@@ -1,0 +1,48 @@
+{
+  "users": [
+    {
+      "username": "mindpixell",
+      "completed_quizzes": [
+        {
+          "category_id": "science",
+          "score": 13,
+          "date": "2025-03-25",
+          "difficulty": "medium"
+        },
+        {
+          "category_id": "history",
+          "score": 10,
+          "date": "2025-03-20",
+          "difficulty": "hard"
+        }
+      ],
+      "total_score": 23,
+      "achievements": [
+        "first_quiz",
+        "science_scholar"
+      ]
+    },
+    {
+      "username": "giovanni.rasmussen",
+      "completed_quizzes": [
+        {
+          "category_id": "movies",
+          "score": 15,
+          "date": "2025-03-28",
+          "difficulty": "easy"
+        },
+        {
+          "category_id": "pop_culture",
+          "score": 14,
+          "date": "2025-03-27",
+          "difficulty": "medium"
+        }
+      ],
+      "total_score": 29,
+      "achievements": [
+        "pop_star",
+        "quiz_master"
+      ]
+    }
+  ]
+}

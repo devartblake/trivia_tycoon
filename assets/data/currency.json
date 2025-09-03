@@ -1,0 +1,16 @@
+{
+  "currencies": [
+    {
+      "id": "coins",
+      "name": "Coins",
+      "symbol": "\ud83e\ude99",
+      "exchange_rate": 1
+    },
+    {
+      "id": "diamonds",
+      "name": "Diamonds",
+      "symbol": "\ud83d\udc8e",
+      "exchange_rate": 0.1
+    }
+  ]
+}

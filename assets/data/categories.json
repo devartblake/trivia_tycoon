@@ -1,0 +1,54 @@
+[
+  {
+    "id": "science",
+    "name": "Science",
+    "description": "Explore the wonders of biology, chemistry, physics, and more.",
+    "icon": "assets/icons/categories/science.png",
+    "age_groups": [
+      "teens",
+      "adults"
+    ]
+  },
+  {
+    "id": "history",
+    "name": "History",
+    "description": "Test your knowledge of world events, ancient civilizations, and more.",
+    "icon": "assets/icons/categories/history.png",
+    "age_groups": [
+      "teens",
+      "adults"
+    ]
+  },
+  {
+    "id": "movies",
+    "name": "Movies",
+    "description": "From classics to new releases, prove you're a movie buff.",
+    "icon": "assets/icons/categories/movies.png",
+    "age_groups": [
+      "kids",
+      "teens",
+      "adults"
+    ]
+  },
+  {
+    "id": "geography",
+    "name": "Geography",
+    "description": "Capitals, landmarks, and countries await your knowledge.",
+    "icon": "assets/icons/categories/geography.png",
+    "age_groups": [
+      "teens",
+      "adults"
+    ]
+  },
+  {
+    "id": "music",
+    "name": "Music",
+    "description": "Lyrics, genres, artists\u2014test your musical IQ.",
+    "icon": "assets/icons/categories/music.png",
+    "age_groups": [
+      "kids",
+      "teens",
+      "adults"
+    ]
+  }
+]

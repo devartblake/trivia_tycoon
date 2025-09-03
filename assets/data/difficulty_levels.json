@@ -1,0 +1,22 @@
+{
+  "levels": [
+    {
+      "level": "easy",
+      "time_limit": 30,
+      "score_multiplier": 1.0,
+      "penalty": 0
+    },
+    {
+      "level": "medium",
+      "time_limit": 20,
+      "score_multiplier": 1.5,
+      "penalty": 1
+    },
+    {
+      "level": "hard",
+      "time_limit": 10,
+      "score_multiplier": 2.0,
+      "penalty": 2
+    }
+  ]
+}

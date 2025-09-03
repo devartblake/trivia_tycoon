@@ -1,0 +1,24 @@
+{
+  "analytics": {
+    "science": {
+      "average_score": 10.2,
+      "most_missed_question_id": "sci_q12",
+      "total_attempts": 100
+    },
+    "history": {
+      "average_score": 9.1,
+      "most_missed_question_id": "his_q03",
+      "total_attempts": 85
+    },
+    "pop_culture": {
+      "average_score": 12.5,
+      "most_missed_question_id": "pop_q10",
+      "total_attempts": 120
+    },
+    "movies": {
+      "average_score": 11.4,
+      "most_missed_question_id": "mov_q08",
+      "total_attempts": 90
+    }
+  }
+}

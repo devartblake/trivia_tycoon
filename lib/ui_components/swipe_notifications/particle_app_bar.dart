@@ -1,0 +1,35 @@
+import 'package:trivia_tycoon/screens/app_shell/app_shell.dart';
+
+import '../../main.dart';
+import 'package:flutter/material.dart';
+
+class ParticleAppBar extends StatelessWidget {
+  const ParticleAppBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(gradient: LinearGradient(colors: [Color(0xffaa07de), Color(0xffde4ed6)])),
+      child: SafeArea(
+        child: Stack(children: <Widget>[
+          SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 26),
+                child: Row(children: <Widget>[
+                  Icon(Icons.menu, size: 28),
+                  SizedBox(width: 18),
+                  Text('Inbox',
+                      style: TextStyle(
+                          fontFamily: 'OpenSans',
+                          fontSize: 21,
+                          letterSpacing: .3,
+                          package: AppShell.pkg
+                      )
+                  )
+                ]),
+              )),
+        ]),
+      ),
+    );
+  }
+}

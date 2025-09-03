@@ -1,0 +1,1 @@
+// Shader fragment for shimmer effect

@@ -1,0 +1,12 @@
+{
+  "sessionId": "session_001",
+  "userId": "user123",
+  "startTime": "2025-03-29T12:00:00Z",
+  "score": 4200,
+  "correctAnswers": 14,
+  "wrongAnswers": 6,
+  "activePowerUps": [
+    "hint",
+    "double_points"
+  ]
+}

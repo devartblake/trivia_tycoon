@@ -1,0 +1,94 @@
+[
+  {
+    "id": "store_coins_100",
+    "name": "100 Coins",
+    "description": "Get 100 coins to spend in the game.",
+    "iconPath": "assets/icons/store/coins_100.png",
+    "price": 0.99,
+    "currency": "usd",
+    "category": "currency"
+  },
+  {
+    "id": "store_diamonds_10",
+    "name": "10 Diamonds",
+    "description": "10 premium diamonds for exclusive items.",
+    "iconPath": "assets/icons/store/diamonds_10.png",
+    "price": 1.99,
+    "currency": "usd",
+    "category": "currency"
+  },
+  {
+    "id": "store_theme_green",
+    "name": "Green Theme",
+    "description": "Bright and energetic green theme for your UI.",
+    "iconPath": "assets/icons/store/themes/green_icon.png",
+    "price": 500,
+    "currency": "coins",
+    "category": "theme"
+  },
+  {
+    "id": "store_avatar_dragon",
+    "name": "Dragon Avatar",
+    "description": "Roar with the legendary dragon avatar!",
+    "iconPath": "assets/icons/store/avatars/dragon.png",
+    "price": 15,
+    "currency": "diamonds",
+    "category": "avatar"
+  },
+  {
+    "id": "powerup_double_xp",
+    "name": "Double XP",
+    "description": "Earn double XP for 10 minutes.",
+    "iconPath": "assets/icons/store/power-up_xp.png",
+    "price": 250,
+    "currency": "coins",
+    "category": "power-up",
+    "duration": 600
+  },
+  {
+    "id": "powerup_hint",
+    "name": "Hint Booster",
+    "description": "Reveal a hint during tough quizzes.",
+    "iconPath": "assets/icons/store/power-up_hint.png",
+    "price": 150,
+    "currency": "coins",
+    "category": "power-up",
+    "duration": 400
+  },
+  {
+    "id": "theme_neon",
+    "name": "Neon Theme",
+    "description": "Unlock the stylish neon theme for your UI.",
+    "iconPath": "assets/icons/store/themes/theme_neon_icon.png",
+    "price": 300,
+    "currency": "coins",
+    "category": "theme"
+  },
+  {
+    "id": "avatar_dragon",
+    "name": "Dragon Avatar",
+    "description": "Roar with the legendary dragon avatar!",
+    "iconPath": "assets/icons/store/avatars/dragon.png",
+    "price": 500,
+    "currency": "coins",
+    "category": "avatar"
+  },
+  {
+    "id": "season_summer_bundle",
+    "name": "Summer Bundle",
+    "description": "Limited-time summer event bundle pack.",
+    "iconPath": "assets/icons/store/themes/season_summer_icon.png",
+    "price": 800,
+    "currency": "coins",
+    "category": "bundle"
+  },
+  {
+    "id": "avatar_robotic",
+    "name": "Robotic Avatar",
+    "description": "Equip a futuristic robot avatar.",
+    "iconPath": "assets/icons/store/avatars/robotic.png",
+    "price": 500,
+    "currency": "coins",
+    "category": "avatar"
+  }
+]

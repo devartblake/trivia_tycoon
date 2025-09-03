@@ -1,0 +1,16 @@
+{
+  "themes": [
+    {
+      "name": "Ocean",
+      "primaryColor": "#00BCD4",
+      "secondaryColor": "#009688",
+      "brightness": "light"
+    },
+    {
+      "name": "Night",
+      "primaryColor": "#212121",
+      "secondaryColor": "#757575",
+      "brightness": "dark"
+    }
+  ]
+}

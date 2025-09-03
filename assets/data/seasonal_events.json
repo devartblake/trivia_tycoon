@@ -1,0 +1,20 @@
+[
+  {
+  "id": "event_spring_festival",
+  "title": "Spring Festival",
+  "description": "Special spring event with flower-themed rewards!",
+  "start_date": "2025-03-20",
+  "end_date": "2025-04-10",
+  "special_rewards": ["avatar_flower", "theme_blossom"],
+  "icon": "assets/images/events/spring_festival.png"
+  },
+  {
+  "id": "event_trivia_mania",
+  "title": "Trivia Mania Week",
+  "description": "Compete for leaderboard boosts and unlock rare badges!",
+  "start_date": "2025-05-01",
+  "end_date": "2025-05-07",
+  "special_rewards": ["badge_mania", "coins_500"],
+  "icon": "assets/images/events/trivia_mania.png"
+  }
+]

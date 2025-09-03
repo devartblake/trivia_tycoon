@@ -1,0 +1,152 @@
+[
+  {
+    "id": "hint_reveal",
+    "name": "Hint Reveal",
+    "description": "Reveals a hint for the current question.",
+    "iconPath": "assets/images/power-ups/hint.png",
+    "duration": 60,
+    "price": 30,
+    "currency": "coins",
+    "type": "hint"
+  },
+  {
+    "id": "remove_option",
+    "name": "Remove One Wrong",
+    "description": "Removes one incorrect answer.",
+    "iconPath": "assets/images/power-ups/remove.png",
+    "duration": 45,
+    "price": 25,
+    "currency": "coins",
+    "type": "eliminate"
+  },
+  {
+    "id": "double_points",
+    "name": "Double Points",
+    "description": "Double the points for the next question.",
+    "iconPath": "assets/images/power-ups/double.png",
+    "duration": 90,
+    "price": 3,
+    "currency": "diamonds",
+    "type": "xp"
+  },
+  {
+    "id": "shield_block",
+    "name": "Shield Block",
+    "description": "Block a penalty from a wrong answer.",
+    "iconPath": "assets/images/power-ups/shield.png",
+    "duration": 120,
+    "price": 5,
+    "currency": "diamonds",
+    "type": "shield"
+  },
+  {
+    "id": "time_boost",
+    "name": "Time Booster",
+    "description": "Adds extra seconds to the question timer.",
+    "iconPath": "assets/images/power-ups/clock.png",
+    "duration": 30,
+    "price": 20,
+    "currency": "coins",
+    "type": "boost"
+  },
+  {
+    "id": "xp_boost",
+    "name": "XP Boost",
+    "description": "Earn double XP for 10 minutes.",
+    "iconPath": "assets/images/power-ups/xp_boost.png",
+    "duration": 600,
+    "price": 100,
+    "currency": "coins",
+    "type": "boost"
+  },
+  {
+    "id": "answer_guard",
+    "name": "Answer Guard",
+    "description": "Protects your answer from being scored incorrectly once.",
+    "iconPath": "assets/images/power-ups/guard.png",
+    "duration": 180,
+    "price": 6,
+    "currency": "diamonds",
+    "type": "shield"
+  },
+  {
+    "id": "eliminate_two",
+    "name": "Eliminate Two",
+    "description": "Removes two incorrect answers from a multiple-choice question.",
+    "icon": "assets/images/power-ups/eliminate.png",
+    "duration": 60,
+    "price": 50,
+    "currency": "coins",
+    "type": "eliminate"
+  },
+  {
+    "id": "double_boost_xp",
+    "name": "XP Boost",
+    "description": "Gain 2x XP for 5 minutes.",
+    "icon": "assets/images/power-ups/boost_xp.png",
+    "duration": 300,
+    "price": 5,
+    "currency": "diamonds",
+    "type": "xp"
+  },
+  {
+    "id": "super_hint",
+    "name": "Super Hint",
+    "description": "Provides a more detailed hint for hard questions.",
+    "icon": "assets/images/power-ups/super_hint.png",
+    "duration": 90,
+    "price": 40,
+    "currency": "coins",
+    "type": "hint"
+  },
+  {
+    "id": "time_freeze",
+    "name": "Time Freeze",
+    "description": "Stops the timer for 10 seconds.",
+    "icon": "assets/images/power-ups/freeze.png",
+    "duration": 180,
+    "price": 4,
+    "currency": "diamonds",
+    "type": "boost"
+  },
+  {
+    "id": "shield_answer",
+    "name": "Answer Shield",
+    "description": "Prevents penalty on a wrong answer for one question.",
+    "icon": "assets/images/power-ups/shield.png",
+    "duration": 120,
+    "price": 3,
+    "currency": "diamonds",
+    "type": "shield"
+  },
+  {
+    "id": "powerup_eliminate_wrong",
+    "name": "Eliminate Wrong Answer",
+    "description": "Removes two incorrect answers from the current question.",
+    "icon": "assets/images/power-ups/eliminate.png",
+    "duration": 45,
+    "price": 50,
+    "currency": "coins",
+    "type": "eliminate"
+  },
+  {
+    "id": "powerup_xp_boost",
+    "name": "XP Boost",
+    "description": "Grants 50% bonus XP for the next 5 minutes.",
+    "icon": "assets/images/power-ups/xp.png",
+    "duration": 300,
+    "price": 100,
+    "currency": "coins",
+    "type": "xp"
+  },
+  {
+    "id": "powerup_hint_combo",
+    "name": "Smart Hints",
+    "description": "Gives two hints in one round.",
+    "icon": "assets/images/power-ups/hint_combo.png",
+    "duration": 90,
+    "price": 70,
+    "currency": "coins",
+    "type": "hint"
+  }
+]

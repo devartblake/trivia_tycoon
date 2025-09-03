@@ -1,0 +1,19 @@
+[
+  {
+    "label": "Gold Chest",
+    "color": "#FFD700",
+    "imagePath": "assets/images/rewards/gold.png",
+    "rewardType": "large",
+    "reward": 250
+  },
+  {
+    "label": "Exclusive Diamond",
+    "color": "#B9F2FF",
+    "imagePath": "assets/images/rewards/diamond.png",
+    "rewardType": "jackpot",
+    "reward": 500,
+    "isExclusive": true,
+    "requiredStreak": 3,
+    "requiredCurrency": 100
+  }
+]

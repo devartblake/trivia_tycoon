@@ -1,0 +1,997 @@
+[
+  {
+    "id": "science_q1",
+    "category_id": "science",
+    "question": "What is the answer to question 1 in science?",
+    "correct_answer": "Correct Answer 1",
+    "incorrect_answers": [
+      "Wrong Answer 1-A",
+      "Wrong Answer 1-B",
+      "Wrong Answer 1-C"
+    ],
+    "difficulty": "hard",
+    "type": "multiple",
+    "powerUpHint": "It's not the answer you think it is.",
+    "powerUpType": "xp"
+  },
+  {
+    "id": "q001",
+    "category": "Science",
+    "question": "What is the chemical symbol for water?",
+    "answers": [
+      {"text": "H2O", "isCorrect": "True"},
+      {"text": "O2", "isCorrect": "False"},
+      {"text": "CO2", "isCorrect": "False"},
+      {"text": "NaCl", "isCorrect": "False"}
+    ],
+    "correctAnswer": "H2O",
+    "type": "multiple_choice",
+    "difficulty": "easy",
+    "imageUrl": "",
+    "videoUrl": "",
+    "powerUpHint": "It's the most well-known molecule!",
+    "powerUpType": "hint"
+  },
+  {
+    "id": "science_q2",
+    "category_id": "science",
+    "question": "What is the answer to question 2 in science?",
+    "correct_answer": "Correct Answer 2",
+    "incorrect_answers": [
+      "Wrong Answer 2-A",
+      "Wrong Answer 2-B",
+      "Wrong Answer 2-C"
+    ],
+    "difficulty": "hard",
+    "type": "multiple"
+  },
+  {
+    "id": "science_q3",
+    "category_id": "science",
+    "question": "What is the answer to question 3 in science?",
+    "correct_answer": "Correct Answer 3",
+    "incorrect_answers": [
+      "Wrong Answer 3-A",
+      "Wrong Answer 3-B",
+      "Wrong Answer 3-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "science_q4",
+    "category_id": "science",
+    "question": "What is the answer to question 4 in science?",
+    "correct_answer": "Correct Answer 4",
+    "incorrect_answers": [
+      "Wrong Answer 4-A",
+      "Wrong Answer 4-B",
+      "Wrong Answer 4-C"
+    ],
+    "difficulty": "hard",
+    "type": "multiple"
+  },
+  {
+    "id": "science_q5",
+    "category_id": "science",
+    "question": "What is the answer to question 5 in science?",
+    "correct_answer": "Correct Answer 5",
+    "incorrect_answers": [
+      "Wrong Answer 5-A",
+      "Wrong Answer 5-B",
+      "Wrong Answer 5-C"
+    ],
+    "difficulty": "hard",
+    "type": "multiple"
+  },
+  {
+    "id": "science_q6",
+    "category_id": "science",
+    "question": "What is the answer to question 6 in science?",
+    "correct_answer": "Correct Answer 6",
+    "incorrect_answers": [
+      "Wrong Answer 6-A",
+      "Wrong Answer 6-B",
+      "Wrong Answer 6-C"
+    ],
+    "difficulty": "hard",
+    "type": "multiple"
+  },
+  {
+    "id": "science_q7",
+    "category_id": "science",
+    "question": "What is the answer to question 7 in science?",
+    "correct_answer": "Correct Answer 7",
+    "incorrect_answers": [
+      "Wrong Answer 7-A",
+      "Wrong Answer 7-B",
+      "Wrong Answer 7-C"
+    ],
+    "difficulty": "hard",
+    "type": "multiple"
+  },
+  {
+    "id": "science_q8",
+    "category_id": "science",
+    "question": "What is the answer to question 8 in science?",
+    "correct_answer": "Correct Answer 8",
+    "incorrect_answers": [
+      "Wrong Answer 8-A",
+      "Wrong Answer 8-B",
+      "Wrong Answer 8-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "science_q9",
+    "category_id": "science",
+    "question": "What is the answer to question 9 in science?",
+    "correct_answer": "Correct Answer 9",
+    "incorrect_answers": [
+      "Wrong Answer 9-A",
+      "Wrong Answer 9-B",
+      "Wrong Answer 9-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "science_q10",
+    "category_id": "science",
+    "question": "What is the answer to question 10 in science?",
+    "correct_answer": "Correct Answer 10",
+    "incorrect_answers": [
+      "Wrong Answer 10-A",
+      "Wrong Answer 10-B",
+      "Wrong Answer 10-C"
+    ],
+    "difficulty": "hard",
+    "type": "multiple"
+  },
+  {
+    "id": "science_q11",
+    "category_id": "science",
+    "question": "What is the answer to question 11 in science?",
+    "correct_answer": "Correct Answer 11",
+    "incorrect_answers": [
+      "Wrong Answer 11-A",
+      "Wrong Answer 11-B",
+      "Wrong Answer 11-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "science_q12",
+    "category_id": "science",
+    "question": "What is the answer to question 12 in science?",
+    "correct_answer": "Correct Answer 12",
+    "incorrect_answers": [
+      "Wrong Answer 12-A",
+      "Wrong Answer 12-B",
+      "Wrong Answer 12-C"
+    ],
+    "difficulty": "hard",
+    "type": "multiple"
+  },
+  {
+    "id": "science_q13",
+    "category_id": "science",
+    "question": "What is the answer to question 13 in science?",
+    "correct_answer": "Correct Answer 13",
+    "incorrect_answers": [
+      "Wrong Answer 13-A",
+      "Wrong Answer 13-B",
+      "Wrong Answer 13-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "science_q14",
+    "category_id": "science",
+    "question": "What is the answer to question 14 in science?",
+    "correct_answer": "Correct Answer 14",
+    "incorrect_answers": [
+      "Wrong Answer 14-A",
+      "Wrong Answer 14-B",
+      "Wrong Answer 14-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "science_q15",
+    "category_id": "science",
+    "question": "What is the answer to question 15 in science?",
+    "correct_answer": "Correct Answer 15",
+    "incorrect_answers": [
+      "Wrong Answer 15-A",
+      "Wrong Answer 15-B",
+      "Wrong Answer 15-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "history_q1",
+    "category_id": "history",
+    "question": "What is the answer to question 1 in history?",
+    "correct_answer": "Correct Answer 1",
+    "incorrect_answers": [
+      "Wrong Answer 1-A",
+      "Wrong Answer 1-B",
+      "Wrong Answer 1-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "history_q2",
+    "category_id": "history",
+    "question": "What is the answer to question 2 in history?",
+    "correct_answer": "Correct Answer 2",
+    "incorrect_answers": [
+      "Wrong Answer 2-A",
+      "Wrong Answer 2-B",
+      "Wrong Answer 2-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "history_q3",
+    "category_id": "history",
+    "question": "What is the answer to question 3 in history?",
+    "correct_answer": "Correct Answer 3",
+    "incorrect_answers": [
+      "Wrong Answer 3-A",
+      "Wrong Answer 3-B",
+      "Wrong Answer 3-C"
+    ],
+    "difficulty": "hard",
+    "type": "multiple"
+  },
+  {
+    "id": "history_q4",
+    "category_id": "history",
+    "question": "What is the answer to question 4 in history?",
+    "correct_answer": "Correct Answer 4",
+    "incorrect_answers": [
+      "Wrong Answer 4-A",
+      "Wrong Answer 4-B",
+      "Wrong Answer 4-C"
+    ],
+    "difficulty": "hard",
+    "type": "multiple"
+  },
+  {
+    "id": "history_q5",
+    "category_id": "history",
+    "question": "What is the answer to question 5 in history?",
+    "correct_answer": "Correct Answer 5",
+    "incorrect_answers": [
+      "Wrong Answer 5-A",
+      "Wrong Answer 5-B",
+      "Wrong Answer 5-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "history_q6",
+    "category_id": "history",
+    "question": "What is the answer to question 6 in history?",
+    "correct_answer": "Correct Answer 6",
+    "incorrect_answers": [
+      "Wrong Answer 6-A",
+      "Wrong Answer 6-B",
+      "Wrong Answer 6-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "history_q7",
+    "category_id": "history",
+    "question": "What is the answer to question 7 in history?",
+    "correct_answer": "Correct Answer 7",
+    "incorrect_answers": [
+      "Wrong Answer 7-A",
+      "Wrong Answer 7-B",
+      "Wrong Answer 7-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "history_q8",
+    "category_id": "history",
+    "question": "What is the answer to question 8 in history?",
+    "correct_answer": "Correct Answer 8",
+    "incorrect_answers": [
+      "Wrong Answer 8-A",
+      "Wrong Answer 8-B",
+      "Wrong Answer 8-C"
+    ],
+    "difficulty": "hard",
+    "type": "multiple"
+  },
+  {
+    "id": "history_q9",
+    "category_id": "history",
+    "question": "What is the answer to question 9 in history?",
+    "correct_answer": "Correct Answer 9",
+    "incorrect_answers": [
+      "Wrong Answer 9-A",
+      "Wrong Answer 9-B",
+      "Wrong Answer 9-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "history_q10",
+    "category_id": "history",
+    "question": "What is the answer to question 10 in history?",
+    "correct_answer": "Correct Answer 10",
+    "incorrect_answers": [
+      "Wrong Answer 10-A",
+      "Wrong Answer 10-B",
+      "Wrong Answer 10-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "history_q11",
+    "category_id": "history",
+    "question": "What is the answer to question 11 in history?",
+    "correct_answer": "Correct Answer 11",
+    "incorrect_answers": [
+      "Wrong Answer 11-A",
+      "Wrong Answer 11-B",
+      "Wrong Answer 11-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "history_q12",
+    "category_id": "history",
+    "question": "What is the answer to question 12 in history?",
+    "correct_answer": "Correct Answer 12",
+    "incorrect_answers": [
+      "Wrong Answer 12-A",
+      "Wrong Answer 12-B",
+      "Wrong Answer 12-C"
+    ],
+    "difficulty": "hard",
+    "type": "multiple"
+  },
+  {
+    "id": "history_q13",
+    "category_id": "history",
+    "question": "What is the answer to question 13 in history?",
+    "correct_answer": "Correct Answer 13",
+    "incorrect_answers": [
+      "Wrong Answer 13-A",
+      "Wrong Answer 13-B",
+      "Wrong Answer 13-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "history_q14",
+    "category_id": "history",
+    "question": "What is the answer to question 14 in history?",
+    "correct_answer": "Correct Answer 14",
+    "incorrect_answers": [
+      "Wrong Answer 14-A",
+      "Wrong Answer 14-B",
+      "Wrong Answer 14-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "history_q15",
+    "category_id": "history",
+    "question": "What is the answer to question 15 in history?",
+    "correct_answer": "Correct Answer 15",
+    "incorrect_answers": [
+      "Wrong Answer 15-A",
+      "Wrong Answer 15-B",
+      "Wrong Answer 15-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "movies_q1",
+    "category_id": "movies",
+    "question": "What is the answer to question 1 in movies?",
+    "correct_answer": "Correct Answer 1",
+    "incorrect_answers": [
+      "Wrong Answer 1-A",
+      "Wrong Answer 1-B",
+      "Wrong Answer 1-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "movies_q2",
+    "category_id": "movies",
+    "question": "What is the answer to question 2 in movies?",
+    "correct_answer": "Correct Answer 2",
+    "incorrect_answers": [
+      "Wrong Answer 2-A",
+      "Wrong Answer 2-B",
+      "Wrong Answer 2-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "movies_q3",
+    "category_id": "movies",
+    "question": "What is the answer to question 3 in movies?",
+    "correct_answer": "Correct Answer 3",
+    "incorrect_answers": [
+      "Wrong Answer 3-A",
+      "Wrong Answer 3-B",
+      "Wrong Answer 3-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "movies_q4",
+    "category_id": "movies",
+    "question": "What is the answer to question 4 in movies?",
+    "correct_answer": "Correct Answer 4",
+    "incorrect_answers": [
+      "Wrong Answer 4-A",
+      "Wrong Answer 4-B",
+      "Wrong Answer 4-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "movies_q5",
+    "category_id": "movies",
+    "question": "What is the answer to question 5 in movies?",
+    "correct_answer": "Correct Answer 5",
+    "incorrect_answers": [
+      "Wrong Answer 5-A",
+      "Wrong Answer 5-B",
+      "Wrong Answer 5-C"
+    ],
+    "difficulty": "hard",
+    "type": "multiple"
+  },
+  {
+    "id": "movies_q6",
+    "category_id": "movies",
+    "question": "What is the answer to question 6 in movies?",
+    "correct_answer": "Correct Answer 6",
+    "incorrect_answers": [
+      "Wrong Answer 6-A",
+      "Wrong Answer 6-B",
+      "Wrong Answer 6-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "movies_q7",
+    "category_id": "movies",
+    "question": "What is the answer to question 7 in movies?",
+    "correct_answer": "Correct Answer 7",
+    "incorrect_answers": [
+      "Wrong Answer 7-A",
+      "Wrong Answer 7-B",
+      "Wrong Answer 7-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "movies_q8",
+    "category_id": "movies",
+    "question": "What is the answer to question 8 in movies?",
+    "correct_answer": "Correct Answer 8",
+    "incorrect_answers": [
+      "Wrong Answer 8-A",
+      "Wrong Answer 8-B",
+      "Wrong Answer 8-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "movies_q9",
+    "category_id": "movies",
+    "question": "What is the answer to question 9 in movies?",
+    "correct_answer": "Correct Answer 9",
+    "incorrect_answers": [
+      "Wrong Answer 9-A",
+      "Wrong Answer 9-B",
+      "Wrong Answer 9-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "movies_q10",
+    "category_id": "movies",
+    "question": "What is the answer to question 10 in movies?",
+    "correct_answer": "Correct Answer 10",
+    "incorrect_answers": [
+      "Wrong Answer 10-A",
+      "Wrong Answer 10-B",
+      "Wrong Answer 10-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "movies_q11",
+    "category_id": "movies",
+    "question": "What is the answer to question 11 in movies?",
+    "correct_answer": "Correct Answer 11",
+    "incorrect_answers": [
+      "Wrong Answer 11-A",
+      "Wrong Answer 11-B",
+      "Wrong Answer 11-C"
+    ],
+    "difficulty": "hard",
+    "type": "multiple"
+  },
+  {
+    "id": "movies_q12",
+    "category_id": "movies",
+    "question": "What is the answer to question 12 in movies?",
+    "correct_answer": "Correct Answer 12",
+    "incorrect_answers": [
+      "Wrong Answer 12-A",
+      "Wrong Answer 12-B",
+      "Wrong Answer 12-C"
+    ],
+    "difficulty": "hard",
+    "type": "multiple"
+  },
+  {
+    "id": "movies_q13",
+    "category_id": "movies",
+    "question": "What is the answer to question 13 in movies?",
+    "correct_answer": "Correct Answer 13",
+    "incorrect_answers": [
+      "Wrong Answer 13-A",
+      "Wrong Answer 13-B",
+      "Wrong Answer 13-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "movies_q14",
+    "category_id": "movies",
+    "question": "What is the answer to question 14 in movies?",
+    "correct_answer": "Correct Answer 14",
+    "incorrect_answers": [
+      "Wrong Answer 14-A",
+      "Wrong Answer 14-B",
+      "Wrong Answer 14-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "movies_q15",
+    "category_id": "movies",
+    "question": "What is the answer to question 15 in movies?",
+    "correct_answer": "Correct Answer 15",
+    "incorrect_answers": [
+      "Wrong Answer 15-A",
+      "Wrong Answer 15-B",
+      "Wrong Answer 15-C"
+    ],
+    "difficulty": "hard",
+    "type": "multiple"
+  },
+  {
+    "id": "geography_q1",
+    "category_id": "geography",
+    "question": "What is the answer to question 1 in geography?",
+    "correct_answer": "Correct Answer 1",
+    "incorrect_answers": [
+      "Wrong Answer 1-A",
+      "Wrong Answer 1-B",
+      "Wrong Answer 1-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "geography_q2",
+    "category_id": "geography",
+    "question": "What is the answer to question 2 in geography?",
+    "correct_answer": "Correct Answer 2",
+    "incorrect_answers": [
+      "Wrong Answer 2-A",
+      "Wrong Answer 2-B",
+      "Wrong Answer 2-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "geography_q3",
+    "category_id": "geography",
+    "question": "What is the answer to question 3 in geography?",
+    "correct_answer": "Correct Answer 3",
+    "incorrect_answers": [
+      "Wrong Answer 3-A",
+      "Wrong Answer 3-B",
+      "Wrong Answer 3-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "geography_q4",
+    "category_id": "geography",
+    "question": "What is the answer to question 4 in geography?",
+    "correct_answer": "Correct Answer 4",
+    "incorrect_answers": [
+      "Wrong Answer 4-A",
+      "Wrong Answer 4-B",
+      "Wrong Answer 4-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "geography_q5",
+    "category_id": "geography",
+    "question": "What is the answer to question 5 in geography?",
+    "correct_answer": "Correct Answer 5",
+    "incorrect_answers": [
+      "Wrong Answer 5-A",
+      "Wrong Answer 5-B",
+      "Wrong Answer 5-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "geography_q6",
+    "category_id": "geography",
+    "question": "What is the answer to question 6 in geography?",
+    "correct_answer": "Correct Answer 6",
+    "incorrect_answers": [
+      "Wrong Answer 6-A",
+      "Wrong Answer 6-B",
+      "Wrong Answer 6-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "geography_q7",
+    "category_id": "geography",
+    "question": "What is the answer to question 7 in geography?",
+    "correct_answer": "Correct Answer 7",
+    "incorrect_answers": [
+      "Wrong Answer 7-A",
+      "Wrong Answer 7-B",
+      "Wrong Answer 7-C"
+    ],
+    "difficulty": "hard",
+    "type": "multiple"
+  },
+  {
+    "id": "geography_q8",
+    "category_id": "geography",
+    "question": "What is the answer to question 8 in geography?",
+    "correct_answer": "Correct Answer 8",
+    "incorrect_answers": [
+      "Wrong Answer 8-A",
+      "Wrong Answer 8-B",
+      "Wrong Answer 8-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "geography_q9",
+    "category_id": "geography",
+    "question": "What is the answer to question 9 in geography?",
+    "correct_answer": "Correct Answer 9",
+    "incorrect_answers": [
+      "Wrong Answer 9-A",
+      "Wrong Answer 9-B",
+      "Wrong Answer 9-C"
+    ],
+    "difficulty": "hard",
+    "type": "multiple"
+  },
+  {
+    "id": "geography_q10",
+    "category_id": "geography",
+    "question": "What is the answer to question 10 in geography?",
+    "correct_answer": "Correct Answer 10",
+    "incorrect_answers": [
+      "Wrong Answer 10-A",
+      "Wrong Answer 10-B",
+      "Wrong Answer 10-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "geography_q11",
+    "category_id": "geography",
+    "question": "What is the answer to question 11 in geography?",
+    "correct_answer": "Correct Answer 11",
+    "incorrect_answers": [
+      "Wrong Answer 11-A",
+      "Wrong Answer 11-B",
+      "Wrong Answer 11-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "geography_q12",
+    "category_id": "geography",
+    "question": "What is the answer to question 12 in geography?",
+    "correct_answer": "Correct Answer 12",
+    "incorrect_answers": [
+      "Wrong Answer 12-A",
+      "Wrong Answer 12-B",
+      "Wrong Answer 12-C"
+    ],
+    "difficulty": "hard",
+    "type": "multiple"
+  },
+  {
+    "id": "geography_q13",
+    "category_id": "geography",
+    "question": "What is the answer to question 13 in geography?",
+    "correct_answer": "Correct Answer 13",
+    "incorrect_answers": [
+      "Wrong Answer 13-A",
+      "Wrong Answer 13-B",
+      "Wrong Answer 13-C"
+    ],
+    "difficulty": "hard",
+    "type": "multiple"
+  },
+  {
+    "id": "geography_q14",
+    "category_id": "geography",
+    "question": "What is the answer to question 14 in geography?",
+    "correct_answer": "Correct Answer 14",
+    "incorrect_answers": [
+      "Wrong Answer 14-A",
+      "Wrong Answer 14-B",
+      "Wrong Answer 14-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "geography_q15",
+    "category_id": "geography",
+    "question": "What is the answer to question 15 in geography?",
+    "correct_answer": "Correct Answer 15",
+    "incorrect_answers": [
+      "Wrong Answer 15-A",
+      "Wrong Answer 15-B",
+      "Wrong Answer 15-C"
+    ],
+    "difficulty": "hard",
+    "type": "multiple"
+  },
+  {
+    "id": "music_q1",
+    "category_id": "music",
+    "question": "What is the answer to question 1 in music?",
+    "correct_answer": "Correct Answer 1",
+    "incorrect_answers": [
+      "Wrong Answer 1-A",
+      "Wrong Answer 1-B",
+      "Wrong Answer 1-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "music_q2",
+    "category_id": "music",
+    "question": "What is the answer to question 2 in music?",
+    "correct_answer": "Correct Answer 2",
+    "incorrect_answers": [
+      "Wrong Answer 2-A",
+      "Wrong Answer 2-B",
+      "Wrong Answer 2-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "music_q3",
+    "category_id": "music",
+    "question": "What is the answer to question 3 in music?",
+    "correct_answer": "Correct Answer 3",
+    "incorrect_answers": [
+      "Wrong Answer 3-A",
+      "Wrong Answer 3-B",
+      "Wrong Answer 3-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "music_q4",
+    "category_id": "music",
+    "question": "What is the answer to question 4 in music?",
+    "correct_answer": "Correct Answer 4",
+    "incorrect_answers": [
+      "Wrong Answer 4-A",
+      "Wrong Answer 4-B",
+      "Wrong Answer 4-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "music_q5",
+    "category_id": "music",
+    "question": "What is the answer to question 5 in music?",
+    "correct_answer": "Correct Answer 5",
+    "incorrect_answers": [
+      "Wrong Answer 5-A",
+      "Wrong Answer 5-B",
+      "Wrong Answer 5-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "music_q6",
+    "category_id": "music",
+    "question": "What is the answer to question 6 in music?",
+    "correct_answer": "Correct Answer 6",
+    "incorrect_answers": [
+      "Wrong Answer 6-A",
+      "Wrong Answer 6-B",
+      "Wrong Answer 6-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "music_q7",
+    "category_id": "music",
+    "question": "What is the answer to question 7 in music?",
+    "correct_answer": "Correct Answer 7",
+    "incorrect_answers": [
+      "Wrong Answer 7-A",
+      "Wrong Answer 7-B",
+      "Wrong Answer 7-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "music_q8",
+    "category_id": "music",
+    "question": "What is the answer to question 8 in music?",
+    "correct_answer": "Correct Answer 8",
+    "incorrect_answers": [
+      "Wrong Answer 8-A",
+      "Wrong Answer 8-B",
+      "Wrong Answer 8-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "music_q9",
+    "category_id": "music",
+    "question": "What is the answer to question 9 in music?",
+    "correct_answer": "Correct Answer 9",
+    "incorrect_answers": [
+      "Wrong Answer 9-A",
+      "Wrong Answer 9-B",
+      "Wrong Answer 9-C"
+    ],
+    "difficulty": "hard",
+    "type": "multiple"
+  },
+  {
+    "id": "music_q10",
+    "category_id": "music",
+    "question": "What is the answer to question 10 in music?",
+    "correct_answer": "Correct Answer 10",
+    "incorrect_answers": [
+      "Wrong Answer 10-A",
+      "Wrong Answer 10-B",
+      "Wrong Answer 10-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "music_q11",
+    "category_id": "music",
+    "question": "What is the answer to question 11 in music?",
+    "correct_answer": "Correct Answer 11",
+    "incorrect_answers": [
+      "Wrong Answer 11-A",
+      "Wrong Answer 11-B",
+      "Wrong Answer 11-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  },
+  {
+    "id": "music_q12",
+    "category_id": "music",
+    "question": "What is the answer to question 12 in music?",
+    "correct_answer": "Correct Answer 12",
+    "incorrect_answers": [
+      "Wrong Answer 12-A",
+      "Wrong Answer 12-B",
+      "Wrong Answer 12-C"
+    ],
+    "difficulty": "hard",
+    "type": "multiple"
+  },
+  {
+    "id": "music_q13",
+    "category_id": "music",
+    "question": "What is the answer to question 13 in music?",
+    "correct_answer": "Correct Answer 13",
+    "incorrect_answers": [
+      "Wrong Answer 13-A",
+      "Wrong Answer 13-B",
+      "Wrong Answer 13-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "music_q14",
+    "category_id": "music",
+    "question": "What is the answer to question 14 in music?",
+    "correct_answer": "Correct Answer 14",
+    "incorrect_answers": [
+      "Wrong Answer 14-A",
+      "Wrong Answer 14-B",
+      "Wrong Answer 14-C"
+    ],
+    "difficulty": "medium",
+    "type": "multiple"
+  },
+  {
+    "id": "music_q15",
+    "category_id": "music",
+    "question": "What is the answer to question 15 in music?",
+    "correct_answer": "Correct Answer 15",
+    "incorrect_answers": [
+      "Wrong Answer 15-A",
+      "Wrong Answer 15-B",
+      "Wrong Answer 15-C"
+    ],
+    "difficulty": "easy",
+    "type": "multiple"
+  }
+]

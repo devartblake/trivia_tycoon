@@ -1,0 +1,182 @@
+[
+  {
+    "date": "2025-03-27",
+    "active_users": 377,
+    "avg_session_length": 12.4,
+    "total_sessions": 527
+  },
+  {
+    "date": "2025-03-28",
+    "active_users": 141,
+    "avg_session_length": 6.95,
+    "total_sessions": 284
+  },
+  {
+    "date": "2025-03-29",
+    "active_users": 389,
+    "avg_session_length": 12.96,
+    "total_sessions": 284
+  },
+  {
+    "date": "2025-03-30",
+    "active_users": 413,
+    "avg_session_length": 8.38,
+    "total_sessions": 297
+  },
+  {
+    "date": "2025-03-31",
+    "active_users": 155,
+    "avg_session_length": 7.87,
+    "total_sessions": 240
+  },
+  {
+    "date": "2025-04-01",
+    "active_users": 334,
+    "avg_session_length": 7.64,
+    "total_sessions": 418
+  },
+  {
+    "date": "2025-04-02",
+    "active_users": 220,
+    "avg_session_length": 8.88,
+    "total_sessions": 424
+  },
+  {
+    "date": "2025-04-03",
+    "active_users": 156,
+    "avg_session_length": 5.86,
+    "total_sessions": 285
+  },
+  {
+    "date": "2025-04-04",
+    "active_users": 399,
+    "avg_session_length": 9.83,
+    "total_sessions": 188
+  },
+  {
+    "date": "2025-04-05",
+    "active_users": 281,
+    "avg_session_length": 14.6,
+    "total_sessions": 245
+  },
+  {
+    "date": "2025-04-06",
+    "active_users": 487,
+    "avg_session_length": 8.65,
+    "total_sessions": 309
+  },
+  {
+    "date": "2025-04-07",
+    "active_users": 371,
+    "avg_session_length": 6.06,
+    "total_sessions": 482
+  },
+  {
+    "date": "2025-04-08",
+    "active_users": 437,
+    "avg_session_length": 8.9,
+    "total_sessions": 472
+  },
+  {
+    "date": "2025-04-09",
+    "active_users": 401,
+    "avg_session_length": 8.62,
+    "total_sessions": 457
+  },
+  {
+    "date": "2025-04-10",
+    "active_users": 305,
+    "avg_session_length": 9.21,
+    "total_sessions": 544
+  },
+  {
+    "date": "2025-04-11",
+    "active_users": 406,
+    "avg_session_length": 13.02,
+    "total_sessions": 270
+  },
+  {
+    "date": "2025-04-12",
+    "active_users": 370,
+    "avg_session_length": 5.81,
+    "total_sessions": 474
+  },
+  {
+    "date": "2025-04-13",
+    "active_users": 340,
+    "avg_session_length": 8.37,
+    "total_sessions": 386
+  },
+  {
+    "date": "2025-04-14",
+    "active_users": 111,
+    "avg_session_length": 5.97,
+    "total_sessions": 593
+  },
+  {
+    "date": "2025-04-15",
+    "active_users": 398,
+    "avg_session_length": 8.71,
+    "total_sessions": 199
+  },
+  {
+    "date": "2025-04-16",
+    "active_users": 168,
+    "avg_session_length": 13.9,
+    "total_sessions": 318
+  },
+  {
+    "date": "2025-04-17",
+    "active_users": 278,
+    "avg_session_length": 11.42,
+    "total_sessions": 414
+  },
+  {
+    "date": "2025-04-18",
+    "active_users": 321,
+    "avg_session_length": 5.03,
+    "total_sessions": 550
+  },
+  {
+    "date": "2025-04-19",
+    "active_users": 196,
+    "avg_session_length": 5.87,
+    "total_sessions": 460
+  },
+  {
+    "date": "2025-04-20",
+    "active_users": 371,
+    "avg_session_length": 11.84,
+    "total_sessions": 345
+  },
+  {
+    "date": "2025-04-21",
+    "active_users": 166,
+    "avg_session_length": 12.96,
+    "total_sessions": 326
+  },
+  {
+    "date": "2025-04-22",
+    "active_users": 153,
+    "avg_session_length": 11.84,
+    "total_sessions": 311
+  },
+  {
+    "date": "2025-04-23",
+    "active_users": 224,
+    "avg_session_length": 6.78,
+    "total_sessions": 232
+  },
+  {
+    "date": "2025-04-24",
+    "active_users": 213,
+    "avg_session_length": 7.47,
+    "total_sessions": 547
+  },
+  {
+    "date": "2025-04-25",
+    "active_users": 231,
+    "avg_session_length": 12.48,
+    "total_sessions": 167
+  }
+]

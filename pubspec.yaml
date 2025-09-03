@@ -1,0 +1,219 @@
+name: trivia_tycoon
+description: "A new Flutter project."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# In Windows, build-name is used as the major, minor, and patch parts
+# of the product and file versions while build-number is used as the build suffix.
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.8
+  vector_math: ^2.1.4
+  intl: ^0.20.2
+  encrypt: ^5.0.3
+  http: ^1.3.0
+  rive: ^0.13.20
+  path: ^1.9.0
+  dio: ^5.8.0+1
+  crypto: ^3.0.6
+  hive: ^2.2.3
+  quiver: ^3.2.2
+  shimmer: ^3.0.0
+  logging: ^1.3.0
+  go_router: ^14.8.1
+  build_runner: ^2.4.15
+  url_launcher: ^6.3.1
+  hive_flutter: ^1.1.0
+  hive_generator: ^2.0.1
+  image_picker: ^1.1.2
+  flutter_svg: ^2.0.17
+  flutter_soloud: ^3.0.2
+  flutter_dotenv: ^5.2.1
+  flutter_animate: ^4.5.2
+  flutter_riverpod: ^2.6.1
+  flutter_3d_controller: ^2.1.0
+  font_awesome_flutter: ^10.8.0
+  dio_cache_interceptor: ^3.5.1
+  phone_numbers_parser: ^9.0.3
+  intl_phone_number_input: ^0.7.4
+  another_transformer_page_view: ^2.0.1
+  dio_cache_interceptor_hive_store: ^4.0.0
+  textstyle_extensions: ^2.0.0-nullsafety
+  file_picker: ^10.0.0
+  permission_handler: ^12.0.0
+  awesome_notifications: ^0.10.1
+  just_audio: ^0.9.46
+  audio_service: ^0.18.17
+  sign_in_button: ^3.2.0
+  image: ^4.5.4
+  image_editor: ^1.6.0  
+  fernet: ^0.0.4
+  http_cache_hive_store: ^5.0.1
+  camera: ^0.11.1
+  fl_chart: ^0.71.0
+  animated_text_kit: ^4.2.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^5.0.0
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+   - assets/config/
+   - assets/data/
+   - assets/data/analytics/
+   - assets/data/questions/
+   - assets/data/questions/bonus/
+   - assets/data/questions/general/
+   - assets/data/questions/kids/
+   - assets/data/questions/media/
+   - assets/data/questions/science/
+   - assets/data/leaderboard/
+   - assets/icons/
+   - assets/icons/badges/
+   - assets/icons/categories/
+   - assets/icons/store/
+   - assets/icons/store/avatars/
+   - assets/icons/store/themes/
+   - assets/images/
+   - assets/images/quiz.png
+   - assets/images/reward-quiz.png
+   - assets/images/avatars/
+   - assets/images/avatars/halloween_pack/
+   - assets/images/avatars/monster_pack/
+   - assets/images/avatars/paw_patrol_pack/
+   - assets/images/backgrounds/
+   - assets/images/confetti/
+   - assets/images/events/
+   - assets/images/logo/
+   - assets/images/notification_images/
+   - assets/images/power-ups/
+   - assets/images/quiz/
+   - assets/images/quiz/backgrounds/
+   - assets/images/quiz/category/
+   - assets/images/rewards/
+   - assets/images/store/
+   - assets/images/store/avatars/
+   - assets/images/store/themes/
+   - assets/images/welcome_images/
+   - assets/models/
+   - assets/splash_previews/
+   - assets/songs/
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/to/resolution-aware-images
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/to/asset-from-package
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  fonts:
+    - family: OpenSans
+      fonts:
+        - asset: assets/fonts/Open-Sans/OpenSans-Regular.ttf
+        - asset: assets/fonts/Open-Sans/OpenSans-Italic.ttf
+          style: italic
+        - asset: assets/fonts/Open-Sans/OpenSans-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Open-Sans/OpenSans-LightItalic.ttf
+          style: italic
+          weight: 300
+        - asset: assets/fonts/Open-Sans/OpenSans-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Open-Sans/OpenSans-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/Open-Sans/OpenSans-Semibold.ttf
+          weight: 600
+        - asset: assets/fonts/Open-Sans/OpenSans-SemiboldItalic.ttf
+          weight: 600
+          style: italic
+        - asset: assets/fonts/Open-Sans/OpenSans-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Open-Sans/OpenSans-ExtraBoldItalic.ttf
+          weight: 800
+          style: italic
+    - family: OpenSansEmoji
+      fonts:
+        - asset: assets/fonts/Open-Sans/OpenSansEmoji.ttf
+    - family: Faustina
+      fonts:
+        - asset: assets/fonts/Faustina/Faustina-Italic.ttf
+          style: italic
+        - asset: assets/fonts/Faustina/Faustina-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Faustina/Faustina-LightItalic.ttf
+          style: italic
+          weight: 300
+        - asset: assets/fonts/Faustina/Faustina-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Faustina/Faustina-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Faustina/Faustina-MediumItalic.ttf
+          style: italic
+          weight: 500
+        - asset: assets/fonts/Faustina/Faustina-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Faustina/Faustina-SemiBoldItalic.ttf
+          style: italic
+          weight: 600
+        - asset: assets/fonts/Faustina/Faustina-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Faustina/Faustina-BoldItalic.ttf
+          style: italic
+          weight: 700
+        - asset: assets/fonts/Faustina/Faustina-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Faustina/Faustina-Bold.ttf
+          style: italic
+          weight: 800
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/to/font-from-package

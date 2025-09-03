@@ -1,0 +1,23 @@
+[
+  {
+    "id": "fashion",
+    "name": "Fashion",
+    "description": "Style, trends, and designers from around the world.",
+    "icon": "\ud83d\udc57",
+    "color": "#E91E63"
+  },
+  {
+    "id": "geography",
+    "name": "Geography",
+    "description": "Countries, capitals, landmarks, and physical features.",
+    "icon": "\ud83d\uddfa\ufe0f",
+    "color": "#4CAF50"
+  },
+  {
+    "id": "music",
+    "name": "Music",
+    "description": "Genres, artists, instruments, and famous albums.",
+    "icon": "\ud83c\udfb5",
+    "color": "#9C27B0"
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "API_BASE_URL": "https://api.example.com",
+  "ENABLE_LOGGING": true,
+  "THEME": "dark",
+  "MAX_QUESTIONS": 10,
+  "ENCRYPTION_KEY": "eE73ibbu+UgzLl5NkTNZvjzQS530kldc4bhwxpw1NWw="
+}

@@ -1,0 +1,22 @@
+{
+  "avatars": [
+    {
+      "id": "avatar_001",
+      "name": "Classic",
+      "cost": 0,
+      "image": "assets/images/avatars/classic.png"
+    },
+    {
+      "id": "avatar_002",
+      "name": "Hero",
+      "cost": 50,
+      "image": "assets/images/avatars/hero.png"
+    },
+    {
+      "id": "avatar_003",
+      "name": "Cyber",
+      "cost": 75,
+      "image": "assets/images/avatars/cyber.png"
+    }
+  ]
+}

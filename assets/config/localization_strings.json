@@ -1,0 +1,12 @@
+{
+  "en": {
+    "start_quiz": "Start Quiz",
+    "view_leaderboard": "View Leaderboard",
+    "settings": "Settings"
+  },
+  "es": {
+    "start_quiz": "Comenzar Quiz",
+    "view_leaderboard": "Ver Clasificaci\u00f3n",
+    "settings": "Configuraciones"
+  }
+}

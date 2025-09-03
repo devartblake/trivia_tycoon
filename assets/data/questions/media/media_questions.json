@@ -1,0 +1,212 @@
+[
+  {
+    "id": "fashion_0",
+    "category": "fashion",
+    "question": "What year was this fashion trend popular?",
+    "media": "https://example.com/media/fashion/trend_0.jpg",
+    "type": "image",
+    "correct_answer": "1994",
+    "wrong_answers": [
+      "2004",
+      "2012",
+      "2010"
+    ],
+    "difficulty": "medium"
+  },
+  {
+    "id": "fashion_1",
+    "category": "fashion",
+    "question": "What year was this fashion trend popular?",
+    "media": "https://example.com/media/fashion/trend_1.jpg",
+    "type": "image",
+    "correct_answer": "2012",
+    "wrong_answers": [
+      "2012",
+      "1991",
+      "2000"
+    ],
+    "difficulty": "hard"
+  },
+  {
+    "id": "fashion_2",
+    "category": "fashion",
+    "question": "What year was this fashion trend popular?",
+    "media": "https://example.com/media/fashion/trend_2.jpg",
+    "type": "image",
+    "correct_answer": "1992",
+    "wrong_answers": [
+      "1995",
+      "2013",
+      "1997"
+    ],
+    "difficulty": "hard"
+  },
+  {
+    "id": "fashion_3",
+    "category": "fashion",
+    "question": "What year was this fashion trend popular?",
+    "media": "https://example.com/media/fashion/trend_3.jpg",
+    "type": "image",
+    "correct_answer": "1999",
+    "wrong_answers": [
+      "2020",
+      "2007",
+      "2001"
+    ],
+    "difficulty": "hard"
+  },
+  {
+    "id": "fashion_4",
+    "category": "fashion",
+    "question": "What year was this fashion trend popular?",
+    "media": "https://example.com/media/fashion/trend_4.jpg",
+    "type": "image",
+    "correct_answer": "2016",
+    "wrong_answers": [
+      "2009",
+      "2013",
+      "1997"
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "music_0",
+    "category": "music",
+    "question": "Identify this song from the clip.",
+    "media": "https://example.com/media/music/song_0.mp3",
+    "type": "audio",
+    "correct_answer": "Function-based actuating attitude",
+    "wrong_answers": [
+      "Profound multi-state middleware",
+      "Synchronized logistical frame",
+      "Secured optimal intranet"
+    ],
+    "difficulty": "hard"
+  },
+  {
+    "id": "music_1",
+    "category": "music",
+    "question": "Identify this song from the clip.",
+    "media": "https://example.com/media/music/song_1.mp3",
+    "type": "audio",
+    "correct_answer": "Mandatory client-server challenge",
+    "wrong_answers": [
+      "Cross-group object-oriented strategy",
+      "Optional system-worthy knowledgebase",
+      "Multi-layered contextually-based architecture"
+    ],
+    "difficulty": "medium"
+  },
+  {
+    "id": "music_2",
+    "category": "music",
+    "question": "Identify this song from the clip.",
+    "media": "https://example.com/media/music/song_2.mp3",
+    "type": "audio",
+    "correct_answer": "Compatible encompassing policy",
+    "wrong_answers": [
+      "Horizontal composite service-desk",
+      "Synchronized secondary orchestration",
+      "Secured modular conglomeration"
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "music_3",
+    "category": "music",
+    "question": "Identify this song from the clip.",
+    "media": "https://example.com/media/music/song_3.mp3",
+    "type": "audio",
+    "correct_answer": "Programmable upward-trending Graphical User Interface",
+    "wrong_answers": [
+      "Robust responsive hub",
+      "Monitored 5thgeneration open architecture",
+      "Phased bottom-line analyzer"
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "music_4",
+    "category": "music",
+    "question": "Identify this song from the clip.",
+    "media": "https://example.com/media/music/song_4.mp3",
+    "type": "audio",
+    "correct_answer": "Synchronized reciprocal moratorium",
+    "wrong_answers": [
+      "Focused bifurcated matrix",
+      "Business-focused logistical implementation",
+      "Optimized national toolset"
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "geo_0",
+    "category": "geography",
+    "question": "Which country does this landmark belong to?",
+    "media": "https://example.com/media/geo/landmark_0.jpg",
+    "type": "image",
+    "correct_answer": "Sri Lanka",
+    "wrong_answers": [
+      "Mauritania",
+      "San Marino",
+      "Bouvet Island (Bouvetoya)"
+    ],
+    "difficulty": "hard"
+  },
+  {
+    "id": "geo_1",
+    "category": "geography",
+    "question": "Which country does this landmark belong to?",
+    "media": "https://example.com/media/geo/landmark_1.jpg",
+    "type": "image",
+    "correct_answer": "Korea",
+    "wrong_answers": [
+      "Benin",
+      "Guyana",
+      "Heard Island and McDonald Islands"
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "geo_2",
+    "category": "geography",
+    "question": "Which country does this landmark belong to?",
+    "media": "https://example.com/media/geo/landmark_2.jpg",
+    "type": "image",
+    "correct_answer": "Saint Barthelemy",
+    "wrong_answers": [
+      "Egypt",
+      "Kazakhstan",
+      "Spain"
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "geo_3",
+    "category": "geography",
+    "question": "Which country does this landmark belong to?",
+    "media": "https://example.com/media/geo/landmark_3.jpg",
+    "type": "image",
+    "correct_answer": "Puerto Rico",
+    "wrong_answers": [
+      "Saint Lucia",
+      "Congo",
+      "Lebanon"
+    ],
+    "difficulty": "medium"
+  },
+  {
+    "id": "geo_4",
+    "category": "geography",
+    "question": "Which country does this landmark belong to?",
+    "media": "https://example.com/media/geo/landmark_4.jpg",
+    "type": "image",
+    "correct_answer": "China",
+    "wrong_answers": [
+      "South Africa",
+      "Christmas Island",
+      "Seychelles"
+    ],
+    "difficulty": "hard"
+  }
+]

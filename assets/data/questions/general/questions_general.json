@@ -1,0 +1,15 @@
+[
+  {
+    "id": "q1",
+    "category": "general",
+    "question": "What is the capital of France?",
+    "answers": [
+      {"text": "Paris", "isCorrect": true},
+      {"text": "Berlin", "isCorrect": false},
+      {"text": "Rome", "isCorrect": false},
+      {"text": "Madrid", "isCorrect": false}
+    ],
+    "correctAnswer": "Paris",
+    "difficulty": 1
+  }
+]

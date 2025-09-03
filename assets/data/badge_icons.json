@@ -1,0 +1,60 @@
+{
+  "badges": [
+    {
+      "id": "badge_early_bird",
+      "name": "Early Bird",
+      "description": "Completed a quiz before 8 AM",
+      "iconPath": "assets/icons/badges/early_bird.png",
+      "isUnlocked": "False"
+    },
+    {
+      "id": "badge_answer_streak_master",
+      "name": "Streak Master",
+      "description": "5 correct answers in a row",
+      "iconPath": "assets/icons/badges/streak_master.png",
+      "isUnlocked": "False"
+    },
+    {
+      "id": "badge_streak_master",
+      "name": "Streak Master",
+      "description": "Maintain a 7-day quiz streak.",
+      "iconPath": "assets/icons/badges/streak_master.png",
+      "isUnlocked": "False"
+    },
+    {
+      "id": "badge_quiz_warrior",
+      "name": "Quiz Warrior",
+      "description": "Played 10 quizzes",
+      "iconPath": "assets/icons/badges/quiz_warrior.png",
+      "isUnlocked": "False"
+    },
+    {
+      "id": "badge_first_quiz",
+      "name": "First Quiz!",
+      "description": "Complete your first quiz.",
+      "iconPath": "assets/icons/badges/first_quiz.png",
+      "isUnlocked": "False"
+    },
+    {
+      "id": "badge_high_score",
+      "name": "High Scorer",
+      "description": "Score above 90% on any quiz.",
+      "iconPath": "assets/icons/badges/high_score.png",
+      "isUnlocked": "False"
+    },
+    {
+      "id": "badge_power_up_user",
+      "name": "Power User",
+      "description": "Use 5 power-ups in a single session.",
+      "iconPath": "assets/icons/badges/power_user.png",
+      "isUnlocked": "False"
+    },
+    {
+      "id": "badge_customizer",
+      "name": "Stylist",
+      "description": "Customize your avatar and theme.",
+      "iconPath": "assets/icons/badges/stylist.png",
+      "isUnlocked": "False"
+    }
+  ]
+}

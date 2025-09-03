@@ -1,0 +1,2 @@
+C:/Users/lmxbl/StudioProjects/trivia_tycoon/android/app/.cxx/Debug/4g121z70/x86/CMakeFiles/edit_cache.dir
+C:/Users/lmxbl/StudioProjects/trivia_tycoon/android/app/.cxx/Debug/4g121z70/x86/CMakeFiles/rebuild_cache.dir

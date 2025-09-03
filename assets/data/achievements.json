@@ -1,0 +1,37 @@
+[
+  {
+    "id": "first_win",
+    "title": "First Victory",
+    "description": "Win your first quiz game.",
+    "points": 10,
+    "icon": "trophy.png"
+  },
+  {
+    "id": "perfect_score",
+    "title": "Perfect Score",
+    "description": "Answer all questions correctly in a quiz.",
+    "points": 50,
+    "icon": "star.png"
+  },
+  {
+    "id": "quiz_master",
+    "title": "Quiz Master",
+    "description": "Win 10 quizzes in a row.",
+    "points": 100,
+    "icon": "crown.png"
+  },
+  {
+    "id": "globetrotter",
+    "title": "Globetrotter",
+    "description": "Play quizzes in 3 different languages.",
+    "points": 30,
+    "icon": "globe.png"
+  },
+  {
+    "id": "speedster",
+    "title": "Speedster",
+    "description": "Complete a quiz in under 60 seconds.",
+    "points": 20,
+    "icon": "lightning.png"
+  }
+]
