@@ -15,7 +15,11 @@ import '../../admin/questions/question_editor_screen.dart';
 import '../../admin/questions/question_list_screen.dart';
 import '../../admin/widgets/encrypted_file_preview.dart';
 import '../../screens/menu/main_menu_screen.dart';
+import '../../screens/settings/skill_theme_screen.dart';
+import '../../screens/skills_tree/skill_branch_detail_screen.dart';
+import '../../screens/skills_tree/skill_tree_nav_screen.dart';
 import '../../screens/skills_tree/skill_tree_screen.dart';
+import '../../screens/skills_tree/widgets/skills_tree_test_screen.dart';
 import '../../ui_components/color_picker/ui/color_picker_screen.dart';
 import '../../ui_components/confetti/ui/confetti_settings.dart';
 import '../../ui_components/depth_card_3d/theme_editor/gradient_editor_screen.dart';
@@ -203,16 +207,16 @@ class AppRouter {
           builder: (context, state) => const MusicScreen(),
         ),
         GoRoute(
+          path: '/skill-theme',
+          builder: (context, state) => const SkillThemeScreen(),
+        ),
+        GoRoute(
           path: '/search',
           builder: (context, state) => const SearchScreen(),
         ),
         GoRoute(
           path: '/alerts',
           builder: (context, state) => const AlertsScreen(),
-        ),
-        GoRoute(
-          path: '/skill-tree',
-          builder: (context, state) => const SkillTreeScreen(),
         ),
         GoRoute(
           path: '/settings',
@@ -270,6 +274,32 @@ class AppRouter {
           path: '/qr-scan-settings',
           name: 'qrScanSettings',
           builder: (context, state) => const QrScanSettingsScreen(),
+        ),
+
+        /// Skills Tree
+        GoRoute(
+          path: '/skills',
+          builder: (context, state) => const SkillTreeNavScreen(),
+        ),
+        GoRoute(
+          path: '/skills-test',
+          builder: (context, state) => const SkillTreeNavTestScreen(),
+        ),
+        GoRoute(
+          path: '/skill-tree/:groupId',
+          name: 'skillTree',
+          builder: (context, state) {
+            final groupId = state.pathParameters['groupId'] ?? '';
+            return SkillTreeScreen(groupId: groupId);
+          },
+        ),
+        GoRoute(
+          path: '/skill-tree/:branchId',
+          builder: (context, state) => SkillBranchDetailScreen(
+            branchId: state.pathParameters['branchId']!,
+            initialStep: int.tryParse(state.uri.queryParameters['step'] ?? ''),
+            showPathInitially: state.uri.queryParameters['showPath'] == '1',
+          ),
         ),
       ],
     );

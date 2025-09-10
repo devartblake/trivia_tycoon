@@ -50,7 +50,7 @@ class NotFoundScreen extends StatelessWidget {
                   '404',
                   style: TextStyle(
                     fontSize: 120,
-                    fontWeight: FontWeight.w100, // Very thin font weight
+                    fontWeight: FontWeight.w300, // Very thin font weight
                     fontFamily: 'Montserrat', // Adjust font as needed
                     color: Colors.white, // This color is overwritten by shimmer
                   ),

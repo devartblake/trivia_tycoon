@@ -106,13 +106,18 @@ flutter:
    - assets/config/
    - assets/data/
    - assets/data/analytics/
+   - assets/data/leaderboard/
    - assets/data/questions/
    - assets/data/questions/bonus/
    - assets/data/questions/general/
    - assets/data/questions/kids/
    - assets/data/questions/media/
    - assets/data/questions/science/
-   - assets/data/leaderboard/
+   - assets/data/questions/social/
+   - assets/data/questions/sports/
+   - assets/data/questions/tech/
+   - assets/data/questions/world/
+   - assets/data/skill_tree/skill_tree.json
    - assets/icons/
    - assets/icons/badges/
    - assets/icons/categories/

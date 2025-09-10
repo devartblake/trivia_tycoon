@@ -36,75 +36,120 @@ class _OnboardingFormStepState extends State<OnboardingFormStep> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(24),
       color: Colors.blueAccent,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text("Tell us about yourself",
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white)),
-          const SizedBox(height: 16),
-          Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: _usernameController,
-                  decoration: const InputDecoration(
-                    labelText: "Username",
-                    fillColor: Colors.white,
-                    filled: true,
-                  ),
-                  validator: (val) =>
-                  val == null || val.isEmpty ? 'Username is required' : null,
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            children: [
+              // Header section (fixed)
+              Text(
+                "Tell us about yourself",
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  color: Colors.white,
                 ),
-                const SizedBox(height: 16),
-                DropdownButtonFormField<String>(
-                  value: _ageGroup,
-                  decoration: const InputDecoration(
-                    labelText: "Age Group",
-                    fillColor: Colors.white,
-                    filled: true,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+
+              // Scrollable form content
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: _usernameController,
+                          decoration: const InputDecoration(
+                            labelText: "Username",
+                            fillColor: Colors.white,
+                            filled: true,
+                          ),
+                          validator: (val) => val == null || val.isEmpty
+                              ? 'Username is required'
+                              : null,
+                        ),
+                        const SizedBox(height: 16),
+
+                        DropdownButtonFormField<String>(
+                          value: _ageGroup,
+                          decoration: const InputDecoration(
+                            labelText: "Age Group",
+                            fillColor: Colors.white,
+                            filled: true,
+                          ),
+                          items: const [
+                            DropdownMenuItem(value: "Under 13", child: Text("Under 13")),
+                            DropdownMenuItem(value: "13-17", child: Text("13-17")),
+                            DropdownMenuItem(value: "18-24", child: Text("18-24")),
+                            DropdownMenuItem(value: "25+", child: Text("25+")),
+                          ],
+                          onChanged: (value) => setState(() => _ageGroup = value),
+                          validator: (val) => val == null
+                              ? 'Please select an age group'
+                              : null,
+                        ),
+                        const SizedBox(height: 16),
+
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            labelText: "Country",
+                            fillColor: Colors.white,
+                            filled: true,
+                          ),
+                          onChanged: (val) => _country = val,
+                          validator: (val) => val == null || val.isEmpty
+                              ? 'Country is required'
+                              : null,
+                        ),
+                        const SizedBox(height: 24),
+
+                        // Premium selection button
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                            icon: Icon(_tryPremium ? Icons.check_circle : Icons.star_border),
+                            label: Text(_tryPremium ? 'Premium Selected' : 'Try Premium'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: _tryPremium ? Colors.amber : Colors.white,
+                              foregroundColor: _tryPremium ? Colors.black : Colors.blue,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                            ),
+                            onPressed: () => setState(() => _tryPremium = !_tryPremium),
+                          ),
+                        ),
+
+                        // Add some bottom padding for better scrolling experience
+                        const SizedBox(height: 24),
+                      ],
+                    ),
                   ),
-                  items: const [
-                    DropdownMenuItem(value: "Under 13", child: Text("Under 13")),
-                    DropdownMenuItem(value: "13-17", child: Text("13-17")),
-                    DropdownMenuItem(value: "18-24", child: Text("18-24")),
-                    DropdownMenuItem(value: "25+", child: Text("25+")),
-                  ],
-                  onChanged: (value) => setState(() => _ageGroup = value),
-                  validator: (val) => val == null ? 'Please select an age group' : null,
                 ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: "Country",
-                    fillColor: Colors.white,
-                    filled: true,
-                  ),
-                  onChanged: (val) => _country = val,
-                  validator: (val) =>
-                  val == null || val.isEmpty ? 'Country is required' : null,
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton.icon(
-                  icon: Icon(_tryPremium ? Icons.check_circle : Icons.star_border),
-                  label: Text(_tryPremium ? 'Premium Selected' : 'Try Premium'),
+              ),
+
+              // Bottom button (fixed)
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _submitForm,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: _tryPremium ? Colors.amber : Colors.white,
-                    foregroundColor: _tryPremium ? Colors.black : Colors.blue,
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.blue,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
-                  onPressed: () => setState(() => _tryPremium = !_tryPremium),
+                  child: const Text(
+                    "Continue",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          const SizedBox(height: 24),
-          ElevatedButton(
-            onPressed: _submitForm,
-            child: const Text("Continue"),
-          )
-        ],
+        ),
       ),
     );
   }

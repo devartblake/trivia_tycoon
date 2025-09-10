@@ -1,0 +1,70 @@
+{
+  "skill_tree": [
+    {
+      "branch_id": "scholar",
+      "title": "Scholar Path",
+      "nodes": [
+        {
+          "id": "faster_hint",
+          "title": "Faster Hint",
+          "description": "Hints are shown 1s faster.",
+          "cost": 100,
+          "unlocked": false,
+          "requires": []
+        },
+        {
+          "id": "show_two_hints",
+          "title": "Show Two Hints",
+          "description": "Reveal two hints per question.",
+          "cost": 200,
+          "unlocked": false,
+          "requires": ["faster_hint"]
+        }
+      ]
+    },
+    {
+      "branch_id": "strategist",
+      "title": "Strategist Path",
+      "nodes": [
+        {
+          "id": "lifeline_cooldown",
+          "title": "Lifeline Cooldown",
+          "description": "Reduce lifeline cooldown by 10s.",
+          "cost": 150,
+          "unlocked": false,
+          "requires": []
+        },
+        {
+          "id": "extra_lifeline",
+          "title": "Extra Lifeline",
+          "description": "Gain an extra lifeline per match.",
+          "cost": 300,
+          "unlocked": false,
+          "requires": ["lifeline_cooldown"]
+        }
+      ]
+    },
+    {
+      "branch_id": "xp_booster",
+      "title": "XP Booster Path",
+      "nodes": [
+        {
+          "id": "xp_boost_1",
+          "title": "XP Boost I",
+          "description": "+5% XP on all answers.",
+          "cost": 100,
+          "unlocked": true,
+          "requires": []
+        },
+        {
+          "id": "xp_boost_2",
+          "title": "XP Boost II",
+          "description": "+10% XP on all answers.",
+          "cost": 250,
+          "unlocked": false,
+          "requires": ["xp_boost_1"]
+        }
+      ]
+    }
+  ]
+}

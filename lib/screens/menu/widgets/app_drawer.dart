@@ -56,9 +56,16 @@ class AppDrawer extends ConsumerWidget {
             ),
             ListTile(
               leading: const Icon(Icons.event),
-              title: const Text('Skill Tree'),
+              title: const Text('Skills'),
               onTap: () {
-                context.push('/skill-tree');
+                context.push('/skills');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.event),
+              title: const Text('Skills Test'),
+              onTap: () {
+                context.push('/skills-test');
               },
             ),
             ListTile(

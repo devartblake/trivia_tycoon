@@ -1,0 +1,946 @@
+{
+  "skill_tree_groups": {
+    "combat_focused": {
+      "title": "Combat-Focused Branches",
+      "description": "Direct gameplay mechanics and competitive advantages",
+      "color": "#FF4444",
+      "branches": {
+        "scholar": {
+          "branch_id": "scholar",
+          "title": "Scholar Path",
+          "description": "Knowledge and learning-based advantages",
+          "color": "#4A90E2",
+          "nodes": [
+            {
+              "id": "sch_root",
+              "title": "Study Habits",
+              "description": "+2s per question thinking time",
+              "tier": 0,
+              "cost": 1,
+              "category": "scholar",
+              "effects": { "timeBonusSec": 2 },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": true,
+              "effectType": "custom",
+              "effectValue": 2.0,
+              "duration": null,
+              "effectTarget": "timer",
+              "effectTrigger": "passive"
+            },
+            {
+              "id": "sch_faster_hint",
+              "title": "Faster Hint",
+              "description": "Hints appear 1s faster",
+              "tier": 1,
+              "cost": 2,
+              "category": "scholar",
+              "effects": { "hintSpeedBonus": 1 },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "custom",
+              "effectValue": 1.0,
+              "duration": null,
+              "effectTarget": "hints",
+              "effectTrigger": "passive"
+            },
+            {
+              "id": "sch_double_hint",
+              "title": "Double Hints",
+              "description": "Show two hints per question",
+              "tier": 2,
+              "cost": 3,
+              "category": "scholar",
+              "effects": { "extraHints": 1 },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "custom",
+              "effectValue": 1.0,
+              "duration": null,
+              "effectTarget": "hints",
+              "effectTrigger": "passive"
+            },
+            {
+              "id": "sch_sage",
+              "title": "Trivia Scholar Sage",
+              "description": "Unlock elite scholar abilities",
+              "tier": 3,
+              "cost": 5,
+              "category": "scholar",
+              "effects": { "eliteAccess": 1 },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "unlockCategory",
+              "effectValue": 1.0,
+              "duration": null,
+              "effectTarget": "elite_scholar",
+              "effectTrigger": "passive"
+            }
+          ]
+        },
+        "strategist": {
+          "branch_id": "strategist",
+          "title": "Strategist Path",
+          "description": "Tactical gameplay and planning advantages",
+          "color": "#9B59B6",
+          "nodes": [
+            {
+              "id": "str_root",
+              "title": "Game Planner",
+              "description": "Start building streaks +10%",
+              "tier": 0,
+              "cost": 1,
+              "category": "strategist",
+              "effects": { "streakMult": 1.1 },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": true,
+              "effectType": "custom",
+              "effectValue": 1.1,
+              "duration": null,
+              "effectTarget": "streak",
+              "effectTrigger": "passive"
+            },
+            {
+              "id": "str_combo",
+              "title": "Combo Planner",
+              "description": "Boost streak x1.2",
+              "tier": 1,
+              "cost": 1,
+              "category": "strategist",
+              "effects": { "streakMult": 1.2 },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "custom",
+              "effectValue": 1.2,
+              "duration": null,
+              "effectTarget": "streak",
+              "effectTrigger": "passive"
+            },
+            {
+              "id": "lifeline_cooldown",
+              "title": "Lifeline Efficiency",
+              "description": "Reduce lifeline cooldown by 10s",
+              "tier": 2,
+              "cost": 2,
+              "category": "strategist",
+              "effects": { "lifelineCooldownReduction": 10 },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "custom",
+              "effectValue": 10.0,
+              "duration": null,
+              "effectTarget": "lifeline",
+              "effectTrigger": "passive"
+            },
+            {
+              "id": "str_master",
+              "title": "Master Tactician",
+              "description": "Unlock strategist elites",
+              "tier": 3,
+              "cost": 3,
+              "category": "strategist",
+              "effects": { "eliteAccess": 1 },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "unlockCategory",
+              "effectValue": 1.0,
+              "duration": null,
+              "effectTarget": "elite_strategist",
+              "effectTrigger": "passive"
+            }
+          ]
+        },
+        "combat": {
+          "branch_id": "combat",
+          "title": "Combat Path",
+          "description": "Direct offensive abilities and disruption",
+          "color": "#E74C3C",
+          "nodes": [
+            {
+              "id": "combat_root",
+              "title": "50-50 Strike",
+              "description": "Eliminate half the wrong answers (90s cooldown)",
+              "tier": 0,
+              "cost": 2,
+              "category": "combat",
+              "effects": { "eliminateHalfWrong": true, "cooldownSec": 90 },
+              "cooldown": 90000,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": true,
+              "effectType": "custom",
+              "effectValue": 0.5,
+              "duration": null,
+              "effectTarget": "answers",
+              "effectTrigger": "active"
+            },
+            {
+              "id": "combat_eraser",
+              "title": "Precise Eraser",
+              "description": "Eliminate one specific wrong option (60s cooldown)",
+              "tier": 1,
+              "cost": 2,
+              "category": "combat",
+              "effects": { "eliminateOneWrong": true, "cooldownSec": 60 },
+              "cooldown": 60000,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "custom",
+              "effectValue": 1.0,
+              "duration": null,
+              "effectTarget": "answers",
+              "effectTrigger": "active"
+            },
+            {
+              "id": "combat_glitch",
+              "title": "Screen Glitch",
+              "description": "Glitch all screens for 10s (120s cooldown)",
+              "tier": 2,
+              "cost": 3,
+              "category": "combat",
+              "effects": { "glitchScreens": true, "duration": 10, "cooldownSec": 120 },
+              "cooldown": 120000,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "custom",
+              "effectValue": 1.0,
+              "duration": 10,
+              "effectTarget": "all_players",
+              "effectTrigger": "active"
+            }
+          ]
+        }
+      }
+    },
+
+    "enhancement_branches": {
+      "title": "Enhancement Branches",
+      "description": "Personal progression and scoring improvements",
+      "color": "#F39C12",
+      "branches": {
+        "xp": {
+          "branch_id": "xp",
+          "title": "XP Path",
+          "description": "Experience and progression bonuses",
+          "color": "#27AE60",
+          "nodes": [
+            {
+              "id": "xp_root",
+              "title": "XP Boost I",
+              "description": "+5% XP on all answers",
+              "tier": 0,
+              "cost": 1,
+              "category": "xp",
+              "effects": { "xpBoost": 0.05 },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": true,
+              "effectType": "xpBoost",
+              "effectValue": 0.05,
+              "duration": null,
+              "effectTarget": "xp",
+              "effectTrigger": "passive"
+            },
+            {
+              "id": "xp_boost_2",
+              "title": "XP Boost II",
+              "description": "+10% XP on all answers",
+              "tier": 1,
+              "cost": 1,
+              "category": "xp",
+              "effects": { "xpBoost": 0.1 },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "xpBoost",
+              "effectValue": 0.1,
+              "duration": null,
+              "effectTarget": "xp",
+              "effectTrigger": "passive"
+            },
+            {
+              "id": "xp_burst",
+              "title": "XP Burst",
+              "description": "Gain +50 XP instantly (60s cooldown)",
+              "tier": 2,
+              "cost": 1,
+              "category": "xp",
+              "effects": { "bonusXP": 50, "cooldownSec": 60 },
+              "cooldown": 60000,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "instantCoins",
+              "effectValue": 50.0,
+              "duration": null,
+              "effectTarget": "xp",
+              "effectTrigger": "active"
+            },
+            {
+              "id": "xp_grandmaster",
+              "title": "Grandmaster XP",
+              "description": "+25% XP on all answers",
+              "tier": 3,
+              "cost": 5,
+              "category": "xp",
+              "effects": { "xpBoost": 0.25 },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "xpBoost",
+              "effectValue": 0.25,
+              "duration": null,
+              "effectTarget": "xp",
+              "effectTrigger": "passive"
+            }
+          ]
+        },
+        "timer": {
+          "branch_id": "timer",
+          "title": "Timer Path",
+          "description": "Time manipulation and management",
+          "color": "#3498DB",
+          "nodes": [
+            {
+              "id": "timer_root",
+              "title": "Extra Time I",
+              "description": "+3s per question",
+              "tier": 0,
+              "cost": 1,
+              "category": "timer",
+              "effects": { "timeBonusSec": 3 },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": true,
+              "effectType": "custom",
+              "effectValue": 3.0,
+              "duration": null,
+              "effectTarget": "timer",
+              "effectTrigger": "passive"
+            },
+            {
+              "id": "timer_freeze",
+              "title": "Time Freeze",
+              "description": "Freeze timer for 1 question (90s cooldown)",
+              "tier": 1,
+              "cost": 3,
+              "category": "timer",
+              "effects": { "freezeTimer": true, "cooldownSec": 90 },
+              "cooldown": 90000,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "custom",
+              "effectValue": 1.0,
+              "duration": null,
+              "effectTarget": "timer",
+              "effectTrigger": "active"
+            },
+            {
+              "id": "timer_power_play",
+              "title": "Power Play",
+              "description": "All players get 50% more score for 20s (180s cooldown)",
+              "tier": 2,
+              "cost": 4,
+              "category": "timer",
+              "effects": { "globalScoreBonus": 0.5, "duration": 20, "cooldownSec": 180 },
+              "cooldown": 180000,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "custom",
+              "effectValue": 0.5,
+              "duration": 20,
+              "effectTarget": "all_players",
+              "effectTrigger": "active"
+            }
+          ]
+        },
+        "combo": {
+          "branch_id": "combo",
+          "title": "Combo Path",
+          "description": "Streak and scoring combinations",
+          "color": "#E67E22",
+          "nodes": [
+            {
+              "id": "combo_root",
+              "title": "Streak Starter",
+              "description": "Begin with +1 streak counter",
+              "tier": 0,
+              "cost": 1,
+              "category": "combo",
+              "effects": { "startingStreak": 1 },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": true,
+              "effectType": "custom",
+              "effectValue": 1.0,
+              "duration": null,
+              "effectTarget": "streak",
+              "effectTrigger": "passive"
+            },
+            {
+              "id": "combo_booster",
+              "title": "Streak Booster",
+              "description": "Boost streak counter by +2 (60s cooldown)",
+              "tier": 1,
+              "cost": 2,
+              "category": "combo",
+              "effects": { "streakBoost": 2, "cooldownSec": 60 },
+              "cooldown": 60000,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "custom",
+              "effectValue": 2.0,
+              "duration": null,
+              "effectTarget": "streak",
+              "effectTrigger": "active"
+            },
+            {
+              "id": "combo_gift",
+              "title": "Score Gift",
+              "description": "Send 800 bonus points to another player (120s cooldown)",
+              "tier": 2,
+              "cost": 3,
+              "category": "combo",
+              "effects": { "giftPoints": 800, "cooldownSec": 120 },
+              "cooldown": 120000,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "custom",
+              "effectValue": 800.0,
+              "duration": null,
+              "effectTarget": "other_player",
+              "effectTrigger": "active"
+            }
+          ]
+        },
+        "risk": {
+          "branch_id": "risk",
+          "title": "Risk Path",
+          "description": "High-reward, high-risk abilities",
+          "color": "#C0392B",
+          "nodes": [
+            {
+              "id": "risk_root",
+              "title": "Double Jeopardy",
+              "description": "Double score on correct, lose all on wrong",
+              "tier": 0,
+              "cost": 2,
+              "category": "risk",
+              "effects": { "doubleOrNothing": true },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": true,
+              "effectType": "doublePoints",
+              "effectValue": 2.0,
+              "duration": null,
+              "effectTarget": "score",
+              "effectTrigger": "passive"
+            },
+            {
+              "id": "risk_multiplier",
+              "title": "2X Multiplier",
+              "description": "Double score for correct answers",
+              "tier": 1,
+              "cost": 3,
+              "category": "risk",
+              "effects": { "scoreMultiplier": 2.0 },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "doublePoints",
+              "effectValue": 2.0,
+              "duration": null,
+              "effectTarget": "score",
+              "effectTrigger": "passive"
+            },
+            {
+              "id": "risk_supersonic",
+              "title": "Supersonic Speed",
+              "description": "1.5x score for 20s when playing fast (90s cooldown)",
+              "tier": 2,
+              "cost": 4,
+              "category": "risk",
+              "effects": { "speedBonus": 1.5, "speedDuration": 20, "cooldownSec": 90 },
+              "cooldown": 90000,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "custom",
+              "effectValue": 1.5,
+              "duration": 20,
+              "effectTarget": "score",
+              "effectTrigger": "conditional"
+            }
+          ]
+        }
+      }
+    },
+
+    "utility_branches": {
+      "title": "Utility Branches",
+      "description": "Support abilities and situational advantages",
+      "color": "#8E44AD",
+      "branches": {
+        "luck": {
+          "branch_id": "luck",
+          "title": "Luck Path",
+          "description": "RNG-based protection and second chances",
+          "color": "#F1C40F",
+          "nodes": [
+            {
+              "id": "luck_root",
+              "title": "Lucky Break",
+              "description": "5% chance to auto-correct wrong answers",
+              "tier": 0,
+              "cost": 2,
+              "category": "luck",
+              "effects": { "autoCorrectChance": 0.05 },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": true,
+              "effectType": "custom",
+              "effectValue": 0.05,
+              "duration": null,
+              "effectTarget": "answers",
+              "effectTrigger": "conditional"
+            },
+            {
+              "id": "luck_immunity",
+              "title": "Second Chance",
+              "description": "Retry same question if answered wrong (180s cooldown)",
+              "tier": 1,
+              "cost": 3,
+              "category": "luck",
+              "effects": { "retryWrongAnswer": true, "cooldownSec": 180 },
+              "cooldown": 180000,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "custom",
+              "effectValue": 1.0,
+              "duration": null,
+              "effectTarget": "answers",
+              "effectTrigger": "conditional"
+            },
+            {
+              "id": "luck_streak_saver",
+              "title": "Streak Guardian",
+              "description": "Protect streak from one wrong answer (300s cooldown)",
+              "tier": 2,
+              "cost": 4,
+              "category": "luck",
+              "effects": { "streakProtection": 1, "cooldownSec": 300 },
+              "cooldown": 300000,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "custom",
+              "effectValue": 1.0,
+              "duration": null,
+              "effectTarget": "streak",
+              "effectTrigger": "conditional"
+            }
+          ]
+        },
+        "stealth": {
+          "branch_id": "stealth",
+          "title": "Stealth Path",
+          "description": "Concealment and misdirection abilities",
+          "color": "#34495E",
+          "nodes": [
+            {
+              "id": "stealth_root",
+              "title": "Silent Study",
+              "description": "Opponents can't see your progress",
+              "tier": 0,
+              "cost": 1,
+              "category": "stealth",
+              "effects": { "hideProgress": true },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": true,
+              "effectType": "custom",
+              "effectValue": 1.0,
+              "duration": null,
+              "effectTarget": "visibility",
+              "effectTrigger": "passive"
+            },
+            {
+              "id": "stealth_phantom",
+              "title": "Phantom Answers",
+              "description": "Hide your answer choices from others",
+              "tier": 1,
+              "cost": 2,
+              "category": "stealth",
+              "effects": { "hideAnswers": true },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "custom",
+              "effectValue": 1.0,
+              "duration": null,
+              "effectTarget": "visibility",
+              "effectTrigger": "passive"
+            },
+            {
+              "id": "stealth_decoy",
+              "title": "Decoy Score",
+              "description": "Show fake score to opponents",
+              "tier": 2,
+              "cost": 3,
+              "category": "stealth",
+              "effects": { "fakeScore": true },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "custom",
+              "effectValue": 1.0,
+              "duration": null,
+              "effectTarget": "visibility",
+              "effectTrigger": "passive"
+            }
+          ]
+        },
+        "knowledge": {
+          "branch_id": "knowledge",
+          "title": "Knowledge Path",
+          "description": "Category-specific bonuses and accuracy",
+          "color": "#16A085",
+          "nodes": [
+            {
+              "id": "know_root",
+              "title": "Trivia Foundation",
+              "description": "+5% accuracy on all categories",
+              "tier": 0,
+              "cost": 1,
+              "category": "knowledge",
+              "effects": { "accuracyBonus": 0.05 },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": true,
+              "effectType": "custom",
+              "effectValue": 0.05,
+              "duration": null,
+              "effectTarget": "accuracy",
+              "effectTrigger": "passive"
+            },
+            {
+              "id": "know_specialist",
+              "title": "Category Specialist",
+              "description": "Choose one category for +15% bonus",
+              "tier": 1,
+              "cost": 3,
+              "category": "knowledge",
+              "effects": { "categoryBonus": 0.15, "selectableCategory": true },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "custom",
+              "effectValue": 0.15,
+              "duration": null,
+              "effectTarget": "category",
+              "effectTrigger": "passive"
+            },
+            {
+              "id": "know_polymath",
+              "title": "Polymath",
+              "description": "+10% bonus across all categories",
+              "tier": 2,
+              "cost": 5,
+              "category": "knowledge",
+              "effects": { "allCategoryBonus": 0.1 },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "custom",
+              "effectValue": 0.1,
+              "duration": null,
+              "effectTarget": "all_categories",
+              "effectTrigger": "passive"
+            }
+          ]
+        }
+      }
+    },
+
+    "advanced_branches": {
+      "title": "Advanced Branches",
+      "description": "High-tier abilities and special mechanics",
+      "color": "#AA00FF",
+      "branches": {
+        "elite": {
+          "branch_id": "elite",
+          "title": "Elite Path",
+          "description": "Master-tier abilities requiring prerequisites",
+          "color": "#FFD700",
+          "nodes": [
+            {
+              "id": "elite_root",
+              "title": "Elite Training",
+              "description": "Unlock elite skill paths",
+              "tier": 0,
+              "cost": 5,
+              "category": "elite",
+              "effects": { "eliteAccess": 1 },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "unlockCategory",
+              "effectValue": 1.0,
+              "duration": null,
+              "effectTarget": "elite",
+              "effectTrigger": "passive"
+            },
+            {
+              "id": "elite_scholar",
+              "title": "Elite Scholar",
+              "description": "Master-level knowledge skills",
+              "tier": 1,
+              "cost": 8,
+              "category": "elite",
+              "effects": { "masterKnowledge": true },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "custom",
+              "effectValue": 1.0,
+              "duration": null,
+              "effectTarget": "knowledge",
+              "effectTrigger": "passive"
+            },
+            {
+              "id": "elite_strategist",
+              "title": "Elite Strategist",
+              "description": "Master-level tactical skills",
+              "tier": 1,
+              "cost": 8,
+              "category": "elite",
+              "effects": { "masterTactics": true },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "custom",
+              "effectValue": 1.0,
+              "duration": null,
+              "effectTarget": "tactics",
+              "effectTrigger": "passive"
+            }
+          ]
+        },
+        "wildcard": {
+          "branch_id": "wildcard",
+          "title": "Wildcard Path",
+          "description": "Unpredictable and chaotic effects",
+          "color": "#8E44AD",
+          "nodes": [
+            {
+              "id": "wild_root",
+              "title": "Wild Card",
+              "description": "Random beneficial effect each game",
+              "tier": 0,
+              "cost": 3,
+              "category": "wildcard",
+              "effects": { "randomBenefit": true },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": true,
+              "effectType": "custom",
+              "effectValue": 1.0,
+              "duration": null,
+              "effectTarget": "random",
+              "effectTrigger": "conditional"
+            },
+            {
+              "id": "wild_chaos",
+              "title": "Chaos Theory",
+              "description": "Random effect every 5 questions",
+              "tier": 1,
+              "cost": 4,
+              "category": "wildcard",
+              "effects": { "periodicChaos": 5 },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "custom",
+              "effectValue": 5.0,
+              "duration": null,
+              "effectTarget": "random",
+              "effectTrigger": "periodic"
+            }
+          ]
+        },
+        "general": {
+          "branch_id": "general",
+          "title": "General Path",
+          "description": "Balanced, multi-purpose abilities",
+          "color": "#7F8C8D",
+          "nodes": [
+            {
+              "id": "gen_root",
+              "title": "Balanced Approach",
+              "description": "Small boost to everything: +2% XP, +1s time, +5% streak",
+              "tier": 0,
+              "cost": 2,
+              "category": "general",
+              "effects": { "xpBoost": 0.02, "timeBonusSec": 1, "streakMult": 1.05 },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": true,
+              "effectType": "custom",
+              "effectValue": null,
+              "duration": null,
+              "effectTarget": "multiple",
+              "effectTrigger": "passive"
+            },
+            {
+              "id": "gen_versatile",
+              "title": "Versatile Player",
+              "description": "Medium boost across all areas",
+              "tier": 1,
+              "cost": 4,
+              "category": "general",
+              "effects": { "xpBoost": 0.05, "timeBonusSec": 2, "streakMult": 1.1 },
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": false,
+              "available": false,
+              "effectType": "custom",
+              "effectValue": null,
+              "duration": null,
+              "effectTarget": "multiple",
+              "effectTrigger": "passive"
+            }
+          ]
+        }
+      }
+    }
+  },
+
+  "edges": [
+    { "fromId": "sch_root", "toId": "sch_faster_hint" },
+    { "fromId": "sch_faster_hint", "toId": "sch_double_hint" },
+    { "fromId": "sch_double_hint", "toId": "sch_sage" },
+
+    { "fromId": "str_root", "toId": "str_combo" },
+    { "fromId": "str_combo", "toId": "lifeline_cooldown" },
+    { "fromId": "lifeline_cooldown", "toId": "str_master" },
+
+    { "fromId": "combat_root", "toId": "combat_eraser" },
+    { "fromId": "combat_eraser", "toId": "combat_glitch" },
+
+    { "fromId": "xp_root", "toId": "xp_boost_2" },
+    { "fromId": "xp_boost_2", "toId": "xp_burst" },
+    { "fromId": "xp_burst", "toId": "xp_grandmaster" },
+
+    { "fromId": "timer_root", "toId": "timer_freeze" },
+    { "fromId": "timer_freeze", "toId": "timer_power_play" },
+
+    { "fromId": "combo_root", "toId": "combo_booster" },
+    { "fromId": "combo_booster", "toId": "combo_gift" },
+
+    { "fromId": "risk_root", "toId": "risk_multiplier" },
+    { "fromId": "risk_multiplier", "toId": "risk_supersonic" },
+
+    { "fromId": "luck_root", "toId": "luck_immunity" },
+    { "fromId": "luck_immunity", "toId": "luck_streak_saver" },
+
+    { "fromId": "stealth_root", "toId": "stealth_phantom" },
+    { "fromId": "stealth_phantom", "toId": "stealth_decoy" },
+
+    { "fromId": "know_root", "toId": "know_specialist" },
+    { "fromId": "know_specialist", "toId": "know_polymath" },
+
+    { "fromId": "elite_root", "toId": "elite_scholar" },
+    { "fromId": "elite_root", "toId": "elite_strategist" },
+
+    { "fromId": "wild_root", "toId": "wild_chaos" },
+
+    { "fromId": "gen_root", "toId": "gen_versatile" },
+
+    { "fromId": "sch_sage", "toId": "elite_root" },
+    { "fromId": "str_master", "toId": "elite_root" }
+  ],
+
+  "group_relationships": {
+    "unlock_requirements": {
+      "combat_focused": [],
+      "enhancement_branches": ["combat_focused"],
+      "utility_branches": ["enhancement_branches"],
+      "advanced_branches": ["combat_focused", "enhancement_branches", "utility_branches"]
+    },
+    "cross_group_edges": [
+      {
+        "from_group": "combat_focused",
+        "to_group": "advanced_branches",
+        "edges": [
+          { "fromId": "sch_sage", "toId": "elite_root" },
+          { "fromId": "str_master", "toId": "elite_root" }
+        ]
+      }
+    ]
+  },
+
+  "progression_metadata": {
+    "total_branches": 14,
+    "total_nodes": 41,
+    "max_tier_per_group": {
+      "combat_focused": 3,
+      "enhancement_branches": 3,
+      "utility_branches": 2,
+      "advanced_branches": 1
+    },
+    "recommended_progression": [
+      "combat_focused",
+      "enhancement_branches",
+      "utility_branches",
+      "advanced_branches"
+    ],
+    "group_themes": {
+      "combat_focused": "Direct competition and knowledge advantages",
+      "enhancement_branches": "Personal improvement and scoring",
+      "utility_branches": "Situational tools and protection",
+      "advanced_branches": "End-game content and mastery"
+    }
+  }
+}

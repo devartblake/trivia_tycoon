@@ -1,70 +1,233 @@
 {
-  "skill_tree": [
+  "nodes": [
+    /* ------------- SCHOLAR ------------- */
     {
-      "branch_id": "scholar",
-      "title": "Scholar Path",
-      "nodes": [
-        {
-          "id": "faster_hint",
-          "title": "Faster Hint",
-          "description": "Hints are shown 1s faster.",
-          "cost": 100,
-          "unlocked": false,
-          "requires": []
-        },
-        {
-          "id": "show_two_hints",
-          "title": "Show Two Hints",
-          "description": "Reveal two hints per question.",
-          "cost": 200,
-          "unlocked": false,
-          "requires": ["faster_hint"]
-        }
-      ]
+      "id": "sch_root",
+      "title": "Study Habits",
+      "description": "+2s per question.",
+      "tier": 0,
+      "cost": 1,
+      "category": "scholar",
+      "effects": { "timeBonusSec": 2 },
+      "unlocked": false,
+      "available": true
     },
     {
-      "branch_id": "strategist",
-      "title": "Strategist Path",
-      "nodes": [
-        {
-          "id": "lifeline_cooldown",
-          "title": "Lifeline Cooldown",
-          "description": "Reduce lifeline cooldown by 10s.",
-          "cost": 150,
-          "unlocked": false,
-          "requires": []
-        },
-        {
-          "id": "extra_lifeline",
-          "title": "Extra Lifeline",
-          "description": "Gain an extra lifeline per match.",
-          "cost": 300,
-          "unlocked": false,
-          "requires": ["lifeline_cooldown"]
-        }
-      ]
+      "id": "sch_focus",
+      "title": "Deep Focus",
+      "description": "Minor streak stability.",
+      "tier": 1,
+      "cost": 1,
+      "category": "scholar",
+      "effects": { "streakMult": 1.05 },
+      "unlocked": false,
+      "available": false
     },
     {
-      "branch_id": "xp_booster",
-      "title": "XP Booster Path",
-      "nodes": [
-        {
-          "id": "xp_boost_1",
-          "title": "XP Boost I",
-          "description": "+5% XP on all answers.",
-          "cost": 100,
-          "unlocked": true,
-          "requires": []
-        },
-        {
-          "id": "xp_boost_2",
-          "title": "XP Boost II",
-          "description": "+10% XP on all answers.",
-          "cost": 250,
-          "unlocked": false,
-          "requires": ["xp_boost_1"]
-        }
-      ]
+      "id": "sch_timer_plus",
+      "title": "Extra Time I",
+      "description": "+3s per question.",
+      "tier": 1,
+      "cost": 1,
+      "category": "scholar",
+      "effects": { "timeBonusSec": 3 },
+      "unlocked": false,
+      "available": false
+    },
+    {
+      "id": "sch_timer_plus_2",
+      "title": "Extra Time II",
+      "description": "+4s per question.",
+      "tier": 2,
+      "cost": 2,
+      "category": "scholar",
+      "effects": { "timeBonusSec": 4 },
+      "unlocked": false,
+      "available": false
+    },
+    {
+      "id": "sch_smart_breaks",
+      "title": "Smart Breaks",
+      "description": "Slight difficulty bonus.",
+      "tier": 2,
+      "cost": 2,
+      "category": "scholar",
+      "effects": { "hardBonus": 0.05 },
+      "unlocked": false,
+      "available": false
+    },
+    {
+      "id": "sch_sage",
+      "title": "Trivia Scholar",
+      "description": "Unlock scholar elites.",
+      "tier": 3,
+      "cost": 3,
+      "category": "scholar",
+      "effects": { "eliteAccess": 1 },
+      "unlocked": false,
+      "available": false
+    },
+
+    /* ----------- STRATEGIST ----------- */
+    {
+      "id": "str_root",
+      "title": "Game Planner",
+      "description": "Start building streaks.",
+      "tier": 0,
+      "cost": 1,
+      "category": "strategist",
+      "effects": { "streakMult": 1.1 },
+      "unlocked": false,
+      "available": true
+    },
+    {
+      "id": "str_timer",
+      "title": "Time Management I",
+      "description": "+5s per question.",
+      "tier": 1,
+      "cost": 1,
+      "category": "strategist",
+      "effects": { "timeBonusSec": 5 },
+      "unlocked": false,
+      "available": false
+    },
+    {
+      "id": "str_combo",
+      "title": "Combo Planner",
+      "description": "Boost streak x1.2.",
+      "tier": 1,
+      "cost": 1,
+      "category": "strategist",
+      "effects": { "streakMult": 1.2 },
+      "unlocked": false,
+      "available": false
+    },
+    {
+      "id": "str_adapt",
+      "title": "Adaptive Strategy",
+      "description": "Small hard Q bonus.",
+      "tier": 2,
+      "cost": 2,
+      "category": "strategist",
+      "effects": { "hardBonus": 0.08 },
+      "unlocked": false,
+      "available": false
+    },
+    {
+      "id": "str_precision",
+      "title": "Precision Play",
+      "description": "Bigger streak boost.",
+      "tier": 2,
+      "cost": 2,
+      "category": "strategist",
+      "effects": { "streakMult": 1.3 },
+      "unlocked": false,
+      "available": false
+    },
+    {
+      "id": "str_master",
+      "title": "Master Tactician",
+      "description": "Unlock strategist elites.",
+      "tier": 3,
+      "cost": 3,
+      "category": "strategist",
+      "effects": { "eliteAccess": 1 },
+      "unlocked": false,
+      "available": false
+    },
+
+    /* -------------- XP ---------------- */
+    {
+      "id": "xp_root",
+      "title": "XP Boost I",
+      "description": "+5% XP on all answers.",
+      "tier": 0,
+      "cost": 1,
+      "category": "xp",
+      "effects": { "xpBoost": 0.05 },
+      "unlocked": false,
+      "available": true
+    },
+    {
+      "id": "xp_boost_2",
+      "title": "XP Boost II",
+      "description": "+10% XP on all answers.",
+      "tier": 1,
+      "cost": 1,
+      "category": "xp",
+      "effects": { "xpBoost": 0.1 },
+      "unlocked": false,
+      "available": false
+    },
+    {
+      "id": "xp_burst",
+      "title": "XP Burst",
+      "description": "Gain +50 XP (60s CD).",
+      "tier": 1,
+      "cost": 1,
+      "category": "xp",
+      "effects": { "bonusXP": 50, "cooldownSec": 60 },
+      "unlocked": false,
+      "available": false
+    },
+    {
+      "id": "xp_boost_3",
+      "title": "XP Boost III",
+      "description": "+15% XP on all answers.",
+      "tier": 2,
+      "cost": 2,
+      "category": "xp",
+      "effects": { "xpBoost": 0.15 },
+      "unlocked": false,
+      "available": false
+    },
+    {
+      "id": "xp_windfall",
+      "title": "Windfall",
+      "description": "+100 XP (120s CD).",
+      "tier": 2,
+      "cost": 2,
+      "category": "xp",
+      "effects": { "bonusXP": 100, "cooldownSec": 120 },
+      "unlocked": false,
+      "available": false
+    },
+    {
+      "id": "xp_grandmaster",
+      "title": "Grandmaster XP",
+      "description": "+25% XP on all answers.",
+      "tier": 3,
+      "cost": 3,
+      "category": "xp",
+      "effects": { "xpBoost": 0.25 },
+      "unlocked": false,
+      "available": false
     }
+  ],
+
+  "edges": [
+    /* Scholar edges */
+    { "fromId": "sch_root", "toId": "sch_focus" },
+    { "fromId": "sch_root", "toId": "sch_timer_plus" },
+    { "fromId": "sch_focus", "toId": "sch_timer_plus_2" },
+    { "fromId": "sch_timer_plus", "toId": "sch_smart_breaks" },
+    { "fromId": "sch_timer_plus_2", "toId": "sch_sage" },
+    { "fromId": "sch_smart_breaks", "toId": "sch_sage" },
+
+    /* Strategist edges */
+    { "fromId": "str_root", "toId": "str_timer" },
+    { "fromId": "str_root", "toId": "str_combo" },
+    { "fromId": "str_timer", "toId": "str_adapt" },
+    { "fromId": "str_combo", "toId": "str_precision" },
+    { "fromId": "str_adapt", "toId": "str_master" },
+    { "fromId": "str_precision", "toId": "str_master" },
+
+    /* XP edges */
+    { "fromId": "xp_root", "toId": "xp_boost_2" },
+    { "fromId": "xp_root", "toId": "xp_burst" },
+    { "fromId": "xp_boost_2", "toId": "xp_boost_3" },
+    { "fromId": "xp_burst", "toId": "xp_windfall" },
+    { "fromId": "xp_boost_3", "toId": "xp_grandmaster" },
+    { "fromId": "xp_windfall", "toId": "xp_grandmaster" }
   ]
 }

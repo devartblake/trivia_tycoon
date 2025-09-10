@@ -83,6 +83,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
           const Divider(),
 
+          ListTile(
+            leading: const Icon(Icons.hexagon),
+            title: const Text("Skill Tree Theme", style: TextStyle(fontWeight: FontWeight.bold),),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              context.push('/skill-theme');
+            },
+          ),
+
+          const Divider(),
+
           SingleSection(
             title: "Preferences",
             children: [
