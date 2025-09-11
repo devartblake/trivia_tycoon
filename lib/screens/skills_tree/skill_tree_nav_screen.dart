@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import '../../../game/controllers/skill_tree_controller.dart';
 import '../../../ui_components/hex_grid/widgets/hex_nav_button.dart';
 import '../../../ui_components/hex_grid/math/hex_orientation.dart';
-import '../../game/models/skill_tree_graph.dart';
 import '../../game/models/skill_tree_nav_models.dart';
 import '../../game/providers/skill_tree_nav_providers.dart';
 import '../../ui_components/hex_grid/widgets/mini_hex_preview.dart';
@@ -34,6 +33,15 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
 
   void _deepLinkToBranchStep(String branchId, {int initialStep = 0, bool showPath = true}) {
     context.push('/skill-tree/$branchId?step=$initialStep&showPath=${showPath ? 1 : 0}');
+  }
+
+  Color parseHex(String hex, {Color fallback = const Color(0xFF555555)}) {
+    try {
+      final v = hex.replaceAll('#', '');
+      return Color(int.parse('FF$v', radix: 16));
+    } catch (_) {
+      return fallback;
+    }
   }
 
   @override
@@ -129,7 +137,7 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 0.85,
+          childAspectRatio: 0.9,
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
         ),
@@ -143,7 +151,7 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
   }
 
   Widget _buildGroupCard(SkillGroupData group) {
-    final bg = Color(int.parse(group.color.replaceFirst('#', '0xFF')));
+    final bg = parseHex(group.color);
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -248,7 +256,10 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
                                     color: Colors.black26,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
-                                  child: const Icon(Icons.open_in_full, size: 12, color: Colors.white),
+                                  child: const Tooltip(
+                                    message: 'Open preview',
+                                    child: Icon(Icons.open_in_full, size: 14, color: Colors.white),
+                                  ),
                                 ),
                               ),
                             ),
@@ -565,7 +576,7 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
         ),
         onTap: () {
           context.pop();
-          context.push('/skill-tree/${result.branchId}');
+          context.push('/skill-tree/${result.branchId}?step=0&showPath=1');
         },
       ),
     );
@@ -766,88 +777,7 @@ class SkillSearchResult {
   });
 }
 
-SkillCategory _categoryFromGroupId(String groupId) {
-  switch (groupId.toLowerCase()) {
-    case 'scholar': return SkillCategory.scholar;
-    case 'strategist': return SkillCategory.strategist;
-    case 'combat': return SkillCategory.combat;
-    case 'xp': return SkillCategory.xp;
-    case 'timer': return SkillCategory.timer;
-    case 'combo': return SkillCategory.combo;
-    case 'risk': return SkillCategory.risk;
-    case 'luck': return SkillCategory.luck;
-    case 'stealth': return SkillCategory.stealth;
-    case 'knowledge': return SkillCategory.knowledge;
-    case 'elite': return SkillCategory.elite;
-    case 'wildcard': return SkillCategory.wildcard;
-    case 'general': return SkillCategory.general;
-    default: return SkillCategory.unknown;
-  }
-}
-
-/// Compute a recommended unlock order for a branch/category.
-/// Topological sort inside the branch subgraph.
-/// Tie-breaker: priority score (favor cheaper cost; xp/time effects get a bump).
-List<SkillNode> computeRecommendedOrderForBranch(
-    SkillTreeGraph graph,
-    String branchId, {
-      Map<String, double>? edgeWeights, // if you later add weights
-    }) {
-  final cat = _categoryFromGroupId(branchId);
-  final nodes = graph.nodes.where((n) => n.category == cat).toList();
-  if (nodes.isEmpty) return const [];
-
-  final idSet = nodes.map((n) => n.id).toSet();
-  final edges = graph.edges.where((e) => idSet.contains(e.fromId) && idSet.contains(e.toId)).toList();
-
-  // Build indegree + adjacency
-  final indeg = <String, int>{ for (final n in nodes) n.id: 0 };
-  final adj = <String, List<String>>{ for (final n in nodes) n.id: [] };
-  for (final e in edges) {
-    indeg[e.toId] = (indeg[e.toId] ?? 0) + 1;
-    adj[e.fromId]!.add(e.toId);
-  }
-
-  double priority(SkillNode n) {
-    // cheaper is better, small nudges for recognizable effects
-    final xpBoost = (n.effects['xpBoost'] ?? 0).toDouble();
-    final timeBonus = (n.effects['timeBonusSec'] ?? 0).toDouble();
-    final streakMult = (n.effects['streakMult'] ?? 0).toDouble();
-    // tune weights as you wish
-    return -n.cost + xpBoost * 10 + timeBonus * 0.5 + streakMult * 2;
-  }
-
-  // Kahn’s algorithm with a priority queue (highest score first)
-  final byId = { for (final n in nodes) n.id: n };
-  final ready = <SkillNode>[
-    for (final n in nodes) if (indeg[n.id] == 0) n
-  ]..sort((a,b) => priority(b).compareTo(priority(a)));
-
-  final result = <SkillNode>[];
-
-  while (ready.isNotEmpty) {
-    final cur = ready.removeAt(0);
-    result.add(cur);
-    for (final v in adj[cur.id]!) {
-      indeg[v] = indeg[v]! - 1;
-      if (indeg[v] == 0) {
-        ready.add(byId[v]!);
-      }
-    }
-    // keep queue sorted by priority
-    ready.sort((a,b) => priority(b).compareTo(priority(a)));
-  }
-
-  // If cycle existed, append remaining by priority (failsafe)
-  if (result.length != nodes.length) {
-    final missing = nodes.where((n) => !result.any((x) => x.id == n.id)).toList()
-      ..sort((a,b) => priority(b).compareTo(priority(a)));
-    result.addAll(missing);
-  }
-  return result;
-}
-
-extension on _SkillTreeNavScreenState {
+extension _AutoPathSheet on _SkillTreeNavScreenState {
   void _showAutoPath(BuildContext context, String branchId, {int initialStep = 0}) {
     showModalBottomSheet(
       context: context,
@@ -889,8 +819,7 @@ extension on _SkillTreeNavScreenState {
                           branchId: branchId,
                           baseColor: Colors.white24,
                           textColor: Colors.white,
-                          // if your preview supports a "highlight path" flag, pass it here
-                          // highlightPath: highlight,
+                          highlightPath: highlight, // Now using the parameter
                         ),
                       ),
                     ),

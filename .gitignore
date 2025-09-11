@@ -169,3 +169,6 @@ android/app/.cxx/Debug/1d212j12/x86_64/configure_fingerprint.bin
 android/app/.cxx/Debug/1d212j12/x86_64/metadata_generation_command.txt
 android/app/.cxx/Debug/1d212j12/x86_64/prefab_config.json
 android/app/.cxx/Debug/1d212j12/x86_64/symbol_folder_index.txt
+*.zip
+*.zip
+*.zip

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../math/hex_orientation.dart';
 import '../widgets/hexagon.dart';
 
-enum HexButtonSize { small, medium, large, extraLarge }
+enum HexButtonSize { tiny, small, medium, large, extraLarge }
 
 class HexNavButton extends StatelessWidget {
   final double? radius; // Made optional - will be overridden by size preset
@@ -16,6 +16,7 @@ class HexNavButton extends StatelessWidget {
   final double? borderWidth; // Made optional - will be sized based on preset
   final bool selected;
   final int? badgeCount;
+  final Color? glowColor; // New glow parameter
 
   const HexNavButton({
     super.key,
@@ -30,10 +31,20 @@ class HexNavButton extends StatelessWidget {
     this.borderWidth, // Optional - will use size preset if not provided
     this.selected = false,
     this.badgeCount,
+    this.glowColor, // New glow parameter
   });
 
   // Size configuration map
   static const Map<HexButtonSize, Map<String, double>> _sizeConfig = {
+    HexButtonSize.tiny: {
+      'radius': 12.0,
+      'borderWidth': 0.8,
+      'iconSize': 8.0,
+      'fontSize': 7.0,
+      'badgeSize': 6.0,
+      'badgePadding': 3.0,
+      'badgeOffset': 3.0,
+    },
     HexButtonSize.small: {
       'radius': 16.0,
       'borderWidth': 1.0,
@@ -82,47 +93,65 @@ class HexNavButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget hexWidget = Hexagon(
+      radius: _effectiveRadius,
+      orientation: orientation,
+      gradient: gradient ?? LinearGradient(
+        colors: selected
+            ? const [Color(0xFF2FD5FF), Color(0xFF5B6BFF)]
+            : const [Color(0x1AFFFFFF), Color(0x11000000)],
+      ),
+      borderColor: selected ? Colors.white : borderColor,
+      borderWidth: selected ? _effectiveBorderWidth + 0.7 : _effectiveBorderWidth,
+      onTap: onPressed,
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null)
+              IconTheme(
+                data: IconThemeData(size: _iconSize),
+                child: icon!,
+              ),
+            if (label != null) ...[
+              SizedBox(height: _fontSize * 0.5), // Proportional spacing
+              Text(
+                label!,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: _fontSize,
+                  fontWeight: FontWeight.w500,
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+
+    // Add glow effect if glowColor is provided
+    if (glowColor != null) {
+      hexWidget = Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: glowColor!,
+              blurRadius: _effectiveRadius * 0.4,
+              spreadRadius: _effectiveRadius * 0.1,
+            ),
+          ],
+        ),
+        child: hexWidget,
+      );
+    }
+
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        Hexagon(
-          radius: _effectiveRadius,
-          orientation: orientation,
-          gradient: gradient ?? LinearGradient(
-            colors: selected
-                ? const [Color(0xFF2FD5FF), Color(0xFF5B6BFF)]
-                : const [Color(0x1AFFFFFF), Color(0x11000000)],
-          ),
-          borderColor: selected ? Colors.white : borderColor,
-          borderWidth: selected ? _effectiveBorderWidth + 0.7 : _effectiveBorderWidth,
-          onTap: onPressed,
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (icon != null)
-                  IconTheme(
-                    data: IconThemeData(size: _iconSize),
-                    child: icon!,
-                  ),
-                if (label != null) ...[
-                  SizedBox(height: _fontSize * 0.5), // Proportional spacing
-                  Text(
-                    label!,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: _fontSize,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ],
-            ),
-          ),
-        ),
+        hexWidget,
         if (badgeCount != null && badgeCount! > 0)
           Positioned(
             right: -_badgeOffset,
@@ -154,6 +183,33 @@ class HexNavButton extends StatelessWidget {
 
 // Convenience constructors for common use cases
 extension HexNavButtonSizes on HexNavButton {
+  static HexNavButton tiny({
+    Key? key,
+    HexOrientation orientation = HexOrientation.pointy,
+    VoidCallback? onPressed,
+    Widget? icon,
+    String? label,
+    Gradient? gradient,
+    Color borderColor = const Color(0x66FFFFFF),
+    bool selected = false,
+    int? badgeCount,
+    Color? glowColor,
+  }) {
+    return HexNavButton(
+      key: key,
+      size: HexButtonSize.tiny,
+      orientation: orientation,
+      onPressed: onPressed,
+      icon: icon,
+      label: label,
+      gradient: gradient,
+      borderColor: borderColor,
+      selected: selected,
+      badgeCount: badgeCount,
+      glowColor: glowColor,
+    );
+  }
+
   static HexNavButton small({
     Key? key,
     HexOrientation orientation = HexOrientation.pointy,
@@ -164,6 +220,7 @@ extension HexNavButtonSizes on HexNavButton {
     Color borderColor = const Color(0x66FFFFFF),
     bool selected = false,
     int? badgeCount,
+    Color? glowColor,
   }) {
     return HexNavButton(
       key: key,
@@ -176,6 +233,7 @@ extension HexNavButtonSizes on HexNavButton {
       borderColor: borderColor,
       selected: selected,
       badgeCount: badgeCount,
+      glowColor: glowColor,
     );
   }
 
@@ -189,6 +247,7 @@ extension HexNavButtonSizes on HexNavButton {
     Color borderColor = const Color(0x66FFFFFF),
     bool selected = false,
     int? badgeCount,
+    Color? glowColor,
   }) {
     return HexNavButton(
       key: key,
@@ -201,6 +260,7 @@ extension HexNavButtonSizes on HexNavButton {
       borderColor: borderColor,
       selected: selected,
       badgeCount: badgeCount,
+      glowColor: glowColor,
     );
   }
 
@@ -214,6 +274,7 @@ extension HexNavButtonSizes on HexNavButton {
     Color borderColor = const Color(0x66FFFFFF),
     bool selected = false,
     int? badgeCount,
+    Color? glowColor,
   }) {
     return HexNavButton(
       key: key,
@@ -226,6 +287,7 @@ extension HexNavButtonSizes on HexNavButton {
       borderColor: borderColor,
       selected: selected,
       badgeCount: badgeCount,
+      glowColor: glowColor,
     );
   }
 }

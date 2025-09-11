@@ -9,8 +9,9 @@ import '../../../ui_components/hex_grid/paint/hex_spider_background_painter.dart
 import '../../core/theme/hex_spider_theme.dart';
 import '../../../game/models/skill_tree_graph.dart';
 import '../../../game/controllers/skill_tree_controller.dart';
-import '../../game/models/skill_branch_path_planner.dart';
+import '../../game/models/skill_branch_path_planner.dart'; // Use centralized planner
 import '../../ui_components/hex_grid/math/hex_orientation.dart';
+import '../../ui_components/hex_grid/paint/branch_path_overlay_painter.dart';
 
 class SkillBranchDetailScreen extends ConsumerStatefulWidget {
   final String branchId;
@@ -35,7 +36,8 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
 
   String? _focusedId;
   bool _showPath = false;
-  int _pathIndex = -1;
+  int _pathIndex = 0;
+  List<String> _computedPath = [];
 
   @override
   void initState() {
@@ -45,12 +47,50 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
     if (widget.initialStep != null) _pathIndex = widget.initialStep!.clamp(0, 9999);
 
     _listCtrl = ScrollController();
+
+    // Defer parsing query params until we have context
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _hydrateFromQueryParamsIfNeeded();
+      _recomputePath();
+      setState(() {});
+    });
+
     Future.microtask(() {
       final args = GoRouterState.of(context).extra as BranchDetailArgs?;
       if (args?.initialStep != null) {
         _listCtrl.jumpTo((args!.initialStep!) * 88.0);
       }
     });
+  }
+
+  void _hydrateFromQueryParamsIfNeeded() {
+    // If caller passed explicit values, prefer those
+    int? step = widget.initialStep;
+    bool? show = widget.showPathInitially ? true : null;
+
+    // Otherwise parse from router location
+    final loc = GoRouter.of(context).routeInformationProvider.value.uri.toString();
+    final uri = Uri.tryParse(loc);
+    if (uri != null) {
+      step ??= int.tryParse(uri.queryParameters['step'] ?? '');
+      final sp = uri.queryParameters['showPath'];
+      show ??= (sp == '1' || sp?.toLowerCase() == 'true');
+    }
+
+    if (step != null) _pathIndex = math.max(0, step);
+    if (show != null) _showPath = show;
+  }
+
+  void _recomputePath() {
+    final state = ref.read(skillTreeProvider);
+    // Use the new centralized planner
+    final planner = SkillBranchPathPlanner.fromGraph(state.graph);
+    final orderedNodes = planner.forBranch(widget.branchId);
+    _computedPath = orderedNodes.map((n) => n.id).toList();
+
+    if (_pathIndex >= _computedPath.length) {
+      _pathIndex = _computedPath.isEmpty ? 0 : _computedPath.length - 1;
+    }
   }
 
   @override
@@ -60,33 +100,32 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
     super.dispose();
   }
 
-  // Build VM using the new extension and BranchPathPlanner
+  // Build VM using the centralized planner
   BranchDetailVM _buildVM(SkillTreeState state) {
-    final sg = state.graph.subgraphForBranch(widget.branchId);
-    final weights = <String, double>{
-      for (final n in sg.nodes)
-        n.id: (n.effects['weight']?.toDouble() ?? (100 - n.tier).toDouble())
-    };
-    final order = BranchPathPlanner(sg, weights).plan();
+    final planner = SkillBranchPathPlanner.fromGraph(state.graph);
+    final orderedNodes = planner.forBranch(widget.branchId);
+    final order = orderedNodes.map((n) => n.id).toList();
+
     final unlocked = <String, bool>{
       for (final n in state.graph.nodes) n.id: n.unlocked
     };
+
     final canUnlock = <String, bool>{
       for (final id in order)
-        id: _canUnlockNow(sg, id, unlocked, state.playerPoints, state.graph.byId[id]!.cost)
+        id: _canUnlockNow(state.graph, id, unlocked, state.playerPoints, state.graph.byId[id]!.cost)
     };
 
     return BranchDetailVM(
         branchId: widget.branchId,
-        nodes: sg.nodes,
+        nodes: orderedNodes,
         order: order,
         canUnlock: canUnlock
     );
   }
 
-  bool _canUnlockNow(SkillTreeGraph sg, String id, Map<String, bool> unlocked, int xp, int cost) {
+  bool _canUnlockNow(SkillTreeGraph graph, String id, Map<String, bool> unlocked, int xp, int cost) {
     if (unlocked[id] == true) return false;
-    final prereqs = sg.edges.where((e) => e.toId == id).map((e) => e.fromId);
+    final prereqs = graph.edges.where((e) => e.toId == id).map((e) => e.fromId);
     final ready = prereqs.isEmpty || prereqs.every((p) => unlocked[p] == true);
     return ready && xp >= cost;
   }
@@ -117,15 +156,8 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
     final node = state.graph.byId[nodeId];
 
     if (node != null && ctrl.canUnlock(nodeId) && state.playerPoints >= node.cost) {
-      ctrl.unlock(nodeId); // Use the method you know exists
+      ctrl.unlock(nodeId);
     }
-  }
-
-  // Safe use method
-  void _useSkill(String nodeId) {
-    final ctrl = ref.read(skillTreeProvider.notifier);
-    // Check if your controller has this method, otherwise remove
-    // ctrl.useSkill(nodeId);
   }
 
   // Hit-test helpers
@@ -158,6 +190,22 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
     if (selected != null) {
       _unlockSkill(selected);
     }
+  }
+
+  void _goToStep(int i) {
+    if (_computedPath.isEmpty) return;
+    setState(() {
+      _pathIndex = i.clamp(0, _computedPath.length - 1);
+    });
+  }
+
+  void _toggleOverlay() {
+    setState(() {
+      _showPath = !_showPath;
+      if (_showPath) {
+        _recomputePath();
+      }
+    });
   }
 
   void _showAutoPathSheet(BranchDetailVM vm) {
@@ -227,106 +275,172 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
     );
   }
 
+  Widget _pathControls(BuildContext context) {
+    final total = _computedPath.length;
+    final label = total == 0
+        ? 'No steps'
+        : 'Step ${_pathIndex + 1} / $total';
+
+    if (!_showPath || total == 0) return const SizedBox.shrink();
+
+    return Card(
+      color: const Color(0xCC1E2139),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: Row(
+          children: [
+            IconButton(
+              onPressed: total == 0 ? null : () => _goToStep(_pathIndex - 1),
+              icon: const Icon(Icons.chevron_left, color: Colors.white),
+            ),
+            Expanded(
+              child: Text(
+                label,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+            IconButton(
+              onPressed: total == 0 ? null : () => _goToStep(_pathIndex + 1),
+              icon: const Icon(Icons.chevron_right, color: Colors.white),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(skillTreeProvider);
-    final vm = _buildVM(state); // Use the VM pattern
-    final filtered = state.graph.subgraphForBranch(widget.branchId); // Use extension
+    final vm = _buildVM(state);
+    final filtered = state.graph.subgraphForBranch(widget.branchId);
     final positions = _filterPositions(state.positions, filtered);
-    final ctrl = ref.read(skillTreeProvider.notifier);
 
     final currentScale = _transform.value.storage[0];
     final branchColor = _branchColor(widget.branchId);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0D1021),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF15183A),
-        title: Text(
-          '${widget.branchId[0].toUpperCase()}${widget.branchId.substring(1)} Branch',
-          style: const TextStyle(color: Colors.white),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.alt_route),
-            tooltip: 'Auto-path',
-            onPressed: () => _showAutoPathSheet(vm), // Pass VM
+        backgroundColor: const Color(0xFF0D1021),
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF15183A),
+          title: Text(
+            '${widget.branchId[0].toUpperCase()}${widget.branchId.substring(1)} Branch',
+            style: const TextStyle(color: Colors.white),
           ),
-          IconButton(
-            icon: const Icon(Icons.playlist_add_check),
-            tooltip: 'Unlock selected',
-            onPressed: _handleUnlockSelected,
-          ),
-          const SizedBox(width: 4),
-        ],
-      ),
-      body: Container(
-        color: const Color(0xFF0D1021),
-        child: LayoutBuilder(
-          builder: (context, c) {
-            final painter = SkillTreePainter(
-              graph: filtered,
-              positions: positions,
-              worldToScreen: _transform.value,
-              nodeRadius: _nodeRadius,
-              selectedId: state.selectedId,
-              categoryImages: const <SkillCategory, ui.Image?>{},
-              focusedId: _focusedId,
-            );
-
-            final backgroundPainter = HexSpiderBackgroundPainter(
-              ringCount: 8,
-              ringSpacing: 140,
-              rayCount: 24,
-              hexRadius: _nodeRadius,
-              orientation: HexOrientation.pointy,
-              scale: currentScale,
-              alignToNodes: true,
-              worldToScreen: _transform.value,
-              positions: positions,
-              theme: HexSpiderTheme.brand,
-              gridColor: branchColor.withOpacity(0.18),
-              ringColor: Colors.white.withOpacity(0.22),
-              rayColor: branchColor.withOpacity(0.18),
-              baseGridAlpha: 1.0,
-              baseRingAlpha: 0.75,
-              baseRayAlpha: 0.65,
-            );
-
-            return GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTapDown: (d) => _handleTapDown(d, positions),
-              onDoubleTapDown: (d) {
-                final id = _hitTestNode(d.localPosition, positions, _transform.value);
-                if (id != null) _unlockSkill(id);
-              },
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: CustomPaint(
-                      painter: backgroundPainter,
-                    ),
-                  ),
-                  Positioned.fill(
-                    child: CustomPaint(
-                      foregroundPainter: painter,
-                    ),
-                  ),
-                  Positioned(
-                    right: 12,
-                    bottom: 12,
-                    child: _ZoomPad(
-                      onIn: () => setState(() => _transform.value = _transform.value.scaled(1.15)),
-                      onOut: () => setState(() => _transform.value = _transform.value.scaled(0.87)),
-                      onReset: () => setState(() => _transform.value = vmath.Matrix4.identity()..scale(0.9, 0.9)),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.alt_route),
+              tooltip: 'Auto-path',
+              onPressed: () => _showAutoPathSheet(vm),
+            ),
+            IconButton(
+              icon: Icon(_showPath ? Icons.layers_clear : Icons.layers),
+              tooltip: _showPath ? 'Hide path' : 'Show path',
+              onPressed: _toggleOverlay,
+            ),
+            IconButton(
+              icon: const Icon(Icons.playlist_add_check),
+              tooltip: 'Unlock selected',
+              onPressed: _handleUnlockSelected,
+            ),
+            const SizedBox(width: 4),
+          ],
         ),
-      ),
+        body: Container(
+            color: const Color(0xFF0D1021),
+            child: LayoutBuilder(
+                builder: (context, c) {
+                  final painter = SkillTreePainter(
+                    graph: filtered,
+                    positions: positions,
+                    worldToScreen: _transform.value,
+                    nodeRadius: _nodeRadius,
+                    selectedId: state.selectedId,
+                    categoryImages: const <SkillCategory, ui.Image?>{},
+                    focusedId: _focusedId,
+                  );
+
+                  final backgroundPainter = HexSpiderBackgroundPainter(
+                    ringCount: 8,
+                    ringSpacing: 140,
+                    rayCount: 24,
+                    hexRadius: _nodeRadius,
+                    orientation: HexOrientation.pointy,
+                    scale: currentScale,
+                    alignToNodes: true,
+                    worldToScreen: _transform.value,
+                    positions: positions,
+                    theme: HexSpiderTheme.brand,
+                    gridColor: branchColor.withOpacity(0.18),
+                    ringColor: Colors.white.withOpacity(0.22),
+                    rayColor: branchColor.withOpacity(0.18),
+                    baseGridAlpha: 1.0,
+                    baseRingAlpha: 0.75,
+                    baseRayAlpha: 0.65,
+                  );
+
+                  return GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTapDown: (d) => _handleTapDown(d, positions),
+                    onDoubleTapDown: (d) {
+                      final id = _hitTestNode(d.localPosition, positions, _transform.value);
+                      if (id != null) _unlockSkill(id);
+                    },
+                    child: Stack(
+                      children: [
+                    Positioned.fill(
+                    child: CustomPaint(
+                    painter: backgroundPainter,
+                    ),
+                  ),
+                  Positioned.fill(
+                  child: CustomPaint(
+                  foregroundPainter: painter,
+                  ),
+                  ),
+                  // Add the path overlay when enabled
+                  if (_showPath && _computedPath.isNotEmpty)
+                  Positioned.fill(
+                  child: IgnorePointer(
+                  child: CustomPaint(
+                    painter: BranchPathOverlayPainter(
+                      positionsWorld: positions,
+                      worldToScreen: _transform.value,
+                      path: _computedPath,
+                      currentStep: _pathIndex,
+                      nodeRadius: _nodeRadius,
+                      showStepNumbers: true,
+                      pathColor: branchColor,
+                      pathGlowColor: branchColor.withOpacity(0.5),
+                      haloColor: const Color(0xFFFFC857),
+                      strokeWidth: 3,
+                    ),
+                  ),
+                  ),
+                  ),
+                        Positioned(
+                          right: 12,
+                          bottom: 12,
+                          child: _ZoomPad(
+                            onIn: () => setState(() => _transform.value = _transform.value.scaled(1.15)),
+                            onOut: () => setState(() => _transform.value = _transform.value.scaled(0.87)),
+                            onReset: () => setState(() => _transform.value = vmath.Matrix4.identity()..scale(0.9, 0.9)),
+                          ),
+                        ),
+                        // Add path controls at the bottom
+                        Positioned(
+                          left: 12,
+                          right: 12,
+                          bottom: 80, // Above zoom controls
+                          child: _pathControls(context),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+            ),
+        ),
     );
   }
 
