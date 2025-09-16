@@ -699,4 +699,28 @@ class AppSettings {
     final items = await getStringList('purchased_items') ?? [];
     return items.contains(id);
   }
+
+  /// Sets the confetti theme name
+  static Future<void> setConfettiTheme(String theme) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('confettiTheme', theme);
+  }
+
+  /// Sets the confetti animation speed
+  static Future<void> setConfettiSpeed(double speed) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('confettiSpeed', speed);
+  }
+
+  /// Sets the number of confetti particles
+  static Future<void> setConfettiParticleCount(int count) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('confettiParticleCount', count);
+  }
+
+  /// Sets the particle density setting
+  static Future<void> setParticleDensity(String density) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('particleDensity', density);
+  }
 }

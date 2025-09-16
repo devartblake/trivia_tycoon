@@ -76,7 +76,7 @@ class SettingsController {
     audioOn.value = audioService.getAudioOn(defaultValue: true);
     soundsOn.value = audioService.getSoundsOn(defaultValue: true);
     musicOn.value = audioService.getMusicOn(defaultValue: true);
-    playerName.value = profileService.getPlayerName();
+    playerName.value = await profileService.getPlayerName();
     purchasedSongs.value = await purchaseService.getPurchasedSongs();
     _log.fine(() => 'Loaded settings successfully.');
   }

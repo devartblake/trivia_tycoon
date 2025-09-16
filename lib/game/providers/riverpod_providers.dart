@@ -240,9 +240,9 @@ final themeSettingsProvider = Provider<ThemeSettingsService>((ref) {
   return ref.read(serviceManagerProvider).themeSettingsService;
 });
 
-/// This provider must be overridden at app launch via AppLauncher
+/// Provides the ThemeNotifier from ServiceManager
 final themeNotifierProvider = Provider<ThemeNotifier>((ref) {
-  throw UnimplementedError('ThemeNotifier must be overridden in AppLauncher');
+  return ref.read(serviceManagerProvider).themeNotifier;
 });
 
 final swatchServiceProvider = Provider<SwatchService>((ref) {

@@ -21,10 +21,6 @@ class LoginManager {
     required this.profileService,
   });
 
-  Future<void> init() async {
-    await profileService.init();
-  }
-
   Future<void> login(String email, String password) async {
     await authService.login(email);
     await secureStorage.setLoggedIn(true);

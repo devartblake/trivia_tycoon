@@ -97,7 +97,7 @@ class UserProfileScreen extends StatelessWidget {
                 children: [
                   ShimmerAvatar(
                     avatarPath: entry.avatar,
-                    initials: entry.username[0].toUpperCase(),
+                    initials: entry.playerName[0].toUpperCase(),
                     radius: 44,
                     xpProgress: entry.xpProgress,
                   ),
@@ -129,7 +129,7 @@ class UserProfileScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          Text(entry.username, style: theme.textTheme.headlineSmall?.copyWith(color: Colors.white)),
+          Text(entry.playerName, style: theme.textTheme.headlineSmall?.copyWith(color: Colors.white)),
           const SizedBox(height: 6),
           Text("Share Profile", style: TextStyle(color: Colors.white70)),
           IconButton(
@@ -372,7 +372,7 @@ class UserProfileScreen extends StatelessWidget {
           ),
 
           const SizedBox(height: 12),
-          Text("Username: @${entry.username}"),
+          Text("Username: @${entry.playerName}"),
           Text("User ID: #${entry.userId}"),
           const SizedBox(height: 16),
           ElevatedButton.icon(

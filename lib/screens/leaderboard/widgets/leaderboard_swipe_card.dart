@@ -4,7 +4,7 @@ import '../../../game/models/leaderboard_entry.dart';
 import '../../leaderboard/widgets/shimmer_avatar.dart';
 
 class LeaderboardSwipeCard extends StatelessWidget {
-  final String username;
+  final String playerName;
   final int score;
   final LeaderboardEntry entry;
   final VoidCallback onPromote;
@@ -12,7 +12,7 @@ class LeaderboardSwipeCard extends StatelessWidget {
 
   const LeaderboardSwipeCard({
     super.key,
-    required this.username,
+    required this.playerName,
     required this.score,
     required this.entry,
     required this.onPromote,
@@ -22,7 +22,7 @@ class LeaderboardSwipeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: ValueKey(username),
+      key: ValueKey(playerName),
       background: _buildSwipeBackground(
         color: Colors.green,
         icon: Icons.star,
@@ -49,8 +49,8 @@ class LeaderboardSwipeCard extends StatelessWidget {
         child: ListTile(
           leading: ShimmerAvatar(
             avatarPath: entry.avatar,
-            initials: (entry.username.isNotEmpty)
-                ? entry.username[0].toUpperCase()
+            initials: (entry.playerName.isNotEmpty)
+                ? entry.playerName[0].toUpperCase()
                 : '?',
             ageGroup: entry.ageGroup,
             gender: entry.gender,
@@ -58,7 +58,7 @@ class LeaderboardSwipeCard extends StatelessWidget {
             xpProgress: entry.xpProgress,
             status: entry.status,
           ),
-          title: Text(username),
+          title: Text(playerName),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

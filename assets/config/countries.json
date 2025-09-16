@@ -1,0 +1,284 @@
+[
+  {
+    "name": "Afghanistan",
+    "code": "AF",
+    "native_language": "Pashto, Dari",
+    "flag_icon_url": "https://flagcdn.com/w160/af.png"
+  },
+  {
+    "name": "Albania",
+    "code": "AL",
+    "native_language": "Albanian",
+    "flag_icon_url": "https://flagcdn.com/w160/al.png"
+  },
+  {
+    "name": "Algeria",
+    "code": "DZ",
+    "native_language": "Arabic",
+    "flag_icon_url": "https://flagcdn.com/w160/dz.png"
+  },
+  {
+    "name": "Argentina",
+    "code": "AR",
+    "native_language": "Spanish",
+    "flag_icon_url": "https://flagcdn.com/w160/ar.png"
+  },
+  {
+    "name": "Australia",
+    "code": "AU",
+    "native_language": "English",
+    "flag_icon_url": "https://flagcdn.com/w160/au.png"
+  },
+  {
+    "name": "Austria",
+    "code": "AT",
+    "native_language": "German",
+    "flag_icon_url": "https://flagcdn.com/w160/at.png"
+  },
+  {
+    "name": "Bangladesh",
+    "code": "BD",
+    "native_language": "Bengali",
+    "flag_icon_url": "https://flagcdn.com/w160/bd.png"
+  },
+  {
+    "name": "Belgium",
+    "code": "BE",
+    "native_language": "Dutch, French, German",
+    "flag_icon_url": "https://flagcdn.com/w160/be.png"
+  },
+  {
+    "name": "Brazil",
+    "code": "BR",
+    "native_language": "Portuguese",
+    "flag_icon_url": "https://flagcdn.com/w160/br.png"
+  },
+  {
+    "name": "Canada",
+    "code": "CA",
+    "native_language": "English, French",
+    "flag_icon_url": "https://flagcdn.com/w160/ca.png"
+  },
+  {
+    "name": "China",
+    "code": "CN",
+    "native_language": "Mandarin Chinese",
+    "flag_icon_url": "https://flagcdn.com/w160/cn.png"
+  },
+  {
+    "name": "Colombia",
+    "code": "CO",
+    "native_language": "Spanish",
+    "flag_icon_url": "https://flagcdn.com/w160/co.png"
+  },
+  {
+    "name": "Denmark",
+    "code": "DK",
+    "native_language": "Danish",
+    "flag_icon_url": "https://flagcdn.com/w160/dk.png"
+  },
+  {
+    "name": "Egypt",
+    "code": "EG",
+    "native_language": "Arabic",
+    "flag_icon_url": "https://flagcdn.com/w160/eg.png"
+  },
+  {
+    "name": "Finland",
+    "code": "FI",
+    "native_language": "Finnish, Swedish",
+    "flag_icon_url": "https://flagcdn.com/w160/fi.png"
+  },
+  {
+    "name": "France",
+    "code": "FR",
+    "native_language": "French",
+    "flag_icon_url": "https://flagcdn.com/w160/fr.png"
+  },
+  {
+    "name": "Germany",
+    "code": "DE",
+    "native_language": "German",
+    "flag_icon_url": "https://flagcdn.com/w160/de.png"
+  },
+  {
+    "name": "Greece",
+    "code": "GR",
+    "native_language": "Greek",
+    "flag_icon_url": "https://flagcdn.com/w160/gr.png"
+  },
+  {
+    "name": "India",
+    "code": "IN",
+    "native_language": "Hindi, English",
+    "flag_icon_url": "https://flagcdn.com/w160/in.png"
+  },
+  {
+    "name": "Indonesia",
+    "code": "ID",
+    "native_language": "Indonesian",
+    "flag_icon_url": "https://flagcdn.com/w160/id.png"
+  },
+  {
+    "name": "Ireland",
+    "code": "IE",
+    "native_language": "Irish, English",
+    "flag_icon_url": "https://flagcdn.com/w160/ie.png"
+  },
+  {
+    "name": "Italy",
+    "code": "IT",
+    "native_language": "Italian",
+    "flag_icon_url": "https://flagcdn.com/w160/it.png"
+  },
+  {
+    "name": "Japan",
+    "code": "JP",
+    "native_language": "Japanese",
+    "flag_icon_url": "https://flagcdn.com/w160/jp.png"
+  },
+  {
+    "name": "Kenya",
+    "code": "KE",
+    "native_language": "Swahili, English",
+    "flag_icon_url": "https://flagcdn.com/w160/ke.png"
+  },
+  {
+    "name": "Mexico",
+    "code": "MX",
+    "native_language": "Spanish",
+    "flag_icon_url": "https://flagcdn.com/w160/mx.png"
+  },
+  {
+    "name": "Netherlands",
+    "code": "NL",
+    "native_language": "Dutch",
+    "flag_icon_url": "https://flagcdn.com/w160/nl.png"
+  },
+  {
+    "name": "New Zealand",
+    "code": "NZ",
+    "native_language": "English, Māori",
+    "flag_icon_url": "https://flagcdn.com/w160/nz.png"
+  },
+  {
+    "name": "Nigeria",
+    "code": "NG",
+    "native_language": "English",
+    "flag_icon_url": "https://flagcdn.com/w160/ng.png"
+  },
+  {
+    "name": "Norway",
+    "code": "NO",
+    "native_language": "Norwegian",
+    "flag_icon_url": "https://flagcdn.com/w160/no.png"
+  },
+  {
+    "name": "Pakistan",
+    "code": "PK",
+    "native_language": "Urdu, English",
+    "flag_icon_url": "https://flagcdn.com/w160/pk.png"
+  },
+  {
+    "name": "Peru",
+    "code": "PE",
+    "native_language": "Spanish",
+    "flag_icon_url": "https://flagcdn.com/w160/pe.png"
+  },
+  {
+    "name": "Philippines",
+    "code": "PH",
+    "native_language": "Filipino, English",
+    "flag_icon_url": "https://flagcdn.com/w160/ph.png"
+  },
+  {
+    "name": "Poland",
+    "code": "PL",
+    "native_language": "Polish",
+    "flag_icon_url": "https://flagcdn.com/w160/pl.png"
+  },
+  {
+    "name": "Portugal",
+    "code": "PT",
+    "native_language": "Portuguese",
+    "flag_icon_url": "https://flagcdn.com/w160/pt.png"
+  },
+  {
+    "name": "Russia",
+    "code": "RU",
+    "native_language": "Russian",
+    "flag_icon_url": "https://flagcdn.com/w160/ru.png"
+  },
+  {
+    "name": "Saudi Arabia",
+    "code": "SA",
+    "native_language": "Arabic",
+    "flag_icon_url": "https://flagcdn.com/w160/sa.png"
+  },
+  {
+    "name": "South Africa",
+    "code": "ZA",
+    "native_language": "Afrikaans, English, Zulu",
+    "flag_icon_url": "https://flagcdn.com/w160/za.png"
+  },
+  {
+    "name": "South Korea",
+    "code": "KR",
+    "native_language": "Korean",
+    "flag_icon_url": "https://flagcdn.com/w160/kr.png"
+  },
+  {
+    "name": "Spain",
+    "code": "ES",
+    "native_language": "Spanish",
+    "flag_icon_url": "https://flagcdn.com/w160/es.png"
+  },
+  {
+    "name": "Sweden",
+    "code": "SE",
+    "native_language": "Swedish",
+    "flag_icon_url": "https://flagcdn.com/w160/se.png"
+  },
+  {
+    "name": "Switzerland",
+    "code": "CH",
+    "native_language": "German, French, Italian",
+    "flag_icon_url": "https://flagcdn.com/w160/ch.png"
+  },
+  {
+    "name": "Thailand",
+    "code": "TH",
+    "native_language": "Thai",
+    "flag_icon_url": "https://flagcdn.com/w160/th.png"
+  },
+  {
+    "name": "Turkey",
+    "code": "TR",
+    "native_language": "Turkish",
+    "flag_icon_url": "https://flagcdn.com/w160/tr.png"
+  },
+  {
+    "name": "United Arab Emirates",
+    "code": "AE",
+    "native_language": "Arabic",
+    "flag_icon_url": "https://flagcdn.com/w160/ae.png"
+  },
+  {
+    "name": "United Kingdom",
+    "code": "GB",
+    "native_language": "English",
+    "flag_icon_url": "https://flagcdn.com/w160/gb.png"
+  },
+  {
+    "name": "United States",
+    "code": "US",
+    "native_language": "English",
+    "flag_icon_url": "https://flagcdn.com/w160/us.png"
+  },
+  {
+    "name": "Vietnam",
+    "code": "VN",
+    "native_language": "Vietnamese",
+    "flag_icon_url": "https://flagcdn.com/w160/vn.png"
+  }
+]

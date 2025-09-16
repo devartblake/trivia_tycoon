@@ -4,8 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+export 'package:sign_in_button/src/button_list.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sign_in_button/sign_in_button.dart';
 import '../../core/constants/login_constants.dart';
 import '../../core/helpers/dart_helper.dart';
 import '../../core/helpers/login_color_helper.dart';
@@ -14,7 +16,6 @@ import 'cards/auth_card_builder.dart';
 import 'widgets/animations/fade_in.dart';
 import 'widgets/gradient_box.dart';
 import 'widgets/hero_text.dart';
-import 'package:sign_in_button/sign_in_button.dart';
 
 import 'models/login_user_type.dart';
 import 'models/term_of_service.dart';
@@ -22,8 +23,6 @@ import 'models/user_form_field.dart';
 import 'providers/auth.dart';
 import 'providers/login_messages.dart';
 import 'providers/login_theme.dart';
-
-export 'package:sign_in_button/src/button_list.dart';
 
 export 'models/login_data.dart';
 export 'models/signup_data.dart';

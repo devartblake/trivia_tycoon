@@ -103,8 +103,8 @@ class _LeaderboardCardState extends State<LeaderboardCard> with SingleTickerProv
             // Avatar with shimmer + status badge
             ShimmerAvatar(
               avatarPath: entry.avatar,
-              initials: (entry.username.isNotEmpty)
-                  ? entry.username[0].toUpperCase()
+              initials: (entry.playerName.isNotEmpty)
+                  ? entry.playerName[0].toUpperCase()
                   : '?',
               ageGroup: entry.ageGroup,
               gender: entry.gender,
@@ -120,7 +120,7 @@ class _LeaderboardCardState extends State<LeaderboardCard> with SingleTickerProv
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(entry.username, style: Theme.of(context).textTheme.titleMedium),
+                  Text(entry.playerName, style: Theme.of(context).textTheme.titleMedium),
                   Text("Age: $ageLabel", style: const TextStyle(fontSize: 12)),
 
                   const SizedBox(height: 4),

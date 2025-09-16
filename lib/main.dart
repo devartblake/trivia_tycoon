@@ -9,22 +9,78 @@ import 'package:trivia_tycoon/widgets/app_logo.dart';
 import 'core/manager/service_manager.dart';
 import 'core/services/theme/theme_notifier.dart';
 import 'game/providers/riverpod_providers.dart' hide themeNotifierProvider;
+import 'game/providers/auth_providers.dart';
+import 'game/providers/onboarding_providers.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final (manager, theme) = await AppInit.initialize();
-  runApp(ProviderScope(
+
+  try {
+    // Initialize services first
+    final (manager, theme) = await AppInit.initialize();
+
+    // Initialize auth state from services
+    await _initializeAuthState(manager);
+
+    runApp(
+      ProviderScope(
+        overrides: [
+          serviceManagerProvider.overrideWithValue(manager),
+        ],
+        child: TriviaTycoonApp(initialData: (manager, theme)),
+      ),
+    );
+  } catch (e) {
+    debugPrint('App initialization failed: $e');
+
+    // Fallback - run app without pre-initialized state
+    runApp(
+      ProviderScope(
+        child: const TriviaTycoonApp(),
+      ),
+    );
+  }
+}
+
+/// Initialize auth state and sync with Riverpod providers
+Future<void> _initializeAuthState(ServiceManager serviceManager) async {
+  try {
+    // Create a temporary container to update providers
+    final container = ProviderContainer(
       overrides: [
-        serviceManagerProvider.overrideWithValue(manager),
-        // themeNotifierProvider.overrideWithValue(theme),
+        serviceManagerProvider.overrideWithValue(serviceManager),
       ],
-      child: const TriviaTycoonApp()
-    )
-  );
+    );
+
+    // Load auth state from services
+    final isLoggedIn = await serviceManager.authService.isLoggedIn();
+    final hasOnboarded = await serviceManager.onboardingSettingsService.hasCompletedOnboarding();
+
+    debugPrint('Session loaded: isLoggedIn=$isLoggedIn, hasOnboarded=$hasOnboarded');
+
+    // Sync with Riverpod providers
+    container.read(isLoggedInSyncProvider.notifier).state = isLoggedIn;
+
+    // Update onboarding state based on completion status
+    if (hasOnboarded) {
+      container.read(hasSeenIntroProvider.notifier).state = true;
+      container.read(hasCompletedProfileProvider.notifier).state = true;
+    }
+
+    // Dispose the temporary container
+    container.dispose();
+
+    debugPrint('Riverpod providers synchronized with service state');
+  } catch (e) {
+    debugPrint('Auth state initialization failed: $e');
+    // Continue with default state - app should still work
+  }
 }
 
 class TriviaTycoonApp extends StatefulWidget {
-  const TriviaTycoonApp({super.key});
+  final (ServiceManager, ThemeNotifier)? initialData;
+
+  const TriviaTycoonApp({super.key, this.initialData});
 
   @override
   State<TriviaTycoonApp> createState() => _TriviaTycoonAppState();
@@ -39,7 +95,12 @@ class _TriviaTycoonAppState extends State<TriviaTycoonApp> {
   @override
   void initState() {
     super.initState();
-    _init();
+    if (widget.initialData != null) {
+      _initialData = widget.initialData;
+      _initialized = true;
+    } else {
+      _init();
+    }
   }
 
   Future<void> _init() async {

@@ -6,8 +6,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import '../ui_components/login/trivia_login.dart';
 import '../core/constants/image_strings.dart';
+import '../game/providers/auth_providers.dart';
+import '../game/providers/onboarding_providers.dart';
 import 'onboarding/widget/constants.dart';
 
+/// Updated login screen that integrates with new flow
 class LoginScreen extends ConsumerWidget {
   static const routeName = '/auth';
   const LoginScreen({super.key});
@@ -27,25 +30,40 @@ class LoginScreen extends ConsumerWidget {
     if (!mockUsers.containsKey(data.name)) return 'User does not exist';
     if (mockUsers[data.name] != data.password) return 'Incorrect password';
 
-    final role = 'player';
+    try {
+      // Get services
+      final authOps = ref.read(authOperationsProvider);
+      final profileService = ref.read(playerProfileServiceProvider);
+      final onboardingService = ref.read(onboardingSettingsServiceProvider);
 
-    final authService = ref.read(authServiceProvider);
-    final profileService = ref.read(playerProfileServiceProvider);
-    final secureStorage = ref.read(secureStorageProvider);
+      // Perform login using the auth operations
+      await authOps.login(data.name);
 
-    // App login logic
-    await authService.login(data.name);
-    await secureStorage.setLoggedIn(true);
-    await profileService.saveUserRoles([role]); // or 'user'
+      // Save additional profile data
+      await profileService.saveUserRoles(['player']);
 
-    return null; // Success triggers `onSubmitAnimationCompleted`
+      // Check if user has completed onboarding before
+      final hasOnboarded = await onboardingService.hasCompletedOnboarding();
+
+      if (hasOnboarded) {
+        // Returning user - set onboarding flags to completed
+        ref.read(hasSeenIntroProvider.notifier).state = true;
+        ref.read(hasCompletedProfileProvider.notifier).state = true;
+
+        // Load user profile data for returning user
+        final playerName = await profileService.getPlayerName();
+        final userRole = await profileService.getUserRole();
+        debugPrint('Loaded profile for returning user: $playerName, role: $userRole');
+      }
+      // If not onboarded, leave flags as false - router will redirect to intro
+
+      return null; // Success triggers navigation
+    } catch (e) {
+      return 'Login failed: ${e.toString()}';
+    }
   }
 
   Future<String?> _signupUser(SignupData data, WidgetRef ref) async {
-    final playerProfileService = ref.read(playerProfileServiceProvider);
-    final authService = ref.read(authServiceProvider);
-    final onboardingService = ref.read(onboardingSettingsServiceProvider);
-
     try {
       // Simulate server-side processing delay
       await Future.delayed(loginTime);
@@ -55,6 +73,15 @@ class LoginScreen extends ConsumerWidget {
       final username = data.additionalSignupData?['Username'] ?? 'Player';
       final name = data.additionalSignupData?['Name'] ?? '';
       final phone = data.additionalSignupData?['phone_number'] ?? '';
+
+      // Get services
+      final authOps = ref.read(authOperationsProvider);
+      final playerProfileService = ref.read(playerProfileServiceProvider);
+      final authService = ref.read(authServiceProvider);
+      final onboardingService = ref.read(onboardingSettingsServiceProvider);
+
+      // Perform login using the auth operations
+      await authOps.login(email!);
 
       // Assign role and optional premium flag
       const defaultRole = 'player';
@@ -70,14 +97,16 @@ class LoginScreen extends ConsumerWidget {
       if (name.isNotEmpty) await playerProfileService.saveAvatar(name);
       if (phone.isNotEmpty) await authService.secureStorage.setSecret('phone_number', phone);
 
-      // Save login + onboarding flag
-      await authService.setLoggedIn(true);
-      await authService.secureStorage.setUserEmail(email!);
+      // Save email and onboarding flag
+      if (email != null) await authService.secureStorage.setUserEmail(email);
       await onboardingService.setHasCompletedOnboarding(false);
+
+      // For new signups, onboarding flags remain false
+      // Router will redirect to intro automatically
 
       return null; // Success
     } catch (e) {
-      return '❌ Signup failed: ${e.toString()}';
+      return 'Signup failed: ${e.toString()}';
     }
   }
 
@@ -94,33 +123,33 @@ class LoginScreen extends ConsumerWidget {
 
   Future<LoginMessages> getLoginMessages(BuildContext context) async {
     return LoginMessages(
-      userHint: 'User',
-      passwordHint: 'Pass',
-      confirmPasswordHint: 'Confirm',
+      userHint: 'Email',
+      passwordHint: 'Password',
+      confirmPasswordHint: 'Confirm Password',
       loginButton: 'LOG IN',
       signupButton: 'REGISTER',
-      forgotPasswordButton: 'Forgot huh?',
-      recoverPasswordButton: 'HELP ME',
+      forgotPasswordButton: 'Forgot Password?',
+      recoverPasswordButton: 'RECOVER',
       goBackButton: 'GO BACK',
-      confirmPasswordError: 'Not match!',
-      recoverPasswordIntro: 'Don\'t feel bad. Happens all the time.',
-      recoverPasswordDescription: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
-      recoverPasswordSuccess: 'Password rescued successfully',
-      tycoonToastTitleError: 'Oh no!',
+      confirmPasswordError: 'Passwords don\'t match!',
+      recoverPasswordIntro: 'Don\'t worry, it happens to everyone.',
+      recoverPasswordDescription: 'Enter your email address and we\'ll send you a link to reset your password.',
+      recoverPasswordSuccess: 'Password reset link sent successfully!',
+      tycoonToastTitleError: 'Oops!',
       tycoonToastTitleSuccess: 'Success!',
-      providersTitleFirst: 'login with',
+      providersTitleFirst: 'or sign in with',
     );
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final onboardingService = ref.read(onboardingSettingsServiceProvider);
-
     return FutureBuilder<LoginMessages>(
       future: getLoginMessages(context),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
         }
 
         return FlutterLogin(
@@ -132,6 +161,8 @@ class LoginScreen extends ConsumerWidget {
           onConfirmRecover: _signupConfirm,
           onConfirmSignup: _signupConfirm,
           loginAfterSignUp: false,
+
+          // Social login providers
           loginProviders: [
             LoginProvider(
               button: Buttons.linkedIn,
@@ -139,10 +170,7 @@ class LoginScreen extends ConsumerWidget {
               callback: () async {
                 return null;
               },
-              providerNeedsSignUpCallback: () {
-                // put here your logic to conditionally show the additional fields
-                return Future.value(true);
-              },
+              providerNeedsSignUpCallback: () => Future.value(true),
             ),
             LoginProvider(
               icon: FontAwesomeIcons.google,
@@ -154,116 +182,158 @@ class LoginScreen extends ConsumerWidget {
             LoginProvider(
               icon: FontAwesomeIcons.githubAlt,
               callback: () async {
-                debugPrint('start github sign in');
+                debugPrint('GitHub sign in initiated');
                 await Future.delayed(loginTime);
-                debugPrint('stop github sign in');
                 return null;
               },
             ),
           ],
+
+          // Enhanced theme
           theme: LoginTheme(
-            primaryColor: Colors.blue,
-            accentColor: Colors.blueAccent,
-            errorColor: Colors.deepOrange,
-            pageColorLight: Colors.indigo.shade300,
-            pageColorDark: Colors.indigo.shade500,
+            primaryColor: Theme.of(context).primaryColor,
+            accentColor: Theme.of(context).primaryColor.withOpacity(0.8),
+            errorColor: Colors.redAccent,
+            pageColorLight: Theme.of(context).primaryColor.withOpacity(0.1),
+            pageColorDark: Theme.of(context).primaryColor.withOpacity(0.3),
             logoWidth: 0.80,
             titleStyle: TextStyle(
-              color: Colors.greenAccent,
+              color: Theme.of(context).primaryColor,
               fontFamily: 'Quicksand',
-              letterSpacing: 4,
+              letterSpacing: 2,
+              fontWeight: FontWeight.bold,
             ),
-            // beforeHeroFontSize: 50,
-            // afterHeroFontSize: 20,
-            bodyStyle: TextStyle(
-              fontStyle: FontStyle.italic,
-              decoration: TextDecoration.underline,
+            bodyStyle: const TextStyle(
+              fontStyle: FontStyle.normal,
+              color: Colors.black87,
             ),
-            textFieldStyle: TextStyle(
-              color: Colors.orange,
-              shadows: [Shadow(color: Colors.yellow, blurRadius: 2)],
+            textFieldStyle: const TextStyle(
+              color: Colors.black87,
             ),
-            buttonStyle: TextStyle(
-              fontWeight: FontWeight.w800,
-              color: Colors.yellow,
+            buttonStyle: const TextStyle(
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
             ),
             cardTheme: CardTheme(
-              color: Colors.yellow.shade100,
-              elevation: 5,
-              margin: EdgeInsets.only(top: 15),
-              shape: ContinuousRectangleBorder(
-                  borderRadius: BorderRadius.circular(100.0)),
+              color: Colors.white,
+              elevation: 8,
+              margin: const EdgeInsets.only(top: 15),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.0),
+              ),
             ),
             buttonTheme: LoginButtonTheme(
-              splashColor: Colors.purple,
-              backgroundColor: Colors.pinkAccent,
-              highlightColor: Colors.lightGreen,
-              elevation: 9.0,
-              highlightElevation: 6.0,
-              shape: BeveledRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+              splashColor: Theme.of(context).primaryColor.withOpacity(0.3),
+              backgroundColor: Theme.of(context).primaryColor,
+              highlightColor: Theme.of(context).primaryColor.withOpacity(0.8),
+              elevation: 4.0,
+              highlightElevation: 8.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
-              // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-              // shape: CircleBorder(side: BorderSide(color: Colors.green)),
-              // shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(55.0)),
             ),
           ),
+
+          // Validation
           userValidator: (value) {
-            if (!value!.contains('@') || !value.endsWith('.com')) {
-              return "Email must contain '@' and end with '.com'";
+            if (value == null || value.isEmpty) {
+              return 'Email is required';
+            }
+            if (!value.contains('@') || !value.contains('.')) {
+              return 'Please enter a valid email address';
             }
             return null;
           },
           passwordValidator: (value) {
-            if (value!.isEmpty) return 'Password is empty';
+            if (value == null || value.isEmpty) {
+              return 'Password is required';
+            }
+            if (value.length < 3) {
+              return 'Password must be at least 3 characters';
+            }
             return null;
           },
+
+          // Callbacks
           onLogin: (data) => _loginUser(data, ref),
           onSignup: (data) => _signupUser(data, ref),
           onRecoverPassword: _recoverPassword,
-          onSubmitAnimationCompleted: () async {
-            final hasOnboarded = await onboardingService
-                .hasCompletedOnboarding();
-            if (context.mounted) {
-              context.go(hasOnboarded ? '/' : '/onboarding');
-            }
+
+          // Navigation after successful auth
+          onSubmitAnimationCompleted: () {
+            // Don't navigate manually - let the router redirect logic handle it
+            // The router will check auth state and onboarding flags to decide where to go
           },
+
+          // Additional signup fields
           additionalSignupFields: const [
-            UserFormField(keyName: 'Username', icon: Icon(FontAwesomeIcons.userLarge)),
-            UserFormField(keyName: 'Name'),
-            UserFormField(keyName: 'Surname'),
-            UserFormField(keyName: 'phone_number',
+            UserFormField(
+              keyName: 'Username',
+              icon: Icon(FontAwesomeIcons.userLarge),
+              displayName: 'Username',
+            ),
+            UserFormField(
+              keyName: 'Name',
+              displayName: 'Full Name',
+            ),
+            UserFormField(
+              keyName: 'phone_number',
               displayName: 'Phone Number',
               userType: LoginUserType.phone,
             ),
           ],
-          headerWidget: const IntroWidget(),
+
+          // Header widget
+          headerWidget: const AuthHeaderWidget(),
+
+          // Footer text (FlutterLogin only accepts String for footer)
+          footer: 'New to Trivia Tycoon? Create an account to get started!',
         );
-      }
+      },
     );
   }
 }
 
-class IntroWidget extends StatelessWidget {
-  const IntroWidget({super.key});
+/// Header widget for auth screens
+class AuthHeaderWidget extends StatelessWidget {
+  const AuthHeaderWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       children: [
         Text.rich(
           TextSpan(
             children: [
-              TextSpan(text: "You are trying to login/sign up on server hosted on "),
-              TextSpan(text: "example.com", style: TextStyle(fontWeight: FontWeight.bold)),
+              const TextSpan(text: "Welcome to "),
+              TextSpan(
+                text: "Trivia Tycoon",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
             ],
           ),
-          textAlign: TextAlign.justify,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
-        Row(
+        const SizedBox(height: 8),
+        Text(
+          'Master every question, become the ultimate tycoon',
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: Colors.grey[600],
+          ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 16),
+        const Row(
           children: <Widget>[
             Expanded(child: Divider()),
-            Padding(padding: EdgeInsets.all(8.0), child: Text("Authenticate")),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Text("Sign In"),
+            ),
             Expanded(child: Divider()),
           ],
         ),

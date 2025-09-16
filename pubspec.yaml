@@ -78,6 +78,11 @@ dependencies:
   camera: ^0.11.1
   fl_chart: ^0.71.0
   animated_text_kit: ^4.2.3
+  logger: ^2.6.1
+  connectivity_plus: ^7.0.0
+  video_player: ^2.10.0
+  chewie: ^1.12.1
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:
@@ -109,8 +114,14 @@ flutter:
    - assets/data/leaderboard/
    - assets/data/questions/
    - assets/data/questions/bonus/
+   - assets/data/questions/classes/
+   - assets/data/questions/entertainment/
    - assets/data/questions/general/
+   - assets/data/questions/geography/
+   - assets/data/questions/history/
    - assets/data/questions/kids/
+   - assets/data/questions/literature/
+   - assets/data/questions/math/
    - assets/data/questions/media/
    - assets/data/questions/science/
    - assets/data/questions/social/

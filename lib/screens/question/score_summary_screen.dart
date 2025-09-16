@@ -59,8 +59,6 @@ class ScoreSummaryScreen extends StatelessWidget {
             ),
           ),
         ),
-        ConfettiWidget(controller: ConfettiController(),
-            theme: ConfettiPresets.celebration),
       ],
     );
   }

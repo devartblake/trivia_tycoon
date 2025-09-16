@@ -54,10 +54,10 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
         this.loadProfile,
         int startingPoints = 5,
       }) : super(SkillTreeState(
-          graph: initialGraph,
-          positions: const {},
-          playerPoints: startingPoints, // example starting points
-        )) {
+    graph: initialGraph,
+    positions: const {},
+    playerPoints: startingPoints, // example starting points
+  )) {
     _computeLayout();
     _restoreProfile();
   }
@@ -129,30 +129,32 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
     _persistProfile();
   }
 
-  // ----- XP-based unlock via XPService (requested path) -----
+  // ----- XP-based unlock via XPService (unified approach) -----
   void unlockSkill(String nodeId) {
     final node = state.graph.getNodeById(nodeId);
     if (node == null || node.unlocked) return;
 
-    // If you require "available" gating by edges/tier:
-    if (!node.available && node.tier > 0) {
-      // Allow unlocking only if prerequisites are unlocked
-      final prereqs = state.graph.edges
-          .where((e) => e.toId == nodeId)
-          .map((e) => state.graph.byId[e.fromId])
-          .whereType<SkillNode>()
-          .toList();
-      final canByPrereq = prereqs.isEmpty || prereqs.every((p) => p.unlocked);
-      if (!canByPrereq) return;
+    // Check prerequisites
+    final prereqs = state.graph.edges
+        .where((e) => e.toId == nodeId)
+        .map((e) => state.graph.byId[e.fromId])
+        .whereType<SkillNode>()
+        .toList();
+    final canByPrereq = prereqs.isEmpty || prereqs.every((p) => p.unlocked);
+    if (!canByPrereq) return;
+
+    // XPService usage with fallback to points
+    try {
+      final xpService = ref.read(xpServiceProvider);
+      final currentXP = xpService.playerXP;
+      if (currentXP < node.cost) return;
+
+      // Deduct XP through service
+      xpService.deductXP(node.cost);
+    } catch (_) {
+      // Fallback to points system if XP service unavailable
+      if (state.playerPoints < node.cost) return;
     }
-
-    // XPService usage
-    final xpService = ref.read(xpServiceProvider);
-    final currentXP = xpService.playerXP; // or currentXP depending on your API
-    if (currentXP < node.cost) return;
-
-    // Deduct XP
-    xpService.deductXP(node.cost);
 
     // Unlock node + mark children as available
     final updatedNodes = state.graph.nodes.map((n) {
@@ -164,51 +166,72 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
     }).toList();
 
     final newGraph = SkillTreeGraph(nodes: updatedNodes, edges: state.graph.edges);
-    state = state.copyWith(graph: newGraph, selectedId: nodeId);
-    _persistProfile();
-  }
 
-  // ----- Use/trigger a skill via SkillEffectHandler -----
-  /// Preferred entry: pass the actual node (UI usually has it).
-  bool useSkill(SkillNode node) {
-    if (!node.unlocked) return false;
-
-    final handler = SkillEffectHandler(
-      gameSession: ref.read(gameSessionProvider),
-      xpService: ref.read(xpServiceProvider),
-      profileService: ref.read(profileServiceProvider),
-      cooldownService: ref.read(skillCooldownServiceProvider),
-    );
-
-    final ok = handler.triggerSkill(node);
-    if (!ok) return false;
-
-    // If your model uses lastUsed/cooldown fields on nodes, update them here.
-    final updatedNodes = state.graph.nodes.map((n) {
-      if (n.id != node.id) return n;
-      // Preserve cooldown if you store it on the node (optional)
-      return n.copyWith(
-        // lastUsed: DateTime.now(), // uncomment if your SkillNode supports it
+    // Update state (deduct points only if XP service failed)
+    try {
+      ref.read(xpServiceProvider);
+      state = state.copyWith(graph: newGraph, selectedId: nodeId);
+    } catch (_) {
+      state = state.copyWith(
+        graph: newGraph,
+        selectedId: nodeId,
+        playerPoints: state.playerPoints - node.cost,
       );
-    }).toList();
+    }
 
-    state = state.copyWith(
-      graph: SkillTreeGraph(nodes: updatedNodes, edges: state.graph.edges),
-      selectedId: node.id,
-    );
     _persistProfile();
-    return true;
   }
 
-  /// Convenience: use by id (keeps old API style)
-  bool useSkillById(String nodeId) {
+  // ----- Unified skill usage through SkillEffectHandler -----
+  /// Primary method: Use skill with full service integration
+  bool useSkill(String nodeId) {
     final node = state.graph.getNodeById(nodeId);
-    if (node == null) return false;
-    return useSkill(node);
+    if (node == null || !node.unlocked) return false;
+
+    // Check cooldown through service
+    try {
+      final cooldownService = ref.read(skillCooldownServiceProvider);
+      if (cooldownService.isOnCooldown(nodeId)) return false;
+    } catch (_) {
+      // Fallback to node-level cooldown check
+      if (node.isOnCooldown) return false;
+    }
+
+    // Route through SkillEffectHandler for unified effect processing
+    try {
+      final handler = SkillEffectHandler(
+        gameSession: ref.read(gameSessionProvider),
+        xpService: ref.read(xpServiceProvider),
+        profileService: ref.read(profileServiceProvider),
+        cooldownService: ref.read(skillCooldownServiceProvider),
+      );
+
+      final success = handler.triggerSkill(node);
+      if (!success) return false;
+
+      // Update node state with usage timestamp
+      final updatedNodes = state.graph.nodes.map((n) {
+        if (n.id != node.id) return n;
+        return n.copyWith(lastUsed: DateTime.now());
+      }).toList();
+
+      state = state.copyWith(
+        graph: SkillTreeGraph(nodes: updatedNodes, edges: state.graph.edges),
+        selectedId: nodeId,
+      );
+
+      _persistProfile();
+      return true;
+    } catch (_) {
+      // Fallback for when services aren't available
+      return false;
+    }
   }
 
-  /// Backwards-compat alias (if your UI still calls `triggerSkill`)
-  bool triggerSkill(String nodeId) => useSkillById(nodeId);
+  /// Convenience method: Use skill with node object (for UI that has the node)
+  bool useSkillNode(SkillNode node) {
+    return useSkill(node.id);
+  }
 
   // ----- Respec -----
   void respec() {
@@ -219,11 +242,24 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
     final reset = [
       for (final n in state.graph.nodes) n.copyWith(unlocked: false, available: n.tier == 0),
     ];
-    state = state.copyWith(
-      graph: SkillTreeGraph(nodes: reset, edges: state.graph.edges),
-      playerPoints: state.playerPoints + refunded,
-      selectedId: null,
-    );
+
+    // Try to refund through XP service, fallback to points
+    try {
+      final xpService = ref.read(xpServiceProvider);
+      xpService.addXP(refunded);
+      state = state.copyWith(
+        graph: SkillTreeGraph(nodes: reset, edges: state.graph.edges),
+        selectedId: null,
+      );
+    } catch (_) {
+      // Fallback to points system
+      state = state.copyWith(
+        graph: SkillTreeGraph(nodes: reset, edges: state.graph.edges),
+        playerPoints: state.playerPoints + refunded,
+        selectedId: null,
+      );
+    }
+
     _persistProfile();
   }
 

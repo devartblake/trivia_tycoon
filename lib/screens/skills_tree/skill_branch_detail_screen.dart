@@ -6,10 +6,11 @@ import 'package:go_router/go_router.dart';
 import 'package:vector_math/vector_math_64.dart' as vmath;
 import 'package:trivia_tycoon/screens/skills_tree/render/skill_tree_painter.dart';
 import '../../../ui_components/hex_grid/paint/hex_spider_background_painter.dart';
+import '../../../ui_components/hex_grid/paint/auto_path_overlay_painter.dart'; // New import
 import '../../core/theme/hex_spider_theme.dart';
 import '../../../game/models/skill_tree_graph.dart';
 import '../../../game/controllers/skill_tree_controller.dart';
-import '../../game/models/skill_branch_path_planner.dart'; // Use centralized planner
+import '../../game/planning/skill_branch_path_planner.dart';
 import '../../ui_components/hex_grid/math/hex_orientation.dart';
 import '../../ui_components/hex_grid/paint/branch_path_overlay_painter.dart';
 
@@ -39,6 +40,14 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
   int _pathIndex = 0;
   List<String> _computedPath = [];
 
+  /// New overlay state management (ValueNotifiers for reactive updates)
+  final ValueNotifier<bool> _showFullPath = ValueNotifier<bool>(false);
+  final ValueNotifier<int> _currentStep = ValueNotifier<int>(0);
+
+  /// Captured screen-space centers for overlay painter
+  final Map<String, Offset> _centers = <String, Offset>{};
+  List<String> _pathIds = const [];
+
   @override
   void initState() {
     super.initState();
@@ -63,6 +72,24 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
     });
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Hydrate from query params if present (additional safety)
+    try {
+      final qs = GoRouterState.of(context).uri.queryParameters;
+      final step = int.tryParse(qs['step'] ?? '') ?? 0;
+      final showPath = (qs['showPath'] ?? '0') == '1';
+      _currentStep.value = step < 0 ? 0 : step;
+      _showFullPath.value = showPath;
+      // Sync with existing state
+      _pathIndex = _currentStep.value;
+      _showPath = _showFullPath.value;
+    } catch (_) {
+      // Safe fallback (no-op)
+    }
+  }
+
   void _hydrateFromQueryParamsIfNeeded() {
     // If caller passed explicit values, prefer those
     int? step = widget.initialStep;
@@ -77,8 +104,14 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
       show ??= (sp == '1' || sp?.toLowerCase() == 'true');
     }
 
-    if (step != null) _pathIndex = math.max(0, step);
-    if (show != null) _showPath = show;
+    if (step != null) {
+      _pathIndex = math.max(0, step);
+      _currentStep.value = _pathIndex;
+    }
+    if (show != null) {
+      _showPath = show;
+      _showFullPath.value = show;
+    }
   }
 
   void _recomputePath() {
@@ -87,9 +120,11 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
     final planner = SkillBranchPathPlanner.fromGraph(state.graph);
     final orderedNodes = planner.forBranch(widget.branchId);
     _computedPath = orderedNodes.map((n) => n.id).toList();
+    _pathIds = _computedPath; // Sync with overlay
 
     if (_pathIndex >= _computedPath.length) {
       _pathIndex = _computedPath.isEmpty ? 0 : _computedPath.length - 1;
+      _currentStep.value = _pathIndex;
     }
   }
 
@@ -97,6 +132,8 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
   void dispose() {
     _transform.dispose();
     _listCtrl.dispose();
+    _showFullPath.dispose();
+    _currentStep.dispose();
     super.dispose();
   }
 
@@ -135,7 +172,12 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
     final out = <String, Offset>{};
     for (final id in ids) {
       final p = all[id];
-      if (p != null) out[id] = p;
+      if (p != null) {
+        out[id] = p;
+        // Capture screen-space centers for overlay (transform to screen space)
+        final screenPos = _transformPoint(_transform.value, p);
+        _centers[id] = screenPos;
+      }
     }
     // If some nodes have no saved layout yet, place them in a quick circle.
     if (out.length < filtered.nodes.length) {
@@ -143,7 +185,11 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
       final cx = 0.0, cy = 0.0, r = 260.0;
       for (int i = 0; i < missing.length; i++) {
         final a = (i / math.max(1, missing.length)) * 2 * math.pi;
-        out[missing[i].id] = Offset(cx + r * math.cos(a), cy + r * math.sin(a));
+        final worldPos = Offset(cx + r * math.cos(a), cy + r * math.sin(a));
+        out[missing[i].id] = worldPos;
+        // Also capture screen space for overlay
+        final screenPos = _transformPoint(_transform.value, worldPos);
+        _centers[missing[i].id] = screenPos;
       }
     }
     return out;
@@ -194,14 +240,17 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
 
   void _goToStep(int i) {
     if (_computedPath.isEmpty) return;
+    final newStep = i.clamp(0, _computedPath.length - 1);
     setState(() {
-      _pathIndex = i.clamp(0, _computedPath.length - 1);
+      _pathIndex = newStep;
+      _currentStep.value = newStep; // Sync ValueNotifier
     });
   }
 
   void _toggleOverlay() {
     setState(() {
       _showPath = !_showPath;
+      _showFullPath.value = _showPath; // Sync ValueNotifier
       if (_showPath) {
         _recomputePath();
       }
@@ -310,6 +359,41 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
     );
   }
 
+  // Simple toolbar row to toggle overlay & step for debugging (optional):
+  Widget _overlayControls() {
+    return ValueListenableBuilder<bool>(
+      valueListenable: _showFullPath,
+      builder: (_, show, __) => Row(
+        children: [
+          Switch(
+            value: show,
+            onChanged: (v) {
+              _showFullPath.value = v;
+              setState(() => _showPath = v); // Sync existing state
+            },
+          ),
+          const SizedBox(width: 8),
+          ValueListenableBuilder<int>(
+            valueListenable: _currentStep,
+            builder: (_, step, __) => Row(
+              children: [
+                IconButton(
+                    onPressed: () => _goToStep(step - 1),
+                    icon: const Icon(Icons.chevron_left, color: Colors.white)
+                ),
+                Text('Step $step', style: const TextStyle(color: Colors.white)),
+                IconButton(
+                    onPressed: () => _goToStep(step + 1),
+                    icon: const Icon(Icons.chevron_right, color: Colors.white)
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(skillTreeProvider);
@@ -320,128 +404,269 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
     final currentScale = _transform.value.storage[0];
     final branchColor = _branchColor(widget.branchId);
 
+    // Ensure path is recomputed when state changes
+    _recomputePath();
+
     return Scaffold(
-        backgroundColor: const Color(0xFF0D1021),
-        appBar: AppBar(
-          backgroundColor: const Color(0xFF15183A),
-          title: Text(
-            '${widget.branchId[0].toUpperCase()}${widget.branchId.substring(1)} Branch',
-            style: const TextStyle(color: Colors.white),
-          ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.alt_route),
-              tooltip: 'Auto-path',
-              onPressed: () => _showAutoPathSheet(vm),
-            ),
-            IconButton(
-              icon: Icon(_showPath ? Icons.layers_clear : Icons.layers),
-              tooltip: _showPath ? 'Hide path' : 'Show path',
-              onPressed: _toggleOverlay,
-            ),
-            IconButton(
-              icon: const Icon(Icons.playlist_add_check),
-              tooltip: 'Unlock selected',
-              onPressed: _handleUnlockSelected,
-            ),
-            const SizedBox(width: 4),
-          ],
+      backgroundColor: const Color(0xFF0D1021),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF15183A),
+        title: Text(
+          '${widget.branchId[0].toUpperCase()}${widget.branchId.substring(1)} Branch',
+          style: const TextStyle(color: Colors.white),
         ),
-        body: Container(
-            color: const Color(0xFF0D1021),
-            child: LayoutBuilder(
-                builder: (context, c) {
-                  final painter = SkillTreePainter(
-                    graph: filtered,
-                    positions: positions,
-                    worldToScreen: _transform.value,
-                    nodeRadius: _nodeRadius,
-                    selectedId: state.selectedId,
-                    categoryImages: const <SkillCategory, ui.Image?>{},
-                    focusedId: _focusedId,
-                  );
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.alt_route),
+            tooltip: 'Auto-path',
+            onPressed: () => _showAutoPathSheet(vm),
+          ),
+          IconButton(
+            icon: Icon(_showPath ? Icons.layers_clear : Icons.layers),
+            tooltip: _showPath ? 'Hide path' : 'Show path',
+            onPressed: _toggleOverlay,
+          ),
+          IconButton(
+            icon: const Icon(Icons.playlist_add_check),
+            tooltip: 'Unlock selected',
+            onPressed: _handleUnlockSelected,
+          ),
+          const SizedBox(width: 4),
+        ],
+      ),
+      body: Container(
+        color: const Color(0xFF0D1021),
+        child: LayoutBuilder(
+          builder: (context, c) {
+            final painter = SkillTreePainter(
+              graph: filtered,
+              positions: positions,
+              worldToScreen: _transform.value,
+              nodeRadius: _nodeRadius,
+              selectedId: state.selectedId,
+              categoryImages: const <SkillCategory, ui.Image?>{},
+              focusedId: _focusedId,
+            );
 
-                  final backgroundPainter = HexSpiderBackgroundPainter(
-                    ringCount: 8,
-                    ringSpacing: 140,
-                    rayCount: 24,
-                    hexRadius: _nodeRadius,
-                    orientation: HexOrientation.pointy,
-                    scale: currentScale,
-                    alignToNodes: true,
-                    worldToScreen: _transform.value,
-                    positions: positions,
-                    theme: HexSpiderTheme.brand,
-                    gridColor: branchColor.withOpacity(0.18),
-                    ringColor: Colors.white.withOpacity(0.22),
-                    rayColor: branchColor.withOpacity(0.18),
-                    baseGridAlpha: 1.0,
-                    baseRingAlpha: 0.75,
-                    baseRayAlpha: 0.65,
-                  );
+            final backgroundPainter = HexSpiderBackgroundPainter(
+              ringCount: 8,
+              ringSpacing: 140,
+              rayCount: 24,
+              hexRadius: _nodeRadius,
+              orientation: HexOrientation.pointy,
+              scale: currentScale,
+              alignToNodes: true,
+              worldToScreen: _transform.value,
+              positions: positions,
+              theme: HexSpiderTheme.brand,
+              gridColor: branchColor.withOpacity(0.18),
+              ringColor: Colors.white.withOpacity(0.22),
+              rayColor: branchColor.withOpacity(0.18),
+              baseGridAlpha: 1.0,
+              baseRingAlpha: 0.75,
+              baseRayAlpha: 0.65,
+            );
 
-                  return GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTapDown: (d) => _handleTapDown(d, positions),
-                    onDoubleTapDown: (d) {
-                      final id = _hitTestNode(d.localPosition, positions, _transform.value);
-                      if (id != null) _unlockSkill(id);
-                    },
-                    child: Stack(
-                      children: [
-                    Positioned.fill(
+            return GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTapDown: (d) => _handleTapDown(d, positions),
+              onDoubleTapDown: (d) {
+                final id = _hitTestNode(d.localPosition, positions, _transform.value);
+                if (id != null) _unlockSkill(id);
+              },
+              child: Stack(
+                children: [
+                  Positioned.fill(
                     child: CustomPaint(
-                    painter: backgroundPainter,
+                      painter: backgroundPainter,
                     ),
                   ),
                   Positioned.fill(
-                  child: CustomPaint(
-                  foregroundPainter: painter,
+                    child: CustomPaint(
+                      foregroundPainter: painter,
+                    ),
                   ),
-                  ),
-                  // Add the path overlay when enabled
+                  // Add the original BranchPathOverlayPainter when enabled
                   if (_showPath && _computedPath.isNotEmpty)
-                  Positioned.fill(
-                  child: IgnorePointer(
-                  child: CustomPaint(
-                    painter: BranchPathOverlayPainter(
-                      positionsWorld: positions,
-                      worldToScreen: _transform.value,
-                      path: _computedPath,
-                      currentStep: _pathIndex,
-                      nodeRadius: _nodeRadius,
-                      showStepNumbers: true,
-                      pathColor: branchColor,
-                      pathGlowColor: branchColor.withOpacity(0.5),
-                      haloColor: const Color(0xFFFFC857),
-                      strokeWidth: 3,
-                    ),
-                  ),
-                  ),
-                  ),
-                        Positioned(
-                          right: 12,
-                          bottom: 12,
-                          child: _ZoomPad(
-                            onIn: () => setState(() => _transform.value = _transform.value.scaled(1.15)),
-                            onOut: () => setState(() => _transform.value = _transform.value.scaled(0.87)),
-                            onReset: () => setState(() => _transform.value = vmath.Matrix4.identity()..scale(0.9, 0.9)),
+                    Positioned.fill(
+                      child: IgnorePointer(
+                        child: CustomPaint(
+                          painter: BranchPathOverlayPainter(
+                            positionsWorld: positions,
+                            worldToScreen: _transform.value,
+                            path: _computedPath,
+                            currentStep: _pathIndex,
+                            nodeRadius: _nodeRadius,
+                            showStepNumbers: true,
+                            pathColor: branchColor,
+                            pathGlowColor: branchColor.withOpacity(0.5),
+                            haloColor: const Color(0xFFFFC857),
+                            strokeWidth: 3,
                           ),
                         ),
-                        // Add path controls at the bottom
-                        Positioned(
-                          left: 12,
-                          right: 12,
-                          bottom: 80, // Above zoom controls
-                          child: _pathControls(context),
-                        ),
-                      ],
+                      ),
                     ),
-                  );
-                },
-            ),
+                  // Add the new AutoPathOverlayPainter as additional layer
+                  Positioned.fill(
+                    child: ValueListenableBuilder<bool>(
+                      valueListenable: _showFullPath,
+                      builder: (_, show, __) => ValueListenableBuilder<int>(
+                        valueListenable: _currentStep,
+                        builder: (_, step, __) => IgnorePointer(
+                          child: CustomPaint(
+                            painter: AutoPathOverlayPainter(
+                              centers: _centers,
+                              pathIds: _pathIds,
+                              currentIndex: step,
+                              showFullPath: show,
+                              fullPathColor: branchColor.withOpacity(0.4),
+                              stepPathColor: branchColor,
+                              stepPathWidth: 4.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    right: 12,
+                    bottom: 12,
+                    child: _ZoomPad(
+                      onIn: () => setState(() => _transform.value = _transform.value.scaled(1.15)),
+                      onOut: () => setState(() => _transform.value = _transform.value.scaled(0.87)),
+                      onReset: () => setState(() => _transform.value = vmath.Matrix4.identity()..scale(0.9, 0.9)),
+                    ),
+                  ),
+                  // Add path controls at the bottom
+                  Positioned(
+                    left: 12,
+                    right: 12,
+                    bottom: 80, // Above zoom controls
+                    child: _pathControls(context),
+                  ),
+                  // Add overlay controls for debugging (optional)
+                  Positioned(
+                    left: 12,
+                    top: 80,
+                    child: _overlayControls(),
+                  ),
+                ],
+              ),
+            );
+          },
         ),
+      ),
     );
+  }
+
+  Widget _bottomActionBar(BuildContext context) {
+    if (_computedPath.isEmpty) return const SizedBox.shrink();
+
+    final state = ref.watch(skillTreeProvider);
+    final ctrl = ref.read(skillTreeProvider.notifier);
+    final step = _currentStep.value.clamp(0, _computedPath.length - 1);
+    final nodeId = _computedPath[step];
+    final node = state.graph.byId[nodeId];
+    if (node == null) return const SizedBox.shrink();
+
+    final canUnlock = ctrl.canUnlock(nodeId);
+    final isUnlocked = node.unlocked;
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
+      decoration: const BoxDecoration(
+        color: Color(0xFF15183A),
+        border: Border(top: BorderSide(color: Colors.white12)),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Row(
+          children: [
+            // Prev
+            IconButton(
+              onPressed: () {
+                final next = (step - 1).clamp(0, _computedPath.length - 1);
+                _currentStep.value = next;
+                _goToStep(next); // Sync with existing state
+              },
+              icon: const Icon(Icons.chevron_left, color: Colors.white70),
+            ),
+            const SizedBox(width: 8),
+            // Node title and status
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    node.title,
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    isUnlocked
+                        ? 'Unlocked'
+                        : (canUnlock ? 'Available (${node.cost} XP)' : 'Locked'),
+                    style: TextStyle(
+                      color: isUnlocked
+                          ? Colors.greenAccent
+                          : (canUnlock ? Colors.white70 : Colors.orangeAccent),
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            // Action buttons
+            if (!isUnlocked)
+              ElevatedButton(
+                onPressed: canUnlock ? () {
+                  _unlockSkill(nodeId);
+                  _advanceIfPossible();
+                } : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: canUnlock ? Colors.teal : Colors.grey,
+                  foregroundColor: Colors.white,
+                ),
+                child: Text('Unlock'),
+              )
+            else
+              ElevatedButton.icon(
+                onPressed: () {
+                  // Use existing controller method
+                  final success = ctrl.useSkill(nodeId);
+                  if (success) _advanceIfPossible();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                ),
+                icon: const Icon(Icons.play_arrow, size: 16),
+                label: const Text('Use'),
+              ),
+            const SizedBox(width: 8),
+            // Next
+            IconButton(
+              onPressed: () {
+                final next = (step + 1).clamp(0, _computedPath.length - 1);
+                _currentStep.value = next;
+                _goToStep(next); // Sync with existing state
+              },
+              icon: const Icon(Icons.chevron_right, color: Colors.white70),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _advanceIfPossible() {
+    if (_computedPath.isEmpty) return;
+    final next = (_currentStep.value + 1).clamp(0, _computedPath.length - 1);
+    _currentStep.value = next;
+    _goToStep(next); // Sync with existing state management
   }
 
   Color _branchColor(String id) {

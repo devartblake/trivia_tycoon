@@ -12,6 +12,9 @@ class QuestionModel {
   final int correctIndex;
   final String? imageUrl;
   final String? videoUrl;
+  final String? audioUrl; // Audio file URL for audio-based questions
+  final String? audioTranscript; // Optional transcript for accessibility
+  final int? audioDuration; // Duration in seconds for UI purposes
   final String? powerUpHint;
   final String? powerUpType;
   final bool showHint;
@@ -33,6 +36,9 @@ class QuestionModel {
     required this.correctIndex,
     this.imageUrl,
     this.videoUrl,
+    this.audioUrl,
+    this.audioTranscript,
+    this.audioDuration,
     this.powerUpHint,
     this.powerUpType,
     this.showHint = false,
@@ -48,6 +54,26 @@ class QuestionModel {
   bool isCorrectAnswer(String selectedAnswer) {
     return selectedAnswer == correctAnswer;
   }
+
+  /// Check if this question has audio content
+  bool get hasAudio => audioUrl?.isNotEmpty == true;
+
+  /// Check if this question has video content
+  bool get hasVideo => videoUrl?.isNotEmpty == true;
+
+  /// Check if this question has image content
+  bool get hasImage => imageUrl?.isNotEmpty == true;
+
+  /// Get the media type for this question
+  String get mediaType {
+    if (hasAudio) return 'audio';
+    if (hasVideo) return 'video';
+    if (hasImage) return 'image';
+    return 'text';
+  }
+
+  /// Check if this is a multimedia question
+  bool get isMultimedia => hasAudio || hasVideo || hasImage;
 
   factory QuestionModel.fromJson(Map<String, dynamic> json) {
     return QuestionModel(
@@ -67,6 +93,9 @@ class QuestionModel {
           .indexWhere((a) => a['isCorrect'] == true),
       imageUrl: json['imageUrl'],
       videoUrl: json['videoUrl'],
+      audioUrl: json['audioUrl'],
+      audioTranscript: json['audioTranscript'],
+      audioDuration: json['audioDuration'],
       powerUpHint: json['powerUpHint'],
       powerUpType: json['powerUpType'],
       // Defaults for power-up-related data
@@ -92,6 +121,9 @@ class QuestionModel {
       'correctIndex': correctIndex,
       'imageUrl': imageUrl,
       'videoUrl': videoUrl,
+      'audioUrl': audioUrl,
+      'audioTranscript': audioTranscript,
+      'audioDuration': audioDuration,
       'powerUpHint': powerUpHint,
       'powerUpType': powerUpType,
       'showHint': showHint,
@@ -115,6 +147,9 @@ class QuestionModel {
     int? correctIndex,
     String? imageUrl,
     String? videoUrl,
+    String? audioUrl,
+    String? audioTranscript,
+    int? audioDuration,
     String? powerUpHint,
     String? powerUpType,
     bool? showHint,
@@ -136,6 +171,9 @@ class QuestionModel {
       correctIndex: correctIndex ?? this.correctIndex,
       imageUrl: imageUrl ?? this.imageUrl,
       videoUrl: videoUrl ?? this.videoUrl,
+      audioUrl: audioUrl ?? this.audioUrl,
+      audioTranscript: audioTranscript ?? this.audioTranscript,
+      audioDuration: audioDuration ?? this.audioDuration,
       powerUpHint: powerUpHint ?? this.powerUpHint,
       powerUpType: powerUpType ?? this.powerUpType,
       showHint: showHint ?? this.showHint,
@@ -143,8 +181,7 @@ class QuestionModel {
       multiplier: multiplier ?? this.multiplier,
       isBoostedTime: isBoostedTime ?? this.isBoostedTime,
       isShielded: isShielded ?? this.isShielded,
-      tags: tags ??  this.tags,
+      tags: tags ?? this.tags,
     );
   }
-
 }

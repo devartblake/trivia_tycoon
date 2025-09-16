@@ -17,15 +17,15 @@ class OnboardingAvatarStep extends StatefulWidget {
 class _OnboardingAvatarStepState extends State<OnboardingAvatarStep> {
   String? _selectedAvatar;
 
-  final List<String> avatars = [
-    'assets/avatars/avatar1.png',
-    'assets/avatars/avatar2.png',
-    'assets/avatars/avatar3.png',
-    'assets/avatars/avatar4.png',
-    'assets/avatars/avatar5.png',
-    'assets/avatars/avatar6.png',
-    'assets/avatars/avatar7.png',
-    'assets/avatars/avatar8.png',
+  final List<Map<String, dynamic>> avatars = [
+    {'id': 'person', 'icon': Icons.person, 'color': Colors.blue},
+    {'id': 'face', 'icon': Icons.face, 'color': Colors.green},
+    {'id': 'account_circle', 'icon': Icons.account_circle, 'color': Colors.orange},
+    {'id': 'sentiment_satisfied', 'icon': Icons.sentiment_satisfied, 'color': Colors.purple},
+    {'id': 'child_care', 'icon': Icons.child_care, 'color': Colors.red},
+    {'id': 'psychology', 'icon': Icons.psychology, 'color': Colors.teal},
+    {'id': 'sports_esports', 'icon': Icons.sports_esports, 'color': Colors.indigo},
+    {'id': 'school', 'icon': Icons.school, 'color': Colors.brown},
   ];
 
   @override
@@ -36,8 +36,10 @@ class _OnboardingAvatarStepState extends State<OnboardingAvatarStep> {
       child: Column(
         children: [
           const SizedBox(height: 16),
-          const Text("Pick an Avatar",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+          const Text(
+            "Pick an Avatar",
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 16),
           Expanded(
             child: GridView.builder(
@@ -49,18 +51,29 @@ class _OnboardingAvatarStepState extends State<OnboardingAvatarStep> {
               ),
               itemBuilder: (context, index) {
                 final avatar = avatars[index];
+                final isSelected = _selectedAvatar == avatar['id'];
+
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      _selectedAvatar = avatar;
+                      _selectedAvatar = avatar['id'];
                     });
                   },
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage(avatar),
-                    radius: 30,
-                    foregroundColor: _selectedAvatar == avatar
-                        ? Colors.blueAccent
-                        : Colors.transparent,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: isSelected
+                          ? Border.all(color: Colors.blueAccent, width: 3)
+                          : Border.all(color: Colors.grey.shade300, width: 1),
+                      color: isSelected
+                          ? avatar['color'].withOpacity(0.8)
+                          : avatar['color'].withOpacity(0.6),
+                    ),
+                    child: Icon(
+                      avatar['icon'],
+                      size: 40,
+                      color: Colors.white,
+                    ),
                   ),
                 );
               },

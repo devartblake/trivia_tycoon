@@ -16,6 +16,7 @@ import 'package:trivia_tycoon/core/services/settings/spin_wheel_settings_service
 import 'package:trivia_tycoon/core/services/settings/splash_settings_service.dart';
 import 'package:trivia_tycoon/core/services/settings/theme_settings_service.dart';
 import 'package:trivia_tycoon/core/services/storage/config_storage_service.dart';
+import 'package:trivia_tycoon/core/services/theme/theme_notifier.dart';
 import 'package:trivia_tycoon/ui_components/login/providers/auth.dart';
 import 'package:trivia_tycoon/ui_components/qr_code/services/qr_history_service.dart';
 import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
@@ -48,6 +49,7 @@ class ServiceManager {
   final SwatchService swatchService;
   final AppCacheService appCacheService;
   final AchievementService achievementService;
+  final ThemeNotifier themeNotifier;
   final SecureStorage secureStorage;
   final QrHistoryService historyService;
   final QuizProgressService quizProgressService;
@@ -82,6 +84,7 @@ class ServiceManager {
     required this.swatchService,
     required this.appCacheService,
     required this.achievementService,
+    required this.themeNotifier,
     required this.secureStorage,
     required this.historyService,
     required this.missionService,
@@ -133,14 +136,22 @@ class ServiceManager {
     final onboard = OnboardingSettingsService();
     final theme = ThemeSettingsService();
     final admin = AdminSettingsService();
+
+    // Initialize PlayerProfileService with Hive box
     final playerProfile = PlayerProfileService();
+
     final qrSettings = QrSettingsService();
+    final generalKey = GeneralKeyValueStorageService();
+
+    // Initialize ThemeNotifier here instead of in AppInit
+    final themeNotifier = ThemeNotifier(generalKey);
+    await themeNotifier.initializationCompleted;
+
     final settingsController = SettingsController(
       audioService: audio,
       profileService: playerProfile,
       purchaseService: purchaseService,
     );
-    final generalKey = GeneralKeyValueStorageService();
     final auth = AuthService(secureStorage: secureStorage, generalKey: generalKey, playerProfileService: playerProfile);
     final history = QrHistoryService(cache: cache, settings: qrSettings);
 
@@ -158,6 +169,7 @@ class ServiceManager {
       fernetService: fernetService,
       swatchService: swatch,
       appCacheService: cache,
+      themeNotifier: themeNotifier,
       secureStorage: secureStorage,
       historyService: history,
       missionService: mission,

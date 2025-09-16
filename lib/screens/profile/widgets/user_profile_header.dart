@@ -40,7 +40,7 @@ class UserProfileHeader extends StatelessWidget {
               ? NetworkImage(entry.avatar)
               : null,
           child: (entry.avatar.isEmpty)
-              ? Text(entry.username[0].toUpperCase(), style: const TextStyle(fontSize: 24))
+              ? Text(entry.playerName[0].toUpperCase(), style: const TextStyle(fontSize: 24))
               : null,
         ),
         const SizedBox(width: 16),
@@ -48,7 +48,7 @@ class UserProfileHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(entry.username, style: theme.textTheme.headlineSmall),
+              Text(entry.playerName, style: theme.textTheme.headlineSmall),
               Text("${entry.ageGroup.toUpperCase()} • Level ${entry.level}"),
               const SizedBox(height: 4),
               _buildFlag(entry.country),

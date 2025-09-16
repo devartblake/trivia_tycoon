@@ -5,7 +5,7 @@ import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_s
 import '../../../game/providers/riverpod_providers.dart';
 import '../../theme/themes.dart';
 
-/// Riverpod provider for ThemeNotifier
+/// River-pod provider for ThemeNotifier
 final themeNotifierProvider = ChangeNotifierProvider<ThemeNotifier>((ref) {
   final storage = ref.read(generalKeyValueStorageProvider);
   return ThemeNotifier(storage);
@@ -23,7 +23,7 @@ class ThemeNotifier extends ChangeNotifier {
   //final Completer<void> _initCompleter = Completer<void>();
   late final Future<void> initializationCompleted;
 
-  /// Constructor is now public, as Riverpod handles initialization.
+  /// Constructor is now public, as River-pod handles initialization.
   ThemeNotifier(this.storage) {
     _currentTheme = AppTheme.fromType(AppTheme.defaultTheme, ThemeMode.system);
     _themeMode = ThemeMode.system;

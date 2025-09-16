@@ -2,7 +2,7 @@
 /// Model representing a leaderboard entry
 class LeaderboardEntry {
   final int userId;
-  final String username;
+  final String playerName;
   final int score;
   final int rank;
   final int tier;   // 1-10 (Bronze = 1, Tycoon Hall = 10)
@@ -47,7 +47,7 @@ class LeaderboardEntry {
 
   LeaderboardEntry({
     required this.userId,
-    required this.username,
+    required this.playerName,
     required this.score,
     required this.rank,
     required this.tier,
@@ -93,7 +93,7 @@ class LeaderboardEntry {
 
   LeaderboardEntry copyWith({
     int? userId,
-    String? username,
+    String? playerName,
     int? score,
     int? rank,
     int? tier,
@@ -138,7 +138,7 @@ class LeaderboardEntry {
   }) {
     return LeaderboardEntry(
       userId: userId ?? this.userId,
-      username: username ?? this.username,
+      playerName: playerName ?? this.playerName,
       score: score ?? this.score,
       rank: rank ?? this.rank,
       tier: tier ?? this.tier,
@@ -187,7 +187,7 @@ class LeaderboardEntry {
   factory LeaderboardEntry.fromJson(Map<String, dynamic> json) {
     return LeaderboardEntry(
       userId: json['user_id'] is int ? json['user_id'] : int.tryParse(json['user_id'].toString()) ?? 0,
-      username: json['username']?.toString() ?? 'Unknown',
+      playerName: json['playerName']?.toString() ?? 'Unknown',
       score: json['score'] ?? 0,
       rank: json['rank'] ?? 0,
       tier: json ['tier'] ?? 1,
@@ -236,7 +236,7 @@ class LeaderboardEntry {
   Map<String, dynamic> toJson() {
     return {
       'user_Id': userId,
-      'username': username,
+      'playerName': playerName,
       'score': score,
       'rank': rank,
       'tier': tier,

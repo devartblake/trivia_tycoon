@@ -196,7 +196,7 @@ class _TierRankScreenState extends ConsumerState<TierRankScreen>
                                     final rank = index + 4;
                                     final entry = entries[index + 3];
                                     return LeaderboardSwipeCard(
-                                      username: entry.username,
+                                      playerName: entry.playerName,
                                       score: entry.score,
                                       entry: entry,
                                       onPromote: () => ref.read(leaderboardControllerProvider).promoteUser(entry),

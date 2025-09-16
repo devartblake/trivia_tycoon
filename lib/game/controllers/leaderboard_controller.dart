@@ -29,16 +29,43 @@ class LeaderboardController extends ChangeNotifier {
   String _sortBy = 'score'; // Default sort field
   String get sortBy => _sortBy;
 
+  // Enhanced state tracking
+  DateTime? _lastRefreshTime;
+  DateTime? _lastCacheTime;
+  bool _isPaused = false;
+  Map<String, dynamic> _leaderboardStats = {};
+
   LeaderboardController({
     required LeaderboardDataService dataService,
     required GeneralKeyValueStorageService storage,
     required Ref ref,
   }) : _dataService = dataService,
         _storage = storage,
-       _ref = ref;
+        _ref = ref {
+    _loadLeaderboardState();
+  }
+
+  /// Load saved leaderboard state
+  Future<void> _loadLeaderboardState() async {
+    try {
+      final lastRefreshStr = await _storage.getString('last_leaderboard_refresh');
+      if (lastRefreshStr != null && lastRefreshStr.isNotEmpty) {
+        _lastRefreshTime = DateTime.parse(lastRefreshStr);
+      }
+
+      final statsStr = await _storage.getString('leaderboard_stats');
+      if (statsStr != null && statsStr.isNotEmpty) {
+        _leaderboardStats = Map<String, dynamic>.from(jsonDecode(statsStr));
+      }
+    } catch (e) {
+      debugPrint('Failed to load leaderboard state: $e');
+    }
+  }
 
   /// Loads leaderboard data from API
   Future<void> loadLeaderboard() async {
+    if (_isPaused) return;
+
     _isLoading = true;
     notifyListeners();
 
@@ -48,6 +75,7 @@ class LeaderboardController extends ChangeNotifier {
         final localData = jsonDecode(cachedJson) as List<dynamic>;
         _allEntries = TierAssigner.assignTiers(localData.map((e) => LeaderboardEntry.fromJson(e)).toList());
         _applyFilters();
+        _lastCacheTime = DateTime.now();
       }
 
       // Always try to update from server too
@@ -57,8 +85,15 @@ class LeaderboardController extends ChangeNotifier {
 
       // Save latest data to Hive
       await _storage.setString('leaderboard_cache', jsonEncode(remote.map((e) => e.toJson()).toList()));
+
+      // Update statistics
+      await _updateLeaderboardStats();
+
+      _lastRefreshTime = DateTime.now();
+      await _storage.setString('last_leaderboard_refresh', _lastRefreshTime!.toIso8601String());
+
     } catch (e) {
-      if (kDebugMode) print("⚠️ Error fetching leaderboard: $e");
+      if (kDebugMode) debugPrint("⚠️ Error fetching leaderboard: $e");
     }
 
     _isLoading = false;
@@ -83,7 +118,7 @@ class LeaderboardController extends ChangeNotifier {
     // Category filtering
     switch (_selectedCategory) {
       case LeaderboardCategory.topXP:
-        // No extra filtering needed
+      // No extra filtering needed
         break;
       case LeaderboardCategory.daily:
         filtered = filtered.where((e) => e.timeframe == 'daily').toList();
@@ -95,7 +130,7 @@ class LeaderboardController extends ChangeNotifier {
         filtered = filtered.where((e) => e.timeframe == 'global').toList();
         break;
       case LeaderboardCategory.mostWins:
-        // Simulated logic - if you don’t have real "wins" data
+      // Simulated logic - if you don't have real "wins" data
         filtered.sort((a, b) => b.score.compareTo(a.score));
         break;
     }
@@ -144,7 +179,7 @@ class LeaderboardController extends ChangeNotifier {
       final currentUser = _allEntries.firstWhere((e) => e.userId == userId);
       filtered = filtered.where((e) => e.tier == currentUser.tier).toList();
     } catch (e) {
-      if (kDebugMode) print("⚠️ Tier restriction skipped (no matching user): $e");
+      if (kDebugMode) debugPrint("⚠️ Tier restriction skipped (no matching user): $e");
     }
 
     filteredEntries = filtered;
@@ -152,6 +187,8 @@ class LeaderboardController extends ChangeNotifier {
 
   /// Submits a score and refreshes leaderboard
   Future<void> submitScore(String playerName, int score) async {
+    if (_isPaused) return;
+
     await _dataService.submitScore(playerName, score);
     await loadLeaderboard();
   }
@@ -190,5 +227,226 @@ class LeaderboardController extends ChangeNotifier {
     _allEntries.remove(entry);
     _applyFilters();
     notifyListeners();
+  }
+
+  /// Update leaderboard statistics
+  Future<void> _updateLeaderboardStats() async {
+    try {
+      _leaderboardStats = {
+        'totalEntries': _allEntries.length,
+        'filteredEntries': filteredEntries.length,
+        'lastRefresh': _lastRefreshTime?.toIso8601String(),
+        'lastCache': _lastCacheTime?.toIso8601String(),
+        'selectedCategory': _selectedCategory.name,
+        'sortBy': _sortBy,
+        'isFilterActive': isFilterActive,
+      };
+
+      await _storage.setString('leaderboard_stats', jsonEncode(_leaderboardStats));
+    } catch (e) {
+      debugPrint('Failed to update leaderboard stats: $e');
+    }
+  }
+
+  /// LIFECYCLE METHOD: Save leaderboard state when app backgrounded
+  /// Called by AppLifecycleObserver when app goes to background
+  Future<void> saveLeaderboardState() async {
+    try {
+      // Stop any loading operations
+      _isLoading = false;
+
+      // Save current filter settings
+      await _storage.setString('leaderboard_filters', jsonEncode(filterSettings.toJson()));
+
+      // Save current state
+      final stateSnapshot = {
+        'selectedCategory': _selectedCategory.name,
+        'sortBy': _sortBy,
+        'lastRefresh': _lastRefreshTime?.toIso8601String(),
+        'totalEntries': _allEntries.length,
+        'filteredEntries': filteredEntries.length,
+        'stats': _leaderboardStats,
+        'timestamp': DateTime.now().toIso8601String(),
+      };
+
+      await _storage.setString('leaderboard_state_snapshot', jsonEncode(stateSnapshot));
+
+      debugPrint('Leaderboard state saved successfully');
+    } catch (e) {
+      debugPrint('Failed to save leaderboard state: $e');
+    }
+  }
+
+  /// LIFECYCLE METHOD: Refresh leaderboard data when app resumes
+  /// Called by AppLifecycleObserver when app resumes from background
+  Future<void> refreshLeaderboardData() async {
+    try {
+      // Reset loading state
+      _isLoading = false;
+
+      // Validate state integrity
+      await _validateLeaderboardIntegrity();
+
+      // Check if refresh is needed
+      if (await _needsRefresh()) {
+        await loadLeaderboard();
+      }
+
+      // Resume normal operations
+      _isPaused = false;
+
+      debugPrint('Leaderboard data refresh completed');
+    } catch (e) {
+      debugPrint('Leaderboard data refresh failed: $e');
+      await _resetLeaderboardState();
+    }
+  }
+
+  /// Check if leaderboard needs refresh
+  Future<bool> _needsRefresh() async {
+    if (_lastRefreshTime == null) return true;
+
+    final timeSinceRefresh = DateTime.now().difference(_lastRefreshTime!);
+    return timeSinceRefresh > const Duration(minutes: 15);
+  }
+
+  /// Validate leaderboard integrity
+  Future<void> _validateLeaderboardIntegrity() async {
+    try {
+      bool needsRepair = false;
+
+      // Validate entries list
+      if (_allEntries.isEmpty) {
+        // Try to load from cache
+        final cachedJson = await _storage.getString('leaderboard_cache');
+        if (cachedJson != null && cachedJson.isNotEmpty) {
+          final localData = jsonDecode(cachedJson) as List<dynamic>;
+          _allEntries = TierAssigner.assignTiers(localData.map((e) => LeaderboardEntry.fromJson(e)).toList());
+          needsRepair = true;
+        }
+      }
+
+      // Validate filter settings
+      if (_selectedCategory == null) {
+        _selectedCategory = LeaderboardCategory.topXP;
+        needsRepair = true;
+      }
+
+      // Validate sort field
+      if (_sortBy.isEmpty) {
+        _sortBy = 'score';
+        needsRepair = true;
+      }
+
+      if (needsRepair) {
+        await _applyFilters();
+        await _updateLeaderboardStats();
+        debugPrint('Leaderboard integrity restored');
+      }
+    } catch (e) {
+      debugPrint('Failed to validate leaderboard integrity: $e');
+    }
+  }
+
+  /// Reset leaderboard state
+  Future<void> _resetLeaderboardState() async {
+    try {
+      _allEntries.clear();
+      filteredEntries.clear();
+      _selectedCategory = LeaderboardCategory.topXP;
+      _sortBy = 'score';
+      _isLoading = false;
+      _lastRefreshTime = null;
+      _lastCacheTime = null;
+      _leaderboardStats.clear();
+
+      await _storage.remove('leaderboard_cache');
+      await _storage.remove('leaderboard_filters');
+      await _storage.remove('leaderboard_stats');
+      await _storage.remove('last_leaderboard_refresh');
+
+      debugPrint('Leaderboard state reset to defaults');
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Failed to reset leaderboard state: $e');
+    }
+  }
+
+  /// Pause leaderboard operations
+  void pauseLeaderboard() {
+    _isPaused = true;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  /// Resume leaderboard operations
+  void resumeLeaderboard() {
+    _isPaused = false;
+  }
+
+  /// Get leaderboard statistics
+  Map<String, dynamic> getLeaderboardStats() {
+    return {
+      ..._leaderboardStats,
+      'isPaused': _isPaused,
+      'isLoading': _isLoading,
+    };
+  }
+
+  /// Export leaderboard data for backup
+  Map<String, dynamic> exportLeaderboardData() {
+    return {
+      'allEntries': _allEntries.map((e) => e.toJson()).toList(),
+      'filterSettings': filterSettings.toJson(),
+      'selectedCategory': _selectedCategory.name,
+      'sortBy': _sortBy,
+      'stats': _leaderboardStats,
+      'exported': DateTime.now().toIso8601String(),
+    };
+  }
+
+  /// Import leaderboard data from backup
+  Future<void> importLeaderboardData(Map<String, dynamic> data) async {
+    try {
+      if (data.containsKey('allEntries')) {
+        _allEntries = (data['allEntries'] as List)
+            .map((e) => LeaderboardEntry.fromJson(e))
+            .toList();
+      }
+
+      if (data.containsKey('filterSettings')) {
+        filterSettings = LeaderboardFilterSettings.fromJson(data['filterSettings']);
+      }
+
+      if (data.containsKey('selectedCategory')) {
+        _selectedCategory = LeaderboardCategory.values.firstWhere(
+              (cat) => cat.name == data['selectedCategory'],
+          orElse: () => LeaderboardCategory.topXP,
+        );
+      }
+
+      if (data.containsKey('sortBy')) {
+        _sortBy = data['sortBy'];
+      }
+
+      await _applyFilters();
+      await _updateLeaderboardStats();
+      notifyListeners();
+
+      debugPrint('Leaderboard data imported successfully');
+    } catch (e) {
+      debugPrint('Failed to import leaderboard data: $e');
+      rethrow;
+    }
+  }
+
+  /// Force refresh leaderboard
+  Future<void> forceRefresh() async {
+    await loadLeaderboard();
+  }
+
+  /// Clear all leaderboard data
+  Future<void> clearAllLeaderboardData() async {
+    await _resetLeaderboardState();
   }
 }

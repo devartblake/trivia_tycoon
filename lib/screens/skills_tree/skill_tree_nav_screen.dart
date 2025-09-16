@@ -103,7 +103,14 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
 
         // Close Button
         IconButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              // Navigate to home/main screen
+              context.go('/');
+            }
+          },
           icon: const Icon(Icons.close, color: Colors.white),
         ),
       ],
@@ -131,6 +138,7 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
 
   Widget _buildGroupGrid(String groupType) {
     final groups = _getGroupsForType(groupType);
+    final skillTreeState = ref.watch(skillTreeProvider);
 
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -144,13 +152,13 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
         itemCount: groups.length,
         itemBuilder: (context, index) {
           final group = groups[index];
-          return _buildGroupCard(group);
+          return _buildGroupCard(group, skillTreeState);
         },
       ),
     );
   }
 
-  Widget _buildGroupCard(SkillGroupData group) {
+  Widget _buildGroupCard(SkillGroupData group, SkillTreeState skillTreeState) {
     final bg = parseHex(group.color);
     return Container(
       decoration: BoxDecoration(
@@ -239,10 +247,12 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
                         height: 20, // Even smaller height
                         child: Stack(
                           children: [
-                            MiniHexBranchPreview(
+                            MiniHexBranchPreview.fromGraph(
+                              graph: skillTreeState.graph,
                               branchId: group.id,
-                              baseColor: bg,
+                              baseColor: bg.withOpacity(0.2),
                               textColor: Colors.white,
+                              highlightPath: true,
                             ),
                             Positioned(
                               top: 0,
@@ -575,7 +585,7 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
           ],
         ),
         onTap: () {
-          context.pop();
+          Navigator.of(context).pop();
           context.push('/skill-tree/${result.branchId}?step=0&showPath=1');
         },
       ),
