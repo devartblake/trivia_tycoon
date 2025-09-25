@@ -26,7 +26,7 @@ class ProfileAvatarPreview extends ConsumerWidget {
           borderRadius: size / 2,
           parallaxDepth: 0.05,
           theme: controller.depthCardTheme,
-          backgroundImage: const AssetImage('assets/images/backgrounds/3d_placeholder.jpg'),
+          backgroundImage: const AssetImage('assets/images/backgrounds/geometry_background.jpg'),
           onTap: () {}, // Optional interaction
         ),
       );

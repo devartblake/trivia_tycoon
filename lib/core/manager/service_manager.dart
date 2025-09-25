@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:trivia_tycoon/core/services/event_queue_service.dart';
 import 'package:trivia_tycoon/core/services/settings/admin_settings_service.dart';
 import 'package:trivia_tycoon/core/services/settings/audio_settings_service.dart';
@@ -32,6 +33,8 @@ import 'package:trivia_tycoon/game/analytics/services/analytics_service.dart';
 import 'package:trivia_tycoon/game/controllers/settings_controller.dart';
 import 'package:trivia_tycoon/game/services/achievement_service.dart';
 import 'package:trivia_tycoon/game/services/mission_service.dart';
+import 'package:trivia_tycoon/game/multiplayer/services/multiplayer_service.dart';
+import '../repositories/mission_repository.dart';
 
 class ServiceManager {
   static late final ServiceManager instance;
@@ -54,6 +57,7 @@ class ServiceManager {
   final QrHistoryService historyService;
   final QuizProgressService quizProgressService;
   final CustomThemeService customThemeService;
+  final MultiplayerService multiplayerService;
   final MissionService missionService;
   final QuestionService questionService;
   final SettingsController settingsController;
@@ -87,6 +91,7 @@ class ServiceManager {
     required this.themeNotifier,
     required this.secureStorage,
     required this.historyService,
+    required this.multiplayerService,
     required this.missionService,
     required this.questionService,
     required this.quizProgressService,
@@ -122,7 +127,6 @@ class ServiceManager {
     final quizProgress = await QuizProgressService.initialize();
     final customTheme = await CustomThemeService.initialize();
     final swatch = SwatchService();
-    final mission = MissionService();
     final eventQueueService = EventQueueService();
     final analytics = AnalyticsService(api, eventQueueService);
     final achievements = AchievementService(apiService: api);
@@ -136,6 +140,15 @@ class ServiceManager {
     final onboard = OnboardingSettingsService();
     final theme = ThemeSettingsService();
     final admin = AdminSettingsService();
+    final multiplayer = MultiplayerService(
+      // inject: settings, http client, analytics, cache, etc.
+    );
+    final missionRepository = SupabaseMissionRepository(Supabase.instance.client);
+    final mission = MissionService(
+      missionRepository,
+      apiBaseUrl: 'https://your-fastapi-endpoint.com/api/v1',
+      apiKey: 'your-api-key-here',
+    );
 
     // Initialize PlayerProfileService with Hive box
     final playerProfile = PlayerProfileService();
@@ -172,6 +185,7 @@ class ServiceManager {
       themeNotifier: themeNotifier,
       secureStorage: secureStorage,
       historyService: history,
+      multiplayerService: multiplayer,
       missionService: mission,
       achievementService: achievements,
       confettiSettingsService: confetti,

@@ -1,0 +1,776 @@
+[
+  {
+    "id": "E5_1",
+    "category": "Movies",
+    "question": "The Lion King features character…",
+    "answers": [
+      {
+        "text": "Simba",
+        "isCorrect": true
+      },
+      {
+        "text": "Mufasa",
+        "isCorrect": false
+      },
+      {
+        "text": "Scar",
+        "isCorrect": false
+      },
+      {
+        "text": "Nala",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Simba",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "disney"
+    ]
+  },
+  {
+    "id": "E5_2",
+    "category": "Music",
+    "question": "Taylor Swift is a…",
+    "answers": [
+      {
+        "text": "Singer-songwriter",
+        "isCorrect": true
+      },
+      {
+        "text": "Actor",
+        "isCorrect": false
+      },
+      {
+        "text": "Athlete",
+        "isCorrect": false
+      },
+      {
+        "text": "Painter",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Singer-songwriter",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "music"
+    ]
+  },
+  {
+    "id": "E6_1",
+    "category": "Movies",
+    "question": "Harry Potter’s school is…",
+    "answers": [
+      {
+        "text": "Hogwarts",
+        "isCorrect": true
+      },
+      {
+        "text": "Durmstrang",
+        "isCorrect": false
+      },
+      {
+        "text": "Beauxbatons",
+        "isCorrect": false
+      },
+      {
+        "text": "Ilvermorny",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Hogwarts",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "harry potter"
+    ]
+  },
+  {
+    "id": "E6_2",
+    "category": "TV",
+    "question": "SpongeBob lives in a…",
+    "answers": [
+      {
+        "text": "Pineapple",
+        "isCorrect": true
+      },
+      {
+        "text": "Coconut",
+        "isCorrect": false
+      },
+      {
+        "text": "Shell",
+        "isCorrect": false
+      },
+      {
+        "text": "Rock",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Pineapple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "cartoon"
+    ]
+  },
+  {
+    "id": "E7_1",
+    "category": "Movies",
+    "question": "The Avengers are from…",
+    "answers": [
+      {
+        "text": "Marvel",
+        "isCorrect": true
+      },
+      {
+        "text": "DC",
+        "isCorrect": false
+      },
+      {
+        "text": "Pixar",
+        "isCorrect": false
+      },
+      {
+        "text": "Image",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Marvel",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "marvel"
+    ]
+  },
+  {
+    "id": "E7_2",
+    "category": "Music",
+    "question": "BTS is a band from…",
+    "answers": [
+      {
+        "text": "South Korea",
+        "isCorrect": true
+      },
+      {
+        "text": "Japan",
+        "isCorrect": false
+      },
+      {
+        "text": "China",
+        "isCorrect": false
+      },
+      {
+        "text": "Philippines",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "South Korea",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "kpop"
+    ]
+  },
+  {
+    "id": "E8_1",
+    "category": "Movies",
+    "question": "Who directed Jurassic Park?",
+    "answers": [
+      {
+        "text": "Steven Spielberg",
+        "isCorrect": true
+      },
+      {
+        "text": "George Lucas",
+        "isCorrect": false
+      },
+      {
+        "text": "James Cameron",
+        "isCorrect": false
+      },
+      {
+        "text": "Ridley Scott",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Steven Spielberg",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "spielberg"
+    ]
+  },
+  {
+    "id": "E8_2",
+    "category": "TV",
+    "question": "Friends is set in…",
+    "answers": [
+      {
+        "text": "New York",
+        "isCorrect": true
+      },
+      {
+        "text": "Los Angeles",
+        "isCorrect": false
+      },
+      {
+        "text": "Chicago",
+        "isCorrect": false
+      },
+      {
+        "text": "Boston",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "New York",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "friends"
+    ]
+  },
+  {
+    "id": "E9_1",
+    "category": "Movies",
+    "question": "Oscar for Best Picture 1994:",
+    "answers": [
+      {
+        "text": "Forrest Gump",
+        "isCorrect": true
+      },
+      {
+        "text": "Pulp Fiction",
+        "isCorrect": false
+      },
+      {
+        "text": "Shawshank",
+        "isCorrect": false
+      },
+      {
+        "text": "Lion King",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Forrest Gump",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "oscars"
+    ]
+  },
+  {
+    "id": "E9_2",
+    "category": "Music",
+    "question": "The Beatles were from…",
+    "answers": [
+      {
+        "text": "Liverpool",
+        "isCorrect": true
+      },
+      {
+        "text": "London",
+        "isCorrect": false
+      },
+      {
+        "text": "Manchester",
+        "isCorrect": false
+      },
+      {
+        "text": "Birmingham",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Liverpool",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "beatles"
+    ]
+  },
+  {
+    "id": "E10_1",
+    "category": "Movies",
+    "question": "First feature-length animated film:",
+    "answers": [
+      {
+        "text": "Snow White (1937)",
+        "isCorrect": true
+      },
+      {
+        "text": "Cinderella",
+        "isCorrect": false
+      },
+      {
+        "text": "Bambi",
+        "isCorrect": false
+      },
+      {
+        "text": "Pinocchio",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Snow White (1937)",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "disney"
+    ]
+  },
+  {
+    "id": "E10_2",
+    "category": "TV",
+    "question": "Game of Thrones is based on novels by…",
+    "answers": [
+      {
+        "text": "George R.R. Martin",
+        "isCorrect": true
+      },
+      {
+        "text": "J.K. Rowling",
+        "isCorrect": false
+      },
+      {
+        "text": "Tolkien",
+        "isCorrect": false
+      },
+      {
+        "text": "C.S. Lewis",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "George R.R. Martin",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "got"
+    ]
+  },
+  {
+    "id": "E11_1",
+    "category": "Music",
+    "question": "Beethoven composed…",
+    "answers": [
+      {
+        "text": "Symphonies",
+        "isCorrect": true
+      },
+      {
+        "text": "Operas",
+        "isCorrect": false
+      },
+      {
+        "text": "Musicals",
+        "isCorrect": false
+      },
+      {
+        "text": "Pop songs",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Symphonies",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "classical"
+    ]
+  },
+  {
+    "id": "E11_2",
+    "category": "Movies",
+    "question": "Citizen Kane released in…",
+    "answers": [
+      {
+        "text": "1941",
+        "isCorrect": true
+      },
+      {
+        "text": "1951",
+        "isCorrect": false
+      },
+      {
+        "text": "1931",
+        "isCorrect": false
+      },
+      {
+        "text": "1961",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1941",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11",
+      "classic"
+    ]
+  },
+  {
+    "id": "E12_1",
+    "category": "TV",
+    "question": "Breaking Bad protagonist:",
+    "answers": [
+      {
+        "text": "Walter White",
+        "isCorrect": true
+      },
+      {
+        "text": "Jesse Pinkman",
+        "isCorrect": false
+      },
+      {
+        "text": "Saul Goodman",
+        "isCorrect": false
+      },
+      {
+        "text": "Mike Ehrmantraut",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Walter White",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "breaking bad"
+    ]
+  },
+  {
+    "id": "E12_2",
+    "category": "Movies",
+    "question": "Inception directed by…",
+    "answers": [
+      {
+        "text": "Christopher Nolan",
+        "isCorrect": true
+      },
+      {
+        "text": "Spielberg",
+        "isCorrect": false
+      },
+      {
+        "text": "Scorsese",
+        "isCorrect": false
+      },
+      {
+        "text": "Kubrick",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Christopher Nolan",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "nolan"
+    ]
+  },
+  {
+    "id": "EX16",
+    "category": "Mixed Entertainment",
+    "question": "Movies are shown in theaters.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX17",
+    "category": "Mixed Entertainment",
+    "question": "Movies are shown in theaters.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX18",
+    "category": "Mixed Entertainment",
+    "question": "Movies are shown in theaters.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX19",
+    "category": "Mixed Entertainment",
+    "question": "Movies are shown in theaters.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX20",
+    "category": "Mixed Entertainment",
+    "question": "Movies are shown in theaters.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX21",
+    "category": "Mixed Entertainment",
+    "question": "Movies are shown in theaters.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX22",
+    "category": "Mixed Entertainment",
+    "question": "Movies are shown in theaters.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX23",
+    "category": "Mixed Entertainment",
+    "question": "Movies are shown in theaters.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX24",
+    "category": "Mixed Entertainment",
+    "question": "Movies are shown in theaters.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX25",
+    "category": "Mixed Entertainment",
+    "question": "Movies are shown in theaters.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX26",
+    "category": "Mixed Entertainment",
+    "question": "Movies are shown in theaters.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX27",
+    "category": "Mixed Entertainment",
+    "question": "Movies are shown in theaters.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX28",
+    "category": "Mixed Entertainment",
+    "question": "Movies are shown in theaters.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX29",
+    "category": "Mixed Entertainment",
+    "question": "Movies are shown in theaters.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  }
+]

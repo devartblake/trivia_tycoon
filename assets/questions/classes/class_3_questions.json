@@ -1,0 +1,586 @@
+[
+  {
+    "id": "3_math_1",
+    "category": "Fractions & Time",
+    "question": "What fraction is one out of four equal parts?",
+    "answers": [
+      {
+        "text": "1/4",
+        "isCorrect": true
+      },
+      {
+        "text": "1/2",
+        "isCorrect": false
+      },
+      {
+        "text": "3/4",
+        "isCorrect": false
+      },
+      {
+        "text": "2/3",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1/4",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "3_read_1",
+    "category": "Reading Comp II",
+    "question": "What is the main idea of a paragraph?",
+    "answers": [
+      {
+        "text": "The big point the author is making",
+        "isCorrect": true
+      },
+      {
+        "text": "A random detail",
+        "isCorrect": false
+      },
+      {
+        "text": "A character’s name",
+        "isCorrect": false
+      },
+      {
+        "text": "The longest sentence",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "The big point the author is making",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "3_life_1",
+    "category": "Life Cycles",
+    "question": "What is the order for a butterfly’s life cycle?",
+    "answers": [
+      {
+        "text": "Egg → Caterpillar → Chrysalis → Butterfly",
+        "isCorrect": true
+      },
+      {
+        "text": "Egg → Butterfly → Caterpillar → Chrysalis",
+        "isCorrect": false
+      },
+      {
+        "text": "Caterpillar → Egg → Butterfly → Chrysalis",
+        "isCorrect": false
+      },
+      {
+        "text": "Egg → Tadpole → Frog",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Egg → Caterpillar → Chrysalis → Butterfly",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "3_geo_1",
+    "category": "Continents & Oceans",
+    "question": "How many continents are on Earth?",
+    "answers": [
+      {
+        "text": "7",
+        "isCorrect": true
+      },
+      {
+        "text": "5",
+        "isCorrect": false
+      },
+      {
+        "text": "6",
+        "isCorrect": false
+      },
+      {
+        "text": "8",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "7",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "3_math_2",
+    "category": "Fractions & Time",
+    "question": "Which is greater: 3/4 or 2/4?",
+    "answers": [
+      {
+        "text": "3/4",
+        "isCorrect": true
+      },
+      {
+        "text": "2/4",
+        "isCorrect": false
+      },
+      {
+        "text": "They are equal",
+        "isCorrect": false
+      },
+      {
+        "text": "1/4",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "3/4",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "3_read_2",
+    "category": "Reading Comp II",
+    "question": "A 'summary' should include…",
+    "answers": [
+      {
+        "text": "Only the most important ideas",
+        "isCorrect": true
+      },
+      {
+        "text": "Every detail",
+        "isCorrect": false
+      },
+      {
+        "text": "Opinions only",
+        "isCorrect": false
+      },
+      {
+        "text": "Just quotes",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Only the most important ideas",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "3_life_2",
+    "category": "Life Cycles",
+    "question": "Animals that eat plants are called…",
+    "answers": [
+      {
+        "text": "Herbivores",
+        "isCorrect": true
+      },
+      {
+        "text": "Carnivores",
+        "isCorrect": false
+      },
+      {
+        "text": "Omnivores",
+        "isCorrect": false
+      },
+      {
+        "text": "Detritivores",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Herbivores",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "3_geo_2",
+    "category": "Continents & Oceans",
+    "question": "The largest ocean is the…",
+    "answers": [
+      {
+        "text": "Pacific Ocean",
+        "isCorrect": true
+      },
+      {
+        "text": "Atlantic Ocean",
+        "isCorrect": false
+      },
+      {
+        "text": "Indian Ocean",
+        "isCorrect": false
+      },
+      {
+        "text": "Arctic Ocean",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Pacific Ocean",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "3_math_3",
+    "category": "Fractions & Time",
+    "question": "How many minutes are in 2 hours?",
+    "answers": [
+      {
+        "text": "120",
+        "isCorrect": true
+      },
+      {
+        "text": "60",
+        "isCorrect": false
+      },
+      {
+        "text": "90",
+        "isCorrect": false
+      },
+      {
+        "text": "150",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "120",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "3_read_3",
+    "category": "Reading Comp II",
+    "question": "Text features like headings help you find information faster.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "3_life_3",
+    "category": "Life Cycles",
+    "question": "A food chain shows…",
+    "answers": [
+      {
+        "text": "How energy moves from one organism to another",
+        "isCorrect": true
+      },
+      {
+        "text": "Weather patterns",
+        "isCorrect": false
+      },
+      {
+        "text": "Rock layers",
+        "isCorrect": false
+      },
+      {
+        "text": "Star brightness",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "How energy moves from one organism to another",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "3_geo_3",
+    "category": "Continents & Oceans",
+    "question": "Which continent is also a country?",
+    "answers": [
+      {
+        "text": "Australia",
+        "isCorrect": true
+      },
+      {
+        "text": "Africa",
+        "isCorrect": false
+      },
+      {
+        "text": "Europe",
+        "isCorrect": false
+      },
+      {
+        "text": "Antarctica",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Australia",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "3_math_4",
+    "category": "Fractions & Time",
+    "question": "What is 1/2 of 20?",
+    "answers": [
+      {
+        "text": "10",
+        "isCorrect": true
+      },
+      {
+        "text": "8",
+        "isCorrect": false
+      },
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "5",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "10",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "3_read_4",
+    "category": "Reading Comp II",
+    "question": "The 'author’s purpose' can be to…",
+    "answers": [
+      {
+        "text": "Inform, persuade, or entertain",
+        "isCorrect": true
+      },
+      {
+        "text": "Confuse the reader",
+        "isCorrect": false
+      },
+      {
+        "text": "Hide facts only",
+        "isCorrect": false
+      },
+      {
+        "text": "Always entertain",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Inform, persuade, or entertain",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "3_life_4",
+    "category": "Life Cycles",
+    "question": "Plants make food using sunlight in a process called…",
+    "answers": [
+      {
+        "text": "Photosynthesis",
+        "isCorrect": true
+      },
+      {
+        "text": "Evaporation",
+        "isCorrect": false
+      },
+      {
+        "text": "Digestion",
+        "isCorrect": false
+      },
+      {
+        "text": "Condensation",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Photosynthesis",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "3_geo_4",
+    "category": "Continents & Oceans",
+    "question": "Which line divides Earth into Northern and Southern Hemispheres?",
+    "answers": [
+      {
+        "text": "Equator",
+        "isCorrect": true
+      },
+      {
+        "text": "Prime Meridian",
+        "isCorrect": false
+      },
+      {
+        "text": "Tropic of Cancer",
+        "isCorrect": false
+      },
+      {
+        "text": "International Date Line",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Equator",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "3_math_5",
+    "category": "Fractions & Time",
+    "question": "Which shows the same value as 2/3?",
+    "answers": [
+      {
+        "text": "4/6",
+        "isCorrect": true
+      },
+      {
+        "text": "3/6",
+        "isCorrect": false
+      },
+      {
+        "text": "2/4",
+        "isCorrect": false
+      },
+      {
+        "text": "3/9",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "4/6",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "3_read_5",
+    "category": "Reading Comp II",
+    "question": "A diagram is a kind of picture that explains something.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "3_life_5",
+    "category": "Life Cycles",
+    "question": "Amphibians live part of their life in water and part on land.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      },
+      {
+        "text": "Only on land",
+        "isCorrect": false
+      },
+      {
+        "text": "Only in water",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "3_geo_5",
+    "category": "Continents & Oceans",
+    "question": "What ocean is on the east coast of the United States?",
+    "answers": [
+      {
+        "text": "Atlantic Ocean",
+        "isCorrect": true
+      },
+      {
+        "text": "Pacific Ocean",
+        "isCorrect": false
+      },
+      {
+        "text": "Indian Ocean",
+        "isCorrect": false
+      },
+      {
+        "text": "Arctic Ocean",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Atlantic Ocean",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  }
+]

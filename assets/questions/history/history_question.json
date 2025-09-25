@@ -1,0 +1,778 @@
+[
+  {
+    "id": "H5_1",
+    "category": "Early U.S. History",
+    "question": "Who wrote 'Common Sense'?",
+    "answers": [
+      {
+        "text": "Thomas Paine",
+        "isCorrect": true
+      },
+      {
+        "text": "Thomas Jefferson",
+        "isCorrect": false
+      },
+      {
+        "text": "Ben Franklin",
+        "isCorrect": false
+      },
+      {
+        "text": "John Adams",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Thomas Paine",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "revolution"
+    ]
+  },
+  {
+    "id": "H5_2",
+    "category": "Colonial America",
+    "question": "The Boston Tea Party protested…",
+    "answers": [
+      {
+        "text": "British tax on tea",
+        "isCorrect": true
+      },
+      {
+        "text": "Stamp Act",
+        "isCorrect": false
+      },
+      {
+        "text": "Slavery",
+        "isCorrect": false
+      },
+      {
+        "text": "High rents",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "British tax on tea",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "colonial"
+    ]
+  },
+  {
+    "id": "H5_3",
+    "category": "Revolution",
+    "question": "The Declaration of Independence was signed in 1776.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "dates"
+    ]
+  },
+  {
+    "id": "H6_1",
+    "category": "Ancient Civilizations",
+    "question": "The Nile was central to…",
+    "answers": [
+      {
+        "text": "Egypt",
+        "isCorrect": true
+      },
+      {
+        "text": "Rome",
+        "isCorrect": false
+      },
+      {
+        "text": "Maya",
+        "isCorrect": false
+      },
+      {
+        "text": "China",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Egypt",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "egypt"
+    ]
+  },
+  {
+    "id": "H6_2",
+    "category": "Ancient Civilizations",
+    "question": "Cuneiform writing came from…",
+    "answers": [
+      {
+        "text": "Mesopotamia",
+        "isCorrect": true
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      },
+      {
+        "text": "India",
+        "isCorrect": false
+      },
+      {
+        "text": "China",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mesopotamia",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G6",
+      "writing"
+    ]
+  },
+  {
+    "id": "H6_3",
+    "category": "Ancient Civilizations",
+    "question": "The Indus Valley had plumbing systems.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G6",
+      "indus"
+    ]
+  },
+  {
+    "id": "H7_1",
+    "category": "Medieval History",
+    "question": "Feudalism was based on…",
+    "answers": [
+      {
+        "text": "Land ownership and loyalty",
+        "isCorrect": true
+      },
+      {
+        "text": "Democracy",
+        "isCorrect": false
+      },
+      {
+        "text": "Capitalism",
+        "isCorrect": false
+      },
+      {
+        "text": "Communism",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Land ownership and loyalty",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "medieval"
+    ]
+  },
+  {
+    "id": "H7_2",
+    "category": "Medieval History",
+    "question": "Who fought in the Crusades?",
+    "answers": [
+      {
+        "text": "Christians and Muslims",
+        "isCorrect": true
+      },
+      {
+        "text": "Romans and Greeks",
+        "isCorrect": false
+      },
+      {
+        "text": "Huns and Mongols",
+        "isCorrect": false
+      },
+      {
+        "text": "English and French only",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Christians and Muslims",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "crusades"
+    ]
+  },
+  {
+    "id": "H8_1",
+    "category": "U.S. Constitution",
+    "question": "First 10 amendments called…",
+    "answers": [
+      {
+        "text": "Bill of Rights",
+        "isCorrect": true
+      },
+      {
+        "text": "Declaration",
+        "isCorrect": false
+      },
+      {
+        "text": "Articles",
+        "isCorrect": false
+      },
+      {
+        "text": "Preamble",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Bill of Rights",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G8",
+      "constitution"
+    ]
+  },
+  {
+    "id": "H8_2",
+    "category": "World",
+    "question": "Industrial Revolution began in…",
+    "answers": [
+      {
+        "text": "Britain",
+        "isCorrect": true
+      },
+      {
+        "text": "France",
+        "isCorrect": false
+      },
+      {
+        "text": "US",
+        "isCorrect": false
+      },
+      {
+        "text": "Russia",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Britain",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "industry"
+    ]
+  },
+  {
+    "id": "H9_1",
+    "category": "World History",
+    "question": "World War I began in…",
+    "answers": [
+      {
+        "text": "1914",
+        "isCorrect": true
+      },
+      {
+        "text": "1918",
+        "isCorrect": false
+      },
+      {
+        "text": "1939",
+        "isCorrect": false
+      },
+      {
+        "text": "1905",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1914",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "ww1"
+    ]
+  },
+  {
+    "id": "H9_2",
+    "category": "World History",
+    "question": "League of Nations formed after…",
+    "answers": [
+      {
+        "text": "World War I",
+        "isCorrect": true
+      },
+      {
+        "text": "WW2",
+        "isCorrect": false
+      },
+      {
+        "text": "Civil War",
+        "isCorrect": false
+      },
+      {
+        "text": "Revolutionary War",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "World War I",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "league"
+    ]
+  },
+  {
+    "id": "H10_1",
+    "category": "US History",
+    "question": "Brown v Board ruled…",
+    "answers": [
+      {
+        "text": "School segregation unconstitutional",
+        "isCorrect": true
+      },
+      {
+        "text": "Segregation legal",
+        "isCorrect": false
+      },
+      {
+        "text": "Slavery ended",
+        "isCorrect": false
+      },
+      {
+        "text": "Voting rights expanded",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "School segregation unconstitutional",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "civil rights"
+    ]
+  },
+  {
+    "id": "H10_2",
+    "category": "US History",
+    "question": "The New Deal was response to…",
+    "answers": [
+      {
+        "text": "Great Depression",
+        "isCorrect": true
+      },
+      {
+        "text": "WW1",
+        "isCorrect": false
+      },
+      {
+        "text": "WW2",
+        "isCorrect": false
+      },
+      {
+        "text": "Civil Rights",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Great Depression",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "new deal"
+    ]
+  },
+  {
+    "id": "H11_1",
+    "category": "World",
+    "question": "Cold War was between…",
+    "answers": [
+      {
+        "text": "US and Soviet Union",
+        "isCorrect": true
+      },
+      {
+        "text": "US and China",
+        "isCorrect": false
+      },
+      {
+        "text": "Britain and Germany",
+        "isCorrect": false
+      },
+      {
+        "text": "US and Mexico",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "US and Soviet Union",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "cold war"
+    ]
+  },
+  {
+    "id": "H11_2",
+    "category": "World",
+    "question": "Fall of Berlin Wall in…",
+    "answers": [
+      {
+        "text": "1989",
+        "isCorrect": true
+      },
+      {
+        "text": "1979",
+        "isCorrect": false
+      },
+      {
+        "text": "1991",
+        "isCorrect": false
+      },
+      {
+        "text": "1969",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1989",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "berlin wall"
+    ]
+  },
+  {
+    "id": "H12_1",
+    "category": "World",
+    "question": "Renaissance started in…",
+    "answers": [
+      {
+        "text": "Italy",
+        "isCorrect": true
+      },
+      {
+        "text": "France",
+        "isCorrect": false
+      },
+      {
+        "text": "Germany",
+        "isCorrect": false
+      },
+      {
+        "text": "England",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Italy",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "renaissance"
+    ]
+  },
+  {
+    "id": "H12_2",
+    "category": "World",
+    "question": "Nelson Mandela was imprisoned in…",
+    "answers": [
+      {
+        "text": "South Africa",
+        "isCorrect": true
+      },
+      {
+        "text": "US",
+        "isCorrect": false
+      },
+      {
+        "text": "India",
+        "isCorrect": false
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "South Africa",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "mandela"
+    ]
+  },
+  {
+    "id": "HX18",
+    "category": "Mixed History",
+    "question": "The US has 50 states.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "HX19",
+    "category": "Mixed History",
+    "question": "The US has 50 states.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "HX20",
+    "category": "Mixed History",
+    "question": "The US has 50 states.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "HX21",
+    "category": "Mixed History",
+    "question": "The US has 50 states.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "HX22",
+    "category": "Mixed History",
+    "question": "The US has 50 states.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "HX23",
+    "category": "Mixed History",
+    "question": "The US has 50 states.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "HX24",
+    "category": "Mixed History",
+    "question": "The US has 50 states.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "HX25",
+    "category": "Mixed History",
+    "question": "The US has 50 states.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "HX26",
+    "category": "Mixed History",
+    "question": "The US has 50 states.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "HX27",
+    "category": "Mixed History",
+    "question": "The US has 50 states.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "HX28",
+    "category": "Mixed History",
+    "question": "The US has 50 states.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "HX29",
+    "category": "Mixed History",
+    "question": "The US has 50 states.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  }
+]

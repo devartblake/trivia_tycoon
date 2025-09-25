@@ -1,41 +1,46 @@
 import 'package:flutter/material.dart';
 import '../utils/parallax_utils.dart';
 
-class ParallaxWrapper extends StatelessWidget {
-  final Widget child;
+class ParallaxWrapperBuilder extends StatelessWidget {
   final double depth;
+  final Widget Function(BuildContext context, Offset tilt) builder;
 
-  const ParallaxWrapper({
+  const ParallaxWrapperBuilder({
     super.key,
-    required this.child,
+    required this.builder,
     this.depth = 5.0,
   });
 
   @override
   Widget build(BuildContext context) {
     return Listener(
-      onPointerMove: (event) {
-        ParallaxUtils.updatePointer(event.position);
-      },
+      onPointerHover: (e) => ParallaxUtils.updatePointer(e.position),
+      onPointerMove: (e) => ParallaxUtils.updatePointer(e.position),
+      onPointerDown: (e) => ParallaxUtils.updatePointer(e.position),
       onPointerUp: (_) => ParallaxUtils.reset(),
-      child: AnimatedBuilder(
-        animation: ParallaxUtils.notifier,
-        builder: (context, _) {
-          final offset = ParallaxUtils.notifier.value * depth;
-          return TweenAnimationBuilder(
-            tween: Tween<Offset>(begin: Offset.zero, end: offset),
-            duration: const Duration(milliseconds: 300),
-            builder: (context, animatedOffset, child) {
+      child: ValueListenableBuilder<Offset>(
+        valueListenable: ParallaxUtils.notifier,
+        builder: (context, offset, _) {
+          return TweenAnimationBuilder<Offset>(
+            tween: Tween<Offset>(
+              begin: Offset.zero,
+              end: offset * depth,
+            ),
+            duration: const Duration(milliseconds: 180),
+            curve: Curves.easeOut,
+            builder: (context, animatedOffset, __) {
+              // Provide tilt to the builder AND apply the transform here
+              final m = Matrix4.identity()
+                ..setEntry(3, 2, 0.001)
+                ..rotateX(animatedOffset.dy)
+                ..rotateY(-animatedOffset.dx);
+
               return Transform(
-                transform: Matrix4.identity()
-                  ..setEntry(3, 2, 0.001)
-                  ..rotateX(animatedOffset.dy)
-                  ..rotateY(-animatedOffset.dx),
                 alignment: Alignment.center,
-                child: child,
+                transform: m,
+                child: builder(context, animatedOffset),
               );
             },
-            child: child,
           );
         },
       ),

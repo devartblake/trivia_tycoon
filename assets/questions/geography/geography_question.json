@@ -1,0 +1,846 @@
+[
+  {
+    "id": "G5_1",
+    "category": "Landforms",
+    "question": "A narrow strip of land connecting two larger areas is an…",
+    "answers": [
+      {
+        "text": "Delta",
+        "isCorrect": false
+      },
+      {
+        "text": "Archipelago",
+        "isCorrect": false
+      },
+      {
+        "text": "Fjord",
+        "isCorrect": false
+      },
+      {
+        "text": "Isthmus",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Isthmus",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "landforms"
+    ]
+  },
+  {
+    "id": "G5_2",
+    "category": "Maps & Keys",
+    "question": "A map key (legend)…",
+    "answers": [
+      {
+        "text": "Explains symbols on a map",
+        "isCorrect": true
+      },
+      {
+        "text": "Shows languages",
+        "isCorrect": false
+      },
+      {
+        "text": "Shows elevation color only",
+        "isCorrect": false
+      },
+      {
+        "text": "Shows weather",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Explains symbols on a map",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "maps"
+    ]
+  },
+  {
+    "id": "G5_3",
+    "category": "Directions",
+    "question": "Compass shows cardinal directions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "navigation"
+    ]
+  },
+  {
+    "id": "G5_4",
+    "category": "Oceans",
+    "question": "Largest ocean:",
+    "answers": [
+      {
+        "text": "Pacific",
+        "isCorrect": true
+      },
+      {
+        "text": "Arctic",
+        "isCorrect": false
+      },
+      {
+        "text": "Atlantic",
+        "isCorrect": false
+      },
+      {
+        "text": "Indian",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Pacific",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "oceans"
+    ]
+  },
+  {
+    "id": "G6_1",
+    "category": "Climate Regions",
+    "question": "A desert climate is typically…",
+    "answers": [
+      {
+        "text": "High rainfall, cold",
+        "isCorrect": false
+      },
+      {
+        "text": "Low rainfall, large temperature swings",
+        "isCorrect": true
+      },
+      {
+        "text": "Constant snowfall",
+        "isCorrect": false
+      },
+      {
+        "text": "High humidity, frequent storms",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Low rainfall, large temperature swings",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G6",
+      "climate"
+    ]
+  },
+  {
+    "id": "G6_2",
+    "category": "Atmospheric Patterns",
+    "question": "Jet streams are…",
+    "answers": [
+      {
+        "text": "Ocean currents",
+        "isCorrect": false
+      },
+      {
+        "text": "River paths",
+        "isCorrect": false
+      },
+      {
+        "text": "Trade winds at surface",
+        "isCorrect": false
+      },
+      {
+        "text": "Fast, narrow air currents high in the atmosphere",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Fast, narrow air currents high in the atmosphere",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G6",
+      "atmosphere"
+    ]
+  },
+  {
+    "id": "G6_3",
+    "category": "Human-Environment",
+    "question": "Irrigation allows farming in arid regions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "agriculture"
+    ]
+  },
+  {
+    "id": "G6_4",
+    "category": "Weather",
+    "question": "Rain shadow forms on the…",
+    "answers": [
+      {
+        "text": "Windward side",
+        "isCorrect": false
+      },
+      {
+        "text": "Leeward side of mountains",
+        "isCorrect": true
+      },
+      {
+        "text": "North side only",
+        "isCorrect": false
+      },
+      {
+        "text": "East side only",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Leeward side of mountains",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G6",
+      "weather"
+    ]
+  },
+  {
+    "id": "G7_1",
+    "category": "Biomes",
+    "question": "A biome with permafrost and low shrubs:",
+    "answers": [
+      {
+        "text": "Rainforest",
+        "isCorrect": false
+      },
+      {
+        "text": "Taiga",
+        "isCorrect": false
+      },
+      {
+        "text": "Tundra",
+        "isCorrect": true
+      },
+      {
+        "text": "Savanna",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Tundra",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "biomes"
+    ]
+  },
+  {
+    "id": "G7_2",
+    "category": "Population",
+    "question": "Population density means…",
+    "answers": [
+      {
+        "text": "Birth rate",
+        "isCorrect": false
+      },
+      {
+        "text": "Average income",
+        "isCorrect": false
+      },
+      {
+        "text": "Number of cities",
+        "isCorrect": false
+      },
+      {
+        "text": "People per unit area",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "People per unit area",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "human geo"
+    ]
+  },
+  {
+    "id": "G7_3",
+    "category": "Cultural Patterns",
+    "question": "Cultural diffusion spreads ideas and practices.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "culture"
+    ]
+  },
+  {
+    "id": "G7_4",
+    "category": "Physical Features",
+    "question": "A rift valley forms by…",
+    "answers": [
+      {
+        "text": "Transform fault only",
+        "isCorrect": false
+      },
+      {
+        "text": "Divergent tectonic plates",
+        "isCorrect": true
+      },
+      {
+        "text": "Convergent plates",
+        "isCorrect": false
+      },
+      {
+        "text": "Erosion",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Divergent tectonic plates",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "tectonics"
+    ]
+  },
+  {
+    "id": "G8_1",
+    "category": "Cartography & GIS",
+    "question": "Contour lines connect equal…",
+    "answers": [
+      {
+        "text": "Rainfall",
+        "isCorrect": false
+      },
+      {
+        "text": "Pressure",
+        "isCorrect": false
+      },
+      {
+        "text": "Temperature",
+        "isCorrect": false
+      },
+      {
+        "text": "Elevation",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Elevation",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "topography"
+    ]
+  },
+  {
+    "id": "G8_2",
+    "category": "Map Projections",
+    "question": "Mercator projection preserves…",
+    "answers": [
+      {
+        "text": "All shapes",
+        "isCorrect": false
+      },
+      {
+        "text": "Directions (rhumb lines)",
+        "isCorrect": true
+      },
+      {
+        "text": "Areas",
+        "isCorrect": false
+      },
+      {
+        "text": "Distances everywhere",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Directions (rhumb lines)",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G8",
+      "projections"
+    ]
+  },
+  {
+    "id": "G8_3",
+    "category": "GIS",
+    "question": "GIS combines layers of spatial data for analysis.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "gis"
+    ]
+  },
+  {
+    "id": "G8_4",
+    "category": "Time Zones",
+    "question": "Each standard time zone is roughly…",
+    "answers": [
+      {
+        "text": "30°",
+        "isCorrect": false
+      },
+      {
+        "text": "45°",
+        "isCorrect": false
+      },
+      {
+        "text": "10°",
+        "isCorrect": false
+      },
+      {
+        "text": "15° of longitude",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "15° of longitude",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "time zones"
+    ]
+  },
+  {
+    "id": "G9_1",
+    "category": "Human Geography",
+    "question": "Urbanization is…",
+    "answers": [
+      {
+        "text": "Rural migration only",
+        "isCorrect": false
+      },
+      {
+        "text": "Increasing percentage living in cities",
+        "isCorrect": true
+      },
+      {
+        "text": "Decreasing city size",
+        "isCorrect": false
+      },
+      {
+        "text": "Higher birth rates only",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Increasing percentage living in cities",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "urban"
+    ]
+  },
+  {
+    "id": "G9_2",
+    "category": "Economic Geography",
+    "question": "Comparative advantage refers to…",
+    "answers": [
+      {
+        "text": "Cheapest labor",
+        "isCorrect": false
+      },
+      {
+        "text": "Absolute highest output",
+        "isCorrect": false
+      },
+      {
+        "text": "Largest market",
+        "isCorrect": false
+      },
+      {
+        "text": "Lower opportunity cost in producing a good",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Lower opportunity cost in producing a good",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G10",
+      "trade"
+    ]
+  },
+  {
+    "id": "G10_1",
+    "category": "Political Geography",
+    "question": "A nation-state aligns a political unit with a cultural/ethnic unit.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 3,
+    "tags": [
+      "G10",
+      "state"
+    ]
+  },
+  {
+    "id": "G11_1",
+    "category": "Development",
+    "question": "HDI combines…",
+    "answers": [
+      {
+        "text": "Life expectancy, education, and income",
+        "isCorrect": true
+      },
+      {
+        "text": "GDP only",
+        "isCorrect": false
+      },
+      {
+        "text": "Exports only",
+        "isCorrect": false
+      },
+      {
+        "text": "Population only",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Life expectancy, education, and income",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "development"
+    ]
+  },
+  {
+    "id": "G11_2",
+    "category": "Globalization",
+    "question": "A multinational corporation operates…",
+    "answers": [
+      {
+        "text": "Only domestically",
+        "isCorrect": false
+      },
+      {
+        "text": "Only via exports",
+        "isCorrect": false
+      },
+      {
+        "text": "Without supply chains",
+        "isCorrect": false
+      },
+      {
+        "text": "In multiple countries",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "In multiple countries",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "globalization"
+    ]
+  },
+  {
+    "id": "G12_1",
+    "category": "Geopolitics",
+    "question": "A chokepoint is…",
+    "answers": [
+      {
+        "text": "A mountain summit",
+        "isCorrect": false
+      },
+      {
+        "text": "A major inland lake",
+        "isCorrect": false
+      },
+      {
+        "text": "A narrow route crucial for trade or military",
+        "isCorrect": true
+      },
+      {
+        "text": "A flat plain",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A narrow route crucial for trade or military",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "geopolitics"
+    ]
+  },
+  {
+    "id": "G12_2",
+    "category": "Economic Systems",
+    "question": "A mixed economy features…",
+    "answers": [
+      {
+        "text": "Only central planning",
+        "isCorrect": false
+      },
+      {
+        "text": "Barter only",
+        "isCorrect": false
+      },
+      {
+        "text": "Both market and government roles",
+        "isCorrect": true
+      },
+      {
+        "text": "Only laissez-faire",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Both market and government roles",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G12",
+      "economy"
+    ]
+  },
+  {
+    "id": "G12_3",
+    "category": "Sustainability",
+    "question": "Sustainable development meets present needs without compromising future generations.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G12",
+      "sustainability"
+    ]
+  },
+  {
+    "id": "G9_3",
+    "category": "Cultural Geography",
+    "question": "A lingua franca is…",
+    "answers": [
+      {
+        "text": "A secret code",
+        "isCorrect": false
+      },
+      {
+        "text": "A dialect only",
+        "isCorrect": false
+      },
+      {
+        "text": "A dead language",
+        "isCorrect": false
+      },
+      {
+        "text": "A common language used among speakers of different native languages",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "A common language used among speakers of different native languages",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "language"
+    ]
+  },
+  {
+    "id": "G10_2",
+    "category": "Transportation",
+    "question": "Intermodal transport means…",
+    "answers": [
+      {
+        "text": "Using only ships",
+        "isCorrect": false
+      },
+      {
+        "text": "Air travel only",
+        "isCorrect": false
+      },
+      {
+        "text": "Using only roads",
+        "isCorrect": false
+      },
+      {
+        "text": "Using multiple transport modes in a single journey",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Using multiple transport modes in a single journey",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "transport"
+    ]
+  },
+  {
+    "id": "G11_3",
+    "category": "Population",
+    "question": "Carrying capacity applies to human geography contexts too.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "population"
+    ]
+  },
+  {
+    "id": "G12_4",
+    "category": "Regional Geography",
+    "question": "The Sahel lies between…",
+    "answers": [
+      {
+        "text": "Arctic and Taiga",
+        "isCorrect": false
+      },
+      {
+        "text": "The Sahara Desert and the Sudanian Savanna",
+        "isCorrect": true
+      },
+      {
+        "text": "Andes and Amazon",
+        "isCorrect": false
+      },
+      {
+        "text": "Himalayas and Gobi",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "The Sahara Desert and the Sudanian Savanna",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "regions"
+    ]
+  },
+  {
+    "id": "G8_5",
+    "category": "Cartography & GIS",
+    "question": "A map’s scale bar lets you…",
+    "answers": [
+      {
+        "text": "Measure real distance from map distance",
+        "isCorrect": true
+      },
+      {
+        "text": "Find exact elevation",
+        "isCorrect": false
+      },
+      {
+        "text": "Measure wind speed",
+        "isCorrect": false
+      },
+      {
+        "text": "Calculate latitude",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Measure real distance from map distance",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "maps"
+    ]
+  },
+  {
+    "id": "G9_4",
+    "category": "Human Geography",
+    "question": "A megalopolis is…",
+    "answers": [
+      {
+        "text": "A chain of closely linked metropolitan areas",
+        "isCorrect": true
+      },
+      {
+        "text": "A single small city",
+        "isCorrect": false
+      },
+      {
+        "text": "A rural village",
+        "isCorrect": false
+      },
+      {
+        "text": "A national capital",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A chain of closely linked metropolitan areas",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "urban"
+    ]
+  }
+]

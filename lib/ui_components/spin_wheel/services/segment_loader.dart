@@ -7,7 +7,8 @@ import 'package:trivia_tycoon/core/services/settings/spin_wheel_settings_service
 import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import '../../../core/services/storage/config_storage_service.dart';
-import '../models/wheel_segment.dart';
+import '../models/spin_system_models.dart';
+
 
 enum SegmentSource { local, remote }
 

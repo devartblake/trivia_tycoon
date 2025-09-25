@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:file_picker/file_picker.dart';
 import '../../../core/services/settings/app_settings.dart';
-import '../models/prize_entry.dart';
+import '../models/spin_system_models.dart';
 
 class PrizeLogExportService {
   /// Export as JSON file

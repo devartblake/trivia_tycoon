@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/settings/app_settings.dart';
-import '../models/prize_entry.dart';
+import '../models/spin_system_models.dart';
 
 class PrizeLogNotifier extends AsyncNotifier<List<PrizeEntry>> {
   List<PrizeEntry> _allLogs = [];

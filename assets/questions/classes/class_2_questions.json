@@ -1,0 +1,592 @@
+[
+  {
+    "id": "2_math_1",
+    "category": "Multiplication",
+    "question": "What is 2 × 3?",
+    "answers": [
+      {
+        "text": "6",
+        "isCorrect": true
+      },
+      {
+        "text": "5",
+        "isCorrect": false
+      },
+      {
+        "text": "8",
+        "isCorrect": false
+      },
+      {
+        "text": "9",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "6",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": [
+      "times tables"
+    ]
+  },
+  {
+    "id": "2_grammar_1",
+    "category": "Grammar & Writing",
+    "question": "Choose the verb: 'Birds fly south.'",
+    "answers": [
+      {
+        "text": "fly",
+        "isCorrect": true
+      },
+      {
+        "text": "Birds",
+        "isCorrect": false
+      },
+      {
+        "text": "south",
+        "isCorrect": false
+      },
+      {
+        "text": ".",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "fly",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "2_weather_1",
+    "category": "Weather & Seasons",
+    "question": "Which season is usually the coldest?",
+    "answers": [
+      {
+        "text": "Winter",
+        "isCorrect": true
+      },
+      {
+        "text": "Spring",
+        "isCorrect": false
+      },
+      {
+        "text": "Summer",
+        "isCorrect": false
+      },
+      {
+        "text": "Fall",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Winter",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "2_maps_1",
+    "category": "Maps & Places",
+    "question": "What does a compass show?",
+    "answers": [
+      {
+        "text": "Directions",
+        "isCorrect": true
+      },
+      {
+        "text": "Weather",
+        "isCorrect": false
+      },
+      {
+        "text": "Time",
+        "isCorrect": false
+      },
+      {
+        "text": "Food",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Directions",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "2_math_2",
+    "category": "Multiplication",
+    "question": "What is 5 × 0?",
+    "answers": [
+      {
+        "text": "0",
+        "isCorrect": true
+      },
+      {
+        "text": "5",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      },
+      {
+        "text": "1",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "0",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "2_grammar_2",
+    "category": "Grammar & Writing",
+    "question": "Which is a complete sentence?",
+    "answers": [
+      {
+        "text": "The dog barked.",
+        "isCorrect": true
+      },
+      {
+        "text": "Because the dog",
+        "isCorrect": false
+      },
+      {
+        "text": "Running fast",
+        "isCorrect": false
+      },
+      {
+        "text": "Blue sky",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "The dog barked.",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "2_weather_2",
+    "category": "Weather & Seasons",
+    "question": "A thermometer measures…",
+    "answers": [
+      {
+        "text": "Temperature",
+        "isCorrect": true
+      },
+      {
+        "text": "Rainfall",
+        "isCorrect": false
+      },
+      {
+        "text": "Wind direction",
+        "isCorrect": false
+      },
+      {
+        "text": "Cloud shapes",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Temperature",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "2_maps_2",
+    "category": "Maps & Places",
+    "question": "On a map, blue often represents…",
+    "answers": [
+      {
+        "text": "Water",
+        "isCorrect": true
+      },
+      {
+        "text": "Mountains",
+        "isCorrect": false
+      },
+      {
+        "text": "Roads",
+        "isCorrect": false
+      },
+      {
+        "text": "Forests",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Water",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "2_math_3",
+    "category": "Multiplication",
+    "question": "What is 3 × 4?",
+    "answers": [
+      {
+        "text": "12",
+        "isCorrect": true
+      },
+      {
+        "text": "7",
+        "isCorrect": false
+      },
+      {
+        "text": "8",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "12",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "2_grammar_3",
+    "category": "Grammar & Writing",
+    "question": "Pick the correct punctuation: 'What is your name'",
+    "answers": [
+      {
+        "text": "?",
+        "isCorrect": true
+      },
+      {
+        "text": "!",
+        "isCorrect": false
+      },
+      {
+        "text": ".",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "?",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "2_weather_3",
+    "category": "Weather & Seasons",
+    "question": "Snow can form when air is below freezing.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "2_maps_3",
+    "category": "Maps & Places",
+    "question": "What tool helps you find places in a city?",
+    "answers": [
+      {
+        "text": "Map",
+        "isCorrect": true
+      },
+      {
+        "text": "Calendar",
+        "isCorrect": false
+      },
+      {
+        "text": "Recipe",
+        "isCorrect": false
+      },
+      {
+        "text": "Bill",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Map",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "2_math_4",
+    "category": "Multiplication",
+    "question": "What is 4 × 6?",
+    "answers": [
+      {
+        "text": "24",
+        "isCorrect": true
+      },
+      {
+        "text": "20",
+        "isCorrect": false
+      },
+      {
+        "text": "22",
+        "isCorrect": false
+      },
+      {
+        "text": "26",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "24",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "2_grammar_4",
+    "category": "Grammar & Writing",
+    "question": "Choose the adjective: 'The tall tree sways.'",
+    "answers": [
+      {
+        "text": "tall",
+        "isCorrect": true
+      },
+      {
+        "text": "tree",
+        "isCorrect": false
+      },
+      {
+        "text": "sways",
+        "isCorrect": false
+      },
+      {
+        "text": ".",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "tall",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "2_weather_4",
+    "category": "Weather & Seasons",
+    "question": "Rain that freezes on the way down is called…",
+    "answers": [
+      {
+        "text": "Sleet",
+        "isCorrect": true
+      },
+      {
+        "text": "Fog",
+        "isCorrect": false
+      },
+      {
+        "text": "Hail",
+        "isCorrect": false
+      },
+      {
+        "text": "Mist",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Sleet",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "2_maps_4",
+    "category": "Maps & Places",
+    "question": "The four main directions are…",
+    "answers": [
+      {
+        "text": "N, S, E, W",
+        "isCorrect": true
+      },
+      {
+        "text": "Up, Down, Left, Right",
+        "isCorrect": false
+      },
+      {
+        "text": "Hot, Cold, Wet, Dry",
+        "isCorrect": false
+      },
+      {
+        "text": "1,2,3,4",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "N, S, E, W",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "2_math_5",
+    "category": "Multiplication",
+    "question": "What is 9 × 2?",
+    "answers": [
+      {
+        "text": "18",
+        "isCorrect": true
+      },
+      {
+        "text": "16",
+        "isCorrect": false
+      },
+      {
+        "text": "20",
+        "isCorrect": false
+      },
+      {
+        "text": "11",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "18",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "2_grammar_5",
+    "category": "Grammar & Writing",
+    "question": "'I' should always be written as…",
+    "answers": [
+      {
+        "text": "capital I",
+        "isCorrect": true
+      },
+      {
+        "text": "small i",
+        "isCorrect": false
+      },
+      {
+        "text": "any size",
+        "isCorrect": false
+      },
+      {
+        "text": "depends",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "capital I",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "2_weather_5",
+    "category": "Weather & Seasons",
+    "question": "What do we call a scientist who studies weather?",
+    "answers": [
+      {
+        "text": "Meteorologist",
+        "isCorrect": true
+      },
+      {
+        "text": "Biologist",
+        "isCorrect": false
+      },
+      {
+        "text": "Chef",
+        "isCorrect": false
+      },
+      {
+        "text": "Artist",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Meteorologist",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "2_maps_5",
+    "category": "Maps & Places",
+    "question": "What does a map key (legend) explain?",
+    "answers": [
+      {
+        "text": "Symbols on the map",
+        "isCorrect": true
+      },
+      {
+        "text": "How to draw maps",
+        "isCorrect": false
+      },
+      {
+        "text": "Time zones",
+        "isCorrect": false
+      },
+      {
+        "text": "Air pressure",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Symbols on the map",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  }
+]

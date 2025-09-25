@@ -320,10 +320,10 @@ class ThemeSettingsService {
       }
 
       if (needsCleanup) {
-        print('🔧 Theme presets cleaned up');
+        debugPrint('🔧 Theme presets cleaned up');
       }
     } catch (e) {
-      print('❌ Failed to validate presets integrity: $e');
+      debugPrint('❌ Failed to validate presets integrity: $e');
     }
   }
 

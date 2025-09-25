@@ -1,0 +1,776 @@
+[
+  {
+    "id": "C5_1",
+    "category": "Current Events",
+    "question": "UNICEF helps…",
+    "answers": [
+      {
+        "text": "Children",
+        "isCorrect": true
+      },
+      {
+        "text": "Animals",
+        "isCorrect": false
+      },
+      {
+        "text": "Environment",
+        "isCorrect": false
+      },
+      {
+        "text": "Sports",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Children",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "unicef"
+    ]
+  },
+  {
+    "id": "C5_2",
+    "category": "Current Events",
+    "question": "NASA explores…",
+    "answers": [
+      {
+        "text": "Space",
+        "isCorrect": true
+      },
+      {
+        "text": "Oceans",
+        "isCorrect": false
+      },
+      {
+        "text": "Forests",
+        "isCorrect": false
+      },
+      {
+        "text": "Deserts",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Space",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "nasa"
+    ]
+  },
+  {
+    "id": "C6_1",
+    "category": "Current Events",
+    "question": "WHO deals with…",
+    "answers": [
+      {
+        "text": "Health",
+        "isCorrect": true
+      },
+      {
+        "text": "Sports",
+        "isCorrect": false
+      },
+      {
+        "text": "War",
+        "isCorrect": false
+      },
+      {
+        "text": "Money",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Health",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "who"
+    ]
+  },
+  {
+    "id": "C6_2",
+    "category": "Current Events",
+    "question": "UN stands for…",
+    "answers": [
+      {
+        "text": "United Nations",
+        "isCorrect": true
+      },
+      {
+        "text": "United Neighbors",
+        "isCorrect": false
+      },
+      {
+        "text": "Universal Network",
+        "isCorrect": false
+      },
+      {
+        "text": "Union Nations",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "United Nations",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "un"
+    ]
+  },
+  {
+    "id": "C7_1",
+    "category": "Current Events",
+    "question": "Climate change causes…",
+    "answers": [
+      {
+        "text": "Global warming",
+        "isCorrect": true
+      },
+      {
+        "text": "Cooling",
+        "isCorrect": false
+      },
+      {
+        "text": "More ice",
+        "isCorrect": false
+      },
+      {
+        "text": "None",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Global warming",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "climate"
+    ]
+  },
+  {
+    "id": "C7_2",
+    "category": "Current Events",
+    "question": "Elections choose…",
+    "answers": [
+      {
+        "text": "Leaders",
+        "isCorrect": true
+      },
+      {
+        "text": "Songs",
+        "isCorrect": false
+      },
+      {
+        "text": "Foods",
+        "isCorrect": false
+      },
+      {
+        "text": "Movies",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Leaders",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7",
+      "elections"
+    ]
+  },
+  {
+    "id": "C8_1",
+    "category": "Current Events",
+    "question": "Internet connects…",
+    "answers": [
+      {
+        "text": "Computers worldwide",
+        "isCorrect": true
+      },
+      {
+        "text": "Phones only",
+        "isCorrect": false
+      },
+      {
+        "text": "Radios",
+        "isCorrect": false
+      },
+      {
+        "text": "TV",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Computers worldwide",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "internet"
+    ]
+  },
+  {
+    "id": "C8_2",
+    "category": "Current Events",
+    "question": "Renewable energy from…",
+    "answers": [
+      {
+        "text": "Sun and wind",
+        "isCorrect": true
+      },
+      {
+        "text": "Coal",
+        "isCorrect": false
+      },
+      {
+        "text": "Oil",
+        "isCorrect": false
+      },
+      {
+        "text": "Gas",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Sun and wind",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "energy"
+    ]
+  },
+  {
+    "id": "C9_1",
+    "category": "Current Events",
+    "question": "COVID-19 pandemic began in…",
+    "answers": [
+      {
+        "text": "2019",
+        "isCorrect": true
+      },
+      {
+        "text": "2020",
+        "isCorrect": false
+      },
+      {
+        "text": "2018",
+        "isCorrect": false
+      },
+      {
+        "text": "2021",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "2019",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "covid"
+    ]
+  },
+  {
+    "id": "C9_2",
+    "category": "Current Events",
+    "question": "Global warming linked to…",
+    "answers": [
+      {
+        "text": "Greenhouse gases",
+        "isCorrect": true
+      },
+      {
+        "text": "Rain",
+        "isCorrect": false
+      },
+      {
+        "text": "Sun",
+        "isCorrect": false
+      },
+      {
+        "text": "Oxygen",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Greenhouse gases",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "warming"
+    ]
+  },
+  {
+    "id": "C10_1",
+    "category": "Current Events",
+    "question": "Paris Agreement aims at…",
+    "answers": [
+      {
+        "text": "Climate change",
+        "isCorrect": true
+      },
+      {
+        "text": "Terrorism",
+        "isCorrect": false
+      },
+      {
+        "text": "Trade",
+        "isCorrect": false
+      },
+      {
+        "text": "Technology",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Climate change",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "paris"
+    ]
+  },
+  {
+    "id": "C10_2",
+    "category": "Current Events",
+    "question": "First man on moon:",
+    "answers": [
+      {
+        "text": "Neil Armstrong",
+        "isCorrect": true
+      },
+      {
+        "text": "Buzz Aldrin",
+        "isCorrect": false
+      },
+      {
+        "text": "Yuri Gagarin",
+        "isCorrect": false
+      },
+      {
+        "text": "John Glenn",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Neil Armstrong",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "space"
+    ]
+  },
+  {
+    "id": "C11_1",
+    "category": "Current Events",
+    "question": "Brexit was UK leaving…",
+    "answers": [
+      {
+        "text": "EU",
+        "isCorrect": true
+      },
+      {
+        "text": "UN",
+        "isCorrect": false
+      },
+      {
+        "text": "NATO",
+        "isCorrect": false
+      },
+      {
+        "text": "Eurozone only",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "EU",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "brexit"
+    ]
+  },
+  {
+    "id": "C11_2",
+    "category": "Current Events",
+    "question": "Olympics 2021 city:",
+    "answers": [
+      {
+        "text": "Tokyo",
+        "isCorrect": true
+      },
+      {
+        "text": "Rio",
+        "isCorrect": false
+      },
+      {
+        "text": "Beijing",
+        "isCorrect": false
+      },
+      {
+        "text": "London",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Tokyo",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "olympics"
+    ]
+  },
+  {
+    "id": "C12_1",
+    "category": "Current Events",
+    "question": "AI stands for…",
+    "answers": [
+      {
+        "text": "Artificial Intelligence",
+        "isCorrect": true
+      },
+      {
+        "text": "Actual Intelligence",
+        "isCorrect": false
+      },
+      {
+        "text": "Automatic Input",
+        "isCorrect": false
+      },
+      {
+        "text": "Advanced Internet",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Artificial Intelligence",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "AI"
+    ]
+  },
+  {
+    "id": "C12_2",
+    "category": "Current Events",
+    "question": "G20 is…",
+    "answers": [
+      {
+        "text": "Group of 20 major economies",
+        "isCorrect": true
+      },
+      {
+        "text": "20 states of US",
+        "isCorrect": false
+      },
+      {
+        "text": "20 sports events",
+        "isCorrect": false
+      },
+      {
+        "text": "20 companies",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Group of 20 major economies",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "g20"
+    ]
+  },
+  {
+    "id": "CX16",
+    "category": "Mixed Current",
+    "question": "The internet is global.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "CX17",
+    "category": "Mixed Current",
+    "question": "The internet is global.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "CX18",
+    "category": "Mixed Current",
+    "question": "The internet is global.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "CX19",
+    "category": "Mixed Current",
+    "question": "The internet is global.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "CX20",
+    "category": "Mixed Current",
+    "question": "The internet is global.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "CX21",
+    "category": "Mixed Current",
+    "question": "The internet is global.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "CX22",
+    "category": "Mixed Current",
+    "question": "The internet is global.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "CX23",
+    "category": "Mixed Current",
+    "question": "The internet is global.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "CX24",
+    "category": "Mixed Current",
+    "question": "The internet is global.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "CX25",
+    "category": "Mixed Current",
+    "question": "The internet is global.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "CX26",
+    "category": "Mixed Current",
+    "question": "The internet is global.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "CX27",
+    "category": "Mixed Current",
+    "question": "The internet is global.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "CX28",
+    "category": "Mixed Current",
+    "question": "The internet is global.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "CX29",
+    "category": "Mixed Current",
+    "question": "The internet is global.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  }
+]

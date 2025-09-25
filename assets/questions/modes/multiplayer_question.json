@@ -1,0 +1,2103 @@
+[
+  {
+    "id": "MP1",
+    "category": "General Knowledge",
+    "question": "What is the capital of France?",
+    "answers": [
+      {
+        "text": "Rome",
+        "isCorrect": false
+      },
+      {
+        "text": "Paris",
+        "isCorrect": true
+      },
+      {
+        "text": "London",
+        "isCorrect": false
+      },
+      {
+        "text": "Berlin",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Paris",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "team",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP2",
+    "category": "Science",
+    "question": "Water boils at what temperature (Celsius)?",
+    "answers": [
+      {
+        "text": "110",
+        "isCorrect": false
+      },
+      {
+        "text": "100",
+        "isCorrect": true
+      },
+      {
+        "text": "80",
+        "isCorrect": false
+      },
+      {
+        "text": "90",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "100",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "team",
+      "science"
+    ]
+  },
+  {
+    "id": "MP3",
+    "category": "Math",
+    "question": "What is 12 x 12?",
+    "answers": [
+      {
+        "text": "156",
+        "isCorrect": false
+      },
+      {
+        "text": "144",
+        "isCorrect": true
+      },
+      {
+        "text": "132",
+        "isCorrect": false
+      },
+      {
+        "text": "124",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "144",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "math",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP4",
+    "category": "History",
+    "question": "Who was the first President of the United States?",
+    "answers": [
+      {
+        "text": "John Adams",
+        "isCorrect": false
+      },
+      {
+        "text": "Thomas Jefferson",
+        "isCorrect": false
+      },
+      {
+        "text": "George Washington",
+        "isCorrect": true
+      },
+      {
+        "text": "Abraham Lincoln",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "George Washington",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "history",
+      "team"
+    ]
+  },
+  {
+    "id": "MP5",
+    "category": "Sports",
+    "question": "Which country won the FIFA World Cup in 2018?",
+    "answers": [
+      {
+        "text": "Argentina",
+        "isCorrect": false
+      },
+      {
+        "text": "Brazil",
+        "isCorrect": false
+      },
+      {
+        "text": "France",
+        "isCorrect": true
+      },
+      {
+        "text": "Germany",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "France",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "sports",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP6",
+    "category": "Entertainment",
+    "question": "The movie 'Inception' was directed by Christopher Nolan.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "entertainment",
+      "team"
+    ]
+  },
+  {
+    "id": "MP7",
+    "category": "Geography",
+    "question": "Mount Everest lies between Nepal and…",
+    "answers": [
+      {
+        "text": "Pakistan",
+        "isCorrect": false
+      },
+      {
+        "text": "China",
+        "isCorrect": true
+      },
+      {
+        "text": "Bhutan",
+        "isCorrect": false
+      },
+      {
+        "text": "India",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "China",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "geography",
+      "team"
+    ]
+  },
+  {
+    "id": "MP8",
+    "category": "Logic Puzzle",
+    "question": "If two’s company and three’s a crowd, what are four and five?",
+    "answers": [
+      {
+        "text": "Eight",
+        "isCorrect": false
+      },
+      {
+        "text": "Seven",
+        "isCorrect": false
+      },
+      {
+        "text": "Nine",
+        "isCorrect": true
+      },
+      {
+        "text": "Ten",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Nine",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "logic",
+      "puzzle",
+      "team"
+    ]
+  },
+  {
+    "id": "MP9",
+    "category": "Pop Culture",
+    "question": "Who sings 'Bad Guy'?",
+    "answers": [
+      {
+        "text": "Billie Eilish",
+        "isCorrect": true
+      },
+      {
+        "text": "Dua Lipa",
+        "isCorrect": false
+      },
+      {
+        "text": "Ariana Grande",
+        "isCorrect": false
+      },
+      {
+        "text": "Taylor Swift",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Billie Eilish",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "entertainment",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP10",
+    "category": "Science",
+    "question": "Which planet is known as the Red Planet?",
+    "answers": [
+      {
+        "text": "Mars",
+        "isCorrect": true
+      },
+      {
+        "text": "Jupiter",
+        "isCorrect": false
+      },
+      {
+        "text": "Saturn",
+        "isCorrect": false
+      },
+      {
+        "text": "Venus",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mars",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "science",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP11",
+    "category": "Sports",
+    "question": "How many players in a soccer team on field?",
+    "answers": [
+      {
+        "text": "11",
+        "isCorrect": true
+      },
+      {
+        "text": "9",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      },
+      {
+        "text": "12",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "11",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "sports",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP12",
+    "category": "Geography",
+    "question": "The Nile River flows into which sea?",
+    "answers": [
+      {
+        "text": "Mediterranean Sea",
+        "isCorrect": true
+      },
+      {
+        "text": "Red Sea",
+        "isCorrect": false
+      },
+      {
+        "text": "Black Sea",
+        "isCorrect": false
+      },
+      {
+        "text": "Caspian Sea",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mediterranean Sea",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "geography",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP13",
+    "category": "Math",
+    "question": "What is 50 ÷ 5?",
+    "answers": [
+      {
+        "text": "10",
+        "isCorrect": true
+      },
+      {
+        "text": "5",
+        "isCorrect": false
+      },
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "15",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "10",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "math",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP14",
+    "category": "General Knowledge",
+    "question": "What is the tallest animal on Earth?",
+    "answers": [
+      {
+        "text": "Giraffe",
+        "isCorrect": true
+      },
+      {
+        "text": "Horse",
+        "isCorrect": false
+      },
+      {
+        "text": "Camel",
+        "isCorrect": false
+      },
+      {
+        "text": "Elephant",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Giraffe",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP15",
+    "category": "History",
+    "question": "The Great Wall of China was built to keep out which group?",
+    "answers": [
+      {
+        "text": "Romans",
+        "isCorrect": false
+      },
+      {
+        "text": "Greeks",
+        "isCorrect": false
+      },
+      {
+        "text": "Mongols",
+        "isCorrect": true
+      },
+      {
+        "text": "Persians",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mongols",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "history",
+      "team"
+    ]
+  },
+  {
+    "id": "MP16",
+    "category": "Geography",
+    "question": "The Nile River flows into which sea?",
+    "answers": [
+      {
+        "text": "Mediterranean Sea",
+        "isCorrect": true
+      },
+      {
+        "text": "Caspian Sea",
+        "isCorrect": false
+      },
+      {
+        "text": "Red Sea",
+        "isCorrect": false
+      },
+      {
+        "text": "Black Sea",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mediterranean Sea",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "geography",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP17",
+    "category": "Entertainment",
+    "question": "Which franchise has Yoda?",
+    "answers": [
+      {
+        "text": "DC",
+        "isCorrect": false
+      },
+      {
+        "text": "Star Wars",
+        "isCorrect": true
+      },
+      {
+        "text": "Star Trek",
+        "isCorrect": false
+      },
+      {
+        "text": "Marvel",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Star Wars",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "entertainment",
+      "team"
+    ]
+  },
+  {
+    "id": "MP18",
+    "category": "General Knowledge",
+    "question": "What is the tallest animal on Earth?",
+    "answers": [
+      {
+        "text": "Camel",
+        "isCorrect": false
+      },
+      {
+        "text": "Giraffe",
+        "isCorrect": true
+      },
+      {
+        "text": "Horse",
+        "isCorrect": false
+      },
+      {
+        "text": "Elephant",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Giraffe",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP19",
+    "category": "Sports",
+    "question": "How many players in a soccer team on field?",
+    "answers": [
+      {
+        "text": "9",
+        "isCorrect": false
+      },
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "11",
+        "isCorrect": true
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "11",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "sports",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP20",
+    "category": "Logic",
+    "question": "If you have me, you want to share me. If you share me, you don’t have me. What am I?",
+    "answers": [
+      {
+        "text": "Time",
+        "isCorrect": false
+      },
+      {
+        "text": "A secret",
+        "isCorrect": true
+      },
+      {
+        "text": "Money",
+        "isCorrect": false
+      },
+      {
+        "text": "Book",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A secret",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "logic",
+      "puzzle",
+      "team"
+    ]
+  },
+  {
+    "id": "MP21",
+    "category": "Logic",
+    "question": "If you have me, you want to share me. If you share me, you don’t have me. What am I?",
+    "answers": [
+      {
+        "text": "Money",
+        "isCorrect": false
+      },
+      {
+        "text": "Time",
+        "isCorrect": false
+      },
+      {
+        "text": "Book",
+        "isCorrect": false
+      },
+      {
+        "text": "A secret",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "A secret",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "logic",
+      "puzzle",
+      "team"
+    ]
+  },
+  {
+    "id": "MP22",
+    "category": "General Knowledge",
+    "question": "What is the tallest animal on Earth?",
+    "answers": [
+      {
+        "text": "Giraffe",
+        "isCorrect": true
+      },
+      {
+        "text": "Elephant",
+        "isCorrect": false
+      },
+      {
+        "text": "Horse",
+        "isCorrect": false
+      },
+      {
+        "text": "Camel",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Giraffe",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP23",
+    "category": "History",
+    "question": "The Great Wall of China was built to keep out which group?",
+    "answers": [
+      {
+        "text": "Mongols",
+        "isCorrect": true
+      },
+      {
+        "text": "Romans",
+        "isCorrect": false
+      },
+      {
+        "text": "Persians",
+        "isCorrect": false
+      },
+      {
+        "text": "Greeks",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mongols",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "history",
+      "team"
+    ]
+  },
+  {
+    "id": "MP24",
+    "category": "Geography",
+    "question": "The Nile River flows into which sea?",
+    "answers": [
+      {
+        "text": "Mediterranean Sea",
+        "isCorrect": true
+      },
+      {
+        "text": "Caspian Sea",
+        "isCorrect": false
+      },
+      {
+        "text": "Black Sea",
+        "isCorrect": false
+      },
+      {
+        "text": "Red Sea",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mediterranean Sea",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "geography",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP25",
+    "category": "History",
+    "question": "The Great Wall of China was built to keep out which group?",
+    "answers": [
+      {
+        "text": "Mongols",
+        "isCorrect": true
+      },
+      {
+        "text": "Greeks",
+        "isCorrect": false
+      },
+      {
+        "text": "Persians",
+        "isCorrect": false
+      },
+      {
+        "text": "Romans",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mongols",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "history",
+      "team"
+    ]
+  },
+  {
+    "id": "MP26",
+    "category": "Sports",
+    "question": "How many players in a soccer team on field?",
+    "answers": [
+      {
+        "text": "9",
+        "isCorrect": false
+      },
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      },
+      {
+        "text": "11",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "11",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "sports",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP27",
+    "category": "Geography",
+    "question": "The Nile River flows into which sea?",
+    "answers": [
+      {
+        "text": "Caspian Sea",
+        "isCorrect": false
+      },
+      {
+        "text": "Red Sea",
+        "isCorrect": false
+      },
+      {
+        "text": "Mediterranean Sea",
+        "isCorrect": true
+      },
+      {
+        "text": "Black Sea",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mediterranean Sea",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "geography",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP28",
+    "category": "Sports",
+    "question": "How many players in a soccer team on field?",
+    "answers": [
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "11",
+        "isCorrect": true
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      },
+      {
+        "text": "9",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "11",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "sports",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP29",
+    "category": "Sports",
+    "question": "How many players in a soccer team on field?",
+    "answers": [
+      {
+        "text": "10",
+        "isCorrect": false
+      },
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "11",
+        "isCorrect": true
+      },
+      {
+        "text": "9",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "11",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "sports",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP30",
+    "category": "Science",
+    "question": "Which gas do humans breathe in to survive?",
+    "answers": [
+      {
+        "text": "Nitrogen",
+        "isCorrect": false
+      },
+      {
+        "text": "Oxygen",
+        "isCorrect": true
+      },
+      {
+        "text": "Carbon Dioxide",
+        "isCorrect": false
+      },
+      {
+        "text": "Helium",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Oxygen",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "science",
+      "team"
+    ]
+  },
+  {
+    "id": "MP31",
+    "category": "Science",
+    "question": "Which gas do humans breathe in to survive?",
+    "answers": [
+      {
+        "text": "Nitrogen",
+        "isCorrect": false
+      },
+      {
+        "text": "Oxygen",
+        "isCorrect": true
+      },
+      {
+        "text": "Helium",
+        "isCorrect": false
+      },
+      {
+        "text": "Carbon Dioxide",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Oxygen",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "science",
+      "team"
+    ]
+  },
+  {
+    "id": "MP32",
+    "category": "Logic",
+    "question": "If you have me, you want to share me. If you share me, you don’t have me. What am I?",
+    "answers": [
+      {
+        "text": "Book",
+        "isCorrect": false
+      },
+      {
+        "text": "A secret",
+        "isCorrect": true
+      },
+      {
+        "text": "Money",
+        "isCorrect": false
+      },
+      {
+        "text": "Time",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A secret",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "logic",
+      "puzzle",
+      "team"
+    ]
+  },
+  {
+    "id": "MP33",
+    "category": "General Knowledge",
+    "question": "What is the tallest animal on Earth?",
+    "answers": [
+      {
+        "text": "Elephant",
+        "isCorrect": false
+      },
+      {
+        "text": "Camel",
+        "isCorrect": false
+      },
+      {
+        "text": "Giraffe",
+        "isCorrect": true
+      },
+      {
+        "text": "Horse",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Giraffe",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP34",
+    "category": "Geography",
+    "question": "The Nile River flows into which sea?",
+    "answers": [
+      {
+        "text": "Caspian Sea",
+        "isCorrect": false
+      },
+      {
+        "text": "Red Sea",
+        "isCorrect": false
+      },
+      {
+        "text": "Mediterranean Sea",
+        "isCorrect": true
+      },
+      {
+        "text": "Black Sea",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mediterranean Sea",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "geography",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP35",
+    "category": "General Knowledge",
+    "question": "What is the tallest animal on Earth?",
+    "answers": [
+      {
+        "text": "Camel",
+        "isCorrect": false
+      },
+      {
+        "text": "Giraffe",
+        "isCorrect": true
+      },
+      {
+        "text": "Horse",
+        "isCorrect": false
+      },
+      {
+        "text": "Elephant",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Giraffe",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP36",
+    "category": "Entertainment",
+    "question": "Which franchise has Yoda?",
+    "answers": [
+      {
+        "text": "Marvel",
+        "isCorrect": false
+      },
+      {
+        "text": "DC",
+        "isCorrect": false
+      },
+      {
+        "text": "Star Trek",
+        "isCorrect": false
+      },
+      {
+        "text": "Star Wars",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Star Wars",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "entertainment",
+      "team"
+    ]
+  },
+  {
+    "id": "MP37",
+    "category": "History",
+    "question": "The Great Wall of China was built to keep out which group?",
+    "answers": [
+      {
+        "text": "Greeks",
+        "isCorrect": false
+      },
+      {
+        "text": "Mongols",
+        "isCorrect": true
+      },
+      {
+        "text": "Romans",
+        "isCorrect": false
+      },
+      {
+        "text": "Persians",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mongols",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "history",
+      "team"
+    ]
+  },
+  {
+    "id": "MP38",
+    "category": "Entertainment",
+    "question": "Which franchise has Yoda?",
+    "answers": [
+      {
+        "text": "Star Trek",
+        "isCorrect": false
+      },
+      {
+        "text": "Star Wars",
+        "isCorrect": true
+      },
+      {
+        "text": "Marvel",
+        "isCorrect": false
+      },
+      {
+        "text": "DC",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Star Wars",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "entertainment",
+      "team"
+    ]
+  },
+  {
+    "id": "MP39",
+    "category": "Geography",
+    "question": "The Nile River flows into which sea?",
+    "answers": [
+      {
+        "text": "Mediterranean Sea",
+        "isCorrect": true
+      },
+      {
+        "text": "Caspian Sea",
+        "isCorrect": false
+      },
+      {
+        "text": "Black Sea",
+        "isCorrect": false
+      },
+      {
+        "text": "Red Sea",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mediterranean Sea",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "geography",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP40",
+    "category": "Logic",
+    "question": "If you have me, you want to share me. If you share me, you don’t have me. What am I?",
+    "answers": [
+      {
+        "text": "A secret",
+        "isCorrect": true
+      },
+      {
+        "text": "Book",
+        "isCorrect": false
+      },
+      {
+        "text": "Time",
+        "isCorrect": false
+      },
+      {
+        "text": "Money",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A secret",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "logic",
+      "puzzle",
+      "team"
+    ]
+  },
+  {
+    "id": "MP41",
+    "category": "Logic",
+    "question": "If you have me, you want to share me. If you share me, you don’t have me. What am I?",
+    "answers": [
+      {
+        "text": "Book",
+        "isCorrect": false
+      },
+      {
+        "text": "Time",
+        "isCorrect": false
+      },
+      {
+        "text": "Money",
+        "isCorrect": false
+      },
+      {
+        "text": "A secret",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "A secret",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "logic",
+      "puzzle",
+      "team"
+    ]
+  },
+  {
+    "id": "MP42",
+    "category": "General Knowledge",
+    "question": "What is the tallest animal on Earth?",
+    "answers": [
+      {
+        "text": "Elephant",
+        "isCorrect": false
+      },
+      {
+        "text": "Horse",
+        "isCorrect": false
+      },
+      {
+        "text": "Camel",
+        "isCorrect": false
+      },
+      {
+        "text": "Giraffe",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Giraffe",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP43",
+    "category": "Science",
+    "question": "Which gas do humans breathe in to survive?",
+    "answers": [
+      {
+        "text": "Helium",
+        "isCorrect": false
+      },
+      {
+        "text": "Carbon Dioxide",
+        "isCorrect": false
+      },
+      {
+        "text": "Oxygen",
+        "isCorrect": true
+      },
+      {
+        "text": "Nitrogen",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Oxygen",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "science",
+      "team"
+    ]
+  },
+  {
+    "id": "MP44",
+    "category": "General Knowledge",
+    "question": "What is the tallest animal on Earth?",
+    "answers": [
+      {
+        "text": "Horse",
+        "isCorrect": false
+      },
+      {
+        "text": "Giraffe",
+        "isCorrect": true
+      },
+      {
+        "text": "Elephant",
+        "isCorrect": false
+      },
+      {
+        "text": "Camel",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Giraffe",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP45",
+    "category": "Entertainment",
+    "question": "Which franchise has Yoda?",
+    "answers": [
+      {
+        "text": "Star Trek",
+        "isCorrect": false
+      },
+      {
+        "text": "Marvel",
+        "isCorrect": false
+      },
+      {
+        "text": "Star Wars",
+        "isCorrect": true
+      },
+      {
+        "text": "DC",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Star Wars",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "entertainment",
+      "team"
+    ]
+  },
+  {
+    "id": "MP46",
+    "category": "Science",
+    "question": "Which gas do humans breathe in to survive?",
+    "answers": [
+      {
+        "text": "Nitrogen",
+        "isCorrect": false
+      },
+      {
+        "text": "Helium",
+        "isCorrect": false
+      },
+      {
+        "text": "Carbon Dioxide",
+        "isCorrect": false
+      },
+      {
+        "text": "Oxygen",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Oxygen",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "science",
+      "team"
+    ]
+  },
+  {
+    "id": "MP47",
+    "category": "Sports",
+    "question": "How many players in a soccer team on field?",
+    "answers": [
+      {
+        "text": "11",
+        "isCorrect": true
+      },
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "9",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "11",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "sports",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP48",
+    "category": "Entertainment",
+    "question": "Which franchise has Yoda?",
+    "answers": [
+      {
+        "text": "Marvel",
+        "isCorrect": false
+      },
+      {
+        "text": "DC",
+        "isCorrect": false
+      },
+      {
+        "text": "Star Trek",
+        "isCorrect": false
+      },
+      {
+        "text": "Star Wars",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Star Wars",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "entertainment",
+      "team"
+    ]
+  },
+  {
+    "id": "MP49",
+    "category": "Math",
+    "question": "What is 50 ÷ 5?",
+    "answers": [
+      {
+        "text": "10",
+        "isCorrect": true
+      },
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "5",
+        "isCorrect": false
+      },
+      {
+        "text": "15",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "10",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "math",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP50",
+    "category": "Logic",
+    "question": "If you have me, you want to share me. If you share me, you don’t have me. What am I?",
+    "answers": [
+      {
+        "text": "Book",
+        "isCorrect": false
+      },
+      {
+        "text": "Time",
+        "isCorrect": false
+      },
+      {
+        "text": "Money",
+        "isCorrect": false
+      },
+      {
+        "text": "A secret",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "A secret",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "logic",
+      "puzzle",
+      "team"
+    ]
+  },
+  {
+    "id": "MP51",
+    "category": "History",
+    "question": "The Great Wall of China was built to keep out which group?",
+    "answers": [
+      {
+        "text": "Persians",
+        "isCorrect": false
+      },
+      {
+        "text": "Greeks",
+        "isCorrect": false
+      },
+      {
+        "text": "Romans",
+        "isCorrect": false
+      },
+      {
+        "text": "Mongols",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Mongols",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "history",
+      "team"
+    ]
+  },
+  {
+    "id": "MP52",
+    "category": "History",
+    "question": "The Great Wall of China was built to keep out which group?",
+    "answers": [
+      {
+        "text": "Romans",
+        "isCorrect": false
+      },
+      {
+        "text": "Persians",
+        "isCorrect": false
+      },
+      {
+        "text": "Greeks",
+        "isCorrect": false
+      },
+      {
+        "text": "Mongols",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Mongols",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "history",
+      "team"
+    ]
+  },
+  {
+    "id": "MP53",
+    "category": "Math",
+    "question": "What is 50 ÷ 5?",
+    "answers": [
+      {
+        "text": "15",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": true
+      },
+      {
+        "text": "5",
+        "isCorrect": false
+      },
+      {
+        "text": "12",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "10",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "math",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP54",
+    "category": "Geography",
+    "question": "The Nile River flows into which sea?",
+    "answers": [
+      {
+        "text": "Red Sea",
+        "isCorrect": false
+      },
+      {
+        "text": "Caspian Sea",
+        "isCorrect": false
+      },
+      {
+        "text": "Mediterranean Sea",
+        "isCorrect": true
+      },
+      {
+        "text": "Black Sea",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mediterranean Sea",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "geography",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP55",
+    "category": "Sports",
+    "question": "How many players in a soccer team on field?",
+    "answers": [
+      {
+        "text": "11",
+        "isCorrect": true
+      },
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      },
+      {
+        "text": "9",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "11",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "sports",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP56",
+    "category": "Sports",
+    "question": "How many players in a soccer team on field?",
+    "answers": [
+      {
+        "text": "9",
+        "isCorrect": false
+      },
+      {
+        "text": "11",
+        "isCorrect": true
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      },
+      {
+        "text": "12",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "11",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "sports",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP57",
+    "category": "Science",
+    "question": "Which gas do humans breathe in to survive?",
+    "answers": [
+      {
+        "text": "Carbon Dioxide",
+        "isCorrect": false
+      },
+      {
+        "text": "Helium",
+        "isCorrect": false
+      },
+      {
+        "text": "Nitrogen",
+        "isCorrect": false
+      },
+      {
+        "text": "Oxygen",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Oxygen",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "science",
+      "team"
+    ]
+  },
+  {
+    "id": "MP58",
+    "category": "Geography",
+    "question": "The Nile River flows into which sea?",
+    "answers": [
+      {
+        "text": "Black Sea",
+        "isCorrect": false
+      },
+      {
+        "text": "Mediterranean Sea",
+        "isCorrect": true
+      },
+      {
+        "text": "Red Sea",
+        "isCorrect": false
+      },
+      {
+        "text": "Caspian Sea",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mediterranean Sea",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "geography",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP59",
+    "category": "Entertainment",
+    "question": "Which franchise has Yoda?",
+    "answers": [
+      {
+        "text": "DC",
+        "isCorrect": false
+      },
+      {
+        "text": "Star Trek",
+        "isCorrect": false
+      },
+      {
+        "text": "Star Wars",
+        "isCorrect": true
+      },
+      {
+        "text": "Marvel",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Star Wars",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "entertainment",
+      "team"
+    ]
+  },
+  {
+    "id": "MP60",
+    "category": "Science",
+    "question": "Which gas do humans breathe in to survive?",
+    "answers": [
+      {
+        "text": "Carbon Dioxide",
+        "isCorrect": false
+      },
+      {
+        "text": "Nitrogen",
+        "isCorrect": false
+      },
+      {
+        "text": "Helium",
+        "isCorrect": false
+      },
+      {
+        "text": "Oxygen",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Oxygen",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "science",
+      "team"
+    ]
+  },
+  {
+    "id": "MP61",
+    "category": "Math",
+    "question": "What is 50 ÷ 5?",
+    "answers": [
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "5",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": true
+      },
+      {
+        "text": "15",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "10",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "math",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP62",
+    "category": "Logic",
+    "question": "If you have me, you want to share me. If you share me, you don’t have me. What am I?",
+    "answers": [
+      {
+        "text": "A secret",
+        "isCorrect": true
+      },
+      {
+        "text": "Book",
+        "isCorrect": false
+      },
+      {
+        "text": "Time",
+        "isCorrect": false
+      },
+      {
+        "text": "Money",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A secret",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "logic",
+      "puzzle",
+      "team"
+    ]
+  },
+  {
+    "id": "MP63",
+    "category": "Science",
+    "question": "Which gas do humans breathe in to survive?",
+    "answers": [
+      {
+        "text": "Nitrogen",
+        "isCorrect": false
+      },
+      {
+        "text": "Carbon Dioxide",
+        "isCorrect": false
+      },
+      {
+        "text": "Helium",
+        "isCorrect": false
+      },
+      {
+        "text": "Oxygen",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Oxygen",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "science",
+      "team"
+    ]
+  },
+  {
+    "id": "MP64",
+    "category": "Logic",
+    "question": "If you have me, you want to share me. If you share me, you don’t have me. What am I?",
+    "answers": [
+      {
+        "text": "A secret",
+        "isCorrect": true
+      },
+      {
+        "text": "Time",
+        "isCorrect": false
+      },
+      {
+        "text": "Money",
+        "isCorrect": false
+      },
+      {
+        "text": "Book",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A secret",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "logic",
+      "puzzle",
+      "team"
+    ]
+  },
+  {
+    "id": "MP65",
+    "category": "Entertainment",
+    "question": "Which franchise has Yoda?",
+    "answers": [
+      {
+        "text": "Marvel",
+        "isCorrect": false
+      },
+      {
+        "text": "DC",
+        "isCorrect": false
+      },
+      {
+        "text": "Star Wars",
+        "isCorrect": true
+      },
+      {
+        "text": "Star Trek",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Star Wars",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "entertainment",
+      "team"
+    ]
+  },
+  {
+    "id": "MP66",
+    "category": "Entertainment",
+    "question": "Which franchise has Yoda?",
+    "answers": [
+      {
+        "text": "Star Trek",
+        "isCorrect": false
+      },
+      {
+        "text": "DC",
+        "isCorrect": false
+      },
+      {
+        "text": "Marvel",
+        "isCorrect": false
+      },
+      {
+        "text": "Star Wars",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Star Wars",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "entertainment",
+      "team"
+    ]
+  },
+  {
+    "id": "MP67",
+    "category": "Entertainment",
+    "question": "Which franchise has Yoda?",
+    "answers": [
+      {
+        "text": "DC",
+        "isCorrect": false
+      },
+      {
+        "text": "Star Wars",
+        "isCorrect": true
+      },
+      {
+        "text": "Star Trek",
+        "isCorrect": false
+      },
+      {
+        "text": "Marvel",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Star Wars",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "entertainment",
+      "team"
+    ]
+  },
+  {
+    "id": "MP68",
+    "category": "Sports",
+    "question": "How many players in a soccer team on field?",
+    "answers": [
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "11",
+        "isCorrect": true
+      },
+      {
+        "text": "9",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "11",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "sports",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP69",
+    "category": "General Knowledge",
+    "question": "What is the tallest animal on Earth?",
+    "answers": [
+      {
+        "text": "Horse",
+        "isCorrect": false
+      },
+      {
+        "text": "Giraffe",
+        "isCorrect": true
+      },
+      {
+        "text": "Elephant",
+        "isCorrect": false
+      },
+      {
+        "text": "Camel",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Giraffe",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general",
+      "vs_mode"
+    ]
+  },
+  {
+    "id": "MP70",
+    "category": "General Knowledge",
+    "question": "What is the tallest animal on Earth?",
+    "answers": [
+      {
+        "text": "Horse",
+        "isCorrect": false
+      },
+      {
+        "text": "Elephant",
+        "isCorrect": false
+      },
+      {
+        "text": "Giraffe",
+        "isCorrect": true
+      },
+      {
+        "text": "Camel",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Giraffe",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general",
+      "vs_mode"
+    ]
+  }
+]

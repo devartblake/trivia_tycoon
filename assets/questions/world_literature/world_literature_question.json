@@ -1,0 +1,870 @@
+[
+  {
+    "id": "WL1",
+    "category": "Epics",
+    "question": "Homer’s epic about the journey home is…",
+    "answers": [
+      {
+        "text": "Aeneid",
+        "isCorrect": false
+      },
+      {
+        "text": "The Iliad",
+        "isCorrect": false
+      },
+      {
+        "text": "Beowulf",
+        "isCorrect": false
+      },
+      {
+        "text": "The Odyssey",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "The Odyssey",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "epic"
+    ]
+  },
+  {
+    "id": "WL2",
+    "category": "Drama",
+    "question": "Shakespeare’s tragedy of the Danish prince is…",
+    "answers": [
+      {
+        "text": "Hamlet",
+        "isCorrect": true
+      },
+      {
+        "text": "King Lear",
+        "isCorrect": false
+      },
+      {
+        "text": "Othello",
+        "isCorrect": false
+      },
+      {
+        "text": "Macbeth",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Hamlet",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "drama"
+    ]
+  },
+  {
+    "id": "WL3",
+    "category": "Poetry",
+    "question": "Haiku originated in…",
+    "answers": [
+      {
+        "text": "Japan",
+        "isCorrect": true
+      },
+      {
+        "text": "Vietnam",
+        "isCorrect": false
+      },
+      {
+        "text": "China",
+        "isCorrect": false
+      },
+      {
+        "text": "Korea",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Japan",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "poetry"
+    ]
+  },
+  {
+    "id": "WL4",
+    "category": "Novel",
+    "question": "Miguel de Cervantes wrote…",
+    "answers": [
+      {
+        "text": "Les Misérables",
+        "isCorrect": false
+      },
+      {
+        "text": "Don Quixote",
+        "isCorrect": true
+      },
+      {
+        "text": "War and Peace",
+        "isCorrect": false
+      },
+      {
+        "text": "Inferno",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Don Quixote",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "novel"
+    ]
+  },
+  {
+    "id": "WL5",
+    "category": "Russian Lit",
+    "question": "Tolstoy wrote…",
+    "answers": [
+      {
+        "text": "The Stranger",
+        "isCorrect": false
+      },
+      {
+        "text": "Crime and Punishment",
+        "isCorrect": false
+      },
+      {
+        "text": "The Trial",
+        "isCorrect": false
+      },
+      {
+        "text": "War and Peace",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "War and Peace",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "russian"
+    ]
+  },
+  {
+    "id": "WL6",
+    "category": "American Lit",
+    "question": "Toni Morrison wrote 'Beloved'.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "american"
+    ]
+  },
+  {
+    "id": "WL7",
+    "category": "French Lit",
+    "question": "Victor Hugo wrote…",
+    "answers": [
+      {
+        "text": "The Plague",
+        "isCorrect": false
+      },
+      {
+        "text": "Les Misérables",
+        "isCorrect": true
+      },
+      {
+        "text": "The Little Prince",
+        "isCorrect": false
+      },
+      {
+        "text": "Madame Bovary",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Les Misérables",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "french"
+    ]
+  },
+  {
+    "id": "WL8",
+    "category": "German Lit",
+    "question": "Kafka wrote…",
+    "answers": [
+      {
+        "text": "Faust",
+        "isCorrect": false
+      },
+      {
+        "text": "Effi Briest",
+        "isCorrect": false
+      },
+      {
+        "text": "The Metamorphosis",
+        "isCorrect": true
+      },
+      {
+        "text": "Buddenbrooks",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "The Metamorphosis",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "german"
+    ]
+  },
+  {
+    "id": "WL9",
+    "category": "Irish Lit",
+    "question": "James Joyce wrote…",
+    "answers": [
+      {
+        "text": "Dubliners",
+        "isCorrect": false
+      },
+      {
+        "text": "A Portrait of the Artist",
+        "isCorrect": false
+      },
+      {
+        "text": "Waiting for Godot",
+        "isCorrect": false
+      },
+      {
+        "text": "Ulysses",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Ulysses",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11-12",
+      "irish"
+    ]
+  },
+  {
+    "id": "WL10",
+    "category": "Modernism",
+    "question": "T.S. Eliot wrote…",
+    "answers": [
+      {
+        "text": "Leaves of Grass",
+        "isCorrect": false
+      },
+      {
+        "text": "The Waste Land",
+        "isCorrect": true
+      },
+      {
+        "text": "Howl",
+        "isCorrect": false
+      },
+      {
+        "text": "Ariel",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "The Waste Land",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11-12",
+      "modernism"
+    ]
+  },
+  {
+    "id": "WL11",
+    "category": "African Lit",
+    "question": "Chinua Achebe wrote…",
+    "answers": [
+      {
+        "text": "Season of Migration",
+        "isCorrect": false
+      },
+      {
+        "text": "Half of a Yellow Sun",
+        "isCorrect": false
+      },
+      {
+        "text": "So Long a Letter",
+        "isCorrect": false
+      },
+      {
+        "text": "Things Fall Apart",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Things Fall Apart",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "african"
+    ]
+  },
+  {
+    "id": "WL12",
+    "category": "Latin American",
+    "question": "Gabriel García Márquez wrote…",
+    "answers": [
+      {
+        "text": "Pedro Páramo",
+        "isCorrect": false
+      },
+      {
+        "text": "One Hundred Years of Solitude",
+        "isCorrect": true
+      },
+      {
+        "text": "The Alchemist",
+        "isCorrect": false
+      },
+      {
+        "text": "The Savage Detectives",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "One Hundred Years of Solitude",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "magical realism"
+    ]
+  },
+  {
+    "id": "WL13",
+    "category": "Italian Lit",
+    "question": "Dante’s epic poem is…",
+    "answers": [
+      {
+        "text": "Aeneid",
+        "isCorrect": false
+      },
+      {
+        "text": "Paradise Lost",
+        "isCorrect": false
+      },
+      {
+        "text": "Iliad",
+        "isCorrect": false
+      },
+      {
+        "text": "Divine Comedy",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Divine Comedy",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "italian"
+    ]
+  },
+  {
+    "id": "WL14",
+    "category": "English Lit",
+    "question": "Mary Shelley wrote…",
+    "answers": [
+      {
+        "text": "Jane Eyre",
+        "isCorrect": false
+      },
+      {
+        "text": "Frankenstein",
+        "isCorrect": true
+      },
+      {
+        "text": "Dracula",
+        "isCorrect": false
+      },
+      {
+        "text": "Wuthering Heights",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Frankenstein",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "gothic"
+    ]
+  },
+  {
+    "id": "WL15",
+    "category": "Spanish Lit",
+    "question": "Borges is known for short stories.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "short fiction"
+    ]
+  },
+  {
+    "id": "WL16",
+    "category": "Japanese Lit",
+    "question": "Murasaki Shikibu wrote…",
+    "answers": [
+      {
+        "text": "The Pillow Book",
+        "isCorrect": false
+      },
+      {
+        "text": "Snow Country",
+        "isCorrect": false
+      },
+      {
+        "text": "No Longer Human",
+        "isCorrect": false
+      },
+      {
+        "text": "The Tale of Genji",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "The Tale of Genji",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11-12",
+      "japanese"
+    ]
+  },
+  {
+    "id": "WL17",
+    "category": "Greek Drama",
+    "question": "Sophocles wrote…",
+    "answers": [
+      {
+        "text": "Oedipus Rex",
+        "isCorrect": true
+      },
+      {
+        "text": "Medea",
+        "isCorrect": false
+      },
+      {
+        "text": "Prometheus Bound",
+        "isCorrect": false
+      },
+      {
+        "text": "The Bacchae",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Oedipus Rex",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "greek"
+    ]
+  },
+  {
+    "id": "WL18",
+    "category": "Poetry",
+    "question": "The 'ghazal' form is prominent in…",
+    "answers": [
+      {
+        "text": "French poetry",
+        "isCorrect": false
+      },
+      {
+        "text": "Old English",
+        "isCorrect": false
+      },
+      {
+        "text": "Latin epics",
+        "isCorrect": false
+      },
+      {
+        "text": "Persian/Urdu poetry",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Persian/Urdu poetry",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11-12",
+      "poetry"
+    ]
+  },
+  {
+    "id": "WL19",
+    "category": "Middle East",
+    "question": "Naguib Mahfouz is from…",
+    "answers": [
+      {
+        "text": "Iraq",
+        "isCorrect": false
+      },
+      {
+        "text": "Iran",
+        "isCorrect": false
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": true
+      },
+      {
+        "text": "Jordan",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Egypt",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "arabic"
+    ]
+  },
+  {
+    "id": "WL20",
+    "category": "South Asia",
+    "question": "Rabindranath Tagore won…",
+    "answers": [
+      {
+        "text": "Booker Prize",
+        "isCorrect": false
+      },
+      {
+        "text": "Hugo",
+        "isCorrect": false
+      },
+      {
+        "text": "Nobel Prize in Literature",
+        "isCorrect": true
+      },
+      {
+        "text": "Pulitzer",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Nobel Prize in Literature",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "south asia"
+    ]
+  },
+  {
+    "id": "WL21",
+    "category": "Themes",
+    "question": "A 'bildungsroman' is a coming‑of‑age story.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "terms"
+    ]
+  },
+  {
+    "id": "WL22",
+    "category": "Theatre",
+    "question": "Samuel Beckett wrote…",
+    "answers": [
+      {
+        "text": "Metamorphosis",
+        "isCorrect": false
+      },
+      {
+        "text": "The Stranger",
+        "isCorrect": false
+      },
+      {
+        "text": "The Trial",
+        "isCorrect": false
+      },
+      {
+        "text": "Waiting for Godot",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Waiting for Godot",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "theatre"
+    ]
+  },
+  {
+    "id": "WL23",
+    "category": "American Poetry",
+    "question": "Langston Hughes was part of…",
+    "answers": [
+      {
+        "text": "Beat Generation",
+        "isCorrect": false
+      },
+      {
+        "text": "Fireside Poets",
+        "isCorrect": false
+      },
+      {
+        "text": "Transcendentalism",
+        "isCorrect": false
+      },
+      {
+        "text": "Harlem Renaissance",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Harlem Renaissance",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "american"
+    ]
+  },
+  {
+    "id": "WL24",
+    "category": "Chinese Lit",
+    "question": "'Journey to the West' features the…",
+    "answers": [
+      {
+        "text": "Dragon King",
+        "isCorrect": false
+      },
+      {
+        "text": "Monkey King",
+        "isCorrect": true
+      },
+      {
+        "text": "Warrior King",
+        "isCorrect": false
+      },
+      {
+        "text": "Tiger King",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Monkey King",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "chinese"
+    ]
+  },
+  {
+    "id": "WL25",
+    "category": "Myth",
+    "question": "Norse thunder god is…",
+    "answers": [
+      {
+        "text": "Loki",
+        "isCorrect": false
+      },
+      {
+        "text": "Odin",
+        "isCorrect": false
+      },
+      {
+        "text": "Thor",
+        "isCorrect": true
+      },
+      {
+        "text": "Baldr",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Thor",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "myth"
+    ]
+  },
+  {
+    "id": "WL26",
+    "category": "Poetic Devices",
+    "question": "Alliteration repeats…",
+    "answers": [
+      {
+        "text": "End rhymes",
+        "isCorrect": false
+      },
+      {
+        "text": "Metaphors",
+        "isCorrect": false
+      },
+      {
+        "text": "Vowel sounds",
+        "isCorrect": false
+      },
+      {
+        "text": "Initial consonant sounds",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Initial consonant sounds",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "devices"
+    ]
+  },
+  {
+    "id": "WL27",
+    "category": "Form",
+    "question": "A sonnet has…",
+    "answers": [
+      {
+        "text": "16 lines",
+        "isCorrect": false
+      },
+      {
+        "text": "14 lines",
+        "isCorrect": true
+      },
+      {
+        "text": "12 lines",
+        "isCorrect": false
+      },
+      {
+        "text": "10 lines",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "14 lines",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "poetry"
+    ]
+  },
+  {
+    "id": "WL28",
+    "category": "Russian Lit",
+    "question": "Dostoevsky wrote…",
+    "answers": [
+      {
+        "text": "The Master and Margarita",
+        "isCorrect": false
+      },
+      {
+        "text": "Doctor Zhivago",
+        "isCorrect": false
+      },
+      {
+        "text": "The Idiot",
+        "isCorrect": false
+      },
+      {
+        "text": "Crime and Punishment",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Crime and Punishment",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "russian"
+    ]
+  },
+  {
+    "id": "WL29",
+    "category": "Epic",
+    "question": "'Aeneid' was written by…",
+    "answers": [
+      {
+        "text": "Catullus",
+        "isCorrect": false
+      },
+      {
+        "text": "Ovid",
+        "isCorrect": false
+      },
+      {
+        "text": "Horace",
+        "isCorrect": false
+      },
+      {
+        "text": "Virgil",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Virgil",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "latin"
+    ]
+  },
+  {
+    "id": "WL30",
+    "category": "Genres",
+    "question": "Magical realism blends realistic settings with fantastical elements.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "genres"
+    ]
+  }
+]

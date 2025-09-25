@@ -1,0 +1,776 @@
+[
+  {
+    "id": "T5_1",
+    "category": "Tech",
+    "question": "A computer mouse is an…",
+    "answers": [
+      {
+        "text": "Input device",
+        "isCorrect": true
+      },
+      {
+        "text": "Output",
+        "isCorrect": false
+      },
+      {
+        "text": "Storage",
+        "isCorrect": false
+      },
+      {
+        "text": "Network",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Input device",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "hardware"
+    ]
+  },
+  {
+    "id": "T5_2",
+    "category": "Tech",
+    "question": "USB stands for…",
+    "answers": [
+      {
+        "text": "Universal Serial Bus",
+        "isCorrect": true
+      },
+      {
+        "text": "United Serial Bus",
+        "isCorrect": false
+      },
+      {
+        "text": "Universal System Board",
+        "isCorrect": false
+      },
+      {
+        "text": "United System Base",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Universal Serial Bus",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "usb"
+    ]
+  },
+  {
+    "id": "T6_1",
+    "category": "Tech",
+    "question": "Ctrl+C is for…",
+    "answers": [
+      {
+        "text": "Copy",
+        "isCorrect": true
+      },
+      {
+        "text": "Paste",
+        "isCorrect": false
+      },
+      {
+        "text": "Cut",
+        "isCorrect": false
+      },
+      {
+        "text": "Undo",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Copy",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "shortcuts"
+    ]
+  },
+  {
+    "id": "T6_2",
+    "category": "Tech",
+    "question": "Binary digits are…",
+    "answers": [
+      {
+        "text": "0 and 1",
+        "isCorrect": true
+      },
+      {
+        "text": "1 and 2",
+        "isCorrect": false
+      },
+      {
+        "text": "2 and 3",
+        "isCorrect": false
+      },
+      {
+        "text": "Yes and No",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "0 and 1",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "binary"
+    ]
+  },
+  {
+    "id": "T7_1",
+    "category": "Tech",
+    "question": "HTML used for…",
+    "answers": [
+      {
+        "text": "Web pages",
+        "isCorrect": true
+      },
+      {
+        "text": "Databases",
+        "isCorrect": false
+      },
+      {
+        "text": "Games",
+        "isCorrect": false
+      },
+      {
+        "text": "Emails",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Web pages",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "html"
+    ]
+  },
+  {
+    "id": "T7_2",
+    "category": "Tech",
+    "question": "Python is a…",
+    "answers": [
+      {
+        "text": "Programming language",
+        "isCorrect": true
+      },
+      {
+        "text": "Snake",
+        "isCorrect": false
+      },
+      {
+        "text": "Hardware",
+        "isCorrect": false
+      },
+      {
+        "text": "Protocol",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Programming language",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "python"
+    ]
+  },
+  {
+    "id": "T8_1",
+    "category": "Tech",
+    "question": "First computer virus:",
+    "answers": [
+      {
+        "text": "Creeper",
+        "isCorrect": true
+      },
+      {
+        "text": "ILOVEYOU",
+        "isCorrect": false
+      },
+      {
+        "text": "Melissa",
+        "isCorrect": false
+      },
+      {
+        "text": "Blaster",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Creeper",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "virus"
+    ]
+  },
+  {
+    "id": "T8_2",
+    "category": "Tech",
+    "question": "RAM stands for…",
+    "answers": [
+      {
+        "text": "Random Access Memory",
+        "isCorrect": true
+      },
+      {
+        "text": "Read Access Memory",
+        "isCorrect": false
+      },
+      {
+        "text": "Ready Available Memory",
+        "isCorrect": false
+      },
+      {
+        "text": "Real Application Memory",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Random Access Memory",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G8",
+      "ram"
+    ]
+  },
+  {
+    "id": "T9_1",
+    "category": "Tech",
+    "question": "First iPhone release:",
+    "answers": [
+      {
+        "text": "2007",
+        "isCorrect": true
+      },
+      {
+        "text": "2005",
+        "isCorrect": false
+      },
+      {
+        "text": "2008",
+        "isCorrect": false
+      },
+      {
+        "text": "2010",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "2007",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "iphone"
+    ]
+  },
+  {
+    "id": "T9_2",
+    "category": "Tech",
+    "question": "Linux is…",
+    "answers": [
+      {
+        "text": "Operating system",
+        "isCorrect": true
+      },
+      {
+        "text": "Hardware",
+        "isCorrect": false
+      },
+      {
+        "text": "Browser",
+        "isCorrect": false
+      },
+      {
+        "text": "Chip",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Operating system",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "linux"
+    ]
+  },
+  {
+    "id": "T10_1",
+    "category": "Tech",
+    "question": "AI means…",
+    "answers": [
+      {
+        "text": "Artificial Intelligence",
+        "isCorrect": true
+      },
+      {
+        "text": "Actual Intelligence",
+        "isCorrect": false
+      },
+      {
+        "text": "Automated Input",
+        "isCorrect": false
+      },
+      {
+        "text": "Analytical Info",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Artificial Intelligence",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "AI"
+    ]
+  },
+  {
+    "id": "T10_2",
+    "category": "Tech",
+    "question": "Cloud computing is…",
+    "answers": [
+      {
+        "text": "Storing data online",
+        "isCorrect": true
+      },
+      {
+        "text": "Storing on CD",
+        "isCorrect": false
+      },
+      {
+        "text": "Only on desktop",
+        "isCorrect": false
+      },
+      {
+        "text": "Floppy disk use",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Storing data online",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "cloud"
+    ]
+  },
+  {
+    "id": "T11_1",
+    "category": "Tech",
+    "question": "First programmer:",
+    "answers": [
+      {
+        "text": "Ada Lovelace",
+        "isCorrect": true
+      },
+      {
+        "text": "Turing",
+        "isCorrect": false
+      },
+      {
+        "text": "Jobs",
+        "isCorrect": false
+      },
+      {
+        "text": "Gates",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Ada Lovelace",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "ada"
+    ]
+  },
+  {
+    "id": "T11_2",
+    "category": "Tech",
+    "question": "Moore’s law predicts…",
+    "answers": [
+      {
+        "text": "Doubling of transistors ~2 years",
+        "isCorrect": true
+      },
+      {
+        "text": "Halving memory",
+        "isCorrect": false
+      },
+      {
+        "text": "Tripling CPUs",
+        "isCorrect": false
+      },
+      {
+        "text": "Declining storage",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Doubling of transistors ~2 years",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "moore"
+    ]
+  },
+  {
+    "id": "T12_1",
+    "category": "Tech",
+    "question": "Blockchain is…",
+    "answers": [
+      {
+        "text": "Decentralized ledger",
+        "isCorrect": true
+      },
+      {
+        "text": "Central server",
+        "isCorrect": false
+      },
+      {
+        "text": "Programming language",
+        "isCorrect": false
+      },
+      {
+        "text": "Hardware",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Decentralized ledger",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "blockchain"
+    ]
+  },
+  {
+    "id": "T12_2",
+    "category": "Tech",
+    "question": "First cryptocurrency:",
+    "answers": [
+      {
+        "text": "Bitcoin",
+        "isCorrect": true
+      },
+      {
+        "text": "Ethereum",
+        "isCorrect": false
+      },
+      {
+        "text": "Litecoin",
+        "isCorrect": false
+      },
+      {
+        "text": "Dogecoin",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Bitcoin",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "crypto"
+    ]
+  },
+  {
+    "id": "TX16",
+    "category": "Mixed Tech",
+    "question": "Computers use electricity.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "TX17",
+    "category": "Mixed Tech",
+    "question": "Computers use electricity.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "TX18",
+    "category": "Mixed Tech",
+    "question": "Computers use electricity.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "TX19",
+    "category": "Mixed Tech",
+    "question": "Computers use electricity.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "TX20",
+    "category": "Mixed Tech",
+    "question": "Computers use electricity.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "TX21",
+    "category": "Mixed Tech",
+    "question": "Computers use electricity.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "TX22",
+    "category": "Mixed Tech",
+    "question": "Computers use electricity.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "TX23",
+    "category": "Mixed Tech",
+    "question": "Computers use electricity.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "TX24",
+    "category": "Mixed Tech",
+    "question": "Computers use electricity.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "TX25",
+    "category": "Mixed Tech",
+    "question": "Computers use electricity.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "TX26",
+    "category": "Mixed Tech",
+    "question": "Computers use electricity.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "TX27",
+    "category": "Mixed Tech",
+    "question": "Computers use electricity.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "TX28",
+    "category": "Mixed Tech",
+    "question": "Computers use electricity.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "TX29",
+    "category": "Mixed Tech",
+    "question": "Computers use electricity.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  }
+]

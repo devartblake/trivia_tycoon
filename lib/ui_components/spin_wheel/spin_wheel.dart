@@ -1,7 +1,6 @@
 library spin_wheel;
 
-export 'models/wheel_segment.dart';
-export 'models/spin_result.dart';
+export 'models/spin_system_models.dart';
 export 'services/segment_loader.dart';
 export 'services/spin_tracker.dart';
 export 'services/rewards/reward_service.dart';

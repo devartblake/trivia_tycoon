@@ -1,0 +1,594 @@
+[
+  {
+    "id": "1_math_1",
+    "category": "Basic Math",
+    "question": "What is 2 + 3?",
+    "answers": [
+      {
+        "text": "5",
+        "isCorrect": true
+      },
+      {
+        "text": "4",
+        "isCorrect": false
+      },
+      {
+        "text": "6",
+        "isCorrect": false
+      },
+      {
+        "text": "7",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "5",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": [
+      "addition"
+    ]
+  },
+  {
+    "id": "1_read_1",
+    "category": "Reading Comprehension",
+    "question": "In the story: 'Tom fed his dog.' Who got food?",
+    "answers": [
+      {
+        "text": "The dog",
+        "isCorrect": true
+      },
+      {
+        "text": "Tom",
+        "isCorrect": false
+      },
+      {
+        "text": "The cat",
+        "isCorrect": false
+      },
+      {
+        "text": "The fish",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "The dog",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": [
+      "who"
+    ]
+  },
+  {
+    "id": "1_plants_1",
+    "category": "Plants & Animals",
+    "question": "Which part of a plant is usually underground?",
+    "answers": [
+      {
+        "text": "Roots",
+        "isCorrect": true
+      },
+      {
+        "text": "Leaves",
+        "isCorrect": false
+      },
+      {
+        "text": "Flowers",
+        "isCorrect": false
+      },
+      {
+        "text": "Stem",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Roots",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "1_comm_1",
+    "category": "Community Helpers",
+    "question": "Who helps put out fires?",
+    "answers": [
+      {
+        "text": "Firefighter",
+        "isCorrect": true
+      },
+      {
+        "text": "Teacher",
+        "isCorrect": false
+      },
+      {
+        "text": "Doctor",
+        "isCorrect": false
+      },
+      {
+        "text": "Chef",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Firefighter",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "1_math_2",
+    "category": "Basic Math",
+    "question": "Which is greater: 9 or 7?",
+    "answers": [
+      {
+        "text": "9",
+        "isCorrect": true
+      },
+      {
+        "text": "7",
+        "isCorrect": false
+      },
+      {
+        "text": "They are equal",
+        "isCorrect": false
+      },
+      {
+        "text": "6",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "9",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "1_read_2",
+    "category": "Reading Comprehension",
+    "question": "A sentence begins with a capital letter.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": [
+      "grammar"
+    ]
+  },
+  {
+    "id": "1_plants_2",
+    "category": "Plants & Animals",
+    "question": "What do plants need to grow?",
+    "answers": [
+      {
+        "text": "Sunlight and water",
+        "isCorrect": true
+      },
+      {
+        "text": "Only sand",
+        "isCorrect": false
+      },
+      {
+        "text": "Only wind",
+        "isCorrect": false
+      },
+      {
+        "text": "Only snow",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Sunlight and water",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "1_comm_2",
+    "category": "Community Helpers",
+    "question": "Who delivers mail?",
+    "answers": [
+      {
+        "text": "Mail carrier",
+        "isCorrect": true
+      },
+      {
+        "text": "Pilot",
+        "isCorrect": false
+      },
+      {
+        "text": "Librarian",
+        "isCorrect": false
+      },
+      {
+        "text": "Mechanic",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mail carrier",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "1_math_3",
+    "category": "Basic Math",
+    "question": "What is 10 − 6?",
+    "answers": [
+      {
+        "text": "4",
+        "isCorrect": true
+      },
+      {
+        "text": "5",
+        "isCorrect": false
+      },
+      {
+        "text": "3",
+        "isCorrect": false
+      },
+      {
+        "text": "6",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "4",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "1_read_3",
+    "category": "Reading Comprehension",
+    "question": "Find the noun: 'The cat runs.'",
+    "answers": [
+      {
+        "text": "cat",
+        "isCorrect": true
+      },
+      {
+        "text": "runs",
+        "isCorrect": false
+      },
+      {
+        "text": "the",
+        "isCorrect": false
+      },
+      {
+        "text": ".",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "cat",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": [
+      "parts of speech"
+    ]
+  },
+  {
+    "id": "1_plants_3",
+    "category": "Plants & Animals",
+    "question": "Which animal lays eggs?",
+    "answers": [
+      {
+        "text": "Chicken",
+        "isCorrect": true
+      },
+      {
+        "text": "Dog",
+        "isCorrect": false
+      },
+      {
+        "text": "Cow",
+        "isCorrect": false
+      },
+      {
+        "text": "Horse",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Chicken",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "1_comm_3",
+    "category": "Community Helpers",
+    "question": "Who checks your teeth?",
+    "answers": [
+      {
+        "text": "Dentist",
+        "isCorrect": true
+      },
+      {
+        "text": "Nurse",
+        "isCorrect": false
+      },
+      {
+        "text": "Chef",
+        "isCorrect": false
+      },
+      {
+        "text": "Farmer",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Dentist",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "1_math_4",
+    "category": "Basic Math",
+    "question": "What is 5 + 0?",
+    "answers": [
+      {
+        "text": "5",
+        "isCorrect": true
+      },
+      {
+        "text": "0",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      },
+      {
+        "text": "4",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "5",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "1_read_4",
+    "category": "Reading Comprehension",
+    "question": "Opposite of 'hot' is…",
+    "answers": [
+      {
+        "text": "cold",
+        "isCorrect": true
+      },
+      {
+        "text": "warm",
+        "isCorrect": false
+      },
+      {
+        "text": "boiling",
+        "isCorrect": false
+      },
+      {
+        "text": "fire",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "cold",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "1_plants_4",
+    "category": "Plants & Animals",
+    "question": "Which animal is a mammal?",
+    "answers": [
+      {
+        "text": "Dolphin",
+        "isCorrect": true
+      },
+      {
+        "text": "Frog",
+        "isCorrect": false
+      },
+      {
+        "text": "Eagle",
+        "isCorrect": false
+      },
+      {
+        "text": "Goldfish",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Dolphin",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "1_comm_4",
+    "category": "Community Helpers",
+    "question": "Who teaches students at school?",
+    "answers": [
+      {
+        "text": "Teacher",
+        "isCorrect": true
+      },
+      {
+        "text": "Farmer",
+        "isCorrect": false
+      },
+      {
+        "text": "Pilot",
+        "isCorrect": false
+      },
+      {
+        "text": "Actor",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Teacher",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "1_math_5",
+    "category": "Basic Math",
+    "question": "Which shape is a rectangle?",
+    "answers": [
+      {
+        "text": "A shape with 4 sides and 4 right angles",
+        "isCorrect": true
+      },
+      {
+        "text": "A shape with 3 sides",
+        "isCorrect": false
+      },
+      {
+        "text": "A round shape",
+        "isCorrect": false
+      },
+      {
+        "text": "A star",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A shape with 4 sides and 4 right angles",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "1_read_5",
+    "category": "Reading Comprehension",
+    "question": "Punctuation marks are used at the ends of sentences.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "1_plants_5",
+    "category": "Plants & Animals",
+    "question": "What do bees make?",
+    "answers": [
+      {
+        "text": "Honey",
+        "isCorrect": true
+      },
+      {
+        "text": "Bread",
+        "isCorrect": false
+      },
+      {
+        "text": "Juice",
+        "isCorrect": false
+      },
+      {
+        "text": "Milk",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Honey",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "1_comm_5",
+    "category": "Community Helpers",
+    "question": "Who drives the school bus?",
+    "answers": [
+      {
+        "text": "Bus driver",
+        "isCorrect": true
+      },
+      {
+        "text": "Doctor",
+        "isCorrect": false
+      },
+      {
+        "text": "Chef",
+        "isCorrect": false
+      },
+      {
+        "text": "Police officer",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Bus driver",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  }
+]

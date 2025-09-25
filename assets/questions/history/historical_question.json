@@ -1,0 +1,2258 @@
+[
+  {
+    "id": "HI1",
+    "category": "Historical",
+    "question": "The printing press was invented by…",
+    "answers": [
+      {
+        "text": "Galileo Galilei",
+        "isCorrect": false
+      },
+      {
+        "text": "James Watt",
+        "isCorrect": false
+      },
+      {
+        "text": "Johannes Gutenberg",
+        "isCorrect": true
+      },
+      {
+        "text": "Isaac Newton",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Johannes Gutenberg",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "innovation",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI2",
+    "category": "Historical",
+    "question": "Which empire built the road system called the 'Royal Road'?",
+    "answers": [
+      {
+        "text": "Persian Empire",
+        "isCorrect": true
+      },
+      {
+        "text": "Incan Empire",
+        "isCorrect": false
+      },
+      {
+        "text": "Roman Empire",
+        "isCorrect": false
+      },
+      {
+        "text": "Han Dynasty",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Persian Empire",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "infrastructure",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI3",
+    "category": "Historical",
+    "question": "The Black Death was a pandemic in which century?",
+    "answers": [
+      {
+        "text": "19th century",
+        "isCorrect": false
+      },
+      {
+        "text": "17th century",
+        "isCorrect": false
+      },
+      {
+        "text": "14th century",
+        "isCorrect": true
+      },
+      {
+        "text": "10th century",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "14th century",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "pandemics",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI4",
+    "category": "Historical",
+    "question": "Which treaty ended World War I?",
+    "answers": [
+      {
+        "text": "Treaty of Tordesillas",
+        "isCorrect": false
+      },
+      {
+        "text": "Treaty of Ghent",
+        "isCorrect": false
+      },
+      {
+        "text": "Treaty of Versailles",
+        "isCorrect": true
+      },
+      {
+        "text": "Treaty of Paris",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Treaty of Versailles",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "diplomacy",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI5",
+    "category": "Historical",
+    "question": "The first successful powered flight was by the Wright brothers in…",
+    "answers": [
+      {
+        "text": "1918",
+        "isCorrect": false
+      },
+      {
+        "text": "1896",
+        "isCorrect": false
+      },
+      {
+        "text": "1927",
+        "isCorrect": false
+      },
+      {
+        "text": "1903",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "1903",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "transport",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI6",
+    "category": "Historical",
+    "question": "When did the Fall of Constantinople occur?",
+    "answers": [
+      {
+        "text": "1453",
+        "isCorrect": true
+      },
+      {
+        "text": "1914",
+        "isCorrect": false
+      },
+      {
+        "text": "1066",
+        "isCorrect": false
+      },
+      {
+        "text": "1776",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1453",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "milestones",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI7",
+    "category": "Historical",
+    "question": "Who is associated with the Light bulb?",
+    "answers": [
+      {
+        "text": "Nikola Tesla",
+        "isCorrect": false
+      },
+      {
+        "text": "Marie Curie",
+        "isCorrect": false
+      },
+      {
+        "text": "Thomas Edison",
+        "isCorrect": true
+      },
+      {
+        "text": "Enrico Fermi",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Thomas Edison",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "inventions",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI8",
+    "category": "Historical",
+    "question": "Buddhism is primarily associated with…",
+    "answers": [
+      {
+        "text": "Aztec Empire",
+        "isCorrect": false
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      },
+      {
+        "text": "Mesopotamia",
+        "isCorrect": false
+      },
+      {
+        "text": "India",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "India",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "ideas",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI9",
+    "category": "Historical",
+    "question": "Who is associated with the Penicillin?",
+    "answers": [
+      {
+        "text": "Nikola Tesla",
+        "isCorrect": false
+      },
+      {
+        "text": "Alexander Fleming",
+        "isCorrect": true
+      },
+      {
+        "text": "Marie Curie",
+        "isCorrect": false
+      },
+      {
+        "text": "Enrico Fermi",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Alexander Fleming",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "inventions",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI10",
+    "category": "Historical",
+    "question": "Buddhism is primarily associated with…",
+    "answers": [
+      {
+        "text": "India",
+        "isCorrect": true
+      },
+      {
+        "text": "Mesopotamia",
+        "isCorrect": false
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      },
+      {
+        "text": "Aztec Empire",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "India",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "ideas",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI11",
+    "category": "Historical",
+    "question": "Paper was invented in ancient China.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "tech",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI12",
+    "category": "Historical",
+    "question": "Paper was invented in ancient China.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "tech",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI13",
+    "category": "Historical",
+    "question": "Paper was invented in ancient China.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "tech",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI14",
+    "category": "Historical",
+    "question": "Paper was invented in ancient China.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "tech",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI15",
+    "category": "Historical",
+    "question": "Democracy is primarily associated with…",
+    "answers": [
+      {
+        "text": "Mesopotamia",
+        "isCorrect": false
+      },
+      {
+        "text": "Aztec Empire",
+        "isCorrect": false
+      },
+      {
+        "text": "Ancient Greece",
+        "isCorrect": true
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Ancient Greece",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "ideas",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI16",
+    "category": "Historical",
+    "question": "Who is associated with the Telephone?",
+    "answers": [
+      {
+        "text": "Alexander Graham Bell",
+        "isCorrect": true
+      },
+      {
+        "text": "Enrico Fermi",
+        "isCorrect": false
+      },
+      {
+        "text": "Marie Curie",
+        "isCorrect": false
+      },
+      {
+        "text": "Nikola Tesla",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Alexander Graham Bell",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "inventions",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI17",
+    "category": "Historical",
+    "question": "Who wrote 'Don Quixote'?",
+    "answers": [
+      {
+        "text": "Homer",
+        "isCorrect": false
+      },
+      {
+        "text": "Cervantes",
+        "isCorrect": true
+      },
+      {
+        "text": "Dante",
+        "isCorrect": false
+      },
+      {
+        "text": "Shakespeare",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Cervantes",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "literature",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI18",
+    "category": "Historical",
+    "question": "Democracy is primarily associated with…",
+    "answers": [
+      {
+        "text": "Ancient Greece",
+        "isCorrect": true
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      },
+      {
+        "text": "Aztec Empire",
+        "isCorrect": false
+      },
+      {
+        "text": "Mesopotamia",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Ancient Greece",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "ideas",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI19",
+    "category": "Historical",
+    "question": "When did the Discovery of America occur?",
+    "answers": [
+      {
+        "text": "1066",
+        "isCorrect": false
+      },
+      {
+        "text": "1914",
+        "isCorrect": false
+      },
+      {
+        "text": "1492",
+        "isCorrect": true
+      },
+      {
+        "text": "1776",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1492",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "milestones",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI20",
+    "category": "Historical",
+    "question": "Paper was invented in ancient China.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "tech",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI21",
+    "category": "Historical",
+    "question": "Who wrote 'The Divine Comedy'?",
+    "answers": [
+      {
+        "text": "Dante",
+        "isCorrect": true
+      },
+      {
+        "text": "Cervantes",
+        "isCorrect": false
+      },
+      {
+        "text": "Homer",
+        "isCorrect": false
+      },
+      {
+        "text": "Shakespeare",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Dante",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "literature",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI22",
+    "category": "Historical",
+    "question": "Who wrote 'Don Quixote'?",
+    "answers": [
+      {
+        "text": "Cervantes",
+        "isCorrect": true
+      },
+      {
+        "text": "Homer",
+        "isCorrect": false
+      },
+      {
+        "text": "Shakespeare",
+        "isCorrect": false
+      },
+      {
+        "text": "Dante",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Cervantes",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "literature",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI23",
+    "category": "Historical",
+    "question": "Paper was invented in ancient China.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "tech",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI24",
+    "category": "Historical",
+    "question": "Who wrote 'The Iliad'?",
+    "answers": [
+      {
+        "text": "Homer",
+        "isCorrect": true
+      },
+      {
+        "text": "Shakespeare",
+        "isCorrect": false
+      },
+      {
+        "text": "Cervantes",
+        "isCorrect": false
+      },
+      {
+        "text": "Dante",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Homer",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "literature",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI25",
+    "category": "Historical",
+    "question": "Who wrote 'Don Quixote'?",
+    "answers": [
+      {
+        "text": "Shakespeare",
+        "isCorrect": false
+      },
+      {
+        "text": "Homer",
+        "isCorrect": false
+      },
+      {
+        "text": "Dante",
+        "isCorrect": false
+      },
+      {
+        "text": "Cervantes",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Cervantes",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "literature",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI26",
+    "category": "Historical",
+    "question": "Democracy is primarily associated with…",
+    "answers": [
+      {
+        "text": "Mesopotamia",
+        "isCorrect": false
+      },
+      {
+        "text": "Aztec Empire",
+        "isCorrect": false
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      },
+      {
+        "text": "Ancient Greece",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Ancient Greece",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "ideas",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI27",
+    "category": "Historical",
+    "question": "When did the Moon landing occur?",
+    "answers": [
+      {
+        "text": "1914",
+        "isCorrect": false
+      },
+      {
+        "text": "1969",
+        "isCorrect": true
+      },
+      {
+        "text": "1066",
+        "isCorrect": false
+      },
+      {
+        "text": "1776",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1969",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "milestones",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI28",
+    "category": "Historical",
+    "question": "Who is associated with the Steam engine improvements?",
+    "answers": [
+      {
+        "text": "Enrico Fermi",
+        "isCorrect": false
+      },
+      {
+        "text": "James Watt",
+        "isCorrect": true
+      },
+      {
+        "text": "Nikola Tesla",
+        "isCorrect": false
+      },
+      {
+        "text": "Marie Curie",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "James Watt",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "inventions",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI29",
+    "category": "Historical",
+    "question": "Who wrote 'Don Quixote'?",
+    "answers": [
+      {
+        "text": "Dante",
+        "isCorrect": false
+      },
+      {
+        "text": "Shakespeare",
+        "isCorrect": false
+      },
+      {
+        "text": "Homer",
+        "isCorrect": false
+      },
+      {
+        "text": "Cervantes",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Cervantes",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "literature",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI30",
+    "category": "Historical",
+    "question": "Paper was invented in ancient China.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "tech",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI31",
+    "category": "Historical",
+    "question": "Who wrote 'The Divine Comedy'?",
+    "answers": [
+      {
+        "text": "Homer",
+        "isCorrect": false
+      },
+      {
+        "text": "Shakespeare",
+        "isCorrect": false
+      },
+      {
+        "text": "Cervantes",
+        "isCorrect": false
+      },
+      {
+        "text": "Dante",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Dante",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "literature",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI32",
+    "category": "Historical",
+    "question": "Paper was invented in ancient China.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "tech",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI33",
+    "category": "Historical",
+    "question": "Paper was invented in ancient China.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "tech",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI34",
+    "category": "Historical",
+    "question": "Confucianism is primarily associated with…",
+    "answers": [
+      {
+        "text": "Mesopotamia",
+        "isCorrect": false
+      },
+      {
+        "text": "China",
+        "isCorrect": true
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      },
+      {
+        "text": "Aztec Empire",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "China",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "ideas",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI35",
+    "category": "Historical",
+    "question": "When did the Magna Carta occur?",
+    "answers": [
+      {
+        "text": "1776",
+        "isCorrect": false
+      },
+      {
+        "text": "1914",
+        "isCorrect": false
+      },
+      {
+        "text": "1215",
+        "isCorrect": true
+      },
+      {
+        "text": "1066",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1215",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "milestones",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI36",
+    "category": "Historical",
+    "question": "Paper was invented in ancient China.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "tech",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI37",
+    "category": "Historical",
+    "question": "Who wrote 'The Divine Comedy'?",
+    "answers": [
+      {
+        "text": "Dante",
+        "isCorrect": true
+      },
+      {
+        "text": "Homer",
+        "isCorrect": false
+      },
+      {
+        "text": "Shakespeare",
+        "isCorrect": false
+      },
+      {
+        "text": "Cervantes",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Dante",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "literature",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI38",
+    "category": "Historical",
+    "question": "Paper was invented in ancient China.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "tech",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI39",
+    "category": "Historical",
+    "question": "Who is associated with the Light bulb?",
+    "answers": [
+      {
+        "text": "Nikola Tesla",
+        "isCorrect": false
+      },
+      {
+        "text": "Enrico Fermi",
+        "isCorrect": false
+      },
+      {
+        "text": "Marie Curie",
+        "isCorrect": false
+      },
+      {
+        "text": "Thomas Edison",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Thomas Edison",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "inventions",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI40",
+    "category": "Historical",
+    "question": "Who is associated with the Light bulb?",
+    "answers": [
+      {
+        "text": "Thomas Edison",
+        "isCorrect": true
+      },
+      {
+        "text": "Marie Curie",
+        "isCorrect": false
+      },
+      {
+        "text": "Enrico Fermi",
+        "isCorrect": false
+      },
+      {
+        "text": "Nikola Tesla",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Thomas Edison",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "inventions",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI41",
+    "category": "Historical",
+    "question": "Paper was invented in ancient China.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "tech",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI42",
+    "category": "Historical",
+    "question": "When did the Discovery of America occur?",
+    "answers": [
+      {
+        "text": "1776",
+        "isCorrect": false
+      },
+      {
+        "text": "1066",
+        "isCorrect": false
+      },
+      {
+        "text": "1492",
+        "isCorrect": true
+      },
+      {
+        "text": "1914",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1492",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "milestones",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI43",
+    "category": "Historical",
+    "question": "When did the Moon landing occur?",
+    "answers": [
+      {
+        "text": "1969",
+        "isCorrect": true
+      },
+      {
+        "text": "1914",
+        "isCorrect": false
+      },
+      {
+        "text": "1776",
+        "isCorrect": false
+      },
+      {
+        "text": "1066",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1969",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "milestones",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI44",
+    "category": "Historical",
+    "question": "Paper was invented in ancient China.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "tech",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI45",
+    "category": "Historical",
+    "question": "When did the Fall of Constantinople occur?",
+    "answers": [
+      {
+        "text": "1776",
+        "isCorrect": false
+      },
+      {
+        "text": "1453",
+        "isCorrect": true
+      },
+      {
+        "text": "1914",
+        "isCorrect": false
+      },
+      {
+        "text": "1066",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1453",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "milestones",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI46",
+    "category": "Historical",
+    "question": "Paper was invented in ancient China.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "tech",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI47",
+    "category": "Historical",
+    "question": "When did the Moon landing occur?",
+    "answers": [
+      {
+        "text": "1914",
+        "isCorrect": false
+      },
+      {
+        "text": "1969",
+        "isCorrect": true
+      },
+      {
+        "text": "1776",
+        "isCorrect": false
+      },
+      {
+        "text": "1066",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1969",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "milestones",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI48",
+    "category": "Historical",
+    "question": "Who wrote 'The Divine Comedy'?",
+    "answers": [
+      {
+        "text": "Shakespeare",
+        "isCorrect": false
+      },
+      {
+        "text": "Homer",
+        "isCorrect": false
+      },
+      {
+        "text": "Dante",
+        "isCorrect": true
+      },
+      {
+        "text": "Cervantes",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Dante",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "literature",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI49",
+    "category": "Historical",
+    "question": "Who wrote 'Hamlet'?",
+    "answers": [
+      {
+        "text": "Dante",
+        "isCorrect": false
+      },
+      {
+        "text": "Homer",
+        "isCorrect": false
+      },
+      {
+        "text": "Shakespeare",
+        "isCorrect": true
+      },
+      {
+        "text": "Cervantes",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Shakespeare",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "literature",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI50",
+    "category": "Historical",
+    "question": "When did the Magna Carta occur?",
+    "answers": [
+      {
+        "text": "1066",
+        "isCorrect": false
+      },
+      {
+        "text": "1914",
+        "isCorrect": false
+      },
+      {
+        "text": "1776",
+        "isCorrect": false
+      },
+      {
+        "text": "1215",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "1215",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "milestones",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI51",
+    "category": "Historical",
+    "question": "Who is associated with the Light bulb?",
+    "answers": [
+      {
+        "text": "Thomas Edison",
+        "isCorrect": true
+      },
+      {
+        "text": "Enrico Fermi",
+        "isCorrect": false
+      },
+      {
+        "text": "Marie Curie",
+        "isCorrect": false
+      },
+      {
+        "text": "Nikola Tesla",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Thomas Edison",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "inventions",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI52",
+    "category": "Historical",
+    "question": "Confucianism is primarily associated with…",
+    "answers": [
+      {
+        "text": "Mesopotamia",
+        "isCorrect": false
+      },
+      {
+        "text": "China",
+        "isCorrect": true
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      },
+      {
+        "text": "Aztec Empire",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "China",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "ideas",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI53",
+    "category": "Historical",
+    "question": "When did the Fall of Constantinople occur?",
+    "answers": [
+      {
+        "text": "1914",
+        "isCorrect": false
+      },
+      {
+        "text": "1776",
+        "isCorrect": false
+      },
+      {
+        "text": "1066",
+        "isCorrect": false
+      },
+      {
+        "text": "1453",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "1453",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "milestones",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI54",
+    "category": "Historical",
+    "question": "Confucianism is primarily associated with…",
+    "answers": [
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      },
+      {
+        "text": "Aztec Empire",
+        "isCorrect": false
+      },
+      {
+        "text": "China",
+        "isCorrect": true
+      },
+      {
+        "text": "Mesopotamia",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "China",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "ideas",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI55",
+    "category": "Historical",
+    "question": "Who wrote 'The Divine Comedy'?",
+    "answers": [
+      {
+        "text": "Cervantes",
+        "isCorrect": false
+      },
+      {
+        "text": "Shakespeare",
+        "isCorrect": false
+      },
+      {
+        "text": "Homer",
+        "isCorrect": false
+      },
+      {
+        "text": "Dante",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Dante",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "literature",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI56",
+    "category": "Historical",
+    "question": "Paper was invented in ancient China.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "tech",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI57",
+    "category": "Historical",
+    "question": "Buddhism is primarily associated with…",
+    "answers": [
+      {
+        "text": "Aztec Empire",
+        "isCorrect": false
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      },
+      {
+        "text": "Mesopotamia",
+        "isCorrect": false
+      },
+      {
+        "text": "India",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "India",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "ideas",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI58",
+    "category": "Historical",
+    "question": "When did the Discovery of America occur?",
+    "answers": [
+      {
+        "text": "1776",
+        "isCorrect": false
+      },
+      {
+        "text": "1914",
+        "isCorrect": false
+      },
+      {
+        "text": "1066",
+        "isCorrect": false
+      },
+      {
+        "text": "1492",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "1492",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "milestones",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI59",
+    "category": "Historical",
+    "question": "Who wrote 'The Divine Comedy'?",
+    "answers": [
+      {
+        "text": "Cervantes",
+        "isCorrect": false
+      },
+      {
+        "text": "Dante",
+        "isCorrect": true
+      },
+      {
+        "text": "Homer",
+        "isCorrect": false
+      },
+      {
+        "text": "Shakespeare",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Dante",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "literature",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI60",
+    "category": "Historical",
+    "question": "Who wrote 'Hamlet'?",
+    "answers": [
+      {
+        "text": "Shakespeare",
+        "isCorrect": true
+      },
+      {
+        "text": "Dante",
+        "isCorrect": false
+      },
+      {
+        "text": "Homer",
+        "isCorrect": false
+      },
+      {
+        "text": "Cervantes",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Shakespeare",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "literature",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI61",
+    "category": "Historical",
+    "question": "Who is associated with the Steam engine improvements?",
+    "answers": [
+      {
+        "text": "Nikola Tesla",
+        "isCorrect": false
+      },
+      {
+        "text": "Enrico Fermi",
+        "isCorrect": false
+      },
+      {
+        "text": "James Watt",
+        "isCorrect": true
+      },
+      {
+        "text": "Marie Curie",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "James Watt",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "inventions",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI62",
+    "category": "Historical",
+    "question": "When did the Fall of Constantinople occur?",
+    "answers": [
+      {
+        "text": "1453",
+        "isCorrect": true
+      },
+      {
+        "text": "1776",
+        "isCorrect": false
+      },
+      {
+        "text": "1066",
+        "isCorrect": false
+      },
+      {
+        "text": "1914",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1453",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "milestones",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI63",
+    "category": "Historical",
+    "question": "Who wrote 'The Iliad'?",
+    "answers": [
+      {
+        "text": "Homer",
+        "isCorrect": true
+      },
+      {
+        "text": "Shakespeare",
+        "isCorrect": false
+      },
+      {
+        "text": "Cervantes",
+        "isCorrect": false
+      },
+      {
+        "text": "Dante",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Homer",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "literature",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI64",
+    "category": "Historical",
+    "question": "Who wrote 'Hamlet'?",
+    "answers": [
+      {
+        "text": "Shakespeare",
+        "isCorrect": true
+      },
+      {
+        "text": "Cervantes",
+        "isCorrect": false
+      },
+      {
+        "text": "Dante",
+        "isCorrect": false
+      },
+      {
+        "text": "Homer",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Shakespeare",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "literature",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI65",
+    "category": "Historical",
+    "question": "Who is associated with the Penicillin?",
+    "answers": [
+      {
+        "text": "Marie Curie",
+        "isCorrect": false
+      },
+      {
+        "text": "Enrico Fermi",
+        "isCorrect": false
+      },
+      {
+        "text": "Nikola Tesla",
+        "isCorrect": false
+      },
+      {
+        "text": "Alexander Fleming",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Alexander Fleming",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "inventions",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI66",
+    "category": "Historical",
+    "question": "Paper was invented in ancient China.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "tech",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI67",
+    "category": "Historical",
+    "question": "Who wrote 'Don Quixote'?",
+    "answers": [
+      {
+        "text": "Shakespeare",
+        "isCorrect": false
+      },
+      {
+        "text": "Dante",
+        "isCorrect": false
+      },
+      {
+        "text": "Homer",
+        "isCorrect": false
+      },
+      {
+        "text": "Cervantes",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Cervantes",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "literature",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI68",
+    "category": "Historical",
+    "question": "Humanism is primarily associated with…",
+    "answers": [
+      {
+        "text": "Mesopotamia",
+        "isCorrect": false
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      },
+      {
+        "text": "Renaissance Europe",
+        "isCorrect": true
+      },
+      {
+        "text": "Aztec Empire",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Renaissance Europe",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "ideas",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI69",
+    "category": "Historical",
+    "question": "Paper was invented in ancient China.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "tech",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI70",
+    "category": "Historical",
+    "question": "Who wrote 'Don Quixote'?",
+    "answers": [
+      {
+        "text": "Shakespeare",
+        "isCorrect": false
+      },
+      {
+        "text": "Cervantes",
+        "isCorrect": true
+      },
+      {
+        "text": "Homer",
+        "isCorrect": false
+      },
+      {
+        "text": "Dante",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Cervantes",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "literature",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI71",
+    "category": "Historical",
+    "question": "Confucianism is primarily associated with…",
+    "answers": [
+      {
+        "text": "China",
+        "isCorrect": true
+      },
+      {
+        "text": "Aztec Empire",
+        "isCorrect": false
+      },
+      {
+        "text": "Mesopotamia",
+        "isCorrect": false
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "China",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "ideas",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI72",
+    "category": "Historical",
+    "question": "Who wrote 'Don Quixote'?",
+    "answers": [
+      {
+        "text": "Cervantes",
+        "isCorrect": true
+      },
+      {
+        "text": "Shakespeare",
+        "isCorrect": false
+      },
+      {
+        "text": "Homer",
+        "isCorrect": false
+      },
+      {
+        "text": "Dante",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Cervantes",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "literature",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI73",
+    "category": "Historical",
+    "question": "Who wrote 'Don Quixote'?",
+    "answers": [
+      {
+        "text": "Homer",
+        "isCorrect": false
+      },
+      {
+        "text": "Dante",
+        "isCorrect": false
+      },
+      {
+        "text": "Cervantes",
+        "isCorrect": true
+      },
+      {
+        "text": "Shakespeare",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Cervantes",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "literature",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI74",
+    "category": "Historical",
+    "question": "Confucianism is primarily associated with…",
+    "answers": [
+      {
+        "text": "China",
+        "isCorrect": true
+      },
+      {
+        "text": "Aztec Empire",
+        "isCorrect": false
+      },
+      {
+        "text": "Mesopotamia",
+        "isCorrect": false
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "China",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "ideas",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI75",
+    "category": "Historical",
+    "question": "Paper was invented in ancient China.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "tech",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI76",
+    "category": "Historical",
+    "question": "Who wrote 'The Iliad'?",
+    "answers": [
+      {
+        "text": "Dante",
+        "isCorrect": false
+      },
+      {
+        "text": "Homer",
+        "isCorrect": true
+      },
+      {
+        "text": "Cervantes",
+        "isCorrect": false
+      },
+      {
+        "text": "Shakespeare",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Homer",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "literature",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI77",
+    "category": "Historical",
+    "question": "Who is associated with the Steam engine improvements?",
+    "answers": [
+      {
+        "text": "James Watt",
+        "isCorrect": true
+      },
+      {
+        "text": "Enrico Fermi",
+        "isCorrect": false
+      },
+      {
+        "text": "Nikola Tesla",
+        "isCorrect": false
+      },
+      {
+        "text": "Marie Curie",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "James Watt",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "inventions",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI78",
+    "category": "Historical",
+    "question": "When did the Discovery of America occur?",
+    "answers": [
+      {
+        "text": "1066",
+        "isCorrect": false
+      },
+      {
+        "text": "1492",
+        "isCorrect": true
+      },
+      {
+        "text": "1776",
+        "isCorrect": false
+      },
+      {
+        "text": "1914",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1492",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "milestones",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI79",
+    "category": "Historical",
+    "question": "Who is associated with the Light bulb?",
+    "answers": [
+      {
+        "text": "Enrico Fermi",
+        "isCorrect": false
+      },
+      {
+        "text": "Marie Curie",
+        "isCorrect": false
+      },
+      {
+        "text": "Thomas Edison",
+        "isCorrect": true
+      },
+      {
+        "text": "Nikola Tesla",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Thomas Edison",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "inventions",
+      "historical"
+    ]
+  },
+  {
+    "id": "HI80",
+    "category": "Historical",
+    "question": "Who is associated with the Light bulb?",
+    "answers": [
+      {
+        "text": "Thomas Edison",
+        "isCorrect": true
+      },
+      {
+        "text": "Marie Curie",
+        "isCorrect": false
+      },
+      {
+        "text": "Nikola Tesla",
+        "isCorrect": false
+      },
+      {
+        "text": "Enrico Fermi",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Thomas Edison",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "inventions",
+      "historical"
+    ]
+  }
+]

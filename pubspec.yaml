@@ -83,6 +83,8 @@ dependencies:
   video_player: ^2.10.0
   chewie: ^1.12.1
   cached_network_image: ^3.4.1
+  supabase_flutter: ^2.10.1
+  web_socket_channel: ^3.0.3
 
 dev_dependencies:
   flutter_test:
@@ -111,23 +113,10 @@ flutter:
    - assets/config/
    - assets/data/
    - assets/data/analytics/
+   - assets/data/events/
    - assets/data/leaderboard/
-   - assets/data/questions/
-   - assets/data/questions/bonus/
-   - assets/data/questions/classes/
-   - assets/data/questions/entertainment/
-   - assets/data/questions/general/
-   - assets/data/questions/geography/
-   - assets/data/questions/history/
-   - assets/data/questions/kids/
-   - assets/data/questions/literature/
-   - assets/data/questions/math/
-   - assets/data/questions/media/
-   - assets/data/questions/science/
-   - assets/data/questions/social/
-   - assets/data/questions/sports/
-   - assets/data/questions/tech/
-   - assets/data/questions/world/
+   - assets/data/missions/
+   - assets/data/snapple_facts/
    - assets/data/skill_tree/skill_tree.json
    - assets/icons/
    - assets/icons/badges/
@@ -157,6 +146,47 @@ flutter:
    - assets/images/store/themes/
    - assets/images/welcome_images/
    - assets/models/
+   - assets/questions/
+   - assets/questions/architecture/
+   - assets/questions/art_history/
+   - assets/questions/arts/
+   - assets/questions/astronomy/
+   - assets/questions/bonus/
+   - assets/questions/business/
+   - assets/questions/civics_law/
+   - assets/questions/classes/
+   - assets/questions/comparative_religions/
+   - assets/questions/computer_science/
+   - assets/questions/cultures/
+   - assets/questions/current_events/
+   - assets/questions/economics/
+   - assets/questions/economics_finance/
+   - assets/questions/engineering_technology/
+   - assets/questions/entertainment/
+   - assets/questions/environment/
+   - assets/questions/environmental_science/
+   - assets/questions/general/
+   - assets/questions/geography/
+   - assets/questions/health/
+   - assets/questions/health_medicine/
+   - assets/questions/history/
+   - assets/questions/kids/
+   - assets/questions/law/
+   - assets/questions/literature/
+   - assets/questions/math/
+   - assets/questions/media/
+   - assets/questions/misc/
+   - assets/questions/modes/
+   - assets/questions/philosophy/
+   - assets/questions/politics/
+   - assets/questions/psychology/
+   - assets/questions/science/
+   - assets/questions/social/
+   - assets/questions/sports/
+   - assets/questions/statistics_data/
+   - assets/questions/technology/
+   - assets/questions/world/
+   - assets/questions/world_literature/
    - assets/splash_previews/
    - assets/songs/
 

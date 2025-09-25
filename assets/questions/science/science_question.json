@@ -1,0 +1,846 @@
+[
+  {
+    "id": "S5_1",
+    "category": "Earth Systems",
+    "question": "Most earthquakes occur at…",
+    "answers": [
+      {
+        "text": "Poles",
+        "isCorrect": false
+      },
+      {
+        "text": "Deserts",
+        "isCorrect": false
+      },
+      {
+        "text": "Tectonic plate boundaries",
+        "isCorrect": true
+      },
+      {
+        "text": "Rivers",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Tectonic plate boundaries",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "geology"
+    ]
+  },
+  {
+    "id": "S5_2",
+    "category": "Earth Systems",
+    "question": "Layer with weather:",
+    "answers": [
+      {
+        "text": "Thermosphere",
+        "isCorrect": false
+      },
+      {
+        "text": "Troposphere",
+        "isCorrect": true
+      },
+      {
+        "text": "Mesosphere",
+        "isCorrect": false
+      },
+      {
+        "text": "Stratosphere",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Troposphere",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "atmosphere"
+    ]
+  },
+  {
+    "id": "S5_3",
+    "category": "Earth Systems",
+    "question": "Igneous rock forms from cooled magma.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G5",
+      "rocks"
+    ]
+  },
+  {
+    "id": "S5_4",
+    "category": "Earth Systems",
+    "question": "Evaporation changes water from…",
+    "answers": [
+      {
+        "text": "Solid to liquid",
+        "isCorrect": false
+      },
+      {
+        "text": "Gas to liquid",
+        "isCorrect": false
+      },
+      {
+        "text": "Solid to gas",
+        "isCorrect": false
+      },
+      {
+        "text": "Liquid to gas",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Liquid to gas",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "water cycle"
+    ]
+  },
+  {
+    "id": "S6_1",
+    "category": "Weather & Climate",
+    "question": "A boundary between air masses is a…",
+    "answers": [
+      {
+        "text": "Isobar",
+        "isCorrect": false
+      },
+      {
+        "text": "Thermocline",
+        "isCorrect": false
+      },
+      {
+        "text": "Front",
+        "isCorrect": true
+      },
+      {
+        "text": "Trade wind",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Front",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "weather"
+    ]
+  },
+  {
+    "id": "S6_2",
+    "category": "Ecology",
+    "question": "Carrying capacity is…",
+    "answers": [
+      {
+        "text": "Birth rate",
+        "isCorrect": false
+      },
+      {
+        "text": "Max population an environment supports",
+        "isCorrect": true
+      },
+      {
+        "text": "Food chain",
+        "isCorrect": false
+      },
+      {
+        "text": "Energy level",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Max population an environment supports",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G6",
+      "ecology"
+    ]
+  },
+  {
+    "id": "S6_3",
+    "category": "Weather & Climate",
+    "question": "Climate describes long-term averages.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G6",
+      "climate"
+    ]
+  },
+  {
+    "id": "S6_4",
+    "category": "Ecology",
+    "question": "Organisms that make their own food:",
+    "answers": [
+      {
+        "text": "Producers",
+        "isCorrect": true
+      },
+      {
+        "text": "Decomposers",
+        "isCorrect": false
+      },
+      {
+        "text": "Scavengers",
+        "isCorrect": false
+      },
+      {
+        "text": "Consumers",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Producers",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "photosynthesis"
+    ]
+  },
+  {
+    "id": "S7_1",
+    "category": "Genetics",
+    "question": "Cells with half the usual chromosomes are…",
+    "answers": [
+      {
+        "text": "Clones",
+        "isCorrect": false
+      },
+      {
+        "text": "Zygotes",
+        "isCorrect": false
+      },
+      {
+        "text": "Somatic cells",
+        "isCorrect": false
+      },
+      {
+        "text": "Gametes",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Gametes",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "meiosis"
+    ]
+  },
+  {
+    "id": "S7_2",
+    "category": "Genetics",
+    "question": "Expressed physical traits:",
+    "answers": [
+      {
+        "text": "Chromosome",
+        "isCorrect": false
+      },
+      {
+        "text": "Gene pool",
+        "isCorrect": false
+      },
+      {
+        "text": "Phenotype",
+        "isCorrect": true
+      },
+      {
+        "text": "Genotype",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Phenotype",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "traits"
+    ]
+  },
+  {
+    "id": "S7_3",
+    "category": "Evolution",
+    "question": "Natural selection favors traits that improve fitness.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "selection"
+    ]
+  },
+  {
+    "id": "S7_4",
+    "category": "Life Science",
+    "question": "Kingdom including mushrooms:",
+    "answers": [
+      {
+        "text": "Plants",
+        "isCorrect": false
+      },
+      {
+        "text": "Protists",
+        "isCorrect": false
+      },
+      {
+        "text": "Fungi",
+        "isCorrect": true
+      },
+      {
+        "text": "Animals",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Fungi",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7",
+      "classification"
+    ]
+  },
+  {
+    "id": "S8_1",
+    "category": "Forces & Motion",
+    "question": "SI unit of force:",
+    "answers": [
+      {
+        "text": "Watt",
+        "isCorrect": false
+      },
+      {
+        "text": "Newton (N)",
+        "isCorrect": true
+      },
+      {
+        "text": "Pascal",
+        "isCorrect": false
+      },
+      {
+        "text": "Joule",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Newton (N)",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G8",
+      "force"
+    ]
+  },
+  {
+    "id": "S8_2",
+    "category": "Energy",
+    "question": "Potential energy is energy due to…",
+    "answers": [
+      {
+        "text": "Temperature",
+        "isCorrect": false
+      },
+      {
+        "text": "Charge",
+        "isCorrect": false
+      },
+      {
+        "text": "Friction",
+        "isCorrect": false
+      },
+      {
+        "text": "Position or configuration",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Position or configuration",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "energy"
+    ]
+  },
+  {
+    "id": "S8_3",
+    "category": "Forces & Motion",
+    "question": "Net force determines acceleration.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "newton"
+    ]
+  },
+  {
+    "id": "S8_4",
+    "category": "Forces & Motion",
+    "question": "An object’s tendency to resist motion change:",
+    "answers": [
+      {
+        "text": "Mass",
+        "isCorrect": false
+      },
+      {
+        "text": "Inertia",
+        "isCorrect": true
+      },
+      {
+        "text": "Weight",
+        "isCorrect": false
+      },
+      {
+        "text": "Velocity",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Inertia",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G8",
+      "inertia"
+    ]
+  },
+  {
+    "id": "S9_1",
+    "category": "Cell Biology",
+    "question": "Mitochondria primarily perform…",
+    "answers": [
+      {
+        "text": "Cellular respiration (ATP production)",
+        "isCorrect": true
+      },
+      {
+        "text": "Detox",
+        "isCorrect": false
+      },
+      {
+        "text": "Protein synthesis",
+        "isCorrect": false
+      },
+      {
+        "text": "DNA replication",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Cellular respiration (ATP production)",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "organelles"
+    ]
+  },
+  {
+    "id": "S9_2",
+    "category": "Cell Biology",
+    "question": "Cell membrane property:",
+    "answers": [
+      {
+        "text": "Rigid impermeable",
+        "isCorrect": false
+      },
+      {
+        "text": "Fully open",
+        "isCorrect": false
+      },
+      {
+        "text": "Metallic",
+        "isCorrect": false
+      },
+      {
+        "text": "Selective permeability",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Selective permeability",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "membrane"
+    ]
+  },
+  {
+    "id": "S9_3",
+    "category": "Cell Biology",
+    "question": "Ribosomes synthesize proteins.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "G9",
+      "ribosome"
+    ]
+  },
+  {
+    "id": "S9_4",
+    "category": "Genetics",
+    "question": "DNA base pairs:",
+    "answers": [
+      {
+        "text": "U–A and C–G",
+        "isCorrect": false
+      },
+      {
+        "text": "A–T and C–G",
+        "isCorrect": true
+      },
+      {
+        "text": "A–G only",
+        "isCorrect": false
+      },
+      {
+        "text": "A–C and T–G",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A–T and C–G",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "dna"
+    ]
+  },
+  {
+    "id": "S10_1",
+    "category": "Chemistry",
+    "question": "pH < 7 indicates…",
+    "answers": [
+      {
+        "text": "Buffer",
+        "isCorrect": false
+      },
+      {
+        "text": "Neutral",
+        "isCorrect": false
+      },
+      {
+        "text": "Basic",
+        "isCorrect": false
+      },
+      {
+        "text": "Acidic solution",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Acidic solution",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G10",
+      "acid-base"
+    ]
+  },
+  {
+    "id": "S10_2",
+    "category": "Chemistry",
+    "question": "Avogadro’s number ≈",
+    "answers": [
+      {
+        "text": "6.02×10^23",
+        "isCorrect": true
+      },
+      {
+        "text": "9.8 m/s^2",
+        "isCorrect": false
+      },
+      {
+        "text": "1.66×10^−27",
+        "isCorrect": false
+      },
+      {
+        "text": "3.00×10^8",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "6.02×10^23",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G10",
+      "mole"
+    ]
+  },
+  {
+    "id": "S10_3",
+    "category": "Chemistry",
+    "question": "Ionic bonds involve electron transfer.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "bonding"
+    ]
+  },
+  {
+    "id": "S10_4",
+    "category": "Chemistry",
+    "question": "Mass is conserved in a chemical reaction per…",
+    "answers": [
+      {
+        "text": "Law of conservation of mass",
+        "isCorrect": true
+      },
+      {
+        "text": "Bernoulli’s",
+        "isCorrect": false
+      },
+      {
+        "text": "Ohm’s law",
+        "isCorrect": false
+      },
+      {
+        "text": "Boyle’s law",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Law of conservation of mass",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "stoichiometry"
+    ]
+  },
+  {
+    "id": "S11_1",
+    "category": "Physics",
+    "question": "Work equals…",
+    "answers": [
+      {
+        "text": "Energy × time",
+        "isCorrect": false
+      },
+      {
+        "text": "Force × displacement",
+        "isCorrect": true
+      },
+      {
+        "text": "Power × time",
+        "isCorrect": false
+      },
+      {
+        "text": "Mass × acceleration",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Force × displacement",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "work"
+    ]
+  },
+  {
+    "id": "S11_2",
+    "category": "Physics",
+    "question": "Momentum p equals…",
+    "answers": [
+      {
+        "text": "F·d",
+        "isCorrect": false
+      },
+      {
+        "text": "m·v",
+        "isCorrect": true
+      },
+      {
+        "text": "E·t",
+        "isCorrect": false
+      },
+      {
+        "text": "m·a",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "m·v",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "momentum"
+    ]
+  },
+  {
+    "id": "S11_3",
+    "category": "Physics",
+    "question": "Momentum is conserved in isolated systems.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "conservation"
+    ]
+  },
+  {
+    "id": "S11_4",
+    "category": "Waves",
+    "question": "Wave speed equals…",
+    "answers": [
+      {
+        "text": "wavelength/period",
+        "isCorrect": false
+      },
+      {
+        "text": "frequency × wavelength",
+        "isCorrect": true
+      },
+      {
+        "text": "period × amplitude",
+        "isCorrect": false
+      },
+      {
+        "text": "amplitude × frequency",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "frequency × wavelength",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11",
+      "waves"
+    ]
+  },
+  {
+    "id": "S12_1",
+    "category": "Advanced Biology",
+    "question": "Transcription produces…",
+    "answers": [
+      {
+        "text": "tRNA from protein",
+        "isCorrect": false
+      },
+      {
+        "text": "mRNA from DNA",
+        "isCorrect": true
+      },
+      {
+        "text": "ATP from glucose",
+        "isCorrect": false
+      },
+      {
+        "text": "Protein from RNA",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "mRNA from DNA",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "transcription"
+    ]
+  },
+  {
+    "id": "S12_2",
+    "category": "Advanced Topics",
+    "question": "Half-life describes…",
+    "answers": [
+      {
+        "text": "Time to melt",
+        "isCorrect": false
+      },
+      {
+        "text": "Time for half a substance to decay",
+        "isCorrect": true
+      },
+      {
+        "text": "Time to freeze",
+        "isCorrect": false
+      },
+      {
+        "text": "Time to boil",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Time for half a substance to decay",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "nuclear"
+    ]
+  }
+]

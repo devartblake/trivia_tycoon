@@ -1,0 +1,776 @@
+[
+  {
+    "id": "E5_1",
+    "category": "Environment",
+    "question": "Recycling helps reduce…",
+    "answers": [
+      {
+        "text": "Waste",
+        "isCorrect": true
+      },
+      {
+        "text": "Rain",
+        "isCorrect": false
+      },
+      {
+        "text": "Sunlight",
+        "isCorrect": false
+      },
+      {
+        "text": "Wind",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Waste",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "recycling"
+    ]
+  },
+  {
+    "id": "E5_2",
+    "category": "Environment",
+    "question": "Planting trees increases…",
+    "answers": [
+      {
+        "text": "Oxygen production",
+        "isCorrect": true
+      },
+      {
+        "text": "Noise",
+        "isCorrect": false
+      },
+      {
+        "text": "Plastic",
+        "isCorrect": false
+      },
+      {
+        "text": "Salt",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Oxygen production",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "trees"
+    ]
+  },
+  {
+    "id": "E6_1",
+    "category": "Ecosystems",
+    "question": "A habitat is…",
+    "answers": [
+      {
+        "text": "Where an organism lives",
+        "isCorrect": true
+      },
+      {
+        "text": "Its diet",
+        "isCorrect": false
+      },
+      {
+        "text": "A predator",
+        "isCorrect": false
+      },
+      {
+        "text": "A climate only",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Where an organism lives",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "habitat"
+    ]
+  },
+  {
+    "id": "E6_2",
+    "category": "Resources",
+    "question": "Renewable resource example:",
+    "answers": [
+      {
+        "text": "Solar energy",
+        "isCorrect": true
+      },
+      {
+        "text": "Coal",
+        "isCorrect": false
+      },
+      {
+        "text": "Oil",
+        "isCorrect": false
+      },
+      {
+        "text": "Natural gas",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Solar energy",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "renewable"
+    ]
+  },
+  {
+    "id": "E7_1",
+    "category": "Food Webs",
+    "question": "Producers get energy from…",
+    "answers": [
+      {
+        "text": "Sunlight (photosynthesis)",
+        "isCorrect": true
+      },
+      {
+        "text": "Eating animals",
+        "isCorrect": false
+      },
+      {
+        "text": "Drinking water",
+        "isCorrect": false
+      },
+      {
+        "text": "Sleeping",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Sunlight (photosynthesis)",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "producers"
+    ]
+  },
+  {
+    "id": "E7_2",
+    "category": "Biodiversity",
+    "question": "Biodiversity means…",
+    "answers": [
+      {
+        "text": "Variety of life in an area",
+        "isCorrect": true
+      },
+      {
+        "text": "Amount of rocks",
+        "isCorrect": false
+      },
+      {
+        "text": "Number of clouds",
+        "isCorrect": false
+      },
+      {
+        "text": "Depth of lakes",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Variety of life in an area",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "biodiversity"
+    ]
+  },
+  {
+    "id": "E8_1",
+    "category": "Climate",
+    "question": "Greenhouse gases trap…",
+    "answers": [
+      {
+        "text": "Heat in the atmosphere",
+        "isCorrect": true
+      },
+      {
+        "text": "Salt in oceans",
+        "isCorrect": false
+      },
+      {
+        "text": "Dust on land",
+        "isCorrect": false
+      },
+      {
+        "text": "Water in soil",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Heat in the atmosphere",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "climate"
+    ]
+  },
+  {
+    "id": "E8_2",
+    "category": "Conservation",
+    "question": "An endangered species is…",
+    "answers": [
+      {
+        "text": "At serious risk of extinction",
+        "isCorrect": true
+      },
+      {
+        "text": "A new species",
+        "isCorrect": false
+      },
+      {
+        "text": "Very common",
+        "isCorrect": false
+      },
+      {
+        "text": "Domesticated",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "At serious risk of extinction",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "endangered"
+    ]
+  },
+  {
+    "id": "E9_1",
+    "category": "Pollution",
+    "question": "Air quality index (AQI) measures…",
+    "answers": [
+      {
+        "text": "Air pollution levels",
+        "isCorrect": true
+      },
+      {
+        "text": "Rainfall",
+        "isCorrect": false
+      },
+      {
+        "text": "Humidity",
+        "isCorrect": false
+      },
+      {
+        "text": "Cloud cover",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Air pollution levels",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "aqi"
+    ]
+  },
+  {
+    "id": "E9_2",
+    "category": "Energy",
+    "question": "Wind turbines generate…",
+    "answers": [
+      {
+        "text": "Electricity",
+        "isCorrect": true
+      },
+      {
+        "text": "Heat only",
+        "isCorrect": false
+      },
+      {
+        "text": "Fuel",
+        "isCorrect": false
+      },
+      {
+        "text": "Plastic",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Electricity",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "energy"
+    ]
+  },
+  {
+    "id": "E10_1",
+    "category": "Sustainability",
+    "question": "The '3 Rs' are…",
+    "answers": [
+      {
+        "text": "Reduce, Reuse, Recycle",
+        "isCorrect": true
+      },
+      {
+        "text": "Repair, Replace, Repeat",
+        "isCorrect": false
+      },
+      {
+        "text": "Read, Write, Run",
+        "isCorrect": false
+      },
+      {
+        "text": "Rescue, Restore, Refuel",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Reduce, Reuse, Recycle",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "3rs"
+    ]
+  },
+  {
+    "id": "E10_2",
+    "category": "Water",
+    "question": "A watershed is…",
+    "answers": [
+      {
+        "text": "Land area that drains to a water body",
+        "isCorrect": true
+      },
+      {
+        "text": "Only a river",
+        "isCorrect": false
+      },
+      {
+        "text": "Only ocean",
+        "isCorrect": false
+      },
+      {
+        "text": "Only a lake",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Land area that drains to a water body",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "water"
+    ]
+  },
+  {
+    "id": "E11_1",
+    "category": "Environmental Policy",
+    "question": "The EPA is the…",
+    "answers": [
+      {
+        "text": "U.S. Environmental Protection Agency",
+        "isCorrect": true
+      },
+      {
+        "text": "Energy Provider Assoc",
+        "isCorrect": false
+      },
+      {
+        "text": "Earth Protection Assoc",
+        "isCorrect": false
+      },
+      {
+        "text": "Environmental Police Agency",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "U.S. Environmental Protection Agency",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "epa"
+    ]
+  },
+  {
+    "id": "E11_2",
+    "category": "Life Cycle",
+    "question": "A carbon footprint measures…",
+    "answers": [
+      {
+        "text": "Total greenhouse gas emissions",
+        "isCorrect": true
+      },
+      {
+        "text": "Only car miles",
+        "isCorrect": false
+      },
+      {
+        "text": "Only electricity use",
+        "isCorrect": false
+      },
+      {
+        "text": "Only food waste",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Total greenhouse gas emissions",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11",
+      "carbon"
+    ]
+  },
+  {
+    "id": "E12_1",
+    "category": "Climate Agreements",
+    "question": "Paris Agreement focuses on…",
+    "answers": [
+      {
+        "text": "Limiting global temperature rise",
+        "isCorrect": true
+      },
+      {
+        "text": "Expanding fossil fuels",
+        "isCorrect": false
+      },
+      {
+        "text": "Banning trade",
+        "isCorrect": false
+      },
+      {
+        "text": "Ending air travel",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Limiting global temperature rise",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "paris"
+    ]
+  },
+  {
+    "id": "E12_2",
+    "category": "Ecosystem Services",
+    "question": "Wetlands help by…",
+    "answers": [
+      {
+        "text": "Filtering water and reducing floods",
+        "isCorrect": true
+      },
+      {
+        "text": "Making deserts",
+        "isCorrect": false
+      },
+      {
+        "text": "Melting ice",
+        "isCorrect": false
+      },
+      {
+        "text": "Blocking rivers",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Filtering water and reducing floods",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "wetlands"
+    ]
+  },
+  {
+    "id": "EX16",
+    "category": "Mixed Environment",
+    "question": "Turning off lights saves energy.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX17",
+    "category": "Mixed Environment",
+    "question": "Turning off lights saves energy.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX18",
+    "category": "Mixed Environment",
+    "question": "Turning off lights saves energy.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX19",
+    "category": "Mixed Environment",
+    "question": "Turning off lights saves energy.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX20",
+    "category": "Mixed Environment",
+    "question": "Turning off lights saves energy.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX21",
+    "category": "Mixed Environment",
+    "question": "Turning off lights saves energy.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX22",
+    "category": "Mixed Environment",
+    "question": "Turning off lights saves energy.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX23",
+    "category": "Mixed Environment",
+    "question": "Turning off lights saves energy.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX24",
+    "category": "Mixed Environment",
+    "question": "Turning off lights saves energy.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX25",
+    "category": "Mixed Environment",
+    "question": "Turning off lights saves energy.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX26",
+    "category": "Mixed Environment",
+    "question": "Turning off lights saves energy.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX27",
+    "category": "Mixed Environment",
+    "question": "Turning off lights saves energy.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX28",
+    "category": "Mixed Environment",
+    "question": "Turning off lights saves energy.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "EX29",
+    "category": "Mixed Environment",
+    "question": "Turning off lights saves energy.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  }
+]

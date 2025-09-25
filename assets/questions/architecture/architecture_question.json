@@ -1,0 +1,612 @@
+[
+  {
+    "id": "ARC1",
+    "category": "Architecture",
+    "question": "The Eiffel Tower is in…",
+    "answers": [
+      {
+        "text": "Rome",
+        "isCorrect": false
+      },
+      {
+        "text": "Paris",
+        "isCorrect": true
+      },
+      {
+        "text": "London",
+        "isCorrect": false
+      },
+      {
+        "text": "Berlin",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Paris",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC2",
+    "category": "Architecture",
+    "question": "The Parthenon is from…",
+    "answers": [
+      {
+        "text": "Ancient Rome",
+        "isCorrect": false
+      },
+      {
+        "text": "Persia",
+        "isCorrect": false
+      },
+      {
+        "text": "Ancient Greece",
+        "isCorrect": true
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Ancient Greece",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "ARC3",
+    "category": "Architecture",
+    "question": "Gothic cathedrals are known for…",
+    "answers": [
+      {
+        "text": "Pyramids",
+        "isCorrect": false
+      },
+      {
+        "text": "Flat roofs",
+        "isCorrect": false
+      },
+      {
+        "text": "Pointed arches & stained glass",
+        "isCorrect": true
+      },
+      {
+        "text": "Domes",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Pointed arches & stained glass",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "ARC4",
+    "category": "Architecture",
+    "question": "The Taj Mahal was built in…",
+    "answers": [
+      {
+        "text": "Pakistan",
+        "isCorrect": false
+      },
+      {
+        "text": "Iran",
+        "isCorrect": false
+      },
+      {
+        "text": "India",
+        "isCorrect": true
+      },
+      {
+        "text": "Iraq",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "India",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC5",
+    "category": "Architecture",
+    "question": "Fallingwater was designed by…",
+    "answers": [
+      {
+        "text": "Le Corbusier",
+        "isCorrect": false
+      },
+      {
+        "text": "Mies van der Rohe",
+        "isCorrect": false
+      },
+      {
+        "text": "Gaudí",
+        "isCorrect": false
+      },
+      {
+        "text": "Frank Lloyd Wright",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Frank Lloyd Wright",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "ARC6",
+    "category": "Architecture",
+    "question": "The Colosseum was used for gladiatorial contests.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC6",
+    "category": "Architecture",
+    "question": "Architecture is both art and science of building design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC7",
+    "category": "Architecture",
+    "question": "Architecture is both art and science of building design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC8",
+    "category": "Architecture",
+    "question": "Architecture is both art and science of building design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC9",
+    "category": "Architecture",
+    "question": "Architecture is both art and science of building design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC10",
+    "category": "Architecture",
+    "question": "Architecture is both art and science of building design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC11",
+    "category": "Architecture",
+    "question": "Architecture is both art and science of building design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC12",
+    "category": "Architecture",
+    "question": "Architecture is both art and science of building design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC13",
+    "category": "Architecture",
+    "question": "Architecture is both art and science of building design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC14",
+    "category": "Architecture",
+    "question": "Architecture is both art and science of building design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC15",
+    "category": "Architecture",
+    "question": "Architecture is both art and science of building design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC16",
+    "category": "Architecture",
+    "question": "Architecture is both art and science of building design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC17",
+    "category": "Architecture",
+    "question": "Architecture is both art and science of building design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC18",
+    "category": "Architecture",
+    "question": "Architecture is both art and science of building design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC19",
+    "category": "Architecture",
+    "question": "Architecture is both art and science of building design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC20",
+    "category": "Architecture",
+    "question": "Architecture is both art and science of building design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC21",
+    "category": "Architecture",
+    "question": "Architecture is both art and science of building design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC22",
+    "category": "Architecture",
+    "question": "Architecture is both art and science of building design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC23",
+    "category": "Architecture",
+    "question": "Architecture is both art and science of building design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC24",
+    "category": "Architecture",
+    "question": "Architecture is both art and science of building design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC25",
+    "category": "Architecture",
+    "question": "Architecture is both art and science of building design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC26",
+    "category": "Architecture",
+    "question": "Architecture is both art and science of building design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC27",
+    "category": "Architecture",
+    "question": "Architecture is both art and science of building design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC28",
+    "category": "Architecture",
+    "question": "Architecture is both art and science of building design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "ARC29",
+    "category": "Architecture",
+    "question": "Architecture is both art and science of building design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  }
+]

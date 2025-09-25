@@ -1,0 +1,902 @@
+[
+  {
+    "id": "geography_q9",
+    "category": "geography",
+    "question": "What is the answer to question 9 in geography?",
+    "answers": [
+      {
+        "text": "Correct Answer 9",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 9-A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 9-B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 9-C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 9",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "movies_en_27",
+    "category": "Movies",
+    "question": "What is example question 27 in Movies?",
+    "answers": [
+      {
+        "text": "Correct Answer 27",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 27 A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 27 B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 27 C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 27",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "history_fr_25",
+    "category": "History",
+    "question": "Quelle est la question exemple 25 en History ?",
+    "answers": [
+      {
+        "text": "Correct Answer 25",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 25 A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 25 B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 25 C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 25",
+    "type": "true_false",
+    "difficulty": 2,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "science_en_16",
+    "category": "Science",
+    "question": "What is example question 16 in Science?",
+    "answers": [
+      {
+        "text": "Correct Answer 16",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 16 A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 16 B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 16 C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 16",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "movies_en_20",
+    "category": "Movies",
+    "question": "What is example question 20 in Movies?",
+    "answers": [
+      {
+        "text": "Correct Answer 20",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 20 A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 20 B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 20 C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 20",
+    "type": "true_false",
+    "difficulty": 3,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "history_fr_28",
+    "category": "History",
+    "question": "Quelle est la question exemple 28 en History ?",
+    "answers": [
+      {
+        "text": "Correct Answer 28",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 28 A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 28 B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 28 C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 28",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "history_en_24",
+    "category": "History",
+    "question": "What is example question 24 in History?",
+    "answers": [
+      {
+        "text": "Correct Answer 24",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 24 A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 24 B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 24 C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 24",
+    "type": "true_false",
+    "difficulty": 1,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "history_fr_20",
+    "category": "History",
+    "question": "Quelle est la question exemple 20 en History ?",
+    "answers": [
+      {
+        "text": "Correct Answer 20",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 20 A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 20 B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 20 C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 20",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "geography_q5",
+    "category": "geography",
+    "question": "What is the answer to question 5 in geography?",
+    "answers": [
+      {
+        "text": "Correct Answer 5",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 5-A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 5-B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 5-C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 5",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "movies_q9",
+    "category": "movies",
+    "question": "What is the answer to question 9 in movies?",
+    "answers": [
+      {
+        "text": "Correct Answer 9",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 9-A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 9-B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 9-C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 9",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "science_es_20",
+    "category": "Science",
+    "question": "¿Cuál es la pregunta de ejemplo 20 en Science?",
+    "answers": [
+      {
+        "text": "Correct Answer 20",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 20 A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 20 B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 20 C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 20",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "pop_culture_es_30",
+    "category": "Pop Culture",
+    "question": "¿Cuál es la pregunta de ejemplo 30 en Pop Culture?",
+    "answers": [
+      {
+        "text": "Correct Answer 30",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 30 A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 30 B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 30 C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 30",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "movies_q11",
+    "category": "movies",
+    "question": "What is the answer to question 11 in movies?",
+    "answers": [
+      {
+        "text": "Correct Answer 11",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 11-A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 11-B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 11-C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 11",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "history_es_18",
+    "category": "History",
+    "question": "¿Cuál es la pregunta de ejemplo 18 en History?",
+    "answers": [
+      {
+        "text": "Correct Answer 18",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 18 A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 18 B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 18 C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 18",
+    "type": "true_false",
+    "difficulty": 1,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "pop_culture_fr_19",
+    "category": "Pop Culture",
+    "question": "Quelle est la question exemple 19 en Pop Culture ?",
+    "answers": [
+      {
+        "text": "Correct Answer 19",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 19 A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 19 B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 19 C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 19",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "movies_es_26",
+    "category": "Movies",
+    "question": "¿Cuál es la pregunta de ejemplo 26 en Movies?",
+    "answers": [
+      {
+        "text": "Correct Answer 26",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 26 A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 26 B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 26 C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 26",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "history_en_30",
+    "category": "History",
+    "question": "What is example question 30 in History?",
+    "answers": [
+      {
+        "text": "Correct Answer 30",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 30 A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 30 B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 30 C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 30",
+    "type": "true_false",
+    "difficulty": 3,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "movies_es_25",
+    "category": "Movies",
+    "question": "¿Cuál es la pregunta de ejemplo 25 en Movies?",
+    "answers": [
+      {
+        "text": "Correct Answer 25",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 25 A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 25 B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 25 C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 25",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "science_q1",
+    "category": "science",
+    "question": "What is the answer to question 1 in science?",
+    "answers": [
+      {
+        "text": "Correct Answer 1",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 1-A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 1-B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 1-C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 1",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "history_fr_18",
+    "category": "History",
+    "question": "Quelle est la question exemple 18 en History ?",
+    "answers": [
+      {
+        "text": "Correct Answer 18",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 18 A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 18 B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 18 C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 18",
+    "type": "true_false",
+    "difficulty": 3,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "science_en_22",
+    "category": "Science",
+    "question": "What is example question 22 in Science?",
+    "answers": [
+      {
+        "text": "Correct Answer 22",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 22 A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 22 B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 22 C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 22",
+    "type": "true_false",
+    "difficulty": 3,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "history_en_20",
+    "category": "History",
+    "question": "What is example question 20 in History?",
+    "answers": [
+      {
+        "text": "Correct Answer 20",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 20 A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 20 B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 20 C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 20",
+    "type": "true_false",
+    "difficulty": 2,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "science_q4",
+    "category": "science",
+    "question": "What is the answer to question 4 in science?",
+    "answers": [
+      {
+        "text": "Correct Answer 4",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 4-A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 4-B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 4-C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 4",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "history_q13",
+    "category": "history",
+    "question": "What is the answer to question 13 in history?",
+    "answers": [
+      {
+        "text": "Correct Answer 13",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 13-A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 13-B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 13-C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 13",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "science_es_17",
+    "category": "Science",
+    "question": "¿Cuál es la pregunta de ejemplo 17 en Science?",
+    "answers": [
+      {
+        "text": "Correct Answer 17",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 17 A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 17 B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 17 C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 17",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "movies_en_29",
+    "category": "Movies",
+    "question": "What is example question 29 in Movies?",
+    "answers": [
+      {
+        "text": "Correct Answer 29",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 29 A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 29 B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 29 C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 29",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "movies_en_17",
+    "category": "Movies",
+    "question": "What is example question 17 in Movies?",
+    "answers": [
+      {
+        "text": "Correct Answer 17",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 17 A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 17 B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 17 C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 17",
+    "type": "true_false",
+    "difficulty": 1,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "pop_culture_fr_26",
+    "category": "Pop Culture",
+    "question": "Quelle est la question exemple 26 en Pop Culture ?",
+    "answers": [
+      {
+        "text": "Correct Answer 26",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 26 A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 26 B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 26 C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 26",
+    "type": "true_false",
+    "difficulty": 1,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "science_en_18",
+    "category": "Science",
+    "question": "What is example question 18 in Science?",
+    "answers": [
+      {
+        "text": "Correct Answer 18",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 18 A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 18 B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 18 C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 18",
+    "type": "true_false",
+    "difficulty": 2,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  },
+  {
+    "id": "music_q1",
+    "category": "music",
+    "question": "What is the answer to question 1 in music?",
+    "answers": [
+      {
+        "text": "Correct Answer 1",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong Answer 1-A",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 1-B",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong Answer 1-C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct Answer 1",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": "",
+    "audioUrl": "",
+    "videoUrl": "",
+    "tags": []
+  }
+]

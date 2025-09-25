@@ -97,7 +97,7 @@ class GridMenuSection extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 2.8,
+              childAspectRatio: 3.2, // Increased from 2.8 to give more height
               crossAxisSpacing: 12,
               mainAxisSpacing: 12,
             ),
@@ -132,7 +132,7 @@ class GridMenuSection extends StatelessWidget {
         context.push(route);
       },
       child: Container(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(10), // Reduced from 12 to 10
         decoration: BoxDecoration(
           color: color.withOpacity(0.1),
           borderRadius: BorderRadius.circular(12),
@@ -144,42 +144,47 @@ class GridMenuSection extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(6), // Reduced from 8 to 6
               decoration: BoxDecoration(
                 color: color,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
                 icon,
-                size: 20,
+                size: 18, // Reduced from 20 to 18
                 color: Colors.white,
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 10), // Reduced from 12 to 10
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min, // Added to prevent overflow
                 children: [
-                  Text(
-                    label,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: color,
+                  Flexible( // Wrapped with Flexible
+                    child: Text(
+                      label,
+                      style: TextStyle(
+                        fontSize: 13, // Reduced from 14 to 13
+                        fontWeight: FontWeight.bold,
+                        color: color,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    description,
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: Colors.grey.shade600,
+                  const SizedBox(height: 1), // Reduced from 2 to 1
+                  Flexible( // Wrapped with Flexible
+                    child: Text(
+                      description,
+                      style: TextStyle(
+                        fontSize: 10, // Reduced from 11 to 10
+                        color: Colors.grey.shade600,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),

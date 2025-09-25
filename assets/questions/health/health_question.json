@@ -1,0 +1,776 @@
+[
+  {
+    "id": "H5_1",
+    "category": "Health",
+    "question": "Vitamins are…",
+    "answers": [
+      {
+        "text": "Nutrients",
+        "isCorrect": true
+      },
+      {
+        "text": "Proteins",
+        "isCorrect": false
+      },
+      {
+        "text": "Minerals",
+        "isCorrect": false
+      },
+      {
+        "text": "Fats",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Nutrients",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "nutrition"
+    ]
+  },
+  {
+    "id": "H5_2",
+    "category": "Health",
+    "question": "Heart pumps…",
+    "answers": [
+      {
+        "text": "Blood",
+        "isCorrect": true
+      },
+      {
+        "text": "Air",
+        "isCorrect": false
+      },
+      {
+        "text": "Food",
+        "isCorrect": false
+      },
+      {
+        "text": "Water",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Blood",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "heart"
+    ]
+  },
+  {
+    "id": "H6_1",
+    "category": "Health",
+    "question": "Calcium strengthens…",
+    "answers": [
+      {
+        "text": "Bones",
+        "isCorrect": true
+      },
+      {
+        "text": "Skin",
+        "isCorrect": false
+      },
+      {
+        "text": "Eyes",
+        "isCorrect": false
+      },
+      {
+        "text": "Hair",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Bones",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "bones"
+    ]
+  },
+  {
+    "id": "H6_2",
+    "category": "Health",
+    "question": "Exercise helps…",
+    "answers": [
+      {
+        "text": "Fitness",
+        "isCorrect": true
+      },
+      {
+        "text": "Laziness",
+        "isCorrect": false
+      },
+      {
+        "text": "Illness",
+        "isCorrect": false
+      },
+      {
+        "text": "Weakness",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Fitness",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "exercise"
+    ]
+  },
+  {
+    "id": "H7_1",
+    "category": "Health",
+    "question": "Lungs help you…",
+    "answers": [
+      {
+        "text": "Breathe",
+        "isCorrect": true
+      },
+      {
+        "text": "See",
+        "isCorrect": false
+      },
+      {
+        "text": "Walk",
+        "isCorrect": false
+      },
+      {
+        "text": "Eat",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Breathe",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7",
+      "lungs"
+    ]
+  },
+  {
+    "id": "H7_2",
+    "category": "Health",
+    "question": "Too much sugar causes…",
+    "answers": [
+      {
+        "text": "Diabetes risk",
+        "isCorrect": true
+      },
+      {
+        "text": "Blindness",
+        "isCorrect": false
+      },
+      {
+        "text": "Fever",
+        "isCorrect": false
+      },
+      {
+        "text": "Injury",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Diabetes risk",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "sugar"
+    ]
+  },
+  {
+    "id": "H8_1",
+    "category": "Health",
+    "question": "Vaccine provides…",
+    "answers": [
+      {
+        "text": "Immunity",
+        "isCorrect": true
+      },
+      {
+        "text": "Infection",
+        "isCorrect": false
+      },
+      {
+        "text": "Pain",
+        "isCorrect": false
+      },
+      {
+        "text": "Illness",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Immunity",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "vaccine"
+    ]
+  },
+  {
+    "id": "H8_2",
+    "category": "Health",
+    "question": "CPR used in…",
+    "answers": [
+      {
+        "text": "Cardiac arrest",
+        "isCorrect": true
+      },
+      {
+        "text": "Broken bone",
+        "isCorrect": false
+      },
+      {
+        "text": "Burn",
+        "isCorrect": false
+      },
+      {
+        "text": "Headache",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Cardiac arrest",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "cpr"
+    ]
+  },
+  {
+    "id": "H9_1",
+    "category": "Health",
+    "question": "BMI measures…",
+    "answers": [
+      {
+        "text": "Body mass index",
+        "isCorrect": true
+      },
+      {
+        "text": "Blood pressure",
+        "isCorrect": false
+      },
+      {
+        "text": "Brain activity",
+        "isCorrect": false
+      },
+      {
+        "text": "Bone density",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Body mass index",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "bmi"
+    ]
+  },
+  {
+    "id": "H9_2",
+    "category": "Health",
+    "question": "Organ that filters blood:",
+    "answers": [
+      {
+        "text": "Kidney",
+        "isCorrect": true
+      },
+      {
+        "text": "Liver",
+        "isCorrect": false
+      },
+      {
+        "text": "Heart",
+        "isCorrect": false
+      },
+      {
+        "text": "Stomach",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Kidney",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "kidney"
+    ]
+  },
+  {
+    "id": "H10_1",
+    "category": "Health",
+    "question": "WHO stands for…",
+    "answers": [
+      {
+        "text": "World Health Organization",
+        "isCorrect": true
+      },
+      {
+        "text": "World Human Org",
+        "isCorrect": false
+      },
+      {
+        "text": "Wide Health Org",
+        "isCorrect": false
+      },
+      {
+        "text": "Well Health Org",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "World Health Organization",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "who"
+    ]
+  },
+  {
+    "id": "H10_2",
+    "category": "Health",
+    "question": "Hippocrates is known as…",
+    "answers": [
+      {
+        "text": "Father of medicine",
+        "isCorrect": true
+      },
+      {
+        "text": "Father of law",
+        "isCorrect": false
+      },
+      {
+        "text": "Father of surgery",
+        "isCorrect": false
+      },
+      {
+        "text": "Father of philosophy",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Father of medicine",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "hippocrates"
+    ]
+  },
+  {
+    "id": "H11_1",
+    "category": "Health",
+    "question": "Insulin regulates…",
+    "answers": [
+      {
+        "text": "Blood sugar",
+        "isCorrect": true
+      },
+      {
+        "text": "Blood pressure",
+        "isCorrect": false
+      },
+      {
+        "text": "Temperature",
+        "isCorrect": false
+      },
+      {
+        "text": "Oxygen",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Blood sugar",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "insulin"
+    ]
+  },
+  {
+    "id": "H11_2",
+    "category": "Health",
+    "question": "MRI uses…",
+    "answers": [
+      {
+        "text": "Magnetic fields",
+        "isCorrect": true
+      },
+      {
+        "text": "X-rays",
+        "isCorrect": false
+      },
+      {
+        "text": "Sound",
+        "isCorrect": false
+      },
+      {
+        "text": "Heat",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Magnetic fields",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11",
+      "mri"
+    ]
+  },
+  {
+    "id": "H12_1",
+    "category": "Health",
+    "question": "COVID-19 caused by…",
+    "answers": [
+      {
+        "text": "Coronavirus SARS-CoV-2",
+        "isCorrect": true
+      },
+      {
+        "text": "Bacteria",
+        "isCorrect": false
+      },
+      {
+        "text": "Fungus",
+        "isCorrect": false
+      },
+      {
+        "text": "Parasite",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Coronavirus SARS-CoV-2",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "covid"
+    ]
+  },
+  {
+    "id": "H12_2",
+    "category": "Health",
+    "question": "CPR stands for…",
+    "answers": [
+      {
+        "text": "Cardiopulmonary resuscitation",
+        "isCorrect": true
+      },
+      {
+        "text": "Cardio Pulse Recovery",
+        "isCorrect": false
+      },
+      {
+        "text": "Careful Patient Response",
+        "isCorrect": false
+      },
+      {
+        "text": "Central Pulmonary Rate",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Cardiopulmonary resuscitation",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "cpr"
+    ]
+  },
+  {
+    "id": "HX16",
+    "category": "Mixed Health",
+    "question": "Exercise benefits health.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "HX17",
+    "category": "Mixed Health",
+    "question": "Exercise benefits health.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "HX18",
+    "category": "Mixed Health",
+    "question": "Exercise benefits health.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "HX19",
+    "category": "Mixed Health",
+    "question": "Exercise benefits health.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "HX20",
+    "category": "Mixed Health",
+    "question": "Exercise benefits health.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "HX21",
+    "category": "Mixed Health",
+    "question": "Exercise benefits health.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "HX22",
+    "category": "Mixed Health",
+    "question": "Exercise benefits health.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "HX23",
+    "category": "Mixed Health",
+    "question": "Exercise benefits health.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "HX24",
+    "category": "Mixed Health",
+    "question": "Exercise benefits health.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "HX25",
+    "category": "Mixed Health",
+    "question": "Exercise benefits health.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "HX26",
+    "category": "Mixed Health",
+    "question": "Exercise benefits health.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "HX27",
+    "category": "Mixed Health",
+    "question": "Exercise benefits health.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "HX28",
+    "category": "Mixed Health",
+    "question": "Exercise benefits health.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "HX29",
+    "category": "Mixed Health",
+    "question": "Exercise benefits health.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  }
+]

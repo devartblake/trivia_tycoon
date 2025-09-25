@@ -1,0 +1,776 @@
+[
+  {
+    "id": "L5_1",
+    "category": "Civics & Law",
+    "question": "A rule made by a community is called a…",
+    "answers": [
+      {
+        "text": "Law",
+        "isCorrect": true
+      },
+      {
+        "text": "Habit",
+        "isCorrect": false
+      },
+      {
+        "text": "Game",
+        "isCorrect": false
+      },
+      {
+        "text": "Song",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Law",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "basics"
+    ]
+  },
+  {
+    "id": "L5_2",
+    "category": "Civics & Law",
+    "question": "Police officers help…",
+    "answers": [
+      {
+        "text": "Enforce laws",
+        "isCorrect": true
+      },
+      {
+        "text": "Write laws",
+        "isCorrect": false
+      },
+      {
+        "text": "Judge cases",
+        "isCorrect": false
+      },
+      {
+        "text": "Elect leaders",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Enforce laws",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "roles"
+    ]
+  },
+  {
+    "id": "L6_1",
+    "category": "Legal Rights",
+    "question": "The right to speak freely is in the…",
+    "answers": [
+      {
+        "text": "First Amendment",
+        "isCorrect": true
+      },
+      {
+        "text": "Second Amendment",
+        "isCorrect": false
+      },
+      {
+        "text": "Preamble",
+        "isCorrect": false
+      },
+      {
+        "text": "Tenth Amendment",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "First Amendment",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "rights"
+    ]
+  },
+  {
+    "id": "L6_2",
+    "category": "Courts",
+    "question": "A judge works in a…",
+    "answers": [
+      {
+        "text": "Court",
+        "isCorrect": true
+      },
+      {
+        "text": "Hospital",
+        "isCorrect": false
+      },
+      {
+        "text": "Library",
+        "isCorrect": false
+      },
+      {
+        "text": "Museum",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Court",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "courts"
+    ]
+  },
+  {
+    "id": "L7_1",
+    "category": "Due Process",
+    "question": "An accused person has the right to a…",
+    "answers": [
+      {
+        "text": "Fair trial",
+        "isCorrect": true
+      },
+      {
+        "text": "Secret trial",
+        "isCorrect": false
+      },
+      {
+        "text": "No trial",
+        "isCorrect": false
+      },
+      {
+        "text": "Punishment only",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Fair trial",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "due process"
+    ]
+  },
+  {
+    "id": "L7_2",
+    "category": "Courts",
+    "question": "A jury is a group of…",
+    "answers": [
+      {
+        "text": "Citizens deciding facts in a case",
+        "isCorrect": true
+      },
+      {
+        "text": "Lawyers",
+        "isCorrect": false
+      },
+      {
+        "text": "Police",
+        "isCorrect": false
+      },
+      {
+        "text": "Senators",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Citizens deciding facts in a case",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "jury"
+    ]
+  },
+  {
+    "id": "L8_1",
+    "category": "Constitutional Law",
+    "question": "The U.S. Constitution is the…",
+    "answers": [
+      {
+        "text": "Supreme law of the land",
+        "isCorrect": true
+      },
+      {
+        "text": "A suggestion",
+        "isCorrect": false
+      },
+      {
+        "text": "State law only",
+        "isCorrect": false
+      },
+      {
+        "text": "Court rule",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Supreme law of the land",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "constitution"
+    ]
+  },
+  {
+    "id": "L8_2",
+    "category": "Criminal vs Civil",
+    "question": "A case about a broken contract is usually…",
+    "answers": [
+      {
+        "text": "Civil case",
+        "isCorrect": true
+      },
+      {
+        "text": "Criminal case",
+        "isCorrect": false
+      },
+      {
+        "text": "Traffic ticket",
+        "isCorrect": false
+      },
+      {
+        "text": "International law",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Civil case",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "civil"
+    ]
+  },
+  {
+    "id": "L9_1",
+    "category": "Branches & Checks",
+    "question": "The branch that interprets laws is…",
+    "answers": [
+      {
+        "text": "Judicial",
+        "isCorrect": true
+      },
+      {
+        "text": "Legislative",
+        "isCorrect": false
+      },
+      {
+        "text": "Executive",
+        "isCorrect": false
+      },
+      {
+        "text": "Local",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Judicial",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "branches"
+    ]
+  },
+  {
+    "id": "L9_2",
+    "category": "Supreme Court",
+    "question": "Justices on the U.S. Supreme Court serve…",
+    "answers": [
+      {
+        "text": "With no fixed term (life tenure)",
+        "isCorrect": true
+      },
+      {
+        "text": "2-year terms",
+        "isCorrect": false
+      },
+      {
+        "text": "4-year terms",
+        "isCorrect": false
+      },
+      {
+        "text": "8-year terms",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "With no fixed term (life tenure)",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "supreme court"
+    ]
+  },
+  {
+    "id": "L10_1",
+    "category": "Landmark Cases",
+    "question": "Marbury v. Madison established…",
+    "answers": [
+      {
+        "text": "Judicial review",
+        "isCorrect": true
+      },
+      {
+        "text": "Equal protection",
+        "isCorrect": false
+      },
+      {
+        "text": "Free speech",
+        "isCorrect": false
+      },
+      {
+        "text": "Incorporation",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Judicial review",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G10",
+      "marbury"
+    ]
+  },
+  {
+    "id": "L10_2",
+    "category": "Rights",
+    "question": "The Fifth Amendment protects against…",
+    "answers": [
+      {
+        "text": "Self-incrimination",
+        "isCorrect": true
+      },
+      {
+        "text": "Free exercise only",
+        "isCorrect": false
+      },
+      {
+        "text": "Quartering troops",
+        "isCorrect": false
+      },
+      {
+        "text": "Unreasonable searches",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Self-incrimination",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "fifth"
+    ]
+  },
+  {
+    "id": "L11_1",
+    "category": "Equal Protection",
+    "question": "Brown v. Board (1954) held…",
+    "answers": [
+      {
+        "text": "School segregation unconstitutional",
+        "isCorrect": true
+      },
+      {
+        "text": "Segregation required",
+        "isCorrect": false
+      },
+      {
+        "text": "No federal role",
+        "isCorrect": false
+      },
+      {
+        "text": "Only voluntary change",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "School segregation unconstitutional",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "brown"
+    ]
+  },
+  {
+    "id": "L11_2",
+    "category": "Criminal Procedure",
+    "question": "A search generally requires a…",
+    "answers": [
+      {
+        "text": "Warrant (with probable cause)",
+        "isCorrect": true
+      },
+      {
+        "text": "Note from teacher",
+        "isCorrect": false
+      },
+      {
+        "text": "Tax form",
+        "isCorrect": false
+      },
+      {
+        "text": "Parking pass",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Warrant (with probable cause)",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11",
+      "search"
+    ]
+  },
+  {
+    "id": "L12_1",
+    "category": "International Law",
+    "question": "A treaty is…",
+    "answers": [
+      {
+        "text": "A formal agreement between nations",
+        "isCorrect": true
+      },
+      {
+        "text": "A domestic law",
+        "isCorrect": false
+      },
+      {
+        "text": "A newspaper",
+        "isCorrect": false
+      },
+      {
+        "text": "A speech",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A formal agreement between nations",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "treaty"
+    ]
+  },
+  {
+    "id": "L12_2",
+    "category": "Legal Theory",
+    "question": "Precedent means…",
+    "answers": [
+      {
+        "text": "Courts follow earlier decisions in similar cases",
+        "isCorrect": true
+      },
+      {
+        "text": "Ignore past cases",
+        "isCorrect": false
+      },
+      {
+        "text": "Only new laws matter",
+        "isCorrect": false
+      },
+      {
+        "text": "Juries make law",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Courts follow earlier decisions in similar cases",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "precedent"
+    ]
+  },
+  {
+    "id": "LX16",
+    "category": "Mixed Law",
+    "question": "Laws help keep order and safety.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "LX17",
+    "category": "Mixed Law",
+    "question": "Laws help keep order and safety.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "LX18",
+    "category": "Mixed Law",
+    "question": "Laws help keep order and safety.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "LX19",
+    "category": "Mixed Law",
+    "question": "Laws help keep order and safety.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "LX20",
+    "category": "Mixed Law",
+    "question": "Laws help keep order and safety.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "LX21",
+    "category": "Mixed Law",
+    "question": "Laws help keep order and safety.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "LX22",
+    "category": "Mixed Law",
+    "question": "Laws help keep order and safety.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "LX23",
+    "category": "Mixed Law",
+    "question": "Laws help keep order and safety.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "LX24",
+    "category": "Mixed Law",
+    "question": "Laws help keep order and safety.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "LX25",
+    "category": "Mixed Law",
+    "question": "Laws help keep order and safety.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "LX26",
+    "category": "Mixed Law",
+    "question": "Laws help keep order and safety.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "LX27",
+    "category": "Mixed Law",
+    "question": "Laws help keep order and safety.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "LX28",
+    "category": "Mixed Law",
+    "question": "Laws help keep order and safety.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "LX29",
+    "category": "Mixed Law",
+    "question": "Laws help keep order and safety.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  }
+]

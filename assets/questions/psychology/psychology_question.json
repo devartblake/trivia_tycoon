@@ -1,0 +1,776 @@
+[
+  {
+    "id": "PSY5_1",
+    "category": "Psychology",
+    "question": "Psychology is the study of…",
+    "answers": [
+      {
+        "text": "Mind and behavior",
+        "isCorrect": true
+      },
+      {
+        "text": "Animals",
+        "isCorrect": false
+      },
+      {
+        "text": "Plants",
+        "isCorrect": false
+      },
+      {
+        "text": "Physics",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mind and behavior",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "definition"
+    ]
+  },
+  {
+    "id": "PSY5_2",
+    "category": "Psychology",
+    "question": "Freud is known for…",
+    "answers": [
+      {
+        "text": "Psychoanalysis",
+        "isCorrect": true
+      },
+      {
+        "text": "Behaviorism",
+        "isCorrect": false
+      },
+      {
+        "text": "Cognitive Therapy",
+        "isCorrect": false
+      },
+      {
+        "text": "Gestalt",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Psychoanalysis",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "freud"
+    ]
+  },
+  {
+    "id": "PSY6_1",
+    "category": "Psychology",
+    "question": "Pavlov studied…",
+    "answers": [
+      {
+        "text": "Classical conditioning",
+        "isCorrect": true
+      },
+      {
+        "text": "Operant conditioning",
+        "isCorrect": false
+      },
+      {
+        "text": "Cognition",
+        "isCorrect": false
+      },
+      {
+        "text": "Development",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Classical conditioning",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "pavlov"
+    ]
+  },
+  {
+    "id": "PSY6_2",
+    "category": "Psychology",
+    "question": "Maslow’s pyramid is…",
+    "answers": [
+      {
+        "text": "Hierarchy of needs",
+        "isCorrect": true
+      },
+      {
+        "text": "Hierarchy of wants",
+        "isCorrect": false
+      },
+      {
+        "text": "Stages of grief",
+        "isCorrect": false
+      },
+      {
+        "text": "Learning pyramid",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Hierarchy of needs",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "maslow"
+    ]
+  },
+  {
+    "id": "PSY7_1",
+    "category": "Psychology",
+    "question": "Skinner studied…",
+    "answers": [
+      {
+        "text": "Operant conditioning",
+        "isCorrect": true
+      },
+      {
+        "text": "Classical conditioning",
+        "isCorrect": false
+      },
+      {
+        "text": "Perception",
+        "isCorrect": false
+      },
+      {
+        "text": "Dreams",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Operant conditioning",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "skinner"
+    ]
+  },
+  {
+    "id": "PSY7_2",
+    "category": "Psychology",
+    "question": "Piaget focused on…",
+    "answers": [
+      {
+        "text": "Cognitive development",
+        "isCorrect": true
+      },
+      {
+        "text": "Emotions",
+        "isCorrect": false
+      },
+      {
+        "text": "Unconscious",
+        "isCorrect": false
+      },
+      {
+        "text": "Society",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Cognitive development",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "piaget"
+    ]
+  },
+  {
+    "id": "PSY8_1",
+    "category": "Psychology",
+    "question": "Bandura’s experiment:",
+    "answers": [
+      {
+        "text": "Bobo doll",
+        "isCorrect": true
+      },
+      {
+        "text": "Stanford Prison",
+        "isCorrect": false
+      },
+      {
+        "text": "Milgram",
+        "isCorrect": false
+      },
+      {
+        "text": "Hawthorne",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Bobo doll",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "bandura"
+    ]
+  },
+  {
+    "id": "PSY8_2",
+    "category": "Psychology",
+    "question": "Milgram studied…",
+    "answers": [
+      {
+        "text": "Obedience",
+        "isCorrect": true
+      },
+      {
+        "text": "Memory",
+        "isCorrect": false
+      },
+      {
+        "text": "Dreams",
+        "isCorrect": false
+      },
+      {
+        "text": "Conditioning",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Obedience",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "milgram"
+    ]
+  },
+  {
+    "id": "PSY9_1",
+    "category": "Psychology",
+    "question": "DSM used for…",
+    "answers": [
+      {
+        "text": "Diagnosing mental disorders",
+        "isCorrect": true
+      },
+      {
+        "text": "Measuring IQ",
+        "isCorrect": false
+      },
+      {
+        "text": "Testing reflexes",
+        "isCorrect": false
+      },
+      {
+        "text": "Counting population",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Diagnosing mental disorders",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "DSM"
+    ]
+  },
+  {
+    "id": "PSY9_2",
+    "category": "Psychology",
+    "question": "Introversion and extraversion by…",
+    "answers": [
+      {
+        "text": "Carl Jung",
+        "isCorrect": true
+      },
+      {
+        "text": "Freud",
+        "isCorrect": false
+      },
+      {
+        "text": "Adler",
+        "isCorrect": false
+      },
+      {
+        "text": "Erikson",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Carl Jung",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "jung"
+    ]
+  },
+  {
+    "id": "PSY10_1",
+    "category": "Psychology",
+    "question": "Erikson proposed…",
+    "answers": [
+      {
+        "text": "Stages of psychosocial development",
+        "isCorrect": true
+      },
+      {
+        "text": "Stages of grief",
+        "isCorrect": false
+      },
+      {
+        "text": "Hierarchy of needs",
+        "isCorrect": false
+      },
+      {
+        "text": "Defense mechanisms",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Stages of psychosocial development",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "erikson"
+    ]
+  },
+  {
+    "id": "PSY10_2",
+    "category": "Psychology",
+    "question": "Cognitive dissonance theory by…",
+    "answers": [
+      {
+        "text": "Leon Festinger",
+        "isCorrect": true
+      },
+      {
+        "text": "Skinner",
+        "isCorrect": false
+      },
+      {
+        "text": "Maslow",
+        "isCorrect": false
+      },
+      {
+        "text": "Freud",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Leon Festinger",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "festinger"
+    ]
+  },
+  {
+    "id": "PSY11_1",
+    "category": "Psychology",
+    "question": "Carl Rogers promoted…",
+    "answers": [
+      {
+        "text": "Client-centered therapy",
+        "isCorrect": true
+      },
+      {
+        "text": "Psychoanalysis",
+        "isCorrect": false
+      },
+      {
+        "text": "Behaviorism",
+        "isCorrect": false
+      },
+      {
+        "text": "Dream analysis",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Client-centered therapy",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "rogers"
+    ]
+  },
+  {
+    "id": "PSY11_2",
+    "category": "Psychology",
+    "question": "Stanford Prison experiment by…",
+    "answers": [
+      {
+        "text": "Philip Zimbardo",
+        "isCorrect": true
+      },
+      {
+        "text": "Milgram",
+        "isCorrect": false
+      },
+      {
+        "text": "Bandura",
+        "isCorrect": false
+      },
+      {
+        "text": "Freud",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Philip Zimbardo",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11",
+      "zimbardo"
+    ]
+  },
+  {
+    "id": "PSY12_1",
+    "category": "Psychology",
+    "question": "Positive psychology founder:",
+    "answers": [
+      {
+        "text": "Martin Seligman",
+        "isCorrect": true
+      },
+      {
+        "text": "Skinner",
+        "isCorrect": false
+      },
+      {
+        "text": "Maslow",
+        "isCorrect": false
+      },
+      {
+        "text": "Freud",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Martin Seligman",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "seligman"
+    ]
+  },
+  {
+    "id": "PSY12_2",
+    "category": "Psychology",
+    "question": "CBT stands for…",
+    "answers": [
+      {
+        "text": "Cognitive Behavioral Therapy",
+        "isCorrect": true
+      },
+      {
+        "text": "Cognitive Brain Therapy",
+        "isCorrect": false
+      },
+      {
+        "text": "Conditioned Behavior Training",
+        "isCorrect": false
+      },
+      {
+        "text": "Central Brain Therapy",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Cognitive Behavioral Therapy",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "cbt"
+    ]
+  },
+  {
+    "id": "PSYX16",
+    "category": "Mixed Psychology",
+    "question": "Psychology studies behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PSYX17",
+    "category": "Mixed Psychology",
+    "question": "Psychology studies behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PSYX18",
+    "category": "Mixed Psychology",
+    "question": "Psychology studies behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PSYX19",
+    "category": "Mixed Psychology",
+    "question": "Psychology studies behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PSYX20",
+    "category": "Mixed Psychology",
+    "question": "Psychology studies behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PSYX21",
+    "category": "Mixed Psychology",
+    "question": "Psychology studies behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PSYX22",
+    "category": "Mixed Psychology",
+    "question": "Psychology studies behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PSYX23",
+    "category": "Mixed Psychology",
+    "question": "Psychology studies behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PSYX24",
+    "category": "Mixed Psychology",
+    "question": "Psychology studies behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PSYX25",
+    "category": "Mixed Psychology",
+    "question": "Psychology studies behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PSYX26",
+    "category": "Mixed Psychology",
+    "question": "Psychology studies behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PSYX27",
+    "category": "Mixed Psychology",
+    "question": "Psychology studies behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PSYX28",
+    "category": "Mixed Psychology",
+    "question": "Psychology studies behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PSYX29",
+    "category": "Mixed Psychology",
+    "question": "Psychology studies behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  }
+]

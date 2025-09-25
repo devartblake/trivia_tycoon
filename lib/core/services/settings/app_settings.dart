@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:trivia_tycoon/core/services/navigation/splash_type.dart';
 import 'package:trivia_tycoon/core/services/storage/config_storage_service.dart';
-import '../../../ui_components/spin_wheel/models/prize_entry.dart';
 import '../../../game/controllers/theme_settings_controller.dart';
+import '../../../ui_components/spin_wheel/models/spin_system_models.dart';
 
 class AppSettings {
   final ConfigStorageService _config;
@@ -624,8 +624,9 @@ class AppSettings {
     String? viewRange,
   }) async {
     final box = await Hive.openBox(_boxName);
-    if (exportFormat != null)
+    if (exportFormat != null) {
       await box.put('prize_export_format', exportFormat);
+    }
     if (badge != null) await box.put('prize_filter_badge', badge);
     if (viewRange != null) await box.put('prize_filter_view_range', viewRange);
   }

@@ -1,0 +1,612 @@
+[
+  {
+    "id": "AST1",
+    "category": "Astronomy",
+    "question": "The largest planet in our solar system is…",
+    "answers": [
+      {
+        "text": "Jupiter",
+        "isCorrect": true
+      },
+      {
+        "text": "Earth",
+        "isCorrect": false
+      },
+      {
+        "text": "Saturn",
+        "isCorrect": false
+      },
+      {
+        "text": "Neptune",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Jupiter",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST2",
+    "category": "Astronomy",
+    "question": "The Milky Way is a…",
+    "answers": [
+      {
+        "text": "Planet",
+        "isCorrect": false
+      },
+      {
+        "text": "Galaxy",
+        "isCorrect": true
+      },
+      {
+        "text": "Comet",
+        "isCorrect": false
+      },
+      {
+        "text": "Star",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Galaxy",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST3",
+    "category": "Astronomy",
+    "question": "The Sun is classified as a…",
+    "answers": [
+      {
+        "text": "G-type main-sequence star",
+        "isCorrect": true
+      },
+      {
+        "text": "Neutron star",
+        "isCorrect": false
+      },
+      {
+        "text": "Red giant",
+        "isCorrect": false
+      },
+      {
+        "text": "White dwarf",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "G-type main-sequence star",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "AST4",
+    "category": "Astronomy",
+    "question": "Light year measures…",
+    "answers": [
+      {
+        "text": "Time",
+        "isCorrect": false
+      },
+      {
+        "text": "Distance",
+        "isCorrect": true
+      },
+      {
+        "text": "Speed",
+        "isCorrect": false
+      },
+      {
+        "text": "Brightness",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Distance",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "AST5",
+    "category": "Astronomy",
+    "question": "Hubble Space Telescope orbits…",
+    "answers": [
+      {
+        "text": "Moon",
+        "isCorrect": false
+      },
+      {
+        "text": "Sun",
+        "isCorrect": false
+      },
+      {
+        "text": "Mars",
+        "isCorrect": false
+      },
+      {
+        "text": "Earth",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Earth",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST6",
+    "category": "Astronomy",
+    "question": "Black holes have gravity so strong that not even light escapes.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 3,
+    "tags": []
+  },
+  {
+    "id": "AST6",
+    "category": "Astronomy",
+    "question": "Astronomy is the study of space.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST7",
+    "category": "Astronomy",
+    "question": "Astronomy is the study of space.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST8",
+    "category": "Astronomy",
+    "question": "Astronomy is the study of space.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST9",
+    "category": "Astronomy",
+    "question": "Astronomy is the study of space.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST10",
+    "category": "Astronomy",
+    "question": "Astronomy is the study of space.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST11",
+    "category": "Astronomy",
+    "question": "Astronomy is the study of space.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST12",
+    "category": "Astronomy",
+    "question": "Astronomy is the study of space.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST13",
+    "category": "Astronomy",
+    "question": "Astronomy is the study of space.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST14",
+    "category": "Astronomy",
+    "question": "Astronomy is the study of space.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST15",
+    "category": "Astronomy",
+    "question": "Astronomy is the study of space.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST16",
+    "category": "Astronomy",
+    "question": "Astronomy is the study of space.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST17",
+    "category": "Astronomy",
+    "question": "Astronomy is the study of space.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST18",
+    "category": "Astronomy",
+    "question": "Astronomy is the study of space.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST19",
+    "category": "Astronomy",
+    "question": "Astronomy is the study of space.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST20",
+    "category": "Astronomy",
+    "question": "Astronomy is the study of space.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST21",
+    "category": "Astronomy",
+    "question": "Astronomy is the study of space.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST22",
+    "category": "Astronomy",
+    "question": "Astronomy is the study of space.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST23",
+    "category": "Astronomy",
+    "question": "Astronomy is the study of space.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST24",
+    "category": "Astronomy",
+    "question": "Astronomy is the study of space.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST25",
+    "category": "Astronomy",
+    "question": "Astronomy is the study of space.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST26",
+    "category": "Astronomy",
+    "question": "Astronomy is the study of space.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST27",
+    "category": "Astronomy",
+    "question": "Astronomy is the study of space.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST28",
+    "category": "Astronomy",
+    "question": "Astronomy is the study of space.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "AST29",
+    "category": "Astronomy",
+    "question": "Astronomy is the study of space.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  }
+]

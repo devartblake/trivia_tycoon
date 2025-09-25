@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
+import '../../game/models/seasonal_competition_model.dart';
 import 'analytics/config_service.dart';
 
 class ApiService {
@@ -64,7 +65,7 @@ class ApiService {
   }) async {
     return _handleRequest(() async {
       final response = await _dio.get(
-        '/questions',
+        '/quiz/play',
         queryParameters: {
           'amount': amount,
           if (category != null) 'category': category,
@@ -179,5 +180,25 @@ class ApiService {
   /// Useful for custom tracking (e.g., startup, session, screen views).
   Future<void> sendEvent(String name, Map<String, dynamic> data) async {
     await post('/events/$name', data: data);
+  }
+}
+
+extension SeasonalApiExtensions on ApiService {
+  Future<List<SeasonPlayer>> getSeasonLeaderboard(String seasonId) async {
+    // Implementation would call your backend
+    throw UnimplementedError('Implement season leaderboard API call');
+  }
+
+  Future<void> resetPlayerSeasonPoints(String playerId) async {
+    // Implementation would reset player's seasonal progress
+    throw UnimplementedError('Implement reset player points API call');
+  }
+
+  Future<void> scheduleTiebreakerQuiz({
+    required List<String> players,
+    required DateTime scheduledTime,
+  }) async {
+    // Implementation would schedule tiebreaker quiz
+    throw UnimplementedError('Implement tiebreaker quiz scheduling');
   }
 }

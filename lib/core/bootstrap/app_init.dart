@@ -7,13 +7,19 @@ import 'package:trivia_tycoon/core/services/theme/theme_notifier.dart';
 import 'package:trivia_tycoon/core/manager/service_manager.dart';
 import '../../game/providers/auth_providers.dart';
 import '../../game/providers/onboarding_providers.dart';
+import '../helpers/educational_stats_initializer.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../services/settings/general_key_value_storage_service.dart';
+import '../services/notification_service.dart'; // Import your NotificationService
 
 /// AppInit handles bootstrapping critical services before runApp()
 class AppInit {
   static Future<(ServiceManager, ThemeNotifier)> initialize({ProviderContainer? container}) async {
     WidgetsFlutterBinding.ensureInitialized();
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+    // Initialize NotificationService EARLY - but don't request permissions yet
+    await _initializeNotifications();
 
     // Initialize Hive boxes
     await Hive.initFlutter();
@@ -28,6 +34,28 @@ class AppInit {
       // Fallback or recreate
       await Hive.deleteBoxFromDisk('settings');
       await Hive.openBox('settings');
+    }
+
+    // Initialize GeneralKeyValueStorageService early for mission data
+    final generalKeyValueStorage = GeneralKeyValueStorageService();
+
+    try {
+      final storedAge = await generalKeyValueStorage.getString('user_age_group');
+      debugPrint('[AppInit] User age group: ${storedAge ?? 'not set'}');
+    } catch (e) {
+      debugPrint('[AppInit] Failed to load user age group: $e');
+    }
+
+    // Initialize Supabase BEFORE ServiceManager
+    try {
+      await Supabase.initialize(
+        url: 'your-supabase-url-here',
+        anonKey: 'your-supabase-anon-key-here',
+      );
+      debugPrint('[AppInit] Supabase initialized successfully');
+    } catch (e) {
+      debugPrint('[AppInit] Supabase initialization failed: $e - continuing with local mode');
+      // App continues without Supabase - will use JSON-only mission mode
     }
 
     // Load and initialize ServiceManager
@@ -55,8 +83,19 @@ class AppInit {
     // Get ThemeNotifier from ServiceManager (already initialized)
     final themeNotifier = serviceManager.themeNotifier;
 
-    // Preload user session and sync with Riverpod providers
+    // Preload user session and sync with River-pod providers
     await _initializeUserSession(serviceManager, container);
+
+    // Initialize educational statistics system
+    if (container != null) {
+      try {
+        final tempContainer = ProviderContainer();
+        await EducationalStatsInitializer.initialize(tempContainer.read as WidgetRef);
+        tempContainer.dispose();
+      } catch (e) {
+        debugPrint('[AppInit] Educational stats initialization failed: $e');
+      }
+    }
 
     // Preload analytics and user session state
     try {
@@ -73,7 +112,43 @@ class AppInit {
     return (serviceManager, themeNotifier);
   }
 
-  /// Initialize user session and sync with Riverpod providers
+  /// Initialize NotificationService (replaces the old _initializeNotifications method)
+  static Future<void> _initializeNotifications() async {
+    try {
+      // Use the centralized NotificationService instead of direct AwesomeNotifications calls
+      final success = await NotificationService().initialize();
+      debugPrint('[AppInit] NotificationService initialized: $success');
+
+      // Don't request permissions here - let the app request them contextually
+      // This prevents the permission dialog from appearing immediately on app start
+
+    } catch (e) {
+      debugPrint('[AppInit] Failed to initialize NotificationService: $e');
+      // App continues without notifications - this is not critical
+    }
+  }
+
+  /// Optional: Request notification permissions (call this only when appropriate)
+  /// You might want to call this from a settings screen or when user first interacts with notifications
+  static Future<void> requestNotificationPermissions({BuildContext? context}) async {
+    if (context != null) {
+      await NotificationService().requestPermissionsWithDialog(context);
+    } else {
+      // Request without dialog (silent request)
+      try {
+        final isAllowed = await NotificationService().isNotificationEnabled();
+        if (!isAllowed) {
+          debugPrint('[AppInit] Notifications not enabled');
+        } else {
+          debugPrint('[AppInit] Notifications already enabled');
+        }
+      } catch (e) {
+        debugPrint('[AppInit] Failed to check notification permissions: $e');
+      }
+    }
+  }
+
+  /// Initialize user session and sync with River-pod providers
   static Future<void> _initializeUserSession(ServiceManager serviceManager, ProviderContainer? container) async {
     try {
       // Load auth state from services
@@ -82,7 +157,7 @@ class AppInit {
 
       debugPrint('Session loaded: isLoggedIn=$isLoggedIn, hasOnboarded=$hasOnboarded');
 
-      // Sync with Riverpod providers if container is provided
+      // Sync with River-pod providers if container is provided
       if (container != null) {
         // Update auth state
         container.read(isLoggedInSyncProvider.notifier).state = isLoggedIn;
@@ -93,7 +168,7 @@ class AppInit {
           container.read(hasCompletedProfileProvider.notifier).state = true;
         }
 
-        debugPrint('Riverpod providers synchronized with service state');
+        debugPrint('River-pod providers synchronized with service state');
       }
 
       // Load additional user data if logged in
@@ -116,7 +191,7 @@ class AppInit {
 
       debugPrint('User profile loaded: $playerName, role: $userRole, premium: $isPremium');
 
-      // You can sync additional profile data with Riverpod providers here if needed
+      // You can sync additional profile data with River-pod providers here if needed
       // Example:
       // if (container != null) {
       //   container.read(userProfileProvider.notifier).updateProfile(

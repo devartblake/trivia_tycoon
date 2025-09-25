@@ -1,0 +1,854 @@
+[
+  {
+    "id": "ESA1",
+    "category": "Climate Systems",
+    "question": "Main driver of Earth’s climate system is…",
+    "answers": [
+      {
+        "text": "Incoming solar radiation",
+        "isCorrect": true
+      },
+      {
+        "text": "Geothermal heat",
+        "isCorrect": false
+      },
+      {
+        "text": "Cosmic rays",
+        "isCorrect": false
+      },
+      {
+        "text": "Tidal forces",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Incoming solar radiation",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11-12",
+      "climate"
+    ]
+  },
+  {
+    "id": "ESA2",
+    "category": "Carbon Cycle",
+    "question": "Largest active carbon reservoir is…",
+    "answers": [
+      {
+        "text": "Atmosphere",
+        "isCorrect": false
+      },
+      {
+        "text": "The oceans",
+        "isCorrect": true
+      },
+      {
+        "text": "Vegetation",
+        "isCorrect": false
+      },
+      {
+        "text": "Soils",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "The oceans",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11-12",
+      "carbon"
+    ]
+  },
+  {
+    "id": "ESA3",
+    "category": "Atmosphere",
+    "question": "Primary greenhouse gas by warming contribution is…",
+    "answers": [
+      {
+        "text": "Water vapor",
+        "isCorrect": true
+      },
+      {
+        "text": "N₂O",
+        "isCorrect": false
+      },
+      {
+        "text": "CH₄",
+        "isCorrect": false
+      },
+      {
+        "text": "CO₂",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Water vapor",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11-12",
+      "atmosphere"
+    ]
+  },
+  {
+    "id": "ESA4",
+    "category": "Energy",
+    "question": "Capacity factor measures…",
+    "answers": [
+      {
+        "text": "Fuel cost",
+        "isCorrect": false
+      },
+      {
+        "text": "Wind speed",
+        "isCorrect": false
+      },
+      {
+        "text": "Actual output vs max possible",
+        "isCorrect": true
+      },
+      {
+        "text": "Max power rating",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Actual output vs max possible",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11-12",
+      "energy"
+    ]
+  },
+  {
+    "id": "ESA5",
+    "category": "Biodiversity",
+    "question": "Keystone species are…",
+    "answers": [
+      {
+        "text": "Most numerous species",
+        "isCorrect": false
+      },
+      {
+        "text": "Invasive species",
+        "isCorrect": false
+      },
+      {
+        "text": "Species with disproportionate ecosystem impact",
+        "isCorrect": true
+      },
+      {
+        "text": "Largest predators",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Species with disproportionate ecosystem impact",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11-12",
+      "biodiversity"
+    ]
+  },
+  {
+    "id": "ESA6",
+    "category": "Oceans",
+    "question": "Thermohaline circulation is driven by temperature & salinity.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 3,
+    "tags": [
+      "G11-12",
+      "oceans"
+    ]
+  },
+  {
+    "id": "ESA7",
+    "category": "Pollution",
+    "question": "Eutrophication is often caused by…",
+    "answers": [
+      {
+        "text": "Heavy metals only",
+        "isCorrect": false
+      },
+      {
+        "text": "Acid rain",
+        "isCorrect": false
+      },
+      {
+        "text": "Ozone depletion",
+        "isCorrect": false
+      },
+      {
+        "text": "Nutrient runoff (N & P)",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Nutrient runoff (N & P)",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "water"
+    ]
+  },
+  {
+    "id": "ESA8",
+    "category": "Air Quality",
+    "question": "PM2.5 refers to particles…",
+    "answers": [
+      {
+        "text": "≤10 micrometers",
+        "isCorrect": false
+      },
+      {
+        "text": "≤2.5 micrometers",
+        "isCorrect": true
+      },
+      {
+        "text": "≥25 micrometers",
+        "isCorrect": false
+      },
+      {
+        "text": "Nano only",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "≤2.5 micrometers",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "air"
+    ]
+  },
+  {
+    "id": "ESA9",
+    "category": "Food Systems",
+    "question": "Sustainable agriculture aims to…",
+    "answers": [
+      {
+        "text": "Maximize yield only",
+        "isCorrect": false
+      },
+      {
+        "text": "Use only synthetic inputs",
+        "isCorrect": false
+      },
+      {
+        "text": "Eliminate labor",
+        "isCorrect": false
+      },
+      {
+        "text": "Meet needs while preserving resources",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Meet needs while preserving resources",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "agriculture"
+    ]
+  },
+  {
+    "id": "ESA10",
+    "category": "Waste",
+    "question": "Circular economy emphasizes…",
+    "answers": [
+      {
+        "text": "Single-use goods",
+        "isCorrect": false
+      },
+      {
+        "text": "Landfilling",
+        "isCorrect": false
+      },
+      {
+        "text": "Linear take-make",
+        "isCorrect": false
+      },
+      {
+        "text": "Reuse and material loops",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Reuse and material loops",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "waste"
+    ]
+  },
+  {
+    "id": "ESA11",
+    "category": "Chemistry",
+    "question": "Ozone in the stratosphere protects from UV radiation.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "ozone"
+    ]
+  },
+  {
+    "id": "ESA12",
+    "category": "Policy",
+    "question": "The Clean Air Act primarily targets…",
+    "answers": [
+      {
+        "text": "Noise",
+        "isCorrect": false
+      },
+      {
+        "text": "Air pollutants",
+        "isCorrect": true
+      },
+      {
+        "text": "Soil erosion",
+        "isCorrect": false
+      },
+      {
+        "text": "Water pollutants",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Air pollutants",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "policy"
+    ]
+  },
+  {
+    "id": "ESA13",
+    "category": "Ecology",
+    "question": "Carrying capacity is…",
+    "answers": [
+      {
+        "text": "Max population the environment can sustain",
+        "isCorrect": true
+      },
+      {
+        "text": "Min viable population",
+        "isCorrect": false
+      },
+      {
+        "text": "Average population",
+        "isCorrect": false
+      },
+      {
+        "text": "Max birth rate",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Max population the environment can sustain",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "ecology"
+    ]
+  },
+  {
+    "id": "ESA14",
+    "category": "Metrics",
+    "question": "Carbon intensity measures…",
+    "answers": [
+      {
+        "text": "GDP growth",
+        "isCorrect": false
+      },
+      {
+        "text": "CO₂ per unit energy or GDP",
+        "isCorrect": true
+      },
+      {
+        "text": "Energy per capita",
+        "isCorrect": false
+      },
+      {
+        "text": "CO₂ per capita only",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "CO₂ per unit energy or GDP",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11-12",
+      "metrics"
+    ]
+  },
+  {
+    "id": "ESA15",
+    "category": "Energy",
+    "question": "Which is nonrenewable?",
+    "answers": [
+      {
+        "text": "Hydro",
+        "isCorrect": false
+      },
+      {
+        "text": "Natural gas",
+        "isCorrect": true
+      },
+      {
+        "text": "Wind",
+        "isCorrect": false
+      },
+      {
+        "text": "Solar",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Natural gas",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G9-12",
+      "energy"
+    ]
+  },
+  {
+    "id": "ESA16",
+    "category": "Water",
+    "question": "Desalination removes salts from seawater.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "water"
+    ]
+  },
+  {
+    "id": "ESA17",
+    "category": "Conservation",
+    "question": "Protected areas help by…",
+    "answers": [
+      {
+        "text": "Boosting extinction",
+        "isCorrect": false
+      },
+      {
+        "text": "Raising poaching",
+        "isCorrect": false
+      },
+      {
+        "text": "Increasing deforestation",
+        "isCorrect": false
+      },
+      {
+        "text": "Preserving habitats & species",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Preserving habitats & species",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G9-12",
+      "conservation"
+    ]
+  },
+  {
+    "id": "ESA18",
+    "category": "Life Cycle",
+    "question": "Scope 3 emissions are…",
+    "answers": [
+      {
+        "text": "On-site fuel use",
+        "isCorrect": false
+      },
+      {
+        "text": "Indirect value-chain emissions",
+        "isCorrect": true
+      },
+      {
+        "text": "Purchased electricity",
+        "isCorrect": false
+      },
+      {
+        "text": "No emissions",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Indirect value-chain emissions",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11-12",
+      "lca"
+    ]
+  },
+  {
+    "id": "ESA19",
+    "category": "Atmosphere",
+    "question": "Main components of dry air:",
+    "answers": [
+      {
+        "text": "Hydrogen & helium",
+        "isCorrect": false
+      },
+      {
+        "text": "Nitrogen & oxygen",
+        "isCorrect": true
+      },
+      {
+        "text": "Oxygen & CO₂",
+        "isCorrect": false
+      },
+      {
+        "text": "CO₂ & methane",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Nitrogen & oxygen",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G9-12",
+      "atmosphere"
+    ]
+  },
+  {
+    "id": "ESA20",
+    "category": "Soils",
+    "question": "Soil organic matter improves…",
+    "answers": [
+      {
+        "text": "Salinity",
+        "isCorrect": false
+      },
+      {
+        "text": "Rock formation",
+        "isCorrect": false
+      },
+      {
+        "text": "Water retention & fertility",
+        "isCorrect": true
+      },
+      {
+        "text": "Acidity always",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Water retention & fertility",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "soils"
+    ]
+  },
+  {
+    "id": "ESA21",
+    "category": "Hazards",
+    "question": "Wildfire risk increases with drought and heat.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "hazards"
+    ]
+  },
+  {
+    "id": "ESA22",
+    "category": "Oceans",
+    "question": "Coral bleaching is often due to…",
+    "answers": [
+      {
+        "text": "Sand storms",
+        "isCorrect": false
+      },
+      {
+        "text": "Earthquakes",
+        "isCorrect": false
+      },
+      {
+        "text": "Nutrient deficit only",
+        "isCorrect": false
+      },
+      {
+        "text": "Thermal stress",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Thermal stress",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "coral"
+    ]
+  },
+  {
+    "id": "ESA23",
+    "category": "Energy Storage",
+    "question": "A battery stores energy…",
+    "answers": [
+      {
+        "text": "Nuclearly",
+        "isCorrect": false
+      },
+      {
+        "text": "Electrochemically",
+        "isCorrect": true
+      },
+      {
+        "text": "Thermally only",
+        "isCorrect": false
+      },
+      {
+        "text": "Mechanically only",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Electrochemically",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "storage"
+    ]
+  },
+  {
+    "id": "ESA24",
+    "category": "Sustainability",
+    "question": "The triple bottom line is…",
+    "answers": [
+      {
+        "text": "Profit, product, price",
+        "isCorrect": false
+      },
+      {
+        "text": "Supply, demand, price",
+        "isCorrect": false
+      },
+      {
+        "text": "Time, cost, scope",
+        "isCorrect": false
+      },
+      {
+        "text": "People, planet, profit",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "People, planet, profit",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "sustainability"
+    ]
+  },
+  {
+    "id": "ESA25",
+    "category": "Climate",
+    "question": "Radiative forcing is…",
+    "answers": [
+      {
+        "text": "Wave height",
+        "isCorrect": false
+      },
+      {
+        "text": "Wind speed",
+        "isCorrect": false
+      },
+      {
+        "text": "Change in energy balance at top of atmosphere",
+        "isCorrect": true
+      },
+      {
+        "text": "Cloud color",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Change in energy balance at top of atmosphere",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11-12",
+      "climate"
+    ]
+  },
+  {
+    "id": "ESA26",
+    "category": "Forestry",
+    "question": "Selective logging can reduce habitat damage vs clearcutting.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "forestry"
+    ]
+  },
+  {
+    "id": "ESA27",
+    "category": "Transport",
+    "question": "EVs have…",
+    "answers": [
+      {
+        "text": "Zero tailpipe emissions",
+        "isCorrect": true
+      },
+      {
+        "text": "Higher NOx tailpipe",
+        "isCorrect": false
+      },
+      {
+        "text": "Zero lifecycle emissions",
+        "isCorrect": false
+      },
+      {
+        "text": "No battery impact",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Zero tailpipe emissions",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "transport"
+    ]
+  },
+  {
+    "id": "ESA28",
+    "category": "Policy",
+    "question": "Carbon tax puts a price on…",
+    "answers": [
+      {
+        "text": "Water use",
+        "isCorrect": false
+      },
+      {
+        "text": "Land area",
+        "isCorrect": false
+      },
+      {
+        "text": "CO₂ emissions",
+        "isCorrect": true
+      },
+      {
+        "text": "All pollutants",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "CO₂ emissions",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "policy"
+    ]
+  },
+  {
+    "id": "ESA29",
+    "category": "Biodiversity",
+    "question": "Invasive species are…",
+    "answers": [
+      {
+        "text": "Domesticated animals",
+        "isCorrect": false
+      },
+      {
+        "text": "Non-native species that harm ecosystems",
+        "isCorrect": true
+      },
+      {
+        "text": "All non-native species",
+        "isCorrect": false
+      },
+      {
+        "text": "Endemic species",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Non-native species that harm ecosystems",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "biodiversity"
+    ]
+  },
+  {
+    "id": "ESA30",
+    "category": "Ecology",
+    "question": "A food chain shows energy flow between organisms.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "G9-12",
+      "ecology"
+    ]
+  }
+]

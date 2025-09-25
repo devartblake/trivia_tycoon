@@ -1,0 +1,776 @@
+[
+  {
+    "id": "A5_1",
+    "category": "Arts",
+    "question": "Primary colors are…",
+    "answers": [
+      {
+        "text": "Red, Blue, Yellow",
+        "isCorrect": true
+      },
+      {
+        "text": "Red, Green, Blue",
+        "isCorrect": false
+      },
+      {
+        "text": "Blue, Yellow, Green",
+        "isCorrect": false
+      },
+      {
+        "text": "Red, Yellow, Black",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Red, Blue, Yellow",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "colors"
+    ]
+  },
+  {
+    "id": "A5_2",
+    "category": "Arts",
+    "question": "Mona Lisa painted by…",
+    "answers": [
+      {
+        "text": "Leonardo da Vinci",
+        "isCorrect": true
+      },
+      {
+        "text": "Michelangelo",
+        "isCorrect": false
+      },
+      {
+        "text": "Raphael",
+        "isCorrect": false
+      },
+      {
+        "text": "Van Gogh",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Leonardo da Vinci",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "painting"
+    ]
+  },
+  {
+    "id": "A6_1",
+    "category": "Arts",
+    "question": "Sculpture is…",
+    "answers": [
+      {
+        "text": "3D artwork",
+        "isCorrect": true
+      },
+      {
+        "text": "2D artwork",
+        "isCorrect": false
+      },
+      {
+        "text": "Digital art",
+        "isCorrect": false
+      },
+      {
+        "text": "Photography",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "3D artwork",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "sculpture"
+    ]
+  },
+  {
+    "id": "A6_2",
+    "category": "Arts",
+    "question": "Starry Night painter:",
+    "answers": [
+      {
+        "text": "Vincent van Gogh",
+        "isCorrect": true
+      },
+      {
+        "text": "Monet",
+        "isCorrect": false
+      },
+      {
+        "text": "Picasso",
+        "isCorrect": false
+      },
+      {
+        "text": "Rembrandt",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Vincent van Gogh",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "painting"
+    ]
+  },
+  {
+    "id": "A7_1",
+    "category": "Arts",
+    "question": "Cubism associated with…",
+    "answers": [
+      {
+        "text": "Picasso",
+        "isCorrect": true
+      },
+      {
+        "text": "Van Gogh",
+        "isCorrect": false
+      },
+      {
+        "text": "Da Vinci",
+        "isCorrect": false
+      },
+      {
+        "text": "Rembrandt",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Picasso",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "cubism"
+    ]
+  },
+  {
+    "id": "A7_2",
+    "category": "Arts",
+    "question": "Broadway is known for…",
+    "answers": [
+      {
+        "text": "Musicals",
+        "isCorrect": true
+      },
+      {
+        "text": "Ballet",
+        "isCorrect": false
+      },
+      {
+        "text": "Opera",
+        "isCorrect": false
+      },
+      {
+        "text": "Symphonies",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Musicals",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "theater"
+    ]
+  },
+  {
+    "id": "A8_1",
+    "category": "Arts",
+    "question": "Michelangelo painted…",
+    "answers": [
+      {
+        "text": "Sistine Chapel ceiling",
+        "isCorrect": true
+      },
+      {
+        "text": "Mona Lisa",
+        "isCorrect": false
+      },
+      {
+        "text": "The Scream",
+        "isCorrect": false
+      },
+      {
+        "text": "Girl with Pearl Earring",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Sistine Chapel ceiling",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "renaissance"
+    ]
+  },
+  {
+    "id": "A8_2",
+    "category": "Arts",
+    "question": "Art movement with Monet:",
+    "answers": [
+      {
+        "text": "Impressionism",
+        "isCorrect": true
+      },
+      {
+        "text": "Cubism",
+        "isCorrect": false
+      },
+      {
+        "text": "Baroque",
+        "isCorrect": false
+      },
+      {
+        "text": "Surrealism",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Impressionism",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "impressionism"
+    ]
+  },
+  {
+    "id": "A9_1",
+    "category": "Arts",
+    "question": "Salvador Dalí style:",
+    "answers": [
+      {
+        "text": "Surrealism",
+        "isCorrect": true
+      },
+      {
+        "text": "Realism",
+        "isCorrect": false
+      },
+      {
+        "text": "Impressionism",
+        "isCorrect": false
+      },
+      {
+        "text": "Cubism",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Surrealism",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "surrealism"
+    ]
+  },
+  {
+    "id": "A9_2",
+    "category": "Arts",
+    "question": "The Thinker sculptor:",
+    "answers": [
+      {
+        "text": "Auguste Rodin",
+        "isCorrect": true
+      },
+      {
+        "text": "Bernini",
+        "isCorrect": false
+      },
+      {
+        "text": "Donatello",
+        "isCorrect": false
+      },
+      {
+        "text": "Ghiberti",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Auguste Rodin",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "sculpture"
+    ]
+  },
+  {
+    "id": "A10_1",
+    "category": "Arts",
+    "question": "The Scream painted by…",
+    "answers": [
+      {
+        "text": "Edvard Munch",
+        "isCorrect": true
+      },
+      {
+        "text": "Van Gogh",
+        "isCorrect": false
+      },
+      {
+        "text": "Klimt",
+        "isCorrect": false
+      },
+      {
+        "text": "Monet",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Edvard Munch",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "expressionism"
+    ]
+  },
+  {
+    "id": "A10_2",
+    "category": "Arts",
+    "question": "Andy Warhol known for…",
+    "answers": [
+      {
+        "text": "Pop Art",
+        "isCorrect": true
+      },
+      {
+        "text": "Cubism",
+        "isCorrect": false
+      },
+      {
+        "text": "Dada",
+        "isCorrect": false
+      },
+      {
+        "text": "Impressionism",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Pop Art",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "popart"
+    ]
+  },
+  {
+    "id": "A11_1",
+    "category": "Arts",
+    "question": "Jackson Pollock style:",
+    "answers": [
+      {
+        "text": "Abstract Expressionism",
+        "isCorrect": true
+      },
+      {
+        "text": "Cubism",
+        "isCorrect": false
+      },
+      {
+        "text": "Surrealism",
+        "isCorrect": false
+      },
+      {
+        "text": "Baroque",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Abstract Expressionism",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11",
+      "pollock"
+    ]
+  },
+  {
+    "id": "A11_2",
+    "category": "Arts",
+    "question": "Guernica painted by…",
+    "answers": [
+      {
+        "text": "Picasso",
+        "isCorrect": true
+      },
+      {
+        "text": "Velázquez",
+        "isCorrect": false
+      },
+      {
+        "text": "Miró",
+        "isCorrect": false
+      },
+      {
+        "text": "Dalí",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Picasso",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11",
+      "picasso"
+    ]
+  },
+  {
+    "id": "A12_1",
+    "category": "Arts",
+    "question": "Architect of Fallingwater:",
+    "answers": [
+      {
+        "text": "Frank Lloyd Wright",
+        "isCorrect": true
+      },
+      {
+        "text": "Le Corbusier",
+        "isCorrect": false
+      },
+      {
+        "text": "Gaudí",
+        "isCorrect": false
+      },
+      {
+        "text": "Mies van der Rohe",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Frank Lloyd Wright",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "architecture"
+    ]
+  },
+  {
+    "id": "A12_2",
+    "category": "Arts",
+    "question": "Guernica depicts…",
+    "answers": [
+      {
+        "text": "Spanish Civil War",
+        "isCorrect": true
+      },
+      {
+        "text": "WWI",
+        "isCorrect": false
+      },
+      {
+        "text": "WWII",
+        "isCorrect": false
+      },
+      {
+        "text": "Cold War",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Spanish Civil War",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "history"
+    ]
+  },
+  {
+    "id": "AX16",
+    "category": "Mixed Arts",
+    "question": "Sculpture is three-dimensional.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "AX17",
+    "category": "Mixed Arts",
+    "question": "Sculpture is three-dimensional.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "AX18",
+    "category": "Mixed Arts",
+    "question": "Sculpture is three-dimensional.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "AX19",
+    "category": "Mixed Arts",
+    "question": "Sculpture is three-dimensional.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "AX20",
+    "category": "Mixed Arts",
+    "question": "Sculpture is three-dimensional.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "AX21",
+    "category": "Mixed Arts",
+    "question": "Sculpture is three-dimensional.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "AX22",
+    "category": "Mixed Arts",
+    "question": "Sculpture is three-dimensional.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "AX23",
+    "category": "Mixed Arts",
+    "question": "Sculpture is three-dimensional.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "AX24",
+    "category": "Mixed Arts",
+    "question": "Sculpture is three-dimensional.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "AX25",
+    "category": "Mixed Arts",
+    "question": "Sculpture is three-dimensional.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "AX26",
+    "category": "Mixed Arts",
+    "question": "Sculpture is three-dimensional.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "AX27",
+    "category": "Mixed Arts",
+    "question": "Sculpture is three-dimensional.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "AX28",
+    "category": "Mixed Arts",
+    "question": "Sculpture is three-dimensional.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "AX29",
+    "category": "Mixed Arts",
+    "question": "Sculpture is three-dimensional.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  }
+]

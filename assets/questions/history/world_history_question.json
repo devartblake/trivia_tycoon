@@ -1,0 +1,2162 @@
+[
+  {
+    "id": "WH1",
+    "category": "World History",
+    "question": "Which ancient civilization built the pyramids at Giza?",
+    "answers": [
+      {
+        "text": "Ancient Greece",
+        "isCorrect": false
+      },
+      {
+        "text": "Maya",
+        "isCorrect": false
+      },
+      {
+        "text": "Ancient Rome",
+        "isCorrect": false
+      },
+      {
+        "text": "Ancient Egypt",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Ancient Egypt",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "ancient",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH2",
+    "category": "World History",
+    "question": "The city of Rome was founded in which modern country?",
+    "answers": [
+      {
+        "text": "Italy",
+        "isCorrect": true
+      },
+      {
+        "text": "Greece",
+        "isCorrect": false
+      },
+      {
+        "text": "Spain",
+        "isCorrect": false
+      },
+      {
+        "text": "France",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Italy",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "classical",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH3",
+    "category": "World History",
+    "question": "Who was known as the 'Maid of Orléans'?",
+    "answers": [
+      {
+        "text": "Catherine the Great",
+        "isCorrect": false
+      },
+      {
+        "text": "Joan of Arc",
+        "isCorrect": true
+      },
+      {
+        "text": "Boudica",
+        "isCorrect": false
+      },
+      {
+        "text": "Cleopatra",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Joan of Arc",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "medieval",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH4",
+    "category": "World History",
+    "question": "Which empire was ruled by Genghis Khan?",
+    "answers": [
+      {
+        "text": "Roman Empire",
+        "isCorrect": false
+      },
+      {
+        "text": "Ottoman Empire",
+        "isCorrect": false
+      },
+      {
+        "text": "Mongol Empire",
+        "isCorrect": true
+      },
+      {
+        "text": "Persian Empire",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mongol Empire",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "asia",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH5",
+    "category": "World History",
+    "question": "The Renaissance began in…",
+    "answers": [
+      {
+        "text": "Netherlands",
+        "isCorrect": false
+      },
+      {
+        "text": "Italy",
+        "isCorrect": true
+      },
+      {
+        "text": "Germany",
+        "isCorrect": false
+      },
+      {
+        "text": "England",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Italy",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "renaissance",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH6",
+    "category": "World History",
+    "question": "Which event started in 1789 and led to the rise of Napoleon?",
+    "answers": [
+      {
+        "text": "Industrial Revolution",
+        "isCorrect": false
+      },
+      {
+        "text": "French Revolution",
+        "isCorrect": true
+      },
+      {
+        "text": "Russian Revolution",
+        "isCorrect": false
+      },
+      {
+        "text": "American Revolution",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "French Revolution",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "europe",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH7",
+    "category": "World History",
+    "question": "Which global conflict occurred from 1914–1918?",
+    "answers": [
+      {
+        "text": "Crimean War",
+        "isCorrect": false
+      },
+      {
+        "text": "World War II",
+        "isCorrect": false
+      },
+      {
+        "text": "World War I",
+        "isCorrect": true
+      },
+      {
+        "text": "Boer War",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "World War I",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "modern",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH8",
+    "category": "World History",
+    "question": "The fall of the Berlin Wall happened in…",
+    "answers": [
+      {
+        "text": "1999",
+        "isCorrect": false
+      },
+      {
+        "text": "1979",
+        "isCorrect": false
+      },
+      {
+        "text": "1991",
+        "isCorrect": false
+      },
+      {
+        "text": "1989",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "1989",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "contemporary",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH9",
+    "category": "World History",
+    "question": "Charlemagne is most associated with which place or polity?",
+    "answers": [
+      {
+        "text": "Persia",
+        "isCorrect": false
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      },
+      {
+        "text": "Frankish Empire",
+        "isCorrect": true
+      },
+      {
+        "text": "Ottoman Empire",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Frankish Empire",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "leaders",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH10",
+    "category": "World History",
+    "question": "The colonization of the Oceania significantly reshaped global trade.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "colonial",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH11",
+    "category": "World History",
+    "question": "When did the Apartheid ends in South Africa occur (approx.)?",
+    "answers": [
+      {
+        "text": "15th century",
+        "isCorrect": false
+      },
+      {
+        "text": "1994",
+        "isCorrect": true
+      },
+      {
+        "text": "2001",
+        "isCorrect": false
+      },
+      {
+        "text": "Ancient era",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1994",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "events",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH12",
+    "category": "World History",
+    "question": "Marco Polo is known for…",
+    "answers": [
+      {
+        "text": "printing press",
+        "isCorrect": false
+      },
+      {
+        "text": "first steam engine",
+        "isCorrect": false
+      },
+      {
+        "text": "travels to Asia",
+        "isCorrect": true
+      },
+      {
+        "text": "discovering DNA",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "travels to Asia",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "exploration",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH13",
+    "category": "World History",
+    "question": "When did the American Revolution occur (approx.)?",
+    "answers": [
+      {
+        "text": "Ancient era",
+        "isCorrect": false
+      },
+      {
+        "text": "2001",
+        "isCorrect": false
+      },
+      {
+        "text": "15th century",
+        "isCorrect": false
+      },
+      {
+        "text": "1775–1783",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "1775–1783",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "events",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH14",
+    "category": "World History",
+    "question": "Charlemagne is most associated with which place or polity?",
+    "answers": [
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      },
+      {
+        "text": "South Africa",
+        "isCorrect": false
+      },
+      {
+        "text": "India",
+        "isCorrect": false
+      },
+      {
+        "text": "Frankish Empire",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Frankish Empire",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "leaders",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH15",
+    "category": "World History",
+    "question": "Simon Bolivar is most associated with which place or polity?",
+    "answers": [
+      {
+        "text": "Byzantium",
+        "isCorrect": false
+      },
+      {
+        "text": "South Africa",
+        "isCorrect": false
+      },
+      {
+        "text": "Persia",
+        "isCorrect": false
+      },
+      {
+        "text": "Venezuela/Gran Colombia",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Venezuela/Gran Colombia",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "leaders",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH16",
+    "category": "World History",
+    "question": "Marco Polo is known for…",
+    "answers": [
+      {
+        "text": "printing press",
+        "isCorrect": false
+      },
+      {
+        "text": "travels to Asia",
+        "isCorrect": true
+      },
+      {
+        "text": "first steam engine",
+        "isCorrect": false
+      },
+      {
+        "text": "discovering DNA",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "travels to Asia",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "exploration",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH17",
+    "category": "World History",
+    "question": "Catherine the Great is most associated with which place or polity?",
+    "answers": [
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      },
+      {
+        "text": "Persia",
+        "isCorrect": false
+      },
+      {
+        "text": "Russia",
+        "isCorrect": true
+      },
+      {
+        "text": "Ottoman Empire",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Russia",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "leaders",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH18",
+    "category": "World History",
+    "question": "When did the Industrial Revolution occur (approx.)?",
+    "answers": [
+      {
+        "text": "15th century",
+        "isCorrect": false
+      },
+      {
+        "text": "18th–19th centuries",
+        "isCorrect": true
+      },
+      {
+        "text": "2001",
+        "isCorrect": false
+      },
+      {
+        "text": "Ancient era",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "18th–19th centuries",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "events",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH19",
+    "category": "World History",
+    "question": "Simon Bolivar is most associated with which place or polity?",
+    "answers": [
+      {
+        "text": "South Africa",
+        "isCorrect": false
+      },
+      {
+        "text": "India",
+        "isCorrect": false
+      },
+      {
+        "text": "Venezuela/Gran Colombia",
+        "isCorrect": true
+      },
+      {
+        "text": "Persia",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Venezuela/Gran Colombia",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "leaders",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH20",
+    "category": "World History",
+    "question": "Mansa Musa is most associated with which place or polity?",
+    "answers": [
+      {
+        "text": "South Africa",
+        "isCorrect": false
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      },
+      {
+        "text": "Mali",
+        "isCorrect": true
+      },
+      {
+        "text": "Byzantium",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mali",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "leaders",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH21",
+    "category": "World History",
+    "question": "When did the Treaty of Versailles occur (approx.)?",
+    "answers": [
+      {
+        "text": "Ancient era",
+        "isCorrect": false
+      },
+      {
+        "text": "15th century",
+        "isCorrect": false
+      },
+      {
+        "text": "2001",
+        "isCorrect": false
+      },
+      {
+        "text": "1919",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "1919",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "events",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH22",
+    "category": "World History",
+    "question": "Marco Polo is known for…",
+    "answers": [
+      {
+        "text": "discovering DNA",
+        "isCorrect": false
+      },
+      {
+        "text": "travels to Asia",
+        "isCorrect": true
+      },
+      {
+        "text": "printing press",
+        "isCorrect": false
+      },
+      {
+        "text": "first steam engine",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "travels to Asia",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "exploration",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH23",
+    "category": "World History",
+    "question": "The colonization of the Europe significantly reshaped global trade.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "colonial",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH24",
+    "category": "World History",
+    "question": "World War II ended in 1945.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "modern",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH25",
+    "category": "World History",
+    "question": "World War II ended in 1945.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "modern",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH26",
+    "category": "World History",
+    "question": "The colonization of the Americas significantly reshaped global trade.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "colonial",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH27",
+    "category": "World History",
+    "question": "Mansa Musa is most associated with which place or polity?",
+    "answers": [
+      {
+        "text": "Byzantium",
+        "isCorrect": false
+      },
+      {
+        "text": "Mali",
+        "isCorrect": true
+      },
+      {
+        "text": "India",
+        "isCorrect": false
+      },
+      {
+        "text": "South Africa",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mali",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "leaders",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH28",
+    "category": "World History",
+    "question": "World War II ended in 1945.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "modern",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH29",
+    "category": "World History",
+    "question": "When did the Apartheid ends in South Africa occur (approx.)?",
+    "answers": [
+      {
+        "text": "Ancient era",
+        "isCorrect": false
+      },
+      {
+        "text": "15th century",
+        "isCorrect": false
+      },
+      {
+        "text": "2001",
+        "isCorrect": false
+      },
+      {
+        "text": "1994",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "1994",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "events",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH30",
+    "category": "World History",
+    "question": "World War II ended in 1945.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "modern",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH31",
+    "category": "World History",
+    "question": "Cleopatra is most associated with which place or polity?",
+    "answers": [
+      {
+        "text": "Byzantium",
+        "isCorrect": false
+      },
+      {
+        "text": "India",
+        "isCorrect": false
+      },
+      {
+        "text": "Ottoman Empire",
+        "isCorrect": false
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Egypt",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "leaders",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH32",
+    "category": "World History",
+    "question": "World War II ended in 1945.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "modern",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH33",
+    "category": "World History",
+    "question": "World War II ended in 1945.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "modern",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH34",
+    "category": "World History",
+    "question": "Zheng He is known for…",
+    "answers": [
+      {
+        "text": "first steam engine",
+        "isCorrect": false
+      },
+      {
+        "text": "printing press",
+        "isCorrect": false
+      },
+      {
+        "text": "discovering DNA",
+        "isCorrect": false
+      },
+      {
+        "text": "Ming treasure voyages",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Ming treasure voyages",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "exploration",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH35",
+    "category": "World History",
+    "question": "World War II ended in 1945.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "modern",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH36",
+    "category": "World History",
+    "question": "When did the Industrial Revolution occur (approx.)?",
+    "answers": [
+      {
+        "text": "18th–19th centuries",
+        "isCorrect": true
+      },
+      {
+        "text": "2001",
+        "isCorrect": false
+      },
+      {
+        "text": "Ancient era",
+        "isCorrect": false
+      },
+      {
+        "text": "15th century",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "18th–19th centuries",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "events",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH37",
+    "category": "World History",
+    "question": "Nelson Mandela is most associated with which place or polity?",
+    "answers": [
+      {
+        "text": "Rome",
+        "isCorrect": false
+      },
+      {
+        "text": "Persia",
+        "isCorrect": false
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      },
+      {
+        "text": "South Africa",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "South Africa",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "leaders",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH38",
+    "category": "World History",
+    "question": "When did the Apartheid ends in South Africa occur (approx.)?",
+    "answers": [
+      {
+        "text": "Ancient era",
+        "isCorrect": false
+      },
+      {
+        "text": "15th century",
+        "isCorrect": false
+      },
+      {
+        "text": "2001",
+        "isCorrect": false
+      },
+      {
+        "text": "1994",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "1994",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "events",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH39",
+    "category": "World History",
+    "question": "Cleopatra is most associated with which place or polity?",
+    "answers": [
+      {
+        "text": "India",
+        "isCorrect": false
+      },
+      {
+        "text": "Byzantium",
+        "isCorrect": false
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": true
+      },
+      {
+        "text": "South Africa",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Egypt",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "leaders",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH40",
+    "category": "World History",
+    "question": "Charlemagne is most associated with which place or polity?",
+    "answers": [
+      {
+        "text": "Frankish Empire",
+        "isCorrect": true
+      },
+      {
+        "text": "Ottoman Empire",
+        "isCorrect": false
+      },
+      {
+        "text": "Persia",
+        "isCorrect": false
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Frankish Empire",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "leaders",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH41",
+    "category": "World History",
+    "question": "When did the Meiji Restoration occur (approx.)?",
+    "answers": [
+      {
+        "text": "15th century",
+        "isCorrect": false
+      },
+      {
+        "text": "2001",
+        "isCorrect": false
+      },
+      {
+        "text": "1868",
+        "isCorrect": true
+      },
+      {
+        "text": "Ancient era",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1868",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "events",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH42",
+    "category": "World History",
+    "question": "World War II ended in 1945.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "modern",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH43",
+    "category": "World History",
+    "question": "Marco Polo is known for…",
+    "answers": [
+      {
+        "text": "printing press",
+        "isCorrect": false
+      },
+      {
+        "text": "first steam engine",
+        "isCorrect": false
+      },
+      {
+        "text": "travels to Asia",
+        "isCorrect": true
+      },
+      {
+        "text": "discovering DNA",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "travels to Asia",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "exploration",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH44",
+    "category": "World History",
+    "question": "World War II ended in 1945.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "modern",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH45",
+    "category": "World History",
+    "question": "World War II ended in 1945.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "modern",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH46",
+    "category": "World History",
+    "question": "World War II ended in 1945.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "modern",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH47",
+    "category": "World History",
+    "question": "World War II ended in 1945.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "modern",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH48",
+    "category": "World History",
+    "question": "The colonization of the Oceania significantly reshaped global trade.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "colonial",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH49",
+    "category": "World History",
+    "question": "When did the American Revolution occur (approx.)?",
+    "answers": [
+      {
+        "text": "2001",
+        "isCorrect": false
+      },
+      {
+        "text": "15th century",
+        "isCorrect": false
+      },
+      {
+        "text": "Ancient era",
+        "isCorrect": false
+      },
+      {
+        "text": "1775–1783",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "1775–1783",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "events",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH50",
+    "category": "World History",
+    "question": "The colonization of the Asia significantly reshaped global trade.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "colonial",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH51",
+    "category": "World History",
+    "question": "Christopher Columbus is known for…",
+    "answers": [
+      {
+        "text": "discovering DNA",
+        "isCorrect": false
+      },
+      {
+        "text": "1492",
+        "isCorrect": true
+      },
+      {
+        "text": "first steam engine",
+        "isCorrect": false
+      },
+      {
+        "text": "printing press",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1492",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "exploration",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH52",
+    "category": "World History",
+    "question": "Catherine the Great is most associated with which place or polity?",
+    "answers": [
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      },
+      {
+        "text": "Russia",
+        "isCorrect": true
+      },
+      {
+        "text": "Persia",
+        "isCorrect": false
+      },
+      {
+        "text": "India",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Russia",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "leaders",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH53",
+    "category": "World History",
+    "question": "When did the Treaty of Versailles occur (approx.)?",
+    "answers": [
+      {
+        "text": "1919",
+        "isCorrect": true
+      },
+      {
+        "text": "15th century",
+        "isCorrect": false
+      },
+      {
+        "text": "2001",
+        "isCorrect": false
+      },
+      {
+        "text": "Ancient era",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1919",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "events",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH54",
+    "category": "World History",
+    "question": "Ferdinand Magellan is known for…",
+    "answers": [
+      {
+        "text": "circumnavigation",
+        "isCorrect": true
+      },
+      {
+        "text": "printing press",
+        "isCorrect": false
+      },
+      {
+        "text": "discovering DNA",
+        "isCorrect": false
+      },
+      {
+        "text": "first steam engine",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "circumnavigation",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "exploration",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH55",
+    "category": "World History",
+    "question": "Simon Bolivar is most associated with which place or polity?",
+    "answers": [
+      {
+        "text": "South Africa",
+        "isCorrect": false
+      },
+      {
+        "text": "Venezuela/Gran Colombia",
+        "isCorrect": true
+      },
+      {
+        "text": "Byzantium",
+        "isCorrect": false
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Venezuela/Gran Colombia",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "leaders",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH56",
+    "category": "World History",
+    "question": "World War II ended in 1945.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "modern",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH57",
+    "category": "World History",
+    "question": "The colonization of the Asia significantly reshaped global trade.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "colonial",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH58",
+    "category": "World History",
+    "question": "World War II ended in 1945.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "modern",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH59",
+    "category": "World History",
+    "question": "Catherine the Great is most associated with which place or polity?",
+    "answers": [
+      {
+        "text": "Byzantium",
+        "isCorrect": false
+      },
+      {
+        "text": "South Africa",
+        "isCorrect": false
+      },
+      {
+        "text": "Ottoman Empire",
+        "isCorrect": false
+      },
+      {
+        "text": "Russia",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Russia",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "leaders",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH60",
+    "category": "World History",
+    "question": "World War II ended in 1945.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "modern",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH61",
+    "category": "World History",
+    "question": "Cleopatra is most associated with which place or polity?",
+    "answers": [
+      {
+        "text": "South Africa",
+        "isCorrect": false
+      },
+      {
+        "text": "Rome",
+        "isCorrect": false
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": true
+      },
+      {
+        "text": "Persia",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Egypt",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "leaders",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH62",
+    "category": "World History",
+    "question": "When did the Meiji Restoration occur (approx.)?",
+    "answers": [
+      {
+        "text": "1868",
+        "isCorrect": true
+      },
+      {
+        "text": "15th century",
+        "isCorrect": false
+      },
+      {
+        "text": "2001",
+        "isCorrect": false
+      },
+      {
+        "text": "Ancient era",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1868",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "events",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH63",
+    "category": "World History",
+    "question": "World War II ended in 1945.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "modern",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH64",
+    "category": "World History",
+    "question": "Nelson Mandela is most associated with which place or polity?",
+    "answers": [
+      {
+        "text": "India",
+        "isCorrect": false
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      },
+      {
+        "text": "Ottoman Empire",
+        "isCorrect": false
+      },
+      {
+        "text": "South Africa",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "South Africa",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "leaders",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH65",
+    "category": "World History",
+    "question": "The colonization of the Middle East significantly reshaped global trade.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "colonial",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH66",
+    "category": "World History",
+    "question": "The colonization of the Oceania significantly reshaped global trade.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "colonial",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH67",
+    "category": "World History",
+    "question": "When did the Apartheid ends in South Africa occur (approx.)?",
+    "answers": [
+      {
+        "text": "2001",
+        "isCorrect": false
+      },
+      {
+        "text": "15th century",
+        "isCorrect": false
+      },
+      {
+        "text": "Ancient era",
+        "isCorrect": false
+      },
+      {
+        "text": "1994",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "1994",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "events",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH68",
+    "category": "World History",
+    "question": "Marco Polo is known for…",
+    "answers": [
+      {
+        "text": "first steam engine",
+        "isCorrect": false
+      },
+      {
+        "text": "printing press",
+        "isCorrect": false
+      },
+      {
+        "text": "discovering DNA",
+        "isCorrect": false
+      },
+      {
+        "text": "travels to Asia",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "travels to Asia",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "exploration",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH69",
+    "category": "World History",
+    "question": "When did the Treaty of Versailles occur (approx.)?",
+    "answers": [
+      {
+        "text": "1919",
+        "isCorrect": true
+      },
+      {
+        "text": "15th century",
+        "isCorrect": false
+      },
+      {
+        "text": "2001",
+        "isCorrect": false
+      },
+      {
+        "text": "Ancient era",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1919",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "events",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH70",
+    "category": "World History",
+    "question": "Zheng He is known for…",
+    "answers": [
+      {
+        "text": "discovering DNA",
+        "isCorrect": false
+      },
+      {
+        "text": "Ming treasure voyages",
+        "isCorrect": true
+      },
+      {
+        "text": "printing press",
+        "isCorrect": false
+      },
+      {
+        "text": "first steam engine",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Ming treasure voyages",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "exploration",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH71",
+    "category": "World History",
+    "question": "Julius Caesar is most associated with which place or polity?",
+    "answers": [
+      {
+        "text": "Persia",
+        "isCorrect": false
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      },
+      {
+        "text": "South Africa",
+        "isCorrect": false
+      },
+      {
+        "text": "Rome",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Rome",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "leaders",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH72",
+    "category": "World History",
+    "question": "When did the American Revolution occur (approx.)?",
+    "answers": [
+      {
+        "text": "15th century",
+        "isCorrect": false
+      },
+      {
+        "text": "1775–1783",
+        "isCorrect": true
+      },
+      {
+        "text": "Ancient era",
+        "isCorrect": false
+      },
+      {
+        "text": "2001",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1775–1783",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "events",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH73",
+    "category": "World History",
+    "question": "Christopher Columbus is known for…",
+    "answers": [
+      {
+        "text": "first steam engine",
+        "isCorrect": false
+      },
+      {
+        "text": "discovering DNA",
+        "isCorrect": false
+      },
+      {
+        "text": "1492",
+        "isCorrect": true
+      },
+      {
+        "text": "printing press",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1492",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "exploration",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH74",
+    "category": "World History",
+    "question": "World War II ended in 1945.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "modern",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH75",
+    "category": "World History",
+    "question": "Ferdinand Magellan is known for…",
+    "answers": [
+      {
+        "text": "circumnavigation",
+        "isCorrect": true
+      },
+      {
+        "text": "first steam engine",
+        "isCorrect": false
+      },
+      {
+        "text": "printing press",
+        "isCorrect": false
+      },
+      {
+        "text": "discovering DNA",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "circumnavigation",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "exploration",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH76",
+    "category": "World History",
+    "question": "World War II ended in 1945.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "modern",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH77",
+    "category": "World History",
+    "question": "The colonization of the Europe significantly reshaped global trade.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "colonial",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH78",
+    "category": "World History",
+    "question": "The colonization of the Oceania significantly reshaped global trade.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "colonial",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH79",
+    "category": "World History",
+    "question": "World War II ended in 1945.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "modern",
+      "world_history"
+    ]
+  },
+  {
+    "id": "WH80",
+    "category": "World History",
+    "question": "World War II ended in 1945.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "modern",
+      "world_history"
+    ]
+  }
+]

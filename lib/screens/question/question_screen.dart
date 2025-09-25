@@ -1,28 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/screens/question/widgets/main_sections/carousel_challenge_section.dart';
 import 'package:trivia_tycoon/screens/question/widgets/main_sections/grid_category_section.dart';
 import '../question/widgets/main_sections/top_menu_section.dart';
 import '../question/widgets/main_sections/grid_menu_section.dart';
 import '../question/widgets/main_sections/cta_widget.dart';
-import '../../game/data/question_loader_service.dart';
+import '../../game/services/question_loader_service.dart';
+import '../../game/services/quiz_category.dart'; // Import QuizCategory
 
-// Provider for the question loader service
+// Provider for the question loader service with QuizCategory support
 final questionStatsProvider = FutureProvider<Map<String, dynamic>>((ref) async {
   final loader = AdaptedQuestionLoaderService();
   return await loader.getAllDatasetStats();
 });
 
-// Provider for available categories
-final categoriesProvider = FutureProvider<List<String>>((ref) async {
+// Provider for available QuizCategories
+final quizCategoriesProvider = FutureProvider<List<QuizCategory>>((ref) async {
   final loader = AdaptedQuestionLoaderService();
-  return await loader.getAvailableCategories();
+  return await loader.getAvailableQuizCategories();
 });
 
-// Provider for dataset info
+// Provider for dataset info with QuizCategory integration
 final datasetInfoProvider = FutureProvider<Map<String, dynamic>>((ref) async {
   final loader = AdaptedQuestionLoaderService();
   return loader.getDatasetInfo();
+});
+
+// Provider for category stats
+final categoryStatsProvider = FutureProvider.family<Map<String, dynamic>, QuizCategory>((ref, category) async {
+  final loader = AdaptedQuestionLoaderService();
+  final questionCount = await loader.getQuizCategoryQuestionCount(category);
+  final difficulty = await loader.getQuizCategoryDifficulty(category);
+
+  return {
+    'questionCount': questionCount,
+    'difficulty': difficulty,
+    'category': category,
+  };
 });
 
 class QuestionScreen extends ConsumerStatefulWidget {
@@ -48,8 +63,11 @@ class _QuestionScreenState extends ConsumerState<QuestionScreen> {
       // Pre-load daily quiz questions for faster access
       await _questionLoader.getDailyQuiz();
 
-      // Pre-load some category data
-      await _questionLoader.getAvailableCategories();
+      // Pre-load QuizCategory data
+      await _questionLoader.getAvailableQuizCategories();
+
+      // Run comprehensive test for debugging
+      await _questionLoader.runComprehensiveTest();
     } catch (e) {
       // Handle silently for now
       debugPrint('Preload warning: $e');
@@ -64,18 +82,19 @@ class _QuestionScreenState extends ConsumerState<QuestionScreen> {
     // Handle navigation based on index
     switch (index) {
       case 0: // Home - already here
+        context.push('/main');
         break;
       case 1: // History
-      // Navigate to history screen
+        context.push('/history');
         break;
       case 2: // Create Quiz (center button)
         _showCreateQuizBottomSheet();
         break;
       case 3: // Leaderboard
-      // Navigate to leaderboard
+        context.push('/leaderboard');
         break;
       case 4: // Profile
-      // Navigate to profile
+        context.push('/profile');
         break;
     }
   }
@@ -92,7 +111,7 @@ class _QuestionScreenState extends ConsumerState<QuestionScreen> {
   @override
   Widget build(BuildContext context) {
     final statsAsync = ref.watch(questionStatsProvider);
-    final categoriesAsync = ref.watch(categoriesProvider);
+    final categoriesAsync = ref.watch(quizCategoriesProvider);
     final datasetInfoAsync = ref.watch(datasetInfoProvider);
 
     return Scaffold(
@@ -112,7 +131,7 @@ class _QuestionScreenState extends ConsumerState<QuestionScreen> {
 
               const SizedBox(height: 24),
 
-              // Quick Access Section
+              // Quick Access Section with QuizCategory integration
               _QuickAccessSection(),
 
               const SizedBox(height: 24),
@@ -135,8 +154,7 @@ class _QuestionScreenState extends ConsumerState<QuestionScreen> {
 
               const SizedBox(height: 24),
 
-              // Grid Menu Section for classes and categories
-              const GridCategorySection(),
+              GridCategorySection(),
 
               const SizedBox(height: 24),
 
@@ -153,12 +171,12 @@ class _QuestionScreenState extends ConsumerState<QuestionScreen> {
 
               const SizedBox(height: 24),
 
-              // Recent Activity Section
+              // Featured Categories Section with QuizCategory
               Consumer(
                 builder: (context, ref, child) {
                   return categoriesAsync.when(
-                    data: (categories) => _RecentActivitySection(categories: categories),
-                    loading: () => const _RecentActivityLoadingSection(),
+                    data: (categories) => _FeaturedCategoriesSection(categories: categories),
+                    loading: () => const _FeaturedCategoriesLoadingSection(),
                     error: (error, stack) => const SizedBox(),
                   );
                 },
@@ -226,9 +244,11 @@ class _StatsOverviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final totalQuestions = stats['totalQuestions'] ?? 0;
-    final categories = (stats['categoryCounts'] as Map?)?.length ?? 0;
-    final imageQuestions = stats['imageQuestions'] ?? 0;
+    final summary = stats['summary'] as Map<String, dynamic>? ?? {};
+    final totalQuestions = summary['totalQuestions'] ?? 0;
+    final totalDatasets = summary['totalDatasets'] ?? 0;
+    final categoryCounts = summary['categoryCounts'] as Map<String, int>? ?? {};
+    final categories = categoryCounts.length;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -260,7 +280,7 @@ class _StatsOverviewCard extends StatelessWidget {
               Expanded(
                 child: _StatItem(
                   title: 'Total Questions',
-                  value: totalQuestions.toString(),
+                  value: _formatNumber(totalQuestions),
                   icon: Icons.quiz,
                   color: Colors.blue,
                 ),
@@ -277,9 +297,9 @@ class _StatsOverviewCard extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: _StatItem(
-                  title: 'With Images',
-                  value: imageQuestions.toString(),
-                  icon: Icons.image,
+                  title: 'Datasets',
+                  value: totalDatasets.toString(),
+                  icon: Icons.library_books,
                   color: Colors.orange,
                 ),
               ),
@@ -288,6 +308,13 @@ class _StatsOverviewCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _formatNumber(int number) {
+    if (number >= 1000) {
+      return '${(number / 1000).toStringAsFixed(1)}k';
+    }
+    return number.toString();
   }
 }
 
@@ -442,19 +469,19 @@ class _QuickAccessSection extends StatelessWidget {
                 icon: Icons.shuffle,
                 color: Colors.indigo,
                 onTap: () {
-                  // Navigate to random quiz
+                  context.push('/quiz/random');
                 },
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: _QuickAccessCard(
-                title: 'Practice Mode',
-                subtitle: 'No time limit',
-                icon: Icons.fitness_center,
+                title: 'Daily Challenge',
+                subtitle: 'New every day',
+                icon: Icons.calendar_today,
                 color: Colors.teal,
                 onTap: () {
-                  // Navigate to practice mode
+                  context.push('/quiz/daily');
                 },
               ),
             ),
@@ -518,14 +545,19 @@ class _QuickAccessCard extends StatelessWidget {
   }
 }
 
-class _RecentActivitySection extends StatelessWidget {
-  final List<String> categories;
+// Enhanced Category Grid using QuizCategory enum
 
-  const _RecentActivitySection({required this.categories});
+class _FeaturedCategoriesSection extends StatelessWidget {
+  final List<QuizCategory> categories;
+
+  const _FeaturedCategoriesSection({required this.categories});
 
   @override
   Widget build(BuildContext context) {
     if (categories.isEmpty) return const SizedBox();
+
+    // Show a horizontal list of featured categories
+    final featuredCategories = categories.take(8).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -539,17 +571,17 @@ class _RecentActivitySection extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         SizedBox(
-          height: 100,
+          height: 120,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: categories.take(6).length,
+            itemCount: featuredCategories.length,
             itemBuilder: (context, index) {
-              final category = categories[index];
+              final category = featuredCategories[index];
               return Padding(
                 padding: EdgeInsets.only(
-                  right: index < categories.length - 1 ? 12 : 0,
+                  right: index < featuredCategories.length - 1 ? 12 : 0,
                 ),
-                child: _CategoryChip(category: category),
+                child: _FeaturedCategoryChip(category: category),
               );
             },
           ),
@@ -559,34 +591,26 @@ class _RecentActivitySection extends StatelessWidget {
   }
 }
 
-class _CategoryChip extends StatelessWidget {
-  final String category;
+class _FeaturedCategoryChip extends ConsumerWidget {
+  final QuizCategory category;
 
-  const _CategoryChip({required this.category});
+  const _FeaturedCategoryChip({required this.category});
 
   @override
-  Widget build(BuildContext context) {
-    final colors = [
-      Colors.blue,
-      Colors.green,
-      Colors.orange,
-      Colors.purple,
-      Colors.red,
-      Colors.teal,
-    ];
-    final color = colors[category.hashCode % colors.length];
+  Widget build(BuildContext context, WidgetRef ref) {
+    final categoryStatsAsync = ref.watch(categoryStatsProvider(category));
 
     return GestureDetector(
       onTap: () {
-        // Navigate to category quiz
+        context.push('/quiz/category/${category.name}');
       },
       child: Container(
-        width: 80,
+        width: 100,
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
+          color: category.primaryColor.withOpacity(0.1),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color.withOpacity(0.3)),
+          border: Border.all(color: category.primaryColor.withOpacity(0.3)),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -594,59 +618,48 @@ class _CategoryChip extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: color,
+                color: category.primaryColor,
                 shape: BoxShape.circle,
               ),
               child: Icon(
-                _getCategoryIcon(category),
+                category.icon,
                 color: Colors.white,
                 size: 20,
               ),
             ),
             const SizedBox(height: 8),
             Text(
-              category.toUpperCase(),
+              category.displayName,
               style: TextStyle(
-                fontSize: 10,
+                fontSize: 11,
                 fontWeight: FontWeight.bold,
-                color: color,
+                color: category.primaryColor,
               ),
               textAlign: TextAlign.center,
-              maxLines: 1,
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 4),
+            categoryStatsAsync.when(
+              data: (stats) => Text(
+                '${stats['questionCount']}q',
+                style: TextStyle(
+                  fontSize: 9,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+              loading: () => const SizedBox(height: 10),
+              error: (error, stack) => const SizedBox(height: 10),
             ),
           ],
         ),
       ),
     );
   }
-
-  IconData _getCategoryIcon(String category) {
-    switch (category.toLowerCase()) {
-      case 'science':
-        return Icons.science;
-      case 'history':
-        return Icons.history_edu;
-      case 'sports':
-        return Icons.sports_soccer;
-      case 'geography':
-        return Icons.public;
-      case 'technology':
-        return Icons.computer;
-      case 'literature':
-        return Icons.menu_book;
-      case 'math':
-        return Icons.calculate;
-      case 'entertainment':
-        return Icons.movie;
-      default:
-        return Icons.quiz;
-    }
-  }
 }
 
-class _RecentActivityLoadingSection extends StatelessWidget {
-  const _RecentActivityLoadingSection();
+class _FeaturedCategoriesLoadingSection extends StatelessWidget {
+  const _FeaturedCategoriesLoadingSection();
 
   @override
   Widget build(BuildContext context) {
@@ -662,7 +675,7 @@ class _RecentActivityLoadingSection extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         SizedBox(
-          height: 100,
+          height: 120,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: 6,
@@ -670,7 +683,7 @@ class _RecentActivityLoadingSection extends StatelessWidget {
               return Padding(
                 padding: EdgeInsets.only(right: index < 5 ? 12 : 0),
                 child: Container(
-                  width: 80,
+                  width: 100,
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.grey.shade200,
@@ -689,7 +702,7 @@ class _RecentActivityLoadingSection extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Container(
-                        width: 50,
+                        width: 60,
                         height: 12,
                         decoration: BoxDecoration(
                           color: Colors.grey.shade300,
@@ -708,7 +721,7 @@ class _RecentActivityLoadingSection extends StatelessWidget {
   }
 }
 
-// Bottom Navigation for QuestionScreen
+// Bottom Navigation for QuestionScreen (unchanged)
 class _QuestionScreenBottomNav extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
@@ -771,33 +784,23 @@ class _QuestionScreenBottomNav extends StatelessWidget {
   }
 }
 
-// Create Quiz Bottom Sheet
-class _CreateQuizBottomSheet extends StatefulWidget {
+// Enhanced Create Quiz Bottom Sheet with QuizCategory support
+class _CreateQuizBottomSheet extends ConsumerStatefulWidget {
   @override
-  State<_CreateQuizBottomSheet> createState() => _CreateQuizBottomSheetState();
+  ConsumerState<_CreateQuizBottomSheet> createState() => _CreateQuizBottomSheetState();
 }
 
-class _CreateQuizBottomSheetState extends State<_CreateQuizBottomSheet> {
+class _CreateQuizBottomSheetState extends ConsumerState<_CreateQuizBottomSheet> {
   String selectedDifficulty = 'Mixed';
-  String selectedCategory = 'All Categories';
+  QuizCategory? selectedCategory;
   int questionCount = 10;
 
   final List<String> difficulties = ['Easy', 'Medium', 'Hard', 'Mixed'];
-  final List<String> categories = [
-    'All Categories',
-    'Science',
-    'History',
-    'Geography',
-    'Entertainment',
-    'Entertainment',
-    'Sports',
-    'Technology',
-    'Literature',
-    'Mathematics'
-  ];
 
   @override
   Widget build(BuildContext context) {
+    final categoriesAsync = ref.watch(quizCategoriesProvider);
+
     return Container(
       height: MediaQuery.of(context).size.height * 0.75,
       decoration: const BoxDecoration(
@@ -941,7 +944,7 @@ class _CreateQuizBottomSheetState extends State<_CreateQuizBottomSheet> {
 
                   const SizedBox(height: 24),
 
-                  // Category Selection
+                  // Category Selection with QuizCategory
                   const Text(
                     'Category',
                     style: TextStyle(
@@ -950,45 +953,114 @@ class _CreateQuizBottomSheetState extends State<_CreateQuizBottomSheet> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: categories.map((category) {
-                      final isSelected = selectedCategory == category;
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            selectedCategory = category;
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 8,
-                          ),
-                          decoration: BoxDecoration(
-                            color: isSelected
-                                ? Colors.green
-                                : Colors.grey.shade200,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            category,
-                            style: TextStyle(
-                              color: isSelected
-                                  ? Colors.white
-                                  : Colors.grey.shade700,
-                              fontWeight: FontWeight.w500,
+                  categoriesAsync.when(
+                    data: (categories) => Column(
+                      children: [
+                        // All Categories option
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedCategory = null;
+                            });
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            margin: const EdgeInsets.only(bottom: 8),
+                            decoration: BoxDecoration(
+                              color: selectedCategory == null
+                                  ? Colors.green
+                                  : Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.apps,
+                                  color: selectedCategory == null
+                                      ? Colors.white
+                                      : Colors.grey.shade600,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  'All Categories (Mixed)',
+                                  style: TextStyle(
+                                    color: selectedCategory == null
+                                        ? Colors.white
+                                        : Colors.grey.shade700,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                      );
-                    }).toList(),
+
+                        // Core categories
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: QuizCategoryManager.coreCategories.map((category) {
+                            final isSelected = selectedCategory == category;
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedCategory = category;
+                                });
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? category.primaryColor
+                                      : category.primaryColor.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                    color: category.primaryColor.withOpacity(0.3),
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      category.icon,
+                                      size: 16,
+                                      color: isSelected
+                                          ? Colors.white
+                                          : category.primaryColor,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      category.displayName,
+                                      style: TextStyle(
+                                        color: isSelected
+                                            ? Colors.white
+                                            : category.primaryColor,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
+                    loading: () => const CircularProgressIndicator(),
+                    error: (error, stack) => Text('Error loading categories: $error'),
                   ),
 
                   const SizedBox(height: 32),
 
-                  // Quick Templates
+                  // Quick Templates with QuizCategory integration
                   const Text(
                     'Quick Templates',
                     style: TextStyle(
@@ -1005,8 +1077,8 @@ class _CreateQuizBottomSheetState extends State<_CreateQuizBottomSheet> {
                         icon: Icons.flash_on,
                         color: Colors.orange,
                         onTap: () {
-                          // Navigate to quick quiz
                           Navigator.pop(context);
+                          context.push('/quiz/quick-challenge');
                         },
                       ),
                       const SizedBox(height: 8),
@@ -1016,8 +1088,8 @@ class _CreateQuizBottomSheetState extends State<_CreateQuizBottomSheet> {
                         icon: Icons.school,
                         color: Colors.blue,
                         onTap: () {
-                          // Navigate to study session
                           Navigator.pop(context);
+                          context.push('/quiz/study-session');
                         },
                       ),
                       const SizedBox(height: 8),
@@ -1027,8 +1099,19 @@ class _CreateQuizBottomSheetState extends State<_CreateQuizBottomSheet> {
                         icon: Icons.psychology,
                         color: Colors.red,
                         onTap: () {
-                          // Navigate to expert challenge
                           Navigator.pop(context);
+                          context.push('/quiz/expert-challenge');
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                      _QuickTemplate(
+                        title: 'Daily Quiz',
+                        subtitle: 'Today\'s curated selection',
+                        icon: Icons.today,
+                        color: Colors.teal,
+                        onTap: () {
+                          Navigator.pop(context);
+                          context.push('/quiz/daily');
                         },
                       ),
                     ],
@@ -1054,22 +1137,38 @@ class _CreateQuizBottomSheetState extends State<_CreateQuizBottomSheet> {
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
+
                       // Navigate to custom quiz with selected parameters
+                      final categoryParam = selectedCategory?.name ?? 'mixed';
+                      final difficultyParam = selectedDifficulty.toLowerCase();
+
+                      context.push(
+                          '/quiz/custom?category=$categoryParam&difficulty=$difficultyParam&count=$questionCount'
+                      );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.purple,
+                      backgroundColor: selectedCategory?.primaryColor ?? Colors.purple,
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text(
-                      'Start Quiz',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (selectedCategory != null) ...[
+                          Icon(selectedCategory!.icon, size: 18),
+                          const SizedBox(width: 8),
+                        ],
+                        const Text(
+                          'Start Quiz',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

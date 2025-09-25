@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../game/data/question_loader_service.dart';
+import '../../game/services/question_loader_service.dart';
 import '../../game/models/question_model.dart';
 
 // Provider for monthly quiz questions
@@ -221,7 +221,7 @@ class MonthlyQuizScreen extends ConsumerWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     // Navigate to quiz with monthly questions
-                    context.push('/question', extra: {
+                    context.push('quiz/play', extra: {
                       'questions': questions,
                       'title': '$currentMonth Challenge',
                       'isMonthlyChallenge': true,

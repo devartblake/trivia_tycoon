@@ -1,0 +1,776 @@
+[
+  {
+    "id": "P5_1",
+    "category": "Civics",
+    "question": "Citizens vote to choose…",
+    "answers": [
+      {
+        "text": "Leaders",
+        "isCorrect": true
+      },
+      {
+        "text": "Songs",
+        "isCorrect": false
+      },
+      {
+        "text": "Holidays",
+        "isCorrect": false
+      },
+      {
+        "text": "Animals",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Leaders",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "voting"
+    ]
+  },
+  {
+    "id": "P5_2",
+    "category": "Government",
+    "question": "A city leader is often called a…",
+    "answers": [
+      {
+        "text": "Mayor",
+        "isCorrect": true
+      },
+      {
+        "text": "Governor",
+        "isCorrect": false
+      },
+      {
+        "text": "President",
+        "isCorrect": false
+      },
+      {
+        "text": "Judge",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mayor",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "local"
+    ]
+  },
+  {
+    "id": "P6_1",
+    "category": "Levels of Govt",
+    "question": "A governor leads a…",
+    "answers": [
+      {
+        "text": "State",
+        "isCorrect": true
+      },
+      {
+        "text": "Country",
+        "isCorrect": false
+      },
+      {
+        "text": "City",
+        "isCorrect": false
+      },
+      {
+        "text": "Court",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "State",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "state"
+    ]
+  },
+  {
+    "id": "P6_2",
+    "category": "Separation of Powers",
+    "question": "The lawmaking branch is…",
+    "answers": [
+      {
+        "text": "Legislative",
+        "isCorrect": true
+      },
+      {
+        "text": "Judicial",
+        "isCorrect": false
+      },
+      {
+        "text": "Executive",
+        "isCorrect": false
+      },
+      {
+        "text": "Municipal",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Legislative",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "branches"
+    ]
+  },
+  {
+    "id": "P7_1",
+    "category": "Constitutions",
+    "question": "A constitution is…",
+    "answers": [
+      {
+        "text": "Rules that organize a government",
+        "isCorrect": true
+      },
+      {
+        "text": "A budget",
+        "isCorrect": false
+      },
+      {
+        "text": "A history book",
+        "isCorrect": false
+      },
+      {
+        "text": "A map",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Rules that organize a government",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "constitution"
+    ]
+  },
+  {
+    "id": "P7_2",
+    "category": "Types of Govt",
+    "question": "A monarchy is led by a…",
+    "answers": [
+      {
+        "text": "King or queen",
+        "isCorrect": true
+      },
+      {
+        "text": "Parliament",
+        "isCorrect": false
+      },
+      {
+        "text": "President",
+        "isCorrect": false
+      },
+      {
+        "text": "Governor",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "King or queen",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "systems"
+    ]
+  },
+  {
+    "id": "P8_1",
+    "category": "Elections",
+    "question": "A ballot is…",
+    "answers": [
+      {
+        "text": "A list of choices for voters",
+        "isCorrect": true
+      },
+      {
+        "text": "A polling place",
+        "isCorrect": false
+      },
+      {
+        "text": "A campaign sign",
+        "isCorrect": false
+      },
+      {
+        "text": "A court order",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A list of choices for voters",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "elections"
+    ]
+  },
+  {
+    "id": "P8_2",
+    "category": "Parties",
+    "question": "A political party is…",
+    "answers": [
+      {
+        "text": "An organization seeking to win elections",
+        "isCorrect": true
+      },
+      {
+        "text": "A holiday group",
+        "isCorrect": false
+      },
+      {
+        "text": "A charity",
+        "isCorrect": false
+      },
+      {
+        "text": "A newspaper",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "An organization seeking to win elections",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "parties"
+    ]
+  },
+  {
+    "id": "P9_1",
+    "category": "Comparative Politics",
+    "question": "Parliamentary systems often have a…",
+    "answers": [
+      {
+        "text": "Prime minister",
+        "isCorrect": true
+      },
+      {
+        "text": "Chief justice",
+        "isCorrect": false
+      },
+      {
+        "text": "Governor",
+        "isCorrect": false
+      },
+      {
+        "text": "Mayor",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Prime minister",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "parliament"
+    ]
+  },
+  {
+    "id": "P9_2",
+    "category": "International",
+    "question": "The UN Security Council has…",
+    "answers": [
+      {
+        "text": "Five permanent members",
+        "isCorrect": true
+      },
+      {
+        "text": "No permanent members",
+        "isCorrect": false
+      },
+      {
+        "text": "Twenty permanent",
+        "isCorrect": false
+      },
+      {
+        "text": "Two permanent",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Five permanent members",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "UN"
+    ]
+  },
+  {
+    "id": "P10_1",
+    "category": "U.S. Federal",
+    "question": "Congress has two chambers:",
+    "answers": [
+      {
+        "text": "House and Senate",
+        "isCorrect": true
+      },
+      {
+        "text": "Cabinet & Court",
+        "isCorrect": false
+      },
+      {
+        "text": "States & Cities",
+        "isCorrect": false
+      },
+      {
+        "text": "President & VP",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "House and Senate",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "congress"
+    ]
+  },
+  {
+    "id": "P10_2",
+    "category": "Elections",
+    "question": "Electoral College is used to elect the…",
+    "answers": [
+      {
+        "text": "U.S. President",
+        "isCorrect": true
+      },
+      {
+        "text": "Senators",
+        "isCorrect": false
+      },
+      {
+        "text": "Governors",
+        "isCorrect": false
+      },
+      {
+        "text": "Mayors",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "U.S. President",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "electoral"
+    ]
+  },
+  {
+    "id": "P11_1",
+    "category": "Public Policy",
+    "question": "A budget is…",
+    "answers": [
+      {
+        "text": "A plan for government spending and revenue",
+        "isCorrect": true
+      },
+      {
+        "text": "A law book",
+        "isCorrect": false
+      },
+      {
+        "text": "A court case",
+        "isCorrect": false
+      },
+      {
+        "text": "A treaty",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A plan for government spending and revenue",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "budget"
+    ]
+  },
+  {
+    "id": "P11_2",
+    "category": "Civic Participation",
+    "question": "A referendum lets…",
+    "answers": [
+      {
+        "text": "Voters approve or reject a proposal",
+        "isCorrect": true
+      },
+      {
+        "text": "Courts rewrite bills",
+        "isCorrect": false
+      },
+      {
+        "text": "Police pass laws",
+        "isCorrect": false
+      },
+      {
+        "text": "Parties appoint leaders",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Voters approve or reject a proposal",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11",
+      "referendum"
+    ]
+  },
+  {
+    "id": "P12_1",
+    "category": "Political Ideologies",
+    "question": "Liberalism classically emphasizes…",
+    "answers": [
+      {
+        "text": "Individual rights and limited government",
+        "isCorrect": true
+      },
+      {
+        "text": "Total state control",
+        "isCorrect": false
+      },
+      {
+        "text": "Hereditary rule",
+        "isCorrect": false
+      },
+      {
+        "text": "No markets",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Individual rights and limited government",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "ideology"
+    ]
+  },
+  {
+    "id": "P12_2",
+    "category": "Elections & Systems",
+    "question": "Proportional representation tends to…",
+    "answers": [
+      {
+        "text": "Allocate seats by vote share",
+        "isCorrect": true
+      },
+      {
+        "text": "Winner-take-all seats",
+        "isCorrect": false
+      },
+      {
+        "text": "No parties allowed",
+        "isCorrect": false
+      },
+      {
+        "text": "Random selection",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Allocate seats by vote share",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "election systems"
+    ]
+  },
+  {
+    "id": "PX16",
+    "category": "Mixed Politics",
+    "question": "Democracies hold regular elections.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX17",
+    "category": "Mixed Politics",
+    "question": "Democracies hold regular elections.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX18",
+    "category": "Mixed Politics",
+    "question": "Democracies hold regular elections.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX19",
+    "category": "Mixed Politics",
+    "question": "Democracies hold regular elections.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX20",
+    "category": "Mixed Politics",
+    "question": "Democracies hold regular elections.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX21",
+    "category": "Mixed Politics",
+    "question": "Democracies hold regular elections.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX22",
+    "category": "Mixed Politics",
+    "question": "Democracies hold regular elections.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX23",
+    "category": "Mixed Politics",
+    "question": "Democracies hold regular elections.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX24",
+    "category": "Mixed Politics",
+    "question": "Democracies hold regular elections.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX25",
+    "category": "Mixed Politics",
+    "question": "Democracies hold regular elections.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX26",
+    "category": "Mixed Politics",
+    "question": "Democracies hold regular elections.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX27",
+    "category": "Mixed Politics",
+    "question": "Democracies hold regular elections.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX28",
+    "category": "Mixed Politics",
+    "question": "Democracies hold regular elections.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX29",
+    "category": "Mixed Politics",
+    "question": "Democracies hold regular elections.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  }
+]

@@ -1,0 +1,612 @@
+[
+  {
+    "id": "B1",
+    "category": "Business",
+    "question": "Money we earn from work is called…",
+    "answers": [
+      {
+        "text": "Loan",
+        "isCorrect": false
+      },
+      {
+        "text": "Debt",
+        "isCorrect": false
+      },
+      {
+        "text": "Income",
+        "isCorrect": true
+      },
+      {
+        "text": "Tax",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Income",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B2",
+    "category": "Business",
+    "question": "A person who starts a business is an…",
+    "answers": [
+      {
+        "text": "Manager",
+        "isCorrect": false
+      },
+      {
+        "text": "Employee",
+        "isCorrect": false
+      },
+      {
+        "text": "Entrepreneur",
+        "isCorrect": true
+      },
+      {
+        "text": "Customer",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Entrepreneur",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "B3",
+    "category": "Business",
+    "question": "What do we call the amount left after costs?",
+    "answers": [
+      {
+        "text": "Loss",
+        "isCorrect": false
+      },
+      {
+        "text": "Tax",
+        "isCorrect": false
+      },
+      {
+        "text": "Profit",
+        "isCorrect": true
+      },
+      {
+        "text": "Revenue",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Profit",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "B4",
+    "category": "Business",
+    "question": "A business plan is…",
+    "answers": [
+      {
+        "text": "A written plan for a company’s goals",
+        "isCorrect": true
+      },
+      {
+        "text": "A sales receipt",
+        "isCorrect": false
+      },
+      {
+        "text": "A tax",
+        "isCorrect": false
+      },
+      {
+        "text": "A license",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A written plan for a company’s goals",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "B5",
+    "category": "Business",
+    "question": "Which is an example of service?",
+    "answers": [
+      {
+        "text": "Shoes",
+        "isCorrect": false
+      },
+      {
+        "text": "Car",
+        "isCorrect": false
+      },
+      {
+        "text": "Book",
+        "isCorrect": false
+      },
+      {
+        "text": "Haircut",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Haircut",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B6",
+    "category": "Business",
+    "question": "Supply and demand affect prices.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "B6",
+    "category": "Business",
+    "question": "Businesses sell goods or services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B7",
+    "category": "Business",
+    "question": "Businesses sell goods or services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B8",
+    "category": "Business",
+    "question": "Businesses sell goods or services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B9",
+    "category": "Business",
+    "question": "Businesses sell goods or services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B10",
+    "category": "Business",
+    "question": "Businesses sell goods or services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B11",
+    "category": "Business",
+    "question": "Businesses sell goods or services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B12",
+    "category": "Business",
+    "question": "Businesses sell goods or services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B13",
+    "category": "Business",
+    "question": "Businesses sell goods or services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B14",
+    "category": "Business",
+    "question": "Businesses sell goods or services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B15",
+    "category": "Business",
+    "question": "Businesses sell goods or services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B16",
+    "category": "Business",
+    "question": "Businesses sell goods or services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B17",
+    "category": "Business",
+    "question": "Businesses sell goods or services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B18",
+    "category": "Business",
+    "question": "Businesses sell goods or services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B19",
+    "category": "Business",
+    "question": "Businesses sell goods or services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B20",
+    "category": "Business",
+    "question": "Businesses sell goods or services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B21",
+    "category": "Business",
+    "question": "Businesses sell goods or services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B22",
+    "category": "Business",
+    "question": "Businesses sell goods or services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B23",
+    "category": "Business",
+    "question": "Businesses sell goods or services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B24",
+    "category": "Business",
+    "question": "Businesses sell goods or services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B25",
+    "category": "Business",
+    "question": "Businesses sell goods or services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B26",
+    "category": "Business",
+    "question": "Businesses sell goods or services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B27",
+    "category": "Business",
+    "question": "Businesses sell goods or services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B28",
+    "category": "Business",
+    "question": "Businesses sell goods or services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "B29",
+    "category": "Business",
+    "question": "Businesses sell goods or services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  }
+]

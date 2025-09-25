@@ -1,0 +1,612 @@
+[
+  {
+    "id": "A1",
+    "category": "Art History",
+    "question": "Leonardo da Vinci painted…",
+    "answers": [
+      {
+        "text": "The Scream",
+        "isCorrect": false
+      },
+      {
+        "text": "Guernica",
+        "isCorrect": false
+      },
+      {
+        "text": "Mona Lisa",
+        "isCorrect": true
+      },
+      {
+        "text": "Starry Night",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mona Lisa",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A2",
+    "category": "Art History",
+    "question": "Van Gogh painted…",
+    "answers": [
+      {
+        "text": "Starry Night",
+        "isCorrect": true
+      },
+      {
+        "text": "The Kiss",
+        "isCorrect": false
+      },
+      {
+        "text": "Water Lilies",
+        "isCorrect": false
+      },
+      {
+        "text": "Mona Lisa",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Starry Night",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A3",
+    "category": "Art History",
+    "question": "The Renaissance began in…",
+    "answers": [
+      {
+        "text": "Greece",
+        "isCorrect": false
+      },
+      {
+        "text": "France",
+        "isCorrect": false
+      },
+      {
+        "text": "Spain",
+        "isCorrect": false
+      },
+      {
+        "text": "Italy",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Italy",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "A4",
+    "category": "Art History",
+    "question": "Impressionism started in…",
+    "answers": [
+      {
+        "text": "France",
+        "isCorrect": true
+      },
+      {
+        "text": "Germany",
+        "isCorrect": false
+      },
+      {
+        "text": "Italy",
+        "isCorrect": false
+      },
+      {
+        "text": "England",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "France",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "A5",
+    "category": "Art History",
+    "question": "Frida Kahlo was from…",
+    "answers": [
+      {
+        "text": "Brazil",
+        "isCorrect": false
+      },
+      {
+        "text": "Mexico",
+        "isCorrect": true
+      },
+      {
+        "text": "Spain",
+        "isCorrect": false
+      },
+      {
+        "text": "USA",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mexico",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "A6",
+    "category": "Art History",
+    "question": "Picasso helped start Cubism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "A6",
+    "category": "Art History",
+    "question": "Artists create art.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A7",
+    "category": "Art History",
+    "question": "Artists create art.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A8",
+    "category": "Art History",
+    "question": "Artists create art.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A9",
+    "category": "Art History",
+    "question": "Artists create art.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A10",
+    "category": "Art History",
+    "question": "Artists create art.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A11",
+    "category": "Art History",
+    "question": "Artists create art.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A12",
+    "category": "Art History",
+    "question": "Artists create art.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A13",
+    "category": "Art History",
+    "question": "Artists create art.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A14",
+    "category": "Art History",
+    "question": "Artists create art.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A15",
+    "category": "Art History",
+    "question": "Artists create art.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A16",
+    "category": "Art History",
+    "question": "Artists create art.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A17",
+    "category": "Art History",
+    "question": "Artists create art.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A18",
+    "category": "Art History",
+    "question": "Artists create art.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A19",
+    "category": "Art History",
+    "question": "Artists create art.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A20",
+    "category": "Art History",
+    "question": "Artists create art.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A21",
+    "category": "Art History",
+    "question": "Artists create art.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A22",
+    "category": "Art History",
+    "question": "Artists create art.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A23",
+    "category": "Art History",
+    "question": "Artists create art.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A24",
+    "category": "Art History",
+    "question": "Artists create art.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A25",
+    "category": "Art History",
+    "question": "Artists create art.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A26",
+    "category": "Art History",
+    "question": "Artists create art.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A27",
+    "category": "Art History",
+    "question": "Artists create art.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A28",
+    "category": "Art History",
+    "question": "Artists create art.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "A29",
+    "category": "Art History",
+    "question": "Artists create art.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  }
+]

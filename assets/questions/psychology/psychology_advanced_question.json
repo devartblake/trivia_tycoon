@@ -1,0 +1,612 @@
+[
+  {
+    "id": "PA1",
+    "category": "Psychology Advanced",
+    "question": "Maslow’s pyramid ends with…",
+    "answers": [
+      {
+        "text": "Self-actualization",
+        "isCorrect": true
+      },
+      {
+        "text": "Love",
+        "isCorrect": false
+      },
+      {
+        "text": "Safety",
+        "isCorrect": false
+      },
+      {
+        "text": "Esteem",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Self-actualization",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "PA2",
+    "category": "Psychology Advanced",
+    "question": "Freud described the id, ego, and…",
+    "answers": [
+      {
+        "text": "Superego",
+        "isCorrect": true
+      },
+      {
+        "text": "Conscious",
+        "isCorrect": false
+      },
+      {
+        "text": "Alter",
+        "isCorrect": false
+      },
+      {
+        "text": "Persona",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Superego",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "PA3",
+    "category": "Psychology Advanced",
+    "question": "Classical conditioning was shown by…",
+    "answers": [
+      {
+        "text": "Piaget’s children",
+        "isCorrect": false
+      },
+      {
+        "text": "Bandura’s dolls",
+        "isCorrect": false
+      },
+      {
+        "text": "Skinner’s rats",
+        "isCorrect": false
+      },
+      {
+        "text": "Pavlov’s dogs",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Pavlov’s dogs",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "PA4",
+    "category": "Psychology Advanced",
+    "question": "The Big Five model includes…",
+    "answers": [
+      {
+        "text": "Hope, Fear, Anger, Joy, Sadness",
+        "isCorrect": false
+      },
+      {
+        "text": "IQ, EQ, AQ, SQ, MQ",
+        "isCorrect": false
+      },
+      {
+        "text": "Id, Ego, Superego",
+        "isCorrect": false
+      },
+      {
+        "text": "Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": []
+  },
+  {
+    "id": "PA5",
+    "category": "Psychology Advanced",
+    "question": "Working memory is also called…",
+    "answers": [
+      {
+        "text": "Implicit memory",
+        "isCorrect": false
+      },
+      {
+        "text": "Short-term memory",
+        "isCorrect": true
+      },
+      {
+        "text": "Episodic memory",
+        "isCorrect": false
+      },
+      {
+        "text": "Long-term memory",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Short-term memory",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "PA6",
+    "category": "Psychology Advanced",
+    "question": "B.F. Skinner studied operant conditioning.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "PA6",
+    "category": "Psychology Advanced",
+    "question": "Psychology studies human behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "PA7",
+    "category": "Psychology Advanced",
+    "question": "Psychology studies human behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "PA8",
+    "category": "Psychology Advanced",
+    "question": "Psychology studies human behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "PA9",
+    "category": "Psychology Advanced",
+    "question": "Psychology studies human behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "PA10",
+    "category": "Psychology Advanced",
+    "question": "Psychology studies human behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "PA11",
+    "category": "Psychology Advanced",
+    "question": "Psychology studies human behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "PA12",
+    "category": "Psychology Advanced",
+    "question": "Psychology studies human behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "PA13",
+    "category": "Psychology Advanced",
+    "question": "Psychology studies human behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "PA14",
+    "category": "Psychology Advanced",
+    "question": "Psychology studies human behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "PA15",
+    "category": "Psychology Advanced",
+    "question": "Psychology studies human behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "PA16",
+    "category": "Psychology Advanced",
+    "question": "Psychology studies human behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "PA17",
+    "category": "Psychology Advanced",
+    "question": "Psychology studies human behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "PA18",
+    "category": "Psychology Advanced",
+    "question": "Psychology studies human behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "PA19",
+    "category": "Psychology Advanced",
+    "question": "Psychology studies human behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "PA20",
+    "category": "Psychology Advanced",
+    "question": "Psychology studies human behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "PA21",
+    "category": "Psychology Advanced",
+    "question": "Psychology studies human behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "PA22",
+    "category": "Psychology Advanced",
+    "question": "Psychology studies human behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "PA23",
+    "category": "Psychology Advanced",
+    "question": "Psychology studies human behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "PA24",
+    "category": "Psychology Advanced",
+    "question": "Psychology studies human behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "PA25",
+    "category": "Psychology Advanced",
+    "question": "Psychology studies human behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "PA26",
+    "category": "Psychology Advanced",
+    "question": "Psychology studies human behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "PA27",
+    "category": "Psychology Advanced",
+    "question": "Psychology studies human behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "PA28",
+    "category": "Psychology Advanced",
+    "question": "Psychology studies human behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "PA29",
+    "category": "Psychology Advanced",
+    "question": "Psychology studies human behavior.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  }
+]

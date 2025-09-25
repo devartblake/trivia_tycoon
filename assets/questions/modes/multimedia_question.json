@@ -1,0 +1,2427 @@
+[
+  {
+    "id": "MM1",
+    "category": "Geography",
+    "question": "Identify this landmark.",
+    "answers": [
+      {
+        "text": "Machu Picchu",
+        "isCorrect": false
+      },
+      {
+        "text": "Eiffel Tower",
+        "isCorrect": true
+      },
+      {
+        "text": "Sydney Opera House",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Eiffel Tower",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "geography"
+    ],
+    "imageUrl": "assets/media/images/landmarks/eiffel_tower.jpg"
+  },
+  {
+    "id": "MM2",
+    "category": "Geography",
+    "question": "Identify this landmark.",
+    "answers": [
+      {
+        "text": "Great Wall of China",
+        "isCorrect": false
+      },
+      {
+        "text": "Eiffel Tower",
+        "isCorrect": false
+      },
+      {
+        "text": "Statue of Liberty",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Statue of Liberty",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "geography"
+    ],
+    "imageUrl": "assets/media/images/landmarks/statue_of_liberty.jpg"
+  },
+  {
+    "id": "MM3",
+    "category": "Geography",
+    "question": "Identify this landmark.",
+    "answers": [
+      {
+        "text": "Great Wall of China",
+        "isCorrect": true
+      },
+      {
+        "text": "Statue of Liberty",
+        "isCorrect": false
+      },
+      {
+        "text": "Taj Mahal",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Great Wall of China",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "geography"
+    ],
+    "imageUrl": "assets/media/images/landmarks/great_wall.jpg"
+  },
+  {
+    "id": "MM4",
+    "category": "Geography",
+    "question": "Identify this landmark.",
+    "answers": [
+      {
+        "text": "Machu Picchu",
+        "isCorrect": true
+      },
+      {
+        "text": "Great Wall of China",
+        "isCorrect": false
+      },
+      {
+        "text": "Taj Mahal",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Machu Picchu",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "geography"
+    ],
+    "imageUrl": "assets/media/images/landmarks/machu_picchu.jpg"
+  },
+  {
+    "id": "MM5",
+    "category": "Geography",
+    "question": "Identify this landmark.",
+    "answers": [
+      {
+        "text": "Sydney Opera House",
+        "isCorrect": true
+      },
+      {
+        "text": "Colosseum",
+        "isCorrect": false
+      },
+      {
+        "text": "Machu Picchu",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Sydney Opera House",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "geography"
+    ],
+    "imageUrl": "assets/media/images/landmarks/sydney_opera_house.jpg"
+  },
+  {
+    "id": "MM6",
+    "category": "Geography",
+    "question": "Identify this landmark.",
+    "answers": [
+      {
+        "text": "Taj Mahal",
+        "isCorrect": true
+      },
+      {
+        "text": "Machu Picchu",
+        "isCorrect": false
+      },
+      {
+        "text": "Great Wall of China",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Taj Mahal",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "geography"
+    ],
+    "imageUrl": "assets/media/images/landmarks/taj_mahal.jpg"
+  },
+  {
+    "id": "MM7",
+    "category": "Geography",
+    "question": "Identify this landmark.",
+    "answers": [
+      {
+        "text": "Colosseum",
+        "isCorrect": true
+      },
+      {
+        "text": "Sydney Opera House",
+        "isCorrect": false
+      },
+      {
+        "text": "Machu Picchu",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Colosseum",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "geography"
+    ],
+    "imageUrl": "assets/media/images/landmarks/colosseum.jpg"
+  },
+  {
+    "id": "MM8",
+    "category": "Geography",
+    "question": "Identify this landmark.",
+    "answers": [
+      {
+        "text": "Christ the Redeemer",
+        "isCorrect": true
+      },
+      {
+        "text": "Machu Picchu",
+        "isCorrect": false
+      },
+      {
+        "text": "Statue of Liberty",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Christ the Redeemer",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "geography"
+    ],
+    "imageUrl": "assets/media/images/landmarks/christ_redeemer.jpg"
+  },
+  {
+    "id": "MM9",
+    "category": "Geography",
+    "question": "Identify this landmark.",
+    "answers": [
+      {
+        "text": "Eiffel Tower",
+        "isCorrect": true
+      },
+      {
+        "text": "Christ the Redeemer",
+        "isCorrect": false
+      },
+      {
+        "text": "Taj Mahal",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Eiffel Tower",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "geography"
+    ],
+    "imageUrl": "assets/media/images/landmarks/eiffel_tower.jpg"
+  },
+  {
+    "id": "MM10",
+    "category": "Geography",
+    "question": "Identify this landmark.",
+    "answers": [
+      {
+        "text": "Machu Picchu",
+        "isCorrect": false
+      },
+      {
+        "text": "Eiffel Tower",
+        "isCorrect": false
+      },
+      {
+        "text": "Statue of Liberty",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Statue of Liberty",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "geography"
+    ],
+    "imageUrl": "assets/media/images/landmarks/statue_of_liberty.jpg"
+  },
+  {
+    "id": "MM11",
+    "category": "Geography",
+    "question": "Identify this landmark.",
+    "answers": [
+      {
+        "text": "Sydney Opera House",
+        "isCorrect": false
+      },
+      {
+        "text": "Great Wall of China",
+        "isCorrect": true
+      },
+      {
+        "text": "Taj Mahal",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Great Wall of China",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "geography"
+    ],
+    "imageUrl": "assets/media/images/landmarks/great_wall.jpg"
+  },
+  {
+    "id": "MM12",
+    "category": "Geography",
+    "question": "Identify this landmark.",
+    "answers": [
+      {
+        "text": "Sydney Opera House",
+        "isCorrect": false
+      },
+      {
+        "text": "Christ the Redeemer",
+        "isCorrect": false
+      },
+      {
+        "text": "Machu Picchu",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Machu Picchu",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "geography"
+    ],
+    "imageUrl": "assets/media/images/landmarks/machu_picchu.jpg"
+  },
+  {
+    "id": "MM13",
+    "category": "Geography",
+    "question": "Identify this landmark.",
+    "answers": [
+      {
+        "text": "Machu Picchu",
+        "isCorrect": false
+      },
+      {
+        "text": "Statue of Liberty",
+        "isCorrect": false
+      },
+      {
+        "text": "Sydney Opera House",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Sydney Opera House",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "geography"
+    ],
+    "imageUrl": "assets/media/images/landmarks/sydney_opera_house.jpg"
+  },
+  {
+    "id": "MM14",
+    "category": "Geography",
+    "question": "Identify this landmark.",
+    "answers": [
+      {
+        "text": "Sydney Opera House",
+        "isCorrect": false
+      },
+      {
+        "text": "Machu Picchu",
+        "isCorrect": false
+      },
+      {
+        "text": "Taj Mahal",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Taj Mahal",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "geography"
+    ],
+    "imageUrl": "assets/media/images/landmarks/taj_mahal.jpg"
+  },
+  {
+    "id": "MM15",
+    "category": "Geography",
+    "question": "Identify this landmark.",
+    "answers": [
+      {
+        "text": "Colosseum",
+        "isCorrect": true
+      },
+      {
+        "text": "Eiffel Tower",
+        "isCorrect": false
+      },
+      {
+        "text": "Taj Mahal",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Colosseum",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "geography"
+    ],
+    "imageUrl": "assets/media/images/landmarks/colosseum.jpg"
+  },
+  {
+    "id": "MM16",
+    "category": "Geography",
+    "question": "Identify this landmark.",
+    "answers": [
+      {
+        "text": "Christ the Redeemer",
+        "isCorrect": true
+      },
+      {
+        "text": "Colosseum",
+        "isCorrect": false
+      },
+      {
+        "text": "Great Wall of China",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Christ the Redeemer",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "geography"
+    ],
+    "imageUrl": "assets/media/images/landmarks/christ_redeemer.jpg"
+  },
+  {
+    "id": "MM17",
+    "category": "Geography",
+    "question": "Which country's flag is shown?",
+    "answers": [
+      {
+        "text": "Canada",
+        "isCorrect": false
+      },
+      {
+        "text": "Germany",
+        "isCorrect": false
+      },
+      {
+        "text": "Japan",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Japan",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "multimedia",
+      "image",
+      "geography"
+    ],
+    "imageUrl": "assets/media/images/flags/japan.png"
+  },
+  {
+    "id": "MM18",
+    "category": "Geography",
+    "question": "Which country's flag is shown?",
+    "answers": [
+      {
+        "text": "Brazil",
+        "isCorrect": true
+      },
+      {
+        "text": "Germany",
+        "isCorrect": false
+      },
+      {
+        "text": "Japan",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Brazil",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "multimedia",
+      "image",
+      "geography"
+    ],
+    "imageUrl": "assets/media/images/flags/brazil.png"
+  },
+  {
+    "id": "MM19",
+    "category": "Geography",
+    "question": "Which country's flag is shown?",
+    "answers": [
+      {
+        "text": "Kenya",
+        "isCorrect": false
+      },
+      {
+        "text": "Canada",
+        "isCorrect": true
+      },
+      {
+        "text": "Germany",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Canada",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "multimedia",
+      "image",
+      "geography"
+    ],
+    "imageUrl": "assets/media/images/flags/canada.png"
+  },
+  {
+    "id": "MM20",
+    "category": "Geography",
+    "question": "Which country's flag is shown?",
+    "answers": [
+      {
+        "text": "Japan",
+        "isCorrect": false
+      },
+      {
+        "text": "Germany",
+        "isCorrect": true
+      },
+      {
+        "text": "Canada",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Germany",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "multimedia",
+      "image",
+      "geography"
+    ],
+    "imageUrl": "assets/media/images/flags/germany.png"
+  },
+  {
+    "id": "MM21",
+    "category": "Geography",
+    "question": "Which country's flag is shown?",
+    "answers": [
+      {
+        "text": "India",
+        "isCorrect": true
+      },
+      {
+        "text": "Canada",
+        "isCorrect": false
+      },
+      {
+        "text": "Brazil",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "India",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "multimedia",
+      "image",
+      "geography"
+    ],
+    "imageUrl": "assets/media/images/flags/india.png"
+  },
+  {
+    "id": "MM22",
+    "category": "Geography",
+    "question": "Which country's flag is shown?",
+    "answers": [
+      {
+        "text": "Japan",
+        "isCorrect": false
+      },
+      {
+        "text": "Kenya",
+        "isCorrect": true
+      },
+      {
+        "text": "Germany",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Kenya",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "multimedia",
+      "image",
+      "geography"
+    ],
+    "imageUrl": "assets/media/images/flags/kenya.png"
+  },
+  {
+    "id": "MM23",
+    "category": "Science",
+    "question": "Which animal is this?",
+    "answers": [
+      {
+        "text": "Panda",
+        "isCorrect": true
+      },
+      {
+        "text": "Giraffe",
+        "isCorrect": false
+      },
+      {
+        "text": "Tiger",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Panda",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "multimedia",
+      "image",
+      "animals"
+    ],
+    "imageUrl": "assets/media/images/animals/panda.jpg"
+  },
+  {
+    "id": "MM24",
+    "category": "Science",
+    "question": "Which animal is this?",
+    "answers": [
+      {
+        "text": "Koala",
+        "isCorrect": false
+      },
+      {
+        "text": "Kangaroo",
+        "isCorrect": true
+      },
+      {
+        "text": "Penguin",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Kangaroo",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "multimedia",
+      "image",
+      "animals"
+    ],
+    "imageUrl": "assets/media/images/animals/kangaroo.jpg"
+  },
+  {
+    "id": "MM25",
+    "category": "Science",
+    "question": "Which animal is this?",
+    "answers": [
+      {
+        "text": "Penguin",
+        "isCorrect": true
+      },
+      {
+        "text": "Tiger",
+        "isCorrect": false
+      },
+      {
+        "text": "Panda",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Penguin",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "multimedia",
+      "image",
+      "animals"
+    ],
+    "imageUrl": "assets/media/images/animals/penguin.jpg"
+  },
+  {
+    "id": "MM26",
+    "category": "Science",
+    "question": "Which animal is this?",
+    "answers": [
+      {
+        "text": "Tiger",
+        "isCorrect": true
+      },
+      {
+        "text": "Panda",
+        "isCorrect": false
+      },
+      {
+        "text": "Giraffe",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Tiger",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "multimedia",
+      "image",
+      "animals"
+    ],
+    "imageUrl": "assets/media/images/animals/tiger.jpg"
+  },
+  {
+    "id": "MM27",
+    "category": "Science",
+    "question": "Which animal is this?",
+    "answers": [
+      {
+        "text": "Giraffe",
+        "isCorrect": true
+      },
+      {
+        "text": "Panda",
+        "isCorrect": false
+      },
+      {
+        "text": "Penguin",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Giraffe",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "multimedia",
+      "image",
+      "animals"
+    ],
+    "imageUrl": "assets/media/images/animals/giraffe.jpg"
+  },
+  {
+    "id": "MM28",
+    "category": "Science",
+    "question": "Which animal is this?",
+    "answers": [
+      {
+        "text": "Panda",
+        "isCorrect": false
+      },
+      {
+        "text": "Koala",
+        "isCorrect": true
+      },
+      {
+        "text": "Penguin",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Koala",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "multimedia",
+      "image",
+      "animals"
+    ],
+    "imageUrl": "assets/media/images/animals/koala.jpg"
+  },
+  {
+    "id": "MM29",
+    "category": "Art History",
+    "question": "Name this artwork.",
+    "answers": [
+      {
+        "text": "Girl with a Pearl Earring",
+        "isCorrect": false
+      },
+      {
+        "text": "Mona Lisa",
+        "isCorrect": true
+      },
+      {
+        "text": "American Gothic",
+        "isCorrect": false
+      },
+      {
+        "text": "The Night Watch",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mona Lisa",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "art"
+    ],
+    "imageUrl": "assets/media/images/art/mona_lisa.jpg"
+  },
+  {
+    "id": "MM30",
+    "category": "Art History",
+    "question": "Name this artwork.",
+    "answers": [
+      {
+        "text": "Starry Night",
+        "isCorrect": true
+      },
+      {
+        "text": "The Night Watch",
+        "isCorrect": false
+      },
+      {
+        "text": "Girl with a Pearl Earring",
+        "isCorrect": false
+      },
+      {
+        "text": "American Gothic",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Starry Night",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "art"
+    ],
+    "imageUrl": "assets/media/images/art/starry_night.jpg"
+  },
+  {
+    "id": "MM31",
+    "category": "Art History",
+    "question": "Name this artwork.",
+    "answers": [
+      {
+        "text": "American Gothic",
+        "isCorrect": false
+      },
+      {
+        "text": "The Night Watch",
+        "isCorrect": false
+      },
+      {
+        "text": "The Persistence of Memory",
+        "isCorrect": true
+      },
+      {
+        "text": "Girl with a Pearl Earring",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "The Persistence of Memory",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "art"
+    ],
+    "imageUrl": "assets/media/images/art/persistence_of_memory.jpg"
+  },
+  {
+    "id": "MM32",
+    "category": "Art History",
+    "question": "Name this artwork.",
+    "answers": [
+      {
+        "text": "Girl with a Pearl Earring",
+        "isCorrect": false
+      },
+      {
+        "text": "The Scream",
+        "isCorrect": true
+      },
+      {
+        "text": "The Night Watch",
+        "isCorrect": false
+      },
+      {
+        "text": "American Gothic",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "The Scream",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "art"
+    ],
+    "imageUrl": "assets/media/images/art/the_scream.jpg"
+  },
+  {
+    "id": "MM33",
+    "category": "History",
+    "question": "Identify this structure.",
+    "answers": [
+      {
+        "text": "Ziggurat of Ur",
+        "isCorrect": false
+      },
+      {
+        "text": "Pyramids of Giza",
+        "isCorrect": true
+      },
+      {
+        "text": "Petra",
+        "isCorrect": false
+      },
+      {
+        "text": "Angkor Wat",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Pyramids of Giza",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "history"
+    ],
+    "imageUrl": "assets/media/images/landmarks/pyramids_giza.jpg"
+  },
+  {
+    "id": "MM34",
+    "category": "History",
+    "question": "Identify this artifact.",
+    "answers": [
+      {
+        "text": "Dead Sea Scrolls",
+        "isCorrect": false
+      },
+      {
+        "text": "Code of Hammurabi",
+        "isCorrect": false
+      },
+      {
+        "text": "Rosetta Stone",
+        "isCorrect": true
+      },
+      {
+        "text": "Terracotta Army",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Rosetta Stone",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "multimedia",
+      "image",
+      "history"
+    ],
+    "imageUrl": "assets/media/images/history/rosetta_stone.jpg"
+  },
+  {
+    "id": "MM35",
+    "category": "Science",
+    "question": "This diagram shows which structure?",
+    "answers": [
+      {
+        "text": "Galaxy",
+        "isCorrect": false
+      },
+      {
+        "text": "Plant cell",
+        "isCorrect": false
+      },
+      {
+        "text": "Carbon cycle",
+        "isCorrect": false
+      },
+      {
+        "text": "Animal cell",
+        "isCorrect": true
+      },
+      {
+        "text": "RNA",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Animal cell",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "science"
+    ],
+    "imageUrl": "assets/media/images/science/animal_cell_diagram.png"
+  },
+  {
+    "id": "MM36",
+    "category": "Science",
+    "question": "Which process does this diagram illustrate?",
+    "answers": [
+      {
+        "text": "RNA",
+        "isCorrect": false
+      },
+      {
+        "text": "Water cycle",
+        "isCorrect": true
+      },
+      {
+        "text": "Galaxy",
+        "isCorrect": false
+      },
+      {
+        "text": "Plant cell",
+        "isCorrect": false
+      },
+      {
+        "text": "Carbon cycle",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Water cycle",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "science"
+    ],
+    "imageUrl": "assets/media/images/science/water_cycle.png"
+  },
+  {
+    "id": "MM37",
+    "category": "Science",
+    "question": "This diagram shows the…",
+    "answers": [
+      {
+        "text": "Solar system",
+        "isCorrect": true
+      },
+      {
+        "text": "Galaxy",
+        "isCorrect": false
+      },
+      {
+        "text": "Plant cell",
+        "isCorrect": false
+      },
+      {
+        "text": "RNA",
+        "isCorrect": false
+      },
+      {
+        "text": "Carbon cycle",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Solar system",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "science"
+    ],
+    "imageUrl": "assets/media/images/science/solar_system.png"
+  },
+  {
+    "id": "MM38",
+    "category": "Science",
+    "question": "Identify the molecule shown.",
+    "answers": [
+      {
+        "text": "Carbon cycle",
+        "isCorrect": false
+      },
+      {
+        "text": "Galaxy",
+        "isCorrect": false
+      },
+      {
+        "text": "Plant cell",
+        "isCorrect": false
+      },
+      {
+        "text": "DNA double helix",
+        "isCorrect": true
+      },
+      {
+        "text": "RNA",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "DNA double helix",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "science"
+    ],
+    "imageUrl": "assets/media/images/science/dna_double_helix.png"
+  },
+  {
+    "id": "MM39",
+    "category": "Music",
+    "question": "Which instrument is playing?",
+    "answers": [
+      {
+        "text": "Saxophone",
+        "isCorrect": false
+      },
+      {
+        "text": "Drums",
+        "isCorrect": false
+      },
+      {
+        "text": "Harp",
+        "isCorrect": false
+      },
+      {
+        "text": "Piano",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Piano",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "audio",
+      "music"
+    ],
+    "audioUrl": "assets/media/audio/instruments/piano_clip.mp3"
+  },
+  {
+    "id": "MM40",
+    "category": "Music",
+    "question": "Which instrument is playing?",
+    "answers": [
+      {
+        "text": "Harp",
+        "isCorrect": false
+      },
+      {
+        "text": "Violin",
+        "isCorrect": true
+      },
+      {
+        "text": "Saxophone",
+        "isCorrect": false
+      },
+      {
+        "text": "Drums",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Violin",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "audio",
+      "music"
+    ],
+    "audioUrl": "assets/media/audio/instruments/violin_clip.mp3"
+  },
+  {
+    "id": "MM41",
+    "category": "Music",
+    "question": "Which instrument is playing?",
+    "answers": [
+      {
+        "text": "Guitar",
+        "isCorrect": true
+      },
+      {
+        "text": "Harp",
+        "isCorrect": false
+      },
+      {
+        "text": "Drums",
+        "isCorrect": false
+      },
+      {
+        "text": "Saxophone",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Guitar",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "audio",
+      "music"
+    ],
+    "audioUrl": "assets/media/audio/instruments/guitar_clip.mp3"
+  },
+  {
+    "id": "MM42",
+    "category": "Music",
+    "question": "Which instrument is playing?",
+    "answers": [
+      {
+        "text": "Harp",
+        "isCorrect": false
+      },
+      {
+        "text": "Flute",
+        "isCorrect": true
+      },
+      {
+        "text": "Saxophone",
+        "isCorrect": false
+      },
+      {
+        "text": "Drums",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Flute",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "audio",
+      "music"
+    ],
+    "audioUrl": "assets/media/audio/instruments/flute_clip.mp3"
+  },
+  {
+    "id": "MM43",
+    "category": "Music",
+    "question": "Which instrument is playing?",
+    "answers": [
+      {
+        "text": "Drums",
+        "isCorrect": false
+      },
+      {
+        "text": "Trumpet",
+        "isCorrect": true
+      },
+      {
+        "text": "Saxophone",
+        "isCorrect": false
+      },
+      {
+        "text": "Harp",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Trumpet",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "audio",
+      "music"
+    ],
+    "audioUrl": "assets/media/audio/instruments/trumpet_clip.mp3"
+  },
+  {
+    "id": "MM44",
+    "category": "Entertainment",
+    "question": "Identify the movie from this theme.",
+    "answers": [
+      {
+        "text": "Star Wars",
+        "isCorrect": true
+      },
+      {
+        "text": "Indiana Jones",
+        "isCorrect": false
+      },
+      {
+        "text": "Superman",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Star Wars",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "audio",
+      "movies"
+    ],
+    "audioUrl": "assets/media/audio/movies/star_wars_theme.mp3"
+  },
+  {
+    "id": "MM45",
+    "category": "Entertainment",
+    "question": "Identify the movie from this theme.",
+    "answers": [
+      {
+        "text": "Jurassic Park",
+        "isCorrect": true
+      },
+      {
+        "text": "Back to the Future",
+        "isCorrect": false
+      },
+      {
+        "text": "Jaws",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Jurassic Park",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "audio",
+      "movies"
+    ],
+    "audioUrl": "assets/media/audio/movies/jurassic_park_theme.mp3"
+  },
+  {
+    "id": "MM46",
+    "category": "Entertainment",
+    "question": "Identify the movie from this theme.",
+    "answers": [
+      {
+        "text": "Lord of the Rings",
+        "isCorrect": false
+      },
+      {
+        "text": "Pirates of the Caribbean",
+        "isCorrect": false
+      },
+      {
+        "text": "Harry Potter",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Harry Potter",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "audio",
+      "movies"
+    ],
+    "audioUrl": "assets/media/audio/movies/harry_potter_theme.mp3"
+  },
+  {
+    "id": "MM47",
+    "category": "Entertainment",
+    "question": "Identify the movie from this theme.",
+    "answers": [
+      {
+        "text": "Batman",
+        "isCorrect": false
+      },
+      {
+        "text": "Mission: Impossible",
+        "isCorrect": true
+      },
+      {
+        "text": "James Bond",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mission: Impossible",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "audio",
+      "movies"
+    ],
+    "audioUrl": "assets/media/audio/movies/mi_theme.mp3"
+  },
+  {
+    "id": "MM48",
+    "category": "History",
+    "question": "Identify this speech excerpt.",
+    "answers": [
+      {
+        "text": "Tear Down This Wall",
+        "isCorrect": false
+      },
+      {
+        "text": "I Have a Dream",
+        "isCorrect": true
+      },
+      {
+        "text": "Gettysburg Address",
+        "isCorrect": false
+      },
+      {
+        "text": "We Shall Fight on the Beaches",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "I Have a Dream",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "multimedia",
+      "audio",
+      "history"
+    ],
+    "audioUrl": "assets/media/audio/speeches/mlk_i_have_a_dream_excerpt.mp3"
+  },
+  {
+    "id": "MM49",
+    "category": "History",
+    "question": "Identify this speech excerpt.",
+    "answers": [
+      {
+        "text": "We Shall Fight on the Beaches",
+        "isCorrect": false
+      },
+      {
+        "text": "Tear Down This Wall",
+        "isCorrect": false
+      },
+      {
+        "text": "Gettysburg Address",
+        "isCorrect": false
+      },
+      {
+        "text": "Moon Landing",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Moon Landing",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "multimedia",
+      "audio",
+      "history"
+    ],
+    "audioUrl": "assets/media/audio/speeches/apollo11_one_small_step.mp3"
+  },
+  {
+    "id": "MM50",
+    "category": "Science",
+    "question": "Identify this sound.",
+    "answers": [
+      {
+        "text": "Birdsong",
+        "isCorrect": false
+      },
+      {
+        "text": "Wind Tunnel",
+        "isCorrect": false
+      },
+      {
+        "text": "City Traffic",
+        "isCorrect": false
+      },
+      {
+        "text": "Ocean Waves",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Ocean Waves",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "multimedia",
+      "audio",
+      "nature"
+    ],
+    "audioUrl": "assets/media/audio/nature/ocean_waves.mp3"
+  },
+  {
+    "id": "MM51",
+    "category": "Science",
+    "question": "Identify this sound.",
+    "answers": [
+      {
+        "text": "City Traffic",
+        "isCorrect": false
+      },
+      {
+        "text": "Rainforest",
+        "isCorrect": true
+      },
+      {
+        "text": "Birdsong",
+        "isCorrect": false
+      },
+      {
+        "text": "Wind Tunnel",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Rainforest",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "multimedia",
+      "audio",
+      "nature"
+    ],
+    "audioUrl": "assets/media/audio/nature/rainforest.mp3"
+  },
+  {
+    "id": "MM52",
+    "category": "Science",
+    "question": "Identify this sound.",
+    "answers": [
+      {
+        "text": "Wind Tunnel",
+        "isCorrect": false
+      },
+      {
+        "text": "Thunderstorm",
+        "isCorrect": true
+      },
+      {
+        "text": "Birdsong",
+        "isCorrect": false
+      },
+      {
+        "text": "City Traffic",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Thunderstorm",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "multimedia",
+      "audio",
+      "nature"
+    ],
+    "audioUrl": "assets/media/audio/nature/thunderstorm.mp3"
+  },
+  {
+    "id": "MM53",
+    "category": "Sports",
+    "question": "Which organization’s logo is shown?",
+    "answers": [
+      {
+        "text": "MLB",
+        "isCorrect": false
+      },
+      {
+        "text": "NBA",
+        "isCorrect": true
+      },
+      {
+        "text": "NHL",
+        "isCorrect": false
+      },
+      {
+        "text": "UEFA",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "NBA",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "sports"
+    ],
+    "imageUrl": "assets/media/images/logos/nba_logo.png"
+  },
+  {
+    "id": "MM54",
+    "category": "Sports",
+    "question": "Which organization’s logo is shown?",
+    "answers": [
+      {
+        "text": "NHL",
+        "isCorrect": false
+      },
+      {
+        "text": "MLB",
+        "isCorrect": false
+      },
+      {
+        "text": "UEFA",
+        "isCorrect": false
+      },
+      {
+        "text": "FIFA",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "FIFA",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "sports"
+    ],
+    "imageUrl": "assets/media/images/logos/fifa_logo.png"
+  },
+  {
+    "id": "MM55",
+    "category": "Sports",
+    "question": "Which organization’s logo is shown?",
+    "answers": [
+      {
+        "text": "MLB",
+        "isCorrect": false
+      },
+      {
+        "text": "Olympics",
+        "isCorrect": true
+      },
+      {
+        "text": "NHL",
+        "isCorrect": false
+      },
+      {
+        "text": "UEFA",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Olympics",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "sports"
+    ],
+    "imageUrl": "assets/media/images/logos/olympic_rings.png"
+  },
+  {
+    "id": "MM56",
+    "category": "Sports",
+    "question": "Which organization’s logo is shown?",
+    "answers": [
+      {
+        "text": "UEFA",
+        "isCorrect": false
+      },
+      {
+        "text": "NFL",
+        "isCorrect": true
+      },
+      {
+        "text": "NHL",
+        "isCorrect": false
+      },
+      {
+        "text": "MLB",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "NFL",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image",
+      "sports"
+    ],
+    "imageUrl": "assets/media/images/logos/nfl_logo.png"
+  },
+  {
+    "id": "MM57",
+    "category": "History",
+    "question": "What is shown in this clip?",
+    "answers": [
+      {
+        "text": "first spacewalk",
+        "isCorrect": false
+      },
+      {
+        "text": "first human on the Moon",
+        "isCorrect": true
+      },
+      {
+        "text": "first Mars landing",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "first human on the Moon",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "video",
+      "history"
+    ],
+    "videoUrl": "assets/media/video/history/apollo11_clip.mp4"
+  },
+  {
+    "id": "MM58",
+    "category": "Science",
+    "question": "What is shown in this clip?",
+    "answers": [
+      {
+        "text": "volcanic eruption",
+        "isCorrect": true
+      },
+      {
+        "text": "tsunami wave",
+        "isCorrect": false
+      },
+      {
+        "text": "earthquake epicenter",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "volcanic eruption",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "video",
+      "science"
+    ],
+    "videoUrl": "assets/media/video/science/volcano_eruption.mp4"
+  },
+  {
+    "id": "MM59",
+    "category": "Sports",
+    "question": "What is shown in this clip?",
+    "answers": [
+      {
+        "text": "bicycle kick",
+        "isCorrect": true
+      },
+      {
+        "text": "rabona",
+        "isCorrect": false
+      },
+      {
+        "text": "panenka penalty",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "bicycle kick",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "video",
+      "sports"
+    ],
+    "videoUrl": "assets/media/video/sports/bicycle_kick.mp4"
+  },
+  {
+    "id": "MM60",
+    "category": "Performing Arts",
+    "question": "What is shown in this clip?",
+    "answers": [
+      {
+        "text": "tap dance",
+        "isCorrect": false
+      },
+      {
+        "text": "ballet",
+        "isCorrect": true
+      },
+      {
+        "text": "salsa",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "ballet",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "video",
+      "performing_arts"
+    ],
+    "videoUrl": "assets/media/video/arts/ballet_clip.mp4"
+  },
+  {
+    "id": "MM61",
+    "category": "Geography",
+    "question": "Identify the city by its skyline.",
+    "answers": [
+      {
+        "text": "Tokyo",
+        "isCorrect": false
+      },
+      {
+        "text": "London",
+        "isCorrect": false
+      },
+      {
+        "text": "New York City",
+        "isCorrect": true
+      },
+      {
+        "text": "Dubai",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "New York City",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "image"
+    ],
+    "imageUrl": "assets/media/images/cities/nyc_skyline.jpg"
+  },
+  {
+    "id": "MM62",
+    "category": "Music",
+    "question": "Identify the composer from this clip.",
+    "answers": [
+      {
+        "text": "Chopin",
+        "isCorrect": false
+      },
+      {
+        "text": "Beethoven",
+        "isCorrect": true
+      },
+      {
+        "text": "Mozart",
+        "isCorrect": false
+      },
+      {
+        "text": "Bach",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Beethoven",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "multimedia",
+      "audio",
+      "classical"
+    ],
+    "audioUrl": "assets/media/audio/classical/beethoven_symphony_excerpt.mp3"
+  },
+  {
+    "id": "MM63",
+    "category": "General Knowledge",
+    "question": "Name this fruit.",
+    "answers": [
+      {
+        "text": "Guava",
+        "isCorrect": false
+      },
+      {
+        "text": "Papaya",
+        "isCorrect": false
+      },
+      {
+        "text": "Mango",
+        "isCorrect": false
+      },
+      {
+        "text": "Pineapple",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Pineapple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "multimedia",
+      "image"
+    ],
+    "imageUrl": "assets/media/images/food/pineapple.jpg"
+  },
+  {
+    "id": "MM64",
+    "category": "Entertainment",
+    "question": "Whose voice is this character?",
+    "answers": [
+      {
+        "text": "Luke Skywalker",
+        "isCorrect": false
+      },
+      {
+        "text": "Darth Vader",
+        "isCorrect": true
+      },
+      {
+        "text": "Han Solo",
+        "isCorrect": false
+      },
+      {
+        "text": "Yoda",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Darth Vader",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "audio",
+      "movies"
+    ],
+    "audioUrl": "assets/media/audio/movies/darth_vader_breathing.mp3"
+  },
+  {
+    "id": "MM65",
+    "category": "Science",
+    "question": "What process is shown in the clip?",
+    "answers": [
+      {
+        "text": "Combustion",
+        "isCorrect": false
+      },
+      {
+        "text": "Condensation",
+        "isCorrect": false
+      },
+      {
+        "text": "Evaporation",
+        "isCorrect": false
+      },
+      {
+        "text": "Photosynthesis",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Photosynthesis",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "video",
+      "science"
+    ],
+    "videoUrl": "assets/media/video/science/photosynthesis_animation.mp4"
+  },
+  {
+    "id": "MM66",
+    "category": "General Knowledge",
+    "question": "Name this fruit.",
+    "answers": [
+      {
+        "text": "Papaya",
+        "isCorrect": false
+      },
+      {
+        "text": "Pineapple",
+        "isCorrect": true
+      },
+      {
+        "text": "Mango",
+        "isCorrect": false
+      },
+      {
+        "text": "Guava",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Pineapple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "multimedia",
+      "image"
+    ],
+    "imageUrl": "assets/media/images/food/pineapple.jpg"
+  },
+  {
+    "id": "MM67",
+    "category": "Entertainment",
+    "question": "Whose voice is this character?",
+    "answers": [
+      {
+        "text": "Darth Vader",
+        "isCorrect": true
+      },
+      {
+        "text": "Yoda",
+        "isCorrect": false
+      },
+      {
+        "text": "Luke Skywalker",
+        "isCorrect": false
+      },
+      {
+        "text": "Han Solo",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Darth Vader",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "audio",
+      "movies"
+    ],
+    "audioUrl": "assets/media/audio/movies/darth_vader_breathing.mp3"
+  },
+  {
+    "id": "MM68",
+    "category": "Science",
+    "question": "What process is shown in the clip?",
+    "answers": [
+      {
+        "text": "Photosynthesis",
+        "isCorrect": true
+      },
+      {
+        "text": "Condensation",
+        "isCorrect": false
+      },
+      {
+        "text": "Combustion",
+        "isCorrect": false
+      },
+      {
+        "text": "Evaporation",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Photosynthesis",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "video",
+      "science"
+    ],
+    "videoUrl": "assets/media/video/science/photosynthesis_animation.mp4"
+  },
+  {
+    "id": "MM69",
+    "category": "General Knowledge",
+    "question": "Name this fruit.",
+    "answers": [
+      {
+        "text": "Papaya",
+        "isCorrect": false
+      },
+      {
+        "text": "Pineapple",
+        "isCorrect": true
+      },
+      {
+        "text": "Mango",
+        "isCorrect": false
+      },
+      {
+        "text": "Guava",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Pineapple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "multimedia",
+      "image"
+    ],
+    "imageUrl": "assets/media/images/food/pineapple.jpg"
+  },
+  {
+    "id": "MM70",
+    "category": "Entertainment",
+    "question": "Whose voice is this character?",
+    "answers": [
+      {
+        "text": "Darth Vader",
+        "isCorrect": true
+      },
+      {
+        "text": "Yoda",
+        "isCorrect": false
+      },
+      {
+        "text": "Han Solo",
+        "isCorrect": false
+      },
+      {
+        "text": "Luke Skywalker",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Darth Vader",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "audio",
+      "movies"
+    ],
+    "audioUrl": "assets/media/audio/movies/darth_vader_breathing.mp3"
+  },
+  {
+    "id": "MM71",
+    "category": "Science",
+    "question": "What process is shown in the clip?",
+    "answers": [
+      {
+        "text": "Photosynthesis",
+        "isCorrect": true
+      },
+      {
+        "text": "Evaporation",
+        "isCorrect": false
+      },
+      {
+        "text": "Combustion",
+        "isCorrect": false
+      },
+      {
+        "text": "Condensation",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Photosynthesis",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "video",
+      "science"
+    ],
+    "videoUrl": "assets/media/video/science/photosynthesis_animation.mp4"
+  },
+  {
+    "id": "MM72",
+    "category": "General Knowledge",
+    "question": "Name this fruit.",
+    "answers": [
+      {
+        "text": "Mango",
+        "isCorrect": false
+      },
+      {
+        "text": "Pineapple",
+        "isCorrect": true
+      },
+      {
+        "text": "Papaya",
+        "isCorrect": false
+      },
+      {
+        "text": "Guava",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Pineapple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "multimedia",
+      "image"
+    ],
+    "imageUrl": "assets/media/images/food/pineapple.jpg"
+  },
+  {
+    "id": "MM73",
+    "category": "Entertainment",
+    "question": "Whose voice is this character?",
+    "answers": [
+      {
+        "text": "Yoda",
+        "isCorrect": false
+      },
+      {
+        "text": "Han Solo",
+        "isCorrect": false
+      },
+      {
+        "text": "Darth Vader",
+        "isCorrect": true
+      },
+      {
+        "text": "Luke Skywalker",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Darth Vader",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "audio",
+      "movies"
+    ],
+    "audioUrl": "assets/media/audio/movies/darth_vader_breathing.mp3"
+  },
+  {
+    "id": "MM74",
+    "category": "Science",
+    "question": "What process is shown in the clip?",
+    "answers": [
+      {
+        "text": "Combustion",
+        "isCorrect": false
+      },
+      {
+        "text": "Photosynthesis",
+        "isCorrect": true
+      },
+      {
+        "text": "Evaporation",
+        "isCorrect": false
+      },
+      {
+        "text": "Condensation",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Photosynthesis",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "video",
+      "science"
+    ],
+    "videoUrl": "assets/media/video/science/photosynthesis_animation.mp4"
+  },
+  {
+    "id": "MM75",
+    "category": "General Knowledge",
+    "question": "Name this fruit.",
+    "answers": [
+      {
+        "text": "Pineapple",
+        "isCorrect": true
+      },
+      {
+        "text": "Mango",
+        "isCorrect": false
+      },
+      {
+        "text": "Papaya",
+        "isCorrect": false
+      },
+      {
+        "text": "Guava",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Pineapple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "multimedia",
+      "image"
+    ],
+    "imageUrl": "assets/media/images/food/pineapple.jpg"
+  },
+  {
+    "id": "MM76",
+    "category": "Entertainment",
+    "question": "Whose voice is this character?",
+    "answers": [
+      {
+        "text": "Darth Vader",
+        "isCorrect": true
+      },
+      {
+        "text": "Yoda",
+        "isCorrect": false
+      },
+      {
+        "text": "Luke Skywalker",
+        "isCorrect": false
+      },
+      {
+        "text": "Han Solo",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Darth Vader",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "audio",
+      "movies"
+    ],
+    "audioUrl": "assets/media/audio/movies/darth_vader_breathing.mp3"
+  },
+  {
+    "id": "MM77",
+    "category": "Science",
+    "question": "What process is shown in the clip?",
+    "answers": [
+      {
+        "text": "Photosynthesis",
+        "isCorrect": true
+      },
+      {
+        "text": "Evaporation",
+        "isCorrect": false
+      },
+      {
+        "text": "Condensation",
+        "isCorrect": false
+      },
+      {
+        "text": "Combustion",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Photosynthesis",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "video",
+      "science"
+    ],
+    "videoUrl": "assets/media/video/science/photosynthesis_animation.mp4"
+  },
+  {
+    "id": "MM78",
+    "category": "General Knowledge",
+    "question": "Name this fruit.",
+    "answers": [
+      {
+        "text": "Papaya",
+        "isCorrect": false
+      },
+      {
+        "text": "Guava",
+        "isCorrect": false
+      },
+      {
+        "text": "Mango",
+        "isCorrect": false
+      },
+      {
+        "text": "Pineapple",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Pineapple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "multimedia",
+      "image"
+    ],
+    "imageUrl": "assets/media/images/food/pineapple.jpg"
+  },
+  {
+    "id": "MM79",
+    "category": "Entertainment",
+    "question": "Whose voice is this character?",
+    "answers": [
+      {
+        "text": "Yoda",
+        "isCorrect": false
+      },
+      {
+        "text": "Luke Skywalker",
+        "isCorrect": false
+      },
+      {
+        "text": "Darth Vader",
+        "isCorrect": true
+      },
+      {
+        "text": "Han Solo",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Darth Vader",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "audio",
+      "movies"
+    ],
+    "audioUrl": "assets/media/audio/movies/darth_vader_breathing.mp3"
+  },
+  {
+    "id": "MM80",
+    "category": "Science",
+    "question": "What process is shown in the clip?",
+    "answers": [
+      {
+        "text": "Condensation",
+        "isCorrect": false
+      },
+      {
+        "text": "Combustion",
+        "isCorrect": false
+      },
+      {
+        "text": "Photosynthesis",
+        "isCorrect": true
+      },
+      {
+        "text": "Evaporation",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Photosynthesis",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "multimedia",
+      "video",
+      "science"
+    ],
+    "videoUrl": "assets/media/video/science/photosynthesis_animation.mp4"
+  }
+]

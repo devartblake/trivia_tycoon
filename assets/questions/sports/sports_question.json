@@ -1,0 +1,776 @@
+[
+  {
+    "id": "SP5_1",
+    "category": "Sports",
+    "question": "Soccer is called…",
+    "answers": [
+      {
+        "text": "Football (outside US)",
+        "isCorrect": true
+      },
+      {
+        "text": "Basketball",
+        "isCorrect": false
+      },
+      {
+        "text": "Tennis",
+        "isCorrect": false
+      },
+      {
+        "text": "Baseball",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Football (outside US)",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "soccer"
+    ]
+  },
+  {
+    "id": "SP5_2",
+    "category": "Sports",
+    "question": "Basketball hoop height:",
+    "answers": [
+      {
+        "text": "10 feet",
+        "isCorrect": true
+      },
+      {
+        "text": "8 feet",
+        "isCorrect": false
+      },
+      {
+        "text": "9 feet",
+        "isCorrect": false
+      },
+      {
+        "text": "12 feet",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "10 feet",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "basketball"
+    ]
+  },
+  {
+    "id": "SP6_1",
+    "category": "Sports",
+    "question": "Olympics held every…",
+    "answers": [
+      {
+        "text": "4 years",
+        "isCorrect": true
+      },
+      {
+        "text": "2",
+        "isCorrect": false
+      },
+      {
+        "text": "6",
+        "isCorrect": false
+      },
+      {
+        "text": "8",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "4 years",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "olympics"
+    ]
+  },
+  {
+    "id": "SP6_2",
+    "category": "Sports",
+    "question": "Baseball has…",
+    "answers": [
+      {
+        "text": "9 innings",
+        "isCorrect": true
+      },
+      {
+        "text": "4",
+        "isCorrect": false
+      },
+      {
+        "text": "6",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "9 innings",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "baseball"
+    ]
+  },
+  {
+    "id": "SP7_1",
+    "category": "Sports",
+    "question": "Super Bowl is final of…",
+    "answers": [
+      {
+        "text": "NFL",
+        "isCorrect": true
+      },
+      {
+        "text": "NBA",
+        "isCorrect": false
+      },
+      {
+        "text": "MLB",
+        "isCorrect": false
+      },
+      {
+        "text": "NHL",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "NFL",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "super bowl"
+    ]
+  },
+  {
+    "id": "SP7_2",
+    "category": "Sports",
+    "question": "Tennis Grand Slam events are…",
+    "answers": [
+      {
+        "text": "4",
+        "isCorrect": true
+      },
+      {
+        "text": "2",
+        "isCorrect": false
+      },
+      {
+        "text": "3",
+        "isCorrect": false
+      },
+      {
+        "text": "5",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "4",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "tennis"
+    ]
+  },
+  {
+    "id": "SP8_1",
+    "category": "Sports",
+    "question": "100m sprint world record by…",
+    "answers": [
+      {
+        "text": "Usain Bolt",
+        "isCorrect": true
+      },
+      {
+        "text": "Carl Lewis",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Johnson",
+        "isCorrect": false
+      },
+      {
+        "text": "Tyson Gay",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Usain Bolt",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "track"
+    ]
+  },
+  {
+    "id": "SP8_2",
+    "category": "Sports",
+    "question": "NBA team Lakers city:",
+    "answers": [
+      {
+        "text": "Los Angeles",
+        "isCorrect": true
+      },
+      {
+        "text": "New York",
+        "isCorrect": false
+      },
+      {
+        "text": "Chicago",
+        "isCorrect": false
+      },
+      {
+        "text": "Miami",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Los Angeles",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "nba"
+    ]
+  },
+  {
+    "id": "SP9_1",
+    "category": "Sports",
+    "question": "FIFA World Cup 2018 winner:",
+    "answers": [
+      {
+        "text": "France",
+        "isCorrect": true
+      },
+      {
+        "text": "Brazil",
+        "isCorrect": false
+      },
+      {
+        "text": "Germany",
+        "isCorrect": false
+      },
+      {
+        "text": "Argentina",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "France",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "world cup"
+    ]
+  },
+  {
+    "id": "SP9_2",
+    "category": "Sports",
+    "question": "First modern Olympics year:",
+    "answers": [
+      {
+        "text": "1896",
+        "isCorrect": true
+      },
+      {
+        "text": "1900",
+        "isCorrect": false
+      },
+      {
+        "text": "1888",
+        "isCorrect": false
+      },
+      {
+        "text": "1920",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1896",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "olympics"
+    ]
+  },
+  {
+    "id": "SP10_1",
+    "category": "Sports",
+    "question": "Rugby originated in…",
+    "answers": [
+      {
+        "text": "England",
+        "isCorrect": true
+      },
+      {
+        "text": "France",
+        "isCorrect": false
+      },
+      {
+        "text": "Australia",
+        "isCorrect": false
+      },
+      {
+        "text": "South Africa",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "England",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "rugby"
+    ]
+  },
+  {
+    "id": "SP10_2",
+    "category": "Sports",
+    "question": "Hockey Stanley Cup is…",
+    "answers": [
+      {
+        "text": "NHL trophy",
+        "isCorrect": true
+      },
+      {
+        "text": "NFL trophy",
+        "isCorrect": false
+      },
+      {
+        "text": "NBA trophy",
+        "isCorrect": false
+      },
+      {
+        "text": "MLB trophy",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "NHL trophy",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "hockey"
+    ]
+  },
+  {
+    "id": "SP11_1",
+    "category": "Sports",
+    "question": "Golf major tournaments:",
+    "answers": [
+      {
+        "text": "4",
+        "isCorrect": true
+      },
+      {
+        "text": "3",
+        "isCorrect": false
+      },
+      {
+        "text": "2",
+        "isCorrect": false
+      },
+      {
+        "text": "5",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "4",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "golf"
+    ]
+  },
+  {
+    "id": "SP11_2",
+    "category": "Sports",
+    "question": "Cricket Test match lasts…",
+    "answers": [
+      {
+        "text": "Up to 5 days",
+        "isCorrect": true
+      },
+      {
+        "text": "1 day",
+        "isCorrect": false
+      },
+      {
+        "text": "2 days",
+        "isCorrect": false
+      },
+      {
+        "text": "7 days",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Up to 5 days",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "cricket"
+    ]
+  },
+  {
+    "id": "SP12_1",
+    "category": "Sports",
+    "question": "First soccer World Cup year:",
+    "answers": [
+      {
+        "text": "1930",
+        "isCorrect": true
+      },
+      {
+        "text": "1920",
+        "isCorrect": false
+      },
+      {
+        "text": "1940",
+        "isCorrect": false
+      },
+      {
+        "text": "1950",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1930",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "world cup"
+    ]
+  },
+  {
+    "id": "SP12_2",
+    "category": "Sports",
+    "question": "Olympics founded in…",
+    "answers": [
+      {
+        "text": "Greece",
+        "isCorrect": true
+      },
+      {
+        "text": "Italy",
+        "isCorrect": false
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      },
+      {
+        "text": "Rome",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Greece",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "olympics"
+    ]
+  },
+  {
+    "id": "SPX16",
+    "category": "Mixed Sports",
+    "question": "Basketball is played with a ball.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SPX17",
+    "category": "Mixed Sports",
+    "question": "Basketball is played with a ball.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SPX18",
+    "category": "Mixed Sports",
+    "question": "Basketball is played with a ball.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SPX19",
+    "category": "Mixed Sports",
+    "question": "Basketball is played with a ball.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SPX20",
+    "category": "Mixed Sports",
+    "question": "Basketball is played with a ball.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SPX21",
+    "category": "Mixed Sports",
+    "question": "Basketball is played with a ball.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SPX22",
+    "category": "Mixed Sports",
+    "question": "Basketball is played with a ball.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SPX23",
+    "category": "Mixed Sports",
+    "question": "Basketball is played with a ball.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SPX24",
+    "category": "Mixed Sports",
+    "question": "Basketball is played with a ball.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SPX25",
+    "category": "Mixed Sports",
+    "question": "Basketball is played with a ball.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SPX26",
+    "category": "Mixed Sports",
+    "question": "Basketball is played with a ball.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SPX27",
+    "category": "Mixed Sports",
+    "question": "Basketball is played with a ball.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SPX28",
+    "category": "Mixed Sports",
+    "question": "Basketball is played with a ball.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SPX29",
+    "category": "Mixed Sports",
+    "question": "Basketball is played with a ball.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  }
+]

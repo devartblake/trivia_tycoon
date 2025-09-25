@@ -1,0 +1,1502 @@
+[
+  {
+    "title": "Answer 20 Arts questions correctly in Classic",
+    "progress": 0,
+    "total": 20,
+    "reward": 900,
+    "icon": "palette",
+    "badge": "Arts Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Classic",
+    "category": "Arts",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 25 Tech questions correctly in Multiplayer",
+    "progress": 0,
+    "total": 25,
+    "reward": 1200,
+    "icon": "memory",
+    "badge": "Tech Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Multiplayer",
+    "category": "Tech",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 15 Entertainment questions correctly in Speed",
+    "progress": 0,
+    "total": 15,
+    "reward": 900,
+    "icon": "movie",
+    "badge": "Entertainment Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Speed",
+    "category": "Entertainment",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 15 History questions correctly in Multimedia",
+    "progress": 0,
+    "total": 15,
+    "reward": 1000,
+    "icon": "history_edu",
+    "badge": "History Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Multimedia",
+    "category": "History",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 25 Science questions correctly in Survival",
+    "progress": 0,
+    "total": 25,
+    "reward": 800,
+    "icon": "science",
+    "badge": "Science Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Survival",
+    "category": "Science",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 15 Geography questions correctly in Multiplayer",
+    "progress": 0,
+    "total": 15,
+    "reward": 800,
+    "icon": "public",
+    "badge": "Geography Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Multiplayer",
+    "category": "Geography",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 25 Tech questions correctly in Multimedia",
+    "progress": 0,
+    "total": 25,
+    "reward": 1200,
+    "icon": "memory",
+    "badge": "Tech Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Multimedia",
+    "category": "Tech",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 25 General questions correctly in Survival",
+    "progress": 0,
+    "total": 25,
+    "reward": 1200,
+    "icon": "quiz",
+    "badge": "General Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Survival",
+    "category": "General",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 15 Tech questions correctly in Classic",
+    "progress": 0,
+    "total": 15,
+    "reward": 800,
+    "icon": "memory",
+    "badge": "Tech Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Classic",
+    "category": "Tech",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 25 Arts questions correctly in Survival",
+    "progress": 0,
+    "total": 25,
+    "reward": 900,
+    "icon": "palette",
+    "badge": "Arts Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Survival",
+    "category": "Arts",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 20 Nature questions correctly in Speed",
+    "progress": 0,
+    "total": 20,
+    "reward": 1200,
+    "icon": "eco",
+    "badge": "Nature Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Speed",
+    "category": "Nature",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 20 Sports questions correctly in Speed",
+    "progress": 0,
+    "total": 20,
+    "reward": 900,
+    "icon": "sports_esports",
+    "badge": "Sports Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Speed",
+    "category": "Sports",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 25 Entertainment questions correctly in Multiplayer",
+    "progress": 0,
+    "total": 25,
+    "reward": 800,
+    "icon": "movie",
+    "badge": "Entertainment Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Multiplayer",
+    "category": "Entertainment",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 25 Science questions correctly in Multiplayer",
+    "progress": 0,
+    "total": 25,
+    "reward": 900,
+    "icon": "science",
+    "badge": "Science Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Multiplayer",
+    "category": "Science",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 25 Entertainment questions correctly in Multiplayer",
+    "progress": 0,
+    "total": 25,
+    "reward": 800,
+    "icon": "movie",
+    "badge": "Entertainment Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Multiplayer",
+    "category": "Entertainment",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 25 Literature questions correctly in Survival",
+    "progress": 0,
+    "total": 25,
+    "reward": 1200,
+    "icon": "menu_book",
+    "badge": "Literature Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Survival",
+    "category": "Literature",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 20 Science questions correctly in Speed",
+    "progress": 0,
+    "total": 20,
+    "reward": 1200,
+    "icon": "science",
+    "badge": "Science Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Speed",
+    "category": "Science",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 25 General questions correctly in Speed",
+    "progress": 0,
+    "total": 25,
+    "reward": 1000,
+    "icon": "quiz",
+    "badge": "General Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Speed",
+    "category": "General",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 15 Arts questions correctly in Survival",
+    "progress": 0,
+    "total": 15,
+    "reward": 1000,
+    "icon": "palette",
+    "badge": "Arts Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Survival",
+    "category": "Arts",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 15 Science questions correctly in Multiplayer",
+    "progress": 0,
+    "total": 15,
+    "reward": 1200,
+    "icon": "science",
+    "badge": "Science Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Multiplayer",
+    "category": "Science",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 25 General questions correctly in Multimedia",
+    "progress": 0,
+    "total": 25,
+    "reward": 900,
+    "icon": "quiz",
+    "badge": "General Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Multimedia",
+    "category": "General",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 15 History questions correctly in Multiplayer",
+    "progress": 0,
+    "total": 15,
+    "reward": 900,
+    "icon": "history_edu",
+    "badge": "History Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Multiplayer",
+    "category": "History",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 15 Nature questions correctly in Multimedia",
+    "progress": 0,
+    "total": 15,
+    "reward": 800,
+    "icon": "eco",
+    "badge": "Nature Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Multimedia",
+    "category": "Nature",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 15 Literature questions correctly in Multiplayer",
+    "progress": 0,
+    "total": 15,
+    "reward": 1200,
+    "icon": "menu_book",
+    "badge": "Literature Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Multiplayer",
+    "category": "Literature",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 25 General questions correctly in Speed",
+    "progress": 0,
+    "total": 25,
+    "reward": 1200,
+    "icon": "quiz",
+    "badge": "General Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Speed",
+    "category": "General",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 25 Sports questions correctly in Speed",
+    "progress": 0,
+    "total": 25,
+    "reward": 1200,
+    "icon": "sports_esports",
+    "badge": "Sports Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Speed",
+    "category": "Sports",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 15 Geography questions correctly in Survival",
+    "progress": 0,
+    "total": 15,
+    "reward": 800,
+    "icon": "public",
+    "badge": "Geography Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Survival",
+    "category": "Geography",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 20 Entertainment questions correctly in Survival",
+    "progress": 0,
+    "total": 20,
+    "reward": 800,
+    "icon": "movie",
+    "badge": "Entertainment Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Survival",
+    "category": "Entertainment",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 25 Geography questions correctly in Survival",
+    "progress": 0,
+    "total": 25,
+    "reward": 900,
+    "icon": "public",
+    "badge": "Geography Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Survival",
+    "category": "Geography",
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 25 Tech questions correctly in Survival",
+    "progress": 0,
+    "total": 25,
+    "reward": 900,
+    "icon": "memory",
+    "badge": "Tech Expert",
+    "tags": [
+      "adults",
+      "category"
+    ],
+    "mode": "Survival",
+    "category": "Tech",
+    "difficulty": 3
+  },
+  {
+    "title": "Achieve 20 streak",
+    "progress": 0,
+    "total": 20,
+    "reward": 1200,
+    "icon": "flash_on",
+    "badge": "Unstoppable",
+    "tags": [
+      "adults",
+      "streak"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Achieve 15 streak",
+    "progress": 0,
+    "total": 15,
+    "reward": 1200,
+    "icon": "flash_on",
+    "badge": "Unstoppable",
+    "tags": [
+      "adults",
+      "streak"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Achieve 15 streak",
+    "progress": 0,
+    "total": 15,
+    "reward": 1000,
+    "icon": "flash_on",
+    "badge": "Unstoppable",
+    "tags": [
+      "adults",
+      "streak"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Achieve 15 streak",
+    "progress": 0,
+    "total": 15,
+    "reward": 1200,
+    "icon": "flash_on",
+    "badge": "Unstoppable",
+    "tags": [
+      "adults",
+      "streak"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Achieve 20 streak",
+    "progress": 0,
+    "total": 20,
+    "reward": 1100,
+    "icon": "flash_on",
+    "badge": "Unstoppable",
+    "tags": [
+      "adults",
+      "streak"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Achieve 12 streak",
+    "progress": 0,
+    "total": 12,
+    "reward": 1100,
+    "icon": "flash_on",
+    "badge": "Unstoppable",
+    "tags": [
+      "adults",
+      "streak"
+    ],
+    "mode": "Multimedia",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Achieve 15 streak",
+    "progress": 0,
+    "total": 15,
+    "reward": 1100,
+    "icon": "flash_on",
+    "badge": "Unstoppable",
+    "tags": [
+      "adults",
+      "streak"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Achieve 20 streak",
+    "progress": 0,
+    "total": 20,
+    "reward": 1100,
+    "icon": "flash_on",
+    "badge": "Unstoppable",
+    "tags": [
+      "adults",
+      "streak"
+    ],
+    "mode": "Multimedia",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Achieve 20 streak",
+    "progress": 0,
+    "total": 20,
+    "reward": 1000,
+    "icon": "flash_on",
+    "badge": "Unstoppable",
+    "tags": [
+      "adults",
+      "streak"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Achieve 15 streak",
+    "progress": 0,
+    "total": 15,
+    "reward": 1100,
+    "icon": "flash_on",
+    "badge": "Unstoppable",
+    "tags": [
+      "adults",
+      "streak"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Achieve 12 streak",
+    "progress": 0,
+    "total": 12,
+    "reward": 1000,
+    "icon": "flash_on",
+    "badge": "Unstoppable",
+    "tags": [
+      "adults",
+      "streak"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Achieve 15 streak",
+    "progress": 0,
+    "total": 15,
+    "reward": 1100,
+    "icon": "flash_on",
+    "badge": "Unstoppable",
+    "tags": [
+      "adults",
+      "streak"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Maintain 90% accuracy for 5 rounds",
+    "progress": 0,
+    "total": 5,
+    "reward": 1200,
+    "icon": "check_circle",
+    "badge": "Precision",
+    "tags": [
+      "adults",
+      "accuracy"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Maintain 90% accuracy for 4 rounds",
+    "progress": 0,
+    "total": 4,
+    "reward": 1200,
+    "icon": "check_circle",
+    "badge": "Precision",
+    "tags": [
+      "adults",
+      "accuracy"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Maintain 90% accuracy for 5 rounds",
+    "progress": 0,
+    "total": 5,
+    "reward": 1100,
+    "icon": "check_circle",
+    "badge": "Precision",
+    "tags": [
+      "adults",
+      "accuracy"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Maintain 90% accuracy for 3 rounds",
+    "progress": 0,
+    "total": 3,
+    "reward": 1000,
+    "icon": "check_circle",
+    "badge": "Precision",
+    "tags": [
+      "adults",
+      "accuracy"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Maintain 90% accuracy for 5 rounds",
+    "progress": 0,
+    "total": 5,
+    "reward": 1100,
+    "icon": "check_circle",
+    "badge": "Precision",
+    "tags": [
+      "adults",
+      "accuracy"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Maintain 90% accuracy for 5 rounds",
+    "progress": 0,
+    "total": 5,
+    "reward": 1100,
+    "icon": "check_circle",
+    "badge": "Precision",
+    "tags": [
+      "adults",
+      "accuracy"
+    ],
+    "mode": "Multimedia",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Maintain 90% accuracy for 5 rounds",
+    "progress": 0,
+    "total": 5,
+    "reward": 1000,
+    "icon": "check_circle",
+    "badge": "Precision",
+    "tags": [
+      "adults",
+      "accuracy"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Maintain 90% accuracy for 5 rounds",
+    "progress": 0,
+    "total": 5,
+    "reward": 1000,
+    "icon": "check_circle",
+    "badge": "Precision",
+    "tags": [
+      "adults",
+      "accuracy"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Maintain 90% accuracy for 4 rounds",
+    "progress": 0,
+    "total": 4,
+    "reward": 1200,
+    "icon": "check_circle",
+    "badge": "Precision",
+    "tags": [
+      "adults",
+      "accuracy"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Maintain 90% accuracy for 5 rounds",
+    "progress": 0,
+    "total": 5,
+    "reward": 1000,
+    "icon": "check_circle",
+    "badge": "Precision",
+    "tags": [
+      "adults",
+      "accuracy"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Complete 2 perfect rounds",
+    "progress": 0,
+    "total": 2,
+    "reward": 1100,
+    "icon": "military_tech",
+    "badge": "Perfectionist",
+    "tags": [
+      "adults",
+      "perfect"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Complete 2 perfect rounds",
+    "progress": 0,
+    "total": 2,
+    "reward": 1300,
+    "icon": "military_tech",
+    "badge": "Perfectionist",
+    "tags": [
+      "adults",
+      "perfect"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Complete 3 perfect rounds",
+    "progress": 0,
+    "total": 3,
+    "reward": 1300,
+    "icon": "military_tech",
+    "badge": "Perfectionist",
+    "tags": [
+      "adults",
+      "perfect"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Complete 3 perfect rounds",
+    "progress": 0,
+    "total": 3,
+    "reward": 1300,
+    "icon": "military_tech",
+    "badge": "Perfectionist",
+    "tags": [
+      "adults",
+      "perfect"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Complete 2 perfect rounds",
+    "progress": 0,
+    "total": 2,
+    "reward": 1100,
+    "icon": "military_tech",
+    "badge": "Perfectionist",
+    "tags": [
+      "adults",
+      "perfect"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Complete 3 perfect rounds",
+    "progress": 0,
+    "total": 3,
+    "reward": 1100,
+    "icon": "military_tech",
+    "badge": "Perfectionist",
+    "tags": [
+      "adults",
+      "perfect"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Complete 3 perfect rounds",
+    "progress": 0,
+    "total": 3,
+    "reward": 1300,
+    "icon": "military_tech",
+    "badge": "Perfectionist",
+    "tags": [
+      "adults",
+      "perfect"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Complete 2 perfect rounds",
+    "progress": 0,
+    "total": 2,
+    "reward": 1200,
+    "icon": "military_tech",
+    "badge": "Perfectionist",
+    "tags": [
+      "adults",
+      "perfect"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 15 under 4s each",
+    "progress": 0,
+    "total": 15,
+    "reward": 1100,
+    "icon": "timer",
+    "badge": "Lightning",
+    "tags": [
+      "adults",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 10 under 5s each",
+    "progress": 0,
+    "total": 10,
+    "reward": 1100,
+    "icon": "timer",
+    "badge": "Lightning",
+    "tags": [
+      "adults",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 15 under 5s each",
+    "progress": 0,
+    "total": 15,
+    "reward": 1000,
+    "icon": "timer",
+    "badge": "Lightning",
+    "tags": [
+      "adults",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 10 under 4s each",
+    "progress": 0,
+    "total": 10,
+    "reward": 1000,
+    "icon": "timer",
+    "badge": "Lightning",
+    "tags": [
+      "adults",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 10 under 5s each",
+    "progress": 0,
+    "total": 10,
+    "reward": 1100,
+    "icon": "timer",
+    "badge": "Lightning",
+    "tags": [
+      "adults",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 15 under 3s each",
+    "progress": 0,
+    "total": 15,
+    "reward": 1100,
+    "icon": "timer",
+    "badge": "Lightning",
+    "tags": [
+      "adults",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 12 under 3s each",
+    "progress": 0,
+    "total": 12,
+    "reward": 1100,
+    "icon": "timer",
+    "badge": "Lightning",
+    "tags": [
+      "adults",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 10 under 3s each",
+    "progress": 0,
+    "total": 10,
+    "reward": 1100,
+    "icon": "timer",
+    "badge": "Lightning",
+    "tags": [
+      "adults",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 10 under 5s each",
+    "progress": 0,
+    "total": 10,
+    "reward": 1100,
+    "icon": "timer",
+    "badge": "Lightning",
+    "tags": [
+      "adults",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 12 under 3s each",
+    "progress": 0,
+    "total": 12,
+    "reward": 1100,
+    "icon": "timer",
+    "badge": "Lightning",
+    "tags": [
+      "adults",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 12 under 3s each",
+    "progress": 0,
+    "total": 12,
+    "reward": 1100,
+    "icon": "timer",
+    "badge": "Lightning",
+    "tags": [
+      "adults",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 10 under 4s each",
+    "progress": 0,
+    "total": 10,
+    "reward": 1100,
+    "icon": "timer",
+    "badge": "Lightning",
+    "tags": [
+      "adults",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Survive 30 questions in Survival",
+    "progress": 0,
+    "total": 30,
+    "reward": 1100,
+    "icon": "favorite_border",
+    "badge": "Survivor",
+    "tags": [
+      "adults",
+      "survival"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Survive 20 questions in Survival",
+    "progress": 0,
+    "total": 20,
+    "reward": 1100,
+    "icon": "favorite_border",
+    "badge": "Survivor",
+    "tags": [
+      "adults",
+      "survival"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Survive 25 questions in Survival",
+    "progress": 0,
+    "total": 25,
+    "reward": 1200,
+    "icon": "favorite_border",
+    "badge": "Survivor",
+    "tags": [
+      "adults",
+      "survival"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Survive 30 questions in Survival",
+    "progress": 0,
+    "total": 30,
+    "reward": 1200,
+    "icon": "favorite_border",
+    "badge": "Survivor",
+    "tags": [
+      "adults",
+      "survival"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Survive 20 questions in Survival",
+    "progress": 0,
+    "total": 20,
+    "reward": 1100,
+    "icon": "favorite_border",
+    "badge": "Survivor",
+    "tags": [
+      "adults",
+      "survival"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Survive 25 questions in Survival",
+    "progress": 0,
+    "total": 25,
+    "reward": 1200,
+    "icon": "favorite_border",
+    "badge": "Survivor",
+    "tags": [
+      "adults",
+      "survival"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Survive 30 questions in Survival",
+    "progress": 0,
+    "total": 30,
+    "reward": 1200,
+    "icon": "favorite_border",
+    "badge": "Survivor",
+    "tags": [
+      "adults",
+      "survival"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Survive 20 questions in Survival",
+    "progress": 0,
+    "total": 20,
+    "reward": 1200,
+    "icon": "favorite_border",
+    "badge": "Survivor",
+    "tags": [
+      "adults",
+      "survival"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Survive 30 questions in Survival",
+    "progress": 0,
+    "total": 30,
+    "reward": 1200,
+    "icon": "favorite_border",
+    "badge": "Survivor",
+    "tags": [
+      "adults",
+      "survival"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Survive 25 questions in Survival",
+    "progress": 0,
+    "total": 25,
+    "reward": 1100,
+    "icon": "favorite_border",
+    "badge": "Survivor",
+    "tags": [
+      "adults",
+      "survival"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 5 games without lifelines",
+    "progress": 0,
+    "total": 5,
+    "reward": 1200,
+    "icon": "bolt",
+    "badge": "Purist",
+    "tags": [
+      "adults",
+      "no_powerups"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 3 games without lifelines",
+    "progress": 0,
+    "total": 3,
+    "reward": 1200,
+    "icon": "bolt",
+    "badge": "Purist",
+    "tags": [
+      "adults",
+      "no_powerups"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 3 games without lifelines",
+    "progress": 0,
+    "total": 3,
+    "reward": 1500,
+    "icon": "bolt",
+    "badge": "Purist",
+    "tags": [
+      "adults",
+      "no_powerups"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 5 games without lifelines",
+    "progress": 0,
+    "total": 5,
+    "reward": 1200,
+    "icon": "bolt",
+    "badge": "Purist",
+    "tags": [
+      "adults",
+      "no_powerups"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 3 games without lifelines",
+    "progress": 0,
+    "total": 3,
+    "reward": 1200,
+    "icon": "bolt",
+    "badge": "Purist",
+    "tags": [
+      "adults",
+      "no_powerups"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 4 games without lifelines",
+    "progress": 0,
+    "total": 4,
+    "reward": 1300,
+    "icon": "bolt",
+    "badge": "Purist",
+    "tags": [
+      "adults",
+      "no_powerups"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 5 games without lifelines",
+    "progress": 0,
+    "total": 5,
+    "reward": 1300,
+    "icon": "bolt",
+    "badge": "Purist",
+    "tags": [
+      "adults",
+      "no_powerups"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 4 games without lifelines",
+    "progress": 0,
+    "total": 4,
+    "reward": 1300,
+    "icon": "bolt",
+    "badge": "Purist",
+    "tags": [
+      "adults",
+      "no_powerups"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 5 multiplayer ranked matches",
+    "progress": 0,
+    "total": 5,
+    "reward": 1600,
+    "icon": "groups",
+    "badge": "Arena Champ",
+    "tags": [
+      "adults",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 7 multiplayer ranked matches",
+    "progress": 0,
+    "total": 7,
+    "reward": 1400,
+    "icon": "groups",
+    "badge": "Arena Champ",
+    "tags": [
+      "adults",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 5 multiplayer ranked matches",
+    "progress": 0,
+    "total": 5,
+    "reward": 1600,
+    "icon": "groups",
+    "badge": "Arena Champ",
+    "tags": [
+      "adults",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 7 multiplayer ranked matches",
+    "progress": 0,
+    "total": 7,
+    "reward": 1400,
+    "icon": "groups",
+    "badge": "Arena Champ",
+    "tags": [
+      "adults",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 10 multiplayer ranked matches",
+    "progress": 0,
+    "total": 10,
+    "reward": 1600,
+    "icon": "groups",
+    "badge": "Arena Champ",
+    "tags": [
+      "adults",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 10 multiplayer ranked matches",
+    "progress": 0,
+    "total": 10,
+    "reward": 1600,
+    "icon": "groups",
+    "badge": "Arena Champ",
+    "tags": [
+      "adults",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 5 multiplayer ranked matches",
+    "progress": 0,
+    "total": 5,
+    "reward": 1200,
+    "icon": "groups",
+    "badge": "Arena Champ",
+    "tags": [
+      "adults",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 5 multiplayer ranked matches",
+    "progress": 0,
+    "total": 5,
+    "reward": 1200,
+    "icon": "groups",
+    "badge": "Arena Champ",
+    "tags": [
+      "adults",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 10 multiplayer ranked matches",
+    "progress": 0,
+    "total": 10,
+    "reward": 1400,
+    "icon": "groups",
+    "badge": "Arena Champ",
+    "tags": [
+      "adults",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 10 multiplayer ranked matches",
+    "progress": 0,
+    "total": 10,
+    "reward": 1400,
+    "icon": "groups",
+    "badge": "Arena Champ",
+    "tags": [
+      "adults",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 3
+  }
+]

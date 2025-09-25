@@ -1,0 +1,2398 @@
+[
+  {
+    "id": "MC1",
+    "category": "Geography",
+    "question": "Which country’s flag is this?",
+    "answers": [
+      {
+        "text": "Japan",
+        "isCorrect": true
+      },
+      {
+        "text": "Spain",
+        "isCorrect": false
+      },
+      {
+        "text": "France",
+        "isCorrect": false
+      },
+      {
+        "text": "Germany",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Japan",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/flags/japan.png"
+  },
+  {
+    "id": "MC2",
+    "category": "Geography",
+    "question": "Which country’s flag is this?",
+    "answers": [
+      {
+        "text": "Spain",
+        "isCorrect": false
+      },
+      {
+        "text": "Brazil",
+        "isCorrect": true
+      },
+      {
+        "text": "France",
+        "isCorrect": false
+      },
+      {
+        "text": "Germany",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Brazil",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/flags/brazil.png"
+  },
+  {
+    "id": "MC3",
+    "category": "Geography",
+    "question": "Identify this landmark.",
+    "answers": [
+      {
+        "text": "Big Ben",
+        "isCorrect": false
+      },
+      {
+        "text": "Statue of Liberty",
+        "isCorrect": false
+      },
+      {
+        "text": "Eiffel Tower",
+        "isCorrect": true
+      },
+      {
+        "text": "Colosseum",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Eiffel Tower",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/landmarks/eiffel_tower.jpg"
+  },
+  {
+    "id": "MC4",
+    "category": "Geography",
+    "question": "Identify this landmark.",
+    "answers": [
+      {
+        "text": "Statue of Liberty",
+        "isCorrect": false
+      },
+      {
+        "text": "Colosseum",
+        "isCorrect": false
+      },
+      {
+        "text": "Taj Mahal",
+        "isCorrect": true
+      },
+      {
+        "text": "Big Ben",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Taj Mahal",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/landmarks/taj_mahal.jpg"
+  },
+  {
+    "id": "MC5",
+    "category": "Science",
+    "question": "Which animal is shown?",
+    "answers": [
+      {
+        "text": "Giraffe",
+        "isCorrect": false
+      },
+      {
+        "text": "Elephant",
+        "isCorrect": false
+      },
+      {
+        "text": "Lion",
+        "isCorrect": false
+      },
+      {
+        "text": "Panda",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Panda",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/animals/panda.jpg"
+  },
+  {
+    "id": "MC6",
+    "category": "Science",
+    "question": "Which animal is shown?",
+    "answers": [
+      {
+        "text": "Lion",
+        "isCorrect": false
+      },
+      {
+        "text": "Tiger",
+        "isCorrect": true
+      },
+      {
+        "text": "Giraffe",
+        "isCorrect": false
+      },
+      {
+        "text": "Elephant",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Tiger",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/animals/tiger.jpg"
+  },
+  {
+    "id": "MC7",
+    "category": "Music",
+    "question": "Identify the instrument sound.",
+    "answers": [
+      {
+        "text": "Flute",
+        "isCorrect": false
+      },
+      {
+        "text": "Drums",
+        "isCorrect": false
+      },
+      {
+        "text": "Piano",
+        "isCorrect": true
+      },
+      {
+        "text": "Violin",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Piano",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/instruments/piano_clip.mp3"
+  },
+  {
+    "id": "MC8",
+    "category": "Music",
+    "question": "Identify the instrument sound.",
+    "answers": [
+      {
+        "text": "Flute",
+        "isCorrect": false
+      },
+      {
+        "text": "Drums",
+        "isCorrect": false
+      },
+      {
+        "text": "Guitar",
+        "isCorrect": true
+      },
+      {
+        "text": "Violin",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Guitar",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/instruments/guitar_clip.mp3"
+  },
+  {
+    "id": "MC9",
+    "category": "Entertainment",
+    "question": "Identify the movie from theme.",
+    "answers": [
+      {
+        "text": "Indiana Jones",
+        "isCorrect": false
+      },
+      {
+        "text": "Star Wars",
+        "isCorrect": true
+      },
+      {
+        "text": "Superman",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Star Wars",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/movies/star_wars_theme.mp3"
+  },
+  {
+    "id": "MC10",
+    "category": "Sports",
+    "question": "Which organization’s logo is this?",
+    "answers": [
+      {
+        "text": "Olympics",
+        "isCorrect": true
+      },
+      {
+        "text": "NBA",
+        "isCorrect": false
+      },
+      {
+        "text": "NFL",
+        "isCorrect": false
+      },
+      {
+        "text": "FIFA",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Olympics",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/logos/olympic_rings.png"
+  },
+  {
+    "id": "MC11",
+    "category": "Science",
+    "question": "Identify this diagram.",
+    "answers": [
+      {
+        "text": "DNA",
+        "isCorrect": true
+      },
+      {
+        "text": "Atom",
+        "isCorrect": false
+      },
+      {
+        "text": "Molecule",
+        "isCorrect": false
+      },
+      {
+        "text": "Cell",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "DNA",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/science/dna_double_helix.png"
+  },
+  {
+    "id": "MC12",
+    "category": "Science",
+    "question": "Identify this sound.",
+    "answers": [
+      {
+        "text": "Thunder",
+        "isCorrect": false
+      },
+      {
+        "text": "Ocean Waves",
+        "isCorrect": true
+      },
+      {
+        "text": "Wind",
+        "isCorrect": false
+      },
+      {
+        "text": "Rain",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Ocean Waves",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/nature/ocean_waves.mp3"
+  },
+  {
+    "id": "MC13",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      },
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC14",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Apple",
+        "isCorrect": true
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Orange",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC15",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC16",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC17",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      },
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC18",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Apple",
+        "isCorrect": true
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC19",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC20",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Apple",
+        "isCorrect": true
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Orange",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC21",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC22",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC23",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      },
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC24",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC25",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      },
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC26",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      },
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC27",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC28",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      },
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC29",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      },
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC30",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC31",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC32",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC33",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      },
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC34",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      },
+      {
+        "text": "Orange",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC35",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      },
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC36",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC37",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      },
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC38",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC39",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      },
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC40",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC41",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      },
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC42",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC43",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC44",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC45",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      },
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC46",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      },
+      {
+        "text": "Orange",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC47",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC48",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC49",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      },
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC50",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Apple",
+        "isCorrect": true
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Orange",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC51",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC52",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC53",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC54",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Apple",
+        "isCorrect": true
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Orange",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC55",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      },
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC56",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Orange",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC57",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC58",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC59",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      },
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC60",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC61",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC62",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Apple",
+        "isCorrect": true
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC63",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC64",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC65",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC66",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC67",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC68",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC69",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      },
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC70",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Apple",
+        "isCorrect": true
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Orange",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC71",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC72",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Apple",
+        "isCorrect": true
+      },
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC73",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      },
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC74",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      },
+      {
+        "text": "Orange",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC75",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC76",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC77",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC78",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  },
+  {
+    "id": "MC79",
+    "category": "Entertainment",
+    "question": "Identify the singer from this clip.",
+    "answers": [
+      {
+        "text": "Freddie Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael Jackson",
+        "isCorrect": false
+      },
+      {
+        "text": "Elvis Presley",
+        "isCorrect": true
+      },
+      {
+        "text": "Frank Sinatra",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Elvis Presley",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "media_challenge"
+    ],
+    "audioUrl": "assets/media/audio/singers/elvis_presley_clip.mp3"
+  },
+  {
+    "id": "MC80",
+    "category": "General Knowledge",
+    "question": "Which fruit is shown?",
+    "answers": [
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Banana",
+        "isCorrect": false
+      },
+      {
+        "text": "Pear",
+        "isCorrect": false
+      },
+      {
+        "text": "Apple",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Apple",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "media_challenge"
+    ],
+    "imageUrl": "assets/media/images/food/apple.jpg"
+  }
+]

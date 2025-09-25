@@ -1,0 +1,1502 @@
+[
+  {
+    "title": "Answer 12 Arts questions correctly in Classic",
+    "progress": 0,
+    "total": 12,
+    "reward": 450,
+    "icon": "palette",
+    "badge": "Arts Pro",
+    "tags": [
+      "adolescence",
+      "category"
+    ],
+    "mode": "Classic",
+    "category": "Arts",
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 12 Entertainment questions correctly in Survival",
+    "progress": 0,
+    "total": 12,
+    "reward": 600,
+    "icon": "movie",
+    "badge": "Entertainment Pro",
+    "tags": [
+      "adolescence",
+      "category"
+    ],
+    "mode": "Survival",
+    "category": "Entertainment",
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 12 Literature questions correctly in Survival",
+    "progress": 0,
+    "total": 12,
+    "reward": 400,
+    "icon": "menu_book",
+    "badge": "Literature Pro",
+    "tags": [
+      "adolescence",
+      "category"
+    ],
+    "mode": "Survival",
+    "category": "Literature",
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 15 History questions correctly in Multimedia",
+    "progress": 0,
+    "total": 15,
+    "reward": 500,
+    "icon": "history_edu",
+    "badge": "History Pro",
+    "tags": [
+      "adolescence",
+      "category"
+    ],
+    "mode": "Multimedia",
+    "category": "History",
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 10 Arts questions correctly in Multiplayer",
+    "progress": 0,
+    "total": 10,
+    "reward": 600,
+    "icon": "palette",
+    "badge": "Arts Pro",
+    "tags": [
+      "adolescence",
+      "category"
+    ],
+    "mode": "Multiplayer",
+    "category": "Arts",
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 10 Tech questions correctly in Multimedia",
+    "progress": 0,
+    "total": 10,
+    "reward": 400,
+    "icon": "memory",
+    "badge": "Tech Pro",
+    "tags": [
+      "adolescence",
+      "category"
+    ],
+    "mode": "Multimedia",
+    "category": "Tech",
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 15 Nature questions correctly in Multimedia",
+    "progress": 0,
+    "total": 15,
+    "reward": 600,
+    "icon": "eco",
+    "badge": "Nature Pro",
+    "tags": [
+      "adolescence",
+      "category"
+    ],
+    "mode": "Multimedia",
+    "category": "Nature",
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 10 Entertainment questions correctly in Speed",
+    "progress": 0,
+    "total": 10,
+    "reward": 600,
+    "icon": "movie",
+    "badge": "Entertainment Pro",
+    "tags": [
+      "adolescence",
+      "category"
+    ],
+    "mode": "Speed",
+    "category": "Entertainment",
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 10 Geography questions correctly in Survival",
+    "progress": 0,
+    "total": 10,
+    "reward": 450,
+    "icon": "public",
+    "badge": "Geography Pro",
+    "tags": [
+      "adolescence",
+      "category"
+    ],
+    "mode": "Survival",
+    "category": "Geography",
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 10 Science questions correctly in Survival",
+    "progress": 0,
+    "total": 10,
+    "reward": 400,
+    "icon": "science",
+    "badge": "Science Pro",
+    "tags": [
+      "adolescence",
+      "category"
+    ],
+    "mode": "Survival",
+    "category": "Science",
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 10 Tech questions correctly in Classic",
+    "progress": 0,
+    "total": 10,
+    "reward": 600,
+    "icon": "memory",
+    "badge": "Tech Pro",
+    "tags": [
+      "adolescence",
+      "category"
+    ],
+    "mode": "Classic",
+    "category": "Tech",
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 10 General questions correctly in Multiplayer",
+    "progress": 0,
+    "total": 10,
+    "reward": 400,
+    "icon": "quiz",
+    "badge": "General Pro",
+    "tags": [
+      "adolescence",
+      "category"
+    ],
+    "mode": "Multiplayer",
+    "category": "General",
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 15 Arts questions correctly in Multimedia",
+    "progress": 0,
+    "total": 15,
+    "reward": 500,
+    "icon": "palette",
+    "badge": "Arts Pro",
+    "tags": [
+      "adolescence",
+      "category"
+    ],
+    "mode": "Multimedia",
+    "category": "Arts",
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 10 Geography questions correctly in Speed",
+    "progress": 0,
+    "total": 10,
+    "reward": 500,
+    "icon": "public",
+    "badge": "Geography Pro",
+    "tags": [
+      "adolescence",
+      "category"
+    ],
+    "mode": "Speed",
+    "category": "Geography",
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 15 General questions correctly in Survival",
+    "progress": 0,
+    "total": 15,
+    "reward": 400,
+    "icon": "quiz",
+    "badge": "General Pro",
+    "tags": [
+      "adolescence",
+      "category"
+    ],
+    "mode": "Survival",
+    "category": "General",
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 12 General questions correctly in Survival",
+    "progress": 0,
+    "total": 12,
+    "reward": 450,
+    "icon": "quiz",
+    "badge": "General Pro",
+    "tags": [
+      "adolescence",
+      "category"
+    ],
+    "mode": "Survival",
+    "category": "General",
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 15 Tech questions correctly in Survival",
+    "progress": 0,
+    "total": 15,
+    "reward": 600,
+    "icon": "memory",
+    "badge": "Tech Pro",
+    "tags": [
+      "adolescence",
+      "category"
+    ],
+    "mode": "Survival",
+    "category": "Tech",
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 10 Tech questions correctly in Multiplayer",
+    "progress": 0,
+    "total": 10,
+    "reward": 600,
+    "icon": "memory",
+    "badge": "Tech Pro",
+    "tags": [
+      "adolescence",
+      "category"
+    ],
+    "mode": "Multiplayer",
+    "category": "Tech",
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 10 History questions correctly in Multimedia",
+    "progress": 0,
+    "total": 10,
+    "reward": 500,
+    "icon": "history_edu",
+    "badge": "History Pro",
+    "tags": [
+      "adolescence",
+      "category"
+    ],
+    "mode": "Multimedia",
+    "category": "History",
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 15 Geography questions correctly in Multimedia",
+    "progress": 0,
+    "total": 15,
+    "reward": 400,
+    "icon": "public",
+    "badge": "Geography Pro",
+    "tags": [
+      "adolescence",
+      "category"
+    ],
+    "mode": "Multimedia",
+    "category": "Geography",
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 12 Geography questions correctly in Classic",
+    "progress": 0,
+    "total": 12,
+    "reward": 500,
+    "icon": "public",
+    "badge": "Geography Pro",
+    "tags": [
+      "adolescence",
+      "category"
+    ],
+    "mode": "Classic",
+    "category": "Geography",
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 10 Entertainment questions correctly in Multiplayer",
+    "progress": 0,
+    "total": 10,
+    "reward": 600,
+    "icon": "movie",
+    "badge": "Entertainment Pro",
+    "tags": [
+      "adolescence",
+      "category"
+    ],
+    "mode": "Multiplayer",
+    "category": "Entertainment",
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 12 Entertainment questions correctly in Speed",
+    "progress": 0,
+    "total": 12,
+    "reward": 500,
+    "icon": "movie",
+    "badge": "Entertainment Pro",
+    "tags": [
+      "adolescence",
+      "category"
+    ],
+    "mode": "Speed",
+    "category": "Entertainment",
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 10 Arts questions correctly in Multimedia",
+    "progress": 0,
+    "total": 10,
+    "reward": 400,
+    "icon": "palette",
+    "badge": "Arts Pro",
+    "tags": [
+      "adolescence",
+      "category"
+    ],
+    "mode": "Multimedia",
+    "category": "Arts",
+    "difficulty": 2
+  },
+  {
+    "title": "Achieve 10 streak",
+    "progress": 0,
+    "total": 10,
+    "reward": 600,
+    "icon": "flash_on",
+    "badge": "Streak Master",
+    "tags": [
+      "adolescence",
+      "streak"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Achieve 10 streak",
+    "progress": 0,
+    "total": 10,
+    "reward": 650,
+    "icon": "flash_on",
+    "badge": "Streak Master",
+    "tags": [
+      "adolescence",
+      "streak"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Achieve 10 streak",
+    "progress": 0,
+    "total": 10,
+    "reward": 600,
+    "icon": "flash_on",
+    "badge": "Streak Master",
+    "tags": [
+      "adolescence",
+      "streak"
+    ],
+    "mode": "Multimedia",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Achieve 7 streak",
+    "progress": 0,
+    "total": 7,
+    "reward": 650,
+    "icon": "flash_on",
+    "badge": "Streak Master",
+    "tags": [
+      "adolescence",
+      "streak"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Achieve 8 streak",
+    "progress": 0,
+    "total": 8,
+    "reward": 600,
+    "icon": "flash_on",
+    "badge": "Streak Master",
+    "tags": [
+      "adolescence",
+      "streak"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Achieve 7 streak",
+    "progress": 0,
+    "total": 7,
+    "reward": 600,
+    "icon": "flash_on",
+    "badge": "Streak Master",
+    "tags": [
+      "adolescence",
+      "streak"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Achieve 7 streak",
+    "progress": 0,
+    "total": 7,
+    "reward": 600,
+    "icon": "flash_on",
+    "badge": "Streak Master",
+    "tags": [
+      "adolescence",
+      "streak"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Achieve 7 streak",
+    "progress": 0,
+    "total": 7,
+    "reward": 650,
+    "icon": "flash_on",
+    "badge": "Streak Master",
+    "tags": [
+      "adolescence",
+      "streak"
+    ],
+    "mode": "Multimedia",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Achieve 7 streak",
+    "progress": 0,
+    "total": 7,
+    "reward": 700,
+    "icon": "flash_on",
+    "badge": "Streak Master",
+    "tags": [
+      "adolescence",
+      "streak"
+    ],
+    "mode": "Multimedia",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Achieve 7 streak",
+    "progress": 0,
+    "total": 7,
+    "reward": 600,
+    "icon": "flash_on",
+    "badge": "Streak Master",
+    "tags": [
+      "adolescence",
+      "streak"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Achieve 7 streak",
+    "progress": 0,
+    "total": 7,
+    "reward": 650,
+    "icon": "flash_on",
+    "badge": "Streak Master",
+    "tags": [
+      "adolescence",
+      "streak"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Achieve 7 streak",
+    "progress": 0,
+    "total": 7,
+    "reward": 700,
+    "icon": "flash_on",
+    "badge": "Streak Master",
+    "tags": [
+      "adolescence",
+      "streak"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Trigger 4 combo multipliers",
+    "progress": 0,
+    "total": 4,
+    "reward": 500,
+    "icon": "filter_vintage",
+    "badge": "Combo Artist",
+    "tags": [
+      "adolescence",
+      "combo"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Trigger 3 combo multipliers",
+    "progress": 0,
+    "total": 3,
+    "reward": 450,
+    "icon": "filter_vintage",
+    "badge": "Combo Artist",
+    "tags": [
+      "adolescence",
+      "combo"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Trigger 4 combo multipliers",
+    "progress": 0,
+    "total": 4,
+    "reward": 550,
+    "icon": "filter_vintage",
+    "badge": "Combo Artist",
+    "tags": [
+      "adolescence",
+      "combo"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Trigger 3 combo multipliers",
+    "progress": 0,
+    "total": 3,
+    "reward": 550,
+    "icon": "filter_vintage",
+    "badge": "Combo Artist",
+    "tags": [
+      "adolescence",
+      "combo"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Trigger 4 combo multipliers",
+    "progress": 0,
+    "total": 4,
+    "reward": 500,
+    "icon": "filter_vintage",
+    "badge": "Combo Artist",
+    "tags": [
+      "adolescence",
+      "combo"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Trigger 4 combo multipliers",
+    "progress": 0,
+    "total": 4,
+    "reward": 450,
+    "icon": "filter_vintage",
+    "badge": "Combo Artist",
+    "tags": [
+      "adolescence",
+      "combo"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Trigger 3 combo multipliers",
+    "progress": 0,
+    "total": 3,
+    "reward": 550,
+    "icon": "filter_vintage",
+    "badge": "Combo Artist",
+    "tags": [
+      "adolescence",
+      "combo"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Trigger 3 combo multipliers",
+    "progress": 0,
+    "total": 3,
+    "reward": 450,
+    "icon": "filter_vintage",
+    "badge": "Combo Artist",
+    "tags": [
+      "adolescence",
+      "combo"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Maintain 80% accuracy for 2 rounds",
+    "progress": 0,
+    "total": 2,
+    "reward": 550,
+    "icon": "check_circle",
+    "badge": "Sharp Shooter",
+    "tags": [
+      "adolescence",
+      "accuracy"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Maintain 80% accuracy for 2 rounds",
+    "progress": 0,
+    "total": 2,
+    "reward": 650,
+    "icon": "check_circle",
+    "badge": "Sharp Shooter",
+    "tags": [
+      "adolescence",
+      "accuracy"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Maintain 80% accuracy for 3 rounds",
+    "progress": 0,
+    "total": 3,
+    "reward": 600,
+    "icon": "check_circle",
+    "badge": "Sharp Shooter",
+    "tags": [
+      "adolescence",
+      "accuracy"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Maintain 80% accuracy for 3 rounds",
+    "progress": 0,
+    "total": 3,
+    "reward": 600,
+    "icon": "check_circle",
+    "badge": "Sharp Shooter",
+    "tags": [
+      "adolescence",
+      "accuracy"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Maintain 80% accuracy for 3 rounds",
+    "progress": 0,
+    "total": 3,
+    "reward": 550,
+    "icon": "check_circle",
+    "badge": "Sharp Shooter",
+    "tags": [
+      "adolescence",
+      "accuracy"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Maintain 80% accuracy for 3 rounds",
+    "progress": 0,
+    "total": 3,
+    "reward": 600,
+    "icon": "check_circle",
+    "badge": "Sharp Shooter",
+    "tags": [
+      "adolescence",
+      "accuracy"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Maintain 80% accuracy for 4 rounds",
+    "progress": 0,
+    "total": 4,
+    "reward": 550,
+    "icon": "check_circle",
+    "badge": "Sharp Shooter",
+    "tags": [
+      "adolescence",
+      "accuracy"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Maintain 80% accuracy for 4 rounds",
+    "progress": 0,
+    "total": 4,
+    "reward": 550,
+    "icon": "check_circle",
+    "badge": "Sharp Shooter",
+    "tags": [
+      "adolescence",
+      "accuracy"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Maintain 80% accuracy for 2 rounds",
+    "progress": 0,
+    "total": 2,
+    "reward": 600,
+    "icon": "check_circle",
+    "badge": "Sharp Shooter",
+    "tags": [
+      "adolescence",
+      "accuracy"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Maintain 80% accuracy for 4 rounds",
+    "progress": 0,
+    "total": 4,
+    "reward": 600,
+    "icon": "check_circle",
+    "badge": "Sharp Shooter",
+    "tags": [
+      "adolescence",
+      "accuracy"
+    ],
+    "mode": "Multimedia",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Maintain 80% accuracy for 2 rounds",
+    "progress": 0,
+    "total": 2,
+    "reward": 650,
+    "icon": "check_circle",
+    "badge": "Sharp Shooter",
+    "tags": [
+      "adolescence",
+      "accuracy"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Maintain 80% accuracy for 4 rounds",
+    "progress": 0,
+    "total": 4,
+    "reward": 650,
+    "icon": "check_circle",
+    "badge": "Sharp Shooter",
+    "tags": [
+      "adolescence",
+      "accuracy"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Complete 2 rounds with no mistakes",
+    "progress": 0,
+    "total": 2,
+    "reward": 750,
+    "icon": "verified",
+    "badge": "Flawless",
+    "tags": [
+      "adolescence",
+      "perfect"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Complete 1 round with no mistakes",
+    "progress": 0,
+    "total": 1,
+    "reward": 650,
+    "icon": "verified",
+    "badge": "Flawless",
+    "tags": [
+      "adolescence",
+      "perfect"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Complete 2 rounds with no mistakes",
+    "progress": 0,
+    "total": 2,
+    "reward": 700,
+    "icon": "verified",
+    "badge": "Flawless",
+    "tags": [
+      "adolescence",
+      "perfect"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Complete 1 round with no mistakes",
+    "progress": 0,
+    "total": 1,
+    "reward": 700,
+    "icon": "verified",
+    "badge": "Flawless",
+    "tags": [
+      "adolescence",
+      "perfect"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Complete 2 rounds with no mistakes",
+    "progress": 0,
+    "total": 2,
+    "reward": 750,
+    "icon": "verified",
+    "badge": "Flawless",
+    "tags": [
+      "adolescence",
+      "perfect"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Complete 1 round with no mistakes",
+    "progress": 0,
+    "total": 1,
+    "reward": 650,
+    "icon": "verified",
+    "badge": "Flawless",
+    "tags": [
+      "adolescence",
+      "perfect"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Answer 5 under 8s each",
+    "progress": 0,
+    "total": 5,
+    "reward": 550,
+    "icon": "timer",
+    "badge": "Speedster",
+    "tags": [
+      "adolescence",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 10 under 6s each",
+    "progress": 0,
+    "total": 10,
+    "reward": 550,
+    "icon": "timer",
+    "badge": "Speedster",
+    "tags": [
+      "adolescence",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 5 under 7s each",
+    "progress": 0,
+    "total": 5,
+    "reward": 550,
+    "icon": "timer",
+    "badge": "Speedster",
+    "tags": [
+      "adolescence",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 5 under 7s each",
+    "progress": 0,
+    "total": 5,
+    "reward": 600,
+    "icon": "timer",
+    "badge": "Speedster",
+    "tags": [
+      "adolescence",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 5 under 7s each",
+    "progress": 0,
+    "total": 5,
+    "reward": 600,
+    "icon": "timer",
+    "badge": "Speedster",
+    "tags": [
+      "adolescence",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 5 under 7s each",
+    "progress": 0,
+    "total": 5,
+    "reward": 650,
+    "icon": "timer",
+    "badge": "Speedster",
+    "tags": [
+      "adolescence",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 10 under 7s each",
+    "progress": 0,
+    "total": 10,
+    "reward": 650,
+    "icon": "timer",
+    "badge": "Speedster",
+    "tags": [
+      "adolescence",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 10 under 8s each",
+    "progress": 0,
+    "total": 10,
+    "reward": 650,
+    "icon": "timer",
+    "badge": "Speedster",
+    "tags": [
+      "adolescence",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 8 under 8s each",
+    "progress": 0,
+    "total": 8,
+    "reward": 600,
+    "icon": "timer",
+    "badge": "Speedster",
+    "tags": [
+      "adolescence",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Answer 10 under 6s each",
+    "progress": 0,
+    "total": 10,
+    "reward": 600,
+    "icon": "timer",
+    "badge": "Speedster",
+    "tags": [
+      "adolescence",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Win 2 games without lifelines",
+    "progress": 0,
+    "total": 2,
+    "reward": 600,
+    "icon": "bolt",
+    "badge": "Unaided",
+    "tags": [
+      "adolescence",
+      "no_powerups"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 1 game without lifelines",
+    "progress": 0,
+    "total": 1,
+    "reward": 600,
+    "icon": "bolt",
+    "badge": "Unaided",
+    "tags": [
+      "adolescence",
+      "no_powerups"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 2 games without lifelines",
+    "progress": 0,
+    "total": 2,
+    "reward": 650,
+    "icon": "bolt",
+    "badge": "Unaided",
+    "tags": [
+      "adolescence",
+      "no_powerups"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 3 games without lifelines",
+    "progress": 0,
+    "total": 3,
+    "reward": 600,
+    "icon": "bolt",
+    "badge": "Unaided",
+    "tags": [
+      "adolescence",
+      "no_powerups"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 2 games without lifelines",
+    "progress": 0,
+    "total": 2,
+    "reward": 600,
+    "icon": "bolt",
+    "badge": "Unaided",
+    "tags": [
+      "adolescence",
+      "no_powerups"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 1 game without lifelines",
+    "progress": 0,
+    "total": 1,
+    "reward": 600,
+    "icon": "bolt",
+    "badge": "Unaided",
+    "tags": [
+      "adolescence",
+      "no_powerups"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 2 games without lifelines",
+    "progress": 0,
+    "total": 2,
+    "reward": 600,
+    "icon": "bolt",
+    "badge": "Unaided",
+    "tags": [
+      "adolescence",
+      "no_powerups"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 1 game without lifelines",
+    "progress": 0,
+    "total": 1,
+    "reward": 700,
+    "icon": "bolt",
+    "badge": "Unaided",
+    "tags": [
+      "adolescence",
+      "no_powerups"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 3
+  },
+  {
+    "title": "Win 4 multiplayer matches",
+    "progress": 0,
+    "total": 4,
+    "reward": 600,
+    "icon": "groups",
+    "badge": "Rival Crusher",
+    "tags": [
+      "adolescence",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Win 4 multiplayer matches",
+    "progress": 0,
+    "total": 4,
+    "reward": 700,
+    "icon": "groups",
+    "badge": "Rival Crusher",
+    "tags": [
+      "adolescence",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Win 3 multiplayer matches",
+    "progress": 0,
+    "total": 3,
+    "reward": 600,
+    "icon": "groups",
+    "badge": "Rival Crusher",
+    "tags": [
+      "adolescence",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Win 3 multiplayer matches",
+    "progress": 0,
+    "total": 3,
+    "reward": 800,
+    "icon": "groups",
+    "badge": "Rival Crusher",
+    "tags": [
+      "adolescence",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Win 4 multiplayer matches",
+    "progress": 0,
+    "total": 4,
+    "reward": 700,
+    "icon": "groups",
+    "badge": "Rival Crusher",
+    "tags": [
+      "adolescence",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Win 5 multiplayer matches",
+    "progress": 0,
+    "total": 5,
+    "reward": 600,
+    "icon": "groups",
+    "badge": "Rival Crusher",
+    "tags": [
+      "adolescence",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Win 5 multiplayer matches",
+    "progress": 0,
+    "total": 5,
+    "reward": 800,
+    "icon": "groups",
+    "badge": "Rival Crusher",
+    "tags": [
+      "adolescence",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Win 5 multiplayer matches",
+    "progress": 0,
+    "total": 5,
+    "reward": 800,
+    "icon": "groups",
+    "badge": "Rival Crusher",
+    "tags": [
+      "adolescence",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Win 3 multiplayer matches",
+    "progress": 0,
+    "total": 3,
+    "reward": 700,
+    "icon": "groups",
+    "badge": "Rival Crusher",
+    "tags": [
+      "adolescence",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Win 4 multiplayer matches",
+    "progress": 0,
+    "total": 4,
+    "reward": 800,
+    "icon": "groups",
+    "badge": "Rival Crusher",
+    "tags": [
+      "adolescence",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Win 5 multiplayer matches",
+    "progress": 0,
+    "total": 5,
+    "reward": 800,
+    "icon": "groups",
+    "badge": "Rival Crusher",
+    "tags": [
+      "adolescence",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Win 4 multiplayer matches",
+    "progress": 0,
+    "total": 4,
+    "reward": 600,
+    "icon": "groups",
+    "badge": "Rival Crusher",
+    "tags": [
+      "adolescence",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Win 5 multiplayer matches",
+    "progress": 0,
+    "total": 5,
+    "reward": 600,
+    "icon": "groups",
+    "badge": "Rival Crusher",
+    "tags": [
+      "adolescence",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Win 4 multiplayer matches",
+    "progress": 0,
+    "total": 4,
+    "reward": 700,
+    "icon": "groups",
+    "badge": "Rival Crusher",
+    "tags": [
+      "adolescence",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Win 3 multiplayer matches",
+    "progress": 0,
+    "total": 3,
+    "reward": 700,
+    "icon": "groups",
+    "badge": "Rival Crusher",
+    "tags": [
+      "adolescence",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Win 3 multiplayer matches",
+    "progress": 0,
+    "total": 3,
+    "reward": 700,
+    "icon": "groups",
+    "badge": "Rival Crusher",
+    "tags": [
+      "adolescence",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Win 3 multiplayer matches",
+    "progress": 0,
+    "total": 3,
+    "reward": 700,
+    "icon": "groups",
+    "badge": "Rival Crusher",
+    "tags": [
+      "adolescence",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Win 3 multiplayer matches",
+    "progress": 0,
+    "total": 3,
+    "reward": 600,
+    "icon": "groups",
+    "badge": "Rival Crusher",
+    "tags": [
+      "adolescence",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Win 3 multiplayer matches",
+    "progress": 0,
+    "total": 3,
+    "reward": 800,
+    "icon": "groups",
+    "badge": "Rival Crusher",
+    "tags": [
+      "adolescence",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  },
+  {
+    "title": "Win 3 multiplayer matches",
+    "progress": 0,
+    "total": 3,
+    "reward": 800,
+    "icon": "groups",
+    "badge": "Rival Crusher",
+    "tags": [
+      "adolescence",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 2
+  }
+]

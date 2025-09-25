@@ -1,0 +1,776 @@
+[
+  {
+    "id": "M5_1",
+    "category": "Print",
+    "question": "A newspaper’s front page is called…",
+    "answers": [
+      {
+        "text": "Cover page",
+        "isCorrect": true
+      },
+      {
+        "text": "Back page",
+        "isCorrect": false
+      },
+      {
+        "text": "Index",
+        "isCorrect": false
+      },
+      {
+        "text": "Insert",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Cover page",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "newspaper"
+    ]
+  },
+  {
+    "id": "M5_2",
+    "category": "Digital",
+    "question": "Social media app for images:",
+    "answers": [
+      {
+        "text": "Instagram",
+        "isCorrect": true
+      },
+      {
+        "text": "Twitter",
+        "isCorrect": false
+      },
+      {
+        "text": "LinkedIn",
+        "isCorrect": false
+      },
+      {
+        "text": "Reddit",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Instagram",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "apps"
+    ]
+  },
+  {
+    "id": "M6_1",
+    "category": "Broadcast",
+    "question": "CNN is a…",
+    "answers": [
+      {
+        "text": "News network",
+        "isCorrect": true
+      },
+      {
+        "text": "Music band",
+        "isCorrect": false
+      },
+      {
+        "text": "Magazine",
+        "isCorrect": false
+      },
+      {
+        "text": "Sport",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "News network",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "cnn"
+    ]
+  },
+  {
+    "id": "M6_2",
+    "category": "Digital",
+    "question": "YouTube mainly shares…",
+    "answers": [
+      {
+        "text": "Videos",
+        "isCorrect": true
+      },
+      {
+        "text": "Photos",
+        "isCorrect": false
+      },
+      {
+        "text": "Texts",
+        "isCorrect": false
+      },
+      {
+        "text": "Podcasts",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Videos",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "youtube"
+    ]
+  },
+  {
+    "id": "M7_1",
+    "category": "Print",
+    "question": "Who invented printing press?",
+    "answers": [
+      {
+        "text": "Johannes Gutenberg",
+        "isCorrect": true
+      },
+      {
+        "text": "Edison",
+        "isCorrect": false
+      },
+      {
+        "text": "Newton",
+        "isCorrect": false
+      },
+      {
+        "text": "Franklin",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Johannes Gutenberg",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "printing"
+    ]
+  },
+  {
+    "id": "M7_2",
+    "category": "Digital",
+    "question": "TikTok originally launched in…",
+    "answers": [
+      {
+        "text": "China",
+        "isCorrect": true
+      },
+      {
+        "text": "USA",
+        "isCorrect": false
+      },
+      {
+        "text": "Japan",
+        "isCorrect": false
+      },
+      {
+        "text": "Korea",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "China",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "tiktok"
+    ]
+  },
+  {
+    "id": "M8_1",
+    "category": "Broadcast",
+    "question": "BBC stands for…",
+    "answers": [
+      {
+        "text": "British Broadcasting Corporation",
+        "isCorrect": true
+      },
+      {
+        "text": "British Broad Corp",
+        "isCorrect": false
+      },
+      {
+        "text": "Best Broadcast Channel",
+        "isCorrect": false
+      },
+      {
+        "text": "Broadcasting Bureau Central",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "British Broadcasting Corporation",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "bbc"
+    ]
+  },
+  {
+    "id": "M8_2",
+    "category": "Digital",
+    "question": "Podcast is…",
+    "answers": [
+      {
+        "text": "Digital audio program",
+        "isCorrect": true
+      },
+      {
+        "text": "TV show",
+        "isCorrect": false
+      },
+      {
+        "text": "Newsprint",
+        "isCorrect": false
+      },
+      {
+        "text": "Email",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Digital audio program",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "podcast"
+    ]
+  },
+  {
+    "id": "M9_1",
+    "category": "Print",
+    "question": "NYT stands for…",
+    "answers": [
+      {
+        "text": "New York Times",
+        "isCorrect": true
+      },
+      {
+        "text": "New Youth Tribune",
+        "isCorrect": false
+      },
+      {
+        "text": "News York Telegraph",
+        "isCorrect": false
+      },
+      {
+        "text": "None",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "New York Times",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "nyt"
+    ]
+  },
+  {
+    "id": "M9_2",
+    "category": "Broadcast",
+    "question": "First TV broadcast year:",
+    "answers": [
+      {
+        "text": "1927",
+        "isCorrect": true
+      },
+      {
+        "text": "1937",
+        "isCorrect": false
+      },
+      {
+        "text": "1947",
+        "isCorrect": false
+      },
+      {
+        "text": "1917",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1927",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G9",
+      "tv"
+    ]
+  },
+  {
+    "id": "M10_1",
+    "category": "Digital",
+    "question": "HTTP means…",
+    "answers": [
+      {
+        "text": "HyperText Transfer Protocol",
+        "isCorrect": true
+      },
+      {
+        "text": "High Tech Protocol",
+        "isCorrect": false
+      },
+      {
+        "text": "Hyper Transfer Text Process",
+        "isCorrect": false
+      },
+      {
+        "text": "Host Transfer Type Protocol",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "HyperText Transfer Protocol",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "http"
+    ]
+  },
+  {
+    "id": "M10_2",
+    "category": "Digital",
+    "question": "WWW stands for…",
+    "answers": [
+      {
+        "text": "World Wide Web",
+        "isCorrect": true
+      },
+      {
+        "text": "Web World Wide",
+        "isCorrect": false
+      },
+      {
+        "text": "World Web Wide",
+        "isCorrect": false
+      },
+      {
+        "text": "Wide World Web",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "World Wide Web",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "www"
+    ]
+  },
+  {
+    "id": "M11_1",
+    "category": "Broadcast",
+    "question": "First US president on TV:",
+    "answers": [
+      {
+        "text": "Franklin D. Roosevelt",
+        "isCorrect": true
+      },
+      {
+        "text": "Eisenhower",
+        "isCorrect": false
+      },
+      {
+        "text": "Kennedy",
+        "isCorrect": false
+      },
+      {
+        "text": "Truman",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Franklin D. Roosevelt",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "tv"
+    ]
+  },
+  {
+    "id": "M11_2",
+    "category": "Print",
+    "question": "Time magazine first published in…",
+    "answers": [
+      {
+        "text": "1923",
+        "isCorrect": true
+      },
+      {
+        "text": "1933",
+        "isCorrect": false
+      },
+      {
+        "text": "1943",
+        "isCorrect": false
+      },
+      {
+        "text": "1953",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1923",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "magazine"
+    ]
+  },
+  {
+    "id": "M12_1",
+    "category": "Digital",
+    "question": "First email sent in…",
+    "answers": [
+      {
+        "text": "1971",
+        "isCorrect": true
+      },
+      {
+        "text": "1981",
+        "isCorrect": false
+      },
+      {
+        "text": "1961",
+        "isCorrect": false
+      },
+      {
+        "text": "1991",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1971",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "email"
+    ]
+  },
+  {
+    "id": "M12_2",
+    "category": "Digital",
+    "question": "Inventor of WWW:",
+    "answers": [
+      {
+        "text": "Tim Berners-Lee",
+        "isCorrect": true
+      },
+      {
+        "text": "Bill Gates",
+        "isCorrect": false
+      },
+      {
+        "text": "Steve Jobs",
+        "isCorrect": false
+      },
+      {
+        "text": "Mark Zuckerberg",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Tim Berners-Lee",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "www"
+    ]
+  },
+  {
+    "id": "MX16",
+    "category": "Mixed Media",
+    "question": "Podcasts are audio media.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "MX17",
+    "category": "Mixed Media",
+    "question": "Podcasts are audio media.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "MX18",
+    "category": "Mixed Media",
+    "question": "Podcasts are audio media.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "MX19",
+    "category": "Mixed Media",
+    "question": "Podcasts are audio media.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "MX20",
+    "category": "Mixed Media",
+    "question": "Podcasts are audio media.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "MX21",
+    "category": "Mixed Media",
+    "question": "Podcasts are audio media.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "MX22",
+    "category": "Mixed Media",
+    "question": "Podcasts are audio media.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "MX23",
+    "category": "Mixed Media",
+    "question": "Podcasts are audio media.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "MX24",
+    "category": "Mixed Media",
+    "question": "Podcasts are audio media.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "MX25",
+    "category": "Mixed Media",
+    "question": "Podcasts are audio media.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "MX26",
+    "category": "Mixed Media",
+    "question": "Podcasts are audio media.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "MX27",
+    "category": "Mixed Media",
+    "question": "Podcasts are audio media.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "MX28",
+    "category": "Mixed Media",
+    "question": "Podcasts are audio media.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "MX29",
+    "category": "Mixed Media",
+    "question": "Podcasts are audio media.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  }
+]

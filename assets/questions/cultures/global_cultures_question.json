@@ -1,0 +1,612 @@
+[
+  {
+    "id": "GC1",
+    "category": "Global Cultures",
+    "question": "Diwali is celebrated in…",
+    "answers": [
+      {
+        "text": "Brazil",
+        "isCorrect": false
+      },
+      {
+        "text": "Russia",
+        "isCorrect": false
+      },
+      {
+        "text": "China",
+        "isCorrect": false
+      },
+      {
+        "text": "India",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "India",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC2",
+    "category": "Global Cultures",
+    "question": "Sushi comes from…",
+    "answers": [
+      {
+        "text": "Italy",
+        "isCorrect": false
+      },
+      {
+        "text": "Mexico",
+        "isCorrect": false
+      },
+      {
+        "text": "Canada",
+        "isCorrect": false
+      },
+      {
+        "text": "Japan",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Japan",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC3",
+    "category": "Global Cultures",
+    "question": "The samba dance is from…",
+    "answers": [
+      {
+        "text": "France",
+        "isCorrect": false
+      },
+      {
+        "text": "USA",
+        "isCorrect": false
+      },
+      {
+        "text": "Spain",
+        "isCorrect": false
+      },
+      {
+        "text": "Brazil",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Brazil",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "GC4",
+    "category": "Global Cultures",
+    "question": "Ramadan is observed in…",
+    "answers": [
+      {
+        "text": "Hinduism",
+        "isCorrect": false
+      },
+      {
+        "text": "Christianity",
+        "isCorrect": false
+      },
+      {
+        "text": "Judaism",
+        "isCorrect": false
+      },
+      {
+        "text": "Islam",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Islam",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "GC5",
+    "category": "Global Cultures",
+    "question": "Machu Picchu is in…",
+    "answers": [
+      {
+        "text": "Peru",
+        "isCorrect": true
+      },
+      {
+        "text": "Argentina",
+        "isCorrect": false
+      },
+      {
+        "text": "Chile",
+        "isCorrect": false
+      },
+      {
+        "text": "Mexico",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Peru",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "GC6",
+    "category": "Global Cultures",
+    "question": "K-pop is music from South Korea.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC6",
+    "category": "Global Cultures",
+    "question": "Cultures have unique traditions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC7",
+    "category": "Global Cultures",
+    "question": "Cultures have unique traditions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC8",
+    "category": "Global Cultures",
+    "question": "Cultures have unique traditions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC9",
+    "category": "Global Cultures",
+    "question": "Cultures have unique traditions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC10",
+    "category": "Global Cultures",
+    "question": "Cultures have unique traditions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC11",
+    "category": "Global Cultures",
+    "question": "Cultures have unique traditions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC12",
+    "category": "Global Cultures",
+    "question": "Cultures have unique traditions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC13",
+    "category": "Global Cultures",
+    "question": "Cultures have unique traditions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC14",
+    "category": "Global Cultures",
+    "question": "Cultures have unique traditions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC15",
+    "category": "Global Cultures",
+    "question": "Cultures have unique traditions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC16",
+    "category": "Global Cultures",
+    "question": "Cultures have unique traditions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC17",
+    "category": "Global Cultures",
+    "question": "Cultures have unique traditions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC18",
+    "category": "Global Cultures",
+    "question": "Cultures have unique traditions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC19",
+    "category": "Global Cultures",
+    "question": "Cultures have unique traditions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC20",
+    "category": "Global Cultures",
+    "question": "Cultures have unique traditions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC21",
+    "category": "Global Cultures",
+    "question": "Cultures have unique traditions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC22",
+    "category": "Global Cultures",
+    "question": "Cultures have unique traditions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC23",
+    "category": "Global Cultures",
+    "question": "Cultures have unique traditions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC24",
+    "category": "Global Cultures",
+    "question": "Cultures have unique traditions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC25",
+    "category": "Global Cultures",
+    "question": "Cultures have unique traditions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC26",
+    "category": "Global Cultures",
+    "question": "Cultures have unique traditions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC27",
+    "category": "Global Cultures",
+    "question": "Cultures have unique traditions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC28",
+    "category": "Global Cultures",
+    "question": "Cultures have unique traditions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "GC29",
+    "category": "Global Cultures",
+    "question": "Cultures have unique traditions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  }
+]

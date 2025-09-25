@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'mission_card_widget.dart';
-import 'mission_swap_button.dart';
+import 'widgets/mission_card_widget.dart';
+// import 'mission_swap_button.dart';
 
 class MissionScrollRow extends StatelessWidget {
   final List<MissionData> missions;
@@ -42,10 +42,10 @@ class MissionScrollRow extends StatelessWidget {
                     transitionBuilder: (child, animation) {
                       return ScaleTransition(scale: animation, child: child);
                     },
-                    child: MissionSwapButton(
-                      key: ValueKey(mission.title),
-                      onPressed: () => onSwap(index),
-                    ),
+                    // child: MissionSwapButton(
+                    //   key: ValueKey(mission.title),
+                    //   onPressed: () => onSwap(index),
+                    // ),
                   ),
                 ),
               ],

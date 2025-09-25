@@ -1,0 +1,374 @@
+[
+  {
+    "folder": "questions",
+    "subfolder": "misc",
+    "filename": "questions",
+    "asset_path": "assets/questions/misc/questions.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "misc",
+    "filename": "questions_offline_pack",
+    "asset_path": "assets/questions/misc/questions_offline_pack.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "arts",
+    "filename": "arts_question",
+    "asset_path": "assets/questions/arts/arts_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "bonus",
+    "filename": "extended_questions",
+    "asset_path": "assets/questions/bonus/extended_questions.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "classes",
+    "filename": "class_10_questions",
+    "asset_path": "assets/questions/classes/class_10_questions.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "classes",
+    "filename": "class_11_questions",
+    "asset_path": "assets/questions/classes/class_11_questions.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "classes",
+    "filename": "class_12_questions",
+    "asset_path": "assets/questions/classes/class_12_questions.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "classes",
+    "filename": "class_1_questions",
+    "asset_path": "assets/questions/classes/class_1_questions.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "classes",
+    "filename": "class_2_questions",
+    "asset_path": "assets/questions/classes/class_2_questions.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "classes",
+    "filename": "class_3_questions",
+    "asset_path": "assets/questions/classes/class_3_questions.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "classes",
+    "filename": "class_4_questions",
+    "asset_path": "assets/questions/classes/class_4_questions.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "classes",
+    "filename": "class_5_questions",
+    "asset_path": "assets/questions/classes/class_5_questions.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "classes",
+    "filename": "class_6_questions",
+    "asset_path": "assets/questions/classes/class_6_questions.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "classes",
+    "filename": "class_7_questions",
+    "asset_path": "assets/questions/classes/class_7_questions.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "classes",
+    "filename": "class_8_questions",
+    "asset_path": "assets/questions/classes/class_8_questions.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "classes",
+    "filename": "class_9_questions",
+    "asset_path": "assets/questions/classes/class_9_questions.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "classes",
+    "filename": "class_K_questions",
+    "asset_path": "assets/questions/classes/class_K_questions.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "current_events",
+    "filename": "current_events_question",
+    "asset_path": "assets/questions/current_events/current_events_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "economics",
+    "filename": "economics_question",
+    "asset_path": "assets/questions/economics/economics_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "entertainment",
+    "filename": "entertainment_question",
+    "asset_path": "assets/questions/entertainment/entertainment_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "environment",
+    "filename": "environment_question",
+    "asset_path": "assets/questions/environment/environment_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "general",
+    "filename": "general_questions",
+    "asset_path": "assets/questions/general/general_questions.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "geography",
+    "filename": "geography_question",
+    "asset_path": "assets/questions/geography/geography_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "health",
+    "filename": "health_question",
+    "asset_path": "assets/questions/health/health_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "history",
+    "filename": "history_question",
+    "asset_path": "assets/questions/history/history_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "kids",
+    "filename": "kids_questions",
+    "asset_path": "assets/questions/kids/kids_questions.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "law",
+    "filename": "law_question",
+    "asset_path": "assets/questions/law/law_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "literature",
+    "filename": "literature_question",
+    "asset_path": "assets/questions/literature/literature_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "math",
+    "filename": "math_question",
+    "asset_path": "assets/questions/math/math_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "media",
+    "filename": "media_question",
+    "asset_path": "assets/questions/media/media_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "media",
+    "filename": "media_questions",
+    "asset_path": "assets/questions/media/media_questions.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "philosophy",
+    "filename": "philosophy_question",
+    "asset_path": "assets/questions/philosophy/philosophy_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "politics",
+    "filename": "politics_question",
+    "asset_path": "assets/questions/politics/politics_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "psychology",
+    "filename": "psychology_question",
+    "asset_path": "assets/questions/psychology/psychology_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "science",
+    "filename": "science_question",
+    "asset_path": "assets/questions/science/science_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "science",
+    "filename": "science_questions",
+    "asset_path": "assets/questions/science/science_questions.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "social",
+    "filename": "social_question",
+    "asset_path": "assets/questions/social/social_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "sports",
+    "filename": "sports_question",
+    "asset_path": "assets/questions/sports/sports_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "tech",
+    "filename": "tech_question",
+    "asset_path": "assets/questions/tech/tech_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "world",
+    "filename": "world_ext_question",
+    "asset_path": "assets/questions/world/world_ext_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "world",
+    "filename": "world_question",
+    "asset_path": "assets/questions/world/world_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "kids",
+    "filename": "kids_grade2_questions",
+    "asset_path": "assets/questions/kids/kids_grade2_questions.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "business",
+    "filename": "business_question",
+    "asset_path": "assets/questions/business/business_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "computer_science",
+    "filename": "computer_science_question",
+    "asset_path": "assets/questions/computer_science/computer_science_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "art_history",
+    "filename": "art_history_question",
+    "asset_path": "assets/questions/art_history/art_history_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "psychology",
+    "filename": "psychology_advanced_question",
+    "asset_path": "assets/questions/psychology/psychology_advanced_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "cultures",
+    "filename": "global_cultures_question",
+    "asset_path": "assets/questions/cultures/global_cultures_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "civics_law",
+    "filename": "civics_law_question",
+    "asset_path": "assets/questions/civics_law/civics_law_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "health_medicine",
+    "filename": "health_medicine_question",
+    "asset_path": "assets/questions/health_medicine/health_medicine_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "engineering_technology",
+    "filename": "engineering_technology_question",
+    "asset_path": "assets/questions/engineering_technology/engineering_technology_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "economics_finance",
+    "filename": "economics_finance_question",
+    "asset_path": "assets/questions/economics_finance/economics_finance_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "environmental_science",
+    "filename": "environmental_science_advanced_question",
+    "asset_path": "assets/questions/environmental_science/environmental_science_advanced_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "statistics_data",
+    "filename": "statistics_data_literacy_question",
+    "asset_path": "assets/questions/statistics_data/statistics_data_literacy_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "world_literature",
+    "filename": "world_literature_question",
+    "asset_path": "assets/questions/world_literature/world_literature_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "astronomy",
+    "filename": "astronomy_question",
+    "asset_path": "assets/questions/astronomy/astronomy_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "architecture",
+    "filename": "architecture_question",
+    "asset_path": "assets/questions/architecture/architecture_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "comparative_religions",
+    "filename": "comparative_religions_question",
+    "asset_path": "assets/questions/comparative_religions/comparative_religions_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "modes",
+    "filename": "multiplayer_question",
+    "asset_path": "assets/questions/modes/multiplayer_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "modes",
+    "filename": "speed_round_question",
+    "asset_path": "assets/questions/modes/speed_round_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "modes",
+    "filename": "multimedia_question",
+    "asset_path": "assets/questions/modes/multimedia_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "modes",
+    "filename": "media_challenge_question",
+    "asset_path": "assets/questions/modes/media_challenge_question.json"
+  },
+  {
+    "folder": "questions",
+    "subfolder": "modes",
+    "filename": "speed_ultra_question",
+    "asset_path": "assets/questions/modes/speed_ultra_question.json"
+  }
+]

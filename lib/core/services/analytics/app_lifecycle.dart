@@ -368,7 +368,7 @@ class _AppLifecycleObserverState extends ConsumerState<AppLifecycleObserver> wit
 
         if (coinReward > 0) {
           final coinNotifier = ref.read(coinNotifierProvider);
-          coinNotifier.addCoins(coinReward);
+          coinNotifier.addValue(coinReward);
 
           _log.info('Awarded $coinReward offline coins for $offlineMinutes minutes away');
         }

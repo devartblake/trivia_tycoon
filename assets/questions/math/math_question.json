@@ -1,0 +1,854 @@
+[
+  {
+    "id": "M5_1",
+    "category": "Fractions & Decimals",
+    "question": "Which decimal equals 7/10?",
+    "answers": [
+      {
+        "text": "0.7",
+        "isCorrect": true
+      },
+      {
+        "text": "0.07",
+        "isCorrect": false
+      },
+      {
+        "text": "0.17",
+        "isCorrect": false
+      },
+      {
+        "text": "0.77",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "0.7",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "fractions"
+    ]
+  },
+  {
+    "id": "M5_2",
+    "category": "Fractions & Decimals",
+    "question": "Add: 3/8 + 1/8 =",
+    "answers": [
+      {
+        "text": "3/16",
+        "isCorrect": false
+      },
+      {
+        "text": "4/8 (1/2)",
+        "isCorrect": true
+      },
+      {
+        "text": "5/16",
+        "isCorrect": false
+      },
+      {
+        "text": "2/8",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "4/8 (1/2)",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "fractions"
+    ]
+  },
+  {
+    "id": "M5_3",
+    "category": "Fractions & Decimals",
+    "question": "Round 12.46 to the nearest tenth.",
+    "answers": [
+      {
+        "text": "12.5",
+        "isCorrect": true
+      },
+      {
+        "text": "12.6",
+        "isCorrect": false
+      },
+      {
+        "text": "12.0",
+        "isCorrect": false
+      },
+      {
+        "text": "12.4",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "12.5",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G5",
+      "rounding"
+    ]
+  },
+  {
+    "id": "M5_4",
+    "category": "Fractions & Decimals",
+    "question": "0.125 equals 1/8.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G5",
+      "decimals"
+    ]
+  },
+  {
+    "id": "M6_1",
+    "category": "Ratios & Rates",
+    "question": "Simplify the ratio 14:21",
+    "answers": [
+      {
+        "text": "1:3",
+        "isCorrect": false
+      },
+      {
+        "text": "7:21",
+        "isCorrect": false
+      },
+      {
+        "text": "2:3",
+        "isCorrect": true
+      },
+      {
+        "text": "3:2",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "2:3",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "ratios"
+    ]
+  },
+  {
+    "id": "M6_2",
+    "category": "Ratios & Rates",
+    "question": "Unit rate for 240 miles in 4 hours:",
+    "answers": [
+      {
+        "text": "40 mph",
+        "isCorrect": false
+      },
+      {
+        "text": "55 mph",
+        "isCorrect": false
+      },
+      {
+        "text": "60 mph",
+        "isCorrect": true
+      },
+      {
+        "text": "80 mph",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "60 mph",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "rates"
+    ]
+  },
+  {
+    "id": "M6_3",
+    "category": "Ratios & Rates",
+    "question": "If 3 notebooks cost $6, 7 notebooks cost…",
+    "answers": [
+      {
+        "text": "$16",
+        "isCorrect": false
+      },
+      {
+        "text": "$12",
+        "isCorrect": false
+      },
+      {
+        "text": "$10",
+        "isCorrect": false
+      },
+      {
+        "text": "$14",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "$14",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G6",
+      "proportion"
+    ]
+  },
+  {
+    "id": "M6_4",
+    "category": "Percents",
+    "question": "25% of 200 is 50.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G6",
+      "percents"
+    ]
+  },
+  {
+    "id": "M7_1",
+    "category": "Pre-Algebra",
+    "question": "Simplify: 4(x + 2)",
+    "answers": [
+      {
+        "text": "4x + 2",
+        "isCorrect": false
+      },
+      {
+        "text": "4x + 8",
+        "isCorrect": true
+      },
+      {
+        "text": "x + 8",
+        "isCorrect": false
+      },
+      {
+        "text": "8x + 2",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "4x + 8",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7",
+      "distributive"
+    ]
+  },
+  {
+    "id": "M7_2",
+    "category": "Pre-Algebra",
+    "question": "Slope of line through (1,2) and (3,6):",
+    "answers": [
+      {
+        "text": "1/2",
+        "isCorrect": false
+      },
+      {
+        "text": "4",
+        "isCorrect": false
+      },
+      {
+        "text": "3",
+        "isCorrect": false
+      },
+      {
+        "text": "2",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "2",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "slope"
+    ]
+  },
+  {
+    "id": "M7_3",
+    "category": "Pre-Algebra",
+    "question": "The opposite of −a is a.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "G7",
+      "integers"
+    ]
+  },
+  {
+    "id": "M7_4",
+    "category": "Pre-Algebra",
+    "question": "Solve: 3x − 5 = 16",
+    "answers": [
+      {
+        "text": "x = 6",
+        "isCorrect": false
+      },
+      {
+        "text": "x = 9",
+        "isCorrect": false
+      },
+      {
+        "text": "x = −7",
+        "isCorrect": false
+      },
+      {
+        "text": "x = 7",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "x = 7",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "equations"
+    ]
+  },
+  {
+    "id": "M8_1",
+    "category": "Algebra I",
+    "question": "Slope-intercept form:",
+    "answers": [
+      {
+        "text": "y−y1 = m(x−x1)",
+        "isCorrect": false
+      },
+      {
+        "text": "y = mx + b",
+        "isCorrect": true
+      },
+      {
+        "text": "x^2 + y^2 = r^2",
+        "isCorrect": false
+      },
+      {
+        "text": "y = ax^2 + bx + c",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "y = mx + b",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G8",
+      "functions"
+    ]
+  },
+  {
+    "id": "M8_2",
+    "category": "Algebra I",
+    "question": "Solve: 2x + 3 = 11",
+    "answers": [
+      {
+        "text": "x = 4",
+        "isCorrect": true
+      },
+      {
+        "text": "x = −4",
+        "isCorrect": false
+      },
+      {
+        "text": "x = 8",
+        "isCorrect": false
+      },
+      {
+        "text": "x = 5",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "x = 4",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G8",
+      "equations"
+    ]
+  },
+  {
+    "id": "M8_3",
+    "category": "Algebra I",
+    "question": "If f(x)=x^2−4, then f(−3) =",
+    "answers": [
+      {
+        "text": "−9",
+        "isCorrect": false
+      },
+      {
+        "text": "5",
+        "isCorrect": true
+      },
+      {
+        "text": "9",
+        "isCorrect": false
+      },
+      {
+        "text": "−5",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "5",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "functions"
+    ]
+  },
+  {
+    "id": "M8_4",
+    "category": "Algebra I",
+    "question": "Solution to system x+y=6, x−y=2:",
+    "answers": [
+      {
+        "text": "(5,1)",
+        "isCorrect": false
+      },
+      {
+        "text": "(4, 2)",
+        "isCorrect": true
+      },
+      {
+        "text": "(2,4)",
+        "isCorrect": false
+      },
+      {
+        "text": "(3,3)",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "(4, 2)",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "systems"
+    ]
+  },
+  {
+    "id": "M9_1",
+    "category": "Geometry",
+    "question": "Distance formula uses:",
+    "answers": [
+      {
+        "text": "SOH-CAH-TOA",
+        "isCorrect": false
+      },
+      {
+        "text": "2πr",
+        "isCorrect": false
+      },
+      {
+        "text": "a^2+b^2=c^2 only",
+        "isCorrect": false
+      },
+      {
+        "text": "√[(x2−x1)^2 + (y2−y1)^2]",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "√[(x2−x1)^2 + (y2−y1)^2]",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "distance"
+    ]
+  },
+  {
+    "id": "M9_2",
+    "category": "Algebra I",
+    "question": "Zeros of (x−5)(x+1):",
+    "answers": [
+      {
+        "text": "x=−5 and 1",
+        "isCorrect": false
+      },
+      {
+        "text": "x=5 and x=−1",
+        "isCorrect": true
+      },
+      {
+        "text": "x=0 and 6",
+        "isCorrect": false
+      },
+      {
+        "text": "x=−1 only",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "x=5 and x=−1",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "quadratic"
+    ]
+  },
+  {
+    "id": "M9_3",
+    "category": "Geometry",
+    "question": "Complementary angles sum to 90°.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "G9",
+      "angles"
+    ]
+  },
+  {
+    "id": "M9_4",
+    "category": "Geometry",
+    "question": "Area of a circle with r=3:",
+    "answers": [
+      {
+        "text": "18π",
+        "isCorrect": false
+      },
+      {
+        "text": "9π",
+        "isCorrect": true
+      },
+      {
+        "text": "6π",
+        "isCorrect": false
+      },
+      {
+        "text": "3π",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "9π",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "area"
+    ]
+  },
+  {
+    "id": "M10_1",
+    "category": "Algebra II",
+    "question": "Vertex form:",
+    "answers": [
+      {
+        "text": "y=mx+b",
+        "isCorrect": false
+      },
+      {
+        "text": "y=ab^x",
+        "isCorrect": false
+      },
+      {
+        "text": "y = a(x−h)^2 + k",
+        "isCorrect": true
+      },
+      {
+        "text": "ax^2+bx+c",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "y = a(x−h)^2 + k",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "quadratics"
+    ]
+  },
+  {
+    "id": "M10_2",
+    "category": "Algebra II",
+    "question": "Solve: 3^x = 27",
+    "answers": [
+      {
+        "text": "x = 1",
+        "isCorrect": false
+      },
+      {
+        "text": "x = −3",
+        "isCorrect": false
+      },
+      {
+        "text": "x = 9",
+        "isCorrect": false
+      },
+      {
+        "text": "x = 3",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "x = 3",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "exponents"
+    ]
+  },
+  {
+    "id": "M10_3",
+    "category": "Algebra II",
+    "question": "Log base 10 of 1000 is:",
+    "answers": [
+      {
+        "text": "0.3",
+        "isCorrect": false
+      },
+      {
+        "text": "3",
+        "isCorrect": true
+      },
+      {
+        "text": "2",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "3",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "logs"
+    ]
+  },
+  {
+    "id": "M10_4",
+    "category": "Algebra II",
+    "question": "The inverse of an increasing function is increasing.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 3,
+    "tags": [
+      "G10",
+      "functions"
+    ]
+  },
+  {
+    "id": "M11_1",
+    "category": "Precalculus",
+    "question": "sin^2θ + cos^2θ =",
+    "answers": [
+      {
+        "text": "0",
+        "isCorrect": false
+      },
+      {
+        "text": "sinθ",
+        "isCorrect": false
+      },
+      {
+        "text": "2",
+        "isCorrect": false
+      },
+      {
+        "text": "1",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "1",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "trig identities"
+    ]
+  },
+  {
+    "id": "M11_2",
+    "category": "Precalculus",
+    "question": "Period of y = sin(x):",
+    "answers": [
+      {
+        "text": "π/2",
+        "isCorrect": false
+      },
+      {
+        "text": "1",
+        "isCorrect": false
+      },
+      {
+        "text": "2π",
+        "isCorrect": true
+      },
+      {
+        "text": "π",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "2π",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "trig"
+    ]
+  },
+  {
+    "id": "M11_3",
+    "category": "Precalculus",
+    "question": "If tanθ=opp/adj, then tan(45°) =",
+    "answers": [
+      {
+        "text": "1",
+        "isCorrect": true
+      },
+      {
+        "text": "√3/3",
+        "isCorrect": false
+      },
+      {
+        "text": "√3",
+        "isCorrect": false
+      },
+      {
+        "text": "0",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "trig"
+    ]
+  },
+  {
+    "id": "M11_4",
+    "category": "Precalculus",
+    "question": "An even function satisfies f(−x)=−f(x).",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 3,
+    "tags": [
+      "G11",
+      "even/odd"
+    ]
+  },
+  {
+    "id": "M12_1",
+    "category": "Calculus & Statistics",
+    "question": "∫ x dx =",
+    "answers": [
+      {
+        "text": "ln|x| + C",
+        "isCorrect": false
+      },
+      {
+        "text": "x + C",
+        "isCorrect": false
+      },
+      {
+        "text": "x^2/2 + C",
+        "isCorrect": true
+      },
+      {
+        "text": "2x + C",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "x^2/2 + C",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "integral"
+    ]
+  },
+  {
+    "id": "M12_2",
+    "category": "Calculus & Statistics",
+    "question": "d/dx (ln x) =",
+    "answers": [
+      {
+        "text": "e^x",
+        "isCorrect": false
+      },
+      {
+        "text": "1/x",
+        "isCorrect": true
+      },
+      {
+        "text": "x",
+        "isCorrect": false
+      },
+      {
+        "text": "ln x",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1/x",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "derivative"
+    ]
+  }
+]

@@ -1,0 +1,1 @@
+class TimeSync { const TimeSync(); }

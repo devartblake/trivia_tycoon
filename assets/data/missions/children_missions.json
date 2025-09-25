@@ -1,0 +1,1502 @@
+[
+  {
+    "title": "Answer 3 Science questions",
+    "progress": 0,
+    "total": 3,
+    "reward": 200,
+    "icon": "science",
+    "badge": "Science Starter",
+    "tags": [
+      "children",
+      "category"
+    ],
+    "mode": "Speed",
+    "category": "Science",
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 10 Science questions in Classic",
+    "progress": 0,
+    "total": 10,
+    "reward": 200,
+    "icon": "science",
+    "badge": "Science Starter",
+    "tags": [
+      "children",
+      "category"
+    ],
+    "mode": "Classic",
+    "category": "Science",
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 5 Geography questions in Classic",
+    "progress": 0,
+    "total": 5,
+    "reward": 300,
+    "icon": "public",
+    "badge": "Geography Starter",
+    "tags": [
+      "children",
+      "category"
+    ],
+    "mode": "Classic",
+    "category": "Geography",
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 5 Geography questions in Multimedia",
+    "progress": 0,
+    "total": 5,
+    "reward": 250,
+    "icon": "public",
+    "badge": "Geography Starter",
+    "tags": [
+      "children",
+      "category"
+    ],
+    "mode": "Multimedia",
+    "category": "Geography",
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 10 Science questions in Multimedia",
+    "progress": 0,
+    "total": 10,
+    "reward": 200,
+    "icon": "science",
+    "badge": "Science Starter",
+    "tags": [
+      "children",
+      "category"
+    ],
+    "mode": "Multimedia",
+    "category": "Science",
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 3 General questions",
+    "progress": 0,
+    "total": 3,
+    "reward": 100,
+    "icon": "quiz",
+    "badge": "General Starter",
+    "tags": [
+      "children",
+      "category"
+    ],
+    "mode": "Speed",
+    "category": "General",
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 5 General questions",
+    "progress": 0,
+    "total": 5,
+    "reward": 100,
+    "icon": "quiz",
+    "badge": "General Starter",
+    "tags": [
+      "children",
+      "category"
+    ],
+    "mode": "Classic",
+    "category": "General",
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 10 Geography questions in Speed",
+    "progress": 0,
+    "total": 10,
+    "reward": 100,
+    "icon": "public",
+    "badge": "Geography Starter",
+    "tags": [
+      "children",
+      "category"
+    ],
+    "mode": "Speed",
+    "category": "Geography",
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 10 Geography questions in Speed",
+    "progress": 0,
+    "total": 10,
+    "reward": 300,
+    "icon": "public",
+    "badge": "Geography Starter",
+    "tags": [
+      "children",
+      "category"
+    ],
+    "mode": "Speed",
+    "category": "Geography",
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 7 General questions in Multimedia",
+    "progress": 0,
+    "total": 7,
+    "reward": 300,
+    "icon": "quiz",
+    "badge": "General Starter",
+    "tags": [
+      "children",
+      "category"
+    ],
+    "mode": "Multimedia",
+    "category": "General",
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 10 Arts questions in Multimedia",
+    "progress": 0,
+    "total": 10,
+    "reward": 250,
+    "icon": "palette",
+    "badge": "Arts Starter",
+    "tags": [
+      "children",
+      "category"
+    ],
+    "mode": "Multimedia",
+    "category": "Arts",
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 3 Geography questions",
+    "progress": 0,
+    "total": 3,
+    "reward": 150,
+    "icon": "public",
+    "badge": "Geography Starter",
+    "tags": [
+      "children",
+      "category"
+    ],
+    "mode": "Multimedia",
+    "category": "Geography",
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 10 General questions",
+    "progress": 0,
+    "total": 10,
+    "reward": 150,
+    "icon": "quiz",
+    "badge": "General Starter",
+    "tags": [
+      "children",
+      "category"
+    ],
+    "mode": "Classic",
+    "category": "General",
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 10 Geography questions",
+    "progress": 0,
+    "total": 10,
+    "reward": 250,
+    "icon": "public",
+    "badge": "Geography Starter",
+    "tags": [
+      "children",
+      "category"
+    ],
+    "mode": "Speed",
+    "category": "Geography",
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 7 Arts questions in Multimedia",
+    "progress": 0,
+    "total": 7,
+    "reward": 300,
+    "icon": "palette",
+    "badge": "Arts Starter",
+    "tags": [
+      "children",
+      "category"
+    ],
+    "mode": "Multimedia",
+    "category": "Arts",
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 7 Science questions in Multimedia",
+    "progress": 0,
+    "total": 7,
+    "reward": 200,
+    "icon": "science",
+    "badge": "Science Starter",
+    "tags": [
+      "children",
+      "category"
+    ],
+    "mode": "Multimedia",
+    "category": "Science",
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 3 History questions",
+    "progress": 0,
+    "total": 3,
+    "reward": 250,
+    "icon": "history_edu",
+    "badge": "History Starter",
+    "tags": [
+      "children",
+      "category"
+    ],
+    "mode": "Speed",
+    "category": "History",
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 5 General questions in Multimedia",
+    "progress": 0,
+    "total": 5,
+    "reward": 150,
+    "icon": "quiz",
+    "badge": "General Starter",
+    "tags": [
+      "children",
+      "category"
+    ],
+    "mode": "Multimedia",
+    "category": "General",
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 10 History questions in Multimedia",
+    "progress": 0,
+    "total": 10,
+    "reward": 250,
+    "icon": "history_edu",
+    "badge": "History Starter",
+    "tags": [
+      "children",
+      "category"
+    ],
+    "mode": "Multimedia",
+    "category": "History",
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 5 Science questions in Classic",
+    "progress": 0,
+    "total": 5,
+    "reward": 100,
+    "icon": "science",
+    "badge": "Science Starter",
+    "tags": [
+      "children",
+      "category"
+    ],
+    "mode": "Classic",
+    "category": "Science",
+    "difficulty": 1
+  },
+  {
+    "title": "Achieve a 5‑answer streak",
+    "progress": 0,
+    "total": 5,
+    "reward": 250,
+    "icon": "flash_on",
+    "badge": "Streak Scout",
+    "tags": [
+      "children",
+      "streak"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Achieve a 5‑answer streak",
+    "progress": 0,
+    "total": 5,
+    "reward": 300,
+    "icon": "flash_on",
+    "badge": "Streak Scout",
+    "tags": [
+      "children",
+      "streak"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Achieve a 3‑answer streak",
+    "progress": 0,
+    "total": 3,
+    "reward": 200,
+    "icon": "flash_on",
+    "badge": "Streak Scout",
+    "tags": [
+      "children",
+      "streak"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Achieve a 7‑answer streak",
+    "progress": 0,
+    "total": 7,
+    "reward": 250,
+    "icon": "flash_on",
+    "badge": "Streak Scout",
+    "tags": [
+      "children",
+      "streak"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Achieve a 3‑answer streak",
+    "progress": 0,
+    "total": 3,
+    "reward": 250,
+    "icon": "flash_on",
+    "badge": "Streak Scout",
+    "tags": [
+      "children",
+      "streak"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Achieve a 7‑answer streak",
+    "progress": 0,
+    "total": 7,
+    "reward": 250,
+    "icon": "flash_on",
+    "badge": "Streak Scout",
+    "tags": [
+      "children",
+      "streak"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Achieve a 7‑answer streak",
+    "progress": 0,
+    "total": 7,
+    "reward": 300,
+    "icon": "flash_on",
+    "badge": "Streak Scout",
+    "tags": [
+      "children",
+      "streak"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Achieve a 3‑answer streak",
+    "progress": 0,
+    "total": 3,
+    "reward": 250,
+    "icon": "flash_on",
+    "badge": "Streak Scout",
+    "tags": [
+      "children",
+      "streak"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Achieve a 5‑answer streak",
+    "progress": 0,
+    "total": 5,
+    "reward": 200,
+    "icon": "flash_on",
+    "badge": "Streak Scout",
+    "tags": [
+      "children",
+      "streak"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Achieve a 5‑answer streak",
+    "progress": 0,
+    "total": 5,
+    "reward": 250,
+    "icon": "flash_on",
+    "badge": "Streak Scout",
+    "tags": [
+      "children",
+      "streak"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Maintain 70% accuracy for 3 rounds",
+    "progress": 0,
+    "total": 3,
+    "reward": 350,
+    "icon": "check_circle",
+    "badge": "Careful Thinker",
+    "tags": [
+      "children",
+      "accuracy"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Maintain 70% accuracy for 2 rounds",
+    "progress": 0,
+    "total": 2,
+    "reward": 250,
+    "icon": "check_circle",
+    "badge": "Careful Thinker",
+    "tags": [
+      "children",
+      "accuracy"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Maintain 70% accuracy for 2 rounds",
+    "progress": 0,
+    "total": 2,
+    "reward": 350,
+    "icon": "check_circle",
+    "badge": "Careful Thinker",
+    "tags": [
+      "children",
+      "accuracy"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Maintain 70% accuracy for 3 rounds",
+    "progress": 0,
+    "total": 3,
+    "reward": 250,
+    "icon": "check_circle",
+    "badge": "Careful Thinker",
+    "tags": [
+      "children",
+      "accuracy"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Maintain 70% accuracy for 3 rounds",
+    "progress": 0,
+    "total": 3,
+    "reward": 300,
+    "icon": "check_circle",
+    "badge": "Careful Thinker",
+    "tags": [
+      "children",
+      "accuracy"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Maintain 70% accuracy for 1 round",
+    "progress": 0,
+    "total": 1,
+    "reward": 350,
+    "icon": "check_circle",
+    "badge": "Careful Thinker",
+    "tags": [
+      "children",
+      "accuracy"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Maintain 70% accuracy for 2 rounds",
+    "progress": 0,
+    "total": 2,
+    "reward": 300,
+    "icon": "check_circle",
+    "badge": "Careful Thinker",
+    "tags": [
+      "children",
+      "accuracy"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Maintain 70% accuracy for 3 rounds",
+    "progress": 0,
+    "total": 3,
+    "reward": 300,
+    "icon": "check_circle",
+    "badge": "Careful Thinker",
+    "tags": [
+      "children",
+      "accuracy"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Play 5 different categories",
+    "progress": 0,
+    "total": 5,
+    "reward": 200,
+    "icon": "today",
+    "badge": "Explorer",
+    "tags": [
+      "children",
+      "variety"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Play 4 different categories",
+    "progress": 0,
+    "total": 4,
+    "reward": 250,
+    "icon": "today",
+    "badge": "Explorer",
+    "tags": [
+      "children",
+      "variety"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Play 5 different categories",
+    "progress": 0,
+    "total": 5,
+    "reward": 200,
+    "icon": "today",
+    "badge": "Explorer",
+    "tags": [
+      "children",
+      "variety"
+    ],
+    "mode": "Multimedia",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Play 5 different categories",
+    "progress": 0,
+    "total": 5,
+    "reward": 200,
+    "icon": "today",
+    "badge": "Explorer",
+    "tags": [
+      "children",
+      "variety"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Play 4 different categories",
+    "progress": 0,
+    "total": 4,
+    "reward": 300,
+    "icon": "today",
+    "badge": "Explorer",
+    "tags": [
+      "children",
+      "variety"
+    ],
+    "mode": "Multimedia",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Play 4 different categories",
+    "progress": 0,
+    "total": 4,
+    "reward": 250,
+    "icon": "today",
+    "badge": "Explorer",
+    "tags": [
+      "children",
+      "variety"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Play 3 different categories",
+    "progress": 0,
+    "total": 3,
+    "reward": 300,
+    "icon": "today",
+    "badge": "Explorer",
+    "tags": [
+      "children",
+      "variety"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Play 5 different categories",
+    "progress": 0,
+    "total": 5,
+    "reward": 300,
+    "icon": "today",
+    "badge": "Explorer",
+    "tags": [
+      "children",
+      "variety"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Play 3 different categories",
+    "progress": 0,
+    "total": 3,
+    "reward": 250,
+    "icon": "today",
+    "badge": "Explorer",
+    "tags": [
+      "children",
+      "variety"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Play 3 different categories",
+    "progress": 0,
+    "total": 3,
+    "reward": 300,
+    "icon": "today",
+    "badge": "Explorer",
+    "tags": [
+      "children",
+      "variety"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Play 3 different categories",
+    "progress": 0,
+    "total": 3,
+    "reward": 300,
+    "icon": "today",
+    "badge": "Explorer",
+    "tags": [
+      "children",
+      "variety"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Play 3 different categories",
+    "progress": 0,
+    "total": 3,
+    "reward": 250,
+    "icon": "today",
+    "badge": "Explorer",
+    "tags": [
+      "children",
+      "variety"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 3 questions under 12s each",
+    "progress": 0,
+    "total": 3,
+    "reward": 300,
+    "icon": "timer",
+    "badge": "Quick Thinker",
+    "tags": [
+      "children",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 5 questions under 10s each",
+    "progress": 0,
+    "total": 5,
+    "reward": 250,
+    "icon": "timer",
+    "badge": "Quick Thinker",
+    "tags": [
+      "children",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 3 questions under 8s each",
+    "progress": 0,
+    "total": 3,
+    "reward": 250,
+    "icon": "timer",
+    "badge": "Quick Thinker",
+    "tags": [
+      "children",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 3 questions under 8s each",
+    "progress": 0,
+    "total": 3,
+    "reward": 250,
+    "icon": "timer",
+    "badge": "Quick Thinker",
+    "tags": [
+      "children",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 5 questions under 12s each",
+    "progress": 0,
+    "total": 5,
+    "reward": 350,
+    "icon": "timer",
+    "badge": "Quick Thinker",
+    "tags": [
+      "children",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 3 questions under 12s each",
+    "progress": 0,
+    "total": 3,
+    "reward": 350,
+    "icon": "timer",
+    "badge": "Quick Thinker",
+    "tags": [
+      "children",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 3 questions under 10s each",
+    "progress": 0,
+    "total": 3,
+    "reward": 300,
+    "icon": "timer",
+    "badge": "Quick Thinker",
+    "tags": [
+      "children",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 3 questions under 8s each",
+    "progress": 0,
+    "total": 3,
+    "reward": 350,
+    "icon": "timer",
+    "badge": "Quick Thinker",
+    "tags": [
+      "children",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 5 questions under 12s each",
+    "progress": 0,
+    "total": 5,
+    "reward": 300,
+    "icon": "timer",
+    "badge": "Quick Thinker",
+    "tags": [
+      "children",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 5 questions under 8s each",
+    "progress": 0,
+    "total": 5,
+    "reward": 250,
+    "icon": "timer",
+    "badge": "Quick Thinker",
+    "tags": [
+      "children",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 5 questions under 10s each",
+    "progress": 0,
+    "total": 5,
+    "reward": 300,
+    "icon": "timer",
+    "badge": "Quick Thinker",
+    "tags": [
+      "children",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Answer 3 questions under 10s each",
+    "progress": 0,
+    "total": 3,
+    "reward": 350,
+    "icon": "timer",
+    "badge": "Quick Thinker",
+    "tags": [
+      "children",
+      "speed"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Use 2 lifelines wisely",
+    "progress": 0,
+    "total": 2,
+    "reward": 250,
+    "icon": "bolt",
+    "badge": "Helper",
+    "tags": [
+      "children",
+      "powerups"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Use 3 lifelines wisely",
+    "progress": 0,
+    "total": 3,
+    "reward": 200,
+    "icon": "bolt",
+    "badge": "Helper",
+    "tags": [
+      "children",
+      "powerups"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Use 2 lifelines wisely",
+    "progress": 0,
+    "total": 2,
+    "reward": 200,
+    "icon": "bolt",
+    "badge": "Helper",
+    "tags": [
+      "children",
+      "powerups"
+    ],
+    "mode": "Multimedia",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Use 3 lifelines wisely",
+    "progress": 0,
+    "total": 3,
+    "reward": 250,
+    "icon": "bolt",
+    "badge": "Helper",
+    "tags": [
+      "children",
+      "powerups"
+    ],
+    "mode": "Multimedia",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Use 3 lifelines wisely",
+    "progress": 0,
+    "total": 3,
+    "reward": 200,
+    "icon": "bolt",
+    "badge": "Helper",
+    "tags": [
+      "children",
+      "powerups"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Use 3 lifelines wisely",
+    "progress": 0,
+    "total": 3,
+    "reward": 200,
+    "icon": "bolt",
+    "badge": "Helper",
+    "tags": [
+      "children",
+      "powerups"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Use 2 lifelines wisely",
+    "progress": 0,
+    "total": 2,
+    "reward": 200,
+    "icon": "bolt",
+    "badge": "Helper",
+    "tags": [
+      "children",
+      "powerups"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Use 3 lifelines wisely",
+    "progress": 0,
+    "total": 3,
+    "reward": 200,
+    "icon": "bolt",
+    "badge": "Helper",
+    "tags": [
+      "children",
+      "powerups"
+    ],
+    "mode": "Multimedia",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Play 2 multiplayer rounds",
+    "progress": 0,
+    "total": 2,
+    "reward": 350,
+    "icon": "groups",
+    "badge": "Team Player",
+    "tags": [
+      "children",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Play 3 multiplayer rounds",
+    "progress": 0,
+    "total": 3,
+    "reward": 300,
+    "icon": "groups",
+    "badge": "Team Player",
+    "tags": [
+      "children",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Play 2 multiplayer rounds",
+    "progress": 0,
+    "total": 2,
+    "reward": 300,
+    "icon": "groups",
+    "badge": "Team Player",
+    "tags": [
+      "children",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Play 2 multiplayer rounds",
+    "progress": 0,
+    "total": 2,
+    "reward": 300,
+    "icon": "groups",
+    "badge": "Team Player",
+    "tags": [
+      "children",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Play 4 multiplayer rounds",
+    "progress": 0,
+    "total": 4,
+    "reward": 350,
+    "icon": "groups",
+    "badge": "Team Player",
+    "tags": [
+      "children",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Play 3 multiplayer rounds",
+    "progress": 0,
+    "total": 3,
+    "reward": 250,
+    "icon": "groups",
+    "badge": "Team Player",
+    "tags": [
+      "children",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Play 3 multiplayer rounds",
+    "progress": 0,
+    "total": 3,
+    "reward": 250,
+    "icon": "groups",
+    "badge": "Team Player",
+    "tags": [
+      "children",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Play 4 multiplayer rounds",
+    "progress": 0,
+    "total": 4,
+    "reward": 300,
+    "icon": "groups",
+    "badge": "Team Player",
+    "tags": [
+      "children",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Play 3 multiplayer rounds",
+    "progress": 0,
+    "total": 3,
+    "reward": 250,
+    "icon": "groups",
+    "badge": "Team Player",
+    "tags": [
+      "children",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Play 3 multiplayer rounds",
+    "progress": 0,
+    "total": 3,
+    "reward": 350,
+    "icon": "groups",
+    "badge": "Team Player",
+    "tags": [
+      "children",
+      "multiplayer"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Complete 3 daily missions",
+    "progress": 0,
+    "total": 3,
+    "reward": 250,
+    "icon": "today",
+    "badge": "Daily Star",
+    "tags": [
+      "children",
+      "daily"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Complete 3 daily missions",
+    "progress": 0,
+    "total": 3,
+    "reward": 250,
+    "icon": "today",
+    "badge": "Daily Star",
+    "tags": [
+      "children",
+      "daily"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Complete 2 daily missions",
+    "progress": 0,
+    "total": 2,
+    "reward": 300,
+    "icon": "today",
+    "badge": "Daily Star",
+    "tags": [
+      "children",
+      "daily"
+    ],
+    "mode": "Multiplayer",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Complete 2 daily missions",
+    "progress": 0,
+    "total": 2,
+    "reward": 200,
+    "icon": "today",
+    "badge": "Daily Star",
+    "tags": [
+      "children",
+      "daily"
+    ],
+    "mode": "Multimedia",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Complete 3 daily missions",
+    "progress": 0,
+    "total": 3,
+    "reward": 300,
+    "icon": "today",
+    "badge": "Daily Star",
+    "tags": [
+      "children",
+      "daily"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Complete 2 daily missions",
+    "progress": 0,
+    "total": 2,
+    "reward": 200,
+    "icon": "today",
+    "badge": "Daily Star",
+    "tags": [
+      "children",
+      "daily"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Complete 1 daily mission",
+    "progress": 0,
+    "total": 1,
+    "reward": 200,
+    "icon": "today",
+    "badge": "Daily Star",
+    "tags": [
+      "children",
+      "daily"
+    ],
+    "mode": "Multimedia",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Complete 3 daily missions",
+    "progress": 0,
+    "total": 3,
+    "reward": 250,
+    "icon": "today",
+    "badge": "Daily Star",
+    "tags": [
+      "children",
+      "daily"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Complete 2 daily missions",
+    "progress": 0,
+    "total": 2,
+    "reward": 300,
+    "icon": "today",
+    "badge": "Daily Star",
+    "tags": [
+      "children",
+      "daily"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Complete 2 daily missions",
+    "progress": 0,
+    "total": 2,
+    "reward": 300,
+    "icon": "today",
+    "badge": "Daily Star",
+    "tags": [
+      "children",
+      "daily"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Complete 2 daily missions",
+    "progress": 0,
+    "total": 2,
+    "reward": 250,
+    "icon": "today",
+    "badge": "Daily Star",
+    "tags": [
+      "children",
+      "daily"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Complete 3 daily missions",
+    "progress": 0,
+    "total": 3,
+    "reward": 200,
+    "icon": "today",
+    "badge": "Daily Star",
+    "tags": [
+      "children",
+      "daily"
+    ],
+    "mode": "Multimedia",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Complete 3 daily missions",
+    "progress": 0,
+    "total": 3,
+    "reward": 300,
+    "icon": "today",
+    "badge": "Daily Star",
+    "tags": [
+      "children",
+      "daily"
+    ],
+    "mode": "Speed",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Complete 3 daily missions",
+    "progress": 0,
+    "total": 3,
+    "reward": 300,
+    "icon": "today",
+    "badge": "Daily Star",
+    "tags": [
+      "children",
+      "daily"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Complete 2 daily missions",
+    "progress": 0,
+    "total": 2,
+    "reward": 300,
+    "icon": "today",
+    "badge": "Daily Star",
+    "tags": [
+      "children",
+      "daily"
+    ],
+    "mode": "Multimedia",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Complete 1 daily mission",
+    "progress": 0,
+    "total": 1,
+    "reward": 300,
+    "icon": "today",
+    "badge": "Daily Star",
+    "tags": [
+      "children",
+      "daily"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Complete 2 daily missions",
+    "progress": 0,
+    "total": 2,
+    "reward": 250,
+    "icon": "today",
+    "badge": "Daily Star",
+    "tags": [
+      "children",
+      "daily"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Complete 2 daily missions",
+    "progress": 0,
+    "total": 2,
+    "reward": 250,
+    "icon": "today",
+    "badge": "Daily Star",
+    "tags": [
+      "children",
+      "daily"
+    ],
+    "mode": "Multimedia",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Complete 1 daily mission",
+    "progress": 0,
+    "total": 1,
+    "reward": 300,
+    "icon": "today",
+    "badge": "Daily Star",
+    "tags": [
+      "children",
+      "daily"
+    ],
+    "mode": "Classic",
+    "category": null,
+    "difficulty": 1
+  },
+  {
+    "title": "Complete 2 daily missions",
+    "progress": 0,
+    "total": 2,
+    "reward": 300,
+    "icon": "today",
+    "badge": "Daily Star",
+    "tags": [
+      "children",
+      "daily"
+    ],
+    "mode": "Survival",
+    "category": null,
+    "difficulty": 1
+  }
+]

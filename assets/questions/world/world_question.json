@@ -1,0 +1,776 @@
+[
+  {
+    "id": "W5_1",
+    "category": "World",
+    "question": "The continent with most countries:",
+    "answers": [
+      {
+        "text": "Africa",
+        "isCorrect": true
+      },
+      {
+        "text": "Asia",
+        "isCorrect": false
+      },
+      {
+        "text": "Europe",
+        "isCorrect": false
+      },
+      {
+        "text": "South America",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Africa",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "continents"
+    ]
+  },
+  {
+    "id": "W5_2",
+    "category": "World",
+    "question": "The largest desert:",
+    "answers": [
+      {
+        "text": "Sahara",
+        "isCorrect": true
+      },
+      {
+        "text": "Gobi",
+        "isCorrect": false
+      },
+      {
+        "text": "Kalahari",
+        "isCorrect": false
+      },
+      {
+        "text": "Mojave",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Sahara",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "deserts"
+    ]
+  },
+  {
+    "id": "W6_1",
+    "category": "World",
+    "question": "The Great Wall is in…",
+    "answers": [
+      {
+        "text": "China",
+        "isCorrect": true
+      },
+      {
+        "text": "India",
+        "isCorrect": false
+      },
+      {
+        "text": "Japan",
+        "isCorrect": false
+      },
+      {
+        "text": "Korea",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "China",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "china"
+    ]
+  },
+  {
+    "id": "W6_2",
+    "category": "World",
+    "question": "Mt Everest in…",
+    "answers": [
+      {
+        "text": "Nepal/China",
+        "isCorrect": true
+      },
+      {
+        "text": "India",
+        "isCorrect": false
+      },
+      {
+        "text": "Bhutan",
+        "isCorrect": false
+      },
+      {
+        "text": "Mongolia",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Nepal/China",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G6",
+      "everest"
+    ]
+  },
+  {
+    "id": "W7_1",
+    "category": "World",
+    "question": "Amazon rainforest is mainly in…",
+    "answers": [
+      {
+        "text": "Brazil",
+        "isCorrect": true
+      },
+      {
+        "text": "Colombia",
+        "isCorrect": false
+      },
+      {
+        "text": "Peru",
+        "isCorrect": false
+      },
+      {
+        "text": "Venezuela",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Brazil",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "amazon"
+    ]
+  },
+  {
+    "id": "W7_2",
+    "category": "World",
+    "question": "The largest country in area:",
+    "answers": [
+      {
+        "text": "Russia",
+        "isCorrect": true
+      },
+      {
+        "text": "China",
+        "isCorrect": false
+      },
+      {
+        "text": "Canada",
+        "isCorrect": false
+      },
+      {
+        "text": "USA",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Russia",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "russia"
+    ]
+  },
+  {
+    "id": "W8_1",
+    "category": "World",
+    "question": "The UN founded in…",
+    "answers": [
+      {
+        "text": "1945",
+        "isCorrect": true
+      },
+      {
+        "text": "1919",
+        "isCorrect": false
+      },
+      {
+        "text": "1939",
+        "isCorrect": false
+      },
+      {
+        "text": "1950",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1945",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "UN"
+    ]
+  },
+  {
+    "id": "W8_2",
+    "category": "World",
+    "question": "Currency of Japan:",
+    "answers": [
+      {
+        "text": "Yen",
+        "isCorrect": true
+      },
+      {
+        "text": "Won",
+        "isCorrect": false
+      },
+      {
+        "text": "Yuan",
+        "isCorrect": false
+      },
+      {
+        "text": "Dollar",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Yen",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G8",
+      "currency"
+    ]
+  },
+  {
+    "id": "W9_1",
+    "category": "World",
+    "question": "The EU headquarters is in…",
+    "answers": [
+      {
+        "text": "Brussels",
+        "isCorrect": true
+      },
+      {
+        "text": "Paris",
+        "isCorrect": false
+      },
+      {
+        "text": "London",
+        "isCorrect": false
+      },
+      {
+        "text": "Berlin",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Brussels",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "EU"
+    ]
+  },
+  {
+    "id": "W9_2",
+    "category": "World",
+    "question": "GDP means…",
+    "answers": [
+      {
+        "text": "Gross Domestic Product",
+        "isCorrect": true
+      },
+      {
+        "text": "Global Dev Plan",
+        "isCorrect": false
+      },
+      {
+        "text": "Gross Data Percent",
+        "isCorrect": false
+      },
+      {
+        "text": "General Dept Policy",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Gross Domestic Product",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "GDP"
+    ]
+  },
+  {
+    "id": "W10_1",
+    "category": "World",
+    "question": "The Cold War ended in…",
+    "answers": [
+      {
+        "text": "1991",
+        "isCorrect": true
+      },
+      {
+        "text": "1980",
+        "isCorrect": false
+      },
+      {
+        "text": "1975",
+        "isCorrect": false
+      },
+      {
+        "text": "2001",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1991",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "cold war"
+    ]
+  },
+  {
+    "id": "W10_2",
+    "category": "World",
+    "question": "NATO stands for…",
+    "answers": [
+      {
+        "text": "North Atlantic Treaty Organization",
+        "isCorrect": true
+      },
+      {
+        "text": "National Trade Org",
+        "isCorrect": false
+      },
+      {
+        "text": "North Asia Treaty Org",
+        "isCorrect": false
+      },
+      {
+        "text": "Naval Atlantic Team Org",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "North Atlantic Treaty Organization",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "NATO"
+    ]
+  },
+  {
+    "id": "W11_1",
+    "category": "World",
+    "question": "The G7 is…",
+    "answers": [
+      {
+        "text": "Group of 7 major economies",
+        "isCorrect": true
+      },
+      {
+        "text": "Group of 7 continents",
+        "isCorrect": false
+      },
+      {
+        "text": "7 African nations",
+        "isCorrect": false
+      },
+      {
+        "text": "7 world religions",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Group of 7 major economies",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "G7"
+    ]
+  },
+  {
+    "id": "W11_2",
+    "category": "World",
+    "question": "The World Bank provides…",
+    "answers": [
+      {
+        "text": "Loans to developing countries",
+        "isCorrect": true
+      },
+      {
+        "text": "Military support",
+        "isCorrect": false
+      },
+      {
+        "text": "Education programs",
+        "isCorrect": false
+      },
+      {
+        "text": "Oil",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Loans to developing countries",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "World Bank"
+    ]
+  },
+  {
+    "id": "W12_1",
+    "category": "World",
+    "question": "Kyoto Protocol dealt with…",
+    "answers": [
+      {
+        "text": "Climate change",
+        "isCorrect": true
+      },
+      {
+        "text": "Terrorism",
+        "isCorrect": false
+      },
+      {
+        "text": "Trade",
+        "isCorrect": false
+      },
+      {
+        "text": "Health",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Climate change",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "climate"
+    ]
+  },
+  {
+    "id": "W12_2",
+    "category": "World",
+    "question": "Brexit was UK leaving…",
+    "answers": [
+      {
+        "text": "European Union",
+        "isCorrect": true
+      },
+      {
+        "text": "UN",
+        "isCorrect": false
+      },
+      {
+        "text": "NATO",
+        "isCorrect": false
+      },
+      {
+        "text": "Eurozone only",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "European Union",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "Brexit"
+    ]
+  },
+  {
+    "id": "WX16",
+    "category": "Mixed World",
+    "question": "The Earth orbits the Sun.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WX17",
+    "category": "Mixed World",
+    "question": "The Earth orbits the Sun.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WX18",
+    "category": "Mixed World",
+    "question": "The Earth orbits the Sun.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WX19",
+    "category": "Mixed World",
+    "question": "The Earth orbits the Sun.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WX20",
+    "category": "Mixed World",
+    "question": "The Earth orbits the Sun.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WX21",
+    "category": "Mixed World",
+    "question": "The Earth orbits the Sun.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WX22",
+    "category": "Mixed World",
+    "question": "The Earth orbits the Sun.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WX23",
+    "category": "Mixed World",
+    "question": "The Earth orbits the Sun.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WX24",
+    "category": "Mixed World",
+    "question": "The Earth orbits the Sun.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WX25",
+    "category": "Mixed World",
+    "question": "The Earth orbits the Sun.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WX26",
+    "category": "Mixed World",
+    "question": "The Earth orbits the Sun.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WX27",
+    "category": "Mixed World",
+    "question": "The Earth orbits the Sun.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WX28",
+    "category": "Mixed World",
+    "question": "The Earth orbits the Sun.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WX29",
+    "category": "Mixed World",
+    "question": "The Earth orbits the Sun.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  }
+]

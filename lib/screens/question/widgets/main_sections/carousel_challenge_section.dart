@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'daily_quiz_widget.dart';
-import 'monthly_quiz_widget.dart';
+import '../challenges/daily_quiz_widget.dart';
+import '../challenges/featured_challenge_widget.dart';
+import '../challenges/monthly_quiz_widget.dart';
 
 class CarouselSection extends StatefulWidget {
   const CarouselSection({super.key});
@@ -56,15 +56,15 @@ class _CarouselSectionState extends State<CarouselSection> {
                 _currentPage = index;
               });
             },
-            children: [
-              // Daily Quiz Widget
-              const DailyQuizWidget(),
+            children: const [
+              // Enhanced Daily Quiz Widget with real data
+              DailyQuizWidget(),
 
-              // Monthly Quiz Widget
-              const MonthlyQuizWidget(),
+              // Enhanced Monthly Quiz Widget with real data
+              MonthlyQuizWidget(),
 
-              // Featured Challenge Widget
-              const FeaturedChallengeWidget(),
+              // Enhanced Featured Challenge Widget with real data
+              FeaturedChallengeWidget(),
             ],
           ),
         ),
@@ -89,136 +89,6 @@ class _CarouselSectionState extends State<CarouselSection> {
           }),
         ),
       ],
-    );
-  }
-}
-
-// Featured Challenge Widget
-class FeaturedChallengeWidget extends StatelessWidget {
-  const FeaturedChallengeWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16), // Reduced from 20
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.indigo.shade600, Colors.purple.shade400],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center, // Center the content
-              children: [
-                Row(
-                  children: [
-                    Icon(
-                      Icons.star,
-                      color: Colors.yellow.shade300,
-                      size: 18, // Slightly smaller
-                    ),
-                    const SizedBox(width: 4),
-                    const Text(
-                      "Featured Challenge",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15, // Slightly smaller
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 2), // Reduced spacing
-                Text(
-                  "Science Masters Quiz",
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.9),
-                    fontSize: 13, // Slightly smaller
-                  ),
-                ),
-                const SizedBox(height: 6), // Reduced spacing
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3), // Reduced padding
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Text(
-                    "2x XP Bonus",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 11, // Slightly smaller
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8), // Reduced spacing
-                ElevatedButton(
-                  onPressed: () {
-                    context.push('/featured-challenge');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.indigo.shade600,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6), // Reduced padding
-                    minimumSize: const Size(0, 32), // Set minimum height
-                  ),
-                  child: const Text(
-                    "Accept Challenge",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 11, // Slightly smaller
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 8), // Add some space between content and icon
-          Stack(
-            children: [
-              Container(
-                width: 70, // Slightly smaller
-                height: 70, // Slightly smaller
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.psychology,
-                  color: Colors.white,
-                  size: 35, // Slightly smaller
-                ),
-              ),
-              Positioned(
-                top: 0,
-                right: 0,
-                child: Container(
-                  padding: const EdgeInsets.all(3), // Slightly smaller
-                  decoration: BoxDecoration(
-                    color: Colors.yellow.shade300,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.star,
-                    color: Colors.indigo.shade600,
-                    size: 14, // Slightly smaller
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
     );
   }
 }

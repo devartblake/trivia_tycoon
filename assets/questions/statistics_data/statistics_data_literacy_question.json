@@ -1,0 +1,862 @@
+[
+  {
+    "id": "SDL1",
+    "category": "Basics",
+    "question": "A mean is the…",
+    "answers": [
+      {
+        "text": "Range",
+        "isCorrect": false
+      },
+      {
+        "text": "Average of values",
+        "isCorrect": true
+      },
+      {
+        "text": "Middle value",
+        "isCorrect": false
+      },
+      {
+        "text": "Most frequent",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Average of values",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "central tendency"
+    ]
+  },
+  {
+    "id": "SDL2",
+    "category": "Basics",
+    "question": "Median is the…",
+    "answers": [
+      {
+        "text": "Average",
+        "isCorrect": false
+      },
+      {
+        "text": "Most frequent",
+        "isCorrect": false
+      },
+      {
+        "text": "Middle value when ordered",
+        "isCorrect": true
+      },
+      {
+        "text": "Sum",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Middle value when ordered",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "median"
+    ]
+  },
+  {
+    "id": "SDL3",
+    "category": "Basics",
+    "question": "Mode is the…",
+    "answers": [
+      {
+        "text": "Spread",
+        "isCorrect": false
+      },
+      {
+        "text": "Most frequent value",
+        "isCorrect": true
+      },
+      {
+        "text": "Middle",
+        "isCorrect": false
+      },
+      {
+        "text": "Average",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Most frequent value",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "mode"
+    ]
+  },
+  {
+    "id": "SDL4",
+    "category": "Spread",
+    "question": "Standard deviation measures…",
+    "answers": [
+      {
+        "text": "Total sum",
+        "isCorrect": false
+      },
+      {
+        "text": "Central value",
+        "isCorrect": false
+      },
+      {
+        "text": "Skew direction",
+        "isCorrect": false
+      },
+      {
+        "text": "Variability around the mean",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Variability around the mean",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "spread"
+    ]
+  },
+  {
+    "id": "SDL5",
+    "category": "Distributions",
+    "question": "A histogram shows…",
+    "answers": [
+      {
+        "text": "Time sequence",
+        "isCorrect": false
+      },
+      {
+        "text": "Cause-effect",
+        "isCorrect": false
+      },
+      {
+        "text": "Frequency distribution",
+        "isCorrect": true
+      },
+      {
+        "text": "Geographic map",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Frequency distribution",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "plots"
+    ]
+  },
+  {
+    "id": "SDL6",
+    "category": "Sampling",
+    "question": "A random sample helps reduce bias.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "sampling"
+    ]
+  },
+  {
+    "id": "SDL7",
+    "category": "Probability",
+    "question": "A fair coin landing heads has probability…",
+    "answers": [
+      {
+        "text": "0.25",
+        "isCorrect": false
+      },
+      {
+        "text": "0.5",
+        "isCorrect": true
+      },
+      {
+        "text": "0.75",
+        "isCorrect": false
+      },
+      {
+        "text": "1.0",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "0.5",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "probability"
+    ]
+  },
+  {
+    "id": "SDL8",
+    "category": "Inference",
+    "question": "A confidence interval estimates…",
+    "answers": [
+      {
+        "text": "A range for a population parameter",
+        "isCorrect": true
+      },
+      {
+        "text": "A proof",
+        "isCorrect": false
+      },
+      {
+        "text": "A causal effect",
+        "isCorrect": false
+      },
+      {
+        "text": "A sample mean exact",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A range for a population parameter",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11-12",
+      "inference"
+    ]
+  },
+  {
+    "id": "SDL9",
+    "category": "Correlation",
+    "question": "Correlation measures…",
+    "answers": [
+      {
+        "text": "Skew",
+        "isCorrect": false
+      },
+      {
+        "text": "Distribution shape",
+        "isCorrect": false
+      },
+      {
+        "text": "Causation",
+        "isCorrect": false
+      },
+      {
+        "text": "Linear association",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Linear association",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "correlation"
+    ]
+  },
+  {
+    "id": "SDL10",
+    "category": "Causation",
+    "question": "Randomized experiments help infer…",
+    "answers": [
+      {
+        "text": "Only averages",
+        "isCorrect": false
+      },
+      {
+        "text": "No effect",
+        "isCorrect": false
+      },
+      {
+        "text": "Causality",
+        "isCorrect": true
+      },
+      {
+        "text": "Only correlation",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Causality",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11-12",
+      "causality"
+    ]
+  },
+  {
+    "id": "SDL11",
+    "category": "Data Ethics",
+    "question": "Personally identifiable information should be protected.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "ethics"
+    ]
+  },
+  {
+    "id": "SDL12",
+    "category": "Outliers",
+    "question": "Outliers can strongly affect the…",
+    "answers": [
+      {
+        "text": "Median only",
+        "isCorrect": false
+      },
+      {
+        "text": "Sample size",
+        "isCorrect": false
+      },
+      {
+        "text": "Mean",
+        "isCorrect": true
+      },
+      {
+        "text": "Mode only",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mean",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "outliers"
+    ]
+  },
+  {
+    "id": "SDL13",
+    "category": "Skew",
+    "question": "Right-skewed distributions have a…",
+    "answers": [
+      {
+        "text": "No tails",
+        "isCorrect": false
+      },
+      {
+        "text": "Long right tail",
+        "isCorrect": true
+      },
+      {
+        "text": "Two peaks",
+        "isCorrect": false
+      },
+      {
+        "text": "Long left tail",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Long right tail",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "skew"
+    ]
+  },
+  {
+    "id": "SDL14",
+    "category": "Visuals",
+    "question": "A boxplot displays…",
+    "answers": [
+      {
+        "text": "Means only",
+        "isCorrect": false
+      },
+      {
+        "text": "Raw list",
+        "isCorrect": false
+      },
+      {
+        "text": "Only maximum",
+        "isCorrect": false
+      },
+      {
+        "text": "Median, quartiles, outliers",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Median, quartiles, outliers",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "boxplot"
+    ]
+  },
+  {
+    "id": "SDL15",
+    "category": "Rates",
+    "question": "Per‑capita rates adjust for…",
+    "answers": [
+      {
+        "text": "Area",
+        "isCorrect": false
+      },
+      {
+        "text": "Population size",
+        "isCorrect": true
+      },
+      {
+        "text": "Inflation",
+        "isCorrect": false
+      },
+      {
+        "text": "Income",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Population size",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "rates"
+    ]
+  },
+  {
+    "id": "SDL16",
+    "category": "Pitfalls",
+    "question": "Correlation ≠ Causation.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "caveats"
+    ]
+  },
+  {
+    "id": "SDL17",
+    "category": "Regression",
+    "question": "Least squares fits a line by minimizing…",
+    "answers": [
+      {
+        "text": "Sum of squared residuals",
+        "isCorrect": true
+      },
+      {
+        "text": "Mean residual",
+        "isCorrect": false
+      },
+      {
+        "text": "Sum of residuals",
+        "isCorrect": false
+      },
+      {
+        "text": "Max error",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Sum of squared residuals",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11-12",
+      "regression"
+    ]
+  },
+  {
+    "id": "SDL18",
+    "category": "Probability",
+    "question": "Mutually exclusive events have…",
+    "answers": [
+      {
+        "text": "Independent causes",
+        "isCorrect": false
+      },
+      {
+        "text": "Same probability",
+        "isCorrect": false
+      },
+      {
+        "text": "Equal size",
+        "isCorrect": false
+      },
+      {
+        "text": "No outcomes in common",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "No outcomes in common",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "probability"
+    ]
+  },
+  {
+    "id": "SDL19",
+    "category": "Design",
+    "question": "A control group helps…",
+    "answers": [
+      {
+        "text": "Reduce sample",
+        "isCorrect": false
+      },
+      {
+        "text": "Isolate the effect of treatment",
+        "isCorrect": true
+      },
+      {
+        "text": "Confuse results",
+        "isCorrect": false
+      },
+      {
+        "text": "Increase cost",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Isolate the effect of treatment",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "design"
+    ]
+  },
+  {
+    "id": "SDL20",
+    "category": "Bias",
+    "question": "Selection bias occurs when…",
+    "answers": [
+      {
+        "text": "Proper randomization",
+        "isCorrect": false
+      },
+      {
+        "text": "Random variation",
+        "isCorrect": false
+      },
+      {
+        "text": "Measurement precision",
+        "isCorrect": false
+      },
+      {
+        "text": "Sample differs systematically from population",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Sample differs systematically from population",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11-12",
+      "bias"
+    ]
+  },
+  {
+    "id": "SDL21",
+    "category": "Data Types",
+    "question": "Categorical data include…",
+    "answers": [
+      {
+        "text": "Labels like colors",
+        "isCorrect": true
+      },
+      {
+        "text": "Heights",
+        "isCorrect": false
+      },
+      {
+        "text": "Speeds",
+        "isCorrect": false
+      },
+      {
+        "text": "Weights",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Labels like colors",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "types"
+    ]
+  },
+  {
+    "id": "SDL22",
+    "category": "Data Types",
+    "question": "Continuous data are…",
+    "answers": [
+      {
+        "text": "Any values in an interval",
+        "isCorrect": true
+      },
+      {
+        "text": "Only integers",
+        "isCorrect": false
+      },
+      {
+        "text": "Only categories",
+        "isCorrect": false
+      },
+      {
+        "text": "Whole-number counts",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Any values in an interval",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "types"
+    ]
+  },
+  {
+    "id": "SDL23",
+    "category": "Privacy",
+    "question": "De-identification removes personal identifiers.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "privacy"
+    ]
+  },
+  {
+    "id": "SDL24",
+    "category": "Visualization",
+    "question": "A scatterplot shows…",
+    "answers": [
+      {
+        "text": "Cumulative totals",
+        "isCorrect": false
+      },
+      {
+        "text": "Pairs of values",
+        "isCorrect": true
+      },
+      {
+        "text": "Ranks only",
+        "isCorrect": false
+      },
+      {
+        "text": "Single counts",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Pairs of values",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "plots"
+    ]
+  },
+  {
+    "id": "SDL25",
+    "category": "Uncertainty",
+    "question": "Margin of error decreases when…",
+    "answers": [
+      {
+        "text": "Units change",
+        "isCorrect": false
+      },
+      {
+        "text": "Sample size increases",
+        "isCorrect": true
+      },
+      {
+        "text": "Bins change",
+        "isCorrect": false
+      },
+      {
+        "text": "Population increases",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Sample size increases",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11-12",
+      "uncertainty"
+    ]
+  },
+  {
+    "id": "SDL26",
+    "category": "Proportions",
+    "question": "A percentage is…",
+    "answers": [
+      {
+        "text": "A mode",
+        "isCorrect": false
+      },
+      {
+        "text": "A rate per 100",
+        "isCorrect": true
+      },
+      {
+        "text": "A mean",
+        "isCorrect": false
+      },
+      {
+        "text": "A fraction of 10",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A rate per 100",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "proportions"
+    ]
+  },
+  {
+    "id": "SDL27",
+    "category": "Bayes",
+    "question": "Posterior probability is…",
+    "answers": [
+      {
+        "text": "Null hypothesis",
+        "isCorrect": false
+      },
+      {
+        "text": "Updated belief after data",
+        "isCorrect": true
+      },
+      {
+        "text": "Observed data only",
+        "isCorrect": false
+      },
+      {
+        "text": "Prior belief",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Updated belief after data",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11-12",
+      "bayes"
+    ]
+  },
+  {
+    "id": "SDL28",
+    "category": "Hypothesis",
+    "question": "A p‑value is the probability of…",
+    "answers": [
+      {
+        "text": "Alternative true",
+        "isCorrect": false
+      },
+      {
+        "text": "Data as/extreme given null true",
+        "isCorrect": true
+      },
+      {
+        "text": "Null being true",
+        "isCorrect": false
+      },
+      {
+        "text": "Effect size",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Data as/extreme given null true",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11-12",
+      "testing"
+    ]
+  },
+  {
+    "id": "SDL29",
+    "category": "Ethics",
+    "question": "Dark patterns are…",
+    "answers": [
+      {
+        "text": "Color themes",
+        "isCorrect": false
+      },
+      {
+        "text": "Accessibility tools",
+        "isCorrect": false
+      },
+      {
+        "text": "Designs that manipulate users",
+        "isCorrect": true
+      },
+      {
+        "text": "Privacy settings",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Designs that manipulate users",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "ethics"
+    ]
+  },
+  {
+    "id": "SDL30",
+    "category": "Communication",
+    "question": "Clear labels and sources improve trust in charts.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "communication"
+    ]
+  }
+]

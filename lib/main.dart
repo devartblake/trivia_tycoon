@@ -42,7 +42,7 @@ Future<void> main() async {
   }
 }
 
-/// Initialize auth state and sync with Riverpod providers
+/// Initialize auth state and sync with River-pod providers
 Future<void> _initializeAuthState(ServiceManager serviceManager) async {
   try {
     // Create a temporary container to update providers
@@ -58,7 +58,7 @@ Future<void> _initializeAuthState(ServiceManager serviceManager) async {
 
     debugPrint('Session loaded: isLoggedIn=$isLoggedIn, hasOnboarded=$hasOnboarded');
 
-    // Sync with Riverpod providers
+    // Sync with River-pod providers
     container.read(isLoggedInSyncProvider.notifier).state = isLoggedIn;
 
     // Update onboarding state based on completion status
@@ -70,7 +70,7 @@ Future<void> _initializeAuthState(ServiceManager serviceManager) async {
     // Dispose the temporary container
     container.dispose();
 
-    debugPrint('Riverpod providers synchronized with service state');
+    debugPrint('River-pod providers synchronized with service state');
   } catch (e) {
     debugPrint('Auth state initialization failed: $e');
     // Continue with default state - app should still work

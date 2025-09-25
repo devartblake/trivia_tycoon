@@ -1,0 +1,1842 @@
+[
+  {
+    "id": "ART_1",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 1?",
+    "answers": [
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      },
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_2",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 2?",
+    "answers": [
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      },
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_3",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 3?",
+    "answers": [
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_4",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 4?",
+    "answers": [
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      },
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_5",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 5?",
+    "answers": [
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_6",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 6?",
+    "answers": [
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_7",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 7?",
+    "answers": [
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_8",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 8?",
+    "answers": [
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      },
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_9",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 9?",
+    "answers": [
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_10",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 10?",
+    "answers": [
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_11",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 11?",
+    "answers": [
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      },
+      {
+        "text": "Correct",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_12",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 12?",
+    "answers": [
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_13",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 13?",
+    "answers": [
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      },
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_14",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 14?",
+    "answers": [
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Correct",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_15",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 15?",
+    "answers": [
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_16",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 16?",
+    "answers": [
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Correct",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_17",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 17?",
+    "answers": [
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_18",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 18?",
+    "answers": [
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      },
+      {
+        "text": "Correct",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_19",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 19?",
+    "answers": [
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      },
+      {
+        "text": "Correct",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_20",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 20?",
+    "answers": [
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_21",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 21?",
+    "answers": [
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_22",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 22?",
+    "answers": [
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_23",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 23?",
+    "answers": [
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_24",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 24?",
+    "answers": [
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      },
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_25",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 25?",
+    "answers": [
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      },
+      {
+        "text": "Correct",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_26",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 26?",
+    "answers": [
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      },
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_27",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 27?",
+    "answers": [
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Correct",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_28",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 28?",
+    "answers": [
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Correct",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_29",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 29?",
+    "answers": [
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_30",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 30?",
+    "answers": [
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      },
+      {
+        "text": "Correct",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_31",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 31?",
+    "answers": [
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_32",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 32?",
+    "answers": [
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Correct",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_33",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 33?",
+    "answers": [
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_34",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 34?",
+    "answers": [
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_35",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 35?",
+    "answers": [
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_36",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 36?",
+    "answers": [
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_37",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 37?",
+    "answers": [
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Correct",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_38",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 38?",
+    "answers": [
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_39",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 39?",
+    "answers": [
+      {
+        "text": "Correct",
+        "isCorrect": true
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_40",
+    "category": "Arts",
+    "question": "Sample Arts MCQ 40?",
+    "answers": [
+      {
+        "text": "Wrong1",
+        "isCorrect": false
+      },
+      {
+        "text": "Wrong2",
+        "isCorrect": false
+      },
+      {
+        "text": "Correct",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Correct",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_41",
+    "category": "Arts",
+    "question": "Sample Arts True/False 41?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_42",
+    "category": "Arts",
+    "question": "Sample Arts True/False 42?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_43",
+    "category": "Arts",
+    "question": "Sample Arts True/False 43?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_44",
+    "category": "Arts",
+    "question": "Sample Arts True/False 44?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_45",
+    "category": "Arts",
+    "question": "Sample Arts True/False 45?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_46",
+    "category": "Arts",
+    "question": "Sample Arts True/False 46?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_47",
+    "category": "Arts",
+    "question": "Sample Arts True/False 47?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_48",
+    "category": "Arts",
+    "question": "Sample Arts True/False 48?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_49",
+    "category": "Arts",
+    "question": "Sample Arts True/False 49?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_50",
+    "category": "Arts",
+    "question": "Sample Arts True/False 50?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_51",
+    "category": "Arts",
+    "question": "Sample Arts True/False 51?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_52",
+    "category": "Arts",
+    "question": "Sample Arts True/False 52?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_53",
+    "category": "Arts",
+    "question": "Sample Arts True/False 53?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_54",
+    "category": "Arts",
+    "question": "Sample Arts True/False 54?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_55",
+    "category": "Arts",
+    "question": "Sample Arts True/False 55?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_56",
+    "category": "Arts",
+    "question": "Sample Arts True/False 56?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_57",
+    "category": "Arts",
+    "question": "Sample Arts True/False 57?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_58",
+    "category": "Arts",
+    "question": "Sample Arts True/False 58?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_59",
+    "category": "Arts",
+    "question": "Sample Arts True/False 59?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_60",
+    "category": "Arts",
+    "question": "Sample Arts True/False 60?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_61",
+    "category": "Arts",
+    "question": "Sample Arts True/False 61?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_62",
+    "category": "Arts",
+    "question": "Sample Arts True/False 62?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_63",
+    "category": "Arts",
+    "question": "Sample Arts True/False 63?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_64",
+    "category": "Arts",
+    "question": "Sample Arts True/False 64?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_65",
+    "category": "Arts",
+    "question": "Sample Arts True/False 65?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_66",
+    "category": "Arts",
+    "question": "Sample Arts True/False 66?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_67",
+    "category": "Arts",
+    "question": "Sample Arts True/False 67?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_68",
+    "category": "Arts",
+    "question": "Sample Arts True/False 68?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_69",
+    "category": "Arts",
+    "question": "Sample Arts True/False 69?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_70",
+    "category": "Arts",
+    "question": "Sample Arts True/False 70?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_71",
+    "category": "Arts",
+    "question": "Sample Arts True/False 71?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_72",
+    "category": "Arts",
+    "question": "Sample Arts True/False 72?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_73",
+    "category": "Arts",
+    "question": "Sample Arts True/False 73?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_74",
+    "category": "Arts",
+    "question": "Sample Arts True/False 74?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_75",
+    "category": "Arts",
+    "question": "Sample Arts True/False 75?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_76",
+    "category": "Arts",
+    "question": "Sample Arts True/False 76?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_77",
+    "category": "Arts",
+    "question": "Sample Arts True/False 77?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_78",
+    "category": "Arts",
+    "question": "Sample Arts True/False 78?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_79",
+    "category": "Arts",
+    "question": "Sample Arts True/False 79?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  },
+  {
+    "id": "ART_80",
+    "category": "Arts",
+    "question": "Sample Arts True/False 80?",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "Arts"
+    ]
+  }
+]

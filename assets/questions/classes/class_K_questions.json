@@ -1,0 +1,625 @@
+[
+  {
+    "id": "K_colors_1",
+    "category": "Colors & Shapes",
+    "question": "What color is the sun in most drawings?",
+    "answers": [
+      {
+        "text": "Yellow",
+        "isCorrect": true
+      },
+      {
+        "text": "Blue",
+        "isCorrect": false
+      },
+      {
+        "text": "Green",
+        "isCorrect": false
+      },
+      {
+        "text": "Purple",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Yellow",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": [
+      "colors"
+    ]
+  },
+  {
+    "id": "K_shapes_1",
+    "category": "Colors & Shapes",
+    "question": "Which shape has 3 sides?",
+    "answers": [
+      {
+        "text": "Triangle",
+        "isCorrect": true
+      },
+      {
+        "text": "Circle",
+        "isCorrect": false
+      },
+      {
+        "text": "Square",
+        "isCorrect": false
+      },
+      {
+        "text": "Rectangle",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Triangle",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": [
+      "shapes"
+    ]
+  },
+  {
+    "id": "K_numbers_1",
+    "category": "Numbers 1–10",
+    "question": "How many fingers are on one hand?",
+    "answers": [
+      {
+        "text": "5",
+        "isCorrect": true
+      },
+      {
+        "text": "4",
+        "isCorrect": false
+      },
+      {
+        "text": "6",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "5",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": [
+      "counting"
+    ]
+  },
+  {
+    "id": "K_letters_1",
+    "category": "Letters & Sounds",
+    "question": "Which letter is the first in the alphabet?",
+    "answers": [
+      {
+        "text": "A",
+        "isCorrect": true
+      },
+      {
+        "text": "B",
+        "isCorrect": false
+      },
+      {
+        "text": "Z",
+        "isCorrect": false
+      },
+      {
+        "text": "M",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": [
+      "alphabet"
+    ]
+  },
+  {
+    "id": "K_animals_1",
+    "category": "Animal Friends",
+    "question": "Which animal says “meow”?",
+    "answers": [
+      {
+        "text": "Cat",
+        "isCorrect": true
+      },
+      {
+        "text": "Dog",
+        "isCorrect": false
+      },
+      {
+        "text": "Cow",
+        "isCorrect": false
+      },
+      {
+        "text": "Duck",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Cat",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": [
+      "animals"
+    ]
+  },
+  {
+    "id": "K_colors_2",
+    "category": "Colors & Shapes",
+    "question": "What color do you get when you mix red and yellow?",
+    "answers": [
+      {
+        "text": "Orange",
+        "isCorrect": true
+      },
+      {
+        "text": "Purple",
+        "isCorrect": false
+      },
+      {
+        "text": "Green",
+        "isCorrect": false
+      },
+      {
+        "text": "Brown",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Orange",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": [
+      "colors",
+      "mixing"
+    ]
+  },
+  {
+    "id": "K_shapes_2",
+    "category": "Colors & Shapes",
+    "question": "Which shape is round?",
+    "answers": [
+      {
+        "text": "Circle",
+        "isCorrect": true
+      },
+      {
+        "text": "Triangle",
+        "isCorrect": false
+      },
+      {
+        "text": "Square",
+        "isCorrect": false
+      },
+      {
+        "text": "Star",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Circle",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "K_numbers_2",
+    "category": "Numbers 1–10",
+    "question": "What number comes after 2?",
+    "answers": [
+      {
+        "text": "3",
+        "isCorrect": true
+      },
+      {
+        "text": "4",
+        "isCorrect": false
+      },
+      {
+        "text": "1",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "3",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "K_letters_2",
+    "category": "Letters & Sounds",
+    "question": "What sound does the letter B usually make?",
+    "answers": [
+      {
+        "text": "buh",
+        "isCorrect": true
+      },
+      {
+        "text": "sss",
+        "isCorrect": false
+      },
+      {
+        "text": "mmm",
+        "isCorrect": false
+      },
+      {
+        "text": "tuh",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "buh",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": [
+      "phonics"
+    ]
+  },
+  {
+    "id": "K_animals_2",
+    "category": "Animal Friends",
+    "question": "A baby dog is called a…",
+    "answers": [
+      {
+        "text": "Puppy",
+        "isCorrect": true
+      },
+      {
+        "text": "Kitten",
+        "isCorrect": false
+      },
+      {
+        "text": "Calf",
+        "isCorrect": false
+      },
+      {
+        "text": "Chick",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Puppy",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "K_numbers_3",
+    "category": "Numbers 1–10",
+    "question": "How many sides does a square have?",
+    "answers": [
+      {
+        "text": "4",
+        "isCorrect": true
+      },
+      {
+        "text": "3",
+        "isCorrect": false
+      },
+      {
+        "text": "5",
+        "isCorrect": false
+      },
+      {
+        "text": "6",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "4",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": [
+      "shapes"
+    ]
+  },
+  {
+    "id": "K_letters_3",
+    "category": "Letters & Sounds",
+    "question": "Which letter is a vowel?",
+    "answers": [
+      {
+        "text": "E",
+        "isCorrect": true
+      },
+      {
+        "text": "B",
+        "isCorrect": false
+      },
+      {
+        "text": "C",
+        "isCorrect": false
+      },
+      {
+        "text": "D",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "E",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": [
+      "vowels"
+    ]
+  },
+  {
+    "id": "K_animals_3",
+    "category": "Animal Friends",
+    "question": "Which animal can fly?",
+    "answers": [
+      {
+        "text": "Bird",
+        "isCorrect": true
+      },
+      {
+        "text": "Fish",
+        "isCorrect": false
+      },
+      {
+        "text": "Horse",
+        "isCorrect": false
+      },
+      {
+        "text": "Turtle",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Bird",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "K_colors_3",
+    "category": "Colors & Shapes",
+    "question": "Strawberries are usually…",
+    "answers": [
+      {
+        "text": "Red",
+        "isCorrect": true
+      },
+      {
+        "text": "Blue",
+        "isCorrect": false
+      },
+      {
+        "text": "Green",
+        "isCorrect": false
+      },
+      {
+        "text": "Black",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Red",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "K_numbers_4",
+    "category": "Numbers 1–10",
+    "question": "How many legs does a spider have?",
+    "answers": [
+      {
+        "text": "8",
+        "isCorrect": true
+      },
+      {
+        "text": "6",
+        "isCorrect": false
+      },
+      {
+        "text": "4",
+        "isCorrect": false
+      },
+      {
+        "text": "2",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "8",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": [
+      "counting"
+    ]
+  },
+  {
+    "id": "K_shapes_3",
+    "category": "Colors & Shapes",
+    "question": "Which shape looks like a box?",
+    "answers": [
+      {
+        "text": "Cube",
+        "isCorrect": true
+      },
+      {
+        "text": "Circle",
+        "isCorrect": false
+      },
+      {
+        "text": "Cone",
+        "isCorrect": false
+      },
+      {
+        "text": "Sphere",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Cube",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": [
+      "3D shapes"
+    ]
+  },
+  {
+    "id": "K_letters_4",
+    "category": "Letters & Sounds",
+    "question": "Which letter is last in the alphabet?",
+    "answers": [
+      {
+        "text": "Z",
+        "isCorrect": true
+      },
+      {
+        "text": "X",
+        "isCorrect": false
+      },
+      {
+        "text": "Y",
+        "isCorrect": false
+      },
+      {
+        "text": "A",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Z",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "K_animals_4",
+    "category": "Animal Friends",
+    "question": "Which animal lives in water and has gills?",
+    "answers": [
+      {
+        "text": "Fish",
+        "isCorrect": true
+      },
+      {
+        "text": "Cat",
+        "isCorrect": false
+      },
+      {
+        "text": "Bird",
+        "isCorrect": false
+      },
+      {
+        "text": "Lion",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Fish",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "K_colors_4",
+    "category": "Colors & Shapes",
+    "question": "Grass is usually…",
+    "answers": [
+      {
+        "text": "Green",
+        "isCorrect": true
+      },
+      {
+        "text": "Pink",
+        "isCorrect": false
+      },
+      {
+        "text": "Orange",
+        "isCorrect": false
+      },
+      {
+        "text": "Purple",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Green",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "K_numbers_5",
+    "category": "Numbers 1–10",
+    "question": "What number is this: 🖐️✌️ (five plus two)?",
+    "answers": [
+      {
+        "text": "7",
+        "isCorrect": true
+      },
+      {
+        "text": "6",
+        "isCorrect": false
+      },
+      {
+        "text": "8",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "7",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  }
+]

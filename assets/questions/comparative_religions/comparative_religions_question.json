@@ -1,0 +1,612 @@
+[
+  {
+    "id": "CR1",
+    "category": "Comparative Religions",
+    "question": "The holy book of Islam is…",
+    "answers": [
+      {
+        "text": "Vedas",
+        "isCorrect": false
+      },
+      {
+        "text": "Torah",
+        "isCorrect": false
+      },
+      {
+        "text": "Bible",
+        "isCorrect": false
+      },
+      {
+        "text": "Qur’an",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Qur’an",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR2",
+    "category": "Comparative Religions",
+    "question": "Hindu festival of lights is…",
+    "answers": [
+      {
+        "text": "Passover",
+        "isCorrect": false
+      },
+      {
+        "text": "Holi",
+        "isCorrect": false
+      },
+      {
+        "text": "Eid",
+        "isCorrect": false
+      },
+      {
+        "text": "Diwali",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Diwali",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR3",
+    "category": "Comparative Religions",
+    "question": "Christianity is based on the teachings of…",
+    "answers": [
+      {
+        "text": "Jesus Christ",
+        "isCorrect": true
+      },
+      {
+        "text": "Buddha",
+        "isCorrect": false
+      },
+      {
+        "text": "Muhammad",
+        "isCorrect": false
+      },
+      {
+        "text": "Moses",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Jesus Christ",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR4",
+    "category": "Comparative Religions",
+    "question": "Buddhism originated in…",
+    "answers": [
+      {
+        "text": "Thailand",
+        "isCorrect": false
+      },
+      {
+        "text": "India",
+        "isCorrect": true
+      },
+      {
+        "text": "Japan",
+        "isCorrect": false
+      },
+      {
+        "text": "China",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "India",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "CR5",
+    "category": "Comparative Religions",
+    "question": "Judaism’s day of rest is called…",
+    "answers": [
+      {
+        "text": "Sunday",
+        "isCorrect": false
+      },
+      {
+        "text": "Sabbath",
+        "isCorrect": true
+      },
+      {
+        "text": "Lent",
+        "isCorrect": false
+      },
+      {
+        "text": "Ramadan",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Sabbath",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "CR6",
+    "category": "Comparative Religions",
+    "question": "Sikhism originated in Punjab, India.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "CR6",
+    "category": "Comparative Religions",
+    "question": "World religions include Christianity, Islam, Hinduism, Buddhism, Judaism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR7",
+    "category": "Comparative Religions",
+    "question": "World religions include Christianity, Islam, Hinduism, Buddhism, Judaism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR8",
+    "category": "Comparative Religions",
+    "question": "World religions include Christianity, Islam, Hinduism, Buddhism, Judaism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR9",
+    "category": "Comparative Religions",
+    "question": "World religions include Christianity, Islam, Hinduism, Buddhism, Judaism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR10",
+    "category": "Comparative Religions",
+    "question": "World religions include Christianity, Islam, Hinduism, Buddhism, Judaism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR11",
+    "category": "Comparative Religions",
+    "question": "World religions include Christianity, Islam, Hinduism, Buddhism, Judaism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR12",
+    "category": "Comparative Religions",
+    "question": "World religions include Christianity, Islam, Hinduism, Buddhism, Judaism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR13",
+    "category": "Comparative Religions",
+    "question": "World religions include Christianity, Islam, Hinduism, Buddhism, Judaism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR14",
+    "category": "Comparative Religions",
+    "question": "World religions include Christianity, Islam, Hinduism, Buddhism, Judaism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR15",
+    "category": "Comparative Religions",
+    "question": "World religions include Christianity, Islam, Hinduism, Buddhism, Judaism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR16",
+    "category": "Comparative Religions",
+    "question": "World religions include Christianity, Islam, Hinduism, Buddhism, Judaism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR17",
+    "category": "Comparative Religions",
+    "question": "World religions include Christianity, Islam, Hinduism, Buddhism, Judaism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR18",
+    "category": "Comparative Religions",
+    "question": "World religions include Christianity, Islam, Hinduism, Buddhism, Judaism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR19",
+    "category": "Comparative Religions",
+    "question": "World religions include Christianity, Islam, Hinduism, Buddhism, Judaism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR20",
+    "category": "Comparative Religions",
+    "question": "World religions include Christianity, Islam, Hinduism, Buddhism, Judaism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR21",
+    "category": "Comparative Religions",
+    "question": "World religions include Christianity, Islam, Hinduism, Buddhism, Judaism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR22",
+    "category": "Comparative Religions",
+    "question": "World religions include Christianity, Islam, Hinduism, Buddhism, Judaism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR23",
+    "category": "Comparative Religions",
+    "question": "World religions include Christianity, Islam, Hinduism, Buddhism, Judaism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR24",
+    "category": "Comparative Religions",
+    "question": "World religions include Christianity, Islam, Hinduism, Buddhism, Judaism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR25",
+    "category": "Comparative Religions",
+    "question": "World religions include Christianity, Islam, Hinduism, Buddhism, Judaism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR26",
+    "category": "Comparative Religions",
+    "question": "World religions include Christianity, Islam, Hinduism, Buddhism, Judaism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR27",
+    "category": "Comparative Religions",
+    "question": "World religions include Christianity, Islam, Hinduism, Buddhism, Judaism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR28",
+    "category": "Comparative Religions",
+    "question": "World religions include Christianity, Islam, Hinduism, Buddhism, Judaism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CR29",
+    "category": "Comparative Religions",
+    "question": "World religions include Christianity, Islam, Hinduism, Buddhism, Judaism.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  }
+]

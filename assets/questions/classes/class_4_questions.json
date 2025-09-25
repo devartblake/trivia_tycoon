@@ -1,0 +1,598 @@
+[
+  {
+    "id": "4_math_1",
+    "category": "Long Division & Multi‑step",
+    "question": "What is 96 ÷ 8?",
+    "answers": [
+      {
+        "text": "12",
+        "isCorrect": true
+      },
+      {
+        "text": "8",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      },
+      {
+        "text": "16",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "12",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": [
+      "division"
+    ]
+  },
+  {
+    "id": "4_math_2",
+    "category": "Long Division & Multi‑step",
+    "question": "Solve: 3 × (12 − 5)",
+    "answers": [
+      {
+        "text": "21",
+        "isCorrect": true
+      },
+      {
+        "text": "15",
+        "isCorrect": false
+      },
+      {
+        "text": "36",
+        "isCorrect": false
+      },
+      {
+        "text": "24",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "21",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": [
+      "order of operations"
+    ]
+  },
+  {
+    "id": "4_math_3",
+    "category": "Long Division & Multi‑step",
+    "question": "A rectangle is 8 cm by 6 cm. What is its area?",
+    "answers": [
+      {
+        "text": "48 cm²",
+        "isCorrect": true
+      },
+      {
+        "text": "14 cm²",
+        "isCorrect": false
+      },
+      {
+        "text": "28 cm²",
+        "isCorrect": false
+      },
+      {
+        "text": "52 cm²",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "48 cm²",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": [
+      "area"
+    ]
+  },
+  {
+    "id": "4_sci_1",
+    "category": "Ecosystems & Food Webs",
+    "question": "Producers are organisms that…",
+    "answers": [
+      {
+        "text": "Make their own food",
+        "isCorrect": true
+      },
+      {
+        "text": "Eat only animals",
+        "isCorrect": false
+      },
+      {
+        "text": "Break down waste",
+        "isCorrect": false
+      },
+      {
+        "text": "Cause disease",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Make their own food",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "4_sci_2",
+    "category": "Ecosystems & Food Webs",
+    "question": "In a food web, arrows usually point to…",
+    "answers": [
+      {
+        "text": "Where the energy goes",
+        "isCorrect": true
+      },
+      {
+        "text": "The sun",
+        "isCorrect": false
+      },
+      {
+        "text": "Back to the producer",
+        "isCorrect": false
+      },
+      {
+        "text": "Randomly",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Where the energy goes",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "4_earth_1",
+    "category": "Earth & Space Basics",
+    "question": "Earth takes about how long to orbit the Sun?",
+    "answers": [
+      {
+        "text": "1 year",
+        "isCorrect": true
+      },
+      {
+        "text": "1 day",
+        "isCorrect": false
+      },
+      {
+        "text": "1 month",
+        "isCorrect": false
+      },
+      {
+        "text": "6 months",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1 year",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "4_earth_2",
+    "category": "Earth & Space Basics",
+    "question": "The phases of the Moon are caused by…",
+    "answers": [
+      {
+        "text": "The Moon’s position relative to Earth and the Sun",
+        "isCorrect": true
+      },
+      {
+        "text": "Clouds covering the Moon",
+        "isCorrect": false
+      },
+      {
+        "text": "Earth’s shadow every night",
+        "isCorrect": false
+      },
+      {
+        "text": "The Moon changing shape",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "The Moon’s position relative to Earth and the Sun",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "4_geo_1",
+    "category": "Geography & Civics",
+    "question": "Which document begins with 'We the People'?",
+    "answers": [
+      {
+        "text": "The U.S. Constitution",
+        "isCorrect": true
+      },
+      {
+        "text": "The Bill of Rights",
+        "isCorrect": false
+      },
+      {
+        "text": "Declaration of Independence",
+        "isCorrect": false
+      },
+      {
+        "text": "Emancipation Proclamation",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "The U.S. Constitution",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "4_geo_2",
+    "category": "Geography & Civics",
+    "question": "Which is a line of longitude?",
+    "answers": [
+      {
+        "text": "Prime Meridian",
+        "isCorrect": true
+      },
+      {
+        "text": "Equator",
+        "isCorrect": false
+      },
+      {
+        "text": "Tropic of Capricorn",
+        "isCorrect": false
+      },
+      {
+        "text": "Arctic Circle",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Prime Meridian",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "4_math_4",
+    "category": "Long Division & Multi‑step",
+    "question": "A prime number has exactly two factors: 1 and itself.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "4_sci_3",
+    "category": "Ecosystems & Food Webs",
+    "question": "What is the main source of energy for most ecosystems?",
+    "answers": [
+      {
+        "text": "The Sun",
+        "isCorrect": true
+      },
+      {
+        "text": "Wind",
+        "isCorrect": false
+      },
+      {
+        "text": "Earth’s core",
+        "isCorrect": false
+      },
+      {
+        "text": "The Moon",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "The Sun",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "4_earth_3",
+    "category": "Earth & Space Basics",
+    "question": "Which layer of Earth is liquid?",
+    "answers": [
+      {
+        "text": "Outer core",
+        "isCorrect": true
+      },
+      {
+        "text": "Crust",
+        "isCorrect": false
+      },
+      {
+        "text": "Mantle",
+        "isCorrect": false
+      },
+      {
+        "text": "Inner core",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Outer core",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": [
+      "earth science"
+    ]
+  },
+  {
+    "id": "4_geo_3",
+    "category": "Geography & Civics",
+    "question": "Which continent has the Sahara Desert?",
+    "answers": [
+      {
+        "text": "Africa",
+        "isCorrect": true
+      },
+      {
+        "text": "Asia",
+        "isCorrect": false
+      },
+      {
+        "text": "Australia",
+        "isCorrect": false
+      },
+      {
+        "text": "South America",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Africa",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "4_math_5",
+    "category": "Long Division & Multi‑step",
+    "question": "What is the remainder when 50 ÷ 7?",
+    "answers": [
+      {
+        "text": "1",
+        "isCorrect": true
+      },
+      {
+        "text": "2",
+        "isCorrect": false
+      },
+      {
+        "text": "3",
+        "isCorrect": false
+      },
+      {
+        "text": "5",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": [
+      "remainders"
+    ]
+  },
+  {
+    "id": "4_sci_4",
+    "category": "Ecosystems & Food Webs",
+    "question": "An organism that breaks down dead matter is a…",
+    "answers": [
+      {
+        "text": "Decomposer",
+        "isCorrect": true
+      },
+      {
+        "text": "Producer",
+        "isCorrect": false
+      },
+      {
+        "text": "Herbivore",
+        "isCorrect": false
+      },
+      {
+        "text": "Parasite",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Decomposer",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "4_earth_4",
+    "category": "Earth & Space Basics",
+    "question": "What causes day and night on Earth?",
+    "answers": [
+      {
+        "text": "Earth’s rotation",
+        "isCorrect": true
+      },
+      {
+        "text": "Earth’s revolution",
+        "isCorrect": false
+      },
+      {
+        "text": "Moon’s gravity",
+        "isCorrect": false
+      },
+      {
+        "text": "Weather",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Earth’s rotation",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "4_geo_4",
+    "category": "Geography & Civics",
+    "question": "What do we call lines on a map that show elevation?",
+    "answers": [
+      {
+        "text": "Contour lines",
+        "isCorrect": true
+      },
+      {
+        "text": "Grid lines",
+        "isCorrect": false
+      },
+      {
+        "text": "Scale bars",
+        "isCorrect": false
+      },
+      {
+        "text": "Legends",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Contour lines",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "4_math_6",
+    "category": "Long Division & Multi‑step",
+    "question": "Solve: 84 ÷ 6 + 5 × 3",
+    "answers": [
+      {
+        "text": "37",
+        "isCorrect": true
+      },
+      {
+        "text": "29",
+        "isCorrect": false
+      },
+      {
+        "text": "33",
+        "isCorrect": false
+      },
+      {
+        "text": "39",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "37",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": [
+      "order of operations"
+    ]
+  },
+  {
+    "id": "4_sci_5",
+    "category": "Ecosystems & Food Webs",
+    "question": "Which best describes a niche?",
+    "answers": [
+      {
+        "text": "An organism’s role and place in its environment",
+        "isCorrect": true
+      },
+      {
+        "text": "A shelter animals build",
+        "isCorrect": false
+      },
+      {
+        "text": "A type of habitat",
+        "isCorrect": false
+      },
+      {
+        "text": "A food a species likes",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "An organism’s role and place in its environment",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  },
+  {
+    "id": "4_geo_5",
+    "category": "Geography & Civics",
+    "question": "Latitude lines run east‑west and measure north‑south.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "imageUrl": null,
+    "audioUrl": null,
+    "videoUrl": null,
+    "tags": []
+  }
+]

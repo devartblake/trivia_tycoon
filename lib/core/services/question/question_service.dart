@@ -41,14 +41,14 @@ class QuestionService {
     // Example: Multi-fallback list
     final fallback = await QuestionLoader.loadFromAssets(
       fallbackAssets: [
-        'assets/data/questions/extended_questions.json',
-        'assets/data/questions/media_questions.json',
-        'assets/data/questions/questions.json',
-        'assets/data/questions/questions_$category.json',
-        'assets/data/questions/questions_general.json',
-        'assets/data/questions/questions_kids.json',
-        'assets/data/questions/questions_offline_pack.json',
-        'assets/data/questions/questions_science.json',
+        'assets/questions/extended_questions.json',
+        'assets/questions/media_questions.json',
+        'assets/questions/questions.json',
+        'assets/questions/questions_$category.json',
+        'assets/questions/questions_general.json',
+        'assets/questions/questions_kids.json',
+        'assets/questions/questions_offline_pack.json',
+        'assets/questions/questions_science.json',
       ],
       shuffle: true,
       limit: amount,

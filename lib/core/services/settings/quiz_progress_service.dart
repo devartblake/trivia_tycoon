@@ -216,4 +216,183 @@ class QuizProgressService {
       return {'error': e.toString()};
     }
   }
+
+  /// Get recent quizzes for UI display
+  List<Map<String, String>> getRecentQuizzes() {
+    try {
+      if (!Hive.isBoxOpen(_settingsBox)) {
+        return _getDefaultRecentQuizzes();
+      }
+
+      final box = Hive.box(_settingsBox);
+      final recentQuizzes = box.get('recent_quizzes');
+
+      if (recentQuizzes != null && recentQuizzes is List) {
+        return List<Map<String, String>>.from(
+            recentQuizzes.map((quiz) => Map<String, String>.from(quiz))
+        );
+      }
+
+      return _getDefaultRecentQuizzes();
+    } catch (e) {
+      debugPrint('[QuizProgress] Error getting recent quizzes: $e');
+      return _getDefaultRecentQuizzes();
+    }
+  }
+
+  /// Get default recent quizzes when no data available
+  List<Map<String, String>> _getDefaultRecentQuizzes() {
+    return [
+      {
+        'title': 'Science Trivia',
+        'score': '85%',
+        'date': 'March 5',
+        'image': 'assets/images/quiz/category/science.jpg'
+      },
+      {
+        'title': 'History Quiz',
+        'score': '90%',
+        'date': 'March 4',
+        'image': 'assets/images/quiz/category/cinema.jpg'
+      },
+      {
+        'title': 'Pop Culture',
+        'score': '75%',
+        'date': 'March 3',
+        'image': 'assets/images/quiz/category/pop_culture.jpg'
+      },
+      {
+        'title': '1980 Movies',
+        'score': '25%',
+        'date': 'February 28',
+        'image': 'assets/images/quiz/category/film-strip.jpg'
+      },
+    ];
+  }
+
+  /// Save a completed quiz to recent quizzes
+  Future<void> saveCompletedQuiz({
+    required String title,
+    required String score,
+    required String category,
+    String? imagePath,
+  }) async {
+    try {
+      final box = await Hive.openBox(_settingsBox);
+      final recentQuizzes = getRecentQuizzes();
+
+      final newQuiz = {
+        'title': title,
+        'score': score,
+        'date': _formatDate(DateTime.now()),
+        'image': imagePath ?? 'assets/images/quiz/category/default.jpg',
+        'category': category,
+      };
+
+      // Add to beginning and limit to 10 recent quizzes
+      recentQuizzes.insert(0, newQuiz);
+      if (recentQuizzes.length > 10) {
+        recentQuizzes.removeRange(10, recentQuizzes.length);
+      }
+
+      await box.put('recent_quizzes', recentQuizzes);
+      debugPrint('[QuizProgress] Saved completed quiz: $title');
+    } catch (e) {
+      debugPrint('[QuizProgress] Error saving completed quiz: $e');
+    }
+  }
+
+  /// Format date for display
+  String _formatDate(DateTime date) {
+    final months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    return '${months[date.month - 1]} ${date.day}';
+  }
+
+  /// Get quiz performance statistics
+  Map<String, dynamic> getQuizStats() {
+    try {
+      final box = Hive.box(_settingsBox);
+      final playerProgress = box.get(_playerProgressKey, defaultValue: {});
+
+      return {
+        'totalQuizzes': playerProgress['total_quizzes'] ?? 0,
+        'totalQuestions': playerProgress['total_questions'] ?? 0,
+        'correctAnswers': playerProgress['correct_answers'] ?? 0,
+        'currentStreak': playerProgress['current_streak'] ?? 0,
+        'bestStreak': playerProgress['best_streak'] ?? 0,
+        'averageScore': _calculateAverageScore(playerProgress),
+        'accuracyPercentage': _calculateAccuracy(playerProgress),
+      };
+    } catch (e) {
+      debugPrint('[QuizProgress] Error getting quiz stats: $e');
+      return {};
+    }
+  }
+
+  /// Calculate average score percentage
+  double _calculateAverageScore(Map<String, dynamic> progress) {
+    final totalQuestions = progress['total_questions'] ?? 0;
+    final correctAnswers = progress['correct_answers'] ?? 0;
+
+    if (totalQuestions == 0) return 0.0;
+    return (correctAnswers / totalQuestions) * 100;
+  }
+
+  /// Calculate accuracy percentage
+  double _calculateAccuracy(Map<String, dynamic> progress) {
+    return _calculateAverageScore(progress);
+  }
+
+  /// Update quiz completion data
+  Future<void> updateQuizCompletion({
+    required int questionsTotal,
+    required int questionsCorrect,
+    required String category,
+    required double completionTime,
+  }) async {
+    try {
+      final currentProgress = await getPlayerProgress();
+
+      // Update totals
+      currentProgress['total_quizzes'] = (currentProgress['total_quizzes'] ?? 0) + 1;
+      currentProgress['total_questions'] = (currentProgress['total_questions'] ?? 0) + questionsTotal;
+      currentProgress['correct_answers'] = (currentProgress['correct_answers'] ?? 0) + questionsCorrect;
+
+      // Update streaks
+      if (questionsCorrect == questionsTotal) {
+        currentProgress['current_streak'] = (currentProgress['current_streak'] ?? 0) + 1;
+        final bestStreak = currentProgress['best_streak'] ?? 0;
+        if (currentProgress['current_streak'] > bestStreak) {
+          currentProgress['best_streak'] = currentProgress['current_streak'];
+        }
+      } else {
+        currentProgress['current_streak'] = 0;
+      }
+
+      // Update category stats
+      final categoryStats = currentProgress['category_stats'] ?? {};
+      final categoryKey = category.toLowerCase();
+      categoryStats[categoryKey] = {
+        'total_quizzes': (categoryStats[categoryKey]?['total_quizzes'] ?? 0) + 1,
+        'total_questions': (categoryStats[categoryKey]?['total_questions'] ?? 0) + questionsTotal,
+        'correct_answers': (categoryStats[categoryKey]?['correct_answers'] ?? 0) + questionsCorrect,
+        'best_time': categoryStats[categoryKey]?['best_time'] ?? completionTime,
+      };
+
+      if (completionTime < (categoryStats[categoryKey]['best_time'] ?? double.infinity)) {
+        categoryStats[categoryKey]['best_time'] = completionTime;
+      }
+
+      currentProgress['category_stats'] = categoryStats;
+      currentProgress['last_quiz_date'] = DateTime.now().toIso8601String();
+
+      await savePlayerProgress(currentProgress);
+      debugPrint('[QuizProgress] Updated quiz completion stats');
+    } catch (e) {
+      debugPrint('[QuizProgress] Error updating quiz completion: $e');
+    }
+  }
 }

@@ -1,0 +1,878 @@
+[
+  {
+    "id": "ET1",
+    "category": "Engineering",
+    "question": "Ohm’s law relates voltage, current, and…",
+    "answers": [
+      {
+        "text": "Power",
+        "isCorrect": false
+      },
+      {
+        "text": "Inductance",
+        "isCorrect": false
+      },
+      {
+        "text": "Resistance",
+        "isCorrect": true
+      },
+      {
+        "text": "Charge",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Resistance",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G9-12",
+      "electronics"
+    ]
+  },
+  {
+    "id": "ET2",
+    "category": "Technology",
+    "question": "A lever provides…",
+    "answers": [
+      {
+        "text": "Chemical energy",
+        "isCorrect": false
+      },
+      {
+        "text": "Thermal mass",
+        "isCorrect": false
+      },
+      {
+        "text": "Electrical energy",
+        "isCorrect": false
+      },
+      {
+        "text": "Mechanical advantage",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Mechanical advantage",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "mechanics"
+    ]
+  },
+  {
+    "id": "ET3",
+    "category": "Materials",
+    "question": "Concrete gains strength through…",
+    "answers": [
+      {
+        "text": "Evaporation",
+        "isCorrect": false
+      },
+      {
+        "text": "Melting",
+        "isCorrect": false
+      },
+      {
+        "text": "Hydration (curing)",
+        "isCorrect": true
+      },
+      {
+        "text": "Freezing",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Hydration (curing)",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "materials"
+    ]
+  },
+  {
+    "id": "ET4",
+    "category": "Energy",
+    "question": "A solar cell converts…",
+    "answers": [
+      {
+        "text": "Motion to light",
+        "isCorrect": false
+      },
+      {
+        "text": "Heat to light",
+        "isCorrect": false
+      },
+      {
+        "text": "Light to electricity",
+        "isCorrect": true
+      },
+      {
+        "text": "Sound to heat",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Light to electricity",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "energy"
+    ]
+  },
+  {
+    "id": "ET5",
+    "category": "Programming",
+    "question": "A robot’s control program is called…",
+    "answers": [
+      {
+        "text": "Firmware",
+        "isCorrect": true
+      },
+      {
+        "text": "Middleware",
+        "isCorrect": false
+      },
+      {
+        "text": "Wetware",
+        "isCorrect": false
+      },
+      {
+        "text": "Hardware",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Firmware",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "robotics"
+    ]
+  },
+  {
+    "id": "ET6",
+    "category": "Design",
+    "question": "The engineering design process is iterative.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "design"
+    ]
+  },
+  {
+    "id": "ET7",
+    "category": "Structures",
+    "question": "A truss is used to…",
+    "answers": [
+      {
+        "text": "Store data",
+        "isCorrect": false
+      },
+      {
+        "text": "Distribute loads efficiently",
+        "isCorrect": true
+      },
+      {
+        "text": "Transmit signals",
+        "isCorrect": false
+      },
+      {
+        "text": "Generate heat",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Distribute loads efficiently",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G9-12",
+      "structures"
+    ]
+  },
+  {
+    "id": "ET8",
+    "category": "Manufacturing",
+    "question": "3D printing is also known as…",
+    "answers": [
+      {
+        "text": "Additive manufacturing",
+        "isCorrect": true
+      },
+      {
+        "text": "Forging",
+        "isCorrect": false
+      },
+      {
+        "text": "Casting",
+        "isCorrect": false
+      },
+      {
+        "text": "Subtractive machining",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Additive manufacturing",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "manufacturing"
+    ]
+  },
+  {
+    "id": "ET9",
+    "category": "Transportation",
+    "question": "Aerodynamic drag…",
+    "answers": [
+      {
+        "text": "Resists forward motion",
+        "isCorrect": true
+      },
+      {
+        "text": "Creates lift",
+        "isCorrect": false
+      },
+      {
+        "text": "Generates torque",
+        "isCorrect": false
+      },
+      {
+        "text": "Cools engines",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Resists forward motion",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "aero"
+    ]
+  },
+  {
+    "id": "ET10",
+    "category": "Controls",
+    "question": "A feedback loop uses…",
+    "answers": [
+      {
+        "text": "Random inputs",
+        "isCorrect": false
+      },
+      {
+        "text": "Static schedules",
+        "isCorrect": false
+      },
+      {
+        "text": "Output to adjust input",
+        "isCorrect": true
+      },
+      {
+        "text": "Only manual tuning",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Output to adjust input",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G9-12",
+      "controls"
+    ]
+  },
+  {
+    "id": "ET11",
+    "category": "Power",
+    "question": "AC stands for…",
+    "answers": [
+      {
+        "text": "Average current",
+        "isCorrect": false
+      },
+      {
+        "text": "Active charge",
+        "isCorrect": false
+      },
+      {
+        "text": "Alternating current",
+        "isCorrect": true
+      },
+      {
+        "text": "Anode current",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Alternating current",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "power"
+    ]
+  },
+  {
+    "id": "ET12",
+    "category": "Computing",
+    "question": "A microcontroller is…",
+    "answers": [
+      {
+        "text": "A battery",
+        "isCorrect": false
+      },
+      {
+        "text": "An antenna",
+        "isCorrect": false
+      },
+      {
+        "text": "A fuse",
+        "isCorrect": false
+      },
+      {
+        "text": "A small CPU with peripherals on one chip",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "A small CPU with peripherals on one chip",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "embedded"
+    ]
+  },
+  {
+    "id": "ET13",
+    "category": "Safety",
+    "question": "Electrical shock risk increases with…",
+    "answers": [
+      {
+        "text": "Dry air",
+        "isCorrect": false
+      },
+      {
+        "text": "Wet conditions",
+        "isCorrect": true
+      },
+      {
+        "text": "Wood gloves",
+        "isCorrect": false
+      },
+      {
+        "text": "Rubber soles",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Wet conditions",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "safety"
+    ]
+  },
+  {
+    "id": "ET14",
+    "category": "Renewables",
+    "question": "Wind turbines convert…",
+    "answers": [
+      {
+        "text": "Kinetic energy to electrical",
+        "isCorrect": true
+      },
+      {
+        "text": "Electrical to thermal",
+        "isCorrect": false
+      },
+      {
+        "text": "Thermal to chemical",
+        "isCorrect": false
+      },
+      {
+        "text": "Chemical to light",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Kinetic energy to electrical",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "energy"
+    ]
+  },
+  {
+    "id": "ET15",
+    "category": "Data",
+    "question": "Sensors provide…",
+    "answers": [
+      {
+        "text": "Random numbers",
+        "isCorrect": false
+      },
+      {
+        "text": "Measurements of physical variables",
+        "isCorrect": true
+      },
+      {
+        "text": "Warnings only",
+        "isCorrect": false
+      },
+      {
+        "text": "User manuals",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Measurements of physical variables",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "sensors"
+    ]
+  },
+  {
+    "id": "ET16",
+    "category": "CAD",
+    "question": "CAD stands for Computer-Aided Design.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "cad"
+    ]
+  },
+  {
+    "id": "ET17",
+    "category": "Electronics",
+    "question": "An LED is a…",
+    "answers": [
+      {
+        "text": "Logic element",
+        "isCorrect": false
+      },
+      {
+        "text": "Laser diode",
+        "isCorrect": false
+      },
+      {
+        "text": "Liquid display",
+        "isCorrect": false
+      },
+      {
+        "text": "Light-emitting diode",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Light-emitting diode",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "electronics"
+    ]
+  },
+  {
+    "id": "ET18",
+    "category": "Mechanics",
+    "question": "Torque is…",
+    "answers": [
+      {
+        "text": "Thermal energy",
+        "isCorrect": false
+      },
+      {
+        "text": "Linear speed",
+        "isCorrect": false
+      },
+      {
+        "text": "A rotational force",
+        "isCorrect": true
+      },
+      {
+        "text": "Electrical charge",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A rotational force",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "mechanics"
+    ]
+  },
+  {
+    "id": "ET19",
+    "category": "Networks",
+    "question": "IoT devices are typically…",
+    "answers": [
+      {
+        "text": "Analog-only",
+        "isCorrect": false
+      },
+      {
+        "text": "Disconnected always",
+        "isCorrect": false
+      },
+      {
+        "text": "Connected to the internet",
+        "isCorrect": true
+      },
+      {
+        "text": "Non-programmable",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Connected to the internet",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "iot"
+    ]
+  },
+  {
+    "id": "ET20",
+    "category": "Aerospace",
+    "question": "Escape velocity is…",
+    "answers": [
+      {
+        "text": "Min orbital speed",
+        "isCorrect": false
+      },
+      {
+        "text": "Speed of sound",
+        "isCorrect": false
+      },
+      {
+        "text": "Max jet speed",
+        "isCorrect": false
+      },
+      {
+        "text": "Speed to break free of gravity",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Speed to break free of gravity",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G9-12",
+      "space"
+    ]
+  },
+  {
+    "id": "ET21",
+    "category": "Materials",
+    "question": "Alloys are…",
+    "answers": [
+      {
+        "text": "Polymers only",
+        "isCorrect": false
+      },
+      {
+        "text": "Mixtures of metals",
+        "isCorrect": true
+      },
+      {
+        "text": "Ceramics",
+        "isCorrect": false
+      },
+      {
+        "text": "Pure elements",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mixtures of metals",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "materials"
+    ]
+  },
+  {
+    "id": "ET22",
+    "category": "Circuits",
+    "question": "A capacitor stores…",
+    "answers": [
+      {
+        "text": "Magnetic flux",
+        "isCorrect": false
+      },
+      {
+        "text": "Electric charge",
+        "isCorrect": true
+      },
+      {
+        "text": "Code",
+        "isCorrect": false
+      },
+      {
+        "text": "Heat",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Electric charge",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "electronics"
+    ]
+  },
+  {
+    "id": "ET23",
+    "category": "Robotics",
+    "question": "Degrees of freedom describe…",
+    "answers": [
+      {
+        "text": "Wheel size",
+        "isCorrect": false
+      },
+      {
+        "text": "Independent motions",
+        "isCorrect": true
+      },
+      {
+        "text": "Clock speed",
+        "isCorrect": false
+      },
+      {
+        "text": "Battery levels",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Independent motions",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "robotics"
+    ]
+  },
+  {
+    "id": "ET24",
+    "category": "Sustainability",
+    "question": "Life-cycle assessment evaluates…",
+    "answers": [
+      {
+        "text": "Only energy use",
+        "isCorrect": false
+      },
+      {
+        "text": "Only cost",
+        "isCorrect": false
+      },
+      {
+        "text": "Only weight",
+        "isCorrect": false
+      },
+      {
+        "text": "Environmental impacts from cradle to grave",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Environmental impacts from cradle to grave",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G9-12",
+      "sustainability"
+    ]
+  },
+  {
+    "id": "ET25",
+    "category": "Coding",
+    "question": "A compiler…",
+    "answers": [
+      {
+        "text": "Executes code line by line",
+        "isCorrect": false
+      },
+      {
+        "text": "Edits text",
+        "isCorrect": false
+      },
+      {
+        "text": "Translates source code to machine code",
+        "isCorrect": true
+      },
+      {
+        "text": "Stores binaries",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Translates source code to machine code",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "software"
+    ]
+  },
+  {
+    "id": "ET26",
+    "category": "Signals",
+    "question": "Analog signals vary…",
+    "answers": [
+      {
+        "text": "Not at all",
+        "isCorrect": false
+      },
+      {
+        "text": "Continuously",
+        "isCorrect": true
+      },
+      {
+        "text": "In steps only",
+        "isCorrect": false
+      },
+      {
+        "text": "Randomly",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Continuously",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "signals"
+    ]
+  },
+  {
+    "id": "ET27",
+    "category": "AI",
+    "question": "Machine learning finds…",
+    "answers": [
+      {
+        "text": "Exact rules only",
+        "isCorrect": false
+      },
+      {
+        "text": "Random outputs",
+        "isCorrect": false
+      },
+      {
+        "text": "Hand-crafted pixels",
+        "isCorrect": false
+      },
+      {
+        "text": "Patterns from data",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Patterns from data",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "ai"
+    ]
+  },
+  {
+    "id": "ET28",
+    "category": "Testing",
+    "question": "A prototype is…",
+    "answers": [
+      {
+        "text": "Marketing plan",
+        "isCorrect": false
+      },
+      {
+        "text": "Final product",
+        "isCorrect": false
+      },
+      {
+        "text": "Blueprint only",
+        "isCorrect": false
+      },
+      {
+        "text": "An early model for testing ideas",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "An early model for testing ideas",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "design"
+    ]
+  },
+  {
+    "id": "ET29",
+    "category": "Thermo",
+    "question": "Heat flows…",
+    "answers": [
+      {
+        "text": "From cold to hot",
+        "isCorrect": false
+      },
+      {
+        "text": "Only in solids",
+        "isCorrect": false
+      },
+      {
+        "text": "Only upward",
+        "isCorrect": false
+      },
+      {
+        "text": "From hot to cold",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "From hot to cold",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "thermo"
+    ]
+  },
+  {
+    "id": "ET30",
+    "category": "Ethics",
+    "question": "Engineering decisions can affect public safety.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "ethics"
+    ]
+  }
+]

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
@@ -24,16 +26,27 @@ class CurrencyManager {
   Future<void> _loadCurrencyState() async {
     try {
       final historyStr = await AppSettings.getString('transaction_history');
-      if (historyStr!.isNotEmpty) {
-        _transactionHistory = Map<String, int>.from(historyStr as Map);
+      if (historyStr != null && historyStr.isNotEmpty) { // Check for null first
+        // Parse the string safely - you may need to adjust this parsing logic
+        // depending on how you're storing the transaction history
+        try {
+          // If stored as JSON string
+          _transactionHistory = Map<String, int>.from(json.decode(historyStr));
+        } catch (parseError) {
+          debugPrint('Failed to parse transaction history: $parseError');
+          _transactionHistory = {};
+        }
       }
 
       final lastSaveStr = await AppSettings.getString('currency_last_save');
-      if (lastSaveStr!.isNotEmpty) {
-        _lastSaveTime = DateTime.parse(lastSaveStr!);
+      if (lastSaveStr != null && lastSaveStr.isNotEmpty) { // Check for null first
+        _lastSaveTime = DateTime.parse(lastSaveStr);
       }
     } catch (e) {
       debugPrint('Failed to load currency state: $e');
+      // Initialize with defaults on error
+      _transactionHistory = {};
+      _lastSaveTime = null;
     }
   }
 
@@ -57,7 +70,7 @@ class CurrencyManager {
     final toNotifier = getNotifier(to);
     if (fromNotifier.canAfford(amount)) {
       await fromNotifier.deduct(amount);
-      await toNotifier.addCoins(amount);
+      await toNotifier.addValue(amount);
 
       // Track transaction
       await _recordTransaction('transfer_${from.name}_to_${to.name}', amount);
@@ -72,7 +85,7 @@ class CurrencyManager {
     if (_isPaused) return;
 
     final notifier = getNotifier(type);
-    await notifier.addCoins(amount);
+    await notifier.addValue(amount);
     BalanceChangeEffect.trigger(type); // Optional visual/sound effect
 
     // Track earning
@@ -258,7 +271,7 @@ class CurrencyNotifier extends StateNotifier<int> {
     state = stored;
   }
 
-  Future<void> addCoins(int amount) async {
+  Future<void> addValue(int amount) async {
     state += amount;
     await AppSettings.setInt(hiveKey, state);
   }

@@ -1,0 +1,776 @@
+[
+  {
+    "id": "P5_1",
+    "category": "Philosophy",
+    "question": "Philosophy means…",
+    "answers": [
+      {
+        "text": "Love of wisdom",
+        "isCorrect": true
+      },
+      {
+        "text": "Love of war",
+        "isCorrect": false
+      },
+      {
+        "text": "Love of money",
+        "isCorrect": false
+      },
+      {
+        "text": "Love of art",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Love of wisdom",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "definition"
+    ]
+  },
+  {
+    "id": "P5_2",
+    "category": "Philosophy",
+    "question": "A question about right/wrong is…",
+    "answers": [
+      {
+        "text": "Ethics",
+        "isCorrect": true
+      },
+      {
+        "text": "Logic",
+        "isCorrect": false
+      },
+      {
+        "text": "Metaphysics",
+        "isCorrect": false
+      },
+      {
+        "text": "Epistemology",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Ethics",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "ethics"
+    ]
+  },
+  {
+    "id": "P6_1",
+    "category": "Philosophy",
+    "question": "Socrates taught…",
+    "answers": [
+      {
+        "text": "Plato",
+        "isCorrect": true
+      },
+      {
+        "text": "Aristotle",
+        "isCorrect": false
+      },
+      {
+        "text": "Descartes",
+        "isCorrect": false
+      },
+      {
+        "text": "Kant",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Plato",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "socrates"
+    ]
+  },
+  {
+    "id": "P6_2",
+    "category": "Philosophy",
+    "question": "Buddha founded…",
+    "answers": [
+      {
+        "text": "Buddhism",
+        "isCorrect": true
+      },
+      {
+        "text": "Hinduism",
+        "isCorrect": false
+      },
+      {
+        "text": "Christianity",
+        "isCorrect": false
+      },
+      {
+        "text": "Islam",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Buddhism",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "buddha"
+    ]
+  },
+  {
+    "id": "P7_1",
+    "category": "Philosophy",
+    "question": "Plato wrote…",
+    "answers": [
+      {
+        "text": "The Republic",
+        "isCorrect": true
+      },
+      {
+        "text": "Nicomachean Ethics",
+        "isCorrect": false
+      },
+      {
+        "text": "Meditations",
+        "isCorrect": false
+      },
+      {
+        "text": "Leviathan",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "The Republic",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "plato"
+    ]
+  },
+  {
+    "id": "P7_2",
+    "category": "Philosophy",
+    "question": "Confucius from…",
+    "answers": [
+      {
+        "text": "China",
+        "isCorrect": true
+      },
+      {
+        "text": "Japan",
+        "isCorrect": false
+      },
+      {
+        "text": "India",
+        "isCorrect": false
+      },
+      {
+        "text": "Korea",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "China",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "confucius"
+    ]
+  },
+  {
+    "id": "P8_1",
+    "category": "Philosophy",
+    "question": "Aristotle tutored…",
+    "answers": [
+      {
+        "text": "Alexander the Great",
+        "isCorrect": true
+      },
+      {
+        "text": "Caesar",
+        "isCorrect": false
+      },
+      {
+        "text": "Socrates",
+        "isCorrect": false
+      },
+      {
+        "text": "Plato",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Alexander the Great",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "aristotle"
+    ]
+  },
+  {
+    "id": "P8_2",
+    "category": "Philosophy",
+    "question": "Logic studies…",
+    "answers": [
+      {
+        "text": "Reasoning",
+        "isCorrect": true
+      },
+      {
+        "text": "Belief",
+        "isCorrect": false
+      },
+      {
+        "text": "Faith",
+        "isCorrect": false
+      },
+      {
+        "text": "Feeling",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Reasoning",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "logic"
+    ]
+  },
+  {
+    "id": "P9_1",
+    "category": "Philosophy",
+    "question": "Descartes famous phrase:",
+    "answers": [
+      {
+        "text": "I think, therefore I am",
+        "isCorrect": true
+      },
+      {
+        "text": "To be or not",
+        "isCorrect": false
+      },
+      {
+        "text": "Man is measure",
+        "isCorrect": false
+      },
+      {
+        "text": "God is dead",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "I think, therefore I am",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "descartes"
+    ]
+  },
+  {
+    "id": "P9_2",
+    "category": "Philosophy",
+    "question": "Stoicism teaches…",
+    "answers": [
+      {
+        "text": "Virtue & self-control",
+        "isCorrect": true
+      },
+      {
+        "text": "Pleasure only",
+        "isCorrect": false
+      },
+      {
+        "text": "Wealth",
+        "isCorrect": false
+      },
+      {
+        "text": "Power",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Virtue & self-control",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "stoicism"
+    ]
+  },
+  {
+    "id": "P10_1",
+    "category": "Philosophy",
+    "question": "Hobbes wrote…",
+    "answers": [
+      {
+        "text": "Leviathan",
+        "isCorrect": true
+      },
+      {
+        "text": "Republic",
+        "isCorrect": false
+      },
+      {
+        "text": "Ethics",
+        "isCorrect": false
+      },
+      {
+        "text": "Meditations",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Leviathan",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "hobbes"
+    ]
+  },
+  {
+    "id": "P10_2",
+    "category": "Philosophy",
+    "question": "Kant wrote…",
+    "answers": [
+      {
+        "text": "Critique of Pure Reason",
+        "isCorrect": true
+      },
+      {
+        "text": "Republic",
+        "isCorrect": false
+      },
+      {
+        "text": "Logic",
+        "isCorrect": false
+      },
+      {
+        "text": "Ethics",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Critique of Pure Reason",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "kant"
+    ]
+  },
+  {
+    "id": "P11_1",
+    "category": "Philosophy",
+    "question": "Nietzsche said…",
+    "answers": [
+      {
+        "text": "God is dead",
+        "isCorrect": true
+      },
+      {
+        "text": "Truth is dead",
+        "isCorrect": false
+      },
+      {
+        "text": "Ethics is dead",
+        "isCorrect": false
+      },
+      {
+        "text": "Love is dead",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "God is dead",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11",
+      "nietzsche"
+    ]
+  },
+  {
+    "id": "P11_2",
+    "category": "Philosophy",
+    "question": "John Stuart Mill advocated…",
+    "answers": [
+      {
+        "text": "Utilitarianism",
+        "isCorrect": true
+      },
+      {
+        "text": "Stoicism",
+        "isCorrect": false
+      },
+      {
+        "text": "Platonism",
+        "isCorrect": false
+      },
+      {
+        "text": "Skepticism",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Utilitarianism",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11",
+      "mill"
+    ]
+  },
+  {
+    "id": "P12_1",
+    "category": "Philosophy",
+    "question": "Heidegger wrote…",
+    "answers": [
+      {
+        "text": "Being and Time",
+        "isCorrect": true
+      },
+      {
+        "text": "Logic",
+        "isCorrect": false
+      },
+      {
+        "text": "Metaphysics",
+        "isCorrect": false
+      },
+      {
+        "text": "Phenomenology",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Being and Time",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "heidegger"
+    ]
+  },
+  {
+    "id": "P12_2",
+    "category": "Philosophy",
+    "question": "Sartre said…",
+    "answers": [
+      {
+        "text": "Existence precedes essence",
+        "isCorrect": true
+      },
+      {
+        "text": "Essence precedes existence",
+        "isCorrect": false
+      },
+      {
+        "text": "Knowledge is power",
+        "isCorrect": false
+      },
+      {
+        "text": "I think, therefore I am",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Existence precedes essence",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "sartre"
+    ]
+  },
+  {
+    "id": "PX16",
+    "category": "Mixed Philosophy",
+    "question": "Philosophy asks big questions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX17",
+    "category": "Mixed Philosophy",
+    "question": "Philosophy asks big questions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX18",
+    "category": "Mixed Philosophy",
+    "question": "Philosophy asks big questions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX19",
+    "category": "Mixed Philosophy",
+    "question": "Philosophy asks big questions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX20",
+    "category": "Mixed Philosophy",
+    "question": "Philosophy asks big questions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX21",
+    "category": "Mixed Philosophy",
+    "question": "Philosophy asks big questions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX22",
+    "category": "Mixed Philosophy",
+    "question": "Philosophy asks big questions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX23",
+    "category": "Mixed Philosophy",
+    "question": "Philosophy asks big questions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX24",
+    "category": "Mixed Philosophy",
+    "question": "Philosophy asks big questions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX25",
+    "category": "Mixed Philosophy",
+    "question": "Philosophy asks big questions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX26",
+    "category": "Mixed Philosophy",
+    "question": "Philosophy asks big questions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX27",
+    "category": "Mixed Philosophy",
+    "question": "Philosophy asks big questions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX28",
+    "category": "Mixed Philosophy",
+    "question": "Philosophy asks big questions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "PX29",
+    "category": "Mixed Philosophy",
+    "question": "Philosophy asks big questions.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  }
+]

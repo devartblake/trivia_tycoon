@@ -36,12 +36,12 @@ class TycoonToast<T> extends StatefulWidget {
     this.onTap,
     this.shouldIconPulse = true,
     this.maxWidth,
-    this.margin = const EdgeInsets.all(0),
-    this.padding = const EdgeInsets.all(16),
+    this.margin = const EdgeInsets.all(16),
+    this.padding = const EdgeInsets.all(20),
     this.borderRadius,
     this.textDirection = TextDirection.ltr,
     this.borderColor,
-    this.borderWidth = 1.0,
+    this.borderWidth = 0.0,
     this.backgroundColor = const Color(0xFF303030),
     this.backgroundGradient,
     this.leftBarIndicatorColor,
@@ -50,13 +50,13 @@ class TycoonToast<T> extends StatefulWidget {
     this.progressIndicatorController,
     this.progressIndicatorBackgroundColor,
     this.progressIndicatorValueColor,
-    this.tycoonToastPosition = TycoonToastPosition.bottom,
+    this.tycoonToastPosition = TycoonToastPosition.top,
     this.tycoonToastStyle = TycoonToastStyle.floating,
     this.positionOffset = 0.0,
     this.dismissDirection = TycoonToastDismissDirection.vertical,
-    this.forwardAnimationCurve = Curves.easeOutCirc,
-    this.reverseAnimationCurve = Curves.easeOutCirc,
-    this.animationDuration = const Duration(milliseconds: 600),
+    this.forwardAnimationCurve = Curves.easeOutBack,
+    this.reverseAnimationCurve = Curves.easeInBack,
+    this.animationDuration = const Duration(milliseconds: 800),
     TycoonToastStatusCallback? onStatusChanged,
     this.barBlur = 0.0,
     this.routeBlur,
@@ -75,10 +75,9 @@ class TycoonToast<T> extends StatefulWidget {
     this.isDismissible = true,
     this.toastRoute,
   })  : onStatusChanged = onStatusChanged ?? ((_) {}) {
-    // ✅ Apply fallback seasonal gradient
+    // Apply modern gradient with glassmorphism effect
     this.backgroundGradient ??= TycoonToastThemeManager.getGradientForEvent(themeEvent);
   }
-
 
   final String? title;
   final String? message;
@@ -175,9 +174,263 @@ class TycoonToast<T> extends StatefulWidget {
   State<TycoonToast> createState() => _TycoonToastState<T?>();
 }
 
-class _TycoonToastState<K extends Object?> extends State<TycoonToast<K>> with TickerProviderStateMixin {
+class _TycoonToastState<K extends Object?> extends State<TycoonToast<K>>
+    with TickerProviderStateMixin {
+  late AnimationController _pulseController;
+  late AnimationController _shimmerController;
+  late Animation<double> _pulseAnimation;
+  late Animation<double> _shimmerAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _pulseController = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    );
+
+    _shimmerController = AnimationController(
+      duration: const Duration(milliseconds: 2000),
+      vsync: this,
+    );
+
+    _pulseAnimation = Tween<double>(
+      begin: 0.95,
+      end: 1.05,
+    ).animate(CurvedAnimation(
+      parent: _pulseController,
+      curve: Curves.easeInOut,
+    ));
+
+    _shimmerAnimation = Tween<double>(
+      begin: -1.0,
+      end: 2.0,
+    ).animate(CurvedAnimation(
+      parent: _shimmerController,
+      curve: Curves.easeInOut,
+    ));
+
+    if (widget.shouldIconPulse) {
+      _pulseController.repeat(reverse: true);
+    }
+
+    if (widget.toastType == TycoonToastType.reward) {
+      _shimmerController.repeat();
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulseController.dispose();
+    _shimmerController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const SizedBox.shrink(); // Rendered inside TycoonToastRoute
+    return GestureDetector(
+      onTap: widget.onTap != null ? () => widget.onTap!(widget) : null,
+      child: Container(
+        constraints: BoxConstraints(
+          maxWidth: widget.maxWidth ?? MediaQuery.of(context).size.width * 0.9,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: widget.borderRadius ?? BorderRadius.circular(20),
+          gradient: widget.backgroundGradient,
+          border: widget.borderWidth > 0
+              ? Border.all(color: widget.borderColor ?? Colors.white24, width: widget.borderWidth)
+              : null,
+          boxShadow: widget.boxShadows ?? [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            ),
+            BoxShadow(
+              color: Colors.white.withOpacity(0.1),
+              blurRadius: 1,
+              offset: const Offset(0, 1),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: widget.borderRadius ?? BorderRadius.circular(20),
+          child: Stack(
+            children: [
+              // Glassmorphism effect
+              BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Colors.white.withOpacity(0.2),
+                        Colors.white.withOpacity(0.1),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+              // Shimmer effect for reward toasts
+              if (widget.toastType == TycoonToastType.reward)
+                AnimatedBuilder(
+                  animation: _shimmerAnimation,
+                  builder: (context, child) {
+                    return Positioned.fill(
+                      child: Transform.translate(
+                        offset: Offset(_shimmerAnimation.value * 200, 0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.transparent,
+                                Colors.white.withOpacity(0.3),
+                                Colors.transparent,
+                              ],
+                              stops: const [0.0, 0.5, 1.0],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+
+              // Main content
+              Padding(
+                padding: widget.padding,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      children: [
+                        // Icon with pulse animation
+                        if (widget.icon != null)
+                          AnimatedBuilder(
+                            animation: _pulseAnimation,
+                            builder: (context, child) {
+                              return Transform.scale(
+                                scale: widget.shouldIconPulse ? _pulseAnimation.value : 1.0,
+                                child: Container(
+                                  padding: const EdgeInsets.all(8), // Reduced from 12
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(8), // Reduced from 12
+                                  ),
+                                  child: widget.icon,
+                                ),
+                              );
+                            },
+                          ),
+
+                        if (widget.icon != null) const SizedBox(width: 12), // Reduced from 16
+
+                        // Text content
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min, // Added this
+                            children: [
+                              if (widget.title != null)
+                                Text(
+                                  widget.title!,
+                                  style: TextStyle(
+                                    color: widget.titleColor ?? Colors.white,
+                                    fontSize: widget.titleSize ?? 14, // Reduced from 16
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 0.5,
+                                  ),
+                                  maxLines: 1, // Added this
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              if (widget.title != null && widget.message != null)
+                                const SizedBox(height: 2), // Reduced from 4
+                              if (widget.message != null)
+                                Text(
+                                  widget.message!,
+                                  style: TextStyle(
+                                    color: widget.messageColor ?? Colors.white.withOpacity(0.9),
+                                    fontSize: widget.messageSize ?? 12, // Reduced from 14
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  maxLines: 2, // Added this
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                            ],
+                          ),
+                        ),
+
+                        // Close button
+                        if (widget.isDismissible)
+                          GestureDetector(
+                            onTap: () => widget.dismiss(),
+                            child: Container(
+                              padding: const EdgeInsets.all(6), // Reduced from 8
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(6), // Reduced from 8
+                              ),
+                              child: Icon(
+                                Icons.close,
+                                color: Colors.white.withOpacity(0.8),
+                                size: 16, // Reduced from 18
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+
+                    // Main button
+                    if (widget.mainButton != null) ...[
+                      const SizedBox(height: 12), // Reduced from 16
+                      widget.mainButton!,
+                    ],
+
+                    // Progress indicator
+                    if (widget.showProgressIndicator) ...[
+                      const SizedBox(height: 12), // Reduced from 16
+                      LinearProgressIndicator(
+                        backgroundColor: widget.progressIndicatorBackgroundColor ??
+                            Colors.white.withOpacity(0.2),
+                        valueColor: widget.progressIndicatorValueColor ??
+                            AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    ],
+
+                    // User input form
+                    if (widget.userInputForm != null) ...[
+                      const SizedBox(height: 12), // Reduced from 16
+                      widget.userInputForm!,
+                    ],
+                  ],
+                ),
+              ),
+
+              // Left bar indicator
+              if (widget.leftBarIndicatorColor != null)
+                Positioned(
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                  child: Container(
+                    width: 4,
+                    decoration: BoxDecoration(
+                      color: widget.leftBarIndicatorColor,
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        bottomLeft: Radius.circular(20),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

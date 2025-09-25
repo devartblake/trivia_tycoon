@@ -1,0 +1,800 @@
+[
+  {
+    "id": "K1",
+    "category": "Colors & Shapes",
+    "question": "What color is the sky on a clear day?",
+    "answers": [
+      {
+        "text": "Yellow",
+        "isCorrect": false
+      },
+      {
+        "text": "Green",
+        "isCorrect": false
+      },
+      {
+        "text": "Blue",
+        "isCorrect": true
+      },
+      {
+        "text": "Red",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Blue",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K2",
+    "category": "Colors & Shapes",
+    "question": "Which shape has 3 sides?",
+    "answers": [
+      {
+        "text": "Circle",
+        "isCorrect": false
+      },
+      {
+        "text": "Square",
+        "isCorrect": false
+      },
+      {
+        "text": "Rectangle",
+        "isCorrect": false
+      },
+      {
+        "text": "Triangle",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Triangle",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K3",
+    "category": "Colors & Shapes",
+    "question": "What color do you get when you mix red and yellow?",
+    "answers": [
+      {
+        "text": "Purple",
+        "isCorrect": false
+      },
+      {
+        "text": "Orange",
+        "isCorrect": true
+      },
+      {
+        "text": "Blue",
+        "isCorrect": false
+      },
+      {
+        "text": "Green",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Orange",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K4",
+    "category": "Colors & Shapes",
+    "question": "A circle has corners.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K5",
+    "category": "Numbers 1-10",
+    "question": "How many legs does a cat have?",
+    "answers": [
+      {
+        "text": "5",
+        "isCorrect": false
+      },
+      {
+        "text": "3",
+        "isCorrect": false
+      },
+      {
+        "text": "4",
+        "isCorrect": true
+      },
+      {
+        "text": "2",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "4",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K6",
+    "category": "Numbers 1-10",
+    "question": "What number comes after 6?",
+    "answers": [
+      {
+        "text": "8",
+        "isCorrect": false
+      },
+      {
+        "text": "7",
+        "isCorrect": true
+      },
+      {
+        "text": "5",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "7",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K7",
+    "category": "Numbers 1-10",
+    "question": "The number 0 means none.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K8",
+    "category": "Numbers 1-10",
+    "question": "How many sides does a square have?",
+    "answers": [
+      {
+        "text": "5",
+        "isCorrect": false
+      },
+      {
+        "text": "6",
+        "isCorrect": false
+      },
+      {
+        "text": "4",
+        "isCorrect": true
+      },
+      {
+        "text": "3",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "4",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K9",
+    "category": "Letters & Sounds",
+    "question": "Which letter does 'apple' start with?",
+    "answers": [
+      {
+        "text": "B",
+        "isCorrect": false
+      },
+      {
+        "text": "D",
+        "isCorrect": false
+      },
+      {
+        "text": "C",
+        "isCorrect": false
+      },
+      {
+        "text": "A",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "A",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K10",
+    "category": "Letters & Sounds",
+    "question": "Which letter makes the /b/ sound?",
+    "answers": [
+      {
+        "text": "M",
+        "isCorrect": false
+      },
+      {
+        "text": "B",
+        "isCorrect": true
+      },
+      {
+        "text": "P",
+        "isCorrect": false
+      },
+      {
+        "text": "D",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "B",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K11",
+    "category": "Letters & Sounds",
+    "question": "The letter 'C' can sound like /k/ in 'cat'.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K12",
+    "category": "Letters & Sounds",
+    "question": "Which is a vowel?",
+    "answers": [
+      {
+        "text": "B",
+        "isCorrect": false
+      },
+      {
+        "text": "C",
+        "isCorrect": false
+      },
+      {
+        "text": "E",
+        "isCorrect": true
+      },
+      {
+        "text": "G",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "E",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K13",
+    "category": "Animal Friends",
+    "question": "Which animal says 'moo'?",
+    "answers": [
+      {
+        "text": "Dog",
+        "isCorrect": false
+      },
+      {
+        "text": "Sheep",
+        "isCorrect": false
+      },
+      {
+        "text": "Cat",
+        "isCorrect": false
+      },
+      {
+        "text": "Cow",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Cow",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K14",
+    "category": "Animal Friends",
+    "question": "Which animal has a long trunk?",
+    "answers": [
+      {
+        "text": "Giraffe",
+        "isCorrect": false
+      },
+      {
+        "text": "Elephant",
+        "isCorrect": true
+      },
+      {
+        "text": "Lion",
+        "isCorrect": false
+      },
+      {
+        "text": "Monkey",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Elephant",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K15",
+    "category": "Animal Friends",
+    "question": "Fish live in water.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K16",
+    "category": "Animal Friends",
+    "question": "Which animal can hop?",
+    "answers": [
+      {
+        "text": "Whale",
+        "isCorrect": false
+      },
+      {
+        "text": "Turtle",
+        "isCorrect": false
+      },
+      {
+        "text": "Snake",
+        "isCorrect": false
+      },
+      {
+        "text": "Rabbit",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Rabbit",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K17",
+    "category": "Everyday Life",
+    "question": "What do you wear on your feet?",
+    "answers": [
+      {
+        "text": "Scarf",
+        "isCorrect": false
+      },
+      {
+        "text": "Hat",
+        "isCorrect": false
+      },
+      {
+        "text": "Shoes",
+        "isCorrect": true
+      },
+      {
+        "text": "Gloves",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Shoes",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K18",
+    "category": "Everyday Life",
+    "question": "What do we use to brush our teeth?",
+    "answers": [
+      {
+        "text": "Spoon",
+        "isCorrect": false
+      },
+      {
+        "text": "Paintbrush",
+        "isCorrect": false
+      },
+      {
+        "text": "Toothbrush",
+        "isCorrect": true
+      },
+      {
+        "text": "Comb",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Toothbrush",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K19",
+    "category": "Safety",
+    "question": "We look both ways before crossing the street.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K20",
+    "category": "Safety",
+    "question": "It is safe to touch a hot stove.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K21",
+    "category": "Community Helpers",
+    "question": "Who helps put out fires?",
+    "answers": [
+      {
+        "text": "Teacher",
+        "isCorrect": false
+      },
+      {
+        "text": "Artist",
+        "isCorrect": false
+      },
+      {
+        "text": "Chef",
+        "isCorrect": false
+      },
+      {
+        "text": "Firefighter",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Firefighter",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K22",
+    "category": "Community Helpers",
+    "question": "Who helps when you feel sick?",
+    "answers": [
+      {
+        "text": "Doctor",
+        "isCorrect": true
+      },
+      {
+        "text": "Farmer",
+        "isCorrect": false
+      },
+      {
+        "text": "Pilot",
+        "isCorrect": false
+      },
+      {
+        "text": "Mechanic",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Doctor",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K23",
+    "category": "Community Helpers",
+    "question": "A librarian works with books.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K24",
+    "category": "Weather & Seasons",
+    "question": "What do you wear when it rains?",
+    "answers": [
+      {
+        "text": "Raincoat",
+        "isCorrect": true
+      },
+      {
+        "text": "Swimsuit",
+        "isCorrect": false
+      },
+      {
+        "text": "Sunglasses",
+        "isCorrect": false
+      },
+      {
+        "text": "Snow boots",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Raincoat",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K25",
+    "category": "Weather & Seasons",
+    "question": "Which season is usually hot?",
+    "answers": [
+      {
+        "text": "Spring",
+        "isCorrect": false
+      },
+      {
+        "text": "Summer",
+        "isCorrect": true
+      },
+      {
+        "text": "Winter",
+        "isCorrect": false
+      },
+      {
+        "text": "Fall",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Summer",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K26",
+    "category": "Weather & Seasons",
+    "question": "Snow is cold.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K27",
+    "category": "Food & Health",
+    "question": "Which is a fruit?",
+    "answers": [
+      {
+        "text": "Potato",
+        "isCorrect": false
+      },
+      {
+        "text": "Banana",
+        "isCorrect": true
+      },
+      {
+        "text": "Broccoli",
+        "isCorrect": false
+      },
+      {
+        "text": "Carrot",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Banana",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K28",
+    "category": "Food & Health",
+    "question": "Which drink is best for strong bones?",
+    "answers": [
+      {
+        "text": "Lemonade",
+        "isCorrect": false
+      },
+      {
+        "text": "Soda",
+        "isCorrect": false
+      },
+      {
+        "text": "Juice",
+        "isCorrect": false
+      },
+      {
+        "text": "Milk",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Milk",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K29",
+    "category": "Food & Health",
+    "question": "Eating vegetables helps us stay healthy.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  },
+  {
+    "id": "K30",
+    "category": "Time & Routines",
+    "question": "What do we say when we wake up?",
+    "answers": [
+      {
+        "text": "Good morning",
+        "isCorrect": true
+      },
+      {
+        "text": "Goodbye",
+        "isCorrect": false
+      },
+      {
+        "text": "Good night",
+        "isCorrect": false
+      },
+      {
+        "text": "See you later",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Good morning",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "K-1"
+    ]
+  }
+]

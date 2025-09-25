@@ -1,0 +1,776 @@
+[
+  {
+    "id": "ECO5_1",
+    "category": "Economics",
+    "question": "Goods are…",
+    "answers": [
+      {
+        "text": "Physical items",
+        "isCorrect": true
+      },
+      {
+        "text": "Services",
+        "isCorrect": false
+      },
+      {
+        "text": "Ideas",
+        "isCorrect": false
+      },
+      {
+        "text": "Taxes",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Physical items",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "goods"
+    ]
+  },
+  {
+    "id": "ECO5_2",
+    "category": "Economics",
+    "question": "Services are…",
+    "answers": [
+      {
+        "text": "Actions provided",
+        "isCorrect": true
+      },
+      {
+        "text": "Goods",
+        "isCorrect": false
+      },
+      {
+        "text": "Items",
+        "isCorrect": false
+      },
+      {
+        "text": "Products",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Actions provided",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "services"
+    ]
+  },
+  {
+    "id": "ECO6_1",
+    "category": "Economics",
+    "question": "Scarcity means…",
+    "answers": [
+      {
+        "text": "Limited resources",
+        "isCorrect": true
+      },
+      {
+        "text": "Unlimited",
+        "isCorrect": false
+      },
+      {
+        "text": "Plenty",
+        "isCorrect": false
+      },
+      {
+        "text": "Free",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Limited resources",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "scarcity"
+    ]
+  },
+  {
+    "id": "ECO6_2",
+    "category": "Economics",
+    "question": "Barter is…",
+    "answers": [
+      {
+        "text": "Trade without money",
+        "isCorrect": true
+      },
+      {
+        "text": "Selling",
+        "isCorrect": false
+      },
+      {
+        "text": "Saving",
+        "isCorrect": false
+      },
+      {
+        "text": "Banking",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Trade without money",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "barter"
+    ]
+  },
+  {
+    "id": "ECO7_1",
+    "category": "Economics",
+    "question": "Supply and demand affect…",
+    "answers": [
+      {
+        "text": "Prices",
+        "isCorrect": true
+      },
+      {
+        "text": "Weather",
+        "isCorrect": false
+      },
+      {
+        "text": "Colors",
+        "isCorrect": false
+      },
+      {
+        "text": "Music",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Prices",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "supply"
+    ]
+  },
+  {
+    "id": "ECO7_2",
+    "category": "Economics",
+    "question": "Taxes are collected by…",
+    "answers": [
+      {
+        "text": "Government",
+        "isCorrect": true
+      },
+      {
+        "text": "Stores",
+        "isCorrect": false
+      },
+      {
+        "text": "Churches",
+        "isCorrect": false
+      },
+      {
+        "text": "Schools",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Government",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "tax"
+    ]
+  },
+  {
+    "id": "ECO8_1",
+    "category": "Economics",
+    "question": "GDP means…",
+    "answers": [
+      {
+        "text": "Gross Domestic Product",
+        "isCorrect": true
+      },
+      {
+        "text": "Gross Dept Percent",
+        "isCorrect": false
+      },
+      {
+        "text": "Global Data Plan",
+        "isCorrect": false
+      },
+      {
+        "text": "General Domestic Policy",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Gross Domestic Product",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "GDP"
+    ]
+  },
+  {
+    "id": "ECO8_2",
+    "category": "Economics",
+    "question": "Inflation means…",
+    "answers": [
+      {
+        "text": "Rising prices",
+        "isCorrect": true
+      },
+      {
+        "text": "Falling prices",
+        "isCorrect": false
+      },
+      {
+        "text": "Stable",
+        "isCorrect": false
+      },
+      {
+        "text": "Taxes",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Rising prices",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "inflation"
+    ]
+  },
+  {
+    "id": "ECO9_1",
+    "category": "Economics",
+    "question": "Recession is…",
+    "answers": [
+      {
+        "text": "Decline in economic activity",
+        "isCorrect": true
+      },
+      {
+        "text": "Rise",
+        "isCorrect": false
+      },
+      {
+        "text": "Stable",
+        "isCorrect": false
+      },
+      {
+        "text": "Growth",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Decline in economic activity",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "recession"
+    ]
+  },
+  {
+    "id": "ECO9_2",
+    "category": "Economics",
+    "question": "Stock market is for…",
+    "answers": [
+      {
+        "text": "Buying/selling shares",
+        "isCorrect": true
+      },
+      {
+        "text": "Loans",
+        "isCorrect": false
+      },
+      {
+        "text": "Jobs",
+        "isCorrect": false
+      },
+      {
+        "text": "Insurance",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Buying/selling shares",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "stocks"
+    ]
+  },
+  {
+    "id": "ECO10_1",
+    "category": "Economics",
+    "question": "Monopoly is…",
+    "answers": [
+      {
+        "text": "Single seller control",
+        "isCorrect": true
+      },
+      {
+        "text": "Many sellers",
+        "isCorrect": false
+      },
+      {
+        "text": "Government tax",
+        "isCorrect": false
+      },
+      {
+        "text": "Market balance",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Single seller control",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "monopoly"
+    ]
+  },
+  {
+    "id": "ECO10_2",
+    "category": "Economics",
+    "question": "Federal Reserve is…",
+    "answers": [
+      {
+        "text": "US central bank",
+        "isCorrect": true
+      },
+      {
+        "text": "Stock exchange",
+        "isCorrect": false
+      },
+      {
+        "text": "Private bank",
+        "isCorrect": false
+      },
+      {
+        "text": "Gold reserve",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "US central bank",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "fed"
+    ]
+  },
+  {
+    "id": "ECO11_1",
+    "category": "Economics",
+    "question": "Keynes advocated…",
+    "answers": [
+      {
+        "text": "Government spending in recessions",
+        "isCorrect": true
+      },
+      {
+        "text": "No govt role",
+        "isCorrect": false
+      },
+      {
+        "text": "Cut taxes always",
+        "isCorrect": false
+      },
+      {
+        "text": "Gold only",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Government spending in recessions",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11",
+      "keynes"
+    ]
+  },
+  {
+    "id": "ECO11_2",
+    "category": "Economics",
+    "question": "Adam Smith wrote…",
+    "answers": [
+      {
+        "text": "Wealth of Nations",
+        "isCorrect": true
+      },
+      {
+        "text": "Das Kapital",
+        "isCorrect": false
+      },
+      {
+        "text": "General Theory",
+        "isCorrect": false
+      },
+      {
+        "text": "Communist Manifesto",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Wealth of Nations",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11",
+      "smith"
+    ]
+  },
+  {
+    "id": "ECO12_1",
+    "category": "Economics",
+    "question": "GDP per capita means…",
+    "answers": [
+      {
+        "text": "GDP divided by population",
+        "isCorrect": true
+      },
+      {
+        "text": "GDP total",
+        "isCorrect": false
+      },
+      {
+        "text": "Exports",
+        "isCorrect": false
+      },
+      {
+        "text": "Imports",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "GDP divided by population",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "gdp"
+    ]
+  },
+  {
+    "id": "ECO12_2",
+    "category": "Economics",
+    "question": "Karl Marx wrote…",
+    "answers": [
+      {
+        "text": "Communist Manifesto",
+        "isCorrect": true
+      },
+      {
+        "text": "Wealth of Nations",
+        "isCorrect": false
+      },
+      {
+        "text": "Das Kapital",
+        "isCorrect": false
+      },
+      {
+        "text": "Republic",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Communist Manifesto",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "marx"
+    ]
+  },
+  {
+    "id": "ECOX16",
+    "category": "Mixed Economics",
+    "question": "Money is used as medium of exchange.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "ECOX17",
+    "category": "Mixed Economics",
+    "question": "Money is used as medium of exchange.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "ECOX18",
+    "category": "Mixed Economics",
+    "question": "Money is used as medium of exchange.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "ECOX19",
+    "category": "Mixed Economics",
+    "question": "Money is used as medium of exchange.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "ECOX20",
+    "category": "Mixed Economics",
+    "question": "Money is used as medium of exchange.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "ECOX21",
+    "category": "Mixed Economics",
+    "question": "Money is used as medium of exchange.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "ECOX22",
+    "category": "Mixed Economics",
+    "question": "Money is used as medium of exchange.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "ECOX23",
+    "category": "Mixed Economics",
+    "question": "Money is used as medium of exchange.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "ECOX24",
+    "category": "Mixed Economics",
+    "question": "Money is used as medium of exchange.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "ECOX25",
+    "category": "Mixed Economics",
+    "question": "Money is used as medium of exchange.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "ECOX26",
+    "category": "Mixed Economics",
+    "question": "Money is used as medium of exchange.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "ECOX27",
+    "category": "Mixed Economics",
+    "question": "Money is used as medium of exchange.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "ECOX28",
+    "category": "Mixed Economics",
+    "question": "Money is used as medium of exchange.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "ECOX29",
+    "category": "Mixed Economics",
+    "question": "Money is used as medium of exchange.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  }
+]

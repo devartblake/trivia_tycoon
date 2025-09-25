@@ -1,0 +1,612 @@
+[
+  {
+    "id": "CL1",
+    "category": "Civics & Law",
+    "question": "The U.S. Constitution is the…",
+    "answers": [
+      {
+        "text": "Supreme law of the land",
+        "isCorrect": true
+      },
+      {
+        "text": "Oldest treaty",
+        "isCorrect": false
+      },
+      {
+        "text": "Bill of Rights",
+        "isCorrect": false
+      },
+      {
+        "text": "Code of Hammurabi",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Supreme law of the land",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "CL2",
+    "category": "Civics & Law",
+    "question": "The branch that makes laws is…",
+    "answers": [
+      {
+        "text": "Executive",
+        "isCorrect": false
+      },
+      {
+        "text": "Judicial",
+        "isCorrect": false
+      },
+      {
+        "text": "Legislative",
+        "isCorrect": true
+      },
+      {
+        "text": "Military",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Legislative",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL3",
+    "category": "Civics & Law",
+    "question": "Who interprets laws?",
+    "answers": [
+      {
+        "text": "Judges",
+        "isCorrect": true
+      },
+      {
+        "text": "Presidents",
+        "isCorrect": false
+      },
+      {
+        "text": "Senators",
+        "isCorrect": false
+      },
+      {
+        "text": "Police",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Judges",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL4",
+    "category": "Civics & Law",
+    "question": "A treaty is…",
+    "answers": [
+      {
+        "text": "A protest",
+        "isCorrect": false
+      },
+      {
+        "text": "An agreement between nations",
+        "isCorrect": true
+      },
+      {
+        "text": "A local law",
+        "isCorrect": false
+      },
+      {
+        "text": "A debate",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "An agreement between nations",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "CL5",
+    "category": "Civics & Law",
+    "question": "Voting is a…",
+    "answers": [
+      {
+        "text": "Optional game",
+        "isCorrect": false
+      },
+      {
+        "text": "Law of physics",
+        "isCorrect": false
+      },
+      {
+        "text": "Right and responsibility",
+        "isCorrect": true
+      },
+      {
+        "text": "Privilege only",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Right and responsibility",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": []
+  },
+  {
+    "id": "CL6",
+    "category": "Civics & Law",
+    "question": "Citizens must obey laws.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL6",
+    "category": "Civics & Law",
+    "question": "Laws help keep order.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL7",
+    "category": "Civics & Law",
+    "question": "Laws help keep order.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL8",
+    "category": "Civics & Law",
+    "question": "Laws help keep order.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL9",
+    "category": "Civics & Law",
+    "question": "Laws help keep order.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL10",
+    "category": "Civics & Law",
+    "question": "Laws help keep order.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL11",
+    "category": "Civics & Law",
+    "question": "Laws help keep order.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL12",
+    "category": "Civics & Law",
+    "question": "Laws help keep order.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL13",
+    "category": "Civics & Law",
+    "question": "Laws help keep order.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL14",
+    "category": "Civics & Law",
+    "question": "Laws help keep order.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL15",
+    "category": "Civics & Law",
+    "question": "Laws help keep order.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL16",
+    "category": "Civics & Law",
+    "question": "Laws help keep order.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL17",
+    "category": "Civics & Law",
+    "question": "Laws help keep order.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL18",
+    "category": "Civics & Law",
+    "question": "Laws help keep order.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL19",
+    "category": "Civics & Law",
+    "question": "Laws help keep order.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL20",
+    "category": "Civics & Law",
+    "question": "Laws help keep order.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL21",
+    "category": "Civics & Law",
+    "question": "Laws help keep order.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL22",
+    "category": "Civics & Law",
+    "question": "Laws help keep order.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL23",
+    "category": "Civics & Law",
+    "question": "Laws help keep order.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL24",
+    "category": "Civics & Law",
+    "question": "Laws help keep order.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL25",
+    "category": "Civics & Law",
+    "question": "Laws help keep order.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL26",
+    "category": "Civics & Law",
+    "question": "Laws help keep order.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL27",
+    "category": "Civics & Law",
+    "question": "Laws help keep order.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL28",
+    "category": "Civics & Law",
+    "question": "Laws help keep order.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "CL29",
+    "category": "Civics & Law",
+    "question": "Laws help keep order.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  }
+]

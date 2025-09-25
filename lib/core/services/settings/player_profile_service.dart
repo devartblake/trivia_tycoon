@@ -279,4 +279,113 @@ class PlayerProfileService {
       return {};
     }
   }
+
+  /// Get complete profile for UI display (synchronous version)
+  Map<String, dynamic> getProfile() {
+    try {
+      if (!Hive.isBoxOpen(_boxName)) {
+        // Return defaults if box isn't open yet
+        return {
+          'name': 'Player',
+          'rank': 'Trivia Master',
+          'level': 0,
+          'currentXP': 0,
+          'maxXP': 500,
+          'role': null,
+          'isPremium': false,
+          'country': null,
+          'ageGroup': 'teens',
+          'avatar': null,
+        };
+      }
+
+      final box = Hive.box(_boxName);
+      return {
+        'name': box.get(_playerNameKey, defaultValue: 'Player'),
+        'rank': _calculateRank(box.get('level', defaultValue: 0)),
+        'level': box.get('level', defaultValue: 0),
+        'currentXP': box.get('currentXP', defaultValue: 0),
+        'maxXP': box.get('maxXP', defaultValue: 500),
+        'role': box.get(_userRoleKey),
+        'isPremium': box.get(_isPremiumKey, defaultValue: false),
+        'country': box.get(_countryKey),
+        'ageGroup': box.get(_ageGroupKey, defaultValue: 'teens'),
+        'avatar': box.get(_avatarKey),
+      };
+    } catch (e) {
+      debugPrint('[PlayerProfile] Error getting profile: $e');
+      return {
+        'name': 'Player',
+        'rank': 'Trivia Master',
+        'level': 12,
+        'currentXP': 340,
+        'maxXP': 500,
+        'role': null,
+        'isPremium': false,
+        'country': null,
+        'ageGroup': 'teens',
+        'avatar': null,
+      };
+    }
+  }
+
+  /// Calculate rank based on level
+  String _calculateRank(int level) {
+    if (level >= 50) return 'Trivia Legend';
+    if (level >= 40) return 'Quiz Master';
+    if (level >= 30) return 'Knowledge Expert';
+    if (level >= 20) return 'Trivia Veteran';
+    if (level >= 10) return 'Trivia Master';
+    if (level >= 5) return 'Quiz Enthusiast';
+    return 'Trivia Novice';
+  }
+
+  /// Save level and XP data
+  Future<void> saveLevelData({int? level, int? currentXP, int? maxXP}) async {
+    final box = await _getBox();
+    if (level != null) await box.put('level', level);
+    if (currentXP != null) await box.put('currentXP', currentXP);
+    if (maxXP != null) await box.put('maxXP', maxXP);
+  }
+
+  /// Add XP and handle level ups
+  Future<Map<String, dynamic>> addXP(int xpToAdd) async {
+    try {
+      final box = await _getBox();
+      final currentXP = box.get('currentXP', defaultValue: 340);
+      final maxXP = box.get('maxXP', defaultValue: 500);
+      final currentLevel = box.get('level', defaultValue: 12);
+
+      int newXP = currentXP + xpToAdd;
+      int newLevel = currentLevel;
+      int newMaxXP = maxXP;
+      bool leveledUp = false;
+
+      // Check for level up
+      while (newXP >= newMaxXP) {
+        newXP -= newMaxXP;
+        newLevel++;
+        newMaxXP = _calculateMaxXPForLevel(newLevel);
+        leveledUp = true;
+      }
+
+      await saveLevelData(level: newLevel, currentXP: newXP, maxXP: newMaxXP);
+
+      return {
+        'leveledUp': leveledUp,
+        'newLevel': newLevel,
+        'newXP': newXP,
+        'newMaxXP': newMaxXP,
+        'xpGained': xpToAdd,
+      };
+    } catch (e) {
+      debugPrint('[PlayerProfile] Error adding XP: $e');
+      return {'leveledUp': false, 'error': e.toString()};
+    }
+  }
+
+  /// Calculate max XP needed for a given level
+  int _calculateMaxXPForLevel(int level) {
+    return 500 + (level * 50); // Increases by 50 XP per level
+  }
 }

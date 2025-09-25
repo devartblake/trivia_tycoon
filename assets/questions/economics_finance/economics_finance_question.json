@@ -1,0 +1,878 @@
+[
+  {
+    "id": "EF1",
+    "category": "Markets",
+    "question": "Supply and demand meet at…",
+    "answers": [
+      {
+        "text": "Equilibrium price",
+        "isCorrect": true
+      },
+      {
+        "text": "Budget",
+        "isCorrect": false
+      },
+      {
+        "text": "GDP",
+        "isCorrect": false
+      },
+      {
+        "text": "Tax rate",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Equilibrium price",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "micro"
+    ]
+  },
+  {
+    "id": "EF2",
+    "category": "Finance",
+    "question": "A budget tracks…",
+    "answers": [
+      {
+        "text": "Income and expenses",
+        "isCorrect": true
+      },
+      {
+        "text": "Only taxes",
+        "isCorrect": false
+      },
+      {
+        "text": "Only savings",
+        "isCorrect": false
+      },
+      {
+        "text": "Only profits",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Income and expenses",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "personal finance"
+    ]
+  },
+  {
+    "id": "EF3",
+    "category": "Inflation",
+    "question": "Inflation means…",
+    "answers": [
+      {
+        "text": "Money supply fixed",
+        "isCorrect": false
+      },
+      {
+        "text": "Average prices rising",
+        "isCorrect": true
+      },
+      {
+        "text": "Unemployment falling",
+        "isCorrect": false
+      },
+      {
+        "text": "All prices falling",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Average prices rising",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "macro"
+    ]
+  },
+  {
+    "id": "EF4",
+    "category": "Banking",
+    "question": "The central bank in the U.S. is the…",
+    "answers": [
+      {
+        "text": "Federal Reserve",
+        "isCorrect": true
+      },
+      {
+        "text": "NYSE",
+        "isCorrect": false
+      },
+      {
+        "text": "Treasury",
+        "isCorrect": false
+      },
+      {
+        "text": "FDIC",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Federal Reserve",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "banking"
+    ]
+  },
+  {
+    "id": "EF5",
+    "category": "Investing",
+    "question": "Stocks represent…",
+    "answers": [
+      {
+        "text": "Ownership in a company",
+        "isCorrect": true
+      },
+      {
+        "text": "Loans to a company",
+        "isCorrect": false
+      },
+      {
+        "text": "Insurance",
+        "isCorrect": false
+      },
+      {
+        "text": "Taxes",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Ownership in a company",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "investing"
+    ]
+  },
+  {
+    "id": "EF6",
+    "category": "Trade",
+    "question": "Tariffs are taxes on imports.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "trade"
+    ]
+  },
+  {
+    "id": "EF7",
+    "category": "GDP",
+    "question": "GDP measures…",
+    "answers": [
+      {
+        "text": "Value of all stocks",
+        "isCorrect": false
+      },
+      {
+        "text": "National debt",
+        "isCorrect": false
+      },
+      {
+        "text": "Money supply",
+        "isCorrect": false
+      },
+      {
+        "text": "Value of final goods/services produced",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Value of final goods/services produced",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G9-12",
+      "macro"
+    ]
+  },
+  {
+    "id": "EF8",
+    "category": "Unemployment",
+    "question": "Unemployment rate measures…",
+    "answers": [
+      {
+        "text": "Retired people",
+        "isCorrect": false
+      },
+      {
+        "text": "Full population",
+        "isCorrect": false
+      },
+      {
+        "text": "All adults",
+        "isCorrect": false
+      },
+      {
+        "text": "Share of labor force without jobs",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Share of labor force without jobs",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "labor"
+    ]
+  },
+  {
+    "id": "EF9",
+    "category": "Currency",
+    "question": "An exchange rate is…",
+    "answers": [
+      {
+        "text": "Sales tax",
+        "isCorrect": false
+      },
+      {
+        "text": "Price of one currency in another",
+        "isCorrect": true
+      },
+      {
+        "text": "Stock dividend",
+        "isCorrect": false
+      },
+      {
+        "text": "Interest on loans",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Price of one currency in another",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "fx"
+    ]
+  },
+  {
+    "id": "EF10",
+    "category": "Personal Finance",
+    "question": "APR on a credit card is…",
+    "answers": [
+      {
+        "text": "Average profit rate",
+        "isCorrect": false
+      },
+      {
+        "text": "Annual price ratio",
+        "isCorrect": false
+      },
+      {
+        "text": "Adjusted payment rule",
+        "isCorrect": false
+      },
+      {
+        "text": "Annual percentage rate",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Annual percentage rate",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "credit"
+    ]
+  },
+  {
+    "id": "EF11",
+    "category": "Opportunity Cost",
+    "question": "The next best alternative you give up is…",
+    "answers": [
+      {
+        "text": "Variable cost",
+        "isCorrect": false
+      },
+      {
+        "text": "Fixed cost",
+        "isCorrect": false
+      },
+      {
+        "text": "Opportunity cost",
+        "isCorrect": true
+      },
+      {
+        "text": "Sunk cost",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Opportunity cost",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "choices"
+    ]
+  },
+  {
+    "id": "EF12",
+    "category": "Elasticity",
+    "question": "If demand is elastic, a price rise…",
+    "answers": [
+      {
+        "text": "Raises total revenue",
+        "isCorrect": false
+      },
+      {
+        "text": "Increases quantity",
+        "isCorrect": false
+      },
+      {
+        "text": "Lowers total revenue",
+        "isCorrect": true
+      },
+      {
+        "text": "Has no effect",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Lowers total revenue",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11-12",
+      "micro"
+    ]
+  },
+  {
+    "id": "EF13",
+    "category": "Bonds",
+    "question": "Buying a bond means…",
+    "answers": [
+      {
+        "text": "Lending money to issuer",
+        "isCorrect": true
+      },
+      {
+        "text": "Owning company shares",
+        "isCorrect": false
+      },
+      {
+        "text": "Buying goods",
+        "isCorrect": false
+      },
+      {
+        "text": "Buying currency",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Lending money to issuer",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "investing"
+    ]
+  },
+  {
+    "id": "EF14",
+    "category": "Risk",
+    "question": "Diversification helps…",
+    "answers": [
+      {
+        "text": "Guarantee profit",
+        "isCorrect": false
+      },
+      {
+        "text": "Reduce risk",
+        "isCorrect": true
+      },
+      {
+        "text": "Eliminate taxes",
+        "isCorrect": false
+      },
+      {
+        "text": "Increase risk",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Reduce risk",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "investing"
+    ]
+  },
+  {
+    "id": "EF15",
+    "category": "Taxes",
+    "question": "Sales tax is applied to…",
+    "answers": [
+      {
+        "text": "Investments",
+        "isCorrect": false
+      },
+      {
+        "text": "Wages",
+        "isCorrect": false
+      },
+      {
+        "text": "Purchases",
+        "isCorrect": true
+      },
+      {
+        "text": "Rent only",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Purchases",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "tax"
+    ]
+  },
+  {
+    "id": "EF16",
+    "category": "Budgeting",
+    "question": "A surplus means income exceeds expenses.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "budget"
+    ]
+  },
+  {
+    "id": "EF17",
+    "category": "Trade",
+    "question": "Comparative advantage suggests…",
+    "answers": [
+      {
+        "text": "Produce everything domestically",
+        "isCorrect": false
+      },
+      {
+        "text": "Avoid trade",
+        "isCorrect": false
+      },
+      {
+        "text": "Specialize where opportunity cost is lower",
+        "isCorrect": true
+      },
+      {
+        "text": "Set equal prices",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Specialize where opportunity cost is lower",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11-12",
+      "trade"
+    ]
+  },
+  {
+    "id": "EF18",
+    "category": "Banking",
+    "question": "FDIC primarily…",
+    "answers": [
+      {
+        "text": "Prints money",
+        "isCorrect": false
+      },
+      {
+        "text": "Sets tax rates",
+        "isCorrect": false
+      },
+      {
+        "text": "Issues stocks",
+        "isCorrect": false
+      },
+      {
+        "text": "Insures bank deposits",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Insures bank deposits",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "banking"
+    ]
+  },
+  {
+    "id": "EF19",
+    "category": "Inflation",
+    "question": "CPI stands for…",
+    "answers": [
+      {
+        "text": "Consumer Price Index",
+        "isCorrect": true
+      },
+      {
+        "text": "Capital Price Indicator",
+        "isCorrect": false
+      },
+      {
+        "text": "Credit Price Index",
+        "isCorrect": false
+      },
+      {
+        "text": "Currency Power Index",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Consumer Price Index",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "macro"
+    ]
+  },
+  {
+    "id": "EF20",
+    "category": "Finance",
+    "question": "A dividend is…",
+    "answers": [
+      {
+        "text": "A loan fee",
+        "isCorrect": false
+      },
+      {
+        "text": "A payment to shareholders",
+        "isCorrect": true
+      },
+      {
+        "text": "A tax credit",
+        "isCorrect": false
+      },
+      {
+        "text": "An import quota",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A payment to shareholders",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "investing"
+    ]
+  },
+  {
+    "id": "EF21",
+    "category": "Saving",
+    "question": "Compound interest means…",
+    "answers": [
+      {
+        "text": "Fixed payments only",
+        "isCorrect": false
+      },
+      {
+        "text": "Only principal earns",
+        "isCorrect": false
+      },
+      {
+        "text": "No growth",
+        "isCorrect": false
+      },
+      {
+        "text": "Interest earns interest",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Interest earns interest",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "savings"
+    ]
+  },
+  {
+    "id": "EF22",
+    "category": "Costs",
+    "question": "Sunk costs are…",
+    "answers": [
+      {
+        "text": "Future costs",
+        "isCorrect": false
+      },
+      {
+        "text": "Loan payments",
+        "isCorrect": false
+      },
+      {
+        "text": "Past costs you can’t recover",
+        "isCorrect": true
+      },
+      {
+        "text": "Tax deductions",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Past costs you can’t recover",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "micro"
+    ]
+  },
+  {
+    "id": "EF23",
+    "category": "Markets",
+    "question": "A monopoly is…",
+    "answers": [
+      {
+        "text": "Government only",
+        "isCorrect": false
+      },
+      {
+        "text": "No buyers",
+        "isCorrect": false
+      },
+      {
+        "text": "One seller controls the market",
+        "isCorrect": true
+      },
+      {
+        "text": "Many sellers",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "One seller controls the market",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "market structure"
+    ]
+  },
+  {
+    "id": "EF24",
+    "category": "Policy",
+    "question": "Fiscal policy is set by…",
+    "answers": [
+      {
+        "text": "Stock market",
+        "isCorrect": false
+      },
+      {
+        "text": "Government (tax/spend)",
+        "isCorrect": true
+      },
+      {
+        "text": "Courts",
+        "isCorrect": false
+      },
+      {
+        "text": "Central bank",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Government (tax/spend)",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "policy"
+    ]
+  },
+  {
+    "id": "EF25",
+    "category": "Policy",
+    "question": "Monetary policy primarily changes…",
+    "answers": [
+      {
+        "text": "Minimum wage",
+        "isCorrect": false
+      },
+      {
+        "text": "Interest rates & money supply",
+        "isCorrect": true
+      },
+      {
+        "text": "Tariffs",
+        "isCorrect": false
+      },
+      {
+        "text": "Income tax brackets",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Interest rates & money supply",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "policy"
+    ]
+  },
+  {
+    "id": "EF26",
+    "category": "Personal Finance",
+    "question": "A credit score reflects borrowing history.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "credit"
+    ]
+  },
+  {
+    "id": "EF27",
+    "category": "Labor",
+    "question": "Minimum wage is…",
+    "answers": [
+      {
+        "text": "Living wage",
+        "isCorrect": false
+      },
+      {
+        "text": "Bonus pay",
+        "isCorrect": false
+      },
+      {
+        "text": "Average wage",
+        "isCorrect": false
+      },
+      {
+        "text": "The legal minimum hourly pay",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "The legal minimum hourly pay",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "labor"
+    ]
+  },
+  {
+    "id": "EF28",
+    "category": "International",
+    "question": "A trade deficit means…",
+    "answers": [
+      {
+        "text": "Exports > Imports",
+        "isCorrect": false
+      },
+      {
+        "text": "Balanced trade",
+        "isCorrect": false
+      },
+      {
+        "text": "No trade",
+        "isCorrect": false
+      },
+      {
+        "text": "Imports > Exports",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Imports > Exports",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "trade"
+    ]
+  },
+  {
+    "id": "EF29",
+    "category": "Entrepreneurship",
+    "question": "A startup is…",
+    "answers": [
+      {
+        "text": "A franchise only",
+        "isCorrect": false
+      },
+      {
+        "text": "A government office",
+        "isCorrect": false
+      },
+      {
+        "text": "A charity",
+        "isCorrect": false
+      },
+      {
+        "text": "A new venture seeking a scalable model",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "A new venture seeking a scalable model",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "business"
+    ]
+  },
+  {
+    "id": "EF30",
+    "category": "Behavioral",
+    "question": "Loss aversion means…",
+    "answers": [
+      {
+        "text": "Losses feel larger than equal gains",
+        "isCorrect": true
+      },
+      {
+        "text": "No effect",
+        "isCorrect": false
+      },
+      {
+        "text": "Gains feel larger",
+        "isCorrect": false
+      },
+      {
+        "text": "Always rational",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Losses feel larger than equal gains",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G11-12",
+      "behavioral"
+    ]
+  }
+]

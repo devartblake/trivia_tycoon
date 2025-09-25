@@ -1,0 +1,695 @@
+[
+  {
+    "id": "G2_1",
+    "category": "Multiplication",
+    "question": "What is 2 x 3?",
+    "answers": [
+      {
+        "text": "4",
+        "isCorrect": false
+      },
+      {
+        "text": "6",
+        "isCorrect": true
+      },
+      {
+        "text": "7",
+        "isCorrect": false
+      },
+      {
+        "text": "5",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "6",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "math",
+      "multiplication"
+    ]
+  },
+  {
+    "id": "G2_2",
+    "category": "Multiplication",
+    "question": "What is 5 x 2?",
+    "answers": [
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "7",
+        "isCorrect": false
+      },
+      {
+        "text": "8",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "10",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "math"
+    ]
+  },
+  {
+    "id": "G2_3",
+    "category": "Multiplication",
+    "question": "Which is equal to 4 x 3?",
+    "answers": [
+      {
+        "text": "8",
+        "isCorrect": false
+      },
+      {
+        "text": "12",
+        "isCorrect": true
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      },
+      {
+        "text": "16",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "12",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "math"
+    ]
+  },
+  {
+    "id": "G2_4",
+    "category": "Grammar & Writing",
+    "question": "Which word is a noun?",
+    "answers": [
+      {
+        "text": "Quick",
+        "isCorrect": false
+      },
+      {
+        "text": "Dog",
+        "isCorrect": true
+      },
+      {
+        "text": "Run",
+        "isCorrect": false
+      },
+      {
+        "text": "Blue",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Dog",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "grammar"
+    ]
+  },
+  {
+    "id": "G2_5",
+    "category": "Grammar & Writing",
+    "question": "Which sentence is correct?",
+    "answers": [
+      {
+        "text": "the Cat runs Fast",
+        "isCorrect": false
+      },
+      {
+        "text": "The cat runs fast.",
+        "isCorrect": true
+      },
+      {
+        "text": "Cat runs",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "The cat runs fast.",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "grammar"
+    ]
+  },
+  {
+    "id": "G2_6",
+    "category": "Grammar & Writing",
+    "question": "A verb is an action word.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "grammar"
+    ]
+  },
+  {
+    "id": "G2_7",
+    "category": "Weather & Seasons",
+    "question": "What tool measures temperature?",
+    "answers": [
+      {
+        "text": "Thermometer",
+        "isCorrect": true
+      },
+      {
+        "text": "Scale",
+        "isCorrect": false
+      },
+      {
+        "text": "Ruler",
+        "isCorrect": false
+      },
+      {
+        "text": "Clock",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Thermometer",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "science"
+    ]
+  },
+  {
+    "id": "G2_8",
+    "category": "Weather & Seasons",
+    "question": "Which season comes after spring?",
+    "answers": [
+      {
+        "text": "Summer",
+        "isCorrect": true
+      },
+      {
+        "text": "Winter",
+        "isCorrect": false
+      },
+      {
+        "text": "Fall",
+        "isCorrect": false
+      },
+      {
+        "text": "Spring again",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Summer",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "seasons"
+    ]
+  },
+  {
+    "id": "G2_9",
+    "category": "Weather & Seasons",
+    "question": "Rain comes from clouds.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "weather"
+    ]
+  },
+  {
+    "id": "G2_10",
+    "category": "Maps & Places",
+    "question": "Which direction is opposite of North?",
+    "answers": [
+      {
+        "text": "West",
+        "isCorrect": false
+      },
+      {
+        "text": "East",
+        "isCorrect": false
+      },
+      {
+        "text": "Left",
+        "isCorrect": false
+      },
+      {
+        "text": "South",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "South",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "maps"
+    ]
+  },
+  {
+    "id": "G2_11",
+    "category": "Maps & Places",
+    "question": "A map key explains…",
+    "answers": [
+      {
+        "text": "Directions",
+        "isCorrect": false
+      },
+      {
+        "text": "Symbols on a map",
+        "isCorrect": true
+      },
+      {
+        "text": "Seasons",
+        "isCorrect": false
+      },
+      {
+        "text": "Cities",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Symbols on a map",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "maps"
+    ]
+  },
+  {
+    "id": "G2_12",
+    "category": "Maps & Places",
+    "question": "Which is a continent?",
+    "answers": [
+      {
+        "text": "Amazon",
+        "isCorrect": false
+      },
+      {
+        "text": "Paris",
+        "isCorrect": false
+      },
+      {
+        "text": "Texas",
+        "isCorrect": false
+      },
+      {
+        "text": "Africa",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Africa",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "geography"
+    ]
+  },
+  {
+    "id": "G2_13",
+    "category": "Everyday Life",
+    "question": "Which chore is about cleaning?",
+    "answers": [
+      {
+        "text": "Sweeping the floor",
+        "isCorrect": true
+      },
+      {
+        "text": "Eating lunch",
+        "isCorrect": false
+      },
+      {
+        "text": "Reading a book",
+        "isCorrect": false
+      },
+      {
+        "text": "Drawing",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Sweeping the floor",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "life"
+    ]
+  },
+  {
+    "id": "G2_14",
+    "category": "Everyday Life",
+    "question": "Brushing your teeth is healthy.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "life"
+    ]
+  },
+  {
+    "id": "G2_15",
+    "category": "Everyday Life",
+    "question": "Which rule helps at school?",
+    "answers": [
+      {
+        "text": "Ignore teacher",
+        "isCorrect": false
+      },
+      {
+        "text": "Shout answers",
+        "isCorrect": false
+      },
+      {
+        "text": "Raise your hand to speak",
+        "isCorrect": true
+      },
+      {
+        "text": "Run indoors",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Raise your hand to speak",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "rules"
+    ]
+  },
+  {
+    "id": "G2_15",
+    "category": "General",
+    "question": "Grade 2 fact filler",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "G2_16",
+    "category": "General",
+    "question": "Grade 2 fact filler",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "G2_17",
+    "category": "General",
+    "question": "Grade 2 fact filler",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "G2_18",
+    "category": "General",
+    "question": "Grade 2 fact filler",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "G2_19",
+    "category": "General",
+    "question": "Grade 2 fact filler",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "G2_20",
+    "category": "General",
+    "question": "Grade 2 fact filler",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "G2_21",
+    "category": "General",
+    "question": "Grade 2 fact filler",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "G2_22",
+    "category": "General",
+    "question": "Grade 2 fact filler",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "G2_23",
+    "category": "General",
+    "question": "Grade 2 fact filler",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "G2_24",
+    "category": "General",
+    "question": "Grade 2 fact filler",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "G2_25",
+    "category": "General",
+    "question": "Grade 2 fact filler",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "G2_26",
+    "category": "General",
+    "question": "Grade 2 fact filler",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "G2_27",
+    "category": "General",
+    "question": "Grade 2 fact filler",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "G2_28",
+    "category": "General",
+    "question": "Grade 2 fact filler",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  },
+  {
+    "id": "G2_29",
+    "category": "General",
+    "question": "Grade 2 fact filler",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": []
+  }
+]

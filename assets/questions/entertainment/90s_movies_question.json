@@ -1,0 +1,2226 @@
+[
+  {
+    "id": "M90_1",
+    "category": "90s Movies",
+    "question": "Who directed 'Jurassic Park'?",
+    "answers": [
+      {
+        "text": "George Lucas",
+        "isCorrect": false
+      },
+      {
+        "text": "Quentin Tarantino",
+        "isCorrect": false
+      },
+      {
+        "text": "Steven Spielberg",
+        "isCorrect": true
+      },
+      {
+        "text": "Wes Anderson",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Steven Spielberg",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "M90_2",
+    "category": "90s Movies",
+    "question": "In which year was 'Jurassic Park' released?",
+    "answers": [
+      {
+        "text": "1994",
+        "isCorrect": false
+      },
+      {
+        "text": "1991",
+        "isCorrect": false
+      },
+      {
+        "text": "1993",
+        "isCorrect": true
+      },
+      {
+        "text": "1992",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1993",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "release_year"
+    ]
+  },
+  {
+    "id": "M90_3",
+    "category": "90s Movies",
+    "question": "Which actor starred in 'Jurassic Park'?",
+    "answers": [
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      },
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Sam Neill",
+        "isCorrect": true
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Sam Neill",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "M90_4",
+    "category": "90s Movies",
+    "question": "'Jurassic Park' is primarily considered a Romance film.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "genre_guess"
+    ]
+  },
+  {
+    "id": "M90_5",
+    "category": "90s Movies",
+    "question": "Who directed 'Titanic'?",
+    "answers": [
+      {
+        "text": "Ron Howard",
+        "isCorrect": false
+      },
+      {
+        "text": "Wes Anderson",
+        "isCorrect": false
+      },
+      {
+        "text": "George Lucas",
+        "isCorrect": false
+      },
+      {
+        "text": "James Cameron",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "James Cameron",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "M90_6",
+    "category": "90s Movies",
+    "question": "In which year was 'Titanic' released?",
+    "answers": [
+      {
+        "text": "1995",
+        "isCorrect": false
+      },
+      {
+        "text": "1998",
+        "isCorrect": false
+      },
+      {
+        "text": "1997",
+        "isCorrect": true
+      },
+      {
+        "text": "1996",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1997",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "release_year"
+    ]
+  },
+  {
+    "id": "M90_7",
+    "category": "90s Movies",
+    "question": "Which actor starred in 'Titanic'?",
+    "answers": [
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Leonardo DiCaprio",
+        "isCorrect": true
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Leonardo DiCaprio",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "M90_8",
+    "category": "90s Movies",
+    "question": "'Titanic' is primarily considered a Horror film.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "genre_guess"
+    ]
+  },
+  {
+    "id": "M90_9",
+    "category": "90s Movies",
+    "question": "Who directed 'The Matrix'?",
+    "answers": [
+      {
+        "text": "Steven Spielberg",
+        "isCorrect": false
+      },
+      {
+        "text": "The Wachowskis",
+        "isCorrect": true
+      },
+      {
+        "text": "James Cameron",
+        "isCorrect": false
+      },
+      {
+        "text": "Ridley Scott",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "The Wachowskis",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "M90_10",
+    "category": "90s Movies",
+    "question": "In which year was 'The Matrix' released?",
+    "answers": [
+      {
+        "text": "1997",
+        "isCorrect": false
+      },
+      {
+        "text": "2000",
+        "isCorrect": false
+      },
+      {
+        "text": "1999",
+        "isCorrect": true
+      },
+      {
+        "text": "1998",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1999",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "release_year"
+    ]
+  },
+  {
+    "id": "M90_11",
+    "category": "90s Movies",
+    "question": "Which actor starred in 'The Matrix'?",
+    "answers": [
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": true
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      },
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Keanu Reeves",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "M90_12",
+    "category": "90s Movies",
+    "question": "'The Matrix' is primarily considered a Fantasy film.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "genre_guess"
+    ]
+  },
+  {
+    "id": "M90_13",
+    "category": "90s Movies",
+    "question": "Who directed 'Pulp Fiction'?",
+    "answers": [
+      {
+        "text": "Steven Spielberg",
+        "isCorrect": false
+      },
+      {
+        "text": "Ron Howard",
+        "isCorrect": false
+      },
+      {
+        "text": "Quentin Tarantino",
+        "isCorrect": true
+      },
+      {
+        "text": "George Lucas",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Quentin Tarantino",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "M90_14",
+    "category": "90s Movies",
+    "question": "In which year was 'Pulp Fiction' released?",
+    "answers": [
+      {
+        "text": "1994",
+        "isCorrect": true
+      },
+      {
+        "text": "1995",
+        "isCorrect": false
+      },
+      {
+        "text": "1993",
+        "isCorrect": false
+      },
+      {
+        "text": "1992",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1994",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "release_year"
+    ]
+  },
+  {
+    "id": "M90_15",
+    "category": "90s Movies",
+    "question": "Which actor starred in 'Pulp Fiction'?",
+    "answers": [
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      },
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "John Travolta",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "John Travolta",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "M90_16",
+    "category": "90s Movies",
+    "question": "'Pulp Fiction' is primarily considered a Science Fiction film.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "genre_guess"
+    ]
+  },
+  {
+    "id": "M90_17",
+    "category": "90s Movies",
+    "question": "Who directed 'Forrest Gump'?",
+    "answers": [
+      {
+        "text": "George Lucas",
+        "isCorrect": false
+      },
+      {
+        "text": "Ron Howard",
+        "isCorrect": false
+      },
+      {
+        "text": "Ridley Scott",
+        "isCorrect": false
+      },
+      {
+        "text": "Robert Zemeckis",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Robert Zemeckis",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "M90_18",
+    "category": "90s Movies",
+    "question": "In which year was 'Forrest Gump' released?",
+    "answers": [
+      {
+        "text": "1994",
+        "isCorrect": true
+      },
+      {
+        "text": "1995",
+        "isCorrect": false
+      },
+      {
+        "text": "1993",
+        "isCorrect": false
+      },
+      {
+        "text": "1992",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1994",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "release_year"
+    ]
+  },
+  {
+    "id": "M90_19",
+    "category": "90s Movies",
+    "question": "Which actor starred in 'Forrest Gump'?",
+    "answers": [
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": true
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Tom Hanks",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "M90_20",
+    "category": "90s Movies",
+    "question": "'Forrest Gump' is primarily considered a Horror film.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "genre_guess"
+    ]
+  },
+  {
+    "id": "M90_21",
+    "category": "90s Movies",
+    "question": "Who directed 'The Silence of the Lambs'?",
+    "answers": [
+      {
+        "text": "Wes Anderson",
+        "isCorrect": false
+      },
+      {
+        "text": "Steven Spielberg",
+        "isCorrect": false
+      },
+      {
+        "text": "Ron Howard",
+        "isCorrect": false
+      },
+      {
+        "text": "Jonathan Demme",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Jonathan Demme",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "M90_22",
+    "category": "90s Movies",
+    "question": "In which year was 'The Silence of the Lambs' released?",
+    "answers": [
+      {
+        "text": "1991",
+        "isCorrect": true
+      },
+      {
+        "text": "1989",
+        "isCorrect": false
+      },
+      {
+        "text": "1990",
+        "isCorrect": false
+      },
+      {
+        "text": "1992",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1991",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "release_year"
+    ]
+  },
+  {
+    "id": "M90_23",
+    "category": "90s Movies",
+    "question": "Which actor starred in 'The Silence of the Lambs'?",
+    "answers": [
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Jodie Foster",
+        "isCorrect": true
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Jodie Foster",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "M90_24",
+    "category": "90s Movies",
+    "question": "'The Silence of the Lambs' is primarily considered a Science Fiction film.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "genre_guess"
+    ]
+  },
+  {
+    "id": "M90_25",
+    "category": "90s Movies",
+    "question": "Who directed 'Fight Club'?",
+    "answers": [
+      {
+        "text": "David Fincher",
+        "isCorrect": true
+      },
+      {
+        "text": "Steven Spielberg",
+        "isCorrect": false
+      },
+      {
+        "text": "Wes Anderson",
+        "isCorrect": false
+      },
+      {
+        "text": "James Cameron",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "David Fincher",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "M90_26",
+    "category": "90s Movies",
+    "question": "In which year was 'Fight Club' released?",
+    "answers": [
+      {
+        "text": "2000",
+        "isCorrect": false
+      },
+      {
+        "text": "1998",
+        "isCorrect": false
+      },
+      {
+        "text": "1997",
+        "isCorrect": false
+      },
+      {
+        "text": "1999",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "1999",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "release_year"
+    ]
+  },
+  {
+    "id": "M90_27",
+    "category": "90s Movies",
+    "question": "Which actor starred in 'Fight Club'?",
+    "answers": [
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Brad Pitt",
+        "isCorrect": true
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Brad Pitt",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "M90_28",
+    "category": "90s Movies",
+    "question": "'Fight Club' is primarily considered a Horror film.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "genre_guess"
+    ]
+  },
+  {
+    "id": "M90_29",
+    "category": "90s Movies",
+    "question": "Who directed 'Good Will Hunting'?",
+    "answers": [
+      {
+        "text": "Steven Spielberg",
+        "isCorrect": false
+      },
+      {
+        "text": "Gus Van Sant",
+        "isCorrect": true
+      },
+      {
+        "text": "Wes Anderson",
+        "isCorrect": false
+      },
+      {
+        "text": "James Cameron",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Gus Van Sant",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "M90_30",
+    "category": "90s Movies",
+    "question": "In which year was 'Good Will Hunting' released?",
+    "answers": [
+      {
+        "text": "1995",
+        "isCorrect": false
+      },
+      {
+        "text": "1997",
+        "isCorrect": true
+      },
+      {
+        "text": "1998",
+        "isCorrect": false
+      },
+      {
+        "text": "1996",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1997",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "release_year"
+    ]
+  },
+  {
+    "id": "M90_31",
+    "category": "90s Movies",
+    "question": "Which actor starred in 'Good Will Hunting'?",
+    "answers": [
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      },
+      {
+        "text": "Matt Damon",
+        "isCorrect": true
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Matt Damon",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "M90_32",
+    "category": "90s Movies",
+    "question": "'Good Will Hunting' is primarily considered a Romance film.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "genre_guess"
+    ]
+  },
+  {
+    "id": "M90_33",
+    "category": "90s Movies",
+    "question": "Who directed 'The Shawshank Redemption'?",
+    "answers": [
+      {
+        "text": "George Lucas",
+        "isCorrect": false
+      },
+      {
+        "text": "Wes Anderson",
+        "isCorrect": false
+      },
+      {
+        "text": "James Cameron",
+        "isCorrect": false
+      },
+      {
+        "text": "Frank Darabont",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Frank Darabont",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "M90_34",
+    "category": "90s Movies",
+    "question": "In which year was 'The Shawshank Redemption' released?",
+    "answers": [
+      {
+        "text": "1992",
+        "isCorrect": false
+      },
+      {
+        "text": "1994",
+        "isCorrect": true
+      },
+      {
+        "text": "1993",
+        "isCorrect": false
+      },
+      {
+        "text": "1995",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1994",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "release_year"
+    ]
+  },
+  {
+    "id": "M90_35",
+    "category": "90s Movies",
+    "question": "Which actor starred in 'The Shawshank Redemption'?",
+    "answers": [
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      },
+      {
+        "text": "Tim Robbins",
+        "isCorrect": true
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Tim Robbins",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "M90_36",
+    "category": "90s Movies",
+    "question": "'The Shawshank Redemption' is primarily considered a Animation film.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "genre_guess"
+    ]
+  },
+  {
+    "id": "M90_37",
+    "category": "90s Movies",
+    "question": "Who directed 'Saving Private Ryan'?",
+    "answers": [
+      {
+        "text": "George Lucas",
+        "isCorrect": false
+      },
+      {
+        "text": "James Cameron",
+        "isCorrect": false
+      },
+      {
+        "text": "Ridley Scott",
+        "isCorrect": false
+      },
+      {
+        "text": "Steven Spielberg",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Steven Spielberg",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "M90_38",
+    "category": "90s Movies",
+    "question": "In which year was 'Saving Private Ryan' released?",
+    "answers": [
+      {
+        "text": "1996",
+        "isCorrect": false
+      },
+      {
+        "text": "1997",
+        "isCorrect": false
+      },
+      {
+        "text": "1999",
+        "isCorrect": false
+      },
+      {
+        "text": "1998",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "1998",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "release_year"
+    ]
+  },
+  {
+    "id": "M90_39",
+    "category": "90s Movies",
+    "question": "Which actor starred in 'Saving Private Ryan'?",
+    "answers": [
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": true
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Tom Hanks",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "M90_40",
+    "category": "90s Movies",
+    "question": "'Saving Private Ryan' is primarily considered a Horror film.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "genre_guess"
+    ]
+  },
+  {
+    "id": "M90_41",
+    "category": "90s Movies",
+    "question": "Which genre typically features space or futuristic tech?",
+    "answers": [
+      {
+        "text": "Western",
+        "isCorrect": false
+      },
+      {
+        "text": "Science Fiction",
+        "isCorrect": true
+      },
+      {
+        "text": "Romance",
+        "isCorrect": false
+      },
+      {
+        "text": "Historical Drama",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Science Fiction",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "genre"
+    ]
+  },
+  {
+    "id": "M90_42",
+    "category": "90s Movies",
+    "question": "Which genre typically features space or futuristic tech?",
+    "answers": [
+      {
+        "text": "Western",
+        "isCorrect": false
+      },
+      {
+        "text": "Romance",
+        "isCorrect": false
+      },
+      {
+        "text": "Science Fiction",
+        "isCorrect": true
+      },
+      {
+        "text": "Historical Drama",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Science Fiction",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "genre"
+    ]
+  },
+  {
+    "id": "M90_43",
+    "category": "90s Movies",
+    "question": "Martin Scorsese is a well-known film director.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "directors"
+    ]
+  },
+  {
+    "id": "M90_44",
+    "category": "90s Movies",
+    "question": "What does CGI stand for in filmmaking?",
+    "answers": [
+      {
+        "text": "Computer-Generated Imagery",
+        "isCorrect": true
+      },
+      {
+        "text": "Camera Gain Index",
+        "isCorrect": false
+      },
+      {
+        "text": "Color Grade Indicator",
+        "isCorrect": false
+      },
+      {
+        "text": "Cut-Gate Interlude",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Computer-Generated Imagery",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "terminology"
+    ]
+  },
+  {
+    "id": "M90_45",
+    "category": "90s Movies",
+    "question": "Which of these is a film rating used in the U.S.?",
+    "answers": [
+      {
+        "text": "PG-13",
+        "isCorrect": true
+      },
+      {
+        "text": "U",
+        "isCorrect": false
+      },
+      {
+        "text": "E10+",
+        "isCorrect": false
+      },
+      {
+        "text": "A++",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "PG-13",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "ratings"
+    ]
+  },
+  {
+    "id": "M90_46",
+    "category": "90s Movies",
+    "question": "The Academy Award for Best Picture is given at the Oscars.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "awards"
+    ]
+  },
+  {
+    "id": "M90_47",
+    "category": "90s Movies",
+    "question": "The Academy Award for Best Animated Feature is given at the Oscars.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "awards"
+    ]
+  },
+  {
+    "id": "M90_48",
+    "category": "90s Movies",
+    "question": "Which genre typically features space or futuristic tech?",
+    "answers": [
+      {
+        "text": "Romance",
+        "isCorrect": false
+      },
+      {
+        "text": "Western",
+        "isCorrect": false
+      },
+      {
+        "text": "Science Fiction",
+        "isCorrect": true
+      },
+      {
+        "text": "Historical Drama",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Science Fiction",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "genre"
+    ]
+  },
+  {
+    "id": "M90_49",
+    "category": "90s Movies",
+    "question": "Which of these is a film rating used in the U.S.?",
+    "answers": [
+      {
+        "text": "A++",
+        "isCorrect": false
+      },
+      {
+        "text": "E10+",
+        "isCorrect": false
+      },
+      {
+        "text": "PG-13",
+        "isCorrect": true
+      },
+      {
+        "text": "U",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "PG-13",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "ratings"
+    ]
+  },
+  {
+    "id": "M90_50",
+    "category": "90s Movies",
+    "question": "James Cameron is a well-known film director.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "directors"
+    ]
+  },
+  {
+    "id": "M90_51",
+    "category": "90s Movies",
+    "question": "Quentin Tarantino is a well-known film director.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "directors"
+    ]
+  },
+  {
+    "id": "M90_52",
+    "category": "90s Movies",
+    "question": "The Academy Award for Best Original Screenplay is given at the Oscars.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "awards"
+    ]
+  },
+  {
+    "id": "M90_53",
+    "category": "90s Movies",
+    "question": "Christopher Nolan is a well-known film director.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "directors"
+    ]
+  },
+  {
+    "id": "M90_54",
+    "category": "90s Movies",
+    "question": "What does CGI stand for in filmmaking?",
+    "answers": [
+      {
+        "text": "Cut-Gate Interlude",
+        "isCorrect": false
+      },
+      {
+        "text": "Camera Gain Index",
+        "isCorrect": false
+      },
+      {
+        "text": "Color Grade Indicator",
+        "isCorrect": false
+      },
+      {
+        "text": "Computer-Generated Imagery",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Computer-Generated Imagery",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "terminology"
+    ]
+  },
+  {
+    "id": "M90_55",
+    "category": "90s Movies",
+    "question": "Which genre typically features space or futuristic tech?",
+    "answers": [
+      {
+        "text": "Romance",
+        "isCorrect": false
+      },
+      {
+        "text": "Western",
+        "isCorrect": false
+      },
+      {
+        "text": "Historical Drama",
+        "isCorrect": false
+      },
+      {
+        "text": "Science Fiction",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Science Fiction",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "genre"
+    ]
+  },
+  {
+    "id": "M90_56",
+    "category": "90s Movies",
+    "question": "Which of these is a film rating used in the U.S.?",
+    "answers": [
+      {
+        "text": "PG-13",
+        "isCorrect": true
+      },
+      {
+        "text": "E10+",
+        "isCorrect": false
+      },
+      {
+        "text": "A++",
+        "isCorrect": false
+      },
+      {
+        "text": "U",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "PG-13",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "ratings"
+    ]
+  },
+  {
+    "id": "M90_57",
+    "category": "90s Movies",
+    "question": "What does CGI stand for in filmmaking?",
+    "answers": [
+      {
+        "text": "Cut-Gate Interlude",
+        "isCorrect": false
+      },
+      {
+        "text": "Computer-Generated Imagery",
+        "isCorrect": true
+      },
+      {
+        "text": "Camera Gain Index",
+        "isCorrect": false
+      },
+      {
+        "text": "Color Grade Indicator",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Computer-Generated Imagery",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "terminology"
+    ]
+  },
+  {
+    "id": "M90_58",
+    "category": "90s Movies",
+    "question": "Which genre typically features space or futuristic tech?",
+    "answers": [
+      {
+        "text": "Historical Drama",
+        "isCorrect": false
+      },
+      {
+        "text": "Romance",
+        "isCorrect": false
+      },
+      {
+        "text": "Western",
+        "isCorrect": false
+      },
+      {
+        "text": "Science Fiction",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Science Fiction",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "genre"
+    ]
+  },
+  {
+    "id": "M90_59",
+    "category": "90s Movies",
+    "question": "Which genre typically features space or futuristic tech?",
+    "answers": [
+      {
+        "text": "Western",
+        "isCorrect": false
+      },
+      {
+        "text": "Romance",
+        "isCorrect": false
+      },
+      {
+        "text": "Science Fiction",
+        "isCorrect": true
+      },
+      {
+        "text": "Historical Drama",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Science Fiction",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "genre"
+    ]
+  },
+  {
+    "id": "M90_60",
+    "category": "90s Movies",
+    "question": "James Cameron is a well-known film director.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "directors"
+    ]
+  },
+  {
+    "id": "M90_61",
+    "category": "90s Movies",
+    "question": "James Cameron is a well-known film director.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "directors"
+    ]
+  },
+  {
+    "id": "M90_62",
+    "category": "90s Movies",
+    "question": "Steven Spielberg is a well-known film director.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "directors"
+    ]
+  },
+  {
+    "id": "M90_63",
+    "category": "90s Movies",
+    "question": "What does CGI stand for in filmmaking?",
+    "answers": [
+      {
+        "text": "Camera Gain Index",
+        "isCorrect": false
+      },
+      {
+        "text": "Color Grade Indicator",
+        "isCorrect": false
+      },
+      {
+        "text": "Cut-Gate Interlude",
+        "isCorrect": false
+      },
+      {
+        "text": "Computer-Generated Imagery",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Computer-Generated Imagery",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "terminology"
+    ]
+  },
+  {
+    "id": "M90_64",
+    "category": "90s Movies",
+    "question": "Which of these is a film rating used in the U.S.?",
+    "answers": [
+      {
+        "text": "PG-13",
+        "isCorrect": true
+      },
+      {
+        "text": "U",
+        "isCorrect": false
+      },
+      {
+        "text": "A++",
+        "isCorrect": false
+      },
+      {
+        "text": "E10+",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "PG-13",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "ratings"
+    ]
+  },
+  {
+    "id": "M90_65",
+    "category": "90s Movies",
+    "question": "Which of these is a film rating used in the U.S.?",
+    "answers": [
+      {
+        "text": "PG-13",
+        "isCorrect": true
+      },
+      {
+        "text": "A++",
+        "isCorrect": false
+      },
+      {
+        "text": "U",
+        "isCorrect": false
+      },
+      {
+        "text": "E10+",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "PG-13",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "ratings"
+    ]
+  },
+  {
+    "id": "M90_66",
+    "category": "90s Movies",
+    "question": "What does CGI stand for in filmmaking?",
+    "answers": [
+      {
+        "text": "Color Grade Indicator",
+        "isCorrect": false
+      },
+      {
+        "text": "Cut-Gate Interlude",
+        "isCorrect": false
+      },
+      {
+        "text": "Camera Gain Index",
+        "isCorrect": false
+      },
+      {
+        "text": "Computer-Generated Imagery",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Computer-Generated Imagery",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "terminology"
+    ]
+  },
+  {
+    "id": "M90_67",
+    "category": "90s Movies",
+    "question": "Which genre typically features space or futuristic tech?",
+    "answers": [
+      {
+        "text": "Western",
+        "isCorrect": false
+      },
+      {
+        "text": "Science Fiction",
+        "isCorrect": true
+      },
+      {
+        "text": "Romance",
+        "isCorrect": false
+      },
+      {
+        "text": "Historical Drama",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Science Fiction",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "genre"
+    ]
+  },
+  {
+    "id": "M90_68",
+    "category": "90s Movies",
+    "question": "Kathryn Bigelow is a well-known film director.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "directors"
+    ]
+  },
+  {
+    "id": "M90_69",
+    "category": "90s Movies",
+    "question": "James Cameron is a well-known film director.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "directors"
+    ]
+  },
+  {
+    "id": "M90_70",
+    "category": "90s Movies",
+    "question": "Which genre typically features space or futuristic tech?",
+    "answers": [
+      {
+        "text": "Western",
+        "isCorrect": false
+      },
+      {
+        "text": "Romance",
+        "isCorrect": false
+      },
+      {
+        "text": "Historical Drama",
+        "isCorrect": false
+      },
+      {
+        "text": "Science Fiction",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Science Fiction",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "genre"
+    ]
+  },
+  {
+    "id": "M90_71",
+    "category": "90s Movies",
+    "question": "What does CGI stand for in filmmaking?",
+    "answers": [
+      {
+        "text": "Camera Gain Index",
+        "isCorrect": false
+      },
+      {
+        "text": "Color Grade Indicator",
+        "isCorrect": false
+      },
+      {
+        "text": "Computer-Generated Imagery",
+        "isCorrect": true
+      },
+      {
+        "text": "Cut-Gate Interlude",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Computer-Generated Imagery",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "terminology"
+    ]
+  },
+  {
+    "id": "M90_72",
+    "category": "90s Movies",
+    "question": "Peter Jackson is a well-known film director.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "directors"
+    ]
+  },
+  {
+    "id": "M90_73",
+    "category": "90s Movies",
+    "question": "Which genre typically features space or futuristic tech?",
+    "answers": [
+      {
+        "text": "Science Fiction",
+        "isCorrect": true
+      },
+      {
+        "text": "Romance",
+        "isCorrect": false
+      },
+      {
+        "text": "Western",
+        "isCorrect": false
+      },
+      {
+        "text": "Historical Drama",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Science Fiction",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "genre"
+    ]
+  },
+  {
+    "id": "M90_74",
+    "category": "90s Movies",
+    "question": "The Academy Award for Best Picture is given at the Oscars.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "awards"
+    ]
+  },
+  {
+    "id": "M90_75",
+    "category": "90s Movies",
+    "question": "What does CGI stand for in filmmaking?",
+    "answers": [
+      {
+        "text": "Color Grade Indicator",
+        "isCorrect": false
+      },
+      {
+        "text": "Camera Gain Index",
+        "isCorrect": false
+      },
+      {
+        "text": "Computer-Generated Imagery",
+        "isCorrect": true
+      },
+      {
+        "text": "Cut-Gate Interlude",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Computer-Generated Imagery",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "terminology"
+    ]
+  },
+  {
+    "id": "M90_76",
+    "category": "90s Movies",
+    "question": "The Academy Award for Best Actor is given at the Oscars.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "awards"
+    ]
+  },
+  {
+    "id": "M90_77",
+    "category": "90s Movies",
+    "question": "The Academy Award for Best Picture is given at the Oscars.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "awards"
+    ]
+  },
+  {
+    "id": "M90_78",
+    "category": "90s Movies",
+    "question": "What does CGI stand for in filmmaking?",
+    "answers": [
+      {
+        "text": "Color Grade Indicator",
+        "isCorrect": false
+      },
+      {
+        "text": "Camera Gain Index",
+        "isCorrect": false
+      },
+      {
+        "text": "Cut-Gate Interlude",
+        "isCorrect": false
+      },
+      {
+        "text": "Computer-Generated Imagery",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Computer-Generated Imagery",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "terminology"
+    ]
+  },
+  {
+    "id": "M90_79",
+    "category": "90s Movies",
+    "question": "Steven Spielberg is a well-known film director.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "directors"
+    ]
+  },
+  {
+    "id": "M90_80",
+    "category": "90s Movies",
+    "question": "Which of these is a film rating used in the U.S.?",
+    "answers": [
+      {
+        "text": "U",
+        "isCorrect": false
+      },
+      {
+        "text": "PG-13",
+        "isCorrect": true
+      },
+      {
+        "text": "A++",
+        "isCorrect": false
+      },
+      {
+        "text": "E10+",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "PG-13",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "ratings"
+    ]
+  }
+]

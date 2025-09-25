@@ -1,0 +1,776 @@
+[
+  {
+    "id": "S5_1",
+    "category": "Community",
+    "question": "A mayor leads a…",
+    "answers": [
+      {
+        "text": "City",
+        "isCorrect": true
+      },
+      {
+        "text": "School",
+        "isCorrect": false
+      },
+      {
+        "text": "Country",
+        "isCorrect": false
+      },
+      {
+        "text": "Company",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "City",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "civics"
+    ]
+  },
+  {
+    "id": "S5_2",
+    "category": "Community",
+    "question": "Volunteers work for…",
+    "answers": [
+      {
+        "text": "Free",
+        "isCorrect": true
+      },
+      {
+        "text": "Money",
+        "isCorrect": false
+      },
+      {
+        "text": "Prizes",
+        "isCorrect": false
+      },
+      {
+        "text": "Fame",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Free",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "volunteer"
+    ]
+  },
+  {
+    "id": "S6_1",
+    "category": "Civics",
+    "question": "Voting age in US:",
+    "answers": [
+      {
+        "text": "18",
+        "isCorrect": true
+      },
+      {
+        "text": "16",
+        "isCorrect": false
+      },
+      {
+        "text": "21",
+        "isCorrect": false
+      },
+      {
+        "text": "20",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "18",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "voting"
+    ]
+  },
+  {
+    "id": "S6_2",
+    "category": "Community",
+    "question": "Firefighters help with…",
+    "answers": [
+      {
+        "text": "Fires",
+        "isCorrect": true
+      },
+      {
+        "text": "Roads",
+        "isCorrect": false
+      },
+      {
+        "text": "Laws",
+        "isCorrect": false
+      },
+      {
+        "text": "Shops",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Fires",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "helpers"
+    ]
+  },
+  {
+    "id": "S7_1",
+    "category": "Government",
+    "question": "Three US government branches:",
+    "answers": [
+      {
+        "text": "Legislative, Executive, Judicial",
+        "isCorrect": true
+      },
+      {
+        "text": "Senate, House, President",
+        "isCorrect": false
+      },
+      {
+        "text": "Federal, State, Local",
+        "isCorrect": false
+      },
+      {
+        "text": "Judge, Jury, Police",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Legislative, Executive, Judicial",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "government"
+    ]
+  },
+  {
+    "id": "S7_2",
+    "category": "Community",
+    "question": "Recycling helps…",
+    "answers": [
+      {
+        "text": "Environment",
+        "isCorrect": true
+      },
+      {
+        "text": "Traffic",
+        "isCorrect": false
+      },
+      {
+        "text": "Taxes",
+        "isCorrect": false
+      },
+      {
+        "text": "Food",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Environment",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7",
+      "environment"
+    ]
+  },
+  {
+    "id": "S8_1",
+    "category": "Rights",
+    "question": "Freedom of speech is in…",
+    "answers": [
+      {
+        "text": "First Amendment",
+        "isCorrect": true
+      },
+      {
+        "text": "Second",
+        "isCorrect": false
+      },
+      {
+        "text": "Fourth",
+        "isCorrect": false
+      },
+      {
+        "text": "Tenth",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "First Amendment",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "rights"
+    ]
+  },
+  {
+    "id": "S8_2",
+    "category": "Civics",
+    "question": "Citizenship test includes…",
+    "answers": [
+      {
+        "text": "US history questions",
+        "isCorrect": true
+      },
+      {
+        "text": "Math only",
+        "isCorrect": false
+      },
+      {
+        "text": "Sports only",
+        "isCorrect": false
+      },
+      {
+        "text": "Cooking",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "US history questions",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "citizenship"
+    ]
+  },
+  {
+    "id": "S9_1",
+    "category": "Society",
+    "question": "Civil Rights Act passed in…",
+    "answers": [
+      {
+        "text": "1964",
+        "isCorrect": true
+      },
+      {
+        "text": "1954",
+        "isCorrect": false
+      },
+      {
+        "text": "1974",
+        "isCorrect": false
+      },
+      {
+        "text": "1984",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1964",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "civil rights"
+    ]
+  },
+  {
+    "id": "S9_2",
+    "category": "Society",
+    "question": "Martin Luther King Jr led…",
+    "answers": [
+      {
+        "text": "Civil Rights Movement",
+        "isCorrect": true
+      },
+      {
+        "text": "WW2",
+        "isCorrect": false
+      },
+      {
+        "text": "Great Depression",
+        "isCorrect": false
+      },
+      {
+        "text": "Industrial Rev",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Civil Rights Movement",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "mlk"
+    ]
+  },
+  {
+    "id": "S10_1",
+    "category": "Global",
+    "question": "UN stands for…",
+    "answers": [
+      {
+        "text": "United Nations",
+        "isCorrect": true
+      },
+      {
+        "text": "United Neighbors",
+        "isCorrect": false
+      },
+      {
+        "text": "Universal Nation",
+        "isCorrect": false
+      },
+      {
+        "text": "Union of Nations",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "United Nations",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "UN"
+    ]
+  },
+  {
+    "id": "S10_2",
+    "category": "Government",
+    "question": "Supreme Court has…",
+    "answers": [
+      {
+        "text": "9 justices",
+        "isCorrect": true
+      },
+      {
+        "text": "7",
+        "isCorrect": false
+      },
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "15",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "9 justices",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "supreme court"
+    ]
+  },
+  {
+    "id": "S11_1",
+    "category": "Politics",
+    "question": "US voting system type:",
+    "answers": [
+      {
+        "text": "Representative democracy",
+        "isCorrect": true
+      },
+      {
+        "text": "Direct democracy",
+        "isCorrect": false
+      },
+      {
+        "text": "Monarchy",
+        "isCorrect": false
+      },
+      {
+        "text": "Dictatorship",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Representative democracy",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "democracy"
+    ]
+  },
+  {
+    "id": "S11_2",
+    "category": "Law",
+    "question": "Constitution is…",
+    "answers": [
+      {
+        "text": "Supreme law of land",
+        "isCorrect": true
+      },
+      {
+        "text": "Only advice",
+        "isCorrect": false
+      },
+      {
+        "text": "State law only",
+        "isCorrect": false
+      },
+      {
+        "text": "Optional",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Supreme law of land",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "constitution"
+    ]
+  },
+  {
+    "id": "S12_1",
+    "category": "Global",
+    "question": "Universal Declaration of Human Rights adopted in…",
+    "answers": [
+      {
+        "text": "1948",
+        "isCorrect": true
+      },
+      {
+        "text": "1958",
+        "isCorrect": false
+      },
+      {
+        "text": "1968",
+        "isCorrect": false
+      },
+      {
+        "text": "1978",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1948",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "human rights"
+    ]
+  },
+  {
+    "id": "S12_2",
+    "category": "Global",
+    "question": "Nobel Peace Prize awarded in…",
+    "answers": [
+      {
+        "text": "Norway",
+        "isCorrect": true
+      },
+      {
+        "text": "Sweden",
+        "isCorrect": false
+      },
+      {
+        "text": "Denmark",
+        "isCorrect": false
+      },
+      {
+        "text": "Finland",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Norway",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "nobel"
+    ]
+  },
+  {
+    "id": "SX16",
+    "category": "Mixed Social",
+    "question": "Citizens pay taxes to support public services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SX17",
+    "category": "Mixed Social",
+    "question": "Citizens pay taxes to support public services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SX18",
+    "category": "Mixed Social",
+    "question": "Citizens pay taxes to support public services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SX19",
+    "category": "Mixed Social",
+    "question": "Citizens pay taxes to support public services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SX20",
+    "category": "Mixed Social",
+    "question": "Citizens pay taxes to support public services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SX21",
+    "category": "Mixed Social",
+    "question": "Citizens pay taxes to support public services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SX22",
+    "category": "Mixed Social",
+    "question": "Citizens pay taxes to support public services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SX23",
+    "category": "Mixed Social",
+    "question": "Citizens pay taxes to support public services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SX24",
+    "category": "Mixed Social",
+    "question": "Citizens pay taxes to support public services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SX25",
+    "category": "Mixed Social",
+    "question": "Citizens pay taxes to support public services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SX26",
+    "category": "Mixed Social",
+    "question": "Citizens pay taxes to support public services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SX27",
+    "category": "Mixed Social",
+    "question": "Citizens pay taxes to support public services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SX28",
+    "category": "Mixed Social",
+    "question": "Citizens pay taxes to support public services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "SX29",
+    "category": "Mixed Social",
+    "question": "Citizens pay taxes to support public services.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  }
+]

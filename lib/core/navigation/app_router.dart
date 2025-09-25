@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/admin/admin_dashboard.dart';
 import 'package:trivia_tycoon/core/router/auth_guard.dart';
 import 'package:trivia_tycoon/core/router/enhanced_admin_guard.dart';
+import 'package:trivia_tycoon/screens/leaderboard/tier_rank_screen.dart';
 import 'package:trivia_tycoon/screens/menu/game_menu_screen.dart';
 import 'package:trivia_tycoon/screens/not_found_screen.dart';
 import 'package:trivia_tycoon/screens/question/question_screen.dart';
@@ -18,10 +18,22 @@ import '../../admin/leaderboard/leaderboard_filter_screen.dart';
 import '../../admin/questions/question_editor_screen.dart';
 import '../../admin/questions/question_list_screen.dart';
 import '../../admin/widgets/encrypted_file_preview.dart';
+import '../../game/models/game_mode.dart';
 import '../../game/providers/onboarding_providers.dart';
 import '../../game/providers/auth_providers.dart';
+import '../../screens/menu/invite_screen.dart';
+import '../../screens/multiplayer/live_match_screen.dart';
+import '../../screens/multiplayer/matchmaking_screen.dart';
+import '../../screens/multiplayer/multiplayer_hub_screen.dart';
+import '../../screens/multiplayer/room_lobby_screen.dart';
 import '../../screens/question/monthly_quiz_screen.dart';
+import '../../screens/question/score_summary_screen_wrapper.dart';
+import '../../screens/question/transitional/how_to_play_screen.dart';
+import '../../screens/rewards/mission_screen.dart';
+import '../../screens/rewards/spin_earn_screen.dart';
 import '../../screens/social/multiplayer_screen.dart';
+import '../../screens/store/gifts_screen.dart';
+import '../../screens/store/offers_screen.dart';
 import '../../screens/users/achievements_screen.dart';
 import '../../screens/browse/all_actions_screen.dart';
 import '../../screens/browse/all_categories_screen.dart';
@@ -58,7 +70,7 @@ import '../../screens/question/score_summary_screen.dart';
 import '../../screens/question/transitional/trivia_transition_screen.dart';
 import '../../screens/question/create_quiz_screen.dart';
 import '../../screens/question/join_quiz_screen.dart';
-import '../../screens/question/play_quiz_screen.dart';
+import '../../screens/question/play_quiz_screen.dart' hide GameMode;
 import '../../screens/rewards/reward_screen.dart';
 import '../../screens/util/search_screen.dart';
 import '../../screens/settings/music_screen.dart';
@@ -209,6 +221,29 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             ),
           ]),
 
+      /// Leaderboard Routes
+      GoRoute(
+        path: '/ranking',
+        builder: (context, state) => const TierRankScreen(),
+      ),
+
+      /// 🏆 Reward Routes
+      GoRoute(
+        path: '/spin-earn',
+        builder: (context, state) => const SpinEarnScreen(),
+      ),
+      GoRoute(
+        path: '/missions',
+        builder: (context, state) => const MissionsScreen(), // Your full mission screen
+      ),
+      GoRoute(path: '/invite', builder: (context, state) => InviteScreen()),
+      GoRoute(path: '/rewards', builder: (context, state) => RewardsScreen()),
+      GoRoute(path: '/offers', builder: (context, state) => OffersScreen()),
+      GoRoute(path: '/leaderboard', builder: (context, state) => LeaderboardScreen()),
+      GoRoute(path: '/gifts', builder: (context, state) => GiftsScreen()),
+      GoRoute(path: '/store', builder: (context, state) => StoreScreen()),
+      GoRoute(path: '/settings', builder: (context, state) => SettingsScreen()),
+
       /// 🧠 Question Flow
       GoRoute(
         path: '/quiz',
@@ -231,8 +266,25 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const PlayQuizScreen(),
       ),
       GoRoute(
-        path: '/question',
-        builder: (context, state) => const AdaptedQuestionScreen(),
+        path: '/quiz/play',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return AdaptedQuestionScreen(
+            classLevel: extra?['classLevel'] ?? '1',
+            category: extra?['category'] ?? 'Mixed',
+            questionCount: extra?['questionCount'] ?? 10,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/how-to-play/:gameMode',
+        builder: (context, state) {
+          final gameModeString = state.pathParameters['gameMode']!;
+          final gameMode = GameMode.values.firstWhere(
+                (mode) => mode.name == gameModeString,
+          );
+          return HowToPlayScreen(gameMode: gameMode);
+        },
       ),
       GoRoute(
         path: '/trivia-transition',
@@ -241,13 +293,22 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/score-summary',
         builder: (context, state) {
-          final args = state.extra as Map<String, dynamic>;
-          return ScoreSummaryScreen(
-            score: args['score'],
-            money: args['money'],
-            diamonds: args['diamonds'],
-          );
-        }),
+          return const ScoreSummaryScreenWrapper();
+        },
+      ),
+
+      /// Multiplayer
+      GoRoute(path: '/multiplayer', builder: (context, state) => MultiplayerHubScreen()),
+      GoRoute(path: '/multiplayer/find', builder: (context, state) => MatchmakingScreen()),
+      GoRoute(path: '/multiplayer/rooms', builder: (context, state) => RoomLobbyScreen()),
+      GoRoute(path: '/multiplayer/match', builder: (context, state) => LiveMatchScreen()),
+      /*GoRoute(
+          path: '/multiplayer/rooms/:roomId',
+          builder: (context, state) {
+            final roomId = state.pathParameters['roomId']!;
+            return RoomLobbyScreen(roomId: roomId);
+          }
+      ),*/
 
       /// 👤 USER PROFILE & SOCIAL
       GoRoute(

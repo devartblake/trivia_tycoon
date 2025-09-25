@@ -1,0 +1,862 @@
+[
+  {
+    "id": "HM1",
+    "category": "Body Systems",
+    "question": "The heart’s primary function is to…",
+    "answers": [
+      {
+        "text": "Filter urine",
+        "isCorrect": false
+      },
+      {
+        "text": "Digest food",
+        "isCorrect": false
+      },
+      {
+        "text": "Exchange gases",
+        "isCorrect": false
+      },
+      {
+        "text": "Pump blood",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Pump blood",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "cardio"
+    ]
+  },
+  {
+    "id": "HM2",
+    "category": "Body Systems",
+    "question": "Gas exchange in the lungs occurs in the…",
+    "answers": [
+      {
+        "text": "Diaphragm",
+        "isCorrect": false
+      },
+      {
+        "text": "Trachea",
+        "isCorrect": false
+      },
+      {
+        "text": "Alveoli",
+        "isCorrect": true
+      },
+      {
+        "text": "Bronchi",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Alveoli",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G9-12",
+      "respiratory"
+    ]
+  },
+  {
+    "id": "HM3",
+    "category": "Nutrition",
+    "question": "Macronutrients include carbs, fat, and…",
+    "answers": [
+      {
+        "text": "Vitamins",
+        "isCorrect": false
+      },
+      {
+        "text": "Water only",
+        "isCorrect": false
+      },
+      {
+        "text": "Minerals",
+        "isCorrect": false
+      },
+      {
+        "text": "Protein",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Protein",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "nutrition"
+    ]
+  },
+  {
+    "id": "HM4",
+    "category": "Immunity",
+    "question": "Vaccines work by…",
+    "answers": [
+      {
+        "text": "Killing all germs directly",
+        "isCorrect": false
+      },
+      {
+        "text": "Boosting body temperature",
+        "isCorrect": false
+      },
+      {
+        "text": "Stimulating adaptive immunity",
+        "isCorrect": true
+      },
+      {
+        "text": "Blocking digestion",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Stimulating adaptive immunity",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G9-12",
+      "immunity"
+    ]
+  },
+  {
+    "id": "HM5",
+    "category": "Neuroscience",
+    "question": "Neurons communicate across gaps called…",
+    "answers": [
+      {
+        "text": "Sarccomeres",
+        "isCorrect": false
+      },
+      {
+        "text": "Valves",
+        "isCorrect": false
+      },
+      {
+        "text": "Bronchioles",
+        "isCorrect": false
+      },
+      {
+        "text": "Synapses",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Synapses",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "neuro"
+    ]
+  },
+  {
+    "id": "HM6",
+    "category": "Public Health",
+    "question": "Handwashing helps prevent disease spread.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "public health"
+    ]
+  },
+  {
+    "id": "HM7",
+    "category": "Genetics",
+    "question": "Humans typically have…",
+    "answers": [
+      {
+        "text": "22 pairs",
+        "isCorrect": false
+      },
+      {
+        "text": "46 pairs of genes only",
+        "isCorrect": false
+      },
+      {
+        "text": "24 pairs",
+        "isCorrect": false
+      },
+      {
+        "text": "23 pairs of chromosomes",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "23 pairs of chromosomes",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "genetics"
+    ]
+  },
+  {
+    "id": "HM8",
+    "category": "Disease",
+    "question": "Type 1 diabetes primarily involves…",
+    "answers": [
+      {
+        "text": "Salt imbalance",
+        "isCorrect": false
+      },
+      {
+        "text": "Excess insulin",
+        "isCorrect": false
+      },
+      {
+        "text": "Insulin deficiency",
+        "isCorrect": true
+      },
+      {
+        "text": "Vitamin C deficiency",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Insulin deficiency",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G9-12",
+      "endocrine"
+    ]
+  },
+  {
+    "id": "HM9",
+    "category": "Medical History",
+    "question": "The first antibiotic widely used was…",
+    "answers": [
+      {
+        "text": "Aspirin",
+        "isCorrect": false
+      },
+      {
+        "text": "Morphine",
+        "isCorrect": false
+      },
+      {
+        "text": "Penicillin",
+        "isCorrect": true
+      },
+      {
+        "text": "Insulin",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Penicillin",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "history"
+    ]
+  },
+  {
+    "id": "HM10",
+    "category": "First Aid",
+    "question": "CPR chest compressions target a rate of ~…",
+    "answers": [
+      {
+        "text": "100–120/min",
+        "isCorrect": true
+      },
+      {
+        "text": "140–160/min",
+        "isCorrect": false
+      },
+      {
+        "text": "40–60/min",
+        "isCorrect": false
+      },
+      {
+        "text": "180–200/min",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "100–120/min",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G9-12",
+      "first aid"
+    ]
+  },
+  {
+    "id": "HM11",
+    "category": "Anatomy",
+    "question": "The liver produces bile.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "digestive"
+    ]
+  },
+  {
+    "id": "HM12",
+    "category": "Mental Health",
+    "question": "CBT stands for…",
+    "answers": [
+      {
+        "text": "Conditioned Behavior Training",
+        "isCorrect": false
+      },
+      {
+        "text": "Clinical Behavior Typing",
+        "isCorrect": false
+      },
+      {
+        "text": "Cognitive Behavioral Therapy",
+        "isCorrect": true
+      },
+      {
+        "text": "Central Brain Therapy",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Cognitive Behavioral Therapy",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "mental"
+    ]
+  },
+  {
+    "id": "HM13",
+    "category": "Pharmacology",
+    "question": "A placebo contains…",
+    "answers": [
+      {
+        "text": "Only vitamins",
+        "isCorrect": false
+      },
+      {
+        "text": "Extra drug",
+        "isCorrect": false
+      },
+      {
+        "text": "Antibiotic",
+        "isCorrect": false
+      },
+      {
+        "text": "No active drug",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "No active drug",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "clinical"
+    ]
+  },
+  {
+    "id": "HM14",
+    "category": "Circulation",
+    "question": "Arteries generally carry blood…",
+    "answers": [
+      {
+        "text": "Only to the brain",
+        "isCorrect": false
+      },
+      {
+        "text": "Only to the lungs",
+        "isCorrect": false
+      },
+      {
+        "text": "To the heart",
+        "isCorrect": false
+      },
+      {
+        "text": "Away from the heart",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Away from the heart",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "cardio"
+    ]
+  },
+  {
+    "id": "HM15",
+    "category": "Respiration",
+    "question": "Hemoglobin binds…",
+    "answers": [
+      {
+        "text": "Insulin",
+        "isCorrect": false
+      },
+      {
+        "text": "Starch",
+        "isCorrect": false
+      },
+      {
+        "text": "Oxygen",
+        "isCorrect": true
+      },
+      {
+        "text": "Calcium",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Oxygen",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "blood"
+    ]
+  },
+  {
+    "id": "HM16",
+    "category": "Epidemiology",
+    "question": "Incidence measures new cases over time.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 3,
+    "tags": [
+      "G9-12",
+      "epi"
+    ]
+  },
+  {
+    "id": "HM17",
+    "category": "Reproduction",
+    "question": "Fertilization typically occurs in the…",
+    "answers": [
+      {
+        "text": "Ovary",
+        "isCorrect": false
+      },
+      {
+        "text": "Cervix",
+        "isCorrect": false
+      },
+      {
+        "text": "Uterus",
+        "isCorrect": false
+      },
+      {
+        "text": "Fallopian tube",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Fallopian tube",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G9-12",
+      "repro"
+    ]
+  },
+  {
+    "id": "HM18",
+    "category": "Senses",
+    "question": "Rods are photoreceptors specialized for…",
+    "answers": [
+      {
+        "text": "Low-light vision",
+        "isCorrect": true
+      },
+      {
+        "text": "Color vision",
+        "isCorrect": false
+      },
+      {
+        "text": "Depth only",
+        "isCorrect": false
+      },
+      {
+        "text": "Near focus",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Low-light vision",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G9-12",
+      "vision"
+    ]
+  },
+  {
+    "id": "HM19",
+    "category": "Homeostasis",
+    "question": "Insulin lowers…",
+    "answers": [
+      {
+        "text": "Blood oxygen",
+        "isCorrect": false
+      },
+      {
+        "text": "Blood glucose",
+        "isCorrect": true
+      },
+      {
+        "text": "Heart rate",
+        "isCorrect": false
+      },
+      {
+        "text": "Body temp",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Blood glucose",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "endocrine"
+    ]
+  },
+  {
+    "id": "HM20",
+    "category": "Pathogens",
+    "question": "Viruses replicate…",
+    "answers": [
+      {
+        "text": "Only in water",
+        "isCorrect": false
+      },
+      {
+        "text": "In stomach acid",
+        "isCorrect": false
+      },
+      {
+        "text": "On skin only",
+        "isCorrect": false
+      },
+      {
+        "text": "Inside host cells",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Inside host cells",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "virology"
+    ]
+  },
+  {
+    "id": "HM21",
+    "category": "Microbiology",
+    "question": "Antibiotics are generally ineffective against…",
+    "answers": [
+      {
+        "text": "Bacteria",
+        "isCorrect": false
+      },
+      {
+        "text": "Protozoa",
+        "isCorrect": false
+      },
+      {
+        "text": "Viruses",
+        "isCorrect": true
+      },
+      {
+        "text": "Some fungi",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Viruses",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "antibiotics"
+    ]
+  },
+  {
+    "id": "HM22",
+    "category": "Fitness",
+    "question": "Aerobic exercise primarily improves…",
+    "answers": [
+      {
+        "text": "Tooth enamel",
+        "isCorrect": false
+      },
+      {
+        "text": "Hair growth",
+        "isCorrect": false
+      },
+      {
+        "text": "Bone fusion",
+        "isCorrect": false
+      },
+      {
+        "text": "Cardiorespiratory endurance",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Cardiorespiratory endurance",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "fitness"
+    ]
+  },
+  {
+    "id": "HM23",
+    "category": "First Aid",
+    "question": "Severe bleeding requires direct pressure.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "G7-12",
+      "first aid"
+    ]
+  },
+  {
+    "id": "HM24",
+    "category": "Digestive",
+    "question": "Most nutrient absorption occurs in the…",
+    "answers": [
+      {
+        "text": "Small intestine",
+        "isCorrect": true
+      },
+      {
+        "text": "Stomach",
+        "isCorrect": false
+      },
+      {
+        "text": "Large intestine",
+        "isCorrect": false
+      },
+      {
+        "text": "Esophagus",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Small intestine",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "digestive"
+    ]
+  },
+  {
+    "id": "HM25",
+    "category": "Biochemistry",
+    "question": "Enzymes are…",
+    "answers": [
+      {
+        "text": "Biological catalysts",
+        "isCorrect": true
+      },
+      {
+        "text": "Membrane pumps",
+        "isCorrect": false
+      },
+      {
+        "text": "Hormones only",
+        "isCorrect": false
+      },
+      {
+        "text": "Genetic codes",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Biological catalysts",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "biochem"
+    ]
+  },
+  {
+    "id": "HM26",
+    "category": "Endocrine",
+    "question": "The thyroid primarily regulates…",
+    "answers": [
+      {
+        "text": "Metabolism",
+        "isCorrect": true
+      },
+      {
+        "text": "Balance",
+        "isCorrect": false
+      },
+      {
+        "text": "Reflexes",
+        "isCorrect": false
+      },
+      {
+        "text": "Memory",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Metabolism",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "endocrine"
+    ]
+  },
+  {
+    "id": "HM27",
+    "category": "Cardio",
+    "question": "Systolic blood pressure measures…",
+    "answers": [
+      {
+        "text": "At rest between beats",
+        "isCorrect": false
+      },
+      {
+        "text": "Vein pressure",
+        "isCorrect": false
+      },
+      {
+        "text": "Lung pressure",
+        "isCorrect": false
+      },
+      {
+        "text": "Pressure during heart contraction",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Pressure during heart contraction",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "cardio"
+    ]
+  },
+  {
+    "id": "HM28",
+    "category": "Imaging",
+    "question": "MRI primarily uses…",
+    "answers": [
+      {
+        "text": "Ultrasound waves",
+        "isCorrect": false
+      },
+      {
+        "text": "Gamma rays",
+        "isCorrect": false
+      },
+      {
+        "text": "Magnetic fields",
+        "isCorrect": true
+      },
+      {
+        "text": "X‑rays",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Magnetic fields",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "imaging"
+    ]
+  },
+  {
+    "id": "HM29",
+    "category": "Nutrition",
+    "question": "Vitamin C deficiency leads to…",
+    "answers": [
+      {
+        "text": "Night blindness",
+        "isCorrect": false
+      },
+      {
+        "text": "Scurvy",
+        "isCorrect": true
+      },
+      {
+        "text": "Rickets",
+        "isCorrect": false
+      },
+      {
+        "text": "Goiter",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Scurvy",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7-12",
+      "nutrition"
+    ]
+  },
+  {
+    "id": "HM30",
+    "category": "Public Health",
+    "question": "Herd immunity reduces spread when many are immune.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 2,
+    "tags": [
+      "G9-12",
+      "public health"
+    ]
+  }
+]

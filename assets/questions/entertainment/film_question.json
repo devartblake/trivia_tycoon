@@ -1,0 +1,2370 @@
+[
+  {
+    "id": "FILM_1",
+    "category": "Film",
+    "question": "What does POV stand for in film?",
+    "answers": [
+      {
+        "text": "Piece of Video",
+        "isCorrect": false
+      },
+      {
+        "text": "Point of View",
+        "isCorrect": true
+      },
+      {
+        "text": "Plan of Vision",
+        "isCorrect": false
+      },
+      {
+        "text": "Part of Voice",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Point of View",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "technique"
+    ]
+  },
+  {
+    "id": "FILM_2",
+    "category": "Film",
+    "question": "Which position oversees the visual look of a film?",
+    "answers": [
+      {
+        "text": "Director of Photography",
+        "isCorrect": true
+      },
+      {
+        "text": "Sound Designer",
+        "isCorrect": false
+      },
+      {
+        "text": "Producer",
+        "isCorrect": false
+      },
+      {
+        "text": "Gaffer",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Director of Photography",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "crew"
+    ]
+  },
+  {
+    "id": "FILM_3",
+    "category": "Film",
+    "question": "The 'rule of thirds' is used in…",
+    "answers": [
+      {
+        "text": "Color grading",
+        "isCorrect": false
+      },
+      {
+        "text": "Screenwriting",
+        "isCorrect": false
+      },
+      {
+        "text": "Sound mixing",
+        "isCorrect": false
+      },
+      {
+        "text": "Composition",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Composition",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "composition"
+    ]
+  },
+  {
+    "id": "FILM_4",
+    "category": "Film",
+    "question": "24 fps is a common frame rate for cinema.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "frame_rate"
+    ]
+  },
+  {
+    "id": "FILM_5",
+    "category": "Film",
+    "question": "Which award is commonly associated with film?",
+    "answers": [
+      {
+        "text": "Booker Prize",
+        "isCorrect": false
+      },
+      {
+        "text": "Oscars",
+        "isCorrect": true
+      },
+      {
+        "text": "Pulitzers",
+        "isCorrect": false
+      },
+      {
+        "text": "Grammys",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Oscars",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "awards"
+    ]
+  },
+  {
+    "id": "FILM_6",
+    "category": "Film",
+    "question": "Who directed 'The Empire Strikes Back'?",
+    "answers": [
+      {
+        "text": "Irvin Kershner",
+        "isCorrect": true
+      },
+      {
+        "text": "James Cameron",
+        "isCorrect": false
+      },
+      {
+        "text": "George Lucas",
+        "isCorrect": false
+      },
+      {
+        "text": "Ron Howard",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Irvin Kershner",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "FILM_7",
+    "category": "Film",
+    "question": "Which actor is closely associated with 'The Empire Strikes Back'?",
+    "answers": [
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Mark Hamill",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Mark Hamill",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "FILM_8",
+    "category": "Film",
+    "question": "'The Empire Strikes Back' was released in the 1980s.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "decade"
+    ]
+  },
+  {
+    "id": "FILM_9",
+    "category": "Film",
+    "question": "Who directed 'Die Hard'?",
+    "answers": [
+      {
+        "text": "George Lucas",
+        "isCorrect": false
+      },
+      {
+        "text": "John McTiernan",
+        "isCorrect": true
+      },
+      {
+        "text": "Ron Howard",
+        "isCorrect": false
+      },
+      {
+        "text": "Wes Anderson",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "John McTiernan",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "FILM_10",
+    "category": "Film",
+    "question": "Which actor is closely associated with 'Die Hard'?",
+    "answers": [
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Bruce Willis",
+        "isCorrect": true
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Bruce Willis",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "FILM_11",
+    "category": "Film",
+    "question": "'Die Hard' was released in the 1980s.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "decade"
+    ]
+  },
+  {
+    "id": "FILM_12",
+    "category": "Film",
+    "question": "Who directed 'Titanic'?",
+    "answers": [
+      {
+        "text": "James Cameron",
+        "isCorrect": true
+      },
+      {
+        "text": "Steven Spielberg",
+        "isCorrect": false
+      },
+      {
+        "text": "Ridley Scott",
+        "isCorrect": false
+      },
+      {
+        "text": "George Lucas",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "James Cameron",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "FILM_13",
+    "category": "Film",
+    "question": "Which actor is closely associated with 'Titanic'?",
+    "answers": [
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Leonardo DiCaprio",
+        "isCorrect": true
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Leonardo DiCaprio",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "FILM_14",
+    "category": "Film",
+    "question": "'Titanic' was released in the 1990s.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "decade"
+    ]
+  },
+  {
+    "id": "FILM_15",
+    "category": "Film",
+    "question": "Who directed 'Aliens'?",
+    "answers": [
+      {
+        "text": "George Lucas",
+        "isCorrect": false
+      },
+      {
+        "text": "James Cameron",
+        "isCorrect": true
+      },
+      {
+        "text": "Steven Spielberg",
+        "isCorrect": false
+      },
+      {
+        "text": "Ridley Scott",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "James Cameron",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "FILM_16",
+    "category": "Film",
+    "question": "Which actor is closely associated with 'Aliens'?",
+    "answers": [
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      },
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": true
+      },
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Sigourney Weaver",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "FILM_17",
+    "category": "Film",
+    "question": "'Aliens' was released in the 1980s.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "decade"
+    ]
+  },
+  {
+    "id": "FILM_18",
+    "category": "Film",
+    "question": "Who directed 'Top Gun'?",
+    "answers": [
+      {
+        "text": "Tony Scott",
+        "isCorrect": true
+      },
+      {
+        "text": "James Cameron",
+        "isCorrect": false
+      },
+      {
+        "text": "Wes Anderson",
+        "isCorrect": false
+      },
+      {
+        "text": "Ridley Scott",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Tony Scott",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "FILM_19",
+    "category": "Film",
+    "question": "Which actor is closely associated with 'Top Gun'?",
+    "answers": [
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Cruise",
+        "isCorrect": true
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Tom Cruise",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "FILM_20",
+    "category": "Film",
+    "question": "'Top Gun' was released in the 1980s.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "decade"
+    ]
+  },
+  {
+    "id": "FILM_21",
+    "category": "Film",
+    "question": "Who directed 'Toy Story'?",
+    "answers": [
+      {
+        "text": "George Lucas",
+        "isCorrect": false
+      },
+      {
+        "text": "John Lasseter",
+        "isCorrect": true
+      },
+      {
+        "text": "Steven Spielberg",
+        "isCorrect": false
+      },
+      {
+        "text": "James Cameron",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "John Lasseter",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "FILM_22",
+    "category": "Film",
+    "question": "Which actor is closely associated with 'Toy Story'?",
+    "answers": [
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      },
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": true
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Tom Hanks",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "FILM_23",
+    "category": "Film",
+    "question": "'Toy Story' was released in the 1990s.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "decade"
+    ]
+  },
+  {
+    "id": "FILM_24",
+    "category": "Film",
+    "question": "Who directed 'Good Will Hunting'?",
+    "answers": [
+      {
+        "text": "Gus Van Sant",
+        "isCorrect": true
+      },
+      {
+        "text": "Wes Anderson",
+        "isCorrect": false
+      },
+      {
+        "text": "Ridley Scott",
+        "isCorrect": false
+      },
+      {
+        "text": "James Cameron",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Gus Van Sant",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "FILM_25",
+    "category": "Film",
+    "question": "Which actor is closely associated with 'Good Will Hunting'?",
+    "answers": [
+      {
+        "text": "Matt Damon",
+        "isCorrect": true
+      },
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Matt Damon",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "FILM_26",
+    "category": "Film",
+    "question": "'Good Will Hunting' was released in the 1990s.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "decade"
+    ]
+  },
+  {
+    "id": "FILM_27",
+    "category": "Film",
+    "question": "Who directed 'Blade Runner'?",
+    "answers": [
+      {
+        "text": "Wes Anderson",
+        "isCorrect": false
+      },
+      {
+        "text": "Ridley Scott",
+        "isCorrect": true
+      },
+      {
+        "text": "George Lucas",
+        "isCorrect": false
+      },
+      {
+        "text": "Quentin Tarantino",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Ridley Scott",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "FILM_28",
+    "category": "Film",
+    "question": "Which actor is closely associated with 'Blade Runner'?",
+    "answers": [
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      },
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": true
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Harrison Ford",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "FILM_29",
+    "category": "Film",
+    "question": "'Blade Runner' was released in the 1980s.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "decade"
+    ]
+  },
+  {
+    "id": "FILM_30",
+    "category": "Film",
+    "question": "Who directed 'E.T. the Extra-Terrestrial'?",
+    "answers": [
+      {
+        "text": "George Lucas",
+        "isCorrect": false
+      },
+      {
+        "text": "Ron Howard",
+        "isCorrect": false
+      },
+      {
+        "text": "Steven Spielberg",
+        "isCorrect": true
+      },
+      {
+        "text": "Ridley Scott",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Steven Spielberg",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "FILM_31",
+    "category": "Film",
+    "question": "Which actor is closely associated with 'E.T. the Extra-Terrestrial'?",
+    "answers": [
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      },
+      {
+        "text": "Henry Thomas",
+        "isCorrect": true
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Henry Thomas",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "FILM_32",
+    "category": "Film",
+    "question": "'E.T. the Extra-Terrestrial' was released in the 1980s.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "decade"
+    ]
+  },
+  {
+    "id": "FILM_33",
+    "category": "Film",
+    "question": "Who directed 'Ferris Bueller's Day Off'?",
+    "answers": [
+      {
+        "text": "Wes Anderson",
+        "isCorrect": false
+      },
+      {
+        "text": "John Hughes",
+        "isCorrect": true
+      },
+      {
+        "text": "James Cameron",
+        "isCorrect": false
+      },
+      {
+        "text": "Ridley Scott",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "John Hughes",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "FILM_34",
+    "category": "Film",
+    "question": "Which actor is closely associated with 'Ferris Bueller's Day Off'?",
+    "answers": [
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Matthew Broderick",
+        "isCorrect": true
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Matthew Broderick",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "FILM_35",
+    "category": "Film",
+    "question": "'Ferris Bueller's Day Off' was released in the 1980s.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "decade"
+    ]
+  },
+  {
+    "id": "FILM_36",
+    "category": "Film",
+    "question": "Who directed 'The Breakfast Club'?",
+    "answers": [
+      {
+        "text": "Steven Spielberg",
+        "isCorrect": false
+      },
+      {
+        "text": "George Lucas",
+        "isCorrect": false
+      },
+      {
+        "text": "John Hughes",
+        "isCorrect": true
+      },
+      {
+        "text": "Wes Anderson",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "John Hughes",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "FILM_37",
+    "category": "Film",
+    "question": "Which actor is closely associated with 'The Breakfast Club'?",
+    "answers": [
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Emilio Estevez",
+        "isCorrect": true
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Emilio Estevez",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "FILM_38",
+    "category": "Film",
+    "question": "'The Breakfast Club' was released in the 1980s.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "decade"
+    ]
+  },
+  {
+    "id": "FILM_39",
+    "category": "Film",
+    "question": "Who directed 'Ghostbusters'?",
+    "answers": [
+      {
+        "text": "Ron Howard",
+        "isCorrect": false
+      },
+      {
+        "text": "Ivan Reitman",
+        "isCorrect": true
+      },
+      {
+        "text": "George Lucas",
+        "isCorrect": false
+      },
+      {
+        "text": "Steven Spielberg",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Ivan Reitman",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "FILM_40",
+    "category": "Film",
+    "question": "Which actor is closely associated with 'Ghostbusters'?",
+    "answers": [
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Bill Murray",
+        "isCorrect": true
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Bill Murray",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "FILM_41",
+    "category": "Film",
+    "question": "'Ghostbusters' was released in the 1980s.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "decade"
+    ]
+  },
+  {
+    "id": "FILM_42",
+    "category": "Film",
+    "question": "Who directed 'Jurassic Park'?",
+    "answers": [
+      {
+        "text": "Quentin Tarantino",
+        "isCorrect": false
+      },
+      {
+        "text": "James Cameron",
+        "isCorrect": false
+      },
+      {
+        "text": "Steven Spielberg",
+        "isCorrect": true
+      },
+      {
+        "text": "Wes Anderson",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Steven Spielberg",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "FILM_43",
+    "category": "Film",
+    "question": "Which actor is closely associated with 'Jurassic Park'?",
+    "answers": [
+      {
+        "text": "Sam Neill",
+        "isCorrect": true
+      },
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Sam Neill",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "FILM_44",
+    "category": "Film",
+    "question": "'Jurassic Park' was released in the 1990s.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "decade"
+    ]
+  },
+  {
+    "id": "FILM_45",
+    "category": "Film",
+    "question": "Who directed 'Pulp Fiction'?",
+    "answers": [
+      {
+        "text": "Quentin Tarantino",
+        "isCorrect": true
+      },
+      {
+        "text": "Steven Spielberg",
+        "isCorrect": false
+      },
+      {
+        "text": "George Lucas",
+        "isCorrect": false
+      },
+      {
+        "text": "James Cameron",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Quentin Tarantino",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "FILM_46",
+    "category": "Film",
+    "question": "Which actor is closely associated with 'Pulp Fiction'?",
+    "answers": [
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      },
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "John Travolta",
+        "isCorrect": true
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "John Travolta",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "FILM_47",
+    "category": "Film",
+    "question": "'Pulp Fiction' was released in the 1990s.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "decade"
+    ]
+  },
+  {
+    "id": "FILM_48",
+    "category": "Film",
+    "question": "Who directed 'The Goonies'?",
+    "answers": [
+      {
+        "text": "Richard Donner",
+        "isCorrect": true
+      },
+      {
+        "text": "Wes Anderson",
+        "isCorrect": false
+      },
+      {
+        "text": "Ron Howard",
+        "isCorrect": false
+      },
+      {
+        "text": "Ridley Scott",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Richard Donner",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "FILM_49",
+    "category": "Film",
+    "question": "Which actor is closely associated with 'The Goonies'?",
+    "answers": [
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      },
+      {
+        "text": "Sean Astin",
+        "isCorrect": true
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Sean Astin",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "FILM_50",
+    "category": "Film",
+    "question": "'The Goonies' was released in the 1980s.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "decade"
+    ]
+  },
+  {
+    "id": "FILM_51",
+    "category": "Film",
+    "question": "Who directed 'The Matrix'?",
+    "answers": [
+      {
+        "text": "James Cameron",
+        "isCorrect": false
+      },
+      {
+        "text": "Wes Anderson",
+        "isCorrect": false
+      },
+      {
+        "text": "The Wachowskis",
+        "isCorrect": true
+      },
+      {
+        "text": "Steven Spielberg",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "The Wachowskis",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "FILM_52",
+    "category": "Film",
+    "question": "Which actor is closely associated with 'The Matrix'?",
+    "answers": [
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      },
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": true
+      },
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Keanu Reeves",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "FILM_53",
+    "category": "Film",
+    "question": "'The Matrix' was released in the 1990s.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "decade"
+    ]
+  },
+  {
+    "id": "FILM_54",
+    "category": "Film",
+    "question": "Who directed 'The Lion King'?",
+    "answers": [
+      {
+        "text": "Wes Anderson",
+        "isCorrect": false
+      },
+      {
+        "text": "Ridley Scott",
+        "isCorrect": false
+      },
+      {
+        "text": "Roger Allers & Rob Minkoff",
+        "isCorrect": true
+      },
+      {
+        "text": "Steven Spielberg",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Roger Allers & Rob Minkoff",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "FILM_55",
+    "category": "Film",
+    "question": "Which actor is closely associated with 'The Lion King'?",
+    "answers": [
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      },
+      {
+        "text": "Matthew Broderick",
+        "isCorrect": true
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Matthew Broderick",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "FILM_56",
+    "category": "Film",
+    "question": "'The Lion King' was released in the 1990s.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "decade"
+    ]
+  },
+  {
+    "id": "FILM_57",
+    "category": "Film",
+    "question": "Who directed 'Back to the Future'?",
+    "answers": [
+      {
+        "text": "Steven Spielberg",
+        "isCorrect": false
+      },
+      {
+        "text": "Ridley Scott",
+        "isCorrect": false
+      },
+      {
+        "text": "George Lucas",
+        "isCorrect": false
+      },
+      {
+        "text": "Robert Zemeckis",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Robert Zemeckis",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "FILM_58",
+    "category": "Film",
+    "question": "Which actor is closely associated with 'Back to the Future'?",
+    "answers": [
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      },
+      {
+        "text": "Michael J. Fox",
+        "isCorrect": true
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Michael J. Fox",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "FILM_59",
+    "category": "Film",
+    "question": "'Back to the Future' was released in the 1980s.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "decade"
+    ]
+  },
+  {
+    "id": "FILM_60",
+    "category": "Film",
+    "question": "Who directed 'The Silence of the Lambs'?",
+    "answers": [
+      {
+        "text": "Jonathan Demme",
+        "isCorrect": true
+      },
+      {
+        "text": "James Cameron",
+        "isCorrect": false
+      },
+      {
+        "text": "Wes Anderson",
+        "isCorrect": false
+      },
+      {
+        "text": "George Lucas",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Jonathan Demme",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "FILM_61",
+    "category": "Film",
+    "question": "Which actor is closely associated with 'The Silence of the Lambs'?",
+    "answers": [
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Jodie Foster",
+        "isCorrect": true
+      },
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Jodie Foster",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "FILM_62",
+    "category": "Film",
+    "question": "'The Silence of the Lambs' was released in the 1990s.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "decade"
+    ]
+  },
+  {
+    "id": "FILM_63",
+    "category": "Film",
+    "question": "Who directed 'The Shawshank Redemption'?",
+    "answers": [
+      {
+        "text": "Ron Howard",
+        "isCorrect": false
+      },
+      {
+        "text": "James Cameron",
+        "isCorrect": false
+      },
+      {
+        "text": "Wes Anderson",
+        "isCorrect": false
+      },
+      {
+        "text": "Frank Darabont",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Frank Darabont",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "director"
+    ]
+  },
+  {
+    "id": "FILM_64",
+    "category": "Film",
+    "question": "Which actor is closely associated with 'The Shawshank Redemption'?",
+    "answers": [
+      {
+        "text": "Bruce Willis",
+        "isCorrect": false
+      },
+      {
+        "text": "Tim Robbins",
+        "isCorrect": true
+      },
+      {
+        "text": "Keanu Reeves",
+        "isCorrect": false
+      },
+      {
+        "text": "Sigourney Weaver",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Hanks",
+        "isCorrect": false
+      },
+      {
+        "text": "Harrison Ford",
+        "isCorrect": false
+      },
+      {
+        "text": "Tom Cruise",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Tim Robbins",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "cast"
+    ]
+  },
+  {
+    "id": "FILM_65",
+    "category": "Film",
+    "question": "'The Shawshank Redemption' was released in the 1990s.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "decade"
+    ]
+  },
+  {
+    "id": "FILM_66",
+    "category": "Film",
+    "question": "Which country is famous for Bollywood?",
+    "answers": [
+      {
+        "text": "USA",
+        "isCorrect": false
+      },
+      {
+        "text": "Brazil",
+        "isCorrect": false
+      },
+      {
+        "text": "India",
+        "isCorrect": true
+      },
+      {
+        "text": "France",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "India",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "world_cinema"
+    ]
+  },
+  {
+    "id": "FILM_67",
+    "category": "Film",
+    "question": "Which term refers to joining shots together?",
+    "answers": [
+      {
+        "text": "Lighting",
+        "isCorrect": false
+      },
+      {
+        "text": "Blocking",
+        "isCorrect": false
+      },
+      {
+        "text": "Editing",
+        "isCorrect": true
+      },
+      {
+        "text": "Scoring",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Editing",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "craft"
+    ]
+  },
+  {
+    "id": "FILM_68",
+    "category": "Film",
+    "question": "A documentary is typically…",
+    "answers": [
+      {
+        "text": "Animation",
+        "isCorrect": false
+      },
+      {
+        "text": "Non-fiction",
+        "isCorrect": true
+      },
+      {
+        "text": "Musical",
+        "isCorrect": false
+      },
+      {
+        "text": "Silent film",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Non-fiction",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "genre"
+    ]
+  },
+  {
+    "id": "FILM_69",
+    "category": "Film",
+    "question": "Which country is famous for Bollywood?",
+    "answers": [
+      {
+        "text": "USA",
+        "isCorrect": false
+      },
+      {
+        "text": "India",
+        "isCorrect": true
+      },
+      {
+        "text": "Brazil",
+        "isCorrect": false
+      },
+      {
+        "text": "France",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "India",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "world_cinema"
+    ]
+  },
+  {
+    "id": "FILM_70",
+    "category": "Film",
+    "question": "Subtitles can aid accessibility for viewers.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "accessibility"
+    ]
+  },
+  {
+    "id": "FILM_71",
+    "category": "Film",
+    "question": "A documentary is typically…",
+    "answers": [
+      {
+        "text": "Non-fiction",
+        "isCorrect": true
+      },
+      {
+        "text": "Silent film",
+        "isCorrect": false
+      },
+      {
+        "text": "Musical",
+        "isCorrect": false
+      },
+      {
+        "text": "Animation",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Non-fiction",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "genre"
+    ]
+  },
+  {
+    "id": "FILM_72",
+    "category": "Film",
+    "question": "A 'cameo' role is…",
+    "answers": [
+      {
+        "text": "A brief appearance by a known person",
+        "isCorrect": true
+      },
+      {
+        "text": "Lead role by newcomer",
+        "isCorrect": false
+      },
+      {
+        "text": "Background extra only",
+        "isCorrect": false
+      },
+      {
+        "text": "Voice-over narration",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A brief appearance by a known person",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "terminology"
+    ]
+  },
+  {
+    "id": "FILM_73",
+    "category": "Film",
+    "question": "Who composes a film’s musical score?",
+    "answers": [
+      {
+        "text": "The colorist",
+        "isCorrect": false
+      },
+      {
+        "text": "The key grip",
+        "isCorrect": false
+      },
+      {
+        "text": "The composer",
+        "isCorrect": true
+      },
+      {
+        "text": "The editor",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "The composer",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "music"
+    ]
+  },
+  {
+    "id": "FILM_74",
+    "category": "Film",
+    "question": "Subtitles can aid accessibility for viewers.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "accessibility"
+    ]
+  },
+  {
+    "id": "FILM_75",
+    "category": "Film",
+    "question": "Subtitles can aid accessibility for viewers.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "accessibility"
+    ]
+  },
+  {
+    "id": "FILM_76",
+    "category": "Film",
+    "question": "Who composes a film’s musical score?",
+    "answers": [
+      {
+        "text": "The key grip",
+        "isCorrect": false
+      },
+      {
+        "text": "The composer",
+        "isCorrect": true
+      },
+      {
+        "text": "The editor",
+        "isCorrect": false
+      },
+      {
+        "text": "The colorist",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "The composer",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "music"
+    ]
+  },
+  {
+    "id": "FILM_77",
+    "category": "Film",
+    "question": "A 'cameo' role is…",
+    "answers": [
+      {
+        "text": "Background extra only",
+        "isCorrect": false
+      },
+      {
+        "text": "A brief appearance by a known person",
+        "isCorrect": true
+      },
+      {
+        "text": "Voice-over narration",
+        "isCorrect": false
+      },
+      {
+        "text": "Lead role by newcomer",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A brief appearance by a known person",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "terminology"
+    ]
+  },
+  {
+    "id": "FILM_78",
+    "category": "Film",
+    "question": "Which country is famous for Bollywood?",
+    "answers": [
+      {
+        "text": "USA",
+        "isCorrect": false
+      },
+      {
+        "text": "France",
+        "isCorrect": false
+      },
+      {
+        "text": "Brazil",
+        "isCorrect": false
+      },
+      {
+        "text": "India",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "India",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "world_cinema"
+    ]
+  },
+  {
+    "id": "FILM_79",
+    "category": "Film",
+    "question": "Who composes a film’s musical score?",
+    "answers": [
+      {
+        "text": "The colorist",
+        "isCorrect": false
+      },
+      {
+        "text": "The editor",
+        "isCorrect": false
+      },
+      {
+        "text": "The composer",
+        "isCorrect": true
+      },
+      {
+        "text": "The key grip",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "The composer",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "music"
+    ]
+  },
+  {
+    "id": "FILM_80",
+    "category": "Film",
+    "question": "A 'cameo' role is…",
+    "answers": [
+      {
+        "text": "Background extra only",
+        "isCorrect": false
+      },
+      {
+        "text": "Voice-over narration",
+        "isCorrect": false
+      },
+      {
+        "text": "A brief appearance by a known person",
+        "isCorrect": true
+      },
+      {
+        "text": "Lead role by newcomer",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "A brief appearance by a known person",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "terminology"
+    ]
+  }
+]

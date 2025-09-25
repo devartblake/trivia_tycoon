@@ -14,6 +14,7 @@ import 'package:trivia_tycoon/game/controllers/settings_controller.dart';
 import '../../admin/controllers/admin_filter_controller.dart';
 import '../../admin/states/admin_filter_state.dart';
 import '../../core/manager/login_manager.dart';
+import '../../core/manager/tier_manager.dart';
 import '../../core/services/encryption/encryption_service.dart';
 import '../../core/services/encryption/fernet_service.dart';
 import '../../core/services/event_queue_service.dart';
@@ -43,13 +44,18 @@ import '../../core/services/theme/swatch_service.dart';
 import '../../core/services/theme/theme_notifier.dart';
 import '../analytics/services/analytics_service.dart';
 import '../controllers/coin_balance_notifier.dart';
+import '../controllers/energy_lives_notifier.dart';
 import '../controllers/fernet_controller.dart';
 import '../controllers/power_up_controller.dart';
 import '../controllers/splash_controller.dart';
+import '../data/mission_data_loader.dart';
 import '../models/leaderboard_entry.dart';
 import '../models/power_up.dart';
+import '../models/seasonal_competition_model.dart';
 import '../models/store_item_model.dart';
+import '../models/tier_model.dart';
 import '../services/achievement_service.dart';
+import '../services/seasonal_competition_service.dart';
 import '../services/store_data_service.dart';
 
 // 🧠 Game State & Controllers
@@ -72,6 +78,8 @@ import '../models/currency_type.dart';
 
 // 🎖️ Badges
 import '../models/badge.dart';
+import '../state/tier_progression_state.dart';
+import '../state/tier_update_result.dart';
 
 // --- 🌍 Global Services ---
 final configServiceProvider =
@@ -350,7 +358,32 @@ final diamondNotifierProvider = Provider<CurrencyNotifier>((ref) {
   return ref.read(currencyManagerProvider).getNotifier(CurrencyType.diamonds);
 });
 
-// --- 🎡 Spin Wheel ---
+// --- 📊 Energy System ---
+final energyProvider = StateNotifierProvider<EnergyNotifier, EnergyState>((ref) {
+  final storage = ref.read(generalKeyValueStorageProvider);
+  return EnergyNotifier(storage);
+});
+
+// Lives System
+final livesProvider = StateNotifierProvider<LivesNotifier, LivesState>((ref) {
+  final storage = ref.read(generalKeyValueStorageProvider);
+  return LivesNotifier(storage);
+});
+
+// Recent Quizzes Provider (for MainMenuScreen)
+final recentQuizzesProvider = FutureProvider<List<Map<String, String>>>((ref) async {
+  final quizService = ref.read(quizProgressServiceProvider);
+  // Implement logic to get recent quizzes from your service
+  return quizService.getRecentQuizzes();
+});
+
+// User Profile Data Provider (consolidated user info)
+final userProfileProvider = Provider<Map<String, dynamic>>((ref) {
+  final profileService = ref.watch(playerProfileServiceProvider);
+  return profileService.getProfile();
+});
+
+/// --- 🎡 Spin Wheel ---
 final segmentLoaderProvider = Provider<SegmentLoader>((ref) {
   final manager = ref.read(serviceManagerProvider);
 
@@ -365,11 +398,11 @@ final segmentLoaderProvider = Provider<SegmentLoader>((ref) {
 });
 
 final spinningControllerProvider =
-    ChangeNotifierProvider<SpinningController>((ref) {
-  return SpinningController(ref);
+    ChangeNotifierProvider<EnhancedSpinningController>((ref) {
+  return EnhancedSpinningController(ref);
 });
 
-// --- 🎖 Badges ---
+/// --- 🎖 Badges ---
 final badgeProvider = FutureProvider<List<GameBadge>>((ref) async {
   final jsonString =
       await rootBundle.loadString('assets/data/badges_icons.json');
@@ -377,7 +410,74 @@ final badgeProvider = FutureProvider<List<GameBadge>>((ref) async {
   return jsonData.map((e) => GameBadge.fromJson(e)).toList();
 });
 
-// --- Analytics ---
+/// --- ⏳ Live Countdown Timer ---
+final seasonalCompetitionServiceProvider = Provider<SeasonalCompetitionService>((ref) {
+  final storage = ref.read(generalKeyValueStorageProvider);
+  final apiService = ref.read(apiServiceProvider);
+  return SeasonalCompetitionService(storage, apiService);
+});
+
+final seasonEndTimeProvider = FutureProvider<DateTime>((ref) async {
+  final service = ref.read(seasonalCompetitionServiceProvider);
+  return await service.getSeasonEndTime();
+});
+
+final timeRemainingProvider = StreamProvider<Duration>((ref) {
+  return Stream.periodic(const Duration(seconds: 1), (i) async {
+    final service = ref.read(seasonalCompetitionServiceProvider);
+    return await service.getTimeRemaining();
+  }).asyncMap((future) => future);
+});
+
+final seasonLeaderboardProvider = FutureProvider<List<SeasonPlayer>>((ref) async {
+  final apiService = ref.read(apiServiceProvider);
+  final seasonService = ref.read(seasonalCompetitionServiceProvider);
+  final seasonId = await seasonService.getCurrentSeasonId();
+  return await apiService.getSeasonLeaderboard(seasonId);
+});
+
+/// --- 🏆 Missions ---
+
+// Providers for different age groups
+final childrenMissionsProvider = StateNotifierProvider<LiveMissionsNotifier, List<Map<String, dynamic>>>((ref) {
+  return LiveMissionsNotifier(AgeGroup.children);
+});
+
+final adolescenceMissionsProvider = StateNotifierProvider<LiveMissionsNotifier, List<Map<String, dynamic>>>((ref) {
+  return LiveMissionsNotifier(AgeGroup.adolescence);
+});
+
+final adultsMissionsProvider = StateNotifierProvider<LiveMissionsNotifier, List<Map<String, dynamic>>>((ref) {
+  return LiveMissionsNotifier(AgeGroup.adults);
+});
+
+// Current user age provider (you'll need to implement this based on your user system)
+final currentUserAgeGroupProvider = Provider<AgeGroup>((ref) {
+  // Replace this with your actual user age logic
+  // For now, returning adolescence as default
+  return AgeGroup.adolescence;
+});
+
+// Dynamic mission provider that selects based on user age
+final liveMissionsProvider = StateNotifierProvider<LiveMissionsNotifier, List<Map<String, dynamic>>>((ref) {
+  final ageGroup = ref.watch(currentUserAgeGroupProvider);
+
+  switch (ageGroup) {
+    case AgeGroup.children:
+      return ref.watch(childrenMissionsProvider.notifier);
+    case AgeGroup.adolescence:
+      return ref.watch(adolescenceMissionsProvider.notifier);
+    case AgeGroup.adults:
+      return ref.watch(adultsMissionsProvider.notifier);
+  }
+});
+
+// Mission actions provider
+final missionActionsProvider = Provider<MissionActions>((ref) {
+  return MissionActions(ref);
+});
+
+/// --- 📈 Analytics ---
 /// Access to AnalyticsService from the ServiceManager
 final analyticsServiceProvider = Provider<AnalyticsService>((ref) {
   final api = ref.watch(apiServiceProvider);
@@ -389,15 +489,105 @@ final eventQueueServiceProvider = Provider<EventQueueService>((ref) {
   return EventQueueService();
 });
 
-// --- Admin ---
+/// --- Admin ---
 final adminFilterProvider = StateNotifierProvider<AdminFilterController, AdminFilterState>(
   (ref) => AdminFilterController(ref),
 );
 
-// -- PowerUps ---
+/// -- PowerUps ---
 final equippedPowerUpProvider = StateNotifierProvider<PowerUpController, PowerUp?>((ref) {
   return PowerUpController(ref);
 });
+
+// --- 🎯 Tier System Providers ---
+
+/// Provides the TierManager instance
+final tierManagerProvider = Provider<TierManager>((ref) {
+  final storage = ref.read(generalKeyValueStorageProvider);
+  final profileService = ref.read(playerProfileServiceProvider);
+  return TierManager(storage, profileService);
+});
+
+/// Provides the current tier model with full details
+final currentTierProvider = FutureProvider<TierModel?>((ref) async {
+  final tierManager = ref.read(tierManagerProvider);
+  return await tierManager.getCurrentTier();
+});
+
+/// Provides all tiers with their unlock status
+final allTiersProvider = FutureProvider<List<TierModel>>((ref) async {
+  final tierManager = ref.read(tierManagerProvider);
+  return await tierManager.getAllTiers();
+});
+
+/// Provides just the current tier ID (0-based index)
+final currentTierIdProvider = FutureProvider<int>((ref) async {
+  final tierManager = ref.read(tierManagerProvider);
+  return await tierManager.getCurrentTierId();
+});
+
+/// Provides tier progression status for UI updates
+final tierProgressionProvider = StateNotifierProvider<TierProgressionNotifier, TierProgressionState>((ref) {
+  final tierManager = ref.read(tierManagerProvider);
+  return TierProgressionNotifier(tierManager, ref);
+});
+
+// --- 🎯 Helper Providers for UI ---
+
+/// Provides the next tier to unlock (useful for showing progression goals)
+final nextTierProvider = FutureProvider<TierModel?>((ref) async {
+  final currentTierId = await ref.watch(currentTierIdProvider.future);
+  final allTiers = await ref.watch(allTiersProvider.future);
+
+  if (currentTierId < allTiers.length - 1) {
+    return allTiers[currentTierId + 1];
+  }
+  return null; // Already at max tier
+});
+
+/// Provides progress toward next tier (as percentage)
+final tierProgressPercentageProvider = FutureProvider<double>((ref) async {
+  final profileService = ref.read(playerProfileServiceProvider);
+  final profile = profileService.getProfile();
+  final currentXP = profile['currentXP'] ?? 0;
+
+  final nextTier = await ref.watch(nextTierProvider.future);
+  if (nextTier == null) return 100.0; // Max tier reached
+
+  final currentTierId = await ref.watch(currentTierIdProvider.future);
+  final tierManager = ref.read(tierManagerProvider);
+  final currentTier = tierManager.getTierById(currentTierId);
+
+  if (currentTier == null) return 0.0;
+
+  final xpInCurrentTier = currentXP - currentTier.requiredXP;
+  final xpNeededForNext = nextTier.requiredXP - currentTier.requiredXP;
+
+  if (xpNeededForNext <= 0) return 100.0;
+
+  return (xpInCurrentTier / xpNeededForNext * 100).clamp(0.0, 100.0);
+});
+
+// --- 🎯 Extension Helper for Easy Access ---
+
+extension TierProviderExtensions on WidgetRef {
+  /// Trigger tier progression check (call after quiz completion, XP gain, etc.)
+  Future<TierUpdateResult> checkTierProgression() async {
+    return await read(tierProgressionProvider.notifier).updateTierProgress();
+  }
+
+  /// Get current tier synchronously (if already loaded)
+  TierModel? getCurrentTierSync() {
+    final asyncValue = read(currentTierProvider);
+    return asyncValue.value;
+  }
+
+  /// Get current tier ID synchronously (if already loaded)
+  int? getCurrentTierIdSync() {
+    final asyncValue = read(currentTierIdProvider);
+    return asyncValue.value;
+  }
+}
 
 // Optionally expose a container for non-widget access (like GameController)
 final refContainer = ProviderContainer(); // or pass from your global app entry

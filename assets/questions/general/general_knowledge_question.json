@@ -1,0 +1,2283 @@
+[
+  {
+    "id": "GK_1",
+    "category": "General Knowledge",
+    "question": "Capital of France?",
+    "answers": [
+      {
+        "text": "London",
+        "isCorrect": false
+      },
+      {
+        "text": "Paris",
+        "isCorrect": true
+      },
+      {
+        "text": "Rome",
+        "isCorrect": false
+      },
+      {
+        "text": "Berlin",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Paris",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge"
+    ]
+  },
+  {
+    "id": "GK_2",
+    "category": "General Knowledge",
+    "question": "Largest mammal?",
+    "answers": [
+      {
+        "text": "Giraffe",
+        "isCorrect": false
+      },
+      {
+        "text": "Blue whale",
+        "isCorrect": true
+      },
+      {
+        "text": "Whale shark",
+        "isCorrect": false
+      },
+      {
+        "text": "Elephant",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Blue whale",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge"
+    ]
+  },
+  {
+    "id": "GK_3",
+    "category": "General Knowledge",
+    "question": "Who painted the Mona Lisa?",
+    "answers": [
+      {
+        "text": "Michelangelo",
+        "isCorrect": false
+      },
+      {
+        "text": "Van Gogh",
+        "isCorrect": false
+      },
+      {
+        "text": "Leonardo da Vinci",
+        "isCorrect": true
+      },
+      {
+        "text": "Picasso",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Leonardo da Vinci",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge"
+    ]
+  },
+  {
+    "id": "GK_4",
+    "category": "General Knowledge",
+    "question": "Which planet is known as the Red Planet?",
+    "answers": [
+      {
+        "text": "Venus",
+        "isCorrect": false
+      },
+      {
+        "text": "Mercury",
+        "isCorrect": false
+      },
+      {
+        "text": "Jupiter",
+        "isCorrect": false
+      },
+      {
+        "text": "Mars",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Mars",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge"
+    ]
+  },
+  {
+    "id": "GK_5",
+    "category": "General Knowledge",
+    "question": "Currency of Japan?",
+    "answers": [
+      {
+        "text": "Yuan",
+        "isCorrect": false
+      },
+      {
+        "text": "Won",
+        "isCorrect": false
+      },
+      {
+        "text": "Ringgit",
+        "isCorrect": false
+      },
+      {
+        "text": "Yen",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Yen",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "general knowledge"
+    ]
+  },
+  {
+    "id": "GK_6",
+    "category": "General Knowledge",
+    "question": "First man on the Moon?",
+    "answers": [
+      {
+        "text": "Neil Armstrong",
+        "isCorrect": true
+      },
+      {
+        "text": "Buzz Aldrin",
+        "isCorrect": false
+      },
+      {
+        "text": "Yuri Gagarin",
+        "isCorrect": false
+      },
+      {
+        "text": "John Glenn",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Neil Armstrong",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "general knowledge"
+    ]
+  },
+  {
+    "id": "GK_7",
+    "category": "General Knowledge",
+    "question": "Fastest land animal?",
+    "answers": [
+      {
+        "text": "Leopard",
+        "isCorrect": false
+      },
+      {
+        "text": "Cheetah",
+        "isCorrect": true
+      },
+      {
+        "text": "Horse",
+        "isCorrect": false
+      },
+      {
+        "text": "Lion",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Cheetah",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "general knowledge"
+    ]
+  },
+  {
+    "id": "GK_8",
+    "category": "General Knowledge",
+    "question": "Tallest mountain in world?",
+    "answers": [
+      {
+        "text": "Makalu",
+        "isCorrect": false
+      },
+      {
+        "text": "Mount Everest",
+        "isCorrect": true
+      },
+      {
+        "text": "K2",
+        "isCorrect": false
+      },
+      {
+        "text": "Kangchenjunga",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Mount Everest",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "general knowledge"
+    ]
+  },
+  {
+    "id": "GK_9",
+    "category": "General Knowledge",
+    "question": "The Earth orbits the Sun.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge"
+    ]
+  },
+  {
+    "id": "GK_10",
+    "category": "General Knowledge",
+    "question": "Shakespeare wrote 'Hamlet'.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge"
+    ]
+  },
+  {
+    "id": "GK_11",
+    "category": "General Knowledge",
+    "question": "The Great Wall of China is visible from space unaided.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge"
+    ]
+  },
+  {
+    "id": "GK_12",
+    "category": "General Knowledge",
+    "question": "Water boils at 100°C at sea level.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge"
+    ]
+  },
+  {
+    "id": "GK_13",
+    "category": "General Knowledge",
+    "question": "There are 26 letters in the English alphabet.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge"
+    ]
+  },
+  {
+    "id": "GK_14",
+    "category": "General Knowledge",
+    "question": "Albert Einstein developed the theory of relativity.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge"
+    ]
+  },
+  {
+    "id": "GK_15",
+    "category": "General Knowledge",
+    "question": "The Pacific Ocean is the smallest ocean.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "text": "False",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "False",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge"
+    ]
+  },
+  {
+    "id": "GK_16",
+    "category": "General Knowledge",
+    "question": "Which is the largest continent?",
+    "answers": [
+      {
+        "text": "Africa",
+        "isCorrect": false
+      },
+      {
+        "text": "Antarctica",
+        "isCorrect": false
+      },
+      {
+        "text": "Europe",
+        "isCorrect": false
+      },
+      {
+        "text": "Asia",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Asia",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "geography"
+    ]
+  },
+  {
+    "id": "GK_17",
+    "category": "General Knowledge",
+    "question": "Who was the first US President?",
+    "answers": [
+      {
+        "text": "Thomas Jefferson",
+        "isCorrect": false
+      },
+      {
+        "text": "Abraham Lincoln",
+        "isCorrect": false
+      },
+      {
+        "text": "George Washington",
+        "isCorrect": true
+      },
+      {
+        "text": "John Adams",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "George Washington",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "general knowledge",
+      "history"
+    ]
+  },
+  {
+    "id": "GK_18",
+    "category": "General Knowledge",
+    "question": "Which is the largest continent?",
+    "answers": [
+      {
+        "text": "Antarctica",
+        "isCorrect": false
+      },
+      {
+        "text": "Asia",
+        "isCorrect": true
+      },
+      {
+        "text": "Africa",
+        "isCorrect": false
+      },
+      {
+        "text": "Europe",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Asia",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "geography"
+    ]
+  },
+  {
+    "id": "GK_19",
+    "category": "General Knowledge",
+    "question": "How many players in a soccer team on field?",
+    "answers": [
+      {
+        "text": "10",
+        "isCorrect": false
+      },
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "11",
+        "isCorrect": true
+      },
+      {
+        "text": "9",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "11",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "sports"
+    ]
+  },
+  {
+    "id": "GK_20",
+    "category": "General Knowledge",
+    "question": "H2O is chemical formula for…",
+    "answers": [
+      {
+        "text": "Hydrogen",
+        "isCorrect": false
+      },
+      {
+        "text": "Water",
+        "isCorrect": true
+      },
+      {
+        "text": "Carbon Dioxide",
+        "isCorrect": false
+      },
+      {
+        "text": "Oxygen",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Water",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "science"
+    ]
+  },
+  {
+    "id": "GK_21",
+    "category": "General Knowledge",
+    "question": "Which is the largest continent?",
+    "answers": [
+      {
+        "text": "Antarctica",
+        "isCorrect": false
+      },
+      {
+        "text": "Africa",
+        "isCorrect": false
+      },
+      {
+        "text": "Europe",
+        "isCorrect": false
+      },
+      {
+        "text": "Asia",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Asia",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "geography"
+    ]
+  },
+  {
+    "id": "GK_22",
+    "category": "General Knowledge",
+    "question": "The Eiffel Tower is located in Paris.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "culture"
+    ]
+  },
+  {
+    "id": "GK_23",
+    "category": "General Knowledge",
+    "question": "Which is the largest continent?",
+    "answers": [
+      {
+        "text": "Asia",
+        "isCorrect": true
+      },
+      {
+        "text": "Antarctica",
+        "isCorrect": false
+      },
+      {
+        "text": "Africa",
+        "isCorrect": false
+      },
+      {
+        "text": "Europe",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Asia",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "geography"
+    ]
+  },
+  {
+    "id": "GK_24",
+    "category": "General Knowledge",
+    "question": "The Eiffel Tower is located in Paris.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "culture"
+    ]
+  },
+  {
+    "id": "GK_25",
+    "category": "General Knowledge",
+    "question": "How many players in a soccer team on field?",
+    "answers": [
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "9",
+        "isCorrect": false
+      },
+      {
+        "text": "11",
+        "isCorrect": true
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "11",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "sports"
+    ]
+  },
+  {
+    "id": "GK_26",
+    "category": "General Knowledge",
+    "question": "How many players in a soccer team on field?",
+    "answers": [
+      {
+        "text": "10",
+        "isCorrect": false
+      },
+      {
+        "text": "11",
+        "isCorrect": true
+      },
+      {
+        "text": "9",
+        "isCorrect": false
+      },
+      {
+        "text": "12",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "11",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "sports"
+    ]
+  },
+  {
+    "id": "GK_27",
+    "category": "General Knowledge",
+    "question": "Who was the first US President?",
+    "answers": [
+      {
+        "text": "Thomas Jefferson",
+        "isCorrect": false
+      },
+      {
+        "text": "John Adams",
+        "isCorrect": false
+      },
+      {
+        "text": "George Washington",
+        "isCorrect": true
+      },
+      {
+        "text": "Abraham Lincoln",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "George Washington",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "general knowledge",
+      "history"
+    ]
+  },
+  {
+    "id": "GK_28",
+    "category": "General Knowledge",
+    "question": "Which is the largest continent?",
+    "answers": [
+      {
+        "text": "Antarctica",
+        "isCorrect": false
+      },
+      {
+        "text": "Asia",
+        "isCorrect": true
+      },
+      {
+        "text": "Africa",
+        "isCorrect": false
+      },
+      {
+        "text": "Europe",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Asia",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "geography"
+    ]
+  },
+  {
+    "id": "GK_29",
+    "category": "General Knowledge",
+    "question": "How many players in a soccer team on field?",
+    "answers": [
+      {
+        "text": "9",
+        "isCorrect": false
+      },
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      },
+      {
+        "text": "11",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "11",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "sports"
+    ]
+  },
+  {
+    "id": "GK_30",
+    "category": "General Knowledge",
+    "question": "Which is the largest continent?",
+    "answers": [
+      {
+        "text": "Antarctica",
+        "isCorrect": false
+      },
+      {
+        "text": "Asia",
+        "isCorrect": true
+      },
+      {
+        "text": "Europe",
+        "isCorrect": false
+      },
+      {
+        "text": "Africa",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Asia",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "geography"
+    ]
+  },
+  {
+    "id": "GK_31",
+    "category": "General Knowledge",
+    "question": "How many players in a soccer team on field?",
+    "answers": [
+      {
+        "text": "9",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      },
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "11",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "11",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "sports"
+    ]
+  },
+  {
+    "id": "GK_32",
+    "category": "General Knowledge",
+    "question": "Which is the largest continent?",
+    "answers": [
+      {
+        "text": "Antarctica",
+        "isCorrect": false
+      },
+      {
+        "text": "Europe",
+        "isCorrect": false
+      },
+      {
+        "text": "Asia",
+        "isCorrect": true
+      },
+      {
+        "text": "Africa",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Asia",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "geography"
+    ]
+  },
+  {
+    "id": "GK_33",
+    "category": "General Knowledge",
+    "question": "Which movie features character Jack Sparrow?",
+    "answers": [
+      {
+        "text": "Harry Potter",
+        "isCorrect": false
+      },
+      {
+        "text": "Pirates of the Caribbean",
+        "isCorrect": true
+      },
+      {
+        "text": "Star Wars",
+        "isCorrect": false
+      },
+      {
+        "text": "Lord of the Rings",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Pirates of the Caribbean",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "entertainment"
+    ]
+  },
+  {
+    "id": "GK_34",
+    "category": "General Knowledge",
+    "question": "Who was the first US President?",
+    "answers": [
+      {
+        "text": "John Adams",
+        "isCorrect": false
+      },
+      {
+        "text": "Abraham Lincoln",
+        "isCorrect": false
+      },
+      {
+        "text": "Thomas Jefferson",
+        "isCorrect": false
+      },
+      {
+        "text": "George Washington",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "George Washington",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "general knowledge",
+      "history"
+    ]
+  },
+  {
+    "id": "GK_35",
+    "category": "General Knowledge",
+    "question": "Who was the first US President?",
+    "answers": [
+      {
+        "text": "Thomas Jefferson",
+        "isCorrect": false
+      },
+      {
+        "text": "George Washington",
+        "isCorrect": true
+      },
+      {
+        "text": "John Adams",
+        "isCorrect": false
+      },
+      {
+        "text": "Abraham Lincoln",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "George Washington",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "general knowledge",
+      "history"
+    ]
+  },
+  {
+    "id": "GK_36",
+    "category": "General Knowledge",
+    "question": "Which is the largest continent?",
+    "answers": [
+      {
+        "text": "Asia",
+        "isCorrect": true
+      },
+      {
+        "text": "Antarctica",
+        "isCorrect": false
+      },
+      {
+        "text": "Africa",
+        "isCorrect": false
+      },
+      {
+        "text": "Europe",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Asia",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "geography"
+    ]
+  },
+  {
+    "id": "GK_37",
+    "category": "General Knowledge",
+    "question": "Which is the largest continent?",
+    "answers": [
+      {
+        "text": "Asia",
+        "isCorrect": true
+      },
+      {
+        "text": "Africa",
+        "isCorrect": false
+      },
+      {
+        "text": "Antarctica",
+        "isCorrect": false
+      },
+      {
+        "text": "Europe",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Asia",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "geography"
+    ]
+  },
+  {
+    "id": "GK_38",
+    "category": "General Knowledge",
+    "question": "Which is the largest continent?",
+    "answers": [
+      {
+        "text": "Asia",
+        "isCorrect": true
+      },
+      {
+        "text": "Antarctica",
+        "isCorrect": false
+      },
+      {
+        "text": "Africa",
+        "isCorrect": false
+      },
+      {
+        "text": "Europe",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Asia",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "geography"
+    ]
+  },
+  {
+    "id": "GK_39",
+    "category": "General Knowledge",
+    "question": "How many players in a soccer team on field?",
+    "answers": [
+      {
+        "text": "11",
+        "isCorrect": true
+      },
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      },
+      {
+        "text": "9",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "11",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "sports"
+    ]
+  },
+  {
+    "id": "GK_40",
+    "category": "General Knowledge",
+    "question": "Which is the largest continent?",
+    "answers": [
+      {
+        "text": "Antarctica",
+        "isCorrect": false
+      },
+      {
+        "text": "Asia",
+        "isCorrect": true
+      },
+      {
+        "text": "Africa",
+        "isCorrect": false
+      },
+      {
+        "text": "Europe",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Asia",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "geography"
+    ]
+  },
+  {
+    "id": "GK_41",
+    "category": "General Knowledge",
+    "question": "H2O is chemical formula for…",
+    "answers": [
+      {
+        "text": "Oxygen",
+        "isCorrect": false
+      },
+      {
+        "text": "Carbon Dioxide",
+        "isCorrect": false
+      },
+      {
+        "text": "Water",
+        "isCorrect": true
+      },
+      {
+        "text": "Hydrogen",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Water",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "science"
+    ]
+  },
+  {
+    "id": "GK_42",
+    "category": "General Knowledge",
+    "question": "How many players in a soccer team on field?",
+    "answers": [
+      {
+        "text": "9",
+        "isCorrect": false
+      },
+      {
+        "text": "11",
+        "isCorrect": true
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      },
+      {
+        "text": "12",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "11",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "sports"
+    ]
+  },
+  {
+    "id": "GK_43",
+    "category": "General Knowledge",
+    "question": "Who was the first US President?",
+    "answers": [
+      {
+        "text": "George Washington",
+        "isCorrect": true
+      },
+      {
+        "text": "John Adams",
+        "isCorrect": false
+      },
+      {
+        "text": "Thomas Jefferson",
+        "isCorrect": false
+      },
+      {
+        "text": "Abraham Lincoln",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "George Washington",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "general knowledge",
+      "history"
+    ]
+  },
+  {
+    "id": "GK_44",
+    "category": "General Knowledge",
+    "question": "H2O is chemical formula for…",
+    "answers": [
+      {
+        "text": "Hydrogen",
+        "isCorrect": false
+      },
+      {
+        "text": "Carbon Dioxide",
+        "isCorrect": false
+      },
+      {
+        "text": "Oxygen",
+        "isCorrect": false
+      },
+      {
+        "text": "Water",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Water",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "science"
+    ]
+  },
+  {
+    "id": "GK_45",
+    "category": "General Knowledge",
+    "question": "Which movie features character Jack Sparrow?",
+    "answers": [
+      {
+        "text": "Lord of the Rings",
+        "isCorrect": false
+      },
+      {
+        "text": "Harry Potter",
+        "isCorrect": false
+      },
+      {
+        "text": "Pirates of the Caribbean",
+        "isCorrect": true
+      },
+      {
+        "text": "Star Wars",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Pirates of the Caribbean",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "entertainment"
+    ]
+  },
+  {
+    "id": "GK_46",
+    "category": "General Knowledge",
+    "question": "How many players in a soccer team on field?",
+    "answers": [
+      {
+        "text": "11",
+        "isCorrect": true
+      },
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "9",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "11",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "sports"
+    ]
+  },
+  {
+    "id": "GK_47",
+    "category": "General Knowledge",
+    "question": "H2O is chemical formula for…",
+    "answers": [
+      {
+        "text": "Water",
+        "isCorrect": true
+      },
+      {
+        "text": "Carbon Dioxide",
+        "isCorrect": false
+      },
+      {
+        "text": "Oxygen",
+        "isCorrect": false
+      },
+      {
+        "text": "Hydrogen",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Water",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "science"
+    ]
+  },
+  {
+    "id": "GK_48",
+    "category": "General Knowledge",
+    "question": "Which movie features character Jack Sparrow?",
+    "answers": [
+      {
+        "text": "Star Wars",
+        "isCorrect": false
+      },
+      {
+        "text": "Lord of the Rings",
+        "isCorrect": false
+      },
+      {
+        "text": "Harry Potter",
+        "isCorrect": false
+      },
+      {
+        "text": "Pirates of the Caribbean",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Pirates of the Caribbean",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "entertainment"
+    ]
+  },
+  {
+    "id": "GK_49",
+    "category": "General Knowledge",
+    "question": "How many players in a soccer team on field?",
+    "answers": [
+      {
+        "text": "9",
+        "isCorrect": false
+      },
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "11",
+        "isCorrect": true
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "11",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "sports"
+    ]
+  },
+  {
+    "id": "GK_50",
+    "category": "General Knowledge",
+    "question": "How many players in a soccer team on field?",
+    "answers": [
+      {
+        "text": "11",
+        "isCorrect": true
+      },
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      },
+      {
+        "text": "9",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "11",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "sports"
+    ]
+  },
+  {
+    "id": "GK_51",
+    "category": "General Knowledge",
+    "question": "H2O is chemical formula for…",
+    "answers": [
+      {
+        "text": "Carbon Dioxide",
+        "isCorrect": false
+      },
+      {
+        "text": "Oxygen",
+        "isCorrect": false
+      },
+      {
+        "text": "Water",
+        "isCorrect": true
+      },
+      {
+        "text": "Hydrogen",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Water",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "science"
+    ]
+  },
+  {
+    "id": "GK_52",
+    "category": "General Knowledge",
+    "question": "The Eiffel Tower is located in Paris.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "culture"
+    ]
+  },
+  {
+    "id": "GK_53",
+    "category": "General Knowledge",
+    "question": "Which is the largest continent?",
+    "answers": [
+      {
+        "text": "Antarctica",
+        "isCorrect": false
+      },
+      {
+        "text": "Asia",
+        "isCorrect": true
+      },
+      {
+        "text": "Africa",
+        "isCorrect": false
+      },
+      {
+        "text": "Europe",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Asia",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "geography"
+    ]
+  },
+  {
+    "id": "GK_54",
+    "category": "General Knowledge",
+    "question": "Which movie features character Jack Sparrow?",
+    "answers": [
+      {
+        "text": "Star Wars",
+        "isCorrect": false
+      },
+      {
+        "text": "Pirates of the Caribbean",
+        "isCorrect": true
+      },
+      {
+        "text": "Lord of the Rings",
+        "isCorrect": false
+      },
+      {
+        "text": "Harry Potter",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Pirates of the Caribbean",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "entertainment"
+    ]
+  },
+  {
+    "id": "GK_55",
+    "category": "General Knowledge",
+    "question": "H2O is chemical formula for…",
+    "answers": [
+      {
+        "text": "Carbon Dioxide",
+        "isCorrect": false
+      },
+      {
+        "text": "Water",
+        "isCorrect": true
+      },
+      {
+        "text": "Oxygen",
+        "isCorrect": false
+      },
+      {
+        "text": "Hydrogen",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Water",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "science"
+    ]
+  },
+  {
+    "id": "GK_56",
+    "category": "General Knowledge",
+    "question": "Which is the largest continent?",
+    "answers": [
+      {
+        "text": "Europe",
+        "isCorrect": false
+      },
+      {
+        "text": "Africa",
+        "isCorrect": false
+      },
+      {
+        "text": "Antarctica",
+        "isCorrect": false
+      },
+      {
+        "text": "Asia",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Asia",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "geography"
+    ]
+  },
+  {
+    "id": "GK_57",
+    "category": "General Knowledge",
+    "question": "Which movie features character Jack Sparrow?",
+    "answers": [
+      {
+        "text": "Star Wars",
+        "isCorrect": false
+      },
+      {
+        "text": "Harry Potter",
+        "isCorrect": false
+      },
+      {
+        "text": "Lord of the Rings",
+        "isCorrect": false
+      },
+      {
+        "text": "Pirates of the Caribbean",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Pirates of the Caribbean",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "entertainment"
+    ]
+  },
+  {
+    "id": "GK_58",
+    "category": "General Knowledge",
+    "question": "How many players in a soccer team on field?",
+    "answers": [
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "11",
+        "isCorrect": true
+      },
+      {
+        "text": "9",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "11",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "sports"
+    ]
+  },
+  {
+    "id": "GK_59",
+    "category": "General Knowledge",
+    "question": "The Eiffel Tower is located in Paris.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "culture"
+    ]
+  },
+  {
+    "id": "GK_60",
+    "category": "General Knowledge",
+    "question": "Which movie features character Jack Sparrow?",
+    "answers": [
+      {
+        "text": "Star Wars",
+        "isCorrect": false
+      },
+      {
+        "text": "Lord of the Rings",
+        "isCorrect": false
+      },
+      {
+        "text": "Harry Potter",
+        "isCorrect": false
+      },
+      {
+        "text": "Pirates of the Caribbean",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Pirates of the Caribbean",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "entertainment"
+    ]
+  },
+  {
+    "id": "GK_61",
+    "category": "General Knowledge",
+    "question": "The Eiffel Tower is located in Paris.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "culture"
+    ]
+  },
+  {
+    "id": "GK_62",
+    "category": "General Knowledge",
+    "question": "Which movie features character Jack Sparrow?",
+    "answers": [
+      {
+        "text": "Harry Potter",
+        "isCorrect": false
+      },
+      {
+        "text": "Star Wars",
+        "isCorrect": false
+      },
+      {
+        "text": "Pirates of the Caribbean",
+        "isCorrect": true
+      },
+      {
+        "text": "Lord of the Rings",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Pirates of the Caribbean",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "entertainment"
+    ]
+  },
+  {
+    "id": "GK_63",
+    "category": "General Knowledge",
+    "question": "H2O is chemical formula for…",
+    "answers": [
+      {
+        "text": "Hydrogen",
+        "isCorrect": false
+      },
+      {
+        "text": "Oxygen",
+        "isCorrect": false
+      },
+      {
+        "text": "Carbon Dioxide",
+        "isCorrect": false
+      },
+      {
+        "text": "Water",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Water",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "science"
+    ]
+  },
+  {
+    "id": "GK_64",
+    "category": "General Knowledge",
+    "question": "H2O is chemical formula for…",
+    "answers": [
+      {
+        "text": "Hydrogen",
+        "isCorrect": false
+      },
+      {
+        "text": "Oxygen",
+        "isCorrect": false
+      },
+      {
+        "text": "Carbon Dioxide",
+        "isCorrect": false
+      },
+      {
+        "text": "Water",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "Water",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "science"
+    ]
+  },
+  {
+    "id": "GK_65",
+    "category": "General Knowledge",
+    "question": "H2O is chemical formula for…",
+    "answers": [
+      {
+        "text": "Water",
+        "isCorrect": true
+      },
+      {
+        "text": "Hydrogen",
+        "isCorrect": false
+      },
+      {
+        "text": "Oxygen",
+        "isCorrect": false
+      },
+      {
+        "text": "Carbon Dioxide",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Water",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "science"
+    ]
+  },
+  {
+    "id": "GK_66",
+    "category": "General Knowledge",
+    "question": "How many players in a soccer team on field?",
+    "answers": [
+      {
+        "text": "9",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      },
+      {
+        "text": "11",
+        "isCorrect": true
+      },
+      {
+        "text": "12",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "11",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "sports"
+    ]
+  },
+  {
+    "id": "GK_67",
+    "category": "General Knowledge",
+    "question": "H2O is chemical formula for…",
+    "answers": [
+      {
+        "text": "Water",
+        "isCorrect": true
+      },
+      {
+        "text": "Carbon Dioxide",
+        "isCorrect": false
+      },
+      {
+        "text": "Hydrogen",
+        "isCorrect": false
+      },
+      {
+        "text": "Oxygen",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Water",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "science"
+    ]
+  },
+  {
+    "id": "GK_68",
+    "category": "General Knowledge",
+    "question": "H2O is chemical formula for…",
+    "answers": [
+      {
+        "text": "Oxygen",
+        "isCorrect": false
+      },
+      {
+        "text": "Water",
+        "isCorrect": true
+      },
+      {
+        "text": "Carbon Dioxide",
+        "isCorrect": false
+      },
+      {
+        "text": "Hydrogen",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Water",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "science"
+    ]
+  },
+  {
+    "id": "GK_69",
+    "category": "General Knowledge",
+    "question": "Who was the first US President?",
+    "answers": [
+      {
+        "text": "George Washington",
+        "isCorrect": true
+      },
+      {
+        "text": "John Adams",
+        "isCorrect": false
+      },
+      {
+        "text": "Abraham Lincoln",
+        "isCorrect": false
+      },
+      {
+        "text": "Thomas Jefferson",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "George Washington",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "general knowledge",
+      "history"
+    ]
+  },
+  {
+    "id": "GK_70",
+    "category": "General Knowledge",
+    "question": "Who was the first US President?",
+    "answers": [
+      {
+        "text": "George Washington",
+        "isCorrect": true
+      },
+      {
+        "text": "Abraham Lincoln",
+        "isCorrect": false
+      },
+      {
+        "text": "Thomas Jefferson",
+        "isCorrect": false
+      },
+      {
+        "text": "John Adams",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "George Washington",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "general knowledge",
+      "history"
+    ]
+  },
+  {
+    "id": "GK_71",
+    "category": "General Knowledge",
+    "question": "How many players in a soccer team on field?",
+    "answers": [
+      {
+        "text": "11",
+        "isCorrect": true
+      },
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      },
+      {
+        "text": "9",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "11",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "sports"
+    ]
+  },
+  {
+    "id": "GK_72",
+    "category": "General Knowledge",
+    "question": "Which is the largest continent?",
+    "answers": [
+      {
+        "text": "Africa",
+        "isCorrect": false
+      },
+      {
+        "text": "Asia",
+        "isCorrect": true
+      },
+      {
+        "text": "Antarctica",
+        "isCorrect": false
+      },
+      {
+        "text": "Europe",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Asia",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "geography"
+    ]
+  },
+  {
+    "id": "GK_73",
+    "category": "General Knowledge",
+    "question": "Who was the first US President?",
+    "answers": [
+      {
+        "text": "John Adams",
+        "isCorrect": false
+      },
+      {
+        "text": "George Washington",
+        "isCorrect": true
+      },
+      {
+        "text": "Thomas Jefferson",
+        "isCorrect": false
+      },
+      {
+        "text": "Abraham Lincoln",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "George Washington",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "general knowledge",
+      "history"
+    ]
+  },
+  {
+    "id": "GK_74",
+    "category": "General Knowledge",
+    "question": "Who was the first US President?",
+    "answers": [
+      {
+        "text": "John Adams",
+        "isCorrect": false
+      },
+      {
+        "text": "Thomas Jefferson",
+        "isCorrect": false
+      },
+      {
+        "text": "Abraham Lincoln",
+        "isCorrect": false
+      },
+      {
+        "text": "George Washington",
+        "isCorrect": true
+      }
+    ],
+    "correctAnswer": "George Washington",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "general knowledge",
+      "history"
+    ]
+  },
+  {
+    "id": "GK_75",
+    "category": "General Knowledge",
+    "question": "How many players in a soccer team on field?",
+    "answers": [
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "11",
+        "isCorrect": true
+      },
+      {
+        "text": "10",
+        "isCorrect": false
+      },
+      {
+        "text": "9",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "11",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "sports"
+    ]
+  },
+  {
+    "id": "GK_76",
+    "category": "General Knowledge",
+    "question": "Who was the first US President?",
+    "answers": [
+      {
+        "text": "Abraham Lincoln",
+        "isCorrect": false
+      },
+      {
+        "text": "John Adams",
+        "isCorrect": false
+      },
+      {
+        "text": "George Washington",
+        "isCorrect": true
+      },
+      {
+        "text": "Thomas Jefferson",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "George Washington",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "general knowledge",
+      "history"
+    ]
+  },
+  {
+    "id": "GK_77",
+    "category": "General Knowledge",
+    "question": "H2O is chemical formula for…",
+    "answers": [
+      {
+        "text": "Hydrogen",
+        "isCorrect": false
+      },
+      {
+        "text": "Carbon Dioxide",
+        "isCorrect": false
+      },
+      {
+        "text": "Water",
+        "isCorrect": true
+      },
+      {
+        "text": "Oxygen",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Water",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "science"
+    ]
+  },
+  {
+    "id": "GK_78",
+    "category": "General Knowledge",
+    "question": "The Eiffel Tower is located in Paris.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "culture"
+    ]
+  },
+  {
+    "id": "GK_79",
+    "category": "General Knowledge",
+    "question": "H2O is chemical formula for…",
+    "answers": [
+      {
+        "text": "Water",
+        "isCorrect": true
+      },
+      {
+        "text": "Hydrogen",
+        "isCorrect": false
+      },
+      {
+        "text": "Carbon Dioxide",
+        "isCorrect": false
+      },
+      {
+        "text": "Oxygen",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Water",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "science"
+    ]
+  },
+  {
+    "id": "GK_80",
+    "category": "General Knowledge",
+    "question": "How many players in a soccer team on field?",
+    "answers": [
+      {
+        "text": "10",
+        "isCorrect": false
+      },
+      {
+        "text": "12",
+        "isCorrect": false
+      },
+      {
+        "text": "11",
+        "isCorrect": true
+      },
+      {
+        "text": "9",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "11",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "general knowledge",
+      "sports"
+    ]
+  }
+]

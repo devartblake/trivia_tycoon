@@ -1,0 +1,776 @@
+[
+  {
+    "id": "WX5_1",
+    "category": "World",
+    "question": "Largest river by volume:",
+    "answers": [
+      {
+        "text": "Amazon",
+        "isCorrect": true
+      },
+      {
+        "text": "Nile",
+        "isCorrect": false
+      },
+      {
+        "text": "Yangtze",
+        "isCorrect": false
+      },
+      {
+        "text": "Mississippi",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Amazon",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "rivers"
+    ]
+  },
+  {
+    "id": "WX5_2",
+    "category": "World",
+    "question": "The Great Barrier Reef is in…",
+    "answers": [
+      {
+        "text": "Australia",
+        "isCorrect": true
+      },
+      {
+        "text": "USA",
+        "isCorrect": false
+      },
+      {
+        "text": "Brazil",
+        "isCorrect": false
+      },
+      {
+        "text": "Mexico",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Australia",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G5",
+      "reef"
+    ]
+  },
+  {
+    "id": "WX6_1",
+    "category": "World",
+    "question": "Currency of India:",
+    "answers": [
+      {
+        "text": "Rupee",
+        "isCorrect": true
+      },
+      {
+        "text": "Dollar",
+        "isCorrect": false
+      },
+      {
+        "text": "Yen",
+        "isCorrect": false
+      },
+      {
+        "text": "Pound",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Rupee",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G6",
+      "currency"
+    ]
+  },
+  {
+    "id": "WX6_2",
+    "category": "World",
+    "question": "Mount Kilimanjaro in…",
+    "answers": [
+      {
+        "text": "Tanzania",
+        "isCorrect": true
+      },
+      {
+        "text": "Kenya",
+        "isCorrect": false
+      },
+      {
+        "text": "Ethiopia",
+        "isCorrect": false
+      },
+      {
+        "text": "Uganda",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Tanzania",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G6",
+      "africa"
+    ]
+  },
+  {
+    "id": "WX7_1",
+    "category": "World",
+    "question": "Colosseum city:",
+    "answers": [
+      {
+        "text": "Rome",
+        "isCorrect": true
+      },
+      {
+        "text": "Athens",
+        "isCorrect": false
+      },
+      {
+        "text": "Paris",
+        "isCorrect": false
+      },
+      {
+        "text": "Madrid",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Rome",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "rome"
+    ]
+  },
+  {
+    "id": "WX7_2",
+    "category": "World",
+    "question": "Taj Mahal built in…",
+    "answers": [
+      {
+        "text": "India",
+        "isCorrect": true
+      },
+      {
+        "text": "Pakistan",
+        "isCorrect": false
+      },
+      {
+        "text": "Nepal",
+        "isCorrect": false
+      },
+      {
+        "text": "Sri Lanka",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "India",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G7",
+      "taj"
+    ]
+  },
+  {
+    "id": "WX8_1",
+    "category": "World",
+    "question": "Big Ben is in…",
+    "answers": [
+      {
+        "text": "London",
+        "isCorrect": true
+      },
+      {
+        "text": "Paris",
+        "isCorrect": false
+      },
+      {
+        "text": "Berlin",
+        "isCorrect": false
+      },
+      {
+        "text": "Madrid",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "London",
+    "type": "multiple_choice",
+    "difficulty": 1,
+    "tags": [
+      "G8",
+      "england"
+    ]
+  },
+  {
+    "id": "WX8_2",
+    "category": "World",
+    "question": "The Kremlin is in…",
+    "answers": [
+      {
+        "text": "Moscow",
+        "isCorrect": true
+      },
+      {
+        "text": "Kiev",
+        "isCorrect": false
+      },
+      {
+        "text": "Warsaw",
+        "isCorrect": false
+      },
+      {
+        "text": "Prague",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Moscow",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G8",
+      "russia"
+    ]
+  },
+  {
+    "id": "WX9_1",
+    "category": "World",
+    "question": "Stonehenge is in…",
+    "answers": [
+      {
+        "text": "UK",
+        "isCorrect": true
+      },
+      {
+        "text": "USA",
+        "isCorrect": false
+      },
+      {
+        "text": "France",
+        "isCorrect": false
+      },
+      {
+        "text": "Germany",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "UK",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "stonehenge"
+    ]
+  },
+  {
+    "id": "WX9_2",
+    "category": "World",
+    "question": "Machu Picchu is in…",
+    "answers": [
+      {
+        "text": "Peru",
+        "isCorrect": true
+      },
+      {
+        "text": "Mexico",
+        "isCorrect": false
+      },
+      {
+        "text": "Chile",
+        "isCorrect": false
+      },
+      {
+        "text": "Argentina",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Peru",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G9",
+      "peru"
+    ]
+  },
+  {
+    "id": "WX10_1",
+    "category": "World",
+    "question": "Eiffel Tower built in…",
+    "answers": [
+      {
+        "text": "1889",
+        "isCorrect": true
+      },
+      {
+        "text": "1900",
+        "isCorrect": false
+      },
+      {
+        "text": "1850",
+        "isCorrect": false
+      },
+      {
+        "text": "1875",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "1889",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "eiffel"
+    ]
+  },
+  {
+    "id": "WX10_2",
+    "category": "World",
+    "question": "Berlin is capital of…",
+    "answers": [
+      {
+        "text": "Germany",
+        "isCorrect": true
+      },
+      {
+        "text": "France",
+        "isCorrect": false
+      },
+      {
+        "text": "Poland",
+        "isCorrect": false
+      },
+      {
+        "text": "Austria",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Germany",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G10",
+      "berlin"
+    ]
+  },
+  {
+    "id": "WX11_1",
+    "category": "World",
+    "question": "Petra ancient city in…",
+    "answers": [
+      {
+        "text": "Jordan",
+        "isCorrect": true
+      },
+      {
+        "text": "Egypt",
+        "isCorrect": false
+      },
+      {
+        "text": "Iraq",
+        "isCorrect": false
+      },
+      {
+        "text": "Syria",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Jordan",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "petra"
+    ]
+  },
+  {
+    "id": "WX11_2",
+    "category": "World",
+    "question": "Angkor Wat temple in…",
+    "answers": [
+      {
+        "text": "Cambodia",
+        "isCorrect": true
+      },
+      {
+        "text": "Thailand",
+        "isCorrect": false
+      },
+      {
+        "text": "Laos",
+        "isCorrect": false
+      },
+      {
+        "text": "Vietnam",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Cambodia",
+    "type": "multiple_choice",
+    "difficulty": 2,
+    "tags": [
+      "G11",
+      "angkor"
+    ]
+  },
+  {
+    "id": "WX12_1",
+    "category": "World",
+    "question": "Great Wall length approx…",
+    "answers": [
+      {
+        "text": "21,000 km",
+        "isCorrect": true
+      },
+      {
+        "text": "10,000 km",
+        "isCorrect": false
+      },
+      {
+        "text": "30,000 km",
+        "isCorrect": false
+      },
+      {
+        "text": "40,000 km",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "21,000 km",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "china"
+    ]
+  },
+  {
+    "id": "WX12_2",
+    "category": "World",
+    "question": "Pyramids of Giza near…",
+    "answers": [
+      {
+        "text": "Cairo",
+        "isCorrect": true
+      },
+      {
+        "text": "Alexandria",
+        "isCorrect": false
+      },
+      {
+        "text": "Luxor",
+        "isCorrect": false
+      },
+      {
+        "text": "Aswan",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "Cairo",
+    "type": "multiple_choice",
+    "difficulty": 3,
+    "tags": [
+      "G12",
+      "egypt"
+    ]
+  },
+  {
+    "id": "WXX16",
+    "category": "Mixed World",
+    "question": "The Earth is round.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WXX17",
+    "category": "Mixed World",
+    "question": "The Earth is round.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WXX18",
+    "category": "Mixed World",
+    "question": "The Earth is round.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WXX19",
+    "category": "Mixed World",
+    "question": "The Earth is round.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WXX20",
+    "category": "Mixed World",
+    "question": "The Earth is round.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WXX21",
+    "category": "Mixed World",
+    "question": "The Earth is round.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WXX22",
+    "category": "Mixed World",
+    "question": "The Earth is round.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WXX23",
+    "category": "Mixed World",
+    "question": "The Earth is round.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WXX24",
+    "category": "Mixed World",
+    "question": "The Earth is round.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WXX25",
+    "category": "Mixed World",
+    "question": "The Earth is round.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WXX26",
+    "category": "Mixed World",
+    "question": "The Earth is round.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WXX27",
+    "category": "Mixed World",
+    "question": "The Earth is round.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WXX28",
+    "category": "Mixed World",
+    "question": "The Earth is round.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": "WXX29",
+    "category": "Mixed World",
+    "question": "The Earth is round.",
+    "answers": [
+      {
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "text": "False",
+        "isCorrect": false
+      }
+    ],
+    "correctAnswer": "True",
+    "type": "true_false",
+    "difficulty": 1,
+    "tags": [
+      "general"
+    ]
+  }
+]

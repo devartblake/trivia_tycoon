@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/ui_components/spin_wheel/models/prize_entry.dart';
+import '../../../ui_components/spin_wheel/models/spin_system_models.dart';
 
 /// PrizeLogService manages the storage and retrieval of prize log entries
 /// and filter preferences for exporting or viewing prize data.
