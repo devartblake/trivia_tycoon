@@ -4,6 +4,8 @@ import 'package:trivia_tycoon/game/multiplayer/data/repositories/multiplayer_rep
 import 'package:trivia_tycoon/game/multiplayer/data/sources/ws_client.dart';
 import 'package:trivia_tycoon/game/multiplayer/domain/entities/game_event.dart';
 
+import '../../../screens/multiplayer/multiplayer_game_matchmaking_screen.dart';
+
 class MultiplayerService {
   final MultiplayerRepositoryImpl _repo;
   final WsClient _ws;
@@ -37,6 +39,21 @@ class MultiplayerService {
   Future<bool> quickMatch() => _repo.quickMatch();
   Future<bool> createRoom(String name) => _repo.createRoom(name);
   Future<bool> joinRoom(String roomId) => _repo.joinRoom(roomId);
+
+  Future<MatchResult?> findMatchForGameMode(String gameMode) async {
+    // Implementation would depend on your backend
+    // This is a placeholder for the actual matchmaking logic
+
+    // Simulate finding a match
+    await Future.delayed(const Duration(seconds: 3));
+
+    return MatchResult(
+      opponentName: 'Player${DateTime.now().millisecond}',
+      opponentAvatar: null,
+      playerAvatar: null,
+      gameMode: gameMode,
+    );
+  }
 
   Future<void> submitAnswer(String matchId, String questionId, String answerId) async {
     // TODO: implement server call via wsClient.send

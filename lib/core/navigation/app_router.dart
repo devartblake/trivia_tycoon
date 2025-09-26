@@ -24,8 +24,12 @@ import '../../game/providers/auth_providers.dart';
 import '../../screens/menu/invite_screen.dart';
 import '../../screens/multiplayer/live_match_screen.dart';
 import '../../screens/multiplayer/matchmaking_screen.dart';
+import '../../screens/multiplayer/multiplayer_game_matchmaking_screen.dart';
 import '../../screens/multiplayer/multiplayer_hub_screen.dart';
+import '../../screens/multiplayer/multiplayer_question_screen.dart';
+import '../../screens/multiplayer/multiplayer_results_screen.dart';
 import '../../screens/multiplayer/room_lobby_screen.dart';
+import '../../screens/profile/profile_selection_screen.dart';
 import '../../screens/question/monthly_quiz_screen.dart';
 import '../../screens/question/score_summary_screen_wrapper.dart';
 import '../../screens/question/transitional/how_to_play_screen.dart';
@@ -266,13 +270,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const PlayQuizScreen(),
       ),
       GoRoute(
-        path: '/quiz/play',
+        path: '/quiz/start/:gameMode',
         builder: (context, state) {
-          final extra = state.extra as Map<String, dynamic>?;
+          final gameMode = state.pathParameters['gameMode']!;
           return AdaptedQuestionScreen(
-            classLevel: extra?['classLevel'] ?? '1',
-            category: extra?['category'] ?? 'Mixed',
-            questionCount: extra?['questionCount'] ?? 10,
+            classLevel: AppRouter._getGameModeClassLevel(gameMode),
+            category: AppRouter._getGameModeCategory(gameMode),
+            questionCount: AppRouter._getGameModeQuestionCount(gameMode),
           );
         },
       ),
@@ -280,10 +284,18 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/how-to-play/:gameMode',
         builder: (context, state) {
           final gameModeString = state.pathParameters['gameMode']!;
+          final isMultiplayer = state.uri.queryParameters['isMultiplayer'] == 'true';
+
+          // Convert string to GameMode enum
           final gameMode = GameMode.values.firstWhere(
                 (mode) => mode.name == gameModeString,
+            orElse: () => GameMode.classic, // Fallback to classic if not found
           );
-          return HowToPlayScreen(gameMode: gameMode);
+
+          return HowToPlayScreen(
+            gameMode: gameMode,
+            isMultiplayer: isMultiplayer,
+          );
         },
       ),
       GoRoute(
@@ -297,11 +309,34 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         },
       ),
 
-      /// Multiplayer
+      /// Multiplayer game mode routes
       GoRoute(path: '/multiplayer', builder: (context, state) => MultiplayerHubScreen()),
       GoRoute(path: '/multiplayer/find', builder: (context, state) => MatchmakingScreen()),
       GoRoute(path: '/multiplayer/rooms', builder: (context, state) => RoomLobbyScreen()),
       GoRoute(path: '/multiplayer/match', builder: (context, state) => LiveMatchScreen()),
+      GoRoute(
+        path: '/multiplayer/matchmaking/:gameMode',
+        builder: (context, state) {
+          final gameMode = state.pathParameters['gameMode']!;
+          return MultiplayerGameMatchmakingScreen(gameMode: gameMode);
+        },
+      ),
+
+      GoRoute(
+        path: '/multiplayer/quiz/:gameMode',
+        builder: (context, state) {
+          final gameMode = state.pathParameters['gameMode']!;
+          return MultiplayerQuestionScreen(gameMode: gameMode);
+        },
+      ),
+
+      GoRoute(
+        path: '/multiplayer/results/:gameMode',
+        builder: (context, state) {
+          final gameMode = state.pathParameters['gameMode']!;
+          return MultiplayerResultsScreen(gameMode: gameMode);
+        },
+      ),
       /*GoRoute(
           path: '/multiplayer/rooms/:roomId',
           builder: (context, state) {
@@ -311,6 +346,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),*/
 
       /// 👤 USER PROFILE & SOCIAL
+      GoRoute(
+        path: '/profile-selection',
+        builder: (context, state) => const ProfileSelectionScreen(),
+      ),
       GoRoute(
         path: '/friends',
         builder: (context, state) => const FriendsScreen(),
@@ -507,5 +546,63 @@ class AppRouter {
     // This method is now simplified since GoRouter provider handles the logic
     final container = ProviderContainer();
     return container.read(goRouterProvider);
+  }
+
+  // Helper methods for game mode configuration
+  static String? _getGameModeCategory(String gameMode) {
+    switch (gameMode) {
+      case 'classic':
+        return 'mixed';
+      case 'topicExplorer':
+        return null; // User will choose
+      case 'survival':
+        return 'general';
+      case 'arena':
+        return 'mixed'; // Treasure Mine
+      case 'teams':
+        return 'general'; // Survival Arena
+      case 'daily':
+        return 'daily_challenge';
+      default:
+        return 'mixed';
+    }
+  }
+
+  static int _getGameModeQuestionCount(String gameMode) {
+    switch (gameMode) {
+      case 'classic':
+        return 10;
+      case 'topicExplorer':
+        return 15;
+      case 'survival':
+        return 20; // Keep going until wrong
+      case 'arena':
+        return 15; // Treasure Mine
+      case 'teams':
+        return 20; // Survival Arena
+      case 'daily':
+        return 5;
+      default:
+        return 10;
+    }
+  }
+
+  static String _getGameModeClassLevel(String gameMode) {
+    switch (gameMode) {
+      case 'classic':
+        return '6';
+      case 'topicExplorer':
+        return '7';
+      case 'survival':
+        return '8';
+      case 'arena':
+        return '8'; // Treasure Mine - Middle school
+      case 'teams':
+        return '10'; // Survival Arena - High school
+      case 'daily':
+        return '9';
+      default:
+        return '6';
+    }
   }
 }

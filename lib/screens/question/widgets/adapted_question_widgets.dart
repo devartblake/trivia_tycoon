@@ -31,9 +31,10 @@ extension QuestionDisplayTypeExtension on QuestionDisplayType {
 // Base question widget interface
 abstract class AdaptedQuestionWidget extends StatelessWidget {
   final QuestionModel question;
-  final Function(String) onAnswerSelected;
+  final void Function(String)? onAnswerSelected;
   final bool showFeedback;
   final String? selectedAnswer;
+  final bool isMultiplayer;
 
   const AdaptedQuestionWidget({
     super.key,
@@ -41,14 +42,16 @@ abstract class AdaptedQuestionWidget extends StatelessWidget {
     required this.onAnswerSelected,
     this.showFeedback = false,
     this.selectedAnswer,
+    this.isMultiplayer = false,
   });
 
   // Factory constructor to create appropriate widget based on question content
   factory AdaptedQuestionWidget.create({
     required QuestionModel question,
-    required Function(String) onAnswerSelected,
+    required void Function(String)? onAnswerSelected,
     bool showFeedback = false,
     String? selectedAnswer,
+    bool isMultiplayer = false,
   }) {
     QuestionDisplayType displayType = QuestionDisplayType.multipleChoice;
 
@@ -68,6 +71,7 @@ abstract class AdaptedQuestionWidget extends StatelessWidget {
           onAnswerSelected: onAnswerSelected,
           showFeedback: showFeedback,
           selectedAnswer: selectedAnswer,
+          isMultiplayer: isMultiplayer,
         );
       case QuestionDisplayType.image:
         return AdaptedImageQuestionWidget(
@@ -75,6 +79,7 @@ abstract class AdaptedQuestionWidget extends StatelessWidget {
           onAnswerSelected: onAnswerSelected,
           showFeedback: showFeedback,
           selectedAnswer: selectedAnswer,
+          isMultiplayer: isMultiplayer,
         );
       case QuestionDisplayType.video:
         return AdaptedVideoQuestionWidget(
@@ -82,6 +87,7 @@ abstract class AdaptedQuestionWidget extends StatelessWidget {
           onAnswerSelected: onAnswerSelected,
           showFeedback: showFeedback,
           selectedAnswer: selectedAnswer,
+          isMultiplayer: isMultiplayer,
         );
       case QuestionDisplayType.audio:
         return AdaptedAudioQuestionWidget(
@@ -89,6 +95,7 @@ abstract class AdaptedQuestionWidget extends StatelessWidget {
           onAnswerSelected: onAnswerSelected,
           showFeedback: showFeedback,
           selectedAnswer: selectedAnswer,
+          isMultiplayer: isMultiplayer,
         );
     }
   }
@@ -102,6 +109,7 @@ class AdaptedMultipleChoiceWidget extends AdaptedQuestionWidget {
     required super.onAnswerSelected,
     super.showFeedback,
     super.selectedAnswer,
+    super.isMultiplayer,
   });
 
   @override
@@ -112,6 +120,9 @@ class AdaptedMultipleChoiceWidget extends AdaptedQuestionWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Multiplayer indicator (if applicable)
+        if (isMultiplayer) _buildMultiplayerIndicator(),
+
         // Question text
         Text(
           question.question,
@@ -133,6 +144,35 @@ class AdaptedMultipleChoiceWidget extends AdaptedQuestionWidget {
         // Answer options
         ...displayOptions.map((option) => _buildAnswerButton(option)),
       ],
+    );
+  }
+
+  Widget _buildMultiplayerIndicator() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+        ),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.flash_on, color: Colors.white, size: 16),
+          const SizedBox(width: 6),
+          const Text(
+            'LIVE MULTIPLAYER',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -199,6 +239,7 @@ class AdaptedMultipleChoiceWidget extends AdaptedQuestionWidget {
 
     Color? backgroundColor;
     Color? textColor;
+    Color? borderColor;
 
     if (showFeedback && isSelected) {
       backgroundColor = isCorrect ? Colors.green : Colors.red;
@@ -206,6 +247,14 @@ class AdaptedMultipleChoiceWidget extends AdaptedQuestionWidget {
     } else if (showFeedback && isCorrect) {
       backgroundColor = Colors.green.shade100;
       textColor = Colors.green.shade800;
+    } else if (isSelected && isMultiplayer) {
+      backgroundColor = const Color(0xFF6366F1).withOpacity(0.1);
+      borderColor = const Color(0xFF6366F1);
+      textColor = const Color(0xFF6366F1);
+    } else if (isSelected) {
+      backgroundColor = Colors.blue.shade50;
+      borderColor = Colors.blue;
+      textColor = Colors.blue.shade800;
     }
 
     return Padding(
@@ -221,7 +270,9 @@ class AdaptedMultipleChoiceWidget extends AdaptedQuestionWidget {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          onPressed: showFeedback ? null : () => onAnswerSelected(option),
+          onPressed: showFeedback || onAnswerSelected == null
+              ? null
+              : () => onAnswerSelected!(option),
           child: Text(
             option,
             textAlign: TextAlign.center,
@@ -241,6 +292,7 @@ class AdaptedImageQuestionWidget extends AdaptedQuestionWidget {
     required super.onAnswerSelected,
     super.showFeedback,
     super.selectedAnswer,
+    super.isMultiplayer,
   });
 
   @override
@@ -385,7 +437,9 @@ class AdaptedImageQuestionWidget extends AdaptedQuestionWidget {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          onPressed: showFeedback ? null : () => onAnswerSelected(option),
+          onPressed: showFeedback || onAnswerSelected == null
+              ? null
+              : () => onAnswerSelected!(option),
           child: Text(
             option,
             textAlign: TextAlign.center,
@@ -405,6 +459,7 @@ class AdaptedVideoQuestionWidget extends AdaptedQuestionWidget {
     required super.onAnswerSelected,
     super.showFeedback,
     super.selectedAnswer,
+    super.isMultiplayer,
   });
 
   @override
@@ -420,15 +475,17 @@ class AdaptedVideoQuestionWidget extends AdaptedQuestionWidget {
 
 class _VideoQuestionWidgetStateful extends StatefulWidget {
   final QuestionModel question;
-  final Function(String) onAnswerSelected;
+  final Function(String)? onAnswerSelected;
   final bool showFeedback;
   final String? selectedAnswer;
+  final bool isMultiplayer;
 
   const _VideoQuestionWidgetStateful({
     required this.question,
     required this.onAnswerSelected,
     this.showFeedback = false,
     this.selectedAnswer,
+    this.isMultiplayer = false,
   });
 
   @override
@@ -562,7 +619,9 @@ class _VideoQuestionWidgetStatefulState extends State<_VideoQuestionWidgetStatef
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          onPressed: widget.showFeedback ? null : () => widget.onAnswerSelected(option),
+          onPressed: widget.showFeedback || widget.onAnswerSelected == null
+              ? null
+              : () => widget.onAnswerSelected!(option),
           child: Text(
             option,
             textAlign: TextAlign.center,
@@ -582,6 +641,7 @@ class AdaptedAudioQuestionWidget extends AdaptedQuestionWidget {
     required super.onAnswerSelected,
     super.showFeedback,
     super.selectedAnswer,
+    super.isMultiplayer,
   });
 
   @override
@@ -597,15 +657,17 @@ class AdaptedAudioQuestionWidget extends AdaptedQuestionWidget {
 
 class _AudioQuestionWidgetStateful extends StatefulWidget {
   final QuestionModel question;
-  final Function(String) onAnswerSelected;
+  final Function(String)? onAnswerSelected;
   final bool showFeedback;
   final String? selectedAnswer;
+  final bool isMultiplayer;
 
   const _AudioQuestionWidgetStateful({
     required this.question,
     required this.onAnswerSelected,
     this.showFeedback = false,
     this.selectedAnswer,
+    this.isMultiplayer = false,
   });
 
   @override
@@ -943,7 +1005,9 @@ class _AudioQuestionWidgetStatefulState extends State<_AudioQuestionWidgetStatef
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          onPressed: widget.showFeedback ? null : () => widget.onAnswerSelected(option),
+          onPressed: widget.showFeedback || widget.onAnswerSelected == null
+              ? null
+              : () => widget.onAnswerSelected!(option),
           child: Text(
             option,
             textAlign: TextAlign.center,

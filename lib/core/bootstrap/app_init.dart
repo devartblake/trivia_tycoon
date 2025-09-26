@@ -1,19 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/core/services/analytics/config_service.dart';
 import 'package:trivia_tycoon/core/services/theme/theme_notifier.dart';
 import 'package:trivia_tycoon/core/manager/service_manager.dart';
+import '../../game/providers/multi_profile_providers.dart';
+import '../services/notification_service.dart';
 import '../../game/providers/auth_providers.dart';
-import '../../game/providers/onboarding_providers.dart';
 import '../helpers/educational_stats_initializer.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../game/providers/onboarding_providers.dart';
 import '../services/settings/general_key_value_storage_service.dart';
-import '../services/notification_service.dart'; // Import your NotificationService
+import '../services/settings/multi_profile_service.dart';
 
 /// AppInit handles bootstrapping critical services before runApp()
 class AppInit {
+  static Future<void> _initializeMultiProfileSystem(ServiceManager serviceManager, ProviderContainer? container) async {
+    try {
+      // Initialize multi-profile system
+      final multiProfileService = MultiProfileService();
+
+      // Migrate existing single profile if needed
+      await multiProfileService.initializeAndMigrate(serviceManager.playerProfileService);
+
+      // Load active profile
+      final activeProfile = await multiProfileService.getActiveProfile();
+
+      if (container != null && activeProfile != null) {
+        // Update the active profile state provider
+        container.read(activeProfileStateProvider.notifier).state = activeProfile;
+
+        debugPrint('[AppInit] Active profile loaded: ${activeProfile.name}');
+      } else {
+        debugPrint('[AppInit] No active profile found - user will need to select one');
+      }
+
+    } catch (e) {
+      debugPrint('[AppInit] Multi-profile initialization failed: $e');
+      // Continue with default state - app should still work
+    }
+  }
+
   static Future<(ServiceManager, ThemeNotifier)> initialize({ProviderContainer? container}) async {
     WidgetsFlutterBinding.ensureInitialized();
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -60,6 +88,9 @@ class AppInit {
 
     // Load and initialize ServiceManager
     final serviceManager = await ServiceManager.initialize();
+
+    // Initialize multi-profile system
+    await _initializeMultiProfileSystem(serviceManager, container);
 
     // Inject dependencies into ConfigService
     final configService = ConfigService.instance;

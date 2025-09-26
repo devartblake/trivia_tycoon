@@ -53,8 +53,18 @@ class _PlayQuizScreenState extends State<PlayQuizScreen> {
     return "${hours}d ${minutes}h";
   }
 
+  // Enhanced navigation method that handles multiplayer modes
   void _navigateToHowToPlay(BuildContext context, GameMode gameMode) {
-    context.push('/how-to-play/${gameMode.name}');
+    // Check if it's a multiplayer mode
+    if (_isMultiplayerMode(gameMode)) {
+      context.push('/how-to-play/${gameMode.name}?isMultiplayer=true');
+    } else {
+      context.push('/how-to-play/${gameMode.name}');
+    }
+  }
+
+  bool _isMultiplayerMode(GameMode mode) {
+    return mode == GameMode.arena || mode == GameMode.teams;
   }
 
   @override
@@ -138,7 +148,8 @@ class _PlayQuizScreenState extends State<PlayQuizScreen> {
                     ),
                     height: 140,
                     titleSize: 16,
-                    onTap: () => _navigateToHowToPlay(context, GameMode.arena),
+                    isMultiplayer: true,
+                    onTap: () => _navigateToHowToPlay(context, GameMode.arena), // This will route to multiplayer
                   ),
                 ),
               ],
@@ -157,7 +168,8 @@ class _PlayQuizScreenState extends State<PlayQuizScreen> {
               height: 120,
               titleSize: 20,
               width: MediaQuery.of(context).size.width * 0.6,
-              onTap: () => _navigateToHowToPlay(context, GameMode.teams),
+              isMultiplayer: true,
+              onTap: () => _navigateToHowToPlay(context, GameMode.teams), // This will route to multiplayer
             ),
 
             const SizedBox(height: 32),
@@ -208,6 +220,42 @@ class _PlayQuizScreenState extends State<PlayQuizScreen> {
   }
 }
 
+Widget _buildMultiplayerBadge() {
+  return Positioned(
+    top: 8,
+    left: 8,
+    child: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+        ),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(
+            Icons.people,
+            color: Colors.white,
+            size: 12,
+          ),
+          const SizedBox(width: 4),
+          const Text(
+            'MULTIPLAYER',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 8,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 class _SimpleGameCard extends StatelessWidget {
   final String title;
   final Gradient gradient;
@@ -215,6 +263,7 @@ class _SimpleGameCard extends StatelessWidget {
   final double titleSize;
   final double? width;
   final VoidCallback onTap;
+  final bool isMultiplayer;
 
   const _SimpleGameCard({
     required this.title,
@@ -223,6 +272,7 @@ class _SimpleGameCard extends StatelessWidget {
     required this.titleSize,
     this.width,
     required this.onTap,
+    this.isMultiplayer = false,
   });
 
   @override
@@ -245,7 +295,41 @@ class _SimpleGameCard extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            // Decorative elements (you can add custom illustrations here)
+            // Multiplayer badge (if applicable)
+            if (isMultiplayer)
+              Positioned(
+                top: 12,
+                left: 12,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.9),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.people,
+                        color: gradient.colors.first,
+                        size: 12,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        'LIVE',
+                        style: TextStyle(
+                          color: gradient.colors.first,
+                          fontSize: 8,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+            // Icon in top right
             Positioned(
               top: 12,
               right: 12,

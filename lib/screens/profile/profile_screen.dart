@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/screens/profile/widgets/shimmer_avatar.dart';
-import '../../game/providers/xp_provider.dart';
+import '../../core/services/settings/multi_profile_service.dart';
+import '../../game/providers/multi_profile_providers.dart';
 import '../../game/services/educational_stats_service.dart';
 import '../../ui_components/depth_card_3d/depth_card.dart';
 import '../../game/providers/riverpod_providers.dart';
@@ -24,16 +25,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
   late TabController _tabController;
   bool _adminModeEnabled = false;
   bool _isAdmin = false;
-
-  // Static profile data (these would come from your user service)
-  final String userName = "Yuki Fixi";
-  final String location = "Albany, New York";
-  final String avatarImage = 'assets/images/avatars/default-avatar.jpg';
-  final String statusText = "Learning enthusiast";
-  final int level = 17;
-  final String teamName = "Study Squad";
-  final String currentGrade = "10th Grade";
-  final String favoriteSubject = "Mathematics";
 
   @override
   void initState() {
@@ -69,11 +60,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
     );
   }
 
-  void _showEditNameBottomSheet(BuildContext context) {
-    final TextEditingController nameController = TextEditingController(text: userName);
-    final TextEditingController locationController = TextEditingController(text: location);
-    final TextEditingController gradeController = TextEditingController(text: currentGrade);
-    final TextEditingController teamController = TextEditingController(text: teamName);
+  void _showEditNameBottomSheet(BuildContext context, ProfileData? currentProfile) {
+    final TextEditingController nameController = TextEditingController(
+        text: currentProfile?.name ?? 'Guest');
+    final TextEditingController locationController = TextEditingController(
+        text: currentProfile?.country ?? '');
+    final TextEditingController gradeController = TextEditingController(
+        text: currentProfile?.ageGroup ?? '');
+    final TextEditingController teamController = TextEditingController(
+        text: currentProfile?.preferences['teamName'] ?? 'Study Squad');
 
     showModalBottomSheet(
       context: context,
@@ -93,7 +88,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Handle bar
               Center(
                 child: Container(
                   width: 40,
@@ -105,8 +99,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
                 ),
               ),
               const SizedBox(height: 20),
-
-              // Title
               const Text(
                 'Edit Profile',
                 style: TextStyle(
@@ -117,8 +109,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
-
-              // Name field
               TextField(
                 controller: nameController,
                 style: const TextStyle(color: Colors.white, fontSize: 16),
@@ -140,8 +130,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
                 textCapitalization: TextCapitalization.words,
               ),
               const SizedBox(height: 16),
-
-              // Location field
               TextField(
                 controller: locationController,
                 style: const TextStyle(color: Colors.white, fontSize: 16),
@@ -164,8 +152,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
                 textCapitalization: TextCapitalization.words,
               ),
               const SizedBox(height: 16),
-
-              // Grade field
               TextField(
                 controller: gradeController,
                 style: const TextStyle(color: Colors.white, fontSize: 16),
@@ -188,8 +174,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
                 textCapitalization: TextCapitalization.words,
               ),
               const SizedBox(height: 16),
-
-              // Team field
               TextField(
                 controller: teamController,
                 style: const TextStyle(color: Colors.white, fontSize: 16),
@@ -212,8 +196,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
                 textCapitalization: TextCapitalization.words,
               ),
               const SizedBox(height: 24),
-
-              // Action buttons
               Row(
                 children: [
                   Expanded(
@@ -235,22 +217,40 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
                   const SizedBox(width: 16),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
-                        if (nameController.text.trim().isNotEmpty) {
-                          setState(() {
-                            // In a real app, you'd update these through your state management
-                            // userName = nameController.text.trim();
-                            // location = locationController.text.trim();
-                            // currentGrade = gradeController.text.trim();
-                            // teamName = teamController.text.trim();
-                          });
-                          Navigator.pop(context);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Profile updated successfully!'),
-                              backgroundColor: Color(0xFF40E0D0),
-                            ),
+                      onPressed: () async {
+                        if (nameController.text.trim().isNotEmpty && currentProfile != null) {
+                          final multiProfileService = ref.read(multiProfileServiceProvider);
+
+                          final success = await multiProfileService.updateProfile(
+                            currentProfile.id,
+                            name: nameController.text.trim(),
+                            country: locationController.text.trim().isNotEmpty
+                                ? locationController.text.trim()
+                                : null,
+                            ageGroup: gradeController.text.trim().isNotEmpty
+                                ? gradeController.text.trim()
+                                : null,
+                            preferences: {
+                              ...currentProfile.preferences,
+                              'teamName': teamController.text.trim(),
+                            },
                           );
+
+                          if (mounted) {
+                            Navigator.pop(context);
+                            ref.read(profileManagerProvider.notifier).refreshProfiles();
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(success
+                                    ? 'Profile updated successfully!'
+                                    : 'Failed to update profile'),
+                                backgroundColor: success
+                                    ? const Color(0xFF40E0D0)
+                                    : Colors.red,
+                              ),
+                            );
+                          }
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -278,17 +278,38 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
 
   @override
   Widget build(BuildContext context) {
+    final activeProfile = ref.watch(activeProfileStateProvider);
+
+    if (activeProfile == null) {
+      return Scaffold(
+        backgroundColor: const Color(0xFF6A5ACD),
+        body: const Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(color: Colors.white),
+              SizedBox(height: 16),
+              Text(
+                'Loading profile...',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
-      backgroundColor: const Color(0xFF6A5ACD), // Slate blue - complementary to quiz themes
+      backgroundColor: const Color(0xFF6A5ACD),
       body: SafeArea(
         child: Column(
           children: [
-            _buildTopAppBar(),
+            _buildTopAppBar(activeProfile),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    _buildGameProfileCard(),
+                    _buildGameProfileCard(activeProfile),
                     const SizedBox(height: 16),
                     _buildTabSection(),
                     const SizedBox(height: 16),
@@ -314,11 +335,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
     );
   }
 
-  Widget _buildAnimatedStatsSection() {
-    // Use real educational data from providers
+  Widget _buildAnimatedStatsSection(ProfileData activeProfile) {
     return Consumer(
       builder: (context, ref, child) {
         final educationalStatsAsync = ref.watch(educationalStatsProvider);
+        final profileStats = ref.watch(activeProfileStatsProvider);
 
         return educationalStatsAsync.when(
           data: (stats) => Row(
@@ -326,18 +347,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
             children: [
               AnimatedStatBox(
                 label: 'Quizzes',
-                value: stats.totalQuizzes,
-                gradientColors: const [Color(0xFF40E0D0), Color(0xFF00CED1)], // Turquoise
+                value: profileStats['totalQuizzes'] ?? stats.totalQuizzes,
+                gradientColors: const [Color(0xFF40E0D0), Color(0xFF00CED1)],
               ),
               AnimatedStatBox(
                 label: 'Correct',
-                value: stats.correctAnswers,
-                gradientColors: const [Color(0xFF26de81), Color(0xFF20bf6b)], // Green
+                value: profileStats['correctAnswers'] ?? stats.correctAnswers,
+                gradientColors: const [Color(0xFF26de81), Color(0xFF20bf6b)],
               ),
               AnimatedStatBox(
                 label: 'Streak',
-                value: stats.currentStreak,
-                gradientColors: const [Color(0xFFFF6B6B), Color(0xFFEE5A24)], // Coral red
+                value: profileStats['currentStreak'] ?? stats.currentStreak,
+                gradientColors: const [Color(0xFFFF6B6B), Color(0xFFEE5A24)],
               ),
             ],
           ),
@@ -346,17 +367,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
             children: [
               AnimatedStatBox(
                 label: 'Quizzes',
-                value: 0,
+                value: profileStats['totalQuizzes'] ?? 0,
                 gradientColors: const [Color(0xFF40E0D0), Color(0xFF00CED1)],
               ),
               AnimatedStatBox(
                 label: 'Correct',
-                value: 0,
+                value: profileStats['correctAnswers'] ?? 0,
                 gradientColors: const [Color(0xFF26de81), Color(0xFF20bf6b)],
               ),
               AnimatedStatBox(
                 label: 'Streak',
-                value: 0,
+                value: profileStats['currentStreak'] ?? 0,
                 gradientColors: const [Color(0xFFFF6B6B), Color(0xFFEE5A24)],
               ),
             ],
@@ -366,17 +387,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
             children: [
               AnimatedStatBox(
                 label: 'Quizzes',
-                value: 0,
+                value: profileStats['totalQuizzes'] ?? 0,
                 gradientColors: const [Color(0xFF40E0D0), Color(0xFF00CED1)],
               ),
               AnimatedStatBox(
                 label: 'Correct',
-                value: 0,
+                value: profileStats['correctAnswers'] ?? 0,
                 gradientColors: const [Color(0xFF26de81), Color(0xFF20bf6b)],
               ),
               AnimatedStatBox(
                 label: 'Streak',
-                value: 0,
+                value: profileStats['currentStreak'] ?? 0,
                 gradientColors: const [Color(0xFFFF6B6B), Color(0xFFEE5A24)],
               ),
             ],
@@ -386,7 +407,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
     );
   }
 
-  Widget _buildTopAppBar() {
+  Widget _buildTopAppBar(ProfileData activeProfile) {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -413,22 +434,23 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
               ),
             ),
             const SizedBox(width: 16),
-            const Text(
-              'My profile',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                shadows: [
-                  Shadow(
-                    color: Colors.black26,
-                    offset: Offset(0, 1),
-                    blurRadius: 2,
-                  ),
-                ],
+            Expanded(
+              child: Text(
+                '${activeProfile.name}\'s Profile',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  shadows: [
+                    Shadow(
+                      color: Colors.black26,
+                      offset: Offset(0, 1),
+                      blurRadius: 2,
+                    ),
+                  ],
+                ),
               ),
             ),
-            const Spacer(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.white.withOpacity(0.2),
@@ -438,6 +460,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
                 icon: const Icon(Icons.more_vert, color: Colors.white),
                 onSelected: (value) {
                   switch (value) {
+                    case 'switch':
+                      context.push('/profile-selection');
+                      break;
                     case 'theme':
                       context.push('/gradient-editor');
                       break;
@@ -447,6 +472,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
                   }
                 },
                 itemBuilder: (context) => [
+                  const PopupMenuItem(
+                    value: 'switch',
+                    child: Row(
+                      children: [
+                        Icon(Icons.switch_account),
+                        SizedBox(width: 8),
+                        Text('Switch Profile'),
+                      ],
+                    ),
+                  ),
                   const PopupMenuItem(
                     value: 'theme',
                     child: Row(
@@ -476,7 +511,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
     );
   }
 
-  Widget _buildGameProfileCard() {
+  Widget _buildGameProfileCard(ProfileData activeProfile) {
     return Container(
       margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -498,8 +533,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
           borderRadius: BorderRadius.circular(24),
           gradient: LinearGradient(
             colors: [
-              const Color(0xFF8A2BE2).withOpacity(0.85), // Blue violet with opacity
-              const Color(0xFF9370DB).withOpacity(0.80), // Medium slate blue with opacity
+              const Color(0xFF8A2BE2).withOpacity(0.85),
+              const Color(0xFF9370DB).withOpacity(0.80),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -507,7 +542,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
         ),
         child: Stack(
           children: [
-            // Avatar reset - top left (below page indicators)
             Positioned(
               top: 20,
               left: 20,
@@ -527,8 +561,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
                 ),
               ),
             ),
-
-            // Admin toggle and Level - top right
             Positioned(
               top: 20,
               right: 20,
@@ -560,7 +592,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      'Level $level',
+                      'Level ${activeProfile.level}',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 14,
@@ -571,45 +603,25 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
                 ],
               ),
             ),
-
-            // Main content
             Padding(
               padding: const EdgeInsets.all(24),
               child: Column(
                 children: [
-                  const SizedBox(height: 60), // Space for top elements
-
-                  // Large character avatar section
+                  const SizedBox(height: 60),
                   SizedBox(
                     height: 250,
-                    child: _buildCharacterSection(),
+                    child: _buildCharacterSection(activeProfile),
                   ),
-
                   const SizedBox(height: 20),
-
-                  // User name and status with educational info
-                  _buildUserNameSection(),
-
+                  _buildUserNameSection(activeProfile),
                   const SizedBox(height: 24),
-
-                  // Educational stats from real data
-                  _buildAnimatedStatsSection(),
-
+                  _buildAnimatedStatsSection(activeProfile),
                   const SizedBox(height: 20),
-
-                  // Educational progress bar with real XP data
-                  _buildEducationalProgress(),
-
+                  _buildEducationalProgress(activeProfile),
                   const SizedBox(height: 30),
-
-                  // Study group section
-                  _buildStudyGroupSection(),
-
+                  _buildStudyGroupSection(activeProfile),
                   const SizedBox(height: 20),
-
-                  // Bottom action buttons
                   _buildBottomActions(),
-
                   const SizedBox(height: 20),
                 ],
               ),
@@ -620,7 +632,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
     );
   }
 
-  Widget _buildCharacterSection() {
+  Widget _buildCharacterSection(ProfileData activeProfile) {
     return Consumer(
       builder: (context, ref, _) {
         final controller = ref.watch(profileAvatarControllerProvider);
@@ -640,16 +652,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
             child: Stack(
               alignment: Alignment.center,
               children: [
-                // Character illustration area
                 ClipOval(
                   child: SizedBox(
                     width: double.infinity,
                     height: double.infinity,
-                    child: _buildAvatarDisplay(controller),
+                    child: _buildAvatarDisplay(controller, activeProfile),
                   ),
                 ),
-
-                // Edit button
                 Positioned(
                   bottom: 20,
                   right: 20,
@@ -687,18 +696,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
     );
   }
 
-  // Your existing avatar display function (preserved exactly)
-  Widget _buildAvatarDisplay(dynamic controller) {
+  Widget _buildAvatarDisplay(dynamic controller, ProfileData activeProfile) {
     final imageFile = controller.imageFile;
-    final avatarPath = controller.avatarPath;
+    final avatarPath = controller.avatarPath ?? activeProfile.avatar;
 
     Widget avatarPreview;
 
-    if (controller.imageFile == null && controller.avatarPath == null) {
+    if (controller.imageFile == null && controller.avatarPath == null && activeProfile.avatar == null) {
       avatarPreview = ShimmerAvatar(
         avatarPath: '',
         isOnline: true,
         isLoading: true,
+        radius: 125,
       );
     } else if (imageFile != null) {
       avatarPreview = Container(
@@ -739,15 +748,34 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
           overlayActions: [],
         ),
       );
+    } else if (activeProfile.avatar != null) {
+      avatarPreview = Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            image: AssetImage(activeProfile.avatar!),
+            fit: BoxFit.cover,
+          ),
+        ),
+      );
     } else {
       avatarPreview = Container(
         width: double.infinity,
         height: double.infinity,
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
-          image: DecorationImage(
-            image: AssetImage('assets/images/avatars/default-avatar.jpg'),
-            fit: BoxFit.cover,
+          color: Colors.white,
+        ),
+        child: Center(
+          child: Text(
+            activeProfile.name.substring(0, 1).toUpperCase(),
+            style: const TextStyle(
+              fontSize: 80,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF6A5ACD),
+            ),
           ),
         ),
       );
@@ -756,7 +784,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
     return avatarPreview;
   }
 
-  Widget _buildUserNameSection() {
+  Widget _buildUserNameSection(ProfileData activeProfile) {
+    final favoriteSubject = activeProfile.preferences['favoriteSubject'] ?? 'Learning';
+
     return Column(
       children: [
         Row(
@@ -764,7 +794,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
           children: [
             Flexible(
               child: Text(
-                userName,
+                activeProfile.name,
                 style: const TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
@@ -782,7 +812,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
             ),
             const SizedBox(width: 8),
             GestureDetector(
-              onTap: () => _showEditNameBottomSheet(context),
+              onTap: () => _showEditNameBottomSheet(context, activeProfile),
               child: Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
@@ -809,28 +839,30 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
             ),
             const SizedBox(width: 4),
             Text(
-              currentGrade,
+              activeProfile.ageGroup?.toUpperCase() ?? 'Student',
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.white.withOpacity(0.7),
                 fontWeight: FontWeight.w500,
               ),
             ),
-            const SizedBox(width: 12),
-            Icon(
-              Icons.location_on,
-              color: Colors.white.withOpacity(0.7),
-              size: 14,
-            ),
-            const SizedBox(width: 4),
-            Text(
-              location,
-              style: TextStyle(
-                fontSize: 14,
+            if (activeProfile.country != null) ...[
+              const SizedBox(width: 12),
+              Icon(
+                Icons.location_on,
                 color: Colors.white.withOpacity(0.7),
-                fontWeight: FontWeight.w500,
+                size: 14,
               ),
-            ),
+              const SizedBox(width: 4),
+              Text(
+                activeProfile.country!,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white.withOpacity(0.7),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
           ],
         ),
         const SizedBox(height: 8),
@@ -857,10 +889,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
     );
   }
 
-  Widget _buildEducationalProgress() {
+  Widget _buildEducationalProgress(ProfileData activeProfile) {
     return Consumer(
       builder: (context, ref, child) {
-        final xp = ref.watch(playerXPProvider);
+        final xp = ref.watch(profileAwareXPProvider.notifier).state;
         final educationalStatsAsync = ref.watch(educationalStatsProvider);
 
         return educationalStatsAsync.when(
@@ -880,7 +912,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
                       ),
                     ),
                     Text(
-                      '$xp XP',
+                      '${activeProfile.currentXP} XP',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 14,
@@ -900,12 +932,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
                   child: Stack(
                     children: [
                       FractionallySizedBox(
-                        widthFactor: (xp / 3000).clamp(0.0, 1.0), // Progress to next level
+                        widthFactor: (activeProfile.currentXP / activeProfile.maxXP).clamp(0.0, 1.0),
                         child: Container(
                           height: 8,
                           decoration: BoxDecoration(
                             gradient: const LinearGradient(
-                              colors: [Color(0xFF40E0D0), Color(0xFF00CED1)], // Turquoise/cyan
+                              colors: [Color(0xFF40E0D0), Color(0xFF00CED1)],
                             ),
                             borderRadius: BorderRadius.circular(4),
                           ),
@@ -916,7 +948,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Average Score: ${stats.averageScore.toStringAsFixed(1)}%',
+                  'Next Level: ${activeProfile.maxXP - activeProfile.currentXP} XP to go',
                   style: TextStyle(
                     color: Colors.white.withOpacity(0.7),
                     fontSize: 12,
@@ -940,7 +972,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
                     ),
                   ),
                   Text(
-                    '$xp XP',
+                    '${activeProfile.currentXP} XP',
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 14,
@@ -975,7 +1007,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
                     ),
                   ),
                   Text(
-                    '$xp XP',
+                    '${activeProfile.currentXP} XP',
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 14,
@@ -1000,7 +1032,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
     );
   }
 
-  Widget _buildStudyGroupSection() {
+  Widget _buildStudyGroupSection(ProfileData activeProfile) {
+    final teamName = activeProfile.preferences['teamName'] ?? 'Solo Learner';
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -1042,6 +1076,24 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
                     offset: const Offset(-12, 0),
                     child: _buildTeamMemberAvatar('assets/images/avatars/avatar-5.png'),
                   ),
+                  if (activeProfile.isPremium) ...[
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.amber,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Text(
+                        'PRO',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ],
@@ -1107,7 +1159,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [Color(0xFF40E0D0), Color(0xFF00CED1)], // Turquoise gradient
+              colors: [Color(0xFF40E0D0), Color(0xFF00CED1)],
             ),
             borderRadius: BorderRadius.circular(8),
             boxShadow: [

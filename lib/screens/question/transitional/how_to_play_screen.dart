@@ -5,10 +5,12 @@ import '../../../game/models/game_mode.dart';
 
 class HowToPlayScreen extends StatefulWidget {
   final GameMode gameMode;
+  final bool isMultiplayer;
 
   const HowToPlayScreen({
     super.key,
     required this.gameMode,
+    this.isMultiplayer = false,
   });
 
   @override
@@ -227,6 +229,16 @@ class _HowToPlayScreenState extends State<HowToPlayScreen>
       navigationRoute: '/daily-quiz',
     ),
   };
+
+  void _startPlaying() {
+    if (widget.isMultiplayer) {
+      // Navigate to multiplayer matchmaking
+      context.go('/multiplayer/matchmaking/${widget.gameMode}');
+    } else {
+      // Navigate directly to single-player quiz
+      context.go('/quiz/start/${widget.gameMode}');
+    }
+  }
 
   @override
   void initState() {
@@ -488,10 +500,12 @@ class _HowToPlayScreenState extends State<HowToPlayScreen>
                                   _showComingSoonSnackBar(context);
                                 }
                               },
-                              icon: const Icon(Icons.play_arrow),
-                              label: const Text('Start Playing'),
+                              icon: Icon(widget.isMultiplayer ? Icons.people : Icons.play_arrow),
+                              label: Text(widget.isMultiplayer ? 'Find Match' : 'Start Playing'),
                               style: FilledButton.styleFrom(
-                                backgroundColor: _info.gradient.colors.first,
+                                backgroundColor: widget.isMultiplayer
+                                    ? const Color(0xFF8B5CF6)
+                                    : _info.gradient.colors.first,
                                 foregroundColor: Colors.white,
                                 padding: const EdgeInsets.symmetric(vertical: 16),
                                 shape: RoundedRectangleBorder(
@@ -511,6 +525,18 @@ class _HowToPlayScreenState extends State<HowToPlayScreen>
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed:  () {
+          HapticFeedback.mediumImpact();
+          _startPlaying();
+        },
+        icon: Icon(widget.isMultiplayer ? Icons.people : Icons.play_arrow),
+        label: Text(widget.isMultiplayer ? 'Find Match' : 'Start Playing'),
+        backgroundColor: widget.isMultiplayer
+            ? Colors.purple
+            : Theme.of(context).primaryColor,
+        foregroundColor: Colors.white24,
       ),
     );
   }
