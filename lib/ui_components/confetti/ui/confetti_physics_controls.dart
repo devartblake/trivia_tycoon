@@ -15,7 +15,7 @@ class ConfettiPhysicsControls extends StatefulWidget {
   });
 
   @override
-  _ConfettiPhysicsControlsState createState() => _ConfettiPhysicsControlsState();
+  State<ConfettiPhysicsControls> createState() => _ConfettiPhysicsControlsState();
 }
 
 class _ConfettiPhysicsControlsState extends State<ConfettiPhysicsControls> {
@@ -24,7 +24,7 @@ class _ConfettiPhysicsControlsState extends State<ConfettiPhysicsControls> {
   late double wind;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     speed = widget.speed;
     gravity = widget.gravity;
@@ -35,37 +35,94 @@ class _ConfettiPhysicsControlsState extends State<ConfettiPhysicsControls> {
     widget.onChanged(speed, gravity, wind);
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildSliderControl(String label, double value, double min, double max, Color color, ValueChanged<double> onChanged) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Speed: ${speed.toStringAsFixed(2)}"),
-        Slider(
-            value: speed,
-            min: 0.1,
-            max: 10.0,
-            onChanged: (value) {
-              setState(() => speed = value);
-              _updatePhysics();
-            },
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF4A5568),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                value.toStringAsFixed(2),
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: color,
+                ),
+              ),
+            ),
+          ],
         ),
-        Text("Gravity: ${gravity.toStringAsFixed(2)}"),
-        Slider(
-            value: gravity,
-            min: 0.0,
-            max: 5.0,
-            onChanged: (value){
-              setState(() => gravity = value);
-              _updatePhysics();
+        const SizedBox(height: 12),
+        SliderTheme(
+          data: SliderTheme.of(context).copyWith(
+            activeTrackColor: color,
+            inactiveTrackColor: color.withOpacity(0.2),
+            thumbColor: color,
+            overlayColor: color.withOpacity(0.1),
+            trackHeight: 6,
+            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12),
+          ),
+          child: Slider(
+            value: value,
+            min: min,
+            max: max,
+            onChanged: onChanged,
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        _buildSliderControl(
+          'Speed',
+          speed,
+          0.1,
+          10.0,
+          const Color(0xFF667EEA),
+              (value) {
+            setState(() => speed = value);
+            _updatePhysics();
           },
         ),
-        Text("Wind: ${wind.toStringAsFixed(2)}"),
-        Slider(
-          value: wind,
-          min: -2.0,
-          max: 2.0,
-          onChanged: (value) {
+        const SizedBox(height: 20),
+        _buildSliderControl(
+          'Gravity',
+          gravity,
+          0.0,
+          5.0,
+          const Color(0xFF9F7AEA),
+              (value) {
+            setState(() => gravity = value);
+            _updatePhysics();
+          },
+        ),
+        const SizedBox(height: 20),
+        _buildSliderControl(
+          'Wind',
+          wind,
+          -2.0,
+          2.0,
+          const Color(0xFF38B2AC),
+              (value) {
             setState(() => wind = value);
             _updatePhysics();
           },

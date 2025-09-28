@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/game/services/profile_service.dart';
 import 'package:trivia_tycoon/game/services/skill_cooldown_service.dart';
-
 import '../../core/manager/tier_manager.dart';
+import '../providers/multi_profile_providers.dart';
 import '../providers/riverpod_providers.dart';
 import '../state/tier_update_result.dart';
 
@@ -28,7 +28,76 @@ class GameSession {
 
   // Optional helpers used by effect handlers / controllers later:
   void addCoins(int amount) {
-    debugPrint('GameSession: addCoins($amount)'); // TODO: persist/add to profile currency
+    debugPrint('GameSession: addCoins($amount)');
+
+    try {
+      // Get the coin balance notifier from Riverpod providers
+      final coinNotifier = _profile.ref.read(coinBalanceProvider.notifier);
+      coinNotifier.add(amount);
+
+      // Also update the active profile's game stats to persist coins
+      final profileManager = _profile.ref.read(profileManagerProvider.notifier);
+      profileManager.updateActiveProfileGameStats({
+        'coins': coinNotifier.state, // Update with new total
+        'lastCoinUpdate': DateTime.now().toIso8601String(),
+      });
+
+      debugPrint('GameSession: Successfully added $amount coins. New total: ${coinNotifier.state}');
+    } catch (e) {
+      debugPrint('GameSession: Error adding coins: $e');
+    }
+  }
+
+  void deductCoins(int amount) {
+    debugPrint('GameSession: deductCoins($amount)');
+
+    try {
+      final coinNotifier = _profile.ref.read(coinBalanceProvider.notifier);
+      if (coinNotifier.state >= amount) {
+        coinNotifier.deduct(amount);
+
+        // Update profile stats
+        final profileManager = _profile.ref.read(profileManagerProvider.notifier);
+        profileManager.updateActiveProfileGameStats({
+          'coins': coinNotifier.state,
+          'lastCoinUpdate': DateTime.now().toIso8601String(),
+        });
+
+        debugPrint('GameSession: Successfully deducted $amount coins. New total: ${coinNotifier.state}');
+      } else {
+        debugPrint('GameSession: Insufficient coins. Required: $amount, Available: ${coinNotifier.state}');
+      }
+    } catch (e) {
+      debugPrint('GameSession: Error deducting coins: $e');
+    }
+  }
+
+  void addGems(int amount) {
+    debugPrint('GameSession: addGems($amount)');
+
+    try {
+      final gemNotifier = _profile.ref.read(diamondNotifierProvider);
+      gemNotifier.addValue(amount);
+
+      // Update profile stats
+      final profileManager = _profile.ref.read(profileManagerProvider.notifier);
+      profileManager.updateActiveProfileGameStats({
+        'gems': gemNotifier.state, // Use 'state' instead of 'currentValue'
+        'lastGemUpdate': DateTime.now().toIso8601String(),
+      });
+
+      debugPrint('GameSession: Successfully added $amount gems. New total: ${gemNotifier.state}');
+    } catch (e) {
+      debugPrint('GameSession: Error adding gems: $e');
+    }
+  }
+
+  int getCurrentCoins() {
+    return _profile.ref.read(coinBalanceProvider);
+  }
+
+  int getCurrentGems() {
+    return _profile.ref.read(diamondBalanceProvider);
   }
 
   void unlockCategory(String name) {

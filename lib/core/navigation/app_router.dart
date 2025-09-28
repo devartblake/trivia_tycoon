@@ -22,6 +22,7 @@ import '../../game/models/game_mode.dart';
 import '../../game/providers/onboarding_providers.dart';
 import '../../game/providers/auth_providers.dart';
 import '../../screens/menu/invite_screen.dart';
+import '../../screens/messages/messages.dart';
 import '../../screens/multiplayer/live_match_screen.dart';
 import '../../screens/multiplayer/matchmaking_screen.dart';
 import '../../screens/multiplayer/multiplayer_game_matchmaking_screen.dart';
@@ -38,6 +39,8 @@ import '../../screens/rewards/spin_earn_screen.dart';
 import '../../screens/social/multiplayer_screen.dart';
 import '../../screens/store/gifts_screen.dart';
 import '../../screens/store/offers_screen.dart';
+import '../../screens/store/store_hub_screen.dart';
+import '../../screens/store/store_secondary.dart';
 import '../../screens/users/achievements_screen.dart';
 import '../../screens/browse/all_actions_screen.dart';
 import '../../screens/browse/all_categories_screen.dart';
@@ -66,7 +69,7 @@ import '../../screens/login_screen.dart';
 import '../../screens/onboarding/onboarding_screen.dart';
 import '../../screens/profile/avatar_selection_screen.dart';
 import '../../screens/profile/friends_screen.dart';
-import '../../screens/profile/help_screen.dart';
+import '../../screens/help_screen.dart';
 import '../../screens/profile/profile_screen.dart';
 import '../../screens/question/question_details_screen.dart';
 import '../../screens/users/quiz_history_screen.dart';
@@ -110,7 +113,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => SimpleSplashScreen(
           onDone: () {
             // Let redirect logic handle where to go next
-            context.go('/main');
+            context.go('/home');
           },
         ),
       ),
@@ -140,8 +143,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
       /// 🏠 Main App Routes
       GoRoute(
-        path: '/main',
-        name: 'main',
+        path: '/home',
+        name: 'home',
         builder: (context, state) => const MainMenuScreen(),
       ),
 
@@ -238,15 +241,42 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/missions',
-        builder: (context, state) => const MissionsScreen(), // Your full mission screen
+        builder: (context, state) =>
+            const MissionsScreen(), // Your full mission screen
       ),
       GoRoute(path: '/invite', builder: (context, state) => InviteScreen()),
       GoRoute(path: '/rewards', builder: (context, state) => RewardsScreen()),
-      GoRoute(path: '/offers', builder: (context, state) => OffersScreen()),
-      GoRoute(path: '/leaderboard', builder: (context, state) => LeaderboardScreen()),
-      GoRoute(path: '/gifts', builder: (context, state) => GiftsScreen()),
-      GoRoute(path: '/store', builder: (context, state) => StoreScreen()),
+      GoRoute(
+          path: '/leaderboard',
+          builder: (context, state) => LeaderboardScreen()),
       GoRoute(path: '/settings', builder: (context, state) => SettingsScreen()),
+
+      /// Store Routes
+      GoRoute(
+        path: '/store-hub',
+        name: 'Store Hub',
+        builder: (context, state) => StoreHubScreen()
+      ),
+      GoRoute(
+        path: '/offers',
+        name: 'Offers',
+        builder: (context, state) => OffersScreen()
+      ),
+      GoRoute(
+        path: '/gifts',
+        name: 'Gifts',
+        builder: (context, state) => GiftsScreen()
+      ),
+      GoRoute(
+        path: '/store',
+        name: 'Store',
+        builder: (context, state) => StoreScreen()
+      ),
+      GoRoute(
+        path: '/store-premium',
+        name: 'Store Premium',
+        builder: (context, state) => const StoreSecondaryScreen()
+      ),
 
       /// 🧠 Question Flow
       GoRoute(
@@ -284,11 +314,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/how-to-play/:gameMode',
         builder: (context, state) {
           final gameModeString = state.pathParameters['gameMode']!;
-          final isMultiplayer = state.uri.queryParameters['isMultiplayer'] == 'true';
+          final isMultiplayer =
+              state.uri.queryParameters['isMultiplayer'] == 'true';
 
           // Convert string to GameMode enum
           final gameMode = GameMode.values.firstWhere(
-                (mode) => mode.name == gameModeString,
+            (mode) => mode.name == gameModeString,
             orElse: () => GameMode.classic, // Fallback to classic if not found
           );
 
@@ -310,10 +341,18 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
 
       /// Multiplayer game mode routes
-      GoRoute(path: '/multiplayer', builder: (context, state) => MultiplayerHubScreen()),
-      GoRoute(path: '/multiplayer/find', builder: (context, state) => MatchmakingScreen()),
-      GoRoute(path: '/multiplayer/rooms', builder: (context, state) => RoomLobbyScreen()),
-      GoRoute(path: '/multiplayer/match', builder: (context, state) => LiveMatchScreen()),
+      GoRoute(
+          path: '/multiplayer',
+          builder: (context, state) => MultiplayerHubScreen()),
+      GoRoute(
+          path: '/multiplayer/find',
+          builder: (context, state) => MatchmakingScreen()),
+      GoRoute(
+          path: '/multiplayer/rooms',
+          builder: (context, state) => RoomLobbyScreen()),
+      GoRoute(
+          path: '/multiplayer/match',
+          builder: (context, state) => LiveMatchScreen()),
       GoRoute(
         path: '/multiplayer/matchmaking/:gameMode',
         builder: (context, state) {
@@ -363,11 +402,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const MultiplayerScreen(),
         redirect: onboardingGuard,
       ),
-      // GoRoute(
-      //   path: '/multiplayer',
-      //   builder: (context, state) => const MultiplayerScreen(),
-      //   redirect: onboardingGuard,
-      // ),
+      GoRoute(
+       path: '/messages',
+       builder: (context, state) => const MessagesScreen(),
+       redirect: onboardingGuard,
+      ),
 
       /// 🎯 Daily Quiz & Featured Content Routes (Referenced in CarouselSection)
       GoRoute(
@@ -398,7 +437,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/all-classes',
-        builder: (context,state) => const AllClassesScreen(),
+        builder: (context, state) => const AllClassesScreen(),
         redirect: onboardingGuard,
       ),
 

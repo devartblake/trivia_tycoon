@@ -8,9 +8,10 @@ import '../ui_components/login/trivia_login.dart';
 import '../core/constants/image_strings.dart';
 import '../game/providers/auth_providers.dart';
 import '../game/providers/onboarding_providers.dart';
+import '../game/providers/multi_profile_providers.dart';
 import 'onboarding/widget/constants.dart';
 
-/// Updated login screen that integrates with new flow
+/// Updated login screen that integrates with multi-profile system
 class LoginScreen extends ConsumerWidget {
   static const routeName = '/auth';
   const LoginScreen({super.key});
@@ -25,7 +26,6 @@ class LoginScreen extends ConsumerWidget {
   Duration get loginTime => Duration(milliseconds: timeDilation.ceil() * 2250);
 
   Future<String?> _loginUser(LoginData data, WidgetRef ref) async {
-    // Simulate mock logic
     await Future.delayed(loginTime);
     if (!mockUsers.containsKey(data.name)) return 'User does not exist';
     if (mockUsers[data.name] != data.password) return 'Incorrect password';
@@ -33,31 +33,70 @@ class LoginScreen extends ConsumerWidget {
     try {
       // Get services
       final authOps = ref.read(authOperationsProvider);
-      final profileService = ref.read(playerProfileServiceProvider);
-      final onboardingService = ref.read(onboardingSettingsServiceProvider);
+      final multiProfileService = ref.read(multiProfileServiceProvider);
+      final serviceManager = ref.read(serviceManagerProvider);
 
       // Perform login using the auth operations
       await authOps.login(data.name);
 
-      // Save additional profile data
-      await profileService.saveUserRoles(['player']);
+      // Check if user has profiles in the multi-profile system
+      final existingProfiles = await multiProfileService.getAllProfiles();
 
-      // Check if user has completed onboarding before
-      final hasOnboarded = await onboardingService.hasCompletedOnboarding();
+      if (existingProfiles.isNotEmpty) {
+        // User has existing profiles - set up active profile and navigate
+        final activeProfile = await multiProfileService.getActiveProfile();
 
-      if (hasOnboarded) {
-        // Returning user - set onboarding flags to completed
-        ref.read(hasSeenIntroProvider.notifier).state = true;
-        ref.read(hasCompletedProfileProvider.notifier).state = true;
+        if (activeProfile != null) {
+          // Update the active profile state
+          ref.read(activeProfileStateProvider.notifier).state = activeProfile;
 
-        // Load user profile data for returning user
-        final playerName = await profileService.getPlayerName();
-        final userRole = await profileService.getUserRole();
-        debugPrint('Loaded profile for returning user: $playerName, role: $userRole');
+          // Mark onboarding as complete since user is returning
+          ref.read(hasSeenIntroProvider.notifier).state = true;
+          ref.read(hasCompletedProfileProvider.notifier).state = true;
+
+          debugPrint('Returning user logged in: ${activeProfile.name}');
+        } else {
+          // Has profiles but no active one - go to profile selection
+          debugPrint('User has profiles but no active profile - going to selection');
+        }
+      } else {
+        // No profiles exist - check if we need to migrate from legacy system
+        final playerProfileService = serviceManager.playerProfileService;
+        final existingName = await playerProfileService.getPlayerName();
+
+        if (existingName != 'Player' && existingName.isNotEmpty) {
+          // Migrate existing profile data to multi-profile system
+          final existingAvatar = await playerProfileService.getAvatar();
+          final existingCountry = await playerProfileService.getCountry();
+          final existingAgeGroup = await playerProfileService.getAgeGroup();
+
+          final migratedProfile = await multiProfileService.createProfile(
+            name: existingName,
+            avatar: existingAvatar,
+            country: existingCountry,
+            ageGroup: existingAgeGroup,
+          );
+
+          if (migratedProfile != null) {
+            await multiProfileService.setActiveProfile(migratedProfile.id);
+            ref.read(activeProfileStateProvider.notifier).state = migratedProfile;
+
+            // Mark onboarding as complete
+            ref.read(hasSeenIntroProvider.notifier).state = true;
+            ref.read(hasCompletedProfileProvider.notifier).state = true;
+
+            debugPrint('Migrated existing profile: ${migratedProfile.name}');
+          }
+        } else {
+          // No existing data - user will need to complete onboarding
+          ref.read(hasSeenIntroProvider.notifier).state = false;
+          ref.read(hasCompletedProfileProvider.notifier).state = false;
+
+          debugPrint('New user - will need to complete onboarding');
+        }
       }
-      // If not onboarded, leave flags as false - router will redirect to intro
 
-      return null; // Success triggers navigation
+      return null; // Success
     } catch (e) {
       return 'Login failed: ${e.toString()}';
     }
@@ -65,10 +104,8 @@ class LoginScreen extends ConsumerWidget {
 
   Future<String?> _signupUser(SignupData data, WidgetRef ref) async {
     try {
-      // Simulate server-side processing delay
       await Future.delayed(loginTime);
 
-      // Extract from signup form
       final email = data.name;
       final username = data.additionalSignupData?['Username'] ?? 'Player';
       final name = data.additionalSignupData?['Name'] ?? '';
@@ -76,35 +113,33 @@ class LoginScreen extends ConsumerWidget {
 
       // Get services
       final authOps = ref.read(authOperationsProvider);
-      final playerProfileService = ref.read(playerProfileServiceProvider);
       final authService = ref.read(authServiceProvider);
-      final onboardingService = ref.read(onboardingSettingsServiceProvider);
 
-      // Perform login using the auth operations
+      // Perform signup using auth operations
       await authOps.login(email!);
 
-      // Assign role and optional premium flag
-      const defaultRole = 'player';
-      final isPremium = data.additionalSignupData?['isPremiumUser'] == 'true';
+      // Save additional auth data
+      if (phone.isNotEmpty) {
+        await authService.secureStorage.setSecret('phone_number', phone);
+      }
+      if (email.isNotEmpty) {
+        await authService.secureStorage.setUserEmail(email);
+      }
 
-      // Save profile info
-      await playerProfileService.savePlayerName(username);
-      await playerProfileService.saveUserRole(defaultRole);
-      await playerProfileService.saveUserRoles([defaultRole]);
-      await playerProfileService.setPremiumStatus(isPremium);
+      // Store signup data temporarily for profile creation
+      ref.read(tempSignupDataProvider.notifier).state = {
+        'username': username,
+        'name': name,
+        'email': email,
+        'isPremium': data.additionalSignupData?['isPremiumUser'] == 'true',
+      };
 
-      // Optionally save more fields
-      if (name.isNotEmpty) await playerProfileService.saveAvatar(name);
-      if (phone.isNotEmpty) await authService.secureStorage.setSecret('phone_number', phone);
+      // For new signups, they'll go through onboarding
+      ref.read(hasSeenIntroProvider.notifier).state = false;
+      ref.read(hasCompletedProfileProvider.notifier).state = false;
 
-      // Save email and onboarding flag
-      if (email != null) await authService.secureStorage.setUserEmail(email);
-      await onboardingService.setHasCompletedOnboarding(false);
-
-      // For new signups, onboarding flags remain false
-      // Router will redirect to intro automatically
-
-      return null; // Success
+      debugPrint('New signup: $username - will complete onboarding');
+      return null;
     } catch (e) {
       return 'Signup failed: ${e.toString()}';
     }
@@ -259,10 +294,16 @@ class LoginScreen extends ConsumerWidget {
           onSignup: (data) => _signupUser(data, ref),
           onRecoverPassword: _recoverPassword,
 
-          // Navigation after successful auth
+          // Navigation after successful auth - Fixed navigation issue
           onSubmitAnimationCompleted: () {
-            // Don't navigate manually - let the router redirect logic handle it
-            // The router will check auth state and onboarding flags to decide where to go
+            // The router will handle navigation based on auth state and onboarding flags
+            // We don't need to manually navigate here - just trigger a rebuild
+            Future.microtask(() {
+              // Force a router refresh to check the new auth state
+              if (context.mounted) {
+                context.go('/');
+              }
+            });
           },
 
           // Additional signup fields
@@ -286,13 +327,16 @@ class LoginScreen extends ConsumerWidget {
           // Header widget
           headerWidget: const AuthHeaderWidget(),
 
-          // Footer text (FlutterLogin only accepts String for footer)
+          // Footer text
           footer: 'New to Trivia Tycoon? Create an account to get started!',
         );
       },
     );
   }
 }
+
+// Provider for temporary signup data
+final tempSignupDataProvider = StateProvider<Map<String, dynamic>?>((ref) => null);
 
 /// Header widget for auth screens
 class AuthHeaderWidget extends StatelessWidget {

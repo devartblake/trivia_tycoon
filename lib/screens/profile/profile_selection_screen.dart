@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../core/manager/log_manager.dart';
 import '../../core/services/settings/multi_profile_service.dart';
+import '../../game/analytics/managers/profile_analytics_manager.dart';
+import '../../game/providers/multi_profile_providers.dart';
+import '../../game/providers/onboarding_providers.dart';
+import '../../game/providers/riverpod_providers.dart';
 
 // You'll need to create this provider
 final multiProfileServiceProvider = Provider<MultiProfileService>((ref) {
@@ -288,8 +294,9 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
             Expanded(
               flex: 1,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       profile.name,
@@ -425,6 +432,14 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
             duration: const Duration(seconds: 2),
           ),
         );
+
+        // After successfully selecting/switching to a profile, add this:
+        ref.read(hasCompletedProfileProvider.notifier).state = true;
+
+        // And update the onboarding phase
+        final serviceManager = ref.read(serviceManagerProvider);
+        await serviceManager.onboardingSettingsService.setOnboardingCompleted(true);
+        await serviceManager.onboardingSettingsService.setHasCompletedOnboarding(true);
 
         // Navigate to home screen
         context.go('/home');
@@ -698,6 +713,7 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
 
   Future<void> _createProfile() async {
     if (_nameController.text.trim().isEmpty) {
+      LogManager.logProfileValidation(_nameController.text.trim(), 'Empty profile name');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please enter a profile name'),
@@ -710,36 +726,56 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
     setState(() => _isCreating = true);
 
     try {
-      final service = ref.read(multiProfileServiceProvider);
-      final profile = await service.createProfile(
+      final profileManager = ref.read(profileManagerProvider.notifier);
+      final profile = await profileManager.createProfile(
         name: _nameController.text.trim(),
         avatar: _selectedAvatar,
         ageGroup: _selectedAgeGroup,
       );
 
-      if (profile != null && mounted) {
-        Navigator.pop(context);
-        widget.onProfileCreated();
+      if (profile != null && mounted) { // Check if still mounted
+        // Track analytics safely - only if widget is still mounted
+        if (mounted) {
+          try {
+            final analyticsManager = ref.read(profileAnalyticsManagerProvider.notifier);
+            await analyticsManager.trackProfileCreated(
+              profileId: profile.id,
+              profileName: profile.name,
+              ageGroup: _selectedAgeGroup,
+              avatar: _selectedAvatar,
+            );
+          } catch (e) {
+            // Log analytics error but don't break the flow
+            LogManager.logProfileError('analytics_tracking', e.toString());
+          }
+        }
+
+        if (mounted) { // Check again before navigation
+          Navigator.pop(context);
+          widget.onProfileCreated();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Profile "${profile.name}" created successfully!'),
+              backgroundColor: const Color(0xFF6A5ACD),
+            ),
+          );
+        }
+      } else if (mounted) {
+        LogManager.logProfileError('creation', 'Profile creation returned null');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Profile "${profile.name}" created successfully!'),
-            backgroundColor: const Color(0xFF6A5ACD),
-          ),
-        );
-      } else if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to create profile. Name might already exist.'),
-            backgroundColor: Colors.red,
+            content: const Text('Failed to create profile. Name might already exist.'),
+            backgroundColor: Colors.red[300],
           ),
         );
       }
     } catch (e) {
+      LogManager.logProfileError('creation', e.toString());
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error creating profile: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.red[300],
           ),
         );
       }

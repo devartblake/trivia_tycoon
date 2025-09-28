@@ -55,6 +55,7 @@ import '../models/seasonal_competition_model.dart';
 import '../models/store_item_model.dart';
 import '../models/tier_model.dart';
 import '../services/achievement_service.dart';
+import '../services/matches_service.dart';
 import '../services/seasonal_competition_service.dart';
 import '../services/store_data_service.dart';
 
@@ -62,6 +63,7 @@ import '../services/store_data_service.dart';
 import '../controllers/question_controller.dart';
 import '../controllers/leaderboard_controller.dart';
 import '../controllers/profile_avatar_controller.dart';
+import '../state/premium_profile_state.dart';
 import '../state/qr_settings_state.dart';
 import '../state/question_state.dart';
 
@@ -497,6 +499,51 @@ final adminFilterProvider = StateNotifierProvider<AdminFilterController, AdminFi
 /// -- PowerUps ---
 final equippedPowerUpProvider = StateNotifierProvider<PowerUpController, PowerUp?>((ref) {
   return PowerUpController(ref);
+});
+
+// Notification and UI state providers
+final unreadNotificationsProvider = StateProvider<int>((ref) => 0);
+final pendingInvitesProvider = StateProvider<int>((ref) => 0);
+final dailyRewardsAvailableProvider = StateProvider<bool>((ref) => true);
+
+// Premium status provider
+final premiumStatusProvider = StateProvider<PremiumStatus>((ref) {
+  return PremiumStatus(
+    isPremium: false,
+    discountPercent: 50,
+    expiryDate: null,
+  );
+});
+
+// Matches providers
+final matchesServiceProvider = Provider<MatchesService>((ref) {
+  return MatchesService();
+});
+
+final activeMatchesProvider = StateNotifierProvider<ActiveMatchesNotifier, List<Map<String, dynamic>>>((ref) {
+  return ActiveMatchesNotifier();
+});
+
+// Energy and Lives refill time providers
+final energyRefillTimeProvider = StateProvider<Duration>((ref) {
+  final energyState = ref.watch(energyProvider);
+  if (energyState.current >= energyState.max) {
+    return Duration.zero;
+  }
+  // Calculate time until next energy refill (assuming 1 energy per 20 minutes)
+  final timePerEnergy = const Duration(minutes: 20);
+  return timePerEnergy;
+});
+
+final livesRefillTimeProvider = StateProvider<Duration>((ref) {
+  final livesState = ref.watch(livesProvider);
+  if (livesState.current >= livesState.max) {
+    return Duration.zero;
+  }
+  // Calculate time until next life refill (assuming 1 life per 30 minutes)
+  final timePerLife = const Duration(minutes: 30);
+  return timePerLife;
+
 });
 
 // --- 🎯 Tier System Providers ---

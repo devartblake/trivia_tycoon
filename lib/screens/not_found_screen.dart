@@ -73,7 +73,7 @@ class NotFoundScreen extends StatelessWidget {
                 onPressed: () {
                   // Navigates back to the home route ('/').
                   // Ensure you have a route named '/' in your GoRouter setup.
-                  context.go('/game');
+                  context.go('/home');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white, // Button background

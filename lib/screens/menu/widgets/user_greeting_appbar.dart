@@ -19,7 +19,6 @@ class UserGreetingAppBar extends ConsumerWidget implements PreferredSizeWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final avatarController = ref.watch(profileAvatarControllerProvider);
     final avatarPath = avatarController.effectiveAvatarPath;
-    final isOnline = true;
     final theme = _getThemeData();
 
     return Container(
@@ -37,18 +36,18 @@ class UserGreetingAppBar extends ConsumerWidget implements PreferredSizeWidget {
         child: Container(
           height: 80,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          child: _buildAppBarContent(avatarPath, isOnline, theme),
+          child: _buildAppBarContent(avatarPath, theme),
         ),
       ),
     );
   }
 
-  Widget _buildAppBarContent(String avatarPath, bool isOnline, Map<String, dynamic> theme) {
+  Widget _buildAppBarContent(String avatarPath, Map<String, dynamic> theme) {
     return Row(
       children: [
         _buildDrawerButton(),
         const SizedBox(width: 16),
-        _buildUserSection(avatarPath, isOnline),
+        _buildUserSection(avatarPath),
         const Spacer(),
         _buildActionButtons(theme),
       ],
@@ -80,7 +79,7 @@ class UserGreetingAppBar extends ConsumerWidget implements PreferredSizeWidget {
     );
   }
 
-  Widget _buildUserSection(String avatarPath, bool isOnline) {
+  Widget _buildUserSection(String avatarPath) {
     final currentHour = DateTime.now().hour;
     final greeting = _getGreeting(currentHour);
     final greetingIcon = _getGreetingIcon(currentHour);
@@ -101,8 +100,15 @@ class UserGreetingAppBar extends ConsumerWidget implements PreferredSizeWidget {
             child: ShimmerAvatar(
               avatarPath: avatarPath,
               radius: 18,
-              isOnline: isOnline,
+              status: AvatarStatus.online,
               isLoading: false,
+              showStatusIndicator: false, // Hide status indicator in app bar
+              borderColor: Colors.transparent, // Container handles border
+              borderWidth: 0,
+              onTap: () {
+                // Optional: Navigate to profile when avatar is tapped
+                // context.push('/profile');
+              },
             ),
           ),
           const SizedBox(width: 12),

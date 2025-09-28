@@ -36,7 +36,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     final onboardingService = serviceManager.onboardingSettingsService;
 
     // Save onboarding flag
-    await onboardingService.setOnboardingCompleted();
+    await onboardingService.setOnboardingCompleted(true);
 
     // Save to persistent storage
     await onboardingService.setHasCompletedOnboarding(true);

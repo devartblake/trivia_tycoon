@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/core/extensions/player_profile_extensions.dart';
-import '../../game/providers/provider_bridge.dart';
+import '../../game/providers/multi_profile_providers.dart';
 import '../../game/providers/riverpod_providers.dart';
+import '../../game/providers/auth_providers.dart';
+import '../../game/providers/onboarding_providers.dart';
 
-/// Profile setup screen for username, avatar selection, and additional settings
+// Import the tempSignupDataProvider
+final tempSignupDataProvider = StateProvider<Map<String, dynamic>?>((ref) => null);
+
+/// Unified Profile setup screen that handles both new profiles and migration
 class ProfileSetupScreen extends ConsumerStatefulWidget {
   const ProfileSetupScreen({super.key});
 
@@ -18,8 +22,11 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen>
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
 
-  String? _selectedAvatarId;
+  String? _selectedAvatarPath;
+  String? _selectedAgeGroup = 'teens';
+  String? _selectedCountry;
   bool _isLoading = false;
+  bool _isInitializing = true;
 
   late final AnimationController _animationController;
   late final Animation<double> _fadeAnimation;
@@ -49,7 +56,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen>
       curve: Curves.easeOutCubic,
     ));
 
-    _animationController.forward();
+    _initializeProfile();
   }
 
   @override
@@ -59,34 +66,123 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen>
     super.dispose();
   }
 
+  /// Initialize profile - check if we need to migrate existing data or create new
+  Future<void> _initializeProfile() async {
+    try {
+      final serviceManager = ref.read(serviceManagerProvider);
+      final multiProfileService = ref.read(multiProfileServiceProvider);
+
+      // Check if we already have profiles in the multi-profile system
+      final existingProfiles = await multiProfileService.getAllProfiles();
+
+      if (existingProfiles.isNotEmpty) {
+        // User already has profiles, redirect to profile selection
+        if (mounted) {
+          context.go('/profile-selection');
+          return;
+        }
+      }
+
+      // Check for temporary signup data first
+      final tempSignupData = ref.read(tempSignupDataProvider);
+      if (tempSignupData != null) {
+        // Use signup data
+        _usernameController.text = tempSignupData['username'] ?? '';
+        // Clear temp data after using it
+        ref.read(tempSignupDataProvider.notifier).state = null;
+      } else {
+        // Check for existing profile data to migrate
+        final playerProfileService = serviceManager.playerProfileService;
+        final existingName = await playerProfileService.getPlayerName();
+        final existingAvatar = await playerProfileService.getAvatar();
+        final existingCountry = await playerProfileService.getCountry();
+        final existingAgeGroup = await playerProfileService.getAgeGroup();
+
+        // Pre-fill form with existing data if available
+        if (existingName != 'Player' && existingName.isNotEmpty) {
+          _usernameController.text = existingName;
+        }
+
+        if (existingAvatar != null && existingAvatar.isNotEmpty) {
+          _selectedAvatarPath = existingAvatar;
+        }
+
+        if (existingCountry != null && existingCountry.isNotEmpty) {
+          _selectedCountry = existingCountry;
+        }
+
+        if (existingAgeGroup != null && existingAgeGroup.isNotEmpty) {
+          _selectedAgeGroup = existingAgeGroup;
+        }
+      }
+
+      setState(() {
+        _isInitializing = false;
+      });
+
+      _animationController.forward();
+    } catch (e) {
+      debugPrint('Error initializing profile: $e');
+      setState(() {
+        _isInitializing = false;
+      });
+      _animationController.forward();
+    }
+  }
+
   Future<void> _completeSetup() async {
     if (!_formKey.currentState!.validate()) return;
-
-    if (_selectedAvatarId == null) {
-      _showSnackBar('Please select an avatar');
-      return;
-    }
 
     setState(() {
       _isLoading = true;
     });
 
     try {
-      // Save profile data using the extension method for cleaner code
-      final playerProfileService = ref.read(playerProfileServiceProvider);
+      final multiProfileService = ref.read(multiProfileServiceProvider);
+      final serviceManager = ref.read(serviceManagerProvider);
 
-      // Use the extension method to save onboarding profile data
-      await playerProfileService.saveOnboardingProfile(
-        playerName: _usernameController.text.trim(),
-        avatar: _selectedAvatarId!,
+      // Create the first profile in the multi-profile system
+      final newProfile = await multiProfileService.createProfile(
+        name: _usernameController.text.trim(),
+        avatar: _selectedAvatarPath,
+        ageGroup: _selectedAgeGroup,
+        country: _selectedCountry,
       );
 
-      // Mark profile setup as completed using the bridge
-      await ref.read(providerBridgeStateProvider.notifier).completeOnboarding();
+      if (newProfile != null) {
+        // Set this as the active profile
+        await multiProfileService.setActiveProfile(newProfile.id);
 
-      // Navigate to main app
-      if (mounted) {
-        context.go('/main');
+        // Update the active profile state provider
+        ref.read(activeProfileStateProvider.notifier).state = newProfile;
+
+        // Mark onboarding as complete in all systems
+        await serviceManager.onboardingSettingsService.setOnboardingCompleted(true);
+        await serviceManager.onboardingSettingsService.setHasCompletedOnboarding(true);
+
+        // Update Riverpod onboarding state
+        ref.read(hasSeenIntroProvider.notifier).state = true;
+        ref.read(hasCompletedProfileProvider.notifier).state = true;
+
+        // Also save in the legacy system for backward compatibility
+        final playerProfileService = serviceManager.playerProfileService;
+        await playerProfileService.savePlayerName(newProfile.name);
+        if (newProfile.avatar != null) {
+          await playerProfileService.saveAvatar(newProfile.avatar!);
+        }
+        if (newProfile.country != null) {
+          await playerProfileService.saveCountry(newProfile.country!);
+        }
+        if (newProfile.ageGroup != null) {
+          await playerProfileService.saveAgeGroup(newProfile.ageGroup!);
+        }
+
+        // Navigate to main app
+        if (mounted) {
+          context.go('/');
+        }
+      } else {
+        _showSnackBar('Failed to create profile. Please try again.');
       }
     } catch (e) {
       _showSnackBar('Failed to save profile: ${e.toString()}');
@@ -112,6 +208,24 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    if (_isInitializing) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(color: theme.primaryColor),
+              const SizedBox(height: 16),
+              Text(
+                'Setting up your profile...',
+                style: theme.textTheme.bodyLarge,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Your Profile'),
@@ -120,7 +234,6 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen>
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            // Allow going back to intro
             context.go('/intro');
           },
         ),
@@ -137,7 +250,6 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Welcome text
                     Text(
                       'Let\'s get you set up!',
                       style: theme.textTheme.headlineMedium?.copyWith(
@@ -145,29 +257,22 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen>
                         color: theme.primaryColor,
                       ),
                     ),
-
                     const SizedBox(height: 8),
-
                     Text(
                       'Choose your username and avatar to get started.',
                       style: theme.textTheme.bodyLarge?.copyWith(
                         color: Colors.grey[600],
                       ),
                     ),
-
                     const SizedBox(height: 32),
-
-                    // Username section
                     _buildUsernameSection(),
-
                     const SizedBox(height: 32),
-
-                    // Avatar selection section
+                    _buildAgeGroupSection(),
+                    const SizedBox(height: 32),
+                    _buildCountrySection(),
+                    const SizedBox(height: 32),
                     _buildAvatarSection(),
-
                     const SizedBox(height: 48),
-
-                    // Complete button
                     _buildCompleteButton(),
                   ],
                 ),
@@ -189,9 +294,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen>
             fontWeight: FontWeight.w600,
           ),
         ),
-
         const SizedBox(height: 12),
-
         TextFormField(
           controller: _usernameController,
           decoration: InputDecoration(
@@ -220,6 +323,85 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen>
     );
   }
 
+  Widget _buildAgeGroupSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Age Group',
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: ['kids', 'teens', 'adults'].map((group) {
+            final isSelected = _selectedAgeGroup == group;
+            return Expanded(
+              child: GestureDetector(
+                onTap: () => setState(() => _selectedAgeGroup = group),
+                child: Container(
+                  margin: const EdgeInsets.only(right: 8),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  decoration: BoxDecoration(
+                    color: isSelected ? Theme.of(context).primaryColor : Colors.grey[100],
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: isSelected ? Theme.of(context).primaryColor : Colors.grey[300]!,
+                    ),
+                  ),
+                  child: Text(
+                    group.toUpperCase(),
+                    style: TextStyle(
+                      color: isSelected ? Colors.white : Colors.grey[600],
+                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      fontSize: 12,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCountrySection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Country (Optional)',
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 12),
+        DropdownButtonFormField<String>(
+          value: _selectedCountry,
+          decoration: InputDecoration(
+            hintText: 'Select your country',
+            prefixIcon: const Icon(Icons.public),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            filled: true,
+            fillColor: Colors.grey[50],
+          ),
+          items: _countries.map((country) {
+            return DropdownMenuItem(
+              value: country,
+              child: Text(country),
+            );
+          }).toList(),
+          onChanged: (value) => setState(() => _selectedCountry = value),
+        ),
+      ],
+    );
+  }
+
   Widget _buildAvatarSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -230,10 +412,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen>
             fontWeight: FontWeight.w600,
           ),
         ),
-
         const SizedBox(height: 12),
-
-        // Avatar grid
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -241,16 +420,17 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen>
             crossAxisCount: 4,
             crossAxisSpacing: 12,
             mainAxisSpacing: 12,
+            childAspectRatio: 0.8,
           ),
           itemCount: _avatarOptions.length,
           itemBuilder: (context, index) {
             final avatar = _avatarOptions[index];
-            final isSelected = _selectedAvatarId == avatar.id;
+            final isSelected = _selectedAvatarPath == avatar.path;
 
             return GestureDetector(
               onTap: () {
                 setState(() {
-                  _selectedAvatarId = avatar.id;
+                  _selectedAvatarPath = avatar.path;
                 });
               },
               child: AnimatedContainer(
@@ -270,13 +450,33 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      avatar.icon,
-                      size: 32,
-                      color: isSelected
-                          ? Theme.of(context).primaryColor
-                          : Colors.grey[600],
-                    ),
+                    if (avatar.path != null)
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.asset(
+                          avatar.path!,
+                          width: 40,
+                          height: 40,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Icon(
+                              avatar.icon,
+                              size: 32,
+                              color: isSelected
+                                  ? Theme.of(context).primaryColor
+                                  : Colors.grey[600],
+                            );
+                          },
+                        ),
+                      )
+                    else
+                      Icon(
+                        avatar.icon,
+                        size: 32,
+                        color: isSelected
+                            ? Theme.of(context).primaryColor
+                            : Colors.grey[600],
+                      ),
                     const SizedBox(height: 4),
                     Text(
                       avatar.name,
@@ -287,6 +487,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen>
                             : Colors.grey[600],
                         fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
@@ -334,29 +535,68 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen>
 
 /// Avatar option model
 class AvatarOption {
-  final String id;
   final String name;
   final IconData icon;
+  final String? path;
 
   const AvatarOption({
-    required this.id,
     required this.name,
     required this.icon,
+    this.path,
   });
 }
 
-/// Available avatar options
+/// Available avatar options with real asset paths
 final List<AvatarOption> _avatarOptions = [
-  const AvatarOption(id: 'rocket', name: 'Rocket', icon: Icons.rocket_launch),
-  const AvatarOption(id: 'star', name: 'Star', icon: Icons.star),
-  const AvatarOption(id: 'lightning', name: 'Lightning', icon: Icons.flash_on),
-  const AvatarOption(id: 'crown', name: 'Crown', icon: Icons.emoji_events),
-  const AvatarOption(id: 'fire', name: 'Fire', icon: Icons.local_fire_department),
-  const AvatarOption(id: 'diamond', name: 'Diamond', icon: Icons.diamond),
-  const AvatarOption(id: 'brain', name: 'Brain', icon: Icons.psychology),
-  const AvatarOption(id: 'shield', name: 'Shield', icon: Icons.shield),
-  const AvatarOption(id: 'magic', name: 'Magic', icon: Icons.auto_fix_high),
-  const AvatarOption(id: 'heart', name: 'Heart', icon: Icons.favorite),
-  const AvatarOption(id: 'music', name: 'Music', icon: Icons.music_note),
-  const AvatarOption(id: 'game', name: 'Game', icon: Icons.sports_esports),
+  const AvatarOption(
+    name: 'Avatar 1',
+    icon: Icons.person,
+    path: 'assets/images/avatars/avatar-1.png',
+  ),
+  const AvatarOption(
+    name: 'Avatar 2',
+    icon: Icons.person,
+    path: 'assets/images/avatars/avatar-2.png',
+  ),
+  const AvatarOption(
+    name: 'Avatar 3',
+    icon: Icons.person,
+    path: 'assets/images/avatars/avatar-3.png',
+  ),
+  const AvatarOption(
+    name: 'Avatar 4',
+    icon: Icons.person,
+    path: 'assets/images/avatars/avatar-4.png',
+  ),
+  const AvatarOption(
+    name: 'Avatar 5',
+    icon: Icons.person,
+    path: 'assets/images/avatars/avatar-5.png',
+  ),
+  const AvatarOption(name: 'Rocket', icon: Icons.rocket_launch),
+  const AvatarOption(name: 'Star', icon: Icons.star),
+  const AvatarOption(name: 'Lightning', icon: Icons.flash_on),
+  const AvatarOption(name: 'Crown', icon: Icons.emoji_events),
+  const AvatarOption(name: 'Fire', icon: Icons.local_fire_department),
+  const AvatarOption(name: 'Diamond', icon: Icons.diamond),
+  const AvatarOption(name: 'Brain', icon: Icons.psychology),
+];
+
+/// Common countries list
+final List<String> _countries = [
+  'United States',
+  'Canada',
+  'United Kingdom',
+  'Australia',
+  'Germany',
+  'France',
+  'Spain',
+  'Italy',
+  'Japan',
+  'South Korea',
+  'Brazil',
+  'Mexico',
+  'India',
+  'China',
+  'Other',
 ];

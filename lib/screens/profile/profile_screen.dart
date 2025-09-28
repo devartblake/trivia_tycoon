@@ -278,58 +278,91 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
 
   @override
   Widget build(BuildContext context) {
-    final activeProfile = ref.watch(activeProfileStateProvider);
-
-    if (activeProfile == null) {
-      return Scaffold(
-        backgroundColor: const Color(0xFF6A5ACD),
-        body: const Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircularProgressIndicator(color: Colors.white),
-              SizedBox(height: 16),
-              Text(
-                'Loading profile...',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
+    final activeProfileAsync = ref.watch(activeProfileProvider);
 
     return Scaffold(
       backgroundColor: const Color(0xFF6A5ACD),
       body: SafeArea(
-        child: Column(
-          children: [
-            _buildTopAppBar(activeProfile),
-            Expanded(
-              child: SingleChildScrollView(
+        child: activeProfileAsync.when(
+          data: (activeProfile) {
+            if (activeProfile == null) {
+              return const Center(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _buildGameProfileCard(activeProfile),
-                    const SizedBox(height: 16),
-                    _buildTabSection(),
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      height: 400,
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: const [
-                          CollectionTab(),
-                          StatisticsTab(),
-                          AchievementsTab(),
-                          CreatedQuestionsTab(),
-                        ],
-                      ),
+                    Icon(Icons.person_off, color: Colors.white, size: 64),
+                    SizedBox(height: 16),
+                    Text(
+                      'No active profile found',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ],
                 ),
-              ),
+              );
+            }
+
+            return Column(
+              children: [
+                _buildTopAppBar(activeProfile),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        _buildGameProfileCard(activeProfile),
+                        const SizedBox(height: 16),
+                        _buildTabSection(),
+                        const SizedBox(height: 16),
+                        SizedBox(
+                          height: 400,
+                          child: TabBarView(
+                            controller: _tabController,
+                            children: const [
+                              CollectionTab(),
+                              StatisticsTab(),
+                              AchievementsTab(),
+                              CreatedQuestionsTab(),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+          loading: () => const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(color: Colors.white),
+                SizedBox(height: 16),
+                Text(
+                  'Loading profile...',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ],
             ),
-          ],
+          ),
+          error: (error, stack) => Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error, color: Colors.red, size: 64),
+                const SizedBox(height: 16),
+                Text(
+                  'Error loading profile: $error',
+                  style: const TextStyle(color: Colors.white, fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () => ref.refresh(activeProfileProvider),
+                  child: const Text('Retry'),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -619,10 +652,61 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
                   const SizedBox(height: 20),
                   _buildEducationalProgress(activeProfile),
                   const SizedBox(height: 30),
+                  _buildFriendsButton(),
+                  const SizedBox(height: 16),
                   _buildStudyGroupSection(activeProfile),
                   const SizedBox(height: 20),
                   _buildBottomActions(),
                   const SizedBox(height: 20),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFriendsButton() {
+    return GestureDetector(
+      onTap: () => context.push('/friends'),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF40E0D0), Color(0xFF00CED1)],
+          ),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF40E0D0).withOpacity(0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.people,
+              color: Colors.white,
+              size: 20,
+            ),
+            const SizedBox(width: 8),
+            const Text(
+              'Friends',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                shadows: [
+                  Shadow(
+                    color: Colors.black26,
+                    offset: Offset(0, 1),
+                    blurRadius: 2,
+                  ),
                 ],
               ),
             ),
@@ -705,9 +789,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
     if (controller.imageFile == null && controller.avatarPath == null && activeProfile.avatar == null) {
       avatarPreview = ShimmerAvatar(
         avatarPath: '',
-        isOnline: true,
+        status: AvatarStatus.online,
         isLoading: true,
         radius: 125,
+        badgeType: activeProfile.isPremium ? AvatarBadgeType.premium : AvatarBadgeType.level,
+        badgeText: 'L${activeProfile.level}',
+        showStatusIndicator: false, // Hide status for main profile display
       );
     } else if (imageFile != null) {
       avatarPreview = Container(
@@ -1104,31 +1191,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
   }
 
   Widget _buildTeamMemberAvatar(String avatarPath) {
-    return Container(
-      width: 30,
-      height: 30,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(color: Colors.white, width: 1.5),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: CircleAvatar(
-        radius: 12,
-        backgroundImage: AssetImage(avatarPath),
-        onBackgroundImageError: (exception, stackTrace) {},
-        child: avatarPath.contains('member')
-            ? null
-            : const CircleAvatar(
-          radius: 12,
-          backgroundImage: AssetImage('assets/images/avatars/avatar-5.png'),
-        ),
-      ),
+    return ShimmerAvatar(
+      avatarPath: avatarPath,
+      status: AvatarStatus.online,
+      isLoading: false,
+      radius: 15,
+      showStatusIndicator: false,
+      borderColor: Colors.white,
+      borderWidth: 1.5,
     );
   }
 

@@ -400,4 +400,25 @@ class LogManager {
   static void dispose() {
     _logStreamController.close();
   }
+
+  /// Profile management specific logging methods
+  static void logProfileCreated(String profileName, String profileId, {String? source}) {
+    success("Profile created: '$profileName' (ID: $profileId)", source: source ?? 'ProfileManager');
+  }
+
+  static void logProfileSwitched(String fromProfile, String toProfile, {String? source}) {
+    info("Profile switched: '$fromProfile' → '$toProfile'", source: source ?? 'ProfileManager');
+  }
+
+  static void logProfileDeleted(String profileName, String profileId, {String? source}) {
+    warning("Profile deleted: '$profileName' (ID: $profileId)", source: source ?? 'ProfileManager');
+  }
+
+  static void logProfileError(String operation, String error, {String? source}) {
+    LogManager.error("Profile $operation failed: $error", source: source ?? 'ProfileManager');
+  }
+
+  static void logProfileValidation(String profileName, String issue, {String? source}) {
+    warning("Profile validation issue for '$profileName': $issue", source: source ?? 'ProfileManager');
+  }
 }

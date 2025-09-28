@@ -559,4 +559,70 @@ class AnalyticsService {
       'healthStatus': getHealthStatus(),
     };
   }
+
+  /// Track profile management events
+  Future<void> trackProfileEvent({
+    required String action, // 'create', 'switch', 'delete', 'edit'
+    required String profileId,
+    String? profileName,
+    String? fromProfileId,
+    Map<String, dynamic>? additionalData,
+  }) async {
+    final data = {
+      'action': action,
+      'profile_id': profileId,
+      if (profileName != null) 'profile_name': profileName,
+      if (fromProfileId != null) 'from_profile_id': fromProfileId,
+      'timestamp': DateTime.now().toIso8601String(),
+      'session_id': _currentSessionId,
+      ...?additionalData,
+    };
+
+    await logEvent('profile_management', data);
+  }
+
+  /// Track profile creation
+  Future<void> trackProfileCreated({
+    required String profileId,
+    required String profileName,
+    required String ageGroup,
+    String? avatar,
+  }) async {
+    await trackProfileEvent(
+      action: 'create',
+      profileId: profileId,
+      profileName: profileName,
+      additionalData: {
+        'age_group': ageGroup,
+        'has_avatar': avatar != null,
+        'avatar_path': avatar,
+      },
+    );
+  }
+
+  /// Track profile switching
+  Future<void> trackProfileSwitch({
+    required String fromProfileId,
+    required String toProfileId,
+    required String toProfileName,
+  }) async {
+    await trackProfileEvent(
+      action: 'switch',
+      profileId: toProfileId,
+      profileName: toProfileName,
+      fromProfileId: fromProfileId,
+    );
+  }
+
+  /// Track profile deletion
+  Future<void> trackProfileDeleted({
+    required String profileId,
+    required String profileName,
+  }) async {
+    await trackProfileEvent(
+      action: 'delete',
+      profileId: profileId,
+      profileName: profileName,
+    );
+  }
 }

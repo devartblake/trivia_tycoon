@@ -31,8 +31,14 @@ class NavigationRedirectService {
         if (currentPath != '/intro') return '/intro';
         return null;
       case OnboardingPhase.profileSetup:
-        if (currentPath != '/profile-setup') return '/profile-setup';
-        return null;
+      // Allow profile-related routes during setup phase
+        if (currentPath == '/profile-setup' ||
+            currentPath == '/profile-selection' ||
+            currentPath == '/avatar-selection') {
+          return null;
+        }
+        // For other paths during profile setup, redirect to profile selection
+        return '/profile-selection';
       case OnboardingPhase.done:
       // Redirect away from auth/onboarding screens if already complete
         if (['/intro', '/profile-setup', '/login', '/signup'].contains(currentPath)) {

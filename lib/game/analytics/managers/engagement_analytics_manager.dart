@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../providers/timeline_filter_provider.dart';
 import '../../../game/analytics/services/analytics_aggregation_service.dart';
 import '../../../game/analytics/services/analytics_service.dart';

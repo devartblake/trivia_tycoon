@@ -104,6 +104,28 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
       pinned: true,
       elevation: 0,
       backgroundColor: Colors.transparent,
+      leading: Container(
+        margin: const EdgeInsets.all(8),
+        child: IconButton(
+          onPressed: () => context.pop(),
+          icon: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Colors.white.withOpacity(0.3),
+                width: 1,
+              ),
+            ),
+            child: const Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+              size: 20,
+            ),
+          ),
+        ),
+      ),
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           decoration: BoxDecoration(

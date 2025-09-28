@@ -307,6 +307,12 @@ class ProfileManagerNotifier extends StateNotifier<ProfileManagerState> {
     }
   }
 
+  Future<void> clearActiveProfile() async {
+    state = const AsyncValue.data(null) as ProfileManagerState;
+    // Optionally clear from persistent storage if you're storing the active profile
+    // await _prefs.remove('active_profile_id');
+  }
+
   Future<void> updateActiveProfileGameStats(Map<String, dynamic> stats) async {
     try {
       final multiProfileService = ref.read(multiProfileServiceProvider);
