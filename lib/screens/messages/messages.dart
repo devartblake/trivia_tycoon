@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../core/utils/input_validator.dart';
-import 'widgets/safe_text.dart';
 import '../profile/dialogs/add_friend_dialog.dart';
 import '../search/dialogs/search_dialog.dart';
 import 'dialogs/create_dm_dialog.dart';
 import 'dialogs/message_request_dialog.dart';
+import 'message_detail_screen.dart';
 
 class MessagesScreen extends StatefulWidget {
   const MessagesScreen({super.key});
@@ -305,7 +304,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
 
   Widget _buildMessageTile(Message message) {
     return InkWell(
-      onTap: () {},
+      onTap: () => _openMessageDetail(message),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
@@ -319,7 +318,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                   Row(
                     children: [
                       Flexible(
-                        child: SafeText(
+                        child: Text(
                           message.name,
                           style: const TextStyle(
                               color: Colors.white,
@@ -339,7 +338,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                     ],
                   ),
                   const SizedBox(height: 2),
-                  SafeText(
+                  Text(
                     message.subtitle,
                     style: const TextStyle(
                         color: Color(0xFFB9BBBE), fontSize: 14),
@@ -449,11 +448,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
   }
 
   Widget _buildAvatarFallback(String name) {
-    final safeName = InputValidator.safeString(name);
-    final firstChar = safeName.isNotEmpty ? safeName.substring(0, 1).toUpperCase() : '?';
-
-    return SafeText(
-      firstChar,
+    return Text(
+      name.isNotEmpty ? name.substring(0, 1).toUpperCase() : '?',
       style: const TextStyle(
         color: Colors.white,
         fontSize: 20,
@@ -496,6 +492,20 @@ class _MessagesScreenState extends State<MessagesScreen> {
     );
   }
 
+  void _openMessageDetail(Message message) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => MessageDetailScreen(
+          contactName: message.name,
+          contactAvatar: message.avatarUrl.isNotEmpty ? message.avatarUrl : null,
+          isOnline: message.status == MessageStatus.online,
+          currentActivity: message.activity.isNotEmpty ? message.activity : null,
+        ),
+        fullscreenDialog: false,
+      ),
+    );
+  }
+
   void _showSearchDialog() {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -506,44 +516,47 @@ class _MessagesScreenState extends State<MessagesScreen> {
   }
 
   void _showAddFriendDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) => const AddFriendDialog(),
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const AddFriendDialog(),
+        fullscreenDialog: true,
+      ),
     );
   }
 
   void _showMessageRequestDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) => MessageRequestDialog(
-        requestCount: _messageRequests,
-        onRequestHandled: (accepted) {
-          setState(() {
-            if (_messageRequests > 0) _messageRequests--;
-          });
-        },
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => MessageRequestDialog(
+          requestCount: _messageRequests,
+          onRequestHandled: (accepted) {
+            setState(() {
+              if (_messageRequests > 0) _messageRequests--;
+            });
+          },
+        ),
+        fullscreenDialog: true,
       ),
     );
   }
 
   void _showCreateDMDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) => const CreateDMDialog(),
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const CreateDMDialog(),
+        fullscreenDialog: true,
+      ),
     );
   }
 }
 
 class Message {
   final String id;
-  final String _name;
-  final String _subtitle;
+  final String name;
+  final String subtitle;
   final String avatarUrl;
   final MessageStatus status;
-  final String _activity;
+  final String activity;
   final String lastSeen;
   final bool hasNotification;
   final int notificationCount;
@@ -552,23 +565,17 @@ class Message {
 
   Message({
     required this.id,
-    required String name,
-    required String subtitle,
+    required this.name,
+    required this.subtitle,
     required this.avatarUrl,
     required this.status,
-    required String activity,
+    required this.activity,
     required this.lastSeen,
     this.hasNotification = false,
     this.notificationCount = 0,
     this.isOfficial = false,
     this.isBot = false,
-  }) : _name = InputValidator.safeString(name),
-        _subtitle = InputValidator.safeString(subtitle),
-        _activity = InputValidator.safeString(activity);
-
-  String get name => _name;
-  String get subtitle => _subtitle;
-  String get activity => _activity;
+  });
 }
 
 enum MessageStatus {

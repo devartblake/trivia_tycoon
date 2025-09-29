@@ -1,28 +1,17 @@
 import 'package:flutter/material.dart';
+import '../../../core/utils/input_validator.dart';
+import '../../../core/utils/unicode_utils.dart';
+import '../../messages/widgets/safe_text.dart';
 
-class SearchDialog extends StatefulWidget {
-  const SearchDialog({super.key});
+class MessageRequestDialog extends StatelessWidget {
+  final int requestCount;
+  final Function(bool) onRequestHandled;
 
-  @override
-  State<SearchDialog> createState() => _SearchDialogState();
-}
-
-class _SearchDialogState extends State<SearchDialog> with TickerProviderStateMixin {
-  late TabController _tabController;
-  final TextEditingController _searchController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 6, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    _searchController.dispose();
-    super.dispose();
-  }
+  const MessageRequestDialog({
+    super.key,
+    required this.requestCount,
+    required this.onRequestHandled,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,175 +21,212 @@ class _SearchDialogState extends State<SearchDialog> with TickerProviderStateMix
         backgroundColor: const Color(0xFF36393F),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.close, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Container(
-          height: 36,
-          decoration: BoxDecoration(
-            color: const Color(0xFF202225),
-            borderRadius: BorderRadius.circular(18),
-          ),
-          child: TextField(
-            controller: _searchController,
-            style: const TextStyle(color: Colors.white),
-            decoration: const InputDecoration(
-              hintText: 'Search',
-              hintStyle: TextStyle(color: Color(0xFF72767D)),
-              prefixIcon: Icon(Icons.search, color: Color(0xFF72767D), size: 20),
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.symmetric(vertical: 8),
-            ),
-          ),
+        title: const SafeText(
+          'Message Requests',
+          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.tune, color: Colors.white),
-            onPressed: () {},
-          ),
-        ],
+        centerTitle: true,
       ),
       body: Column(
         children: [
-          _buildTabBar(),
-          Expanded(child: _buildTabBarView()),
+          _buildTabs(),
+          _buildRequestsList(),
         ],
       ),
     );
   }
 
-  Widget _buildTabBar() {
+  Widget _buildTabs() {
     return Container(
-      color: const Color(0xFF36393F),
-      child: TabBar(
-        controller: _tabController,
-        isScrollable: true,
-        indicatorColor: const Color(0xFF5865F2),
-        indicatorWeight: 2,
-        labelColor: const Color(0xFF5865F2),
-        unselectedLabelColor: Colors.white70,
-        tabs: const [
-          Tab(text: 'Recent'),
-          Tab(text: 'People'),
-          Tab(text: 'Media'),
-          Tab(text: 'Pins'),
-          Tab(text: 'Links'),
-          Tab(text: 'Files'),
+      margin: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFF40444B),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              decoration: BoxDecoration(
+                color: const Color(0xFF5865F2),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const SafeText(
+                'Requests',
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: const SafeText(
+                'Spam',
+                style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w500),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildTabBarView() {
-    return TabBarView(
-      controller: _tabController,
-      children: [
-        _buildRecentTab(),
-        _buildPeopleTab(),
-        _buildMediaTab(),
-        _buildPinsTab(),
-        _buildLinksTab(),
-        _buildFilesTab(),
-      ],
-    );
-  }
+  Widget _buildRequestsList() {
+    // Clean the section header text using UnicodeUtils
+    final sectionHeaderText = UnicodeUtils.sanitizeString('MESSAGE REQUESTS — $requestCount');
 
-  Widget _buildRecentTab() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+    return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Suggested',
-            style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(height: 16),
-          ListTile(
-            leading: const CircleAvatar(
-              backgroundColor: Color(0xFF5865F2),
-              child: Text('C', style: TextStyle(color: Colors.white)),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: SafeText(
+              sectionHeaderText,
+              style: const TextStyle(color: Color(0xFF72767D), fontSize: 12, fontWeight: FontWeight.w500),
             ),
-            title: const Text('CavemanYeti', style: TextStyle(color: Colors.white)),
-            subtitle: const Text('cavemanyeti', style: TextStyle(color: Color(0xFF72767D))),
-            onTap: () {},
-          ),
-          const SizedBox(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Photos & Media',
-                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-              TextButton(
-                onPressed: () {},
-                child: const Text(
-                  'View all',
-                  style: TextStyle(color: Color(0xFF5865F2)),
-                ),
-              ),
-            ],
           ),
           const SizedBox(height: 16),
-          _buildMediaGrid(),
+          Expanded(
+            child: ListView(
+              children: [
+                _buildRequestTile(
+                    'cameron_cancer99',
+                    'cam1999',
+                    '>30d ago',
+                    'https://discord.gg/ZNPGJ3eZ'
+                ),
+                _buildRequestTile(
+                    'Sofiya Yuki', // Cleaned up the problematic Unicode
+                    'sofiya_...',
+                    'June 9, 2023',
+                    'Message contains a sticker:'
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildMediaGrid() {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
-        childAspectRatio: 1.2,
+  Widget _buildRequestTile(String name, String username, String time, String message) {
+    // Sanitize all input strings using UnicodeUtils
+    final safeName = InputValidator.safeString(name);
+    final safeUsername = InputValidator.safeString(username);
+    final safeTime = InputValidator.safeString(time);
+    final safeMessage = InputValidator.safeString(message);
+
+    // Get safe first character for avatar
+    final avatarChar = safeName.isNotEmpty
+        ? UnicodeUtils.sanitizeString(safeName.substring(0, 1)).toUpperCase()
+        : '?';
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFF40444B),
+        borderRadius: BorderRadius.circular(8),
       ),
-      itemCount: 6,
-      itemBuilder: (context, index) {
-        return Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFF40444B),
-            borderRadius: BorderRadius.circular(8),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 20,
+            backgroundColor: const Color(0xFF5865F2),
+            child: SafeText(
+              avatarChar,
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
           ),
-          child: const Center(
-            child: Icon(Icons.image, color: Colors.white70, size: 40),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // User info row with proper overflow handling
+                Wrap(
+                  spacing: 4,
+                  runSpacing: 2,
+                  children: [
+                    SafeText(
+                      safeName,
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                    ),
+                    SafeText(
+                      safeUsername,
+                      style: const TextStyle(color: Color(0xFF72767D), fontSize: 12),
+                    ),
+                    SafeText(
+                      safeTime,
+                      style: const TextStyle(color: Color(0xFF72767D), fontSize: 12),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                SafeText(
+                  safeMessage,
+                  style: const TextStyle(color: Color(0xFFB9BBBE), fontSize: 14),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
           ),
-        );
-      },
+          Column(
+            children: [
+              IconButton(
+                onPressed: () => onRequestHandled(true),
+                icon: const Icon(Icons.check, color: Color(0xFF3BA55C)),
+                tooltip: 'Accept request',
+              ),
+              IconButton(
+                onPressed: () => onRequestHandled(false),
+                icon: const Icon(Icons.close, color: Color(0xFFED4245)),
+                tooltip: 'Decline request',
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
+}
 
-  Widget _buildPeopleTab() {
-    return const Center(
-      child: Text('People tab content', style: TextStyle(color: Colors.white)),
-    );
-  }
+// Helper class for creating safe message request data
+class MessageRequest {
+  final String _name;
+  final String _username;
+  final String _time;
+  final String _message;
+  final String? _avatarUrl;
 
-  Widget _buildMediaTab() {
-    return const Center(
-      child: Text('Media tab content', style: TextStyle(color: Colors.white)),
-    );
-  }
+  MessageRequest({
+    required String name,
+    required String username,
+    required String time,
+    required String message,
+    String? avatarUrl,
+  }) : _name = InputValidator.safeString(name),
+        _username = InputValidator.safeString(username),
+        _time = InputValidator.safeString(time),
+        _message = InputValidator.safeString(message),
+        _avatarUrl = avatarUrl != null ? InputValidator.safeString(avatarUrl) : null;
 
-  Widget _buildPinsTab() {
-    return const Center(
-      child: Text('Pins tab content', style: TextStyle(color: Colors.white)),
-    );
-  }
+  String get name => _name;
+  String get username => _username;
+  String get time => _time;
+  String get message => _message;
+  String? get avatarUrl => _avatarUrl;
 
-  Widget _buildLinksTab() {
-    return const Center(
-      child: Text('Links tab content', style: TextStyle(color: Colors.white)),
-    );
-  }
-
-  Widget _buildFilesTab() {
-    return const Center(
-      child: Text('Files tab content', style: TextStyle(color: Colors.white)),
-    );
+  String get safeAvatarChar {
+    final safeName = UnicodeUtils.sanitizeString(_name);
+    return safeName.isNotEmpty ? safeName.substring(0, 1).toUpperCase() : '?';
   }
 }

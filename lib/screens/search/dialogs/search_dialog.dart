@@ -1,14 +1,28 @@
 import 'package:flutter/material.dart';
 
-class MessageRequestDialog extends StatelessWidget {
-  final int requestCount;
-  final Function(bool) onRequestHandled;
+class SearchDialog extends StatefulWidget {
+  const SearchDialog({super.key});
 
-  const MessageRequestDialog({
-    super.key,
-    required this.requestCount,
-    required this.onRequestHandled,
-  });
+  @override
+  State<SearchDialog> createState() => _SearchDialogState();
+}
+
+class _SearchDialogState extends State<SearchDialog> with TickerProviderStateMixin {
+  late TabController _tabController;
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 6, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,138 +32,243 @@ class MessageRequestDialog extends StatelessWidget {
         backgroundColor: const Color(0xFF36393F),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          'Message Requests',
-          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
+        title: Container(
+          height: 36,
+          decoration: BoxDecoration(
+            color: const Color(0xFF202225),
+            borderRadius: BorderRadius.circular(18),
+          ),
+          child: TextField(
+            controller: _searchController,
+            style: const TextStyle(color: Colors.white),
+            decoration: const InputDecoration(
+              hintText: 'Search',
+              hintStyle: TextStyle(color: Color(0xFF72767D)),
+              prefixIcon: Icon(Icons.search, color: Color(0xFF72767D), size: 20),
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.symmetric(vertical: 8),
+            ),
+          ),
         ),
-        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.tune, color: Colors.white),
+            onPressed: () {},
+          ),
+        ],
       ),
       body: Column(
         children: [
-          _buildTabs(),
-          _buildRequestsList(),
+          _buildTabBar(),
+          Expanded(child: _buildTabBarView()),
         ],
       ),
     );
   }
 
-  Widget _buildTabs() {
+  Widget _buildTabBar() {
     return Container(
-      margin: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFF40444B),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              decoration: BoxDecoration(
-                color: const Color(0xFF5865F2),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: const Text(
-                'Requests',
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: const Text(
-                'Spam',
-                style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w500),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
+      color: const Color(0xFF36393F),
+      child: TabBar(
+        controller: _tabController,
+        tabAlignment: TabAlignment.start,
+        isScrollable: true,
+        indicatorColor: const Color(0xFF5865F2),
+        indicatorWeight: 2,
+        labelColor: const Color(0xFF5865F2),
+        unselectedLabelColor: Colors.white70,
+        tabs: const [
+          Tab(text: 'Recent'),
+          Tab(text: 'People'),
+          Tab(text: 'Media'),
+          Tab(text: 'Pins'),
+          Tab(text: 'Links'),
+          Tab(text: 'Files'),
         ],
       ),
     );
   }
 
-  Widget _buildRequestsList() {
-    return Expanded(
+  Widget _buildTabBarView() {
+    return TabBarView(
+      controller: _tabController,
+      children: [
+        _buildRecentTab(),
+        _buildPeopleTab(),
+        _buildMediaTab(),
+        _buildPinsTab(),
+        _buildLinksTab(),
+        _buildFilesTab(),
+      ],
+    );
+  }
+
+  Widget _buildRecentTab() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              'MESSAGE REQUESTS — 2',
-              style: TextStyle(color: Color(0xFF72767D), fontSize: 12, fontWeight: FontWeight.w500),
-            ),
+          const Text(
+            'Suggested',
+            style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 16),
-          _buildRequestTile('cameron_cancer99', 'cam1999', '>30d ago', 'https://discord.gg/ZNPGJ3eZ'),
-          _buildRequestTile('🎀Sofiya Yuki🎀', 'sofiya_...', 'June 9, 2023', 'Message contains a sticker:'),
+          ListTile(
+            leading: const CircleAvatar(
+              backgroundColor: Color(0xFF5865F2),
+              child: Text('C', style: TextStyle(color: Colors.white)),
+            ),
+            title: const Text('CavemanYeti', style: TextStyle(color: Colors.white)),
+            subtitle: const Text('cavemanyeti', style: TextStyle(color: Color(0xFF72767D))),
+            onTap: () {},
+          ),
+          const SizedBox(height: 24),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Photos & Media',
+                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+              ),
+              TextButton(
+                onPressed: () {},
+                child: const Text(
+                  'View all',
+                  style: TextStyle(color: Color(0xFF5865F2)),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          _buildMediaGrid(),
         ],
       ),
     );
   }
 
-  Widget _buildRequestTile(String name, String username, String time, String message) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFF40444B),
-        borderRadius: BorderRadius.circular(8),
+  Widget _buildMediaGrid() {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
+        childAspectRatio: 1.2,
       ),
-      child: Row(
+      itemCount: 6,
+      itemBuilder: (context, index) {
+        return Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFF40444B),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: const Center(
+            child: Icon(Icons.image, color: Colors.white70, size: 40),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildPeopleTab() {
+    return const Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircleAvatar(
-            radius: 20,
-            backgroundColor: const Color(0xFF5865F2),
-            child: Text(
-              name[0],
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            ),
+          Icon(Icons.people_outline, color: Colors.white70, size: 64),
+          SizedBox(height: 16),
+          Text(
+            'No people found',
+            style: TextStyle(color: Colors.white70, fontSize: 16),
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      name,
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      username,
-                      style: const TextStyle(color: Color(0xFF72767D), fontSize: 12),
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      time,
-                      style: const TextStyle(color: Color(0xFF72767D), fontSize: 12),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  message,
-                  style: const TextStyle(color: Color(0xFFB9BBBE), fontSize: 14),
-                ),
-              ],
-            ),
+          Text(
+            'Try searching for a different name',
+            style: TextStyle(color: Color(0xFF72767D), fontSize: 14),
           ),
-          IconButton(
-            onPressed: () => onRequestHandled(true),
-            icon: const Icon(Icons.check, color: Color(0xFF3BA55C)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMediaTab() {
+    return const Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.photo_library_outlined, color: Colors.white70, size: 64),
+          SizedBox(height: 16),
+          Text(
+            'No media found',
+            style: TextStyle(color: Colors.white70, fontSize: 16),
           ),
-          IconButton(
-            onPressed: () => onRequestHandled(false),
-            icon: const Icon(Icons.close, color: Color(0xFFED4245)),
+          Text(
+            'Photos and videos will appear here',
+            style: TextStyle(color: Color(0xFF72767D), fontSize: 14),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPinsTab() {
+    return const Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.push_pin_outlined, color: Colors.white70, size: 64),
+          SizedBox(height: 16),
+          Text(
+            'No pinned messages',
+            style: TextStyle(color: Colors.white70, fontSize: 16),
+          ),
+          Text(
+            'Pinned messages will appear here',
+            style: TextStyle(color: Color(0xFF72767D), fontSize: 14),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLinksTab() {
+    return const Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.link, color: Colors.white70, size: 64),
+          SizedBox(height: 16),
+          Text(
+            'No links found',
+            style: TextStyle(color: Colors.white70, fontSize: 16),
+          ),
+          Text(
+            'Shared links will appear here',
+            style: TextStyle(color: Color(0xFF72767D), fontSize: 14),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFilesTab() {
+    return const Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.insert_drive_file_outlined, color: Colors.white70, size: 64),
+          SizedBox(height: 16),
+          Text(
+            'No files found',
+            style: TextStyle(color: Colors.white70, fontSize: 16),
+          ),
+          Text(
+            'Shared files will appear here',
+            style: TextStyle(color: Color(0xFF72767D), fontSize: 14),
           ),
         ],
       ),
