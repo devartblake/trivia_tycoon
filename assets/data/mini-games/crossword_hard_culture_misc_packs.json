@@ -1,0 +1,14 @@
+{
+  "version": 3,
+  "theme": "culture_misc",
+  "puzzles": [],
+  "counts": {
+    "totalPuzzles": 0,
+    "byGrid": {
+      "10": 0,
+      "12": 0,
+      "15": 0
+    },
+    "totalWords": 0
+  }
+}

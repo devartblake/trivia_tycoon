@@ -1,0 +1,3321 @@
+{
+  "version": 3,
+  "theme": "science_tech",
+  "puzzles": [
+    {
+      "id": "10x10-1",
+      "gridSize": 10,
+      "words": [
+        {
+          "word": "ANTHROLOGY",
+          "clue": "Practice related to Anthro",
+          "startRow": 0,
+          "startCol": 9,
+          "direction": "down"
+        },
+        {
+          "word": "CRYPTOLOGY",
+          "clue": "Measurement of Crypto",
+          "startRow": 9,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "HYDROSOPHY",
+          "clue": "Study of Hydro",
+          "startRow": 0,
+          "startCol": 2,
+          "direction": "down"
+        },
+        {
+          "word": "CRYPTOLOGY",
+          "clue": "Government by Crypto",
+          "startRow": 9,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "HYDROLOGY",
+          "clue": "Practice related to Hydro",
+          "startRow": 2,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ECOSCOPE",
+          "clue": "Measurement of Eco",
+          "startRow": 6,
+          "startCol": 0,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "10x10-2",
+      "gridSize": 10,
+      "words": [
+        {
+          "word": "TELELOGY",
+          "clue": "Government by Tele",
+          "startRow": 2,
+          "startCol": 2,
+          "direction": "down"
+        },
+        {
+          "word": "TELEISM",
+          "clue": "Study of Tele",
+          "startRow": 6,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ECOCRACY",
+          "clue": "Study of Eco",
+          "startRow": 7,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "NEOSCOPE",
+          "clue": "Measurement of Neo",
+          "startRow": 3,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "ASTRONOMY",
+          "clue": "Belief in Astro",
+          "startRow": 2,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "TELEISM",
+          "clue": "Practice related to Tele",
+          "startRow": 6,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "PHOTONOMY",
+          "clue": "Practice related to Photo",
+          "startRow": 0,
+          "startCol": 9,
+          "direction": "down"
+        },
+        {
+          "word": "ASTROLOGY",
+          "clue": "Practice related to Astro",
+          "startRow": 0,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "BIOLOGY",
+          "clue": "Government by Bio",
+          "startRow": 8,
+          "startCol": 3,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "10x10-3",
+      "gridSize": 10,
+      "words": [
+        {
+          "word": "HYDROMETRY",
+          "clue": "Practice related to Hydro",
+          "startRow": 0,
+          "startCol": 9,
+          "direction": "down"
+        },
+        {
+          "word": "ECOMETRY",
+          "clue": "Practice related to Eco",
+          "startRow": 9,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "NEONOMY",
+          "clue": "Belief in Neo",
+          "startRow": 1,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "CRYPTOLOGY",
+          "clue": "Belief in Crypto",
+          "startRow": 0,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "GEOLOGY",
+          "clue": "Fear of Geo",
+          "startRow": 0,
+          "startCol": 4,
+          "direction": "down"
+        },
+        {
+          "word": "ECOIST",
+          "clue": "Love of Eco",
+          "startRow": 4,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "HYDROIST",
+          "clue": "Belief in Hydro",
+          "startRow": 7,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "ASTROCRACY",
+          "clue": "Love of Astro",
+          "startRow": 0,
+          "startCol": 1,
+          "direction": "down"
+        }
+      ]
+    },
+    {
+      "id": "10x10-4",
+      "gridSize": 10,
+      "words": [
+        {
+          "word": "PHOTOARCHY",
+          "clue": "Fear of Photo",
+          "startRow": 0,
+          "startCol": 5,
+          "direction": "down"
+        },
+        {
+          "word": "ASTROISM",
+          "clue": "Love of Astro",
+          "startRow": 2,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "ANTHROLOGY",
+          "clue": "Study of Anthro",
+          "startRow": 0,
+          "startCol": 3,
+          "direction": "down"
+        },
+        {
+          "word": "TELEISM",
+          "clue": "Government by Tele",
+          "startRow": 3,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "METASCOPE",
+          "clue": "System of Meta knowledge",
+          "startRow": 0,
+          "startCol": 9,
+          "direction": "down"
+        }
+      ]
+    },
+    {
+      "id": "10x10-5",
+      "gridSize": 10,
+      "words": [
+        {
+          "word": "PALEOSCOPE",
+          "clue": "Belief in Paleo",
+          "startRow": 0,
+          "startCol": 6,
+          "direction": "down"
+        },
+        {
+          "word": "ECOMETRY",
+          "clue": "Fear of Eco",
+          "startRow": 3,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "ECOPHILE",
+          "clue": "Government by Eco",
+          "startRow": 2,
+          "startCol": 3,
+          "direction": "down"
+        },
+        {
+          "word": "ASTROISM",
+          "clue": "Study of Astro",
+          "startRow": 1,
+          "startCol": 7,
+          "direction": "down"
+        },
+        {
+          "word": "ASTROSCOPE",
+          "clue": "System of Astro knowledge",
+          "startRow": 0,
+          "startCol": 8,
+          "direction": "down"
+        },
+        {
+          "word": "BIOPHOBIA",
+          "clue": "Love of Bio",
+          "startRow": 1,
+          "startCol": 4,
+          "direction": "down"
+        },
+        {
+          "word": "TELELOGY",
+          "clue": "System of Tele knowledge",
+          "startRow": 2,
+          "startCol": 2,
+          "direction": "down"
+        },
+        {
+          "word": "GEOSCOPE",
+          "clue": "Measurement of Geo",
+          "startRow": 0,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "BIOGRAPHY",
+          "clue": "Fear of Bio",
+          "startRow": 1,
+          "startCol": 1,
+          "direction": "down"
+        },
+        {
+          "word": "ECOMETRY",
+          "clue": "System of Eco knowledge",
+          "startRow": 3,
+          "startCol": 2,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "10x10-6",
+      "gridSize": 10,
+      "words": [
+        {
+          "word": "PHOTOCRACY",
+          "clue": "Measurement of Photo",
+          "startRow": 8,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ECOSOPHY",
+          "clue": "Practice related to Eco",
+          "startRow": 2,
+          "startCol": 1,
+          "direction": "down"
+        },
+        {
+          "word": "ANTHROLOGY",
+          "clue": "Study of Anthro",
+          "startRow": 1,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "BIOCRACY",
+          "clue": "Fear of Bio",
+          "startRow": 2,
+          "startCol": 5,
+          "direction": "down"
+        },
+        {
+          "word": "ASTROCRACY",
+          "clue": "Government by Astro",
+          "startRow": 5,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "HYDROSOPHY",
+          "clue": "Practice related to Hydro",
+          "startRow": 0,
+          "startCol": 0,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "10x10-7",
+      "gridSize": 10,
+      "words": [
+        {
+          "word": "TELEIST",
+          "clue": "Belief in Tele",
+          "startRow": 6,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ASTROARCHY",
+          "clue": "Belief in Astro",
+          "startRow": 3,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ECOARCHY",
+          "clue": "Love of Eco",
+          "startRow": 2,
+          "startCol": 7,
+          "direction": "down"
+        },
+        {
+          "word": "PHOTOSOPHY",
+          "clue": "Fear of Photo",
+          "startRow": 0,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "TELEIST",
+          "clue": "Love of Tele",
+          "startRow": 6,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "PHOTOARCHY",
+          "clue": "System of Photo knowledge",
+          "startRow": 7,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "PSYCHONOMY",
+          "clue": "System of Psycho knowledge",
+          "startRow": 4,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "PHOTOSOPHY",
+          "clue": "Fear of Photo",
+          "startRow": 0,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "TELEIST",
+          "clue": "Measurement of Tele",
+          "startRow": 6,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ASTROMANCY",
+          "clue": "System of Astro knowledge",
+          "startRow": 1,
+          "startCol": 0,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "10x10-8",
+      "gridSize": 10,
+      "words": [
+        {
+          "word": "HYDROPHILE",
+          "clue": "Love of Hydro",
+          "startRow": 3,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ANTHRONOMY",
+          "clue": "Measurement of Anthro",
+          "startRow": 0,
+          "startCol": 6,
+          "direction": "down"
+        },
+        {
+          "word": "BIOARCHY",
+          "clue": "Fear of Bio",
+          "startRow": 1,
+          "startCol": 4,
+          "direction": "down"
+        },
+        {
+          "word": "HYDROIST",
+          "clue": "Measurement of Hydro",
+          "startRow": 1,
+          "startCol": 2,
+          "direction": "down"
+        },
+        {
+          "word": "HYDROMETRY",
+          "clue": "Love of Hydro",
+          "startRow": 0,
+          "startCol": 3,
+          "direction": "down"
+        }
+      ]
+    },
+    {
+      "id": "10x10-9",
+      "gridSize": 10,
+      "words": [
+        {
+          "word": "ASTROSCOPE",
+          "clue": "Practice related to Astro",
+          "startRow": 1,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ASTROCRACY",
+          "clue": "System of Astro knowledge",
+          "startRow": 0,
+          "startCol": 1,
+          "direction": "down"
+        }
+      ]
+    },
+    {
+      "id": "10x10-10",
+      "gridSize": 10,
+      "words": [
+        {
+          "word": "PHOTOCRACY",
+          "clue": "System of Photo knowledge",
+          "startRow": 1,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "BIOISM",
+          "clue": "System of Bio knowledge",
+          "startRow": 4,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ECOPHILE",
+          "clue": "Belief in Eco",
+          "startRow": 2,
+          "startCol": 2,
+          "direction": "down"
+        },
+        {
+          "word": "TELEPHILE",
+          "clue": "Belief in Tele",
+          "startRow": 2,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "TELEMETRY",
+          "clue": "Practice related to Tele",
+          "startRow": 8,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "BIOARCHY",
+          "clue": "Measurement of Bio",
+          "startRow": 7,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "METAPHOBIA",
+          "clue": "Study of Meta",
+          "startRow": 0,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "BIOIST",
+          "clue": "Measurement of Bio",
+          "startRow": 5,
+          "startCol": 4,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "10x10-11",
+      "gridSize": 10,
+      "words": [
+        {
+          "word": "PHOTOSOPHY",
+          "clue": "Government by Photo",
+          "startRow": 9,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "NEOSCOPE",
+          "clue": "Belief in Neo",
+          "startRow": 0,
+          "startCol": 8,
+          "direction": "down"
+        },
+        {
+          "word": "NEONOMY",
+          "clue": "Practice related to Neo",
+          "startRow": 3,
+          "startCol": 9,
+          "direction": "down"
+        },
+        {
+          "word": "PHOTONOMY",
+          "clue": "Love of Photo",
+          "startRow": 0,
+          "startCol": 7,
+          "direction": "down"
+        },
+        {
+          "word": "TELEARCHY",
+          "clue": "Belief in Tele",
+          "startRow": 0,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "TELESCOPE",
+          "clue": "System of Tele knowledge",
+          "startRow": 0,
+          "startCol": 4,
+          "direction": "down"
+        },
+        {
+          "word": "NEONOMY",
+          "clue": "Government by Neo",
+          "startRow": 3,
+          "startCol": 9,
+          "direction": "down"
+        },
+        {
+          "word": "METASCOPE",
+          "clue": "Belief in Meta",
+          "startRow": 0,
+          "startCol": 5,
+          "direction": "down"
+        }
+      ]
+    },
+    {
+      "id": "10x10-12",
+      "gridSize": 10,
+      "words": [
+        {
+          "word": "ASTROSCOPE",
+          "clue": "Belief in Astro",
+          "startRow": 0,
+          "startCol": 3,
+          "direction": "down"
+        },
+        {
+          "word": "TELEGRAPHY",
+          "clue": "Study of Tele",
+          "startRow": 9,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "CHRONONOMY",
+          "clue": "Fear of Chrono",
+          "startRow": 7,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ECOMETRY",
+          "clue": "System of Eco knowledge",
+          "startRow": 0,
+          "startCol": 9,
+          "direction": "down"
+        }
+      ]
+    },
+    {
+      "id": "10x10-13",
+      "gridSize": 10,
+      "words": [
+        {
+          "word": "TELELOGY",
+          "clue": "Belief in Tele",
+          "startRow": 4,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "TELEPHOBIA",
+          "clue": "System of Tele knowledge",
+          "startRow": 3,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "HYDROLOGY",
+          "clue": "Government by Hydro",
+          "startRow": 8,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "BIONOMY",
+          "clue": "System of Bio knowledge",
+          "startRow": 2,
+          "startCol": 8,
+          "direction": "down"
+        },
+        {
+          "word": "METAGRAPHY",
+          "clue": "Measurement of Meta",
+          "startRow": 0,
+          "startCol": 9,
+          "direction": "down"
+        },
+        {
+          "word": "METAGRAPHY",
+          "clue": "Study of Meta",
+          "startRow": 0,
+          "startCol": 9,
+          "direction": "down"
+        },
+        {
+          "word": "BIOARCHY",
+          "clue": "Study of Bio",
+          "startRow": 9,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "CHRONOIST",
+          "clue": "Belief in Chrono",
+          "startRow": 0,
+          "startCol": 0,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "10x10-14",
+      "gridSize": 10,
+      "words": [
+        {
+          "word": "PALEOMETRY",
+          "clue": "Fear of Paleo",
+          "startRow": 9,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ECOARCHY",
+          "clue": "Practice related to Eco",
+          "startRow": 2,
+          "startCol": 9,
+          "direction": "down"
+        },
+        {
+          "word": "CHRONOIST",
+          "clue": "Love of Chrono",
+          "startRow": 1,
+          "startCol": 7,
+          "direction": "down"
+        },
+        {
+          "word": "BIOISM",
+          "clue": "Belief in Bio",
+          "startRow": 8,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "PSYCHOLOGY",
+          "clue": "System of Psycho knowledge",
+          "startRow": 0,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ECOLOGY",
+          "clue": "Study of Eco",
+          "startRow": 6,
+          "startCol": 0,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "10x10-15",
+      "gridSize": 10,
+      "words": [
+        {
+          "word": "PALEOPHILE",
+          "clue": "Fear of Paleo",
+          "startRow": 3,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "PHOTOCRACY",
+          "clue": "Measurement of Photo",
+          "startRow": 8,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "PHOTOSOPHY",
+          "clue": "Study of Photo",
+          "startRow": 5,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "BIOISM",
+          "clue": "Measurement of Bio",
+          "startRow": 4,
+          "startCol": 4,
+          "direction": "across"
+        },
+        {
+          "word": "ANTHROLOGY",
+          "clue": "Love of Anthro",
+          "startRow": 0,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "HYDROLOGY",
+          "clue": "System of Hydro knowledge",
+          "startRow": 7,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "METAPHOBIA",
+          "clue": "Belief in Meta",
+          "startRow": 2,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "CRYPTOIST",
+          "clue": "Study of Crypto",
+          "startRow": 1,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "PSYCHOLOGY",
+          "clue": "Love of Psycho",
+          "startRow": 6,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ECONOMY",
+          "clue": "Fear of Eco",
+          "startRow": 9,
+          "startCol": 1,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "10x10-16",
+      "gridSize": 10,
+      "words": [
+        {
+          "word": "CRYPTOISM",
+          "clue": "Belief in Crypto",
+          "startRow": 0,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ASTROARCHY",
+          "clue": "Love of Astro",
+          "startRow": 1,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "PALEONOMY",
+          "clue": "Government by Paleo",
+          "startRow": 3,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "CHRONONOMY",
+          "clue": "Belief in Chrono",
+          "startRow": 6,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "TELEMETRY",
+          "clue": "Practice related to Tele",
+          "startRow": 8,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "TELENOMY",
+          "clue": "Government by Tele",
+          "startRow": 5,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "PHOTOISM",
+          "clue": "Love of Photo",
+          "startRow": 2,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "NEOGRAPHY",
+          "clue": "Fear of Neo",
+          "startRow": 9,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "TELESCOPE",
+          "clue": "Fear of Tele",
+          "startRow": 4,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "CHRONOLOGY",
+          "clue": "System of Chrono knowledge",
+          "startRow": 7,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ASTROARCHY",
+          "clue": "Government by Astro",
+          "startRow": 1,
+          "startCol": 0,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "12x12-1",
+      "gridSize": 12,
+      "words": [
+        {
+          "word": "ANTHROLOGY",
+          "clue": "Practice related to Anthro",
+          "startRow": 1,
+          "startCol": 5,
+          "direction": "down"
+        },
+        {
+          "word": "CRYPTOLOGY",
+          "clue": "Measurement of Crypto",
+          "startRow": 3,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "HYDROSOPHY",
+          "clue": "Study of Hydro",
+          "startRow": 8,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "CRYPTOLOGY",
+          "clue": "Government by Crypto",
+          "startRow": 3,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "HYDROLOGY",
+          "clue": "Practice related to Hydro",
+          "startRow": 0,
+          "startCol": 2,
+          "direction": "down"
+        },
+        {
+          "word": "CRYPTOMETRY",
+          "clue": "Practice related to Crypto",
+          "startRow": 0,
+          "startCol": 11,
+          "direction": "down"
+        },
+        {
+          "word": "ECOSCOPE",
+          "clue": "Measurement of Eco",
+          "startRow": 6,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "PHOTOPHOBIA",
+          "clue": "Government by Photo",
+          "startRow": 11,
+          "startCol": 1,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "12x12-2",
+      "gridSize": 12,
+      "words": [
+        {
+          "word": "PSYCHOPHILE",
+          "clue": "Study of Psycho",
+          "startRow": 1,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "TELELOGY",
+          "clue": "Government by Tele",
+          "startRow": 0,
+          "startCol": 11,
+          "direction": "down"
+        },
+        {
+          "word": "TELEISM",
+          "clue": "Study of Tele",
+          "startRow": 3,
+          "startCol": 10,
+          "direction": "down"
+        },
+        {
+          "word": "ECOCRACY",
+          "clue": "Study of Eco",
+          "startRow": 0,
+          "startCol": 4,
+          "direction": "down"
+        },
+        {
+          "word": "NEOSCOPE",
+          "clue": "Measurement of Neo",
+          "startRow": 3,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ANTHROPHILE",
+          "clue": "Fear of Anthro",
+          "startRow": 4,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ASTRONOMY",
+          "clue": "Belief in Astro",
+          "startRow": 9,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "TELEISM",
+          "clue": "Practice related to Tele",
+          "startRow": 3,
+          "startCol": 10,
+          "direction": "down"
+        },
+        {
+          "word": "PSYCHOPHOBIA",
+          "clue": "Study of Psycho",
+          "startRow": 10,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "PHOTONOMY",
+          "clue": "Practice related to Photo",
+          "startRow": 2,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ASTROLOGY",
+          "clue": "Practice related to Astro",
+          "startRow": 11,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "PSYCHOPHILE",
+          "clue": "Measurement of Psycho",
+          "startRow": 1,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "BIOLOGY",
+          "clue": "Government by Bio",
+          "startRow": 8,
+          "startCol": 1,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "12x12-3",
+      "gridSize": 12,
+      "words": [
+        {
+          "word": "HYDROMETRY",
+          "clue": "Practice related to Hydro",
+          "startRow": 2,
+          "startCol": 8,
+          "direction": "down"
+        },
+        {
+          "word": "ECOMETRY",
+          "clue": "Practice related to Eco",
+          "startRow": 8,
+          "startCol": 4,
+          "direction": "across"
+        },
+        {
+          "word": "NEONOMY",
+          "clue": "Belief in Neo",
+          "startRow": 11,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "CRYPTOLOGY",
+          "clue": "Belief in Crypto",
+          "startRow": 1,
+          "startCol": 6,
+          "direction": "down"
+        },
+        {
+          "word": "CRYPTOGRAPHY",
+          "clue": "Love of Crypto",
+          "startRow": 0,
+          "startCol": 1,
+          "direction": "down"
+        },
+        {
+          "word": "GEOLOGY",
+          "clue": "Fear of Geo",
+          "startRow": 6,
+          "startCol": 4,
+          "direction": "across"
+        },
+        {
+          "word": "ECOIST",
+          "clue": "Love of Eco",
+          "startRow": 1,
+          "startCol": 5,
+          "direction": "across"
+        },
+        {
+          "word": "ANTHROGRAPHY",
+          "clue": "System of Anthro knowledge",
+          "startRow": 0,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "HYDROIST",
+          "clue": "Belief in Hydro",
+          "startRow": 1,
+          "startCol": 2,
+          "direction": "down"
+        },
+        {
+          "word": "ASTROCRACY",
+          "clue": "Love of Astro",
+          "startRow": 0,
+          "startCol": 2,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "12x12-4",
+      "gridSize": 12,
+      "words": [
+        {
+          "word": "CHRONOMANCY",
+          "clue": "Practice related to Chrono",
+          "startRow": 0,
+          "startCol": 6,
+          "direction": "down"
+        },
+        {
+          "word": "CHRONOARCHY",
+          "clue": "Love of Chrono",
+          "startRow": 7,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "PHOTOARCHY",
+          "clue": "Fear of Photo",
+          "startRow": 1,
+          "startCol": 2,
+          "direction": "down"
+        },
+        {
+          "word": "ASTROISM",
+          "clue": "Love of Astro",
+          "startRow": 3,
+          "startCol": 5,
+          "direction": "down"
+        },
+        {
+          "word": "ANTHROLOGY",
+          "clue": "Study of Anthro",
+          "startRow": 2,
+          "startCol": 3,
+          "direction": "down"
+        },
+        {
+          "word": "TELEISM",
+          "clue": "Government by Tele",
+          "startRow": 0,
+          "startCol": 7,
+          "direction": "down"
+        },
+        {
+          "word": "ANTHROGRAPHY",
+          "clue": "Measurement of Anthro",
+          "startRow": 0,
+          "startCol": 11,
+          "direction": "down"
+        },
+        {
+          "word": "METASCOPE",
+          "clue": "System of Meta knowledge",
+          "startRow": 2,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "PALEOSCOPE",
+          "clue": "Belief in Paleo",
+          "startRow": 1,
+          "startCol": 8,
+          "direction": "down"
+        },
+        {
+          "word": "ECOMETRY",
+          "clue": "Fear of Eco",
+          "startRow": 11,
+          "startCol": 4,
+          "direction": "across"
+        },
+        {
+          "word": "ECOPHILE",
+          "clue": "Government by Eco",
+          "startRow": 3,
+          "startCol": 1,
+          "direction": "down"
+        },
+        {
+          "word": "PSYCHOPHILE",
+          "clue": "System of Psycho knowledge",
+          "startRow": 0,
+          "startCol": 9,
+          "direction": "down"
+        },
+        {
+          "word": "ASTROISM",
+          "clue": "Study of Astro",
+          "startRow": 3,
+          "startCol": 5,
+          "direction": "down"
+        }
+      ]
+    },
+    {
+      "id": "12x12-5",
+      "gridSize": 12,
+      "words": [
+        {
+          "word": "CHRONOCRACY",
+          "clue": "Study of Chrono",
+          "startRow": 0,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "PSYCHOARCHY",
+          "clue": "Belief in Psycho",
+          "startRow": 1,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "ASTROSCOPE",
+          "clue": "System of Astro knowledge",
+          "startRow": 8,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "BIOPHOBIA",
+          "clue": "Love of Bio",
+          "startRow": 3,
+          "startCol": 7,
+          "direction": "down"
+        },
+        {
+          "word": "TELELOGY",
+          "clue": "System of Tele knowledge",
+          "startRow": 5,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "CRYPTOCRACY",
+          "clue": "Belief in Crypto",
+          "startRow": 0,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "PSYCHOARCHY",
+          "clue": "Study of Psycho",
+          "startRow": 1,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "PALEOPHOBIA",
+          "clue": "System of Paleo knowledge",
+          "startRow": 7,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "GEOSCOPE",
+          "clue": "Measurement of Geo",
+          "startRow": 6,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "CHRONOMANCY",
+          "clue": "Love of Chrono",
+          "startRow": 11,
+          "startCol": 0,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "12x12-6",
+      "gridSize": 12,
+      "words": [
+        {
+          "word": "ANTHROPHOBIA",
+          "clue": "Fear of Anthro",
+          "startRow": 7,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "BIOGRAPHY",
+          "clue": "Fear of Bio",
+          "startRow": 2,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "ECOMETRY",
+          "clue": "System of Eco knowledge",
+          "startRow": 1,
+          "startCol": 4,
+          "direction": "down"
+        },
+        {
+          "word": "PHOTOCRACY",
+          "clue": "Measurement of Photo",
+          "startRow": 3,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "ECOSOPHY",
+          "clue": "Practice related to Eco",
+          "startRow": 1,
+          "startCol": 4,
+          "direction": "across"
+        },
+        {
+          "word": "PHOTOPHOBIA",
+          "clue": "Fear of Photo",
+          "startRow": 6,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "ANTHROLOGY",
+          "clue": "Study of Anthro",
+          "startRow": 0,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "BIOCRACY",
+          "clue": "Fear of Bio",
+          "startRow": 2,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "ASTROCRACY",
+          "clue": "Government by Astro",
+          "startRow": 11,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "HYDROSOPHY",
+          "clue": "Practice related to Hydro",
+          "startRow": 9,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "TELEIST",
+          "clue": "Belief in Tele",
+          "startRow": 5,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "ASTROARCHY",
+          "clue": "Belief in Astro",
+          "startRow": 10,
+          "startCol": 2,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "12x12-7",
+      "gridSize": 12,
+      "words": [
+        {
+          "word": "ECOARCHY",
+          "clue": "Love of Eco",
+          "startRow": 1,
+          "startCol": 1,
+          "direction": "down"
+        },
+        {
+          "word": "PHOTOSOPHY",
+          "clue": "Fear of Photo",
+          "startRow": 7,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "TELEIST",
+          "clue": "Love of Tele",
+          "startRow": 1,
+          "startCol": 3,
+          "direction": "down"
+        },
+        {
+          "word": "PHOTOARCHY",
+          "clue": "System of Photo knowledge",
+          "startRow": 11,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "ANTHROPHILE",
+          "clue": "Practice related to Anthro",
+          "startRow": 0,
+          "startCol": 8,
+          "direction": "down"
+        },
+        {
+          "word": "ANTHROPHOBIA",
+          "clue": "Fear of Anthro",
+          "startRow": 0,
+          "startCol": 11,
+          "direction": "down"
+        },
+        {
+          "word": "PSYCHONOMY",
+          "clue": "System of Psycho knowledge",
+          "startRow": 0,
+          "startCol": 2,
+          "direction": "down"
+        },
+        {
+          "word": "PHOTOSOPHY",
+          "clue": "Fear of Photo",
+          "startRow": 7,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "TELEIST",
+          "clue": "Measurement of Tele",
+          "startRow": 1,
+          "startCol": 3,
+          "direction": "down"
+        },
+        {
+          "word": "CHRONOARCHY",
+          "clue": "Love of Chrono",
+          "startRow": 1,
+          "startCol": 10,
+          "direction": "down"
+        }
+      ]
+    },
+    {
+      "id": "12x12-8",
+      "gridSize": 12,
+      "words": [
+        {
+          "word": "ASTROMANCY",
+          "clue": "System of Astro knowledge",
+          "startRow": 1,
+          "startCol": 1,
+          "direction": "down"
+        },
+        {
+          "word": "HYDROPHILE",
+          "clue": "Love of Hydro",
+          "startRow": 10,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ANTHRONOMY",
+          "clue": "Measurement of Anthro",
+          "startRow": 1,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "BIOARCHY",
+          "clue": "Fear of Bio",
+          "startRow": 4,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "HYDROIST",
+          "clue": "Measurement of Hydro",
+          "startRow": 0,
+          "startCol": 10,
+          "direction": "down"
+        },
+        {
+          "word": "HYDROMETRY",
+          "clue": "Love of Hydro",
+          "startRow": 3,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "ASTROSCOPE",
+          "clue": "Practice related to Astro",
+          "startRow": 2,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ASTROCRACY",
+          "clue": "System of Astro knowledge",
+          "startRow": 8,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "PHOTOCRACY",
+          "clue": "System of Photo knowledge",
+          "startRow": 0,
+          "startCol": 0,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "12x12-9",
+      "gridSize": 12,
+      "words": [
+        {
+          "word": "CRYPTOGRAPHY",
+          "clue": "Belief in Crypto",
+          "startRow": 0,
+          "startCol": 11,
+          "direction": "down"
+        },
+        {
+          "word": "BIOISM",
+          "clue": "System of Bio knowledge",
+          "startRow": 3,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ECOPHILE",
+          "clue": "Belief in Eco",
+          "startRow": 1,
+          "startCol": 2,
+          "direction": "down"
+        },
+        {
+          "word": "TELEPHILE",
+          "clue": "Belief in Tele",
+          "startRow": 1,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "PSYCHOGRAPHY",
+          "clue": "Love of Psycho",
+          "startRow": 11,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "TELEMETRY",
+          "clue": "Practice related to Tele",
+          "startRow": 0,
+          "startCol": 9,
+          "direction": "down"
+        },
+        {
+          "word": "BIOARCHY",
+          "clue": "Measurement of Bio",
+          "startRow": 2,
+          "startCol": 1,
+          "direction": "down"
+        },
+        {
+          "word": "METAPHOBIA",
+          "clue": "Study of Meta",
+          "startRow": 2,
+          "startCol": 8,
+          "direction": "down"
+        },
+        {
+          "word": "BIOIST",
+          "clue": "Measurement of Bio",
+          "startRow": 0,
+          "startCol": 7,
+          "direction": "down"
+        },
+        {
+          "word": "PHOTOPHOBIA",
+          "clue": "System of Photo knowledge",
+          "startRow": 0,
+          "startCol": 6,
+          "direction": "down"
+        },
+        {
+          "word": "HYDROPHOBIA",
+          "clue": "Fear of Hydro",
+          "startRow": 0,
+          "startCol": 10,
+          "direction": "down"
+        }
+      ]
+    },
+    {
+      "id": "12x12-10",
+      "gridSize": 12,
+      "words": [
+        {
+          "word": "PSYCHOPHOBIA",
+          "clue": "System of Psycho knowledge",
+          "startRow": 8,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "PHOTOSOPHY",
+          "clue": "Government by Photo",
+          "startRow": 2,
+          "startCol": 5,
+          "direction": "down"
+        },
+        {
+          "word": "ANTHROGRAPHY",
+          "clue": "Measurement of Anthro",
+          "startRow": 6,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "CRYPTOCRACY",
+          "clue": "Belief in Crypto",
+          "startRow": 5,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "HYDROGRAPHY",
+          "clue": "Government by Hydro",
+          "startRow": 4,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "NEOSCOPE",
+          "clue": "Belief in Neo",
+          "startRow": 7,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "NEONOMY",
+          "clue": "Practice related to Neo",
+          "startRow": 0,
+          "startCol": 5,
+          "direction": "across"
+        },
+        {
+          "word": "PHOTONOMY",
+          "clue": "Love of Photo",
+          "startRow": 1,
+          "startCol": 1,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "12x12-11",
+      "gridSize": 12,
+      "words": [
+        {
+          "word": "TELEARCHY",
+          "clue": "Belief in Tele",
+          "startRow": 3,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "CHRONOPHOBIA",
+          "clue": "Fear of Chrono",
+          "startRow": 0,
+          "startCol": 1,
+          "direction": "down"
+        },
+        {
+          "word": "TELESCOPE",
+          "clue": "System of Tele knowledge",
+          "startRow": 0,
+          "startCol": 3,
+          "direction": "down"
+        },
+        {
+          "word": "NEONOMY",
+          "clue": "Government by Neo",
+          "startRow": 2,
+          "startCol": 5,
+          "direction": "down"
+        },
+        {
+          "word": "CHRONOSCOPE",
+          "clue": "Love of Chrono",
+          "startRow": 1,
+          "startCol": 7,
+          "direction": "down"
+        },
+        {
+          "word": "METASCOPE",
+          "clue": "Belief in Meta",
+          "startRow": 1,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "ASTROSCOPE",
+          "clue": "Belief in Astro",
+          "startRow": 2,
+          "startCol": 11,
+          "direction": "down"
+        },
+        {
+          "word": "TELEGRAPHY",
+          "clue": "Study of Tele",
+          "startRow": 1,
+          "startCol": 4,
+          "direction": "down"
+        },
+        {
+          "word": "CHRONONOMY",
+          "clue": "Fear of Chrono",
+          "startRow": 2,
+          "startCol": 9,
+          "direction": "down"
+        },
+        {
+          "word": "ECOMETRY",
+          "clue": "System of Eco knowledge",
+          "startRow": 2,
+          "startCol": 8,
+          "direction": "down"
+        },
+        {
+          "word": "TELELOGY",
+          "clue": "Belief in Tele",
+          "startRow": 3,
+          "startCol": 2,
+          "direction": "down"
+        },
+        {
+          "word": "TELEPHOBIA",
+          "clue": "System of Tele knowledge",
+          "startRow": 0,
+          "startCol": 0,
+          "direction": "down"
+        }
+      ]
+    },
+    {
+      "id": "12x12-12",
+      "gridSize": 12,
+      "words": [
+        {
+          "word": "CRYPTOMANCY",
+          "clue": "Study of Crypto",
+          "startRow": 1,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "HYDROLOGY",
+          "clue": "Government by Hydro",
+          "startRow": 0,
+          "startCol": 10,
+          "direction": "down"
+        },
+        {
+          "word": "BIONOMY",
+          "clue": "System of Bio knowledge",
+          "startRow": 8,
+          "startCol": 4,
+          "direction": "across"
+        },
+        {
+          "word": "METAGRAPHY",
+          "clue": "Measurement of Meta",
+          "startRow": 0,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "METAGRAPHY",
+          "clue": "Study of Meta",
+          "startRow": 0,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "BIOARCHY",
+          "clue": "Study of Bio",
+          "startRow": 2,
+          "startCol": 3,
+          "direction": "down"
+        },
+        {
+          "word": "ASTROPHOBIA",
+          "clue": "Belief in Astro",
+          "startRow": 1,
+          "startCol": 11,
+          "direction": "down"
+        },
+        {
+          "word": "CRYPTOPHOBIA",
+          "clue": "Government by Crypto",
+          "startRow": 0,
+          "startCol": 1,
+          "direction": "down"
+        },
+        {
+          "word": "CHRONOIST",
+          "clue": "Belief in Chrono",
+          "startRow": 1,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "PALEOMETRY",
+          "clue": "Fear of Paleo",
+          "startRow": 11,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ECOARCHY",
+          "clue": "Practice related to Eco",
+          "startRow": 7,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "CHRONOIST",
+          "clue": "Love of Chrono",
+          "startRow": 1,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "BIOISM",
+          "clue": "Belief in Bio",
+          "startRow": 3,
+          "startCol": 2,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "12x12-13",
+      "gridSize": 12,
+      "words": [
+        {
+          "word": "PSYCHOLOGY",
+          "clue": "System of Psycho knowledge",
+          "startRow": 10,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ECOLOGY",
+          "clue": "Study of Eco",
+          "startRow": 4,
+          "startCol": 9,
+          "direction": "down"
+        },
+        {
+          "word": "PALEOPHILE",
+          "clue": "Fear of Paleo",
+          "startRow": 7,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "PHOTOCRACY",
+          "clue": "Measurement of Photo",
+          "startRow": 5,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "PHOTOSOPHY",
+          "clue": "Study of Photo",
+          "startRow": 1,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "BIOISM",
+          "clue": "Measurement of Bio",
+          "startRow": 0,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "ANTHROLOGY",
+          "clue": "Love of Anthro",
+          "startRow": 9,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "HYDROLOGY",
+          "clue": "System of Hydro knowledge",
+          "startRow": 6,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "ASTROGRAPHY",
+          "clue": "Belief in Astro",
+          "startRow": 3,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "ANTHROPHOBIA",
+          "clue": "Fear of Anthro",
+          "startRow": 11,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "CRYPTOMANCY",
+          "clue": "Belief in Crypto",
+          "startRow": 2,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "METAPHOBIA",
+          "clue": "Belief in Meta",
+          "startRow": 0,
+          "startCol": 0,
+          "direction": "down"
+        }
+      ]
+    },
+    {
+      "id": "12x12-14",
+      "gridSize": 12,
+      "words": [
+        {
+          "word": "CRYPTOIST",
+          "clue": "Study of Crypto",
+          "startRow": 6,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "PSYCHOLOGY",
+          "clue": "Love of Psycho",
+          "startRow": 1,
+          "startCol": 5,
+          "direction": "down"
+        },
+        {
+          "word": "ECONOMY",
+          "clue": "Fear of Eco",
+          "startRow": 5,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "CRYPTOISM",
+          "clue": "Belief in Crypto",
+          "startRow": 10,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "CRYPTOSOPHY",
+          "clue": "Study of Crypto",
+          "startRow": 0,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "ASTROARCHY",
+          "clue": "Love of Astro",
+          "startRow": 8,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "PALEONOMY",
+          "clue": "Government by Paleo",
+          "startRow": 7,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "CHRONONOMY",
+          "clue": "Belief in Chrono",
+          "startRow": 11,
+          "startCol": 1,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "12x12-15",
+      "gridSize": 12,
+      "words": [
+        {
+          "word": "TELEMETRY",
+          "clue": "Practice related to Tele",
+          "startRow": 0,
+          "startCol": 8,
+          "direction": "down"
+        },
+        {
+          "word": "PSYCHOMANCY",
+          "clue": "Practice related to Psycho",
+          "startRow": 1,
+          "startCol": 5,
+          "direction": "down"
+        },
+        {
+          "word": "HYDROPHOBIA",
+          "clue": "Measurement of Hydro",
+          "startRow": 1,
+          "startCol": 9,
+          "direction": "down"
+        },
+        {
+          "word": "CHRONOPHOBIA",
+          "clue": "Government by Chrono",
+          "startRow": 0,
+          "startCol": 2,
+          "direction": "down"
+        },
+        {
+          "word": "TELENOMY",
+          "clue": "Government by Tele",
+          "startRow": 3,
+          "startCol": 3,
+          "direction": "down"
+        },
+        {
+          "word": "PHOTOISM",
+          "clue": "Love of Photo",
+          "startRow": 3,
+          "startCol": 10,
+          "direction": "down"
+        },
+        {
+          "word": "NEOGRAPHY",
+          "clue": "Fear of Neo",
+          "startRow": 3,
+          "startCol": 4,
+          "direction": "down"
+        },
+        {
+          "word": "TELESCOPE",
+          "clue": "Fear of Tele",
+          "startRow": 2,
+          "startCol": 6,
+          "direction": "down"
+        },
+        {
+          "word": "CHRONOLOGY",
+          "clue": "System of Chrono knowledge",
+          "startRow": 1,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "PSYCHOARCHY",
+          "clue": "Love of Psycho",
+          "startRow": 1,
+          "startCol": 7,
+          "direction": "down"
+        },
+        {
+          "word": "CRYPTOSCOPE",
+          "clue": "Belief in Crypto",
+          "startRow": 0,
+          "startCol": 11,
+          "direction": "down"
+        },
+        {
+          "word": "ASTROARCHY",
+          "clue": "Government by Astro",
+          "startRow": 2,
+          "startCol": 1,
+          "direction": "down"
+        }
+      ]
+    },
+    {
+      "id": "15x15-1",
+      "gridSize": 15,
+      "words": [
+        {
+          "word": "ANTHROLOGY",
+          "clue": "Practice related to Anthro",
+          "startRow": 12,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "CRYPTOLOGY",
+          "clue": "Measurement of Crypto",
+          "startRow": 3,
+          "startCol": 9,
+          "direction": "down"
+        },
+        {
+          "word": "HYDROSOPHY",
+          "clue": "Study of Hydro",
+          "startRow": 4,
+          "startCol": 3,
+          "direction": "down"
+        },
+        {
+          "word": "CRYPTOLOGY",
+          "clue": "Government by Crypto",
+          "startRow": 3,
+          "startCol": 9,
+          "direction": "down"
+        },
+        {
+          "word": "HYDROLOGY",
+          "clue": "Practice related to Hydro",
+          "startRow": 5,
+          "startCol": 8,
+          "direction": "down"
+        },
+        {
+          "word": "CRYPTOMETRY",
+          "clue": "Practice related to Crypto",
+          "startRow": 4,
+          "startCol": 2,
+          "direction": "down"
+        },
+        {
+          "word": "ECOSCOPE",
+          "clue": "Measurement of Eco",
+          "startRow": 9,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "PHOTOPHOBIA",
+          "clue": "Government by Photo",
+          "startRow": 3,
+          "startCol": 14,
+          "direction": "down"
+        },
+        {
+          "word": "PSYCHOPHILE",
+          "clue": "Study of Psycho",
+          "startRow": 3,
+          "startCol": 6,
+          "direction": "down"
+        },
+        {
+          "word": "TELELOGY",
+          "clue": "Government by Tele",
+          "startRow": 4,
+          "startCol": 5,
+          "direction": "down"
+        },
+        {
+          "word": "TELEISM",
+          "clue": "Study of Tele",
+          "startRow": 1,
+          "startCol": 13,
+          "direction": "down"
+        },
+        {
+          "word": "ECOCRACY",
+          "clue": "Study of Eco",
+          "startRow": 3,
+          "startCol": 4,
+          "direction": "down"
+        },
+        {
+          "word": "NEOSCOPE",
+          "clue": "Measurement of Neo",
+          "startRow": 2,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "ANTHROPHILE",
+          "clue": "Fear of Anthro",
+          "startRow": 2,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "ASTRONOMY",
+          "clue": "Belief in Astro",
+          "startRow": 14,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "TELEISM",
+          "clue": "Practice related to Tele",
+          "startRow": 1,
+          "startCol": 13,
+          "direction": "down"
+        },
+        {
+          "word": "PSYCHOPHOBIA",
+          "clue": "Study of Psycho",
+          "startRow": 0,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "PHOTONOMY",
+          "clue": "Practice related to Photo",
+          "startRow": 6,
+          "startCol": 11,
+          "direction": "down"
+        },
+        {
+          "word": "ASTROLOGY",
+          "clue": "Practice related to Astro",
+          "startRow": 4,
+          "startCol": 12,
+          "direction": "down"
+        },
+        {
+          "word": "PSYCHOPHILE",
+          "clue": "Measurement of Psycho",
+          "startRow": 3,
+          "startCol": 6,
+          "direction": "down"
+        },
+        {
+          "word": "BIOLOGY",
+          "clue": "Government by Bio",
+          "startRow": 6,
+          "startCol": 10,
+          "direction": "down"
+        },
+        {
+          "word": "HYDROMETRY",
+          "clue": "Practice related to Hydro",
+          "startRow": 1,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "ECOMETRY",
+          "clue": "Practice related to Eco",
+          "startRow": 1,
+          "startCol": 1,
+          "direction": "down"
+        },
+        {
+          "word": "NEONOMY",
+          "clue": "Belief in Neo",
+          "startRow": 8,
+          "startCol": 13,
+          "direction": "down"
+        },
+        {
+          "word": "CRYPTOLOGY",
+          "clue": "Belief in Crypto",
+          "startRow": 3,
+          "startCol": 9,
+          "direction": "down"
+        }
+      ]
+    },
+    {
+      "id": "15x15-2",
+      "gridSize": 15,
+      "words": [
+        {
+          "word": "CRYPTOGRAPHY",
+          "clue": "Love of Crypto",
+          "startRow": 2,
+          "startCol": 7,
+          "direction": "down"
+        },
+        {
+          "word": "GEOLOGY",
+          "clue": "Fear of Geo",
+          "startRow": 7,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "ECOIST",
+          "clue": "Love of Eco",
+          "startRow": 5,
+          "startCol": 5,
+          "direction": "down"
+        },
+        {
+          "word": "ANTHROGRAPHY",
+          "clue": "System of Anthro knowledge",
+          "startRow": 3,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "HYDROIST",
+          "clue": "Belief in Hydro",
+          "startRow": 4,
+          "startCol": 6,
+          "direction": "across"
+        },
+        {
+          "word": "ASTROCRACY",
+          "clue": "Love of Astro",
+          "startRow": 0,
+          "startCol": 10,
+          "direction": "down"
+        },
+        {
+          "word": "CHRONOMANCY",
+          "clue": "Practice related to Chrono",
+          "startRow": 0,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "CHRONOARCHY",
+          "clue": "Love of Chrono",
+          "startRow": 4,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "PHOTOARCHY",
+          "clue": "Fear of Photo",
+          "startRow": 10,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "ASTROISM",
+          "clue": "Love of Astro",
+          "startRow": 1,
+          "startCol": 4,
+          "direction": "across"
+        },
+        {
+          "word": "ANTHROLOGY",
+          "clue": "Study of Anthro",
+          "startRow": 12,
+          "startCol": 4,
+          "direction": "across"
+        },
+        {
+          "word": "TELEISM",
+          "clue": "Government by Tele",
+          "startRow": 4,
+          "startCol": 13,
+          "direction": "down"
+        },
+        {
+          "word": "ANTHROGRAPHY",
+          "clue": "Measurement of Anthro",
+          "startRow": 3,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "METASCOPE",
+          "clue": "System of Meta knowledge",
+          "startRow": 3,
+          "startCol": 2,
+          "direction": "down"
+        },
+        {
+          "word": "PALEOSCOPE",
+          "clue": "Belief in Paleo",
+          "startRow": 2,
+          "startCol": 1,
+          "direction": "down"
+        },
+        {
+          "word": "ECOMETRY",
+          "clue": "Fear of Eco",
+          "startRow": 14,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "ECOPHILE",
+          "clue": "Government by Eco",
+          "startRow": 11,
+          "startCol": 4,
+          "direction": "across"
+        },
+        {
+          "word": "PSYCHOPHILE",
+          "clue": "System of Psycho knowledge",
+          "startRow": 1,
+          "startCol": 14,
+          "direction": "down"
+        },
+        {
+          "word": "ASTROISM",
+          "clue": "Study of Astro",
+          "startRow": 1,
+          "startCol": 4,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "15x15-3",
+      "gridSize": 15,
+      "words": [
+        {
+          "word": "CHRONOCRACY",
+          "clue": "Study of Chrono",
+          "startRow": 10,
+          "startCol": 4,
+          "direction": "across"
+        },
+        {
+          "word": "PSYCHOARCHY",
+          "clue": "Belief in Psycho",
+          "startRow": 1,
+          "startCol": 5,
+          "direction": "down"
+        },
+        {
+          "word": "ASTROSCOPE",
+          "clue": "System of Astro knowledge",
+          "startRow": 2,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "BIOPHOBIA",
+          "clue": "Love of Bio",
+          "startRow": 6,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "TELELOGY",
+          "clue": "System of Tele knowledge",
+          "startRow": 3,
+          "startCol": 14,
+          "direction": "down"
+        },
+        {
+          "word": "CRYPTOCRACY",
+          "clue": "Belief in Crypto",
+          "startRow": 3,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "PSYCHOARCHY",
+          "clue": "Study of Psycho",
+          "startRow": 1,
+          "startCol": 5,
+          "direction": "down"
+        },
+        {
+          "word": "PALEOPHOBIA",
+          "clue": "System of Paleo knowledge",
+          "startRow": 1,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "GEOSCOPE",
+          "clue": "Measurement of Geo",
+          "startRow": 4,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "CHRONOMANCY",
+          "clue": "Love of Chrono",
+          "startRow": 3,
+          "startCol": 12,
+          "direction": "down"
+        },
+        {
+          "word": "ANTHROPHOBIA",
+          "clue": "Fear of Anthro",
+          "startRow": 14,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "BIOGRAPHY",
+          "clue": "Fear of Bio",
+          "startRow": 6,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "ECOMETRY",
+          "clue": "System of Eco knowledge",
+          "startRow": 4,
+          "startCol": 2,
+          "direction": "down"
+        },
+        {
+          "word": "PHOTOCRACY",
+          "clue": "Measurement of Photo",
+          "startRow": 4,
+          "startCol": 11,
+          "direction": "down"
+        },
+        {
+          "word": "ECOSOPHY",
+          "clue": "Practice related to Eco",
+          "startRow": 2,
+          "startCol": 9,
+          "direction": "down"
+        },
+        {
+          "word": "PHOTOPHOBIA",
+          "clue": "Fear of Photo",
+          "startRow": 12,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ANTHROLOGY",
+          "clue": "Study of Anthro",
+          "startRow": 13,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "BIOCRACY",
+          "clue": "Fear of Bio",
+          "startRow": 4,
+          "startCol": 13,
+          "direction": "down"
+        },
+        {
+          "word": "ASTROCRACY",
+          "clue": "Government by Astro",
+          "startRow": 0,
+          "startCol": 4,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "15x15-4",
+      "gridSize": 15,
+      "words": [
+        {
+          "word": "HYDROSOPHY",
+          "clue": "Practice related to Hydro",
+          "startRow": 2,
+          "startCol": 1,
+          "direction": "down"
+        },
+        {
+          "word": "TELEIST",
+          "clue": "Belief in Tele",
+          "startRow": 4,
+          "startCol": 8,
+          "direction": "across"
+        },
+        {
+          "word": "ASTROARCHY",
+          "clue": "Belief in Astro",
+          "startRow": 2,
+          "startCol": 8,
+          "direction": "down"
+        },
+        {
+          "word": "ECOARCHY",
+          "clue": "Love of Eco",
+          "startRow": 4,
+          "startCol": 11,
+          "direction": "down"
+        },
+        {
+          "word": "PHOTOSOPHY",
+          "clue": "Fear of Photo",
+          "startRow": 10,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "TELEIST",
+          "clue": "Love of Tele",
+          "startRow": 4,
+          "startCol": 8,
+          "direction": "across"
+        },
+        {
+          "word": "PHOTOARCHY",
+          "clue": "System of Photo knowledge",
+          "startRow": 9,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "ANTHROPHILE",
+          "clue": "Practice related to Anthro",
+          "startRow": 2,
+          "startCol": 14,
+          "direction": "down"
+        },
+        {
+          "word": "ANTHROPHOBIA",
+          "clue": "Fear of Anthro",
+          "startRow": 2,
+          "startCol": 2,
+          "direction": "down"
+        },
+        {
+          "word": "PSYCHONOMY",
+          "clue": "System of Psycho knowledge",
+          "startRow": 3,
+          "startCol": 13,
+          "direction": "down"
+        },
+        {
+          "word": "PHOTOSOPHY",
+          "clue": "Fear of Photo",
+          "startRow": 10,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "TELEIST",
+          "clue": "Measurement of Tele",
+          "startRow": 4,
+          "startCol": 8,
+          "direction": "across"
+        },
+        {
+          "word": "CHRONOARCHY",
+          "clue": "Love of Chrono",
+          "startRow": 12,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "ASTROMANCY",
+          "clue": "System of Astro knowledge",
+          "startRow": 2,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "HYDROPHILE",
+          "clue": "Love of Hydro",
+          "startRow": 5,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "ANTHRONOMY",
+          "clue": "Measurement of Anthro",
+          "startRow": 13,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "BIOARCHY",
+          "clue": "Fear of Bio",
+          "startRow": 0,
+          "startCol": 6,
+          "direction": "down"
+        },
+        {
+          "word": "HYDROIST",
+          "clue": "Measurement of Hydro",
+          "startRow": 1,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "HYDROMETRY",
+          "clue": "Love of Hydro",
+          "startRow": 14,
+          "startCol": 3,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "15x15-5",
+      "gridSize": 15,
+      "words": [
+        {
+          "word": "ASTROSCOPE",
+          "clue": "Practice related to Astro",
+          "startRow": 3,
+          "startCol": 8,
+          "direction": "down"
+        },
+        {
+          "word": "ASTROCRACY",
+          "clue": "System of Astro knowledge",
+          "startRow": 3,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "PHOTOCRACY",
+          "clue": "System of Photo knowledge",
+          "startRow": 9,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "CRYPTOGRAPHY",
+          "clue": "Belief in Crypto",
+          "startRow": 1,
+          "startCol": 10,
+          "direction": "down"
+        },
+        {
+          "word": "BIOISM",
+          "clue": "System of Bio knowledge",
+          "startRow": 8,
+          "startCol": 4,
+          "direction": "across"
+        },
+        {
+          "word": "ECOPHILE",
+          "clue": "Belief in Eco",
+          "startRow": 6,
+          "startCol": 3,
+          "direction": "down"
+        },
+        {
+          "word": "TELEPHILE",
+          "clue": "Belief in Tele",
+          "startRow": 13,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "PSYCHOGRAPHY",
+          "clue": "Love of Psycho",
+          "startRow": 2,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "TELEMETRY",
+          "clue": "Practice related to Tele",
+          "startRow": 14,
+          "startCol": 6,
+          "direction": "across"
+        },
+        {
+          "word": "BIOARCHY",
+          "clue": "Measurement of Bio",
+          "startRow": 0,
+          "startCol": 1,
+          "direction": "down"
+        },
+        {
+          "word": "METAPHOBIA",
+          "clue": "Study of Meta",
+          "startRow": 5,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "BIOIST",
+          "clue": "Measurement of Bio",
+          "startRow": 7,
+          "startCol": 5,
+          "direction": "down"
+        },
+        {
+          "word": "PHOTOPHOBIA",
+          "clue": "System of Photo knowledge",
+          "startRow": 1,
+          "startCol": 13,
+          "direction": "down"
+        },
+        {
+          "word": "HYDROPHOBIA",
+          "clue": "Fear of Hydro",
+          "startRow": 1,
+          "startCol": 14,
+          "direction": "down"
+        },
+        {
+          "word": "PSYCHOPHOBIA",
+          "clue": "System of Psycho knowledge",
+          "startRow": 0,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "PHOTOSOPHY",
+          "clue": "Government by Photo",
+          "startRow": 4,
+          "startCol": 3,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "15x15-6",
+      "gridSize": 15,
+      "words": [
+        {
+          "word": "ANTHROGRAPHY",
+          "clue": "Measurement of Anthro",
+          "startRow": 12,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "CRYPTOCRACY",
+          "clue": "Belief in Crypto",
+          "startRow": 2,
+          "startCol": 13,
+          "direction": "down"
+        },
+        {
+          "word": "HYDROGRAPHY",
+          "clue": "Government by Hydro",
+          "startRow": 3,
+          "startCol": 12,
+          "direction": "down"
+        },
+        {
+          "word": "NEOSCOPE",
+          "clue": "Belief in Neo",
+          "startRow": 7,
+          "startCol": 7,
+          "direction": "down"
+        },
+        {
+          "word": "NEONOMY",
+          "clue": "Practice related to Neo",
+          "startRow": 9,
+          "startCol": 5,
+          "direction": "across"
+        },
+        {
+          "word": "PHOTONOMY",
+          "clue": "Love of Photo",
+          "startRow": 1,
+          "startCol": 11,
+          "direction": "down"
+        },
+        {
+          "word": "TELEARCHY",
+          "clue": "Belief in Tele",
+          "startRow": 14,
+          "startCol": 4,
+          "direction": "across"
+        },
+        {
+          "word": "CHRONOPHOBIA",
+          "clue": "Fear of Chrono",
+          "startRow": 1,
+          "startCol": 2,
+          "direction": "down"
+        },
+        {
+          "word": "TELESCOPE",
+          "clue": "System of Tele knowledge",
+          "startRow": 10,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "NEONOMY",
+          "clue": "Government by Neo",
+          "startRow": 9,
+          "startCol": 5,
+          "direction": "across"
+        },
+        {
+          "word": "CHRONOSCOPE",
+          "clue": "Love of Chrono",
+          "startRow": 1,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "METASCOPE",
+          "clue": "Belief in Meta",
+          "startRow": 2,
+          "startCol": 4,
+          "direction": "down"
+        },
+        {
+          "word": "ASTROSCOPE",
+          "clue": "Belief in Astro",
+          "startRow": 2,
+          "startCol": 14,
+          "direction": "down"
+        },
+        {
+          "word": "TELEGRAPHY",
+          "clue": "Study of Tele",
+          "startRow": 13,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "CHRONONOMY",
+          "clue": "Fear of Chrono",
+          "startRow": 0,
+          "startCol": 3,
+          "direction": "down"
+        },
+        {
+          "word": "ECOMETRY",
+          "clue": "System of Eco knowledge",
+          "startRow": 0,
+          "startCol": 9,
+          "direction": "down"
+        },
+        {
+          "word": "TELELOGY",
+          "clue": "Belief in Tele",
+          "startRow": 0,
+          "startCol": 6,
+          "direction": "across"
+        },
+        {
+          "word": "TELEPHOBIA",
+          "clue": "System of Tele knowledge",
+          "startRow": 1,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "CRYPTOMANCY",
+          "clue": "Study of Crypto",
+          "startRow": 1,
+          "startCol": 1,
+          "direction": "down"
+        }
+      ]
+    },
+    {
+      "id": "15x15-7",
+      "gridSize": 15,
+      "words": [
+        {
+          "word": "HYDROLOGY",
+          "clue": "Government by Hydro",
+          "startRow": 1,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "BIONOMY",
+          "clue": "System of Bio knowledge",
+          "startRow": 12,
+          "startCol": 6,
+          "direction": "across"
+        },
+        {
+          "word": "METAGRAPHY",
+          "clue": "Measurement of Meta",
+          "startRow": 3,
+          "startCol": 12,
+          "direction": "down"
+        },
+        {
+          "word": "METAGRAPHY",
+          "clue": "Study of Meta",
+          "startRow": 3,
+          "startCol": 12,
+          "direction": "down"
+        },
+        {
+          "word": "BIOARCHY",
+          "clue": "Study of Bio",
+          "startRow": 11,
+          "startCol": 6,
+          "direction": "across"
+        },
+        {
+          "word": "ASTROPHOBIA",
+          "clue": "Belief in Astro",
+          "startRow": 1,
+          "startCol": 9,
+          "direction": "down"
+        },
+        {
+          "word": "CRYPTOPHOBIA",
+          "clue": "Government by Crypto",
+          "startRow": 0,
+          "startCol": 3,
+          "direction": "down"
+        },
+        {
+          "word": "CHRONOIST",
+          "clue": "Belief in Chrono",
+          "startRow": 5,
+          "startCol": 4,
+          "direction": "across"
+        },
+        {
+          "word": "PALEOMETRY",
+          "clue": "Fear of Paleo",
+          "startRow": 2,
+          "startCol": 13,
+          "direction": "down"
+        },
+        {
+          "word": "ECOARCHY",
+          "clue": "Practice related to Eco",
+          "startRow": 0,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "CHRONOIST",
+          "clue": "Love of Chrono",
+          "startRow": 5,
+          "startCol": 4,
+          "direction": "across"
+        },
+        {
+          "word": "BIOISM",
+          "clue": "Belief in Bio",
+          "startRow": 2,
+          "startCol": 5,
+          "direction": "across"
+        },
+        {
+          "word": "PSYCHOLOGY",
+          "clue": "System of Psycho knowledge",
+          "startRow": 2,
+          "startCol": 4,
+          "direction": "down"
+        },
+        {
+          "word": "ECOLOGY",
+          "clue": "Study of Eco",
+          "startRow": 8,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "PALEOPHILE",
+          "clue": "Fear of Paleo",
+          "startRow": 5,
+          "startCol": 1,
+          "direction": "down"
+        },
+        {
+          "word": "PHOTOCRACY",
+          "clue": "Measurement of Photo",
+          "startRow": 4,
+          "startCol": 5,
+          "direction": "down"
+        },
+        {
+          "word": "PHOTOSOPHY",
+          "clue": "Study of Photo",
+          "startRow": 0,
+          "startCol": 11,
+          "direction": "down"
+        },
+        {
+          "word": "BIOISM",
+          "clue": "Measurement of Bio",
+          "startRow": 2,
+          "startCol": 5,
+          "direction": "across"
+        },
+        {
+          "word": "ANTHROLOGY",
+          "clue": "Love of Anthro",
+          "startRow": 3,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "HYDROLOGY",
+          "clue": "System of Hydro knowledge",
+          "startRow": 1,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ASTROGRAPHY",
+          "clue": "Belief in Astro",
+          "startRow": 0,
+          "startCol": 14,
+          "direction": "down"
+        },
+        {
+          "word": "ANTHROPHOBIA",
+          "clue": "Fear of Anthro",
+          "startRow": 14,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "CRYPTOMANCY",
+          "clue": "Belief in Crypto",
+          "startRow": 13,
+          "startCol": 3,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "15x15-8",
+      "gridSize": 15,
+      "words": [
+        {
+          "word": "METAPHOBIA",
+          "clue": "Belief in Meta",
+          "startRow": 1,
+          "startCol": 11,
+          "direction": "down"
+        },
+        {
+          "word": "CRYPTOIST",
+          "clue": "Study of Crypto",
+          "startRow": 9,
+          "startCol": 5,
+          "direction": "across"
+        },
+        {
+          "word": "PSYCHOLOGY",
+          "clue": "Love of Psycho",
+          "startRow": 4,
+          "startCol": 10,
+          "direction": "down"
+        },
+        {
+          "word": "ECONOMY",
+          "clue": "Fear of Eco",
+          "startRow": 6,
+          "startCol": 4,
+          "direction": "across"
+        },
+        {
+          "word": "CRYPTOISM",
+          "clue": "Belief in Crypto",
+          "startRow": 11,
+          "startCol": 5,
+          "direction": "across"
+        },
+        {
+          "word": "CRYPTOSOPHY",
+          "clue": "Study of Crypto",
+          "startRow": 13,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ASTROARCHY",
+          "clue": "Love of Astro",
+          "startRow": 4,
+          "startCol": 2,
+          "direction": "down"
+        },
+        {
+          "word": "PALEONOMY",
+          "clue": "Government by Paleo",
+          "startRow": 1,
+          "startCol": 7,
+          "direction": "down"
+        },
+        {
+          "word": "CHRONONOMY",
+          "clue": "Belief in Chrono",
+          "startRow": 7,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "TELEMETRY",
+          "clue": "Practice related to Tele",
+          "startRow": 3,
+          "startCol": 5,
+          "direction": "across"
+        },
+        {
+          "word": "PSYCHOMANCY",
+          "clue": "Practice related to Psycho",
+          "startRow": 4,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "HYDROPHOBIA",
+          "clue": "Measurement of Hydro",
+          "startRow": 1,
+          "startCol": 1,
+          "direction": "down"
+        },
+        {
+          "word": "CHRONOPHOBIA",
+          "clue": "Government by Chrono",
+          "startRow": 0,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "TELENOMY",
+          "clue": "Government by Tele",
+          "startRow": 3,
+          "startCol": 4,
+          "direction": "down"
+        },
+        {
+          "word": "PHOTOISM",
+          "clue": "Love of Photo",
+          "startRow": 5,
+          "startCol": 3,
+          "direction": "down"
+        },
+        {
+          "word": "NEOGRAPHY",
+          "clue": "Fear of Neo",
+          "startRow": 2,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "TELESCOPE",
+          "clue": "Fear of Tele",
+          "startRow": 14,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "CHRONOLOGY",
+          "clue": "System of Chrono knowledge",
+          "startRow": 3,
+          "startCol": 14,
+          "direction": "down"
+        }
+      ]
+    },
+    {
+      "id": "15x15-9",
+      "gridSize": 15,
+      "words": [
+        {
+          "word": "PSYCHOARCHY",
+          "clue": "Love of Psycho",
+          "startRow": 14,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "CRYPTOSCOPE",
+          "clue": "Belief in Crypto",
+          "startRow": 1,
+          "startCol": 13,
+          "direction": "down"
+        },
+        {
+          "word": "ASTROARCHY",
+          "clue": "Government by Astro",
+          "startRow": 5,
+          "startCol": 11,
+          "direction": "down"
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "totalPuzzles": 40,
+    "byGrid": {
+      "10": 16,
+      "12": 15,
+      "15": 9
+    },
+    "totalWords": 438
+  }
+}

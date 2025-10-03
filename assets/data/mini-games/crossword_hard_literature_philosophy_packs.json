@@ -1,0 +1,173 @@
+{
+  "version": 3,
+  "theme": "literature_philosophy",
+  "puzzles": [
+    {
+      "id": "10x10-1",
+      "gridSize": 10,
+      "words": [
+        {
+          "word": "ENCOMIUM",
+          "clue": "A speech or piece of writing that praises someone highly",
+          "startRow": 0,
+          "startCol": 1,
+          "direction": "down"
+        },
+        {
+          "word": "DIALECTIC",
+          "clue": "The art of investigating or discussing the truth of opinions",
+          "startRow": 5,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "PHILISTINE",
+          "clue": "A person who is hostile or indifferent to culture and the arts",
+          "startRow": 9,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "QUIXOTIC",
+          "clue": "Exceedingly idealistic; unrealistic and impractical",
+          "startRow": 6,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "LACONIC",
+          "clue": "Using very few words; terse",
+          "startRow": 0,
+          "startCol": 7,
+          "direction": "down"
+        }
+      ]
+    },
+    {
+      "id": "12x12-1",
+      "gridSize": 12,
+      "words": [
+        {
+          "word": "MELLIFLUOUS",
+          "clue": "Sweet or musical; pleasant to hear",
+          "startRow": 2,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "ENCOMIUM",
+          "clue": "A speech or piece of writing that praises someone highly",
+          "startRow": 2,
+          "startCol": 2,
+          "direction": "down"
+        },
+        {
+          "word": "ANACHRONISM",
+          "clue": "Something out of its proper time period",
+          "startRow": 3,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "DIALECTIC",
+          "clue": "The art of investigating or discussing the truth of opinions",
+          "startRow": 7,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "PHILISTINE",
+          "clue": "A person who is hostile or indifferent to culture and the arts",
+          "startRow": 10,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "QUIXOTIC",
+          "clue": "Exceedingly idealistic; unrealistic and impractical",
+          "startRow": 8,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "LACONIC",
+          "clue": "Using very few words; terse",
+          "startRow": 5,
+          "startCol": 9,
+          "direction": "down"
+        }
+      ]
+    },
+    {
+      "id": "15x15-1",
+      "gridSize": 15,
+      "words": [
+        {
+          "word": "SCHADENFREUDE",
+          "clue": "Pleasure derived from another person's misfortune",
+          "startRow": 2,
+          "startCol": 10,
+          "direction": "down"
+        },
+        {
+          "word": "MELLIFLUOUS",
+          "clue": "Sweet or musical; pleasant to hear",
+          "startRow": 12,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "ENCOMIUM",
+          "clue": "A speech or piece of writing that praises someone highly",
+          "startRow": 7,
+          "startCol": 7,
+          "direction": "down"
+        },
+        {
+          "word": "ANACHRONISM",
+          "clue": "Something out of its proper time period",
+          "startRow": 2,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "DIALECTIC",
+          "clue": "The art of investigating or discussing the truth of opinions",
+          "startRow": 1,
+          "startCol": 9,
+          "direction": "down"
+        },
+        {
+          "word": "PHILISTINE",
+          "clue": "A person who is hostile or indifferent to culture and the arts",
+          "startRow": 5,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "QUIXOTIC",
+          "clue": "Exceedingly idealistic; unrealistic and impractical",
+          "startRow": 3,
+          "startCol": 4,
+          "direction": "down"
+        },
+        {
+          "word": "LACONIC",
+          "clue": "Using very few words; terse",
+          "startRow": 3,
+          "startCol": 8,
+          "direction": "across"
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "totalPuzzles": 3,
+    "byGrid": {
+      "10": 1,
+      "12": 1,
+      "15": 1
+    },
+    "totalWords": 20
+  }
+}

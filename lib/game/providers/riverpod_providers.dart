@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -27,6 +28,7 @@ import '../../core/services/settings/quiz_progress_service.dart';
 import '../../core/services/settings/reward_settings_service.dart';
 import '../../core/services/settings/spin_wheel_settings_service.dart';
 import '../../core/services/settings/theme_settings_service.dart';
+import '../../core/state/flow_connect_state_notifier.dart';
 import '../../ui_components/login/providers/auth.dart';
 import '../../ui_components/qr_code/models/qr_settings_model.dart';
 import '../../ui_components/qr_code/services/qr_history_service.dart';
@@ -55,6 +57,7 @@ import '../models/seasonal_competition_model.dart';
 import '../models/store_item_model.dart';
 import '../models/tier_model.dart';
 import '../services/achievement_service.dart';
+import '../services/flow_connect_level_generator.dart';
 import '../services/matches_service.dart';
 import '../services/seasonal_competition_service.dart';
 import '../services/store_data_service.dart';
@@ -63,6 +66,7 @@ import '../services/store_data_service.dart';
 import '../controllers/question_controller.dart';
 import '../controllers/leaderboard_controller.dart';
 import '../controllers/profile_avatar_controller.dart';
+import '../state/flow_connect_game_state.dart';
 import '../state/premium_profile_state.dart';
 import '../state/qr_settings_state.dart';
 import '../state/question_state.dart';
@@ -577,6 +581,53 @@ final currentTierIdProvider = FutureProvider<int>((ref) async {
 final tierProgressionProvider = StateNotifierProvider<TierProgressionNotifier, TierProgressionState>((ref) {
   final tierManager = ref.read(tierManagerProvider);
   return TierProgressionNotifier(tierManager, ref);
+});
+
+// --- Flow Connect Settings ---
+
+// A simple class to hold our settings state
+@immutable
+class FlowSettings {
+  final int gridSize;
+  final FlowConnectDifficulty difficulty;
+
+  const FlowSettings({this.gridSize = 5, this.difficulty = FlowConnectDifficulty.easy});
+
+  FlowSettings copyWith({int? gridSize, FlowConnectDifficulty? difficulty}) {
+    return FlowSettings(
+      gridSize: gridSize ?? this.gridSize,
+      difficulty: difficulty ?? this.difficulty,
+    );
+  }
+}
+
+// A notifier to manage the settings state
+class FlowSettingsNotifier extends StateNotifier<FlowSettings> {
+  FlowSettingsNotifier() : super(const FlowSettings());
+
+  void setGridSize(int size) {
+    state = state.copyWith(gridSize: size);
+  }
+
+  void setDifficulty(FlowConnectDifficulty difficulty) {
+    state = state.copyWith(difficulty: difficulty);
+  }
+}
+
+// The provider that the UI will interact with
+final flowSettingsProvider = StateNotifierProvider<FlowSettingsNotifier, FlowSettings>((ref) {
+  return FlowSettingsNotifier();
+});
+
+/// Provider for the Flow Connect mini-game state
+final flowConnectStateProvider = ChangeNotifierProvider.autoDispose<FlowConnectStateNotifier>((ref) {
+  final settings = ref.watch(flowSettingsProvider);
+
+  return FlowConnectStateNotifier(
+    gridSize: settings.gridSize,
+    difficulty: settings.difficulty,
+    onPuzzleComplete: null, // Will be set from the UI
+  );
 });
 
 // --- 🎯 Helper Providers for UI ---

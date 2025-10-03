@@ -125,7 +125,7 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
           ),
           const SizedBox(width: 12),
           const Text(
-            'Store Hub',
+            'Marketplace',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,

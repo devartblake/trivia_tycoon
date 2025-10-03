@@ -1,0 +1,569 @@
+{
+  "version": 3,
+  "theme": "vocabulary",
+  "puzzles": [
+    {
+      "id": "10x10-1",
+      "gridSize": 10,
+      "words": [
+        {
+          "word": "METASOPHY",
+          "clue": "System of Meta knowledge",
+          "startRow": 0,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "NEOCRACY",
+          "clue": "Government by Neo",
+          "startRow": 2,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "NEOMANCY",
+          "clue": "Fear of Neo",
+          "startRow": 1,
+          "startCol": 1,
+          "direction": "down"
+        },
+        {
+          "word": "GEOSOPHY",
+          "clue": "Government by Geo",
+          "startRow": 8,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "ABNEGATION",
+          "clue": "The act of renouncing or rejecting something",
+          "startRow": 9,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "METAARCHY",
+          "clue": "Measurement of Meta",
+          "startRow": 0,
+          "startCol": 9,
+          "direction": "down"
+        },
+        {
+          "word": "GEOIST",
+          "clue": "Belief in Geo",
+          "startRow": 1,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "NEOISM",
+          "clue": "Fear of Neo",
+          "startRow": 2,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "METALOGY",
+          "clue": "Love of Meta",
+          "startRow": 4,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "PANACEA",
+          "clue": "A solution or remedy for all difficulties or diseases",
+          "startRow": 3,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "METAISM",
+          "clue": "Practice related to Meta",
+          "startRow": 5,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "NEOCRACY",
+          "clue": "Government by Neo",
+          "startRow": 2,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "NEPOTISM",
+          "clue": "Favoritism granted to relatives regardless of merit",
+          "startRow": 6,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "NEOMANCY",
+          "clue": "Love of Neo",
+          "startRow": 1,
+          "startCol": 1,
+          "direction": "down"
+        }
+      ]
+    },
+    {
+      "id": "10x10-2",
+      "gridSize": 10,
+      "words": [
+        {
+          "word": "ANTHROIST",
+          "clue": "Study of Anthro",
+          "startRow": 1,
+          "startCol": 6,
+          "direction": "down"
+        },
+        {
+          "word": "OBDURATE",
+          "clue": "Stubbornly refusing to change one’s opinion",
+          "startRow": 1,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "NEOSOPHY",
+          "clue": "Measurement of Neo",
+          "startRow": 0,
+          "startCol": 8,
+          "direction": "down"
+        },
+        {
+          "word": "GEOISM",
+          "clue": "Measurement of Geo",
+          "startRow": 8,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "CACOPHONY",
+          "clue": "A harsh, discordant mixture of sounds",
+          "startRow": 0,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "PALEOMANCY",
+          "clue": "Practice related to Paleo",
+          "startRow": 0,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "ANTHROIST",
+          "clue": "Practice related to Anthro",
+          "startRow": 1,
+          "startCol": 6,
+          "direction": "down"
+        },
+        {
+          "word": "GEOSOPHY",
+          "clue": "Belief in Geo",
+          "startRow": 6,
+          "startCol": 2,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "12x12-1",
+      "gridSize": 12,
+      "words": [
+        {
+          "word": "ANTHROCRACY",
+          "clue": "System of Anthro knowledge",
+          "startRow": 1,
+          "startCol": 6,
+          "direction": "down"
+        },
+        {
+          "word": "METASOPHY",
+          "clue": "System of Meta knowledge",
+          "startRow": 9,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "NEOCRACY",
+          "clue": "Government by Neo",
+          "startRow": 10,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "NEOMANCY",
+          "clue": "Fear of Neo",
+          "startRow": 2,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "GEOSOPHY",
+          "clue": "Government by Geo",
+          "startRow": 1,
+          "startCol": 2,
+          "direction": "down"
+        },
+        {
+          "word": "ABNEGATION",
+          "clue": "The act of renouncing or rejecting something",
+          "startRow": 0,
+          "startCol": 1,
+          "direction": "down"
+        },
+        {
+          "word": "METAARCHY",
+          "clue": "Measurement of Meta",
+          "startRow": 1,
+          "startCol": 11,
+          "direction": "down"
+        },
+        {
+          "word": "GEOIST",
+          "clue": "Belief in Geo",
+          "startRow": 3,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "NEOISM",
+          "clue": "Fear of Neo",
+          "startRow": 0,
+          "startCol": 3,
+          "direction": "down"
+        },
+        {
+          "word": "METALOGY",
+          "clue": "Love of Meta",
+          "startRow": 4,
+          "startCol": 8,
+          "direction": "down"
+        },
+        {
+          "word": "PANACEA",
+          "clue": "A solution or remedy for all difficulties or diseases",
+          "startRow": 0,
+          "startCol": 5,
+          "direction": "across"
+        },
+        {
+          "word": "METAISM",
+          "clue": "Practice related to Meta",
+          "startRow": 1,
+          "startCol": 9,
+          "direction": "down"
+        },
+        {
+          "word": "NEOCRACY",
+          "clue": "Government by Neo",
+          "startRow": 10,
+          "startCol": 0,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "12x12-2",
+      "gridSize": 12,
+      "words": [
+        {
+          "word": "INSCRUTABLE",
+          "clue": "Impossible to understand or interpret",
+          "startRow": 1,
+          "startCol": 8,
+          "direction": "down"
+        },
+        {
+          "word": "NEPOTISM",
+          "clue": "Favoritism granted to relatives regardless of merit",
+          "startRow": 3,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "NEOMANCY",
+          "clue": "Love of Neo",
+          "startRow": 1,
+          "startCol": 5,
+          "direction": "down"
+        },
+        {
+          "word": "ANTHROIST",
+          "clue": "Study of Anthro",
+          "startRow": 2,
+          "startCol": 2,
+          "direction": "down"
+        },
+        {
+          "word": "OBDURATE",
+          "clue": "Stubbornly refusing to change one’s opinion",
+          "startRow": 11,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "NEOSOPHY",
+          "clue": "Measurement of Neo",
+          "startRow": 2,
+          "startCol": 3,
+          "direction": "down"
+        },
+        {
+          "word": "ANTHROARCHY",
+          "clue": "Study of Anthro",
+          "startRow": 0,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "GEOISM",
+          "clue": "Measurement of Geo",
+          "startRow": 0,
+          "startCol": 7,
+          "direction": "down"
+        },
+        {
+          "word": "CACOPHONY",
+          "clue": "A harsh, discordant mixture of sounds",
+          "startRow": 1,
+          "startCol": 1,
+          "direction": "down"
+        },
+        {
+          "word": "PALEOMANCY",
+          "clue": "Practice related to Paleo",
+          "startRow": 0,
+          "startCol": 11,
+          "direction": "down"
+        },
+        {
+          "word": "ANTHROIST",
+          "clue": "Practice related to Anthro",
+          "startRow": 2,
+          "startCol": 2,
+          "direction": "down"
+        },
+        {
+          "word": "GEOSOPHY",
+          "clue": "Belief in Geo",
+          "startRow": 1,
+          "startCol": 10,
+          "direction": "down"
+        }
+      ]
+    },
+    {
+      "id": "15x15-1",
+      "gridSize": 15,
+      "words": [
+        {
+          "word": "ANTHROCRACY",
+          "clue": "System of Anthro knowledge",
+          "startRow": 6,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "METASOPHY",
+          "clue": "System of Meta knowledge",
+          "startRow": 4,
+          "startCol": 2,
+          "direction": "down"
+        },
+        {
+          "word": "NEOCRACY",
+          "clue": "Government by Neo",
+          "startRow": 5,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "NEOMANCY",
+          "clue": "Fear of Neo",
+          "startRow": 2,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "GEOSOPHY",
+          "clue": "Government by Geo",
+          "startRow": 4,
+          "startCol": 4,
+          "direction": "across"
+        },
+        {
+          "word": "ABNEGATION",
+          "clue": "The act of renouncing or rejecting something",
+          "startRow": 7,
+          "startCol": 2,
+          "direction": "across"
+        },
+        {
+          "word": "METAARCHY",
+          "clue": "Measurement of Meta",
+          "startRow": 8,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "GEOIST",
+          "clue": "Belief in Geo",
+          "startRow": 14,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "NEOISM",
+          "clue": "Fear of Neo",
+          "startRow": 7,
+          "startCol": 4,
+          "direction": "down"
+        },
+        {
+          "word": "METALOGY",
+          "clue": "Love of Meta",
+          "startRow": 12,
+          "startCol": 4,
+          "direction": "across"
+        },
+        {
+          "word": "PANACEA",
+          "clue": "A solution or remedy for all difficulties or diseases",
+          "startRow": 13,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "METAISM",
+          "clue": "Practice related to Meta",
+          "startRow": 9,
+          "startCol": 7,
+          "direction": "across"
+        },
+        {
+          "word": "NEOCRACY",
+          "clue": "Government by Neo",
+          "startRow": 5,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "INSCRUTABLE",
+          "clue": "Impossible to understand or interpret",
+          "startRow": 10,
+          "startCol": 4,
+          "direction": "across"
+        },
+        {
+          "word": "NEPOTISM",
+          "clue": "Favoritism granted to relatives regardless of merit",
+          "startRow": 2,
+          "startCol": 13,
+          "direction": "down"
+        },
+        {
+          "word": "NEOMANCY",
+          "clue": "Love of Neo",
+          "startRow": 2,
+          "startCol": 0,
+          "direction": "down"
+        },
+        {
+          "word": "ANTHROIST",
+          "clue": "Study of Anthro",
+          "startRow": 0,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "OBDURATE",
+          "clue": "Stubbornly refusing to change one’s opinion",
+          "startRow": 3,
+          "startCol": 6,
+          "direction": "across"
+        },
+        {
+          "word": "NEOSOPHY",
+          "clue": "Measurement of Neo",
+          "startRow": 6,
+          "startCol": 1,
+          "direction": "down"
+        },
+        {
+          "word": "ANTHROARCHY",
+          "clue": "Study of Anthro",
+          "startRow": 1,
+          "startCol": 0,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "15x15-2",
+      "gridSize": 15,
+      "words": [
+        {
+          "word": "SESQUIPEDALIAN",
+          "clue": "Characterized by long words; long-winded",
+          "startRow": 0,
+          "startCol": 4,
+          "direction": "down"
+        },
+        {
+          "word": "GEOISM",
+          "clue": "Measurement of Geo",
+          "startRow": 5,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "CACOPHONY",
+          "clue": "A harsh, discordant mixture of sounds",
+          "startRow": 9,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "PALEOMANCY",
+          "clue": "Practice related to Paleo",
+          "startRow": 1,
+          "startCol": 3,
+          "direction": "down"
+        },
+        {
+          "word": "ANTHROIST",
+          "clue": "Practice related to Anthro",
+          "startRow": 6,
+          "startCol": 8,
+          "direction": "down"
+        },
+        {
+          "word": "VERISIMILITUDE",
+          "clue": "The appearance of being true or real",
+          "startRow": 0,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "GEOSOPHY",
+          "clue": "Belief in Geo",
+          "startRow": 2,
+          "startCol": 11,
+          "direction": "down"
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "totalPuzzles": 6,
+    "byGrid": {
+      "10": 2,
+      "12": 2,
+      "15": 2
+    },
+    "totalWords": 74
+  }
+}

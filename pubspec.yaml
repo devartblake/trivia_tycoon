@@ -115,6 +115,8 @@ flutter:
    - assets/data/analytics/
    - assets/data/events/
    - assets/data/leaderboard/
+   - assets/data/mini-games/
+   - assets/data/mini-games/crossword_hard.json
    - assets/data/missions/
    - assets/data/snapple_facts/
    - assets/data/skill_tree/skill_tree.json

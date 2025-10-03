@@ -45,6 +45,12 @@ class _AppDrawerState extends ConsumerState<AppDrawer>
       'gradient': const LinearGradient(colors: [Color(0xFF10B981), Color(0xFF059669)]),
     },
     {
+      'icon': Icons.games_rounded,
+      'title': 'Mini Games',
+      'route': '/mini-games',
+      'gradient': const LinearGradient(colors: [Color(0xFFFF6B6B), Color(0xFFFF8E53)]),
+    },
+    {
       'icon': Icons.psychology_rounded,
       'title': 'Skills',
       'route': '/skills',
@@ -216,20 +222,17 @@ class _AppDrawerState extends ConsumerState<AppDrawer>
         children: [
           Row(
             children: [
-              Hero(
-                tag: 'profile-avatar',
-                child: Container(
-                  padding: const EdgeInsets.all(3),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(50),
-                    border: Border.all(
-                      color: Colors.white.withOpacity(0.4),
-                      width: 3,
-                    ),
+              Container(
+                padding: const EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(50),
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.4),
+                    width: 3,
                   ),
-                  child: _buildProfileAvatar(activeProfile),
                 ),
+                child: _buildProfileAvatar(activeProfile),
               ),
               const SizedBox(width: 16),
               Expanded(

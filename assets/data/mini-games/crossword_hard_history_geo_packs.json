@@ -1,0 +1,117 @@
+{
+  "version": 3,
+  "theme": "history_geo",
+  "puzzles": [
+    {
+      "id": "10x10-1",
+      "gridSize": 10,
+      "words": [
+        {
+          "word": "OBFUSCATE",
+          "clue": "To deliberately make something unclear or difficult to understand",
+          "startRow": 5,
+          "startCol": 1,
+          "direction": "across"
+        },
+        {
+          "word": "APOCRYPHAL",
+          "clue": "Of doubtful authenticity, though widely circulated as true",
+          "startRow": 4,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "SYCOPHANT",
+          "clue": "A person who acts obsequiously toward someone important to gain advantage",
+          "startRow": 1,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "ZEITGEIST",
+          "clue": "The defining spirit or mood of a particular period in history",
+          "startRow": 8,
+          "startCol": 0,
+          "direction": "across"
+        }
+      ]
+    },
+    {
+      "id": "12x12-1",
+      "gridSize": 12,
+      "words": [
+        {
+          "word": "OBFUSCATE",
+          "clue": "To deliberately make something unclear or difficult to understand",
+          "startRow": 1,
+          "startCol": 3,
+          "direction": "down"
+        },
+        {
+          "word": "APOCRYPHAL",
+          "clue": "Of doubtful authenticity, though widely circulated as true",
+          "startRow": 6,
+          "startCol": 0,
+          "direction": "across"
+        },
+        {
+          "word": "SYCOPHANT",
+          "clue": "A person who acts obsequiously toward someone important to gain advantage",
+          "startRow": 3,
+          "startCol": 2,
+          "direction": "down"
+        },
+        {
+          "word": "ZEITGEIST",
+          "clue": "The defining spirit or mood of a particular period in history",
+          "startRow": 2,
+          "startCol": 11,
+          "direction": "down"
+        }
+      ]
+    },
+    {
+      "id": "15x15-1",
+      "gridSize": 15,
+      "words": [
+        {
+          "word": "OBFUSCATE",
+          "clue": "To deliberately make something unclear or difficult to understand",
+          "startRow": 3,
+          "startCol": 4,
+          "direction": "across"
+        },
+        {
+          "word": "APOCRYPHAL",
+          "clue": "Of doubtful authenticity, though widely circulated as true",
+          "startRow": 1,
+          "startCol": 4,
+          "direction": "down"
+        },
+        {
+          "word": "SYCOPHANT",
+          "clue": "A person who acts obsequiously toward someone important to gain advantage",
+          "startRow": 6,
+          "startCol": 3,
+          "direction": "across"
+        },
+        {
+          "word": "ZEITGEIST",
+          "clue": "The defining spirit or mood of a particular period in history",
+          "startRow": 2,
+          "startCol": 12,
+          "direction": "down"
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "totalPuzzles": 3,
+    "byGrid": {
+      "10": 1,
+      "12": 1,
+      "15": 1
+    },
+    "totalWords": 12
+  }
+}

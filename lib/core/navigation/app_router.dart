@@ -23,6 +23,15 @@ import '../../game/providers/onboarding_providers.dart';
 import '../../game/providers/auth_providers.dart';
 import '../../screens/menu/invite_screen.dart';
 import '../../screens/messages/messages.dart';
+import '../../screens/mini_games/connections_puzzle_screen.dart';
+import '../../screens/mini_games/crossword_screen.dart';
+import '../../screens/mini_games/flow_connect_puzzle_screen.dart';
+import '../../screens/mini_games/game_2048_screen.dart';
+import '../../screens/mini_games/memory_match_screen.dart';
+import '../../screens/mini_games/mini_games_hub_screen.dart';
+import '../../screens/mini_games/sudoku_puzzle_screen.dart';
+import '../../screens/mini_games/sun_moon_puzzle_screen.dart';
+import '../../screens/mini_games/word_search_screen.dart';
 import '../../screens/multiplayer/live_match_screen.dart';
 import '../../screens/multiplayer/matchmaking_screen.dart';
 import '../../screens/multiplayer/multiplayer_game_matchmaking_screen.dart';
@@ -40,7 +49,7 @@ import '../../screens/social/multiplayer_screen.dart';
 import '../../screens/store/gifts_screen.dart';
 import '../../screens/store/offers_screen.dart';
 import '../../screens/store/store_hub_screen.dart';
-import '../../screens/store/store_secondary.dart';
+import '../../screens/store/premium_store.dart';
 import '../../screens/users/achievements_screen.dart';
 import '../../screens/browse/all_actions_screen.dart';
 import '../../screens/browse/all_categories_screen.dart';
@@ -383,6 +392,62 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             return RoomLobbyScreen(roomId: roomId);
           }
       ),*/
+
+      /// 🎮 Mini Games
+      GoRoute(
+        path: '/mini-games',
+        name: 'Mini Games',
+        builder: (context, state) => const MiniGamesHubScreen(),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/sun-moon-puzzle',
+        name: 'SunMoon Puzzle',
+        builder: (context, state) => const SunMoonPuzzleScreen(),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/connections-puzzle',
+        name: 'Connections Puzzle',
+        builder: (context, state) => const ConnectionsPuzzleScreen(),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/flow-connect',
+        name: 'Flow Connect',
+        builder: (context, state) => const FlowConnectPuzzleScreen(),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/sudoku-puzzle',
+        name: 'sudokuPuzzle',
+        builder: (context, state) => const SudokuPuzzleScreen(),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/game-2048',
+        name: 'game2048',
+        builder: (context, state) => const Game2048Screen(),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/memory-match',
+        name: 'memoryMatch',
+        builder: (context, state) => const MemoryMatchScreen(),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/word-search',
+        name: 'wordSearch',
+        builder: (context, state) => const WordSearchScreen(),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/crossword',
+        name: 'crossword',
+        builder: (context, state) => const CrosswordScreen(),
+        redirect: onboardingGuard,
+      ),
 
       /// 👤 USER PROFILE & SOCIAL
       GoRoute(
