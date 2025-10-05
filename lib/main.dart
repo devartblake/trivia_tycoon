@@ -6,6 +6,7 @@ import 'package:trivia_tycoon/core/widgets/offline_fallback_screen.dart';
 import 'package:trivia_tycoon/screens/splash_variants/main_splash.dart';
 import 'package:trivia_tycoon/widgets/app_logo.dart';
 
+import 'core/env.dart';
 import 'core/manager/service_manager.dart';
 import 'core/services/theme/theme_notifier.dart';
 import 'game/providers/riverpod_providers.dart' hide themeNotifierProvider;
@@ -14,6 +15,9 @@ import 'game/providers/onboarding_providers.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Load environment variables before doing anything else
+  await Env.load();
 
   try {
     // Initialize services first

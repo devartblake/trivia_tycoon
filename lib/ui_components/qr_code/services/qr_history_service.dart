@@ -71,10 +71,9 @@ class QrHistoryService {
       'scans': filteredScans.map((e) => e.toJson()).toList(),
     };
 
-    final uri = Uri.parse(
-        'https://your.api.url/api/scans/upload${retentionDays != null
-            ? '?days=$retentionDays'
-            : ''}');
+    final base = await AppSettings.getString('API_BASE_URL');
+    final qs = retentionDays != null ? '?days=$retentionDays' : '';
+    final uri = Uri.parse('$base/api/v1/referrals/sync$qs');
 
     final response = await http.post(
       uri,
@@ -95,13 +94,14 @@ class QrHistoryService {
     final now = DateTime.now();
 
     // Skip if synced recently
-    if (_lastAutoSync != null && now.difference(_lastAutoSync!) < interval) return;
-
-    try {
-      await syncToBackend(userId: userId, retentionDays: retentionDays);
-      _lastAutoSync = now;
-    } catch (e) {
-      // Optional: log to file or analytics
+    if (_lastAutoSync != null && now.difference(_lastAutoSync!) < interval) {
+      return; // Skip — recently synced
     }
+
+    await syncToBackend(userId: userId, retentionDays: retentionDays);
+    _lastAutoSync = now;
+
+    // Optionally persist this timestamp in AppSettings:
+    await AppSettings.setDateTime('qr_last_auto_sync', now);
   }
 }

@@ -404,7 +404,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                     ),
                     GestureDetector(
                       onTap: () {
-                        context.go('/ranking');
+                        context.push('/ranking');
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(

@@ -506,7 +506,8 @@ class AppSettings {
   /// Retrieves theme.
   static Future<String?> getString(String key) async {
     final box = await Hive.openBox(_boxName);
-    return box.get(key) as String?;
+    final v = box.get(key);
+    return v is String ? v : null;
   }
 
   /// Save a List<String> as a single comma-separated string

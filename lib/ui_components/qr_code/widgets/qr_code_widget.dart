@@ -12,7 +12,7 @@ class QrCodeWidget extends StatelessWidget {
   final double padding; // Optional padding inside the QR area
 
   const QrCodeWidget({
-    Key? key,
+    super.key,
     required this.data,
     this.size = 200,
     this.roundedDots = false,
@@ -20,7 +20,7 @@ class QrCodeWidget extends StatelessWidget {
     this.backgroundColor = Colors.white,
     this.version = 1,
     this.padding = 8.0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

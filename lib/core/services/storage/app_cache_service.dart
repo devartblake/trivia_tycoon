@@ -47,6 +47,20 @@ class AppCacheService {
     return raw as T?;
   }
 
+  /// FIX: Added a dedicated method for saving JSON-encodable objects.
+  /// This simplifies caching logic by ensuring any object is stored as a string.
+  Future<void> setJson(String key, dynamic value, {Duration? expiration}) async {
+    try {
+      final encoded = jsonEncode(value);
+      await _box.put(key, encoded);
+      await _updateCacheMetadata(key, expiration: expiration);
+    } catch (e) {
+      if (kDebugMode) {
+        print('❌ Failed to set JSON in cache for key "$key": $e');
+      }
+    }
+  }
+
   Future<void> put(String key, dynamic value) async {
     await _box.put(key, value);
     await _updateCacheMetadata(key);
@@ -63,7 +77,8 @@ class AppCacheService {
   }
 
   /// Set with explicit expiration time
-  Future<void> setWithExpiration(String key, dynamic value, DateTime expiration) async {
+  Future<void> setWithExpiration(
+      String key, dynamic value, DateTime expiration) async {
     final encoded = value is String || value is num || value is bool
         ? value
         : jsonEncode(value);
@@ -84,11 +99,8 @@ class AppCacheService {
   /// 📹 Leaderboard helpers with expiration
   Future<void> cacheLeaderboard(List<LeaderboardEntry> entries) async {
     final encoded = entries.map((e) => e.toJson()).toList();
-    await setWithExpiration(
-        'leaderboard_data',
-        encoded,
-        DateTime.now().add(_leaderboardCacheExpiration)
-    );
+    await setWithExpiration('leaderboard_data', encoded,
+        DateTime.now().add(_leaderboardCacheExpiration));
   }
 
   Future<List<LeaderboardEntry>> getCachedLeaderboard() async {
@@ -106,14 +118,12 @@ class AppCacheService {
   }
 
   /// ✅ Save QuestionModel list to Hive (as JSON strings) with expiration
-  Future<void> saveQuestionCache(String key, List<QuestionModel> questions) async {
+  Future<void> saveQuestionCache(
+      String key, List<QuestionModel> questions) async {
     try {
       final encoded = questions.map((q) => json.encode(q.toJson())).toList();
-      await setWithExpiration(
-          key,
-          json.encode(encoded),
-          DateTime.now().add(_questionCacheExpiration)
-      );
+      await setWithExpiration(key, json.encode(encoded),
+          DateTime.now().add(_questionCacheExpiration));
     } catch (e) {
       if (kDebugMode) {
         print('❌ Failed to save question cache: $e');
@@ -188,7 +198,9 @@ class AppCacheService {
   Future<List<ScanHistoryItem>> loadScanHistory() async {
     try {
       final raw = get<List<dynamic>>('qr_scan_history') ?? [];
-      return raw.map((e) => ScanHistoryItem.fromJson(Map<String, dynamic>.from(e))).toList();
+      return raw
+          .map((e) => ScanHistoryItem.fromJson(Map<String, dynamic>.from(e)))
+          .toList();
     } catch (e) {
       if (kDebugMode) {
         print('❌ Failed to load scan history: $e');
@@ -205,7 +217,8 @@ class AppCacheService {
 
   /// Store temporary data that expires quickly
   Future<void> setTemporaryData(String key, dynamic value) async {
-    final tempData = get<Map<String, dynamic>>(_tempDataKey) ?? <String, dynamic>{};
+    final tempData =
+        get<Map<String, dynamic>>(_tempDataKey) ?? <String, dynamic>{};
     tempData[key] = {
       'value': value,
       'expires': DateTime.now().add(_tempDataExpiration).toIso8601String(),
@@ -215,7 +228,8 @@ class AppCacheService {
 
   /// Get temporary data with automatic expiration
   T? getTemporaryData<T>(String key) {
-    final tempData = get<Map<String, dynamic>>(_tempDataKey) ?? <String, dynamic>{};
+    final tempData =
+        get<Map<String, dynamic>>(_tempDataKey) ?? <String, dynamic>{};
     final item = tempData[key];
 
     if (item == null) return null;
@@ -238,10 +252,11 @@ class AppCacheService {
       await remove(_tempDataKey);
 
       // Clear any other temporary keys
-      final tempKeys = _box.keys.where((key) =>
+      final tempKeys = _box.keys
+          .where((key) =>
       key.toString().startsWith('temp_') ||
-          key.toString().startsWith('session_')
-      ).toList();
+          key.toString().startsWith('session_'))
+          .toList();
 
       for (final key in tempKeys) {
         await _box.delete(key);
@@ -290,7 +305,8 @@ class AppCacheService {
       await _updateLastCleanup();
 
       if (kDebugMode) {
-        print('✅ Cache cleanup completed. Removed ${keysToRemove.length} expired entries');
+        print(
+            '✅ Cache cleanup completed. Removed ${keysToRemove.length} expired entries');
       }
     } catch (e) {
       if (kDebugMode) {
@@ -301,7 +317,8 @@ class AppCacheService {
 
   /// Clean expired temporary data
   Future<void> _cleanExpiredTemporaryData() async {
-    final tempData = get<Map<String, dynamic>>(_tempDataKey) ?? <String, dynamic>{};
+    final tempData =
+        get<Map<String, dynamic>>(_tempDataKey) ?? <String, dynamic>{};
     final now = DateTime.now();
     final keysToRemove = <String>[];
 
@@ -343,7 +360,8 @@ class AppCacheService {
   /// Sets specific expiration for a cache key
   Future<void> _setCacheExpiration(String key, DateTime expiration) async {
     final metadata = _getCacheMetadata();
-    final existing = metadata[key] as Map<String, dynamic>? ?? <String, dynamic>{};
+    final existing =
+        metadata[key] as Map<String, dynamic>? ?? <String, dynamic>{};
 
     existing['expires'] = expiration.toIso8601String();
     existing['accessed'] = DateTime.now().toIso8601String();
@@ -436,7 +454,8 @@ class AppCacheService {
 
   /// Force expires a cache entry
   Future<void> expireCacheEntry(String key) async {
-    await _setCacheExpiration(key, DateTime.now().subtract(const Duration(seconds: 1)));
+    await _setCacheExpiration(
+        key, DateTime.now().subtract(const Duration(seconds: 1)));
   }
 
   /// Extends cache entry expiration
@@ -462,7 +481,10 @@ class AppCacheService {
 
   /// Gets all cache keys by pattern
   List<String> getCacheKeysByPattern(String pattern) {
-    return _box.keys.where((key) => key.toString().contains(pattern)).cast<String>().toList();
+    return _box.keys
+        .where((key) => key.toString().contains(pattern))
+        .cast<String>()
+        .toList();
   }
 
   /// Bulk remove cache entries by pattern

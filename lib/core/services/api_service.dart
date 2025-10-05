@@ -21,23 +21,26 @@ class ApiService {
   ApiService({required this.baseUrl})
       : _dio = Dio(BaseOptions(
     baseUrl: baseUrl,
-    connectTimeout: const Duration(seconds: 10),
-    receiveTimeout: const Duration(seconds: 10),
+    // Shorter timeouts for development to fail fast
+    connectTimeout: const Duration(seconds: 3),
+    receiveTimeout: const Duration(seconds: 3),
+    sendTimeout: const Duration(seconds: 3),
   )),
-      _configService = ConfigService.instance {
-    if (ConfigService.enableLogging) {
+        _configService = ConfigService.instance {
+
+    // Disable or reduce logging in release mode
+    if (ConfigService.enableLogging && kDebugMode) {
       _dio.interceptors.add(LogInterceptor(
-        request: true,
-        requestHeader: true,
-        requestBody: true,
-        responseHeader: true,
-        responseBody: true,
-        error: true,
+        request: false,           // Disable request logging
+        requestHeader: false,      // Disable header logging
+        requestBody: false,        // Disable body logging
+        responseHeader: false,
+        responseBody: false,
+        error: true,              // Only log errors
         logPrint: (log) => debugPrint("[API Log]: $log"),
       ));
     }
 
-    /// **🔹 Initialize Cache**
     _initializeCache();
   }
 
@@ -137,11 +140,26 @@ class ApiService {
     });
   }
 
-  /// **🔹 Unified API Request Handler**
+  /// Unified API Request Handler with silent timeout handling
   Future<T> _handleRequest<T>(Future<T> Function() request) async {
     try {
       return await request();
     } on DioException catch (e) {
+      // Silently handle timeout errors in development (no backend)
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout ||
+          e.type == DioExceptionType.sendTimeout) {
+
+        // Only log in debug mode with reduced verbosity
+        if (ConfigService.enableLogging && kDebugMode) {
+          debugPrint("[API Timeout]: ${e.requestOptions.path} - No backend available");
+        }
+
+        // Throw a custom exception instead of the verbose Dio one
+        throw Exception("API Timeout");
+      }
+
+      // Log other Dio errors normally
       if (ConfigService.enableLogging) {
         debugPrint("API Error [Dio]: ${e.message}");
       }
@@ -156,22 +174,28 @@ class ApiService {
 
   /// Loads mock data from assets/json
   Future<dynamic> getMockData(String filename) async {
-    final String jsonString = await rootBundle.loadString('assets/data/analytics/$filename');
+    final String jsonString = await rootBundle.loadString('assets/data/analytics/{$filename}_mission_analytics.json');
     return jsonDecode(jsonString);
   }
 
   /// **🔹 Generic POST Request**
   /// Sends a POST request to the specified [path] with a JSON [data] payload.
   /// Handles errors using the unified [_handleRequest] wrapper.
-  Future<void> post(String path, {required Map<String, dynamic> data}) async {
-    await _handleRequest(() async {
-      await _dio.post(
+  /// FIX: Returns a type-safe Map for predictable JSON responses.
+  Future<Map<String, dynamic>> post(String path,
+      {required Map<String, dynamic> body}) async {
+    return _handleRequest(() async {
+      final response = await _dio.post(
         path,
-        data: data,
+        data: body,
         options: Options(headers: {
           'Content-Type': 'application/json',
         }),
       );
+      // Ensure the response data is a map, otherwise return an empty map.
+      return response.data is Map<String, dynamic>
+          ? response.data as Map<String, dynamic>
+          : {};
     });
   }
 
@@ -179,7 +203,7 @@ class ApiService {
   /// Sends a lightweight event to the `/events/:name` endpoint with the given [data].
   /// Useful for custom tracking (e.g., startup, session, screen views).
   Future<void> sendEvent(String name, Map<String, dynamic> data) async {
-    await post('/events/$name', data: data);
+    await post('/events/$name', body: data);
   }
 }
 

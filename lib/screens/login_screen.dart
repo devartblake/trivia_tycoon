@@ -11,16 +11,66 @@ import '../game/providers/onboarding_providers.dart';
 import '../game/providers/multi_profile_providers.dart';
 import 'onboarding/widget/constants.dart';
 
+/// User data model for mock authentication
+class MockUser {
+  final String email;
+  final String password;
+  final String role; // 'player' or 'admin'
+  final bool isPremium;
+
+  const MockUser({
+    required this.email,
+    required this.password,
+    required this.role,
+    required this.isPremium,
+  });
+
+  bool get isAdmin => role == 'admin';
+  bool get isPlayer => role == 'player';
+}
+
 /// Updated login screen that integrates with multi-profile system
 class LoginScreen extends ConsumerWidget {
   static const routeName = '/auth';
   const LoginScreen({super.key});
 
-  static const mockUsers = {
-    'dribbble@gmail.com': '12345',
-    'hunter@gmail.com': 'hunter',
-    'near.huscarl@gmail.com': 'subscribe to pewdiepie',
-    '@.com': '.',
+  static const mockUsers = <String, MockUser>{
+    'admin@gmail.com': MockUser(
+      email: 'admin@gmail.com',
+      password: 'admin123',
+      role: 'admin',
+      isPremium: true,
+    ),
+    'premium@gmail.com': MockUser(
+      email: 'premium@gmail.com',
+      password: 'premium',
+      role: 'player',
+      isPremium: true,
+    ),
+    'dribbble@gmail.com': MockUser(
+      email: 'dribbble@gmail.com',
+      password: '12345',
+      role: 'player',
+      isPremium: false,
+    ),
+    'hunter@gmail.com': MockUser(
+      email: 'hunter@gmail.com',
+      password: 'hunter',
+      role: 'admin',
+      isPremium: true,
+    ),
+    'near.huscarl@gmail.com': MockUser(
+      email: 'near.huscarl@gmail.com',
+      password: 'subscribe to pewdiepie',
+      role: 'player',
+      isPremium: false,
+    ),
+    '@.com': MockUser(
+      email: '@.com',
+      password: '.',
+      role: 'player',
+      isPremium: false,
+    ),
   };
 
   Duration get loginTime => Duration(milliseconds: timeDilation.ceil() * 2250);
@@ -28,16 +78,25 @@ class LoginScreen extends ConsumerWidget {
   Future<String?> _loginUser(LoginData data, WidgetRef ref) async {
     await Future.delayed(loginTime);
     if (!mockUsers.containsKey(data.name)) return 'User does not exist';
-    if (mockUsers[data.name] != data.password) return 'Incorrect password';
+
+    final mockUser = mockUsers[data.name]!;
+    if (mockUser.password != data.password) return 'Incorrect password';
 
     try {
       // Get services
       final authOps = ref.read(authOperationsProvider);
+      final authService = ref.read(authServiceProvider);
       final multiProfileService = ref.read(multiProfileServiceProvider);
       final serviceManager = ref.read(serviceManagerProvider);
 
       // Perform login using the auth operations
       await authOps.login(data.name);
+
+      // Store user role and premium status
+      await authService.secureStorage.setSecret('user_role', mockUser.role);
+      await authService.secureStorage.setSecret('is_premium', mockUser.isPremium.toString());
+
+      debugPrint('Login successful - Role: ${mockUser.role}, Premium: ${mockUser.isPremium}');
 
       // Check if user has profiles in the multi-profile system
       final existingProfiles = await multiProfileService.getAllProfiles();
@@ -126,12 +185,17 @@ class LoginScreen extends ConsumerWidget {
         await authService.secureStorage.setUserEmail(email);
       }
 
+      // New users default to player role and check premium status
+      final isPremium = data.additionalSignupData?['isPremiumUser'] == 'true';
+      await authService.secureStorage.setSecret('user_role', 'player');
+      await authService.secureStorage.setSecret('is_premium', isPremium.toString());
+
       // Store signup data temporarily for profile creation
       ref.read(tempSignupDataProvider.notifier).state = {
         'username': username,
         'name': name,
         'email': email,
-        'isPremium': data.additionalSignupData?['isPremiumUser'] == 'true',
+        'isPremium': isPremium,
       };
 
       // For new signups, they'll go through onboarding

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:isolate';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import '../../ui_components/qr_code/services/qr_history_service.dart';
 import '../services/notification_service.dart';
 
 /// Background task service to handle mission reminders and notifications
@@ -253,6 +254,23 @@ class BackgroundTaskService {
     });
   }
 
+  /// ✅ Call this method once per app launch or on scheduled background trigger
+  static Future<void> runDailyTasks({required String userId}) async {
+    await runDailyQrSyncTask(userId: userId);
+    // Add other daily tasks here
+  }
+
+  /// 🧠 Auto-sync QR scan history if due
+  static Future<void> runDailyQrSyncTask({required String userId}) async {
+    try {
+      debugPrint('[BG Task] Checking QR sync...');
+      await QrHistoryService.instance.autoSyncIfDue(userId: userId, retentionDays: 14);
+      debugPrint('[BG Task] QR sync (if due) completed.');
+    } catch (e, st) {
+      debugPrint('[BG Task] QR sync failed: $e');
+    }
+  }
+
   /// Update user activity timestamp
   Future<void> recordUserActivity() async {
     try {
@@ -268,7 +286,8 @@ class BackgroundTaskService {
     required String missionTitle,
     required int reward,
     required String missionId,
-  }) async {
+  })
+  async {
     // Send immediate celebration
     await _notificationService.showMissionNotification(
       title: 'Mission Complete!',
@@ -298,7 +317,8 @@ class BackgroundTaskService {
   Future<void> storeMissionStatistic({
     required String eventType,
     required Map<String, dynamic> data,
-  }) async {
+  })
+  async {
     try {
       final box = await _getBackgroundBox();
       final timestamp = DateTime.now().millisecondsSinceEpoch;
@@ -321,7 +341,8 @@ class BackgroundTaskService {
   Future<List<Map<String, dynamic>>> getMissionStatistics({
     String? eventType,
     DateTime? since,
-  }) async {
+  })
+  async {
     try {
       final box = await _getBackgroundBox();
       final statistics = <Map<String, dynamic>>[];

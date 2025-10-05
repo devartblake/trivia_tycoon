@@ -7,6 +7,7 @@ import 'package:trivia_tycoon/core/services/analytics/config_service.dart';
 import 'package:trivia_tycoon/core/services/theme/theme_notifier.dart';
 import 'package:trivia_tycoon/core/manager/service_manager.dart';
 import '../../game/providers/multi_profile_providers.dart';
+import '../../game/services/referral_storage_service.dart';
 import '../services/notification_service.dart';
 import '../../game/providers/auth_providers.dart';
 import '../helpers/educational_stats_initializer.dart';
@@ -16,7 +17,8 @@ import '../services/settings/multi_profile_service.dart';
 
 /// AppInit handles bootstrapping critical services before runApp()
 class AppInit {
-  static Future<void> _initializeMultiProfileSystem(ServiceManager serviceManager, ProviderContainer? container) async {
+  static Future<void> _initializeMultiProfileSystem(ServiceManager serviceManager, ProviderContainer? container)
+  async {
     try {
       // Initialize multi-profile system
       final multiProfileService = MultiProfileService();
@@ -64,6 +66,9 @@ class AppInit {
       await Hive.openBox('settings');
     }
 
+    // Initialize referral storage
+    await _initializeReferralStorage();
+
     // Initialize GeneralKeyValueStorageService early for mission data
     final generalKeyValueStorage = GeneralKeyValueStorageService();
 
@@ -89,9 +94,6 @@ class AppInit {
     // Load and initialize ServiceManager
     final serviceManager = await ServiceManager.initialize();
 
-    // Initialize multi-profile system
-    await _initializeMultiProfileSystem(serviceManager, container);
-
     // Inject dependencies into ConfigService
     final configService = ConfigService.instance;
     configService.initServices(serviceManager);
@@ -103,12 +105,13 @@ class AppInit {
         debugPrint("[WARN] ConfigService timeout. Using default settings.");
       },
     );
-
+    // Initialize multi-profile system
+    await _initializeMultiProfileSystem(serviceManager, container);
     // Safe pre-fetch of splash type to avoid runtime crash later
     try {
       await serviceManager.splashSettingsService.getSplashType();
     } catch (e) {
-      debugPrint('[AppInit] Failed to load SplashType: $e — fallback to default.');
+      debugPrint('[AppInit] Failed to load SplashType: $e â€” fallback to default.');
     }
 
     // Get ThemeNotifier from ServiceManager (already initialized)
@@ -156,6 +159,18 @@ class AppInit {
     } catch (e) {
       debugPrint('[AppInit] Failed to initialize NotificationService: $e');
       // App continues without notifications - this is not critical
+    }
+  }
+
+  /// Initialize Referral Storage Service
+  static Future<void> _initializeReferralStorage() async {
+    try {
+      final referralStorage = ReferralStorageService();
+      await referralStorage.initialize();
+      debugPrint('[AppInit] ReferralStorageService initialized');
+    } catch (e) {
+      debugPrint('[AppInit] Failed to initialize ReferralStorageService: $e');
+      // Continue - referral system is not critical for app startup
     }
   }
 

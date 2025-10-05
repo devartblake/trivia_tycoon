@@ -51,14 +51,19 @@ import '../controllers/fernet_controller.dart';
 import '../controllers/power_up_controller.dart';
 import '../controllers/splash_controller.dart';
 import '../data/mission_data_loader.dart';
+import '../data/referral_repository.dart';
 import '../models/leaderboard_entry.dart';
 import '../models/power_up.dart';
+import '../models/referral_models.dart';
 import '../models/seasonal_competition_model.dart';
 import '../models/store_item_model.dart';
 import '../models/tier_model.dart';
 import '../services/achievement_service.dart';
 import '../services/flow_connect_level_generator.dart';
 import '../services/matches_service.dart';
+import '../services/referral_api_service.dart';
+import '../services/referral_service.dart';
+import '../services/referral_storage_service.dart';
 import '../services/seasonal_competition_service.dart';
 import '../services/store_data_service.dart';
 
@@ -66,7 +71,6 @@ import '../services/store_data_service.dart';
 import '../controllers/question_controller.dart';
 import '../controllers/leaderboard_controller.dart';
 import '../controllers/profile_avatar_controller.dart';
-import '../state/flow_connect_game_state.dart';
 import '../state/premium_profile_state.dart';
 import '../state/qr_settings_state.dart';
 import '../state/question_state.dart';
@@ -387,6 +391,83 @@ final recentQuizzesProvider = FutureProvider<List<Map<String, String>>>((ref) as
 final userProfileProvider = Provider<Map<String, dynamic>>((ref) {
   final profileService = ref.watch(playerProfileServiceProvider);
   return profileService.getProfile();
+});
+
+final referralRepositoryProvider = Provider<ReferralRepository>((ref) {
+  final services = ref.read(serviceManagerProvider);
+  return ReferralRepository(
+    api: services.apiService,
+    cache: services.appCacheService,
+  );
+});
+
+final referralStorageServiceProvider = Provider<ReferralStorageService>((ref) {
+  final storage = ReferralStorageService();
+  // Initialize is called in main.dart before runApp
+  return storage;
+});
+
+final referralApiServiceProvider = Provider<ReferralApiService>((ref) {
+  final apiService = ref.watch(apiServiceProvider);
+  return ReferralApiService(apiService);
+});
+
+// Helper provider to get current user ID
+final currentUserIdProvider = FutureProvider<String>((ref) async {
+  final authService = ref.watch(authServiceProvider);
+  final playerProfile = ref.watch(playerProfileServiceProvider);
+
+  // Try to get email from secure storage
+  final email = await authService.getStoredEmail();
+  if (email != null && email.isNotEmpty) {
+    return email.split('@').first; // Use email username as userId
+  }
+
+  // Fallback to player name
+  final playerName = await playerProfile.getPlayerName();
+  if (playerName != 'Player') {
+    return playerName;
+  }
+
+  // Last resort
+  return 'guest';
+});
+
+final referralServiceProvider = Provider<ReferralService>((ref) {
+  final storage = ref.watch(referralStorageServiceProvider);
+  final api = ref.watch(referralApiServiceProvider);
+
+  // Use a default userId for now - will be replaced when async provider loads
+  return ReferralService(
+    storage: storage,
+    api: api,
+    userId: 'guest', // Temporary default
+    baseUrl: 'https://www.trivia.app',
+  );
+});
+
+// Better approach: Async provider that waits for userId
+final asyncReferralServiceProvider = FutureProvider<ReferralService>((ref) async {
+  final storage = ref.watch(referralStorageServiceProvider);
+  final api = ref.watch(referralApiServiceProvider);
+  final userId = await ref.watch(currentUserIdProvider.future);
+
+  return ReferralService(
+    storage: storage,
+    api: api,
+    userId: userId,
+    baseUrl: 'https://www.trivia.app',
+  );
+});
+
+final userReferralCodeProvider = FutureProvider<ReferralCode>((ref) async {
+  final referralService = await ref.watch(asyncReferralServiceProvider.future);
+  return await referralService.getOrCreateReferralCode();
+});
+
+final referralStatsProvider = FutureProvider<Map<String, dynamic>>((ref) async {
+  final referralService = await ref.watch(asyncReferralServiceProvider.future);
+  return await referralService.getStats();
 });
 
 /// --- 🎡 Spin Wheel ---

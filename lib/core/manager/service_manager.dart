@@ -34,6 +34,10 @@ import 'package:trivia_tycoon/game/controllers/settings_controller.dart';
 import 'package:trivia_tycoon/game/services/achievement_service.dart';
 import 'package:trivia_tycoon/game/services/mission_service.dart';
 import 'package:trivia_tycoon/game/multiplayer/services/multiplayer_service.dart';
+import '../../game/services/referral_api_service.dart';
+import '../../game/services/referral_service.dart';
+import '../../game/services/referral_storage_service.dart';
+import '../env.dart';
 import '../repositories/mission_repository.dart';
 
 class ServiceManager {
@@ -72,6 +76,9 @@ class ServiceManager {
   final AdminSettingsService adminSettingsService;
   final PlayerProfileService playerProfileService;
   final QrSettingsService qrSettingsService;
+  final ReferralStorageService referralStorageService;
+  final ReferralApiService referralApiService;
+  final ReferralService referralService;
   final GeneralKeyValueStorageService generalKeyValueStorageService;
 
   ServiceManager({
@@ -109,11 +116,15 @@ class ServiceManager {
     required this.playerProfileService,
     required this.qrSettingsService,
     required this.generalKeyValueStorageService,
+    required this.referralStorageService,
+    required this.referralApiService,
+    required this.referralService,
   });
 
   /// Initialize all core services and return a ready ServiceManager
   static Future<ServiceManager> initialize() async {
-    final api = ApiService(baseUrl: 'https://api.url');
+    final String baseUrl = Env.apiBaseUrl;
+    final api = ApiService(baseUrl: '$baseUrl/api/v1');
     final leaderboard = LeaderboardDataService(apiService: api);
 
     // Add async initialize methods
@@ -128,7 +139,11 @@ class ServiceManager {
     final customTheme = await CustomThemeService.initialize();
     final swatch = SwatchService();
     final eventQueueService = EventQueueService();
+
     final analytics = AnalyticsService(api, eventQueueService);
+    await analytics.initialize();
+    await analytics.trackStartup();
+
     final achievements = AchievementService(apiService: api);
     final confetti = ConfettiSettingsService();
     final questions = QuestionService(apiService: api, quizProgressService: quizProgress);
@@ -146,13 +161,28 @@ class ServiceManager {
     final missionRepository = SupabaseMissionRepository(Supabase.instance.client);
     final mission = MissionService(
       missionRepository,
-      apiBaseUrl: 'https://your-fastapi-endpoint.com/api/v1',
+      apiBaseUrl: api.baseUrl,
       apiKey: 'your-api-key-here',
     );
 
     // Initialize PlayerProfileService with Hive box
     final playerProfile = PlayerProfileService();
 
+    // Initialize Referral Services
+    final referralStorage = ReferralStorageService();
+    await referralStorage.initialize();
+
+    final referralApi = ReferralApiService(api);
+
+    // Note: We need to get userId after auth is created, so we'll update this later
+    // For now, use a placeholder
+    final referralServiceTemp = ReferralService(
+      storage: referralStorage,
+      api: referralApi,
+      userId: 'guest', // Will be updated after login
+    );
+
+    // Initialize QrHistoryService
     final qrSettings = QrSettingsService();
     final generalKey = GeneralKeyValueStorageService();
 
@@ -204,6 +234,9 @@ class ServiceManager {
       settingsController: settingsController,
       spinWheelSettingsService: spinWheel,
       generalKeyValueStorageService: generalKey,
+      referralStorageService: referralStorage,
+      referralApiService: referralApi,
+      referralService: referralServiceTemp,
     );
   }
 }
