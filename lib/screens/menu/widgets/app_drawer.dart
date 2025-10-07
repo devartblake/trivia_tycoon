@@ -78,22 +78,10 @@ class _AppDrawerState extends ConsumerState<AppDrawer>
       'color': const Color(0x9670FF1B),
     },
     {
-      'icon': Icons.group_rounded,
-      'title': 'Friends',
-      'route': '/friends',
-      'color': const Color(0xFF6366F1),
-    },
-    {
       'icon': Icons.settings_suggest_rounded,
       'title': 'Preferences',
       'route': '/preferences',
       'color': const Color(0xFF10B981),
-    },
-    {
-      'icon': Icons.help_outline_rounded,
-      'title': 'Help & Feedback',
-      'route': '/help',
-      'color': const Color(0xFFF59E0B),
     },
   ];
 
@@ -109,6 +97,12 @@ class _AppDrawerState extends ConsumerState<AppDrawer>
       'title': 'Settings',
       'route': '/settings',
       'color': const Color(0xFF64748B),
+    },
+    {
+      'icon': Icons.help_outline_rounded,
+      'title': 'Help & Feedback',
+      'route': '/help',
+      'color': const Color(0xFFF59E0B),
     },
     {
       'icon': Icons.report_rounded,

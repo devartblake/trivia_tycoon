@@ -35,6 +35,9 @@ class EventQueueService {
       'EventQueueService initialized - Consecutive failures: $_consecutiveFailures',
       source: 'EventQueueService',
     );
+
+    // Check queue size on initialization
+    await _enforceQueueSizeLimit();
   }
 
   /// Load previous failure state from storage
@@ -114,6 +117,54 @@ class EventQueueService {
     return _isInCooldown;
   }
 
+  /// Enforce queue size limit - delete oldest events if over limit
+  Future<void> _enforceQueueSizeLimit() async {
+    try {
+      final box = await Hive.openBox(_boxName);
+
+      if (box.length <= maxQueueSize) return;
+
+      final excessCount = box.length - maxQueueSize;
+
+      LogManager.warning(
+        'Queue size (${box.length}) exceeds limit ($maxQueueSize). Removing $excessCount oldest events (FIFO).',
+        source: 'EventQueueService',
+      );
+
+      // Get all entries sorted by timestamp (oldest first)
+      final entries = box.toMap().entries.toList();
+      entries.sort((a, b) {
+        final aTime = DateTime.tryParse(a.value['timestamp'] ?? '') ?? DateTime.now();
+        final bTime = DateTime.tryParse(b.value['timestamp'] ?? '') ?? DateTime.now();
+        return aTime.compareTo(bTime);
+      });
+
+      // Delete oldest entries
+      int deleted = 0;
+      for (var i = 0; i < excessCount; i++) {
+        await box.delete(entries[i].key);
+        deleted++;
+      }
+
+      LogManager.info(
+        'Deleted $deleted oldest events to maintain queue size limit',
+        source: 'EventQueueService',
+      );
+
+      _notifyAnalytics('queue_size_limit_enforced', {
+        'deleted_count': deleted,
+        'remaining_count': box.length,
+        'max_queue_size': maxQueueSize,
+      });
+    } catch (e) {
+      LogManager.error(
+        'Failed to enforce queue size limit',
+        source: 'EventQueueService',
+        error: e,
+      );
+    }
+  }
+
   /// Enqueue a failed event for later retry
   Future<void> enqueueEvent(String endpoint, Map<String, dynamic> payload) async {
     if (isInCooldown) {
@@ -128,6 +179,38 @@ class EventQueueService {
 
     try {
       final box = await Hive.openBox(_boxName);
+
+      // Enforce size limit before adding new event
+      if (box.length >= maxQueueSize) {
+        LogManager.warning(
+          'Queue at max size ($maxQueueSize). Removing 10 oldest events (FIFO) before adding new event.',
+          source: 'EventQueueService',
+        );
+
+        // Remove 10 oldest events
+        final entries = box.toMap().entries.toList();
+        entries.sort((a, b) {
+          final aTime = DateTime.tryParse(a.value['timestamp'] ?? '') ?? DateTime.now();
+          final bTime = DateTime.tryParse(b.value['timestamp'] ?? '') ?? DateTime.now();
+          return aTime.compareTo(bTime);
+        });
+
+        int deleteCount = 10;
+        for (var i = 0; i < deleteCount && i < entries.length; i++) {
+          await box.delete(entries[i].key);
+        }
+
+        LogManager.info(
+          'Deleted $deleteCount oldest events (FIFO) to make room',
+          source: 'EventQueueService',
+        );
+
+        _notifyAnalytics('queue_fifo_cleanup', {
+          'deleted_count': deleteCount,
+          'reason': 'max_queue_size_reached',
+        });
+      }
+
       final id = DateTime.now().millisecondsSinceEpoch.toString();
 
       await box.put(id, {
@@ -234,6 +317,9 @@ class EventQueueService {
 
     // Report results
     _reportRetryCycle(successCount, failureCount, box.length);
+
+    // Enforce queue size limit after retries
+    await _enforceQueueSizeLimit();
   }
 
   /// Handle a complete failure cycle
@@ -344,6 +430,7 @@ class EventQueueService {
           'is_in_cooldown': _isInCooldown,
           'cooldown_until': _cooldownUntil?.toIso8601String(),
           'total_events': events.length,
+          'max_queue_size': maxQueueSize,
         },
         'analytics_logs': LogManager.exportLogsAsJson(source: 'EventQueueService'),
       };
@@ -373,6 +460,7 @@ class EventQueueService {
       'last_failure_time': _lastFailureTime?.toIso8601String(),
       'max_consecutive_failures': maxConsecutiveFailures,
       'cooldown_period_minutes': cooldownPeriod.inMinutes,
+      'max_queue_size': maxQueueSize,
     };
   }
 

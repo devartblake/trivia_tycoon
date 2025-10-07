@@ -16,95 +16,552 @@ class FileImportExportScreen extends StatefulWidget {
 class _FileImportExportScreenState extends State<FileImportExportScreen> {
   List<QuestionModel> _importedQuestions = [];
   String? _status;
+  bool _isProcessing = false;
 
   Future<void> _importFromFile() async {
-    setState(() => _status = '📂 Picking file...');
-    final result = await FilePicker.platform.pickFiles();
+    setState(() {
+      _status = 'Picking file...';
+      _isProcessing = true;
+    });
 
-    if (result != null && result.files.single.path != null) {
-      final filePath = result.files.single.path!;
-      final file = File(filePath);
-      final content = await file.readAsString();
+    try {
+      final result = await FilePicker.platform.pickFiles();
 
-      try {
-        final decrypted = EncryptionUtils.decryptAES(content);
-        final List decoded = jsonDecode(decrypted);
-        final questions = decoded
-            .map((e) => QuestionModel.fromJson(e))
-            .toList();
+      if (result != null && result.files.single.path != null) {
+        final filePath = result.files.single.path!;
+        final file = File(filePath);
+        final content = await file.readAsString();
 
+        try {
+          final decrypted = EncryptionUtils.decryptAES(content);
+          final List decoded = jsonDecode(decrypted);
+          final questions = decoded.map((e) => QuestionModel.fromJson(e)).toList();
+
+          setState(() {
+            _importedQuestions = List<QuestionModel>.from(questions);
+            _status = 'Successfully imported ${questions.length} questions';
+            _isProcessing = false;
+          });
+
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Row(
+                children: [
+                  const Icon(Icons.check_circle, color: Colors.white),
+                  const SizedBox(width: 12),
+                  Text('Imported ${questions.length} questions'),
+                ],
+              ),
+              backgroundColor: const Color(0xFF10B981),
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          );
+        } catch (e) {
+          setState(() {
+            _status = 'Failed to import file: $e';
+            _isProcessing = false;
+          });
+        }
+      } else {
         setState(() {
-          _importedQuestions = List<QuestionModel>.from(questions);
-          _status = '✅ Imported ${questions.length} questions.';
+          _status = null;
+          _isProcessing = false;
         });
-      } catch (e) {
-        setState(() => _status = '❌ Failed to import file: $e');
       }
+    } catch (e) {
+      setState(() {
+        _status = 'Error: $e';
+        _isProcessing = false;
+      });
     }
   }
 
   Future<void> _exportToFile() async {
-    setState(() => _status = '🧾 Preparing export...');
+    if (_importedQuestions.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Row(
+            children: [
+              Icon(Icons.warning, color: Colors.white),
+              SizedBox(width: 12),
+              Text('No questions to export'),
+            ],
+          ),
+          backgroundColor: const Color(0xFFF59E0B),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      _status = 'Preparing export...';
+      _isProcessing = true;
+    });
 
     try {
       final data = _importedQuestions.map((q) => q.toJson()).toList();
       final jsonStr = jsonEncode(data);
       final encrypted = EncryptionUtils.encryptAES(jsonStr);
 
-      final outputFile = File(
-        '${Directory.systemTemp.path}/exported_questions.json',
-      );
+      final outputFile = File('${Directory.systemTemp.path}/exported_questions.json');
       await outputFile.writeAsString(encrypted);
 
       setState(() {
-        _status = '✅ Exported to: ${outputFile.path}';
+        _status = 'Successfully exported to: ${outputFile.path}';
+        _isProcessing = false;
       });
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Row(
+            children: [
+              Icon(Icons.check_circle, color: Colors.white),
+              SizedBox(width: 12),
+              Text('Export successful'),
+            ],
+          ),
+          backgroundColor: const Color(0xFF10B981),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      );
     } catch (e) {
-      setState(() => _status = '❌ Failed to export: $e');
+      setState(() {
+        _status = 'Failed to export: $e';
+        _isProcessing = false;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('File Import/Export')),
-      body: Padding(
+      backgroundColor: const Color(0xFFF5F7FA),
+      appBar: AppBar(
+        title: const Text(
+          'File Import/Export',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF1A1A1A),
+          ),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: Color(0xFF1A1A1A)),
+      ),
+      body: ListView(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            ElevatedButton.icon(
-              onPressed: _importFromFile,
-              icon: const Icon(Icons.upload_file),
-              label: const Text("Import Questions"),
+        children: [
+          // Header Card
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF6366F1).withOpacity(0.3),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+              ],
             ),
-            const SizedBox(height: 10),
-            ElevatedButton.icon(
-              onPressed: _exportToFile,
-              icon: const Icon(Icons.download),
-              label: const Text("Export Questions"),
+            child: const Row(
+              children: [
+                Icon(Icons.import_export, color: Colors.white, size: 40),
+                SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Import & Export',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        'Manage your question database',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white70,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 20),
-            if (_status != null)
-              Text(_status!, style: const TextStyle(fontSize: 14)),
+          ),
 
-            const SizedBox(height: 10),
-            Expanded(
-              child: _importedQuestions.isEmpty
-                  ? const Center(child: Text("No questions imported yet."))
-                  : ListView.builder(
-                itemCount: _importedQuestions.length,
-                itemBuilder: (context, index) {
-                  final question = _importedQuestions[index];
-                  return ListTile(
-                    leading: Text('${index + 1}'),
-                    title: Text(question.question),
-                    subtitle: Text("Category: ${question.category}"),
-                  );
-                },
+          const SizedBox(height: 24),
+
+          // Actions Card
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: const Color(0xFFE9ECEF),
+                width: 1,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.04),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Row(
+                  children: [
+                    Icon(Icons.file_upload, color: Color(0xFF10B981), size: 24),
+                    SizedBox(width: 12),
+                    Text(
+                      'Actions',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF1A1A1A),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+
+                // Import Button
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF10B981), Color(0xFF059669)],
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF10B981).withOpacity(0.3),
+                          blurRadius: 12,
+                          offset: const Offset(0, 6),
+                        ),
+                      ],
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: _isProcessing ? null : _importFromFile,
+                        borderRadius: BorderRadius.circular(12),
+                        child: Center(
+                          child: _isProcessing
+                              ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                              : const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.upload_file, color: Colors.white),
+                              SizedBox(width: 12),
+                              Text(
+                                'Import Questions',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                // Export Button
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF3B82F6), Color(0xFF60A5FA)],
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF3B82F6).withOpacity(0.3),
+                          blurRadius: 12,
+                          offset: const Offset(0, 6),
+                        ),
+                      ],
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: _isProcessing ? null : _exportToFile,
+                        borderRadius: BorderRadius.circular(12),
+                        child: const Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.download, color: Colors.white),
+                              SizedBox(width: 12),
+                              Text(
+                                'Export Questions',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          // Status Card
+          if (_status != null)
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: _status!.contains('Failed') || _status!.contains('Error')
+                    ? const Color(0xFFEF4444).withOpacity(0.1)
+                    : const Color(0xFF10B981).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: _status!.contains('Failed') || _status!.contains('Error')
+                      ? const Color(0xFFEF4444)
+                      : const Color(0xFF10B981),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    _status!.contains('Failed') || _status!.contains('Error')
+                        ? Icons.error_outline
+                        : Icons.info_outline,
+                    color: _status!.contains('Failed') || _status!.contains('Error')
+                        ? const Color(0xFFEF4444)
+                        : const Color(0xFF10B981),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      _status!,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: _status!.contains('Failed') || _status!.contains('Error')
+                            ? const Color(0xFFEF4444)
+                            : const Color(0xFF10B981),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+
+          if (_status != null) const SizedBox(height: 24),
+
+          // Questions List Card
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: const Color(0xFFE9ECEF),
+                width: 1,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.04),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.list, color: Color(0xFF6366F1), size: 24),
+                      const SizedBox(width: 12),
+                      const Text(
+                        'Imported Questions',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF1A1A1A),
+                        ),
+                      ),
+                      const Spacer(),
+                      if (_importedQuestions.isNotEmpty)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF6366F1).withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            '${_importedQuestions.length}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF6366F1),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+
+                Divider(height: 1, color: Colors.grey[200]),
+
+                SizedBox(
+                  height: 400,
+                  child: _importedQuestions.isEmpty
+                      ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.folder_open,
+                          size: 64,
+                          color: Colors.grey[400],
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'No questions imported yet',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[600],
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Import a file to get started',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[500],
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                      : ListView.separated(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: _importedQuestions.length,
+                    separatorBuilder: (context, index) => const SizedBox(height: 8),
+                    itemBuilder: (context, index) {
+                      final question = _importedQuestions[index];
+                      return Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF8FAFC),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.grey[200]!,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF6366F1).withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  '${index + 1}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF6366F1),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    question.question,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    'Category: ${question.category}',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

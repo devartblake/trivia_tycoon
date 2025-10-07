@@ -224,6 +224,7 @@ class FriendDiscoveryService extends ChangeNotifier {
     debugPrint('FriendDiscoveryService initialized');
   }
 
+  @override
   void dispose() {
     for (final controller in _friendListStreams.values) {
       controller.close();

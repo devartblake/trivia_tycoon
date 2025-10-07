@@ -5,7 +5,6 @@ import 'package:trivia_tycoon/core/bootstrap/app_launcher.dart';
 import 'package:trivia_tycoon/core/widgets/offline_fallback_screen.dart';
 import 'package:trivia_tycoon/screens/splash_variants/main_splash.dart';
 import 'package:trivia_tycoon/widgets/app_logo.dart';
-
 import 'core/env.dart';
 import 'core/manager/service_manager.dart';
 import 'core/services/theme/theme_notifier.dart';
@@ -152,7 +151,21 @@ class _TriviaTycoonAppState extends State<TriviaTycoonApp> {
     }
 
     if (!_initialized || _initialData == null) {
-      return const Center(child: CircularProgressIndicator());
+      return Scaffold(
+        backgroundColor: const Color(0xFFF5F7FA),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AppLogo(size: 120, animate: true),
+              const SizedBox(height: 32),
+              const CircularProgressIndicator(
+                color: Color(0xFF6366F1),
+              ),
+            ],
+          ),
+        ),
+      );
     }
 
     return AppLauncher(initialData: _initialData!);

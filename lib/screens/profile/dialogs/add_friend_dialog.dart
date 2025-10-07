@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/utils/input_validator.dart';
 import '../../../core/utils/unicode_utils.dart';
 import '../../messages/widgets/safe_text.dart';
@@ -137,7 +138,10 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
               style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
             ),
             trailing: const Icon(Icons.chevron_right, color: Colors.white70),
-            onTap: () {},
+            onTap: () {
+              Navigator.pop(context);
+              context.push('/friends/add-username');
+            },
           ),
         ],
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/admin/admin_dashboard.dart';
+import 'package:trivia_tycoon/admin/events_management/admin_event_queue_screen.dart';
 import 'package:trivia_tycoon/core/router/auth_guard.dart';
 import 'package:trivia_tycoon/core/router/enhanced_admin_guard.dart';
 import 'package:trivia_tycoon/screens/leaderboard/tier_rank_screen.dart';
@@ -21,8 +22,9 @@ import '../../admin/widgets/encrypted_file_preview.dart';
 import '../../game/models/game_mode.dart';
 import '../../game/providers/onboarding_providers.dart';
 import '../../game/providers/auth_providers.dart';
+import '../../screens/challenge/challenge_screen.dart';
 import '../../screens/menu/invite_screen.dart';
-import '../../screens/messages/messages.dart';
+import '../../screens/messages/messages_screen.dart';
 import '../../screens/mini_games/connections_puzzle_screen.dart';
 import '../../screens/mini_games/crossword_screen.dart';
 import '../../screens/mini_games/flow_connect_puzzle_screen.dart';
@@ -39,10 +41,13 @@ import '../../screens/multiplayer/multiplayer_hub_screen.dart';
 import '../../screens/multiplayer/multiplayer_question_screen.dart';
 import '../../screens/multiplayer/multiplayer_results_screen.dart';
 import '../../screens/multiplayer/room_lobby_screen.dart';
+import '../../screens/preferences_screen.dart';
+import '../../screens/profile/enhanced/add_friends_screen.dart';
 import '../../screens/profile/profile_selection_screen.dart';
 import '../../screens/question/monthly_quiz_screen.dart';
 import '../../screens/question/score_summary_screen_wrapper.dart';
 import '../../screens/question/transitional/how_to_play_screen.dart';
+import '../../screens/report_screen.dart';
 import '../../screens/rewards/mission_screen.dart';
 import '../../screens/rewards/spin_earn_screen.dart';
 import '../../screens/social/multiplayer_screen.dart';
@@ -186,6 +191,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const ConfigSettingsScreen(),
       ),
       createAdminRoute(
+        path: '/admin/events-queue',
+        name: 'Events Queue Manager',
+        builder: (context, state) => const AdminEventQueueScreen(),
+      ),
+      createAdminRoute(
         path: '/admin/file-import-export',
         name: 'File Import/Export',
         builder: (context, state) => const FileImportExportScreen(),
@@ -252,6 +262,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/missions',
         builder: (context, state) =>
             const MissionsScreen(), // Your full mission screen
+      ),
+      GoRoute(
+        path: '/challenges',
+        name: 'Challenge',
+        builder: (context, state) => const ChallengeScreen(),
       ),
       GoRoute(path: '/invite', builder: (context, state) => InviteScreen()),
       GoRoute(path: '/rewards', builder: (context, state) => RewardsScreen()),
@@ -451,24 +466,39 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
       /// 👤 USER PROFILE & SOCIAL
       GoRoute(
+        path: '/preferences',
+        name: 'Preferences',
+        builder: (context, state) => const PreferencesScreen(),
+      ),
+      GoRoute(
         path: '/profile-selection',
+        name: 'Profile Selection',
         builder: (context, state) => const ProfileSelectionScreen(),
       ),
       GoRoute(
         path: '/friends',
+        name: 'Friends',
         builder: (context, state) => const FriendsScreen(),
       ),
       GoRoute(
+        path: '/friends/add-username',
+        name: 'Add Friend By Username',
+        builder: (context, state) => const AddFriendByUsernameScreen(),
+      ),
+      GoRoute(
         path: '/avatar-selection',
+        name: 'Avatar Selection',
         builder: (context, state) => const AvatarSelectionScreen(),
       ),
       GoRoute(
         path: '/multiplayer',
+        name: 'Multiplayer',
         builder: (context, state) => const MultiplayerScreen(),
         redirect: onboardingGuard,
       ),
       GoRoute(
        path: '/messages',
+       name: 'Messages',
        builder: (context, state) => const MessagesScreen(),
        redirect: onboardingGuard,
       ),
@@ -476,16 +506,19 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       /// 🎯 Daily Quiz & Featured Content Routes (Referenced in CarouselSection)
       GoRoute(
         path: '/daily-quiz',
+        name: 'Daily Quiz',
         builder: (context, state) => const DailyQuizScreen(),
         redirect: onboardingGuard,
       ),
       GoRoute(
         path: '/monthly-quiz',
+        name: 'Monthly Quiz',
         builder: (context, state) => const MonthlyQuizScreen(),
         redirect: onboardingGuard,
       ),
       GoRoute(
         path: '/featured-challenge',
+        name: 'Featured Challenge',
         builder: (context, state) => const FeaturedChallengeScreen(),
         redirect: onboardingGuard,
       ),
@@ -525,16 +558,19 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       /// ⚡ Quick Actions Routes (Referenced in Enhanced GridMenuSection)
       GoRoute(
         path: '/history',
+        name: 'History',
         builder: (context, state) => const QuizHistoryScreen(),
         redirect: onboardingGuard,
       ),
       GoRoute(
         path: '/favorites',
+        name: 'Favorites',
         builder: (context, state) => const FavoritesScreen(),
         redirect: onboardingGuard,
       ),
       GoRoute(
         path: '/all-actions',
+        name: 'All Actions',
         builder: (context, state) => const AllActionsScreen(),
         redirect: onboardingGuard,
       ),
@@ -542,26 +578,42 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       /// 🎮 Enhanced Quiz Routes (Referenced in TopMenuSection)
       GoRoute(
         path: '/achievements',
+        name: 'Achievements',
         builder: (context, state) => const AchievementsScreen(),
         redirect: onboardingGuard,
       ),
 
       GoRoute(
         path: '/music',
+        name: 'Music',
         builder: (context, state) => const MusicScreen(),
       ),
       GoRoute(
         path: '/skill-theme',
+        name: 'Skill Theme',
         builder: (context, state) => const SkillThemeScreen(),
+      ),
+
+      GoRoute(
+        path: '/help',
+        name: 'Help & Feedback',
+        builder: (context, state) => const HelpScreen(),
+      ),
+      GoRoute(
+        path: '/report',
+        name: 'Report',
+        builder: (context, state) => const ReportScreen(),
       ),
 
       /// 🧩 UTILITY & MISC
       GoRoute(
         path: '/search',
+        name: 'Search',
         builder: (context, state) => const SearchScreen(),
       ),
       GoRoute(
         path: '/alerts',
+        name: 'Alerts',
         builder: (context, state) => const AlertsScreen(),
       ),
       GoRoute(
@@ -583,10 +635,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/theme-settings',
         builder: (context, state) => const ThemeSettingsScreen(),
-      ),
-      GoRoute(
-        path: '/help',
-        builder: (context, state) => const HelpScreen(),
       ),
       GoRoute(
         path: '/confetti-settings',

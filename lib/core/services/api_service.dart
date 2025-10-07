@@ -174,7 +174,7 @@ class ApiService {
 
   /// Loads mock data from assets/json
   Future<dynamic> getMockData(String filename) async {
-    final String jsonString = await rootBundle.loadString('assets/data/analytics/{$filename}_mission_analytics.json');
+    final String jsonString = await rootBundle.loadString('assets/data/analytics/$filename');
     return jsonDecode(jsonString);
   }
 

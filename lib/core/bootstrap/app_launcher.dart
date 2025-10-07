@@ -5,11 +5,10 @@ import 'package:trivia_tycoon/core/manager/service_manager.dart';
 import 'package:trivia_tycoon/core/services/theme/theme_notifier.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart' as providers;
 import 'package:go_router/go_router.dart';
-
-// Updated import to use new router
 import '../../game/providers/auth_providers.dart';
 import '../../game/providers/onboarding_providers.dart';
 import '../../ui_components/power_ups/power_up_HUD_Overlay.dart';
+import '../../widgets/app_logo.dart';
 import '../navigation/app_router.dart';
 import '../theme/app_scroll_behavior.dart';
 
@@ -80,14 +79,16 @@ class _AppLauncherState extends ConsumerState<AppLauncher> {
   @override
   Widget build(BuildContext context) {
     if (!_authStateInitialized || _router == null) {
-      return const Scaffold(
+      return Scaffold(
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircularProgressIndicator(),
-              SizedBox(height: 16),
-              Text('Initializing app...'),
+              const AppLogo(size: 100, animate: true),
+              const SizedBox(height: 32),
+              const CircularProgressIndicator(),
+              const SizedBox(height: 16),
+              const Text('Initializing app...'),
             ],
           ),
         ),

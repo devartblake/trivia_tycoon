@@ -6,6 +6,7 @@ import '../screens/widgets/slimy_card_preview_screen.dart';
 import 'analytics/analytics_screen.dart';
 import 'config/config_settings_screen.dart';
 import 'encryption/encryption_manager_screen.dart';
+import 'events_management/admin_event_queue_screen.dart';
 import 'questions/file_import_export_screen.dart';
 import 'questions/question_editor_screen.dart';
 
@@ -58,13 +59,24 @@ class AdminDashboardScreen extends StatelessWidget {
         ),
       ),
       _AdminAction(
+        title: 'Events Queue',
+        subtitle: 'Manages the event queue',
+        icon: Icons.event_busy_rounded,
+        color: Colors.indigo,
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const AdminEventQueueScreen()),
+        ),
+      ),
+      _AdminAction(
         title: 'Leaderboard Filters',
         subtitle: 'Advanced leaderboard filters',
         icon: Icons.filter_alt_rounded,
         color: Colors.indigo,
         onTap: () => Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => const AdminLeaderboardFilterScreen()),
+          MaterialPageRoute(
+              builder: (_) => const AdminLeaderboardFilterScreen()),
         ),
       ),
       _AdminAction(
@@ -133,42 +145,46 @@ class AdminDashboardScreen extends StatelessWidget {
                   ),
                 ),
                 child: SafeArea(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(20),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0), // Reduced padding
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(12), // Reduced from 16
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: const Icon(
+                            Icons.admin_panel_settings_rounded,
+                            size: 40, // Reduced from 48
+                            color: Colors.white,
+                          ),
                         ),
-                        child: const Icon(
-                          Icons.admin_panel_settings_rounded,
-                          size: 48,
-                          color: Colors.white,
+                        const SizedBox(height: 12), // Reduced from 16
+                        const Text(
+                          'Admin Dashboard',
+                          style: TextStyle(
+                            fontSize: 24, // Reduced from 28
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            letterSpacing: 0.5,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      const Text(
-                        'Admin Dashboard',
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          letterSpacing: 0.5,
+                        const SizedBox(height: 6), // Reduced from 8
+                        Text(
+                          'Manage your trivia empire',
+                          style: TextStyle(
+                            fontSize: 13, // Reduced from 14
+                            color: Colors.white.withOpacity(0.9),
+                            letterSpacing: 0.3,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Manage your trivia empire',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white.withOpacity(0.9),
-                          letterSpacing: 0.3,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                    ],
+                        const SizedBox(height: 12), // Reduced from 20
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -179,27 +195,11 @@ class AdminDashboardScreen extends StatelessWidget {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(20),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _buildStatCard(
-                      context: context,
-                      icon: Icons.category_rounded,
-                      label: 'Modules',
-                      value: '${actions.length}',
-                      color: theme.primaryColor,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _buildStatCard(
-                      context: context,
-                      icon: Icons.verified_user_rounded,
-                      label: 'Access',
-                      value: 'Full',
-                      color: Colors.green,
-                    ),
-                  ),
+              child: _buildCombinedStatCard(
+                context: context,
+                stats: [
+                  (icon: Icons.category_rounded, label: 'Modules', value: '${actions.length}', color: theme.primaryColor),
+                  (icon: Icons.verified_user_rounded, label: 'Access', value: 'Full', color: Colors.green),
                 ],
               ),
             ),
@@ -216,7 +216,7 @@ class AdminDashboardScreen extends StatelessWidget {
                 childAspectRatio: 1.0,
               ),
               delegate: SliverChildBuilderDelegate(
-                    (context, index) {
+                (context, index) {
                   final action = actions[index];
                   return _buildActionCard(
                     context: context,
@@ -263,11 +263,11 @@ class AdminDashboardScreen extends StatelessWidget {
             ),
             child: Icon(icon, size: 20, color: color),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           Text(
             value,
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
               color: Colors.grey[900],
             ),
@@ -276,7 +276,7 @@ class AdminDashboardScreen extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 14,
               color: Colors.grey[600],
             ),
           ),
@@ -375,6 +375,73 @@ class AdminDashboardScreen extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildCombinedStatCard({
+    required BuildContext context,
+    required List<({IconData icon, String label, String value, Color color})> stats,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          for (var i = 0; i < stats.length; i++) ...[
+            if (i > 0) ...[
+              const SizedBox(width: 16),
+              Container(
+                width: 1,
+                height: 40,
+                color: Colors.grey[300],
+              ),
+              const SizedBox(width: 16),
+            ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: stats[i].color.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(stats[i].icon, size: 20, color: stats[i].color),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    stats[i].value,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[900],
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    stats[i].label,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }

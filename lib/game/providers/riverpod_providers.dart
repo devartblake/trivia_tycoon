@@ -10,12 +10,14 @@ import 'package:trivia_tycoon/core/services/settings/prize_log_service.dart';
 import 'package:trivia_tycoon/core/services/settings/purchase_settings_service.dart';
 import 'package:trivia_tycoon/core/services/settings/splash_settings_service.dart';
 import 'package:trivia_tycoon/game/controllers/settings_controller.dart';
+import 'package:trivia_tycoon/game/models/pvp_challenge_models.dart';
 
 // 🔧 Core Services & Config
 import '../../admin/controllers/admin_filter_controller.dart';
 import '../../admin/states/admin_filter_state.dart';
 import '../../core/manager/login_manager.dart';
 import '../../core/manager/tier_manager.dart';
+import '../../core/repositories/message_repository.dart';
 import '../../core/services/encryption/encryption_service.dart';
 import '../../core/services/encryption/fernet_service.dart';
 import '../../core/services/event_queue_service.dart';
@@ -28,6 +30,7 @@ import '../../core/services/settings/quiz_progress_service.dart';
 import '../../core/services/settings/reward_settings_service.dart';
 import '../../core/services/settings/spin_wheel_settings_service.dart';
 import '../../core/services/settings/theme_settings_service.dart';
+import '../../core/services/social/challenge_coordination_service.dart';
 import '../../core/state/flow_connect_state_notifier.dart';
 import '../../ui_components/login/providers/auth.dart';
 import '../../ui_components/qr_code/models/qr_settings_model.dart';
@@ -52,6 +55,7 @@ import '../controllers/power_up_controller.dart';
 import '../controllers/splash_controller.dart';
 import '../data/mission_data_loader.dart';
 import '../data/referral_repository.dart';
+import '../models/conversation_models.dart';
 import '../models/leaderboard_entry.dart';
 import '../models/power_up.dart';
 import '../models/referral_models.dart';
@@ -90,6 +94,7 @@ import '../models/currency_type.dart';
 import '../models/badge.dart';
 import '../state/tier_progression_state.dart';
 import '../state/tier_update_result.dart';
+import 'message_providers.dart';
 
 // --- 🌍 Global Services ---
 final configServiceProvider =
@@ -468,6 +473,15 @@ final userReferralCodeProvider = FutureProvider<ReferralCode>((ref) async {
 final referralStatsProvider = FutureProvider<Map<String, dynamic>>((ref) async {
   final referralService = await ref.watch(asyncReferralServiceProvider.future);
   return await referralService.getStats();
+});
+
+/// --- Messages ---
+
+// Provider for the existing ChallengeCoordinationService
+final challengeCoordinationServiceProvider = Provider<ChallengeCoordinationService>((ref) {
+  final service = ChallengeCoordinationService();
+  service.initialize();
+  return service;
 });
 
 /// --- 🎡 Spin Wheel ---

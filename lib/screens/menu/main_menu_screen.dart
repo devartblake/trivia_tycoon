@@ -3,9 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/screens/menu/widgets/app_drawer.dart';
+import 'package:trivia_tycoon/screens/menu/widgets/standard_appbar.dart';
 import '../../screens/menu/widgets/rank_level_card.dart';
 import '../../screens/menu/widgets/recently_played_section.dart';
-import '../../screens/menu/widgets/user_greeting_appbar.dart';
+import '../../ui_components/tycoon_toast/tycoon_toast.dart';
 import '../profile/widgets/shimmer_avatar.dart';
 import '../../game/providers/riverpod_providers.dart';
 
@@ -21,6 +22,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
   AnimationController? _animationController;
   Animation<double>? _fadeAnimation;
   late List<AnimationController> _cardAnimationControllers;
+  TycoonToast? _greetingToast;
 
   @override
   void initState() {
@@ -51,6 +53,100 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
         if (mounted) _cardAnimationControllers[i].forward();
       });
     }
+
+    // Show greeting toast after a short delay
+    Future.delayed(const Duration(milliseconds: 800), () {
+      if (mounted) _showGreetingToast();
+    });
+  }
+
+  void _showGreetingToast() {
+    final profileService = ref.read(playerProfileServiceProvider);
+    final ageGroup = ref.read(userAgeGroupProvider);
+    final userProfile = profileService.getProfile();
+    final userName = userProfile['name'] ?? 'Player';
+    final currentHour = DateTime.now().hour;
+    final greeting = _getGreeting(currentHour);
+    final greetingIcon = _getGreetingIcon(currentHour);
+
+    _greetingToast = TycoonToast(
+      title: greeting,
+      message: 'Welcome back, $userName!',
+      icon: Icon(greetingIcon, color: Colors.white, size: 32),
+      titleSize: 18,
+      messageSize: 15,
+      duration: const Duration(seconds: 3),
+      tycoonToastPosition: TycoonToastPosition.top,
+      tycoonToastStyle: TycoonToastStyle.floating,
+      backgroundGradient: _getGreetingGradient(ageGroup),
+      shouldIconPulse: true,
+      margin: const EdgeInsets.only(top: 60, left: 16, right: 16),
+      padding: const EdgeInsets.all(24),
+      borderRadius: BorderRadius.circular(20),
+      boxShadows: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.3),
+          blurRadius: 25,
+          offset: const Offset(0, 12),
+        ),
+      ],
+    );
+
+    _greetingToast!.show(context);
+  }
+
+  LinearGradient _getGreetingGradient(String ageGroup) {
+    switch (ageGroup) {
+      case 'kids':
+        return const LinearGradient(
+          colors: [Color(0xFFFF6B6B), Color(0xFFFF8E53)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        );
+      case 'teens':
+        return const LinearGradient(
+          colors: [Color(0xFF4ECDC4), Color(0xFF44A08D)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        );
+      case 'adults':
+        return const LinearGradient(
+          colors: [Color(0xFF667eea), Color(0xFF764ba2)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        );
+      default:
+        return const LinearGradient(
+          colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        );
+    }
+  }
+
+  String _getGreeting(int hour) {
+    if (hour < 12) return 'Good Morning';
+    if (hour < 17) return 'Good Afternoon';
+    return 'Good Evening';
+  }
+
+  IconData _getGreetingIcon(int hour) {
+    if (hour < 12) return Icons.wb_sunny_rounded;
+    if (hour < 17) return Icons.wb_sunny_outlined;
+    return Icons.nightlight_round;
+  }
+
+  String _getThemeEventForAgeGroup(String ageGroup) {
+    switch (ageGroup) {
+      case 'kids':
+        return 'reward';
+      case 'teens':
+        return 'success';
+      case 'adults':
+        return 'info';
+      default:
+        return 'general';
+    }
   }
 
   @override
@@ -78,14 +174,14 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
   }
 
   PreferredSizeWidget _buildAppBar() {
-    final profileService = ref.watch(playerProfileServiceProvider);
     final ageGroup = ref.watch(userAgeGroupProvider);
-    final userProfile = profileService.getProfile();
-    final userName = userProfile['name'] ?? 'Player';
 
-    return UserGreetingAppBar(
-      userName: userName,
+    return StandardAppBar(
+      title: 'Trivia Tycoon',
       ageGroup: ageGroup,
+      showSearch: true,
+      showChat: true,
+      showNotifications: true,
     );
   }
 
@@ -96,13 +192,36 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Currency Display
+          // Rewards Available Widget
           SlideTransition(
             position: Tween<Offset>(
               begin: const Offset(0, 0.5),
               end: Offset.zero,
             ).animate(CurvedAnimation(
               parent: _cardAnimationControllers[0],
+              curve: Curves.easeOutBack,
+            )),
+            child: Consumer(
+              builder: (context, ref, child) {
+                final dailyRewardsAvailable = ref.watch(dailyRewardsAvailableProvider);
+                final ageGroup = ref.watch(userAgeGroupProvider);
+
+                return _RewardsAvailableWidget(
+                  dailyRewardsAvailable: dailyRewardsAvailable,
+                  ageGroup: ageGroup,
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 20),
+
+          // Currency Display
+          SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0, 0.5),
+              end: Offset.zero,
+            ).animate(CurvedAnimation(
+              parent: _cardAnimationControllers[1],
               curve: Curves.easeOutBack,
             )),
             child: Consumer(
@@ -122,10 +241,8 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
                   currentLives: livesState.current,
                   maxLives: livesState.max,
                   ref: ref,
-                  showEnergyInfo: (cur, max) =>
-                      _showEnergyInfo(context, cur, max),
-                  showLivesInfo: (cur, max) =>
-                      _showLivesInfo(context, cur, max),
+                  showEnergyInfo: (cur, max) => _showEnergyInfo(context, cur, max),
+                  showLivesInfo: (cur, max) => _showLivesInfo(context, cur, max),
                 );
               },
             ),
@@ -138,7 +255,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
               begin: const Offset(0, 0.5),
               end: Offset.zero,
             ).animate(CurvedAnimation(
-              parent: _cardAnimationControllers[1],
+              parent: _cardAnimationControllers[2],
               curve: Curves.easeOutBack,
             )),
             child: Consumer(
@@ -165,17 +282,15 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
               begin: const Offset(0, 0.5),
               end: Offset.zero,
             ).animate(CurvedAnimation(
-              parent: _cardAnimationControllers[2],
+              parent: _cardAnimationControllers[3],
               curve: Curves.easeOutBack,
             )),
             child: Consumer(
               builder: (context, ref, child) {
                 final ageGroup = ref.watch(userAgeGroupProvider);
-                final unreadNotifications =
-                ref.watch(unreadNotificationsProvider);
+                final unreadNotifications = ref.watch(unreadNotificationsProvider);
                 final pendingInvites = ref.watch(pendingInvitesProvider);
-                final dailyRewardsAvailable =
-                ref.watch(dailyRewardsAvailableProvider);
+                final dailyRewardsAvailable = ref.watch(dailyRewardsAvailableProvider);
 
                 return _ActionButtonsRow(
                   ageGroup: ageGroup,
@@ -194,7 +309,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
               begin: const Offset(0, 0.5),
               end: Offset.zero,
             ).animate(CurvedAnimation(
-              parent: _cardAnimationControllers[3],
+              parent: _cardAnimationControllers[4],
               curve: Curves.easeOutBack,
             )),
             child: Consumer(
@@ -220,7 +335,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
               begin: const Offset(0, 0.5),
               end: Offset.zero,
             ).animate(CurvedAnimation(
-              parent: _cardAnimationControllers[4],
+              parent: _cardAnimationControllers[5],
               curve: Curves.easeOutBack,
             )),
             child: Consumer(
@@ -239,20 +354,11 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
           const SizedBox(height: 24),
 
           // User Matches
-          SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0, 0.5),
-              end: Offset.zero,
-            ).animate(CurvedAnimation(
-              parent: _cardAnimationControllers[5],
-              curve: Curves.easeOutBack,
-            )),
-            child: Consumer(
-              builder: (context, ref, child) {
-                final matches = ref.watch(activeMatchesProvider);
-                return _MatchesSection(matches: matches);
-              },
-            ),
+          Consumer(
+            builder: (context, ref, child) {
+              final matches = ref.watch(activeMatchesProvider);
+              return _MatchesSection(matches: matches);
+            },
           ),
           const SizedBox(height: 100),
         ],
@@ -260,8 +366,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     );
   }
 
-  void _showEnergyInfo(
-      BuildContext context, int currentEnergy, int maxEnergy) {
+  void _showEnergyInfo(BuildContext context, int currentEnergy, int maxEnergy) {
     final energyRefillTime = ref.read(energyRefillTimeProvider);
 
     showDialog(
@@ -349,8 +454,145 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
   }
 }
 
-// All the helper widgets that were missing or incomplete are defined below.
+// New Rewards Available Widget
+class _RewardsAvailableWidget extends StatelessWidget {
+  final bool dailyRewardsAvailable;
+  final String ageGroup;
 
+  const _RewardsAvailableWidget({
+    required this.dailyRewardsAvailable,
+    required this.ageGroup,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (!dailyRewardsAvailable) {
+      return const SizedBox.shrink();
+    }
+
+    return GestureDetector(
+      onTap: () {
+        HapticFeedback.mediumImpact();
+        context.push('/rewards');
+      },
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          gradient: _getRewardGradient(ageGroup),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFFF59E0B).withOpacity(0.3),
+              blurRadius: 20,
+              offset: const Offset(0, 8),
+            ),
+          ],
+          border: Border.all(
+            color: Colors.white.withOpacity(0.3),
+            width: 2,
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: const Icon(
+                Icons.card_giftcard,
+                color: Colors.white,
+                size: 32,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Daily Rewards Available!',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Tap to claim your rewards',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white.withOpacity(0.9),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.white,
+                size: 20,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  LinearGradient _getRewardGradient(String ageGroup) {
+    switch (ageGroup) {
+      case 'kids':
+        return const LinearGradient(
+          colors: [
+            Color(0xFFFF6B6B),
+            Color(0xFFFF8E53),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        );
+      case 'teens':
+        return const LinearGradient(
+          colors: [
+            Color(0xFF4ECDC4),
+            Color(0xFF44A08D),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        );
+      case 'adults':
+        return const LinearGradient(
+          colors: [
+            Color(0xFFF59E0B),
+            Color(0xFFD97706),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        );
+      default:
+        return const LinearGradient(
+          colors: [
+            Color(0xFFF59E0B),
+            Color(0xFFD97706),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        );
+    }
+  }
+}
+
+// Rest of the helper widgets remain the same...
 class _CurrencyDisplay extends StatelessWidget {
   final String ageGroup;
   final int coins;
@@ -490,9 +732,8 @@ class _CurrencyDisplay extends StatelessWidget {
     } else if (number >= 1000) {
       return '${(number / 1000).toStringAsFixed(1)}K';
     }
-    return number
-        .toString()
-        .replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},');
+    return number.toString().replaceAllMapped(
+        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},');
   }
 
   void _showCoinStore(BuildContext context) {
@@ -928,16 +1169,14 @@ class _TriviaJourneyProgress extends StatelessWidget {
             GestureDetector(
               onTap: () => context.push('/offers'),
               child: Container(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFD700).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.star,
-                        color: Color(0xFFF59E0B), size: 18),
+                    const Icon(Icons.star, color: Color(0xFFF59E0B), size: 18),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -1107,8 +1346,7 @@ class _MatchesSection extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Container(
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: statusColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),

@@ -1,7 +1,3 @@
-import 'package:flutter/material.dart';
-import '../../core/utils/input_validator.dart';
-import '../../screens/messages/widgets/safe_text.dart';
-
 enum ReactionType {
   // Standard emoji reactions
   thumbsUp('👍', 'thumbs_up'),

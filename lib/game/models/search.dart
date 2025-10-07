@@ -9,6 +9,8 @@ enum SearchCategory {
   store,
   settings,
   help,
+  games,
+  powerUps,
 }
 
 enum SearchResultType {

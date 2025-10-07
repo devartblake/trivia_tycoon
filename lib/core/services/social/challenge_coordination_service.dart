@@ -1,208 +1,21 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
-
-enum ChallengeStatus {
-  pending,
-  accepted,
-  declined,
-  expired,
-  completed,
-  cancelled;
-
-  String get displayName {
-    switch (this) {
-      case ChallengeStatus.pending:
-        return 'Pending';
-      case ChallengeStatus.accepted:
-        return 'Accepted';
-      case ChallengeStatus.declined:
-        return 'Declined';
-      case ChallengeStatus.expired:
-        return 'Expired';
-      case ChallengeStatus.completed:
-        return 'Completed';
-      case ChallengeStatus.cancelled:
-        return 'Cancelled';
-    }
-  }
-
-  bool get isActive => this == ChallengeStatus.accepted;
-  bool get isPending => this == ChallengeStatus.pending;
-  bool get isFinished => [completed, declined, expired, cancelled].contains(this);
-}
-
-class Challenge {
-  final String id;
-  final String challengerId;
-  final String challengerName;
-  final String opponentId;
-  final String opponentName;
-  final String category;
-  final int questionCount;
-  final String difficulty;
-  final int wager; // Coins wagered
-  final ChallengeStatus status;
-  final DateTime createdAt;
-  final DateTime? acceptedAt;
-  final DateTime? completedAt;
-  final DateTime expiresAt;
-  final String? challengerScore;
-  final String? opponentScore;
-  final String? winnerId;
-
-  const Challenge({
-    required this.id,
-    required this.challengerId,
-    required this.challengerName,
-    required this.opponentId,
-    required this.opponentName,
-    required this.category,
-    required this.questionCount,
-    required this.difficulty,
-    this.wager = 0,
-    this.status = ChallengeStatus.pending,
-    required this.createdAt,
-    this.acceptedAt,
-    this.completedAt,
-    required this.expiresAt,
-    this.challengerScore,
-    this.opponentScore,
-    this.winnerId,
-  });
-
-  bool get hasWager => wager > 0;
-  bool get isExpired => DateTime.now().isAfter(expiresAt) && !status.isFinished;
-  Duration get timeRemaining => expiresAt.difference(DateTime.now());
-
-  String? getWinnerName() {
-    if (winnerId == null) return null;
-    return winnerId == challengerId ? challengerName : opponentName;
-  }
-
-  Challenge copyWith({
-    String? id,
-    String? challengerId,
-    String? challengerName,
-    String? opponentId,
-    String? opponentName,
-    String? category,
-    int? questionCount,
-    String? difficulty,
-    int? wager,
-    ChallengeStatus? status,
-    DateTime? createdAt,
-    DateTime? acceptedAt,
-    DateTime? completedAt,
-    DateTime? expiresAt,
-    String? challengerScore,
-    String? opponentScore,
-    String? winnerId,
-  }) {
-    return Challenge(
-      id: id ?? this.id,
-      challengerId: challengerId ?? this.challengerId,
-      challengerName: challengerName ?? this.challengerName,
-      opponentId: opponentId ?? this.opponentId,
-      opponentName: opponentName ?? this.opponentName,
-      category: category ?? this.category,
-      questionCount: questionCount ?? this.questionCount,
-      difficulty: difficulty ?? this.difficulty,
-      wager: wager ?? this.wager,
-      status: status ?? this.status,
-      createdAt: createdAt ?? this.createdAt,
-      acceptedAt: acceptedAt ?? this.acceptedAt,
-      completedAt: completedAt ?? this.completedAt,
-      expiresAt: expiresAt ?? this.expiresAt,
-      challengerScore: challengerScore ?? this.challengerScore,
-      opponentScore: opponentScore ?? this.opponentScore,
-      winnerId: winnerId ?? this.winnerId,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'challengerId': challengerId,
-      'challengerName': challengerName,
-      'opponentId': opponentId,
-      'opponentName': opponentName,
-      'category': category,
-      'questionCount': questionCount,
-      'difficulty': difficulty,
-      'wager': wager,
-      'status': status.name,
-      'createdAt': createdAt.toIso8601String(),
-      if (acceptedAt != null) 'acceptedAt': acceptedAt!.toIso8601String(),
-      if (completedAt != null) 'completedAt': completedAt!.toIso8601String(),
-      'expiresAt': expiresAt.toIso8601String(),
-      if (challengerScore != null) 'challengerScore': challengerScore,
-      if (opponentScore != null) 'opponentScore': opponentScore,
-      if (winnerId != null) 'winnerId': winnerId,
-    };
-  }
-
-  factory Challenge.fromJson(Map<String, dynamic> json) {
-    return Challenge(
-      id: json['id'] as String,
-      challengerId: json['challengerId'] as String,
-      challengerName: json['challengerName'] as String,
-      opponentId: json['opponentId'] as String,
-      opponentName: json['opponentName'] as String,
-      category: json['category'] as String,
-      questionCount: json['questionCount'] as int,
-      difficulty: json['difficulty'] as String,
-      wager: json['wager'] as int? ?? 0,
-      status: ChallengeStatus.values.byName(json['status'] as String),
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      acceptedAt: json['acceptedAt'] != null
-          ? DateTime.parse(json['acceptedAt'] as String)
-          : null,
-      completedAt: json['completedAt'] != null
-          ? DateTime.parse(json['completedAt'] as String)
-          : null,
-      expiresAt: DateTime.parse(json['expiresAt'] as String),
-      challengerScore: json['challengerScore'] as String?,
-      opponentScore: json['opponentScore'] as String?,
-      winnerId: json['winnerId'] as String?,
-    );
-  }
-}
-
-class ChallengeResult {
-  final String challengeId;
-  final String winnerId;
-  final String? winnerName;
-  final int challengerScore;
-  final int opponentScore;
-  final int coinsWon;
-  final DateTime completedAt;
-
-  const ChallengeResult({
-    required this.challengeId,
-    required this.winnerId,
-    this.winnerName,
-    required this.challengerScore,
-    required this.opponentScore,
-    this.coinsWon = 0,
-    required this.completedAt,
-  });
-
-  bool isDraw() => challengerScore == opponentScore;
-  int get scoreDifference => (challengerScore - opponentScore).abs();
-}
+import '../../../game/models/pvp_challenge_models.dart';
+import 'challenge_message_bridge.dart';
 
 class ChallengeCoordinationService extends ChangeNotifier {
   static final ChallengeCoordinationService _instance =
   ChallengeCoordinationService._internal();
   factory ChallengeCoordinationService() => _instance;
   ChallengeCoordinationService._internal();
+  ChallengeMessageBridge? _messageBridge;
 
   // Storage
-  final Map<String, Challenge> _challenges = {};
+  final Map<String, PVPChallenge> _challenges = {};
   final Map<String, int> _userCoinBalances = {}; // userId -> coin balance
 
   // Streams
-  final Map<String, StreamController<List<Challenge>>> _userChallengeStreams = {};
+  final Map<String, StreamController<List<PVPChallenge>>> _userChallengeStreams = {};
 
   // Expiration timer
   Timer? _expirationTimer;
@@ -231,7 +44,7 @@ class ChallengeCoordinationService extends ChangeNotifier {
 
   // ============ Challenge Creation ============
 
-  Future<Challenge?> createChallenge({
+  Future<PVPChallenge?> createChallenge({
     required String challengerId,
     required String challengerName,
     required String opponentId,
@@ -262,7 +75,7 @@ class ChallengeCoordinationService extends ChangeNotifier {
       return null;
     }
 
-    final challenge = Challenge(
+    final challenge = PVPChallenge(
       id: _generateChallengeId(),
       challengerId: challengerId,
       challengerName: challengerName,
@@ -288,6 +101,12 @@ class ChallengeCoordinationService extends ChangeNotifier {
     _broadcastChallengeUpdate(opponentId);
     notifyListeners();
 
+    // Notify the message bridge
+    if (_messageBridge != null) {
+      await _messageBridge!.onChallengeCreated(challenge);
+    }
+
+    notifyListeners();
     return challenge;
   }
 
@@ -320,7 +139,7 @@ class ChallengeCoordinationService extends ChangeNotifier {
     }
 
     _challenges[challengeId] = challenge.copyWith(
-      status: ChallengeStatus.accepted,
+      status: PVPChallengeStatus.accepted,
       acceptedAt: DateTime.now(),
     );
 
@@ -343,7 +162,7 @@ class ChallengeCoordinationService extends ChangeNotifier {
     }
 
     _challenges[challengeId] = challenge.copyWith(
-      status: ChallengeStatus.declined,
+      status: PVPChallengeStatus.declined,
       completedAt: DateTime.now(),
     );
 
@@ -372,7 +191,7 @@ class ChallengeCoordinationService extends ChangeNotifier {
     }
 
     _challenges[challengeId] = challenge.copyWith(
-      status: ChallengeStatus.cancelled,
+      status: PVPChallengeStatus.cancelled,
       completedAt: DateTime.now(),
     );
 
@@ -391,7 +210,7 @@ class ChallengeCoordinationService extends ChangeNotifier {
 
   // ============ Challenge Completion ============
 
-  Future<ChallengeResult?> completeChallenge({
+  Future<PVPChallengeResult?> completeChallenge({
     required String challengeId,
     required int challengerScore,
     required int opponentScore,
@@ -425,7 +244,7 @@ class ChallengeCoordinationService extends ChangeNotifier {
     }
 
     _challenges[challengeId] = challenge.copyWith(
-      status: ChallengeStatus.completed,
+      status: PVPChallengeStatus.completed,
       completedAt: DateTime.now(),
       challengerScore: challengerScore.toString(),
       opponentScore: opponentScore.toString(),
@@ -437,7 +256,7 @@ class ChallengeCoordinationService extends ChangeNotifier {
     _broadcastChallengeUpdate(challenge.opponentId);
     notifyListeners();
 
-    return ChallengeResult(
+    return PVPChallengeResult(
       challengeId: challengeId,
       winnerId: winnerId ?? '',
       winnerName: challenge.getWinnerName(),
@@ -513,32 +332,32 @@ class ChallengeCoordinationService extends ChangeNotifier {
 
   // ============ Query Methods ============
 
-  Challenge? getChallenge(String challengeId) {
+  PVPChallenge? getChallenge(String challengeId) {
     return _challenges[challengeId];
   }
 
-  List<Challenge> getUserChallenges(String userId) {
+  List<PVPChallenge> getUserChallenges(String userId) {
     return _challenges.values
         .where((c) => c.challengerId == userId || c.opponentId == userId)
         .toList()
       ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
   }
 
-  List<Challenge> getPendingChallenges(String userId) {
+  List<PVPChallenge> getPendingChallenges(String userId) {
     return _challenges.values
         .where((c) => c.opponentId == userId && c.status.isPending && !c.isExpired)
         .toList()
       ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
   }
 
-  List<Challenge> getSentChallenges(String userId) {
+  List<PVPChallenge> getSentChallenges(String userId) {
     return _challenges.values
         .where((c) => c.challengerId == userId && c.status.isPending)
         .toList()
       ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
   }
 
-  List<Challenge> getActiveChallenges(String userId) {
+  List<PVPChallenge> getActiveChallenges(String userId) {
     return _challenges.values
         .where((c) =>
     (c.challengerId == userId || c.opponentId == userId) &&
@@ -547,16 +366,16 @@ class ChallengeCoordinationService extends ChangeNotifier {
       ..sort((a, b) => b.acceptedAt!.compareTo(a.acceptedAt!));
   }
 
-  List<Challenge> getCompletedChallenges(String userId) {
+  List<PVPChallenge> getCompletedChallenges(String userId) {
     return _challenges.values
         .where((c) =>
     (c.challengerId == userId || c.opponentId == userId) &&
-        c.status == ChallengeStatus.completed)
+        c.status == PVPChallengeStatus.completed)
         .toList()
       ..sort((a, b) => b.completedAt!.compareTo(a.completedAt!));
   }
 
-  List<Challenge> getChallengeHistory(String userId, {int limit = 50}) {
+  List<PVPChallenge> getChallengeHistory(String userId, {int limit = 50}) {
     return getUserChallenges(userId)
         .where((c) => c.status.isFinished)
         .take(limit)
@@ -567,7 +386,7 @@ class ChallengeCoordinationService extends ChangeNotifier {
 
   Map<String, dynamic> getChallengeStats(String userId) {
     final allChallenges = getUserChallenges(userId);
-    final completed = allChallenges.where((c) => c.status == ChallengeStatus.completed);
+    final completed = allChallenges.where((c) => c.status == PVPChallengeStatus.completed);
 
     final wins = completed.where((c) => c.winnerId == userId).length;
     final losses = completed.where((c) =>
@@ -630,7 +449,7 @@ class ChallengeCoordinationService extends ChangeNotifier {
     if (challenge == null) return;
 
     _challenges[challengeId] = challenge.copyWith(
-      status: ChallengeStatus.expired,
+      status: PVPChallengeStatus.expired,
       completedAt: DateTime.now(),
     );
 
@@ -646,9 +465,9 @@ class ChallengeCoordinationService extends ChangeNotifier {
 
   // ============ Streams ============
 
-  Stream<List<Challenge>> watchUserChallenges(String userId) {
+  Stream<List<PVPChallenge>> watchUserChallenges(String userId) {
     _userChallengeStreams[userId] ??=
-    StreamController<List<Challenge>>.broadcast();
+    StreamController<List<PVPChallenge>>.broadcast();
 
     // Send initial data
     Future.delayed(Duration.zero, () {
