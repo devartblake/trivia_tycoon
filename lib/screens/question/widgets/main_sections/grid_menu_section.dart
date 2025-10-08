@@ -25,7 +25,7 @@ class GridMenuSection extends StatelessWidget {
         "icon": Icons.star_outline,
         "label": "Favorites",
         "color": Colors.amber,
-        "route": "/favorites",
+        "route": "/favorites-quiz",
         "description": "Saved questions"
       },
       {

@@ -4,6 +4,7 @@ import 'package:trivia_tycoon/admin/widgets/analytics/analytics_empty_state.dart
 import 'package:trivia_tycoon/admin/widgets/analytics/user_type_dropdown.dart';
 import 'package:trivia_tycoon/core/manager/analytics/analytics_stream_manager.dart';
 import 'package:trivia_tycoon/game/providers/mission_filters_provider.dart';
+import '../../game/analytics/providers/analytics_providers.dart';
 import '../../ui_components/mission/mission_filters_segmented_tabs.dart';
 import '../../game/providers/timeline_filter_provider.dart';
 import '../widgets/analytics/timeline_filter_tabs.dart';
@@ -12,6 +13,7 @@ import '../widgets/analytics/retention/retention_analytics_widget.dart';
 import '../widgets/analytics/mission/mission_analytics_bar_chart.dart';
 import '../widgets/analytics/mission/mission_analytics_radar_chart.dart';
 import '../widgets/analytics/mission/mission_analytics_widget.dart';
+import '../widgets/analytics/spin_analytics_dashboard.dart';
 
 class AnalyticsScreen extends ConsumerStatefulWidget {
   const AnalyticsScreen({super.key});
@@ -23,6 +25,10 @@ class AnalyticsScreen extends ConsumerStatefulWidget {
 class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
   Future<void> _onRefresh() async {
     await ref.refresh(analyticsManagerProvider.future);
+    // Also refresh spin analytics
+    ref.invalidate(spinAnalyticsSummaryProvider);
+    ref.invalidate(spinTrendDataProvider);
+    ref.invalidate(recentSpinsProvider);
   }
 
   @override
@@ -113,6 +119,20 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                   ),
 
                   const SizedBox(height: 20),
+
+                  // ============ NEW: SPIN & EARN ANALYTICS ============
+                  const SpinAnalyticsDashboard(),
+
+                  const SizedBox(height: 24),
+
+                  // Divider
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Divider(thickness: 1, color: Colors.grey[200]),
+                  ),
+
+                  const SizedBox(height: 24),
+                  // ============ END SPIN & EARN ANALYTICS ============
 
                   // Filters Section
                   Padding(

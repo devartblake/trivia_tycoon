@@ -2,244 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
+import 'package:trivia_tycoon/screens/rewards/widgets/reward_stepper_slider_widget.dart';
 import 'package:trivia_tycoon/ui_components/spin_wheel/ui/screen/wheel_screen.dart';
-import '../../ui_components/spin_wheel/services/rewards/reward_probability.dart';
-import '../../ui_components/spin_wheel/services/spin_tracker.dart';
-
-class RewardStep {
-  final double pointValue;
-  final IconData icon;
-  final Color backgroundColor;
-  final int quantity;
-  final String description;
-
-  const RewardStep({
-    required this.pointValue,
-    required this.icon,
-    required this.backgroundColor,
-    this.quantity = 1,
-    this.description = '',
-  });
-}
-
-class RewardStepperSlider extends StatefulWidget {
-  final double value;
-  final ValueChanged<double> onChanged;
-  final List<RewardStep> rewardSteps;
-  final Color progressColor;
-  final double height;
-
-  const RewardStepperSlider({
-    super.key,
-    required this.value,
-    required this.onChanged,
-    required this.rewardSteps,
-    this.progressColor = Colors.orange,
-    this.height = 100,
-  });
-
-  @override
-  State<RewardStepperSlider> createState() => _RewardStepperSliderState();
-}
-
-class _RewardStepperSliderState extends State<RewardStepperSlider> {
-  final List<GlobalKey<TooltipState>> _tooltipKeys = [];
-
-  @override
-  void initState() {
-    super.initState();
-    // Initialize tooltip keys for each reward step
-    for (int i = 0; i < widget.rewardSteps.length; i++) {
-      _tooltipKeys.add(GlobalKey<TooltipState>());
-    }
-  }
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: widget.height,
-      child: Column(
-        children: [
-          _buildRewardIconsRow(),
-          const SizedBox(height: 8),
-          _buildProgressSlider(),
-          const SizedBox(height: 8),
-          _buildPointLabels(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRewardIconsRow() {
-    return SizedBox(
-      height: 60,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: widget.rewardSteps.asMap().entries.map((entry) {
-          final index = entry.key;
-          final step = entry.value;
-          final isUnlocked = widget.value >= step.pointValue;
-          return _buildRewardIcon(step, isUnlocked, index);
-        }).toList(),
-      ),
-    );
-  }
-
-  Widget _buildRewardIcon(RewardStep step, bool isUnlocked, int index) {
-    return Tooltip(
-      key: _tooltipKeys[index],
-      message: '${step.description}\n${step.quantity > 1 ? '${step.quantity} ' : ''}Unlocked at ${step.pointValue.toInt()} points',
-      decoration: BoxDecoration(
-        color: Colors.black87,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      textStyle: TextStyle(
-        color: Colors.white,
-        fontSize: 12,
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      waitDuration: Duration(milliseconds: 300),
-      triggerMode: TooltipTriggerMode.tap,
-      enableFeedback: true,
-      child: GestureDetector(
-        onTap: () {
-          // Force tooltip to show on tap for mobile devices
-          _tooltipKeys[index].currentState?.ensureTooltipVisible();
-        },
-        child: MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: isUnlocked ? step.backgroundColor : Colors.grey[400],
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: isUnlocked ? Colors.orange[300]! : Colors.grey[500]!,
-                    width: 2,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 4,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Center(
-                  child: Icon(
-                    step.icon,
-                    color: isUnlocked ? Colors.white : Colors.grey[600],
-                    size: 24,
-                  ),
-                ),
-              ),
-              if (step.quantity > 1)
-                Positioned(
-                  right: -8,
-                  top: -8,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.orange, width: 1),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 2,
-                          offset: Offset(0, 1),
-                        ),
-                      ],
-                    ),
-                    child: Text(
-                      '${step.quantity}',
-                      style: const TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.orange,
-                      ),
-                    ),
-                  ),
-                ),
-              if (isUnlocked && widget.value > step.pointValue)
-                Positioned(
-                  right: -5,
-                  bottom: -5,
-                  child: Container(
-                    width: 20,
-                    height: 20,
-                    decoration: BoxDecoration(
-                      color: Colors.green,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 2),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.green.withOpacity(0.3),
-                          blurRadius: 4,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: const Icon(
-                      Icons.check,
-                      color: Colors.white,
-                      size: 12,
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildProgressSlider() {
-    final maxValue = widget.rewardSteps.last.pointValue.toDouble();
-
-    return Container(
-      height: 20,
-      child: SliderTheme(
-        data: SliderTheme.of(context).copyWith(
-          trackHeight: 8,
-          thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12),
-          thumbColor: widget.progressColor,
-          activeTrackColor: widget.progressColor,
-          inactiveTrackColor: Colors.grey[300],
-          overlayShape: SliderComponentShape.noOverlay,
-          tickMarkShape: SliderTickMarkShape.noTickMark,
-        ),
-        child: Slider(
-          value: widget.value.clamp(0, maxValue),
-          min: 0,
-          max: maxValue,
-          onChanged: widget.onChanged,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPointLabels() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: widget.rewardSteps.map((step) {
-        final isActive = widget.value >= step.pointValue;
-        return Text(
-          '${step.pointValue.toInt()}',
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-            color: isActive ? widget.progressColor : Colors.grey[600],
-          ),
-        );
-      }).toList(),
-    );
-  }
-}
+import '../../game/analytics/services/analytics_service.dart';
+import '../../game/models/reward_step_models.dart';
+import '../../ui_components/spin_wheel/ui/toasts/spin_ready_premium_toast.dart';
 
 class SpinEarnScreen extends ConsumerStatefulWidget {
   const SpinEarnScreen({super.key});
@@ -258,15 +25,35 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
   late Animation<Offset> _slideAnimation;
 
   bool _isLoading = true;
-  SpinStatistics? _spinStats;
-  RewardProbabilities? _currentProbabilities;
+
+  // Spin statistics
+  int _todaySpinCount = 0;
+  int _weeklySpinCount = 0;
+  int _totalSpins = 0;
+  int _spinsRemaining = 0;
+  int _dailyLimit = 5;
+
+  // Reward progress
   double _currentSpinSliderValue = 20.0;
+
+  // Analytics
+  AnalyticsService? _analytics;
+  DateTime? _screenEnteredTime;
 
   @override
   void initState() {
     super.initState();
+    _screenEnteredTime = DateTime.now();
     _initAnimations();
-    _loadSpinData();
+    _loadSpinData().then((_) {
+      // Show spin ready toast after data loads
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (mounted) {
+          _checkAndShowSpinReadyToast();
+        }
+      });
+    });
+    _trackScreenView();
   }
 
   void _initAnimations() {
@@ -312,17 +99,32 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
 
   Future<void> _loadSpinData() async {
     try {
+      // Check if we need to reset daily counts
+      await _checkAndResetDailyCounts();
+
+      // Load all spin data from AppSettings
       final results = await Future.wait([
-        EnhancedSpinTracker.getStatistics(),
-        EnhancedRewardService().getCurrentProbabilities(),
+        AppSettings.getTodaySpinCount(),
+        AppSettings.getWeeklySpinCount(),
+        AppSettings.getTotalLifetimeSpins(),
+        AppSettings.getDailySpinLimit(),
+        AppSettings.getRemainingSpinsToday(),
+        AppSettings.getSpinRewardPoints(),
       ]);
 
       if (mounted) {
         setState(() {
-          _spinStats = results[0] as SpinStatistics;
-          _currentProbabilities = results[1] as RewardProbabilities;
+          _todaySpinCount = results[0] as int;
+          _weeklySpinCount = results[1] as int;
+          _totalSpins = results[2] as int;
+          _dailyLimit = results[3] as int;
+          _spinsRemaining = results[4] as int;
+          _currentSpinSliderValue = results[5] as double;
           _isLoading = false;
         });
+
+        // Track analytics after loading
+        await _trackDataLoaded();
       }
     } catch (e) {
       debugPrint('Failed to load spin data: $e');
@@ -331,14 +133,152 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
           _isLoading = false;
         });
       }
+      await _trackError('load_spin_data_failed', e.toString());
     }
+  }
+
+  Future<void> _checkAndShowSpinReadyToast() async {
+    final canSpin = await AppSettings.canSpinToday();
+    final spinsRemaining = await AppSettings.getRemainingSpinsToday();
+    final rewardPoints = await AppSettings.getSpinRewardPoints();
+
+    if (canSpin && spinsRemaining > 0 && mounted) {
+      // Show premium toast
+      await PremiumSpinReadyToast.show(
+        context: context,
+        onSpinNow: _navigateToFullWheelScreen,
+        spinsRemaining: spinsRemaining,
+        rewardPoints: rewardPoints.toInt(),
+        bonusMessage: spinsRemaining == 5 ? '🎉 All spins available!' : null,
+      );
+    }
+  }
+
+  /// Checks and resets daily/weekly counts if needed
+  Future<void> _checkAndResetDailyCounts() async {
+    final lastSpinDate = await AppSettings.getLastSpinDate();
+    final now = DateTime.now();
+
+    // Reset daily count if it's a new day
+    if (lastSpinDate == null || !_isSameDay(lastSpinDate, now)) {
+      await AppSettings.resetDailySpinCount();
+      await _trackAnalyticsEvent('daily_spin_reset', {
+        'last_spin_date': lastSpinDate?.toIso8601String(),
+        'reset_date': now.toIso8601String(),
+      });
+    }
+
+    // Reset weekly count if it's a new week
+    final lastWeeklyReset = await AppSettings.getLastWeeklyResetDate();
+    if (lastWeeklyReset == null || !_isSameWeek(lastWeeklyReset, now)) {
+      await AppSettings.resetWeeklySpinCount();
+      await AppSettings.setLastWeeklyResetDate(now);
+      await _trackAnalyticsEvent('weekly_spin_reset', {
+        'last_reset_date': lastWeeklyReset?.toIso8601String(),
+        'reset_date': now.toIso8601String(),
+      });
+    }
+  }
+
+  bool _isSameDay(DateTime date1, DateTime date2) {
+    return date1.year == date2.year &&
+        date1.month == date2.month &&
+        date1.day == date2.day;
+  }
+
+  bool _isSameWeek(DateTime date1, DateTime date2) {
+    // Week starts on Monday
+    final startOfWeek1 = date1.subtract(Duration(days: date1.weekday - 1));
+    final startOfWeek2 = date2.subtract(Duration(days: date2.weekday - 1));
+    return _isSameDay(startOfWeek1, startOfWeek2);
+  }
+
+  // ============ ANALYTICS METHODS ============
+
+  /// Track screen view
+  Future<void> _trackScreenView() async {
+    await _trackAnalyticsEvent('screen_view', {
+      'screen_name': 'SpinEarnScreen',
+      'spins_remaining': _spinsRemaining,
+      'daily_limit': _dailyLimit,
+      'total_lifetime_spins': _totalSpins,
+    });
+  }
+
+  /// Track when data is successfully loaded
+  Future<void> _trackDataLoaded() async {
+    await _trackAnalyticsEvent('spin_data_loaded', {
+      'today_spin_count': _todaySpinCount,
+      'weekly_spin_count': _weeklySpinCount,
+      'total_spins': _totalSpins,
+      'spins_remaining': _spinsRemaining,
+      'reward_points': _currentSpinSliderValue,
+    });
+  }
+
+  /// Track analytics event
+  Future<void> _trackAnalyticsEvent(String eventName, Map<String, dynamic> data) async {
+    try {
+      _analytics ??= ref.read(analyticsServiceProvider);
+      await _analytics?.trackEvent(eventName, data);
+    } catch (e) {
+      debugPrint('Analytics tracking failed: $e');
+    }
+  }
+
+  /// Track engagement
+  Future<void> _trackEngagement(String action, {Map<String, dynamic>? properties}) async {
+    try {
+      _analytics ??= ref.read(analyticsServiceProvider);
+      await _analytics?.trackEngagement(
+        action: action,
+        screen: 'SpinEarnScreen',
+        properties: properties,
+      );
+    } catch (e) {
+      debugPrint('Engagement tracking failed: $e');
+    }
+  }
+
+  /// Track error
+  Future<void> _trackError(String errorType, String errorMessage) async {
+    await _trackAnalyticsEvent('spin_screen_error', {
+      'error_type': errorType,
+      'error_message': errorMessage,
+      'timestamp': DateTime.now().toIso8601String(),
+    });
+  }
+
+  /// Track user interaction
+  Future<void> _trackUserAction(String action, {Map<String, dynamic>? additionalData}) async {
+    await _trackEngagement('user_action', properties: {
+      'action': action,
+      'spins_remaining': _spinsRemaining,
+      'reward_points': _currentSpinSliderValue,
+      ...?additionalData,
+    });
   }
 
   @override
   void dispose() {
+    _trackScreenExit();
     _headerController.dispose();
     _wheelController.dispose();
     super.dispose();
+  }
+
+  /// Track screen exit with duration
+  Future<void> _trackScreenExit() async {
+    if (_screenEnteredTime != null) {
+      final duration = DateTime.now().difference(_screenEnteredTime!);
+      await _trackAnalyticsEvent('screen_exit', {
+        'screen_name': 'SpinEarnScreen',
+        'duration_seconds': duration.inSeconds,
+        'duration_minutes': duration.inMinutes,
+        'spins_used': _todaySpinCount,
+        'final_reward_points': _currentSpinSliderValue,
+      });
+    }
   }
 
   @override
@@ -391,12 +331,12 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.casino,
                           size: 32,
                           color: Colors.white,
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Text(
                           'Spin & Earn',
                           style: theme.textTheme.headlineSmall?.copyWith(
@@ -404,13 +344,12 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        if (_spinStats != null)
-                          Text(
-                            '${_spinStats!.spinsRemainingToday} spins remaining today',
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: Colors.white.withOpacity(0.9),
-                            ),
+                        Text(
+                          '$_spinsRemaining spins remaining today',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: Colors.white.withOpacity(0.9),
                           ),
+                        ),
                       ],
                     ),
                   ),
@@ -421,14 +360,43 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
         ),
       ),
       leading: IconButton(
-        onPressed: () {
+        onPressed: () async {
+          await _trackUserAction('back_button_pressed');
           if (Navigator.canPop(context)) {
             Navigator.pop(context);
           } else {
             context.go('/rewards');
           }
         },
-        icon: Icon(Icons.arrow_back, color: Colors.white),
+        icon: const Icon(Icons.arrow_back, color: Colors.white),
+      ),
+      actions: [
+        IconButton(
+          onPressed: () async {
+            await _trackUserAction('settings_button_pressed');
+            _showSettingsDialog(theme);
+          },
+          icon: const Icon(Icons.settings, color: Colors.white),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildShowSpinToastButton() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: ElevatedButton.icon(
+        onPressed: _checkAndShowSpinReadyToast,
+        icon: const Icon(Icons.casino),
+        label: const Text('Check Spin Status'),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.orange,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
       ),
     );
   }
@@ -436,7 +404,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
   Widget _buildLoadingState() {
     return Container(
       height: 400,
-      child: Center(
+      child: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -446,7 +414,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
               'Loading spin wheel...',
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.grey.shade600,
+                color: Colors.grey,
               ),
             ),
           ],
@@ -462,23 +430,21 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
         mainAxisSize: MainAxisSize.min,
         children: [
           _buildStatsSection(theme),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
           _buildSpinPointsSlider(theme),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
           Flexible(
             child: _buildWheelSection(theme),
           ),
-          SizedBox(height: 40),
+          const SizedBox(height: 40),
         ],
       ),
     );
   }
 
   Widget _buildStatsSection(ThemeData theme) {
-    if (_spinStats == null) return SizedBox.shrink();
-
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -486,7 +452,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 8,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -501,17 +467,20 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               GestureDetector(
-                onTap: () => _showProbabilityDialog(theme),
+                onTap: () async {
+                  await _trackUserAction('history_button_pressed');
+                  _showHistoryDialog(theme);
+                },
                 child: Container(
-                  padding: EdgeInsets.all(6),
+                  padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
-                    Icons.info_outline,
+                    Icons.history,
                     size: 18,
                     color: theme.colorScheme.primary,
                   ),
@@ -519,14 +488,14 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
               ),
             ],
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Row(
             children: [
               Expanded(
                 child: _buildStatItem(
                   icon: Icons.today,
                   label: 'Today',
-                  value: '${_spinStats!.dailyCount}/${_spinStats!.maxSpinsPerDay}',
+                  value: '$_todaySpinCount/$_dailyLimit',
                   color: Colors.blue,
                 ),
               ),
@@ -534,7 +503,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                 child: _buildStatItem(
                   icon: Icons.date_range,
                   label: 'This Week',
-                  value: '${_spinStats!.weeklyCount}',
+                  value: '$_weeklySpinCount',
                   color: Colors.green,
                 ),
               ),
@@ -542,7 +511,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                 child: _buildStatItem(
                   icon: Icons.timeline,
                   label: 'Total',
-                  value: '${_spinStats!.totalSpins}',
+                  value: '$_totalSpins',
                   color: Colors.purple,
                 ),
               ),
@@ -562,14 +531,14 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: color.withOpacity(0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(icon, color: color, size: 20),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Text(
           value,
           style: TextStyle(
@@ -629,7 +598,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
     ];
 
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -637,7 +606,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 8,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -646,12 +615,12 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
         children: [
           Row(
             children: [
-              Icon(
+              const Icon(
                 Icons.emoji_events,
                 color: Colors.amber,
                 size: 20,
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Text(
                 'Reward Progress',
                 style: theme.textTheme.titleMedium?.copyWith(
@@ -660,11 +629,10 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
               ),
             ],
           ),
-          SizedBox(height: 16),
-
+          const SizedBox(height: 16),
           Container(
             width: double.infinity,
-            padding: EdgeInsets.all(12),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [Colors.cyan.withOpacity(0.1), Colors.blue.withOpacity(0.1)],
@@ -682,7 +650,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                     color: Colors.cyan[700],
                   ),
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 Text(
                   '${_currentSpinSliderValue.toInt()}/200',
                   style: TextStyle(
@@ -693,26 +661,33 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
               ],
             ),
           ),
-
-          SizedBox(height: 20),
-
+          const SizedBox(height: 20),
           RewardStepperSlider(
             value: _currentSpinSliderValue,
-            onChanged: (value) {
+            onChanged: (value) async {
+              final oldValue = _currentSpinSliderValue;
               setState(() {
                 _currentSpinSliderValue = value;
+              });
+
+              // Save to AppSettings
+              await AppSettings.setSpinRewardPoints(value);
+
+              // Track slider interaction
+              await _trackUserAction('reward_slider_changed', additionalData: {
+                'old_value': oldValue,
+                'new_value': value,
+                'difference': value - oldValue,
               });
             },
             rewardSteps: rewardSteps,
             progressColor: Colors.orange,
             height: 120,
           ),
-
-          SizedBox(height: 16),
-
+          const SizedBox(height: 16),
           Container(
             width: double.infinity,
-            padding: EdgeInsets.all(12),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: Colors.grey[50],
               borderRadius: BorderRadius.circular(8),
@@ -749,7 +724,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
         return Transform.scale(
           scale: _wheelAnimation.value,
           child: Container(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
@@ -757,7 +732,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),
                   blurRadius: 12,
-                  offset: Offset(0, 4),
+                  offset: const Offset(0, 4),
                 ),
               ],
             ),
@@ -772,7 +747,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                       color: theme.colorScheme.primary,
                       size: 24,
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Text(
                       'Try Your Luck!',
                       style: theme.textTheme.titleLarge?.copyWith(
@@ -781,7 +756,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Container(
                   height: 200,
                   width: 200,
@@ -795,14 +770,14 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                         Colors.pink.shade200,
                         Colors.orange.shade200,
                       ],
-                      stops: [0.0, 0.33, 0.66, 1.0],
+                      stops: const [0.0, 0.33, 0.66, 1.0],
                     ),
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
                         color: Colors.purple.withOpacity(0.3),
                         blurRadius: 20,
-                        offset: Offset(0, 8),
+                        offset: const Offset(0, 8),
                       ),
                     ],
                   ),
@@ -810,7 +785,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                     color: Colors.transparent,
                     child: InkWell(
                       borderRadius: BorderRadius.circular(100),
-                      onTap: _navigateToFullWheelScreen,
+                      onTap: _spinsRemaining > 0 ? _navigateToFullWheelScreen : _handleNoSpinsRemaining,
                       child: Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
@@ -824,28 +799,27 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                Icons.casino,
+                                _spinsRemaining > 0 ? Icons.casino : Icons.lock,
                                 size: 48,
                                 color: Colors.white,
                               ),
-                              SizedBox(height: 8),
+                              const SizedBox(height: 8),
                               Text(
-                                'TAP TO SPIN',
-                                style: TextStyle(
+                                _spinsRemaining > 0 ? 'TAP TO SPIN' : 'NO SPINS',
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   letterSpacing: 1.2,
                                 ),
                               ),
-                              if (_spinStats != null)
-                                Text(
-                                  '${_spinStats!.spinsRemainingToday} left',
-                                  style: TextStyle(
-                                    color: Colors.white.withOpacity(0.9),
-                                    fontSize: 12,
-                                  ),
+                              Text(
+                                '$_spinsRemaining left',
+                                style: TextStyle(
+                                  color: Colors.white.withOpacity(0.9),
+                                  fontSize: 12,
                                 ),
+                              ),
                             ],
                           ),
                         ),
@@ -853,9 +827,11 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
-                  'Tap the wheel to open the full spin experience!',
+                  _spinsRemaining > 0
+                      ? 'Tap the wheel to open the full spin experience!'
+                      : 'Come back tomorrow for more spins!',
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: Colors.grey.shade600,
                   ),
@@ -869,16 +845,61 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
     );
   }
 
-  void _navigateToFullWheelScreen() {
-    Navigator.of(context).push(
+  void _handleNoSpinsRemaining() async {
+    await _trackUserAction('no_spins_tap', additionalData: {
+      'spins_remaining': _spinsRemaining,
+      'daily_limit': _dailyLimit,
+      'today_count': _todaySpinCount,
+    });
+
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('No spins remaining today! Come back tomorrow.'),
+        backgroundColor: Colors.orange,
+        action: SnackBarAction(
+          label: 'OK',
+          textColor: Colors.white,
+          onPressed: () {},
+        ),
+      ),
+    );
+  }
+
+  void _navigateToFullWheelScreen() async {
+    await _trackUserAction('spin_wheel_opened', additionalData: {
+      'spins_remaining_before': _spinsRemaining,
+      'reward_points': _currentSpinSliderValue,
+    });
+
+    final result = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => const WheelScreen(),
         fullscreenDialog: true,
       ),
     );
+
+    // Track return from wheel
+    await _trackUserAction('returned_from_wheel', additionalData: {
+      'result': result?.toString(),
+    });
+
+    // Refresh data after spinning
+    if (mounted) {
+      await _loadSpinData();
+    }
   }
 
-  void _showProbabilityDialog(ThemeData theme) {
+  void _showHistoryDialog(ThemeData theme) async {
+    final history = await AppSettings.getSpinHistory();
+
+    await _trackEngagement('spin_history_viewed', properties: {
+      'history_count': history.length,
+    });
+
+    if (!mounted) return;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -887,100 +908,55 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
             borderRadius: BorderRadius.circular(16),
           ),
           child: Container(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
+            constraints: const BoxConstraints(maxHeight: 500),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
                   children: [
-                    Icon(
-                      Icons.pie_chart,
-                      color: theme.colorScheme.secondary,
-                      size: 24,
-                    ),
-                    SizedBox(width: 12),
+                    const Icon(Icons.history, size: 24),
+                    const SizedBox(width: 12),
                     Text(
-                      'Your Current Chances',
+                      'Spin History',
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Spacer(),
-                    GestureDetector(
-                      onTap: () => Navigator.of(context).pop(),
-                      child: Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Icon(
-                          Icons.close,
-                          size: 18,
-                          color: Colors.grey[600],
-                        ),
-                      ),
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(Icons.close),
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
-                if (_currentProbabilities != null) ...[
-                  _buildProbabilityBar('Jackpot', _currentProbabilities!.jackpot, Colors.amber),
-                  SizedBox(height: 12),
-                  _buildProbabilityBar('Rare', _currentProbabilities!.rare, Colors.purple),
-                  SizedBox(height: 12),
-                  _buildProbabilityBar('Uncommon', _currentProbabilities!.uncommon, Colors.blue),
-                  SizedBox(height: 12),
-                  _buildProbabilityBar('Common', _currentProbabilities!.common, Colors.green),
-                ] else
-                  Container(
-                    padding: EdgeInsets.all(20),
-                    child: Column(
-                      children: [
-                        Icon(
-                          Icons.error_outline,
-                          size: 48,
-                          color: Colors.grey[400],
-                        ),
-                        SizedBox(height: 12),
-                        Text(
-                          'Probability data not available',
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: 16,
+                const SizedBox(height: 16),
+                if (history.isEmpty)
+                  const Expanded(
+                    child: Center(
+                      child: Text('No spin history yet'),
+                    ),
+                  )
+                else
+                  Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: history.length,
+                      itemBuilder: (context, index) {
+                        final spin = history[index];
+                        return ListTile(
+                          leading: Icon(
+                            Icons.card_giftcard,
+                            color: theme.colorScheme.primary,
                           ),
-                        ),
-                      ],
+                          title: Text(spin['rewardType'] ?? 'Unknown'),
+                          subtitle: Text(
+                            'Value: ${spin['rewardValue']} • ${_formatDate(spin['timestamp'])}',
+                          ),
+                        );
+                      },
                     ),
                   ),
-                SizedBox(height: 16),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.blue[50],
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.blue[200]!),
-                  ),
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.info,
-                        color: Colors.blue[600],
-                        size: 20,
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        'Probabilities are dynamic and may change based on your activity and progress.',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.blue[700],
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
               ],
             ),
           ),
@@ -989,52 +965,129 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
     );
   }
 
-  Widget _buildProbabilityBar(String label, double probability, Color color) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 80,
-            child: Text(
-              label,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Colors.grey.shade700,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              height: 8,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: FractionallySizedBox(
-                alignment: Alignment.centerLeft,
-                widthFactor: probability,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: color,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(width: 8),
-          Text(
-            '${(probability * 100).toStringAsFixed(1)}%',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
-          ),
-        ],
-      ),
+  void _showSettingsDialog(ThemeData theme) async {
+    bool animationEnabled = await AppSettings.getSpinAnimationEnabled();
+    bool soundEnabled = await AppSettings.getSpinSoundEnabled();
+    bool hapticEnabled = await AppSettings.getSpinHapticEnabled();
+
+    await _trackEngagement('settings_opened', properties: {
+      'animation_enabled': animationEnabled,
+      'sound_enabled': soundEnabled,
+      'haptic_enabled': hapticEnabled,
+    });
+
+    if (!mounted) return;
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (context, setDialogState) {
+                return Dialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                      Row(
+                      children: [
+                      const Icon(Icons.settings, size: 24),
+                      const SizedBox(width: 12),
+                      Text(
+                        'Spin Settings',
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Spacer(),
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(Icons.close),
+                      ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    SwitchListTile(
+                        title: const Text('Animations'),
+                        subtitle: const Text('Enable spin animations'),
+                        value: animationEnabled,
+                        onChanged: (value) async {
+                          await AppSettings.setSpinAnimationEnabled(value);
+                          await _trackUserAction('setting_changed', additionalData: {
+                            'setting': 'animations',
+                            'new_value': value,
+                              });
+                          setDialogState(() {
+                            animationEnabled = value;
+                          });
+                        },
+                    ),
+                            SwitchListTile(
+                              title: const Text('Sound Effects'),
+                              subtitle: const Text('Play sounds when spinning'),
+                              value: soundEnabled,
+                              onChanged: (value) async {
+                                await AppSettings.setSpinSoundEnabled(value);
+                                await _trackUserAction('setting_changed', additionalData: {
+                                  'setting': 'sound_effects',
+                                  'new_value': value,
+                                });
+                                setDialogState(() {
+                                  soundEnabled = value;
+                                });
+                              },
+                            ),
+                            SwitchListTile(
+                              title: const Text('Haptic Feedback'),
+                              subtitle: const Text('Vibrate when spinning'),
+                              value: hapticEnabled,
+                              onChanged: (value) async {
+                                await AppSettings.setSpinHapticEnabled(value);
+                                await _trackUserAction('setting_changed', additionalData: {
+                                  'setting': 'haptic_feedback',
+                                  'new_value': value,
+                                });
+                                setDialogState(() {
+                                  hapticEnabled = value;
+                                });
+                              },
+                            ),
+                            const SizedBox(height: 20),
+                            _buildShowSpinToastButton(),
+                          ],
+                      ),
+                    ),
+                );
+              },
+          );
+        },
     );
   }
+
+  String _formatDate(dynamic timestamp) {
+    if (timestamp == null) return 'Unknown';
+    try {
+      final date = timestamp is DateTime ? timestamp : DateTime.parse(timestamp.toString());
+      final now = DateTime.now();
+      final difference = now.difference(date);
+
+      if (difference.inMinutes < 60) {
+        return '${difference.inMinutes}m ago';
+      } else if (difference.inHours < 24) {
+        return '${difference.inHours}h ago';
+      } else {
+        return '${difference.inDays}d ago';
+      }
+    } catch (e) {
+      return 'Unknown';
+    }
+  }
 }
+
+// Provider for AnalyticsService (add this to your providers file)
+final analyticsServiceProvider = Provider<AnalyticsService>((ref) {
+  throw UnimplementedError('AnalyticsService provider must be overridden');
+});

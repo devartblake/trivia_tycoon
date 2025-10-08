@@ -10,7 +10,7 @@ import '../models/spin_system_models.dart';
 import '../physics/spin_physics_handler.dart';
 import '../physics/spin_velocity.dart';
 import '../services/rewards/reward_probability.dart';
-import '../ui/widgets/result_dialog.dart';
+import '../ui/dialogs/result_dialog.dart';
 import '../services/spin_tracker.dart';
 import '../services/prize_log_provider.dart';
 

@@ -104,25 +104,31 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
       pinned: true,
       elevation: 0,
       backgroundColor: Colors.transparent,
-      leading: Container(
-        margin: const EdgeInsets.all(8),
-        child: IconButton(
-          onPressed: () => context.pop(),
-          icon: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: Colors.white.withOpacity(0.3),
-                width: 1,
-              ),
+      leading: IconButton(
+        onPressed: () {
+          // Check if there is a screen to pop back to
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            // If not, go to a default route like home.
+            // Replace '/' with your actual home route if it's different.
+            context.go('/home');
+          }
+        },
+        icon: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.3),
+              width: 1,
             ),
-            child: const Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-              size: 20,
-            ),
+          ),
+          child: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+            size: 20,
           ),
         ),
       ),
@@ -148,6 +154,9 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
                 children: [
                   Row(
                     children: [
+                      // This part of your code was already correct.
+                      // Using a Spacer() to push the title away from the leading button.
+                      const SizedBox(width: 48),
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
@@ -221,7 +230,7 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
                 onTap: () async {
                   final ok = await ref.read(multiplayerServiceProvider).quickMatch();
                   if (context.mounted && ok) {
-                    context.go('/multiplayer/find');
+                    context.push('/multiplayer/find');
                   }
                 },
               ),
@@ -235,7 +244,7 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
                 gradient: const LinearGradient(
                   colors: [Color(0xFF4ECDC4), Color(0xFF44A08D)],
                 ),
-                onTap: () => context.go('/multiplayer/find'),
+                onTap: () => context.push('/multiplayer/find'),
               ),
             ),
           ],
@@ -426,7 +435,7 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
                 onTap: () {
                   final id = (rooms[i]['roomId'] ?? '').toString();
                   ref.read(roomControllerProvider.notifier).joinRoom(id);
-                  context.go('/multiplayer/rooms');
+                  context.push('/multiplayer/rooms');
                 },
               ),
             ),

@@ -234,6 +234,7 @@ class _TycoonToastState<K extends Object?> extends State<TycoonToast<K>>
       child: Container(
         constraints: BoxConstraints(
           maxWidth: widget.maxWidth ?? MediaQuery.of(context).size.width * 0.9,
+          maxHeight: MediaQuery.of(context).size.height * 0.5, // Add max height
         ),
         decoration: BoxDecoration(
           borderRadius: widget.borderRadius ?? BorderRadius.circular(20),
@@ -258,7 +259,7 @@ class _TycoonToastState<K extends Object?> extends State<TycoonToast<K>>
           borderRadius: widget.borderRadius ?? BorderRadius.circular(20),
           child: Stack(
             children: [
-              // Glassmorphism effect
+              // Glass morphism effect
               BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                 child: Container(
@@ -301,112 +302,115 @@ class _TycoonToastState<K extends Object?> extends State<TycoonToast<K>>
                 ),
 
               // Main content
-              Padding(
-                padding: widget.padding,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      children: [
-                        // Icon with pulse animation
-                        if (widget.icon != null)
-                          AnimatedBuilder(
-                            animation: _pulseAnimation,
-                            builder: (context, child) {
-                              return Transform.scale(
-                                scale: widget.shouldIconPulse ? _pulseAnimation.value : 1.0,
-                                child: Container(
-                                  padding: const EdgeInsets.all(8), // Reduced from 12
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(8), // Reduced from 12
+              SingleChildScrollView(
+                child: Padding(
+                  padding: widget.padding,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start, // Changed from center
+                        children: [
+                          // Icon with pulse animation
+                          if (widget.icon != null)
+                            AnimatedBuilder(
+                              animation: _pulseAnimation,
+                              builder: (context, child) {
+                                return Transform.scale(
+                                  scale: widget.shouldIconPulse ? _pulseAnimation.value : 1.0,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.2),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: widget.icon,
                                   ),
-                                  child: widget.icon,
-                                ),
-                              );
-                            },
-                          ),
+                                );
+                              },
+                            ),
 
-                        if (widget.icon != null) const SizedBox(width: 12), // Reduced from 16
+                          if (widget.icon != null) const SizedBox(width: 12),
 
-                        // Text content
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min, // Added this
-                            children: [
-                              if (widget.title != null)
-                                Text(
-                                  widget.title!,
-                                  style: TextStyle(
-                                    color: widget.titleColor ?? Colors.white,
-                                    fontSize: widget.titleSize ?? 14, // Reduced from 16
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 0.5,
+                          // Text content
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (widget.title != null)
+                                  Text(
+                                    widget.title!,
+                                    style: TextStyle(
+                                      color: widget.titleColor ?? Colors.white,
+                                      fontSize: widget.titleSize ?? 14,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 0.5,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  maxLines: 1, // Added this
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              if (widget.title != null && widget.message != null)
-                                const SizedBox(height: 2), // Reduced from 4
-                              if (widget.message != null)
-                                Text(
-                                  widget.message!,
-                                  style: TextStyle(
-                                    color: widget.messageColor ?? Colors.white.withOpacity(0.9),
-                                    fontSize: widget.messageSize ?? 12, // Reduced from 14
-                                    fontWeight: FontWeight.w500,
+                                if (widget.title != null && widget.message != null)
+                                  const SizedBox(height: 2),
+                                if (widget.message != null)
+                                  Text(
+                                    widget.message!,
+                                    style: TextStyle(
+                                      color: widget.messageColor ?? Colors.white.withOpacity(0.9),
+                                      fontSize: widget.messageSize ?? 12,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  maxLines: 2, // Added this
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                            ],
-                          ),
-                        ),
-
-                        // Close button
-                        if (widget.isDismissible)
-                          GestureDetector(
-                            onTap: () => widget.dismiss(),
-                            child: Container(
-                              padding: const EdgeInsets.all(6), // Reduced from 8
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(6), // Reduced from 8
-                              ),
-                              child: Icon(
-                                Icons.close,
-                                color: Colors.white.withOpacity(0.8),
-                                size: 16, // Reduced from 18
-                              ),
+                              ],
                             ),
                           ),
-                      ],
-                    ),
 
-                    // Main button
-                    if (widget.mainButton != null) ...[
-                      const SizedBox(height: 12), // Reduced from 16
-                      widget.mainButton!,
-                    ],
-
-                    // Progress indicator
-                    if (widget.showProgressIndicator) ...[
-                      const SizedBox(height: 12), // Reduced from 16
-                      LinearProgressIndicator(
-                        backgroundColor: widget.progressIndicatorBackgroundColor ??
-                            Colors.white.withOpacity(0.2),
-                        valueColor: widget.progressIndicatorValueColor ??
-                            AlwaysStoppedAnimation<Color>(Colors.white),
+                          // Close button
+                          if (widget.isDismissible)
+                            GestureDetector(
+                              onTap: () => widget.dismiss(),
+                              child: Container(
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Icon(
+                                  Icons.close,
+                                  color: Colors.white.withOpacity(0.8),
+                                  size: 16,
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
-                    ],
 
-                    // User input form
-                    if (widget.userInputForm != null) ...[
-                      const SizedBox(height: 12), // Reduced from 16
-                      widget.userInputForm!,
+                      // Main button
+                      if (widget.mainButton != null) ...[
+                        const SizedBox(height: 12),
+                        widget.mainButton!,
+                      ],
+
+                      // Progress indicator
+                      if (widget.showProgressIndicator) ...[
+                        const SizedBox(height: 12),
+                        LinearProgressIndicator(
+                          backgroundColor: widget.progressIndicatorBackgroundColor ??
+                              Colors.white.withOpacity(0.2),
+                          valueColor: widget.progressIndicatorValueColor ??
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      ],
+
+                      // User input form
+                      if (widget.userInputForm != null) ...[
+                        const SizedBox(height: 12),
+                        widget.userInputForm!,
+                      ],
                     ],
-                  ],
+                  ),
                 ),
               ),
 

@@ -62,6 +62,23 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
     return AppBar(
       backgroundColor: const Color(0xFF202225),
       elevation: 0,
+      leading: Center(
+        child: Container(
+          margin: const EdgeInsets.only(left: 12.0),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: IconButton(
+            onPressed: () => Navigator.of(context).pop(),
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+              size: 22,
+            ),
+          ),
+        ),
+      ),
       title: const Text(
         'Messages',
         style: TextStyle(
@@ -69,10 +86,6 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
           fontSize: 20,
           fontWeight: FontWeight.w600,
         ),
-      ),
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back, color: Colors.white),
-        onPressed: () => Navigator.pop(context),
       ),
     );
   }

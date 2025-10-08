@@ -6,17 +6,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/core/services/analytics/config_service.dart';
 import 'package:trivia_tycoon/core/services/theme/theme_notifier.dart';
 import 'package:trivia_tycoon/core/manager/service_manager.dart';
+import '../../game/analytics/services/spin_analytics_tracker.dart';
 import '../../game/providers/multi_profile_providers.dart';
 import '../../game/services/referral_storage_service.dart';
 import '../services/notification_service.dart';
 import '../../game/providers/auth_providers.dart';
 import '../helpers/educational_stats_initializer.dart';
 import '../../game/providers/onboarding_providers.dart';
+import '../services/settings/app_settings.dart';
 import '../services/settings/general_key_value_storage_service.dart';
 import '../services/settings/multi_profile_service.dart';
 
 /// AppInit handles bootstrapping critical services before runApp()
 class AppInit {
+  // Store tracker for later use
+  static SpinAnalyticsTracker? _spinAnalyticsTracker;
+
+  /// Get the spin analytics tracker instance
+  static SpinAnalyticsTracker? get spinAnalyticsTracker => _spinAnalyticsTracker;
+
   static Future<void> _initializeMultiProfileSystem(ServiceManager serviceManager, ProviderContainer? container)
   async {
     try {
@@ -120,6 +128,10 @@ class AppInit {
     // Preload user session and sync with River-pod providers
     await _initializeUserSession(serviceManager, container);
 
+    // ============ INITIALIZE SPIN ANALYTICS ============
+    await _initializeSpinAnalytics(serviceManager);
+    // ============ END SPIN ANALYTICS ============
+
     // Initialize educational statistics system
     if (container != null) {
       try {
@@ -144,6 +156,41 @@ class AppInit {
     }
 
     return (serviceManager, themeNotifier);
+  }
+
+  /// Initialize Spin Analytics Tracker
+  static Future<void> _initializeSpinAnalytics(ServiceManager serviceManager) async {
+    try {
+      // Create spin analytics tracker
+      _spinAnalyticsTracker = SpinAnalyticsTracker(serviceManager.analyticsService);
+
+      // Load initial spin data
+      final todayCount = await AppSettings.getTodaySpinCount();
+      final weeklyCount = await AppSettings.getWeeklySpinCount();
+      final totalSpins = await AppSettings.getTotalLifetimeSpins();
+      final canSpin = await AppSettings.canSpinToday();
+      final rewardPoints = await AppSettings.getSpinRewardPoints();
+
+      // Track spin system initialized
+      await serviceManager.analyticsService.trackEvent('spin_system_initialized', {
+        'today_count': todayCount,
+        'weekly_count': weeklyCount,
+        'total_spins': totalSpins,
+        'can_spin': canSpin,
+        'reward_points': rewardPoints,
+        'timestamp': DateTime.now().toIso8601String(),
+      });
+
+      debugPrint('[AppInit] Spin Analytics initialized');
+      debugPrint('[AppInit] - Today: $todayCount spins');
+      debugPrint('[AppInit] - Weekly: $weeklyCount spins');
+      debugPrint('[AppInit] - Total: $totalSpins spins');
+      debugPrint('[AppInit] - Can Spin: $canSpin');
+      debugPrint('[AppInit] - Reward Points: $rewardPoints');
+    } catch (e) {
+      debugPrint('[AppInit] Spin Analytics initialization failed: $e');
+      // Continue - analytics is not critical
+    }
   }
 
   /// Initialize NotificationService (replaces the old _initializeNotifications method)
@@ -194,67 +241,92 @@ class AppInit {
     }
   }
 
-  /// Initialize user session and sync with River-pod providers
+  /// Initialize user session and sync with Riverpod providers
   static Future<void> _initializeUserSession(ServiceManager serviceManager, ProviderContainer? container) async {
     try {
-      // Load auth state from services
       final isLoggedIn = await serviceManager.authService.isLoggedIn();
       final hasOnboarded = await serviceManager.onboardingSettingsService.hasCompletedOnboarding();
 
       debugPrint('Session loaded: isLoggedIn=$isLoggedIn, hasOnboarded=$hasOnboarded');
 
-      // Sync with River-pod providers if container is provided
+      // Track session initialization
+      await serviceManager.analyticsService.trackEvent('user_session_initialized', {
+        'is_logged_in': isLoggedIn,
+        'has_onboarded': hasOnboarded,
+        'timestamp': DateTime.now().toIso8601String(),
+      });
+
       if (container != null) {
-        // Update auth state
         container.read(isLoggedInSyncProvider.notifier).state = isLoggedIn;
 
-        // Update onboarding state based on completion status
         if (hasOnboarded) {
           container.read(hasSeenIntroProvider.notifier).state = true;
           container.read(hasCompletedProfileProvider.notifier).state = true;
         }
 
-        debugPrint('River-pod providers synchronized with service state');
+        debugPrint('Riverpod providers synchronized with service state');
       }
 
-      // Load additional user data if logged in
       if (isLoggedIn) {
         await _loadUserProfile(serviceManager, container);
       }
     } catch (e) {
       debugPrint('[AppInit] User session initialization failed: $e');
-      // Continue with default state - app should still work
     }
   }
 
   /// Load user profile data for logged-in users
   static Future<void> _loadUserProfile(ServiceManager serviceManager, ProviderContainer? container) async {
     try {
-      // Load user profile data
       final playerName = await serviceManager.playerProfileService.getPlayerName();
       final userRole = await serviceManager.playerProfileService.getUserRole();
       final isPremium = await serviceManager.playerProfileService.isPremiumUser();
 
       debugPrint('User profile loaded: $playerName, role: $userRole, premium: $isPremium');
 
-      // You can sync additional profile data with River-pod providers here if needed
-      // Example:
-      // if (container != null) {
-      //   container.read(userProfileProvider.notifier).updateProfile(
-      //     name: playerName,
-      //     role: userRole,
-      //     isPremium: isPremium,
-      //   );
-      // }
-
+      await serviceManager.analyticsService.trackEvent('user_profile_loaded', {
+        'player_name': playerName,
+        'user_role': userRole,
+        'is_premium': isPremium,
+      });
     } catch (e) {
       debugPrint('[AppInit] User profile loading failed: $e');
-      // Continue - this is not critical for app functionality
     }
   }
 
   /// Method to reinitialize user session (useful after login/logout)
   static Future<void> reinitializeUserSession(ServiceManager serviceManager, ProviderContainer container) async {
     await _initializeUserSession(serviceManager, container);
+  }
+
+  /// Track app lifecycle events
+  static Future<void> trackAppLifecycle(ServiceManager serviceManager, String event) async {
+    try {
+      await serviceManager.analyticsService.trackLifecycleEvent(
+        event,
+        additionalData: {
+          'timestamp': DateTime.now().toIso8601String(),
+        },
+      );
+    } catch (e) {
+      debugPrint('[AppInit] Failed to track lifecycle event: $e');
+    }
+  }
+
+  /// Get spin analytics summary for debugging
+  static Future<Map<String, dynamic>> getSpinAnalyticsSummary() async {
+    try {
+      return {
+        'today_count': await AppSettings.getTodaySpinCount(),
+        'weekly_count': await AppSettings.getWeeklySpinCount(),
+        'total_spins': await AppSettings.getTotalLifetimeSpins(),
+        'can_spin': await AppSettings.canSpinToday(),
+        'spins_remaining': await AppSettings.getRemainingSpinsToday(),
+        'reward_points': await AppSettings.getSpinRewardPoints(),
+      };
+    } catch (e) {
+      debugPrint('[AppInit] Failed to get spin analytics summary: $e');
+      return {};
+    }
   }
 }

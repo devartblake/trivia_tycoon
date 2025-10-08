@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trivia_tycoon/ui_components/spin_wheel/ui/widgets/animations/reward_glow_animation.dart';
 import '../../models/spin_system_models.dart';
-import 'coin/coin_balance_display.dart';
-import 'coin/coin_gain_animation.dart';
+import '../widgets/coin/coin_balance_display.dart';
+import '../widgets/coin/coin_gain_animation.dart';
 import 'dart:math' as math;
 
 class ResultDialog extends StatefulWidget {

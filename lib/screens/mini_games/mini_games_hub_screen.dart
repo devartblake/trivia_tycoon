@@ -28,6 +28,23 @@ class MiniGamesHubScreen extends StatelessWidget {
               pinned: true,
               backgroundColor: Colors.transparent,
               elevation: 0,
+              leading: Center(
+                child: Container(
+                  margin: const EdgeInsets.only(left: 12.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: IconButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                      size: 22,
+                    ),
+                  ),
+                ),
+              ),
               flexibleSpace: FlexibleSpaceBar(
                 background: Container(
                   decoration: const BoxDecoration(

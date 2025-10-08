@@ -260,13 +260,55 @@ class TycoonToastThemeManager {
           ],
         );
 
+      case 'spin_ready':
+        return LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            const Color(0xFFFFA500).withOpacity(0.9),
+            const Color(0xFFFF6B35).withOpacity(0.9),
+          ],
+        );
+
+      case 'premium_spin_ready':
+        return LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            const Color(0xFFFF6B35).withOpacity(0.95),
+            const Color(0xFFF7931E).withOpacity(0.95),
+            const Color(0xFFFFC837).withOpacity(0.95),
+          ],
+          stops: const [0.0, 0.5, 1.0],
+        );
+
+      case 'spin_completed':
+        return LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            const Color(0xFF4CAF50).withOpacity(0.9),
+            const Color(0xFF8BC34A).withOpacity(0.9),
+          ],
+        );
+
+      case 'spin_cooldown':
+        return LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            const Color(0xFF2196F3).withOpacity(0.9),
+            const Color(0xFF03A9F4).withOpacity(0.9),
+          ],
+        );
+
       default:
         return LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Color(0xFF636E72),
-            Color(0xFF2D3436),
+            const Color(0xFF6366F1).withOpacity(0.9),
+            const Color(0xFF8B5CF6).withOpacity(0.9),
           ],
         );
     }

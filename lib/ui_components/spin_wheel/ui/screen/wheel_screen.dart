@@ -1,15 +1,19 @@
-import 'dart:math';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trivia_tycoon/ui_components/spin_wheel/ui/widgets/floating_spin_cta.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import '../../../../game/providers/riverpod_providers.dart';
+import '../../../../core/services/settings/app_settings.dart';
 import '../../models/spin_system_models.dart';
 import '../../physics/non_uniform_motion.dart';
 import '../../physics/updated_spin_handler.dart';
 import '../../utils/spin_transition_utils.dart';
-import '../widgets/result_dialog.dart';
+import '../dialogs/result_dialog.dart';
+import '../toasts/spin_ready_toast.dart';
+import '../widgets/stat_card_widget.dart';
 import '../widgets/wheel_segment_stack.dart';
 import '../widgets/spin_button.dart';
 import '../widgets/spin_cooldown_widget.dart';
@@ -39,13 +43,169 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
 
   List<WheelSegment> _segments = [];
 
+  // Analytics tracking
+  DateTime? _screenEnteredTime;
+  int _spinCount = 0;
+  Timer? _cooldownCheckTimer;
+
   @override
   void initState() {
     super.initState();
+    _screenEnteredTime = DateTime.now();
     _initializeAnimations();
     _loadSegments();
     _checkSpinAvailability();
+    _trackScreenView();
+    _startCooldownMonitor();
   }
+
+  // Monitor cooldown and show toast when ready
+  void _startCooldownMonitor() {
+    _cooldownCheckTimer = Timer.periodic(const Duration(seconds: 5), (_) async {
+      final wasCanSpin = _canSpin;
+      await _checkSpinAvailability();
+
+      // If spin just became available
+      if (_canSpin && !wasCanSpin && mounted) {
+        await _showSpinReadyToast();
+      }
+    });
+  }
+
+  Future<void> _showSpinReadyToast() async {
+    await _trackUserAction('spin_ready_toast_shown');
+
+    await SpinReadyToast.show(
+      context: context,
+      onSpinNow: () {
+        _handleSpin();
+      },
+      customMessage: 'Your cooldown has expired! Spin now to win rewards!',
+    );
+  }
+
+  @override
+  void dispose() {
+    _cooldownCheckTimer?.cancel();
+    _trackScreenExit();
+    _animationController.dispose();
+    _scaleController.dispose();
+    super.dispose();
+  }
+
+  // ============ ANALYTICS METHODS ============
+
+  /// Track screen view
+  Future<void> _trackScreenView() async {
+    try {
+      final analytics = ref.read(analyticsServiceProvider);
+      await analytics.trackEvent('wheel_screen_view', {
+        'screen_name': 'WheelScreen',
+        'can_spin': _canSpin,
+        'segments_count': _segments.length,
+      });
+    } catch (e) {
+      debugPrint('Analytics tracking failed: $e');
+    }
+  }
+
+  /// Track screen exit with duration
+  Future<void> _trackScreenExit() async {
+    if (_screenEnteredTime == null) return;
+
+    try {
+      final analytics = ref.read(analyticsServiceProvider);
+      final duration = DateTime.now().difference(_screenEnteredTime!);
+
+      await analytics.trackEvent('wheel_screen_exit', {
+        'screen_name': 'WheelScreen',
+        'duration_seconds': duration.inSeconds,
+        'spins_completed': _spinCount,
+        'final_can_spin': _canSpin,
+      });
+    } catch (e) {
+      debugPrint('Analytics tracking failed: $e');
+    }
+  }
+
+  /// Track user action
+  Future<void> _trackUserAction(String action, {Map<String, dynamic>? additionalData}) async {
+    try {
+      final analytics = ref.read(analyticsServiceProvider);
+      await analytics.trackEngagement(
+        action: action,
+        screen: 'WheelScreen',
+        properties: {
+          'can_spin': _canSpin,
+          'is_spinning': _isSpinning,
+          'spin_count': _spinCount,
+          ...?additionalData,
+        },
+      );
+    } catch (e) {
+      debugPrint('Analytics tracking failed: $e');
+    }
+  }
+
+  /// Track spin started
+  Future<void> _trackSpinStarted({required String triggerMethod}) async {
+    await _trackUserAction('spin_started', additionalData: {
+      'trigger_method': triggerMethod, // 'button' or 'gesture'
+      'current_angle': _currentAngle,
+      'segments_count': _segments.length,
+    });
+  }
+
+  /// Track spin completed with result
+  Future<void> _trackSpinCompleted(WheelSegment result) async {
+    try {
+      final analytics = ref.read(analyticsServiceProvider);
+
+      // Track the spin completion event
+      await analytics.trackEvent('spin_completed', {
+        'reward_type': result.label,
+        'reward_value': result.reward,
+        'segment_index': _activeIndex,
+        'spin_number': _spinCount,
+      });
+
+      // Update spin statistics in AppSettings
+      await AppSettings.updateSpinStatistics(
+        rewardType: result.label,
+        rewardValue: result.reward,
+      );
+
+      // Add to spin history
+      await AppSettings.addSpinToHistory({
+        'rewardType': result.label,
+        'rewardValue': result.reward,
+        'timestamp': DateTime.now().toIso8601String(),
+        'segmentIndex': _activeIndex,
+      });
+
+      // Increment spin counters
+      await AppSettings.incrementTodaySpinCount();
+      await AppSettings.incrementWeeklySpinCount();
+      await AppSettings.incrementTotalLifetimeSpins();
+
+      // Update reward points
+      final currentPoints = await AppSettings.getSpinRewardPoints();
+      await AppSettings.addSpinRewardPoints(result.reward.toDouble());
+
+    } catch (e) {
+      debugPrint('Failed to track spin completion: $e');
+    }
+  }
+
+  /// Track error
+  Future<void> _trackError(String errorType, String errorMessage) async {
+    await _trackUserAction('wheel_screen_error', additionalData: {
+      'error_type': errorType,
+      'error_message': errorMessage,
+    });
+  }
+
+  // ============ END ANALYTICS METHODS ============
 
   void _initializeAnimations() {
     _animationController = AnimationController(
@@ -94,8 +254,13 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
         setState(() {
           _segments = segments;
         });
+
+        await _trackUserAction('segments_loaded', additionalData: {
+          'segments_count': segments.length,
+        });
       }
     } catch (e) {
+      await _trackError('segment_load_failed', e.toString());
       _showErrorSnackBar('Failed to load wheel segments');
     }
   }
@@ -105,6 +270,10 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
     if (mounted) {
       setState(() {
         _canSpin = canSpin;
+      });
+
+      await _trackUserAction('spin_availability_checked', additionalData: {
+        'can_spin': canSpin,
       });
     }
   }
@@ -119,7 +288,11 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
     setState(() {
       _activeIndex = index;
       _isSpinning = false;
+      _spinCount++;
     });
+
+    // Track spin completion
+    _trackSpinCompleted(result);
 
     // Trigger confetti and haptic feedback
     ref.read(confettiControllerProvider).play();
@@ -134,7 +307,12 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
   }
 
   Future<void> _handleSpin() async {
-    if (_isSpinning || !_canSpin) return;
+    if (_isSpinning || !_canSpin) {
+      if (!_canSpin) {
+        await _trackUserAction('spin_blocked_cooldown');
+      }
+      return;
+    }
 
     setState(() {
       _isSpinning = true;
@@ -142,6 +320,9 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
     });
 
     HapticFeedback.mediumImpact();
+
+    // Track spin started
+    await _trackSpinStarted(triggerMethod: 'button');
 
     try {
       await UpdatedSpinHandlers.handleSpinWithPhysics(
@@ -173,6 +354,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
       setState(() {
         _isSpinning = false;
       });
+      await _trackError('spin_failed', e.toString());
       _showErrorSnackBar('Spin failed. Please try again.');
     }
   }
@@ -183,6 +365,13 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
     setState(() {
       _isSpinning = true;
       _activeIndex = null;
+    });
+
+    // Track gesture spin
+    _trackSpinStarted(triggerMethod: 'gesture').then((_) {
+      _trackUserAction('gesture_spin', additionalData: {
+        'velocity': velocity,
+      });
     });
 
     final physics = EnhancedNonUniformMotion(resistance: 0.015);
@@ -202,13 +391,17 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
     HapticFeedback.lightImpact();
   }
 
-  // Helper method for gesture velocity conversion
   double _convertGestureVelocity(double gestureVelocity) {
     final normalizedVelocity = gestureVelocity.abs() / 1000.0;
     return (normalizedVelocity * 10.0).clamp(2.0, 15.0);
   }
 
   void _showResultDialog(WheelSegment segment) {
+    _trackUserAction('result_dialog_shown', additionalData: {
+      'reward': segment.label,
+      'reward_value': segment.reward,
+    });
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -221,7 +414,9 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
           timestamp: DateTime.now(),
         ),
       ),
-    );
+    ).then((_) {
+      _trackUserAction('result_dialog_closed');
+    });
   }
 
   void _showErrorSnackBar(String message) {
@@ -264,13 +459,6 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
         allowWhileIdle: true,
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    _scaleController.dispose();
-    super.dispose();
   }
 
   @override
@@ -350,7 +538,8 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
         actions: [
           IconButton(
             icon: const Icon(Icons.history),
-            onPressed: () {
+            onPressed: () async {
+              await _trackUserAction('history_button_pressed');
               // Navigate to prize log
             },
           ),
@@ -369,7 +558,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                   opacity: _isSpinning ? _fadeAnimation.value : 1.0,
                   child: Stack(
                     children: [
-                      // Main content - Use SafeArea and SingleChildScrollView to prevent overflow
+                      // Main content
                       SafeArea(
                         child: SingleChildScrollView(
                           child: ConstrainedBox(
@@ -456,15 +645,13 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                     ),
                                   ),
 
-                                  // Controls section - Make this more compact
+                                  // Controls section
                                   Container(
                                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        // Cooldown widget - make it more compact
                                         const SpinCooldownWidget(),
-
                                         const SizedBox(height: 16),
 
                                         // Spin button
@@ -481,19 +668,19 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                             scale: 0.95,
                                             duration: const Duration(milliseconds: 200),
                                             child: SpinButton(
-                                              onSpin: () {}, // Empty callback when disabled
+                                              onSpin: () {},
                                             ),
                                           ),
 
                                         const SizedBox(height: 16),
 
-                                        // Stats row - make more compact
+                                        // Stats row
                                         if (!_isSpinning)
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                             children: [
                                               Flexible(
-                                                child: _StatCard(
+                                                child: StatCard(
                                                   icon: Icons.casino,
                                                   label: 'Spins Today',
                                                   value: '${SpinTracker.maxSpinsPerDay}',
@@ -502,7 +689,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                               ),
                                               const SizedBox(width: 8),
                                               Flexible(
-                                                child: _StatCard(
+                                                child: StatCard(
                                                   icon: Icons.timer,
                                                   label: 'Cooldown',
                                                   value: '${SpinTracker.cooldown.inHours}h',
@@ -511,7 +698,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                               ),
                                               const SizedBox(width: 8),
                                               Flexible(
-                                                child: _StatCard(
+                                                child: StatCard(
                                                   icon: Icons.emoji_events,
                                                   label: 'Rewards',
                                                   value: '${_segments.length}',
@@ -540,83 +727,6 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class _StatCard extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String value;
-  final Color color;
-
-  const _StatCard({
-    required this.icon,
-    required this.label,
-    required this.value,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: isDark
-            ? const Color(0xFF2A2A3E)
-            : Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: color.withOpacity(0.2),
-          width: 1,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: isDark
-                ? Colors.black.withOpacity(0.2)
-                : Colors.grey.withOpacity(0.1),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(6),
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              icon,
-              color: color,
-              size: 14,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 10,
-              color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
       ),
     );
   }

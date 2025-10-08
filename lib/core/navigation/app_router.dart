@@ -7,6 +7,7 @@ import 'package:trivia_tycoon/core/router/enhanced_admin_guard.dart';
 import 'package:trivia_tycoon/screens/leaderboard/tier_rank_screen.dart';
 import 'package:trivia_tycoon/screens/menu/game_menu_screen.dart';
 import 'package:trivia_tycoon/screens/not_found_screen.dart';
+import 'package:trivia_tycoon/screens/question/categories/favorites_quiz_screen.dart';
 import 'package:trivia_tycoon/screens/question/question_screen.dart';
 import 'package:trivia_tycoon/screens/splash_variants/main_splash.dart';
 import 'package:trivia_tycoon/screens/store/store_screen.dart';
@@ -41,10 +42,14 @@ import '../../screens/multiplayer/multiplayer_hub_screen.dart';
 import '../../screens/multiplayer/multiplayer_question_screen.dart';
 import '../../screens/multiplayer/multiplayer_results_screen.dart';
 import '../../screens/multiplayer/room_lobby_screen.dart';
+import '../../screens/notifications/notifications_screen.dart';
 import '../../screens/preferences_screen.dart';
 import '../../screens/profile/enhanced/add_friends_screen.dart';
 import '../../screens/profile/profile_selection_screen.dart';
-import '../../screens/question/monthly_quiz_screen.dart';
+import '../../screens/question/categories/category_quiz_screen.dart';
+import '../../screens/question/categories/class_quiz_screen.dart';
+import '../../screens/question/categories/featured_challenge_screen.dart';
+import '../../screens/question/categories/monthly_quiz_screen.dart';
 import '../../screens/question/score_summary_screen_wrapper.dart';
 import '../../screens/question/transitional/how_to_play_screen.dart';
 import '../../screens/report_screen.dart';
@@ -62,10 +67,7 @@ import '../../screens/browse/all_classes_screen.dart';
 import '../../screens/menu/main_menu_screen.dart';
 import '../../screens/onboarding/profile_setup_screen.dart';
 import '../../screens/onboarding/intro_carousel_screen.dart';
-import '../../screens/question/category_quiz_screen.dart';
-import '../../screens/question/class_quiz_screen.dart';
-import '../../screens/question/daily_quiz_screen.dart';
-import '../../screens/question/featured_challenge_screen.dart';
+import '../../screens/question/categories/daily_quiz_screen.dart';
 import '../../screens/question/question_view_screen.dart';
 import '../../screens/settings/skill_theme_screen.dart';
 import '../../screens/skills_tree/skill_branch_detail_screen.dart';
@@ -78,7 +80,6 @@ import '../../ui_components/confetti/ui/confetti_settings.dart';
 import '../../ui_components/depth_card_3d/theme_editor/gradient_editor_screen.dart';
 import '../../ui_components/qr_code/screens/qr_scan_settings_screen.dart';
 import '../../ui_components/qr_code/screens/qr_scanner_screen.dart';
-import '../../screens/util/alerts_screen.dart';
 import '../../screens/login_screen.dart';
 import '../../screens/onboarding/onboarding_screen.dart';
 import '../../screens/profile/avatar_selection_screen.dart';
@@ -87,7 +88,6 @@ import '../../screens/help_screen.dart';
 import '../../screens/profile/profile_screen.dart';
 import '../../screens/question/question_details_screen.dart';
 import '../../screens/users/quiz_history_screen.dart';
-import '../../screens/question/score_summary_screen.dart';
 import '../../screens/question/transitional/trivia_transition_screen.dart';
 import '../../screens/question/create_quiz_screen.dart';
 import '../../screens/question/join_quiz_screen.dart';
@@ -302,207 +302,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const StoreSecondaryScreen()
       ),
 
-      /// 🧠 Question Flow
-      GoRoute(
-        path: '/quiz',
-        builder: (context, state) => const QuestionScreen(),
-      ),
-      GoRoute(
-        path: '/quiz-details',
-        builder: (context, state) => const QuestionDetailsScreen(),
-      ),
-      GoRoute(
-        path: '/create-quiz',
-        builder: (context, state) => const CreateQuizScreen(),
-      ),
-      GoRoute(
-        path: '/join-quiz',
-        builder: (context, state) => const JoinQuizScreen(),
-      ),
-      GoRoute(
-        path: '/play-quiz',
-        builder: (context, state) => const PlayQuizScreen(),
-      ),
-      GoRoute(
-        path: '/quiz/start/:gameMode',
-        builder: (context, state) {
-          final gameMode = state.pathParameters['gameMode']!;
-          return AdaptedQuestionScreen(
-            classLevel: AppRouter._getGameModeClassLevel(gameMode),
-            category: AppRouter._getGameModeCategory(gameMode),
-            questionCount: AppRouter._getGameModeQuestionCount(gameMode),
-          );
-        },
-      ),
-      GoRoute(
-        path: '/how-to-play/:gameMode',
-        builder: (context, state) {
-          final gameModeString = state.pathParameters['gameMode']!;
-          final isMultiplayer =
-              state.uri.queryParameters['isMultiplayer'] == 'true';
-
-          // Convert string to GameMode enum
-          final gameMode = GameMode.values.firstWhere(
-            (mode) => mode.name == gameModeString,
-            orElse: () => GameMode.classic, // Fallback to classic if not found
-          );
-
-          return HowToPlayScreen(
-            gameMode: gameMode,
-            isMultiplayer: isMultiplayer,
-          );
-        },
-      ),
-      GoRoute(
-        path: '/trivia-transition',
-        builder: (context, state) => const TriviaTransitionScreen(),
-      ),
-      GoRoute(
-        path: '/score-summary',
-        builder: (context, state) {
-          return const ScoreSummaryScreenWrapper();
-        },
-      ),
-
-      /// Multiplayer game mode routes
-      GoRoute(
-          path: '/multiplayer',
-          builder: (context, state) => MultiplayerHubScreen()),
-      GoRoute(
-          path: '/multiplayer/find',
-          builder: (context, state) => MatchmakingScreen()),
-      GoRoute(
-          path: '/multiplayer/rooms',
-          builder: (context, state) => RoomLobbyScreen()),
-      GoRoute(
-          path: '/multiplayer/match',
-          builder: (context, state) => LiveMatchScreen()),
-      GoRoute(
-        path: '/multiplayer/matchmaking/:gameMode',
-        builder: (context, state) {
-          final gameMode = state.pathParameters['gameMode']!;
-          return MultiplayerGameMatchmakingScreen(gameMode: gameMode);
-        },
-      ),
-
-      GoRoute(
-        path: '/multiplayer/quiz/:gameMode',
-        builder: (context, state) {
-          final gameMode = state.pathParameters['gameMode']!;
-          return MultiplayerQuestionScreen(gameMode: gameMode);
-        },
-      ),
-
-      GoRoute(
-        path: '/multiplayer/results/:gameMode',
-        builder: (context, state) {
-          final gameMode = state.pathParameters['gameMode']!;
-          return MultiplayerResultsScreen(gameMode: gameMode);
-        },
-      ),
-      /*GoRoute(
-          path: '/multiplayer/rooms/:roomId',
-          builder: (context, state) {
-            final roomId = state.pathParameters['roomId']!;
-            return RoomLobbyScreen(roomId: roomId);
-          }
-      ),*/
-
-      /// 🎮 Mini Games
-      GoRoute(
-        path: '/mini-games',
-        name: 'Mini Games',
-        builder: (context, state) => const MiniGamesHubScreen(),
-        redirect: onboardingGuard,
-      ),
-      GoRoute(
-        path: '/sun-moon-puzzle',
-        name: 'SunMoon Puzzle',
-        builder: (context, state) => const SunMoonPuzzleScreen(),
-        redirect: onboardingGuard,
-      ),
-      GoRoute(
-        path: '/connections-puzzle',
-        name: 'Connections Puzzle',
-        builder: (context, state) => const ConnectionsPuzzleScreen(),
-        redirect: onboardingGuard,
-      ),
-      GoRoute(
-        path: '/flow-connect',
-        name: 'Flow Connect',
-        builder: (context, state) => const FlowConnectPuzzleScreen(),
-        redirect: onboardingGuard,
-      ),
-      GoRoute(
-        path: '/sudoku-puzzle',
-        name: 'sudokuPuzzle',
-        builder: (context, state) => const SudokuPuzzleScreen(),
-        redirect: onboardingGuard,
-      ),
-      GoRoute(
-        path: '/game-2048',
-        name: 'game2048',
-        builder: (context, state) => const Game2048Screen(),
-        redirect: onboardingGuard,
-      ),
-      GoRoute(
-        path: '/memory-match',
-        name: 'memoryMatch',
-        builder: (context, state) => const MemoryMatchScreen(),
-        redirect: onboardingGuard,
-      ),
-      GoRoute(
-        path: '/word-search',
-        name: 'wordSearch',
-        builder: (context, state) => const WordSearchScreen(),
-        redirect: onboardingGuard,
-      ),
-      GoRoute(
-        path: '/crossword',
-        name: 'crossword',
-        builder: (context, state) => const CrosswordScreen(),
-        redirect: onboardingGuard,
-      ),
-
-      /// 👤 USER PROFILE & SOCIAL
-      GoRoute(
-        path: '/preferences',
-        name: 'Preferences',
-        builder: (context, state) => const PreferencesScreen(),
-      ),
-      GoRoute(
-        path: '/profile-selection',
-        name: 'Profile Selection',
-        builder: (context, state) => const ProfileSelectionScreen(),
-      ),
-      GoRoute(
-        path: '/friends',
-        name: 'Friends',
-        builder: (context, state) => const FriendsScreen(),
-      ),
-      GoRoute(
-        path: '/friends/add-username',
-        name: 'Add Friend By Username',
-        builder: (context, state) => const AddFriendByUsernameScreen(),
-      ),
-      GoRoute(
-        path: '/avatar-selection',
-        name: 'Avatar Selection',
-        builder: (context, state) => const AvatarSelectionScreen(),
-      ),
-      GoRoute(
-        path: '/multiplayer',
-        name: 'Multiplayer',
-        builder: (context, state) => const MultiplayerScreen(),
-        redirect: onboardingGuard,
-      ),
-      GoRoute(
-       path: '/messages',
-       name: 'Messages',
-       builder: (context, state) => const MessagesScreen(),
-       redirect: onboardingGuard,
-      ),
-
       /// 🎯 Daily Quiz & Featured Content Routes (Referenced in CarouselSection)
       GoRoute(
         path: '/daily-quiz',
@@ -553,6 +352,223 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/all-categories',
         builder: (context, state) => const AllCategoriesScreen(),
         redirect: onboardingGuard,
+      ),
+
+      /// 🧠 Question Flow
+      GoRoute(
+        path: '/quiz',
+        builder: (context, state) => const QuestionScreen(),
+      ),
+      GoRoute(
+        path: '/quiz-details',
+        builder: (context, state) => const QuestionDetailsScreen(),
+      ),
+      GoRoute(
+        path: '/quiz/question',
+        builder: (context, state) => const AdaptedQuestionScreen(),
+      ),
+      GoRoute(
+        path: '/create-quiz',
+        builder: (context, state) => const CreateQuizScreen(),
+      ),
+      GoRoute(
+        path: '/join-quiz',
+        builder: (context, state) => const JoinQuizScreen(),
+      ),
+      GoRoute(
+        path: '/quiz/play',
+        builder: (context, state) => const PlayQuizScreen(),
+      ),
+      GoRoute(
+        path: '/favorites-quiz',
+        name: 'Favorites Quiz',
+        builder: (context, state) => const FavoritesQuizScreen(),
+      ),
+      GoRoute(
+        path: '/quiz/start/:gameMode',
+        builder: (context, state) {
+          final gameMode = state.pathParameters['gameMode']!;
+          return AdaptedQuestionScreen(
+            classLevel: AppRouter._getGameModeClassLevel(gameMode),
+            category: AppRouter._getGameModeCategory(gameMode),
+            questionCount: AppRouter._getGameModeQuestionCount(gameMode),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/how-to-play/:gameMode',
+        builder: (context, state) {
+          final gameModeString = state.pathParameters['gameMode']!;
+          final isMultiplayer =
+              state.uri.queryParameters['isMultiplayer'] == 'true';
+
+          // Convert string to GameMode enum
+          final gameMode = GameMode.values.firstWhere(
+            (mode) => mode.name == gameModeString,
+            orElse: () => GameMode.classic, // Fallback to classic if not found
+          );
+
+          return HowToPlayScreen(
+            gameMode: gameMode,
+            isMultiplayer: isMultiplayer,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/trivia-transition',
+        builder: (context, state) => const TriviaTransitionScreen(),
+      ),
+      GoRoute(
+        path: '/score-summary',
+        builder: (context, state) {
+          return const ScoreSummaryScreenWrapper();
+        },
+      ),
+
+      /// Multiplayer game mode routes
+      GoRoute(
+          path: '/multiplayer',
+          name: 'multiplayer',
+          builder: (context, state) => MultiplayerHubScreen()),
+      GoRoute(
+          path: '/multiplayer/find',
+          name: 'find-match',
+          builder: (context, state) => MatchmakingScreen()),
+      GoRoute(
+          path: '/multiplayer/rooms',
+          name: 'find-room',
+          builder: (context, state) => RoomLobbyScreen()),
+      GoRoute(
+          path: '/multiplayer/match',
+          name: 'live-match',
+          builder: (context, state) => LiveMatchScreen()),
+      GoRoute(
+        path: '/multiplayer/matchmaking/:gameMode',
+        name: 'multiplayer-matchmaking',
+        builder: (context, state) {
+          final gameMode = state.pathParameters['gameMode']!;
+          return MultiplayerGameMatchmakingScreen(gameMode: gameMode);
+        },
+      ),
+
+      GoRoute(
+        path: '/multiplayer/quiz/:gameMode',
+        name: 'multiplayer-quiz',
+        builder: (context, state) {
+          final gameMode = state.pathParameters['gameMode']!;
+          return MultiplayerQuestionScreen(gameMode: gameMode);
+        },
+      ),
+
+      GoRoute(
+        path: '/multiplayer/results/:gameMode',
+        name: 'multiplayer-results',
+        builder: (context, state) {
+          final gameMode = state.pathParameters['gameMode']!;
+          return MultiplayerResultsScreen(gameMode: gameMode);
+        },
+      ),
+      /*GoRoute(
+          path: '/multiplayer/rooms/:roomId',
+          builder: (context, state) {
+            final roomId = state.pathParameters['roomId']!;
+            return RoomLobbyScreen(roomId: roomId);
+          }
+      ),*/
+
+      /// 🎮 Mini Games
+      GoRoute(
+        path: '/mini-games',
+        name: 'mini-games',
+        builder: (context, state) => const MiniGamesHubScreen(),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/sun-moon-puzzle',
+        name: 'sunmoon-puzzle',
+        builder: (context, state) => const SunMoonPuzzleScreen(),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/connections-puzzle',
+        name: 'connections-puzzle',
+        builder: (context, state) => const ConnectionsPuzzleScreen(),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/flow-connect',
+        name: 'flow-connect',
+        builder: (context, state) => const FlowConnectPuzzleScreen(),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/sudoku-puzzle',
+        name: 'sudoku-puzzle',
+        builder: (context, state) => const SudokuPuzzleScreen(),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/game-2048',
+        name: 'game2048',
+        builder: (context, state) => const Game2048Screen(),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/memory-match',
+        name: 'memoryMatch',
+        builder: (context, state) => const MemoryMatchScreen(),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/word-search',
+        name: 'wordSearch',
+        builder: (context, state) => const WordSearchScreen(),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/crossword',
+        name: 'crossword',
+        builder: (context, state) => const CrosswordScreen(),
+        redirect: onboardingGuard,
+      ),
+
+      /// 👤 USER PROFILE & SOCIAL
+      GoRoute(
+        path: '/preferences',
+        name: 'preferences',
+        builder: (context, state) => const PreferencesScreen(),
+      ),
+      GoRoute(
+        path: '/profile-selection',
+        name: 'Profile Selection',
+        builder: (context, state) => const ProfileSelectionScreen(),
+      ),
+      GoRoute(
+        path: '/friends',
+        name: 'Friends',
+        builder: (context, state) => const FriendsScreen(),
+      ),
+      GoRoute(
+        path: '/friends/add-username',
+        name: 'Add Friend By Username',
+        builder: (context, state) => const AddFriendByUsernameScreen(),
+      ),
+      GoRoute(
+        path: '/avatar-selection',
+        name: 'Avatar Selection',
+        builder: (context, state) => const AvatarSelectionScreen(),
+      ),
+      GoRoute(
+        path: '/multiplayer',
+        name: 'Multiplayer',
+        builder: (context, state) => const MultiplayerScreen(),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+       path: '/messages',
+       name: 'Messages',
+       builder: (context, state) => const MessagesScreen(),
+       redirect: onboardingGuard,
       ),
 
       /// ⚡ Quick Actions Routes (Referenced in Enhanced GridMenuSection)
@@ -614,7 +630,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/alerts',
         name: 'Alerts',
-        builder: (context, state) => const AlertsScreen(),
+        redirect: (context, state) => '/notifications?tab=alerts',
+      ),
+      GoRoute(
+        path: '/notifications',
+        name: 'Notifications',
+        builder: (context, state) => const NotificationsScreen(),
       ),
       GoRoute(
         path: '/qr-scanner',

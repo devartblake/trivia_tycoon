@@ -7,7 +7,7 @@ import '../../game/models/question_model.dart';
 import '../../game/providers/quiz_providers.dart';
 import '../../game/providers/quiz_results_provider.dart';
 import '../../game/services/educational_stats_service.dart';
-import '../../game/services/quiz_category.dart'; // Import QuizCategory
+import '../../game/services/quiz_category.dart';
 
 class AdaptedQuestionScreen extends ConsumerStatefulWidget {
   final String? classLevel;

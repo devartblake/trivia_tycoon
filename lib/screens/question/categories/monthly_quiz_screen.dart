@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../game/services/question_loader_service.dart';
-import '../../game/models/question_model.dart';
+import '../../../game/services/question_loader_service.dart';
+import '../../../game/models/question_model.dart';
 
 // Provider for monthly quiz questions
 final monthlyQuizProvider = FutureProvider<List<QuestionModel>>((ref) async {

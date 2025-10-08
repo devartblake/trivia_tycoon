@@ -115,7 +115,7 @@ class StandardAppBar extends ConsumerWidget implements PreferredSizeWidget {
                   ),
                 ),
                 child: IconButton(
-                  onPressed: () => context.push('/alerts'),
+                  onPressed: () => context.push('/notifications'),
                   icon: const Icon(
                     Icons.notifications_rounded,
                     color: Colors.white,

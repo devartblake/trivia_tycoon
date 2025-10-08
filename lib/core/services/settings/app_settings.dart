@@ -19,6 +19,395 @@ class AppSettings {
     return AppSettings(config);
   }
 
+  // ============ SPIN & EARN SETTINGS ============
+
+  /// Saves the daily spin limit
+  static Future<void> setDailySpinLimit(int limit) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('dailySpinLimit', limit);
+  }
+
+  /// Retrieves the daily spin limit
+  static Future<int> getDailySpinLimit() async {
+    final box = await Hive.openBox(_boxName);
+    return box.get('dailySpinLimit', defaultValue: 5);
+  }
+
+  /// Saves the last spin date
+  static Future<void> setLastSpinDate(DateTime date) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('lastSpinDate', date.toIso8601String());
+  }
+
+  /// Retrieves the last spin date
+  static Future<DateTime?> getLastSpinDate() async {
+    final box = await Hive.openBox(_boxName);
+    final dateStr = box.get('lastSpinDate');
+    return dateStr != null ? DateTime.tryParse(dateStr) : null;
+  }
+
+  /// Saves today's spin count
+  static Future<void> setTodaySpinCount(int count) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('todaySpinCount', count);
+  }
+
+  /// Retrieves today's spin count
+  static Future<int> getTodaySpinCount() async {
+    final box = await Hive.openBox(_boxName);
+    return box.get('todaySpinCount', defaultValue: 0);
+  }
+
+  /// Increments today's spin count
+  static Future<int> incrementTodaySpinCount() async {
+    final box = await Hive.openBox(_boxName);
+    final current = box.get('todaySpinCount', defaultValue: 0);
+    final newCount = current + 1;
+    await box.put('todaySpinCount', newCount);
+    return newCount;
+  }
+
+  /// Resets daily spin count (call this at midnight or when day changes)
+  static Future<void> resetDailySpinCount() async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('todaySpinCount', 0);
+    await box.put('lastSpinDate', DateTime.now().toIso8601String());
+  }
+
+  /// Checks if user can spin today
+  static Future<bool> canSpinToday() async {
+    final todayCount = await getTodaySpinCount();
+    final limit = await getDailySpinLimit();
+    return todayCount < limit;
+  }
+
+  /// Gets remaining spins for today
+  static Future<int> getRemainingSpinsToday() async {
+    final todayCount = await getTodaySpinCount();
+    final limit = await getDailySpinLimit();
+    return (limit - todayCount).clamp(0, limit);
+  }
+
+  /// Saves the weekly spin count
+  static Future<void> setWeeklySpinCount(int count) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('weeklySpinCount', count);
+  }
+
+  /// Retrieves the weekly spin count
+  static Future<int> getWeeklySpinCount() async {
+    final box = await Hive.openBox(_boxName);
+    return box.get('weeklySpinCount', defaultValue: 0);
+  }
+
+  /// Increments weekly spin count
+  static Future<int> incrementWeeklySpinCount() async {
+    final box = await Hive.openBox(_boxName);
+    final current = box.get('weeklySpinCount', defaultValue: 0);
+    final newCount = current + 1;
+    await box.put('weeklySpinCount', newCount);
+    return newCount;
+  }
+
+  /// Resets weekly spin count (call this at start of week)
+  static Future<void> resetWeeklySpinCount() async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('weeklySpinCount', 0);
+  }
+
+  /// Saves the last weekly reset date
+  static Future<void> setLastWeeklyResetDate(DateTime date) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('lastWeeklyResetDate', date.toIso8601String());
+  }
+
+  /// Retrieves the last weekly reset date
+  static Future<DateTime?> getLastWeeklyResetDate() async {
+    final box = await Hive.openBox(_boxName);
+    final dateStr = box.get('lastWeeklyResetDate');
+    return dateStr != null ? DateTime.tryParse(dateStr) : null;
+  }
+
+  /// Saves total lifetime spins
+  static Future<void> setTotalLifetimeSpins(int count) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('totalLifetimeSpins', count);
+  }
+
+  /// Retrieves total lifetime spins
+  static Future<int> getTotalLifetimeSpins() async {
+    final box = await Hive.openBox(_boxName);
+    return box.get('totalLifetimeSpins', defaultValue: 0);
+  }
+
+  /// Increments total lifetime spins
+  static Future<int> incrementTotalLifetimeSpins() async {
+    final box = await Hive.openBox(_boxName);
+    final current = box.get('totalLifetimeSpins', defaultValue: 0);
+    final newCount = current + 1;
+    await box.put('totalLifetimeSpins', newCount);
+    return newCount;
+  }
+
+  /// Saves the current spin reward points
+  static Future<void> setSpinRewardPoints(double points) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('spinRewardPoints', points);
+  }
+
+  /// Retrieves the current spin reward points
+  static Future<double> getSpinRewardPoints() async {
+    final box = await Hive.openBox(_boxName);
+    return box.get('spinRewardPoints', defaultValue: 0.0);
+  }
+
+  /// Adds points to spin reward progress
+  static Future<double> addSpinRewardPoints(double points) async {
+    final box = await Hive.openBox(_boxName);
+    final current = box.get('spinRewardPoints', defaultValue: 0.0);
+    final newTotal = current + points;
+    await box.put('spinRewardPoints', newTotal);
+    return newTotal;
+  }
+
+  /// Resets spin reward points (after claiming reward)
+  static Future<void> resetSpinRewardPoints() async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('spinRewardPoints', 0.0);
+  }
+
+  /// Saves spin wheel animation enabled state
+  static Future<void> setSpinAnimationEnabled(bool enabled) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('spinAnimationEnabled', enabled);
+  }
+
+  /// Retrieves spin wheel animation enabled state
+  static Future<bool> getSpinAnimationEnabled() async {
+    final box = await Hive.openBox(_boxName);
+    return box.get('spinAnimationEnabled', defaultValue: true);
+  }
+
+  /// Saves spin sound effects enabled state
+  static Future<void> setSpinSoundEnabled(bool enabled) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('spinSoundEnabled', enabled);
+  }
+
+  /// Retrieves spin sound effects enabled state
+  static Future<bool> getSpinSoundEnabled() async {
+    final box = await Hive.openBox(_boxName);
+    return box.get('spinSoundEnabled', defaultValue: true);
+  }
+
+  /// Saves spin haptic feedback enabled state
+  static Future<void> setSpinHapticEnabled(bool enabled) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('spinHapticEnabled', enabled);
+  }
+
+  /// Retrieves spin haptic feedback enabled state
+  static Future<bool> getSpinHapticEnabled() async {
+    final box = await Hive.openBox(_boxName);
+    return box.get('spinHapticEnabled', defaultValue: true);
+  }
+
+  /// Saves last spin reward type
+  static Future<void> setLastSpinRewardType(String rewardType) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('lastSpinRewardType', rewardType);
+  }
+
+  /// Retrieves last spin reward type
+  static Future<String?> getLastSpinRewardType() async {
+    final box = await Hive.openBox(_boxName);
+    return box.get('lastSpinRewardType');
+  }
+
+  /// Saves last spin reward value
+  static Future<void> setLastSpinRewardValue(int value) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('lastSpinRewardValue', value);
+  }
+
+  /// Retrieves last spin reward value
+  static Future<int> getLastSpinRewardValue() async {
+    final box = await Hive.openBox(_boxName);
+    return box.get('lastSpinRewardValue', defaultValue: 0);
+  }
+
+  /// Saves spin history (last 10 spins)
+  static Future<void> addSpinToHistory(Map<String, dynamic> spinData) async {
+    final box = await Hive.openBox(_boxName);
+    List<dynamic> history = box.get('spinHistory', defaultValue: []);
+
+    history.insert(0, spinData); // Add to beginning
+
+    // Keep only last 50 spins
+    if (history.length > 50) {
+      history = history.sublist(0, 50);
+    }
+
+    await box.put('spinHistory', history);
+  }
+
+  /// Retrieves spin history
+  static Future<List<Map<String, dynamic>>> getSpinHistory() async {
+    final box = await Hive.openBox(_boxName);
+    final history = box.get('spinHistory', defaultValue: []);
+    return List<Map<String, dynamic>>.from(
+        history.map((e) => Map<String, dynamic>.from(e))
+    );
+  }
+
+  /// Clears spin history
+  static Future<void> clearSpinHistory() async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('spinHistory', []);
+  }
+
+  /// Saves bonus spin multiplier
+  static Future<void> setBonusSpinMultiplier(double multiplier) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('bonusSpinMultiplier', multiplier);
+  }
+
+  /// Retrieves bonus spin multiplier
+  static Future<double> getBonusSpinMultiplier() async {
+    final box = await Hive.openBox(_boxName);
+    return box.get('bonusSpinMultiplier', defaultValue: 1.0);
+  }
+
+  /// Saves bonus spin expiry time
+  static Future<void> setBonusSpinExpiry(DateTime expiry) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('bonusSpinExpiry', expiry.toIso8601String());
+  }
+
+  /// Retrieves bonus spin expiry time
+  static Future<DateTime?> getBonusSpinExpiry() async {
+    final box = await Hive.openBox(_boxName);
+    final dateStr = box.get('bonusSpinExpiry');
+    return dateStr != null ? DateTime.tryParse(dateStr) : null;
+  }
+
+  /// Checks if bonus spin is active
+  static Future<bool> isBonusSpinActive() async {
+    final expiry = await getBonusSpinExpiry();
+    if (expiry == null) return false;
+    return DateTime.now().isBefore(expiry);
+  }
+
+  /// Saves spin notification enabled state
+  static Future<void> setSpinNotificationEnabled(bool enabled) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('spinNotificationEnabled', enabled);
+  }
+
+  /// Retrieves spin notification enabled state
+  static Future<bool> getSpinNotificationEnabled() async {
+    final box = await Hive.openBox(_boxName);
+    return box.get('spinNotificationEnabled', defaultValue: true);
+  }
+
+  /// Saves last notification sent time
+  static Future<void> setLastSpinNotificationTime(DateTime time) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('lastSpinNotificationTime', time.toIso8601String());
+  }
+
+  /// Retrieves last notification sent time
+  static Future<DateTime?> getLastSpinNotificationTime() async {
+    final box = await Hive.openBox(_boxName);
+    final dateStr = box.get('lastSpinNotificationTime');
+    return dateStr != null ? DateTime.tryParse(dateStr) : null;
+  }
+
+  /// Saves auto-spin enabled state
+  static Future<void> setAutoSpinEnabled(bool enabled) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('autoSpinEnabled', enabled);
+  }
+
+  /// Retrieves auto-spin enabled state
+  static Future<bool> getAutoSpinEnabled() async {
+    final box = await Hive.openBox(_boxName);
+    return box.get('autoSpinEnabled', defaultValue: false);
+  }
+
+  /// Saves spin wheel theme/skin
+  static Future<void> setSpinWheelTheme(String theme) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('spinWheelTheme', theme);
+  }
+
+  /// Retrieves spin wheel theme/skin
+  static Future<String> getSpinWheelTheme() async {
+    final box = await Hive.openBox(_boxName);
+    return box.get('spinWheelTheme', defaultValue: 'default');
+  }
+
+  /// Saves unlocked spin wheel themes
+  static Future<void> addUnlockedSpinTheme(String theme) async {
+    final box = await Hive.openBox(_boxName);
+    List<String> themes = List<String>.from(
+        box.get('unlockedSpinThemes', defaultValue: ['default'])
+    );
+    if (!themes.contains(theme)) {
+      themes.add(theme);
+      await box.put('unlockedSpinThemes', themes);
+    }
+  }
+
+  /// Retrieves unlocked spin wheel themes
+  static Future<List<String>> getUnlockedSpinThemes() async {
+    final box = await Hive.openBox(_boxName);
+    return List<String>.from(
+        box.get('unlockedSpinThemes', defaultValue: ['default'])
+    );
+  }
+
+  /// Saves spin statistics summary
+  static Future<void> saveSpinStatistics(Map<String, dynamic> stats) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put('spinStatistics', stats);
+  }
+
+  /// Retrieves spin statistics summary
+  static Future<Map<String, dynamic>> getSpinStatistics() async {
+    final box = await Hive.openBox(_boxName);
+    return Map<String, dynamic>.from(
+        box.get('spinStatistics', defaultValue: {})
+    );
+  }
+
+  /// Updates spin statistics with new spin data
+  static Future<void> updateSpinStatistics({
+    required String rewardType,
+    required int rewardValue,
+  }) async {
+    final stats = await getSpinStatistics();
+
+    // Update total spins
+    stats['totalSpins'] = (stats['totalSpins'] ?? 0) + 1;
+
+    // Update reward type counts
+    final rewardCounts = Map<String, int>.from(stats['rewardCounts'] ?? {});
+    rewardCounts[rewardType] = (rewardCounts[rewardType] ?? 0) + 1;
+    stats['rewardCounts'] = rewardCounts;
+
+    // Update total rewards earned
+    stats['totalRewardsEarned'] = (stats['totalRewardsEarned'] ?? 0) + rewardValue;
+
+    // Update best reward
+    if (rewardValue > (stats['bestReward'] ?? 0)) {
+      stats['bestReward'] = rewardValue;
+      stats['bestRewardType'] = rewardType;
+    }
+
+    await saveSpinStatistics(stats);
+  }
+
   /// Sets the splash screen type based on the selected enum value.
   ///
   /// Example usage:

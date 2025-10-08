@@ -8,9 +8,9 @@ import 'package:trivia_tycoon/widgets/app_logo.dart';
 import 'core/env.dart';
 import 'core/manager/service_manager.dart';
 import 'core/services/theme/theme_notifier.dart';
-import 'game/providers/riverpod_providers.dart' hide themeNotifierProvider;
 import 'game/providers/auth_providers.dart';
 import 'game/providers/onboarding_providers.dart';
+import 'game/providers/riverpod_providers.dart' hide themeNotifierProvider;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
