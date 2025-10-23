@@ -13,12 +13,16 @@ import 'package:trivia_tycoon/screens/splash_variants/main_splash.dart';
 import 'package:trivia_tycoon/screens/store/store_screen.dart';
 import 'package:trivia_tycoon/screens/leaderboard/leaderboard_screen.dart';
 import 'package:trivia_tycoon/screens/settings/settings_screen.dart';
+import '../../admin/admin_dashboard_shell.dart';
+import '../../admin/analytics/analytics_screen.dart';
 import '../../admin/config/config_settings_screen.dart';
 import '../../admin/encryption/encryption_manager_screen.dart';
+import '../../admin/notifications/admin_notifications_screen.dart';
 import '../../admin/questions/file_import_export_screen.dart';
 import '../../admin/leaderboard/leaderboard_filter_screen.dart';
 import '../../admin/questions/question_editor_screen.dart';
 import '../../admin/questions/question_list_screen.dart';
+import '../../admin/user_management/admin_users_screen.dart';
 import '../../admin/widgets/encrypted_file_preview.dart';
 import '../../game/models/game_mode.dart';
 import '../../game/providers/onboarding_providers.dart';
@@ -164,7 +168,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
       /// 🛡️ Admin Routes (Protected & Conditional)
       // Main admin dashboard
-      GoRoute(
+      /*GoRoute(
         path: '/admin',
         builder: (context, state) {
           return const AdminRouteWrapper(
@@ -214,6 +218,87 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/admin/encryption-preview',
         name: 'Encryption Preview',
         builder: (context, state) => const EncryptedFilePreview(),
+      ),*/
+
+      // --- NEW ADMIN SHELL ROUTE ---
+      // This single ShellRoute handles all '/admin/*' paths.
+      // The guard is applied once to the shell, protecting all child routes.
+      ShellRoute(
+        builder: (context, state, child) => AdminDashboardShell(child: child),
+        // Add your admin guard here to protect the entire section
+        redirect: enhancedAdminGuard,
+        routes: [
+          GoRoute(
+            path: '/admin',
+            name: 'admin-dashboard',
+            builder: (context, state) => const AdminDashboardScreen(),
+          ),
+          GoRoute(
+            path: '/admin/analytics',
+            name: 'admin-analytics',
+            builder: (context, state) => const AnalyticsScreen(), // Your real Analytics screen
+          ),
+          GoRoute(
+            path: '/admin/settings',
+            name: 'admin-settings',
+            builder: (context, state) => const ConfigSettingsScreen(),
+          ),
+          GoRoute(
+            path: '/admin/notifications',
+            name: 'admin-notifications',
+            builder: (context, state) => const AdminNotificationsScreen(),
+          ),
+          GoRoute(
+            path: '/admin/events',
+            name: 'admin-events',
+            builder: (context, state) => const AdminEventQueueScreen(),
+          ),
+          GoRoute(
+            path: '/admin/leaderboard-filters',
+            name: 'leaderboard-filters',
+            builder: (context, state) => const AdminLeaderboardFilterScreen(),
+          ),
+          GoRoute(
+            path: '/admin/encryption',
+            name: 'admin-encryption',
+            builder: (context, state) => const EncryptionManagerScreen(),
+          ),
+          GoRoute(
+            path: '/admin/config-settings',
+            name: 'config-settings',
+            builder: (context, state) => const ConfigSettingsScreen(),
+          ),
+          GoRoute(
+            path: '/admin/events-queue',
+            name: 'events-queue',
+            builder: (context, state) => const AdminEventQueueScreen(),
+          ),
+          GoRoute(
+            path: '/admin/file-import-export',
+            name: 'file-import-export',
+            builder: (context, state) => const FileImportExportScreen(),
+          ),
+          GoRoute(
+            path: '/admin/question-list',
+            name: 'question-list',
+            builder: (context, state) => const QuestionListScreen(),
+          ),
+          GoRoute(
+            path: '/admin/question-editor',
+            name: 'question-editor',
+            builder: (context, state) => const QuestionEditorScreen(),
+          ),
+          GoRoute(
+            path: '/admin/encryption-preview',
+            name: 'encryption-preview',
+            builder: (context, state) => const EncryptedFilePreview(),
+          ),
+          GoRoute(
+            path: '/admin/users',
+            name: 'admin-users',
+            builder: (context, state) => const AdminUsersScreen(),
+          ),
+        ],
       ),
 
       /// 🧭 Shell Route with MainNavBar (applies only to these screens)
