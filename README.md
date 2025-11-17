@@ -1,87 +1,110 @@
 # Trivia Tycoon
 
-Trivia Tycoon is a cross-platform trivia game built with Flutter, designed around **long-term progression**, **Theory-of-Mind (ToM)-inspired targeting**, and **admin-grade controls**.  
+[![Flutter](https://img.shields.io/badge/Flutter-3.x-blue)]()
+[![Dart](https://img.shields.io/badge/Dart-Stable-blue.svg)]()
+[![Platforms](https://img.shields.io/badge/Platforms-iOS%20%7C%20Android%20%7C%20Web%20%7C%20Desktop-success)]()
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)]()
+[![State Management: Riverpod](https://img.shields.io/badge/State%20Management-Riverpod-purple.svg)]()
+[![Status](https://img.shields.io/badge/Status-Active_Development-orange.svg)]()
 
-Players climb through ranks and tiers, complete missions, unlock a honeycomb-style skill tree, and compete on a rich, analytics-driven leaderboard. Admins get tools for managing questions, scan history, encryption, analytics, and more.
+Trivia Tycoon is a cross-platform trivia ecosystem built with Flutter. The app features a **tier-based ranking system**, **dynamic XP missions**, **a honeycomb skill tree**, **an offline-first architecture**, **QR code systems**, and **full administrative tools** for managing questions, analytics, encryption, and user behaviors.
+
+This repository includes the entire player-facing and admin-facing Flutter application.
 
 ---
 
-## ✨ Key Features
+## 🖼️ Screenshots & Demo
 
-### 🧠 Gameplay & Progression
+> Add your real screenshots to `assets/screenshots/` and update paths below.
 
-- **Multi-category trivia**: Questions across categories (e.g., general knowledge, school-aligned content, themed packs).
-- **Skill Trees & Honeycomb Layout**  
-  - Knowledge, Strategy, and Power-up branches.  
-  - Unlocks that meaningfully affect gameplay (time boosts, hint behavior, lifelines, category bonuses).
-- **Tier-based Rank System**
-  - Global tiers with ~100 players per tier.  
-  - Tier rank vs global rank, with promotion/reward thresholds.
-- **Missions & XP**
-  - Daily / weekly missions (streaks, category goals, difficulty challenges).  
-  - XP and rewards that tie into rank, unlocks, and cosmetics.
+### 📱 Gameplay
+<img src="assets/screenshots/gameplay.png" width="300">
 
-### 🏆 Leaderboard & Analytics
+### 🧠 Skill Tree (Honeycomb Layout)
+<img src="assets/screenshots/skill_tree.png" width="300">
 
-- **Tier-aware leaderboard** with auto-scroll to the current player.
-- **Enhanced player profiles** with:
-  - XP bar & level
-  - Rank & tier info
-  - Engagement score
-  - Subscription/account status
-- **Admin filters** for:
-  - Bots vs human players  
-  - Device type, notification preferences, premium users  
-  - Power-up holders and high-engagement players
+### 🏆 Leaderboard (Tier System)
+<img src="assets/screenshots/leaderboard.png" width="300">
 
-### 📱 QR & Sharing System
+### 🛠 Admin Dashboard
+<img src="assets/screenshots/admin_dashboard.png" width="300">
 
-- Built-in **QR generator** and **scanner**:
-  - Custom QR painter and scanner widgets.
-  - Scan history with timestamps and filtering by scan type.
-  - Optional deep behaviors (launch URL, copy ID, share profile, etc.).
+---
 
-### 🛠️ Admin & Tools
+## 🎞️ Demo GIFs
 
-- **Admin Dashboard** with:
-  - Question editor and question list (tags, bulk actions, filters).
-  - Encryption manager (Fernet/AES) for secure data.
-  - Mission analytics & scan analytics.
-  - Splash screen selector and animated splash previews.
-- **Config & Settings**
-  - Modular settings services (audio, theme, quiz, etc.).
-  - App-wide `ServiceManager` to centralize services like API, cache, encryption, analytics.
+> Add demo animations to `assets/demos/`.
+
+- **Skill Tree Animation**  
+  <img src="assets/demos/skill_tree.gif" width="350">
+
+- **QR Scanner**  
+  <img src="assets/demos/qr_scanner.gif" width="350">
+
+- **Mission Completion Animation**  
+  <img src="assets/demos/mission_xp.gif" width="350">
+
+---
+
+## ✨ Core Features
+
+### 🧠 Gameplay & Player Progression
+- Honeycomb-style skill tree (Knowledge, Power-ups, Strategy)
+- Daily/weekly missions with XP, streaks, and bonuses
+- Animated XP bar with glow and transitions
+- Question categories, difficulty scaling, and media support
+
+### 🏆 Ranking System
+- Global + Tier-based ranking structure  
+- 100 players per tier  
+- Top 25 = promotion eligibility  
+- Top 20 = daily rewards  
+- Auto-scroll to player within tier
+
+### 📊 Leaderboard & Player Profiles
+- Streaks, engagement scores, activity tracking
+- Country flag, rank badges, XP stats
+- Profile QR sharing
+
+### 📱 QR Ecosystem
+- Custom QR generator (no external packages)
+- Custom QR decoder engine
+- Scan preview modal and full scan history
+- Scan-type filters (profile, referral, mission, promo)
+
+### 🛠 Admin Tools
+- Question editor with tags, media, and encryption support  
+- Question list with bulk delete, search, filtering  
+- Encryption Manager (AES & Fernet)  
+- Mission analytics dashboard  
+- Scan analytics dashboard  
+- Splash screen selector + animated previews  
 
 ---
 
 ## 🧰 Tech Stack
 
-- **Frontend:** Flutter (Dart)
-- **State Management:** Riverpod
-- **Local Storage / Cache:** Hive (via `AppCacheService` / `SecureStorage` abstraction)
-- **Config & Settings:** Modular settings services (e.g., `AudioSettingsService`, `QuizProgressService`, etc.)
-- **Encryption:** AES + Fernet utilities and services
-- **Backend (planned / integrated):**
-  - FastAPI / .NET microservices for game data, analytics, and sync
-  - PostgreSQL & other data stores (depending on environment)
-
-> Note: This repository is focused on the Flutter client. Backend services live in separate repos.
+| Layer | Technology |
+|------|------------|
+| Framework | Flutter |
+| Language | Dart |
+| State Management | Riverpod |
+| Offline Storage | Hive |
+| Encryption | AES + Fernet |
+| Router | GoRouter |
+| Backend Integration | FastAPI or .NET microservices |
+| QR | Fully custom painter & decoder engine |
 
 ---
 
 ## 🚀 Getting Started
 
 ### 1. Prerequisites
+- Flutter SDK (matching version in `pubspec.yaml`)
+- Xcode (macOS), Android SDK (any platform)
+- Optional: API backend for online sync
 
-- [Flutter SDK](https://docs.flutter.dev/get-started/install) (matching the version used in this project)
-- Dart SDK (bundled with Flutter)
-- A recent version of:
-  - Android Studio, IntelliJ IDEA, or VS Code with Flutter extension
-- Optionally:
-  - Running instance of the Trivia Tycoon backend (FastAPI / .NET) if you are testing online features.
-
-### 2. Clone the Repository
-
+### 2. Clone Project
 ```bash
 git clone https://github.com/devartblake/trivia_tycoon.git
 cd trivia_tycoon
