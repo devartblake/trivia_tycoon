@@ -109,6 +109,8 @@ This repository includes the entire player-facing and admin-facing Flutter appli
 git clone https://github.com/devartblake/trivia_tycoon.git
 cd trivia_tycoon
 
+---
+
 ### 3. Install Dependencies
 ```bash
 flutter pub get
