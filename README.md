@@ -108,3 +108,24 @@ This repository includes the entire player-facing and admin-facing Flutter appli
 ```bash
 git clone https://github.com/devartblake/trivia_tycoon.git
 cd trivia_tycoon
+
+### 3. Install Dependencies
+```bash
+flutter pub get
+
+### 4. Configure the App
+Depending on your setup, you may need to configure:
+	•	API endpoints (e.g., dev/stage/prod).
+	•	Encryption keys or secure tokens (stored via SecureStorage and not committed).
+	•	Feature flags (e.g., enable/disable QR scanner, missions, admin tools).
+
+Typical patterns:
+	•	lib/config/ for environment constants.
+	•	.env / --dart-define values (if used in this repo).
+
+Update this section to match your actual configuration files and environment flow.
+
+### 5. Run the App
+Run on a connected device or emulator:
+```bash
+flutter run
