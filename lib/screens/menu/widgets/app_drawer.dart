@@ -77,12 +77,12 @@ class _AppDrawerState extends ConsumerState<AppDrawer>
       'route': '/missions',
       'color': const Color(0x9670FF1B),
     },
-    {
-      'icon': Icons.settings_suggest_rounded,
-      'title': 'Preferences',
-      'route': '/preferences',
-      'color': const Color(0xFF10B981),
-    },
+    // {
+    //   'icon': Icons.settings_suggest_rounded,
+    //   'title': 'Preferences',
+    //   'route': '/preferences',
+    //   'color': const Color(0xFF10B981),
+    // },
   ];
 
   final List<Map<String, dynamic>> _bottomItems = [

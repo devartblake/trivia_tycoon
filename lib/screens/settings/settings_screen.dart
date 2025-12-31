@@ -146,6 +146,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
 
     _preferences.addAll([
       {
+        'title': 'App Preferences',  // NEW - Link to PreferencesScreen
+        'subtitle': 'Game and accessibility settings',
+        'icon': Icons.tune_rounded,
+        'route': '/preferences',
+        'color': const Color(0xFF8B5CF6),
+      },
+      {
         'title': 'Notifications',
         'subtitle': _isCheckingNotifications
             ? 'Checking status...'
@@ -159,13 +166,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
         'subtitle': 'Stay updated with news',
         'icon': Icons.newspaper_rounded,
         'color': const Color(0xFF06B6D4),
-      },
-      {
-        'title': 'Questions with Images',
-        'subtitle': 'Visual question format',
-        'icon': Icons.image_rounded,
-        'color': const Color(0xFFF59E0B),
-      },
+      }
     ]);
 
     _privacy.addAll([
