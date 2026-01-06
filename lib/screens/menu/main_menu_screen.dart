@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/screens/menu/widgets/app_drawer.dart';
 import 'package:trivia_tycoon/screens/menu/widgets/standard_appbar.dart';
+import '../../core/helpers/responsive_layout.dart';
 import '../../screens/menu/widgets/rank_level_card.dart';
 import '../../screens/menu/widgets/recently_played_section.dart';
 import '../../ui_components/tycoon_toast/tycoon_toast.dart';
@@ -136,19 +137,6 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     return Icons.nightlight_round;
   }
 
-  String _getThemeEventForAgeGroup(String ageGroup) {
-    switch (ageGroup) {
-      case 'kids':
-        return 'reward';
-      case 'teens':
-        return 'success';
-      case 'adults':
-        return 'info';
-      default:
-        return 'general';
-    }
-  }
-
   @override
   void dispose() {
     _animationController?.dispose();
@@ -167,9 +155,140 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
       body: _fadeAnimation != null
           ? FadeTransition(
         opacity: _fadeAnimation!,
-        child: _buildBody(),
+        child: _buildResponsiveBody(),
       )
-          : _buildBody(),
+          : _buildResponsiveBody(),
+    );
+  }
+
+  Widget _buildResponsiveBody() {
+    return ResponsiveLayout(
+      mobile: _buildMobileLayout(),
+      desktop: _buildDesktopLayout(),
+    );
+  }
+
+  // --- MOBILE LAYOUT ---
+  Widget _buildMobileLayout() {
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: _buildAllComponents(),
+      ),
+    );
+  }
+
+  // --- DESKTOP/WEB LAYOUT ---
+  Widget _buildDesktopLayout() {
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 1400),
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.all(32),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final isExtraWide = constraints.maxWidth > 1200;
+
+              if (isExtraWide) {
+                // Three column layout for very wide screens
+                return _buildThreeColumnLayout();
+              } else {
+                // Two column layout for desktop/tablet
+                return _buildTwoColumnLayout();
+              }
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Two column layout
+  Widget _buildTwoColumnLayout() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Left Column
+        Expanded(
+          flex: 5,
+          child: Column(
+            children: [
+              _animatedComponent(0, _buildRewardsWidget()),
+              const SizedBox(height: 20),
+              _animatedComponent(1, _buildCurrencyWidget()),
+              const SizedBox(height: 24),
+              _animatedComponent(3, _buildActionButtons()),
+            ],
+          ),
+        ),
+        const SizedBox(width: 32),
+        // Right Column
+        Expanded(
+          flex: 7,
+          child: Column(
+            children: [
+              _animatedComponent(2, _buildRankCard()),
+              const SizedBox(height: 24),
+              _animatedComponent(4, _buildJourneyProgress()),
+              const SizedBox(height: 24),
+              _animatedComponent(5, _buildRecentlyPlayed()),
+              const SizedBox(height: 24),
+              _buildMatchesSection(),
+              const SizedBox(height: 100),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Three column layout for extra wide screens
+  Widget _buildThreeColumnLayout() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Left Column - Actions & Currency
+        Expanded(
+          flex: 3,
+          child: Column(
+            children: [
+              _animatedComponent(1, _buildCurrencyWidget()),
+              const SizedBox(height: 24),
+              _animatedComponent(3, _buildActionButtons()),
+            ],
+          ),
+        ),
+        const SizedBox(width: 24),
+        // Middle Column - Main Content
+        Expanded(
+          flex: 5,
+          child: Column(
+            children: [
+              _animatedComponent(0, _buildRewardsWidget()),
+              const SizedBox(height: 20),
+              _animatedComponent(2, _buildRankCard()),
+              const SizedBox(height: 24),
+              _animatedComponent(4, _buildJourneyProgress()),
+              const SizedBox(height: 24),
+              _animatedComponent(5, _buildRecentlyPlayed()),
+            ],
+          ),
+        ),
+        const SizedBox(width: 24),
+        // Right Column - Matches
+        Expanded(
+          flex: 4,
+          child: Column(
+            children: [
+              _buildMatchesSection(),
+              const SizedBox(height: 100),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -185,185 +304,151 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     );
   }
 
-  Widget _buildBody() {
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Rewards Available Widget
-          SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0, 0.5),
-              end: Offset.zero,
-            ).animate(CurvedAnimation(
-              parent: _cardAnimationControllers[0],
-              curve: Curves.easeOutBack,
-            )),
-            child: Consumer(
-              builder: (context, ref, child) {
-                final dailyRewardsAvailable = ref.watch(dailyRewardsAvailableProvider);
-                final ageGroup = ref.watch(userAgeGroupProvider);
-
-                return _RewardsAvailableWidget(
-                  dailyRewardsAvailable: dailyRewardsAvailable,
-                  ageGroup: ageGroup,
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 20),
-
-          // Currency Display
-          SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0, 0.5),
-              end: Offset.zero,
-            ).animate(CurvedAnimation(
-              parent: _cardAnimationControllers[1],
-              curve: Curves.easeOutBack,
-            )),
-            child: Consumer(
-              builder: (context, ref, child) {
-                final coins = ref.watch(coinBalanceProvider);
-                final diamonds = ref.watch(diamondBalanceProvider);
-                final energyState = ref.watch(energyProvider);
-                final livesState = ref.watch(livesProvider);
-                final ageGroup = ref.watch(userAgeGroupProvider);
-
-                return _CurrencyDisplay(
-                  ageGroup: ageGroup,
-                  coins: coins,
-                  gems: diamonds,
-                  currentEnergy: energyState.current,
-                  maxEnergy: energyState.max,
-                  currentLives: livesState.current,
-                  maxLives: livesState.max,
-                  ref: ref,
-                  showEnergyInfo: (cur, max) => _showEnergyInfo(context, cur, max),
-                  showLivesInfo: (cur, max) => _showLivesInfo(context, cur, max),
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 24),
-
-          // Rank & Level
-          SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0, 0.5),
-              end: Offset.zero,
-            ).animate(CurvedAnimation(
-              parent: _cardAnimationControllers[2],
-              curve: Curves.easeOutBack,
-            )),
-            child: Consumer(
-              builder: (context, ref, child) {
-                final profileService = ref.watch(playerProfileServiceProvider);
-                final ageGroup = ref.watch(userAgeGroupProvider);
-                final userProfile = profileService.getProfile();
-
-                return RankLevelCard(
-                  rank: userProfile['rank'] ?? 'Apprentice 1',
-                  level: userProfile['level'] ?? 0,
-                  currentXP: userProfile['currentXP'] ?? 340,
-                  maxXP: userProfile['maxXP'] ?? 1000,
-                  ageGroup: ageGroup,
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 24),
-
-          // Action Buttons
-          SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0, 0.5),
-              end: Offset.zero,
-            ).animate(CurvedAnimation(
-              parent: _cardAnimationControllers[3],
-              curve: Curves.easeOutBack,
-            )),
-            child: Consumer(
-              builder: (context, ref, child) {
-                final ageGroup = ref.watch(userAgeGroupProvider);
-                final unreadNotifications = ref.watch(unreadNotificationsProvider);
-                final pendingInvites = ref.watch(pendingInvitesProvider);
-                final dailyRewardsAvailable = ref.watch(dailyRewardsAvailableProvider);
-
-                return _ActionButtonsRow(
-                  ageGroup: ageGroup,
-                  unreadNotifications: unreadNotifications,
-                  pendingInvites: pendingInvites,
-                  dailyRewardsAvailable: dailyRewardsAvailable,
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 24),
-
-          // Trivia Progress
-          SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0, 0.5),
-              end: Offset.zero,
-            ).animate(CurvedAnimation(
-              parent: _cardAnimationControllers[4],
-              curve: Curves.easeOutBack,
-            )),
-            child: Consumer(
-              builder: (context, ref, child) {
-                final profileService = ref.watch(playerProfileServiceProvider);
-                final premiumStatus = ref.watch(premiumStatusProvider);
-                final userProfile = profileService.getProfile();
-
-                return _TriviaJourneyProgress(
-                  currentXP: userProfile['currentXP'] ?? 340,
-                  maxXP: userProfile['maxXP'] ?? 1000,
-                  isPremium: premiumStatus.isPremium,
-                  premiumDiscountPercent: premiumStatus.discountPercent,
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 24),
-
-          // Recently Played
-          SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0, 0.5),
-              end: Offset.zero,
-            ).animate(CurvedAnimation(
-              parent: _cardAnimationControllers[5],
-              curve: Curves.easeOutBack,
-            )),
-            child: Consumer(
-              builder: (context, ref, child) {
-                final quizService = ref.watch(quizProgressServiceProvider);
-                final ageGroup = ref.watch(userAgeGroupProvider);
-                final recentQuizzes = quizService.getRecentQuizzes();
-
-                return RecentlyPlayedSection(
-                  quizzes: recentQuizzes,
-                  ageGroup: ageGroup,
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 24),
-
-          // User Matches
-          Consumer(
-            builder: (context, ref, child) {
-              final matches = ref.watch(activeMatchesProvider);
-              return _MatchesSection(matches: matches);
-            },
-          ),
-          const SizedBox(height: 100),
-        ],
-      ),
+  // --- HELPER TO MAINTAIN ANIMATIONS ---
+  Widget _animatedComponent(int index, Widget child) {
+    return SlideTransition(
+      position: Tween<Offset>(
+        begin: const Offset(0, 0.5),
+        end: Offset.zero,
+      ).animate(CurvedAnimation(
+        parent: _cardAnimationControllers[index],
+        curve: Curves.easeOutBack,
+      )),
+      child: child,
     );
+  }
+
+  // --- COMPONENT BUILDERS (Avoid Code Duplication) ---
+
+  Widget _buildRewardsWidget() {
+    return Consumer(
+      builder: (context, ref, _) {
+        final dailyRewardsAvailable = ref.watch(dailyRewardsAvailableProvider);
+        final ageGroup = ref.watch(userAgeGroupProvider);
+        return _RewardsAvailableWidget(
+          dailyRewardsAvailable: dailyRewardsAvailable,
+          ageGroup: ageGroup,
+        );
+      },
+    );
+  }
+
+  Widget _buildCurrencyWidget() {
+    return Consumer(
+      builder: (context, ref, _) {
+        final coins = ref.watch(coinBalanceProvider);
+        final diamonds = ref.watch(diamondBalanceProvider);
+        final energyState = ref.watch(energyProvider);
+        final livesState = ref.watch(livesProvider);
+        final ageGroup = ref.watch(userAgeGroupProvider);
+        return _CurrencyDisplay(
+          ageGroup: ageGroup,
+          coins: coins,
+          gems: diamonds,
+          currentEnergy: energyState.current,
+          maxEnergy: energyState.max,
+          currentLives: livesState.current,
+          maxLives: livesState.max,
+          ref: ref,
+          showEnergyInfo: (cur, max) => _showEnergyInfo(context, cur, max),
+          showLivesInfo: (cur, max) => _showLivesInfo(context, cur, max),
+        );
+      },
+    );
+  }
+
+  Widget _buildRankCard() {
+    return Consumer(
+      builder: (context, ref, _) {
+        final profileService = ref.watch(playerProfileServiceProvider);
+        final ageGroup = ref.watch(userAgeGroupProvider);
+        final userProfile = profileService.getProfile();
+        return RankLevelCard(
+          rank: userProfile['rank'] ?? 'Apprentice 1',
+          level: userProfile['level'] ?? 0,
+          currentXP: userProfile['currentXP'] ?? 340,
+          maxXP: userProfile['maxXP'] ?? 1000,
+          ageGroup: ageGroup,
+        );
+      },
+    );
+  }
+
+  Widget _buildActionButtons() {
+    return Consumer(
+      builder: (context, ref, _) {
+        final ageGroup = ref.watch(userAgeGroupProvider);
+        final unreadNotifications = ref.watch(unreadNotificationsProvider);
+        final pendingInvites = ref.watch(pendingInvitesProvider);
+        final dailyRewardsAvailable = ref.watch(dailyRewardsAvailableProvider);
+        return _ActionButtonsRow(
+          ageGroup: ageGroup,
+          unreadNotifications: unreadNotifications,
+          pendingInvites: pendingInvites,
+          dailyRewardsAvailable: dailyRewardsAvailable,
+          isDesktop: ResponsiveLayout.isDesktop(context),
+        );
+      },
+    );
+  }
+
+  Widget _buildJourneyProgress() {
+    return Consumer(
+      builder: (context, ref, _) {
+        final profileService = ref.watch(playerProfileServiceProvider);
+        final premiumStatus = ref.watch(premiumStatusProvider);
+        final userProfile = profileService.getProfile();
+        return _TriviaJourneyProgress(
+          currentXP: userProfile['currentXP'] ?? 340,
+          maxXP: userProfile['maxXP'] ?? 1000,
+          isPremium: premiumStatus.isPremium,
+          premiumDiscountPercent: premiumStatus.discountPercent,
+        );
+      },
+    );
+  }
+
+  Widget _buildRecentlyPlayed() {
+    return Consumer(
+      builder: (context, ref, _) {
+        final quizService = ref.watch(quizProgressServiceProvider);
+        final ageGroup = ref.watch(userAgeGroupProvider);
+        final recentQuizzes = quizService.getRecentQuizzes();
+        return RecentlyPlayedSection(
+          quizzes: recentQuizzes,
+          ageGroup: ageGroup,
+        );
+      },
+    );
+  }
+
+  Widget _buildMatchesSection() {
+    return Consumer(
+      builder: (context, ref, _) {
+        final matches = ref.watch(activeMatchesProvider);
+        return _MatchesSection(matches: matches);
+      },
+    );
+  }
+
+  // Helper to build all components for mobile layout
+  List<Widget> _buildAllComponents() {
+    return [
+      _animatedComponent(0, _buildRewardsWidget()),
+      const SizedBox(height: 20),
+      _animatedComponent(1, _buildCurrencyWidget()),
+      const SizedBox(height: 24),
+      _animatedComponent(2, _buildRankCard()),
+      const SizedBox(height: 24),
+      _animatedComponent(3, _buildActionButtons()),
+      const SizedBox(height: 24),
+      _animatedComponent(4, _buildJourneyProgress()),
+      const SizedBox(height: 24),
+      _animatedComponent(5, _buildRecentlyPlayed()),
+      const SizedBox(height: 24),
+      _buildMatchesSection(),
+      const SizedBox(height: 100),
+    ];
   }
 
   void _showEnergyInfo(BuildContext context, int currentEnergy, int maxEnergy) {
@@ -372,6 +457,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text('Energy System'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -412,6 +498,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text('Lives System'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -454,7 +541,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
   }
 }
 
-// New Rewards Available Widget
+// Rewards Available Widget
 class _RewardsAvailableWidget extends StatelessWidget {
   final bool dailyRewardsAvailable;
   final String ageGroup;
@@ -554,37 +641,25 @@ class _RewardsAvailableWidget extends StatelessWidget {
     switch (ageGroup) {
       case 'kids':
         return const LinearGradient(
-          colors: [
-            Color(0xFFFF6B6B),
-            Color(0xFFFF8E53),
-          ],
+          colors: [Color(0xFFFF6B6B), Color(0xFFFF8E53)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         );
       case 'teens':
         return const LinearGradient(
-          colors: [
-            Color(0xFF4ECDC4),
-            Color(0xFF44A08D),
-          ],
+          colors: [Color(0xFF4ECDC4), Color(0xFF44A08D)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         );
       case 'adults':
         return const LinearGradient(
-          colors: [
-            Color(0xFFF59E0B),
-            Color(0xFFD97706),
-          ],
+          colors: [Color(0xFFF59E0B), Color(0xFFD97706)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         );
       default:
         return const LinearGradient(
-          colors: [
-            Color(0xFFF59E0B),
-            Color(0xFFD97706),
-          ],
+          colors: [Color(0xFFF59E0B), Color(0xFFD97706)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         );
@@ -592,7 +667,7 @@ class _RewardsAvailableWidget extends StatelessWidget {
   }
 }
 
-// Rest of the helper widgets remain the same...
+// Currency Display Widget
 class _CurrencyDisplay extends StatelessWidget {
   final String ageGroup;
   final int coins;
@@ -683,46 +758,48 @@ class _CurrencyDisplay extends StatelessWidget {
           final isLast = index == currencies.length - 1;
 
           return Expanded(
-            child: TweenAnimationBuilder<double>(
-              duration: Duration(milliseconds: 600 + (index * 100)),
-              tween: Tween(begin: 0.0, end: 1.0),
-              builder: (context, value, child) {
-                return Transform.scale(
-                  scale: 0.8 + (0.2 * value),
-                  child: Opacity(
-                    opacity: value,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: _CurrencyItem(
-                            name: currency['name'] as String,
-                            value: currency['value'] as String,
-                            icon: currency['icon'] as IconData,
-                            color: currency['color'] as Color,
-                            bgColor: currency['bgColor'] as Color,
-                            onTap: currency['onTap'] as VoidCallback,
-                            isLow: currency['isLow'] as bool,
-                          ),
-                        ),
-                        if (!isLast)
-                          Container(
-                            width: 1,
-                            height: 40,
-                            margin: const EdgeInsets.symmetric(horizontal: 8),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF64748B).withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(0.5),
-                            ),
-                          ),
-                      ],
+            child: Row(
+              children: [
+                Expanded(child: _buildCurrencyItem(index, currency)),
+                if (!isLast)
+                  Container(
+                    width: 1,
+                    height: 40,
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF64748B).withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(0.5),
                     ),
                   ),
-                );
-              },
+              ],
             ),
           );
         }).toList(),
       ),
+    );
+  }
+
+  Widget _buildCurrencyItem(int index, Map<String, dynamic> currency) {
+    return TweenAnimationBuilder<double>(
+      duration: Duration(milliseconds: 600 + (index * 100)),
+      tween: Tween(begin: 0.0, end: 1.0),
+      builder: (context, value, child) {
+        return Transform.scale(
+          scale: 0.8 + (0.2 * value),
+          child: Opacity(
+            opacity: value,
+            child: _CurrencyItem(
+              name: currency['name'] as String,
+              value: currency['value'] as String,
+              icon: currency['icon'] as IconData,
+              color: currency['color'] as Color,
+              bgColor: currency['bgColor'] as Color,
+              onTap: currency['onTap'] as VoidCallback,
+              isLow: currency['isLow'] as bool,
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -737,11 +814,11 @@ class _CurrencyDisplay extends StatelessWidget {
   }
 
   void _showCoinStore(BuildContext context) {
-    // Implementation for showing coin store
+    // Implementation
   }
 
   void _showGemStore(BuildContext context) {
-    // Implementation for showing gem store
+    // Implementation
   }
 }
 
@@ -788,11 +865,7 @@ class _CurrencyItem extends StatelessWidget {
                     width: 1,
                   ),
                 ),
-                child: Icon(
-                  icon,
-                  color: color,
-                  size: 20,
-                ),
+                child: Icon(icon, color: color, size: 20),
               ),
               if (isLow)
                 Positioned(
@@ -839,17 +912,20 @@ class _CurrencyItem extends StatelessWidget {
   }
 }
 
+// Action Buttons Widget
 class _ActionButtonsRow extends StatelessWidget {
   final String ageGroup;
   final int unreadNotifications;
   final int pendingInvites;
   final bool dailyRewardsAvailable;
+  final bool isDesktop;
 
   const _ActionButtonsRow({
     required this.ageGroup,
     required this.unreadNotifications,
     required this.pendingInvites,
     required this.dailyRewardsAvailable,
+    this.isDesktop = false,
   });
 
   @override
@@ -936,27 +1012,39 @@ class _ActionButtonsRow extends StatelessWidget {
                     color: Color(0xFF1E293B),
                   ),
                 ),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.swipe_left,
-                      size: 16,
-                      color: Colors.grey.shade400,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      'Scroll',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey.shade500,
-                      ),
-                    ),
-                  ],
-                ),
+                if (!isDesktop)
+                  Row(
+                    children: [
+                      Icon(Icons.swipe_left, size: 16, color: Colors.grey.shade400),
+                      const SizedBox(width: 4),
+                      Text('Scroll', style: TextStyle(fontSize: 12, color: Colors.grey.shade500)),
+                    ],
+                  ),
               ],
             ),
           ),
-          SizedBox(
+
+          // Desktop: Grid layout, Mobile: Horizontal scroll
+          isDesktop
+              ? Padding(
+            padding: const EdgeInsets.all(16),
+            child: GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 1.2,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+              ),
+              itemCount: actions.length,
+              itemBuilder: (context, index) {
+                final action = actions[index];
+                return _buildActionCard(action, index);
+              },
+            ),
+          )
+              : SizedBox(
             height: 100,
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -997,6 +1085,30 @@ class _ActionButtonsRow extends StatelessWidget {
     );
   }
 
+  Widget _buildActionCard(Map<String, dynamic> action, int index) {
+    return TweenAnimationBuilder<double>(
+      duration: Duration(milliseconds: 600 + (index * 80)),
+      tween: Tween(begin: 0.0, end: 1.0),
+      builder: (context, value, child) {
+        return Transform.scale(
+          scale: 0.8 + (0.2 * value),
+          child: Opacity(
+            opacity: value,
+            child: _ActionButton(
+              label: action['label'] as String,
+              icon: action['icon'] as IconData,
+              gradient: action['gradient'] as LinearGradient,
+              route: action['route'] as String,
+              description: action['description'] as String,
+              badge: action['badge'] as int?,
+              isCard: true,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   LinearGradient _getGradient(int index) {
     final gradients = [
       const LinearGradient(colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)]),
@@ -1019,6 +1131,7 @@ class _ActionButton extends StatelessWidget {
   final String route;
   final String description;
   final int? badge;
+  final bool isCard;
 
   const _ActionButton({
     required this.label,
@@ -1027,10 +1140,79 @@ class _ActionButton extends StatelessWidget {
     required this.route,
     required this.description,
     this.badge,
+    this.isCard = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (isCard) {
+      return GestureDetector(
+        onTap: () {
+          HapticFeedback.lightImpact();
+          context.push(route);
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: gradient,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: gradient.colors.first.withOpacity(0.3),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              )
+            ],
+          ),
+          child: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(icon, color: Colors.white, size: 32),
+                    const SizedBox(height: 8),
+                    Text(
+                      label,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+              if (badge != null && badge! > 0)
+                Positioned(
+                  right: 8,
+                  top: 8,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFEF4444),
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 1.5),
+                    ),
+                    child: Text(
+                      badge.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return GestureDetector(
       onTap: () {
         HapticFeedback.lightImpact();
@@ -1072,9 +1254,10 @@ class _ActionButton extends StatelessWidget {
                     child: Text(
                       badge.toString(),
                       style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold),
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -1085,9 +1268,10 @@ class _ActionButton extends StatelessWidget {
             label,
             textAlign: TextAlign.center,
             style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: Color(0xFF475569)),
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: Color(0xFF475569),
+            ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -1134,11 +1318,14 @@ class _TriviaJourneyProgress extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Trivia Journey',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF1E293B))),
+          const Text(
+            'Trivia Journey',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF1E293B),
+            ),
+          ),
           const SizedBox(height: 12),
           Row(
             children: [
@@ -1149,8 +1336,7 @@ class _TriviaJourneyProgress extends StatelessWidget {
                     value: progress,
                     minHeight: 12,
                     backgroundColor: const Color(0xFFF1F5F9),
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                        Color(0xFF6366F1)),
+                    valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF6366F1)),
                   ),
                 ),
               ),
@@ -1158,9 +1344,10 @@ class _TriviaJourneyProgress extends StatelessWidget {
               Text(
                 '${(progress * 100).toInt()}%',
                 style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                    color: Color(0xFF6366F1)),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  color: Color(0xFF6366F1),
+                ),
               ),
             ],
           ),
@@ -1182,12 +1369,12 @@ class _TriviaJourneyProgress extends StatelessWidget {
                       child: Text(
                         'Unlock Premium for $premiumDiscountPercent% OFF!',
                         style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFFB45309)),
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFFB45309),
+                        ),
                       ),
                     ),
-                    const Icon(Icons.arrow_forward_ios,
-                        size: 14, color: Color(0xFFB45309)),
+                    const Icon(Icons.arrow_forward_ios, size: 14, color: Color(0xFFB45309)),
                   ],
                 ),
               ),
@@ -1225,18 +1412,23 @@ class _MatchesSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Your Matches',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF1E293B))),
+          const Text(
+            'Your Matches',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF1E293B),
+            ),
+          ),
           const SizedBox(height: 16),
           if (matches.isEmpty)
             const Center(
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 24.0),
-                child: Text('No active matches. Start a new game!',
-                    style: TextStyle(color: Colors.grey)),
+                child: Text(
+                  'No active matches. Start a new game!',
+                  style: TextStyle(color: Colors.grey),
+                ),
               ),
             )
           else
@@ -1317,25 +1509,23 @@ class _MatchesSection extends StatelessWidget {
                     Text(
                       match['name'] as String,
                       style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          color: Color(0xFF1E293B)),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        color: Color(0xFF1E293B),
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        Icon(
-                          statusIcon,
-                          size: 16,
-                          color: statusColor,
-                        ),
+                        Icon(statusIcon, size: 16, color: statusColor),
                         const SizedBox(width: 4),
                         Text(
                           match['score'] as String,
                           style: TextStyle(
-                              color: statusColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500),
+                            color: statusColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ],
                     ),
@@ -1354,17 +1544,14 @@ class _MatchesSection extends StatelessWidget {
                     child: Text(
                       match['time'] as String,
                       style: TextStyle(
-                          color: statusColor,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500),
+                        color: statusColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    size: 16,
-                    color: Colors.grey.shade400,
-                  ),
+                  Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey.shade400),
                 ],
               ),
             ],
