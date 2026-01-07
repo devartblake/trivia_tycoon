@@ -443,6 +443,47 @@ final currentUserIdProvider = FutureProvider<String>((ref) async {
 
 // --- 🎁 Referral Invite System Providers ---
 
+/// Provides the ReferralService (synchronous with default userId)
+/// Use asyncReferralServiceProvider for async operations
+final referralServiceProvider = Provider<ReferralService>((ref) {
+  final storage = ref.watch(referralStorageServiceProvider);
+  final api = ref.watch(referralApiServiceProvider);
+
+  // Use a default userId for now - will be replaced when async provider loads
+  return ReferralService(
+    storage: storage,
+    api: api,
+    userId: 'guest', // Temporary default
+    baseUrl: 'https://www.trivia.app',
+  );
+});
+
+/// Better approach: Async provider that waits for userId
+final asyncReferralServiceProvider = FutureProvider<ReferralService>((ref) async {
+  final storage = ref.watch(referralStorageServiceProvider);
+  final api = ref.watch(referralApiServiceProvider);
+  final userId = await ref.watch(currentUserIdProvider.future);
+
+  return ReferralService(
+    storage: storage,
+    api: api,
+    userId: userId,
+    baseUrl: 'https://www.trivia.app',
+  );
+});
+
+/// Provides the user's referral code
+final userReferralCodeProvider = FutureProvider<ReferralCode>((ref) async {
+  final referralService = await ref.watch(asyncReferralServiceProvider.future);
+  return await referralService.getOrCreateReferralCode();
+});
+
+/// Provides referral statistics
+final referralStatsProvider = FutureProvider<Map<String, dynamic>>((ref) async {
+  final referralService = await ref.watch(asyncReferralServiceProvider.future);
+  return await referralService.getStats();
+});
+
 /// Provides the ReferralInviteStorageService
 final referralInviteStorageServiceProvider = Provider<ReferralInviteStorageService>((ref) {
   final storage = ReferralInviteStorageService();

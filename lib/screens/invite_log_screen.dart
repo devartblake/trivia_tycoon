@@ -225,10 +225,10 @@ class _InviteLogScreenState extends ConsumerState<InviteLogScreen>
   }
 
   Widget _buildInviteCard(ReferralInvite invite, ReferralInviteService service) {
-    final status = invite.statusEnum;
-    Color statusColor;
-    IconData statusIcon;
-    String statusText;
+    final status = invite.status;
+    final Color statusColor;
+    final IconData statusIcon;
+    final String statusText;
 
     switch (status) {
       case InviteStatus.redeemed:
