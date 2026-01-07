@@ -25,6 +25,7 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
 
   bool _hasClaimedToday = false;
   bool _isLoading = true;
+  bool _claimedDuringThisSession = false;
   SpinStatistics? _spinStats;
 
   @override
@@ -124,6 +125,7 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
     if (mounted) {
       setState(() {
         _hasClaimedToday = true;
+        _claimedDuringThisSession = true;
       });
 
       // Show success feedback
@@ -150,6 +152,11 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
     context.push('/spin-earn');
   }
 
+  // Helper method to handle all back navigation with claim status
+  void _handleBackNavigation() {
+    Navigator.of(context).pop(_claimedDuringThisSession);
+  }
+
   @override
   void dispose() {
     _headerController.dispose();
@@ -161,19 +168,27 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Scaffold(
-      backgroundColor: Colors.grey.shade50,
-      body: CustomScrollView(
-        slivers: [
-          _buildAppBar(theme),
-          SliverToBoxAdapter(
-            child: _isLoading
-                ? _buildLoadingState()
-                : _buildContent(theme),
-          ),
-        ],
+    return PopScope (
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (!didPop) {
+          _handleBackNavigation();
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Colors.grey.shade50,
+        body: CustomScrollView(
+          slivers: [
+            _buildAppBar(theme),
+            SliverToBoxAdapter(
+              child: _isLoading
+                  ? _buildLoadingState()
+                  : _buildContent(theme),
+            ),
+          ],
+        ),
+        bottomNavigationBar: _buildBottomNavigation(),
       ),
-      bottomNavigationBar: _buildBottomNavigation(),
     );
   }
 
@@ -192,7 +207,7 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
             borderRadius: BorderRadius.circular(12),
           ),
           child: IconButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: _handleBackNavigation,
             icon: const Icon(
               Icons.arrow_back,
               color: Colors.white,

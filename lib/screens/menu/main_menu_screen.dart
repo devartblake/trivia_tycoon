@@ -164,6 +164,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
   Widget _buildResponsiveBody() {
     return ResponsiveLayout(
       mobile: _buildMobileLayout(),
+      tablet: _buildMobileLayout(),
       desktop: _buildDesktopLayout(),
     );
   }
@@ -542,7 +543,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
 }
 
 // Rewards Available Widget
-class _RewardsAvailableWidget extends StatelessWidget {
+class _RewardsAvailableWidget extends ConsumerWidget {
   final bool dailyRewardsAvailable;
   final String ageGroup;
 
@@ -552,16 +553,13 @@ class _RewardsAvailableWidget extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     if (!dailyRewardsAvailable) {
       return const SizedBox.shrink();
     }
 
     return GestureDetector(
-      onTap: () {
-        HapticFeedback.mediumImpact();
-        context.push('/rewards');
-      },
+      onTap: () => _handleRewardTap(context, ref),
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
@@ -635,6 +633,28 @@ class _RewardsAvailableWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // Handle reward tap - navigation to rewards or claim directly
+  Future<void> _handleRewardTap(BuildContext context, WidgetRef ref) async {
+    HapticFeedback.mediumImpact();
+
+    // Navigate to rewards screen
+    final result = await context.push('/rewards');
+
+    // If rewards were claimed (returns true), update the provider
+    if (result == true) {
+      _claimRewards(ref);
+    }
+  }
+
+  // Claim the reward and update the provider state
+  void _claimRewards(WidgetRef ref) {
+    // Update the dailyRewardsAvailableProvider to false
+    // This will hide the widget on the next rebuild
+    ref.read(dailyRewardsAvailableProvider.notifier).state = false;
+
+    debugPrint('Daily rewards claimed - widget will be hidden');
   }
 
   LinearGradient _getRewardGradient(String ageGroup) {
@@ -1918,11 +1938,3 @@ class _MatchesSectionState extends State<_MatchesSection> {
     ];
   }
 }
-
-
-
-
-
-
-
-

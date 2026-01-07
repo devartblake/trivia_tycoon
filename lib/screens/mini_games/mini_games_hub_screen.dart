@@ -21,6 +21,7 @@ class MiniGamesHubScreen extends StatelessWidget {
         ),
         child: ResponsiveLayout(
           mobile: _buildMobileLayout(context),
+          tablet: _buildTabletLayout(context),
           desktop: _buildDesktopLayout(context),
         ),
       ),
@@ -43,6 +44,31 @@ class MiniGamesHubScreen extends StatelessWidget {
               const SizedBox(height: 32),
               ..._buildWordGamesSection(context),
               const SizedBox(height: 32),
+              ..._buildMemoryStrategySection(context),
+              const SizedBox(height: 100),
+            ]),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Tablet Layout
+  Widget _buildTabletLayout(BuildContext context) {
+    return CustomScrollView(
+      physics: const BouncingScrollPhysics(),
+      slivers: [
+        _buildAppBar(context),
+        SliverPadding(
+          padding: const EdgeInsets.all(20),
+          sliver: SliverList(
+            delegate: SliverChildListDelegate([
+              _buildFeaturedGameCard(context),
+              const SizedBox(height: 36),
+              ..._buildLogicPuzzlesSection(context),
+              const SizedBox(height: 36),
+              ..._buildWordGamesSection(context),
+              const SizedBox(height: 36),
               ..._buildMemoryStrategySection(context),
               const SizedBox(height: 100),
             ]),

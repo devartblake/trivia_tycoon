@@ -199,6 +199,55 @@ class ApiService {
     });
   }
 
+  /// **🔹 Generic DELETE Request**
+  Future<Map<String, dynamic>> delete(String path) async {
+    return _handleRequest(() async {
+      final response = await _dio.delete(
+        path,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+        }),
+      );
+      return response.data is Map<String, dynamic>
+          ? response.data as Map<String, dynamic>
+          : {};
+    });
+  }
+
+  /// **🔹 Generic PATCH Request**
+  Future<Map<String, dynamic>> patch(String path,
+      {required Map<String, dynamic> body}) async {
+    return _handleRequest(() async {
+      final response = await _dio.patch(
+        path,
+        data: body,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+        }),
+      );
+      return response.data is Map<String, dynamic>
+          ? response.data as Map<String, dynamic>
+          : {};
+    });
+  }
+
+  /// **🔹 Generic PUT Request**
+  Future<Map<String, dynamic>> put(String path,
+      {required Map<String, dynamic> body}) async {
+    return _handleRequest(() async {
+      final response = await _dio.put(
+        path,
+        data: body,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+        }),
+      );
+      return response.data is Map<String, dynamic>
+          ? response.data as Map<String, dynamic>
+          : {};
+    });
+  }
+
   /// **🔹 Analytics Event Submission**
   /// Sends a lightweight event to the `/events/:name` endpoint with the given [data].
   /// Useful for custom tracking (e.g., startup, session, screen views).

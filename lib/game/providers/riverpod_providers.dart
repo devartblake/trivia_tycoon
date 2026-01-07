@@ -66,6 +66,9 @@ import '../services/achievement_service.dart';
 import '../services/flow_connect_level_generator.dart';
 import '../services/matches_service.dart';
 import '../services/referral_api_service.dart';
+import '../services/referral_invite_api_service.dart';
+import '../services/referral_invite_service.dart';
+import '../services/referral_invite_storage_service.dart';
 import '../services/referral_service.dart';
 import '../services/referral_storage_service.dart';
 import '../services/seasonal_competition_service.dart';
@@ -438,41 +441,116 @@ final currentUserIdProvider = FutureProvider<String>((ref) async {
   return 'guest';
 });
 
-final referralServiceProvider = Provider<ReferralService>((ref) {
-  final storage = ref.watch(referralStorageServiceProvider);
-  final api = ref.watch(referralApiServiceProvider);
+// --- 🎁 Referral Invite System Providers ---
 
-  // Use a default userId for now - will be replaced when async provider loads
-  return ReferralService(
+/// Provides the ReferralInviteStorageService
+final referralInviteStorageServiceProvider = Provider<ReferralInviteStorageService>((ref) {
+  final storage = ReferralInviteStorageService();
+  // Initialize is called in main.dart before runApp
+  return storage;
+});
+
+/// Provides the ReferralInviteApiService
+final referralInviteApiServiceProvider = Provider<ReferralInviteApiService>((ref) {
+  final apiService = ref.watch(apiServiceProvider);
+  return ReferralInviteApiService(apiService);
+});
+
+/// Provides the ReferralInviteService (synchronous with default userId)
+/// Use asyncReferralInviteServiceProvider for async operations
+final referralInviteServiceProvider = Provider<ReferralInviteService>((ref) {
+  final storage = ref.watch(referralInviteStorageServiceProvider);
+  final api = ref.watch(referralInviteApiServiceProvider);
+
+  return ReferralInviteService(
     storage: storage,
     api: api,
-    userId: 'guest', // Temporary default
-    baseUrl: 'https://www.trivia.app',
+    userId: 'guest', // Temporary default, use async version for actual userId
   );
 });
 
-// Better approach: Async provider that waits for userId
-final asyncReferralServiceProvider = FutureProvider<ReferralService>((ref) async {
-  final storage = ref.watch(referralStorageServiceProvider);
-  final api = ref.watch(referralApiServiceProvider);
+/// Async provider that waits for userId (RECOMMENDED for most use cases)
+final asyncReferralInviteServiceProvider = FutureProvider<ReferralInviteService>((ref) async {
+  final storage = ref.watch(referralInviteStorageServiceProvider);
+  final api = ref.watch(referralInviteApiServiceProvider);
   final userId = await ref.watch(currentUserIdProvider.future);
 
-  return ReferralService(
+  return ReferralInviteService(
     storage: storage,
     api: api,
     userId: userId,
-    baseUrl: 'https://www.trivia.app',
   );
 });
 
-final userReferralCodeProvider = FutureProvider<ReferralCode>((ref) async {
-  final referralService = await ref.watch(asyncReferralServiceProvider.future);
-  return await referralService.getOrCreateReferralCode();
+/// Provides all invites for the current user
+final userInvitesProvider = FutureProvider<List<ReferralInvite>>((ref) async {
+  final service = await ref.watch(asyncReferralInviteServiceProvider.future);
+  return service.getInvites();
 });
 
-final referralStatsProvider = FutureProvider<Map<String, dynamic>>((ref) async {
-  final referralService = await ref.watch(asyncReferralServiceProvider.future);
-  return await referralService.getStats();
+/// Provides pending invites for the current user
+final pendingInvitesCountProvider = FutureProvider<int>((ref) async {
+  final service = await ref.watch(asyncReferralInviteServiceProvider.future);
+  return service.getPendingInvites().length;
+});
+
+/// Provides invite statistics
+final inviteStatsProvider = FutureProvider<Map<String, int>>((ref) async {
+  final service = await ref.watch(asyncReferralInviteServiceProvider.future);
+  return service.getStats();
+});
+
+/// Stream provider for real-time invite updates (updates every 5 seconds)
+final liveInvitesProvider = StreamProvider.family<List<ReferralInvite>, String>((ref, userId) {
+  final storage = ref.watch(referralInviteStorageServiceProvider);
+
+  return Stream.periodic(const Duration(seconds: 5), (_) {
+    return storage.getUserInvites(userId);
+  }).map((invites) => invites);
+});
+
+/// Provider to create a new invite
+/// Usage: ref.read(createInviteProvider).call(...)
+final createInviteProvider = Provider<Future<ReferralInvite> Function({
+required String referralCode,
+String? inviteeName,
+String? inviteeEmail,
+int expirationDays,
+})>((ref) {
+  return ({
+    required String referralCode,
+    String? inviteeName,
+    String? inviteeEmail,
+    int expirationDays = 7,
+  }) async {
+    final service = await ref.read(asyncReferralInviteServiceProvider.future);
+    return await service.createInvite(
+      referralCode: referralCode,
+      inviteeName: inviteeName,
+      inviteeEmail: inviteeEmail,
+      expirationDays: expirationDays,
+    );
+  };
+});
+
+/// Provider to redeem an invite
+final redeemInviteProvider = Provider<Future<bool> Function({
+required String inviteId,
+required String redeemedByUserId,
+String? redeemerName,
+})>((ref) {
+  return ({
+    required String inviteId,
+    required String redeemedByUserId,
+    String? redeemerName,
+  }) async {
+    final service = await ref.read(asyncReferralInviteServiceProvider.future);
+    return await service.redeemInvite(
+      inviteId: inviteId,
+      redeemedByUserId: redeemedByUserId,
+      redeemerName: redeemerName,
+    );
+  };
 });
 
 /// --- Messages ---

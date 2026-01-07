@@ -1,6 +1,7 @@
 import '../../core/services/api_service.dart';
 import '../models/referral_models.dart';
 
+// API service for referral invite operations
 class ReferralApiService {
   final ApiService _apiService;
 

@@ -354,7 +354,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const ChallengeScreen(),
       ),
       GoRoute(path: '/invite', builder: (context, state) => InviteScreen()),
-      GoRoute(path: '/rewards', builder: (context, state) => RewardsScreen()),
+      GoRoute(
+          path: '/rewards',
+          builder: (context, state) => RewardsScreen()
+      ),
       GoRoute(
           path: '/leaderboard',
           builder: (context, state) => LeaderboardScreen()),
