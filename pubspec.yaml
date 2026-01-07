@@ -148,6 +148,7 @@ flutter:
    - assets/images/events/
    - assets/images/logo/
    - assets/images/notification_images/
+   - assets/images/overlays/
    - assets/images/power-ups/
    - assets/images/quiz/
    - assets/images/quiz/backgrounds/

@@ -91,9 +91,6 @@ const String tPawPatrolSkyeBadgeImage = "assets/images/avatars/paw_patrol_pack/b
 const String tPawPatrolTrackerBadgeImage = "assets/images/avatars/paw_patrol_pack/badges/tracker_badge_32.png";
 const String tPawPatrolZumaBadgeImage = "assets/images/avatars/paw_patrol_pack/badges/zuma_badge_32.png";
 
-
-
-
 // -- Notification Images
 const String tCircleSpriteImage = "assets/images/notification_images/spritesheet_circle.png";
 const String tSparkleSpriteImage = "assets/images/notification_images/spritesheet_sparkle.png";
@@ -121,3 +118,9 @@ const String tForestNightTimeImage = "assets/images/backgrounds/bg5.jpeg";
 const String tMountainNightImage = "assets/images/backgrounds/bg6.jpeg";
 const String tForestWinterImage = "assets/images/backgrounds/bg7.jpg";
 const String tDarkMountainImage = "assets/images/backgrounds/bg8.jpeg";
+
+// -- Overlay Images
+const String tGlitch071Image = "assets/images/overlays/glitch_071.jpg";
+const String tGlitch083Image = "assets/images/overlays/glitch_083.jpg";
+const String tGlitch085Image = "assets/images/overlays/glitch_085.jpg";
+const String tGlitch123Image = "assets/images/overlays/glitch_123.jpg";
