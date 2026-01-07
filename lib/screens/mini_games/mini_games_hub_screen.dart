@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/helpers/responsive_layout.dart';
 
 class MiniGamesHubScreen extends StatelessWidget {
   const MiniGamesHubScreen({super.key});
@@ -18,268 +19,443 @@ class MiniGamesHubScreen extends StatelessWidget {
             end: Alignment.bottomCenter,
           ),
         ),
-        child: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            // App Bar
-            SliverAppBar(
-              expandedHeight: 140,
-              floating: false,
-              pinned: true,
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              leading: Center(
-                child: Container(
-                  margin: const EdgeInsets.only(left: 12.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: IconButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                      size: 22,
-                    ),
-                  ),
-                ),
-              ),
-              flexibleSpace: FlexibleSpaceBar(
-                background: Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xFF6366F1),
-                        Color(0xFF8B5CF6),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                  ),
-                  child: SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          const Text(
-                            'Mini Games',
-                            style: TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              letterSpacing: -0.5,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Challenge your brain with fun puzzles',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.white.withOpacity(0.9),
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            // Content
-            SliverPadding(
-              padding: const EdgeInsets.all(20),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-                  // Featured Game Card
-                  _buildFeaturedGameCard(context),
-
-                  const SizedBox(height: 32),
-
-                  // Section Header
-                  const Text(
-                    'Logic Puzzles',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF1E293B),
-                    ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // Logic Games Grid
-                  _buildGameCard(
-                    context,
-                    title: 'Sun & Moon',
-                    subtitle: 'Classic logic puzzle',
-                    description: 'Fill the grid following the rules',
-                    icon: Icons.wb_sunny_rounded,
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFFFBBF24), Color(0xFFF59E0B)],
-                    ),
-                    route: '/sun-moon-puzzle',
-                    difficulty: 'Medium',
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  _buildGameCard(
-                    context,
-                    title: 'Flow Connect',
-                    subtitle: 'Connect matching dots',
-                    description: 'Draw paths without crossing',
-                    icon: Icons.route_rounded,
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFFEC4899), Color(0xFFDB2777)],
-                    ),
-                    route: '/flow-connect',
-                    difficulty: 'Medium',
-                    comingSoon: false,
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  _buildGameCard(
-                    context,
-                    title: 'Sudoku',
-                    subtitle: 'Number placement',
-                    description: 'Fill 9x9 grid with digits',
-                    icon: Icons.grid_4x4_rounded,
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF3B82F6), Color(0xFF2563EB)],
-                    ),
-                    route: '/sudoku-puzzle',
-                    difficulty: 'Hard',
-                    comingSoon: false,
-                  ),
-
-                  const SizedBox(height: 32),
-
-                  // Section Header
-                  const Text(
-                    'Word Games',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF1E293B),
-                    ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  _buildGameCard(
-                    context,
-                    title: 'Connections',
-                    subtitle: 'Find common groups',
-                    description: 'Group 4 words that share a connection',
-                    icon: Icons.hub_rounded,
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-                    ),
-                    route: '/connections-puzzle',
-                    difficulty: 'Medium',
-                    comingSoon: false,  // Set to false since it's ready
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  _buildGameCard(
-                    context,
-                    title: 'Word Search',
-                    subtitle: 'Find hidden words',
-                    description: 'Locate words in the grid',
-                    icon: Icons.search_rounded,
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF10B981), Color(0xFF059669)],
-                    ),
-                    route: '/word-search',
-                    difficulty: 'Easy',
-                    comingSoon: false,
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  _buildGameCard(
-                    context,
-                    title: 'Crossword',
-                    subtitle: 'Classic word puzzle',
-                    description: 'Solve clues to fill the grid',
-                    icon: Icons.apps_rounded,
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF8B5CF6), Color(0xFF7C3AED)],
-                    ),
-                    route: '/crossword',
-                    difficulty: 'Hard',
-                    comingSoon: false,
-                  ),
-
-                  const SizedBox(height: 32),
-
-                  // Section Header
-                  const Text(
-                    'Memory & Strategy',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF1E293B),
-                    ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  _buildGameCard(
-                    context,
-                    title: 'Memory Match',
-                    subtitle: 'Card matching game',
-                    description: 'Find all matching pairs',
-                    icon: Icons.style_rounded,
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFFEC4899), Color(0xFFDB2777)],
-                    ),
-                    route: '/memory-match',
-                    difficulty: 'Easy',
-                    comingSoon: false,
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  _buildGameCard(
-                    context,
-                    title: '2048',
-                    subtitle: 'Combine tiles',
-                    description: 'Reach the 2048 tile',
-                    icon: Icons.dashboard_rounded,
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFFEF4444), Color(0xFFDC2626)],
-                    ),
-                    route: '/game-2048',
-                    difficulty: 'Medium',
-                    comingSoon: false,
-                  ),
-
-                  const SizedBox(height: 40),
-                ]),
-              ),
-            ),
-          ],
+        child: ResponsiveLayout(
+          mobile: _buildMobileLayout(context),
+          desktop: _buildDesktopLayout(context),
         ),
       ),
     );
   }
 
+  // Mobile Layout - Original vertical scroll
+  Widget _buildMobileLayout(BuildContext context) {
+    return CustomScrollView(
+      physics: const BouncingScrollPhysics(),
+      slivers: [
+        _buildAppBar(context),
+        SliverPadding(
+          padding: const EdgeInsets.all(20),
+          sliver: SliverList(
+            delegate: SliverChildListDelegate([
+              _buildFeaturedGameCard(context),
+              const SizedBox(height: 32),
+              ..._buildLogicPuzzlesSection(context),
+              const SizedBox(height: 32),
+              ..._buildWordGamesSection(context),
+              const SizedBox(height: 32),
+              ..._buildMemoryStrategySection(context),
+              const SizedBox(height: 100),
+            ]),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Desktop Layout - Grid with better space utilization
+  Widget _buildDesktopLayout(BuildContext context) {
+    return CustomScrollView(
+      physics: const BouncingScrollPhysics(),
+      slivers: [
+        _buildAppBar(context),
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 32),
+          sliver: SliverToBoxAdapter(
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 1400),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Featured Game - Full Width
+                    _buildFeaturedGameCard(context),
+
+                    const SizedBox(height: 48),
+
+                    // Logic Puzzles Section
+                    const Text(
+                      'Logic Puzzles',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF1E293B),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    _buildGameGrid(context, _getLogicPuzzleGames()),
+
+                    const SizedBox(height: 48),
+
+                    // Word Games Section
+                    const Text(
+                      'Word Games',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF1E293B),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    _buildGameGrid(context, _getWordGames()),
+
+                    const SizedBox(height: 48),
+
+                    // Memory & Strategy Section
+                    const Text(
+                      'Memory & Strategy',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF1E293B),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    _buildGameGrid(context, _getMemoryStrategyGames()),
+
+                    const SizedBox(height: 100),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Game grid for desktop layout
+  Widget _buildGameGrid(BuildContext context, List<Map<String, dynamic>> games) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Calculate number of columns based on width
+        int crossAxisCount = 2;
+        double childAspectRatio = 3.2;
+
+        if (constraints.maxWidth > 1200) {
+          crossAxisCount = 3;
+          childAspectRatio = 3.0; // More height for 3 columns
+        } else if (constraints.maxWidth > 900) {
+          crossAxisCount = 2;
+          childAspectRatio = 3.2; // More height for 2 columns
+        }
+
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount,
+            childAspectRatio: childAspectRatio, // Adjusted for better fit
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 16,
+          ),
+          itemCount: games.length,
+          itemBuilder: (context, index) {
+            final game = games[index];
+            return _buildGameCard(
+              context,
+              title: game['title'],
+              subtitle: game['subtitle'],
+              description: game['description'],
+              icon: game['icon'],
+              gradient: game['gradient'],
+              route: game['route'],
+              difficulty: game['difficulty'],
+              comingSoon: game['comingSoon'] ?? false,
+            );
+          },
+        );
+      },
+    );
+  }
+
+  // App Bar
+  Widget _buildAppBar(BuildContext context) {
+    return SliverAppBar(
+      expandedHeight: 140,
+      floating: false,
+      pinned: true,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      leading: Center(
+        child: Container(
+          margin: const EdgeInsets.only(left: 12.0),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: IconButton(
+            onPressed: () => Navigator.of(context).pop(),
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+              size: 22,
+            ),
+          ),
+        ),
+      ),
+      flexibleSpace: FlexibleSpaceBar(
+        background: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color(0xFF6366F1),
+                Color(0xFF8B5CF6),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  const Text(
+                    'Mini Games',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Challenge your brain with fun puzzles',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.white.withOpacity(0.9),
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Section builders for mobile
+  List<Widget> _buildLogicPuzzlesSection(BuildContext context) {
+    return [
+      const Text(
+        'Logic Puzzles',
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Color(0xFF1E293B),
+        ),
+      ),
+      const SizedBox(height: 16),
+      ..._getLogicPuzzleGames().map((game) => Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: _buildGameCard(
+          context,
+          title: game['title'],
+          subtitle: game['subtitle'],
+          description: game['description'],
+          icon: game['icon'],
+          gradient: game['gradient'],
+          route: game['route'],
+          difficulty: game['difficulty'],
+          comingSoon: game['comingSoon'] ?? false,
+        ),
+      )),
+    ];
+  }
+
+  List<Widget> _buildWordGamesSection(BuildContext context) {
+    return [
+      const Text(
+        'Word Games',
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Color(0xFF1E293B),
+        ),
+      ),
+      const SizedBox(height: 16),
+      ..._getWordGames().map((game) => Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: _buildGameCard(
+          context,
+          title: game['title'],
+          subtitle: game['subtitle'],
+          description: game['description'],
+          icon: game['icon'],
+          gradient: game['gradient'],
+          route: game['route'],
+          difficulty: game['difficulty'],
+          comingSoon: game['comingSoon'] ?? false,
+        ),
+      )),
+    ];
+  }
+
+  List<Widget> _buildMemoryStrategySection(BuildContext context) {
+    return [
+      const Text(
+        'Memory & Strategy',
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Color(0xFF1E293B),
+        ),
+      ),
+      const SizedBox(height: 16),
+      ..._getMemoryStrategyGames().map((game) => Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: _buildGameCard(
+          context,
+          title: game['title'],
+          subtitle: game['subtitle'],
+          description: game['description'],
+          icon: game['icon'],
+          gradient: game['gradient'],
+          route: game['route'],
+          difficulty: game['difficulty'],
+          comingSoon: game['comingSoon'] ?? false,
+        ),
+      )),
+    ];
+  }
+
+  // Game data methods
+  List<Map<String, dynamic>> _getLogicPuzzleGames() {
+    return [
+      {
+        'title': 'Sun & Moon',
+        'subtitle': 'Classic logic puzzle',
+        'description': 'Fill the grid following the rules',
+        'icon': Icons.wb_sunny_rounded,
+        'gradient': const LinearGradient(
+          colors: [Color(0xFFFBBF24), Color(0xFFF59E0B)],
+        ),
+        'route': '/sun-moon-puzzle',
+        'difficulty': 'Medium',
+      },
+      {
+        'title': 'Flow Connect',
+        'subtitle': 'Connect matching dots',
+        'description': 'Draw paths without crossing',
+        'icon': Icons.route_rounded,
+        'gradient': const LinearGradient(
+          colors: [Color(0xFFEC4899), Color(0xFFDB2777)],
+        ),
+        'route': '/flow-connect',
+        'difficulty': 'Medium',
+        'comingSoon': false,
+      },
+      {
+        'title': 'Sudoku',
+        'subtitle': 'Number placement',
+        'description': 'Fill 9x9 grid with digits',
+        'icon': Icons.grid_4x4_rounded,
+        'gradient': const LinearGradient(
+          colors: [Color(0xFF3B82F6), Color(0xFF2563EB)],
+        ),
+        'route': '/sudoku-puzzle',
+        'difficulty': 'Hard',
+        'comingSoon': false,
+      },
+    ];
+  }
+
+  List<Map<String, dynamic>> _getWordGames() {
+    return [
+      {
+        'title': 'Connections',
+        'subtitle': 'Find common groups',
+        'description': 'Group 4 words that share a connection',
+        'icon': Icons.hub_rounded,
+        'gradient': const LinearGradient(
+          colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+        ),
+        'route': '/connections-puzzle',
+        'difficulty': 'Medium',
+        'comingSoon': false,
+      },
+      {
+        'title': 'Word Search',
+        'subtitle': 'Find hidden words',
+        'description': 'Locate words in the grid',
+        'icon': Icons.search_rounded,
+        'gradient': const LinearGradient(
+          colors: [Color(0xFF10B981), Color(0xFF059669)],
+        ),
+        'route': '/word-search',
+        'difficulty': 'Easy',
+        'comingSoon': false,
+      },
+      {
+        'title': 'Crossword',
+        'subtitle': 'Classic word puzzle',
+        'description': 'Solve clues to fill the grid',
+        'icon': Icons.apps_rounded,
+        'gradient': const LinearGradient(
+          colors: [Color(0xFF8B5CF6), Color(0xFF7C3AED)],
+        ),
+        'route': '/crossword',
+        'difficulty': 'Hard',
+        'comingSoon': false,
+      },
+    ];
+  }
+
+  List<Map<String, dynamic>> _getMemoryStrategyGames() {
+    return [
+      {
+        'title': 'Memory Match',
+        'subtitle': 'Card matching game',
+        'description': 'Find pairs of matching cards',
+        'icon': Icons.style_rounded,
+        'gradient': const LinearGradient(
+          colors: [Color(0xFFEC4899), Color(0xFFDB2777)],
+        ),
+        'route': '/memory-match',
+        'difficulty': 'Easy',
+        'comingSoon': true,
+      },
+      {
+        'title': 'Simon Says',
+        'subtitle': 'Pattern memory',
+        'description': 'Repeat the sequence',
+        'icon': Icons.circle_outlined,
+        'gradient': const LinearGradient(
+          colors: [Color(0xFF06B6D4), Color(0xFF0891B2)],
+        ),
+        'route': '/simon-says',
+        'difficulty': 'Medium',
+        'comingSoon': true,
+      },
+      {
+        'title': 'Chess Puzzles',
+        'subtitle': 'Tactical challenges',
+        'description': 'Find the best move',
+        'icon': Icons.auto_awesome_rounded,
+        'gradient': const LinearGradient(
+          colors: [Color(0xFF64748B), Color(0xFF475569)],
+        ),
+        'route': '/chess-puzzles',
+        'difficulty': 'Hard',
+        'comingSoon': true,
+      },
+    ];
+  }
+
   Widget _buildFeaturedGameCard(BuildContext context) {
     return Container(
+      height: 220, // Increased from 180
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [
             Color(0xFF6366F1),
             Color(0xFF8B5CF6),
-            Color(0xFFA855F7),
+            Color(0xFFEC4899),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -296,84 +472,78 @@ class MiniGamesHubScreen extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () => context.push('/sun-moon-puzzle'),
+          onTap: () => context.push('/connections-puzzle'),
           borderRadius: BorderRadius.circular(20),
           child: Padding(
             padding: const EdgeInsets.all(24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Icon(
-                        Icons.star_rounded,
-                        color: Colors.white,
-                        size: 28,
-                      ),
-                    ),
-                    const Spacer(),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Text(
-                        'FEATURED',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Text(
+                          '🔥 FEATURED',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 12),
+                      const Text(
+                        'Connections',
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Group words by finding hidden connections',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white.withOpacity(0.9),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          _buildFeatureBadge(Icons.groups_rounded, 'Social'),
+                          const SizedBox(width: 8),
+                          _buildFeatureBadge(Icons.psychology_rounded, 'Brain'),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 16),
-                const Text(
-                  'Sun & Moon Puzzle',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+                const SizedBox(width: 16),
+                Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.hub_rounded,
                     color: Colors.white,
+                    size: 40,
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Challenge your logic skills with this classic puzzle. Fill the grid with suns and moons following simple rules.',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.white.withOpacity(0.9),
-                    height: 1.4,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    _buildFeatureBadge(Icons.psychology_rounded, 'Logic'),
-                    const SizedBox(width: 12),
-                    _buildFeatureBadge(Icons.timer_rounded, '10-15 min'),
-                    const Spacer(),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Icon(
-                        Icons.arrow_forward_rounded,
-                        color: Color(0xFF6366F1),
-                        size: 20,
-                      ),
-                    ),
-                  ],
                 ),
               ],
             ),
@@ -385,7 +555,7 @@ class MiniGamesHubScreen extends StatelessWidget {
 
   Widget _buildFeatureBadge(IconData icon, String text) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.2),
         borderRadius: BorderRadius.circular(20),
@@ -393,7 +563,11 @@ class MiniGamesHubScreen extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: Colors.white, size: 14),
+          Icon(
+            icon,
+            color: Colors.white,
+            size: 14,
+          ),
           const SizedBox(width: 6),
           Text(
             text,
@@ -439,16 +613,16 @@ class MiniGamesHubScreen extends StatelessWidget {
               : () => context.push(route),
           borderRadius: BorderRadius.circular(16),
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(12), // Reduced from 14
             child: Row(
               children: [
                 // Icon Container
                 Container(
-                  width: 56,
-                  height: 56,
+                  width: 48, // Reduced from 52
+                  height: 48,
                   decoration: BoxDecoration(
                     gradient: gradient,
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
                         color: gradient.colors.first.withOpacity(0.3),
@@ -460,32 +634,38 @@ class MiniGamesHubScreen extends StatelessWidget {
                   child: Icon(
                     icon,
                     color: Colors.white,
-                    size: 28,
+                    size: 24, // Reduced from 26
                   ),
                 ),
 
-                const SizedBox(width: 16),
+                const SizedBox(width: 12), // Reduced from 14
 
                 // Content
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Row(
                         children: [
-                          Text(
-                            title,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF1E293B),
+                          Flexible(
+                            child: Text(
+                              title,
+                              style: const TextStyle(
+                                fontSize: 14, // Reduced from 15
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF1E293B),
+                                height: 1.2,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           if (comingSoon) ...[
-                            const SizedBox(width: 8),
+                            const SizedBox(width: 6),
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
+                                horizontal: 6,
                                 vertical: 2,
                               ),
                               decoration: BoxDecoration(
@@ -498,7 +678,7 @@ class MiniGamesHubScreen extends StatelessWidget {
                               child: const Text(
                                 'SOON',
                                 style: TextStyle(
-                                  fontSize: 9,
+                                  fontSize: 8,
                                   fontWeight: FontWeight.bold,
                                   color: Color(0xFFF59E0B),
                                   letterSpacing: 0.5,
@@ -512,27 +692,31 @@ class MiniGamesHubScreen extends StatelessWidget {
                       Text(
                         subtitle,
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: 11, // Reduced from 12
                           color: Colors.grey.shade600,
+                          height: 1.2,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 5), // Reduced from 6
                       Row(
                         children: [
                           _buildDifficultyBadge(difficulty),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: 6),
                           Icon(
                             Icons.circle,
-                            size: 4,
+                            size: 3,
                             color: Colors.grey.shade400,
                           ),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: 6),
                           Expanded(
                             child: Text(
                               description,
                               style: TextStyle(
-                                fontSize: 12,
+                                fontSize: 10, // Reduced from 11
                                 color: Colors.grey.shade500,
+                                height: 1.2,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -544,13 +728,13 @@ class MiniGamesHubScreen extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(width: 12),
+                const SizedBox(width: 8), // Reduced from 10
 
                 // Arrow
                 Icon(
                   Icons.arrow_forward_ios_rounded,
                   color: Colors.grey.shade400,
-                  size: 16,
+                  size: 14,
                 ),
               ],
             ),
@@ -577,7 +761,7 @@ class MiniGamesHubScreen extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2), // Reduced from 6
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(4),
@@ -585,9 +769,10 @@ class MiniGamesHubScreen extends StatelessWidget {
       child: Text(
         difficulty,
         style: TextStyle(
-          fontSize: 11,
+          fontSize: 9, // Reduced from 10
           fontWeight: FontWeight.w600,
           color: color,
+          height: 1.2,
         ),
       ),
     );

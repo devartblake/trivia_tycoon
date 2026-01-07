@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math';
 
-import 'dialogs/game_result_dialog.dart';
+import '../dialogs/game_result_dialog.dart';
 
 class Game2048Screen extends StatefulWidget {
   const Game2048Screen({super.key});

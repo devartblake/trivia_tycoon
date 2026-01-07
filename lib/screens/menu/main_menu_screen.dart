@@ -1385,15 +1385,25 @@ class _TriviaJourneyProgress extends StatelessWidget {
   }
 }
 
-class _MatchesSection extends StatelessWidget {
+class _MatchesSection extends StatefulWidget {
   final List<Map<String, dynamic>> matches;
 
   const _MatchesSection({required this.matches});
 
   @override
+  State<_MatchesSection> createState() => _MatchesSectionState();
+}
+
+class _MatchesSectionState extends State<_MatchesSection> {
+  String _selectedTab = 'Classic';
+  String _selectedFilter = 'All';
+
+  @override
   Widget build(BuildContext context) {
+    // If no matches, show sample matches for demo
+    final displayMatches = widget.matches.isEmpty ? _getSampleMatches() : widget.matches;
+
     return Container(
-      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -1412,152 +1422,507 @@ class _MatchesSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Your Matches',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF1E293B),
-            ),
-          ),
+          // Tabs
+          _buildTabs(),
+
           const SizedBox(height: 16),
-          if (matches.isEmpty)
-            const Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 24.0),
-                child: Text(
-                  'No active matches. Start a new game!',
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-            )
-          else
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: matches.length,
+
+          // Create Match Button
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: _buildCreateMatchButton(),
+          ),
+
+          const SizedBox(height: 20),
+
+          // Filter Chips
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: _buildFilterChips(),
+          ),
+
+          const SizedBox(height: 20),
+
+          // Matches Horizontal Scroll
+          SizedBox(
+            height: 280, // Increased from 240 to 280
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              scrollDirection: Axis.horizontal,
+              itemCount: displayMatches.length + 1, // +1 for invite card
               itemBuilder: (context, index) {
-                return _buildMatchTile(context, matches[index]);
+                if (index == 0) {
+                  return _buildInviteCard();
+                }
+                return Padding(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: _buildMatchCard(displayMatches[index - 1]),
+                );
               },
             ),
+          ),
+
+          const SizedBox(height: 20),
         ],
       ),
     );
   }
 
-  Widget _buildMatchTile(BuildContext context, Map<String, dynamic> match) {
-    final status = match['status'] as String;
-    Color statusColor = const Color(0xFF64748B);
-    IconData statusIcon = Icons.schedule;
-    AvatarStatus avatarStatus = AvatarStatus.online;
-
-    switch (status) {
-      case 'winning':
-        statusColor = const Color(0xFF10B981);
-        statusIcon = Icons.trending_up;
-        avatarStatus = AvatarStatus.online;
-        break;
-      case 'losing':
-        statusColor = const Color(0xFFEF4444);
-        statusIcon = Icons.trending_down;
-        avatarStatus = AvatarStatus.busy;
-        break;
-      case 'waiting':
-        statusColor = const Color(0xFFF59E0B);
-        statusIcon = Icons.schedule;
-        avatarStatus = AvatarStatus.away;
-        break;
-      case 'tied':
-        statusColor = const Color(0xFF8B5CF6);
-        statusIcon = Icons.drag_handle;
-        avatarStatus = AvatarStatus.online;
-        break;
-    }
-
+  Widget _buildTabs() {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: const Color(0xFF64748B).withOpacity(0.1),
+            width: 1,
+          ),
+        ),
+      ),
+      child: Row(
+        children: [
+          _buildTab('Classic', 1),
+          _buildTab('Live', 1),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTab(String label, int notificationCount) {
+    final isSelected = _selectedTab == label;
+
+    return Expanded(
       child: InkWell(
-        onTap: () => context.push('/match-details', extra: match),
-        borderRadius: BorderRadius.circular(16),
+        onTap: () => setState(() => _selectedTab = label),
         child: Container(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(vertical: 16),
           decoration: BoxDecoration(
-            color: const Color(0xFFF8FAFF),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: statusColor.withOpacity(0.2),
-              width: 1,
+            border: Border(
+              bottom: BorderSide(
+                color: isSelected ? const Color(0xFF1E293B) : Colors.transparent,
+                width: 3,
+              ),
             ),
           ),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ShimmerAvatar(
-                avatarPath: match['avatar'] as String,
-                status: avatarStatus,
-                isLoading: false,
-                radius: 20,
-                showStatusIndicator: true,
-                borderColor: statusColor.withOpacity(0.3),
-                borderWidth: 2,
-                onTap: () => context.push('/profile/${match['name']}'),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      match['name'] as String,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                        color: Color(0xFF1E293B),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        Icon(statusIcon, size: 16, color: statusColor),
-                        const SizedBox(width: 4),
-                        Text(
-                          match['score'] as String,
-                          style: TextStyle(
-                            color: statusColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                  color: isSelected ? const Color(0xFF1E293B) : const Color(0xFF64748B),
                 ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: statusColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      match['time'] as String,
-                      style: TextStyle(
-                        color: statusColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
+              if (notificationCount > 0) ...[
+                const SizedBox(width: 8),
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFEF4444),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Text(
+                    notificationCount.toString(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey.shade400),
-                ],
-              ),
+                ),
+              ],
             ],
           ),
         ),
       ),
     );
   }
+
+  Widget _buildCreateMatchButton() {
+    return Container(
+      height: 56,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        gradient: const LinearGradient(
+          colors: [
+            Color(0xFFFF6B6B),
+            Color(0xFFFFD93D),
+            Color(0xFF6BCB77),
+            Color(0xFF4D96FF),
+            Color(0xFF9D4EDD),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF6366F1).withOpacity(0.3),
+            blurRadius: 15,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Container(
+        margin: const EdgeInsets.all(2),
+        decoration: BoxDecoration(
+          color: const Color(0xFF1E293B),
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () => context.push('/create-match'),
+            borderRadius: BorderRadius.circular(14),
+            child: const Center(
+              child: Text(
+                'Create match',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFilterChips() {
+    final filters = ['All', 'Your turn', 'Suggestions'];
+
+    return Row(
+      children: filters.map((filter) {
+        final isSelected = _selectedFilter == filter;
+
+        return Padding(
+          padding: const EdgeInsets.only(right: 12),
+          child: FilterChip(
+            selected: isSelected,
+            label: Text(filter),
+            onSelected: (selected) {
+              setState(() => _selectedFilter = filter);
+            },
+            backgroundColor: Colors.white,
+            selectedColor: const Color(0xFFE2E8F0),
+            labelStyle: TextStyle(
+              fontSize: 14,
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+              color: isSelected ? const Color(0xFF1E293B) : const Color(0xFF64748B),
+            ),
+            side: BorderSide(
+              color: isSelected
+                  ? const Color(0xFF94A3B8)
+                  : const Color(0xFFE2E8F0),
+              width: 1.5,
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildInviteCard() {
+    return Container(
+      width: 160,
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF3B82F6),
+            Color(0xFF2563EB),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF3B82F6).withOpacity(0.3),
+            blurRadius: 15,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => context.push('/invite'),
+          borderRadius: BorderRadius.circular(20),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 72,
+                  height: 72,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Icon(
+                    Icons.person_add_rounded,
+                    color: Colors.white,
+                    size: 36,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Invite',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMatchCard(Map<String, dynamic> match) {
+    final status = match['status'] as String;
+    String statusText = '';
+    Color statusColor = const Color(0xFF64748B);
+    String actionLabel = 'Start';
+
+    switch (status) {
+      case 'your_turn':
+        statusText = 'Your turn';
+        statusColor = const Color(0xFFEF4444);
+        actionLabel = 'Play';
+        break;
+      case 'similar_stats':
+        statusText = '#SimilarStats';
+        statusColor = const Color(0xFF94A3B8);
+        actionLabel = 'Start';
+        break;
+      case 'fast_player':
+        statusText = '#FastPlayer';
+        statusColor = const Color(0xFF94A3B8);
+        actionLabel = 'Start';
+        break;
+      case 'waiting':
+        statusText = 'Waiting...';
+        statusColor = const Color(0xFF94A3B8);
+        actionLabel = 'View';
+        break;
+    }
+
+    return Container(
+      width: 160,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: const Color(0xFFE2E8F0),
+          width: 2,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Top content with flexible space
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Avatar
+                  GestureDetector(
+                    onTap: () => context.push('/profile/${match['name']}'),
+                    child: Container(
+                      width: 70,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        color: _getAvatarColor(match['name'] as String),
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: _getAvatarColor(match['name'] as String).withOpacity(0.3),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Text(
+                          (match['name'] as String).substring(0, 1).toUpperCase(),
+                          style: const TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Name
+                  Text(
+                    match['name'] as String,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF1E293B),
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+
+                  // Score
+                  if (match['score'] != null)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF1F5F9),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        match['score'] as String,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF64748B),
+                        ),
+                      ),
+                    ),
+                  const SizedBox(height: 10),
+
+                  // Status
+                  Text(
+                    statusText,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: statusColor,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // Action Button - Fixed height at bottom
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: const Color(0xFFE0E7FF),
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(18),
+                bottomRight: Radius.circular(18),
+              ),
+              border: Border(
+                top: BorderSide(
+                  color: const Color(0xFFE2E8F0),
+                  width: 2,
+                ),
+              ),
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () {
+                  HapticFeedback.lightImpact();
+                  context.push('/match-details', extra: match);
+                },
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(18),
+                  bottomRight: Radius.circular(18),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  child: Text(
+                    actionLabel,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1E293B),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Color _getAvatarColor(String name) {
+    final colors = [
+      const Color(0xFFEC4899), // Pink
+      const Color(0xFFF59E0B), // Yellow
+      const Color(0xFF10B981), // Green
+      const Color(0xFF3B82F6), // Blue
+      const Color(0xFF8B5CF6), // Purple
+    ];
+
+    final index = name.hashCode % colors.length;
+    return colors[index];
+  }
+
+  List<Map<String, dynamic>> _getSampleMatches() {
+    return [
+      {
+        'name': 'techalien.9...',
+        'score': '0-0',
+        'status': 'your_turn',
+      },
+      {
+        'name': 'todd.faugh...',
+        'score': null,
+        'status': 'similar_stats',
+      },
+      {
+        'name': 'emelia.brin...',
+        'score': null,
+        'status': 'fast_player',
+      },
+      {
+        'name': 'sarah.chen',
+        'score': '850-720',
+        'status': 'waiting',
+      },
+      {
+        'name': 'mike.johnson',
+        'score': '540-680',
+        'status': 'your_turn',
+      },
+    ];
+  }
 }
+
+
+
+
+
+
+
+

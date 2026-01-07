@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import '../../game/data/word_search_loader.dart';
-import '../../game/controllers/word_search_controller.dart';
+import '../../../game/data/word_search_loader.dart';
+import '../../../game/controllers/word_search_controller.dart';
 import 'package:trivia_tycoon/screens/mini_games/widgets/word_list_widget.dart';
 import 'package:trivia_tycoon/screens/mini_games/widgets/word_search_grid_widget.dart';
 
-import 'dialogs/game_result_dialog.dart';
-import 'dialogs/word_search_settings_dialog.dart';
+import '../dialogs/game_result_dialog.dart';
+import '../dialogs/word_search_settings_dialog.dart';
 
 class WordSearchScreen extends StatefulWidget {
   const WordSearchScreen({super.key});

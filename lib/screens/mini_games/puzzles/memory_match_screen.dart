@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:trivia_tycoon/ui_components/flip_card/flip_card.dart';
 import 'package:trivia_tycoon/ui_components/flip_card/controller/flip_card_controller.dart';
 
-import 'dialogs/game_result_dialog.dart';
+import '../dialogs/game_result_dialog.dart';
 
 class MemoryMatchScreen extends StatefulWidget {
   const MemoryMatchScreen({super.key});

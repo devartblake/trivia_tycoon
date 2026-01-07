@@ -1,13 +1,13 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../game/models/flow_connect_grid_cell.dart';
-import '../../game/models/flow_connect_path_point.dart';
-import '../../game/providers/riverpod_providers.dart';
-import '../../game/services/flow_connect_level_generator.dart';
-import '../../game/state/flow_connect_game_state.dart';
-import 'dialogs/flow_connect_settings_dialog.dart';
-import 'dialogs/game_result_dialog.dart';
+import '../../../game/models/flow_connect_grid_cell.dart';
+import '../../../game/models/flow_connect_path_point.dart';
+import '../../../game/providers/riverpod_providers.dart';
+import '../../../game/services/flow_connect_level_generator.dart';
+import '../../../game/state/flow_connect_game_state.dart';
+import '../dialogs/flow_connect_settings_dialog.dart';
+import '../dialogs/game_result_dialog.dart';
 
 class FlowConnectPuzzleScreen extends ConsumerStatefulWidget {
   const FlowConnectPuzzleScreen({super.key});

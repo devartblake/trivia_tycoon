@@ -4,8 +4,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
-import 'dialogs/crossword_settings_dialog.dart';
-import 'dialogs/game_result_dialog.dart';
+import '../dialogs/crossword_settings_dialog.dart';
+import '../dialogs/game_result_dialog.dart';
 
 class CrosswordScreen extends StatefulWidget {
   const CrosswordScreen({super.key});
