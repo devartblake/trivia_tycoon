@@ -1,5 +1,5 @@
-import '../math/galois_field.dart';
-import '../math/gf_poly.dart';
+import '../../../decoder/galois_field.dart';
+import '../../../decoder/gf_poly.dart';
 
 class ReedSolomonDecoder {
   final GaloisField field;

@@ -4,6 +4,7 @@ import 'package:trivia_tycoon/admin/admin_dashboard.dart';
 import 'package:trivia_tycoon/admin/events_management/admin_event_queue_screen.dart';
 import 'package:trivia_tycoon/core/router/auth_guard.dart';
 import 'package:trivia_tycoon/core/router/enhanced_admin_guard.dart';
+import 'package:trivia_tycoon/screens/invite_log_screen.dart';
 import 'package:trivia_tycoon/screens/leaderboard/tier_rank_screen.dart';
 import 'package:trivia_tycoon/screens/menu/game_menu_screen.dart';
 import 'package:trivia_tycoon/screens/not_found_screen.dart';
@@ -353,7 +354,15 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         name: 'Challenge',
         builder: (context, state) => const ChallengeScreen(),
       ),
-      GoRoute(path: '/invite', builder: (context, state) => InviteScreen()),
+      GoRoute(
+          path: '/invite',
+          builder: (context, state) => InviteScreen()
+      ),
+      // Add this route to test:
+      GoRoute(
+        path: '/invite-log',
+        builder: (context, state) => const InviteLogScreen(),
+      ),
       GoRoute(
           path: '/rewards',
           builder: (context, state) => RewardsScreen()

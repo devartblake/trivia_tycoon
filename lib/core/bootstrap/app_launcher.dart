@@ -11,6 +11,7 @@ import '../../ui_components/power_ups/power_up_HUD_Overlay.dart';
 import '../../widgets/app_logo.dart';
 import '../navigation/app_router.dart';
 import '../theme/app_scroll_behavior.dart';
+import '../theme/themes.dart';
 import 'app_init.dart';
 
 /// AppLauncher handles config + service initialization and launches the app
@@ -43,6 +44,7 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
 
   // ============ LIFECYCLE TRACKING ============
 
+  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     final serviceManager = widget.initialData.$1;
 
@@ -195,8 +197,9 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
         debugShowCheckedModeBanner: false,
         scrollBehavior: AppScrollBehavior(),
 
-        // Use your existing theme system - ThemeNotifier provides themeData and themeMode
-        theme: themeNotifier.themeData,
+        // AppTheme drives ThemeData; ThemeNotifier drives ThemeMode
+        theme: AppTheme.fromType(AppTheme.defaultTheme, ThemeMode.light).themeData,
+        darkTheme: AppTheme.fromType(AppTheme.defaultTheme, ThemeMode.dark).themeData,
         themeMode: themeNotifier.themeMode,
 
         // Use the new provider-based router

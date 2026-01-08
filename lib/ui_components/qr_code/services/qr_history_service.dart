@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';

@@ -444,6 +444,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
       ],
     );
   }
+
   Widget buildEnhancedTimerSection() {
     return Consumer(
       builder: (context, ref, child) {

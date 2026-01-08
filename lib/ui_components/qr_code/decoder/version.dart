@@ -1,4 +1,4 @@
-import '../common/bit_matrix.dart';
+import '../core/zxing/common/bit_matrix.dart';
 
 class Version {
   final int versionNumber;

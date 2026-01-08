@@ -106,7 +106,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
         );
       case 'teens':
         return const LinearGradient(
-          colors: [Color(0xFF4ECDC4), Color(0xFF44A08D)],
+          colors: [Color(0xCB769CFD), Color(0x863575FF)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         );
@@ -149,7 +149,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFF),
+      backgroundColor: const Color(0xFFD4D4D4),
       drawer: const AppDrawer(),
       appBar: _buildAppBar(),
       body: _fadeAnimation != null

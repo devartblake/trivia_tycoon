@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
-import '../format/mask_util.dart';
-import '../math/galois_field.dart';
+import '../../../decoder/format_information.dart';
+import '../../../decoder/galois_field.dart';
+import '../../../decoder/mask_util.dart';
+import '../../../decoder/version.dart';
 import '../decoder/reed_solomon_decoder.dart';
 import '../decoder/decoded_bitstream_parser.dart';
 import '../common/bit_matrix.dart';
 import '../common/binary_bitmap.dart';
-import '../format/format_information.dart';
-import '../format/version.dart';
 
 class QrDecoder {
   final ReedSolomonDecoder _ecc = ReedSolomonDecoder(GaloisField.qrField);

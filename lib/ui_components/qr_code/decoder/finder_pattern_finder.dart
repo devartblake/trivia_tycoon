@@ -1,5 +1,5 @@
-import '../common/bit_matrix.dart';
 import 'dart:math';
+import '../core/zxing/common/bit_matrix.dart';
 
 class FinderPattern {
   final double x;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../ui_components/qr_code/models/scan_history_item.dart';
 import '../../../ui_components/qr_code/services/qr_history_service.dart';
 import '../../../ui_components/qr_code/utils/qr_scan_format_utils.dart';
+import '../../ui_components/qr_code/models/scan_history_item.dart';
 
 class AdminScanStatsCard extends StatefulWidget {
   final String userId;

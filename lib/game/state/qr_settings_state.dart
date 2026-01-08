@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../ui_components/qr_code/models/qr_settings_model.dart';
 import '../../core/services/settings/app_settings.dart';
+import '../../ui_components/qr_code/models/qr_settings_model.dart';
 
 class QrSettingsNotifier extends StateNotifier<QrSettingsModel> {
   QrSettingsNotifier() : super(QrSettingsModel(scanLimit: 50, autoLaunch: false)) {

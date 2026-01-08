@@ -1,4 +1,4 @@
-import '../common/bit_matrix.dart';
+import '../core/zxing/common/bit_matrix.dart';
 
 class MaskUtil {
   /// Applies the inverse of the mask (XOR) to the matrix using the mask pattern index.

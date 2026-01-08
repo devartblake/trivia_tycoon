@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/core/bootstrap/app_init.dart';
 import 'package:trivia_tycoon/core/bootstrap/app_launcher.dart';
-import 'package:trivia_tycoon/core/widgets/offline_fallback_screen.dart';
+import '/offline_fallback_screen.dart';
 import 'package:trivia_tycoon/screens/splash_variants/main_splash.dart';
 import 'package:trivia_tycoon/widgets/app_logo.dart';
 import 'core/env.dart';

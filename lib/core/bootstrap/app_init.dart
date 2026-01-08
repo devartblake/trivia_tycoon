@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/core/services/analytics/config_service.dart';
 import 'package:trivia_tycoon/core/services/theme/theme_notifier.dart';
 import 'package:trivia_tycoon/core/manager/service_manager.dart';
+import 'package:trivia_tycoon/game/logic/referral_invite_adapter.dart';
 import '../../game/analytics/services/spin_analytics_tracker.dart';
 import '../../game/providers/multi_profile_providers.dart';
 import '../../game/services/referral_storage_service.dart';
@@ -65,6 +66,7 @@ class AppInit {
     await Hive.openBox('settings');
     await Hive.openBox('cache');
     await Hive.openBox('question');
+    Hive.registerAdapter(ReferralInviteHiveAdapter());
 
     try {
       await Hive.openBox('settings');

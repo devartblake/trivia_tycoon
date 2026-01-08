@@ -8,45 +8,80 @@ import '../core/zxing/decoder/qr_decoder.dart';
 
 class QrScannerController {
   final Function(String result)? onScan;
-  late CameraController _cameraController;
+
+  CameraController? _cameraController;
   bool _isProcessing = false;
-  bool get isTorchOn => _cameraController.value.flashMode == FlashMode.torch;
 
   QrScannerController({this.onScan});
 
-  Future<void> toggleTorch() async {
-    final newMode = isTorchOn ? FlashMode.off : FlashMode.torch;
-    await _cameraController.setFlashMode(newMode);
-  }
+  /// Safe access (may be null before initialize completes).
+  CameraController? get cameraOrNull => _cameraController;
 
-  bool get isPaused => !_cameraController.value.isStreamingImages;
+  bool get hasCamera => _cameraController != null;
 
-  Future<void> pauseCamera() async {
-    await _cameraController.stopImageStream();
-  }
+  bool get isInitialized => _cameraController?.value.isInitialized ?? false;
 
-  Future<void> resumeCamera() async {
-    await _cameraController.startImageStream(_processCameraImage);
+  bool get isTorchOn =>
+      _cameraController?.value.flashMode == FlashMode.torch;
+
+  bool get isPaused {
+    final c = _cameraController;
+    if (c == null || !c.value.isInitialized) return true;
+    return !c.value.isStreamingImages;
   }
 
   Future<void> initialize() async {
-    final cameras = await availableCameras();
-    final rearCamera = cameras.firstWhere((cam) => cam.lensDirection == CameraLensDirection.back);
+    // Avoid double-init if initialize gets called more than once.
+    if (_cameraController != null) {
+      if (_cameraController!.value.isInitialized) return;
+    }
 
-    _cameraController = CameraController(
+    final cameras = await availableCameras();
+    final rearCamera = cameras.firstWhere(
+          (cam) => cam.lensDirection == CameraLensDirection.back,
+      orElse: () => cameras.first,
+    );
+
+    final controller = CameraController(
       rearCamera,
       ResolutionPreset.low,
       enableAudio: false,
     );
 
-    await _cameraController.initialize();
-    _cameraController.startImageStream(_processCameraImage);
+    _cameraController = controller;
+
+    await controller.initialize();
+    await controller.startImageStream(_processCameraImage);
   }
 
-  CameraController get camera => _cameraController;
+  Future<void> toggleTorch() async {
+    final c = _cameraController;
+    if (c == null || !c.value.isInitialized) return;
+
+    final newMode = isTorchOn ? FlashMode.off : FlashMode.torch;
+    await c.setFlashMode(newMode);
+  }
+
+  Future<void> pauseCamera() async {
+    final c = _cameraController;
+    if (c == null || !c.value.isInitialized) return;
+    if (!c.value.isStreamingImages) return;
+
+    await c.stopImageStream();
+  }
+
+  Future<void> resumeCamera() async {
+    final c = _cameraController;
+    if (c == null || !c.value.isInitialized) return;
+    if (c.value.isStreamingImages) return;
+
+    await c.startImageStream(_processCameraImage);
+  }
 
   void dispose() {
-    _cameraController.dispose();
+    final c = _cameraController;
+    _cameraController = null;
+    c?.dispose();
   }
 
   void _processCameraImage(CameraImage image) async {
@@ -57,20 +92,20 @@ class QrScannerController {
       final luminance = _convertToLuminance(image);
       final matrix = _toBitMatrix(luminance, image.width, image.height);
       final binaryBitmap = BinaryBitmap(matrix);
+
       final result = await QrDecoder().decode(binaryBitmap);
 
       if (result != null) {
-        HapticFeedback.mediumImpact(); // 📳
-         SystemSound.play(SystemSoundType.click); // 🔔
+        HapticFeedback.mediumImpact();
+        SystemSound.play(SystemSoundType.click);
         onScan?.call(result.text);
       }
-    } catch (e) {
-      // silent fail
+    } catch (_) {
+      // silent fail (intended)
     } finally {
       _isProcessing = false;
     }
   }
-
 
   Uint8List _convertToLuminance(CameraImage image) {
     // Using Y plane from YUV420 format

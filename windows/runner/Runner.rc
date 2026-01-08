@@ -93,9 +93,9 @@ BEGIN
             VALUE "FileDescription", "trivia_tycoon" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "trivia_tycoon" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2025 com.theoreticalmindstech. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2025 Theoretical Minds Technologies. All rights reserved." "\0"
             VALUE "OriginalFilename", "trivia_tycoon.exe" "\0"
-            VALUE "ProductName", "trivia_tycoon" "\0"
+            VALUE "ProductName", "Trivia Tycoon" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

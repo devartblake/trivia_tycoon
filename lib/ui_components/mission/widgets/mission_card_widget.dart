@@ -358,127 +358,132 @@ class _MissionCardState extends State<MissionCard> with TickerProviderStateMixin
 
   Widget _buildCard(bool isCompleted) {
     return Container(
-      width: 280,
-      height: 250,
+      width: double.infinity,
+      constraints: const BoxConstraints(minHeight: 92),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: isCompleted
               ? [
-            const Color(0xFF1B4332).withOpacity(0.95),
-            const Color(0xFF2D5A3D).withOpacity(0.9),
+            const Color(0xFF1B4332).withOpacity(0.92),
+            const Color(0xFF2D5A3D).withOpacity(0.88),
           ]
               : [
-            const Color(0xFF2C2C54).withOpacity(0.95),
-            const Color(0xFF1B1B2F).withOpacity(0.9),
+            const Color(0xFF2C2C54).withOpacity(0.92),
+            const Color(0xFF1B1B2F).withOpacity(0.88),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isCompleted
-              ? const Color(0xFF40916C).withOpacity(0.6)
-              : Colors.white.withOpacity(0.15),
-          width: 1.5,
+              ? const Color(0xFF40916C).withOpacity(0.55)
+              : Colors.white.withOpacity(0.12),
+          width: 1.2,
         ),
         boxShadow: [
           BoxShadow(
             color: isCompleted
-                ? const Color(0xFF40916C).withOpacity(0.3)
-                : Colors.black.withOpacity(0.25),
-            blurRadius: isCompleted ? 20 : 15,
+                ? const Color(0xFF40916C).withOpacity(0.22)
+                : Colors.black.withOpacity(0.22),
+            blurRadius: 12,
             offset: const Offset(0, 8),
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         child: Stack(
           children: [
-            // Background pattern
             Positioned.fill(
               child: CustomPaint(
                 painter: _CardPatternPainter(isCompleted: isCompleted),
               ),
             ),
-            // Content
             Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  _buildHeader(),
-                  const SizedBox(height: 16),
-                  _buildTitle(),
-                  const Spacer(),
-                  _buildProgressSection(),
-                  const SizedBox(height: 16),
+                  _buildHeader(isCompleted),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildTitle(isCompleted),
+                        const SizedBox(height: 10),
+                        _buildProgressSection(isCompleted),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 12),
                   _buildFooter(isCompleted),
                 ],
               ),
             ),
-            // Completion overlay
-            if (isCompleted)
-              Positioned.fill(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    gradient: LinearGradient(
-                      colors: [
-                        const Color(0xFF40916C).withOpacity(0.1),
-                        const Color(0xFF52B788).withOpacity(0.05),
-                      ],
-                    ),
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.check_circle,
-                      color: Colors.white,
-                      size: 40,
-                    ),
-                  ),
-                ),
-              ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildHeader() {
-    final isCompleted = widget.progress >= widget.total;
+  /// Left side: icon container (feed-row style)
+  Widget _buildHeader(bool isCompleted) {
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.10),
+        ),
+      ),
+      child: Icon(
+        widget.icon,
+        color: isCompleted ? Colors.white : const Color(0xFF74C0FC),
+        size: 20,
+      ),
+    );
+  }
+
+  /// Center top: title + badge (single row)
+  Widget _buildTitle(bool isCompleted) {
+    final badgeColor = _getBadgeColor();
 
     return Row(
       children: [
-        Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.15),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Icon(
-            widget.icon,
-            color: isCompleted ? Colors.white : const Color(0xFF74C0FC),
-            size: 20,
+        Expanded(
+          child: Text(
+            widget.title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 13,
+              color: Colors.white,
+            ),
           ),
         ),
-        const Spacer(),
+        const SizedBox(width: 10),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: _getBadgeColor().withOpacity(0.25),
-            borderRadius: BorderRadius.circular(12),
+            color: badgeColor.withOpacity(0.22),
+            borderRadius: BorderRadius.circular(999),
             border: Border.all(
-              color: _getBadgeColor().withOpacity(0.6),
+              color: badgeColor.withOpacity(0.45),
               width: 1,
             ),
           ),
           child: Text(
             widget.badge,
             style: TextStyle(
-              color: _getBadgeColor(),
+              color: badgeColor,
               fontSize: 10,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),
@@ -486,80 +491,45 @@ class _MissionCardState extends State<MissionCard> with TickerProviderStateMixin
     );
   }
 
-  Widget _buildTitle() {
-    return Text(
-      widget.title,
-      style: const TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 14,
-        color: Colors.white,
-        height: 1.3,
-      ),
-      maxLines: 3,
-      overflow: TextOverflow.ellipsis,
-    );
-  }
+  /// Center bottom: compact progress bar + progress text
+  Widget _buildProgressSection(bool isCompleted) {
+    final progressText = "${widget.progress}/${widget.total}";
 
-  Widget _buildProgressSection() {
-    return _ProgressBarWithText(
-      progress: widget.progress,
-      total: widget.total,
-    );
-  }
-
-  Widget _buildFooter(bool isCompleted) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        if (isCompleted)
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: const Color(0xFF40916C).withOpacity(0.3),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: const Color(0xFF52B788).withOpacity(0.7),
-              ),
-            ),
-            child: const Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.check, color: Color(0xFF95D5B2), size: 14),
-                SizedBox(width: 4),
-                Text(
-                  "Complete",
-                  style: TextStyle(
-                    color: Color(0xFF95D5B2),
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          )
-        else
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: const Color(0xFFFF8500).withOpacity(0.25),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: const Text(
-              "In Progress",
-              style: TextStyle(
-                color: Color(0xFFFFB366),
-                fontSize: 10,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+        _ProgressBarWithText(
+          progress: widget.progress,
+          total: widget.total,
+          compact: true,
+        ),
+        const SizedBox(height: 6),
+        Text(
+          progressText,
+          style: TextStyle(
+            color: Colors.white.withOpacity(0.70),
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
           ),
+        ),
+      ],
+    );
+  }
+
+  /// Right side: reward pill + status/check
+  Widget _buildFooter(bool isCompleted) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           decoration: BoxDecoration(
-            color: const Color(0xFFFFD60A).withOpacity(0.25),
-            borderRadius: BorderRadius.circular(12),
+            color: const Color(0xFFFFD60A).withOpacity(0.20),
+            borderRadius: BorderRadius.circular(999),
             border: Border.all(
-              color: const Color(0xFFFFD60A).withOpacity(0.6),
+              color: const Color(0xFFFFD60A).withOpacity(0.45),
             ),
           ),
           child: Row(
@@ -569,18 +539,39 @@ class _MissionCardState extends State<MissionCard> with TickerProviderStateMixin
                 "+${widget.reward}",
                 style: const TextStyle(
                   color: Color(0xFFFFD60A),
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w800,
                   fontSize: 12,
                 ),
               ),
               const SizedBox(width: 4),
-              const Icon(Icons.star, color: Color(0xFFFFD60A), size: 14),
+              const Icon(
+                Icons.star,
+                color: Color(0xFFFFD60A),
+                size: 14,
+              ),
             ],
           ),
         ),
+        const SizedBox(height: 10),
+        if (isCompleted)
+          const Icon(
+            Icons.check_circle,
+            color: Color(0xFF95D5B2),
+            size: 18,
+          )
+        else
+          Text(
+            "In progress",
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.60),
+              fontSize: 10,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
       ],
     );
   }
+
 
   Color _getBadgeColor() {
     switch (widget.badge.toLowerCase()) {
@@ -604,10 +595,12 @@ class _MissionCardState extends State<MissionCard> with TickerProviderStateMixin
 class _ProgressBarWithText extends StatelessWidget {
   final int progress;
   final int total;
+  final bool compact;
 
   const _ProgressBarWithText({
     required this.progress,
     required this.total,
+    this.compact = false,
   });
 
   @override
@@ -615,60 +608,35 @@ class _ProgressBarWithText extends StatelessWidget {
     final value = (progress / total).clamp(0.0, 1.0);
     final isCompleted = progress >= total;
 
+    final minHeight = compact ? 14.0 : 24.0;
+    final radius = compact ? 10.0 : 14.0;
+    final innerRadius = compact ? 9.0 : 12.0;
+
     return SizedBox(
-      height: 28,
-      child: Stack(
+      height: compact ? 16 : 28,
+      child: TycoonLinearProgressIndicator(
+        value: value,
+        maxValue: 1.0,
+        minHeight: minHeight,
+        showGlowOnComplete: true,
+        animateXpOnComplete: true,
+        gradientColors: isCompleted
+            ? [const Color(0xFF52B788), const Color(0xFF40916C)]
+            : [const Color(0xFF6C5CE7), const Color(0xFF5A4FCF)],
+        borderRadius: radius,
+        linearProgressBarBorderRadius: innerRadius,
+        colorLinearProgress:
+        isCompleted ? const Color(0xFF52B788) : const Color(0xFF6C5CE7),
+        backgroundColor: Colors.white.withOpacity(0.18),
+        trailingXpIcon: Icon(
+          isCompleted ? Icons.check_circle : Icons.flash_on_rounded,
+          color: Colors.white,
+          size: compact ? 14 : 18,
+        ),
+        showPercent: false,
+        percentTextStyle: const TextStyle(color: Colors.white),
         alignment: Alignment.center,
-        children: [
-          TycoonLinearProgressIndicator(
-            value: value,
-            maxValue: 1.0,
-            minHeight: 24,
-            showGlowOnComplete: true,
-            animateXpOnComplete: true,
-            gradientColors: isCompleted
-                ? [const Color(0xFF52B788), const Color(0xFF40916C)]
-                : [const Color(0xFF6C5CE7), const Color(0xFF5A4FCF)],
-            borderRadius: 14,
-            linearProgressBarBorderRadius: 12,
-            colorLinearProgress: isCompleted
-                ? const Color(0xFF52B788)
-                : const Color(0xFF6C5CE7),
-            backgroundColor: Colors.white.withOpacity(0.2),
-            trailingXpIcon: Icon(
-              isCompleted ? Icons.check_circle : Icons.flash_on_rounded,
-              color: Colors.white,
-              size: 18,
-            ),
-            showPercent: false,
-            percentTextStyle: const TextStyle(color: Colors.white),
-            alignment: Alignment.center,
-            onProgressChanged: (_) {},
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "$progress",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                  ),
-                ),
-                Text(
-                  "$total",
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.9),
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+        onProgressChanged: (_) {},
       ),
     );
   }

@@ -411,7 +411,7 @@ class _MissionPanelState extends ConsumerState<MissionPanel>
   }
 
   Widget _buildMissionsList(List<Map<String, dynamic>> missions) {
-    // Add safety check
+    // Safety check
     if (missions.isEmpty) {
       return SizedBox(
         height: 260,
@@ -424,14 +424,17 @@ class _MissionPanelState extends ConsumerState<MissionPanel>
       );
     }
 
+    // Vertical scroll:
+    // - Fixed viewport height to avoid unbounded height inside Column
+    // - MissionCard currently has a fixed size (280x250), so we center it
     return SizedBox(
-      height: 260, // Fixed height to prevent layout issues
+      height: 560, // Tune this based on how many missions you want visible at once
       child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        scrollDirection: Axis.vertical,
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
         physics: const BouncingScrollPhysics(),
         itemCount: missions.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 16),
+        separatorBuilder: (_, __) => const SizedBox(height: 16),
         itemBuilder: (context, index) {
           final mission = missions[index];
           final missionId = mission['id'] as String;
@@ -442,21 +445,27 @@ class _MissionPanelState extends ConsumerState<MissionPanel>
             tween: Tween(begin: 0.0, end: 1.0),
             builder: (context, value, child) {
               return Transform.translate(
-                offset: Offset(0, 30 * (1 - value)),
+                offset: Offset(0, 24 * (1 - value)),
                 child: Opacity(
                   opacity: value,
-                  child: GestureDetector(
-                    onDoubleTap: isCompleted
-                        ? () => _handleCompleteMission(missionId, mission['reward'])
-                        : null,
-                    child: MissionCardWithSwapButton(
-                      title: mission['title'],
-                      progress: mission['progress'],
-                      total: mission['total'],
-                      reward: mission['reward'],
-                      icon: mission['icon'],
-                      badge: mission['badge'],
-                      onSwap: () => _handleSwap(missionId),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: GestureDetector(
+                      onDoubleTap: isCompleted
+                          ? () => _handleCompleteMission(
+                        missionId,
+                        mission['reward'],
+                      )
+                          : null,
+                      child: MissionCardWithSwapButton(
+                        title: mission['title'],
+                        progress: mission['progress'],
+                        total: mission['total'],
+                        reward: mission['reward'],
+                        icon: mission['icon'],
+                        badge: mission['badge'],
+                        onSwap: () => _handleSwap(missionId),
+                      ),
                     ),
                   ),
                 ),
