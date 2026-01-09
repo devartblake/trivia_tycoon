@@ -34,6 +34,9 @@ import 'package:trivia_tycoon/game/controllers/settings_controller.dart';
 import 'package:trivia_tycoon/game/services/achievement_service.dart';
 import 'package:trivia_tycoon/game/services/mission_service.dart';
 import 'package:trivia_tycoon/game/multiplayer/services/multiplayer_service.dart';
+import '../../arcade/missions/arcade_mission_service.dart';
+import '../../arcade/services/arcade_daily_bonus_service.dart';
+import '../../arcade/services/arcade_personal_best_service.dart';
 import '../../game/services/referral_api_service.dart';
 import '../../game/services/referral_service.dart';
 import '../../game/services/referral_storage_service.dart';
@@ -80,6 +83,9 @@ class ServiceManager {
   final ReferralApiService referralApiService;
   final ReferralService referralService;
   final GeneralKeyValueStorageService generalKeyValueStorageService;
+  final ArcadePersonalBestService arcadePersonalBestService;
+  final ArcadeDailyBonusService arcadeDailyBonusService;
+  final ArcadeMissionService arcadeMissionService;
 
   ServiceManager({
     required this.apiService,
@@ -116,6 +122,9 @@ class ServiceManager {
     required this.playerProfileService,
     required this.qrSettingsService,
     required this.generalKeyValueStorageService,
+    required this.arcadePersonalBestService,
+    required this.arcadeDailyBonusService,
+    required this.arcadeMissionService,
     required this.referralStorageService,
     required this.referralApiService,
     required this.referralService,
@@ -135,6 +144,9 @@ class ServiceManager {
     final fernetService = await FernetService.initialize(secureStorage);
     final encryptService = await EncryptionService.initialize(secureStorage);
     final cache = await AppCacheService.initialize();
+    final arcadePB = ArcadePersonalBestService(cache);
+    final arcadeDaily = ArcadeDailyBonusService(cache);
+    final arcadeMissions = ArcadeMissionService(cache);
     final quizProgress = await QuizProgressService.initialize();
     final customTheme = await CustomThemeService.initialize();
     final swatch = SwatchService();
@@ -212,6 +224,10 @@ class ServiceManager {
       fernetService: fernetService,
       swatchService: swatch,
       appCacheService: cache,
+      // arcade services
+      arcadePersonalBestService: arcadePB,
+      arcadeDailyBonusService: arcadeDaily,
+      arcadeMissionService: arcadeMissions,
       themeNotifier: themeNotifier,
       secureStorage: secureStorage,
       historyService: history,

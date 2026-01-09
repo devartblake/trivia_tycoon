@@ -1,17 +1,42 @@
-class ArcadeDailyBonusService {
-  DateTime? _lastClaimedUtcDate; // track date only in UTC (stable)
+import '../../core/services/storage/app_cache_service.dart';
 
-  bool get isClaimedToday {
-    final last = _lastClaimedUtcDate;
-    if (last == null) return false;
-    final now = DateTime.now().toUtc();
-    return (last.year == now.year && last.month == now.month && last.day == now.day);
+class ArcadeDailyBonusService {
+  static const _cacheKey = 'arcade_daily_bonus_utc';
+
+  final AppCacheService _cache;
+  DateTime? _lastClaimedUtc;
+
+  ArcadeDailyBonusService(this._cache) {
+    _load();
   }
 
-  /// Marks claimed if not already. Returns true if newly claimed.
+  void _load() {
+    final raw = _cache.get<String>(_cacheKey);
+    if (raw == null) return;
+    _lastClaimedUtc = DateTime.tryParse(raw);
+  }
+
+  void _persist() {
+    if (_lastClaimedUtc != null) {
+      _cache.set(_cacheKey, _lastClaimedUtc!.toIso8601String());
+    }
+  }
+
+  bool get isClaimedToday {
+    final last = _lastClaimedUtc;
+    if (last == null) return false;
+
+    final now = DateTime.now().toUtc();
+    return last.year == now.year &&
+        last.month == now.month &&
+        last.day == now.day;
+  }
+
   bool tryClaimToday() {
     if (isClaimedToday) return false;
-    _lastClaimedUtcDate = DateTime.now().toUtc();
+
+    _lastClaimedUtc = DateTime.now().toUtc();
+    _persist();
     return true;
   }
 }

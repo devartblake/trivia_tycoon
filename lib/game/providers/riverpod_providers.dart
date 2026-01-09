@@ -15,6 +15,9 @@ import 'package:trivia_tycoon/game/models/pvp_challenge_models.dart';
 // 🔧 Core Services & Config
 import '../../admin/controllers/admin_filter_controller.dart';
 import '../../admin/states/admin_filter_state.dart';
+import '../../arcade/missions/arcade_mission_service.dart';
+import '../../arcade/services/arcade_daily_bonus_service.dart';
+import '../../arcade/services/arcade_personal_best_service.dart';
 import '../../core/manager/login_manager.dart';
 import '../../core/manager/tier_manager.dart';
 import '../../core/repositories/message_repository.dart';
@@ -795,6 +798,21 @@ final currentTierIdProvider = FutureProvider<int>((ref) async {
 final tierProgressionProvider = StateNotifierProvider<TierProgressionNotifier, TierProgressionState>((ref) {
   final tierManager = ref.read(tierManagerProvider);
   return TierProgressionNotifier(tierManager, ref);
+});
+
+// --- Arcade Settings ---
+final arcadePersonalBestServiceProvider =
+Provider<ArcadePersonalBestService>((ref) {
+  return ref.read(serviceManagerProvider).arcadePersonalBestService;
+});
+
+final arcadeDailyBonusServiceProvider =
+Provider<ArcadeDailyBonusService>((ref) {
+  return ref.read(serviceManagerProvider).arcadeDailyBonusService;
+});
+
+final arcadeMissionServiceProvider = Provider<ArcadeMissionService>((ref) {
+  return ref.read(serviceManagerProvider).arcadeMissionService;
 });
 
 // --- Flow Connect Settings ---

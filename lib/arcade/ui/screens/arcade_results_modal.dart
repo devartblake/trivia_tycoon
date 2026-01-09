@@ -14,6 +14,10 @@ class ArcadeResultsModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final meta = result.metadata ?? const <String, dynamic>{};
+    final bool isNewPb = meta['isNewPb'] == true;
+    final int previousBest = (meta['previousBest'] as int?) ?? 0;
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
       child: Column(
@@ -37,7 +41,65 @@ class ArcadeResultsModal extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          _statRow('Score', '${result.score}'),
+          AnimatedScale(
+            scale: isNewPb ? 1.08 : 1.0,
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeOutBack,
+            child: Text(
+              '${result.score}',
+              style: const TextStyle(
+                fontSize: 42,
+                fontWeight: FontWeight.w900,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          if (isNewPb) ...[
+            const SizedBox(height: 10),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(999),
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xFFFFD54F),
+                    Color(0xFFFFB300),
+                  ],
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.25),
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: const Text(
+                'NEW PERSONAL BEST',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 0.6,
+                ),
+              ),
+            ),
+          ],
+
+          if (previousBest > 0) ...[
+            const SizedBox(height: 6),
+            Text(
+              isNewPb
+                  ? 'Previous best: $previousBest'
+                  : 'Personal best: $previousBest',
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.70),
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
+
           _statRow('Difficulty', result.difficulty.label),
           _statRow('Duration', _formatDuration(result.duration)),
           const SizedBox(height: 14),

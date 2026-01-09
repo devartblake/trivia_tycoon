@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../game/providers/riverpod_providers.dart';
 import '../../../game/providers/xp_provider.dart';
 import '../../../game/providers/wallet_providers.dart'; // (added in Part B) incrementCoins/incrementGems
 import '../../domain/arcade_difficulty.dart';
@@ -95,14 +96,14 @@ class _ArcadeGameShellState extends ConsumerState<ArcadeGameShell> {
       score: result.score,
       duration: result.duration,
       metadata: {
-        ...result.metadata,
+        ...?result.metadata,
         'isNewPb': isNewPb,
         'previousBest': previousBest,
       },
     );
 
     final rewardsService = ref.read(arcadeRewardsServiceProvider);
-    final rewards = rewardsService.computeRewards(result);
+    final rewards = rewardsService.computeRewards(enrichedResult);
 
     // XP (your canonical write path)
     incrementXP(ref, rewards.xp);
@@ -112,7 +113,8 @@ class _ArcadeGameShellState extends ConsumerState<ArcadeGameShell> {
     incrementGems(ref, rewards.gems);
 
     // Analytics
-    ref.read(arcadeAnalyticsServiceProvider).logGameCompleted(result);
+    ref.read(arcadeAnalyticsServiceProvider).logGameCompleted(enrichedResult);
+    ref.read(arcadeMissionServiceProvider).onArcadeRunCompleted(enrichedResult);
 
     if (!mounted) return;
 
@@ -122,7 +124,7 @@ class _ArcadeGameShellState extends ConsumerState<ArcadeGameShell> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (_) => ArcadeResultsModal(result: result, rewards: rewards),
+      builder: (_) => ArcadeResultsModal(result: enrichedResult, rewards: rewards),
     );
 
     if (!mounted) return;
