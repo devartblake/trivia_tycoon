@@ -25,6 +25,7 @@ import '../../admin/questions/question_editor_screen.dart';
 import '../../admin/questions/question_list_screen.dart';
 import '../../admin/user_management/admin_users_screen.dart';
 import '../../admin/widgets/encrypted_file_preview.dart';
+import '../../arcade/ui/screens/arcade_hub_screen.dart';
 import '../../game/models/game_mode.dart';
 import '../../game/providers/onboarding_providers.dart';
 import '../../game/providers/auth_providers.dart';
@@ -332,6 +333,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               redirect: onboardingGuard,
             ),
           ]),
+
+      /// Arcade Hub
+      GoRoute(
+        path: '/arcade',
+        builder: (context, state) => const ArcadeHubScreen(),
+      ),
 
       /// Leaderboard Routes
       GoRoute(
