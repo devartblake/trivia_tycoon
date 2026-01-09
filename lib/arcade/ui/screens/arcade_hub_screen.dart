@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/arcade/ui/screens/widgets/wallet_counters_row.dart';
+import '../../../game/providers/riverpod_providers.dart';
 import '../../../game/providers/wallet_providers.dart';
 import '../../domain/arcade_difficulty.dart';
 import '../../domain/arcade_game_definition.dart';
+import '../../missions/arcade_mission_models.dart';
 import '../../providers/arcade_providers.dart';
 import 'arcade_game_shell.dart';
 
@@ -78,6 +80,9 @@ class ArcadeHubScreen extends ConsumerWidget {
               ),
             ),
           ),
+
+          // Arcade Missions Section
+          _buildArcadeMissionsBox(context, ref),
         ],
       ),
     );
@@ -269,6 +274,52 @@ class ArcadeHubScreen extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildArcadeMissionsBox(BuildContext context, WidgetRef ref) {
+    final service = ref.watch(arcadeMissionServiceProvider);
+    final missions = service.missions;
+
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Arcade Missions',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w900,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            for (final m in missions)
+              _MissionRow(
+                mission: m,
+                progress: service.progressFor(m.id),
+                canClaim: service.canClaim(m.id),
+                onClaim: () {
+                  service.markClaimed(m.id);
+
+                  incrementCoins(ref, m.reward.coins);
+                  incrementGems(ref, m.reward.gems);
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Mission complete! +${m.reward.coins} coins, +${m.reward.gems} gems',
+                      ),
+                    ),
+                  );
+                },
+              ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -812,6 +863,90 @@ class ArcadeHubScreen extends ConsumerWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _MissionRow extends StatelessWidget {
+  final ArcadeMission mission;
+  final ArcadeMissionProgress progress;
+  final bool canClaim;
+  final VoidCallback onClaim;
+
+  const _MissionRow({
+    required this.mission,
+    required this.progress,
+    required this.canClaim,
+    required this.onClaim,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final ratio = (progress.current / mission.target).clamp(0.0, 1.0);
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: Colors.white.withOpacity(0.06),
+        border: Border.all(color: Colors.white.withOpacity(0.12)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            mission.title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            mission.subtitle,
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.7),
+              fontSize: 12,
+            ),
+          ),
+          const SizedBox(height: 10),
+
+          LinearProgressIndicator(
+            value: ratio,
+            backgroundColor: Colors.white.withOpacity(0.1),
+            color: Colors.amberAccent,
+            minHeight: 6,
+          ),
+          const SizedBox(height: 8),
+
+          Row(
+            children: [
+              Text(
+                '${progress.current}/${mission.target}',
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.7),
+                  fontSize: 12,
+                ),
+              ),
+              const Spacer(),
+              ElevatedButton(
+                onPressed: canClaim ? onClaim : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                  canClaim ? Colors.amberAccent : Colors.white.withOpacity(0.12),
+                  foregroundColor: Colors.black,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(canClaim ? 'Claim' : 'In Progress'),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

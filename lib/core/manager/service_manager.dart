@@ -34,6 +34,7 @@ import 'package:trivia_tycoon/game/controllers/settings_controller.dart';
 import 'package:trivia_tycoon/game/services/achievement_service.dart';
 import 'package:trivia_tycoon/game/services/mission_service.dart';
 import 'package:trivia_tycoon/game/multiplayer/services/multiplayer_service.dart';
+import '../../arcade/leaderboards/local_arcade_leaderboard_service.dart';
 import '../../arcade/missions/arcade_mission_service.dart';
 import '../../arcade/services/arcade_daily_bonus_service.dart';
 import '../../arcade/services/arcade_personal_best_service.dart';
@@ -86,6 +87,7 @@ class ServiceManager {
   final ArcadePersonalBestService arcadePersonalBestService;
   final ArcadeDailyBonusService arcadeDailyBonusService;
   final ArcadeMissionService arcadeMissionService;
+  final LocalArcadeLeaderboardService localArcadeLeaderboardService;
 
   ServiceManager({
     required this.apiService,
@@ -125,6 +127,7 @@ class ServiceManager {
     required this.arcadePersonalBestService,
     required this.arcadeDailyBonusService,
     required this.arcadeMissionService,
+    required this.localArcadeLeaderboardService,
     required this.referralStorageService,
     required this.referralApiService,
     required this.referralService,
@@ -147,6 +150,7 @@ class ServiceManager {
     final arcadePB = ArcadePersonalBestService(cache);
     final arcadeDaily = ArcadeDailyBonusService(cache);
     final arcadeMissions = ArcadeMissionService(cache);
+    final localArcadeLeaderboards = LocalArcadeLeaderboardService(cache);
     final quizProgress = await QuizProgressService.initialize();
     final customTheme = await CustomThemeService.initialize();
     final swatch = SwatchService();
@@ -228,6 +232,7 @@ class ServiceManager {
       arcadePersonalBestService: arcadePB,
       arcadeDailyBonusService: arcadeDaily,
       arcadeMissionService: arcadeMissions,
+      localArcadeLeaderboardService: localArcadeLeaderboards,
       themeNotifier: themeNotifier,
       secureStorage: secureStorage,
       historyService: history,
