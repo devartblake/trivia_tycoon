@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../domain/arcade_difficulty.dart';
 import '../../domain/arcade_result.dart';
 import '../../ui/screens/arcade_game_shell.dart';
+import '../../ui/screens/widgets/wallet_counters_row.dart';
 import 'pattern_sprint_controller.dart';
 
 class PatternSprintScreen extends StatefulWidget {
@@ -55,6 +56,10 @@ class _PatternSprintScreenState extends State<PatternSprintScreen> {
       appBar: AppBar(
         title: Text('Pattern Sprint • ${widget.difficulty.label}'),
         actions: [
+          const Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: WalletCountersRow(compact: true),
+          ),
           TextButton(
             onPressed: _finish,
             child: const Text('End', style: TextStyle(color: Colors.white)),

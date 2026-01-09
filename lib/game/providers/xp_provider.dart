@@ -8,8 +8,12 @@ final playerXPProvider = StateProvider<int>((ref) {
   return xpService.playerXP;
 });
 
+/// Canonical XP write path (used by Arcade, Trivia, Missions, etc.)
 void incrementXP(WidgetRef ref, int amount) {
+  if (amount <= 0) return;
+
   final xpService = ref.read(xpServiceProvider);
   xpService.addXP(amount);
+
   ref.read(playerXPProvider.notifier).state = xpService.playerXP;
 }

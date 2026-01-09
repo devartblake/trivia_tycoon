@@ -81,6 +81,26 @@ class _ArcadeGameShellState extends ConsumerState<ArcadeGameShell> {
       metadata: rawResult.metadata,
     );
 
+    // ✅ Step 6D: Personal Best (PB) enrichment
+    final pbService = ref.read(arcadePersonalBestServiceProvider);
+    final previousBest = pbService.getBest(result.gameId, result.difficulty);
+    final isNewPb = result.score > previousBest;
+    if (isNewPb) {
+      pbService.trySetBest(result);
+    }
+
+    final enrichedResult = ArcadeResult(
+      gameId: result.gameId,
+      difficulty: result.difficulty,
+      score: result.score,
+      duration: result.duration,
+      metadata: {
+        ...result.metadata,
+        'isNewPb': isNewPb,
+        'previousBest': previousBest,
+      },
+    );
+
     final rewardsService = ref.read(arcadeRewardsServiceProvider);
     final rewards = rewardsService.computeRewards(result);
 

@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../services/arcade_daily_bonus_service.dart';
+import '../services/arcade_personal_best_service.dart';
 import '../services/arcade_registry.dart';
 import '../services/arcade_rewards_service.dart';
 import '../services/arcade_session_service.dart';
@@ -18,4 +20,12 @@ final arcadeSessionServiceProvider = Provider<ArcadeSessionService>((ref) {
 
 final arcadeAnalyticsServiceProvider = Provider<ArcadeAnalyticsService>((ref) {
   return const ArcadeAnalyticsService();
+});
+
+final arcadePersonalBestServiceProvider = Provider<ArcadePersonalBestService>((ref) {
+  return ArcadePersonalBestService();
+});
+
+final arcadeDailyBonusServiceProvider = Provider<ArcadeDailyBonusService>((ref) {
+  return ArcadeDailyBonusService();
 });
