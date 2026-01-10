@@ -18,6 +18,7 @@ import '../../admin/states/admin_filter_state.dart';
 import '../../arcade/leaderboards/local_arcade_leaderboard_service.dart';
 import '../../arcade/missions/arcade_mission_service.dart';
 import '../../arcade/services/arcade_daily_bonus_service.dart';
+import '../../arcade/services/arcade_mission_claim_service.dart';
 import '../../arcade/services/arcade_personal_best_service.dart';
 import '../../core/manager/login_manager.dart';
 import '../../core/manager/tier_manager.dart';
@@ -809,6 +810,17 @@ final arcadeMissionServiceProvider = Provider<ArcadeMissionService>((ref) {
 final localArcadeLeaderboardServiceProvider =
 Provider<LocalArcadeLeaderboardService>((ref) {
   return ref.read(serviceManagerProvider).localArcadeLeaderboardService;
+});
+
+final localArcadeLeaderboardProvider =
+Provider<LocalArcadeLeaderboardService>((ref) {
+  final cache = ref.read(appCacheServiceProvider);
+  return LocalArcadeLeaderboardService(cache);
+});
+
+final arcadeMissionClaimServiceProvider = Provider<ArcadeMissionClaimService>((ref) {
+  final cache = ref.read(appCacheServiceProvider); // or ServiceManager.instance.appCacheService
+  return ArcadeMissionClaimService(cache);
 });
 
 

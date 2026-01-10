@@ -439,6 +439,8 @@ class _MissionPanelState extends ConsumerState<MissionPanel>
           final mission = missions[index];
           final missionId = mission['id'] as String;
           final isCompleted = mission['progress'] >= mission['total'];
+          final claimService = ref.read(arcadeMissionClaimServiceProvider);
+          final alreadyClaimed = claimService.isClaimedToday(missionId);
 
           return TweenAnimationBuilder<double>(
             duration: Duration(milliseconds: 400 + (index * 100)),
@@ -451,20 +453,50 @@ class _MissionPanelState extends ConsumerState<MissionPanel>
                   child: Align(
                     alignment: Alignment.center,
                     child: GestureDetector(
+                      onTap: null,
                       onDoubleTap: isCompleted
                           ? () => _handleCompleteMission(
                         missionId,
                         mission['reward'],
                       )
                           : null,
-                      child: MissionCardWithSwapButton(
-                        title: mission['title'],
-                        progress: mission['progress'],
-                        total: mission['total'],
-                        reward: mission['reward'],
-                        icon: mission['icon'],
-                        badge: mission['badge'],
-                        onSwap: () => _handleSwap(missionId),
+                      child: Stack(
+                        children: [
+                            MissionCardWithSwapButton(
+                            title: mission['title'],
+                            progress: mission['progress'],
+                            total: mission['total'],
+                            reward: mission['reward'],
+                            icon: mission['icon'],
+                            badge: mission['badge'],
+                            onSwap: () => _handleSwap(missionId),
+                          ),
+                          if (isCompleted)
+                            Positioned(
+                              left: 20,
+                              right: 20,
+                              bottom: 16,
+                              child: SizedBox(
+                                height: 40,
+                                child: ElevatedButton(
+                                  onPressed: alreadyClaimed
+                                      ? null
+                                      : () async {
+                                    // mark claimed FIRST, then grant XP
+                                    await claimService.markClaimedToday(missionId);
+                                    _handleCompleteMission(missionId, mission['reward']);
+                                    setState(() {}); // refresh local claimed state
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: alreadyClaimed ? Colors.grey.shade700 : const Color(0xFF6C5CE7),
+                                    foregroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                  ),
+                                  child: Text(alreadyClaimed ? "Claimed" : "Claim Reward"),
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                     ),
                   ),

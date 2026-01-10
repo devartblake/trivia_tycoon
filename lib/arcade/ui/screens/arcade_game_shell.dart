@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../game/providers/riverpod_providers.dart';
 import '../../../game/providers/xp_provider.dart';
@@ -126,7 +127,19 @@ class _ArcadeGameShellState extends ConsumerState<ArcadeGameShell> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (_) => ArcadeResultsModal(result: enrichedResult, rewards: rewards),
+      builder: (_) => ArcadeResultsModal(
+        result: enrichedResult,
+        rewards: rewards,
+        onPlayAgain: () {
+          // for now, simplest: just pop back to hub and let user re-enter
+          // (we can implement true replay-in-place after Step 8C)
+        },
+        onViewAllLocalScores: () {
+          // navigate to Step 8C screen route
+          // Example if you're using go_router:
+          context.push('/arcade/local-scores');
+        },
+      ),
     );
 
     if (!mounted) return;

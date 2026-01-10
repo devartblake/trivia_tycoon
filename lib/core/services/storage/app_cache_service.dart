@@ -1,17 +1,26 @@
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
 import '../../../game/models/question_model.dart';
 import '../../../game/models/leaderboard_entry.dart';
 import '../../../ui_components/qr_code/models/scan_history_item.dart';
 
+/// Offline-first cache service backed by Hive.
+/// Key goals:
+/// - Stable JSON typing (Map<String,dynamic> and List) when reading cached JSON.
+/// - Avoid brittle generic casts like get<Map<String,dynamic>>() (explicit helpers instead).
+/// - Maintain lightweight expiration metadata per key.
+/// - Support existing app caching use-cases (leaderboards, questions, scan history, temp/session data).
 class AppCacheService {
-  static const _boxName = 'cache';
-  static const _tempDataKey = 'temp_data';
-  static const _cacheMetadataKey = 'cache_metadata';
-  static const _lastCleanupKey = 'last_cleanup';
+  static const String _boxName = 'cache';
 
-  late final Box _box;
+  // Internal keys
+  static const String _tempDataKey = 'temp_data';
+  static const String _cacheMetadataKey = 'cache_metadata';
+  static const String _lastCleanupKey = 'last_cleanup';
 
   // Cache expiration settings
   static const Duration _defaultExpiration = Duration(hours: 24);
@@ -19,36 +28,92 @@ class AppCacheService {
   static const Duration _leaderboardCacheExpiration = Duration(minutes: 30);
   static const Duration _tempDataExpiration = Duration(hours: 1);
 
-  /// Call this in your ServiceManager before using other methods
+  late final Box _box;
+
+  /// Call this in your ServiceManager before using other methods.
+  /// This assumes Hive has already been initialized (Hive.initFlutter()) in your app bootstrap.
   static Future<AppCacheService> initialize() async {
     final service = AppCacheService();
+
+    // If your bootstrap already opens this box, Hive.openBox will return the existing open box.
     service._box = await Hive.openBox(_boxName);
+
+    // Optional: clean old entries at startup (safe, but not required)
+    // await service.cleanOldEntries();
+
     return service;
   }
 
-  /// Generic get with expiration check
+  // ---------------------------------------------------------------------------
+  // Core typed API
+  // ---------------------------------------------------------------------------
+
+  /// Generic get with expiration check.
+  ///
+  /// IMPORTANT:
+  /// - Do NOT call get<Map<String, dynamic>>. Use getJsonMap().
+  /// - Do NOT call get<List<dynamic>> for JSON arrays. Use getJsonList() when you can.
   T? get<T>(String key) {
+
     final raw = _box.get(key);
     if (raw == null) return null;
 
-    // Check if this is an expired cached item
+    // Check expiration
     if (_isExpired(key)) {
       _box.delete(key);
+      _removeCacheMetadata(key);
       return null;
     }
 
+    // If stored as JSON string, decode and normalize Map keys to String.
     if (raw is String) {
-      try {
-        return jsonDecode(raw) as T?;
-      } catch (e) {
+      final decoded = _tryDecodeJson(raw);
+      if (decoded == null) {
+        // Plain string (not JSON)
         return raw as T?;
       }
+
+      final normalized = _normalizeDecoded(decoded);
+      return normalized as T?;
     }
+
+    // Stored directly as a Hive-supported primitive/object.
     return raw as T?;
   }
 
-  /// FIX: Added a dedicated method for saving JSON-encodable objects.
-  /// This simplifies caching logic by ensuring any object is stored as a string.
+  /// Strongly-typed JSON map getter (recommended for JSON objects).
+  Map<String, dynamic>? getJsonMap(String key) {
+    final v = get<dynamic>(key);
+    if (v == null) return null;
+
+    if (v is Map<String, dynamic>) return v;
+    if (v is Map) {
+      return Map<String, dynamic>.from(
+        v.map((k, val) => MapEntry(k.toString(), val)),
+      );
+    }
+
+    if (kDebugMode) {
+      print('❌ [AppCacheService] getJsonMap("$key") got ${v.runtimeType}');
+    }
+    return null;
+  }
+
+  /// Strongly-typed JSON list getter (recommended for JSON arrays).
+  List<dynamic>? getJsonList(String key) {
+    final v = get<dynamic>(key);
+    if (v == null) return null;
+
+    if (v is List) return v;
+
+    if (kDebugMode) {
+      print('❌ [AppCacheService] getJsonList("$key") got ${v.runtimeType}');
+    }
+    return null;
+  }
+
+  /// Dedicated method for saving JSON-encodable objects.
+  /// Ensures any object is stored as a JSON string for stable decoding.
   Future<void> setJson(String key, dynamic value, {Duration? expiration}) async {
     try {
       final encoded = jsonEncode(value);
@@ -61,29 +126,48 @@ class AppCacheService {
     }
   }
 
-  Future<void> put(String key, dynamic value) async {
+  /// Stores raw data as-is (use for primitives or Hive-supported objects).
+  Future<void> put(String key, dynamic value, {Duration? expiration}) async {
     await _box.put(key, value);
-    await _updateCacheMetadata(key);
+    await _updateCacheMetadata(key, expiration: expiration);
   }
 
-  /// Generic set (JSON encodes all non-primitive values) with expiration
+  /// Generic set:
+  /// - primitives stored directly
+  /// - Map/List encoded as JSON string
   Future<void> set(String key, dynamic value, {Duration? expiration}) async {
-    final encoded = value is String || value is num || value is bool
-        ? value
-        : jsonEncode(value);
+    if (value == null) {
+      await remove(key);
+      return;
+    }
 
-    await _box.put(key, encoded);
-    await _updateCacheMetadata(key, expiration: expiration);
+    final isPrimitive =
+        value is String || value is num || value is bool || value is DateTime;
+
+    if (isPrimitive) {
+      await put(key, value, expiration: expiration);
+      return;
+    }
+
+    // Structured data goes through JSON for stability.
+    await setJson(key, value, expiration: expiration);
   }
 
   /// Set with explicit expiration time
   Future<void> setWithExpiration(
-      String key, dynamic value, DateTime expiration) async {
-    final encoded = value is String || value is num || value is bool
-        ? value
-        : jsonEncode(value);
+      String key,
+      dynamic value,
+      DateTime expiration,
+      ) async {
+    final isPrimitive =
+        value is String || value is num || value is bool || value is DateTime;
 
-    await _box.put(key, encoded);
+    if (isPrimitive) {
+      await _box.put(key, value);
+    } else {
+      await _box.put(key, jsonEncode(value));
+    }
+
     await _setCacheExpiration(key, expiration);
   }
 
@@ -96,34 +180,45 @@ class AppCacheService {
     await _box.clear();
   }
 
-  /// 📹 Leaderboard helpers with expiration
+  // ---------------------------------------------------------------------------
+  // Feature helpers (Leaderboard / Questions / Scan history)
+  // ---------------------------------------------------------------------------
+
+  /// Leaderboard helpers with expiration
   Future<void> cacheLeaderboard(List<LeaderboardEntry> entries) async {
     final encoded = entries.map((e) => e.toJson()).toList();
-    await setWithExpiration('leaderboard_data', encoded,
-        DateTime.now().add(_leaderboardCacheExpiration));
+    await setWithExpiration(
+      'leaderboard_data',
+      encoded,
+      DateTime.now().add(_leaderboardCacheExpiration),
+    );
   }
 
   Future<List<LeaderboardEntry>> getCachedLeaderboard() async {
-    final raw = get<List<dynamic>>('leaderboard_data');
+    final raw = getJsonList('leaderboard_data');
     if (raw == null) return [];
 
     try {
-      return raw
-          .map((e) => LeaderboardEntry.fromJson(Map<String, dynamic>.from(e)))
-          .toList();
+      return raw.map((e) {
+        if (e is Map<String, dynamic>) return LeaderboardEntry.fromJson(e);
+        if (e is Map) return LeaderboardEntry.fromJson(Map<String, dynamic>.from(e));
+        throw StateError('Invalid leaderboard entry type: ${e.runtimeType}');
+      }).toList();
     } catch (e) {
       await remove('leaderboard_data');
       return [];
     }
   }
 
-  /// ✅ Save QuestionModel list to Hive (as JSON strings) with expiration
-  Future<void> saveQuestionCache(
-      String key, List<QuestionModel> questions) async {
+  /// Save QuestionModel list to Hive (as JSON strings) with expiration
+  Future<void> saveQuestionCache(String key, List<QuestionModel> questions) async {
     try {
-      final encoded = questions.map((q) => json.encode(q.toJson())).toList();
-      await setWithExpiration(key, json.encode(encoded),
-          DateTime.now().add(_questionCacheExpiration));
+      final encoded = questions.map((q) => q.toJson()).toList();
+      await setWithExpiration(
+        key,
+        encoded,
+        DateTime.now().add(_questionCacheExpiration),
+      );
     } catch (e) {
       if (kDebugMode) {
         print('❌ Failed to save question cache: $e');
@@ -131,32 +226,31 @@ class AppCacheService {
     }
   }
 
-  /// ✅ Load QuestionModel list from Hive with expiration check
+  /// Load QuestionModel list from Hive with expiration check
   Future<List<QuestionModel>> loadQuestionCache(String key) async {
-    final raw = get<String>(key);
+    final raw = getJsonList(key);
     if (raw == null) return [];
 
     try {
-      final List<dynamic> decoded = json.decode(raw);
-      return decoded
-          .map((e) => QuestionModel.fromJson(json.decode(e)))
-          .toList();
+      return raw.map((e) {
+        if (e is Map<String, dynamic>) return QuestionModel.fromJson(e);
+        if (e is Map) return QuestionModel.fromJson(Map<String, dynamic>.from(e));
+        throw StateError('Invalid question type: ${e.runtimeType}');
+      }).toList();
     } catch (e) {
       await remove(key);
       return [];
     }
   }
 
-  /// ✅ Clear cached question data for a given key
-  Future<void> clearQuestionCache(String key) async {
-    await remove(key);
-  }
+  Future<void> clearQuestionCache(String key) async => remove(key);
 
-  /// Saves question from admin question editor
+  /// Saves questions from admin question editor (stored in separate 'questions' box).
   Future<void> saveQuestions(List<QuestionModel> questions) async {
     try {
       final box = await Hive.openBox('questions');
       await box.put('all', questions.map((q) => q.toJson()).toList());
+      // Track under cache metadata (optional)
       await _updateCacheMetadata('questions_all');
     } catch (e) {
       if (kDebugMode) {
@@ -165,13 +259,17 @@ class AppCacheService {
     }
   }
 
-  /// Retrieves questions from model
+  /// Retrieves questions from separate box.
   Future<List<QuestionModel>> getQuestions() async {
     try {
       final box = await Hive.openBox('questions');
       final raw = box.get('all', defaultValue: []);
       if (raw is List) {
-        return raw.map((q) => QuestionModel.fromJson(q)).toList();
+        return raw.map((q) {
+          if (q is Map<String, dynamic>) return QuestionModel.fromJson(q);
+          if (q is Map) return QuestionModel.fromJson(Map<String, dynamic>.from(q));
+          throw StateError('Invalid saved question type: ${q.runtimeType}');
+        }).toList();
       }
       return [];
     } catch (e) {
@@ -186,7 +284,7 @@ class AppCacheService {
   Future<void> saveScanHistory(List<ScanHistoryItem> items) async {
     try {
       final encoded = items.map((e) => e.toJson()).toList();
-      await set('qr_scan_history', encoded, expiration: _defaultExpiration);
+      await setJson('qr_scan_history', encoded, expiration: _defaultExpiration);
     } catch (e) {
       if (kDebugMode) {
         print('❌ Failed to save scan history: $e');
@@ -197,10 +295,12 @@ class AppCacheService {
   /// Retrieves QR Code Camera scan history
   Future<List<ScanHistoryItem>> loadScanHistory() async {
     try {
-      final raw = get<List<dynamic>>('qr_scan_history') ?? [];
-      return raw
-          .map((e) => ScanHistoryItem.fromJson(Map<String, dynamic>.from(e)))
-          .toList();
+      final raw = getJsonList('qr_scan_history') ?? const <dynamic>[];
+      return raw.map((e) {
+        if (e is Map<String, dynamic>) return ScanHistoryItem.fromJson(e);
+        if (e is Map) return ScanHistoryItem.fromJson(Map<String, dynamic>.from(e));
+        throw StateError('Invalid scan item type: ${e.runtimeType}');
+      }).toList();
     } catch (e) {
       if (kDebugMode) {
         print('❌ Failed to load scan history: $e');
@@ -210,56 +310,61 @@ class AppCacheService {
     }
   }
 
-  /// Clears QR Code Camera scan history
-  Future<void> clearScanHistory() async {
-    await remove('qr_scan_history');
-  }
+  Future<void> clearScanHistory() async => remove('qr_scan_history');
 
-  /// Store temporary data that expires quickly
+  // ---------------------------------------------------------------------------
+  // Temporary data (session-like, expires quickly)
+  // ---------------------------------------------------------------------------
+
+  /// Store temporary data that expires quickly.
+  /// Stored under [_tempDataKey] as a JSON map.
   Future<void> setTemporaryData(String key, dynamic value) async {
-    final tempData =
-        get<Map<String, dynamic>>(_tempDataKey) ?? <String, dynamic>{};
+    final tempData = getJsonMap(_tempDataKey) ?? <String, dynamic>{};
+
     tempData[key] = {
       'value': value,
       'expires': DateTime.now().add(_tempDataExpiration).toIso8601String(),
     };
-    await set(_tempDataKey, tempData);
+
+    await setJson(_tempDataKey, tempData, expiration: _tempDataExpiration);
   }
 
-  /// Get temporary data with automatic expiration
+  /// Get temporary data with automatic expiration.
   T? getTemporaryData<T>(String key) {
-    final tempData =
-        get<Map<String, dynamic>>(_tempDataKey) ?? <String, dynamic>{};
+    final tempData = getJsonMap(_tempDataKey) ?? <String, dynamic>{};
     final item = tempData[key];
 
-    if (item == null) return null;
+    if (item is! Map) return null;
 
-    final expires = DateTime.parse(item['expires']);
+    final itemMap = Map<String, dynamic>.from(item);
+    final expiresRaw = itemMap['expires'];
+    if (expiresRaw is! String) return null;
+
+    final expires = DateTime.tryParse(expiresRaw);
+    if (expires == null) return null;
+
     if (DateTime.now().isAfter(expires)) {
-      // Item expired, remove it
       tempData.remove(key);
-      set(_tempDataKey, tempData);
+      setJson(_tempDataKey, tempData, expiration: _tempDataExpiration);
       return null;
     }
 
-    return item['value'] as T?;
+    return itemMap['value'] as T?;
   }
 
-  /// LIFECYCLE METHOD: Clears temporary data
-  /// Called when app goes to background or is about to be terminated
+  /// Clears temporary data and other temp/session keys.
   Future<void> clearTemporaryData() async {
     try {
       await remove(_tempDataKey);
 
-      // Clear any other temporary keys
       final tempKeys = _box.keys
-          .where((key) =>
-      key.toString().startsWith('temp_') ||
-          key.toString().startsWith('session_'))
+          .map((k) => k.toString())
+          .where((k) => k.startsWith('temp_') || k.startsWith('session_'))
           .toList();
 
-      for (final key in tempKeys) {
-        await _box.delete(key);
+      for (final k in tempKeys) {
+        await _box.delete(k);
+        await _removeCacheMetadata(k);
       }
 
       if (kDebugMode) {
@@ -272,41 +377,41 @@ class AppCacheService {
     }
   }
 
-  /// LIFECYCLE METHOD: Cleans old cache entries
-  /// Called when app resumes or starts
+  // ---------------------------------------------------------------------------
+  // Cleanup / metadata / expiration
+  // ---------------------------------------------------------------------------
+
+  /// Cleans old cache entries (expires keys tracked in metadata).
   Future<void> cleanOldEntries() async {
     try {
       final metadata = _getCacheMetadata();
       final now = DateTime.now();
       final keysToRemove = <String>[];
 
-      // Check each cached item for expiration
       for (final entry in metadata.entries) {
         final key = entry.key;
-        final data = entry.value as Map<String, dynamic>?;
+        final data = entry.value;
 
-        if (data != null && data.containsKey('expires')) {
-          final expires = DateTime.parse(data['expires']);
-          if (now.isAfter(expires)) {
-            keysToRemove.add(key);
+        if (data is Map && data.containsKey('expires')) {
+          final expiresRaw = data['expires'];
+          if (expiresRaw is String) {
+            final expires = DateTime.tryParse(expiresRaw);
+            if (expires != null && now.isAfter(expires)) {
+              keysToRemove.add(key);
+            }
           }
         }
       }
 
-      // Remove expired entries
       for (final key in keysToRemove) {
         await remove(key);
       }
 
-      // Clean up temporary data
       await _cleanExpiredTemporaryData();
-
-      // Update last cleanup time
       await _updateLastCleanup();
 
       if (kDebugMode) {
-        print(
-            '✅ Cache cleanup completed. Removed ${keysToRemove.length} expired entries');
+        print('✅ Cache cleanup completed. Removed ${keysToRemove.length} expired entries');
       }
     } catch (e) {
       if (kDebugMode) {
@@ -315,19 +420,21 @@ class AppCacheService {
     }
   }
 
-  /// Clean expired temporary data
   Future<void> _cleanExpiredTemporaryData() async {
-    final tempData =
-        get<Map<String, dynamic>>(_tempDataKey) ?? <String, dynamic>{};
+    final tempData = getJsonMap(_tempDataKey) ?? <String, dynamic>{};
     final now = DateTime.now();
     final keysToRemove = <String>[];
 
     for (final entry in tempData.entries) {
-      final item = entry.value as Map<String, dynamic>?;
-      if (item != null && item.containsKey('expires')) {
-        final expires = DateTime.parse(item['expires']);
-        if (now.isAfter(expires)) {
-          keysToRemove.add(entry.key);
+      final item = entry.value;
+      if (item is Map) {
+        final itemMap = Map<String, dynamic>.from(item);
+        final expiresRaw = itemMap['expires'];
+        if (expiresRaw is String) {
+          final expires = DateTime.tryParse(expiresRaw);
+          if (expires != null && now.isAfter(expires)) {
+            keysToRemove.add(entry.key);
+          }
         }
       }
     }
@@ -337,11 +444,10 @@ class AppCacheService {
     }
 
     if (keysToRemove.isNotEmpty) {
-      await set(_tempDataKey, tempData);
+      await setJson(_tempDataKey, tempData, expiration: _tempDataExpiration);
     }
   }
 
-  /// Updates cache metadata for a key
   Future<void> _updateCacheMetadata(String key, {Duration? expiration}) async {
     final metadata = _getCacheMetadata();
     final now = DateTime.now();
@@ -349,7 +455,7 @@ class AppCacheService {
     metadata[key] = {
       'created': now.toIso8601String(),
       'accessed': now.toIso8601String(),
-      'expires': expiration != null
+      'expires': (expiration != null)
           ? now.add(expiration).toIso8601String()
           : now.add(_defaultExpiration).toIso8601String(),
     };
@@ -357,64 +463,75 @@ class AppCacheService {
     await _box.put(_cacheMetadataKey, metadata);
   }
 
-  /// Sets specific expiration for a cache key
   Future<void> _setCacheExpiration(String key, DateTime expiration) async {
     final metadata = _getCacheMetadata();
-    final existing =
-        metadata[key] as Map<String, dynamic>? ?? <String, dynamic>{};
+    final existing = metadata[key];
+    final existingMap = existing is Map
+        ? Map<String, dynamic>.from(existing)
+        : <String, dynamic>{};
 
-    existing['expires'] = expiration.toIso8601String();
-    existing['accessed'] = DateTime.now().toIso8601String();
+    existingMap['expires'] = expiration.toIso8601String();
+    existingMap['accessed'] = DateTime.now().toIso8601String();
 
-    metadata[key] = existing;
+    metadata[key] = existingMap;
     await _box.put(_cacheMetadataKey, metadata);
   }
 
-  /// Removes cache metadata for a key
   Future<void> _removeCacheMetadata(String key) async {
     final metadata = _getCacheMetadata();
     metadata.remove(key);
     await _box.put(_cacheMetadataKey, metadata);
   }
 
-  /// Gets cache metadata
   Map<String, dynamic> _getCacheMetadata() {
     final raw = _box.get(_cacheMetadataKey);
-    return raw is Map ? Map<String, dynamic>.from(raw) : <String, dynamic>{};
+    if (raw is Map) {
+      // Normalize keys to String
+      return Map<String, dynamic>.from(
+        raw.map((k, v) => MapEntry(k.toString(), v)),
+      );
+    }
+    return <String, dynamic>{};
   }
 
-  /// Checks if a cache key is expired
   bool _isExpired(String key) {
     final metadata = _getCacheMetadata();
-    final data = metadata[key] as Map<String, dynamic>?;
+    final data = metadata[key];
 
-    if (data == null || !data.containsKey('expires')) {
-      return false; // No expiration data means no expiration
-    }
+    if (data is! Map) return false;
 
-    final expires = DateTime.parse(data['expires']);
+    final m = Map<String, dynamic>.from(data);
+    final expiresRaw = m['expires'];
+    if (expiresRaw is! String) return false;
+
+    final expires = DateTime.tryParse(expiresRaw);
+    if (expires == null) return false;
+
     return DateTime.now().isAfter(expires);
   }
 
-  /// Updates last cleanup timestamp
   Future<void> _updateLastCleanup() async {
     await _box.put(_lastCleanupKey, DateTime.now().toIso8601String());
   }
 
-  /// Gets last cleanup timestamp
   Future<DateTime?> getLastCleanup() async {
     final raw = _box.get(_lastCleanupKey);
-    return raw != null ? DateTime.parse(raw) : null;
+    if (raw is String) return DateTime.tryParse(raw);
+    return null;
   }
 
-  /// Gets cache statistics
   Future<Map<String, dynamic>> getCacheStats() async {
     final metadata = _getCacheMetadata();
     final totalEntries = _box.length;
+
     final expiredCount = metadata.values.where((data) {
-      if (data is Map && data.containsKey('expires')) {
-        final expires = DateTime.parse(data['expires']);
-        return DateTime.now().isAfter(expires);
+      if (data is Map) {
+        final m = Map<String, dynamic>.from(data);
+        final expiresRaw = m['expires'];
+        if (expiresRaw is String) {
+          final expires = DateTime.tryParse(expiresRaw);
+          return expires != null && DateTime.now().isAfter(expires);
+        }
       }
       return false;
     }).length;
@@ -430,68 +547,94 @@ class AppCacheService {
     };
   }
 
-  /// Gets cache entry details
   Future<Map<String, dynamic>?> getCacheEntryInfo(String key) async {
     final metadata = _getCacheMetadata();
-    final data = metadata[key] as Map<String, dynamic>?;
+    final data = metadata[key];
 
-    if (data == null) return null;
+    if (data is! Map) return null;
 
+    final m = Map<String, dynamic>.from(data);
+    final created = DateTime.tryParse(m['created']?.toString() ?? '');
+    final expires = DateTime.tryParse(m['expires']?.toString() ?? '');
     final now = DateTime.now();
-    final expires = DateTime.parse(data['expires']);
-    final created = DateTime.parse(data['created']);
+
+    if (created == null || expires == null) return null;
 
     return {
       'key': key,
-      'created': data['created'],
-      'accessed': data['accessed'],
-      'expires': data['expires'],
+      'created': m['created'],
+      'accessed': m['accessed'],
+      'expires': m['expires'],
       'isExpired': now.isAfter(expires),
       'age': now.difference(created).inMinutes,
       'timeToExpiry': expires.difference(now).inMinutes,
     };
   }
 
-  /// Force expires a cache entry
   Future<void> expireCacheEntry(String key) async {
     await _setCacheExpiration(
-        key, DateTime.now().subtract(const Duration(seconds: 1)));
+      key,
+      DateTime.now().subtract(const Duration(seconds: 1)),
+    );
   }
 
-  /// Extends cache entry expiration
   Future<void> extendCacheEntry(String key, Duration extension) async {
     final info = await getCacheEntryInfo(key);
-    if (info != null) {
-      final currentExpires = DateTime.parse(info['expires']);
-      await _setCacheExpiration(key, currentExpires.add(extension));
-    }
+    if (info == null) return;
+
+    final expires = DateTime.tryParse(info['expires']?.toString() ?? '');
+    if (expires == null) return;
+
+    await _setCacheExpiration(key, expires.add(extension));
   }
 
-  /// Refreshes cache entry (updates access time)
   Future<void> refreshCacheEntry(String key) async {
     final metadata = _getCacheMetadata();
-    final data = metadata[key] as Map<String, dynamic>?;
+    final data = metadata[key];
 
-    if (data != null) {
-      data['accessed'] = DateTime.now().toIso8601String();
-      metadata[key] = data;
+    if (data is Map) {
+      final m = Map<String, dynamic>.from(data);
+      m['accessed'] = DateTime.now().toIso8601String();
+      metadata[key] = m;
       await _box.put(_cacheMetadataKey, metadata);
     }
   }
 
-  /// Gets all cache keys by pattern
   List<String> getCacheKeysByPattern(String pattern) {
     return _box.keys
-        .where((key) => key.toString().contains(pattern))
-        .cast<String>()
+        .map((k) => k.toString())
+        .where((k) => k.contains(pattern))
         .toList();
   }
 
-  /// Bulk remove cache entries by pattern
   Future<void> removeCacheEntriesByPattern(String pattern) async {
     final keys = getCacheKeysByPattern(pattern);
     for (final key in keys) {
       await remove(key);
     }
+  }
+
+  // ---------------------------------------------------------------------------
+  // JSON helpers
+  // ---------------------------------------------------------------------------
+
+  dynamic _tryDecodeJson(String raw) {
+    try {
+      return jsonDecode(raw);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  dynamic _normalizeDecoded(dynamic decoded) {
+    if (decoded is Map) {
+      return Map<String, dynamic>.from(
+        decoded.map((k, v) => MapEntry(k.toString(), _normalizeDecoded(v))),
+      );
+    }
+    if (decoded is List) {
+      return decoded.map(_normalizeDecoded).toList();
+    }
+    return decoded;
   }
 }

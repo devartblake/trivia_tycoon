@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/arcade/ui/screens/widgets/wallet_counters_row.dart';
+
 import '../../../game/providers/riverpod_providers.dart';
 import '../../../game/providers/wallet_providers.dart';
 import '../../domain/arcade_difficulty.dart';
 import '../../domain/arcade_game_definition.dart';
+import '../../domain/arcade_game_id.dart';
+import '../../leaderboards/local_arcade_leaderboard_models.dart';
+import '../../leaderboards/local_arcade_leaderboard_service.dart';
 import '../../missions/arcade_mission_models.dart';
 import '../../providers/arcade_providers.dart';
 import 'arcade_game_shell.dart';
 
 class ArcadeHubScreen extends ConsumerWidget {
   const ArcadeHubScreen({super.key});
+
+  // Small helpers to avoid repeating SliverToBoxAdapter everywhere.
+  SliverToBoxAdapter _sliverBox(Widget child) => SliverToBoxAdapter(child: child);
+
+  SliverToBoxAdapter _sliverGap([double h = 12]) =>
+      SliverToBoxAdapter(child: SizedBox(height: h));
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,18 +36,39 @@ class ArcadeHubScreen extends ConsumerWidget {
           // Modern AppBar with gradient
           _buildModernAppBar(context, ref),
 
-          SliverToBoxAdapter(child: _buildDailyBonusBanner(context, ref)),
+          // Daily Bonus Banner
+          _sliverBox(_buildDailyBonusBanner(context, ref)),
 
-          // Stats/Achievement Banner
-          SliverToBoxAdapter(
-            child: _buildStatsBanner(context),
+          // Open Daily Bonus Button (must be wrapped as sliver)
+          _sliverBox(
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+              child: SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: () => context.push('/arcade/daily-bonus'),
+                  icon: const Icon(Icons.calendar_month_rounded, color: Colors.white),
+                  label: const Text(
+                    'Open Daily Bonus',
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(color: Colors.white.withOpacity(0.25)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                ),
+              ),
+            ),
           ),
 
-          // Featured Game Section (if you want to highlight one)
-          if (games.isNotEmpty)
-            SliverToBoxAdapter(
-              child: _buildFeaturedSection(context, games.first),
-            ),
+          _sliverGap(12),
+
+          // Stats/Achievement Banner
+          _sliverBox(_buildStatsBanner(context)),
+
+          // Featured Game Section
+          if (games.isNotEmpty) _sliverBox(_buildFeaturedSection(context, games.first)),
 
           // Section Header
           const SliverToBoxAdapter(
@@ -44,11 +76,7 @@ class ArcadeHubScreen extends ConsumerWidget {
               padding: EdgeInsets.fromLTRB(20, 32, 20, 16),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.games_rounded,
-                    color: Colors.white,
-                    size: 24,
-                  ),
+                  Icon(Icons.games_rounded, color: Colors.white, size: 24),
                   SizedBox(width: 12),
                   Text(
                     'All Games',
@@ -64,9 +92,9 @@ class ArcadeHubScreen extends ConsumerWidget {
             ),
           ),
 
-          // Game Grid/List
+          // Game List
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate(
                     (context, index) {
@@ -81,8 +109,13 @@ class ArcadeHubScreen extends ConsumerWidget {
             ),
           ),
 
-          // Arcade Missions Section
+          // Arcade Missions Section (already returns SliverToBoxAdapter)
           _buildArcadeMissionsBox(context, ref),
+
+          // Local leaderboards box MUST be sliver-wrapped (it returns a normal widget)
+          _sliverBox(_buildLocalLeaderboardsBox(context, ref)),
+
+          _sliverGap(24),
         ],
       ),
     );
@@ -95,11 +128,10 @@ class ArcadeHubScreen extends ConsumerWidget {
       pinned: true,
       backgroundColor: Colors.transparent,
       elevation: 0,
-      // Wallet counters in the AppBar
       actions: const [
         Padding(
           padding: EdgeInsets.only(right: 12),
-          child: WalletCountersRow(compact: true, backplate: true,),
+          child: WalletCountersRow(compact: true, backplate: true),
         ),
       ],
       flexibleSpace: FlexibleSpaceBar(
@@ -107,9 +139,9 @@ class ArcadeHubScreen extends ConsumerWidget {
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                Color(0xFF6366F1), // Indigo
-                Color(0xFF8B5CF6), // Purple
-                Color(0xFFEC4899), // Pink
+                Color(0xFF6366F1),
+                Color(0xFF8B5CF6),
+                Color(0xFFEC4899),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -130,11 +162,7 @@ class ArcadeHubScreen extends ConsumerWidget {
                           color: Colors.white.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        child: const Icon(
-                          Icons.videogame_asset_rounded,
-                          color: Colors.white,
-                          size: 28,
-                        ),
+                        child: const Icon(Icons.videogame_asset_rounded, color: Colors.white, size: 28),
                       ),
                       const SizedBox(width: 16),
                       const Expanded(
@@ -202,9 +230,7 @@ class ArcadeHubScreen extends ConsumerWidget {
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.1),
-        ),
+        border: Border.all(color: Colors.white.withOpacity(0.1)),
       ),
       child: Row(
         children: [
@@ -216,11 +242,7 @@ class ArcadeHubScreen extends ConsumerWidget {
               color: const Color(0xFFFBBF24),
             ),
           ),
-          Container(
-            width: 1,
-            height: 40,
-            color: Colors.white.withOpacity(0.1),
-          ),
+          Container(width: 1, height: 40, color: Colors.white.withOpacity(0.1)),
           Expanded(
             child: _buildStatItem(
               icon: Icons.local_fire_department_rounded,
@@ -229,11 +251,7 @@ class ArcadeHubScreen extends ConsumerWidget {
               color: const Color(0xFFEF4444),
             ),
           ),
-          Container(
-            width: 1,
-            height: 40,
-            color: Colors.white.withOpacity(0.1),
-          ),
+          Container(width: 1, height: 40, color: Colors.white.withOpacity(0.1)),
           Expanded(
             child: _buildStatItem(
               icon: Icons.star_rounded,
@@ -259,19 +277,12 @@ class ArcadeHubScreen extends ConsumerWidget {
         const SizedBox(height: 8),
         Text(
           value,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 4),
         Text(
           label,
-          style: TextStyle(
-            color: Colors.white.withOpacity(0.6),
-            fontSize: 12,
-          ),
+          style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 12),
         ),
       ],
     );
@@ -289,20 +300,16 @@ class ArcadeHubScreen extends ConsumerWidget {
           children: [
             const Text(
               'Arcade Missions',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w900,
-                color: Colors.white,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: Colors.white),
             ),
             const SizedBox(height: 10),
-
             for (final m in missions)
               _MissionRow(
                 mission: m,
                 progress: service.progressFor(m.id),
                 canClaim: service.canClaim(m.id),
                 onClaim: () {
+                  // IMPORTANT: service must enforce one-claim-only internally.
                   service.markClaimed(m.id);
 
                   incrementCoins(ref, m.reward.coins);
@@ -310,9 +317,7 @@ class ArcadeHubScreen extends ConsumerWidget {
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(
-                        'Mission complete! +${m.reward.coins} coins, +${m.reward.gems} gems',
-                      ),
+                      content: Text('Mission complete! +${m.reward.coins} coins, +${m.reward.gems} gems'),
                     ),
                   );
                 },
@@ -331,11 +336,7 @@ class ArcadeHubScreen extends ConsumerWidget {
         height: 180,
         decoration: BoxDecoration(
           gradient: const LinearGradient(
-            colors: [
-              Color(0xFF10B981), // Green
-              Color(0xFF059669), // Emerald
-              Color(0xFF047857), // Dark green
-            ],
+            colors: [Color(0xFF10B981), Color(0xFF059669), Color(0xFF047857)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -363,10 +364,7 @@ class ArcadeHubScreen extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 6,
-                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
                             color: Colors.white.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(20),
@@ -394,10 +392,7 @@ class ArcadeHubScreen extends ConsumerWidget {
                         const SizedBox(height: 8),
                         Text(
                           game.subtitle,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.white.withOpacity(0.9),
-                          ),
+                          style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.9)),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -408,15 +403,8 @@ class ArcadeHubScreen extends ConsumerWidget {
                   Container(
                     width: 80,
                     height: 80,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      game.icon,
-                      color: Colors.white,
-                      size: 40,
-                    ),
+                    decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), shape: BoxShape.circle),
+                    child: Icon(game.icon, color: Colors.white, size: 40),
                   ),
                 ],
               ),
@@ -431,24 +419,14 @@ class ArcadeHubScreen extends ConsumerWidget {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            Colors.white.withOpacity(0.08),
-            Colors.white.withOpacity(0.04),
-          ],
+          colors: [Colors.white.withOpacity(0.08), Colors.white.withOpacity(0.04)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.1),
-          width: 1,
-        ),
+        border: Border.all(color: Colors.white.withOpacity(0.1), width: 1),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
+          BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 10, offset: const Offset(0, 4)),
         ],
       ),
       child: Material(
@@ -460,19 +438,11 @@ class ArcadeHubScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(20),
             child: Row(
               children: [
-                // Icon Container
                 Container(
                   width: 64,
                   height: 64,
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [
-                        Color(0xFF6366F1),
-                        Color(0xFF8B5CF6),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
+                    gradient: const LinearGradient(colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)]),
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
@@ -482,16 +452,9 @@ class ArcadeHubScreen extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  child: Icon(
-                    game.icon,
-                    color: Colors.white,
-                    size: 32,
-                  ),
+                  child: Icon(game.icon, color: Colors.white, size: 32),
                 ),
-
                 const SizedBox(width: 16),
-
-                // Content
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -510,39 +473,25 @@ class ArcadeHubScreen extends ConsumerWidget {
                         game.subtitle,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.7),
-                          fontSize: 14,
-                        ),
+                        style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 14),
                       ),
                       const SizedBox(height: 12),
-                      // Difficulty badges
                       Wrap(
                         spacing: 6,
                         runSpacing: 6,
-                        children: game.supportedDifficulties
-                            .take(3)
-                            .map((difficulty) => _buildDifficultyChip(difficulty))
-                            .toList(),
+                        children: game.supportedDifficulties.take(3).map(_buildDifficultyChip).toList(),
                       ),
                     ],
                   ),
                 ),
-
                 const SizedBox(width: 12),
-
-                // Arrow
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    color: Colors.white70,
-                    size: 16,
-                  ),
+                  child: const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white70, size: 16),
                 ),
               ],
             ),
@@ -573,26 +522,16 @@ class ArcadeHubScreen extends ConsumerWidget {
       decoration: BoxDecoration(
         color: color.withOpacity(0.2),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: color.withOpacity(0.4),
-          width: 1,
-        ),
+        border: Border.all(color: color.withOpacity(0.4), width: 1),
       ),
       child: Text(
         difficulty.label,
-        style: TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.w600,
-          color: color,
-        ),
+        style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: color),
       ),
     );
   }
 
-  Future<void> _openDifficultyPicker(
-      BuildContext context,
-      ArcadeGameDefinition game,
-      ) async {
+  Future<void> _openDifficultyPicker(BuildContext context, ArcadeGameDefinition game) async {
     final selected = await showModalBottomSheet<ArcadeDifficulty>(
       context: context,
       backgroundColor: Colors.transparent,
@@ -602,15 +541,54 @@ class ArcadeHubScreen extends ConsumerWidget {
 
     if (selected == null) return;
 
-    // Launch through the common shell to standardize rewards & result UX
     // ignore: use_build_context_synchronously
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => ArcadeGameShell(
-          game: game,
-          difficulty: selected,
-        ),
+        builder: (_) => ArcadeGameShell(game: game, difficulty: selected),
       ),
+    );
+  }
+
+  void _showLeaderboardSheet(
+      BuildContext context,
+      LocalArcadeLeaderboardService svc,
+      ArcadeGameId gameId,
+      String title,
+      ) {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: const Color(0xFF0E0E12),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (_) {
+        final all = svc.topForGame(gameId, limit: 25);
+
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 14, 16, 18),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '$title — Local Leaderboard',
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16),
+                ),
+                const SizedBox(height: 12),
+                if (all.isEmpty)
+                  Text('No scores recorded yet.', style: TextStyle(color: Colors.white.withOpacity(0.7)))
+                else
+                  Flexible(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: all.length,
+                      itemBuilder: (_, i) => _LeaderboardRow(rank: i + 1, entry: all[i]),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -634,10 +612,7 @@ class ArcadeHubScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Daily Bonus',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
-                ),
+                const Text('Daily Bonus', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900)),
                 const SizedBox(height: 4),
                 Text(
                   claimed ? 'Claimed for today.' : 'Claim once per day for extra coins.',
@@ -654,7 +629,6 @@ class ArcadeHubScreen extends ConsumerWidget {
               final didClaim = bonus.tryClaimToday();
               if (!didClaim) return;
 
-              // Award daily currency (no XP here)
               incrementCoins(ref, 250);
               incrementGems(ref, 2);
 
@@ -679,17 +653,12 @@ class ArcadeHubScreen extends ConsumerWidget {
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            Color(0xFF1A1A24),
-            Color(0xFF0E0E12),
-          ],
+          colors: [Color(0xFF1A1A24), Color(0xFF0E0E12)],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-        border: Border(
-          top: BorderSide(color: Colors.white24, width: 1),
-        ),
+        border: Border(top: BorderSide(color: Colors.white24, width: 1)),
       ),
       child: SafeArea(
         child: Padding(
@@ -697,27 +666,18 @@ class ArcadeHubScreen extends ConsumerWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Drag Handle
               Container(
                 width: 44,
                 height: 5,
-                decoration: BoxDecoration(
-                  color: Colors.white24,
-                  borderRadius: BorderRadius.circular(10),
-                ),
+                decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(10)),
               ),
-
               const SizedBox(height: 24),
-
-              // Header
               Row(
                 children: [
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-                      ),
+                      gradient: const LinearGradient(colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)]),
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: Icon(game.icon, color: Colors.white, size: 24),
@@ -737,29 +697,19 @@ class ArcadeHubScreen extends ConsumerWidget {
                           ),
                         ),
                         const SizedBox(height: 4),
-                        const Text(
-                          'Select Difficulty',
-                          style: TextStyle(
-                            color: Colors.white60,
-                            fontSize: 14,
-                          ),
-                        ),
+                        const Text('Select Difficulty', style: TextStyle(color: Colors.white60, fontSize: 14)),
                       ],
                     ),
                   ),
                 ],
               ),
-
               const SizedBox(height: 24),
-
-              // Difficulty Options
               ...game.supportedDifficulties.map(
                     (difficulty) => Padding(
                   padding: const EdgeInsets.only(bottom: 12),
                   child: _buildDifficultyOption(difficulty),
                 ),
               ),
-
               const SizedBox(height: 8),
             ],
           ),
@@ -799,18 +749,12 @@ class ArcadeHubScreen extends ConsumerWidget {
       builder: (context) => Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              color.withOpacity(0.15),
-              color.withOpacity(0.05),
-            ],
+            colors: [color.withOpacity(0.15), color.withOpacity(0.05)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: color.withOpacity(0.3),
-            width: 1.5,
-          ),
+          border: Border.all(color: color.withOpacity(0.3), width: 1.5),
         ),
         child: Material(
           color: Colors.transparent,
@@ -823,10 +767,7 @@ class ArcadeHubScreen extends ConsumerWidget {
                 children: [
                   Container(
                     padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: color.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                    decoration: BoxDecoration(color: color.withOpacity(0.2), borderRadius: BorderRadius.circular(12)),
                     child: Icon(icon, color: color, size: 24),
                   ),
                   const SizedBox(width: 16),
@@ -836,33 +777,77 @@ class ArcadeHubScreen extends ConsumerWidget {
                       children: [
                         Text(
                           difficulty.label,
-                          style: TextStyle(
-                            color: color,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
+                          style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                         const SizedBox(height: 4),
-                        Text(
-                          description,
-                          style: const TextStyle(
-                            color: Colors.white60,
-                            fontSize: 13,
-                          ),
-                        ),
+                        Text(description, style: const TextStyle(color: Colors.white60, fontSize: 13)),
                       ],
                     ),
                   ),
-                  Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    color: color.withOpacity(0.7),
-                    size: 18,
-                  ),
+                  Icon(Icons.arrow_forward_ios_rounded, color: color.withOpacity(0.7), size: 18),
                 ],
               ),
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildLocalLeaderboardsBox(BuildContext context, WidgetRef ref) {
+    final svc = ref.watch(localArcadeLeaderboardServiceProvider);
+
+    Widget buildGame(ArcadeGameId gameId, String title) {
+      final top = svc.topForGame(gameId, limit: 5);
+
+      return Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: Colors.white.withOpacity(0.06),
+          border: Border.all(color: Colors.white.withOpacity(0.12)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900)),
+                const Spacer(),
+                TextButton(
+                  onPressed: () => _showLeaderboardSheet(context, svc, gameId, title),
+                  child: const Text('View All'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            if (top.isEmpty)
+              Text(
+                'No scores yet. Play a run to set your first record.',
+                style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 12),
+              )
+            else
+              for (int i = 0; i < top.length; i++) _LeaderboardRow(rank: i + 1, entry: top[i]),
+          ],
+        ),
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Top Scores (Local)',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: Colors.white),
+          ),
+          const SizedBox(height: 10),
+          buildGame(ArcadeGameId.patternSprint, 'Pattern Sprint'),
+          buildGame(ArcadeGameId.memoryFlip, 'Memory Flip'),
+          buildGame(ArcadeGameId.quickMathRush, 'Quick Math Rush'),
+        ],
       ),
     );
   }
@@ -898,21 +883,14 @@ class _MissionRow extends StatelessWidget {
         children: [
           Text(
             mission.title,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w800,
-            ),
+            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 4),
           Text(
             mission.subtitle,
-            style: TextStyle(
-              color: Colors.white.withOpacity(0.7),
-              fontSize: 12,
-            ),
+            style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 12),
           ),
           const SizedBox(height: 10),
-
           LinearProgressIndicator(
             value: ratio,
             backgroundColor: Colors.white.withOpacity(0.1),
@@ -920,31 +898,72 @@ class _MissionRow extends StatelessWidget {
             minHeight: 6,
           ),
           const SizedBox(height: 8),
-
           Row(
             children: [
               Text(
                 '${progress.current}/${mission.target}',
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.7),
-                  fontSize: 12,
-                ),
+                style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 12),
               ),
               const Spacer(),
               ElevatedButton(
                 onPressed: canClaim ? onClaim : null,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                  canClaim ? Colors.amberAccent : Colors.white.withOpacity(0.12),
+                  backgroundColor: canClaim ? Colors.amberAccent : Colors.white.withOpacity(0.12),
                   foregroundColor: Colors.black,
                   elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
                 child: Text(canClaim ? 'Claim' : 'In Progress'),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LeaderboardRow extends StatelessWidget {
+  final int rank;
+  final LocalArcadeScoreEntry entry;
+
+  const _LeaderboardRow({
+    required this.rank,
+    required this.entry,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final secs = (entry.durationMs / 1000).toStringAsFixed(1);
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 28,
+            child: Text(
+              '#$rank',
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.7),
+                fontWeight: FontWeight.w800,
+                fontSize: 12,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              '${entry.score} pts',
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
+            ),
+          ),
+          Text(
+            '${entry.difficulty.name.toUpperCase()} • ${secs}s',
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.7),
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ],
       ),

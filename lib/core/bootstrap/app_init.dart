@@ -57,9 +57,6 @@ class AppInit {
     WidgetsFlutterBinding.ensureInitialized();
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-    // Initialize NotificationService EARLY - but don't request permissions yet
-    await _initializeNotifications();
-
     // Initialize Hive boxes
     await Hive.initFlutter();
     await Hive.openBox('secrets');
@@ -67,6 +64,9 @@ class AppInit {
     await Hive.openBox('cache');
     await Hive.openBox('question');
     Hive.registerAdapter(ReferralInviteHiveAdapter());
+
+    // Initialize NotificationService EARLY - but don't request permissions yet
+    await _initializeNotifications();
 
     try {
       await Hive.openBox('settings');
