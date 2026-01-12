@@ -1,9 +1,14 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 /// A simple utility service for general-purpose key-value storage using Hive.
 class GeneralKeyValueStorageService {
   static const _boxName = 'settings';
+
+  // ============================================
+  // EXISTING METHODS (UNCHANGED)
+  // ============================================
 
   Future<void> setString(String key, String value) async {
     final box = await Hive.openBox(_boxName);
@@ -78,5 +83,42 @@ class GeneralKeyValueStorageService {
   Future<void> remove(String key) async {
     final box = await Hive.openBox(_boxName);
     await box.delete(key);
+  }
+
+  // ============================================
+  // NEW METHODS FOR JSON/MAP SUPPORT
+  // ============================================
+
+  /// Store a JSON object (Map) as a string
+  Future<void> setJson(String key, Map<String, dynamic> value) async {
+    final box = await Hive.openBox(_boxName);
+    final jsonString = jsonEncode(value);
+    await box.put(key, jsonString);
+  }
+
+  /// Retrieve a JSON object (Map) from storage
+  Future<Map<String, dynamic>?> getJson(String key) async {
+    final box = await Hive.openBox(_boxName);
+    final jsonString = box.get(key);
+    if (jsonString == null || jsonString is! String) return null;
+
+    try {
+      return jsonDecode(jsonString) as Map<String, dynamic>;
+    } catch (e) {
+      debugPrint('[Storage] Error decoding JSON for key "$key": $e');
+      return null;
+    }
+  }
+
+  /// Generic get method (for backward compatibility)
+  Future<dynamic> get(String key) async {
+    final box = await Hive.openBox(_boxName);
+    return box.get(key);
+  }
+
+  /// Generic set method (for backward compatibility)
+  Future<void> set(String key, dynamic value) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put(key, value);
   }
 }
