@@ -5,6 +5,8 @@ enum ThemeType { main, allStar, competition }
 
 class AppTheme {
   static ThemeType defaultTheme = ThemeType.main;
+  static ThemeType allStarTheme = ThemeType.allStar;
+  static ThemeType competitionTheme = ThemeType.competition;
 
   final ThemeType type; // New property to store the theme type
   final ThemeMode themeMode;

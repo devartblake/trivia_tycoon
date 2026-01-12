@@ -198,8 +198,8 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
         scrollBehavior: AppScrollBehavior(),
 
         // AppTheme drives ThemeData; ThemeNotifier drives ThemeMode
-        theme: AppTheme.fromType(AppTheme.defaultTheme, ThemeMode.light).themeData,
-        darkTheme: AppTheme.fromType(AppTheme.defaultTheme, ThemeMode.dark).themeData,
+        theme: AppTheme.fromType(AppTheme.allStarTheme, ThemeMode.light).themeData,
+        darkTheme: AppTheme.fromType(AppTheme.allStarTheme, ThemeMode.dark).themeData,
         themeMode: themeNotifier.themeMode,
 
         // Use the new provider-based router

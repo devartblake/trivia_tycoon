@@ -25,6 +25,7 @@ import '../../admin/questions/question_editor_screen.dart';
 import '../../admin/questions/question_list_screen.dart';
 import '../../admin/user_management/admin_users_screen.dart';
 import '../../admin/widgets/encrypted_file_preview.dart';
+import '../../arcade/leaderboards/local_arcade_leaderboard_screen.dart';
 import '../../arcade/missions/arcade_missions_screen.dart';
 import '../../arcade/ui/screens/arcade_hub_screen.dart';
 import '../../arcade/ui/screens/daily_bonus_screen.dart';
@@ -348,6 +349,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/arcade/missions',
         builder: (context, state) => const ArcadeMissionsScreen(),
+      ),
+      GoRoute(
+        path: '/arcade/local-leaderboards',
+        builder: (context, state) => const LocalArcadeLeaderboardScreen(),
       ),
 
       /// Leaderboard Routes

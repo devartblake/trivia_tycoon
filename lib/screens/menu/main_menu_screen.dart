@@ -968,6 +968,14 @@ class _ActionButtonsRow extends StatelessWidget {
         'badge': dailyRewardsAvailable ? 1 : null,
       },
       {
+        'label': 'Arcade',
+        'icon': Icons.games,
+        'gradient': _getGradient(5),
+        'route': '/arcade',
+        'description': 'Arcade games',
+        'badge': null,
+      },
+      {
         'label': 'Leaderboard',
         'icon': Icons.trending_up,
         'gradient': _getGradient(3),
