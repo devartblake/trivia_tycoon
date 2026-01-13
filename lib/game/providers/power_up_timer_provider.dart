@@ -2,28 +2,19 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 
+/// Provider for power-up countdown timer
 final powerUpTimeProvider = StateNotifierProvider<PowerUpTimeNotifier, int?>((ref) {
   return PowerUpTimeNotifier(ref);
 });
 
+/// Notifier that manages power-up countdown timer
 class PowerUpTimeNotifier extends StateNotifier<int?> {
   final Ref ref;
   Timer? _timer;
 
   PowerUpTimeNotifier(this.ref) : super(null);
 
-  final powerUpTimeProvider = StreamProvider<int?>((ref) {
-    final powerUp = ref.watch(equippedPowerUpProvider);
-    if (powerUp == null) return const Stream.empty();
-
-    final endTime = DateTime.now().add(Duration(seconds: powerUp.duration!));
-    return Stream.periodic(const Duration(seconds: 1), (_) {
-      final remaining = endTime.difference(DateTime.now()).inSeconds;
-      return remaining > 0 ? remaining : 0;
-    }).takeWhile((remaining) => remaining > 0);
-  });
-
-
+  /// Start countdown timer
   void start(int seconds) {
     _timer?.cancel();
     state = seconds;
@@ -41,11 +32,13 @@ class PowerUpTimeNotifier extends StateNotifier<int?> {
     });
   }
 
+  /// Stop timer and clear state
   void stop() {
     _timer?.cancel();
     state = null;
   }
 
+  /// Check if timer is currently active
   bool get isActive => state != null && state! > 0;
 
   @override

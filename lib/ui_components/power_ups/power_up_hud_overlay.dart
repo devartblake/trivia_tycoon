@@ -2,8 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/game/providers/power_up_timer_provider.dart';
 import 'package:trivia_tycoon/game/models/power_up.dart';
-
 import '../../game/providers/riverpod_providers.dart';
+
+/// Model for active power-up
+class ActivePowerUp {
+  final String id;
+  final String name;
+  final IconData icon;
+  final Duration remainingTime;
+  final Color color;
+
+  ActivePowerUp({
+    required this.id,
+    required this.name,
+    required this.icon,
+    required this.remainingTime,
+    required this.color,
+  });
+}
 
 class PowerUpHUDOverlay extends ConsumerStatefulWidget {
   const PowerUpHUDOverlay({super.key});

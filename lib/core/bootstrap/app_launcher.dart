@@ -7,11 +7,12 @@ import 'package:trivia_tycoon/game/providers/riverpod_providers.dart' as provide
 import 'package:go_router/go_router.dart';
 import '../../game/providers/auth_providers.dart';
 import '../../game/providers/onboarding_providers.dart';
-import '../../ui_components/power_ups/power_up_HUD_Overlay.dart';
+import '../../ui_components/power_ups/power_up_hud_overlay.dart';
 import '../../widgets/app_logo.dart';
 import '../navigation/app_router.dart';
 import '../theme/app_scroll_behavior.dart';
 import '../theme/themes.dart';
+import '../services/theme/seasonal_theme_service.dart';
 import 'app_init.dart';
 
 /// AppLauncher handles config + service initialization and launches the app
@@ -30,7 +31,7 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     _initializeAuthState();
     _initRouter();
     _trackAppLaunch();
@@ -78,16 +79,16 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
       // Show spin analytics in debug mode
       if (!const bool.fromEnvironment('dart.vm.product')) {
         final summary = await AppInit.getSpinAnalyticsSummary();
-        debugPrint('═══════════════════════════════════════════════════');
+        debugPrint('╔════════════════════════════════════════════════╗');
         debugPrint('SPIN ANALYTICS SUMMARY');
-        debugPrint('═══════════════════════════════════════════════════');
+        debugPrint('╠════════════════════════════════════════════════╣');
         debugPrint('Today: ${summary['today_count']}/${summary['daily_limit']}');
         debugPrint('Weekly: ${summary['weekly_count']}');
         debugPrint('Total: ${summary['total_spins']}');
         debugPrint('Can Spin: ${summary['can_spin']}');
         debugPrint('Remaining: ${summary['spins_remaining']}');
         debugPrint('Reward Points: ${summary['reward_points']}');
-        debugPrint('═══════════════════════════════════════════════════');
+        debugPrint('╚════════════════════════════════════════════════╝');
       }
     } catch (e) {
       debugPrint('[AppLauncher] Failed to track app launch: $e');
@@ -188,8 +189,19 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
       );
     }
 
-    // Get theme from your system
+    // Get active theme with AsyncValue support
+    final activeThemeAsync = ref.watch(activeThemeTypeProvider);
+
+    return activeThemeAsync.when(
+      data: (activeThemeType) => _buildApp(activeThemeType),
+      loading: () => _buildApp(AppTheme.defaultTheme),
+      error: (_, __) => _buildApp(AppTheme.defaultTheme),
+    );
+  }
+
+  Widget _buildApp(ThemeType themeType) {
     final themeNotifier = ref.watch(providers.themeNotifierProvider);
+    final appTheme = AppTheme.fromType(themeType, ThemeMode.light);
 
     return AppLifecycleObserver(
       child: MaterialApp.router(
@@ -197,15 +209,15 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
         debugShowCheckedModeBanner: false,
         scrollBehavior: AppScrollBehavior(),
 
-        // AppTheme drives ThemeData; ThemeNotifier drives ThemeMode
-        theme: AppTheme.fromType(AppTheme.allStarTheme, ThemeMode.light).themeData,
-        darkTheme: AppTheme.fromType(AppTheme.allStarTheme, ThemeMode.dark).themeData,
+        // Use active theme instead of hardcoded allStar
+        theme: appTheme.themeData,
+        darkTheme: AppTheme.fromType(themeType, ThemeMode.dark).themeData,
         themeMode: themeNotifier.themeMode,
 
         // Use the new provider-based router
         routerConfig: _router!,
 
-        // Add the PowerUpHUDOverlay and other features from your AppShell
+        // PowerUpHUDOverlay now conditionally rendered
         builder: (context, child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(
@@ -216,6 +228,7 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
               child: Stack(
                 children: [
                   if (child != null) child,
+                  // Only render PowerUpHUDOverlay, let it handle visibility
                   const PowerUpHUDOverlay(),
                 ],
               ),

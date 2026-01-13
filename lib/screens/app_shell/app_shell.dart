@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/core/services/analytics/config_service.dart';
 import 'package:trivia_tycoon/core/utils/theme_mapper.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart' as providers;
-import 'package:trivia_tycoon/ui_components/power_ups/power_up_HUD_Overlay.dart';
 import '../../core/theme/app_scroll_behavior.dart';
 
 /// AppShell is the main scaffold wrapper for the app
@@ -42,14 +41,10 @@ class AppShell extends ConsumerWidget {
         useMaterial3: true,
       ),
       routerConfig: router,
+      // The overlay is handled in AppLauncher builder
       builder: (context, child) => AnimatedSwitcher(
         duration: const Duration(milliseconds: 400),
-        child: Stack(
-          children: [
-            if (child != null) child,
-            const PowerUpHUDOverlay(),
-          ],
-        ),
+        child: child,
       ),
     );
   }
