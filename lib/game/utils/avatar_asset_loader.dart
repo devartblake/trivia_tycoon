@@ -64,23 +64,49 @@ class AvatarAssetLoader {
     return _dedupeSorted(merged);
   }
 
-  static Future<List<String>> _loadAvatarsFromAssets(String path, {required bool is3D}) async {
-    final manifestContent = await rootBundle.loadString('AssetManifest.json');
-    final Map<String, dynamic> manifestMap = json.decode(manifestContent);
+  static Future<List<String>> _loadAvatarsFromAssets(
+      String path, {
+        required bool is3D,
+      }) async {
+    // Preferred approach: AssetManifest API (works even if Flutter uses AssetManifest.bin internally)
+    try {
+      final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
+      final assets = manifest.listAssets();
 
-    final allAssets = manifestMap.keys
-        .where((String key) {
-      if (!key.startsWith(path)) return false;
+      final filtered = assets.where((key) {
+        if (!key.startsWith(path)) return false;
 
-      if (is3D) {
-        return key.endsWith('.glb') || key.endsWith('.gltf');
-      }
-      return key.endsWith('.png') || key.endsWith('.jpg') || key.endsWith('.jpeg') || key.endsWith('.webp');
-    })
-        .toList();
+        if (is3D) {
+          return key.endsWith('.glb') || key.endsWith('.gltf');
+        }
+        return key.endsWith('.png') ||
+            key.endsWith('.jpg') ||
+            key.endsWith('.jpeg') ||
+            key.endsWith('.webp');
+      }).toList()
+        ..sort();
 
-    allAssets.sort();
-    return allAssets;
+      return filtered;
+    } catch (_) {
+      // Fallback: old JSON manifest load (older Flutter, or if AssetManifest fails)
+      final manifestContent = await rootBundle.loadString('AssetManifest.json');
+      final Map<String, dynamic> manifestMap = json.decode(manifestContent) as Map<String, dynamic>;
+
+      final allAssets = manifestMap.keys.where((key) {
+        if (!key.startsWith(path)) return false;
+
+        if (is3D) {
+          return key.endsWith('.glb') || key.endsWith('.gltf');
+        }
+        return key.endsWith('.png') ||
+            key.endsWith('.jpg') ||
+            key.endsWith('.jpeg') ||
+            key.endsWith('.webp');
+      }).toList()
+        ..sort();
+
+      return allAssets;
+    }
   }
 
   static List<String> _dedupeSorted(List<String> items) {

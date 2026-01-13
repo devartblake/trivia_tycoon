@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:archive/archive.dart';
 import 'package:archive/archive_io.dart';
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
@@ -263,16 +263,13 @@ class AvatarPackageService {
     }
 
     if (lower.endsWith('.tar.gz') || lower.endsWith('.tgz')) {
-      // Most reliable approach with archive package:
-      // bytes -> gunzip -> untar
       final bytes = await archiveFile.readAsBytes();
-      final tarBytes = GZipDecoder().decodeBytes(bytes);
-      final archive = TarDecoder().decodeBytes(tarBytes);
+      final tarBytes = GZipDecoder().decodeBytes(bytes); // gzip -> tar bytes
+      final archive = TarDecoder().decodeBytes(tarBytes); // tar bytes -> archive
       await _writeArchiveToDisk(archive, destDir);
       return;
     }
 
-    // NOTE: RAR is not supported by `archive` package.
     throw UnsupportedError('Unsupported archive type: ${archiveFile.path}');
   }
 
