@@ -1,103 +1,217 @@
 import 'dart:convert';
+
 import 'package:flutter/services.dart';
+
 import '../../core/services/storage/app_cache_service.dart';
 import '../models/avatar_package_models.dart';
 import '../services/avatar_package_service.dart';
 
+/// AvatarAssetLoader
+///
+/// Loads avatar assets from:
+/// 1) Bundled "index.json" (preferred; stable even if AssetManifest has issues)
+/// 2) Fallback: AssetManifest.json (bundled assets only)
+/// 3) Optional: locally installed avatar packages via AvatarPackageService
+///
+/// IMPORTANT:
+/// - The legacy API returns List<String> for UI compatibility.
+/// - The preferred API returns List<AvatarAssetRef> so UI can correctly render
+///   AssetImage vs FileImage without guessing.
+///
+/// Index format expected:
+/// {
+///   "items": ["avatars/a.png", "avatars/b.webp", ...]   // for images index
+/// }
+/// and
+/// {
+///   "items": ["characters/a.glb", "characters/b.gltf", ...] // for 3d index
+/// }
 class AvatarAssetLoader {
-  // Your existing paths remain unchanged
+  // Bundled asset folders
   static const String imageAvatarPath = 'assets/images/avatars/';
   static const String threeDAvatarPath = 'assets/3d/characters/';
+
+  /// Index files generated in your zip build step.
+  /// These should be declared as assets in pubspec.yaml.
+  static const String imagesIndexAsset = 'assets/images/index.json';
+  static const String threeDIndexAsset = 'assets/3d/index.json';
 
   /// If you want to disable local packages temporarily, flip this.
   static bool enableLocalPackages = true;
 
-  /// Loads image avatars from bundled assets AND local installed packages.
+  // ---------------------------------------------------------------------------
+  // Legacy API (non-breaking): returns List<String>
+  // ---------------------------------------------------------------------------
+
+  /// Loads image avatars as paths.
   ///
-  /// Returns a list of strings. For compatibility:
-  /// - asset images are returned as asset paths (as before)
-  /// - local images are returned as absolute file paths
-  static Future<List<String>> loadImageAvatars({
+  /// For compatibility with existing code:
+  /// - assets return "assets/images/..." paths
+  /// - local package avatars return absolute file paths
+  ///
+  /// NOTE: Your current UI uses AssetImage(imagePath).
+  /// AssetImage will NOT work for file paths. If you enable local packages
+  /// in the screen, you should switch the UI to use [loadImageAvatarRefs]
+  /// and choose AssetImage/FileImage accordingly.
+  static Future<List<String>> loadImageAvatars({AppCacheService? cache}) async {
+    final refs = await loadImageAvatarRefs(cache: cache);
+    return _dedupeSorted(refs.map((e) => e.path).toList());
+  }
+
+  /// Loads 3D avatars as paths.
+  ///
+  /// For compatibility with existing code:
+  /// - assets return "assets/3d/..." paths
+  /// - local package avatars return absolute file paths
+  static Future<List<String>> loadThreeDAvatars({AppCacheService? cache}) async {
+    final refs = await loadThreeDAvatarsRefsCompat(cache: cache);
+    return _dedupeSorted(refs.map((e) => e.path).toList());
+  }
+
+  // ---------------------------------------------------------------------------
+  // Preferred API: returns AvatarAssetRef (Flutter-friendly)
+  // ---------------------------------------------------------------------------
+
+  /// Loads image avatars as typed refs (asset vs file).
+  static Future<List<AvatarAssetRef>> loadImageAvatarRefs({
     AppCacheService? cache,
   }) async {
-    final assetList = await _loadAvatarsFromAssets(imageAvatarPath, is3D: false);
+    final bundled = await _loadBundledImagesRefs();
 
+    // If local packages are disabled or cache not provided, return bundled only.
     if (!enableLocalPackages || cache == null) {
-      return assetList;
+      return _dedupeRefsSorted(bundled);
     }
 
     final pkg = AvatarPackageService(cache);
     final locals = await pkg.loadAllLocalImageAvatars();
 
-    final merged = <String>[
-      ...assetList,
-      ...locals.where((e) => e.source == AvatarSource.file).map((e) => e.path),
+    final merged = <AvatarAssetRef>[
+      ...bundled,
+      ...locals.where((e) => e.source == AvatarSource.file),
     ];
 
-    return _dedupeSorted(merged);
+    return _dedupeRefsSorted(merged);
   }
 
-  /// Loads 3D avatars from bundled assets AND local installed packages.
-  ///
-  /// Returns a list of strings. For compatibility:
-  /// - asset models are returned as asset paths (as before)
-  /// - local models are returned as absolute file paths
-  ///
-  /// Note: whether your 3D renderer supports file paths depends on your DepthCard3D stack.
-  static Future<List<String>> loadThreeDAvatars({
+  /// Loads 3D avatars as typed refs (asset vs file).
+  static Future<List<AvatarAssetRef>> loadThreeDAvatarsRefsCompat({
     AppCacheService? cache,
   }) async {
-    final assetList = await _loadAvatarsFromAssets(threeDAvatarPath, is3D: true);
+    // Backward-compat alias if you prefer this naming.
+    return loadThreeDAvatarsRefs(cache: cache);
+  }
+
+  /// Loads 3D avatars as typed refs (asset vs file).
+  static Future<List<AvatarAssetRef>> loadThreeDAvatarsRefs({
+    AppCacheService? cache,
+  }) async {
+    final bundled = await _loadBundled3dRefs();
 
     if (!enableLocalPackages || cache == null) {
-      return assetList;
+      return _dedupeRefsSorted(bundled);
     }
 
     final pkg = AvatarPackageService(cache);
     final locals = await pkg.loadAllLocalThreeDAvatars();
 
-    final merged = <String>[
-      ...assetList,
-      ...locals.where((e) => e.source == AvatarSource.file).map((e) => e.path),
+    final merged = <AvatarAssetRef>[
+      ...bundled,
+      ...locals.where((e) => e.source == AvatarSource.file),
     ];
 
-    return _dedupeSorted(merged);
+    return _dedupeRefsSorted(merged);
   }
 
-  static Future<List<String>> _loadAvatarsFromAssets(
+  // ---------------------------------------------------------------------------
+  // Bundled assets via index.json (preferred)
+  // ---------------------------------------------------------------------------
+
+  static Future<List<AvatarAssetRef>> _loadBundledImagesRefs() async {
+    final idxItems = await _tryLoadIndexItems(imagesIndexAsset);
+
+    if (idxItems != null) {
+      // items contain "avatars/xxx.png" relative to assets/images/
+      final paths = idxItems
+          .where((p) => p.startsWith('avatars/'))
+          .where(_isImageRel)
+          .map((rel) => 'assets/images/$rel')
+          .toList()
+        ..sort();
+
+      return paths
+          .map((p) => AvatarAssetRef(source: AvatarSource.asset, path: p))
+          .toList();
+    }
+
+    // Fallback: AssetManifest.json
+    final fallback = await _loadFromAssetManifest(imageAvatarPath, is3D: false);
+    return fallback
+        .map((p) => AvatarAssetRef(source: AvatarSource.asset, path: p))
+        .toList();
+  }
+
+  static Future<List<AvatarAssetRef>> _loadBundled3dRefs() async {
+    final idxItems = await _tryLoadIndexItems(threeDIndexAsset);
+
+    if (idxItems != null) {
+      // items contain "characters/xxx.glb" relative to assets/3d/
+      final paths = idxItems
+          .where((p) => p.startsWith('characters/'))
+          .where(_is3dRel)
+          .map((rel) => 'assets/3d/$rel')
+          .toList()
+        ..sort();
+
+      return paths
+          .map((p) => AvatarAssetRef(source: AvatarSource.asset, path: p))
+          .toList();
+    }
+
+    // Fallback: AssetManifest.json
+    final fallback = await _loadFromAssetManifest(threeDAvatarPath, is3D: true);
+    return fallback
+        .map((p) => AvatarAssetRef(source: AvatarSource.asset, path: p))
+        .toList();
+  }
+
+  static Future<List<String>?> _tryLoadIndexItems(String assetPath) async {
+    try {
+      final s = await rootBundle.loadString(assetPath);
+      final map = jsonDecode(s);
+
+      if (map is! Map<String, dynamic>) return null;
+      final raw = map['items'];
+      if (raw is! List) return null;
+
+      final items = raw.map((e) => e.toString()).toList();
+      if (items.isEmpty) return null;
+      return items;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Fallback: AssetManifest.json
+  // ---------------------------------------------------------------------------
+
+  static Future<List<String>> _loadFromAssetManifest(
       String path, {
         required bool is3D,
       }) async {
-    // Preferred approach: AssetManifest API (works even if Flutter uses AssetManifest.bin internally)
     try {
-      final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
-      final assets = manifest.listAssets();
-
-      final filtered = assets.where((key) {
-        if (!key.startsWith(path)) return false;
-
-        if (is3D) {
-          return key.endsWith('.glb') || key.endsWith('.gltf');
-        }
-        return key.endsWith('.png') ||
-            key.endsWith('.jpg') ||
-            key.endsWith('.jpeg') ||
-            key.endsWith('.webp');
-      }).toList()
-        ..sort();
-
-      return filtered;
-    } catch (_) {
-      // Fallback: old JSON manifest load (older Flutter, or if AssetManifest fails)
+      // AssetManifest.json is generated by Flutter at build time when assets exist.
+      // It should be available in release builds, but may behave unexpectedly if
+      // assets are misdeclared or hot reload is in a broken state.
       final manifestContent = await rootBundle.loadString('AssetManifest.json');
-      final Map<String, dynamic> manifestMap = json.decode(manifestContent) as Map<String, dynamic>;
+      final decoded = json.decode(manifestContent);
 
-      final allAssets = manifestMap.keys.where((key) {
+      if (decoded is! Map<String, dynamic>) return const [];
+
+      final allAssets = decoded.keys.where((String key) {
         if (!key.startsWith(path)) return false;
-
-        if (is3D) {
-          return key.endsWith('.glb') || key.endsWith('.gltf');
-        }
+        if (is3D) return key.endsWith('.glb') || key.endsWith('.gltf');
         return key.endsWith('.png') ||
             key.endsWith('.jpg') ||
             key.endsWith('.jpeg') ||
@@ -106,7 +220,27 @@ class AvatarAssetLoader {
         ..sort();
 
       return allAssets;
+    } catch (_) {
+      // If manifest truly unavailable, return empty rather than crash.
+      return const [];
     }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Helpers
+  // ---------------------------------------------------------------------------
+
+  static bool _isImageRel(String rel) {
+    final l = rel.toLowerCase();
+    return l.endsWith('.png') ||
+        l.endsWith('.jpg') ||
+        l.endsWith('.jpeg') ||
+        l.endsWith('.webp');
+  }
+
+  static bool _is3dRel(String rel) {
+    final l = rel.toLowerCase();
+    return l.endsWith('.glb') || l.endsWith('.gltf');
   }
 
   static List<String> _dedupeSorted(List<String> items) {
@@ -116,6 +250,20 @@ class AvatarAssetLoader {
       if (set.add(it)) out.add(it);
     }
     out.sort();
+    return out;
+  }
+
+  static List<AvatarAssetRef> _dedupeRefsSorted(List<AvatarAssetRef> items) {
+    // Dedupe by "source|path" to avoid duplicates if the same asset appears twice.
+    final set = <String>{};
+    final out = <AvatarAssetRef>[];
+
+    for (final it in items) {
+      final k = '${it.source.name}|${it.path}';
+      if (set.add(k)) out.add(it);
+    }
+
+    out.sort((a, b) => a.path.compareTo(b.path));
     return out;
   }
 }

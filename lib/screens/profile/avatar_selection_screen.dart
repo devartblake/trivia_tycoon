@@ -54,7 +54,9 @@ class _AvatarChoiceScreenState extends ConsumerState<AvatarSelectionScreen> with
     final cache = ref.read(appCacheServiceProvider);
 
     // ✅ FIXED: Pass cache parameter to both methods
-    final loadedImages = await AvatarAssetLoader.loadImageAvatars(cache: cache);
+    final loadedImages = await AvatarAssetLoader.loadImageAvatars(
+        cache: ref.read(appCacheServiceProvider)
+    );
     final loaded3D = await AvatarAssetLoader.loadThreeDAvatars(cache: cache);
 
     if (mounted) {

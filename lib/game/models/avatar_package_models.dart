@@ -2,20 +2,229 @@ import 'dart:convert';
 
 /// Keep server packages image-only for now.
 /// Later, you can extend render hints to include 3D/DepthCard configs.
-enum AvatarPackageKind {
+enum AvatarPackageType {
   image,
-  // depthCard3d, // later
+  depthCard,
 }
 
 /// Where an avatar came from.
 enum AvatarSource {
   asset,
   file,
+  remote,
 }
 
-/// A single avatar “thing” that can be displayed/selected.
-/// For now, it is just a path + source.
-/// Later you can extend this to include render hints (DepthCardConfig, etc.).
+/// More Flutter-friendly, future-proof avatar kind.
+/// This lets you evolve beyond [AvatarPackageType] without breaking existing data.
+enum AvatarKind {
+  image,
+  threeD,
+}
+
+AvatarKind _kindFromPackageType(AvatarPackageType t) {
+  switch (t) {
+    case AvatarPackageType.image:
+      return AvatarKind.image;
+    case AvatarPackageType.depthCard:
+      return AvatarKind.threeD;
+  }
+}
+
+/// A single avatar item you can render/select.
+/// This is the core object the UI should work with.
+class AvatarEntry {
+  /// Stable identifier for selection/storage.
+  /// For packaged avatars, you can use something like: "packageId:relativePath"
+  final String id;
+
+  /// Asset path (assets/...), absolute file path, or remote URL depending on [source].
+  final String path;
+
+  /// Optional nicer label for UI.
+  final String? displayName;
+
+  /// Optional thumbnail (asset/file/url) for faster grid rendering.
+  /// If null, the UI can render [path] directly for images.
+  final String? thumbnailPath;
+
+  /// Tags for filtering/search.
+  final List<String> tags;
+
+  /// Where this avatar comes from.
+  final AvatarSource source;
+
+  /// Optional: which package it came from (helps with uninstall/debug).
+  final String? packageId;
+
+  /// Optional: type info without relying on file extension.
+  final AvatarKind kind;
+
+  /// Future-proof bucket for extra fields (rarer use).
+  final Map<String, dynamic> meta;
+
+  const AvatarEntry({
+    required this.id,
+    required this.path,
+    required this.source,
+    this.displayName,
+    this.thumbnailPath,
+    this.tags = const [],
+    this.packageId,
+    this.kind = AvatarKind.image,
+    this.meta = const {},
+  });
+
+  AvatarEntry copyWith({
+    String? id,
+    String? path,
+    AvatarSource? source,
+    String? displayName,
+    String? thumbnailPath,
+    List<String>? tags,
+    String? packageId,
+    AvatarKind? kind,
+    Map<String, dynamic>? meta,
+  }) {
+    return AvatarEntry(
+      id: id ?? this.id,
+      path: path ?? this.path,
+      source: source ?? this.source,
+      displayName: displayName ?? this.displayName,
+      thumbnailPath: thumbnailPath ?? this.thumbnailPath,
+      tags: tags ?? this.tags,
+      packageId: packageId ?? this.packageId,
+      kind: kind ?? this.kind,
+      meta: meta ?? this.meta,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'path': path,
+    'displayName': displayName,
+    'thumbnailPath': thumbnailPath,
+    'tags': tags,
+    'source': source.name,
+    'packageId': packageId,
+    'kind': kind.name,
+    'meta': meta,
+  };
+
+  /// Note: source may be supplied externally (e.g. you know the package is local),
+  /// but we also allow reading it from JSON for flexibility.
+  factory AvatarEntry.fromJson(
+      Map<String, dynamic> json, {
+        AvatarSource? sourceOverride,
+        String? packageIdOverride,
+        AvatarKind? kindOverride,
+      }) {
+    final sourceStr = json['source']?.toString();
+    final src = sourceOverride ??
+        AvatarSource.values.firstWhere(
+              (e) => e.name == sourceStr,
+          orElse: () => AvatarSource.asset,
+        );
+
+    final kindStr = json['kind']?.toString();
+    final kind = kindOverride ??
+        AvatarKind.values.firstWhere(
+              (e) => e.name == kindStr,
+          orElse: () => AvatarKind.image,
+        );
+
+    final rawTags = json['tags'];
+    final tags = (rawTags is List)
+        ? rawTags.map((e) => e.toString()).toList()
+        : const <String>[];
+
+    final meta = (json['meta'] is Map)
+        ? Map<String, dynamic>.from(json['meta'] as Map)
+        : const <String, dynamic>{};
+
+    return AvatarEntry(
+      id: (json['id'] ?? '').toString(),
+      path: (json['path'] ?? '').toString(),
+      displayName: json['displayName']?.toString(),
+      thumbnailPath: json['thumbnailPath']?.toString(),
+      tags: tags,
+      source: src,
+      packageId: packageIdOverride ?? json['packageId']?.toString(),
+      kind: kind,
+      meta: meta,
+    );
+  }
+}
+
+class AvatarPackage {
+  final String packageId;
+  final String displayName;
+  final String version;
+  final AvatarPackageType type;
+
+  /// Where this package came from (local install vs remote catalog vs asset-bundled).
+  final AvatarSource source;
+
+  final List<AvatarEntry> avatars;
+
+  const AvatarPackage({
+    required this.packageId,
+    required this.displayName,
+    required this.version,
+    required this.type,
+    required this.source,
+    required this.avatars,
+  });
+
+  Map<String, dynamic> toJson() => {
+    'packageId': packageId,
+    'displayName': displayName,
+    'version': version,
+    'type': type.name,
+    'source': source.name,
+    'avatars': avatars.map((a) => a.toJson()).toList(),
+  };
+
+  factory AvatarPackage.fromJson(
+      Map<String, dynamic> json, {
+        required AvatarSource source,
+      }) {
+    final typeStr = json['type']?.toString() ?? 'image';
+    final type = AvatarPackageType.values.firstWhere(
+          (e) => e.name == typeStr,
+      orElse: () => AvatarPackageType.image,
+    );
+
+    final kind = _kindFromPackageType(type);
+
+    final rawAvatars = json['avatars'];
+    final avatars = (rawAvatars is List)
+        ? rawAvatars
+        .whereType<Map>()
+        .map((e) => AvatarEntry.fromJson(
+      Map<String, dynamic>.from(e),
+      sourceOverride: source,
+      packageIdOverride: json['packageId']?.toString(),
+      kindOverride: kind,
+    ))
+        .toList()
+        : <AvatarEntry>[];
+
+    return AvatarPackage(
+      packageId: (json['packageId'] ?? '').toString(),
+      displayName: (json['displayName'] ?? '').toString(),
+      version: (json['version'] ?? '1.0.0').toString(),
+      type: type,
+      source: source,
+      avatars: avatars,
+    );
+  }
+}
+
+/// A small reference type.
+/// Recommendation: keep for compatibility, but prefer using [AvatarEntry] everywhere.
+///
+/// You can deprecate later:
+/// @Deprecated('Use AvatarEntry instead.')
 class AvatarAssetRef {
   final AvatarSource source;
 
@@ -30,14 +239,15 @@ class AvatarAssetRef {
 }
 
 class AvatarPackageRenderHints {
-  final AvatarPackageKind kind;
+  /// NOTE: this field name is “kind” but it aligns with package type.
+  final AvatarPackageType kind;
 
   /// Optional: recommended preview image path inside package folder.
   /// Example: "previews/cover.png"
   final String? previewImagePath;
 
   const AvatarPackageRenderHints({
-    this.kind = AvatarPackageKind.image,
+    this.kind = AvatarPackageType.image,
     this.previewImagePath,
   });
 
@@ -48,9 +258,9 @@ class AvatarPackageRenderHints {
 
   factory AvatarPackageRenderHints.fromJson(Map<String, dynamic> json) {
     final kindStr = (json['kind'] ?? 'image').toString();
-    final kind = AvatarPackageKind.values.firstWhere(
+    final kind = AvatarPackageType.values.firstWhere(
           (x) => x.name == kindStr,
-      orElse: () => AvatarPackageKind.image,
+      orElse: () => AvatarPackageType.image,
     );
 
     return AvatarPackageRenderHints(
@@ -111,10 +321,14 @@ class AvatarPackageMetadata {
       version: (json['version'] ?? '1.0.0').toString(),
       thumbnailUrl: json['thumbnailUrl']?.toString(),
       archiveUrl: json['archiveUrl']?.toString(),
-      sizeBytes: json['sizeBytes'] is int ? json['sizeBytes'] as int : int.tryParse('${json['sizeBytes']}'),
+      sizeBytes: json['sizeBytes'] is int
+          ? json['sizeBytes'] as int
+          : int.tryParse('${json['sizeBytes']}'),
       sha256: json['sha256']?.toString(),
       render: json['render'] is Map
-          ? AvatarPackageRenderHints.fromJson(Map<String, dynamic>.from(json['render'] as Map))
+          ? AvatarPackageRenderHints.fromJson(
+        Map<String, dynamic>.from(json['render'] as Map),
+      )
           : const AvatarPackageRenderHints(),
     );
   }
@@ -144,7 +358,9 @@ class AvatarPackageInstall {
 
   factory AvatarPackageInstall.fromJson(Map<String, dynamic> json) {
     return AvatarPackageInstall(
-      meta: AvatarPackageMetadata.fromJson(Map<String, dynamic>.from(json['meta'] as Map)),
+      meta: AvatarPackageMetadata.fromJson(
+        Map<String, dynamic>.from(json['meta'] as Map),
+      ),
       installDir: json['installDir'].toString(),
       installedAtUtcIso: json['installedAtUtcIso'].toString(),
     );
