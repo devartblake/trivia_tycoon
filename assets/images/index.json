@@ -1,0 +1,787 @@
+{
+  "schemaVersion": 1,
+  "generatedAtUtc": "2026-01-13T12:43:26Z",
+  "root": "assets/images",
+  "fileCount": 128,
+  "folders": [
+    "avatars",
+    "backgrounds",
+    "logo",
+    "notification_images",
+    "overlays",
+    "quiz",
+    "rewards",
+    "store",
+    "welcome_images"
+  ],
+  "files": [
+    {
+      "path": "183953.png",
+      "size": 93730,
+      "sha256": "9ad299e0e074ce29fbb3203da8c83f489176dcf02a52a0c9b9810a8a63755750",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "184023.png",
+      "size": 108709,
+      "sha256": "39a8406228c844bc2ce54dd26e5486b49807d121810de2fd00cc0691d0092ad2",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "184046.png",
+      "size": 108121,
+      "sha256": "9973f40923bf90c3502255c067f572a76f1eb9c45d55b2a1800249e0ebba0484",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "184106.png",
+      "size": 149083,
+      "sha256": "70ae37c80161d4c8f4ee3021abf423005f294aeab52afb67380080fdd532791d",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/avatar-1.png",
+      "size": 16340,
+      "sha256": "aac046b6a8d87de94d19cd1cb0fa6854d509e6ea41721092f518df94b3e6d56f",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/avatar-2.png",
+      "size": 23136,
+      "sha256": "0ae005f811f90d1fd031034f2fc0898e617791004416218fb97e01b7c5ff9607",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/avatar-3.png",
+      "size": 11845,
+      "sha256": "3ef9169b7841ccc3ddc3b5fa10e1513475f2d2d6389c781ad801a522f01bc2b4",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/avatar-4.png",
+      "size": 21231,
+      "sha256": "406ee6aba41f7abc03992290b888b26788f34abc7d5149de89a616ce74783aa3",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/avatar-5.png",
+      "size": 18787,
+      "sha256": "bad78850603e2ef2669d28df3a02574128ce83748182fe7feebdbefde1cb8bc1",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/default-avatar.jpg",
+      "size": 1887,
+      "sha256": "202e2974b5ff1b080939048785140208773f1d8ffd3551c32e3be534094ed44b",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/default-avatar.png",
+      "size": 4069,
+      "sha256": "c8bf2a6e1392539b83e6119e55cd21ef4268c1ed6b0175fc9a7626c5625d7336",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/halloween_pack/doll_32.png",
+      "size": 2026,
+      "sha256": "bd7962cb046f2cb85972f10b5601e4c970ee89511fd737a61d1ec8530e011c11",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/halloween_pack/doll_64.png",
+      "size": 6673,
+      "sha256": "7673ed2275bc2af4174efb20b78641e651d407b4986d290e153d78a1f0b5fa51",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/halloween_pack/dracula_32.png",
+      "size": 1816,
+      "sha256": "eb555e102079324451ecde4d284bb06160d9a3863eb4ee15bfe73340f9546f57",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/halloween_pack/dracula_64.png",
+      "size": 5968,
+      "sha256": "a0e5da2236937454da334eaff23fca5bd36ca68e84d38d26911a856a42a4d02d",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/halloween_pack/grim_reaper_32.png",
+      "size": 1654,
+      "sha256": "a165dd87daf01919f42bdaf7946390efa439dab3df138912d355f3c3d1e18a35",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/halloween_pack/grim_reaper_64.png",
+      "size": 5126,
+      "sha256": "0e5f7821117acc1984f33d0c33f9d271730e57cb9339dc748abd4e17059e023e",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/halloween_pack/hannibal_lecter_32.png",
+      "size": 2094,
+      "sha256": "479113c9cdeaf204a77881b73e8611ac451954fd54078effcb33374bbd77cf57",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/halloween_pack/hannibal_lecter_64.png",
+      "size": 7172,
+      "sha256": "2d296aa9cc6cb39c6accb7c98b9e00f039016c3d5ed55978d2416a41fe2255b4",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/halloween_pack/hellboy_32.png",
+      "size": 1805,
+      "sha256": "a03a53766a9b479aeda5d32c80912b70563b073e6900af77aedcd026995765ed",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/halloween_pack/hellboy_64.png",
+      "size": 5696,
+      "sha256": "52d9fe74052cd4a3fc94cec18564c5275c7a4012a9daa8354233c561d96b5515",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/halloween_pack/jason_32.png",
+      "size": 1883,
+      "sha256": "733dd1c35e9f4cba4c64c77613dbaef5e78ae7054183d809dc9c6da8e33d4a33",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/halloween_pack/jason_64.png",
+      "size": 6078,
+      "sha256": "6ccf037812ebe37774704c11bbcabd5100684bcc636d9dfa556298e2713bbb02",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/halloween_pack/mike_32.png",
+      "size": 2003,
+      "sha256": "802e057ff6559c5b70de760de23dead7ecaa37276a21dda1567121e1925bc7ba",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/halloween_pack/mike_64.png",
+      "size": 6288,
+      "sha256": "cac017a9a1528d9d8d51824d46488df7863ffbcbd3c7674e20504aad4c08d013",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/halloween_pack/red_skull_32 (1).png",
+      "size": 1819,
+      "sha256": "bae57d420f45d8698c9c9cb06cd7d87b4708cf247029eeabbe282e7130d4e8b3",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/halloween_pack/red_skull_64.png",
+      "size": 5567,
+      "sha256": "5b2d82712995de5f4275ddb8704f061e3f988fffe837ddc8ad56d72807c151f3",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/halloween_pack/scream_32.png",
+      "size": 1683,
+      "sha256": "51f72f0c39d3c25a0ff1481ab5f4d1bfaf8e5060e156ceeec0da16e4318972ef",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/halloween_pack/scream_64.png",
+      "size": 5261,
+      "sha256": "12e2dacb0576ea36bc22be165d2662a868bbd738ca7261fa55cd1dad7915567c",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/halloween_pack/sea_monster_32.png",
+      "size": 7687,
+      "sha256": "8e4824131b74453a3fe9eafcce80b25b3511bcb1431c341d4f3f89450c05bf35",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/halloween_pack/sea_monster_64.png",
+      "size": 2286,
+      "sha256": "4ed85e70e2cfc1dbb07cabbd1a19e8e22d6860c60f2a8a0aa3da237827409c34",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/halloween_pack/vendetta_32.png",
+      "size": 1726,
+      "sha256": "a47188e27ff7c652392c2ab78013ae4a3d66bb9fcb8621c8722e868e7952ea0d",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/halloween_pack/vendetta_64.png",
+      "size": 5244,
+      "sha256": "db0f5d311d1158642b3c3b66c66f09c10f2580a0ca5232c65354af5855befe79",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/monster_pack/cyclops_1.png",
+      "size": 28945,
+      "sha256": "ed3cdbfa2e6009c4a2ceee02591b476a264ec1400fc03a7c15ca3712603d856c",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/monster_pack/cyclops_2.png",
+      "size": 47385,
+      "sha256": "57251c3715b92d96e347fcb0acf511c0c43d29d893092f40052a495c8085694d",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/monster_pack/monster_1.png",
+      "size": 61185,
+      "sha256": "93dbd6f38817c664981f189118b0b84fe0104b9d301a59ff0b6d053cd2299927",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/monster_pack/monster_2.png",
+      "size": 49912,
+      "sha256": "e5508f28acf9f6ceae786b945dca958c2b9d5757af08b06f3b7fababa11996aa",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/monster_pack/monster_3.png",
+      "size": 24729,
+      "sha256": "e8b3b020111f3eace314a648403690d9551e6cc338982d9186e1a81f591fe8da",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/monster_pack/monster_4.png",
+      "size": 26420,
+      "sha256": "3dae755136a1b2235d7d266b35316cd1b10c945f037ee951c31b4e40e6c7e5be",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/monster_pack/monster_5.png",
+      "size": 32843,
+      "sha256": "3283d61f53a9caeac9093062001aea7ab5178f3a0421c1605141050d72f6f277",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/monster_pack/triclops_1.png",
+      "size": 52592,
+      "sha256": "626f1d8b94935cf715dd77f34c547df0ade2db3deb786949950248bf892e36e8",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/monster_pack/triclops_2.png",
+      "size": 48589,
+      "sha256": "8d57a6357a230c3f3e127e55d9c9238561ce6fe34d7b5bef679110aa8ce1de8a",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/badges/chase_badge_32.png",
+      "size": 2009,
+      "sha256": "172f2bad2392d4a49caba14dc2213546fa9a090bf8da368eefa31cbda7d9bbf0",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/badges/everest_badge_32.png",
+      "size": 1986,
+      "sha256": "a843171c3ecb1cc178a6922843120363956e411e5203ad9f6a7c7e8769e4bcf3",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/badges/marshall_badge_32.png",
+      "size": 1970,
+      "sha256": "6a4519f072949acdc22f91e6a23ab1e1e860f3f3fa42796ecdd7513b28d69615",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/badges/paw_patrol_badge.png",
+      "size": 2067,
+      "sha256": "02d321fd21d6c1f0510cc48405ec1a2871a43394c9e086493066c1644801c53d",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/badges/rocky_badge_32.png",
+      "size": 2045,
+      "sha256": "f267d4445d0c8d66e3ff7fa293581f40e40d050fcc7d745d78f78243a597b56d",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/badges/rubble_badge_32.png",
+      "size": 2109,
+      "sha256": "07d22889d725587ba6ba2fc9a208e3120f1582140c65ba00e028998315e9be07",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/badges/skye_badge_32.png",
+      "size": 2176,
+      "sha256": "4df1cfe53ab192103363c4963028d51b731dad3f7494572738a812102abeb261",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/badges/tracker_badge_32.png",
+      "size": 2143,
+      "sha256": "a4c9855ffd9a5296f1a6f430139297c90889230d4cac8b9e8084eea54858b997",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/badges/zuma_badge_32.png",
+      "size": 2149,
+      "sha256": "df1889d3406598c3ee173ca71d88705d4283b815c33cc18c60428404b27719b0",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/chase_32.png",
+      "size": 2134,
+      "sha256": "75a67e0899162e73c3b66b54f8f796d9b8e290bbb7eb250a09cd7062f9b11238",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/chase_72.png",
+      "size": 7002,
+      "sha256": "e92f9908d9397ed3da228af7c81fd9fd7bf60cead01e1b88b8df944e816f5fa7",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/everest_32.png",
+      "size": 2342,
+      "sha256": "3b8d09de5cff66500642cce354c9145f059215c2475822f4b1b7ff0f85016891",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/everest_72.png",
+      "size": 7451,
+      "sha256": "4b8ce85e1f3768a5eb2d74776e865bfb65b3fd43b65eceec0189eb0f5fce0975",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/marshall_32.png",
+      "size": 1993,
+      "sha256": "2423f0b3100ba53569f0722a06cab6a11f7d108d71e95c53cc176aa138f0e103",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/marshall_72.png",
+      "size": 6041,
+      "sha256": "e16c82e25716ba3b5f736bf4faa32c1508656adc45c1e892154fdcc61885f12a",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/rocky.png",
+      "size": 7373,
+      "sha256": "a070cfad5e60341f446c092282f8f26dac4eb892c81f01680e5c22aab8a5bf6f",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/rocky_32.png",
+      "size": 2338,
+      "sha256": "4de85969a8fc116ef0830e4859b88cf6ad3098a9cc0358573ec21ee4ae4416d2",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/rubble_32.png",
+      "size": 2094,
+      "sha256": "e16110545e2db9afc0de75995bcb9afc0d843e267e36940927cae359c22010ff",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/rubble_72.png",
+      "size": 6567,
+      "sha256": "94234cb576b9b29dcce5380053d28fd96a1107ff1f481d2ed2e55d1cc9ccb864",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/skye_32.png",
+      "size": 2327,
+      "sha256": "7f13d88f2d035f7ea0a61fd07ae87882a12c4f0e0115600751af9fd6ff4ff74f",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/skye_72.png",
+      "size": 7682,
+      "sha256": "d3ec7d9a5cc7c354a889c20bfa8205d5666186e64e3864af939099ecaa64173f",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/tracker_32.png",
+      "size": 1980,
+      "sha256": "73a521009f5ec8ef01265418733b144d34a0371c613c80c6436e7564e9e913fb",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/tracker_72.png",
+      "size": 6320,
+      "sha256": "bc58977cc9b8b22abe785775e6b8f8c159e1c8d12f976463080d2b2b84d21c5e",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/zuma_32.png",
+      "size": 1956,
+      "sha256": "f3ab7507bdb8756d638899f97e1e152cadcf58bcd652501358859ac8fb75ba2c",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatars/paw_patrol_pack/zuma_72.png",
+      "size": 6180,
+      "sha256": "21af27e121c25d9f4367165b24d97777686ba35a19f51eecde929919631d7ee2",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "backgrounds/bg1.jpeg",
+      "size": 689114,
+      "sha256": "bd313b85b931234923b4e2ccd04cc9863f984e491a03ce97522b1823f87be0f7",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "backgrounds/bg2.jpeg",
+      "size": 219464,
+      "sha256": "6d0a07bf9bb74478d67bce938c8b8b8f153b1daca31de97a49373c17fdb87e9f",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "backgrounds/bg3.jpeg",
+      "size": 25974,
+      "sha256": "a11a72d0aa3eb46cb5b6a1b5aabecccf8fb90a5f362675030cf841a66704c5dd",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "backgrounds/bg4.webp",
+      "size": 28654,
+      "sha256": "278081139882594cfd7a681c177ffccf1f17fe72a6701dd370df4f7d15774ca3",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "backgrounds/bg5.jpeg",
+      "size": 646752,
+      "sha256": "b0c18d95545818f922f5d2f6bf98c8a0da68b512665ff31222a52fe57b9f8230",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "backgrounds/bg6.jpeg",
+      "size": 102073,
+      "sha256": "4a8b91871107a5df374aae543183cfdb780e5fd5325111e9c721b890a68360df",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "backgrounds/bg7.jpg",
+      "size": 78466,
+      "sha256": "695ccdc48e90c48bb973d9d2eeb471229856c92f1fc7724c6e98dfe0e1975487",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "backgrounds/bg8.jpeg",
+      "size": 35345,
+      "sha256": "bd9e5a29d173f7deecaec2908c276010721b4b7b827f45f6c90ace81e054a23c",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "backgrounds/cover.jpeg",
+      "size": 465756,
+      "sha256": "a50d7a6920286365c9a252780cd9c5504fffe19ae7a7af7072706af417ff1769",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "backgrounds/geometry_background.jpg",
+      "size": 334023,
+      "sha256": "2b4ec2f5e0f6662908007fd896e60d8b77cec23acfad281749b27975369f8976",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "backgrounds/questions_background.jpg",
+      "size": 1074511,
+      "sha256": "e67ab8c671d17e639019a51fc091621b069bb1775ca76501ec0d5865eeabaef9",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "backgrounds/versus_background.jpg",
+      "size": 38970,
+      "sha256": "3542703fc51891913801cc72aebf95b0eb0a8428aad5b966c4a633c72b6b1f72",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "cta_banner.png",
+      "size": 11234,
+      "sha256": "97d0da92fcd5ba9b0e721094928d6b805d13335a025ca1b6fef8427f1d2f08c0",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "logo/appLogo.png",
+      "size": 272389,
+      "sha256": "c066de07afc3f66085c5d96c3b3e4b3d457a503303e6a27c92287e4dcf9eab73",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "notification_images/spritesheet_circle.png",
+      "size": 1060,
+      "sha256": "8766d54e82e2f013e92419c71e25a0facbc65afcb020fc457fa30c61e5adace8",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "notification_images/spritesheet_sparkle.png",
+      "size": 1644,
+      "sha256": "f6b93ba4b9f0b79ca2db453493a6e1b08b5118253c19af2bf91d4f3196748046",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "overlays/glitch_071.jpg",
+      "size": 2035668,
+      "sha256": "af451ab89d8fc3ebf69f6d52166b79604ee93d89a9941018351ee5995f41e8e5",
+      "modified": "2026-01-07T18:12:48"
+    },
+    {
+      "path": "overlays/glitch_083.jpg",
+      "size": 2142653,
+      "sha256": "072d3fdf829e4765f9f4e599f287ff4ce0c0d96a6183abe5730c9fa24062bbc0",
+      "modified": "2026-01-07T18:12:48"
+    },
+    {
+      "path": "overlays/glitch_085.jpg",
+      "size": 1064042,
+      "sha256": "c314a0afb0865ff26d0249b4166c1b34b67025e2c4b7efaaf8561f1b2887fc6e",
+      "modified": "2026-01-07T18:12:48"
+    },
+    {
+      "path": "overlays/glitch_123.jpg",
+      "size": 1225144,
+      "sha256": "d296030560394a160804879d5b1bcf5d0539e598ff165cf3f7c0f45f61a824c7",
+      "modified": "2026-01-07T18:12:48"
+    },
+    {
+      "path": "quiz.png",
+      "size": 18088,
+      "sha256": "7dbcccbec6afd0e7c2e57c790b831cbd759e701b6e2182d8725686a599fb8285",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "quiz/abstract-rainbow.jpg",
+      "size": 413328,
+      "sha256": "fa193a3e3be9d50fbeb91f7b2fa0d91be3e4f8a28641d284abb732e79173c723",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "quiz/backgrounds/abstract_corners.jpg",
+      "size": 1535300,
+      "sha256": "f5184d53e98466a8ea9135fe71cfd90c6ae35f775933a134571725db62e932c8",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "quiz/backgrounds/abstract_triangles.jpg",
+      "size": 868558,
+      "sha256": "8e892194d6f73fd72c308caf47769ac48e85a514bc37170d9f81ca40421f5e95",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "quiz/backgrounds/branch_nick.jpg",
+      "size": 1468930,
+      "sha256": "95e483c4854caa1238e8a8ec6d3b4d28db80ec7201733f173cb45b787bcd1a8a",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "quiz/backgrounds/field_of_flowers.jpg",
+      "size": 207816,
+      "sha256": "00d32218eb0fa7ebe1d9fb455762ac25cfac2f52b6faee0e34151b6e0175b3bd",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "quiz/backgrounds/flowers.png",
+      "size": 1608244,
+      "sha256": "906d91fef30c7d60cb563e5d05a74b699cd35a5da8de76cd6a761e51eeef7289",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "quiz/backgrounds/moonlight_jasper.jpg",
+      "size": 452519,
+      "sha256": "4f34ea6fda014a720309cd7446e64d76a7e3ea227c07cda3595faf3ac3dab4e1",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "quiz/backgrounds/music_clef.jpg",
+      "size": 139641,
+      "sha256": "bf9b046d173a553bb3004c31d1ac9c696988773f205af1596f83e1dc33697e9e",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "quiz/backgrounds/space.jpg",
+      "size": 295050,
+      "sha256": "941213a73de3dcdc99a9bd9bb7c8308805ce8996018e3b49b000ab60a6d2016f",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "quiz/boris-misevic.jpg",
+      "size": 2080484,
+      "sha256": "56f425a6e478e381c5da5a9e65ca78ca28a16cb7b00caf481fab632dd8da488a",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "quiz/category/cinema.jpg",
+      "size": 18593,
+      "sha256": "b5dabf050772d9ad5488c3000615fbc7caa1d6fc9cc3d9d1e67c813d0c08d659",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "quiz/category/default.jpg",
+      "size": 25423,
+      "sha256": "39de8e68ebeab849234e80efb45a005fa22f0162102b7d7ed1eca8dd7d75d29c",
+      "modified": "2025-09-23T00:47:30"
+    },
+    {
+      "path": "quiz/category/default.png",
+      "size": 142977,
+      "sha256": "b42875c383cbae33d8d9bc3d2b1efa1071533a4d824b136d67adab9d591ad58a",
+      "modified": "2025-09-23T00:42:46"
+    },
+    {
+      "path": "quiz/category/film-strip.jpg",
+      "size": 12949,
+      "sha256": "2c8347dfe198e461a13982325209fadaf34ab37ba6ddf571931b1648cc0bb664",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "quiz/category/pop_culture.jpg",
+      "size": 122099,
+      "sha256": "eba493d8eb6f48700ea64704e4f930e46dd0e08933a105cbbf870dcf1c2c7d52",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "quiz/category/science.jpg",
+      "size": 37924,
+      "sha256": "717e9915e8606772345f66f5e4c3636109829926391f388d6504642f2c5f3924",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "quiz/hearts-4796957_1920.jpg",
+      "size": 725116,
+      "sha256": "1ef1ee74932b43d2e1773139bf8b1bb98ec14092c3f8a6d4e6fe5603ac1ecc15",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "quiz/ink-7294678_1280.jpg",
+      "size": 435657,
+      "sha256": "8f9e69d739f3817b74bae50acb9d1d0523792518e56b93b961919a6377704c48",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "quiz/numbers-7044751_1920.jpg",
+      "size": 357615,
+      "sha256": "02809989af440fa7d996246454df7e765ee4f10463bf9c21a3af75dc0d77862d",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "quiz/thilak-mohan-unsplash.jpg",
+      "size": 783134,
+      "sha256": "cbfff39708232f0558d26d15963275eb3c4a6c630aef6e024a250557f4062764",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "reward-quiz.png",
+      "size": 520562,
+      "sha256": "20f539f2933c01cddbd297e2b139433d3a17b14d1adb23f319ff49bc0e4a38c4",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "rewards/diamond.png",
+      "size": 46504,
+      "sha256": "cfefd5a2303795aa8a2c2a9851e6e070111dcbac3d54cb3684700bd28e47cbc6",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "rewards/diamond.webp",
+      "size": 30610,
+      "sha256": "9bd97ec333cc69d95913b58af05a6dc08ea988c02c66ccc8675204343f382c29",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "rewards/gold.png",
+      "size": 233128,
+      "sha256": "3858bc03d18d216059b7a0638464c6666f37cd1f4bac4307ea6974f3a2da8482",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "spinning_wheel.png",
+      "size": 42718,
+      "sha256": "7a975317117de0abdc703682b665623b3f158a8a20150f2c55170bf0cfa9fcaf",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "store/themes/green.png",
+      "size": 1440742,
+      "sha256": "9f521f69b50dfbdf238263a984f68d36e4d484f39b2fe6594ef7af84e71f0f4c",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "store/themes/neon.png",
+      "size": 53625,
+      "sha256": "ee38189cf086ff0823fbe8ae16263ba3453e3cad029cc96c9652b4b05553edf1",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "store/themes/theme_neon.png",
+      "size": 3042963,
+      "sha256": "736ad369ad5f07f153bc07ae170a09b1cce775b979b1d184c371cafbc41e1e7c",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "welcome_images/Bg-Blue.png",
+      "size": 54956,
+      "sha256": "3c6409677495b0fba16569041d80074ca393019702dab02b23a8d0fb259e4ae1",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "welcome_images/Bg-Red.png",
+      "size": 55683,
+      "sha256": "d1054e335e6a956f2bd83bd88be07d8c09c1dc24a7507b7823c424f884400fea",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "welcome_images/Bg-Yellow.png",
+      "size": 55213,
+      "sha256": "f9ed5be9702b4e744cad0f68aa6535d725fb801e67adcabc282c734b1abf62e4",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "welcome_images/Illustration-Blue.png",
+      "size": 78773,
+      "sha256": "eeded620e5462d6dcef8609f0a19f5c8faded920a79bab9fa3a4237c90b625cb",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "welcome_images/Illustration-Red.png",
+      "size": 74181,
+      "sha256": "3598b24fc7359980926fc593a60d8e235c9ab85987c6bedaa0bac934edae0150",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "welcome_images/Illustration-Yellow.png",
+      "size": 67810,
+      "sha256": "b45792fb1e9f78642ea06a139b520425c2fbaa3a9912f0995eda0f9eac57a8ea",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "welcome_images/Moon-Crescent.png",
+      "size": 5586,
+      "sha256": "e8dcee95b6f5ddd3451bace3d38d70a3bf5589f090b6cb606b3ef4b7cda429a3",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "welcome_images/Slider-Blue.png",
+      "size": 1263,
+      "sha256": "df1ccde7cd444d4598960b61de00f61a71c3b28da36e9c6eb570ea978966158a",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "welcome_images/Slider-Red.png",
+      "size": 1197,
+      "sha256": "0a8b94fc73e7cab108665f740926583fa43a65b2737ed6dc2c60e35a064e6d38",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "welcome_images/Slider-Yellow.png",
+      "size": 977,
+      "sha256": "f7dac889970f194d397580d04b34cc55606aabff0a9c76d1265a07d38d70ef21",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "welcome_images/Sun-Red.png",
+      "size": 2620,
+      "sha256": "3c185a5bb3e5445b909649460d24b0ae6df993f00eeb5ccd6cc298a752bdce57",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "welcome_images/Sun-Yellow.png",
+      "size": 2614,
+      "sha256": "0c676d7994c2871514d38bb65db24a2520b793bed3b1a0c1dd9558c22088113f",
+      "modified": "2025-09-03T11:59:14"
+    }
+  ]
+}

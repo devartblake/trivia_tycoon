@@ -1,0 +1,506 @@
+{
+  "schemaVersion": 1,
+  "generatedAtUtc": "2026-01-13T12:43:26Z",
+  "root": "assets/questions",
+  "fileCount": 76,
+  "folders": [
+    "architecture",
+    "art_history",
+    "arts",
+    "astronomy",
+    "bonus",
+    "business",
+    "civics_law",
+    "classes",
+    "comparative_religions",
+    "computer_science",
+    "cultures",
+    "current_events",
+    "economics",
+    "economics_finance",
+    "engineering_technology",
+    "entertainment",
+    "environment",
+    "environmental_science",
+    "general",
+    "geography",
+    "health",
+    "health_medicine",
+    "history",
+    "kids",
+    "law",
+    "literature",
+    "math",
+    "media",
+    "misc",
+    "modes",
+    "philosophy",
+    "politics",
+    "psychology",
+    "science",
+    "social",
+    "sports",
+    "statistics_data",
+    "technology",
+    "world",
+    "world_literature"
+  ],
+  "files": [
+    {
+      "path": "architecture/architecture_question.json",
+      "size": 12285,
+      "sha256": "af7d620b45f91aecab7b4f455ba8cd59d4c28a29c8b6ee38cbd1dbf3ca85b025",
+      "modified": "2025-09-18T18:09:40"
+    },
+    {
+      "path": "art_history/art_history_question.json",
+      "size": 11195,
+      "sha256": "f917bb40ca309ec5b9059ab82f7180d44cfaf4a05ad8c333aa55d194a97e3286",
+      "modified": "2025-09-18T13:07:36"
+    },
+    {
+      "path": "arts/art_question.json",
+      "size": 32364,
+      "sha256": "edd53a1b08000d418c6cba85d0386a3a5c1c0d9487b312108aa118e9e704b83d",
+      "modified": "2025-09-19T18:56:32"
+    },
+    {
+      "path": "arts/arts_question.json",
+      "size": 14146,
+      "sha256": "735a0f70aaabde0b1c11ac74d99a087418b994e1af552842974aa7c9606140cc",
+      "modified": "2025-09-17T00:00:00"
+    },
+    {
+      "path": "arts/creative_arts_question.json",
+      "size": 34444,
+      "sha256": "aec6811b9a8f329f76fe33e659782b6e8e52583c8e9c41f8ef1cd877d3716bfb",
+      "modified": "2025-09-19T18:56:40"
+    },
+    {
+      "path": "arts/visual_arts_question.json",
+      "size": 33964,
+      "sha256": "f3784abe8f68e77552caf2d2e88b599c2c3f95eb213e6b110e693f299201d72e",
+      "modified": "2025-09-19T18:56:34"
+    },
+    {
+      "path": "astronomy/astronomy_question.json",
+      "size": 11578,
+      "sha256": "637f74052be06aa672d9da5fc7b7f33e3ee7815ba3e9335588da52109ee19d72",
+      "modified": "2025-09-18T18:09:34"
+    },
+    {
+      "path": "bonus/extended_questions.json",
+      "size": 100737,
+      "sha256": "2dd363d23dd6361b2ab85054390f0ae175154d31c2d2505c140dce0be1cacf88",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "business/business_question.json",
+      "size": 11558,
+      "sha256": "653e63fc507652fb804ea4325ec704acacc6950e993f7740d4628e138fa40928",
+      "modified": "2025-09-18T13:07:32"
+    },
+    {
+      "path": "civics_law/civics_law_question.json",
+      "size": 11447,
+      "sha256": "980a0348e55bd486a7f1c67f83607895f0b1b3689e8cf0fe2ce3e5c58922d0ab",
+      "modified": "2025-09-18T13:24:12"
+    },
+    {
+      "path": "classes/class_10_questions.json",
+      "size": 19224,
+      "sha256": "7285a0d8cc31ab5b0632c15a0c9206e91ee1fb3d3e158abba0d44522fb2b7e1b",
+      "modified": "2025-09-16T02:02:16"
+    },
+    {
+      "path": "classes/class_11_questions.json",
+      "size": 19210,
+      "sha256": "2b27b1d3c80724e190c49b53a8d8c8a65b7758ca481c10bd84a08dd661a974db",
+      "modified": "2025-09-16T02:02:20"
+    },
+    {
+      "path": "classes/class_12_questions.json",
+      "size": 19161,
+      "sha256": "bb69a5f274b609b0d99eaab451763a4b23f742301d35e1c18139fa6b8b7b08b7",
+      "modified": "2025-09-16T02:02:24"
+    },
+    {
+      "path": "classes/class_1_questions.json",
+      "size": 11447,
+      "sha256": "7f8d034ca3c1ae2794028d984f95847ca730570afbbcc44cbe488b3c70d6a781",
+      "modified": "2025-09-16T01:08:54"
+    },
+    {
+      "path": "classes/class_2_questions.json",
+      "size": 11514,
+      "sha256": "3718a0152712fac91534ce364067a7b6f11a159d1258a5c2090fd6dbdef35d6f",
+      "modified": "2025-09-16T01:08:58"
+    },
+    {
+      "path": "classes/class_3_questions.json",
+      "size": 12149,
+      "sha256": "7479219573c39652843cf317ca0170d0a68811e882d7ddcedb7f145488079568",
+      "modified": "2025-09-16T01:09:02"
+    },
+    {
+      "path": "classes/class_4_questions.json",
+      "size": 12339,
+      "sha256": "a1711a059af09eb3d0688d3896a80c121133824477def713ce720cb2baa8c8d9",
+      "modified": "2025-09-16T01:09:04"
+    },
+    {
+      "path": "classes/class_5_questions.json",
+      "size": 19232,
+      "sha256": "288172339bcf365b61f7e650502467320a82eb6bf147579c4d0a1dfd56c68529",
+      "modified": "2025-09-16T02:01:48"
+    },
+    {
+      "path": "classes/class_6_questions.json",
+      "size": 19117,
+      "sha256": "ec4f4563df5144f5bb161949382add016bd797c4c4682ac558e7c02e87bb4c1c",
+      "modified": "2025-09-16T02:01:52"
+    },
+    {
+      "path": "classes/class_7_questions.json",
+      "size": 19212,
+      "sha256": "821774b7289a3bc0b691796fa68160c03bd45b4cf69fa1dbab6457274c5cdb82",
+      "modified": "2025-09-16T02:01:58"
+    },
+    {
+      "path": "classes/class_8_questions.json",
+      "size": 19233,
+      "sha256": "bb0b216bae77ee32beac9b990c36383340cf2ac055d16d0000c41a4c47eed5cd",
+      "modified": "2025-09-16T02:02:04"
+    },
+    {
+      "path": "classes/class_9_questions.json",
+      "size": 19210,
+      "sha256": "ef646946833c96e677794604af031c27d974daad49fffcad83ebd6c8f852181b",
+      "modified": "2025-09-16T02:02:08"
+    },
+    {
+      "path": "classes/class_K_questions.json",
+      "size": 11718,
+      "sha256": "316be1f64e08268b22971912cbe3a9b424416bab581e5d7abc656a86c03f15c7",
+      "modified": "2025-09-16T01:08:52"
+    },
+    {
+      "path": "comparative_religions/comparative_religions_question.json",
+      "size": 12843,
+      "sha256": "db3b38e77fc853fb57935ba42d34cffe18f1c4bd3d8027c598e6d39e1966835f",
+      "modified": "2025-09-18T18:09:42"
+    },
+    {
+      "path": "computer_science/computer_science_question.json",
+      "size": 11620,
+      "sha256": "7e7b2f9e048e30bd4c7b6cf88478ef726c55cbf30fb510b71db78f1b8ba5512a",
+      "modified": "2025-09-18T13:07:34"
+    },
+    {
+      "path": "cultures/global_cultures_question.json",
+      "size": 11614,
+      "sha256": "5865da4e571fe3386a57b94913efea2643cd6ad5efd2283e7d610442e087f3f6",
+      "modified": "2025-09-18T13:24:02"
+    },
+    {
+      "path": "current_events/current_events_question.json",
+      "size": 14046,
+      "sha256": "1b98232cac7b629145709e11039cc481f7a07ed97a1b2ed35559af87c705c55a",
+      "modified": "2025-09-17T01:07:20"
+    },
+    {
+      "path": "economics/economics_question.json",
+      "size": 14493,
+      "sha256": "4cae4e251664ed026a1258e2db2bffcdd92a0d0c3a9f9db2809c26c7f22a5f33",
+      "modified": "2025-09-17T00:00:06"
+    },
+    {
+      "path": "economics_finance/economics_finance_question.json",
+      "size": 17223,
+      "sha256": "f91e85f8b1ad7bde2b028c8cc5f63b66f01ea15bacf6991c506ee633d16942e0",
+      "modified": "2025-09-18T14:05:08"
+    },
+    {
+      "path": "engineering_technology/engineering_technology_question.json",
+      "size": 17084,
+      "sha256": "e3a9077054bce2bcc7ff5f7a6ca7caa936663fd21bf25c4c1b1d24bff0ef6e16",
+      "modified": "2025-09-18T14:05:06"
+    },
+    {
+      "path": "entertainment/80s_movies_question.json",
+      "size": 43604,
+      "sha256": "f8ab9f56ce2a7f437fe64fbcef3f436d961fce94d0234b328725954045747db4",
+      "modified": "2025-09-20T03:17:14"
+    },
+    {
+      "path": "entertainment/90s_movies_question.json",
+      "size": 43419,
+      "sha256": "75247a973f4a631826acbda927754db9f0a809b4e6a3ac4d7a8af848d7d8f3b0",
+      "modified": "2025-09-20T03:17:18"
+    },
+    {
+      "path": "entertainment/entertainment_question.json",
+      "size": 14177,
+      "sha256": "1c073839afcb6ee479f42d151dae7fb76aba712a41a28fd0014a547f0d0f0b29",
+      "modified": "2025-09-16T23:56:14"
+    },
+    {
+      "path": "entertainment/film_question.json",
+      "size": 45770,
+      "sha256": "a3af3cd3848da64a2409896d03692e93619f451f8cf4a565c62cc1802bbcdea7",
+      "modified": "2025-09-20T03:17:22"
+    },
+    {
+      "path": "environment/environment_question.json",
+      "size": 14866,
+      "sha256": "170910099bc03329bd5a9aaaa09b4dbbf296d8ca08faa5432eee1cebf51fef81",
+      "modified": "2025-09-17T17:59:18"
+    },
+    {
+      "path": "environmental_science/environmental_science_advanced_question.json",
+      "size": 16996,
+      "sha256": "5b2a5e8f2052d9da73decee156602c52eadc2c049f8b117ff9a16b8317504807",
+      "modified": "2025-09-18T18:03:08"
+    },
+    {
+      "path": "general/general_knowledge_question.json",
+      "size": 43965,
+      "sha256": "d2b3f46a7e2aa8f67a6a5dc71fd127aa2272e18aee870f2c451457a7f4f18300",
+      "modified": "2025-09-19T19:10:50"
+    },
+    {
+      "path": "general/general_questions.json",
+      "size": 373,
+      "sha256": "414ffbb76b7ffefd76988c41c781a9c8bb2e2f86d509d854ac14fc136f03a186",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "geography/geography_question.json",
+      "size": 17125,
+      "sha256": "136711cc76a2e1e7478e5e956f22e583c6ca6d8e84326cd4bd509e5153056dd0",
+      "modified": "2025-09-16T23:33:08"
+    },
+    {
+      "path": "health/health_question.json",
+      "size": 13995,
+      "sha256": "2b00f8f9330a3259420f39423cf3f286216b1d3d20576569bcd21ee205aaac53",
+      "modified": "2025-09-17T01:07:16"
+    },
+    {
+      "path": "health_medicine/health_medicine_question.json",
+      "size": 16557,
+      "sha256": "9f489a0719e974a678d1753d02944a4172ef4a0d2d96ad3fd8c058a31cf6d258",
+      "modified": "2025-09-18T14:05:02"
+    },
+    {
+      "path": "history/historical_question.json",
+      "size": 42420,
+      "sha256": "a08498c4f9ef4e59dc96a1d2b5ad42b4f46502f521612deb9ce1ee8e48376426",
+      "modified": "2025-09-20T01:00:08"
+    },
+    {
+      "path": "history/history_question.json",
+      "size": 14333,
+      "sha256": "e8b9986fe5df79034a83dce163ee7262a49426326fab407c664d0fbd73e1ca0c",
+      "modified": "2025-09-16T23:47:04"
+    },
+    {
+      "path": "history/world_history_question.json",
+      "size": 42204,
+      "sha256": "2d4f86a2ab9b88fb15fad10df346128ab4ead20f3da2e0501354e3c4dd26a82d",
+      "modified": "2025-09-20T01:00:04"
+    },
+    {
+      "path": "kids/kids_grade2_questions.json",
+      "size": 12648,
+      "sha256": "bcfe34bffd73859a22ebb59cf1c98e2aa8804ef4b610d5c2ecb376b96681b587",
+      "modified": "2025-09-18T13:07:28"
+    },
+    {
+      "path": "kids/kids_questions.json",
+      "size": 14328,
+      "sha256": "fb6fafc8791fe95a24681b6cef8652e9f617f6dc4c23381335543963bb9d726e",
+      "modified": "2025-09-18T12:58:50"
+    },
+    {
+      "path": "law/law_question.json",
+      "size": 14792,
+      "sha256": "56e4b5d04c889bbaba97d6dfd451191a6d198fcb2e39217cfe6e34aec66c6976",
+      "modified": "2025-09-17T17:59:12"
+    },
+    {
+      "path": "literature/literature_question.json",
+      "size": 14323,
+      "sha256": "e897eb8526fc42e09f719d7f78d87e056c1e68b35cd8965b07c74d4cca66f657",
+      "modified": "2025-09-16T23:47:06"
+    },
+    {
+      "path": "math/math_question.json",
+      "size": 15238,
+      "sha256": "af027d604d22cf33dc770cc3c850b7c0a93222ef09194a5932b2e33f569d91d9",
+      "modified": "2025-09-16T23:33:02"
+    },
+    {
+      "path": "media/media_question.json",
+      "size": 14092,
+      "sha256": "bbab5afea3dd1c432b1c21bbbce86f1a843842e802dea4bc801ca6361fb18370",
+      "modified": "2025-09-16T23:56:16"
+    },
+    {
+      "path": "media/media_questions.json",
+      "size": 5795,
+      "sha256": "a9cf42a7fa19c05ead6d363d895885c7e9a5c7c3ae55c04fa3c70990a2eae166",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "misc/questions.json",
+      "size": 26464,
+      "sha256": "a8e4419a42a62be8b7af299ce3a01f4a974c52a3f27e5176fc2b248dbae1cf12",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "misc/questions_offline_pack.json",
+      "size": 6,
+      "sha256": "b423bb45501e0fa49d3b77e635f800a29f1fdcf5a58e00c7e04a7ff7833045f2",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "modes/media_challenge_question.json",
+      "size": 49102,
+      "sha256": "795beb7605f1694cbf465fdb7ce2798029e159c05cae2ab4e48fb8b53934a58c",
+      "modified": "2025-09-18T22:35:58"
+    },
+    {
+      "path": "modes/multimedia_question.json",
+      "size": 49118,
+      "sha256": "e1156de10162d9b39f92fc13ea46bf311c0d5b2bcb5ebd992679ad25d7df2323",
+      "modified": "2025-09-18T19:21:40"
+    },
+    {
+      "path": "modes/multiplayer_question.json",
+      "size": 39078,
+      "sha256": "74cefc618b7a350b038aa814b903344140083d94a81ec96f72a63bf69d09f2bf",
+      "modified": "2025-09-18T18:15:10"
+    },
+    {
+      "path": "modes/speed_round_question.json",
+      "size": 37528,
+      "sha256": "225aab730cc2c13c26d35b7307ccca43074cd8e8885a4465d6d1baa0c342574d",
+      "modified": "2025-09-18T18:19:46"
+    },
+    {
+      "path": "modes/speed_ultra_question.json",
+      "size": 46890,
+      "sha256": "18e691ca51cfc237837f59b7c69c941b5b737480acf8e2387b19f10ddefecc15",
+      "modified": "2025-09-18T22:45:42"
+    },
+    {
+      "path": "philosophy/philosophy_question.json",
+      "size": 14280,
+      "sha256": "016feb702db4dee417c0fa913cff854b333f5b0f0eae711edb3d73c0001590ca",
+      "modified": "2025-09-17T00:00:10"
+    },
+    {
+      "path": "politics/politics_question.json",
+      "size": 14867,
+      "sha256": "7d7dfa261a95af00669e0f36918bd408b510da9105f5905edd06008b1f6eab2b",
+      "modified": "2025-09-17T17:59:14"
+    },
+    {
+      "path": "psychology/psychology_advanced_question.json",
+      "size": 12151,
+      "sha256": "99879f29255d29cda5a150e450bb9f2a1263f8faef0f6154f034cd3b1a0bd93f",
+      "modified": "2025-09-18T13:23:58"
+    },
+    {
+      "path": "psychology/psychology_question.json",
+      "size": 14599,
+      "sha256": "1d7d2a0b479023b4995db5c25c1ee4836a1c2e4df4013c704e6b3d86ddd85bff",
+      "modified": "2025-09-17T01:07:12"
+    },
+    {
+      "path": "question_paths_index.json",
+      "size": 10928,
+      "sha256": "09cb5f1780a05d78db582221f3b4815831067ecf70ea1dbf0e8fb7d56e3a6874",
+      "modified": "2025-09-19T08:46:58"
+    },
+    {
+      "path": "science/biology_question.json",
+      "size": 42783,
+      "sha256": "92591d03734f067dc40b89d04357353b5a632de41b7796df06e28ccbeab23411",
+      "modified": "2025-09-19T19:16:24"
+    },
+    {
+      "path": "science/chemistry_question.json",
+      "size": 41566,
+      "sha256": "36e74e9420a52f24143b73ef93a828cf6395680d55773be0b0e9c70d4b8af74b",
+      "modified": "2025-09-19T19:16:20"
+    },
+    {
+      "path": "science/natural_science_question.json",
+      "size": 44464,
+      "sha256": "e9ac13e30224715040c6a63bb8b8d40a29f86cb6e0b992c1002ae3a67cfcd729",
+      "modified": "2025-09-19T19:16:14"
+    },
+    {
+      "path": "science/physics_question.json",
+      "size": 43184,
+      "sha256": "2d3ed6335c739b66b19fcdd2fe0e180955a3600b74f963d1ffe0ec21957d06a2",
+      "modified": "2025-09-19T19:16:16"
+    },
+    {
+      "path": "science/science_question.json",
+      "size": 16030,
+      "sha256": "8926cd98b37e5fe8f3068fc79c6f5148740fc085ece96e269ac9bbc51a8d71d1",
+      "modified": "2025-09-16T23:33:04"
+    },
+    {
+      "path": "science/science_questions.json",
+      "size": 385,
+      "sha256": "56bfde2348b789044d5fb8838aedafc58e8ddd85fdbd99e1225717874c546c56",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "social/social_question.json",
+      "size": 14383,
+      "sha256": "8fe243a9012e5e0d63cb1eae734907bec14856efc45e15af307da4913ede00fc",
+      "modified": "2025-09-16T23:56:20"
+    },
+    {
+      "path": "sports/sports_question.json",
+      "size": 13899,
+      "sha256": "8d268297cd1e2e7a7565b25820fe8a3d0347b5969baae3f938ee55d44fe59920",
+      "modified": "2025-09-16T23:57:54"
+    },
+    {
+      "path": "statistics_data/statistics_data_literacy_question.json",
+      "size": 16734,
+      "sha256": "2ece7e2dd5db06a518129898c3b385e8234046cc2b5b5b58474f641c78405cd6",
+      "modified": "2025-09-18T18:03:10"
+    },
+    {
+      "path": "technology/tech_question.json",
+      "size": 14048,
+      "sha256": "5c794b77b13aa790df0c17c14f22f19b56de1b05dfac055b84b914921fa75c63",
+      "modified": "2025-09-16T23:58:02"
+    },
+    {
+      "path": "world/world_ext_question.json",
+      "size": 13605,
+      "sha256": "ffcec2a88ded36dd6aa7b0f94163f7db7f826449274b0018ed4412bd66bc69e1",
+      "modified": "2025-09-16T23:58:06"
+    },
+    {
+      "path": "world/world_question.json",
+      "size": 13999,
+      "sha256": "820dde7f20fea0c0e3c2883f962b14eb3097bdb7a3b4138960be4185213d974a",
+      "modified": "2025-09-16T23:47:10"
+    },
+    {
+      "path": "world_literature/world_literature_question.json",
+      "size": 16355,
+      "sha256": "0673ca96ae0f0d692e470ddbc13d11d9e392bd44e6bcc9460fd82852c9a9d47f",
+      "modified": "2025-09-18T18:03:14"
+    }
+  ]
+}

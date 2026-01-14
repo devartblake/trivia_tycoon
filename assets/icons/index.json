@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "generatedAtUtc": "2026-01-13T12:43:25Z",
+  "root": "assets/icons",
+  "fileCount": 9,
+  "folders": [
+    "store"
+  ],
+  "files": [
+    {
+      "path": "store/avatars/dragon.png",
+      "size": 9359,
+      "sha256": "3ba2d75def7d6e2ec56d676c98a34f4e80a5730016b0b4eb7d260b7c36ddd000",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "store/avatars/robotic.png",
+      "size": 3691,
+      "sha256": "98bbccc4e6241b8d7d5ede106574aeb8db2d1cb6086c726caefffa625c395f96",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "store/coins_100.png",
+      "size": 34467,
+      "sha256": "0f46daf26e654d0906c81fb74e167dd1fd8f35b1cd9c8dcc2807872069a73d31",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "store/diamonds_10.png",
+      "size": 5179,
+      "sha256": "0e29e0fdb386a526b2fef2e2f682761c7bdaa285ee72a5075064497c8974f323",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "store/power-up_hint.png",
+      "size": 5603,
+      "sha256": "3ed67f7f648c9067103b7dc8369106637dca7814e97a569316037f24e395efff",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "store/power-up_xp.png",
+      "size": 106338,
+      "sha256": "d48a55b7eef6d489978317defd7467711f158b9b99d848942300bb9df6ec9ab8",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "store/themes/green_icon.png",
+      "size": 8088,
+      "sha256": "09eddf01106ac78dd88f30e641e40e45db188b23d11356caf7ae26e6d912326e",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "store/themes/season_summer_icon.png",
+      "size": 6218,
+      "sha256": "313733db7fb4d1b39b173dbd6b29aed1c7977399b15aa3238e7bc3a5ed4f7996",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "store/themes/theme_neon_icon.png",
+      "size": 8917,
+      "sha256": "f276f081d7e8f9603eaf42b5e6d8a9b425fd1306cbd329881cfd21a4e032a0e3",
+      "modified": "2025-09-03T11:59:14"
+    }
+  ]
+}

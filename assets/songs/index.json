@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "generatedAtUtc": "2026-01-13T12:43:27Z",
+  "root": "assets/songs",
+  "fileCount": 12,
+  "folders": [],
+  "files": [
+    {
+      "path": "around_the_world.mp3",
+      "size": 3937684,
+      "sha256": "e59f2ae017575e6ddf2cda50e73fc9d7bfaaade7f8806fdaffd3ad2b895a8297",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "autumn_days_lofi.mp3",
+      "size": 2496527,
+      "sha256": "8e5aaf9775a589f35bceb1b1656eb7360ff3fb7492b54f14acac3bbebbb7c1b7",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "believing_in_goods_things.mp3",
+      "size": 2302872,
+      "sha256": "99ac2ff5aa87df46b4024bfaf83db132135847c0e957bf079d975aecbd2b3305",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "breezing.mp3",
+      "size": 5634247,
+      "sha256": "e690ce5b918afa9196611568630a4eba45bbcea4d0299b80da3bf1996e2744c9",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "end_game.mp3",
+      "size": 2367714,
+      "sha256": "679f52f8fff788edf4cfe01331e5f37cf98492c22ded7a8927c2ea20748f9c56",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "holding_hands.mp3",
+      "size": 5472293,
+      "sha256": "caf0f49dbeea7bc4ec8377be49af56fce6c8b8b325854d1215119ae49eaa2ba5",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "moving_on.mp3",
+      "size": 5765325,
+      "sha256": "fe378d01cef4fb93b3ff6cc21d7b7d57a658cfa036a39af9887a571980d48825",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "new_starts_beat.mp3",
+      "size": 6653901,
+      "sha256": "081bde0028e00da72f66dbecf22b2f444f19a26fa6c8bb09aa9ab0a0a5ec018e",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "patience.mp3",
+      "size": 3265221,
+      "sha256": "122892d1d9b9ea668f791582d6e7562af5bdc4aca63a942c79a7a2ea3cb363c9",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "pillow_days.mp3",
+      "size": 5959023,
+      "sha256": "12a04d2cabb0e0c3db4b5a4594106c46f91e40ecc5d139f7bff5f48e89953aac",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "sweetheart_waltz.mp3",
+      "size": 5766770,
+      "sha256": "1f1ab2a92cbc97a3fbdcff3bb4fbdb734d7c2e8a2277e922f6ac208bf0c764d9",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "what_it_feels_like.mp3",
+      "size": 8222296,
+      "sha256": "4cf205537d0b7d4b22cb8465963a6db5aa7cfeeaa684afb8255973a453d0213b",
+      "modified": "2025-09-03T11:59:14"
+    }
+  ]
+}

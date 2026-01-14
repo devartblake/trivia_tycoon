@@ -1,0 +1,281 @@
+{
+  "schemaVersion": 1,
+  "generatedAtUtc": "2026-01-13T12:43:25Z",
+  "root": "assets/data",
+  "fileCount": 44,
+  "folders": [
+    "analytics",
+    "events",
+    "leaderboard",
+    "mini-games",
+    "missions",
+    "skill_tree",
+    "snapple_facts"
+  ],
+  "files": [
+    {
+      "path": "accessibility.json",
+      "size": 76,
+      "sha256": "cd5b199c4e199ebab2e75d673b47d48babdd963e8c4b570444759b8aefff480b",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "achievements.json",
+      "size": 844,
+      "sha256": "1b3f8dd2aa7681fb2c573fde79b8bd1eedb39e5cc6d41410d3091808086b1486",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "analytics/mock_engagement_analytics.json",
+      "size": 3729,
+      "sha256": "677f4109953239ff6f47d83ef48d0d464897548d39fffa7722e0e7b82712b6dd",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "analytics/mock_mission_analytics.json",
+      "size": 3572,
+      "sha256": "abd66789ce1e34d767bec5631179988213d164b3776780fc134033d9ec0ed8c7",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "analytics/mock_retention_analytics.json",
+      "size": 2936,
+      "sha256": "f07ac58f391d807176a2336c8bd8e3a400bad7f1e500268f01984c1070d940f1",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "avatar_items.json",
+      "size": 430,
+      "sha256": "8b0600b8f9de1edf9701291c1be45f0e1afccc33f1296bb602a1d574e66c8209",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "badge_icons.json",
+      "size": 1786,
+      "sha256": "c61fbe3c8579194b3a79dde8a351edac0f639c4cdeb474cff475c675314112d7",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "categories.json",
+      "size": 1288,
+      "sha256": "0cadb7ffa758b052b1f554f980e67b1bd0a7250c4d9e8527582783720aa0d159",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "currency.json",
+      "size": 275,
+      "sha256": "35e6b4f6376b137bc6df0cb922f77fa5d610efcd24ccfd399b477609346cd1b4",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "difficulty_levels.json",
+      "size": 373,
+      "sha256": "cb6b846ba00a1ad9d1eaf09a58f15c56341d6a7fc8c3118cc9929575cecb8761",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "events/seasonal_events.json",
+      "size": 637,
+      "sha256": "31a27058ca73fb247c7174039b0e85bee6891f5adf275519105a8ae95b638950",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "leaderboard/leaderboard.json",
+      "size": 56398,
+      "sha256": "27804ed9be92beb55620f72de8b0188a2ee84558cc9f26c6809766de464e0c24",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "mini-games/crossword_hard.json",
+      "size": 19217,
+      "sha256": "cf0ae88055c7bcf53d2efe67e94c7012160da40273b7c92ed532f91ac4c97b06",
+      "modified": "2025-10-01T11:23:46"
+    },
+    {
+      "path": "mini-games/crossword_hard_culture_misc_packs.json",
+      "size": 191,
+      "sha256": "8abdfae351c8e4fcbbb396c5d1cdf12fe7a6cf8ad518e8bfce5a9f8c758123bd",
+      "modified": "2025-10-02T17:06:00"
+    },
+    {
+      "path": "mini-games/crossword_hard_history_geo_packs.json",
+      "size": 3077,
+      "sha256": "9f3e0a5ecb18e40571faa2469cd15f722b3c19f5504e941412fc961395718bf6",
+      "modified": "2025-10-02T17:05:52"
+    },
+    {
+      "path": "mini-games/crossword_hard_literature_philosophy_packs.json",
+      "size": 4522,
+      "sha256": "073dc0a2852af694f946c075454a3ea28ca1243791bd50b37ec6e8bd431469e2",
+      "modified": "2025-10-02T17:05:56"
+    },
+    {
+      "path": "mini-games/crossword_hard_science_tech_packs.json",
+      "size": 79308,
+      "sha256": "1692d1f1fe6fbc3997e5aad48edc7f71214f6f5e01c9d05011318ecf7b845631",
+      "modified": "2025-10-02T17:05:46"
+    },
+    {
+      "path": "mini-games/crossword_hard_vocabulary_packs.json",
+      "size": 13924,
+      "sha256": "1214c00778257cb0ec0a0cb4055d5c8497c23da4f214c97f993908d21fdc779e",
+      "modified": "2025-10-02T17:05:44"
+    },
+    {
+      "path": "mini-games/flow_puzzles.json",
+      "size": 14330,
+      "sha256": "d1384851f5249b23f7fc45fbf46f33f6798909963a98468c6d820ab0aabcddbd",
+      "modified": "2025-10-02T01:47:46"
+    },
+    {
+      "path": "mini-games/word_search_easy.json",
+      "size": 7117,
+      "sha256": "5bbbc8762dae6c8f608b91339d09b26d8a46933e34311e383721a21939196562",
+      "modified": "2025-10-01T10:36:20"
+    },
+    {
+      "path": "mini-games/word_search_hard.json",
+      "size": 11865,
+      "sha256": "e363d3656c5faa1e8d371cd90884743ab3adfd4bb2dee1a0e10bd62492fbe153",
+      "modified": "2025-10-01T12:48:04"
+    },
+    {
+      "path": "mini-games/word_search_medium.json",
+      "size": 11695,
+      "sha256": "f208eb63322f0720fdbbcfd77e59fc86057134ce1429766a917c1dcb97b871d6",
+      "modified": "2025-10-01T12:48:00"
+    },
+    {
+      "path": "missions/adolescence_missions.json",
+      "size": 29042,
+      "sha256": "16e899513802997c54b6a5419b3f867e45745b19f3326ace38606ead62d1ce71",
+      "modified": "2025-09-23T03:35:42"
+    },
+    {
+      "path": "missions/adults_missions.json",
+      "size": 28890,
+      "sha256": "a6c21947c4e97611ede6d5f7a9dc86bdf2cec893a0c41826aa04d94d18068a38",
+      "modified": "2025-09-23T03:35:46"
+    },
+    {
+      "path": "missions/children_missions.json",
+      "size": 28132,
+      "sha256": "8deeb2a95af828e3b98930f246cbb2c7f0a93fd638c5c3dae2338f625d7e02ba",
+      "modified": "2025-09-23T03:35:38"
+    },
+    {
+      "path": "new_categories.json",
+      "size": 564,
+      "sha256": "38595b04ee98f97768ec77d10d4162d386849a210e54eaa3ee80e5e62912f924",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "power_ups.json",
+      "size": 4124,
+      "sha256": "85a0d1158a4b21fe92d559abbf6a1e3e8f621897d3e576616c8f9f57faf216e4",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "quiz_analytics.json",
+      "size": 546,
+      "sha256": "f46c84fc939eec80506c65d6557e3db64441f4ac58da10701d0eee45fb6fadb5",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "session_data.json",
+      "size": 226,
+      "sha256": "496a197bddc363c195779a7dc288d2f1a3012f2946b60e34bbe433f791a30ebd",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "skill_tree.json",
+      "size": 6332,
+      "sha256": "54c73ab77e8680a5ff574d7987296983d85b9d3d62aadeaf9b29a4f0be99684f",
+      "modified": "2025-09-06T15:05:40"
+    },
+    {
+      "path": "skill_tree/skill_tree.json",
+      "size": 33106,
+      "sha256": "80b588f52e25f278346cc3e823a70abc01bb636c50f5c8ed73d70547af8e0ee5",
+      "modified": "2025-09-07T01:20:30"
+    },
+    {
+      "path": "skill_tree_main.json",
+      "size": 1783,
+      "sha256": "f614b8125312ab340ef4460eae6bae31d1543481556e7561a3c1b5205b0d6692",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "snapple_facts/snapple_facts_143-172.json",
+      "size": 3040,
+      "sha256": "e457a8a4fd0541dc6f9bf1545084a0a778b2612b307abcb93988763b87badc5e",
+      "modified": "2025-09-13T13:48:20"
+    },
+    {
+      "path": "snapple_facts/snapple_real_facts_1-172.json",
+      "size": 16065,
+      "sha256": "7ced1a07e263c194549f0a1467ca81682839cb5e9a3b43cc319785655af8a0c6",
+      "modified": "2025-09-13T13:57:18"
+    },
+    {
+      "path": "snapple_facts/snapple_real_facts_1-172.jsonl",
+      "size": 13483,
+      "sha256": "f525118e5893db5db34c70aa652ee885af1e1b986a31b78bdddf1aae51c956c7",
+      "modified": "2025-09-13T13:57:22"
+    },
+    {
+      "path": "snapple_facts/snapple_real_facts_1-172_enriched.json",
+      "size": 59664,
+      "sha256": "c820bedaff6c9065c250d1897f8f23be0fe6226f261ee037cacf5d266067dc57",
+      "modified": "2025-09-13T14:06:02"
+    },
+    {
+      "path": "snapple_facts/snapple_real_facts_1-172_enriched.jsonl",
+      "size": 45730,
+      "sha256": "ad2f907fa5ca4c78a5047990ff27de8a97ed6cf3ad86b661a1302b1655506469",
+      "modified": "2025-09-13T14:06:06"
+    },
+    {
+      "path": "snapple_facts/snapple_real_facts_1-200_enriched.json",
+      "size": 69742,
+      "sha256": "cad41db6c5530101c8267125a9899ed6a804f9b0c4247e8bfed32a8de55077e7",
+      "modified": "2025-09-13T14:05:56"
+    },
+    {
+      "path": "snapple_facts/snapple_real_facts_1-200_enriched.jsonl",
+      "size": 53504,
+      "sha256": "a31246c149e82b9f3ba0df51708769f985e78e5f478890acf847dad74b69d81e",
+      "modified": "2025-09-13T14:05:58"
+    },
+    {
+      "path": "snapple_facts/snapple_real_facts_1-50.json",
+      "size": 4236,
+      "sha256": "5a0ec7cb0ce57bd63cd66c6c44879bf62afd5c34079522a2f957f08bb5c77cc7",
+      "modified": "2025-09-13T13:50:56"
+    },
+    {
+      "path": "store_items.json",
+      "size": 2668,
+      "sha256": "10304b0e76c3e69922861b0072344f17ab50d62aed1bc78198c6ca06b03015c3",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "themes.json",
+      "size": 298,
+      "sha256": "ad48c12ca8c025885eb2814479549516dcbc6e8f8dcdc908c529694f57ed396c",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "user_progress.json",
+      "size": 1021,
+      "sha256": "5e70cb6f71d721b56867c7264a907bd79557b22352e5c1d844f70ba58de6d574",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "user_settings.json",
+      "size": 162,
+      "sha256": "715120b45bd111ef6ef2321b237d0db1c9067f96c70ee984c9a5a19bb5148d5e",
+      "modified": "2025-09-03T11:59:14"
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "generatedAtUtc": "2026-01-13T12:43:27Z",
+  "roots": [
+    {
+      "dir": "assets/config",
+      "fileCount": 4,
+      "folders": []
+    },
+    {
+      "dir": "assets/data",
+      "fileCount": 44,
+      "folders": [
+        "analytics",
+        "events",
+        "leaderboard",
+        "mini-games",
+        "missions",
+        "skill_tree",
+        "snapple_facts"
+      ]
+    },
+    {
+      "dir": "assets/fonts",
+      "fileCount": 25,
+      "folders": [
+        "Faustina",
+        "Open-Sans"
+      ]
+    },
+    {
+      "dir": "assets/icons",
+      "fileCount": 9,
+      "folders": [
+        "store"
+      ]
+    },
+    {
+      "dir": "assets/images",
+      "fileCount": 128,
+      "folders": [
+        "avatars",
+        "backgrounds",
+        "logo",
+        "notification_images",
+        "overlays",
+        "quiz",
+        "rewards",
+        "store",
+        "welcome_images"
+      ]
+    },
+    {
+      "dir": "assets/models",
+      "fileCount": 3,
+      "folders": []
+    },
+    {
+      "dir": "assets/questions",
+      "fileCount": 76,
+      "folders": [
+        "architecture",
+        "art_history",
+        "arts",
+        "astronomy",
+        "bonus",
+        "business",
+        "civics_law",
+        "classes",
+        "comparative_religions",
+        "computer_science",
+        "cultures",
+        "current_events",
+        "economics",
+        "economics_finance",
+        "engineering_technology",
+        "entertainment",
+        "environment",
+        "environmental_science",
+        "general",
+        "geography",
+        "health",
+        "health_medicine",
+        "history",
+        "kids",
+        "law",
+        "literature",
+        "math",
+        "media",
+        "misc",
+        "modes",
+        "philosophy",
+        "politics",
+        "psychology",
+        "science",
+        "social",
+        "sports",
+        "statistics_data",
+        "technology",
+        "world",
+        "world_literature"
+      ]
+    },
+    {
+      "dir": "assets/screenshots",
+      "fileCount": 14,
+      "folders": []
+    },
+    {
+      "dir": "assets/shaders",
+      "fileCount": 1,
+      "folders": []
+    },
+    {
+      "dir": "assets/songs",
+      "fileCount": 12,
+      "folders": []
+    },
+    {
+      "dir": "assets/sounds",
+      "fileCount": 1,
+      "folders": []
+    },
+    {
+      "dir": "assets/splash_previews",
+      "fileCount": 5,
+      "folders": []
+    }
+  ]
+}
