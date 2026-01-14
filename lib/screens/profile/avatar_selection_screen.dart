@@ -54,7 +54,9 @@ class _AvatarChoiceScreenState extends ConsumerState<AvatarSelectionScreen> with
     final cache = ref.read(appCacheServiceProvider); // Error: The name 'appCacheServiceProvider' is defined in the libraries 'package:trivia_tycoon/game/providers/avatar_package_providers.dart' and 'package:trivia_tycoon/game/providers/riverpod_providers.dart'. Try using 'as prefix' for one of the import directives, or hiding the name from all but one of the imports.
 
     // ✅ FIXED: Pass cache parameter to both methods
-    final loadedImages = await AvatarAssetLoader.loadImageAvatars(cache: cache);
+    final loadedImages = await AvatarAssetLoader.loadImageAvatars(
+        cache: ref.read(appCacheServiceProvider)
+    );
     final loaded3D = await AvatarAssetLoader.loadThreeDAvatars(cache: cache);
 
     if (mounted) {

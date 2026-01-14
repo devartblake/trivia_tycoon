@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "generatedAtUtc": "2026-01-13T12:43:26Z",
+  "root": "assets/images",
+  "fileCount": 128,
+  "folders": [
+    "characters"
+  ],
+  "files": [
+    {
+      "path": "183953.png",
+      "size": 93730,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "modified": "2025-09-03T11:59:14"
+    }
+  ]
+}
