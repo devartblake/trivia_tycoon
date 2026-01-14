@@ -1,0 +1,22 @@
+Avatar Package Schema
+
+{
+  "packageId": "neon_set_v1",
+  "displayName": "Neon Avatar Set",
+  "version": "1.0.0",
+  "author": "Trivia Tycoon",
+  "type": "image",
+  "preview": "preview.png",
+  "avatars": [
+    {
+      "id": "neon_01",
+      "path": "avatars/neon_01.png",
+      "tags": ["neon", "futuristic"]
+    },
+    {
+      "id": "neon_02",
+      "path": "avatars/neon_02.png",
+      "tags": ["neon"]
+    }
+  ]
+}
