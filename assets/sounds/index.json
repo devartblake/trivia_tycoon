@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "generatedAtUtc": "2026-01-13T12:43:27Z",
+  "root": "assets/sounds",
+  "fileCount": 1,
+  "folders": [],
+  "files": [
+    {
+      "path": "cha_ching.mp3",
+      "size": 13,
+      "sha256": "3bcc38fafd80458db3d3d9fea543ce855db45032456bea3f83e6fc4ef719eb00",
+      "modified": "2025-09-03T11:59:14"
+    }
+  ]
+}

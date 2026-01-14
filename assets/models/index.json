@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "generatedAtUtc": "2026-01-13T12:43:26Z",
+  "root": "assets/models",
+  "fileCount": 3,
+  "folders": [],
+  "files": [
+    {
+      "path": "cartoon_character.glb",
+      "size": 704276,
+      "sha256": "aea77129954ece7a8bc0ede96d728176e9ee51dd98c9876a1dc306786664415b",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "cartoon_character.obj",
+      "size": 1757106,
+      "sha256": "8291266499d0595dab51a63e5378ef212239f2db912ee95dcc069fc73f1521f9",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "internal_ground_ao_texture.jpeg",
+      "size": 42080,
+      "sha256": "2f45d171068fac8dbffba80b9ba71c372b3fff5d5e8add51a651c5f12ec6a609",
+      "modified": "2025-09-03T11:59:14"
+    }
+  ]
+}

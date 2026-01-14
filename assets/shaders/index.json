@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "generatedAtUtc": "2026-01-13T12:43:26Z",
+  "root": "assets/shaders",
+  "fileCount": 1,
+  "folders": [],
+  "files": [
+    {
+      "path": "shimmer_effect.frag",
+      "size": 37,
+      "sha256": "372ee67eefa2160dff856eaccdb3e2d119ffa17c5dfff33caa071618a53be8b7",
+      "modified": "2025-09-03T11:59:14"
+    }
+  ]
+}

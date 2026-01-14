@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "generatedAtUtc": "2026-01-13T12:43:25Z",
+  "root": "assets/config",
+  "fileCount": 4,
+  "folders": [],
+  "files": [
+    {
+      "path": "config.json",
+      "size": 191,
+      "sha256": "631701903ebbaf107c7e940f4d8aa2276d285ada0811557c4bc8bbedcd5ce55c",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "countries.json",
+      "size": 6705,
+      "sha256": "6973fc613640de2796f11ff16422302c8cfbb042a52dea243d97d329f3541087",
+      "modified": "2025-09-12T17:23:08"
+    },
+    {
+      "path": "localization_strings.json",
+      "size": 265,
+      "sha256": "db083339445596625929de67705bf901cd311c531bdb6cbadcbb1c992a3750c7",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "segments.json",
+      "size": 425,
+      "sha256": "63472079530bb017da875377f90a78e341814b975d269fc1704e03701fe7c4e4",
+      "modified": "2025-09-03T11:59:14"
+    }
+  ]
+}

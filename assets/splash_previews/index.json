@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "generatedAtUtc": "2026-01-13T12:43:27Z",
+  "root": "assets/splash_previews",
+  "fileCount": 5,
+  "folders": [],
+  "files": [
+    {
+      "path": "empireRising.png",
+      "size": 8,
+      "sha256": "4c4b6a3be1314ab86138bef4314dde022e600960d8689a2c8f8631802d20dab6",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "fortuneWheel.png",
+      "size": 8,
+      "sha256": "4c4b6a3be1314ab86138bef4314dde022e600960d8689a2c8f8631802d20dab6",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "hqTerminal.png",
+      "size": 8,
+      "sha256": "4c4b6a3be1314ab86138bef4314dde022e600960d8689a2c8f8631802d20dab6",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "mindMarket.png",
+      "size": 8,
+      "sha256": "4c4b6a3be1314ab86138bef4314dde022e600960d8689a2c8f8631802d20dab6",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "vaultUnlock.png",
+      "size": 8,
+      "sha256": "4c4b6a3be1314ab86138bef4314dde022e600960d8689a2c8f8631802d20dab6",
+      "modified": "2025-09-03T11:59:14"
+    }
+  ]
+}
