@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../game/models/avatar_package_models.dart';
 import '../../game/providers/avatar_package_providers.dart';
-import '../../game/providers/riverpod_providers.dart';  // ✅ FIXED: Removed hide statement
+import '../../game/providers/riverpod_providers.dart';
 import '../../ui_components/depth_card_3d/depth_card.dart';
 import '../../ui_components/depth_card_3d/theme_editor/depth_card_theme_selector.dart';
 import '../../core/services/settings/app_settings.dart';
@@ -51,8 +51,7 @@ class _AvatarChoiceScreenState extends ConsumerState<AvatarSelectionScreen> with
 
   Future<void> _loadAvatars() async {
     // ✅ FIXED: Get cache from provider
-    final cache = ref.read(appCacheServiceProvider); // Error: The name 'appCacheServiceProvider' is defined in the libraries 'package:trivia_tycoon/game/providers/avatar_package_providers.dart' and 'package:trivia_tycoon/game/providers/riverpod_providers.dart'. Try using 'as prefix' for one of the import directives, or hiding the name from all but one of the imports.
-
+    final cache = ref.read(appCacheServiceProvider); 
     // ✅ FIXED: Pass cache parameter to both methods
     final loadedImages = await AvatarAssetLoader.loadImageAvatars(
         cache: ref.read(appCacheServiceProvider)

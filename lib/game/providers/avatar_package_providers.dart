@@ -1,13 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 
-import '../../core/services/storage/app_cache_service.dart';
 import '../models/avatar_package_models.dart';
 import '../services/avatar_package_service.dart';
-
-final appCacheServiceProvider = Provider<AppCacheService>((ref) {
-  return ref.read(serviceManagerProvider).appCacheService;
-});
 
 /// Provide a remote source later (FastAPI).
 /// For now, keep it null (or swap in a mock implementation).
@@ -15,8 +10,41 @@ final avatarPackageRemoteSourceProvider = Provider<AvatarPackageRemoteSource?>((
   return null;
 });
 
+/// ----------------------------
+/// Service provider
+/// ----------------------------
+
 final avatarPackageServiceProvider = Provider<AvatarPackageService>((ref) {
   final cache = ref.watch(appCacheServiceProvider);
   final remote = ref.watch(avatarPackageRemoteSourceProvider);
   return AvatarPackageService(cache, remote: remote);
+});
+
+/// ----------------------------
+/// Installed (local) packages
+/// ----------------------------
+
+final installedAvatarPackagesProvider =
+FutureProvider<List<AvatarPackageInstall>>((ref) async {
+  final service = ref.read(avatarPackageServiceProvider);
+  return service.loadInstalledPackages();
+});
+
+/// ----------------------------
+/// Server (remote) packages
+/// ----------------------------
+///
+/// This is backend-ready but safe for now.
+/// If no backend is wired, it simply returns [].
+
+final serverAvatarPackagesProvider =
+FutureProvider<List<AvatarPackageMetadata>>((ref) async {
+  final service = ref.read(avatarPackageServiceProvider);
+
+  // If remote source not connected yet, return empty list safely
+  if (!service.hasRemoteSource) {
+    return const [];
+  }
+
+  return service.fetchServerPackages();
 });

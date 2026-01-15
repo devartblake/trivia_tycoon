@@ -28,9 +28,11 @@ class AvatarPackageService {
         AvatarPackageRemoteSource? remote,
       }) : _remote = remote;
 
+  bool get hasRemoteSource => _remote != null;
+
   /// Where packages are installed:
   /// <documents>/avatarPackages/<packageId_version>/
-  Future<Directory> _packagesRootDir() async {
+  Future<Directory> get _packagesRootDir async {
     final docs = await getApplicationDocumentsDirectory();
     final root = Directory(p.join(docs.path, 'avatarPackages'));
     if (!await root.exists()) {
@@ -45,7 +47,7 @@ class AvatarPackageService {
 
   /// Local: discover installed packages by scanning avatarPackages/*/manifest.json.
   Future<List<AvatarPackageInstall>> listInstalled() async {
-    final root = await _packagesRootDir();
+    final root = await _packagesRootDir;
     final out = <AvatarPackageInstall>[];
 
     if (!await root.exists()) return out;
@@ -92,8 +94,63 @@ class AvatarPackageService {
     return list;
   }
 
+  /// ---------------------------------------------------------------------------
+  /// Load installed packages (used by installedAvatarPackagesProvider)
+  /// ---------------------------------------------------------------------------
+  ///
+  /// Strategy:
+  /// 1) Prefer the persisted index in AppCacheService for speed and reliability.
+  /// 2) Fallback: scan the install folder for `manifest.json` files.
+  ///
+  Future<List<AvatarPackageInstall>> loadInstalledPackages() async {
+    // 1) Try index first
+    final indexed = _cache.get<Map<String, dynamic>>(_cacheKeyServerList);
+    if (indexed != null && indexed.isNotEmpty) {
+      final installs = <AvatarPackageInstall>[];
+      for (final entry in indexed.entries) {
+        final raw = entry.value;
+        if (raw is Map) {
+          try {
+            installs.add(
+              AvatarPackageInstall.fromJson(
+                Map<String, dynamic>.from(raw),
+              ),
+            );
+          } catch (_) {
+            // ignore bad entry (we will still return what we can)
+          }
+        }
+      }
+
+      // Optional: verify folders still exist; prune missing
+      final filtered = <AvatarPackageInstall>[];
+      bool changed = false;
+      for (final i in installs) {
+        final dir = Directory(i.installDir);
+        if (await dir.exists()) {
+          filtered.add(i);
+        } else {
+          changed = true;
+        }
+      }
+      if (changed) {
+        await _persistInstalledIndex(filtered);
+      }
+
+      filtered.sort((a, b) => b.installedAtUtcIso.compareTo(a.installedAtUtcIso));
+      return filtered;
+    }
+
+    // 2) Fallback scan
+    final scanned = await _scanInstalledPackagesFromDisk();
+    await _persistInstalledIndex(scanned);
+
+    scanned.sort((a, b) => b.installedAtUtcIso.compareTo(a.installedAtUtcIso));
+    return scanned;
+  }
+
   Future<bool> isInstalled(AvatarPackageMetadata meta) async {
-    final root = await _packagesRootDir();
+    final root = await _packagesRootDir;
     final folder = Directory(p.join(root.path, meta.installFolderName));
     final manifest = File(p.join(folder.path, 'manifest.json'));
     return await folder.exists() && await manifest.exists();
@@ -110,7 +167,7 @@ class AvatarPackageService {
       throw StateError('archiveUrl is missing for package ${meta.id}.');
     }
 
-    final root = await _packagesRootDir();
+    final root = await _packagesRootDir;
     final installDir = Directory(p.join(root.path, meta.installFolderName));
 
     // If a previous install exists, delete it to avoid mixed files.
@@ -209,6 +266,54 @@ class AvatarPackageService {
   // -----------------------
   // Internals
   // -----------------------
+
+  /// ---------------------------------------------------------------------------
+  /// Disk scan fallback: find <root>/*/manifest.json
+  /// ---------------------------------------------------------------------------
+  Future<List<AvatarPackageInstall>> _scanInstalledPackagesFromDisk() async {
+    final root = await _packagesRootDir;
+    if (!await root.exists()) return const [];
+
+    final installs = <AvatarPackageInstall>[];
+
+    final children = root.listSync(followLinks: false);
+    for (final entity in children) {
+      if (entity is! Directory) continue;
+
+      final manifestFile = File(p.join(entity.path, 'manifest.json'));
+      if (!manifestFile.existsSync()) continue;
+
+      try {
+        final s = manifestFile.readAsStringSync();
+        final map = jsonDecode(s) as Map<String, dynamic>;
+        final install = AvatarPackageInstall.fromJson(map);
+
+        // If manifest stored a relative installDir, normalize to current folder
+        final normalized = AvatarPackageInstall(
+          meta: install.meta,
+          installDir: entity.path,
+          installedAtUtcIso: install.installedAtUtcIso,
+        );
+
+        installs.add(normalized);
+      } catch (_) {
+        // ignore malformed manifest
+      }
+    }
+
+    return installs;
+  }
+
+  /// ---------------------------------------------------------------------------
+  /// Persist installed index
+  /// ---------------------------------------------------------------------------
+  Future<void> _persistInstalledIndex(List<AvatarPackageInstall> installs) async {
+    final payload = <String, dynamic>{};
+    for (final i in installs) {
+      payload[i.meta.installFolderName] = i.toJson();
+    }
+    await _cache.setJson(_cacheKeyServerList, payload);
+  }
 
   Future<void> _downloadToFile(String url, File out) async {
     final client = http.Client();
