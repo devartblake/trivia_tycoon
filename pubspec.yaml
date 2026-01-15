@@ -121,7 +121,6 @@ flutter:
   assets:
    - .env
    - assets/3d/
-   - assets/images/avatars/
    - assets/images/backgrounds/geometry_background.jpg
    - assets/images/backgrounds/versus_background.jpg
    - assets/config/
@@ -141,12 +140,9 @@ flutter:
    - assets/icons/store/avatars/
    - assets/icons/store/themes/
    - assets/images/
+   - assets/images/avatars/
    - assets/images/quiz.png
    - assets/images/reward-quiz.png
-   - assets/images/avatars/
-   - assets/images/avatars/halloween_pack/
-   - assets/images/avatars/monster_pack/
-   - assets/images/avatars/paw_patrol_pack/
    - assets/images/backgrounds/
    - assets/images/confetti/
    - assets/images/events/
@@ -163,6 +159,7 @@ flutter:
    - assets/images/store/themes/
    - assets/images/welcome_images/
    - assets/models/
+   - assets/packages/
    - assets/questions/
    - assets/questions/architecture/
    - assets/questions/art_history/

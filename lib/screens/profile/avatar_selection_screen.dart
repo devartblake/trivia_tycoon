@@ -196,6 +196,7 @@ class _AvatarChoiceScreenState extends ConsumerState<AvatarSelectionScreen> with
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text("Choose Avatar"),
         bottom: TabBar(
@@ -238,109 +239,121 @@ class _AvatarPackagesTab extends ConsumerWidget {
     final installedAsync = ref.watch(installedAvatarPackagesProvider);
     final serverAsync = ref.watch(serverAvatarPackagesProvider);
 
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-      children: [
-        const Text(
-          'Installed Packages',
-          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900),
-        ),
-        const SizedBox(height: 10),
-        installedAsync.when(
-          data: (items) {
-            if (items.isEmpty) {
-              return Text(
-                'No packages installed yet.',
-                style: TextStyle(color: Colors.white.withOpacity(0.7)),
-              );
-            }
+    Future<void> refresh() async {
+      ref.invalidate(installedAvatarPackagesProvider);
+      ref.invalidate(serverAvatarPackagesProvider);
+      // Give the providers a microtask to restart (optional but helps perceived UX)
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    }
 
-            return Column(
-              children: items.map((install) {
-                return _PackageCardInstalled(
-                  install: install,
-                  onUninstall: () async {
-                    final svc = ref.read(avatarPackageServiceProvider);
-                    await svc.uninstall(install);
+    return Container(
+      color: const Color(0xFFC1C0C0), // ✅ ensures tab background is dark
+      child: RefreshIndicator(
+        onRefresh: refresh,
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+          children: [
+            const Text(
+              'Installed Packages',
+              style: TextStyle(color: Colors.white54, fontSize: 16, fontWeight: FontWeight.w900),
+            ),
+            const SizedBox(height: 10),
 
-                    // Refresh UI
-                    ref.invalidate(installedAvatarPackagesProvider);
+            installedAsync.when(
+              data: (items) {
+                if (items.isEmpty) {
+                  return Text(
+                    'No packages installed yet.',
+                    style: TextStyle(color: Colors.white54.withOpacity(0.7)),
+                  );
+                }
 
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Uninstalled "${install.meta.name}".')),
-                      );
-                    }
-                  },
+                return Column(
+                  children: items.map((install) {
+                    return _PackageCardInstalled(
+                      install: install,
+                      onUninstall: () async {
+                        final svc = ref.read(avatarPackageServiceProvider);
+                        await svc.uninstall(install);
+                        ref.invalidate(installedAvatarPackagesProvider);
+
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Uninstalled "${install.meta.name}".')),
+                          );
+                        }
+                      },
+                    );
+                  }).toList(),
                 );
-              }).toList(),
-            );
-          },
-          loading: () => const _ThinLoader(),
-          error: (e, _) => _ErrorLine('Failed to load installed packages: $e'),
-        ),
+              },
+              loading: () => const _ThinLoader(),
+              error: (e, _) => _ErrorLine('Failed to load installed packages: $e'),
+            ),
 
-        const SizedBox(height: 22),
+            const SizedBox(height: 22),
 
-        const Text(
-          'Server Packages',
-          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900),
-        ),
-        const SizedBox(height: 10),
-        Text(
-          'Download image-only packs for now. 3D/DepthCard support can be added later.',
-          style: TextStyle(color: Colors.white.withOpacity(0.65), fontSize: 12, fontWeight: FontWeight.w600),
-        ),
-        const SizedBox(height: 12),
+            const Text(
+              'Server Packages',
+              style: TextStyle(color: Colors.white54, fontSize: 16, fontWeight: FontWeight.w900),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Download image-only packs for now. 3D/DepthCard support can be added later.',
+              style: TextStyle(color: Colors.white54.withOpacity(0.65), fontSize: 12, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 12),
 
-        serverAsync.when(
-          data: (items) {
-            if (items.isEmpty) {
-              return Text(
-                'No server packages yet (or backend not connected).',
-                style: TextStyle(color: Colors.white.withOpacity(0.7)),
-              );
-            }
+            serverAsync.when(
+              data: (items) {
+                if (items.isEmpty) {
+                  return Text(
+                    'No server packages yet (or backend not connected). Pull to refresh.',
+                    style: TextStyle(color: Colors.white54.withOpacity(0.7)),
+                  );
+                }
 
-            return Column(
-              children: items.map((meta) {
-                return _PackageCardServer(
-                  meta: meta,
-                  onInstall: () async {
-                    final svc = ref.read(avatarPackageServiceProvider);
+                return Column(
+                  children: items.map((meta) {
+                    return _PackageCardServer(
+                      meta: meta,
+                      onInstall: () async {
+                        final svc = ref.read(avatarPackageServiceProvider);
 
-                    // Optimistic UX: show immediate feedback
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Downloading "${meta.name}"...')),
-                      );
-                    }
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Downloading "${meta.name}"...')),
+                          );
+                        }
 
-                    try {
-                      await svc.downloadAndInstall(meta);
-                      ref.invalidate(installedAvatarPackagesProvider);
+                        try {
+                          await svc.downloadAndInstall(meta);
+                          ref.invalidate(installedAvatarPackagesProvider);
 
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Installed "${meta.name}".')),
-                        );
-                      }
-                    } catch (e) {
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Install failed: $e')),
-                        );
-                      }
-                    }
-                  },
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Installed "${meta.name}".')),
+                            );
+                          }
+                        } catch (e) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Install failed: $e')),
+                            );
+                          }
+                        }
+                      },
+                    );
+                  }).toList(),
                 );
-              }).toList(),
-            );
-          },
-          loading: () => const _ThinLoader(),
-          error: (e, _) => _ErrorLine('Failed to load server packages: $e'),
+              },
+              loading: () => const _ThinLoader(),
+              error: (e, _) => _ErrorLine('Failed to load server packages: $e'),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
