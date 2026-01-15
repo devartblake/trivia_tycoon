@@ -64,32 +64,25 @@ const String tMonsterTriclopsOneImage = "assets/images/avatars/monster_pack/tric
 const String tMonsterTriclopsTwoImage = "assets/images/avatars/monster_pack/triclops_2.png";
 
 // -- Paw Patrol Pack
-const String tPawPatrolChaseImage72 = "assets/images/avatars/paw_patrol_pack/chase_72.png";
-const String tPawPatrolChaseImage32 = "assets/images/avatars/paw_patrol_pack/chase_32.png";
-const String tPawPatrolEverestImage72 = "assets/images/avatars/paw_patrol_pack/everest_72.png";
-const String tPawPatrolMarshallImage72 = "assets/images/avatars/paw_patrol_pack/marshall_72.png";
-const String tPawPatrolMarshallImage32 = "assets/images/avatars/paw_patrol_pack/marshall_32.png";
-const String tPawPatrolRockyImage72 = "assets/images/avatars/paw_patrol_pack/rocky_72.png";
-const String tPawPatrolRockyImage32 = "assets/images/avatars/paw_patrol_pack/rock_32.png";
-const String tPawPatrolRubbleImage72 = "assets/images/avatars/paw_patrol_pack/rubble_72.png";
-const String tPawPatrolRubbleImage32 = "assets/images/avatars/paw_patrol_pack/rubble_32.png";
-const String tPawPatrolSkyeImage72 = "assets/images/avatars/paw_patrol_pack/skye_72.png";
-const String tPawPatrolSkyeImage32 = "assets/images/avatars/paw_patrol_pack/skye_32.png";
-const String tPawPatrolTrackerImage72 = "assets/images/avatars/paw_patrol_pack/tracker_72.png";
-const String tPawPatrolTrackerImage32 = "assets/images/avatars/paw_patrol_pack/tracker_32.png";
-const String tPawPatrolZumaImage72 = "assets/images/avatars/paw_patrol_pack/zuma_72.png";
-const String tPawPatrolZumaImage32 = "assets/images/avatars/paw_patrol_pack/zuma_32.png";
+const String tPawPatrolChaseImage72 = "assets/packages/paw_patrol_pack/chase_72.png";
+const String tPawPatrolEverestImage72 = "assets/packages/paw_patrol_pack/everest_72.png";
+const String tPawPatrolMarshallImage72 = "assets/packages/paw_patrol_pack/marshall_72.png";
+const String tPawPatrolRockyImage72 = "assets/packages/paw_patrol_pack/rocky_72.png";
+const String tPawPatrolRubbleImage72 = "assets/packages/paw_patrol_pack/rubble_72.png";
+const String tPawPatrolSkyeImage72 = "assets/packages/paw_patrol_pack/skye_72.png";
+const String tPawPatrolTrackerImage72 = "assets/packages/paw_patrol_pack/tracker_72.png";
+const String tPawPatrolZumaImage72 = "assets/packages/paw_patrol_pack/zuma_72.png";
 
 // -- Paw Patrol Badges
-const String tPawPatrolChaseBadgeImage = "assets/images/avatars/paw_patrol_pack/badges/chase_badge_32.png";
-const String tPawPatrolEverestBadgeImage = "assets/images/avatars/paw_patrol_pack/badges/everest_badge_32.png";
-const String tPawPatrolMarshallBadgeImage = "assets/images/avatars/paw_patrol_pack/badges/marshall_badge_32.png";
-const String tPawPatrolBadgeImage = "assets/images/avatars/paw_patrol_pack/badges/paw_patrol_badge_32.png";
-const String tPawPatrolRockyBadgeImage = "assets/images/avatars/paw_patrol_pack/badges/rocky_badge_32.png";
-const String tPawPatrolRubbleBadgeImage = "assets/images/avatars/paw_patrol_pack/badges/rubble_badge_32.png";
-const String tPawPatrolSkyeBadgeImage = "assets/images/avatars/paw_patrol_pack/badges/skye_badge_32.png";
-const String tPawPatrolTrackerBadgeImage = "assets/images/avatars/paw_patrol_pack/badges/tracker_badge_32.png";
-const String tPawPatrolZumaBadgeImage = "assets/images/avatars/paw_patrol_pack/badges/zuma_badge_32.png";
+const String tPawPatrolChaseBadgeImage = "assets/packages/paw_patrol_pack/badges/chase_badge_32.png";
+const String tPawPatrolEverestBadgeImage = "assets/packages/paw_patrol_pack/badges/everest_badge_32.png";
+const String tPawPatrolMarshallBadgeImage = "assets/packages/paw_patrol_pack/badges/marshall_badge_32.png";
+const String tPawPatrolBadgeImage = "assets/packages/paw_patrol_pack/badges/paw_patrol_badge_32.png";
+const String tPawPatrolRockyBadgeImage = "assets/packages/paw_patrol_pack/badges/rocky_badge_32.png";
+const String tPawPatrolRubbleBadgeImage = "assets/packages/paw_patrol_pack/badges/rubble_badge_32.png";
+const String tPawPatrolSkyeBadgeImage = "assets/packages/paw_patrol_pack/badges/skye_badge_32.png";
+const String tPawPatrolTrackerBadgeImage = "assets/packages/paw_patrol_pack/badges/tracker_badge_32.png";
+const String tPawPatrolZumaBadgeImage = "assets/packages/paw_patrol_pack/badges/zuma_badge_32.png";
 
 // -- Notification Images
 const String tCircleSpriteImage = "assets/images/notification_images/spritesheet_circle.png";
