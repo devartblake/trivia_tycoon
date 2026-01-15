@@ -4,7 +4,6 @@ import '../../../game/providers/riverpod_providers.dart';
 import '../../../game/utils/avatar_asset_loader.dart';
 import '../../../ui_components/depth_card_3d/depth_card.dart';
 import '../../../ui_components/depth_card_3d/theme_editor/depth_card_theme_selector.dart';
-import '../../../game/providers/avatar_package_providers.dart';
 import '../widgets/empty_state_widget.dart';
 
 class Avatar3DTab extends ConsumerStatefulWidget {

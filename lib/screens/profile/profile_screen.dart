@@ -9,6 +9,7 @@ import '../../ui_components/depth_card_3d/depth_card.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../screens/profile/widgets/animated_state_box.dart';
 import '../../ui_components/profile_avatar/profile_image_picker_dialog.dart';
+import 'enhanced/enhanced_profile_screen.dart';
 import 'tabs/collection_tab.dart';
 import 'tabs/statistics_tab.dart';
 import 'tabs/achievements_tab.dart';
@@ -657,6 +658,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
                   _buildStudyGroupSection(activeProfile),
                   const SizedBox(height: 20),
                   _buildBottomActions(),
+                  const SizedBox(height: 16),
+                  _buildDeveloperActions(activeProfile),
                   const SizedBox(height: 20),
                 ],
               ),
@@ -1256,6 +1259,140 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
             ),
           ),
         ),
+      ],
+    );
+  }
+
+  Widget _buildDeveloperActions(ProfileData activeProfile) {
+    return Column(
+      children: [
+        // Enhanced Profile Button
+        GestureDetector(
+          onTap: () {
+            // Navigate to Enhanced Profile Screen
+            // Note: You'll need to pass the appropriate userId and currentUserId
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const EnhancedProfileScreen(
+                  userId: 'current_user_id', // Replace with actual user ID
+                  currentUserId: 'current_user_id', // Replace with actual current user ID
+                  isOwnProfile: true,
+                ),
+              ),
+            );
+          },
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+              ),
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF6366F1).withOpacity(0.3),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.person_rounded,
+                  color: Colors.white,
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                const Text(
+                  'View Enhanced Profile',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        // Admin Mode Toggle (only visible if user is admin)
+        if (_isAdmin) ...[
+          const SizedBox(height: 12),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              gradient: _adminModeEnabled
+                  ? const LinearGradient(
+                colors: [Color(0xFFEC4899), Color(0xFFF59E0B)],
+              )
+                  : LinearGradient(
+                colors: [
+                  Colors.grey.shade700,
+                  Colors.grey.shade600,
+                ],
+              ),
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: (_adminModeEnabled
+                      ? const Color(0xFFEC4899)
+                      : Colors.grey.shade700)
+                      .withOpacity(0.3),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  _adminModeEnabled ? Icons.admin_panel_settings : Icons.security,
+                  color: Colors.white,
+                  size: 24,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Admin Mode',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        _adminModeEnabled ? 'Enabled' : 'Disabled',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.8),
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Switch(
+                  value: _adminModeEnabled,
+                  onChanged: _toggleAdminMode,
+                  activeColor: Colors.white,
+                  activeTrackColor: Colors.white.withOpacity(0.3),
+                  inactiveThumbColor: Colors.white70,
+                  inactiveTrackColor: Colors.white.withOpacity(0.2),
+                ),
+              ],
+            ),
+          ),
+        ],
       ],
     );
   }

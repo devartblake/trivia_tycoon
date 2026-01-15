@@ -55,64 +55,66 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          _buildAppBar(context),
-          SliverToBoxAdapter(
-            child: Column(
-              children: [
-                _buildProfileInfo(context),
-                const SizedBox(height: 16),
-                _buildQuickActions(context),
-                const SizedBox(height: 8),
-                _buildTabBar(),
-              ],
-            ),
-          ),
-          SliverFillRemaining(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                _buildStatsTab(context),
-                _buildActivityTab(context),
-                _buildAchievementsTab(context),
-              ],
-            ),
-          ),
+      backgroundColor: const Color(0xFF0A0A0F),
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          _buildModernAppBar(context),
         ],
+        body: Column(
+          children: [
+            _buildProfileCard(),
+            const SizedBox(height: 16),
+            _buildPresenceCard(),
+            const SizedBox(height: 16),
+            _buildStatsCards(),
+            const SizedBox(height: 16),
+            _buildQuickActions(),
+            const SizedBox(height: 20),
+            _buildTabBar(),
+            const SizedBox(height: 16),
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  _buildStatsTab(),
+                  _buildActivityTab(),
+                  _buildAchievementsTab(),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  Widget _buildModernAppBar(BuildContext context) {
     return SliverAppBar(
       expandedHeight: 200,
+      floating: false,
       pinned: true,
+      backgroundColor: const Color(0xFF0A0A0F),
+      elevation: 0,
       flexibleSpace: FlexibleSpaceBar(
         background: Stack(
           fit: StackFit.expand,
           children: [
             Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
+                  colors: [
+                    Color(0xFF6366F1),
+                    Color(0xFF8B5CF6),
+                    Color(0xFFEC4899),
+                  ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [
-                    Theme.of(context).colorScheme.primary,
-                    Theme.of(context).colorScheme.secondary,
-                  ],
                 ),
               ),
             ),
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: Image.network(
-                'https://example.com/banner.jpg', // Placeholder
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(),
+            Positioned.fill(
+              child: CustomPaint(
+                painter: _GridPatternPainter(),
               ),
             ),
             Container(
@@ -122,7 +124,7 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.transparent,
-                    Colors.black.withOpacity(0.7),
+                    Colors.black.withOpacity(0.3),
                   ],
                 ),
               ),
@@ -130,69 +132,213 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
           ],
         ),
       ),
-      actions: [
-        if (widget.isOwnProfile)
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: () => _navigateToEditProfile(),
-          )
-        else
-          PopupMenuButton<String>(
-            onSelected: _handleMenuAction,
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: 'message',
-                child: ListTile(
-                  leading: Icon(Icons.message),
-                  title: Text('Send Message'),
-                  contentPadding: EdgeInsets.zero,
-                ),
-              ),
-              const PopupMenuItem(
-                value: 'challenge',
-                child: ListTile(
-                  leading: Icon(Icons.sports_esports),
-                  title: Text('Challenge to Quiz'),
-                  contentPadding: EdgeInsets.zero,
-                ),
-              ),
-              const PopupMenuDivider(),
-              const PopupMenuItem(
-                value: 'block',
-                child: ListTile(
-                  leading: Icon(Icons.block, color: Colors.red),
-                  title: Text('Block', style: TextStyle(color: Colors.red)),
-                  contentPadding: EdgeInsets.zero,
-                ),
-              ),
-            ],
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 8),
+        child: Container(
+          margin: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.15),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.2),
+            ),
           ),
+          child: IconButton(
+            icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+            onPressed: () => Navigator.pop(context),
+            padding: EdgeInsets.zero,
+          ),
+        ),
+      ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 8),
+          child: Container(
+            margin: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.15),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Colors.white.withOpacity(0.2),
+              ),
+            ),
+            child: widget.isOwnProfile
+                ? IconButton(
+              icon: const Icon(Icons.edit_rounded, color: Colors.white),
+              onPressed: _navigateToEditProfile,
+              padding: EdgeInsets.zero,
+            )
+                : PopupMenuButton<String>(
+              icon: const Icon(Icons.more_vert_rounded, color: Colors.white),
+              onSelected: _handleMenuAction,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              itemBuilder: (context) => [
+                const PopupMenuItem(
+                  value: 'message',
+                  child: Row(
+                    children: [
+                      Icon(Icons.message_rounded, size: 20),
+                      SizedBox(width: 12),
+                      Text('Send Message'),
+                    ],
+                  ),
+                ),
+                const PopupMenuItem(
+                  value: 'challenge',
+                  child: Row(
+                    children: [
+                      Icon(Icons.sports_esports_rounded, size: 20),
+                      SizedBox(width: 12),
+                      Text('Challenge to Quiz'),
+                    ],
+                  ),
+                ),
+                const PopupMenuDivider(),
+                const PopupMenuItem(
+                  value: 'block',
+                  child: Row(
+                    children: [
+                      Icon(Icons.block_rounded, color: Colors.red, size: 20),
+                      SizedBox(width: 12),
+                      Text('Block', style: TextStyle(color: Colors.red)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }
 
-  Widget _buildProfileInfo(BuildContext context) {
-    return Transform.translate(
-      offset: const Offset(0, -50),
+  Widget _buildProfileCard() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.white.withOpacity(0.08),
+            Colors.white.withOpacity(0.04),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.12),
+          width: 1.5,
+        ),
+      ),
       child: Column(
         children: [
-          ProfileHeader(
-            userId: widget.userId,
-            displayName: _userData['displayName'],
-            username: _userData['username'],
-            bio: _userData['bio'],
-            isOwnProfile: widget.isOwnProfile,
+          Row(
+            children: [
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+                  ),
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.3),
+                    width: 3,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF6366F1).withOpacity(0.3),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: const Center(
+                  child: Icon(Icons.person, color: Colors.white, size: 40),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _userData['displayName'],
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      _userData['username'],
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.6),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFFFBBF24), Color(0xFFF59E0B)],
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.stars_rounded,
+                                color: Colors.white,
+                                size: 14,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                'Level ${_userData['level']}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 16),
-          _buildPresenceStatus(context),
-          const SizedBox(height: 16),
-          _buildStatsRow(context),
+          Text(
+            _userData['bio'],
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.8),
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              height: 1.4,
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildPresenceStatus(BuildContext context) {
+  Widget _buildPresenceCard() {
     return StreamBuilder<UserPresence?>(
       stream: _presenceService.watchUserPresence(widget.userId),
       builder: (context, snapshot) {
@@ -201,10 +347,21 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
 
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 16),
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceVariant,
-            borderRadius: BorderRadius.circular(12),
+            gradient: LinearGradient(
+              colors: [
+                const Color(0xFF10B981).withOpacity(0.15),
+                const Color(0xFF3B82F6).withOpacity(0.1),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: const Color(0xFF10B981).withOpacity(0.3),
+              width: 1.5,
+            ),
           ),
           child: RichPresenceIndicator(
             presence: presence,
@@ -215,136 +372,143 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
     );
   }
 
-  Widget _buildStatsRow(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
+  Widget _buildStatsCards() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildStatItem(
-            context,
-            '${_userData['friendCount']}',
-            'Friends',
-            Icons.people,
+          Expanded(
+            child: _buildStatCard(
+              'Friends',
+              _userData['friendCount'].toString(),
+              Icons.people_rounded,
+              const [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+                  () => _showMutualFriends(),
+            ),
           ),
-          Container(
-            width: 1,
-            height: 40,
-            color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+          const SizedBox(width: 12),
+          Expanded(
+            child: _buildStatCard(
+              'Points',
+              _userData['totalPoints'].toString(),
+              Icons.star_rounded,
+              const [Color(0xFFFBBF24), Color(0xFFF59E0B)],
+              null,
+            ),
           ),
-          _buildStatItem(
-            context,
-            'Lv ${_userData['level']}',
-            'Level',
-            Icons.stars,
-          ),
-          Container(
-            width: 1,
-            height: 40,
-            color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
-          ),
-          _buildStatItem(
-            context,
-            '${_userData['achievements']}',
-            'Achievements',
-            Icons.emoji_events,
+          const SizedBox(width: 12),
+          Expanded(
+            child: _buildStatCard(
+              'Badges',
+              _userData['achievements'].toString(),
+              Icons.emoji_events_rounded,
+              const [Color(0xFFEC4899), Color(0xFFF59E0B)],
+              null,
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildStatItem(
-      BuildContext context,
-      String value,
+  Widget _buildStatCard(
       String label,
+      String value,
       IconData icon,
+      List<Color> gradient,
+      VoidCallback? onTap,
       ) {
-    return Column(
-      children: [
-        Icon(
-          icon,
-          color: Theme.of(context).colorScheme.primary,
-          size: 20,
-        ),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              gradient[0].withOpacity(0.15),
+              gradient[1].withOpacity(0.1),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: gradient[0].withOpacity(0.3),
+            width: 1.5,
           ),
         ),
-        Text(
-          label,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildQuickActions(BuildContext context) {
-    if (widget.isOwnProfile) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
+        child: Column(
           children: [
-            Expanded(
-              child: FilledButton.icon(
-                onPressed: _navigateToEditProfile,
-                icon: const Icon(Icons.edit),
-                label: const Text('Edit Profile'),
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(colors: gradient),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: Colors.white, size: 24),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              value,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w900,
               ),
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: OutlinedButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.settings),
-                label: const Text('Settings'),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.6),
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],
         ),
-      );
-    }
+      ),
+    );
+  }
+
+  Widget _buildQuickActions() {
+    if (widget.isOwnProfile) return const SizedBox.shrink();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
           Expanded(
-            child: FilledButton.icon(
-              onPressed: () {},
-              icon: const Icon(Icons.person_add),
-              label: const Text('Add Friend'),
+            child: ElevatedButton.icon(
+              onPressed: () => _handleMenuAction('message'),
+              icon: const Icon(Icons.message_rounded, size: 18),
+              label: const Text('Message'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF6366F1),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 0,
+              ),
             ),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: OutlinedButton.icon(
-              onPressed: () {},
-              icon: const Icon(Icons.message),
-              label: const Text('Message'),
+              onPressed: () => _handleMenuAction('challenge'),
+              icon: const Icon(Icons.sports_esports_rounded, size: 18),
+              label: const Text('Challenge'),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.white,
+                side: BorderSide(color: Colors.white.withOpacity(0.3)),
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
             ),
-          ),
-          const SizedBox(width: 12),
-          OutlinedButton(
-            onPressed: () => _showMutualFriends(),
-            child: Text('${_userData['mutualFriends']} mutual'),
           ),
         ],
       ),
@@ -355,17 +519,42 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceVariant,
-        borderRadius: BorderRadius.circular(12),
+        color: Colors.white.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.1),
+        ),
       ),
       child: TabBar(
         controller: _tabController,
         indicator: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(14),
+          gradient: LinearGradient(
+            colors: [
+              const Color(0xFF6366F1).withOpacity(0.8),
+              const Color(0xFF8B5CF6).withOpacity(0.8),
+            ],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF6366F1).withOpacity(0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
-        labelColor: Theme.of(context).colorScheme.onPrimary,
-        unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
+        indicatorSize: TabBarIndicatorSize.tab,
+        dividerColor: Colors.transparent,
+        labelColor: Colors.white,
+        unselectedLabelColor: Colors.white.withOpacity(0.5),
+        labelStyle: const TextStyle(
+          fontWeight: FontWeight.w900,
+          fontSize: 13,
+        ),
+        unselectedLabelStyle: const TextStyle(
+          fontWeight: FontWeight.w700,
+          fontSize: 13,
+        ),
         tabs: const [
           Tab(text: 'Stats'),
           Tab(text: 'Activity'),
@@ -375,95 +564,94 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
     );
   }
 
-  Widget _buildStatsTab(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        GameStatsWidget(userId: widget.userId),
-        const SizedBox(height: 16),
-        _buildRecentMatchesCard(context),
-        const SizedBox(height: 16),
-        _buildStreaksCard(context),
-      ],
-    );
-  }
-
-  Widget _buildRecentMatchesCard(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.history,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  'Recent Matches',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+  Widget _buildStatsTab() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Recent Matches',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.w900,
             ),
-            const SizedBox(height: 16),
-            ..._generateRecentMatches().map((match) => _buildMatchTile(context, match)),
-          ],
-        ),
+          ),
+          const SizedBox(height: 12),
+          ..._generateRecentMatches().map((match) => _buildMatchCard(match)),
+          const SizedBox(height: 20),
+        ],
       ),
     );
   }
 
-  Widget _buildMatchTile(BuildContext context, Map<String, dynamic> match) {
+  Widget _buildMatchCard(Map<String, dynamic> match) {
     final isWin = match['result'] == 'win';
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isWin
-            ? Colors.green.withOpacity(0.1)
-            : Colors.red.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(8),
+        gradient: LinearGradient(
+          colors: isWin
+              ? [
+            const Color(0xFF10B981).withOpacity(0.15),
+            const Color(0xFF3B82F6).withOpacity(0.1),
+          ]
+              : [
+            const Color(0xFFEF4444).withOpacity(0.15),
+            const Color(0xFFF59E0B).withOpacity(0.1),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isWin
-              ? Colors.green.withOpacity(0.3)
-              : Colors.red.withOpacity(0.3),
+              ? const Color(0xFF10B981).withOpacity(0.3)
+              : const Color(0xFFEF4444).withOpacity(0.3),
+          width: 1.5,
         ),
       ),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: isWin ? Colors.green : Colors.red,
-              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                colors: isWin
+                    ? [const Color(0xFF10B981), const Color(0xFF3B82F6)]
+                    : [const Color(0xFFEF4444), const Color(0xFFF59E0B)],
+              ),
+              borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
-              isWin ? Icons.check : Icons.close,
+              isWin ? Icons.check_circle_rounded : Icons.cancel_rounded,
               color: Colors.white,
-              size: 16,
+              size: 24,
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   match['category'],
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w900,
                   ),
                 ),
+                const SizedBox(height: 4),
                 Text(
                   '${match['score']} points',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.6),
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
@@ -471,8 +659,10 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
           ),
           Text(
             match['time'],
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.5),
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ],
@@ -480,141 +670,64 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
     );
   }
 
-  Widget _buildStreaksCard(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.local_fire_department,
-                  color: Colors.orange,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  'Streaks',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            _buildStreakItem(context, 'Current Streak', '7 days', Colors.orange),
-            const SizedBox(height: 12),
-            _buildStreakItem(context, 'Longest Streak', '23 days', Colors.blue),
-            const SizedBox(height: 12),
-            _buildStreakItem(context, 'Win Streak', '5 games', Colors.green),
-          ],
-        ),
-      ),
+  Widget _buildActivityTab() {
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      itemCount: _generateRecentActivities().length,
+      itemBuilder: (context, index) {
+        final activity = _generateRecentActivities()[index];
+        return _buildActivityCard(activity);
+      },
     );
   }
 
-  Widget _buildStreakItem(BuildContext context, String label, String value, Color color) {
-    return Row(
-      children: [
-        Container(
-          width: 4,
-          height: 40,
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(2),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ),
-              Text(
-                value,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildActivityTab(BuildContext context) {
-    return ListView(
+  Widget _buildActivityCard(Map<String, dynamic> activity) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
-      children: [
-        _buildActivityTimeline(context),
-      ],
-    );
-  }
-
-  Widget _buildActivityTimeline(BuildContext context) {
-    final activities = _generateRecentActivities();
-
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Recent Activity',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-            ...activities.map((activity) => _buildActivityItem(context, activity)),
-          ],
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.1),
         ),
       ),
-    );
-  }
-
-  Widget _buildActivityItem(BuildContext context, Map<String, dynamic> activity) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              shape: BoxShape.circle,
+              gradient: const LinearGradient(
+                colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+              ),
+              borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
               activity['icon'],
-              size: 16,
-              color: Theme.of(context).colorScheme.primary,
+              size: 20,
+              color: Colors.white,
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   activity['title'],
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
                   ),
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: 4),
                 Text(
                   activity['time'],
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.5),
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
@@ -625,63 +738,108 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
     );
   }
 
-  Widget _buildAchievementsTab(BuildContext context) {
+  Widget _buildAchievementsTab() {
     return GridView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        childAspectRatio: 0.8,
+        childAspectRatio: 0.85,
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
       ),
       itemCount: _generateAchievements().length,
       itemBuilder: (context, index) {
         final achievement = _generateAchievements()[index];
-        return _buildAchievementCard(context, achievement);
+        return _buildAchievementCard(achievement);
       },
     );
   }
 
-  Widget _buildAchievementCard(BuildContext context, Map<String, dynamic> achievement) {
+  Widget _buildAchievementCard(Map<String, dynamic> achievement) {
     final isUnlocked = achievement['unlocked'];
 
     return GestureDetector(
       onTap: () => _showAchievementDetails(achievement),
       child: Container(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: isUnlocked
-              ? Theme.of(context).colorScheme.primaryContainer
-              : Theme.of(context).colorScheme.surfaceVariant,
-          borderRadius: BorderRadius.circular(12),
+          gradient: isUnlocked
+              ? LinearGradient(
+            colors: [
+              const Color(0xFFFBBF24).withOpacity(0.2),
+              const Color(0xFFF59E0B).withOpacity(0.15),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          )
+              : LinearGradient(
+            colors: [
+              Colors.white.withOpacity(0.05),
+              Colors.white.withOpacity(0.02),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isUnlocked
-                ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).colorScheme.outline.withOpacity(0.2),
-            width: 2,
+                ? const Color(0xFFFBBF24).withOpacity(0.4)
+                : Colors.white.withOpacity(0.1),
+            width: 1.5,
           ),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              achievement['icon'],
-              size: 32,
-              color: isUnlocked
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.5),
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                gradient: isUnlocked
+                    ? const LinearGradient(
+                  colors: [Color(0xFFFBBF24), Color(0xFFF59E0B)],
+                )
+                    : LinearGradient(
+                  colors: [
+                    Colors.white.withOpacity(0.15),
+                    Colors.white.withOpacity(0.08),
+                  ],
+                ),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                achievement['icon'],
+                size: 28,
+                color: Colors.white.withOpacity(isUnlocked ? 1 : 0.3),
+              ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
             Text(
               achievement['name'],
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: isUnlocked ? null : Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.5),
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+                fontSize: 11,
+                color: Colors.white.withOpacity(isUnlocked ? 1 : 0.4),
               ),
               textAlign: TextAlign.center,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
+            if (!isUnlocked) ...[
+              const SizedBox(height: 6),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text(
+                  '${achievement['progress']}%',
+                  style: TextStyle(
+                    fontSize: 9,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white.withOpacity(0.5),
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),
@@ -689,40 +847,95 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
   }
 
   void _navigateToEditProfile() {
-    // Navigate to edit profile screen
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      backgroundColor: const Color(0xFF1A1A24),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
       builder: (context) => DraggableScrollableSheet(
         initialChildSize: 0.9,
         builder: (context, scrollController) => Container(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(24),
           child: ListView(
             controller: scrollController,
             children: [
-              Text(
-                'Edit Profile',
-                style: Theme.of(context).textTheme.headlineSmall,
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
               ),
               const SizedBox(height: 24),
-              const TextField(
+              const Text(
+                'Edit Profile',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              const SizedBox(height: 24),
+              TextField(
+                style: const TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   labelText: 'Display Name',
-                  border: OutlineInputBorder(),
+                  labelStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.white.withOpacity(0.2)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF6366F1)),
+                  ),
+                  fillColor: Colors.white.withOpacity(0.05),
+                  filled: true,
                 ),
               ),
               const SizedBox(height: 16),
-              const TextField(
+              TextField(
+                style: const TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   labelText: 'Bio',
-                  border: OutlineInputBorder(),
+                  labelStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.white.withOpacity(0.2)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF6366F1)),
+                  ),
+                  fillColor: Colors.white.withOpacity(0.05),
+                  filled: true,
                 ),
                 maxLines: 3,
               ),
               const SizedBox(height: 24),
-              FilledButton(
+              ElevatedButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Save Changes'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF6366F1),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 0,
+                ),
+                child: const Text(
+                  'Save Changes',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 15,
+                  ),
+                ),
               ),
             ],
           ),
@@ -747,37 +960,133 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF1A1A24),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
         title: Row(
           children: [
-            Icon(achievement['icon']),
-            const SizedBox(width: 8),
-            Expanded(child: Text(achievement['name'])),
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFFFBBF24), Color(0xFFF59E0B)],
+                ),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(achievement['icon'], color: Colors.white, size: 24),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                achievement['name'],
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+            ),
           ],
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(achievement['description']),
-            const SizedBox(height: 12),
+            Text(
+              achievement['description'],
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.8),
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 16),
             if (achievement['unlocked'])
-              Text(
-                'Unlocked: ${achievement['unlockedDate']}',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF10B981).withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: const Color(0xFF10B981).withOpacity(0.3),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.check_circle_rounded,
+                      color: Color(0xFF10B981),
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Unlocked: ${achievement['unlockedDate']}',
+                      style: const TextStyle(
+                        color: Color(0xFF10B981),
+                        fontWeight: FontWeight.w700,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
                 ),
               )
             else
-              Text(
-                'Progress: ${achievement['progress']}%',
-                style: Theme.of(context).textTheme.bodySmall,
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Progress',
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.8),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Text(
+                          '${achievement['progress']}%',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      child: LinearProgressIndicator(
+                        value: achievement['progress'] / 100,
+                        backgroundColor: Colors.white.withOpacity(0.1),
+                        valueColor: const AlwaysStoppedAnimation<Color>(
+                          Color(0xFF6366F1),
+                        ),
+                        minHeight: 6,
+                      ),
+                    ),
+                  ],
+                ),
               ),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
+            child: const Text(
+              'Close',
+              style: TextStyle(
+                color: Color(0xFF6366F1),
+                fontWeight: FontWeight.w700,
+              ),
+            ),
           ),
         ],
       ),
@@ -785,17 +1094,15 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
   }
 
   void _handleMenuAction(String action) {
-    switch (action) {
-      case 'message':
-      // Open message screen
-        break;
-      case 'challenge':
-      // Send challenge
-        break;
-      case 'block':
-      // Block user
-        break;
-    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Action: $action'),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    );
   }
 
   List<Map<String, dynamic>> _generateRecentMatches() {
@@ -809,25 +1116,126 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
 
   List<Map<String, dynamic>> _generateRecentActivities() {
     return [
-      {'icon': Icons.emoji_events, 'title': 'Earned "Quiz Master" achievement', 'time': '2 hours ago'},
-      {'icon': Icons.people, 'title': 'Added 3 new friends', 'time': '5 hours ago'},
+      {
+        'icon': Icons.emoji_events,
+        'title': 'Earned "Quiz Master" achievement',
+        'time': '2 hours ago'
+      },
+      {
+        'icon': Icons.people,
+        'title': 'Added 3 new friends',
+        'time': '5 hours ago'
+      },
       {'icon': Icons.star, 'title': 'Reached Level 42', 'time': '1 day ago'},
-      {'icon': Icons.sports_esports, 'title': 'Won 5 games in a row', 'time': '1 day ago'},
-      {'icon': Icons.group, 'title': 'Joined "Trivia Champions" group', 'time': '2 days ago'},
+      {
+        'icon': Icons.sports_esports,
+        'title': 'Won 5 games in a row',
+        'time': '1 day ago'
+      },
+      {
+        'icon': Icons.group,
+        'title': 'Joined "Trivia Champions" group',
+        'time': '2 days ago'
+      },
     ];
   }
 
   List<Map<String, dynamic>> _generateAchievements() {
     return [
-      {'name': 'First Win', 'icon': Icons.star, 'unlocked': true, 'description': 'Win your first game', 'unlockedDate': '15 Jan 2024'},
-      {'name': 'Speed Demon', 'icon': Icons.flash_on, 'unlocked': true, 'description': 'Answer 10 questions in under 30 seconds', 'unlockedDate': '20 Jan 2024'},
-      {'name': 'Brain Box', 'icon': Icons.psychology, 'unlocked': true, 'description': 'Get 100% in a quiz', 'unlockedDate': '3 Feb 2024'},
-      {'name': 'Social Butterfly', 'icon': Icons.people, 'unlocked': true, 'description': 'Add 50 friends', 'unlockedDate': '10 Feb 2024'},
-      {'name': 'Streak Master', 'icon': Icons.local_fire_department, 'unlocked': false, 'description': 'Maintain a 30-day streak', 'progress': 70},
-      {'name': 'Quiz Champion', 'icon': Icons.emoji_events, 'unlocked': false, 'description': 'Win 100 games', 'progress': 45},
-      {'name': 'Category King', 'icon': Icons.rocket, 'unlocked': false, 'description': 'Master all categories', 'progress': 60},
-      {'name': 'Team Player', 'icon': Icons.group, 'unlocked': false, 'description': 'Play 50 team games', 'progress': 30},
-      {'name': 'Night Owl', 'icon': Icons.nightlight, 'unlocked': false, 'description': 'Play after midnight 10 times', 'progress': 80},
+      {
+        'name': 'First Win',
+        'icon': Icons.star,
+        'unlocked': true,
+        'description': 'Win your first game',
+        'unlockedDate': '15 Jan 2024'
+      },
+      {
+        'name': 'Speed Demon',
+        'icon': Icons.flash_on,
+        'unlocked': true,
+        'description': 'Answer 10 questions in under 30 seconds',
+        'unlockedDate': '20 Jan 2024'
+      },
+      {
+        'name': 'Brain Box',
+        'icon': Icons.psychology,
+        'unlocked': true,
+        'description': 'Get 100% in a quiz',
+        'unlockedDate': '3 Feb 2024'
+      },
+      {
+        'name': 'Social Butterfly',
+        'icon': Icons.people,
+        'unlocked': true,
+        'description': 'Add 50 friends',
+        'unlockedDate': '10 Feb 2024'
+      },
+      {
+        'name': 'Streak Master',
+        'icon': Icons.local_fire_department,
+        'unlocked': false,
+        'description': 'Maintain a 30-day streak',
+        'progress': 70
+      },
+      {
+        'name': 'Quiz Champion',
+        'icon': Icons.emoji_events,
+        'unlocked': false,
+        'description': 'Win 100 games',
+        'progress': 45
+      },
+      {
+        'name': 'Category King',
+        'icon': Icons.rocket,
+        'unlocked': false,
+        'description': 'Master all categories',
+        'progress': 60
+      },
+      {
+        'name': 'Team Player',
+        'icon': Icons.group,
+        'unlocked': false,
+        'description': 'Play 50 team games',
+        'progress': 30
+      },
+      {
+        'name': 'Night Owl',
+        'icon': Icons.nightlight,
+        'unlocked': false,
+        'description': 'Play after midnight 10 times',
+        'progress': 80
+      },
     ];
   }
+}
+
+class _GridPatternPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.white.withOpacity(0.05)
+      ..strokeWidth = 1
+      ..style = PaintingStyle.stroke;
+
+    const gridSize = 30.0;
+
+    for (double i = 0; i < size.width; i += gridSize) {
+      canvas.drawLine(
+        Offset(i, 0),
+        Offset(i, size.height),
+        paint,
+      );
+    }
+
+    for (double i = 0; i < size.height; i += gridSize) {
+      canvas.drawLine(
+        Offset(0, i),
+        Offset(size.width, i),
+        paint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
