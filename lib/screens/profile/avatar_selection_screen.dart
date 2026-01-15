@@ -289,7 +289,7 @@ class _AvatarPackagesTab extends ConsumerWidget {
                 }
 
                 try {
-                  await svc.installBundledZip(
+                  await svc.installBundledAssetArchive(
                       meta: demoMeta,
                       assetArchivePath: demoAssetPath
                   );
