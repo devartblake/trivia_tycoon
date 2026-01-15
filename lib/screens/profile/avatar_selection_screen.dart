@@ -1,47 +1,32 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../game/models/avatar_package_models.dart';
-import '../../game/providers/avatar_package_providers.dart';
-import '../../game/providers/riverpod_providers.dart';
-import '../../ui_components/depth_card_3d/depth_card.dart';
-import '../../ui_components/depth_card_3d/theme_editor/depth_card_theme_selector.dart';
 import '../../core/services/settings/app_settings.dart';
-import '../../game/utils/avatar_asset_loader.dart';
+import '../../ui_components/depth_card_3d/models/depth_card_theme.dart';
+import '../../ui_components/depth_card_3d/theme_editor/depth_card_theme_selector.dart';
+import 'tabs/avatar_images_tab.dart';
+import 'tabs/avatar_3d_tab.dart';
+import 'tabs/avatar_packages_tab.dart';
 
 class AvatarSelectionScreen extends ConsumerStatefulWidget {
   const AvatarSelectionScreen({super.key});
 
   @override
-  ConsumerState<AvatarSelectionScreen> createState() => _AvatarChoiceScreenState();
+  ConsumerState<AvatarSelectionScreen> createState() =>
+      _AvatarSelectionScreenState();
 }
 
-class _AvatarChoiceScreenState extends ConsumerState<AvatarSelectionScreen> with SingleTickerProviderStateMixin {
+class _AvatarSelectionScreenState extends ConsumerState<AvatarSelectionScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  List<String> imageAvatars = [];
-  List<String> threeDAvatars = [];
   DepthCardTheme _selectedTheme = DepthCardTheme.presets[0];
-
-  final List<Map<String, String>> avatarPackages = [
-    {
-      'image': 'assets/images/packages/package1.png',
-      'route': '/store?package=starter'
-    },
-    {
-      'image': 'assets/images/packages/package2.png',
-      'route': '/store?package=hero'
-    },
-  ];
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
 
-    _loadAvatars();
     AppSettings.getDepthCardTheme().then((name) {
-      if (name != null) {
+      if (name != null && mounted) {
         setState(() {
           _selectedTheme = DepthCardTheme.fromName(name);
         });
@@ -49,492 +34,236 @@ class _AvatarChoiceScreenState extends ConsumerState<AvatarSelectionScreen> with
     });
   }
 
-  Future<void> _loadAvatars() async {
-    // ✅ FIXED: Get cache from provider
-    final cache = ref.read(appCacheServiceProvider); 
-    // ✅ FIXED: Pass cache parameter to both methods
-    final loadedImages = await AvatarAssetLoader.loadImageAvatars(
-        cache: ref.read(appCacheServiceProvider)
-    );
-    final loaded3D = await AvatarAssetLoader.loadThreeDAvatars(cache: cache);
-
-    if (mounted) {
-      setState(() {
-        imageAvatars = loadedImages;
-        threeDAvatars = loaded3D;
-      });
-    }
-  }
-
-  void _selectAvatar(String path, {bool is3D = false}) {
-    final controller = ref.read(profileAvatarControllerProvider.notifier);
-    controller.selectAvatarFromAsset(path);
-    Navigator.pop(context);
-  }
-
-  /// ** Dynamically loading Avatar Images
-  Widget _buildImageAvatarTab() {
-    if (imageAvatars.isEmpty) {
-      return const Center(
-        child: Padding(
-          padding: EdgeInsets.all(32),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.image_not_supported, size: 64, color: Colors.grey),
-              SizedBox(height: 16),
-              Text(
-                'No image avatars available',
-                style: TextStyle(color: Colors.grey),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
-    return GridView.builder(
-      padding: const EdgeInsets.all(12),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        mainAxisSpacing: 12,
-        crossAxisSpacing: 12,
-      ),
-      itemCount: imageAvatars.length,
-      itemBuilder: (context, index) {
-        final imagePath = imageAvatars[index];
-        return GestureDetector(
-          onTap: () => _selectAvatar(imagePath),
-          child: CircleAvatar(
-            backgroundImage: imagePath.startsWith('assets/')
-                ? AssetImage(imagePath) as ImageProvider
-                : FileImage(File(imagePath)),
-            radius: 40,
-          ),
-        );
-      },
-    );
-  }
-
-  /// ** Dynamically load DepthCard 3D Avatars.
-  Widget _build3DAvatarTab() {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Choose Theme",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              DepthCardThemeSelector(
-                selectedName: _selectedTheme.name,
-                onThemeSelected: (theme) async {
-                  setState(() => _selectedTheme = theme);
-                  await AppSettings.setDepthCardTheme(theme.name);
-                },
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 10),
-        Expanded(
-          child: threeDAvatars.isEmpty
-              ? const Center(
-            child: Padding(
-              padding: EdgeInsets.all(32),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.threed_rotation, size: 64, color: Colors.grey),
-                  SizedBox(height: 16),
-                  Text(
-                    'No 3D avatars available',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                ],
-              ),
-            ),
-          )
-              : GridView.builder(
-            padding: const EdgeInsets.all(12),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 1,
-            ),
-            itemCount: threeDAvatars.length,
-            itemBuilder: (context, index) {
-              final modelPath = threeDAvatars[index];
-
-              final config = DepthCardConfig(
-                modelAssetPath: modelPath,
-                text: "Character ${index + 1}",
-                onTap: () => _selectAvatar(modelPath),
-                theme: _selectedTheme,
-                width: 200,
-                height: 200,
-                parallaxDepth: 0.1,
-                borderRadius: 30.0,
-                backgroundImage: const AssetImage('assets/images/logo/appLogo.png'),
-                overlayActions: [],
-              );
-
-              return DepthCard3D(config: config);
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text("Choose Avatar"),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: const [
-            Tab(icon: Icon(Icons.image), text: "Images"),
-            Tab(icon: Icon(Icons.threed_rotation), text: "3D"),
-            Tab(icon: Icon(Icons.shopping_bag), text: "Packages"),
-          ],
-        ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          // Image Avatars
-          _buildImageAvatarTab(),
-
-          // 3D Avatars using DepthCard3D
-          _build3DAvatarTab(),
-
-          // Packages (Navigate to Store)
-          const _AvatarPackagesTab(),
-        ],
-      ),
-    );
-  }
-
   @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
   }
-}
 
-class _AvatarPackagesTab extends ConsumerWidget {
-  const _AvatarPackagesTab();
+  Future<void> _onThemeSelected(DepthCardTheme theme) async {
+    setState(() => _selectedTheme = theme);
+    await AppSettings.setDepthCardTheme(theme.name);
+  }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final installedAsync = ref.watch(installedAvatarPackagesProvider);
-    final serverAsync = ref.watch(serverAvatarPackagesProvider);
-
-    Future<void> refresh() async {
-      ref.invalidate(installedAvatarPackagesProvider);
-      ref.invalidate(serverAvatarPackagesProvider);
-      // Give the providers a microtask to restart (optional but helps perceived UX)
-      await Future<void>.delayed(const Duration(milliseconds: 50));
-    }
-
-    // --- Bundled demo package (ships with the app) ---
-    final demoMeta = AvatarPackageMetadata(
-      id: 'demo_animals',
-      name: 'Demo Animals Pack',
-      version: '1.0.0',
-      thumbnailUrl: null,
-      archiveUrl: null, // bundled
-      sizeBytes: null,
-      sha256: null,
-      render: const AvatarPackageRenderHints(kind: AvatarPackageType.image),
-    );
-
-    const demoAssetPath = 'assets/zip/demo_avatar_package_animals_v1.zip';
-
-    return Container(
-      color: const Color(0xFFC1C0C0), // ✅ ensures tab background is dark
-      child: RefreshIndicator(
-        onRefresh: refresh,
-        child: ListView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF0A0A0F),
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          _buildModernAppBar(context),
+        ],
+        body: Column(
           children: [
-            // -----------------------
-            // Bundled Demo Section
-            // -----------------------
-            const Text(
-              'Bundled Demo',
-              style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900),
-            ),
-            const SizedBox(height: 10),
-            _PackageCardBundled(
-              meta: demoMeta,
-              assetZipPath: demoAssetPath,
-              onInstall: () async {
-                final svc = ref.read(avatarPackageServiceProvider);
-
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Installing "${demoMeta.name}"...')),
-                  );
-                }
-
-                try {
-                  await svc.installBundledAssetArchive(
-                      meta: demoMeta,
-                      assetArchivePath: demoAssetPath
-                  );
-                  ref.invalidate(installedAvatarPackagesProvider);
-
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Installed "${demoMeta.name}".')),
-                    );
-                  }
-                } catch (e) {
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Demo install failed: $e')),
-                    );
-                  }
-                }
-              },
-            ),
-
-            const SizedBox(height: 22),
-
-            // -----------------------
-            // Installed Packages
-            // -----------------------
-            const Text(
-              'Installed Packages',
-              style: TextStyle(color: Colors.white54, fontSize: 16, fontWeight: FontWeight.w900),
-            ),
-            const SizedBox(height: 10),
-
-            installedAsync.when(
-              data: (items) {
-                if (items.isEmpty) {
-                  return Text(
-                    'No packages installed yet.',
-                    style: TextStyle(color: Colors.white54.withOpacity(0.7)),
-                  );
-                }
-
-                return Column(
-                  children: items.map((install) {
-                    return _PackageCardInstalled(
-                      install: install,
-                      onUninstall: () async {
-                        final svc = ref.read(avatarPackageServiceProvider);
-                        await svc.uninstall(install);
-                        ref.invalidate(installedAvatarPackagesProvider);
-
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Uninstalled "${install.meta.name}".')),
-                          );
-                        }
-                      },
-                    );
-                  }).toList(),
-                );
-              },
-              loading: () => const _ThinLoader(),
-              error: (e, _) => _ErrorLine('Failed to load installed packages: $e'),
-            ),
-
-            const SizedBox(height: 22),
-
-            // -----------------------
-            // Server Packages
-            // -----------------------
-            const Text(
-              'Server Packages',
-              style: TextStyle(color: Colors.white54, fontSize: 16, fontWeight: FontWeight.w900),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Download image-only packs for now. 3D/DepthCard support can be added later.',
-              style: TextStyle(color: Colors.white54.withOpacity(0.65), fontSize: 12, fontWeight: FontWeight.w600),
-            ),
+            _buildTabBar(),
             const SizedBox(height: 12),
-
-            serverAsync.when(
-              data: (items) {
-                if (items.isEmpty) {
-                  return Text(
-                    'No server packages yet (or backend not connected). Pull to refresh.',
-                    style: TextStyle(color: Colors.white54.withOpacity(0.7)),
-                  );
-                }
-
-                return Column(
-                  children: items.map((meta) {
-                    return _PackageCardServer(
-                      meta: meta,
-                      onInstall: () async {
-                        final svc = ref.read(avatarPackageServiceProvider);
-
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Downloading "${meta.name}"...')),
-                          );
-                        }
-
-                        try {
-                          await svc.downloadAndInstall(meta);
-                          ref.invalidate(installedAvatarPackagesProvider);
-
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Installed "${meta.name}".')),
-                            );
-                          }
-                        } catch (e) {
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Install failed: $e')),
-                            );
-                          }
-                        }
-                      },
-                    );
-                  }).toList(),
-                );
-              },
-              loading: () => const _ThinLoader(),
-              error: (e, _) => _ErrorLine('Failed to load server packages: $e'),
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  const AvatarImagesTab(),
+                  Avatar3DTab(
+                    selectedTheme: _selectedTheme,
+                    onThemeSelected: _onThemeSelected,
+                  ),
+                  const AvatarPackagesTab(),
+                ],
+              ),
             ),
           ],
         ),
       ),
     );
   }
-}
 
-class _PackageCardBundled extends ConsumerWidget {
-  final AvatarPackageMetadata meta;
-  final String assetZipPath;
-  final Future<void> Function() onInstall;
-
-  const _PackageCardBundled({
-    required this.meta,
-    required this.assetZipPath,
-    required this.onInstall,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return FutureBuilder<bool>(
-      future: ref.read(avatarPackageServiceProvider).isInstalled(meta),
-      builder: (context, snap) {
-        final installed = snap.data == true;
-
-        return Container(
-          margin: const EdgeInsets.only(bottom: 12),
-          padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            color: Colors.white.withOpacity(0.06),
-            border: Border.all(color: Colors.white.withOpacity(0.12)),
-          ),
-          child: Row(
-            children: [
-              const Icon(Icons.inventory_2_rounded, color: Colors.white70),
-              const SizedBox(width: 12),
-              Expanded(
+  Widget _buildModernAppBar(BuildContext context) {
+    return SliverAppBar(
+      expandedHeight: 180,
+      floating: false,
+      pinned: true,
+      backgroundColor: const Color(0xFF0A0A0F),
+      elevation: 0,
+      flexibleSpace: FlexibleSpaceBar(
+        background: Stack(
+          fit: StackFit.expand,
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xFF6366F1),
+                    Color(0xFF8B5CF6),
+                    Color(0xFFEC4899),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+            ),
+            Positioned.fill(
+              child: CustomPaint(
+                painter: _GridPatternPainter(),
+              ),
+            ),
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 60, 20, 16),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      meta.name,
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'v${meta.version} • Bundled',
-                      style: TextStyle(color: Colors.white.withOpacity(0.65), fontSize: 12, fontWeight: FontWeight.w700),
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(14),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.white.withOpacity(0.3),
+                                Colors.white.withOpacity(0.1),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(18),
+                            border: Border.all(
+                              color: Colors.white.withOpacity(0.2),
+                              width: 1.5,
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.person_rounded,
+                            color: Colors.white,
+                            size: 32,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        const Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Choose Avatar',
+                                style: TextStyle(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.white,
+                                  letterSpacing: -0.5,
+                                  height: 1,
+                                ),
+                              ),
+                              SizedBox(height: 6),
+                              Text(
+                                'Express yourself',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.white70,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
-              const SizedBox(width: 10),
-              ElevatedButton(
-                onPressed: installed ? null : () async => onInstall(),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: installed ? Colors.white.withOpacity(0.10) : Colors.amber.withOpacity(0.95),
-                  foregroundColor: Colors.black,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                ),
-                child: Text(installed ? 'Installed' : 'Install'),
-              ),
-            ],
+            ),
+          ],
+        ),
+      ),
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 8),
+        child: Container(
+          margin: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.15),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.2),
+            ),
           ),
-        );
-      },
+          child: IconButton(
+            icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+            onPressed: () => Navigator.pop(context),
+            padding: EdgeInsets.zero,
+          ),
+        ),
+      ),
     );
   }
-}
 
-class _PackageCardInstalled extends StatelessWidget {
-  final AvatarPackageInstall install;
-  final VoidCallback onUninstall;
-
-  const _PackageCardInstalled({
-    required this.install,
-    required this.onUninstall,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildTabBar() {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(14),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.05),
         borderRadius: BorderRadius.circular(16),
-        color: Colors.white.withOpacity(0.06),
-        border: Border.all(color: Colors.white.withOpacity(0.12)),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.1),
+        ),
       ),
-      child: Row(
-        children: [
-          const Icon(Icons.folder_rounded, color: Colors.white70),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: TabBar(
+        controller: _tabController,
+        indicator: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          gradient: LinearGradient(
+            colors: [
+              const Color(0xFF6366F1).withOpacity(0.8),
+              const Color(0xFF8B5CF6).withOpacity(0.8),
+            ],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF6366F1).withOpacity(0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        indicatorSize: TabBarIndicatorSize.tab,
+        dividerColor: Colors.transparent,
+        labelColor: Colors.white,
+        unselectedLabelColor: Colors.white.withOpacity(0.5),
+        labelStyle: const TextStyle(
+          fontWeight: FontWeight.w900,
+          fontSize: 13,
+        ),
+        unselectedLabelStyle: const TextStyle(
+          fontWeight: FontWeight.w700,
+          fontSize: 13,
+        ),
+        tabs: const [
+          Tab(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  install.meta.name,
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'v${install.meta.version} • Installed',
-                  style: TextStyle(color: Colors.white.withOpacity(0.65), fontSize: 12, fontWeight: FontWeight.w700),
-                ),
+                Icon(Icons.image_rounded, size: 18),
+                SizedBox(width: 6),
+                Text('Images'),
               ],
             ),
           ),
-          const SizedBox(width: 10),
-          OutlinedButton(
-            onPressed: onUninstall,
-            style: OutlinedButton.styleFrom(
-              side: BorderSide(color: Colors.white.withOpacity(0.25)),
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          Tab(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.threed_rotation_rounded, size: 18),
+                SizedBox(width: 6),
+                Text('3D'),
+              ],
             ),
-            child: const Text('Uninstall'),
+          ),
+          Tab(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.shopping_bag_rounded, size: 18),
+                SizedBox(width: 6),
+                Text('Packs'),
+              ],
+            ),
           ),
         ],
       ),
@@ -542,94 +271,33 @@ class _PackageCardInstalled extends StatelessWidget {
   }
 }
 
-class _PackageCardServer extends ConsumerWidget {
-  final AvatarPackageMetadata meta;
-  final Future<void> Function() onInstall;
+class _GridPatternPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.white.withOpacity(0.05)
+      ..strokeWidth = 1
+      ..style = PaintingStyle.stroke;
 
-  const _PackageCardServer({
-    required this.meta,
-    required this.onInstall,
-  });
+    const gridSize = 30.0;
+
+    for (double i = 0; i < size.width; i += gridSize) {
+      canvas.drawLine(
+        Offset(i, 0),
+        Offset(i, size.height),
+        paint,
+      );
+    }
+
+    for (double i = 0; i < size.height; i += gridSize) {
+      canvas.drawLine(
+        Offset(0, i),
+        Offset(size.width, i),
+        paint,
+      );
+    }
+  }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return FutureBuilder<bool>(
-      future: ref.read(avatarPackageServiceProvider).isInstalled(meta),
-      builder: (context, snap) {
-        final installed = snap.data == true;
-
-        return Container(
-          margin: const EdgeInsets.only(bottom: 12),
-          padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            color: Colors.white.withOpacity(0.06),
-            border: Border.all(color: Colors.white.withOpacity(0.12)),
-          ),
-          child: Row(
-            children: [
-              const Icon(Icons.cloud_download_rounded, color: Colors.white70),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      meta.name,
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'v${meta.version}${meta.sizeBytes == null ? '' : ' • ${(meta.sizeBytes! / (1024 * 1024)).toStringAsFixed(1)} MB'}',
-                      style: TextStyle(color: Colors.white.withOpacity(0.65), fontSize: 12, fontWeight: FontWeight.w700),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 10),
-              ElevatedButton(
-                onPressed: installed ? null : () async => onInstall(),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: installed ? Colors.white.withOpacity(0.10) : Colors.amber.withOpacity(0.95),
-                  foregroundColor: Colors.black,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                ),
-                child: Text(installed ? 'Installed' : 'Download'),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _ThinLoader extends StatelessWidget {
-  const _ThinLoader();
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: LinearProgressIndicator(
-        minHeight: 3,
-        backgroundColor: Colors.white.withOpacity(0.10),
-        color: Colors.amberAccent,
-      ),
-    );
-  }
-}
-
-class _ErrorLine extends StatelessWidget {
-  final String text;
-  const _ErrorLine(this.text);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: TextStyle(color: Colors.redAccent.withOpacity(0.9), fontWeight: FontWeight.w700),
-    );
-  }
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
