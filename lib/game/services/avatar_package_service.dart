@@ -1,225 +1,248 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:archive/archive.dart';
 import 'package:archive/archive_io.dart';
+import 'package:crypto/crypto.dart';
+import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 
 import '../../core/services/storage/app_cache_service.dart';
 import '../models/avatar_package_models.dart';
 
-/// Remote listing contract (plug into FastAPI later).
+/// Optional contract for backend.
+/// Your FastAPI will eventually back this:
+/// GET /avatar-packages -> List<AvatarPackageMetadata>
 abstract class AvatarPackageRemoteSource {
-  Future<List<AvatarPackageManifest>> fetchPackages();
-  Future<Uri> resolveDownloadUrl(String packageId);
+  Future<List<AvatarPackageMetadata>> fetchPackages();
 }
 
 class AvatarPackageService {
-  static const _installedKey = 'avatar_packages_installed_v1';
-
-  /// Root folder where packages are installed:
-  /// <app-doc-dir>/avatar_packages/<packageId>/
-  static const String packagesRootFolderName = 'avatar_packages';
+  static const _cacheKeyServerList = 'avatar_packages_server_list_v1';
 
   final AppCacheService _cache;
   final AvatarPackageRemoteSource? _remote;
 
-  AvatarPackageService(this._cache, {AvatarPackageRemoteSource? remote})
-      : _remote = remote;
+  AvatarPackageService(
+      this._cache, {
+        AvatarPackageRemoteSource? remote,
+      }) : _remote = remote;
 
-  // ----------------------------
-  // Installed package registry
-  // ----------------------------
+  /// Where packages are installed:
+  /// <documents>/avatarPackages/<packageId_version>/
+  Future<Directory> _packagesRootDir() async {
+    final docs = await getApplicationDocumentsDirectory();
+    final root = Directory(p.join(docs.path, 'avatarPackages'));
+    if (!await root.exists()) {
+      await root.create(recursive: true);
+    }
+    return root;
+  }
 
-  Future<List<AvatarPackageManifest>> listInstalledPackages() async {
-    final raw = _cache.get<Map<String, dynamic>>(_installedKey);
-    if (raw == null || raw.isEmpty) return const [];
+  Future<File> _manifestFile(Directory installDir) async {
+    return File(p.join(installDir.path, 'manifest.json'));
+  }
 
-    final out = <AvatarPackageManifest>[];
-    for (final entry in raw.entries) {
-      final v = entry.value;
-      if (v is Map) {
-        out.add(AvatarPackageManifest.fromJson(Map<String, dynamic>.from(v)));
+  /// Local: discover installed packages by scanning avatarPackages/*/manifest.json.
+  Future<List<AvatarPackageInstall>> listInstalled() async {
+    final root = await _packagesRootDir();
+    final out = <AvatarPackageInstall>[];
+
+    if (!await root.exists()) return out;
+
+    final children = root.listSync(followLinks: false);
+    for (final entity in children) {
+      if (entity is! Directory) continue;
+
+      final manifest = await _manifestFile(entity);
+      if (!await manifest.exists()) continue;
+
+      try {
+        final text = await manifest.readAsString();
+        final jsonMap = json.decode(text);
+        if (jsonMap is Map) {
+          out.add(AvatarPackageInstall.fromJson(Map<String, dynamic>.from(jsonMap)));
+        }
+      } catch (_) {
+        // Ignore broken manifests.
       }
     }
+
+    // newest first
+    out.sort((a, b) => b.installedAtUtcIso.compareTo(a.installedAtUtcIso));
     return out;
   }
 
-  Future<void> upsertInstalledPackage(AvatarPackageManifest manifest) async {
-    final raw = _cache.get<Map<String, dynamic>>(_installedKey) ?? <String, dynamic>{};
-    raw[manifest.id] = manifest.toJson();
-    _cache.setJson(_installedKey, raw);
-  }
-
-  Future<void> removeInstalledPackage(String packageId) async {
-    final raw = _cache.get<Map<String, dynamic>>(_installedKey) ?? <String, dynamic>{};
-    raw.remove(packageId);
-    _cache.setJson(_installedKey, raw);
-  }
-
-  // ----------------------------
-  // Paths
-  // ----------------------------
-
-  /// You should implement this in AppCacheService already (or provide it).
-  /// Expected: returns app documents directory.
-  Future<Directory> _appDocDir() => _cache.getAppDocDir(); // Error: The method 'getAppDocDir' isn't defined for the type 'AppCacheService'. Try correcting the name to the name of an existing method, or defining a method named 'getAppDocDir'.
-
-  Future<Directory> getPackagesRootDir() async {
-    final doc = await _appDocDir();
-    final dir = Directory(p.join(doc.path, packagesRootFolderName));
-    if (!await dir.exists()) await dir.create(recursive: true);
-    return dir;
-  }
-
-  Future<Directory> getPackageDir(String packageId) async {
-    final root = await getPackagesRootDir();
-    final dir = Directory(p.join(root.path, packageId));
-    if (!await dir.exists()) await dir.create(recursive: true);
-    return dir;
-  }
-
-  // ----------------------------
-  // Local asset listing (used by AvatarAssetLoader)
-  // ----------------------------
-
-  /// Load ALL local image avatars from installed packages.
-  /// Returns resolved file paths that UI can display.
-  Future<List<AvatarResolvedAsset>> loadAllLocalImageAvatars() async {
-    final pkgs = await listInstalledPackages();
-    final out = <AvatarResolvedAsset>[];
-
-    for (final pkgManifest in pkgs) {
-      final pkgDir = await getPackageDir(pkgManifest.id);
-
-      // Images folder
-      final imagesDir = Directory(p.join(pkgDir.path, pkgManifest.imagesDir));
-      if (!await imagesDir.exists()) continue;
-
-      // Prefer index.json if present (fast + stable).
-      final indexed = await _tryReadIndex(imagesDir);
-      if (indexed != null) {
-        for (final rel in indexed.items) {
-          if (_isImage(rel)) {
-            out.add(
-              AvatarResolvedAsset(
-                source: AvatarSource.file,
-                path: p.join(imagesDir.path, rel),
-                packageId: pkgManifest.id,
-              ),
-            );
-          }
-        }
-        continue;
-      }
-
-      // Fallback: recursive scan (slower, but robust)
-      final files = await imagesDir
-          .list(recursive: true, followLinks: false)
-          .where((e) => e is File)
-          .cast<File>()
+  /// Server: if remote is present, use it.
+  /// If not, return cached list (or empty).
+  Future<List<AvatarPackageMetadata>> fetchServerPackages({bool allowCache = true}) async {
+    if (_remote == null) {
+      if (!allowCache) return const [];
+      final cached = _cache.get<List<dynamic>>(_cacheKeyServerList);
+      if (cached == null) return const [];
+      return cached
+          .whereType<Map>()
+          .map((m) => AvatarPackageMetadata.fromJson(Map<String, dynamic>.from(m)))
           .toList();
+    }
 
-      for (final f in files) {
-        if (_isImage(f.path)) {
-          out.add(
-            AvatarResolvedAsset(
-              source: AvatarSource.file,
-              path: f.path,
-              packageId: pkgManifest.id,
-            ),
-          );
-        }
+    final list = await _remote!.fetchPackages();
+    // Cache for offline browsing.
+    await _cache.setJson(_cacheKeyServerList, list.map((x) => x.toJson()).toList());
+    return list;
+  }
+
+  Future<bool> isInstalled(AvatarPackageMetadata meta) async {
+    final root = await _packagesRootDir();
+    final folder = Directory(p.join(root.path, meta.installFolderName));
+    final manifest = File(p.join(folder.path, 'manifest.json'));
+    return await folder.exists() && await manifest.exists();
+  }
+
+  /// Install flow:
+  /// 1) download archive
+  /// 2) optional sha256 verify
+  /// 3) extract to install dir
+  /// 4) write manifest.json
+  Future<AvatarPackageInstall> downloadAndInstall(AvatarPackageMetadata meta) async {
+    final url = meta.archiveUrl;
+    if (url == null || url.isEmpty) {
+      throw StateError('archiveUrl is missing for package ${meta.id}.');
+    }
+
+    final root = await _packagesRootDir();
+    final installDir = Directory(p.join(root.path, meta.installFolderName));
+
+    // If a previous install exists, delete it to avoid mixed files.
+    if (await installDir.exists()) {
+      await installDir.delete(recursive: true);
+    }
+    await installDir.create(recursive: true);
+
+    final tmp = await getTemporaryDirectory();
+    final archiveFile = File(p.join(tmp.path, '${meta.installFolderName}${_guessArchiveSuffix(url)}'));
+
+    await _downloadToFile(url, archiveFile);
+
+    if (meta.sha256 != null && meta.sha256!.trim().isNotEmpty) {
+      final ok = await _verifySha256(archiveFile, meta.sha256!.trim());
+      if (!ok) {
+        // cleanup
+        if (await installDir.exists()) await installDir.delete(recursive: true);
+        throw StateError('SHA-256 mismatch for ${meta.id}.');
       }
     }
 
-    return _dedupeResolved(out);
+    await _extractArchive(archiveFile, installDir);
+
+    final install = AvatarPackageInstall(
+      meta: meta,
+      installDir: installDir.path,
+      installedAtUtcIso: DateTime.now().toUtc().toIso8601String(),
+    );
+
+    final manifest = await _manifestFile(installDir);
+    await manifest.writeAsString(install.toPrettyJson());
+
+    return install;
   }
 
-  /// Load ALL local 3D avatars from installed packages.
-  /// Note: your current UI can ignore these until DepthCard properly supports file paths.
-  Future<List<AvatarResolvedAsset>> loadAllLocalThreeDAvatars() async {
-    final pkgs = await listInstalledPackages();
-    final out = <AvatarResolvedAsset>[];
+  Future<void> uninstall(AvatarPackageInstall install) async {
+    final dir = Directory(install.installDir);
+    if (await dir.exists()) {
+      await dir.delete(recursive: true);
+    }
+  }
 
-    for (final pkgManifest in pkgs) {
-      final pkgDir = await getPackageDir(pkgManifest.id);
+  Future<List<AvatarAssetRef>> loadAllLocalImageAvatars() async {
+    final installs = await listInstalled();
+    final out = <AvatarAssetRef>[];
 
-      final modelsDir = Directory(p.join(pkgDir.path, pkgManifest.modelsDir));
-      if (!await modelsDir.exists()) continue;
+    const exts = ['.png', '.jpg', '.jpeg', '.webp'];
 
-      final indexed = await _tryReadIndex(modelsDir);
-      if (indexed != null) {
-        for (final rel in indexed.items) {
-          if (_is3d(rel)) {
-            out.add(
-              AvatarResolvedAsset(
-                source: AvatarSource.file,
-                path: p.join(modelsDir.path, rel),
-                packageId: pkgManifest.id,
-              ),
-            );
-          }
-        }
-        continue;
-      }
+    for (final install in installs) {
+      final dir = Directory(install.installDir);
+      if (!await dir.exists()) continue;
 
-      final files = await modelsDir
-          .list(recursive: true, followLinks: false)
-          .where((e) => e is File)
-          .cast<File>()
-          .toList();
+      final files = dir
+          .listSync(recursive: true, followLinks: false)
+          .whereType<File>()
+          .where((f) {
+        final e = p.extension(f.path).toLowerCase();
+        return exts.contains(e);
+      });
 
       for (final f in files) {
-        if (_is3d(f.path)) {
-          out.add(
-            AvatarResolvedAsset(
-              source: AvatarSource.file,
-              path: f.path,
-              packageId: pkgManifest.id,
-            ),
-          );
-        }
+        out.add(AvatarAssetRef(source: AvatarSource.file, path: f.path));
       }
     }
 
-    return _dedupeResolved(out);
+    return out;
   }
 
-  Future<FolderIndex?> _tryReadIndex(Directory dir) async {
-    final f = File(p.join(dir.path, 'index.json'));
-    if (!await f.exists()) return null;
+  Future<List<AvatarAssetRef>> loadAllLocalThreeDAvatars() async {
+    final installs = await listInstalled();
+    final out = <AvatarAssetRef>[];
 
+    const exts = ['.glb', '.gltf'];
+
+    for (final install in installs) {
+      final dir = Directory(install.installDir);
+      if (!await dir.exists()) continue;
+
+      final files = dir
+          .listSync(recursive: true, followLinks: false)
+          .whereType<File>()
+          .where((f) {
+        final e = p.extension(f.path).toLowerCase();
+        return exts.contains(e);
+      });
+
+      for (final f in files) {
+        out.add(AvatarAssetRef(source: AvatarSource.file, path: f.path));
+      }
+    }
+
+    return out;
+  }
+
+  // -----------------------
+  // Internals
+  // -----------------------
+
+  Future<void> _downloadToFile(String url, File out) async {
+    final client = http.Client();
     try {
-      final s = await f.readAsString();
-      final json = jsonDecode(s) as Map<String, dynamic>;
-      return FolderIndex.fromJson(json);
-    } catch (_) {
-      return null;
+      final req = http.Request('GET', Uri.parse(url));
+      final resp = await client.send(req);
+
+      if (resp.statusCode < 200 || resp.statusCode >= 300) {
+        throw HttpException('Download failed (${resp.statusCode}).');
+      }
+
+      final sink = out.openWrite();
+      await resp.stream.pipe(sink);
+      await sink.flush();
+      await sink.close();
+    } finally {
+      client.close();
     }
   }
 
-  // ----------------------------
-  // Download + install (server later)
-  // ----------------------------
+  Future<bool> _verifySha256(File file, String expectedHexLower) async {
+    final bytes = await file.readAsBytes();
+    final digest = sha256.convert(bytes).toString().toLowerCase();
+    return digest == expectedHexLower.toLowerCase();
+  }
 
-  /// Installs a downloaded archive into a package folder and writes/updates manifest.
-  /// You’ll call this from your “Packages” tab later.
-  Future<void> installFromArchive({
-    required String packageId,
-    required File archiveFile,
-    required AvatarPackageManifest manifest,
-  }) async {
-    final dest = await getPackageDir(packageId);
-
-    // Clean existing folder first (prevents file leftovers from older versions).
-    if (await dest.exists()) {
-      await dest.delete(recursive: true);
-    }
-    await dest.create(recursive: true);
-
-    await _extractArchive(archiveFile, dest);
-    await upsertInstalledPackage(manifest);
+  String _guessArchiveSuffix(String url) {
+    final lower = url.toLowerCase();
+    if (lower.endsWith('.tar.gz')) return '.tar.gz';
+    if (lower.endsWith('.tgz')) return '.tgz';
+    if (lower.endsWith('.tar')) return '.tar';
+    if (lower.endsWith('.zip')) return '.zip';
+    // default: zip
+    return '.zip';
   }
 
   Future<void> _extractArchive(File archiveFile, Directory destDir) async {
@@ -240,10 +263,9 @@ class AvatarPackageService {
     }
 
     if (lower.endsWith('.tar.gz') || lower.endsWith('.tgz')) {
-      // Robust approach: bytes -> gunzip -> tar
       final bytes = await archiveFile.readAsBytes();
-      final ungz = GZipDecoder().decodeBytes(bytes);
-      final archive = TarDecoder().decodeBytes(ungz);
+      final tarBytes = GZipDecoder().decodeBytes(bytes); // gzip -> tar bytes
+      final archive = TarDecoder().decodeBytes(tarBytes); // tar bytes -> archive
       await _writeArchiveToDisk(archive, destDir);
       return;
     }
@@ -255,48 +277,23 @@ class AvatarPackageService {
     for (final file in archive) {
       final filename = file.name;
 
-      // prevent zip-slip
+      // Guard against zip-slip
       final normalized = p.normalize(filename);
-      if (p.isAbsolute(normalized) || normalized.startsWith('..')) continue;
+      if (p.isAbsolute(normalized) || normalized.startsWith('..')) {
+        continue;
+      }
 
       final outPath = p.join(destDir.path, normalized);
 
       if (file.isFile) {
         final outFile = File(outPath);
         await outFile.parent.create(recursive: true);
-        await outFile.writeAsBytes(file.content as List<int>);
+        final data = file.content as List<int>;
+        await outFile.writeAsBytes(data);
       } else {
-        final outDir = Directory(outPath);
-        await outDir.create(recursive: true);
+        final outDirectory = Directory(outPath);
+        await outDirectory.create(recursive: true);
       }
     }
-  }
-
-  // ----------------------------
-  // Helpers
-  // ----------------------------
-
-  static bool _isImage(String path) {
-    final l = path.toLowerCase();
-    return l.endsWith('.png') ||
-        l.endsWith('.jpg') ||
-        l.endsWith('.jpeg') ||
-        l.endsWith('.webp');
-  }
-
-  static bool _is3d(String path) {
-    final l = path.toLowerCase();
-    return l.endsWith('.glb') || l.endsWith('.gltf');
-  }
-
-  static List<AvatarResolvedAsset> _dedupeResolved(List<AvatarResolvedAsset> items) {
-    final seen = <String>{};
-    final out = <AvatarResolvedAsset>[];
-    for (final it in items) {
-      final key = '${it.source.name}:${it.path}';
-      if (seen.add(key)) out.add(it);
-    }
-    out.sort((a, b) => a.path.compareTo(b.path));
-    return out;
   }
 }

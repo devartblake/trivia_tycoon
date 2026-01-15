@@ -224,79 +224,6 @@ class AvatarAssetLoader {
       // If manifest truly unavailable, return empty rather than crash.
       return const [];
     }
-
-    // Fallback
-    return _loadFromAssetManifest(imageAvatarPath, is3D: false);
-  }
-
-  static Future<List<String>> _loadBundled3d() async {
-    final idx = await _tryLoadIndex(_threeDIndexAsset);
-    if (idx != null) {
-      // items contain "characters/xxx.glb" relative to assets/3d/
-      final out = idx.items
-          .where((p) => p.startsWith('characters/'))
-          .where(_is3dRel)
-          .map((rel) => 'assets/3d/$rel')
-          .toList()
-        ..sort();
-      return out;
-    }
-
-    // Fallback
-    return _loadFromAssetManifest(threeDAvatarPath, is3D: true);
-  }
-
-  static Future<_Index?> _tryLoadIndex(String assetPath) async {
-    try {
-      final s = await rootBundle.loadString(assetPath);
-      final map = jsonDecode(s) as Map<String, dynamic>;
-      final raw = map['items'];
-      if (raw is! List) return null;
-      final items = raw.map((e) => e.toString()).toList();
-      return _Index(items: items);
-    } catch (_) {
-      return null;
-    }
-  }
-
-  // ------------------------
-  // Fallback: AssetManifest.json
-  // ------------------------
-
-  static Future<List<String>> _loadFromAssetManifest(String path, {required bool is3D}) async {
-    try {
-      final manifestContent = await rootBundle.loadString('AssetManifest.json');
-      final Map<String, dynamic> manifestMap = json.decode(manifestContent);
-
-      final allAssets = manifestMap.keys.where((String key) {
-        if (!key.startsWith(path)) return false;
-        if (is3D) return key.endsWith('.glb') || key.endsWith('.gltf');
-        return key.endsWith('.png') ||
-            key.endsWith('.jpg') ||
-            key.endsWith('.jpeg') ||
-            key.endsWith('.webp');
-      }).toList();
-
-      allAssets.sort();
-      return allAssets;
-    } catch (_) {
-      // If manifest truly unavailable, return empty rather than crash.
-      return const [];
-    }
-  }
-
-  // ------------------------
-  // Helpers
-  // ------------------------
-
-  static bool _isImageRel(String rel) {
-    final l = rel.toLowerCase();
-    return l.endsWith('.png') || l.endsWith('.jpg') || l.endsWith('.jpeg') || l.endsWith('.webp');
-  }
-
-  static bool _is3dRel(String rel) {
-    final l = rel.toLowerCase();
-    return l.endsWith('.glb') || l.endsWith('.gltf');
   }
 
   // ---------------------------------------------------------------------------
@@ -339,9 +266,4 @@ class AvatarAssetLoader {
     out.sort((a, b) => a.path.compareTo(b.path));
     return out;
   }
-}
-
-class _Index {
-  final List<String> items;
-  const _Index({required this.items});
 }
