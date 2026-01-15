@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:archive/archive.dart';
 import 'package:archive/archive_io.dart';
 import 'package:crypto/crypto.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -18,7 +20,11 @@ abstract class AvatarPackageRemoteSource {
 }
 
 class AvatarPackageService {
+  /// Cache key for server list (List<Map>).
   static const _cacheKeyServerList = 'avatar_packages_server_list_v1';
+
+  /// Cache key for installed index (Map<String, dynamic> of installs).
+  static const _cacheKeyInstalledIndex = 'avatar_packages_installed_index_v1';
 
   final AppCacheService _cache;
   final AvatarPackageRemoteSource? _remote;
@@ -44,6 +50,33 @@ class AvatarPackageService {
   Future<File> _manifestFile(Directory installDir) async {
     return File(p.join(installDir.path, 'manifest.json'));
   }
+
+  /// ---------------------------------------------------------------------------
+  /// Server list
+  /// ---------------------------------------------------------------------------
+
+  /// Server: if remote is present, use it.
+  /// If not, return cached list (or empty).
+  Future<List<AvatarPackageMetadata>> fetchServerPackages({bool allowCache = true}) async {
+    if (_remote == null) {
+      if (!allowCache) return const [];
+      final cached = _cache.get<List<dynamic>>(_cacheKeyServerList);
+      if (cached == null) return const [];
+      return cached
+          .whereType<Map>()
+          .map((m) => AvatarPackageMetadata.fromJson(Map<String, dynamic>.from(m)))
+          .toList();
+    }
+
+    final list = await _remote!.fetchPackages();
+    // Cache for offline browsing.
+    await _cache.setJson(_cacheKeyServerList, list.map((x) => x.toJson()).toList());
+    return list;
+  }
+
+  /// ---------------------------------------------------------------------------
+  /// Installed packages
+  /// ---------------------------------------------------------------------------
 
   /// Local: discover installed packages by scanning avatarPackages/*/manifest.json.
   Future<List<AvatarPackageInstall>> listInstalled() async {
@@ -75,38 +108,15 @@ class AvatarPackageService {
     return out;
   }
 
-  /// Server: if remote is present, use it.
-  /// If not, return cached list (or empty).
-  Future<List<AvatarPackageMetadata>> fetchServerPackages({bool allowCache = true}) async {
-    if (_remote == null) {
-      if (!allowCache) return const [];
-      final cached = _cache.get<List<dynamic>>(_cacheKeyServerList);
-      if (cached == null) return const [];
-      return cached
-          .whereType<Map>()
-          .map((m) => AvatarPackageMetadata.fromJson(Map<String, dynamic>.from(m)))
-          .toList();
-    }
-
-    final list = await _remote!.fetchPackages();
-    // Cache for offline browsing.
-    await _cache.setJson(_cacheKeyServerList, list.map((x) => x.toJson()).toList());
-    return list;
-  }
-
-  /// ---------------------------------------------------------------------------
-  /// Load installed packages (used by installedAvatarPackagesProvider)
-  /// ---------------------------------------------------------------------------
-  ///
   /// Strategy:
-  /// 1) Prefer the persisted index in AppCacheService for speed and reliability.
-  /// 2) Fallback: scan the install folder for `manifest.json` files.
-  ///
+  /// 1) Prefer the persisted installed index in AppCacheService for speed.
+  /// 2) Fallback: scan disk for `manifest.json` files.
   Future<List<AvatarPackageInstall>> loadInstalledPackages() async {
-    // 1) Try index first
-    final indexed = _cache.get<Map<String, dynamic>>(_cacheKeyServerList);
+    // 1) Try installed index first (Map)
+    final indexed = _cache.get<Map<String, dynamic>>(_cacheKeyInstalledIndex);
     if (indexed != null && indexed.isNotEmpty) {
       final installs = <AvatarPackageInstall>[];
+
       for (final entry in indexed.entries) {
         final raw = entry.value;
         if (raw is Map) {
@@ -122,9 +132,10 @@ class AvatarPackageService {
         }
       }
 
-      // Optional: verify folders still exist; prune missing
+      // Verify folders still exist; prune missing
       final filtered = <AvatarPackageInstall>[];
       bool changed = false;
+
       for (final i in installs) {
         final dir = Directory(i.installDir);
         if (await dir.exists()) {
@@ -133,6 +144,7 @@ class AvatarPackageService {
           changed = true;
         }
       }
+
       if (changed) {
         await _persistInstalledIndex(filtered);
       }
@@ -156,25 +168,29 @@ class AvatarPackageService {
     return await folder.exists() && await manifest.exists();
   }
 
+  Future<AvatarPackageInstall?> _findInstallById(String id) async {
+    final installs = await loadInstalledPackages();
+    for (final i in installs) {
+      if (i.meta.id == id) return i;
+    }
+    return null;
+  }
+
+  /// ---------------------------------------------------------------------------
+  /// Install flows
+  /// ---------------------------------------------------------------------------
+
   /// Install flow:
   /// 1) download archive
   /// 2) optional sha256 verify
   /// 3) extract to install dir
   /// 4) write manifest.json
+  /// 5) update installed index cache
   Future<AvatarPackageInstall> downloadAndInstall(AvatarPackageMetadata meta) async {
     final url = meta.archiveUrl;
     if (url == null || url.isEmpty) {
       throw StateError('archiveUrl is missing for package ${meta.id}.');
     }
-
-    final root = await _packagesRootDir;
-    final installDir = Directory(p.join(root.path, meta.installFolderName));
-
-    // If a previous install exists, delete it to avoid mixed files.
-    if (await installDir.exists()) {
-      await installDir.delete(recursive: true);
-    }
-    await installDir.create(recursive: true);
 
     final tmp = await getTemporaryDirectory();
     final archiveFile = File(p.join(tmp.path, '${meta.installFolderName}${_guessArchiveSuffix(url)}'));
@@ -184,14 +200,62 @@ class AvatarPackageService {
     if (meta.sha256 != null && meta.sha256!.trim().isNotEmpty) {
       final ok = await _verifySha256(archiveFile, meta.sha256!.trim());
       if (!ok) {
-        // cleanup
-        if (await installDir.exists()) await installDir.delete(recursive: true);
         throw StateError('SHA-256 mismatch for ${meta.id}.');
       }
     }
 
+    return _installFromArchiveFile(meta, archiveFile);
+  }
+
+  /// Step 2: Install a package from a bundled ZIP/TAR/etc shipped in assets.
+  ///
+  /// Example asset path:
+  ///   assets/zip/demo_avatar_package_animals_v1.zip
+  ///
+  /// Notes:
+  /// - This is idempotent: if already installed, returns existing install record.
+  /// - We do NOT require manifest.json to be inside the zip. We create our own
+  ///   manifest.json after extraction (same as server install).
+  Future<AvatarPackageInstall> installBundledZip({
+    required AvatarPackageMetadata meta,
+    required String assetArchivePath,
+  }) async {
+    // If already installed, return existing record.
+    final existing = await _findInstallById(meta.id);
+    if (existing != null) return existing;
+
+    // Load bytes from asset bundle
+    final data = await rootBundle.load(assetArchivePath);
+    final bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+
+    // Stage to temp file (archive package APIs are file/stream oriented)
+    final tmp = await getTemporaryDirectory();
+    final ext = _guessArchiveSuffix(assetArchivePath);
+    final archiveFile = File(p.join(tmp.path, '${meta.installFolderName}$ext'));
+
+    await archiveFile.writeAsBytes(bytes, flush: true);
+
+    return _installFromArchiveFile(meta, archiveFile);
+  }
+
+  /// Shared install pipeline for both remote downloads and bundled archives.
+  Future<AvatarPackageInstall> _installFromArchiveFile(
+      AvatarPackageMetadata meta,
+      File archiveFile,
+      ) async {
+    final root = await _packagesRootDir;
+    final installDir = Directory(p.join(root.path, meta.installFolderName));
+
+    // Clean previous install folder to avoid mixed files.
+    if (await installDir.exists()) {
+      await installDir.delete(recursive: true);
+    }
+    await installDir.create(recursive: true);
+
+    // Extract archive
     await _extractArchive(archiveFile, installDir);
 
+    // Write install manifest (authoritative record for scanning/listing)
     final install = AvatarPackageInstall(
       meta: meta,
       installDir: installDir.path,
@@ -199,7 +263,15 @@ class AvatarPackageService {
     );
 
     final manifest = await _manifestFile(installDir);
-    await manifest.writeAsString(install.toPrettyJson());
+    await manifest.writeAsString(install.toPrettyJson(), flush: true);
+
+    // Update installed index cache
+    final current = await loadInstalledPackages();
+    final updated = <AvatarPackageInstall>[
+      ...current.where((x) => x.meta.id != meta.id),
+      install,
+    ];
+    await _persistInstalledIndex(updated);
 
     return install;
   }
@@ -209,10 +281,19 @@ class AvatarPackageService {
     if (await dir.exists()) {
       await dir.delete(recursive: true);
     }
+
+    // Update installed index
+    final current = await loadInstalledPackages();
+    final updated = current.where((x) => x.meta.id != install.meta.id).toList();
+    await _persistInstalledIndex(updated);
   }
 
+  /// ---------------------------------------------------------------------------
+  /// Local avatar discovery (used by AvatarAssetLoader)
+  /// ---------------------------------------------------------------------------
+
   Future<List<AvatarAssetRef>> loadAllLocalImageAvatars() async {
-    final installs = await listInstalled();
+    final installs = await loadInstalledPackages();
     final out = <AvatarAssetRef>[];
 
     const exts = ['.png', '.jpg', '.jpeg', '.webp'];
@@ -224,10 +305,7 @@ class AvatarPackageService {
       final files = dir
           .listSync(recursive: true, followLinks: false)
           .whereType<File>()
-          .where((f) {
-        final e = p.extension(f.path).toLowerCase();
-        return exts.contains(e);
-      });
+          .where((f) => exts.contains(p.extension(f.path).toLowerCase()));
 
       for (final f in files) {
         out.add(AvatarAssetRef(source: AvatarSource.file, path: f.path));
@@ -238,7 +316,7 @@ class AvatarPackageService {
   }
 
   Future<List<AvatarAssetRef>> loadAllLocalThreeDAvatars() async {
-    final installs = await listInstalled();
+    final installs = await loadInstalledPackages();
     final out = <AvatarAssetRef>[];
 
     const exts = ['.glb', '.gltf'];
@@ -250,10 +328,7 @@ class AvatarPackageService {
       final files = dir
           .listSync(recursive: true, followLinks: false)
           .whereType<File>()
-          .where((f) {
-        final e = p.extension(f.path).toLowerCase();
-        return exts.contains(e);
-      });
+          .where((f) => exts.contains(p.extension(f.path).toLowerCase()));
 
       for (final f in files) {
         out.add(AvatarAssetRef(source: AvatarSource.file, path: f.path));
@@ -267,9 +342,7 @@ class AvatarPackageService {
   // Internals
   // -----------------------
 
-  /// ---------------------------------------------------------------------------
   /// Disk scan fallback: find <root>/*/manifest.json
-  /// ---------------------------------------------------------------------------
   Future<List<AvatarPackageInstall>> _scanInstalledPackagesFromDisk() async {
     final root = await _packagesRootDir;
     if (!await root.exists()) return const [];
@@ -288,14 +361,14 @@ class AvatarPackageService {
         final map = jsonDecode(s) as Map<String, dynamic>;
         final install = AvatarPackageInstall.fromJson(map);
 
-        // If manifest stored a relative installDir, normalize to current folder
-        final normalized = AvatarPackageInstall(
-          meta: install.meta,
-          installDir: entity.path,
-          installedAtUtcIso: install.installedAtUtcIso,
+        // Normalize installDir to current folder (authoritative location)
+        installs.add(
+          AvatarPackageInstall(
+            meta: install.meta,
+            installDir: entity.path,
+            installedAtUtcIso: install.installedAtUtcIso,
+          ),
         );
-
-        installs.add(normalized);
       } catch (_) {
         // ignore malformed manifest
       }
@@ -304,15 +377,14 @@ class AvatarPackageService {
     return installs;
   }
 
-  /// ---------------------------------------------------------------------------
-  /// Persist installed index
-  /// ---------------------------------------------------------------------------
+  /// Persist installed index (Map<String, dynamic>).
+  /// Key by installFolderName so versioned installs are unique.
   Future<void> _persistInstalledIndex(List<AvatarPackageInstall> installs) async {
     final payload = <String, dynamic>{};
     for (final i in installs) {
       payload[i.meta.installFolderName] = i.toJson();
     }
-    await _cache.setJson(_cacheKeyServerList, payload);
+    await _cache.setJson(_cacheKeyInstalledIndex, payload);
   }
 
   Future<void> _downloadToFile(String url, File out) async {
@@ -340,13 +412,14 @@ class AvatarPackageService {
     return digest == expectedHexLower.toLowerCase();
   }
 
-  String _guessArchiveSuffix(String url) {
-    final lower = url.toLowerCase();
+  /// Guess archive suffix based on path.
+  String _guessArchiveSuffix(String urlOrPath) {
+    final lower = urlOrPath.toLowerCase();
     if (lower.endsWith('.tar.gz')) return '.tar.gz';
     if (lower.endsWith('.tgz')) return '.tgz';
     if (lower.endsWith('.tar')) return '.tar';
     if (lower.endsWith('.zip')) return '.zip';
-    // default: zip
+    // default
     return '.zip';
   }
 
@@ -369,8 +442,8 @@ class AvatarPackageService {
 
     if (lower.endsWith('.tar.gz') || lower.endsWith('.tgz')) {
       final bytes = await archiveFile.readAsBytes();
-      final tarBytes = GZipDecoder().decodeBytes(bytes); // gzip -> tar bytes
-      final archive = TarDecoder().decodeBytes(tarBytes); // tar bytes -> archive
+      final gzBytes = GZipDecoder().decodeBytes(bytes);
+      final archive = TarDecoder().decodeBytes(gzBytes);
       await _writeArchiveToDisk(archive, destDir);
       return;
     }
@@ -394,7 +467,7 @@ class AvatarPackageService {
         final outFile = File(outPath);
         await outFile.parent.create(recursive: true);
         final data = file.content as List<int>;
-        await outFile.writeAsBytes(data);
+        await outFile.writeAsBytes(data, flush: true);
       } else {
         final outDirectory = Directory(outPath);
         await outDirectory.create(recursive: true);

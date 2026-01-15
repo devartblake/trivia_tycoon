@@ -246,6 +246,20 @@ class _AvatarPackagesTab extends ConsumerWidget {
       await Future<void>.delayed(const Duration(milliseconds: 50));
     }
 
+    // --- Bundled demo package (ships with the app) ---
+    final demoMeta = AvatarPackageMetadata(
+      id: 'demo_animals',
+      name: 'Demo Animals Pack',
+      version: '1.0.0',
+      thumbnailUrl: null,
+      archiveUrl: null, // bundled
+      sizeBytes: null,
+      sha256: null,
+      render: const AvatarPackageRenderHints(kind: AvatarPackageType.image),
+    );
+
+    const demoAssetPath = 'assets/zip/demo_avatar_package_animals_v1.zip';
+
     return Container(
       color: const Color(0xFFC1C0C0), // ✅ ensures tab background is dark
       child: RefreshIndicator(
@@ -254,6 +268,53 @@ class _AvatarPackagesTab extends ConsumerWidget {
           physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
           children: [
+            // -----------------------
+            // Bundled Demo Section
+            // -----------------------
+            const Text(
+              'Bundled Demo',
+              style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900),
+            ),
+            const SizedBox(height: 10),
+            _PackageCardBundled(
+              meta: demoMeta,
+              assetZipPath: demoAssetPath,
+              onInstall: () async {
+                final svc = ref.read(avatarPackageServiceProvider);
+
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Installing "${demoMeta.name}"...')),
+                  );
+                }
+
+                try {
+                  await svc.installBundledZip(
+                      meta: demoMeta,
+                      assetArchivePath: demoAssetPath
+                  );
+                  ref.invalidate(installedAvatarPackagesProvider);
+
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Installed "${demoMeta.name}".')),
+                    );
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Demo install failed: $e')),
+                    );
+                  }
+                }
+              },
+            ),
+
+            const SizedBox(height: 22),
+
+            // -----------------------
+            // Installed Packages
+            // -----------------------
             const Text(
               'Installed Packages',
               style: TextStyle(color: Colors.white54, fontSize: 16, fontWeight: FontWeight.w900),
@@ -294,6 +355,9 @@ class _AvatarPackagesTab extends ConsumerWidget {
 
             const SizedBox(height: 22),
 
+            // -----------------------
+            // Server Packages
+            // -----------------------
             const Text(
               'Server Packages',
               style: TextStyle(color: Colors.white54, fontSize: 16, fontWeight: FontWeight.w900),
@@ -354,6 +418,71 @@ class _AvatarPackagesTab extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _PackageCardBundled extends ConsumerWidget {
+  final AvatarPackageMetadata meta;
+  final String assetZipPath;
+  final Future<void> Function() onInstall;
+
+  const _PackageCardBundled({
+    required this.meta,
+    required this.assetZipPath,
+    required this.onInstall,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return FutureBuilder<bool>(
+      future: ref.read(avatarPackageServiceProvider).isInstalled(meta),
+      builder: (context, snap) {
+        final installed = snap.data == true;
+
+        return Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            color: Colors.white.withOpacity(0.06),
+            border: Border.all(color: Colors.white.withOpacity(0.12)),
+          ),
+          child: Row(
+            children: [
+              const Icon(Icons.inventory_2_rounded, color: Colors.white70),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      meta.name,
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'v${meta.version} • Bundled',
+                      style: TextStyle(color: Colors.white.withOpacity(0.65), fontSize: 12, fontWeight: FontWeight.w700),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 10),
+              ElevatedButton(
+                onPressed: installed ? null : () async => onInstall(),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: installed ? Colors.white.withOpacity(0.10) : Colors.amber.withOpacity(0.95),
+                  foregroundColor: Colors.black,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                ),
+                child: Text(installed ? 'Installed' : 'Install'),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
