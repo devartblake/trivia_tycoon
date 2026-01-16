@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,16 +23,35 @@ class ProfileScreen extends ConsumerStatefulWidget {
   ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTickerProviderStateMixin {
+class _ProfileScreenState extends ConsumerState<ProfileScreen>
+    with TickerProviderStateMixin {
   late TabController _tabController;
+  late AnimationController _fadeController;
+  late Animation<double> _fadeAnimation;
   bool _adminModeEnabled = false;
   bool _isAdmin = false;
 
   @override
   void initState() {
-    _tabController = TabController(length: 4, vsync: this);
-    _loadAdminStatus();
     super.initState();
+    _tabController = TabController(length: 4, vsync: this);
+    _fadeController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+    _fadeAnimation = CurvedAnimation(
+      parent: _fadeController,
+      curve: Curves.easeInOut,
+    );
+    _fadeController.forward();
+    _loadAdminStatus();
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    _fadeController.dispose();
+    super.dispose();
   }
 
   Future<void> _loadAdminStatus() async {
@@ -39,10 +59,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
     final isAdmin = await serviceManager.adminSettingsService.isAdminUser();
     final adminMode = await serviceManager.adminSettingsService.isAdminMode();
 
-    setState(() {
-      _isAdmin = isAdmin;
-      _adminModeEnabled = adminMode;
-    });
+    if (mounted) {
+      setState(() {
+        _isAdmin = isAdmin;
+        _adminModeEnabled = adminMode;
+      });
+    }
   }
 
   Future<void> _toggleAdminMode(bool enabled) async {
@@ -50,13 +72,26 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
     await serviceManager.adminSettingsService.setAdminMode(enabled);
     setState(() => _adminModeEnabled = enabled);
     if (!mounted) return;
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: const Text('Admin Mode Enabled'),
-        showCloseIcon: true,
+        content: Row(
+          children: [
+            Icon(
+              enabled ? Icons.admin_panel_settings : Icons.security,
+              color: Colors.white,
+            ),
+            const SizedBox(width: 12),
+            Text('Admin Mode ${enabled ? "Enabled" : "Disabled"}'),
+          ],
+        ),
+        backgroundColor: enabled
+            ? const Color(0xFF10B981)
+            : const Color(0xFF6B7280),
         behavior: SnackBarBehavior.floating,
-        clipBehavior: Clip.none,
-        margin: const EdgeInsets.all(12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        margin: const EdgeInsets.all(16),
+        duration: const Duration(seconds: 2),
       ),
     );
   }
@@ -75,13 +110,29 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
+      isDismissible: true,
+      enableDrag: true,
       builder: (context) => Container(
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
-        decoration: const BoxDecoration(
-          color: Color(0xFF6A5ACD),
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              const Color(0xFF6A5ACD),
+              const Color(0xFF8B7EC8),
+            ],
+          ),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: 20,
+              offset: const Offset(0, -4),
+            ),
+          ],
         ),
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -89,135 +140,90 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Drag Handle
               Center(
                 child: Container(
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.3),
+                    color: Colors.white.withOpacity(0.4),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
-              const Text(
-                'Edit Profile',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-                textAlign: TextAlign.center,
-              ),
               const SizedBox(height: 24),
-              TextField(
-                controller: nameController,
-                style: const TextStyle(color: Colors.white, fontSize: 16),
-                decoration: InputDecoration(
-                  labelText: 'Your Name',
-                  labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.white.withOpacity(0.3)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Colors.white),
-                  ),
-                  fillColor: Colors.white.withOpacity(0.1),
-                  filled: true,
-                ),
-                maxLength: 30,
-                textCapitalization: TextCapitalization.words,
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: locationController,
-                style: const TextStyle(color: Colors.white, fontSize: 16),
-                decoration: InputDecoration(
-                  labelText: 'Location',
-                  labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.white.withOpacity(0.3)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Colors.white),
-                  ),
-                  fillColor: Colors.white.withOpacity(0.1),
-                  filled: true,
-                  prefixIcon: Icon(Icons.location_on, color: Colors.white.withOpacity(0.7)),
-                ),
-                maxLength: 50,
-                textCapitalization: TextCapitalization.words,
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: gradeController,
-                style: const TextStyle(color: Colors.white, fontSize: 16),
-                decoration: InputDecoration(
-                  labelText: 'Current Grade',
-                  labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.white.withOpacity(0.3)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Colors.white),
-                  ),
-                  fillColor: Colors.white.withOpacity(0.1),
-                  filled: true,
-                  prefixIcon: Icon(Icons.school, color: Colors.white.withOpacity(0.7)),
-                ),
-                maxLength: 20,
-                textCapitalization: TextCapitalization.words,
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: teamController,
-                style: const TextStyle(color: Colors.white, fontSize: 16),
-                decoration: InputDecoration(
-                  labelText: 'Study Group/Team Name',
-                  labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.white.withOpacity(0.3)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Colors.white),
-                  ),
-                  fillColor: Colors.white.withOpacity(0.1),
-                  filled: true,
-                  prefixIcon: Icon(Icons.group, color: Colors.white.withOpacity(0.7)),
-                ),
-                maxLength: 30,
-                textCapitalization: TextCapitalization.words,
-              ),
-              const SizedBox(height: 24),
+
+              // Header with Icon
               Row(
                 children: [
-                  Expanded(
-                    child: TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      style: TextButton.styleFrom(
-                        backgroundColor: Colors.white.withOpacity(0.2),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: const Text(
-                        'Cancel',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      Icons.edit_rounded,
+                      color: Colors.white,
+                      size: 24,
                     ),
                   ),
                   const SizedBox(width: 16),
+                  const Text(
+                    'Edit Profile',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 28),
+
+              // Input Fields
+              _buildModernTextField(
+                controller: nameController,
+                label: 'Your Name',
+                icon: Icons.person_rounded,
+                maxLength: 30,
+              ),
+              const SizedBox(height: 16),
+              _buildModernTextField(
+                controller: locationController,
+                label: 'Location',
+                icon: Icons.location_on_rounded,
+                maxLength: 50,
+              ),
+              const SizedBox(height: 16),
+              _buildModernTextField(
+                controller: gradeController,
+                label: 'Current Grade',
+                icon: Icons.school_rounded,
+                maxLength: 20,
+              ),
+              const SizedBox(height: 16),
+              _buildModernTextField(
+                controller: teamController,
+                label: 'Study Group/Team Name',
+                icon: Icons.group_rounded,
+                maxLength: 30,
+              ),
+              const SizedBox(height: 28),
+
+              // Action Buttons
+              Row(
+                children: [
                   Expanded(
-                    child: ElevatedButton(
+                    child: _buildOutlinedButton(
+                      onPressed: () => Navigator.pop(context),
+                      label: 'Cancel',
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    flex: 2,
+                    child: _buildGradientButton(
                       onPressed: () async {
                         if (nameController.text.trim().isNotEmpty && currentProfile != null) {
                           final multiProfileService = ref.read(multiProfileServiceProvider);
@@ -243,28 +249,33 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
 
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text(success
-                                    ? 'Profile updated successfully!'
-                                    : 'Failed to update profile'),
+                                content: Row(
+                                  children: [
+                                    Icon(
+                                      success ? Icons.check_circle : Icons.error,
+                                      color: Colors.white,
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Text(success
+                                        ? 'Profile updated!'
+                                        : 'Update failed'),
+                                  ],
+                                ),
                                 backgroundColor: success
-                                    ? const Color(0xFF40E0D0)
-                                    : Colors.red,
+                                    ? const Color(0xFF10B981)
+                                    : const Color(0xFFEF4444),
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                margin: const EdgeInsets.all(16),
                               ),
                             );
                           }
                         }
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF40E0D0),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: const Text(
-                        'Save Changes',
-                        style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
+                      label: 'Save Changes',
+                      icon: Icons.check_rounded,
                     ),
                   ),
                 ],
@@ -277,93 +288,299 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
     );
   }
 
+  Widget _buildModernTextField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    int? maxLength,
+  }) {
+    return TextField(
+      controller: controller,
+      style: const TextStyle(color: Colors.white, fontSize: 16),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(
+          color: Colors.white.withOpacity(0.8),
+          fontSize: 14,
+        ),
+        prefixIcon: Icon(icon, color: Colors.white.withOpacity(0.8), size: 20),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(color: Colors.white.withOpacity(0.3)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: Colors.white, width: 2),
+        ),
+        fillColor: Colors.white.withOpacity(0.15),
+        filled: true,
+        counterStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
+      ),
+      maxLength: maxLength,
+      textCapitalization: TextCapitalization.words,
+    );
+  }
+
+  Widget _buildOutlinedButton({
+    required VoidCallback onPressed,
+    required String label,
+  }) {
+    return OutlinedButton(
+      onPressed: onPressed,
+      style: OutlinedButton.styleFrom(
+        foregroundColor: Colors.white,
+        side: BorderSide(color: Colors.white.withOpacity(0.5), width: 2),
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+      ),
+      child: Text(
+        label,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGradientButton({
+    required VoidCallback onPressed,
+    required String label,
+    IconData? icon,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFF40E0D0), Color(0xFF00CED1)],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF40E0D0).withOpacity(0.4),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (icon != null) ...[
+              Icon(icon, size: 20),
+              const SizedBox(width: 8),
+            ],
+            Text(
+              label,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final activeProfileAsync = ref.watch(activeProfileProvider);
 
     return Scaffold(
       backgroundColor: const Color(0xFF6A5ACD),
-      body: SafeArea(
-        child: activeProfileAsync.when(
-          data: (activeProfile) {
-            if (activeProfile == null) {
-              return const Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+      extendBodyBehindAppBar: true,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              const Color(0xFF6A5ACD),
+              const Color(0xFF8B7EC8),
+              const Color(0xFF6A5ACD).withOpacity(0.8),
+            ],
+          ),
+        ),
+        child: SafeArea(
+          child: FadeTransition(
+            opacity: _fadeAnimation,
+            child: activeProfileAsync.when(
+              data: (activeProfile) {
+                if (activeProfile == null) {
+                  return _buildEmptyState();
+                }
+
+                return Column(
                   children: [
-                    Icon(Icons.person_off, color: Colors.white, size: 64),
-                    SizedBox(height: 16),
-                    Text(
-                      'No active profile found',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    _buildTopAppBar(activeProfile),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 8),
+                            _buildGameProfileCard(activeProfile),
+                            const SizedBox(height: 20),
+                            _buildTabSection(),
+                            const SizedBox(height: 16),
+                            SizedBox(
+                              height: 420,
+                              child: TabBarView(
+                                controller: _tabController,
+                                physics: const BouncingScrollPhysics(),
+                                children: const [
+                                  CollectionTab(),
+                                  StatisticsTab(),
+                                  AchievementsTab(),
+                                  CreatedQuestionsTab(),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
-                ),
-              );
-            }
+                );
+              },
+              loading: () => _buildLoadingState(),
+              error: (error, stack) => _buildErrorState(error),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
-            return Column(
-              children: [
-                _buildTopAppBar(activeProfile),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        _buildGameProfileCard(activeProfile),
-                        const SizedBox(height: 16),
-                        _buildTabSection(),
-                        const SizedBox(height: 16),
-                        SizedBox(
-                          height: 400,
-                          child: TabBarView(
-                            controller: _tabController,
-                            children: const [
-                              CollectionTab(),
-                              StatisticsTab(),
-                              AchievementsTab(),
-                              CreatedQuestionsTab(),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },
-          loading: () => const Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(color: Colors.white),
-                SizedBox(height: 16),
-                Text(
-                  'Loading profile...',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-              ],
+  Widget _buildEmptyState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.1),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.person_off_rounded,
+              color: Colors.white,
+              size: 64,
             ),
           ),
-          error: (error, stack) => Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.error, color: Colors.red, size: 64),
-                const SizedBox(height: 16),
-                Text(
-                  'Error loading profile: $error',
-                  style: const TextStyle(color: Colors.white, fontSize: 16),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () => ref.refresh(activeProfileProvider),
-                  child: const Text('Retry'),
-                ),
-              ],
+          const SizedBox(height: 24),
+          const Text(
+            'No active profile found',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
             ),
           ),
+          const SizedBox(height: 8),
+          Text(
+            'Please create or select a profile',
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.7),
+              fontSize: 14,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLoadingState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.1),
+              shape: BoxShape.circle,
+            ),
+            child: const CircularProgressIndicator(
+              color: Colors.white,
+              strokeWidth: 3,
+            ),
+          ),
+          const SizedBox(height: 24),
+          const Text(
+            'Loading profile...',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorState(Object error) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.red.withOpacity(0.2),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.error_rounded,
+                color: Colors.red,
+                size: 64,
+              ),
+            ),
+            const SizedBox(height: 24),
+            const Text(
+              'Error loading profile',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              error.toString(),
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.7),
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 24),
+            _buildGradientButton(
+              onPressed: () => ref.refresh(activeProfileProvider),
+              label: 'Retry',
+              icon: Icons.refresh_rounded,
+            ),
+          ],
         ),
       ),
     );
@@ -379,60 +596,84 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
           data: (stats) => Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              AnimatedStatBox(
-                label: 'Quizzes',
-                value: profileStats['totalQuizzes'] ?? stats.totalQuizzes,
-                gradientColors: const [Color(0xFF40E0D0), Color(0xFF00CED1)],
+              Expanded(
+                child: AnimatedStatBox(
+                  label: 'Quizzes',
+                  value: profileStats['totalQuizzes'] ?? stats.totalQuizzes,
+                  gradientColors: const [Color(0xFF40E0D0), Color(0xFF00CED1)],
+                ),
               ),
-              AnimatedStatBox(
-                label: 'Correct',
-                value: profileStats['correctAnswers'] ?? stats.correctAnswers,
-                gradientColors: const [Color(0xFF26de81), Color(0xFF20bf6b)],
+              const SizedBox(width: 12),
+              Expanded(
+                child: AnimatedStatBox(
+                  label: 'Correct',
+                  value: profileStats['correctAnswers'] ?? stats.correctAnswers,
+                  gradientColors: const [Color(0xFF26de81), Color(0xFF20bf6b)],
+                ),
               ),
-              AnimatedStatBox(
-                label: 'Streak',
-                value: profileStats['currentStreak'] ?? stats.currentStreak,
-                gradientColors: const [Color(0xFFFF6B6B), Color(0xFFEE5A24)],
+              const SizedBox(width: 12),
+              Expanded(
+                child: AnimatedStatBox(
+                  label: 'Streak',
+                  value: profileStats['currentStreak'] ?? stats.currentStreak,
+                  gradientColors: const [Color(0xFFFF6B6B), Color(0xFFEE5A24)],
+                ),
               ),
             ],
           ),
           loading: () => Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              AnimatedStatBox(
-                label: 'Quizzes',
-                value: profileStats['totalQuizzes'] ?? 0,
-                gradientColors: const [Color(0xFF40E0D0), Color(0xFF00CED1)],
+              Expanded(
+                child: AnimatedStatBox(
+                  label: 'Quizzes',
+                  value: profileStats['totalQuizzes'] ?? 0,
+                  gradientColors: const [Color(0xFF40E0D0), Color(0xFF00CED1)],
+                ),
               ),
-              AnimatedStatBox(
-                label: 'Correct',
-                value: profileStats['correctAnswers'] ?? 0,
-                gradientColors: const [Color(0xFF26de81), Color(0xFF20bf6b)],
+              const SizedBox(width: 12),
+              Expanded(
+                child: AnimatedStatBox(
+                  label: 'Correct',
+                  value: profileStats['correctAnswers'] ?? 0,
+                  gradientColors: const [Color(0xFF26de81), Color(0xFF20bf6b)],
+                ),
               ),
-              AnimatedStatBox(
-                label: 'Streak',
-                value: profileStats['currentStreak'] ?? 0,
-                gradientColors: const [Color(0xFFFF6B6B), Color(0xFFEE5A24)],
+              const SizedBox(width: 12),
+              Expanded(
+                child: AnimatedStatBox(
+                  label: 'Streak',
+                  value: profileStats['currentStreak'] ?? 0,
+                  gradientColors: const [Color(0xFFFF6B6B), Color(0xFFEE5A24)],
+                ),
               ),
             ],
           ),
           error: (error, stack) => Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              AnimatedStatBox(
-                label: 'Quizzes',
-                value: profileStats['totalQuizzes'] ?? 0,
-                gradientColors: const [Color(0xFF40E0D0), Color(0xFF00CED1)],
+              Expanded(
+                child: AnimatedStatBox(
+                  label: 'Quizzes',
+                  value: profileStats['totalQuizzes'] ?? 0,
+                  gradientColors: const [Color(0xFF40E0D0), Color(0xFF00CED1)],
+                ),
               ),
-              AnimatedStatBox(
-                label: 'Correct',
-                value: profileStats['correctAnswers'] ?? 0,
-                gradientColors: const [Color(0xFF26de81), Color(0xFF20bf6b)],
+              const SizedBox(width: 12),
+              Expanded(
+                child: AnimatedStatBox(
+                  label: 'Correct',
+                  value: profileStats['correctAnswers'] ?? 0,
+                  gradientColors: const [Color(0xFF26de81), Color(0xFF20bf6b)],
+                ),
               ),
-              AnimatedStatBox(
-                label: 'Streak',
-                value: profileStats['currentStreak'] ?? 0,
-                gradientColors: const [Color(0xFFFF6B6B), Color(0xFFEE5A24)],
+              const SizedBox(width: 12),
+              Expanded(
+                child: AnimatedStatBox(
+                  label: 'Streak',
+                  value: profileStats['currentStreak'] ?? 0,
+                  gradientColors: const [Color(0xFFFF6B6B), Color(0xFFEE5A24)],
+                ),
               ),
             ],
           ),
@@ -442,217 +683,279 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
   }
 
   Widget _buildTopAppBar(ProfileData activeProfile) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            const Color(0xFF6A5ACD).withOpacity(0.9),
-            const Color(0xFF483D8B).withOpacity(0.8),
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
+    return ClipRRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Colors.white.withOpacity(0.15),
+                Colors.white.withOpacity(0.05),
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+            border: Border(
+              bottom: BorderSide(
+                color: Colors.white.withOpacity(0.1),
+                width: 1,
+              ),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.white.withOpacity(0.25),
+                        Colors.white.withOpacity(0.15),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.3),
+                      width: 1,
+                    ),
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () => context.pop(),
+                      borderRadius: BorderRadius.circular(14),
+                      child: const Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Icon(
+                          Icons.arrow_back_rounded,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    '${activeProfile.name}\'s Profile',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.white.withOpacity(0.25),
+                        Colors.white.withOpacity(0.15),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.3),
+                      width: 1,
+                    ),
+                  ),
+                  child: PopupMenuButton<String>(
+                    icon: const Icon(Icons.more_vert_rounded, color: Colors.white),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    color: Colors.white,
+                    elevation: 8,
+                    onSelected: (value) {
+                      switch (value) {
+                        case 'switch':
+                          context.push('/profile-selection');
+                          break;
+                        case 'theme':
+                          context.push('/gradient-editor');
+                          break;
+                        case 'settings':
+                          context.push('/user-settings');
+                          break;
+                      }
+                    },
+                    itemBuilder: (context) => [
+                      _buildPopupMenuItem(
+                        value: 'switch',
+                        icon: Icons.switch_account_rounded,
+                        label: 'Switch Profile',
+                      ),
+                      _buildPopupMenuItem(
+                        value: 'theme',
+                        icon: Icons.palette_rounded,
+                        label: 'Customize Theme',
+                      ),
+                      _buildPopupMenuItem(
+                        value: 'settings',
+                        icon: Icons.settings_rounded,
+                        label: 'Settings',
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: IconButton(
-                onPressed: () => context.pop(),
-                icon: const Icon(Icons.arrow_back, color: Colors.white, size: 24),
-              ),
+    );
+  }
+
+  PopupMenuItem<String> _buildPopupMenuItem({
+    required String value,
+    required IconData icon,
+    required String label,
+  }) {
+    return PopupMenuItem(
+      value: value,
+      child: Row(
+        children: [
+          Icon(icon, size: 20, color: const Color(0xFF6A5ACD)),
+          const SizedBox(width: 12),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
             ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Text(
-                '${activeProfile.name}\'s Profile',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  shadows: [
-                    Shadow(
-                      color: Colors.black26,
-                      offset: Offset(0, 1),
-                      blurRadius: 2,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: PopupMenuButton<String>(
-                icon: const Icon(Icons.more_vert, color: Colors.white),
-                onSelected: (value) {
-                  switch (value) {
-                    case 'switch':
-                      context.push('/profile-selection');
-                      break;
-                    case 'theme':
-                      context.push('/gradient-editor');
-                      break;
-                    case 'settings':
-                      context.push('/user-settings');
-                      break;
-                  }
-                },
-                itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    value: 'switch',
-                    child: Row(
-                      children: [
-                        Icon(Icons.switch_account),
-                        SizedBox(width: 8),
-                        Text('Switch Profile'),
-                      ],
-                    ),
-                  ),
-                  const PopupMenuItem(
-                    value: 'theme',
-                    child: Row(
-                      children: [
-                        Icon(Icons.palette),
-                        SizedBox(width: 8),
-                        Text('Customize 3D Theme'),
-                      ],
-                    ),
-                  ),
-                  const PopupMenuItem(
-                    value: 'settings',
-                    child: Row(
-                      children: [
-                        Icon(Icons.settings),
-                        SizedBox(width: 8),
-                        Text('User Settings'),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildGameProfileCard(ProfileData activeProfile) {
     return Container(
-      margin: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.3),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
+            blurRadius: 24,
+            offset: const Offset(0, 12),
           ),
         ],
-        image: const DecorationImage(
-          image: AssetImage('assets/images/backgrounds/geometry_background.jpg'),
-          fit: BoxFit.cover,
-        ),
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24),
-          gradient: LinearGradient(
-            colors: [
-              const Color(0xFF8A2BE2).withOpacity(0.85),
-              const Color(0xFF9370DB).withOpacity(0.80),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(28),
         child: Stack(
           children: [
-            Positioned(
-              top: 20,
-              left: 20,
+            // Background Image
+            Positioned.fill(
+              child: Image.asset(
+                'assets/images/backgrounds/geometry_background.jpg',
+                fit: BoxFit.cover,
+              ),
+            ),
+
+            // Gradient Overlay
+            Positioned.fill(
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.4),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Tooltip(
-                  message: 'Reset Avatar',
-                  child: IconButton(
-                    icon: const Icon(Icons.restore, color: Colors.white70, size: 20),
-                    onPressed: () async {
-                      await ref.read(profileAvatarControllerProvider.notifier).resetAvatar();
-                    },
+                  gradient: LinearGradient(
+                    colors: [
+                      const Color(0xFF8A2BE2).withOpacity(0.92),
+                      const Color(0xFF9370DB).withOpacity(0.88),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
                 ),
               ),
             ),
+
+            // Top Action Buttons
+            Positioned(
+              top: 20,
+              left: 20,
+              child: _buildGlassButton(
+                icon: Icons.restore_rounded,
+                tooltip: 'Reset Avatar',
+                onPressed: () async {
+                  await ref.read(profileAvatarControllerProvider.notifier).resetAvatar();
+                },
+              ),
+            ),
+
             Positioned(
               top: 20,
               right: 20,
               child: Row(
                 children: [
-                  if (_isAdmin)
-                    Container(
-                      margin: const EdgeInsets.only(right: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.4),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Tooltip(
-                        message: _adminModeEnabled ? 'Disable Admin Mode' : 'Enable Admin Mode',
-                        child: IconButton(
-                          icon: Icon(
-                            _adminModeEnabled ? Icons.toggle_on : Icons.toggle_off,
-                            color: _adminModeEnabled ? Colors.greenAccent : Colors.white70,
-                            size: 24,
-                          ),
-                          onPressed: () => _toggleAdminMode(!_adminModeEnabled),
-                        ),
-                      ),
+                  if (_isAdmin) ...[
+                    _buildGlassButton(
+                      icon: _adminModeEnabled ? Icons.toggle_on : Icons.toggle_off_outlined,
+                      tooltip: _adminModeEnabled ? 'Disable Admin' : 'Enable Admin',
+                      onPressed: () => _toggleAdminMode(!_adminModeEnabled),
+                      iconColor: _adminModeEnabled ? const Color(0xFF10B981) : Colors.white70,
                     ),
+                    const SizedBox(width: 8),
+                  ],
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.4),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      'Level ${activeProfile.level}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.white.withOpacity(0.25),
+                          Colors.white.withOpacity(0.15),
+                        ],
                       ),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: Colors.white.withOpacity(0.3),
+                        width: 1,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.star_rounded,
+                          color: Color(0xFFFBBF24),
+                          size: 16,
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          'Level ${activeProfile.level}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
+
+            // Content
             Padding(
               padding: const EdgeInsets.all(24),
               child: Column(
                 children: [
                   const SizedBox(height: 60),
                   SizedBox(
-                    height: 250,
+                    height: 240,
                     child: _buildCharacterSection(activeProfile),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 24),
                   _buildUserNameSection(activeProfile),
                   const SizedBox(height: 24),
                   _buildAnimatedStatsSection(activeProfile),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 24),
                   _buildEducationalProgress(activeProfile),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 24),
                   _buildFriendsButton(),
                   const SizedBox(height: 16),
                   _buildStudyGroupSection(activeProfile),
@@ -670,50 +973,98 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
     );
   }
 
-  Widget _buildFriendsButton() {
-    return GestureDetector(
-      onTap: () => context.push('/friends'),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF40E0D0), Color(0xFF00CED1)],
-          ),
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF40E0D0).withOpacity(0.3),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.people,
-              color: Colors.white,
-              size: 20,
-            ),
-            const SizedBox(width: 8),
-            const Text(
-              'Friends',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                shadows: [
-                  Shadow(
-                    color: Colors.black26,
-                    offset: Offset(0, 1),
-                    blurRadius: 2,
-                  ),
+  Widget _buildGlassButton({
+    required IconData icon,
+    required String tooltip,
+    required VoidCallback onPressed,
+    Color iconColor = Colors.white70,
+  }) {
+    return Tooltip(
+      message: tooltip,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(14),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Colors.white.withOpacity(0.25),
+                  Colors.white.withOpacity(0.15),
                 ],
               ),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: Colors.white.withOpacity(0.3),
+                width: 1,
+              ),
             ),
-          ],
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: onPressed,
+                borderRadius: BorderRadius.circular(14),
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Icon(icon, color: iconColor, size: 20),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFriendsButton() {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => context.push('/friends'),
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [Color(0xFF40E0D0), Color(0xFF00CED1)],
+            ),
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF40E0D0).withOpacity(0.4),
+                blurRadius: 12,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(
+                  Icons.people_rounded,
+                  color: Colors.white,
+                  size: 18,
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Text(
+                'Friends',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -730,11 +1081,23 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
             width: double.infinity,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.black.withOpacity(0.6),
-              border: Border.all(
-                color: Colors.white.withOpacity(0.2),
-                width: 2,
+              gradient: LinearGradient(
+                colors: [
+                  Colors.white.withOpacity(0.15),
+                  Colors.white.withOpacity(0.05),
+                ],
               ),
+              border: Border.all(
+                color: Colors.white.withOpacity(0.3),
+                width: 3,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
+                ),
+              ],
             ),
             child: Stack(
               alignment: Alignment.center,
@@ -747,30 +1110,40 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
                   ),
                 ),
                 Positioned(
-                  bottom: 20,
-                  right: 20,
-                  child: GestureDetector(
-                    onTap: () {
-                      showProfileImagePickerDialog(context, controller);
-                    },
-                    child: Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.3),
-                            blurRadius: 8,
-                            offset: const Offset(0, 2),
+                  bottom: 16,
+                  right: 16,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () {
+                        showProfileImagePickerDialog(context, controller);
+                      },
+                      customBorder: const CircleBorder(),
+                      child: Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFF40E0D0), Color(0xFF00CED1)],
                           ),
-                        ],
-                      ),
-                      child: const Icon(
-                        Icons.edit,
-                        size: 18,
-                        color: Colors.black87,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF40E0D0).withOpacity(0.5),
+                              blurRadius: 12,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                          border: Border.all(
+                            color: Colors.white,
+                            width: 2,
+                          ),
+                        ),
+                        child: const Icon(
+                          Icons.edit_rounded,
+                          size: 20,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -789,41 +1162,37 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
 
     Widget avatarPreview;
 
-    if (controller.imageFile == null && controller.avatarPath == null && activeProfile.avatar == null) {
+    if (controller.imageFile == null &&
+        controller.avatarPath == null &&
+        activeProfile.avatar == null) {
       avatarPreview = ShimmerAvatar(
         avatarPath: '',
         status: AvatarStatus.online,
         isLoading: true,
-        radius: 125,
-        badgeType: activeProfile.isPremium ? AvatarBadgeType.premium : AvatarBadgeType.level,
+        radius: 120,
+        badgeType: activeProfile.isPremium
+            ? AvatarBadgeType.premium
+            : AvatarBadgeType.level,
         badgeText: 'L${activeProfile.level}',
-        showStatusIndicator: false, // Hide status for main profile display
+        showStatusIndicator: false,
       );
     } else if (imageFile != null) {
-      avatarPreview = Container(
+      avatarPreview = Image.file(
+        imageFile,
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          image: DecorationImage(
-            image: FileImage(imageFile),
-            fit: BoxFit.cover,
-          ),
-        ),
+        fit: BoxFit.cover,
       );
-    } else if (avatarPath != null && (avatarPath.endsWith('.png') || avatarPath.endsWith('.jpg'))) {
-      avatarPreview = Container(
+    } else if (avatarPath != null &&
+        (avatarPath.endsWith('.png') || avatarPath.endsWith('.jpg'))) {
+      avatarPreview = Image.asset(
+        avatarPath,
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          image: DecorationImage(
-            image: AssetImage(avatarPath),
-            fit: BoxFit.cover,
-          ),
-        ),
+        fit: BoxFit.cover,
       );
-    } else if (avatarPath != null && (avatarPath.endsWith('.glb') || avatarPath.endsWith('.obj'))) {
+    } else if (avatarPath != null &&
+        (avatarPath.endsWith('.glb') || avatarPath.endsWith('.obj'))) {
       avatarPreview = DepthCard3D(
         config: DepthCardConfig(
           modelAssetPath: avatarPath,
@@ -833,30 +1202,29 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
           height: double.infinity,
           parallaxDepth: 0.2,
           borderRadius: 150,
-          backgroundImage: const AssetImage('assets/images/backgrounds/geometry_background.jpg'),
+          backgroundImage: const AssetImage(
+            'assets/images/backgrounds/geometry_background.jpg',
+          ),
           onTap: () {},
           overlayActions: [],
         ),
       );
     } else if (activeProfile.avatar != null) {
-      avatarPreview = Container(
+      avatarPreview = Image.asset(
+        activeProfile.avatar!,
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          image: DecorationImage(
-            image: AssetImage(activeProfile.avatar!),
-            fit: BoxFit.cover,
-          ),
-        ),
+        fit: BoxFit.cover,
       );
     } else {
       avatarPreview = Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.white,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              const Color(0xFF40E0D0),
+              const Color(0xFF00CED1),
+            ],
+          ),
         ),
         child: Center(
           child: Text(
@@ -864,7 +1232,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
             style: const TextStyle(
               fontSize: 80,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF6A5ACD),
+              color: Colors.white,
             ),
           ),
         ),
@@ -889,89 +1257,61 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
-                  shadows: [
-                    Shadow(
-                      color: Colors.black54,
-                      offset: Offset(0, 2),
-                      blurRadius: 4,
-                    ),
-                  ],
+                  letterSpacing: 0.5,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            const SizedBox(width: 8),
-            GestureDetector(
-              onTap: () => _showEditNameBottomSheet(context, activeProfile),
-              child: Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Icon(
-                  Icons.edit,
-                  color: Colors.white,
-                  size: 18,
+            const SizedBox(width: 12),
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () => _showEditNameBottomSheet(context, activeProfile),
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.white.withOpacity(0.25),
+                        Colors.white.withOpacity(0.15),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.3),
+                      width: 1,
+                    ),
+                  ),
+                  child: const Icon(
+                    Icons.edit_rounded,
+                    color: Colors.white,
+                    size: 16,
+                  ),
                 ),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 4),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        const SizedBox(height: 12),
+        Wrap(
+          spacing: 16,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
           children: [
-            Icon(
-              Icons.school,
-              color: Colors.white.withOpacity(0.7),
-              size: 14,
+            _buildInfoChip(
+              icon: Icons.school_rounded,
+              label: activeProfile.ageGroup?.toUpperCase() ?? 'Student',
             ),
-            const SizedBox(width: 4),
-            Text(
-              activeProfile.ageGroup?.toUpperCase() ?? 'Student',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.white.withOpacity(0.7),
-                fontWeight: FontWeight.w500,
+            if (activeProfile.country != null)
+              _buildInfoChip(
+                icon: Icons.location_on_rounded,
+                label: activeProfile.country!,
               ),
-            ),
-            if (activeProfile.country != null) ...[
-              const SizedBox(width: 12),
-              Icon(
-                Icons.location_on,
-                color: Colors.white.withOpacity(0.7),
-                size: 14,
-              ),
-              const SizedBox(width: 4),
-              Text(
-                activeProfile.country!,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.white.withOpacity(0.7),
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ],
-        ),
-        const SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.favorite,
-              color: Colors.white.withOpacity(0.7),
-              size: 14,
-            ),
-            const SizedBox(width: 4),
-            Text(
-              'Loves $favoriteSubject',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.white.withOpacity(0.8),
-                fontStyle: FontStyle.italic,
-              ),
+            _buildInfoChip(
+              icon: Icons.favorite_rounded,
+              label: 'Loves $favoriteSubject',
+              color: const Color(0xFFFF6B6B),
             ),
           ],
         ),
@@ -979,146 +1319,167 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
     );
   }
 
+  Widget _buildInfoChip({
+    required IconData icon,
+    required String label,
+    Color? color,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.2),
+          width: 1,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            color: color ?? Colors.white.withOpacity(0.9),
+            size: 14,
+          ),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: color ?? Colors.white.withOpacity(0.9),
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildEducationalProgress(ProfileData activeProfile) {
     return Consumer(
       builder: (context, ref, child) {
-        final xp = ref.watch(profileAwareXPProvider.notifier).state;
         final educationalStatsAsync = ref.watch(educationalStatsProvider);
 
         return educationalStatsAsync.when(
-          data: (stats) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Learning Progress',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
+          data: (stats) => _buildProgressContent(activeProfile),
+          loading: () => _buildProgressContent(activeProfile),
+          error: (error, stack) => _buildProgressContent(activeProfile),
+        );
+      },
+    );
+  }
+
+  Widget _buildProgressContent(ProfileData activeProfile) {
+    final progress = (activeProfile.currentXP / activeProfile.maxXP).clamp(0.0, 1.0);
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.white.withOpacity(0.15),
+            Colors.white.withOpacity(0.05),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.2),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  const Icon(
+                    Icons.trending_up_rounded,
+                    color: Colors.white,
+                    size: 18,
+                  ),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'Learning Progress',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
                     ),
-                    Text(
-                      '${activeProfile.currentXP} XP',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
+                  ),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF40E0D0), Color(0xFF00CED1)],
+                  ),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                const SizedBox(height: 4),
+                child: Text(
+                  '${activeProfile.currentXP} XP',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Stack(
+              children: [
                 Container(
                   width: double.infinity,
-                  height: 8,
+                  height: 10,
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Stack(
-                    children: [
-                      FractionallySizedBox(
-                        widthFactor: (activeProfile.currentXP / activeProfile.maxXP).clamp(0.0, 1.0),
-                        child: Container(
-                          height: 8,
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFF40E0D0), Color(0xFF00CED1)],
-                            ),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                        ),
-                      ),
-                    ],
+                    color: Colors.white.withOpacity(0.2),
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  'Next Level: ${activeProfile.maxXP - activeProfile.currentXP} XP to go',
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.7),
-                    fontSize: 12,
+                FractionallySizedBox(
+                  widthFactor: progress,
+                  child: Container(
+                    height: 10,
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Color(0xFF40E0D0), Color(0xFF00CED1)],
+                      ),
+                    ),
                   ),
                 ),
               ],
-            );
-          },
-          loading: () => Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Learning Progress',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text(
-                    '${activeProfile.currentXP} XP',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
+              Text(
+                'Next Level in ${activeProfile.maxXP - activeProfile.currentXP} XP',
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.8),
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-              const SizedBox(height: 4),
-              Container(
-                width: double.infinity,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.3),
-                  borderRadius: BorderRadius.circular(4),
+              Text(
+                '${(progress * 100).toInt()}%',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],
           ),
-          error: (error, stack) => Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Learning Progress',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text(
-                    '${activeProfile.currentXP} XP',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 4),
-              Container(
-                width: double.infinity,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.3),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
+        ],
+      ),
     );
   }
 
@@ -1127,60 +1488,109 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(12),
+        gradient: LinearGradient(
+          colors: [
+            Colors.white.withOpacity(0.15),
+            Colors.white.withOpacity(0.05),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.2),
+          width: 1,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Study Group',
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 8),
           Row(
             children: [
-              Text(
-                teamName,
-                style: const TextStyle(
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  Icons.group_rounded,
                   color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                  size: 18,
                 ),
               ),
-              const Spacer(),
+              const SizedBox(width: 12),
+              const Text(
+                'Study Group',
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  teamName,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
               Row(
                 children: [
                   _buildTeamMemberAvatar('assets/images/avatars/avatar-5.png'),
                   Transform.translate(
-                    offset: const Offset(-6, 0),
+                    offset: const Offset(-8, 0),
                     child: _buildTeamMemberAvatar('assets/images/avatars/avatar-5.png'),
                   ),
                   Transform.translate(
-                    offset: const Offset(-12, 0),
+                    offset: const Offset(-16, 0),
                     child: _buildTeamMemberAvatar('assets/images/avatars/avatar-5.png'),
                   ),
                   if (activeProfile.isPremium) ...[
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 4),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.amber,
-                        borderRadius: BorderRadius.circular(12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
                       ),
-                      child: const Text(
-                        'PRO',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFFFBBF24), Color(0xFFF59E0B)],
                         ),
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFFFBBF24).withOpacity(0.4),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: const Row(
+                        children: [
+                          Icon(
+                            Icons.workspace_premium_rounded,
+                            size: 12,
+                            color: Colors.white,
+                          ),
+                          SizedBox(width: 4),
+                          Text(
+                            'PRO',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -1194,14 +1604,28 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
   }
 
   Widget _buildTeamMemberAvatar(String avatarPath) {
-    return ShimmerAvatar(
-      avatarPath: avatarPath,
-      status: AvatarStatus.online,
-      isLoading: false,
-      radius: 15,
-      showStatusIndicator: false,
-      borderColor: Colors.white,
-      borderWidth: 1.5,
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: Colors.white,
+          width: 2,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: ShimmerAvatar(
+        avatarPath: avatarPath,
+        status: AvatarStatus.online,
+        isLoading: false,
+        radius: 16,
+        showStatusIndicator: false,
+      ),
     );
   }
 
@@ -1209,127 +1633,148 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
     return Row(
       children: [
         Expanded(
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.5),
-              borderRadius: BorderRadius.circular(8),
+          child: _buildActionButton(
+            label: 'Recent Quizzes',
+            icon: Icons.quiz_rounded,
+            gradient: LinearGradient(
+              colors: [
+                Colors.white.withOpacity(0.15),
+                Colors.white.withOpacity(0.05),
+              ],
             ),
-            child: const Center(
-              child: Text(
-                'Recent Quiz Results',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
+            onTap: () {},
           ),
         ),
         const SizedBox(width: 12),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          decoration: BoxDecoration(
+        Expanded(
+          child: _buildActionButton(
+            label: 'Study Chat',
+            icon: Icons.chat_bubble_rounded,
             gradient: const LinearGradient(
               colors: [Color(0xFF40E0D0), Color(0xFF00CED1)],
             ),
-            borderRadius: BorderRadius.circular(8),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFF40E0D0).withOpacity(0.4),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: const Text(
-            'Study Chat',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              shadows: [
-                Shadow(
-                  color: Colors.black26,
-                  offset: Offset(0, 1),
-                  blurRadius: 2,
-                ),
-              ],
-            ),
+            onTap: () {},
           ),
         ),
       ],
     );
   }
 
+  Widget _buildActionButton({
+    required String label,
+    required IconData icon,
+    required Gradient gradient,
+    required VoidCallback onTap,
+  }) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          decoration: BoxDecoration(
+            gradient: gradient,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.2),
+              width: 1,
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, color: Colors.white, size: 16),
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildDeveloperActions(ProfileData activeProfile) {
     return Column(
       children: [
-        // Enhanced Profile Button
-        GestureDetector(
-          onTap: () {
-            // Navigate to Enhanced Profile Screen
-            // Note: You'll need to pass the appropriate userId and currentUserId
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const EnhancedProfileScreen(
-                  userId: 'current_user_id', // Replace with actual user ID
-                  currentUserId: 'current_user_id', // Replace with actual current user ID
-                  isOwnProfile: true,
-                ),
-              ),
-            );
-          },
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-              ),
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF6366F1).withOpacity(0.3),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.person_rounded,
-                  color: Colors.white,
-                  size: 20,
-                ),
-                const SizedBox(width: 8),
-                const Text(
-                  'View Enhanced Profile',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
+        Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const EnhancedProfileScreen(
+                    userId: 'current_user_id',
+                    currentUserId: 'current_user_id',
+                    isOwnProfile: true,
                   ),
                 ),
-              ],
+              );
+            },
+            borderRadius: BorderRadius.circular(16),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+                ),
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF6366F1).withOpacity(0.4),
+                    blurRadius: 12,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(
+                      Icons.person_rounded,
+                      color: Colors.white,
+                      size: 18,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  const Text(
+                    'View Enhanced Profile',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.3,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-
-        // Admin Mode Toggle (only visible if user is admin)
         if (_isAdmin) ...[
           const SizedBox(height: 12),
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
               gradient: _adminModeEnabled
                   ? const LinearGradient(
-                colors: [Color(0xFFEC4899), Color(0xFFF59E0B)],
+                colors: [Color(0xFF10B981), Color(0xFF059669)],
               )
                   : LinearGradient(
                 colors: [
@@ -1337,26 +1782,35 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
                   Colors.grey.shade600,
                 ],
               ),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
                   color: (_adminModeEnabled
-                      ? const Color(0xFFEC4899)
+                      ? const Color(0xFF10B981)
                       : Colors.grey.shade700)
-                      .withOpacity(0.3),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
+                      .withOpacity(0.4),
+                  blurRadius: 12,
+                  offset: const Offset(0, 6),
                 ),
               ],
             ),
             child: Row(
               children: [
-                Icon(
-                  _adminModeEnabled ? Icons.admin_panel_settings : Icons.security,
-                  color: Colors.white,
-                  size: 24,
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    _adminModeEnabled
+                        ? Icons.admin_panel_settings_rounded
+                        : Icons.security_rounded,
+                    color: Colors.white,
+                    size: 24,
+                  ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -1365,16 +1819,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
                         'Admin Mode',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 14,
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        _adminModeEnabled ? 'Enabled' : 'Disabled',
+                        _adminModeEnabled ? 'All features unlocked' : 'Standard access',
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.8),
-                          fontSize: 11,
+                          fontSize: 12,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -1401,31 +1855,53 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTicker
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.95),
-        borderRadius: BorderRadius.circular(16),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+            color: Colors.black.withOpacity(0.15),
+            blurRadius: 16,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
-      child: TabBar(
-        controller: _tabController,
-        indicatorColor: const Color(0xFF6A5ACD),
-        indicatorWeight: 3,
-        indicatorSize: TabBarIndicatorSize.label,
-        labelColor: const Color(0xFF6A5ACD),
-        unselectedLabelColor: Colors.grey[600],
-        labelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-        unselectedLabelStyle: const TextStyle(fontSize: 11),
-        tabs: const [
-          Tab(icon: Icon(Icons.grid_view, size: 22), text: 'Collection'),
-          Tab(icon: Icon(Icons.bar_chart, size: 22), text: 'Statistics'),
-          Tab(icon: Icon(Icons.emoji_events, size: 22), text: 'Achievements'),
-          Tab(icon: Icon(Icons.create, size: 22), text: 'Questions'),
-        ],
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: TabBar(
+          controller: _tabController,
+          indicatorColor: const Color(0xFF6A5ACD),
+          indicatorWeight: 3,
+          indicatorSize: TabBarIndicatorSize.tab,
+          labelColor: const Color(0xFF6A5ACD),
+          unselectedLabelColor: Colors.grey[600],
+          labelStyle: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.bold,
+          ),
+          unselectedLabelStyle: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+          ),
+          dividerColor: Colors.transparent,
+          tabs: const [
+            Tab(
+              icon: Icon(Icons.grid_view_rounded, size: 22),
+              text: 'Collection',
+            ),
+            Tab(
+              icon: Icon(Icons.bar_chart_rounded, size: 22),
+              text: 'Stats',
+            ),
+            Tab(
+              icon: Icon(Icons.emoji_events_rounded, size: 22),
+              text: 'Awards',
+            ),
+            Tab(
+              icon: Icon(Icons.create_rounded, size: 22),
+              text: 'Created',
+            ),
+          ],
+        ),
       ),
     );
   }

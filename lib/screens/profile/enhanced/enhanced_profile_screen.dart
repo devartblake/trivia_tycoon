@@ -1,11 +1,27 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../../../core/services/presence/rich_presence_service.dart';
 import '../../../game/models/user_presence_models.dart';
 import '../../../ui_components/presence/rich_presence_indicator.dart';
+import 'sections/profile_header_section.dart';
+import 'sections/profile_stats_section.dart';
+import 'sections/arcade_summary_section.dart';
+import 'sections/missions_preview_section.dart';
+import 'sections/daily_bonus_section.dart';
+import 'sections/profile_actions_section.dart';
 import 'widgets/game_stats_widget.dart';
 import 'widgets/profile_header.dart';
 import 'mutual_friends_screen.dart';
 
+/// Enhanced Profile Screen with arcade integration, missions, and daily bonus
+///
+/// Features:
+/// - Component extraction for maintainability
+/// - Arcade best runs and local leaderboard preview
+/// - Mission progress (daily/weekly/season)
+/// - Daily bonus status and streak
+/// - Title system
+/// - Modern Material 3 design with glassmorphism
 class EnhancedProfileScreen extends StatefulWidget {
   final String userId;
   final String currentUserId;
@@ -23,32 +39,81 @@ class EnhancedProfileScreen extends StatefulWidget {
 }
 
 class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   final RichPresenceService _presenceService = RichPresenceService();
   late TabController _tabController;
+  late AnimationController _fadeController;
+  late Animation<double> _fadeAnimation;
 
-  // Mock user data
+  // Mock user data - Replace with actual data providers
   final Map<String, dynamic> _userData = {
     'displayName': 'Alex Johnson',
     'username': '@alexj',
+    'title': 'Pattern Sprinter', // Title system
     'bio': 'Trivia enthusiast | Quiz champion | Always up for a challenge 🎯',
     'joinDate': DateTime(2023, 1, 15),
     'friendCount': 127,
     'mutualFriends': 12,
     'level': 42,
+    'currentXP': 3420,
+    'maxXP': 5000,
     'totalPoints': 15420,
     'achievements': 23,
+    'rank': 17,
+    'tier': 4,
+    'favoriteSubject': 'Science',
+  };
+
+  // Arcade data
+  final Map<String, dynamic> _arcadeData = {
+    'quickMathBest': 1850,
+    'quickMathRank': 3,
+    'patternSprintBest': 2340,
+    'patternSprintRank': 7,
+    'lastRun': {
+      'game': 'Quick Math Rush',
+      'score': 1650,
+      'time': '2 hours ago',
+    },
+  };
+
+  // Missions data
+  final Map<String, dynamic> _missionsData = {
+    'dailyProgress': 3,
+    'dailyTotal': 5,
+    'weeklyProgress': 8,
+    'weeklyTotal': 15,
+    'seasonProgress': 45,
+    'seasonTotal': 100,
+  };
+
+  // Daily bonus data
+  final Map<String, dynamic> _dailyBonusData = {
+    'currentStreak': 12,
+    'longestStreak': 45,
+    'nextReward': 'Premium Avatar Pack',
+    'canClaim': true,
   };
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
+    _fadeController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+    _fadeAnimation = CurvedAnimation(
+      parent: _fadeController,
+      curve: Curves.easeInOut,
+    );
+    _fadeController.forward();
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _fadeController.dispose();
     super.dispose();
   }
 
@@ -56,41 +121,116 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0F),
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          _buildModernAppBar(context),
-        ],
-        body: Column(
-          children: [
-            _buildProfileCard(),
-            const SizedBox(height: 16),
-            _buildPresenceCard(),
-            const SizedBox(height: 16),
-            _buildStatsCards(),
-            const SizedBox(height: 16),
-            _buildQuickActions(),
-            const SizedBox(height: 20),
-            _buildTabBar(),
-            const SizedBox(height: 16),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  _buildStatsTab(),
-                  _buildActivityTab(),
-                  _buildAchievementsTab(),
-                ],
-              ),
-            ),
+      body: FadeTransition(
+        opacity: _fadeAnimation,
+        child: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            _buildModernAppBar(context, innerBoxIsScrolled),
           ],
+          body: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(child: const SizedBox(height: 16)),
+
+              // Profile Header with Title
+              SliverToBoxAdapter(
+                child: ProfileHeaderSection(
+                  userData: _userData,
+                  isOwnProfile: widget.isOwnProfile,
+                  onEditProfile: _navigateToEditProfile,
+                ),
+              ),
+
+              SliverToBoxAdapter(child: const SizedBox(height: 16)),
+
+              // Rich Presence Card
+              SliverToBoxAdapter(child: _buildPresenceCard()),
+
+              SliverToBoxAdapter(child: const SizedBox(height: 16)),
+
+              // Stats Cards
+              SliverToBoxAdapter(
+                child: ProfileStatsSection(
+                  userData: _userData,
+                  onFriendsTap: _showMutualFriends,
+                ),
+              ),
+
+              SliverToBoxAdapter(child: const SizedBox(height: 16)),
+
+              // XP Progress Bar
+              SliverToBoxAdapter(child: _buildXPProgressCard()),
+
+              SliverToBoxAdapter(child: const SizedBox(height: 16)),
+
+              // Quick Actions (Message/Challenge)
+              if (!widget.isOwnProfile)
+                SliverToBoxAdapter(
+                  child: ProfileActionsSection(
+                    onMessage: () => _handleMenuAction('message'),
+                    onChallenge: () => _handleMenuAction('challenge'),
+                  ),
+                ),
+
+              SliverToBoxAdapter(child: const SizedBox(height: 16)),
+
+              // Arcade Summary
+              SliverToBoxAdapter(
+                child: ArcadeSummarySection(
+                  arcadeData: _arcadeData,
+                  onViewAllScores: _navigateToArcadeScores,
+                ),
+              ),
+
+              SliverToBoxAdapter(child: const SizedBox(height: 16)),
+
+              // Missions Preview
+              SliverToBoxAdapter(
+                child: MissionsPreviewSection(
+                  missionsData: _missionsData,
+                  onViewMissions: _navigateToMissions,
+                ),
+              ),
+
+              SliverToBoxAdapter(child: const SizedBox(height: 16)),
+
+              // Daily Bonus Status
+              if (widget.isOwnProfile)
+                SliverToBoxAdapter(
+                  child: DailyBonusSection(
+                    bonusData: _dailyBonusData,
+                    onClaimBonus: _claimDailyBonus,
+                  ),
+                ),
+
+              SliverToBoxAdapter(child: const SizedBox(height: 20)),
+
+              // Tabs
+              SliverToBoxAdapter(child: _buildTabBar()),
+
+              SliverToBoxAdapter(child: const SizedBox(height: 16)),
+
+              // Tab Content
+              SliverFillRemaining(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    _buildStatsTab(),
+                    _buildActivityTab(),
+                    _buildAchievementsTab(),
+                    _buildCollectionTab(),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildModernAppBar(BuildContext context) {
+  Widget _buildModernAppBar(BuildContext context, bool innerBoxIsScrolled) {
     return SliverAppBar(
-      expandedHeight: 200,
+      expandedHeight: 180,
       floating: false,
       pinned: true,
       backgroundColor: const Color(0xFF0A0A0F),
@@ -99,6 +239,7 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
         background: Stack(
           fit: StackFit.expand,
           children: [
+            // Gradient Background
             Container(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
@@ -112,11 +253,15 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
                 ),
               ),
             ),
+
+            // Grid Pattern Overlay
             Positioned.fill(
               child: CustomPaint(
                 painter: _GridPatternPainter(),
               ),
             ),
+
+            // Gradient Overlay
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -132,208 +277,63 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
           ],
         ),
       ),
-      leading: Padding(
-        padding: const EdgeInsets.only(left: 8),
-        child: Container(
-          margin: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.15),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: Colors.white.withOpacity(0.2),
-            ),
-          ),
-          child: IconButton(
-            icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
-            onPressed: () => Navigator.pop(context),
-            padding: EdgeInsets.zero,
-          ),
-        ),
+      leading: _buildGlassButton(
+        icon: Icons.arrow_back_rounded,
+        onPressed: () => Navigator.pop(context),
       ),
       actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 8),
-          child: Container(
-            margin: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: Colors.white.withOpacity(0.2),
-              ),
-            ),
-            child: widget.isOwnProfile
-                ? IconButton(
-              icon: const Icon(Icons.edit_rounded, color: Colors.white),
-              onPressed: _navigateToEditProfile,
-              padding: EdgeInsets.zero,
-            )
-                : PopupMenuButton<String>(
-              icon: const Icon(Icons.more_vert_rounded, color: Colors.white),
-              onSelected: _handleMenuAction,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              itemBuilder: (context) => [
-                const PopupMenuItem(
-                  value: 'message',
-                  child: Row(
-                    children: [
-                      Icon(Icons.message_rounded, size: 20),
-                      SizedBox(width: 12),
-                      Text('Send Message'),
-                    ],
-                  ),
-                ),
-                const PopupMenuItem(
-                  value: 'challenge',
-                  child: Row(
-                    children: [
-                      Icon(Icons.sports_esports_rounded, size: 20),
-                      SizedBox(width: 12),
-                      Text('Challenge to Quiz'),
-                    ],
-                  ),
-                ),
-                const PopupMenuDivider(),
-                const PopupMenuItem(
-                  value: 'block',
-                  child: Row(
-                    children: [
-                      Icon(Icons.block_rounded, color: Colors.red, size: 20),
-                      SizedBox(width: 12),
-                      Text('Block', style: TextStyle(color: Colors.red)),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+        if (widget.isOwnProfile)
+          _buildGlassButton(
+            icon: Icons.edit_rounded,
+            onPressed: _navigateToEditProfile,
+          )
+        else
+          _buildGlassButton(
+            icon: Icons.more_vert_rounded,
+            onPressed: () => _showOptionsMenu(context),
           ),
-        ),
+        const SizedBox(width: 8),
       ],
     );
   }
 
-  Widget _buildProfileCard() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Colors.white.withOpacity(0.08),
-            Colors.white.withOpacity(0.04),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.12),
-          width: 1.5,
-        ),
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-                  ),
-                  border: Border.all(
-                    color: Colors.white.withOpacity(0.3),
-                    width: 3,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFF6366F1).withOpacity(0.3),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: const Center(
-                  child: Icon(Icons.person, color: Colors.white, size: 40),
+  Widget _buildGlassButton({
+    required IconData icon,
+    required VoidCallback onPressed,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Colors.white.withOpacity(0.2),
+                  Colors.white.withOpacity(0.1),
+                ],
+              ),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Colors.white.withOpacity(0.3),
+                width: 1,
+              ),
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: onPressed,
+                borderRadius: BorderRadius.circular(12),
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Icon(icon, color: Colors.white, size: 24),
                 ),
               ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _userData['displayName'],
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      _userData['username'],
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.6),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFFFBBF24), Color(0xFFF59E0B)],
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.stars_rounded,
-                                color: Colors.white,
-                                size: 14,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                'Level ${_userData['level']}',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w900,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Text(
-            _userData['bio'],
-            style: TextStyle(
-              color: Colors.white.withOpacity(0.8),
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              height: 1.4,
             ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -357,7 +357,7 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(20),
             border: Border.all(
               color: const Color(0xFF10B981).withOpacity(0.3),
               width: 1.5,
@@ -372,143 +372,126 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
     );
   }
 
-  Widget _buildStatsCards() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        children: [
-          Expanded(
-            child: _buildStatCard(
-              'Friends',
-              _userData['friendCount'].toString(),
-              Icons.people_rounded,
-              const [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-                  () => _showMutualFriends(),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: _buildStatCard(
-              'Points',
-              _userData['totalPoints'].toString(),
-              Icons.star_rounded,
-              const [Color(0xFFFBBF24), Color(0xFFF59E0B)],
-              null,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: _buildStatCard(
-              'Badges',
-              _userData['achievements'].toString(),
-              Icons.emoji_events_rounded,
-              const [Color(0xFFEC4899), Color(0xFFF59E0B)],
-              null,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  Widget _buildXPProgressCard() {
+    final progress = (_userData['currentXP'] / _userData['maxXP']).clamp(0.0, 1.0);
+    final xpNeeded = _userData['maxXP'] - _userData['currentXP'];
 
-  Widget _buildStatCard(
-      String label,
-      String value,
-      IconData icon,
-      List<Color> gradient,
-      VoidCallback? onTap,
-      ) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              gradient[0].withOpacity(0.15),
-              gradient[1].withOpacity(0.1),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: gradient[0].withOpacity(0.3),
-            width: 1.5,
-          ),
-        ),
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(colors: gradient),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(icon, color: Colors.white, size: 24),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              value,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.6),
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.white.withOpacity(0.08),
+            Colors.white.withOpacity(0.04),
           ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.12),
+          width: 1.5,
         ),
       ),
-    );
-  }
-
-  Widget _buildQuickActions() {
-    if (widget.isOwnProfile) return const SizedBox.shrink();
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
+      child: Column(
         children: [
-          Expanded(
-            child: ElevatedButton.icon(
-              onPressed: () => _handleMenuAction('message'),
-              icon: const Icon(Icons.message_rounded, size: 18),
-              label: const Text('Message'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF6366F1),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(
+                      Icons.trending_up_rounded,
+                      color: Colors.white,
+                      size: 18,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  const Text(
+                    'Level Progress',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF40E0D0), Color(0xFF00CED1)],
+                  ),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                elevation: 0,
+                child: Text(
+                  '${_userData['currentXP']} XP',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Stack(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 12,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.1),
+                  ),
+                ),
+                FractionallySizedBox(
+                  widthFactor: progress,
+                  child: Container(
+                    height: 12,
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Color(0xFF40E0D0), Color(0xFF00CED1)],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: OutlinedButton.icon(
-              onPressed: () => _handleMenuAction('challenge'),
-              icon: const Icon(Icons.sports_esports_rounded, size: 18),
-              label: const Text('Challenge'),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: Colors.white,
-                side: BorderSide(color: Colors.white.withOpacity(0.3)),
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Level ${_userData['level']} → ${_userData['level'] + 1}',
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.8),
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-            ),
+              Text(
+                '$xpNeeded XP to go',
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.6),
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -529,36 +512,23 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
         controller: _tabController,
         indicator: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
-          gradient: LinearGradient(
-            colors: [
-              const Color(0xFF6366F1).withOpacity(0.8),
-              const Color(0xFF8B5CF6).withOpacity(0.8),
-            ],
+          gradient: const LinearGradient(
+            colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
           ),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF6366F1).withOpacity(0.3),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
         ),
         indicatorSize: TabBarIndicatorSize.tab,
         dividerColor: Colors.transparent,
         labelColor: Colors.white,
         unselectedLabelColor: Colors.white.withOpacity(0.5),
         labelStyle: const TextStyle(
-          fontWeight: FontWeight.w900,
-          fontSize: 13,
-        ),
-        unselectedLabelStyle: const TextStyle(
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.bold,
           fontSize: 13,
         ),
         tabs: const [
           Tab(text: 'Stats'),
           Tab(text: 'Activity'),
           Tab(text: 'Achievements'),
+          Tab(text: 'Collection'),
         ],
       ),
     );
@@ -567,6 +537,7 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
   Widget _buildStatsTab() {
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 16),
+      physics: const BouncingScrollPhysics(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -575,7 +546,7 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 12),
@@ -642,7 +613,7 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -673,6 +644,7 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
   Widget _buildActivityTab() {
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 16),
+      physics: const BouncingScrollPhysics(),
       itemCount: _generateRecentActivities().length,
       itemBuilder: (context, index) {
         final activity = _generateRecentActivities()[index];
@@ -741,6 +713,7 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
   Widget _buildAchievementsTab() {
     return GridView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 16),
+      physics: const BouncingScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         childAspectRatio: 0.85,
@@ -846,101 +819,128 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
     );
   }
 
-  void _navigateToEditProfile() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: const Color(0xFF1A1A24),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+  Widget _buildCollectionTab() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Avatar Collection',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 12),
+          _buildCollectionSection('Installed Packages', _generateInstalledAvatars()),
+          const SizedBox(height: 20),
+          _buildCollectionSection('Built-in Avatars', _generateBuiltInAvatars()),
+          const SizedBox(height: 20),
+        ],
       ),
-      builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.9,
-        builder: (context, scrollController) => Container(
-          padding: const EdgeInsets.all(24),
-          child: ListView(
-            controller: scrollController,
-            children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24),
-              const Text(
-                'Edit Profile',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-              const SizedBox(height: 24),
-              TextField(
-                style: const TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  labelText: 'Display Name',
-                  labelStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.white.withOpacity(0.2)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFF6366F1)),
-                  ),
-                  fillColor: Colors.white.withOpacity(0.05),
-                  filled: true,
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                style: const TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  labelText: 'Bio',
-                  labelStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.white.withOpacity(0.2)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFF6366F1)),
-                  ),
-                  fillColor: Colors.white.withOpacity(0.05),
-                  filled: true,
-                ),
-                maxLines: 3,
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF6366F1),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  elevation: 0,
-                ),
-                child: const Text(
-                  'Save Changes',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 15,
-                  ),
-                ),
-              ),
-            ],
+    );
+  }
+
+  Widget _buildCollectionSection(String title, List<Map<String, dynamic>> items) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            color: Colors.white.withOpacity(0.7),
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
           ),
         ),
+        const SizedBox(height: 12),
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 4,
+            childAspectRatio: 1,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+          ),
+          itemCount: items.length,
+          itemBuilder: (context, index) {
+            final item = items[index];
+            return _buildCollectionItem(item);
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCollectionItem(Map<String, dynamic> item) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.white.withOpacity(0.08),
+            Colors.white.withOpacity(0.04),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.12),
+        ),
       ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            item['icon'],
+            color: Colors.white,
+            size: 32,
+          ),
+          const SizedBox(height: 6),
+          Text(
+            item['name'],
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.8),
+              fontSize: 10,
+              fontWeight: FontWeight.w600,
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Navigation methods
+  void _navigateToEditProfile() {
+    // TODO: Implement edit profile
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Edit profile feature coming soon')),
+    );
+  }
+
+  void _navigateToArcadeScores() {
+    // TODO: Navigate to arcade scores screen
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Navigating to arcade scores...')),
+    );
+  }
+
+  void _navigateToMissions() {
+    // TODO: Navigate to missions screen
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Navigating to missions...')),
+    );
+  }
+
+  void _claimDailyBonus() {
+    // TODO: Implement daily bonus claim
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Daily bonus claimed!')),
     );
   }
 
@@ -953,6 +953,72 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
           currentUserId: widget.currentUserId,
         ),
       ),
+    );
+  }
+
+  void _showOptionsMenu(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color(0xFF1A1A24),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildOptionTile(
+              icon: Icons.message_rounded,
+              title: 'Send Message',
+              onTap: () {
+                Navigator.pop(context);
+                _handleMenuAction('message');
+              },
+            ),
+            _buildOptionTile(
+              icon: Icons.sports_esports_rounded,
+              title: 'Challenge to Quiz',
+              onTap: () {
+                Navigator.pop(context);
+                _handleMenuAction('challenge');
+              },
+            ),
+            const Divider(color: Colors.white24),
+            _buildOptionTile(
+              icon: Icons.block_rounded,
+              title: 'Block',
+              onTap: () {
+                Navigator.pop(context);
+                _handleMenuAction('block');
+              },
+              isDestructive: true,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOptionTile({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+    bool isDestructive = false,
+  }) {
+    return ListTile(
+      leading: Icon(
+        icon,
+        color: isDestructive ? Colors.red : Colors.white,
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+          color: isDestructive ? Colors.red : Colors.white,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      onTap: onTap,
     );
   }
 
@@ -982,7 +1048,7 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
                 achievement['name'],
                 style: const TextStyle(
                   color: Colors.white,
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -1055,7 +1121,7 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
@@ -1105,6 +1171,7 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
     );
   }
 
+  // Mock data generators
   List<Map<String, dynamic>> _generateRecentMatches() {
     return [
       {'category': 'Science', 'score': 850, 'result': 'win', 'time': '2h ago'},
@@ -1164,28 +1231,28 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
         'unlockedDate': '3 Feb 2024'
       },
       {
-        'name': 'Social Butterfly',
+        'name': 'Social',
         'icon': Icons.people,
         'unlocked': true,
         'description': 'Add 50 friends',
         'unlockedDate': '10 Feb 2024'
       },
       {
-        'name': 'Streak Master',
+        'name': 'Streak',
         'icon': Icons.local_fire_department,
         'unlocked': false,
-        'description': 'Maintain a 30-day streak',
+        'description': '30-day streak',
         'progress': 70
       },
       {
-        'name': 'Quiz Champion',
+        'name': 'Champion',
         'icon': Icons.emoji_events,
         'unlocked': false,
         'description': 'Win 100 games',
         'progress': 45
       },
       {
-        'name': 'Category King',
+        'name': 'Master',
         'icon': Icons.rocket,
         'unlocked': false,
         'description': 'Master all categories',
@@ -1202,9 +1269,31 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
         'name': 'Night Owl',
         'icon': Icons.nightlight,
         'unlocked': false,
-        'description': 'Play after midnight 10 times',
+        'description': 'Play after midnight 10x',
         'progress': 80
       },
+    ];
+  }
+
+  List<Map<String, dynamic>> _generateInstalledAvatars() {
+    return [
+      {'name': 'Robot', 'icon': Icons.smart_toy},
+      {'name': 'Animal', 'icon': Icons.pets},
+      {'name': 'Sci-Fi', 'icon': Icons.rocket_launch},
+      {'name': 'Fantasy', 'icon': Icons.auto_awesome},
+    ];
+  }
+
+  List<Map<String, dynamic>> _generateBuiltInAvatars() {
+    return [
+      {'name': 'School', 'icon': Icons.school},
+      {'name': 'Sports', 'icon': Icons.sports_basketball},
+      {'name': 'Music', 'icon': Icons.music_note},
+      {'name': 'Art', 'icon': Icons.palette},
+      {'name': 'Science', 'icon': Icons.science},
+      {'name': 'Gaming', 'icon': Icons.videogame_asset},
+      {'name': 'Nature', 'icon': Icons.park},
+      {'name': 'Food', 'icon': Icons.restaurant},
     ];
   }
 }
