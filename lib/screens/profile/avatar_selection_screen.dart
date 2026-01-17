@@ -55,6 +55,7 @@ class _AvatarSelectionScreenState extends ConsumerState<AvatarSelectionScreen>
         ],
         body: Column(
           children: [
+            const SizedBox(height: 5),
             _buildTabBar(),
             const SizedBox(height: 12),
             Expanded(
