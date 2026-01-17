@@ -18,291 +18,89 @@ import '../services/settings/app_settings.dart';
 import '../services/settings/general_key_value_storage_service.dart';
 import '../services/settings/multi_profile_service.dart';
 
-/// AppInit handles bootstrapping critical services before runApp()
 class AppInit {
-  // Store tracker for later use
+  static bool _backgroundServicesReady = false;
   static SpinAnalyticsTracker? _spinAnalyticsTracker;
-
-  /// Get the spin analytics tracker instance
   static SpinAnalyticsTracker? get spinAnalyticsTracker => _spinAnalyticsTracker;
 
-  static Future<void> _initializeMultiProfileSystem(ServiceManager serviceManager, ProviderContainer? container)
-  async {
-    try {
-      // Initialize multi-profile system
-      final multiProfileService = MultiProfileService();
-
-      // Migrate existing single profile if needed
-      await multiProfileService.initializeAndMigrate(serviceManager.playerProfileService);
-
-      // Load active profile
-      final activeProfile = await multiProfileService.getActiveProfile();
-
-      if (container != null && activeProfile != null) {
-        // Update the active profile state provider
-        container.read(activeProfileStateProvider.notifier).state = activeProfile;
-
-        debugPrint('[AppInit] Active profile loaded: ${activeProfile.name}');
-      } else {
-        debugPrint('[AppInit] No active profile found - user will need to select one');
-      }
-
-    } catch (e) {
-      debugPrint('[AppInit] Multi-profile initialization failed: $e');
-      // Continue with default state - app should still work
-    }
-  }
-
+  // --- CRITICAL INITIALIZATION (Required for first frame) ---
   static Future<(ServiceManager, ThemeNotifier)> initialize({ProviderContainer? container}) async {
+    // 1. Core Flutter & Storage Setup
     WidgetsFlutterBinding.ensureInitialized();
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-    // Initialize Hive boxes
+    // Initialize Hive BEFORE any services access it
     await Hive.initFlutter();
-    await Hive.openBox('secrets');
+    if (!Hive.isAdapterRegistered(ReferralInviteHiveAdapter().typeId)) {
+      Hive.registerAdapter(ReferralInviteHiveAdapter());
+    }
+
+    // Open critical boxes required for theme/auth immediately
     await Hive.openBox('settings');
-    await Hive.openBox('cache');
-    await Hive.openBox('question');
-    Hive.registerAdapter(ReferralInviteHiveAdapter());
+    await Hive.openBox('secrets');
 
-    // Initialize NotificationService EARLY - but don't request permissions yet
-    await _initializeNotifications();
-
+    // 2. Network & Backend
     try {
-      await Hive.openBox('settings');
-    } catch (e) {
-      // Fallback or recreate
-      await Hive.deleteBoxFromDisk('settings');
-      await Hive.openBox('settings');
-    }
-
-    // Initialize referral storage
-    await _initializeReferralStorage();
-
-    // Initialize GeneralKeyValueStorageService early for mission data
-    final generalKeyValueStorage = GeneralKeyValueStorageService();
-
-    try {
-      final storedAge = await generalKeyValueStorage.getString('user_age_group');
-      debugPrint('[AppInit] User age group: ${storedAge ?? 'not set'}');
-    } catch (e) {
-      debugPrint('[AppInit] Failed to load user age group: $e');
-    }
-
-    // Initialize Supabase BEFORE ServiceManager
-    try {
+      // Note: Replace with your actual Env calls if needed
       await Supabase.initialize(
-        url: 'your-supabase-url-here',
-        anonKey: 'your-supabase-anon-key-here',
+        url: 'YOUR_SUPABASE_URL',
+        anonKey: 'YOUR_SUPABASE_ANON_KEY',
       );
-      debugPrint('[AppInit] Supabase initialized successfully');
+      debugPrint('[AppInit] Supabase initialized');
     } catch (e) {
-      debugPrint('[AppInit] Supabase initialization failed: $e - continuing with local mode');
-      // App continues without Supabase - will use JSON-only mission mode
+      debugPrint('[AppInit] Supabase initialization failed: $e');
     }
 
-    // Load and initialize ServiceManager
+    // 3. Service Manager & Core Logic
     final serviceManager = await ServiceManager.initialize();
 
-    // Inject dependencies into ConfigService
-    final configService = ConfigService.instance;
-    configService.initServices(serviceManager);
-
-    // Load local + remote config
-    await configService.loadConfig().timeout(
-      const Duration(seconds: 10),
-      onTimeout: () {
-        debugPrint("[WARN] ConfigService timeout. Using default settings.");
-      },
-    );
-    // Initialize multi-profile system
-    await _initializeMultiProfileSystem(serviceManager, container);
-    // Safe pre-fetch of splash type to avoid runtime crash later
-    try {
-      await serviceManager.splashSettingsService.getSplashType();
-    } catch (e) {
-      debugPrint('[AppInit] Failed to load SplashType: $e â€” fallback to default.');
-    }
-
-    // Get ThemeNotifier from ServiceManager (already initialized)
-    final themeNotifier = serviceManager.themeNotifier;
-
-    // Preload user session and sync with River-pod providers
+    // Check session & load profile using safe casting
     await _initializeUserSession(serviceManager, container);
+    await _initializeMultiProfileSystem(serviceManager, container);
 
-    // ============ INITIALIZE SPIN ANALYTICS ============
-    await _initializeSpinAnalytics(serviceManager);
-    // ============ END SPIN ANALYTICS ============
-
-    // Initialize educational statistics system
-    if (container != null) {
-      try {
-        final tempContainer = ProviderContainer();
-        await EducationalStatsInitializer.initialize(tempContainer.read as WidgetRef);
-        tempContainer.dispose();
-      } catch (e) {
-        debugPrint('[AppInit] Educational stats initialization failed: $e');
-      }
-    }
-
-    // Preload analytics and user session state
-    try {
-      await serviceManager.analyticsService.trackStartup().timeout(
-        const Duration(seconds: 5),
-        onTimeout: () {
-          debugPrint('[AppInit] Analytics startup timeout - app continues normally');
-        },
-      );
-    } catch (e) {
-      debugPrint('[AppInit] Analytics startup failed: $e - app continues normally');
-    }
-
-    return (serviceManager, themeNotifier);
+    debugPrint('[AppInit] Critical initialization complete');
+    return (serviceManager, serviceManager.themeNotifier);
   }
 
-  /// Initialize Spin Analytics Tracker
-  static Future<void> _initializeSpinAnalytics(ServiceManager serviceManager) async {
+  // --- BACKGROUND INITIALIZATION (Deferred for performance) ---
+  static Future<void> initializeBackgroundServices(ServiceManager serviceManager, ProviderContainer? container) async {
+    // Wait a short moment to let the UI finish rendering
+    await Future.delayed(const Duration(seconds: 1));
+    debugPrint('[AppInit] Starting deferred background services...');
+
     try {
-      // Create spin analytics tracker
+      // 1. Open secondary storage
+      await Hive.openBox('cache');
+      await Hive.openBox('question');
+
+      // 2. Notifications (Hive is ready now)
+      await NotificationService().initialize();
+      await _initializeReferralStorage();
+
+      // 3. Analytics & Config (The "Noisy" Services)
+      final configService = ConfigService.instance;
+      configService.initServices(serviceManager);
+      await configService.loadConfig();
+
       _spinAnalyticsTracker = SpinAnalyticsTracker(serviceManager.analyticsService);
-
-      // Load initial spin data
-      final todayCount = await AppSettings.getTodaySpinCount();
-      final weeklyCount = await AppSettings.getWeeklySpinCount();
-      final totalSpins = await AppSettings.getTotalLifetimeSpins();
-      final canSpin = await AppSettings.canSpinToday();
-      final rewardPoints = await AppSettings.getSpinRewardPoints();
-
-      // Track spin system initialized
-      await serviceManager.analyticsService.trackEvent('spin_system_initialized', {
-        'today_count': todayCount,
-        'weekly_count': weeklyCount,
-        'total_spins': totalSpins,
-        'can_spin': canSpin,
-        'reward_points': rewardPoints,
-        'timestamp': DateTime.now().toIso8601String(),
-      });
-
-      debugPrint('[AppInit] Spin Analytics initialized');
-      debugPrint('[AppInit] - Today: $todayCount spins');
-      debugPrint('[AppInit] - Weekly: $weeklyCount spins');
-      debugPrint('[AppInit] - Total: $totalSpins spins');
-      debugPrint('[AppInit] - Can Spin: $canSpin');
-      debugPrint('[AppInit] - Reward Points: $rewardPoints');
-    } catch (e) {
-      debugPrint('[AppInit] Spin Analytics initialization failed: $e');
-      // Continue - analytics is not critical
-    }
-  }
-
-  /// Initialize NotificationService (replaces the old _initializeNotifications method)
-  static Future<void> _initializeNotifications() async {
-    try {
-      // Use the centralized NotificationService instead of direct AwesomeNotifications calls
-      final success = await NotificationService().initialize();
-      debugPrint('[AppInit] NotificationService initialized: $success');
-
-      // Don't request permissions here - let the app request them contextually
-      // This prevents the permission dialog from appearing immediately on app start
-
-    } catch (e) {
-      debugPrint('[AppInit] Failed to initialize NotificationService: $e');
-      // App continues without notifications - this is not critical
-    }
-  }
-
-  /// Initialize Referral Storage Service
-  static Future<void> _initializeReferralStorage() async {
-    try {
-      final referralStorage = ReferralStorageService();
-      await referralStorage.initialize();
-      debugPrint('[AppInit] ReferralStorageService initialized');
-    } catch (e) {
-      debugPrint('[AppInit] Failed to initialize ReferralStorageService: $e');
-      // Continue - referral system is not critical for app startup
-    }
-  }
-
-  /// Optional: Request notification permissions (call this only when appropriate)
-  /// You might want to call this from a settings screen or when user first interacts with notifications
-  static Future<void> requestNotificationPermissions({BuildContext? context}) async {
-    if (context != null) {
-      await NotificationService().requestPermissionsWithDialog(context);
-    } else {
-      // Request without dialog (silent request)
-      try {
-        final isAllowed = await NotificationService().isNotificationEnabled();
-        if (!isAllowed) {
-          debugPrint('[AppInit] Notifications not enabled');
-        } else {
-          debugPrint('[AppInit] Notifications already enabled');
-        }
-      } catch (e) {
-        debugPrint('[AppInit] Failed to check notification permissions: $e');
-      }
-    }
-  }
-
-  /// Initialize user session and sync with Riverpod providers
-  static Future<void> _initializeUserSession(ServiceManager serviceManager, ProviderContainer? container) async {
-    try {
-      final isLoggedIn = await serviceManager.authService.isLoggedIn();
-      final hasOnboarded = await serviceManager.onboardingSettingsService.hasCompletedOnboarding();
-
-      debugPrint('Session loaded: isLoggedIn=$isLoggedIn, hasOnboarded=$hasOnboarded');
-
-      // Track session initialization
-      await serviceManager.analyticsService.trackEvent('user_session_initialized', {
-        'is_logged_in': isLoggedIn,
-        'has_onboarded': hasOnboarded,
-        'timestamp': DateTime.now().toIso8601String(),
-      });
+      await serviceManager.analyticsService.trackStartup();
 
       if (container != null) {
-        container.read(isLoggedInSyncProvider.notifier).state = isLoggedIn;
-
-        if (hasOnboarded) {
-          container.read(hasSeenIntroProvider.notifier).state = true;
-          container.read(hasCompletedProfileProvider.notifier).state = true;
-        }
-
-        debugPrint('Riverpod providers synchronized with service state');
+        await EducationalStatsInitializer.initialize(container as dynamic);
       }
 
-      if (isLoggedIn) {
-        await _loadUserProfile(serviceManager, container);
-      }
+      _backgroundServicesReady = true;
+      debugPrint('[AppInit] Background services ready');
     } catch (e) {
-      debugPrint('[AppInit] User session initialization failed: $e');
+      debugPrint('[AppInit] Background initialization error: $e');
     }
   }
 
-  /// Load user profile data for logged-in users
-  static Future<void> _loadUserProfile(ServiceManager serviceManager, ProviderContainer? container) async {
-    try {
-      final playerName = await serviceManager.playerProfileService.getPlayerName();
-      final userRole = await serviceManager.playerProfileService.getUserRole();
-      final isPremium = await serviceManager.playerProfileService.isPremiumUser();
-
-      debugPrint('User profile loaded: $playerName, role: $userRole, premium: $isPremium');
-
-      await serviceManager.analyticsService.trackEvent('user_profile_loaded', {
-        'player_name': playerName,
-        'user_role': userRole,
-        'is_premium': isPremium,
-      });
-    } catch (e) {
-      debugPrint('[AppInit] User profile loading failed: $e');
-    }
-  }
-
-  /// Method to reinitialize user session (useful after login/logout)
-  static Future<void> reinitializeUserSession(ServiceManager serviceManager, ProviderContainer container) async {
-    await _initializeUserSession(serviceManager, container);
-  }
-
-  /// Track app lifecycle events
+  /// Refactored to be safe even if called before analytics are ready
   static Future<void> trackAppLifecycle(ServiceManager serviceManager, String event) async {
+    // If background services aren't ready, we skip tracking to avoid console noise/errors
+    if (!_backgroundServicesReady) return;
+
     try {
       await serviceManager.analyticsService.trackLifecycleEvent(
         event,
@@ -311,15 +109,32 @@ class AppInit {
         },
       );
     } catch (e) {
-      debugPrint('[AppInit] Failed to track lifecycle event: $e');
+      // Use silent logging here to keep console clean
+      debugPrint('[AppInit] Lifecycle track skipped: service not ready or error');
     }
   }
 
-  /// Get spin analytics summary for debugging
+  // --- HELPERS WITH SAFE CASTING ---
+
+  /// Get spin analytics summary for debugging (Safely)
   static Future<Map<String, dynamic>> getSpinAnalyticsSummary() async {
+    // If background services (Hive boxes) aren't ready, return empty/safe defaults
+    if (!_backgroundServicesReady) {
+      return {
+        'today_count': 0,
+        'daily_limit': 0,
+        'weekly_count': 0,
+        'total_spins': 0,
+        'can_spin': false,
+        'spins_remaining': 0,
+        'reward_points': 0,
+      };
+    }
+
     try {
       return {
         'today_count': await AppSettings.getTodaySpinCount(),
+        'daily_limit': await AppSettings.getDailySpinLimit(),
         'weekly_count': await AppSettings.getWeeklySpinCount(),
         'total_spins': await AppSettings.getTotalLifetimeSpins(),
         'can_spin': await AppSettings.canSpinToday(),
@@ -327,8 +142,54 @@ class AppInit {
         'reward_points': await AppSettings.getSpinRewardPoints(),
       };
     } catch (e) {
-      debugPrint('[AppInit] Failed to get spin analytics summary: $e');
+      debugPrint('[AppInit] Error fetching spin summary: $e');
       return {};
     }
+  }
+
+  static Future<void> _initializeUserSession(ServiceManager serviceManager, ProviderContainer? container) async {
+    try {
+      final isLoggedIn = await serviceManager.authService.isLoggedIn();
+      if (container != null) {
+        container.read(isLoggedInSyncProvider.notifier).state = isLoggedIn;
+      }
+      if (isLoggedIn) {
+        await _loadUserProfile(serviceManager, container);
+      }
+    } catch (e) {
+      debugPrint('[AppInit] Session check failed: $e');
+    }
+  }
+
+  static Future<void> _loadUserProfile(ServiceManager serviceManager, ProviderContainer? container) async {
+    try {
+      final rawProfile = await serviceManager.playerProfileService.getProfile();
+      // FIX: Safe Map casting to prevent _Map<dynamic, dynamic> errors
+      final profile = rawProfile != null ? Map<String, dynamic>.from(rawProfile as Map) : {};
+
+      if (profile.isNotEmpty) {
+        debugPrint('[AppInit] Profile loaded for: ${profile['name']}');
+      }
+    } catch (e) {
+      debugPrint('[AppInit] Profile cast failed: $e');
+    }
+  }
+
+  static Future<void> _initializeMultiProfileSystem(ServiceManager serviceManager, ProviderContainer? container) async {
+    try {
+      final multiProfileService = MultiProfileService();
+      await multiProfileService.initializeAndMigrate(serviceManager.playerProfileService);
+      final activeProfile = await multiProfileService.getActiveProfile();
+      if (container != null && activeProfile != null) {
+        container.read(activeProfileStateProvider.notifier).state = activeProfile;
+      }
+    } catch (e) {
+      debugPrint('[AppInit] Multi-profile error: $e');
+    }
+  }
+
+  static Future<void> _initializeReferralStorage() async {
+    final referralStorage = ReferralStorageService();
+    await referralStorage.initialize();
   }
 }

@@ -9,14 +9,14 @@ class ProfileHeader extends StatelessWidget {
   final bool isOwnProfile;
 
   const ProfileHeader({
-    Key? key,
+    super.key,
     required this.userId,
     required this.displayName,
     required this.username,
     this.bio,
     this.avatarUrl,
     this.isOwnProfile = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

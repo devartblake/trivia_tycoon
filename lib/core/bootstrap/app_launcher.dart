@@ -47,16 +47,18 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Use the existing initialData pattern to avoid breaking changes
     final serviceManager = widget.initialData.$1;
 
     switch (state) {
       case AppLifecycleState.resumed:
+      // This is now safe because we made trackAppLifecycle robust in app_init.dart
         AppInit.trackAppLifecycle(serviceManager, 'app_resumed');
         _checkSpinStatusOnResume();
         break;
       case AppLifecycleState.paused:
         AppInit.trackAppLifecycle(serviceManager, 'app_paused');
-        _flushAnalyticsOnPause();
+        _flushAnalyticsOnPause(); // Added safety inside this method below
         break;
       case AppLifecycleState.inactive:
         AppInit.trackAppLifecycle(serviceManager, 'app_inactive');
@@ -74,24 +76,42 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
   Future<void> _trackAppLaunch() async {
     try {
       final serviceManager = widget.initialData.$1;
+
+      // 1. Track the launch (This is safe/silent if analytics aren't ready)
       await AppInit.trackAppLifecycle(serviceManager, 'app_launched');
 
-      // Show spin analytics in debug mode
+      // 2. Show debug info
       if (!const bool.fromEnvironment('dart.vm.product')) {
+        // Small delay to ensure Hive boxes are opened by the background loader
+        await Future.delayed(const Duration(milliseconds: 500));
+
         final summary = await AppInit.getSpinAnalyticsSummary();
+
+        // Use null-aware operators ?? 0 to prevent crashes if a key is missing
         debugPrint('╔════════════════════════════════════════════════╗');
-        debugPrint('SPIN ANALYTICS SUMMARY');
+        debugPrint('              SPIN ANALYTICS SUMMARY              ');
         debugPrint('╠════════════════════════════════════════════════╣');
-        debugPrint('Today: ${summary['today_count']}/${summary['daily_limit']}');
-        debugPrint('Weekly: ${summary['weekly_count']}');
-        debugPrint('Total: ${summary['total_spins']}');
-        debugPrint('Can Spin: ${summary['can_spin']}');
-        debugPrint('Remaining: ${summary['spins_remaining']}');
-        debugPrint('Reward Points: ${summary['reward_points']}');
+        debugPrint(' Today:         ${summary['today_count'] ?? 0}/${summary['daily_limit'] ?? 0}');
+        debugPrint(' Weekly:        ${summary['weekly_count'] ?? 0}');
+        debugPrint(' Total:         ${summary['total_spins'] ?? 0}');
+        debugPrint(' Can Spin:      ${summary['can_spin'] ?? false}');
+        debugPrint(' Remaining:     ${summary['spins_remaining'] ?? 0}');
+        debugPrint(' Reward Points: ${summary['reward_points'] ?? 0}');
         debugPrint('╚════════════════════════════════════════════════╝');
       }
     } catch (e) {
       debugPrint('[AppLauncher] Failed to track app launch: $e');
+    }
+  }
+
+  /// Flush analytics when app pauses
+  void _flushAnalyticsOnPause() {
+    try {
+      final serviceManager = widget.initialData.$1;
+      serviceManager.analyticsService.flushEvents();
+      debugPrint('[AppLauncher] Analytics flushed on app pause');
+    } catch (e) {
+      debugPrint('[AppLauncher] Failed to flush analytics: $e');
     }
   }
 
@@ -110,17 +130,6 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
       debugPrint('[AppLauncher] Spin status checked on resume: ${summary['spins_remaining']} spins remaining');
     } catch (e) {
       debugPrint('[AppLauncher] Failed to check spin status: $e');
-    }
-  }
-
-  /// Flush analytics when app pauses
-  Future<void> _flushAnalyticsOnPause() async {
-    try {
-      final serviceManager = widget.initialData.$1;
-      await serviceManager.analyticsService.flushEvents();
-      debugPrint('[AppLauncher] Analytics flushed on app pause');
-    } catch (e) {
-      debugPrint('[AppLauncher] Failed to flush analytics: $e');
     }
   }
 
