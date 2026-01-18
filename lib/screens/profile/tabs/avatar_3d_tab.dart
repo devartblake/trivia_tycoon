@@ -64,7 +64,7 @@ class _Avatar3DTabState extends ConsumerState<Avatar3DTab> {
   Widget _buildThemeSelector() {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16), // Reduced from 20 to prevent overflow
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -81,6 +81,7 @@ class _Avatar3DTabState extends ConsumerState<Avatar3DTab> {
         ),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min, // ✅ Prevents vertical overflow
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
@@ -110,7 +111,7 @@ class _Avatar3DTabState extends ConsumerState<Avatar3DTab> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12), // Reduced from 16 for more compact layout
           DepthCardThemeSelector(
             selectedName: widget.selectedTheme.name,
             onThemeSelected: widget.onThemeSelected,

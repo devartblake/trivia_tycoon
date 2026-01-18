@@ -1647,38 +1647,42 @@ class _MatchesSectionState extends State<_MatchesSection> {
   Widget _buildFilterChips() {
     final filters = ['All', 'Your turn', 'Suggestions'];
 
-    return Row(
-      children: filters.map((filter) {
-        final isSelected = _selectedFilter == filter;
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      physics: const BouncingScrollPhysics(),
+      child: Row(
+        children: filters.map((filter) {
+          final isSelected = _selectedFilter == filter;
 
-        return Padding(
-          padding: const EdgeInsets.only(right: 12),
-          child: FilterChip(
-            selected: isSelected,
-            label: Text(filter),
-            onSelected: (selected) {
-              setState(() => _selectedFilter = filter);
-            },
-            backgroundColor: Colors.white,
-            selectedColor: const Color(0xFFE2E8F0),
-            labelStyle: TextStyle(
-              fontSize: 14,
-              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-              color: isSelected ? const Color(0xFF1E293B) : const Color(0xFF64748B),
+          return Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: FilterChip(
+              selected: isSelected,
+              label: Text(filter),
+              onSelected: (selected) {
+                setState(() => _selectedFilter = filter);
+              },
+              backgroundColor: Colors.white,
+              selectedColor: const Color(0xFFE2E8F0),
+              labelStyle: TextStyle(
+                fontSize: 14,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                color: isSelected ? const Color(0xFF1E293B) : const Color(0xFF64748B),
+              ),
+              side: BorderSide(
+                color: isSelected
+                    ? const Color(0xFF94A3B8)
+                    : const Color(0xFFE2E8F0),
+                width: 1.5,
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
             ),
-            side: BorderSide(
-              color: isSelected
-                  ? const Color(0xFF94A3B8)
-                  : const Color(0xFFE2E8F0),
-              width: 1.5,
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24),
-            ),
-          ),
-        );
-      }).toList(),
+          );
+        }).toList(),
+      ),
     );
   }
 

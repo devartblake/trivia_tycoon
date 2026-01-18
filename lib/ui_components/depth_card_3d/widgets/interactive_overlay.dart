@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import '../models/card_overlay_action.dart';
+import '../models/depth_card_theme.dart';
 
 class InteractiveOverlay extends StatelessWidget {
   final String text;
   final VoidCallback? onTap;
+
+  /// Optional theme (used by DepthCard3D). If not provided, sensible defaults
+  /// are used. This is intentionally non-breaking for existing call sites.
+  final DepthCardTheme? theme;
+
+  /// Optional parallax tilt (used by DepthCard3D). When provided, the overlay
+  /// highlights shift slightly to match the parallax direction.
+  final Offset tilt;
 
   /// Preferred: matches DepthCardConfig.overlayActions
   final List<CardOverlayAction>? overlayActions;
@@ -19,6 +28,8 @@ class InteractiveOverlay extends StatelessWidget {
     super.key,
     required this.text,
     this.onTap,
+    this.theme,
+    this.tilt = Offset.zero,
     this.overlayActions,
     @Deprecated('Use overlayActions instead.') this.actions,
     required this.width,

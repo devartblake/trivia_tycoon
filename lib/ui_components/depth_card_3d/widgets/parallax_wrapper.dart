@@ -3,11 +3,13 @@ import '../utils/parallax_utils.dart';
 
 class ParallaxWrapperBuilder extends StatelessWidget {
   final double depth;
+  final Widget? child;
   final Widget Function(BuildContext context, Offset tilt) builder;
 
   const ParallaxWrapperBuilder({
     super.key,
     required this.builder,
+    this.child,
     this.depth = 5.0,
   });
 
@@ -44,6 +46,34 @@ class ParallaxWrapperBuilder extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+}
+
+/// Newer name used by the refactored DepthCard3D.
+///
+/// This keeps backward compatibility by delegating to [ParallaxWrapperBuilder].
+class ParallaxWrapper extends StatelessWidget {
+  final double depth;
+  final Widget Function(BuildContext context, Offset tilt) builder;
+
+  /// Optional child slot (kept for signature compatibility).
+  /// If you want, you can evolve this to wrap [child] with a parallax transform.
+  final Widget? child;
+
+  const ParallaxWrapper({
+    super.key,
+    this.depth = 0.1,
+    required this.builder,
+    this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ParallaxWrapperBuilder(
+      depth: depth,
+      builder: builder,
+      child: child,
     );
   }
 }

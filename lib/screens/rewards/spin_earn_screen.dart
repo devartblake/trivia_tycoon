@@ -6,6 +6,7 @@ import 'package:trivia_tycoon/screens/rewards/widgets/reward_stepper_slider_widg
 import 'package:trivia_tycoon/ui_components/spin_wheel/ui/screen/wheel_screen.dart';
 import '../../game/analytics/services/analytics_service.dart';
 import '../../game/models/reward_step_models.dart';
+import '../../game/providers/riverpod_providers.dart';
 import '../../ui_components/spin_wheel/ui/toasts/spin_ready_premium_toast.dart';
 
 class SpinEarnScreen extends ConsumerStatefulWidget {
@@ -402,7 +403,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
   }
 
   Widget _buildLoadingState() {
-    return Container(
+    return SizedBox(
       height: 400,
       child: const Center(
         child: Column(
@@ -1088,6 +1089,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
 }
 
 // Provider for AnalyticsService (add this to your providers file)
+// Replace the UnimplementedError provider with this:
 final analyticsServiceProvider = Provider<AnalyticsService>((ref) {
-  throw UnimplementedError('AnalyticsService provider must be overridden');
+  return ref.watch(serviceManagerProvider).analyticsService;
 });

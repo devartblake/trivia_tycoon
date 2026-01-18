@@ -20,3 +20,29 @@ Avatar Package Schema
     }
   ]
 }
+
+import 'ui_components/depth_card_3d/models/depth_card_spec.dart';
+import 'ui_components/depth_card_3d/mappers/depth_card_spec_mapper.dart';
+import 'ui_components/depth_card_3d/depth_card_3d.dart';
+
+// Example: spec coming from backend (or local JSON)
+final spec = DepthCardSpec(
+  id: 'avatar_owl_01',
+  modelPath: 'assets/images/avatars/owl.png', // image-only for now
+  titleText: 'Night Owl',
+  themeKey: 'default',
+  backgroundAssetPath: 'assets/images/backgrounds/geometry_background.jpg',
+  overlays: const [
+    DepthOverlaySpec(kind: 'vignette', props: {'opacity': 0.18}),
+    DepthOverlaySpec(kind: 'softGlow', props: {'opacity': 0.10}),
+  ],
+);
+
+final config = DepthCardSpecMapper.toConfig(
+  spec,
+  onTap: () {
+    // UI-only action (select avatar, open modal, claim mission, etc.)
+  },
+);
+
+return DepthCard3D(config: config);

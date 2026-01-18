@@ -242,9 +242,7 @@ class EventQueueService {
   }
 
   /// Retry all pending events in the queue with failure tracking
-  Future<void> retryQueuedEvents(
-      Future<void> Function(String endpoint, Map<String, dynamic> payload) handler,
-      ) async {
+  Future<void> retryQueuedEvents( Future<void> Function(String endpoint, Map<String, dynamic> payload) handler) async {
     if (isInCooldown) {
       final remaining = _cooldownUntil!.difference(DateTime.now());
       LogManager.warning(
@@ -259,10 +257,7 @@ class EventQueueService {
 
     if (keys.isEmpty) return;
 
-    LogManager.info(
-      'Starting retry cycle - ${keys.length} events in queue',
-      source: 'EventQueueService',
-    );
+    LogManager.info('Processing - ${keys.length} queued events', source: 'EventQueueService');
 
     int successCount = 0;
     int failureCount = 0;

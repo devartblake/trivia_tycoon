@@ -11,6 +11,7 @@ import '../../game/providers/riverpod_providers.dart';
 import '../../screens/profile/widgets/animated_state_box.dart';
 import '../../ui_components/profile_avatar/profile_image_picker_dialog.dart';
 import 'enhanced/enhanced_profile_screen.dart';
+import 'enhanced/sheets/edit_profile_bottom_sheet.dart';
 import 'tabs/collection_tab.dart';
 import 'tabs/statistics_tab.dart';
 import 'tabs/achievements_tab.dart';
@@ -97,195 +98,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
   }
 
   void _showEditNameBottomSheet(BuildContext context, ProfileData? currentProfile) {
-    final TextEditingController nameController = TextEditingController(
-        text: currentProfile?.name ?? 'Guest');
-    final TextEditingController locationController = TextEditingController(
-        text: currentProfile?.country ?? '');
-    final TextEditingController gradeController = TextEditingController(
-        text: currentProfile?.ageGroup ?? '');
-    final TextEditingController teamController = TextEditingController(
-        text: currentProfile?.preferences['teamName'] ?? 'Study Squad');
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      isDismissible: true,
-      enableDrag: true,
-      builder: (context) => Container(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
+    if (currentProfile == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No active profile found'),
+          backgroundColor: Color(0xFFEF4444),
         ),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              const Color(0xFF6A5ACD),
-              const Color(0xFF8B7EC8),
-            ],
-          ),
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              blurRadius: 20,
-              offset: const Offset(0, -4),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Drag Handle
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.4),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24),
+      );
+      return;
+    }
 
-              // Header with Icon
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(
-                      Icons.edit_rounded,
-                      color: Colors.white,
-                      size: 24,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  const Text(
-                    'Edit Profile',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 28),
-
-              // Input Fields
-              _buildModernTextField(
-                controller: nameController,
-                label: 'Your Name',
-                icon: Icons.person_rounded,
-                maxLength: 30,
-              ),
-              const SizedBox(height: 16),
-              _buildModernTextField(
-                controller: locationController,
-                label: 'Location',
-                icon: Icons.location_on_rounded,
-                maxLength: 50,
-              ),
-              const SizedBox(height: 16),
-              _buildModernTextField(
-                controller: gradeController,
-                label: 'Current Grade',
-                icon: Icons.school_rounded,
-                maxLength: 20,
-              ),
-              const SizedBox(height: 16),
-              _buildModernTextField(
-                controller: teamController,
-                label: 'Study Group/Team Name',
-                icon: Icons.group_rounded,
-                maxLength: 30,
-              ),
-              const SizedBox(height: 28),
-
-              // Action Buttons
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildOutlinedButton(
-                      onPressed: () => Navigator.pop(context),
-                      label: 'Cancel',
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    flex: 2,
-                    child: _buildGradientButton(
-                      onPressed: () async {
-                        if (nameController.text.trim().isNotEmpty && currentProfile != null) {
-                          final multiProfileService = ref.read(multiProfileServiceProvider);
-
-                          final success = await multiProfileService.updateProfile(
-                            currentProfile.id,
-                            name: nameController.text.trim(),
-                            country: locationController.text.trim().isNotEmpty
-                                ? locationController.text.trim()
-                                : null,
-                            ageGroup: gradeController.text.trim().isNotEmpty
-                                ? gradeController.text.trim()
-                                : null,
-                            preferences: {
-                              ...currentProfile.preferences,
-                              'teamName': teamController.text.trim(),
-                            },
-                          );
-
-                          if (mounted) {
-                            Navigator.pop(context);
-                            ref.read(profileManagerProvider.notifier).refreshProfiles();
-
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Row(
-                                  children: [
-                                    Icon(
-                                      success ? Icons.check_circle : Icons.error,
-                                      color: Colors.white,
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Text(success
-                                        ? 'Profile updated!'
-                                        : 'Update failed'),
-                                  ],
-                                ),
-                                backgroundColor: success
-                                    ? const Color(0xFF10B981)
-                                    : const Color(0xFFEF4444),
-                                behavior: SnackBarBehavior.floating,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                margin: const EdgeInsets.all(16),
-                              ),
-                            );
-                          }
-                        }
-                      },
-                      label: 'Save Changes',
-                      icon: Icons.check_rounded,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-            ],
-          ),
-        ),
-      ),
-    );
+    // Use the new EditProfileBottomSheet
+    EditProfileBottomSheet.show(context, currentProfile);
   }
 
   Widget _buildModernTextField({

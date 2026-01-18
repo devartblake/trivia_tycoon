@@ -1,7 +1,13 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/presence/rich_presence_service.dart';
+import '../../../core/services/settings/multi_profile_service.dart';
 import '../../../game/models/user_presence_models.dart';
+import '../../../game/providers/multi_profile_providers.dart';
+import '../../../ui_components/depth_card_3d/core/depth_card_3d.dart';
+import '../../../ui_components/depth_card_3d/models/depth_card_config.dart';
+import '../../../ui_components/depth_card_3d/models/depth_card_theme.dart';
 import '../../../ui_components/presence/rich_presence_indicator.dart';
 import 'sections/profile_header_section.dart';
 import 'sections/profile_stats_section.dart';
@@ -9,6 +15,7 @@ import 'sections/arcade_summary_section.dart';
 import 'sections/missions_preview_section.dart';
 import 'sections/daily_bonus_section.dart';
 import 'sections/profile_actions_section.dart';
+import 'sheets/edit_profile_bottom_sheet.dart';
 import 'widgets/game_stats_widget.dart';
 import 'widgets/profile_header.dart';
 import 'mutual_friends_screen.dart';
@@ -22,7 +29,7 @@ import 'mutual_friends_screen.dart';
 /// - Daily bonus status and streak
 /// - Title system
 /// - Modern Material 3 design with glassmorphism
-class EnhancedProfileScreen extends StatefulWidget {
+class EnhancedProfileScreen extends ConsumerStatefulWidget {
   final String userId;
   final String currentUserId;
   final bool isOwnProfile;
@@ -35,10 +42,10 @@ class EnhancedProfileScreen extends StatefulWidget {
   });
 
   @override
-  State<EnhancedProfileScreen> createState() => _EnhancedProfileScreenState();
+  ConsumerState<EnhancedProfileScreen> createState() => _EnhancedProfileScreenState();
 }
 
-class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
+class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
     with TickerProviderStateMixin {
   final RichPresenceService _presenceService = RichPresenceService();
   late TabController _tabController;
@@ -230,7 +237,7 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
 
   Widget _buildModernAppBar(BuildContext context, bool innerBoxIsScrolled) {
     return SliverAppBar(
-      expandedHeight: 180,
+      expandedHeight: 400,
       floating: false,
       pinned: true,
       backgroundColor: const Color(0xFF0A0A0F),
@@ -239,29 +246,35 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
         background: Stack(
           fit: StackFit.expand,
           children: [
-            // Gradient Background
-            Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Color(0xFF6366F1),
-                    Color(0xFF8B5CF6),
-                    Color(0xFFEC4899),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+            // DepthCard3D Background
+            Center (
+              child: DepthCard3D(
+                config: DepthCardConfig(
+                  width: double.infinity,
+                  height: 400,
+                  text: '', // Required parameter - empty since we're using custom overlay
+                  modelAssetPath: 'assets/models/flutter_dash.obj', // Your 3D model path
+                  backgroundImage: const AssetImage('assets/images/backgrounds/bg7.jpg'), // Optional background
+                  backgroundOpacity: 0.3,
+                  backgroundBlur: 2.0,
+                  backgroundFit: BoxFit.cover,
+                  theme: const DepthCardTheme(
+                    name: 'Profile',
+                    shadowColor: Color(0xFF6366F1),
+                    textColor: Colors.white,
+                    elevation: 16,
+                    overlayColor: Color(0xFF6366F1),
+                    glowEnabled: true,
+                  ),
+                  parallaxDepth: 0.5,
+                  borderRadius: 0, // No border radius for app bar
+                  show3DText: false, // We'll use our own overlay text
+                  slots: DepthCardSlots(), // Empty slots, we'll add our own overlay
                 ),
               ),
             ),
 
-            // Grid Pattern Overlay
-            Positioned.fill(
-              child: CustomPaint(
-                painter: _GridPatternPainter(),
-              ),
-            ),
-
-            // Gradient Overlay
+            // Gradient Overlay for better readability
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -269,11 +282,112 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.transparent,
-                    Colors.black.withOpacity(0.3),
+                    Colors.black.withOpacity(0.4),
                   ],
                 ),
               ),
             ),
+
+            // Optional: Profile info overlay at bottom of app bar
+            if (!innerBoxIsScrolled)
+              Positioned(
+                bottom: 16,
+                left: 16,
+                right: 16,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.white.withOpacity(0.15),
+                            Colors.white.withOpacity(0.08),
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.2),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          // Avatar
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+                              ),
+                              border: Border.all(
+                                color: Colors.white.withOpacity(0.3),
+                                width: 2,
+                              ),
+                            ),
+                            child: const Icon(Icons.person, color: Colors.white, size: 28),
+                          ),
+                          const SizedBox(width: 12),
+                          // Name and username
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _userData['displayName'] ?? 'User',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  _userData['username'] ?? '@user',
+                                  style: TextStyle(
+                                    color: Colors.white.withOpacity(0.7),
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                          // Level badge
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFFFBBF24), Color(0xFFF59E0B)],
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.stars_rounded, color: Colors.white, size: 14),
+                                const SizedBox(width: 4),
+                                Text(
+                                  'Lv ${_userData['level']}',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
           ],
         ),
       ),
@@ -916,11 +1030,82 @@ class _EnhancedProfileScreenState extends State<EnhancedProfileScreen>
   }
 
   // Navigation methods
-  void _navigateToEditProfile() {
-    // TODO: Implement edit profile
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Edit profile feature coming soon')),
-    );
+  void _navigateToEditProfile() async {
+    // Use the state provider for synchronous access
+    final profile = ref.read(activeProfileStateProvider);
+
+    if (profile != null) {
+      // Show the edit profile bottom sheet
+      final result = await EditProfileBottomSheet.show(context, profile);
+
+      // If changes were saved, the providers automatically update via profileManagerProvider
+      if (result == true && mounted) {
+        // Profile was updated successfully
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(Icons.check_circle_rounded, color: Colors.white),
+                const SizedBox(width: 12),
+                const Text('Profile updated successfully!'),
+              ],
+            ),
+            backgroundColor: const Color(0xFF10B981),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            margin: const EdgeInsets.all(16),
+          ),
+        );
+      }
+    } else {
+      // Fallback: Try to load from the async provider
+      try {
+        final multiProfileService = ref.read(multiProfileServiceProvider);
+        final loadedProfile = await multiProfileService.getActiveProfile();
+
+        if (loadedProfile != null && mounted) {
+          final result = await EditProfileBottomSheet.show(context, loadedProfile);
+
+          if (result == true && mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Row(
+                  children: [
+                    const Icon(Icons.check_circle_rounded, color: Colors.white),
+                    const SizedBox(width: 12),
+                    const Text('Profile updated successfully!'),
+                  ],
+                ),
+                backgroundColor: const Color(0xFF10B981),
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                margin: const EdgeInsets.all(16),
+              ),
+            );
+          }
+        } else if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('No active profile found'),
+              backgroundColor: Color(0xFFEF4444),
+            ),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error loading profile: $e'),
+              backgroundColor: const Color(0xFFEF4444),
+            ),
+          );
+        }
+      }
+    }
   }
 
   void _navigateToArcadeScores() {

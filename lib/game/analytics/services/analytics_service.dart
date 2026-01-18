@@ -1,11 +1,11 @@
 import 'dart:async' show StreamSubscription, TimeoutException, Timer;
 import 'dart:convert';
+import 'package:hive/hive.dart';
+import 'package:uuid/uuid.dart';
 import 'package:flutter/foundation.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:hive/hive.dart';
 import 'package:trivia_tycoon/core/services/event_queue_service.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import 'package:uuid/uuid.dart';
 import '../../../core/services/api_service.dart';
 import '../models/engagement_entry.dart';
 import '../models/mission_analytics_entry.dart';
@@ -15,6 +15,7 @@ import '../models/retention_entry.dart';
 class AnalyticsService {
   final ApiService apiService;
   final EventQueueService eventQueueService;
+
   Timer? _retryTimer;
 
   // Offline persistence boxes
@@ -22,8 +23,7 @@ class AnalyticsService {
   Box? _sessionDataBox; // Added for enhanced session tracking
 
   // Connectivity monitoring
-  late final StreamSubscription<List<ConnectivityResult>>
-  _connectivitySubscription;
+  late final StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
   bool _isOnline = false;
   String? _currentSessionId;
 
@@ -35,7 +35,7 @@ class AnalyticsService {
   AnalyticsService(this.apiService, this.eventQueueService);
 
   /// Initializes the enhanced analytics service with persistence and connectivity monitoring
-  Future<void> initialize() async {
+  Future<void> initialize({ String? initialSessionId, bool silent = true}) async {
     LogManager.log('Initializing AnalyticsService',
         level: LogLevel.info, source: 'AnalyticsService');
 
@@ -43,8 +43,7 @@ class AnalyticsService {
       // Initialize Hive box for offline events
       _offlineEventsBox = await Hive.openBox('offline_analytics_events');
       _sessionDataBox = await Hive.openBox('analytics_session_data'); // Enhanced session storage
-      LogManager.log('Offline events box opened successfully',
-          level: LogLevel.debug, source: 'AnalyticsService');
+      LogManager.log('Offline events box opened successfully', level: LogLevel.debug, source: 'AnalyticsService');
 
       // Set up connectivity monitoring
       await _initializeConnectivity();
@@ -179,9 +178,7 @@ class AnalyticsService {
   }
 
   /// Store event for offline sync
-  Future<void> _storeOfflineEvent(
-      String eventName, Map<String, dynamic> data)
-  async {
+  Future<void> _storeOfflineEvent(String eventName, Map<String, dynamic> data) async {
     try {
       // Check if box is initialized
       if (_offlineEventsBox == null) {
@@ -266,12 +263,7 @@ class AnalyticsService {
   }
 
   /// Enhanced session tracking
-  Future<void> trackAppSession({
-    required String userId,
-    required String platform,
-    required String appVersion,
-  })
-  async {
+  Future<void> trackAppSession({ required String userId, required String platform, required String appVersion}) async {
     final sessionId = _currentSessionId ?? const Uuid().v4();
     final deviceId = const Uuid().v5(Uuid.NAMESPACE_URL, userId);
     final timestamp = DateTime.now().toUtc().toIso8601String();
@@ -297,9 +289,7 @@ class AnalyticsService {
   }
 
   /// Enhanced retry wrapper with better logging
-  Future<void> _sendWithRetry(
-      String endpoint, Map<String, dynamic> data)
-  async {
+  Future<void> _sendWithRetry( String endpoint, Map<String, dynamic> data) async {
     try {
       // FIX: Changed named parameter from `data` to `body` to match ApiService.
       await apiService.post(endpoint, body: data);
@@ -575,8 +565,7 @@ class AnalyticsService {
   }
 
   /// Track app lifecycle events
-  Future<void> trackLifecycleEvent(String event,
-      {Map<String, dynamic>? additionalData}) async {
+  Future<void> trackLifecycleEvent(String event, {Map<String, dynamic>? additionalData}) async {
     final data = {
       'lifecycle_event': event,
       'timestamp': DateTime.now().toIso8601String(),
@@ -591,12 +580,7 @@ class AnalyticsService {
   }
 
   /// Track user engagement metrics
-  Future<void> trackEngagement({
-    required String action,
-    String? screen,
-    int? duration,
-    Map<String, dynamic>? properties,
-  }) async {
+  Future<void> trackEngagement({ required String action, String? screen, int? duration, Map<String, dynamic>? properties}) async {
     final data = {
       'action': action,
       if (screen != null) 'screen': screen,
@@ -609,12 +593,7 @@ class AnalyticsService {
   }
 
   /// Track performance metrics
-  Future<void> trackPerformance({
-    required String metric,
-    required double value,
-    String? unit,
-    Map<String, dynamic>? context,
-  }) async {
+  Future<void> trackPerformance({required String metric, required double value, String? unit, Map<String, dynamic>? context}) async {
     final data = {
       'metric': metric,
       'value': value,

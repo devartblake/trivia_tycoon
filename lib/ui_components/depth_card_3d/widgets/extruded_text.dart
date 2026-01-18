@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
 
+import '../models/depth_card_theme.dart';
+
 /// Faux-3D text by stacking offset layers (dependency-free).
 class ExtrudedText extends StatelessWidget {
   final String text;
   final TextStyle style;
-  final int depth;
-  final double elevation;
+
+  /// Optional DepthCard theme (used by DepthCard3D). If provided, it will
+  /// influence face/side colors but will not override your explicit [style].
+  final DepthCardTheme? theme;
+
+  final int layers;
+  final double depth;
+  final double opacity;
   final Offset tilt;
+
   final bool shine;
+  final double elevation;
   final Duration shineDuration;
+
   final Color? faceColor;
   final Color? sideColor;
   final bool stroke; // optional outline under face
@@ -16,12 +27,11 @@ class ExtrudedText extends StatelessWidget {
   const ExtrudedText({
     super.key,
     required this.text,
-    this.style = const TextStyle(
-      fontSize: 32,
-      fontWeight: FontWeight.w900,
-      letterSpacing: 0.5,
-    ),
-    this.depth = 12,
+    required this.style,
+    this.theme,
+    this.layers = 6,
+    this.depth = 1.2,
+    this.opacity = 0.30,
     this.elevation = 1.0,
     this.tilt = Offset.zero,
     this.shine = true,
@@ -33,25 +43,30 @@ class ExtrudedText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final baseFace = faceColor ?? style.color ?? Colors.white;
-    final baseSide = sideColor ?? HSLColor.fromColor(baseFace).withLightness(0.25).toColor();
+    if (text.isEmpty) return const SizedBox.shrink();
 
-    final layers = <Widget>[];
+    final themedFace = faceColor ?? style.color ?? Colors.white;
+    final themedSide = sideColor ?? HSLColor.fromColor(themedFace).withLightness(0.25).toColor();
+
+    final dx = tilt.dx * depth;
+    final dy = tilt.dy * depth;
+
+    final stack = <Widget>[];
 
     // Back to front: sides first
-    for (int i = depth; i >= 1; i--) {
+    for (double i = depth; i >= 1; i--) {
       final dx = i * elevation * (0.25 + 0.75 * tilt.dx);
       final dy = i * elevation * (0.35 + 0.65 * tilt.dy);
 
-      layers.add(
+      stack.add(
         Transform.translate(
           offset: Offset(dx, dy),
           child: Text(
             text,
             style: style.copyWith(
               color: Color.alphaBlend(
-                baseSide.withOpacity(0.85),
-                baseFace.withOpacity(0.15),
+                themedSide.withOpacity(0.85),
+                themedFace.withOpacity(0.15),
               ),
             ),
           ),
@@ -59,7 +74,7 @@ class ExtrudedText extends StatelessWidget {
       );
     }
 
-    Widget faceText = Text(text, style: style.copyWith(color: baseFace));
+    Widget faceText = Text(text, style: style.copyWith(color: themedFace));
 
     if (shine) {
       faceText = ShaderMask(
@@ -82,7 +97,7 @@ class ExtrudedText extends StatelessWidget {
     }
 
     if (stroke) {
-      layers.add(
+      stack.add(
         Stack(
           children: [
             Text(
@@ -99,9 +114,37 @@ class ExtrudedText extends StatelessWidget {
         ),
       );
     } else {
-      layers.add(faceText);
+      stack.add(faceText);
     }
 
-    return Stack(children: layers);
+    // Side layers (extrusion)
+    for (int i = layers; i >= 1; i--) {
+      final t = i / layers;
+      stack.add(
+        Transform.translate(
+          offset: Offset(dx * t, dy * t),
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: style.copyWith(
+              color: themedSide.withOpacity(opacity * (1 - (t * 0.35))),
+            ),
+          ),
+        ),
+      );
+    }
+
+    // Face
+    stack.add(
+      Text(
+        text,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: style.copyWith(color: themedFace),
+      ),
+    );
+
+    return Stack(children: stack);
   }
 }
