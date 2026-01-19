@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'quiz_card.dart';
+import '../widgets/quiz_card.dart';
 
 class RecentlyPlayedSection extends StatefulWidget {
   final List<Map<String, String>> quizzes;

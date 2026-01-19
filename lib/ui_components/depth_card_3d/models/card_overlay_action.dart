@@ -5,11 +5,13 @@ class CardOverlayAction {
   final String? name;
   final IconData icon;
   final VoidCallback onPressed;
+  final VoidCallback onTap;
   final String tooltip;
 
   const CardOverlayAction({
     required this.icon,
     required this.onPressed,
+    required this.onTap,
     required this.tooltip,
     this.title,
     this.name,

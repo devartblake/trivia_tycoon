@@ -142,6 +142,31 @@ final profileManagerProvider = StateNotifierProvider<ProfileManagerNotifier, Pro
   return ProfileManagerNotifier(ref);
 });
 
+// Convenience provider for accessing available profiles
+final availableProfilesProvider = Provider<List<ProfileData>>((ref) {
+  final profileManager = ref.watch(profileManagerProvider);
+  return profileManager.profiles;
+});
+
+/// Convenience provider for checking if profile manager is loading
+final isProfileLoadingProvider = Provider<bool>((ref) {
+  final profileManager = ref.watch(profileManagerProvider);
+  return profileManager.isLoading;
+});
+
+/// Convenience provider for getting profile manager errors
+final profileErrorProvider = Provider<String?>((ref) {
+  final profileManager = ref.watch(profileManagerProvider);
+  return profileManager.error;
+});
+
+/// Convenience provider for getting the active profile
+/// (alternative to activeProfileStateProvider)
+final currentProfileProvider = Provider<ProfileData?>((ref) {
+  final profileManager = ref.watch(profileManagerProvider);
+  return profileManager.activeProfile;
+});
+
 class ProfileManagerState {
   final bool isInitialized;
   final bool isLoading;
@@ -265,12 +290,7 @@ class ProfileManagerNotifier extends StateNotifier<ProfileManagerState> {
     }
   }
 
-  Future<ProfileData?> createProfile({
-    required String name,
-    String? avatar,
-    String? country,
-    String? ageGroup,
-  }) async {
+  Future<ProfileData?> createProfile({required String name, String? avatar, String? country, String? ageGroup}) async {
     try {
       final multiProfileService = ref.read(multiProfileServiceProvider);
       final newProfile = await multiProfileService.createProfile(

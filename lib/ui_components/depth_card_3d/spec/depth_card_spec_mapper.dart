@@ -2,25 +2,43 @@ import 'package:flutter/material.dart';
 
 import '../models/depth_card_config.dart';
 import '../models/depth_card_theme.dart';
-import 'depth_card_spec.dart';
+import '../models/card_overlay_action.dart';
+import '../spec/depth_card_spec.dart';
 
-/// Converts DepthCardSpec (data-only) into DepthCardConfig (UI-only).
+/// Action dispatcher for JSON-safe actions.
 ///
-/// Backward compatibility:
-/// - Existing screens can keep passing DepthCardConfig directly.
-/// - Backend-driven flows pass DepthCardSpec and convert here.
+/// The mapper can create UI buttons, but the runtime app decides what the action does.
+/// This keeps the spec JSON-safe and backend-friendly.
+typedef DepthCardActionDispatcher = void Function(DepthCardActionSpec action);
+
+/// Converts JSON-safe DepthCardSpec → UI-only DepthCardConfig.
 ///
-/// Notes:
-/// - We keep overlays lightweight.
-/// - Unknown overlay kinds return SizedBox.shrink() to avoid crashes.
-/// - We DO NOT change DepthCardConfig; this mapper adapts to it.
+/// RULES:
+/// - DepthCardConfig is NOT modified
+/// - Spec is backend-safe
+/// - Mapper is the ONLY translation layer
 class DepthCardSpecMapper {
+
+  /// Map a spec to a UI config.
+  ///
+  /// Optional:
+  /// - onTap: UI callback
+  /// - slots: slot widgets for card corners/center
+  /// - overlayActions: UI-only actions (legacy/manual)
+  /// - actionDispatcher: converts spec.actions into UI actions
   static DepthCardConfig toConfig(
       DepthCardSpec spec, {
         VoidCallback? onTap,
         DepthCardSlots slots = DepthCardSlots.empty,
-        List<dynamic>? overlayActions, // keeps this mapper independent of your action type
+
+        /// Legacy/manual UI actions path (kept for compatibility).
+        List<CardOverlayAction>? overlayActions,
+
+        /// New path: map spec.actions -> CardOverlayAction buttons.
+        DepthCardActionDispatcher? actionDispatcher,
       }) {
+    final mappedActions = _mapSpecActions(spec.actions, dispatcher: actionDispatcher);
+
     return DepthCardConfig(
       modelAssetPath: spec.modelPath,
       text: spec.titleText,
@@ -29,22 +47,24 @@ class DepthCardSpecMapper {
       height: spec.height,
       borderRadius: spec.borderRadius,
       parallaxDepth: spec.parallaxDepth,
-      backgroundImage: (spec.backgroundAssetPath != null && spec.backgroundAssetPath!.trim().isNotEmpty)
+      showInteractiveOverlay: spec.showInteractiveOverlay,
+      // Background image (asset-only for now, backend-safe)
+      backgroundImage: (spec.backgroundAssetPath != null && spec.backgroundAssetPath!.isNotEmpty)
           ? AssetImage(spec.backgroundAssetPath!)
           : null,
       onTap: onTap,
       slots: slots,
-      overlayWidgets: spec.overlays.map(_overlayWidgetFromSpec).toList(),
-      showInteractiveOverlay: spec.showInteractiveOverlay,
 
-      // Keep as-is for now. Later you can define a JSON-safe ActionSpec DTO
-      // and map it into your CardOverlayAction list in a separate mapper.
-      overlayActions: overlayActions as dynamic,
+      // Overlay widgets (mapped from JSON-safe overlay specs)
+      overlayWidgets: spec.overlays.map(_overlayWidgetFromSpec).toList(growable: false),
+
+      // Actions remain UI-driven for now
+      overlayActions: overlayActions ?? mappedActions,
     );
   }
 
   // ---------------------------------------------------------------------------
-  // Theme mapping (backend sends "themeKey")
+  // Theme catalog
   // ---------------------------------------------------------------------------
 
   static DepthCardTheme _themeFromKey(String key) {
@@ -52,9 +72,9 @@ class DepthCardSpecMapper {
       case 'default':
         return const DepthCardTheme();
 
-    // Add your catalog as you expand:
+    // Future examples:
     // case 'indigoNeon':
-    //   return const DepthCardTheme(...);
+    //   return DepthCardThemes.indigoNeon;
 
       default:
         return const DepthCardTheme();
@@ -62,28 +82,73 @@ class DepthCardSpecMapper {
   }
 
   // ---------------------------------------------------------------------------
-  // Overlay catalog mapping
+  // Action mapping (JSON-safe -> UI-only CardOverlayAction)
   // ---------------------------------------------------------------------------
 
-  static Widget _overlayWidgetFromSpec(DepthOverlaySpec o) {
-    switch (o.kind) {
+  static List<CardOverlayAction>? _mapSpecActions(
+      List<DepthCardActionSpec> actions, {
+        required DepthCardActionDispatcher? dispatcher,
+      }) {
+    if (actions.isEmpty) return null;
+    if (dispatcher == null) return null;
+
+    return actions.map((a) {
+      return CardOverlayAction(
+        icon: _iconFromKey(a.iconKey),
+        tooltip: a.label,
+        onTap: () => dispatcher(a),
+        onPressed: () {  },
+      );
+    }).toList();
+  }
+
+  static IconData _iconFromKey(String key) {
+    // Keep this mapping stable. Backend sends strings, UI maps to IconData.
+    switch (key) {
+      case 'download':
+        return Icons.download_rounded;
+      case 'install':
+        return Icons.file_download_rounded;
+      case 'open':
+        return Icons.open_in_new_rounded;
+      case 'info':
+        return Icons.info_outline_rounded;
+      case 'gift':
+        return Icons.card_giftcard_rounded;
+      case 'play':
+        return Icons.play_arrow_rounded;
+      case 'profile':
+        return Icons.person_rounded;
+      case 'settings':
+        return Icons.settings_rounded;
+      case 'warning':
+        return Icons.warning_amber_rounded;
+      case 'delete':
+        return Icons.delete_outline_rounded;
+
+      default:
+        return Icons.more_horiz_rounded;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Overlay catalog (JSON-safe → Widget)
+  // ---------------------------------------------------------------------------
+
+  static Widget _overlayWidgetFromSpec(DepthOverlaySpec spec) {
+    switch (spec.kind) {
       case 'vignette':
         return _VignetteOverlay(
-          opacity: _toDouble(o.props['opacity'], fallback: 0.18),
+          opacity: _toDouble(spec.props['opacity'], fallback: 0.18),
         );
 
       case 'softGlow':
         return _SoftGlowOverlay(
-          opacity: _toDouble(o.props['opacity'], fallback: 0.12),
+          opacity: _toDouble(spec.props['opacity'], fallback: 0.12),
         );
 
-    // You can safely add more overlay kinds later:
-    // - "sparkle" (static light speckle)
-    // - "scanlines"
-    // - "noise" (subtle film grain)
-    // Keep them cheap for scroll performance.
-
       default:
+      // Unknown overlay → safe no-op
         return const SizedBox.shrink();
     }
   }
@@ -94,6 +159,9 @@ class DepthCardSpecMapper {
   }
 }
 
+// ---------------------------------------------------------------------------
+// Lightweight overlays (GPU-cheap, scroll-safe)
+// ---------------------------------------------------------------------------
 class _VignetteOverlay extends StatelessWidget {
   final double opacity;
   const _VignetteOverlay({required this.opacity});
@@ -110,7 +178,6 @@ class _VignetteOverlay extends StatelessWidget {
               Colors.black.withOpacity(opacity),
             ],
             radius: 0.95,
-            center: Alignment.center,
           ),
         ),
       ),

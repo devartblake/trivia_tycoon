@@ -85,8 +85,7 @@ class AvatarPackagesTab extends ConsumerWidget {
       render: const AvatarPackageRenderHints(kind: AvatarPackageType.image),
     );
 
-    const demoAssetPath =
-        'assets/zip/demo_avatar_package_animals_v1_fixed.zip';
+    const demoAssetPath = 'assets/zip/demo_avatar_package_animals_v1.zip';
 
     return PackageCardBundled(
       meta: demoMeta,

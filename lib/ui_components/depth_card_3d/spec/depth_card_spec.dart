@@ -33,10 +33,6 @@ class DepthCardSpec {
   /// Theme key, not the theme object. Example: "default", "indigoNeon", etc.
   final String themeKey;
 
-  /// Optional background asset path (JSON-safe string).
-  /// Example: "assets/images/backgrounds/geometry_background.jpg"
-  final String? backgroundAssetPath;
-
   /// Layout params
   final double width;
   final double height;
@@ -45,11 +41,20 @@ class DepthCardSpec {
   /// Parallax intensity
   final double parallaxDepth;
 
+  /// Optional background asset path (JSON-safe string).
+  /// Example: "assets/images/backgrounds/geometry_background.jpg"
+  final String? backgroundAssetPath;
+
   /// Feature flags
   final bool showInteractiveOverlay;
 
   /// Overlay spec list (JSON-safe recipes -> mapped to Widgets client-side).
   final List<DepthOverlaySpec> overlays;
+
+  /// JSON-safe overlay actions (buttons) that can be rendered as UI actions.
+  /// These are *data only*; the mapper can turn them into CardOverlayAction
+  /// by using an action dispatcher callback (runtime).
+  final List<DepthCardActionSpec> actions;
 
   const DepthCardSpec({
     this.schemaVersion = 1,
@@ -64,6 +69,7 @@ class DepthCardSpec {
     this.parallaxDepth = 0.25,
     this.showInteractiveOverlay = true,
     this.overlays = const [],
+    this.actions = const [],
   });
 
   DepthCardSpec copyWith({
@@ -79,6 +85,7 @@ class DepthCardSpec {
     double? parallaxDepth,
     bool? showInteractiveOverlay,
     List<DepthOverlaySpec>? overlays,
+    List<DepthCardActionSpec>? actions,
   }) {
     return DepthCardSpec(
       schemaVersion: schemaVersion ?? this.schemaVersion,
@@ -93,6 +100,7 @@ class DepthCardSpec {
       parallaxDepth: parallaxDepth ?? this.parallaxDepth,
       showInteractiveOverlay: showInteractiveOverlay ?? this.showInteractiveOverlay,
       overlays: overlays ?? this.overlays,
+      actions: actions ?? this.actions,
     );
   }
 
@@ -111,6 +119,7 @@ class DepthCardSpec {
         'parallaxDepth': parallaxDepth,
         'showInteractiveOverlay': showInteractiveOverlay,
         'overlays': overlays.map((e) => e.toJson()).toList(),
+        'actions': actions.map((e) => e.toJson()).toList(),
       };
     }
 
@@ -128,6 +137,7 @@ class DepthCardSpec {
       'parallax_depth': parallaxDepth,
       'show_interactive_overlay': showInteractiveOverlay,
       'overlays': overlays.map((e) => e.toJson(snakeCase: true)).toList(),
+      'actions': actions.map((e) => e.toJson()).toList(),
     };
   }
 
@@ -155,7 +165,16 @@ class DepthCardSpec {
       borderRadius: _toDouble(read('borderRadius', 'border_radius'), fallback: 24),
       parallaxDepth: _toDouble(read('parallaxDepth', 'parallax_depth'), fallback: 0.25),
       showInteractiveOverlay: _toBool(read('showInteractiveOverlay', 'show_interactive_overlay'), fallback: true),
-      overlays: overlays,
+      overlays: (json['overlays'] is List)
+          ? (json['overlays'] as List)
+          .map((e) => DepthOverlaySpec.fromJson(Map<String, dynamic>.from(e as Map)))
+          .toList()
+          : const [],
+      actions: (json['actions'] is List)
+          ? (json['actions'] as List)
+          .map((e) => DepthCardActionSpec.fromJson(Map<String, dynamic>.from(e as Map)))
+          .toList()
+          : const [],
     );
   }
 
@@ -209,10 +228,95 @@ class DepthOverlaySpec {
   }
 
   factory DepthOverlaySpec.fromJson(Map<String, dynamic> json) {
-    final propsRaw = json['props'];
     return DepthOverlaySpec(
       kind: (json['kind'] ?? '').toString(),
-      props: (propsRaw is Map) ? Map<String, dynamic>.from(propsRaw as Map) : const {},
+      props: json['props'] is Map ? Map<String, dynamic>.from(json['props'] as Map) : const {},
+    );
+  }
+}
+
+/// Stable action kinds the backend can send later.
+/// Keep these keys stable; treat them like an API contract.
+enum DepthCardActionKind {
+  /// Navigate (internal route) or open external URL.
+  openUrl,
+
+  /// Open a profile (userId should be in payload).
+  openProfile,
+
+  /// Open a modal/details sheet.
+  showDetails,
+
+  /// Avatar package install / download.
+  installPackage,
+
+  /// Mission/bonus claim.
+  claimReward,
+
+  /// Fallback for custom server behaviors.
+  custom,
+}
+
+/// JSON-safe action spec.
+/// UI is not embedded here; mapper converts this into CardOverlayAction.
+class DepthCardActionSpec {
+  /// Unique action id (useful for analytics/event queue).
+  final String id;
+
+  /// Tooltip/label for UI button.
+  final String label;
+
+  /// Icon key (mapped in mapper; backend sends string).
+  /// Example: "info", "download", "open", "gift"
+  final String iconKey;
+
+  /// What the action means.
+  final DepthCardActionKind kind;
+
+  /// Arbitrary JSON payload for action execution.
+  /// Example:
+  /// - { "url": "https://..." }
+  /// - { "route": "/profile/123" }
+  /// - { "userId": "abc" }
+  /// - { "packageId": "animals", "version": "1.0.0" }
+  final Map<String, dynamic> payload;
+
+  /// Optional style key for future (e.g. "primary", "danger").
+  /// For now it is not used by UI.
+  final String? styleKey;
+
+  const DepthCardActionSpec({
+    required this.id,
+    required this.label,
+    required this.iconKey,
+    required this.kind,
+    this.payload = const {},
+    this.styleKey,
+  });
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'label': label,
+    'iconKey': iconKey,
+    'kind': kind.name,
+    'payload': payload,
+    'styleKey': styleKey,
+  };
+
+  factory DepthCardActionSpec.fromJson(Map<String, dynamic> json) {
+    final kindStr = (json['kind'] ?? 'custom').toString();
+    final kind = DepthCardActionKind.values.firstWhere(
+          (k) => k.name == kindStr,
+      orElse: () => DepthCardActionKind.custom,
+    );
+
+    return DepthCardActionSpec(
+      id: (json['id'] ?? '').toString(),
+      label: (json['label'] ?? '').toString(),
+      iconKey: (json['iconKey'] ?? 'info').toString(),
+      kind: kind,
+      payload: json['payload'] is Map ? Map<String, dynamic>.from(json['payload'] as Map) : const {},
+      styleKey: json['styleKey']?.toString(),
     );
   }
 }

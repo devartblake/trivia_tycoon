@@ -1,7 +1,5 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../game/providers/avatar_package_providers.dart';
 import '../../../game/providers/riverpod_providers.dart';
 import '../../../game/utils/avatar_asset_loader.dart';
 import '../widgets/avatar_image_card.dart';

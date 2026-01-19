@@ -55,7 +55,7 @@ class _Avatar3DTabState extends ConsumerState<Avatar3DTab> {
     return Column(
       children: [
         _buildThemeSelector(),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
         Expanded(child: _buildContent()),
       ],
     );
