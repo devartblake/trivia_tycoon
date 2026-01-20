@@ -1078,7 +1078,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
               child: Text(
                 activeProfile.name,
                 style: const TextStyle(
-                  fontSize: 32,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                   letterSpacing: 0.5,
@@ -1135,7 +1135,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
             _buildInfoChip(
               icon: Icons.favorite_rounded,
               label: 'Loves $favoriteSubject',
-              color: const Color(0xFFFF6B6B),
+              color: const Color(0xFFFBBF24),
             ),
           ],
         ),

@@ -11,7 +11,7 @@ enum AvatarPackageType {
 enum AvatarSource {
   asset,
   file,
-  remote,
+  remote, network,
 }
 
 /// More Flutter-friendly, future-proof avatar kind.

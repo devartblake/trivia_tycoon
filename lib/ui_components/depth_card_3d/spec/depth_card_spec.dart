@@ -1,83 +1,83 @@
 import 'dart:convert';
 
-/// JSON-safe rendering spec that your backend can return.
+/// JSON-safe, backend-ready spec for rendering a DepthCard.
 ///
-/// IMPORTANT:
-/// - Data-only (no Widgets, no callbacks, no ImageProvider, no Flutter-only types).
-/// - Convert to your existing UI-only DepthCardConfig via DepthCardSpecMapper.
-///
-/// Backward compatibility:
-/// - This spec is versioned via [schemaVersion].
-/// - fromJson tolerates both camelCase and snake_case keys.
-///
-/// Paths:
-/// - `modelPath` can be an asset path ("assets/..."), local file path ("/data/..."),
-///   or a remote URL ("https://...").
-/// - `backgroundAssetPath` is an optional asset path string. If you later want remote
-///   backgrounds, add a backgroundUrl field and resolve client-side.
+/// Key goals:
+/// - Pure data (no Widgets)
+/// - Fully serializable (toJson/fromJson)
+/// - Backward compatible: tolerant parsing + sensible defaults
+/// - Supports "image-only now" but can be extended to 3D later without
+///   touching UI code paths (DepthCardConfig stays UI-only).
 class DepthCardSpec {
-  /// Increment when you evolve the schema.
-  /// Keep defaults compatible.
-  final int schemaVersion;
-
-  /// Unique identifier for the spec (useful for caching/dedup).
+  /// Optional stable id for caching/dedupe (e.g. avatarId, missionId).
   final String id;
 
-  /// Primary content path (3D model OR image).
-  /// Can be asset/file/url.
-  final String modelPath;
+  /// Human text shown on the card.
+  final String text;
 
-  /// Optional title text displayed at top (maps to DepthCardConfig.text).
-  final String titleText;
-
-  /// Theme key, not the theme object. Example: "default", "indigoNeon", etc.
+  /// A theme key that maps to your DepthCardThemes catalog.
+  /// Examples:
+  /// - "light", "dark", "futuristic", "neon", "fantasy", "minimalist", "oceanic", "blueSteel"
+  ///
+  /// You can also accept legacy synonyms (handled in mapper).
   final String themeKey;
 
-  /// Layout params
-  final double width;
-  final double height;
-  final double borderRadius;
+  /// Main visual asset reference.
+  ///
+  /// Supported patterns:
+  /// - asset: "assets/images/avatars/a.png"
+  /// - file:  "/data/user/0/.../a.png"
+  ///
+  /// For future:
+  /// - 3D: "assets/3d/characters/x.glb" or absolute file path
+  final String modelPath;
 
-  /// Parallax intensity
-  final double parallaxDepth;
-
-  /// Optional background asset path (JSON-safe string).
-  /// Example: "assets/images/backgrounds/geometry_background.jpg"
+  /// Optional background image (asset or file). If not provided, the theme can handle it.
   final String? backgroundAssetPath;
 
-  /// Feature flags
+  /// Optional card sizing hints (UI may override).
+  final double? width;
+  final double? height;
+
+  /// UI-ish values but still JSON-safe; mapper applies defaults if null.
+  final double? borderRadius;
+  final double? parallaxDepth;
+
+  /// Whether to show the glass interactive overlay.
   final bool showInteractiveOverlay;
 
-  /// Overlay spec list (JSON-safe recipes -> mapped to Widgets client-side).
+  /// UI-only overlays (JSON-safe) that mapper can translate to actual widgets.
+  /// Example:
+  /// [
+  ///   {"kind":"badge","props":{"slot":"topRight","text":"+50"}},
+  ///   {"kind":"softGlow","props":{"intensity":0.6}}
+  /// ]
   final List<DepthOverlaySpec> overlays;
 
-  /// JSON-safe overlay actions (buttons) that can be rendered as UI actions.
-  /// These are *data only*; the mapper can turn them into CardOverlayAction
-  /// by using an action dispatcher callback (runtime).
+  /// Optional actions that can be rendered as overlay actions (buttons).
+  /// This is JSON-safe; UI decides how to display them.
   final List<DepthCardActionSpec> actions;
 
   const DepthCardSpec({
-    this.schemaVersion = 1,
     required this.id,
+    required this.text,
     required this.modelPath,
-    this.titleText = '',
-    this.themeKey = 'default',
+    required this.themeKey,
     this.backgroundAssetPath,
-    this.width = 320,
-    this.height = 220,
-    this.borderRadius = 24,
-    this.parallaxDepth = 0.25,
+    this.width,
+    this.height,
+    this.borderRadius,
+    this.parallaxDepth,
     this.showInteractiveOverlay = true,
     this.overlays = const [],
     this.actions = const [],
   });
 
   DepthCardSpec copyWith({
-    int? schemaVersion,
     String? id,
-    String? modelPath,
-    String? titleText,
+    String? text,
     String? themeKey,
+    String? modelPath,
     String? backgroundAssetPath,
     double? width,
     double? height,
@@ -88,11 +88,10 @@ class DepthCardSpec {
     List<DepthCardActionSpec>? actions,
   }) {
     return DepthCardSpec(
-      schemaVersion: schemaVersion ?? this.schemaVersion,
       id: id ?? this.id,
-      modelPath: modelPath ?? this.modelPath,
-      titleText: titleText ?? this.titleText,
+      text: text ?? this.text,
       themeKey: themeKey ?? this.themeKey,
+      modelPath: modelPath ?? this.modelPath,
       backgroundAssetPath: backgroundAssetPath ?? this.backgroundAssetPath,
       width: width ?? this.width,
       height: height ?? this.height,
@@ -104,219 +103,170 @@ class DepthCardSpec {
     );
   }
 
-  Map<String, dynamic> toJson({bool snakeCase = false}) {
-    if (!snakeCase) {
-      return {
-        'schemaVersion': schemaVersion,
-        'id': id,
-        'modelPath': modelPath,
-        'titleText': titleText,
-        'themeKey': themeKey,
-        'backgroundAssetPath': backgroundAssetPath,
-        'width': width,
-        'height': height,
-        'borderRadius': borderRadius,
-        'parallaxDepth': parallaxDepth,
-        'showInteractiveOverlay': showInteractiveOverlay,
-        'overlays': overlays.map((e) => e.toJson()).toList(),
-        'actions': actions.map((e) => e.toJson()).toList(),
-      };
-    }
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'text': text,
+    'themeKey': themeKey,
+    'modelPath': modelPath,
+    if (backgroundAssetPath != null) 'backgroundAssetPath': backgroundAssetPath,
+    if (width != null) 'width': width,
+    if (height != null) 'height': height,
+    if (borderRadius != null) 'borderRadius': borderRadius,
+    if (parallaxDepth != null) 'parallaxDepth': parallaxDepth,
+    'showInteractiveOverlay': showInteractiveOverlay,
+    'overlays': overlays.map((e) => e.toJson()).toList(),
+    'actions': actions.map((e) => e.toJson()).toList(),
+  };
 
-    // Optional: if your backend prefers snake_case.
-    return {
-      'schema_version': schemaVersion,
-      'id': id,
-      'model_path': modelPath,
-      'title_text': titleText,
-      'theme_key': themeKey,
-      'background_asset_path': backgroundAssetPath,
-      'width': width,
-      'height': height,
-      'border_radius': borderRadius,
-      'parallax_depth': parallaxDepth,
-      'show_interactive_overlay': showInteractiveOverlay,
-      'overlays': overlays.map((e) => e.toJson(snakeCase: true)).toList(),
-      'actions': actions.map((e) => e.toJson()).toList(),
-    };
-  }
+  String toPrettyJson() => const JsonEncoder.withIndent('  ').convert(toJson());
 
+  /// Tolerant parsing: accepts legacy fields where possible.
   factory DepthCardSpec.fromJson(Map<String, dynamic> json) {
-    // Accept both camelCase and snake_case.
-    dynamic read(String camel, String snake) => json.containsKey(camel) ? json[camel] : json[snake];
-
-    final overlaysRaw = read('overlays', 'overlays');
-    final overlays = (overlaysRaw is List)
-        ? overlaysRaw
-        .whereType<Map>()
-        .map((e) => DepthOverlaySpec.fromJson(Map<String, dynamic>.from(e)))
-        .toList()
-        : const <DepthOverlaySpec>[];
+    final overlaysRaw = json['overlays'];
+    final actionsRaw = json['actions'];
 
     return DepthCardSpec(
-      schemaVersion: _toInt(read('schemaVersion', 'schema_version'), fallback: 1),
-      id: (read('id', 'id') ?? '').toString(),
-      modelPath: (read('modelPath', 'model_path') ?? '').toString(),
-      titleText: (read('titleText', 'title_text') ?? '').toString(),
-      themeKey: (read('themeKey', 'theme_key') ?? 'default').toString(),
-      backgroundAssetPath: read('backgroundAssetPath', 'background_asset_path')?.toString(),
-      width: _toDouble(read('width', 'width'), fallback: 320),
-      height: _toDouble(read('height', 'height'), fallback: 220),
-      borderRadius: _toDouble(read('borderRadius', 'border_radius'), fallback: 24),
-      parallaxDepth: _toDouble(read('parallaxDepth', 'parallax_depth'), fallback: 0.25),
-      showInteractiveOverlay: _toBool(read('showInteractiveOverlay', 'show_interactive_overlay'), fallback: true),
-      overlays: (json['overlays'] is List)
-          ? (json['overlays'] as List)
-          .map((e) => DepthOverlaySpec.fromJson(Map<String, dynamic>.from(e as Map)))
+      id: (json['id']?? '').toString(),
+      text: (json['text'] ?? '').toString(),
+      themeKey: (json['themeKey'] ?? json['theme'] ?? 'futuristic').toString(),
+      modelPath: (json['modelPath'] ?? json['src'] ?? json['model'] ?? '').toString(),
+      backgroundAssetPath: json['backgroundAssetPath']?.toString(),
+      width: _num(json['width']),
+      height: _num(json['height']),
+      borderRadius: _num(json['borderRadius']),
+      parallaxDepth: _num(json['parallaxDepth']),
+      showInteractiveOverlay: (json['showInteractiveOverlay'] is bool)
+          ? json['showInteractiveOverlay'] as bool
+          : true,
+      overlays: overlaysRaw is List
+          ? overlaysRaw
+          .whereType<Map>()
+          .map((m) => DepthOverlaySpec.fromJson(Map<String, dynamic>.from(m)))
           .toList()
           : const [],
-      actions: (json['actions'] is List)
-          ? (json['actions'] as List)
-          .map((e) => DepthCardActionSpec.fromJson(Map<String, dynamic>.from(e as Map)))
+      actions: actionsRaw is List
+          ? actionsRaw
+          .whereType<Map>()
+          .map((m) => DepthCardActionSpec.fromJson(Map<String, dynamic>.from(m)))
           .toList()
           : const [],
     );
   }
 
-  String toPrettyJson({bool snakeCase = false}) =>
-      const JsonEncoder.withIndent('  ').convert(toJson(snakeCase: snakeCase));
-
-  static double _toDouble(dynamic v, {required double fallback}) {
+  static double? _num(dynamic v) {
+    if (v == null) return null;
     if (v is num) return v.toDouble();
-    return double.tryParse('$v') ?? fallback;
-  }
-
-  static int _toInt(dynamic v, {required int fallback}) {
-    if (v is int) return v;
-    if (v is num) return v.toInt();
-    return int.tryParse('$v') ?? fallback;
-  }
-
-  static bool _toBool(dynamic v, {required bool fallback}) {
-    if (v is bool) return v;
-    final s = '$v'.toLowerCase().trim();
-    if (s == 'true' || s == '1' || s == 'yes') return true;
-    if (s == 'false' || s == '0' || s == 'no') return false;
-    return fallback;
+    return double.tryParse(v.toString());
   }
 }
 
-/// A JSON-safe overlay definition.
-/// These are "recipes" the client maps to actual overlay widgets.
+/// JSON-safe overlay descriptor.
 ///
-/// Example:
-/// { "kind":"vignette", "props": { "opacity": 0.18 } }
-/// { "kind":"softGlow", "props": { "opacity": 0.12 } }
+/// Each overlay is:
+/// - kind: "softGlow", "vignette", "badge", "chip", etc.
+/// - props: kind-specific properties (slot/text/intensity/colors etc.)
 class DepthOverlaySpec {
-  /// Overlay “type” (client-defined catalog).
-  final String kind;
+  /// Overlay kind identifier.
+  /// Examples:
+  /// - "vignette"
+  /// - "softGlow"
+  /// - "badge"
+  /// - "chip"
+  final String type;
 
-  /// JSON-safe props bag (numbers, strings, bools, arrays, maps).
+  /// Slot selector for overlays that should align to a corner.
+  /// Supported: "topLeft", "topRight", "bottomLeft", "bottomRight", "center"
+  final String? slot;
+
+  /// Optional display text for overlays like badge/chip.
+  final String? text;
+
+  /// Arbitrary properties for tuning (opacity, etc.).
   final Map<String, dynamic> props;
 
   const DepthOverlaySpec({
-    required this.kind,
+    required this.type,
+    this.slot,
+    this.text,
     this.props = const {},
   });
 
-  Map<String, dynamic> toJson({bool snakeCase = false}) {
-    // Here snakeCase isn't critical; kept for symmetry.
-    return {
-      'kind': kind,
-      'props': props,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+    'type': type,
+    if (slot != null) 'slot': slot,
+    if (text != null) 'text': text,
+    'props': props,
+  };
 
   factory DepthOverlaySpec.fromJson(Map<String, dynamic> json) {
+    final rawProps = json['props'];
     return DepthOverlaySpec(
-      kind: (json['kind'] ?? '').toString(),
-      props: json['props'] is Map ? Map<String, dynamic>.from(json['props'] as Map) : const {},
+      type: (json['kind'] ?? json['type'] ?? '').toString(),
+      slot: json['slot']?.toString(),
+      text: json['text']?.toString(),
+      props: json['props'] is Map
+          ? Map<String, dynamic>.from(json['props'] as Map)
+          : const {},
     );
   }
 }
 
-/// Stable action kinds the backend can send later.
-/// Keep these keys stable; treat them like an API contract.
-enum DepthCardActionKind {
-  /// Navigate (internal route) or open external URL.
-  openUrl,
-
-  /// Open a profile (userId should be in payload).
-  openProfile,
-
-  /// Open a modal/details sheet.
-  showDetails,
-
-  /// Avatar package install / download.
-  installPackage,
-
-  /// Mission/bonus claim.
-  claimReward,
-
-  /// Fallback for custom server behaviors.
-  custom,
-}
-
-/// JSON-safe action spec.
-/// UI is not embedded here; mapper converts this into CardOverlayAction.
+/// JSON-safe action descriptor.
+///
+/// Actions are intentionally data-only. The UI can map them to:
+/// - buttons
+/// - chips
+/// - context menus
+///
+/// Examples:
+/// {"id":"equip","label":"Equip","icon":"check","intent":"equip_avatar"}
+/// {"id":"open","label":"Open","intent":"open_mission","payload":{"missionId":"m1"}}
 class DepthCardActionSpec {
-  /// Unique action id (useful for analytics/event queue).
+  /// Stable id for analytics and routing.
   final String id;
 
-  /// Tooltip/label for UI button.
+  /// "open", "equip", "buy", "info", "share", etc.
+  final String type;
+
+  /// Button label.
   final String label;
 
-  /// Icon key (mapped in mapper; backend sends string).
-  /// Example: "info", "download", "open", "gift"
-  final String iconKey;
+  /// Material icon key (mapper converts to IconData).
+  /// Examples: "info", "check", "shopping_cart"
+  final String? icon;
 
-  /// What the action means.
-  final DepthCardActionKind kind;
+  /// Intent key for routing/handlers.
+  final String intent;
 
-  /// Arbitrary JSON payload for action execution.
-  /// Example:
-  /// - { "url": "https://..." }
-  /// - { "route": "/profile/123" }
-  /// - { "userId": "abc" }
-  /// - { "packageId": "animals", "version": "1.0.0" }
+  /// Optional extra data. Must remain JSON-safe.
   final Map<String, dynamic> payload;
-
-  /// Optional style key for future (e.g. "primary", "danger").
-  /// For now it is not used by UI.
-  final String? styleKey;
 
   const DepthCardActionSpec({
     required this.id,
+    required this.type,
     required this.label,
-    required this.iconKey,
-    required this.kind,
+    required this.intent,
+    this.icon,
     this.payload = const {},
-    this.styleKey,
   });
 
   Map<String, dynamic> toJson() => {
     'id': id,
     'label': label,
-    'iconKey': iconKey,
-    'kind': kind.name,
-    'payload': payload,
-    'styleKey': styleKey,
+    'intent': intent,
+    if (icon != null) 'icon': icon,
+    if (payload.isNotEmpty) 'payload': payload,
   };
 
   factory DepthCardActionSpec.fromJson(Map<String, dynamic> json) {
-    final kindStr = (json['kind'] ?? 'custom').toString();
-    final kind = DepthCardActionKind.values.firstWhere(
-          (k) => k.name == kindStr,
-      orElse: () => DepthCardActionKind.custom,
-    );
-
+    final rawPayload = json['payload'];
     return DepthCardActionSpec(
       id: (json['id'] ?? '').toString(),
+      type: (json['type'] ?? '').toString(),
       label: (json['label'] ?? '').toString(),
-      iconKey: (json['iconKey'] ?? 'info').toString(),
-      kind: kind,
-      payload: json['payload'] is Map ? Map<String, dynamic>.from(json['payload'] as Map) : const {},
-      styleKey: json['styleKey']?.toString(),
+      intent: (json['intent'] ?? '').toString(),
+      icon: json['icon']?.toString(),
+      payload: rawPayload is Map ? Map<String, dynamic>.from(rawPayload) : const {},
     );
   }
 }

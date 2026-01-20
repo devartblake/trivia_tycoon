@@ -129,7 +129,7 @@ class _Avatar3DTabState extends ConsumerState<Avatar3DTab> {
           children: [
             Container(
               width: 60,
-              height: 60,
+              height: 80,
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [Color(0xFF8B5CF6), Color(0xFFEC4899)],

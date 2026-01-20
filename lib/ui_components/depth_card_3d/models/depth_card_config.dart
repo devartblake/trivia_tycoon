@@ -1,25 +1,8 @@
 import 'package:flutter/material.dart';
 import 'card_overlay_action.dart';
+import 'depth_card_slots.dart';
 import 'depth_card_theme.dart';
 import 'lighting_options.dart';
-
-class DepthCardSlots {
-  final Widget? topLeft;
-  final Widget? topRight;
-  final Widget? bottomLeft;
-  final Widget? bottomRight;
-  final Widget? center;
-
-  const DepthCardSlots({
-    this.topLeft,
-    this.topRight,
-    this.bottomLeft,
-    this.bottomRight,
-    this.center,
-  });
-
-  static const empty = DepthCardSlots();
-}
 
 class DepthCardConfig {
   final String modelAssetPath;

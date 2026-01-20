@@ -76,4 +76,10 @@ class DepthCardThemes {
     oceanic,
     blueSteel
   ];
+
+  static const DepthCardTheme indigo = futuristic;
+  static const DepthCardTheme neonPink = neon;
+  static const DepthCardTheme emerald = oceanic;
+  static const DepthCardTheme amber = fantasy;
+  static const DepthCardTheme midnight = dark;
 }

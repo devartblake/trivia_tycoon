@@ -2,11 +2,11 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/presence/rich_presence_service.dart';
-import '../../../core/services/settings/multi_profile_service.dart';
 import '../../../game/models/user_presence_models.dart';
 import '../../../game/providers/multi_profile_providers.dart';
 import '../../../ui_components/depth_card_3d/core/depth_card_3d.dart';
 import '../../../ui_components/depth_card_3d/models/depth_card_config.dart';
+import '../../../ui_components/depth_card_3d/models/depth_card_slots.dart';
 import '../../../ui_components/depth_card_3d/models/depth_card_theme.dart';
 import '../../../ui_components/presence/rich_presence_indicator.dart';
 import 'sections/profile_header_section.dart';
@@ -19,6 +19,12 @@ import 'sheets/edit_profile_bottom_sheet.dart';
 import 'widgets/game_stats_widget.dart';
 import 'widgets/profile_header.dart';
 import 'mutual_friends_screen.dart';
+
+enum EnhancedProfileAction {
+  message,
+  challenge,
+  block,
+}
 
 /// Enhanced Profile Screen with arcade integration, missions, and daily bonus
 ///

@@ -1,125 +1,122 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import '../../../game/models/avatar_package_models.dart';
 
-class AvatarImageCard extends StatefulWidget {
-  final String imagePath;
-  final VoidCallback onTap;
+/// Enhanced Avatar Image Card - Using AvatarAssetRef (Preferred)
+///
+/// This version uses the type-safe AvatarAssetRef approach from AvatarAssetLoader.
+/// No path guessing needed - the ref tells us exactly how to load it!
+class AvatarImageCard extends StatelessWidget {
+  final AvatarAssetRef avatarRef;
+  final VoidCallback? onTap;
+  final bool isSelected;
 
   const AvatarImageCard({
     super.key,
-    required this.imagePath,
-    required this.onTap,
+    required this.avatarRef,
+    this.onTap,
+    this.isSelected = false,
   });
-
-  @override
-  State<AvatarImageCard> createState() => _AvatarImageCardState();
-}
-
-class _AvatarImageCardState extends State<AvatarImageCard>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-  bool _isPressed = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 150),
-      vsync: this,
-    );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _handleTapDown(TapDownDetails details) {
-    setState(() => _isPressed = true);
-    _controller.forward();
-  }
-
-  void _handleTapUp(TapUpDetails details) {
-    setState(() => _isPressed = false);
-    _controller.reverse();
-  }
-
-  void _handleTapCancel() {
-    setState(() => _isPressed = false);
-    _controller.reverse();
-  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: _handleTapDown,
-      onTapUp: _handleTapUp,
-      onTapCancel: _handleTapCancel,
-      onTap: widget.onTap,
-      child: ScaleTransition(
-        scale: _scaleAnimation,
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: _isPressed
-                  ? [
-                const Color(0xFF6366F1).withOpacity(0.3),
-                const Color(0xFF8B5CF6).withOpacity(0.2),
-              ]
-                  : [
-                Colors.white.withOpacity(0.08),
-                Colors.white.withOpacity(0.04),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: _isPressed
-                  ? const Color(0xFF6366F1).withOpacity(0.5)
-                  : Colors.white.withOpacity(0.12),
-              width: 2,
-            ),
-            boxShadow: _isPressed
-                ? [
-              BoxShadow(
-                color: const Color(0xFF6366F1).withOpacity(0.3),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ]
-                : [],
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isSelected
+                ? const Color(0xFF6366F1)
+                : Colors.white.withOpacity(0.1),
+            width: isSelected ? 3 : 1,
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(18),
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                Image(
-                  image: widget.imagePath.startsWith('assets/')
-                      ? AssetImage(widget.imagePath) as ImageProvider
-                      : FileImage(File(widget.imagePath)),
-                  fit: BoxFit.cover,
-                ),
-                if (_isPressed)
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          const Color(0xFF6366F1).withOpacity(0.2),
-                          const Color(0xFF8B5CF6).withOpacity(0.2),
-                        ],
-                      ),
-                    ),
-                  ),
-              ],
+          boxShadow: isSelected
+              ? [
+            BoxShadow(
+              color: const Color(0xFF6366F1).withOpacity(0.3),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
             ),
-          ),
+          ]
+              : null,
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: _buildImage(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildImage() {
+    // Use the source type from the ref - no guessing!
+    switch (avatarRef.source) {
+      case AvatarSource.asset:
+      // Bundled asset
+        return Image.asset(
+          avatarRef.path,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return _buildErrorWidget();
+          },
+        );
+
+      case AvatarSource.file:
+      // File from installed package
+        return Image.file(
+          File(avatarRef.path),
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return _buildErrorWidget();
+          },
+        );
+
+      case AvatarSource.network:
+      // Network URL (if you add this later)
+        return Image.network(
+          avatarRef.path,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return _buildErrorWidget();
+          },
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return _buildLoadingWidget();
+          },
+        );
+      case AvatarSource.remote:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+    }
+  }
+
+  Widget _buildErrorWidget() {
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+        ),
+      ),
+      child: const Center(
+        child: Icon(
+          Icons.person_rounded,
+          color: Colors.white,
+          size: 32,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoadingWidget() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.05),
+      ),
+      child: const Center(
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          valueColor: AlwaysStoppedAnimation(Color(0xFF6366F1)),
         ),
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../game/models/avatar_package_models.dart';
 import '../../../game/providers/riverpod_providers.dart';
 import '../../../game/utils/avatar_asset_loader.dart';
 import '../widgets/avatar_image_card.dart';
@@ -13,7 +14,7 @@ class AvatarImagesTab extends ConsumerStatefulWidget {
 }
 
 class _AvatarImagesTabState extends ConsumerState<AvatarImagesTab> {
-  List<String> imageAvatars = [];
+  List<AvatarAssetRef> imageAvatars = [];
   bool _isLoading = true;
 
   @override
@@ -26,19 +27,19 @@ class _AvatarImagesTabState extends ConsumerState<AvatarImagesTab> {
     setState(() => _isLoading = true);
 
     final cache = ref.read(appCacheServiceProvider);
-    final loadedImages = await AvatarAssetLoader.loadImageAvatars(cache: cache);
+    final loadedRefs = await AvatarAssetLoader.loadImageAvatarRefs(cache: cache);
 
     if (mounted) {
       setState(() {
-        imageAvatars = loadedImages;
+        imageAvatars = loadedRefs;
         _isLoading = false;
       });
     }
   }
 
-  void _selectAvatar(String path) {
+  void _selectAvatar(AvatarAssetRef avatarRef) {  // ✅ Changed parameter type
     final controller = ref.read(profileAvatarControllerProvider.notifier);
-    controller.selectAvatarFromAsset(path);
+    controller.selectAvatarFromAsset(avatarRef.path);  // Use ref.path
     Navigator.pop(context);
   }
 
@@ -98,10 +99,10 @@ class _AvatarImagesTabState extends ConsumerState<AvatarImagesTab> {
       ),
       itemCount: imageAvatars.length,
       itemBuilder: (context, index) {
-        final imagePath = imageAvatars[index];
+        final avatarRef = imageAvatars[index];
         return AvatarImageCard(
-          imagePath: imagePath,
-          onTap: () => _selectAvatar(imagePath),
+          avatarRef: avatarRef,
+          onTap: () => _selectAvatar(avatarRef),
         );
       },
     );
