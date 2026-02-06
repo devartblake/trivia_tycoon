@@ -276,6 +276,7 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
                   borderRadius: 0, // No border radius for app bar
                   show3DText: false, // We'll use our own overlay text
                   slots: DepthCardSlots.empty, // Empty slots, we'll add our own overlay
+                  backgroundFilterQuality: FilterQuality.none,
                 ),
               ),
             ),

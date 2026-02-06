@@ -19,13 +19,14 @@ class ProfileAvatarPreview extends ConsumerWidget {
     if (is3D) {
       return DepthCard3D(
         config: DepthCardConfig(
-          modelAssetPath: path!,
+          modelAssetPath: path,
           text: '',
           width: size,
           height: size,
           borderRadius: size / 2,
           parallaxDepth: 0.05,
           theme: controller.depthCardTheme,
+          backgroundFilterQuality: FilterQuality.none,
           backgroundImage: const AssetImage('assets/images/backgrounds/geometry_background.jpg'),
           onTap: () {}, // Optional interaction
         ),

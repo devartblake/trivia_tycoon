@@ -74,7 +74,7 @@ class DepthCardConfig {
     this.backgroundBlur = 0.0,
     this.backgroundKenBurns = true,
     this.backgroundBlendMode,
-    this.backgroundFilterQuality = FilterQuality.low, // 👈 safe default
+    this.backgroundFilterQuality = FilterQuality.none, // 👈 safe default
 
     this.show3DText = true,
     this.textStyle = const TextStyle(
