@@ -29,6 +29,9 @@ This repository includes the entire player-facing and admin-facing Flutter appli
 ### 🛠 Admin Dashboard
 <img src="assets/screenshots/admin_dashboard.png" width="300">
 
+### Mini Games
+<img src="assets/screenshots/mini_games.png" width="300">
+
 ---
 
 ## 🎞️ Demo GIFs
