@@ -215,6 +215,7 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
     return AppLifecycleObserver(
       child: MaterialApp.router(
         title: 'Trivia Tycoon',
+        showPerformanceOverlay: false,
         debugShowCheckedModeBanner: false,
         scrollBehavior: AppScrollBehavior(),
 
