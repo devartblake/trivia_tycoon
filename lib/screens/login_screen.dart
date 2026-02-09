@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:trivia_tycoon/core/services/analytics/config_service.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
+import 'package:trivia_tycoon/ui_components/login/providers/auth.dart';
 import '../core/constants/image_strings.dart';
 import '../game/providers/auth_providers.dart';
 import '../game/providers/onboarding_providers.dart';
@@ -135,18 +137,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
     await Future.delayed(const Duration(milliseconds: 1500));
 
-    if (!mockUsers.containsKey(email)) {
-      _showErrorSnackBar('User does not exist');
-      setState(() => _isLoading = false);
-      return;
-    }
-
-    final mockUser = mockUsers[email]!;
-    if (mockUser.password != password) {
-      _showErrorSnackBar('Incorrect password');
-      setState(() => _isLoading = false);
-      return;
-    }
+    // if (!mockUsers.containsKey(email)) {
+    //   _showErrorSnackBar('User does not exist');
+    //   setState(() => _isLoading = false);
+    //   return;
+    // }
+    //
+    // final mockUser = mockUsers[email]!;
+    // if (mockUser.password != password) {
+    //   _showErrorSnackBar('Incorrect password');
+    //   setState(() => _isLoading = false);
+    //   return;
+    // }
 
     try {
       final authOps = ref.read(authOperationsProvider);
@@ -154,10 +156,33 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       final multiProfileService = ref.read(multiProfileServiceProvider);
       final serviceManager = ref.read(serviceManagerProvider);
 
-      await authOps.login(email);
+      // await authOps.login(email);
+      // await authService.secureStorage.setSecret('user_role', mockUser.role);
+      // await authService.secureStorage.setSecret('is_premium', mockUser.isPremium.toString());
 
-      await authService.secureStorage.setSecret('user_role', mockUser.role);
-      await authService.secureStorage.setSecret('is_premium', mockUser.isPremium.toString());
+      if (ConfigService.useBackendAuth) {
+        final response = _isSignUpMode
+            ? await authOps.signup(email, password)
+            : await authOps.loginWithPassword(email, password);
+        await _applyBackendSession(response, authService);
+      } else {
+        if (!mockUsers.containsKey(email)) {
+          _showErrorSnackBar('User does not exist');
+          setState(() => _isLoading = false);
+          return;
+        }
+
+        final mockUser = mockUsers[email]!;
+        if (mockUser.password != password) {
+          _showErrorSnackBar('Incorrect password');
+          setState(() => _isLoading = false);
+          return;
+        }
+        await authOps.login(email);
+        await authService.secureStorage.setSecret('user_role', mockUser.role);
+        await authService.secureStorage
+            .setSecret('is_premium', mockUser.isPremium.toString());
+      }
 
       final existingProfiles = await multiProfileService.getAllProfiles();
 
@@ -206,6 +231,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       _showErrorSnackBar('Login failed: ${e.toString()}');
       setState(() => _isLoading = false);
     }
+  }
+
+  Future<void> _applyBackendSession(
+      Map<String, dynamic> response,
+      AuthService authService,
+      ) async {
+    final role = _extractRole(response);
+    final isPremium = response['isPremium'] == true;
+
+    if (role != null) {
+      await authService.secureStorage.setSecret('user_role', role);
+    }
+    await authService.secureStorage
+        .setSecret('is_premium', isPremium.toString());
+  }
+
+  String? _extractRole(Map<String, dynamic> response) {
+    final roles = response['roles'];
+    if (roles is List && roles.isNotEmpty) {
+      return roles.first.toString();
+    }
+    final role = response['role'];
+    return role?.toString();
   }
 
   void _showErrorSnackBar(String message) {

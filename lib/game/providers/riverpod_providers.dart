@@ -131,6 +131,7 @@ final loginManagerProvider = Provider<LoginManager>((ref) {
   final serviceManager = ref.read(serviceManagerProvider);
   return LoginManager(
     authService: serviceManager.authService,
+    apiService: serviceManager.apiService,
     profileService: serviceManager.playerProfileService,
     onboardingService: serviceManager.onboardingSettingsService,
     secureStorage: serviceManager.secureStorage,

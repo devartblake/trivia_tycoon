@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/services/storage/secure_storage.dart';
 import '../providers/riverpod_providers.dart';
 import 'onboarding_providers.dart';
 
@@ -27,6 +28,84 @@ class AuthOperations {
 
     // Update River-pod state immediately
     ref.read(isLoggedInSyncProvider.notifier).state = true;
+  }
+
+  /// Login user with password via backend API
+  Future<Map<String, dynamic>> loginWithPassword(String email, String password) async {
+    final authService = ref.read(authServiceProvider);
+    final secureStorage = ref.read(secureStorageProvider);
+    final apiService = ref.read(apiServiceProvider);
+
+    final response = await apiService.login(email: email, password: password);
+    final roles = _extractRoles(response);
+    final isPremium = response['isPremium'] == true;
+    final userId = response['userId']?.toString() ?? 'guest';
+
+    await authService.login(
+      email,
+      userId: userId,
+      isPremiumUser: isPremium,
+      roles: roles,
+    );
+    await secureStorage.setLoggedIn(true);
+    await _persistAuthTokenIfPresent(response, secureStorage);
+
+    ref.read(isLoggedInSyncProvider.notifier).state = true;
+    return response;
+  }
+
+  /// Signup user via backend API
+  Future<Map<String, dynamic>> signup(
+      String email,
+      String password, {
+        Map<String, dynamic>? extra,
+      }) async {
+    final authService = ref.read(authServiceProvider);
+    final secureStorage = ref.read(secureStorageProvider);
+    final apiService = ref.read(apiServiceProvider);
+
+    final response = await apiService.signup(
+      email: email,
+      password: password,
+      extra: extra,
+    );
+    final roles = _extractRoles(response);
+    final isPremium = response['isPremium'] == true;
+    final userId = response['userId']?.toString() ?? 'guest';
+
+    await authService.login(
+      email,
+      userId: userId,
+      isPremiumUser: isPremium,
+      roles: roles,
+    );
+    await secureStorage.setLoggedIn(true);
+    await _persistAuthTokenIfPresent(response, secureStorage);
+
+    ref.read(isLoggedInSyncProvider.notifier).state = true;
+    return response;
+  }
+
+  List<String> _extractRoles(Map<String, dynamic> response) {
+    final roles = response['roles'];
+    if (roles is List) {
+      return roles.map((role) => role.toString()).toList();
+    }
+    final role = response['role'];
+    if (role != null) {
+      return [role.toString()];
+    }
+    return const ['player'];
+  }
+
+  Future<void> _persistAuthTokenIfPresent(
+      Map<String, dynamic> response,
+      SecureStorage secureStorage,
+      ) async {
+    final token = response['token'];
+    if (token is String && token.isNotEmpty) {
+      await secureStorage.setSecret('auth_token', token);
+    }
   }
 
   /// Logout user and clear state

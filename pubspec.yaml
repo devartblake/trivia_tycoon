@@ -20,6 +20,7 @@ version: 1.0.0+1
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
+  flutter: '>=3.10.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -61,7 +62,7 @@ dependencies:
   phone_numbers_parser: ^9.0.3
   intl_phone_number_input: ^0.7.4
   another_transformer_page_view: ^2.0.1
-  http_cache_hive_store: ^5.0.1
+  http_cache_hive_store: ^5.0.2
   dio_cache_interceptor_hive_store: ^4.0.0
   textstyle_extensions: ^2.0.0-nullsafety
   file_picker: ^10.0.0
@@ -83,7 +84,7 @@ dependencies:
   cached_network_image: ^3.4.1
   supabase_flutter: ^2.10.1
   web_socket_channel: ^3.0.3
-  share_plus: ^12.0.0
+  share_plus: ^10.1.0
   equatable: ^2.0.7
   path_provider: ^2.1.5
   in_app_purchase: ^3.2.3
@@ -135,9 +136,9 @@ flutter:
    - assets/data/snapple_facts/
    - assets/data/skill_tree/skill_tree.json
    - assets/icons/
-   - assets/icons/badges/
-   - assets/icons/categories/
-   - assets/icons/store/
+#   - assets/icons/badges/
+#   - assets/icons/categories/
+#   - assets/icons/store/
    - assets/icons/store/avatars/
    - assets/icons/store/themes/
    - assets/images/
@@ -145,18 +146,18 @@ flutter:
    - assets/images/quiz.png
    - assets/images/reward-quiz.png
    - assets/images/backgrounds/
-   - assets/images/confetti/
-   - assets/images/events/
+#   - assets/images/confetti/
+#   - assets/images/events/
    - assets/images/logo/
    - assets/images/notification_images/
    - assets/images/overlays/
-   - assets/images/power-ups/
+#   - assets/images/power-ups/
    - assets/images/quiz/
    - assets/images/quiz/backgrounds/
    - assets/images/quiz/category/
    - assets/images/rewards/
    - assets/images/store/
-   - assets/images/store/avatars/
+#   - assets/images/store/avatars/
    - assets/images/store/themes/
    - assets/images/welcome_images/
    - assets/models/

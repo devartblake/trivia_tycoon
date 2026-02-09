@@ -254,6 +254,32 @@ class ApiService {
   Future<void> sendEvent(String name, Map<String, dynamic> data) async {
     await post('/events/$name', body: data);
   }
+
+  /// **🔹 Auth: Login**
+  /// Sends credentials to the backend auth endpoint.
+  Future<Map<String, dynamic>> login({
+    required String email,
+    required String password,
+  }) async {
+    return post('/auth/login', body: {
+      'email': email,
+      'password': password,
+    });
+  }
+
+  /// **🔹 Auth: Signup**
+  /// Registers a new user. Additional fields can be passed in [extra].
+  Future<Map<String, dynamic>> signup({
+    required String email,
+    required String password,
+    Map<String, dynamic>? extra,
+  }) async {
+    return post('/auth/signup', body: {
+      'email': email,
+      'password': password,
+      if (extra != null) ...extra,
+    });
+  }
 }
 
 extension SeasonalApiExtensions on ApiService {

@@ -195,6 +195,12 @@ class ConfigService extends ChangeNotifier {
     return val is bool ? val : (val?.toString().toLowerCase() == 'true');
   }
 
+  /// Check if backend auth should be used
+  static bool get useBackendAuth {
+    final val = _config['USE_BACKEND_AUTH'];
+    return val is bool ? val : (val?.toString().toLowerCase() == 'true');
+  }
+
   /// Refresh remote configuration manually
   Future<void> refreshConfig() async => _fetchRemoteConfig();
 
@@ -204,6 +210,7 @@ class ConfigService extends ChangeNotifier {
     "API_BASE_URL_PROD": "https://fallback-api.com",
     "ENABLE_LOGGING": "false",
     "GALLERY_MODE": false,
+    "USE_BACKEND_AUTH": false,
   };
 
   /// Default fallback URL
