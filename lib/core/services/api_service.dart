@@ -280,6 +280,22 @@ class ApiService {
       if (extra != null) ...extra,
     });
   }
+
+  /// **🔹 Auth: OAuth URL**
+  /// Requests the backend-generated OAuth URL for a provider.
+  Future<String?> getOAuthUrl(String provider) async {
+    return _handleRequest(() async {
+      final response = await _dio.get('/auth/oauth/$provider');
+      if (response.data is Map<String, dynamic>) {
+        final data = response.data as Map<String, dynamic>;
+        return (data['url'] ?? data['authUrl'] ?? data['redirectUrl'])?.toString();
+      }
+      if (response.data is String) {
+        return response.data as String;
+      }
+      return null;
+    });
+  }
 }
 
 extension SeasonalApiExtensions on ApiService {

@@ -1,7 +1,25 @@
 import 'package:flutter/material.dart';
 
-enum MissionType { daily, weekly,science, streak, explorer, wildcard }
+enum MissionType { daily, weekly, seasonal, oneTime, unknown, science, streak, explorer, wildcard }
 enum MissionStatus { active, completed, expired, swapped }
+
+MissionType _parseMissionType(Object? v) {
+  final s = (v ?? '').toString().toLowerCase().trim();
+  switch (s) {
+    case 'daily':
+      return MissionType.daily;
+    case 'weekly':
+      return MissionType.weekly;
+    case 'seasonal':
+      return MissionType.seasonal;
+    case 'one_time':
+    case 'onetime':
+    case 'one-time':
+      return MissionType.oneTime;
+    default:
+      return MissionType.unknown;
+  }
+}
 
 class Mission {
   final String id;
@@ -9,7 +27,8 @@ class Mission {
   final String? description;
   final int progress;
   final int total;
-  final int reward;
+  final int target;
+  final int rewardXp;
   final IconData icon;
   final String badge;
   final MissionType type;
@@ -25,7 +44,8 @@ class Mission {
     this.description,
     required this.progress,
     required this.total,
-    required this.reward,
+    required this.target,
+    required this.rewardXp,
     required this.icon,
     required this.badge,
     required this.type,
@@ -40,7 +60,7 @@ class Mission {
   bool get isExpired => expiresAt != null && DateTime.now().isAfter(expiresAt!);
   double get progressPercentage => (progress / total).clamp(0.0, 1.0);
 
-  // Factory constructor for creating from Supabase JSON
+  // Factory constructor for creating from API JSON
   factory Mission.fromJson(Map<String, dynamic> json) {
     return Mission(
       id: json['id'] as String,
@@ -48,10 +68,15 @@ class Mission {
       description: json['description'] as String?,
       progress: json['progress'] as int,
       total: json['total'] as int,
-      reward: json['reward'] as int,
+      target: (json['target'] ?? json['goal'] ?? json['targetCount'] ?? 0) is num
+          ? (json['target'] ?? json['goal'] ?? json['targetCount'] ?? 0).toInt()
+          : int.tryParse((json['target'] ?? json['goal'] ?? json['targetCount'] ?? '0').toString()) ?? 0,
+      rewardXp: (json['rewardXp'] ?? json['reward_xp'] ?? json['xpReward'] ?? 0) is num
+          ? (json['rewardXp'] ?? json['reward_xp'] ?? json['xpReward'] ?? 0).toInt()
+          : int.tryParse((json['rewardXp'] ?? json['reward_xp'] ?? json['xpReward'] ?? '0').toString()) ?? 0,
       icon: _iconFromString(json['icon_name'] as String),
       badge: json['badge'] as String,
-      type: MissionType.values.byName(json['type'] as String),
+      type: _parseMissionType(json['type'] ?? json['timeframe'] ?? json['missionType']),
       status: MissionStatus.values.byName(json['status'] as String),
       createdAt: DateTime.parse(json['created_at'] as String),
       completedAt: json['completed_at'] != null
@@ -64,7 +89,7 @@ class Mission {
     );
   }
 
-  // Convert to JSON for Supabase
+  // Convert to JSON for API
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -72,7 +97,8 @@ class Mission {
       'description': description,
       'progress': progress,
       'total': total,
-      'reward': reward,
+      'target': target,
+      'rewardXp': rewardXp,
       'icon_name': _iconToString(icon),
       'badge': badge,
       'type': type.name,
@@ -91,7 +117,8 @@ class Mission {
     String? description,
     int? progress,
     int? total,
-    int? reward,
+    int? target,
+    int? rewardXp,
     IconData? icon,
     String? badge,
     MissionType? type,
@@ -107,7 +134,8 @@ class Mission {
       description: description ?? this.description,
       progress: progress ?? this.progress,
       total: total ?? this.total,
-      reward: reward ?? this.reward,
+      target: target ?? this.target,
+      rewardXp: rewardXp ?? this.rewardXp,
       icon: icon ?? this.icon,
       badge: badge ?? this.badge,
       type: type ?? this.type,

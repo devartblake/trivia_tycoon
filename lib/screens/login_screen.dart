@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:trivia_tycoon/core/services/analytics/config_service.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import 'package:trivia_tycoon/ui_components/login/providers/auth.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../core/constants/image_strings.dart';
 import '../game/providers/auth_providers.dart';
 import '../game/providers/onboarding_providers.dart';
@@ -254,6 +255,32 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     }
     final role = response['role'];
     return role?.toString();
+  }
+
+  Future<void> _handleSocialLogin(String provider) async {
+    if (!ConfigService.useBackendAuth) {
+      _showErrorSnackBar('Enable backend auth to use social login.');
+      return;
+    }
+
+    try {
+      final apiService = ref.read(apiServiceProvider);
+      final authUrl = await apiService.getOAuthUrl(provider);
+      if (authUrl == null || authUrl.isEmpty) {
+        _showErrorSnackBar('No auth URL returned for $provider.');
+        return;
+      }
+
+      final uri = Uri.tryParse(authUrl);
+      if (uri == null || !await canLaunchUrl(uri)) {
+        _showErrorSnackBar('Unable to open $provider login.');
+        return;
+      }
+
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      _showErrorSnackBar('Failed to start $provider login: $e');
+    }
   }
 
   void _showErrorSnackBar(String message) {
@@ -553,22 +580,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                           children: [
                             _buildSocialButton(
                               icon: FontAwesomeIcons.google,
-                              onPressed: () {},
+                              onPressed: () => _handleSocialLogin('google'),
                             ),
                             const SizedBox(width: 16),
                             _buildSocialButton(
                               icon: FontAwesomeIcons.facebook,
-                              onPressed: () {},
+                              onPressed: () => _handleSocialLogin('facebook'),
                             ),
                             const SizedBox(width: 16),
                             _buildSocialButton(
                               icon: FontAwesomeIcons.steam,
-                              onPressed: () {},
+                              onPressed: () => _handleSocialLogin('steam'),
                             ),
                             const SizedBox(width: 16),
                             _buildSocialButton(
                               icon: FontAwesomeIcons.apple,
-                              onPressed: () {},
+                              onPressed: () => _handleSocialLogin('apple'),
                             ),
                           ],
                         ),

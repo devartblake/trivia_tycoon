@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:trivia_tycoon/core/env.dart';
 import '../../core/repositories/mission_repository.dart';
 import '../data/mission_data_loader.dart';
 import '../providers/riverpod_providers.dart';
@@ -58,7 +58,7 @@ class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
             'title': userMission.mission.title,
             'progress': userMission.progress,
             'total': userMission.mission.total,
-            'reward': userMission.mission.reward,
+            'reward': userMission.mission.rewardXp,
             'icon': userMission.mission.icon,
             'badge': userMission.mission.badge,
             'mode': userMission.mission.metadata?['mode'],
@@ -98,7 +98,7 @@ class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
               'title': userMission.mission.title,
               'progress': userMission.progress,
               'total': userMission.mission.total,
-              'reward': userMission.mission.reward,
+              'reward': userMission.mission.rewardXp,
               'icon': userMission.mission.icon,
               'badge': userMission.mission.badge,
               'mode': userMission.mission.metadata?['mode'],
@@ -217,7 +217,7 @@ class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
         final backendId = mission['backend_id'] as String?;
 
         if (backendId != null) {
-          await _missionService!.updateProgress(backendId, increment);
+          await _missionService!.updateProgress(backendId, increment, userId: '');
           // Reload from backend
           await _loadFromBackend();
           return;
@@ -360,14 +360,10 @@ class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
 
 // Updated providers for hybrid system
 final missionRepositoryProvider = Provider<MissionRepository?>((ref) {
-  // Return null if you want JSON-only mode
-  // Return SupabaseMissionRepository(Supabase.instance.client) for backend integration
-  try {
-    return SupabaseMissionRepository(Supabase.instance.client);
-  } catch (e) {
-    debugPrint('Supabase not available, using JSON-only mode');
-    return null;
-  }
+  return ApiMissionRepository(
+    baseUrl: EnvConfig.apiBaseUrl,
+    accessTokenProvider: null,
+  );
 });
 
 final missionServiceProvider = Provider<MissionService?>((ref) {

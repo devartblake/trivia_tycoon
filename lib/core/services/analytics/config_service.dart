@@ -167,6 +167,10 @@ class ConfigService extends ChangeNotifier {
 
   /// Safely get base URL before fully loaded
   String _getBaseUrlSafely() {
+    final directBaseUrl = _config['API_BASE_URL'];
+    if (directBaseUrl is String && directBaseUrl.isNotEmpty) {
+      return directBaseUrl;
+    }
     switch (_config['APP_ENV'] ?? 'prod') {
       case 'dev':
         return _config['API_BASE_URL_DEV'] ?? _defaultBaseUrl;
@@ -207,12 +211,12 @@ class ConfigService extends ChangeNotifier {
   /// Default config fallback
   static const Map<String, dynamic> _defaultConfig = {
     "APP_ENV": "prod",
-    "API_BASE_URL_PROD": "https://fallback-api.com",
+    "API_BASE_URL_PROD": "https://localhost:5000",
     "ENABLE_LOGGING": "false",
     "GALLERY_MODE": false,
-    "USE_BACKEND_AUTH": false,
+    "USE_BACKEND_AUTH": true,
   };
 
   /// Default fallback URL
-  static const String _defaultBaseUrl = "https://fallback-api.com";
+  static const String _defaultBaseUrl = "https://localhost:5000";
 }

@@ -18,6 +18,9 @@ import '../services/settings/app_settings.dart';
 import '../services/settings/general_key_value_storage_service.dart';
 import '../services/settings/multi_profile_service.dart';
 
+/// App bootstrapper
+/// - Loads env
+/// - Initializes ServiceManager (API clients, local storage, etc.)
 class AppInit {
   static bool _backgroundServicesReady = false;
   static SpinAnalyticsTracker? _spinAnalyticsTracker;
@@ -40,16 +43,7 @@ class AppInit {
     await Hive.openBox('secrets');
 
     // 2. Network & Backend
-    try {
-      // Note: Replace with your actual Env calls if needed
-      await Supabase.initialize(
-        url: 'YOUR_SUPABASE_URL',
-        anonKey: 'YOUR_SUPABASE_ANON_KEY',
-      );
-      debugPrint('[AppInit] Supabase initialized');
-    } catch (e) {
-      debugPrint('[AppInit] Supabase initialization failed: $e');
-    }
+
 
     // 3. Service Manager & Core Logic
     final serviceManager = await ServiceManager.initialize();

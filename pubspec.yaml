@@ -82,7 +82,6 @@ dependencies:
   video_player: ^2.10.0
   chewie: ^1.12.1
   cached_network_image: ^3.4.1
-  supabase_flutter: ^2.10.1
   web_socket_channel: ^3.0.3
   share_plus: ^10.1.0
   equatable: ^2.0.7

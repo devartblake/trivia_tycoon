@@ -1,5 +1,4 @@
 import 'package:hive/hive.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:trivia_tycoon/core/services/event_queue_service.dart';
 import 'package:trivia_tycoon/core/services/settings/admin_settings_service.dart';
 import 'package:trivia_tycoon/core/services/settings/audio_settings_service.dart';
@@ -133,9 +132,11 @@ class ServiceManager {
     required this.referralService,
   });
 
+  static EnvConfig? get envConfig => null;
+
   /// Initialize all core services and return a ready ServiceManager
   static Future<ServiceManager> initialize() async {
-    final String baseUrl = Env.apiBaseUrl;
+    final String baseUrl = EnvConfig.apiBaseUrl;
     final api = ApiService(baseUrl: '$baseUrl/api/v1');
     final leaderboard = LeaderboardDataService(apiService: api);
 
@@ -174,7 +175,7 @@ class ServiceManager {
     final multiplayer = MultiplayerService(
       // inject: settings, http client, analytics, cache, etc.
     );
-    final missionRepository = SupabaseMissionRepository(Supabase.instance.client);
+    final missionRepository = ApiMissionRepository(baseUrl: baseUrl, accessTokenProvider: null);
     final mission = MissionService(
       missionRepository,
       apiBaseUrl: api.baseUrl,

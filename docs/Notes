@@ -46,3 +46,5 @@ final config = DepthCardSpecMapper.toConfig(
 );
 
 return DepthCard3D(config: config);
+
+dotnet ef migrations add InitialCreate --project Tycoon.Backend.Migrations/Tycoon.Backend.Migrations.csproj --startup-project Tycoon.MigrationService/Tycoon.MigrationService.csproj

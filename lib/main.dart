@@ -16,7 +16,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Load environment variables before doing anything else
-  await Env.load();
+  await EnvConfig.load();
 
   try {
     // Initialize services first

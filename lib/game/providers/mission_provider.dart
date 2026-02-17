@@ -35,7 +35,7 @@ class MissionProvider extends ChangeNotifier {
   // Statistics
   int get totalCompletedMissions => completedMissions.length;
   int get totalRewardsEarned => completedMissions
-      .fold(0, (sum, mission) => sum + mission.mission.reward);
+      .fold(0, (sum, mission) => sum + mission.mission.rewardXp);
   double get overallProgress => _missions.isEmpty
       ? 0.0
       : _missions
@@ -115,7 +115,7 @@ class MissionProvider extends ChangeNotifier {
     _clearError();
 
     try {
-      final updatedMission = await _missionService.updateProgress(userMissionId, increment);
+      final updatedMission = await _missionService.updateProgress(userMissionId, increment, userId: _userId);
 
       // Update local state
       final index = _missions.indexWhere((m) => m.id == userMissionId);
@@ -222,14 +222,14 @@ class MissionProvider extends ChangeNotifier {
 
   void _onMissionCompleted(UserMission mission) {
     // Handle mission completion (you can add UI feedback here)
-    debugPrint('Mission completed: ${mission.mission.title} (+${mission.mission.reward} rewards)');
+    debugPrint('Mission completed: ${mission.mission.title} (+${mission.mission.rewardXp} rewards)');
 
-    // You could show a snackbar, play a sound, etc.
+    // You could show a snack bar, play a sound, etc.
     // Send notification safely
     _notificationHelper.onMissionCompleted(
       missionId: mission.id,
       missionTitle: mission.mission.title,
-      reward: mission.mission.reward,
+      reward: mission.mission.rewardXp,
       userId: _userId,
     );
   }
