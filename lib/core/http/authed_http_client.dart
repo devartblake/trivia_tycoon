@@ -11,7 +11,10 @@ class AuthedHttpClient {
     required this.apiBaseUrl,
     required this.auth,
     http.Client? httpClient,
-  }) : _http = httpClient ?? http.Client();
+  })  : apiBaseUrl = apiBaseUrl.endsWith('/')
+            ? apiBaseUrl.substring(0, apiBaseUrl.length - 1)
+            : apiBaseUrl,
+        _http = httpClient ?? http.Client();
 
   Uri _uri(String path) => Uri.parse('$apiBaseUrl$path');
 
@@ -36,20 +39,26 @@ class AuthedHttpClient {
 
   /// Helper for JSON POST with auth header attached.
   Future<http.Response> postJson(String path, Map<String, dynamic> jsonBody) async {
-    final token = await auth.getValidAccessToken();
-    final headers = <String, String>{
-      'Content-Type': 'application/json',
-      if (token != null) 'Authorization': 'Bearer $token',
-    };
-    return post(path, headers: headers, body: jsonEncode(jsonBody));
+    return _sendWithRefresh(() async {
+      final token = await auth.getValidAccessToken();
+      final headers = <String, String>{
+        'Content-Type': 'application/json',
+        if (token != null) 'Authorization': 'Bearer $token',
+      };
+
+      return _http.post(_uri(path), headers: headers, body: jsonEncode(jsonBody));
+    });
   }
 
   Future<http.Response> getJson(String path) async {
-    final token = await auth.getValidAccessToken();
-    final headers = <String, String>{
-      'Accept': 'application/json',
-      if (token != null) 'Authorization': 'Bearer $token',
-    };
-    return get(path, headers: headers);
+    return _sendWithRefresh(() async {
+      final token = await auth.getValidAccessToken();
+      final headers = <String, String>{
+        'Accept': 'application/json',
+        if (token != null) 'Authorization': 'Bearer $token',
+      };
+
+      return _http.get(_uri(path), headers: headers);
+    });
   }
 }
