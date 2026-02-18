@@ -57,6 +57,7 @@ dependencies:
   flutter_animate: ^4.5.2
   flutter_riverpod: ^2.6.1
   flutter_3d_controller: ^2.1.0
+  flutter_secure_storage: ^10.0.0
   font_awesome_flutter: ^10.8.0
   dio_cache_interceptor: ^3.5.1
   phone_numbers_parser: ^9.0.3
