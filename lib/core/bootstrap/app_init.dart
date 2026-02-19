@@ -32,6 +32,7 @@ class AppInit {
 
   // --- CRITICAL INITIALIZATION (Required for first frame) ---
   static Future<(ServiceManager, ThemeNotifier)> initialize({ProviderContainer? container}) async {
+    await EnvConfig.load();
     // 1. Core Flutter & Storage Setup
     WidgetsFlutterBinding.ensureInitialized();
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
