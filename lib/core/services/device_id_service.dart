@@ -1,47 +1,56 @@
-import 'dart:math';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:uuid/uuid.dart';
+import 'storage/secure_storage.dart';
 
-/// Persists a stable deviceId for login/refresh/logout device-bound sessions.
-/// Uses Hive (no shared_preferences).
+/// Manages a persistent device identifier for authentication operations.
+///
+/// The device ID is:
+/// - Generated once on first use
+/// - Stored securely in device storage
+/// - Persists across app restarts
+/// - Required by backend for login/signup/refresh/logout
+///
+/// This allows the backend to:
+/// - Track which devices a user is logged in on
+/// - Support "logout from this device" vs "logout everywhere"
+/// - Detect suspicious login patterns (e.g., login from 10 devices in 1 minute)
 class DeviceIdService {
-  static const String _key = 'device_id';
+  static const _kDeviceId = 'device_id';
+  final SecureStorage _storage;
 
-  final Box _settingsBox;
+  DeviceIdService(this._storage);
 
-  DeviceIdService(this._settingsBox);
-
-  /// Returns an existing deviceId or creates + persists a new one.
+  /// Get existing device ID or create a new one if it doesn't exist.
+  ///
+  /// The device ID is a UUID v4 (random) that uniquely identifies this app
+  /// installation. It's stored in secure storage and persists even after
+  /// app updates.
   Future<String> getOrCreate() async {
-    final existing = _settingsBox.get(_key) as String?;
-    if (existing != null && existing.trim().isNotEmpty) return existing;
+    var id = await _storage.getSecret(_kDeviceId);
 
-    final created = _generateUuidV4();
-    await _settingsBox.put(_key, created);
-    return created;
+    if (id == null || id.isEmpty) {
+      // Generate new UUID
+      id = const Uuid().v4();
+      await _storage.setSecret(_kDeviceId, id);
+    }
+
+    return id;
   }
 
-  /// Returns deviceId if already stored; otherwise null.
-  String? get current => _settingsBox.get(_key) as String?;
+  /// Clear the device ID.
+  ///
+  /// WARNING: This should only be used for testing or when the user explicitly
+  /// wants to "reset" their device identity. After calling this, the next
+  /// call to getOrCreate() will generate a new device ID.
+  ///
+  /// The backend will see the new device ID as a completely different device,
+  /// and old refresh tokens tied to the old device ID will no longer work.
+  Future<void> clear() async {
+    await _storage.removeSecret(_kDeviceId);
+  }
 
-  Future<void> reset() async => _settingsBox.delete(_key);
-
-  // UUIDv4 without external deps.
-  String _generateUuidV4() {
-    final rand = Random.secure();
-    final bytes = List<int>.generate(16, (_) => rand.nextInt(256));
-
-    // Set version to 4 => xxxx0100
-    bytes[6] = (bytes[6] & 0x0F) | 0x40;
-    // Set variant to 10xxxxxx
-    bytes[8] = (bytes[8] & 0x3F) | 0x80;
-
-    String hex(int v) => v.toRadixString(16).padLeft(2, '0');
-
-    final b = bytes.map(hex).join();
-    return '${b.substring(0, 8)}-'
-        '${b.substring(8, 12)}-'
-        '${b.substring(12, 16)}-'
-        '${b.substring(16, 20)}-'
-        '${b.substring(20, 32)}';
+  /// Get the current device ID without creating a new one.
+  /// Returns null if no device ID has been generated yet.
+  Future<String?> get() async {
+    return await _storage.getSecret(_kDeviceId);
   }
 }

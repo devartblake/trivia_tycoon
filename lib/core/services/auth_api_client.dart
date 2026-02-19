@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'auth_token_store.dart';
 
+/// API client for authentication endpoints
 class AuthApiClient {
   final http.Client _http;
   final String _apiBaseUrl;
@@ -15,6 +16,7 @@ class AuthApiClient {
 
   /// Adjust these paths to match your backend:
   static const String loginPath = '/auth/login';
+  static const String signupPath = '/auth/signup';
   static const String refreshPath = '/auth/refresh';
   static const String logoutPath = '/auth/logout';
 
@@ -35,6 +37,41 @@ class AuthApiClient {
 
     if (res.statusCode < 200 || res.statusCode >= 300) {
       throw Exception('Login failed: ${res.statusCode} ${res.body}');
+    }
+
+    final json = jsonDecode(res.body) as Map<String, dynamic>;
+    return _parseSession(json);
+  }
+
+  /// Signup endpoint (register + auto-login)
+  Future<AuthSession> signup({
+    required String email,
+    required String password,
+    required String deviceId,
+    String? username,
+    String? country,
+  }) async {
+    final res = await _http.post(
+      _u(signupPath),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'email': email,
+        'password': password,
+        'deviceId': deviceId,
+        if (username != null) 'username': username,
+        if (country != null) 'country': country,
+      }),
+    );
+
+    if (res.statusCode < 200 || res.statusCode >= 300) {
+      // Parse error message if available
+      try {
+        final errorJson = jsonDecode(res.body) as Map<String, dynamic>;
+        final errorMsg = errorJson['error'] ?? errorJson['message'] ?? res.body;
+        throw Exception('Signup failed: $errorMsg');
+      } catch (_) {
+        throw Exception('Signup failed: ${res.statusCode} ${res.body}');
+      }
     }
 
     final json = jsonDecode(res.body) as Map<String, dynamic>;
@@ -97,9 +134,18 @@ class AuthApiClient {
     final refresh = (json['refreshToken'] ?? json['refresh_token'] ?? '') as String;
 
     final userId = (json['userId'] ?? json['user_id']) as String?;
-    final expiresRaw = json['expiresAtUtc'] ?? json['expires_at'] ?? json['expiresAt'];
 
+    // Parse expiration
     DateTime? expiresAtUtc;
+
+    // Backend returns expiresIn (seconds)
+    final expiresIn = json['expiresIn'];
+    if (expiresIn is int) {
+      expiresAtUtc = DateTime.now().toUtc().add(Duration(seconds: expiresIn));
+    }
+
+    // Or expiresAtUtc as ISO string
+    final expiresRaw = json['expiresAtUtc'] ?? json['expires_at'] ?? json['expiresAt'];
     if (expiresRaw is String && expiresRaw.isNotEmpty) {
       expiresAtUtc = DateTime.tryParse(expiresRaw)?.toUtc();
     } else if (expiresRaw is int) {

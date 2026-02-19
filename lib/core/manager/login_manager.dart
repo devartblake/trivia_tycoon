@@ -10,8 +10,16 @@ import '../services/analytics/config_service.dart';
 import '../services/api_service.dart';
 
 /// LoginManager handles login, logout, onboarding, and resume state.
+///
+/// REFACTORED to properly integrate with backend authentication:
+/// - Uses AuthTokenStore (Hive) for persistent token storage
+/// - Uses DeviceIdService for device identification
+/// - Properly stores accessToken + refreshToken separately
+/// - Handles backend response format correctly
 class LoginManager {
+  // Core authentication service
   final AuthService authService;
+
   final ApiService apiService;
   final OnboardingSettingsService onboardingService;
   final SecureStorage secureStorage;

@@ -4,17 +4,14 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:trivia_tycoon/core/services/analytics/config_service.dart';
+import 'package:trivia_tycoon/core/services/storage/secure_storage.dart';
 import 'package:trivia_tycoon/core/services/theme/theme_notifier.dart';
 import 'package:trivia_tycoon/core/manager/service_manager.dart';
 import 'package:trivia_tycoon/game/logic/referral_invite_adapter.dart';
 import '../../game/analytics/services/spin_analytics_tracker.dart';
 import '../../game/providers/multi_profile_providers.dart';
 import '../../game/services/referral_storage_service.dart';
-import '../auth/auth_api.dart';
-import '../auth/auth_manager.dart';
-import '../auth/token_store.dart';
 import '../env.dart';
-import '../http/authed_http_client.dart';
 import '../services/auth_api_client.dart';
 import '../services/auth_service.dart';
 import '../services/auth_token_store.dart';
@@ -22,9 +19,7 @@ import '../services/device_id_service.dart';
 import '../services/notification_service.dart';
 import '../../game/providers/auth_providers.dart';
 import '../helpers/educational_stats_initializer.dart';
-import '../../game/providers/onboarding_providers.dart';
 import '../services/settings/app_settings.dart';
-import '../services/settings/general_key_value_storage_service.dart';
 import '../services/settings/multi_profile_service.dart';
 
 /// App bootstrapper
@@ -53,7 +48,7 @@ class AppInit {
 
     // 2. Network & Backend
     // Create deviceId early so auth flow always has it.
-    final deviceIdService = DeviceIdService(settingsBox);
+    final deviceIdService = DeviceIdService(settingsBox as SecureStorage);
     final deviceId = await deviceIdService.getOrCreate();
     debugPrint('✅ DeviceId ready: $deviceId');
     final tokenStore = AuthTokenStore(settingsBox);
