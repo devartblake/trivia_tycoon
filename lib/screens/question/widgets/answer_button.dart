@@ -104,14 +104,14 @@ class _EnhancedAnswerButtonState extends State<EnhancedAnswerButton>
               boxShadow: widget.isSelected || widget.showFeedback
                   ? [
                 BoxShadow(
-                  color: _getButtonColor().withOpacity(0.3),
+                  color: _getButtonColor().withValues(alpha: 0.3),
                   blurRadius: 8,
                   offset: const Offset(0, 4),
                 ),
               ]
                   : [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.1),
+                  color: Colors.grey.withValues(alpha: 0.1),
                   blurRadius: 4,
                   offset: const Offset(0, 2),
                 ),
@@ -145,7 +145,7 @@ class _EnhancedAnswerButtonState extends State<EnhancedAnswerButton>
                         height: 32,
                         decoration: BoxDecoration(
                           color: widget.showFeedback || widget.isSelected
-                              ? Colors.white.withOpacity(0.2)
+                              ? Colors.white.withValues(alpha: 0.2)
                               : Colors.blue.shade100,
                           shape: BoxShape.circle,
                         ),

@@ -242,10 +242,10 @@ class CreateQuizBottomSheetState extends ConsumerState<CreateQuizBottomSheet> {
                                 decoration: BoxDecoration(
                                   color: isSelected
                                       ? category.primaryColor
-                                      : category.primaryColor.withOpacity(0.1),
+                                      : category.primaryColor.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(20),
                                   border: Border.all(
-                                    color: category.primaryColor.withOpacity(0.3),
+                                    color: category.primaryColor.withValues(alpha: 0.3),
                                   ),
                                 ),
                                 child: Row(

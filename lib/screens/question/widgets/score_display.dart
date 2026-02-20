@@ -114,7 +114,7 @@ class _EnhancedScoreDisplayState extends ConsumerState<EnhancedScoreDisplay>
         gradient: LinearGradient(
           colors: [
             Colors.white,
-            classColor.withOpacity(0.05),
+            classColor.withValues(alpha: 0.05),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -122,7 +122,7 @@ class _EnhancedScoreDisplayState extends ConsumerState<EnhancedScoreDisplay>
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: classColor.withOpacity(0.2),
+            color: classColor.withValues(alpha: 0.2),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -137,7 +137,7 @@ class _EnhancedScoreDisplayState extends ConsumerState<EnhancedScoreDisplay>
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: classColor.withOpacity(0.1),
+                  color: classColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Row(
@@ -215,7 +215,7 @@ class _EnhancedScoreDisplayState extends ConsumerState<EnhancedScoreDisplay>
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
-                  color: classColor.withOpacity(0.1),
+                  color: classColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Column(
@@ -248,10 +248,10 @@ class _EnhancedScoreDisplayState extends ConsumerState<EnhancedScoreDisplay>
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.purple.withOpacity(0.1),
+                color: Colors.purple.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: Colors.purple.withOpacity(0.2),
+                  color: Colors.purple.withValues(alpha: 0.2),
                 ),
               ),
               child: Row(
@@ -378,7 +378,7 @@ class _EnhancedScoreDisplayState extends ConsumerState<EnhancedScoreDisplay>
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
-                      color: categoryColor.withOpacity(0.1),
+                      color: categoryColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
@@ -405,10 +405,10 @@ class _EnhancedScoreDisplayState extends ConsumerState<EnhancedScoreDisplay>
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.orange.withOpacity(0.1),
+        color: Colors.orange.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Colors.orange.withOpacity(0.3),
+          color: Colors.orange.withValues(alpha: 0.3),
         ),
       ),
       child: Row(

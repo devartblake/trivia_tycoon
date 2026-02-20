@@ -180,7 +180,7 @@ class _ChatThemesScreenState extends State<ChatThemesScreen> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               shape: BoxShape.circle,
             ),
             child: const Icon(
@@ -266,7 +266,7 @@ class _ChatThemesScreenState extends State<ChatThemesScreen> {
                             margin: const EdgeInsets.all(8),
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: theme.primaryColor.withOpacity(0.7),
+                              color: theme.primaryColor.withValues(alpha: 0.7),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: const Text(
@@ -371,7 +371,7 @@ class _ChatThemesScreenState extends State<ChatThemesScreen> {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.green.withOpacity(0.2),
+                              color: Colors.green.withValues(alpha: 0.2),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: const Text(

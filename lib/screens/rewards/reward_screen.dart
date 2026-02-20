@@ -203,7 +203,7 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
         child: Container(
           margin: const EdgeInsets.only(left: 12.0),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(12),
           ),
           child: IconButton(
@@ -224,7 +224,7 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
               end: Alignment.bottomRight,
               colors: [
                 theme.colorScheme.primary,
-                theme.colorScheme.primary.withOpacity(0.8),
+                theme.colorScheme.primary.withValues(alpha: 0.8),
               ],
             ),
           ),
@@ -256,7 +256,7 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
                           Text(
                             '${_spinStats!.spinsRemainingToday} spins remaining today',
                             style: theme.textTheme.bodyMedium?.copyWith(
-                              color: Colors.white.withOpacity(0.9),
+                              color: Colors.white.withValues(alpha: 0.9),
                             ),
                           ),
                       ],
@@ -333,7 +333,7 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
               boxShadow: [
                 BoxShadow(
                   color: (_hasClaimedToday ? Colors.green : Colors.amber)
-                      .withOpacity(0.3),
+                      .withValues(alpha: 0.3),
                   blurRadius: 12,
                   offset: Offset(0, 6),
                 ),
@@ -386,7 +386,7 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.purple.withOpacity(0.3),
+            color: Colors.purple.withValues(alpha: 0.3),
             blurRadius: 12,
             offset: Offset(0, 6),
           ),
@@ -416,7 +416,7 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
           Text(
             'Try your luck on the wheel!',
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: Colors.white.withOpacity(0.9),
+              color: Colors.white.withValues(alpha: 0.9),
             ),
           ),
           SizedBox(height: 16),
@@ -455,7 +455,7 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2),
+        color: Colors.white.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -522,7 +522,7 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: Offset(0, 2),
           ),
@@ -582,7 +582,7 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
         Container(
           padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(icon, color: color, size: 20),
@@ -612,7 +612,7 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: Offset(0, -2),
           ),

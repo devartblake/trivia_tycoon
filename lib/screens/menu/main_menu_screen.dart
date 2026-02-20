@@ -121,7 +121,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
       borderRadius: BorderRadius.circular(20),
       boxShadows: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.3),
+          color: Colors.black.withValues(alpha: 0.3),
           blurRadius: 25,
           offset: const Offset(0, 12),
         ),

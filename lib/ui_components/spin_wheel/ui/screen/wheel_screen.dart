@@ -477,7 +477,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.purple.withOpacity(0.1),
+                color: Colors.purple.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Icon(
@@ -504,8 +504,8 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: snapshot.data!
-                        ? Colors.green.withOpacity(0.1)
-                        : Colors.orange.withOpacity(0.1),
+                        ? Colors.green.withValues(alpha: 0.1)
+                        : Colors.orange.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
@@ -583,8 +583,8 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                         boxShadow: [
                                           BoxShadow(
                                             color: isDark
-                                                ? Colors.black.withOpacity(0.3)
-                                                : Colors.grey.withOpacity(0.1),
+                                                ? Colors.black.withValues(alpha: 0.3)
+                                                : Colors.grey.withValues(alpha: 0.1),
                                             blurRadius: 20,
                                             offset: const Offset(0, 10),
                                           ),
@@ -615,7 +615,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                             if (_isSpinning)
                                               Container(
                                                 decoration: BoxDecoration(
-                                                  color: Colors.black.withOpacity(0.2),
+                                                  color: Colors.black.withValues(alpha: 0.2),
                                                   borderRadius: BorderRadius.circular(24),
                                                 ),
                                                 child: const Center(

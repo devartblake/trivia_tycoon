@@ -168,13 +168,13 @@ class _SegmentUnlockOverlayState extends State<SegmentUnlockOverlay>
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Colors.black.withOpacity(0.85),
-                Colors.grey.shade900.withOpacity(0.75),
-                Colors.black.withOpacity(0.85),
+                Colors.black.withValues(alpha: 0.85),
+                Colors.grey.shade900.withValues(alpha: 0.75),
+                Colors.black.withValues(alpha: 0.85),
               ],
             ),
             border: Border.all(
-              color: Colors.amber.withOpacity(0.3),
+              color: Colors.amber.withValues(alpha: 0.3),
               width: 1,
             ),
           ),
@@ -205,7 +205,7 @@ class _SegmentUnlockOverlayState extends State<SegmentUnlockOverlay>
             child: CustomPaint(
               painter: ShimmerPainter(
                 animation: _shimmerAnimation.value,
-                color: Colors.amber.withOpacity(0.15),
+                color: Colors.amber.withValues(alpha: 0.15),
               ),
             ),
           ),
@@ -234,8 +234,8 @@ class _SegmentUnlockOverlayState extends State<SegmentUnlockOverlay>
                     shape: BoxShape.circle,
                     gradient: RadialGradient(
                       colors: [
-                        Colors.amber.withOpacity(0.3),
-                        Colors.amber.withOpacity(0.1),
+                        Colors.amber.withValues(alpha: 0.3),
+                        Colors.amber.withValues(alpha: 0.1),
                         Colors.transparent,
                       ],
                     ),
@@ -245,10 +245,10 @@ class _SegmentUnlockOverlayState extends State<SegmentUnlockOverlay>
                       width: 32,
                       height: 32,
                       decoration: BoxDecoration(
-                        color: Colors.amber.withOpacity(0.2),
+                        color: Colors.amber.withValues(alpha: 0.2),
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: Colors.amber.withOpacity(0.5),
+                          color: Colors.amber.withValues(alpha: 0.5),
                           width: 2,
                         ),
                       ),
@@ -283,10 +283,10 @@ class _SegmentUnlockOverlayState extends State<SegmentUnlockOverlay>
                       vertical: 2,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.5),
+                      color: Colors.black.withValues(alpha: 0.5),
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                        color: Colors.amber.withOpacity(0.3),
+                        color: Colors.amber.withValues(alpha: 0.3),
                         width: 0.5,
                       ),
                     ),
@@ -363,11 +363,11 @@ class _SegmentUnlockOverlayState extends State<SegmentUnlockOverlay>
             decoration: BoxDecoration(
               border: Border(
                 top: BorderSide(
-                  color: Colors.amber.withOpacity(0.6),
+                  color: Colors.amber.withValues(alpha: 0.6),
                   width: 1.5,
                 ),
                 left: BorderSide(
-                  color: Colors.amber.withOpacity(0.6),
+                  color: Colors.amber.withValues(alpha: 0.6),
                   width: 1.5,
                 ),
               ),

@@ -158,13 +158,13 @@ class _WidgetWheelSegmentState extends ConsumerState<WidgetWheelSegment>
       borderRadius: BorderRadius.circular(16),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.1),
+          color: Colors.black.withValues(alpha: 0.1),
           blurRadius: 8,
           offset: const Offset(0, 4),
         ),
         if (widget.isActive)
           BoxShadow(
-            color: theme.colorScheme.primary.withOpacity(0.3),
+            color: theme.colorScheme.primary.withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 0),
           ),
@@ -217,8 +217,8 @@ class _WidgetWheelSegmentState extends ConsumerState<WidgetWheelSegment>
       end: Alignment.bottomRight,
       colors: [
         baseColor,
-        baseColor.withOpacity(0.8),
-        baseColor.withOpacity(0.9),
+        baseColor.withValues(alpha: 0.8),
+        baseColor.withValues(alpha: 0.9),
       ],
       stops: const [0.0, 0.5, 1.0],
     );
@@ -229,7 +229,7 @@ class _WidgetWheelSegmentState extends ConsumerState<WidgetWheelSegment>
       child: Container(
         margin: const EdgeInsets.only(top: 16),
         decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.6),
+          color: Colors.black.withValues(alpha: 0.6),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Center(

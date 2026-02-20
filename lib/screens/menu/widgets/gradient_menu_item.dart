@@ -29,21 +29,21 @@ class GradientMenuItemWidget extends StatelessWidget {
           boxShadow: [
             if (isSelected)
               BoxShadow(
-                color: item.gradient.colors.first.withOpacity(0.3),
+                color: item.gradient.colors.first.withValues(alpha: 0.3),
                 blurRadius: 15,
                 offset: const Offset(0, 6),
               )
             else
               BoxShadow(
-                color: const Color(0xFF64748B).withOpacity(0.08),
+                color: const Color(0xFF64748B).withValues(alpha: 0.08),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
           ],
           border: Border.all(
             color: isSelected
-                ? Colors.white.withOpacity(0.2)
-                : const Color(0xFF64748B).withOpacity(0.1),
+                ? Colors.white.withValues(alpha: 0.2)
+                : const Color(0xFF64748B).withValues(alpha: 0.1),
             width: 1,
           ),
         ),
@@ -52,8 +52,8 @@ class GradientMenuItemWidget extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               color: isSelected
-                  ? Colors.white.withOpacity(0.2)
-                  : item.gradient.colors.first.withOpacity(0.1),
+                  ? Colors.white.withValues(alpha: 0.2)
+                  : item.gradient.colors.first.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
@@ -73,8 +73,8 @@ class GradientMenuItemWidget extends StatelessWidget {
           trailing: Icon(
             Icons.arrow_forward_ios_rounded,
             color: isSelected
-                ? Colors.white.withOpacity(0.8)
-                : const Color(0xFF64748B).withOpacity(0.5),
+                ? Colors.white.withValues(alpha: 0.8)
+                : const Color(0xFF64748B).withValues(alpha: 0.5),
             size: 16,
           ),
           onTap: () {

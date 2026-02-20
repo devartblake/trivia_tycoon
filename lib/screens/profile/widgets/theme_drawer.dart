@@ -28,7 +28,7 @@ class ThemedDrawer extends ConsumerWidget {
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [theme.primaryColor.withOpacity(0.9), theme.secondaryColor],
+            colors: [theme.primaryColor.withValues(alpha: 0.9), theme.secondaryColor],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),

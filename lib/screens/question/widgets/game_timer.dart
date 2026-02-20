@@ -104,7 +104,7 @@ class _EnhancedGameTimerState extends State<EnhancedGameTimer>
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: _getTimerColor().withOpacity(0.3),
+                  color: _getTimerColor().withValues(alpha: 0.3),
                   blurRadius: 8,
                   offset: const Offset(0, 4),
                 ),

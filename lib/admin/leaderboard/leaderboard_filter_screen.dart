@@ -27,7 +27,7 @@ class AdminLeaderboardFilterScreen extends ConsumerWidget {
           padding: const EdgeInsets.only(left: 8),
           child: Container(
             decoration: BoxDecoration(
-              color: theme.primaryColor.withOpacity(0.1),
+              color: theme.primaryColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: IconButton(
@@ -58,7 +58,7 @@ class AdminLeaderboardFilterScreen extends ConsumerWidget {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: theme.primaryColor.withOpacity(0.1),
+                        color: theme.primaryColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Icon(
@@ -202,10 +202,10 @@ class AdminLeaderboardFilterScreen extends ConsumerWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                       decoration: BoxDecoration(
-                        color: theme.primaryColor.withOpacity(0.05),
+                        color: theme.primaryColor.withValues(alpha: 0.05),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: theme.primaryColor.withOpacity(0.2),
+                          color: theme.primaryColor.withValues(alpha: 0.2),
                           width: 1,
                         ),
                       ),
@@ -291,7 +291,7 @@ class AdminLeaderboardFilterScreen extends ConsumerWidget {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(0, -2),
                 ),
@@ -358,7 +358,7 @@ class AdminLeaderboardFilterScreen extends ConsumerWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -401,12 +401,12 @@ class AdminLeaderboardFilterScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: value ? theme.primaryColor.withOpacity(0.08) : Colors.grey[50],
+        color: value ? theme.primaryColor.withValues(alpha: 0.08) : Colors.grey[50],
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: value
-              ? theme.primaryColor.withOpacity(0.3)
-              : Colors.grey.withOpacity(0.2),
+              ? theme.primaryColor.withValues(alpha: 0.3)
+              : Colors.grey.withValues(alpha: 0.2),
           width: 1.5,
         ),
       ),
@@ -416,7 +416,7 @@ class AdminLeaderboardFilterScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: value
-                  ? theme.primaryColor.withOpacity(0.15)
+                  ? theme.primaryColor.withValues(alpha: 0.15)
                   : Colors.grey[200],
               borderRadius: BorderRadius.circular(10),
             ),

@@ -46,7 +46,7 @@ class EmailCard extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             blurRadius: 8.0,
-            color: Colors.black.withOpacity(0.1), // Subtle shadow
+            color: Colors.black.withValues(alpha: 0.1), // Subtle shadow
           ),
         ],
         borderRadius: BorderRadius.circular(10), // Slightly rounded corners

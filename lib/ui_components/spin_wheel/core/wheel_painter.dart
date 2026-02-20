@@ -65,9 +65,9 @@ class WheelPainter extends CustomPainter {
     if (isActive) {
       paint.shader = RadialGradient(
         colors: [
-          segment.color.withOpacity(0.8),
+          segment.color.withValues(alpha: 0.8),
           segment.color,
-          segment.color.withOpacity(0.9),
+          segment.color.withValues(alpha: 0.9),
         ],
         stops: const [0.0, 0.7, 1.0],
       ).createShader(Rect.fromCircle(center: center, radius: radius));
@@ -89,7 +89,7 @@ class WheelPainter extends CustomPainter {
     // Draw segment border
     final borderPaint = Paint()
       ..style = PaintingStyle.stroke
-      ..color = Colors.white.withOpacity(0.3)
+      ..color = Colors.white.withValues(alpha: 0.3)
       ..strokeWidth = strokeWidth;
 
     canvas.drawPath(path, borderPaint);
@@ -130,7 +130,7 @@ class WheelPainter extends CustomPainter {
       fontWeight: isActive ? FontWeight.bold : FontWeight.w600,
       shadows: [
         Shadow(
-          color: Colors.black.withOpacity(0.5),
+          color: Colors.black.withValues(alpha: 0.5),
           offset: const Offset(1, 1),
           blurRadius: 2,
         ),
@@ -199,7 +199,7 @@ class WheelPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     final pointerShadowPaint = Paint()
-      ..color = Colors.black.withOpacity(0.3)
+      ..color = Colors.black.withValues(alpha: 0.3)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3);
 
     final pointerLength = radius * 0.15;
@@ -275,7 +275,7 @@ class WheelSegmentPainter extends CustomPainter {
 
   void _drawShadow(Canvas canvas, Offset center, double radius) {
     final shadowPaint = Paint()
-      ..color = Colors.black.withOpacity(0.2)
+      ..color = Colors.black.withValues(alpha: 0.2)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
 
     final shadowPath = _createSegmentPath(center, radius + 4);
@@ -289,9 +289,9 @@ class WheelSegmentPainter extends CustomPainter {
     // Create gradient
     paint.shader = LinearGradient(
       colors: [
-        segment.color.withOpacity(0.8),
+        segment.color.withValues(alpha: 0.8),
         segment.color,
-        segment.color.withOpacity(0.9),
+        segment.color.withValues(alpha: 0.9),
       ],
       stops: const [0.0, 0.5, 1.0],
       begin: Alignment.topCenter,
@@ -304,7 +304,7 @@ class WheelSegmentPainter extends CustomPainter {
     // Draw border
     final borderPaint = Paint()
       ..style = PaintingStyle.stroke
-      ..color = Colors.white.withOpacity(0.5)
+      ..color = Colors.white.withValues(alpha: 0.5)
       ..strokeWidth = 2.0;
 
     canvas.drawPath(path, borderPaint);
@@ -313,7 +313,7 @@ class WheelSegmentPainter extends CustomPainter {
   void _drawActiveHighlight(Canvas canvas, Offset center, double radius) {
     final highlightPaint = Paint()
       ..style = PaintingStyle.stroke
-      ..color = Colors.white.withOpacity(0.8)
+      ..color = Colors.white.withValues(alpha: 0.8)
       ..strokeWidth = 4.0
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
 

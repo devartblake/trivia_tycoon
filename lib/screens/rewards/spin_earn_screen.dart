@@ -317,7 +317,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
               end: Alignment.bottomRight,
               colors: [
                 theme.colorScheme.primary,
-                theme.colorScheme.primary.withOpacity(0.8),
+                theme.colorScheme.primary.withValues(alpha: 0.8),
               ],
             ),
           ),
@@ -348,7 +348,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                         Text(
                           '$_spinsRemaining spins remaining today',
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: Colors.white.withOpacity(0.9),
+                            color: Colors.white.withValues(alpha: 0.9),
                           ),
                         ),
                       ],
@@ -451,7 +451,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -477,7 +477,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                 child: Container(
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.primary.withOpacity(0.1),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
@@ -534,7 +534,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(icon, color: color, size: 20),
@@ -605,7 +605,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -636,10 +636,10 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.cyan.withOpacity(0.1), Colors.blue.withOpacity(0.1)],
+                colors: [Colors.cyan.withValues(alpha: 0.1), Colors.blue.withValues(alpha: 0.1)],
               ),
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.cyan.withOpacity(0.3)),
+              border: Border.all(color: Colors.cyan.withValues(alpha: 0.3)),
             ),
             child: Row(
               children: [
@@ -731,7 +731,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
@@ -776,7 +776,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.purple.withOpacity(0.3),
+                        color: Colors.purple.withValues(alpha: 0.3),
                         blurRadius: 20,
                         offset: const Offset(0, 8),
                       ),
@@ -817,7 +817,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                               Text(
                                 '$_spinsRemaining left',
                                 style: TextStyle(
-                                  color: Colors.white.withOpacity(0.9),
+                                  color: Colors.white.withValues(alpha: 0.9),
                                   fontSize: 12,
                                 ),
                               ),

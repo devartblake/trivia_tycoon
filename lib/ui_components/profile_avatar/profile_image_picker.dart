@@ -135,7 +135,7 @@ class _ProfileImagePickerState extends State<ProfileImagePicker>
                   width: 32,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: colorScheme.onSurfaceVariant.withOpacity(0.4),
+                    color: colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -179,7 +179,7 @@ class _ProfileImagePickerState extends State<ProfileImagePicker>
                           gradient: LinearGradient(
                             colors: [
                               colorScheme.primaryContainer,
-                              colorScheme.primary.withOpacity(0.7),
+                              colorScheme.primary.withValues(alpha: 0.7),
                             ],
                           ),
                           onTap: _isLoading
@@ -196,7 +196,7 @@ class _ProfileImagePickerState extends State<ProfileImagePicker>
                           gradient: LinearGradient(
                             colors: [
                               colorScheme.secondaryContainer,
-                              colorScheme.secondary.withOpacity(0.7),
+                              colorScheme.secondary.withValues(alpha: 0.7),
                             ],
                           ),
                           onTap: _isLoading
@@ -299,7 +299,7 @@ class _ImageSourceOptionState extends State<_ImageSourceOption> {
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: colorScheme.shadow.withOpacity(0.08),
+                  color: colorScheme.shadow.withValues(alpha: 0.08),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -312,7 +312,7 @@ class _ImageSourceOptionState extends State<_ImageSourceOption> {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: colorScheme.surface.withOpacity(0.9),
+                      color: colorScheme.surface.withValues(alpha: 0.9),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(
@@ -338,7 +338,7 @@ class _ImageSourceOptionState extends State<_ImageSourceOption> {
                           widget.subtitle,
                           style: textTheme.bodySmall?.copyWith(
                             color: colorScheme.onPrimaryContainer
-                                .withOpacity(0.7),
+                                .withValues(alpha: 0.7),
                           ),
                         ),
                       ],
@@ -347,7 +347,7 @@ class _ImageSourceOptionState extends State<_ImageSourceOption> {
                   Icon(
                     Icons.arrow_forward_ios_rounded,
                     size: 16,
-                    color: colorScheme.onPrimaryContainer.withOpacity(0.6),
+                    color: colorScheme.onPrimaryContainer.withValues(alpha: 0.6),
                   ),
                 ],
               ),

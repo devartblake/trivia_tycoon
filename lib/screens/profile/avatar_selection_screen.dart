@@ -120,15 +120,15 @@ class _AvatarSelectionScreenState extends ConsumerState<AvatarSelectionScreen>
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                Colors.white.withOpacity(0.3),
-                                Colors.white.withOpacity(0.1),
+                                Colors.white.withValues(alpha: 0.3),
+                                Colors.white.withValues(alpha: 0.1),
                               ],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
                             borderRadius: BorderRadius.circular(18),
                             border: Border.all(
-                              color: Colors.white.withOpacity(0.2),
+                              color: Colors.white.withValues(alpha: 0.2),
                               width: 1.5,
                             ),
                           ),
@@ -179,10 +179,10 @@ class _AvatarSelectionScreenState extends ConsumerState<AvatarSelectionScreen>
         child: Container(
           margin: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.15),
+            color: Colors.white.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
             ),
           ),
           child: IconButton(
@@ -199,10 +199,10 @@ class _AvatarSelectionScreenState extends ConsumerState<AvatarSelectionScreen>
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Colors.white.withOpacity(0.1),
+          color: Colors.white.withValues(alpha: 0.1),
         ),
       ),
       child: TabBar(
@@ -211,13 +211,13 @@ class _AvatarSelectionScreenState extends ConsumerState<AvatarSelectionScreen>
           borderRadius: BorderRadius.circular(14),
           gradient: LinearGradient(
             colors: [
-              const Color(0xFF6366F1).withOpacity(0.8),
-              const Color(0xFF8B5CF6).withOpacity(0.8),
+              const Color(0xFF6366F1).withValues(alpha: 0.8),
+              const Color(0xFF8B5CF6).withValues(alpha: 0.8),
             ],
           ),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF6366F1).withOpacity(0.3),
+              color: const Color(0xFF6366F1).withValues(alpha: 0.3),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -226,7 +226,7 @@ class _AvatarSelectionScreenState extends ConsumerState<AvatarSelectionScreen>
         indicatorSize: TabBarIndicatorSize.tab,
         dividerColor: Colors.transparent,
         labelColor: Colors.white,
-        unselectedLabelColor: Colors.white.withOpacity(0.5),
+        unselectedLabelColor: Colors.white.withValues(alpha: 0.5),
         labelStyle: const TextStyle(
           fontWeight: FontWeight.w900,
           fontSize: 13,
@@ -276,7 +276,7 @@ class _GridPatternPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.white.withOpacity(0.05)
+      ..color = Colors.white.withValues(alpha: 0.05)
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
 

@@ -101,7 +101,7 @@ class _ThemeColorPickerState extends ConsumerState<ThemeColorPicker> {
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
               BoxShadow(
-                color: currentColor.withOpacity(0.5),
+                color: currentColor.withValues(alpha: 0.5),
                 blurRadius: 8,
                 spreadRadius: 2,
               )
@@ -126,7 +126,7 @@ class _ThemeColorPickerState extends ConsumerState<ThemeColorPicker> {
             border: Border.all(color: Colors.grey.shade400),
             boxShadow: [
               BoxShadow(
-                color: currentColor.withOpacity(0.4),
+                color: currentColor.withValues(alpha: 0.4),
                 blurRadius: 12,
                 spreadRadius: 2,
                 offset: const Offset(0, 3)

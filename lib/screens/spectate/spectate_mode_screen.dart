@@ -203,7 +203,7 @@ class _SpectateModeScreenState extends State<SpectateModeScreen> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Colors.black.withOpacity(0.7),
+              Colors.black.withValues(alpha: 0.7),
               Colors.transparent,
             ],
           ),
@@ -311,7 +311,7 @@ class _SpectateModeScreenState extends State<SpectateModeScreen> {
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
             colors: [
-              Colors.black.withOpacity(0.7),
+              Colors.black.withValues(alpha: 0.7),
               Colors.transparent,
             ],
           ),
@@ -341,8 +341,8 @@ class _SpectateModeScreenState extends State<SpectateModeScreen> {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: isLeading
-                  ? Colors.amber.withOpacity(0.3)
-                  : Colors.white.withOpacity(0.1),
+                  ? Colors.amber.withValues(alpha: 0.3)
+                  : Colors.white.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
                 color: isLeading ? Colors.amber : Colors.white30,
@@ -461,7 +461,7 @@ class _SpectateModeScreenState extends State<SpectateModeScreen> {
             mini: true,
             heroTag: 'chat',
             onPressed: () => setState(() => _showChat = !_showChat),
-            backgroundColor: Colors.white.withOpacity(0.2),
+            backgroundColor: Colors.white.withValues(alpha: 0.2),
             child: Icon(
               _showChat ? Icons.chat_bubble : Icons.chat_bubble_outline,
               color: Colors.white,
@@ -472,7 +472,7 @@ class _SpectateModeScreenState extends State<SpectateModeScreen> {
             mini: true,
             heroTag: 'controls',
             onPressed: () => setState(() => _showControls = !_showControls),
-            backgroundColor: Colors.white.withOpacity(0.2),
+            backgroundColor: Colors.white.withValues(alpha: 0.2),
             child: Icon(
               _showControls ? Icons.visibility_off : Icons.visibility,
               color: Colors.white,

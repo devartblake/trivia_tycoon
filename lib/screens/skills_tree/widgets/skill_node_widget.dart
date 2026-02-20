@@ -150,7 +150,7 @@ class SkillNodeWidget extends StatelessWidget {
 
     final mainIcon = iconImage == null
         ? Icon(Icons.auto_awesome,
-        color: textColor.withOpacity(0.85),
+        color: textColor.withValues(alpha: 0.85),
         size: _iconSize)
         : RawImage(
         image: iconImage,
@@ -175,7 +175,7 @@ class SkillNodeWidget extends StatelessWidget {
         ? LinearGradient(
       colors: [
         bg,
-        glow.withOpacity(0.2),
+        glow.withValues(alpha: 0.2),
       ],
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
@@ -197,7 +197,7 @@ class SkillNodeWidget extends StatelessWidget {
             gradient: gradient,
             borderColor: border,
             shadowColor: isSelected || isUnlocked
-                ? glow.withOpacity(0.35)
+                ? glow.withValues(alpha: 0.35)
                 : const Color(0x33000000),
             onTap: onTap,
             child: Padding(
@@ -217,19 +217,19 @@ class SkillNodeWidget extends StatelessWidget {
     if (unlocked) {
       return Icon(
         Icons.check_circle,
-        color: Colors.green.withOpacity(0.8),
+        color: Colors.green.withValues(alpha: 0.8),
         size: fontSize + 4,
       );
     } else {
       return Icon(
         Icons.lock,
-        color: textColor.withOpacity(0.6),
+        color: textColor.withValues(alpha: 0.6),
         size: fontSize + 2,
       );
     }
   }
 
-  Color _tint(Color c, double a) => c.withOpacity(a);
+  Color _tint(Color c, double a) => c.withValues(alpha: a);
 }
 
 class _CooldownBadge extends StatelessWidget {
@@ -248,9 +248,9 @@ class _CooldownBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
+        color: color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withOpacity(0.45), width: 1),
+        border: Border.all(color: color.withValues(alpha: 0.45), width: 1),
       ),
       child: Text(
         mmss(remaining),

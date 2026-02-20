@@ -48,7 +48,7 @@ class AllActionsScreen extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      tileColor: Colors.purple.withOpacity(0.1),
+                      tileColor: Colors.purple.withValues(alpha: 0.1),
                     ),
                   );
                 },

@@ -53,7 +53,7 @@ class EnhancedProgressIndicator extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: classColor.withOpacity(0.1),
+                  color: classColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -83,7 +83,7 @@ class EnhancedProgressIndicator extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [classColor, classColor.withOpacity(0.7)],
+                    colors: [classColor, classColor.withValues(alpha: 0.7)],
                   ),
                   borderRadius: BorderRadius.circular(4),
                 ),

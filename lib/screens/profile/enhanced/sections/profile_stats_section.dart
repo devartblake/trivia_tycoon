@@ -73,15 +73,15 @@ class ProfileStatsSection extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                gradient[0].withOpacity(0.15),
-                gradient[1].withOpacity(0.1),
+                gradient[0].withValues(alpha: 0.15),
+                gradient[1].withValues(alpha: 0.1),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: gradient[0].withOpacity(0.3),
+              color: gradient[0].withValues(alpha: 0.3),
               width: 1.5,
             ),
           ),
@@ -108,7 +108,7 @@ class ProfileStatsSection extends StatelessWidget {
               Text(
                 label,
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.6),
+                  color: Colors.white.withValues(alpha: 0.6),
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                 ),

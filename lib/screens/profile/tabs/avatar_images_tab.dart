@@ -70,7 +70,7 @@ class _AvatarImagesTabState extends ConsumerState<AvatarImagesTab> {
             Text(
               'Loading avatars...',
               style: TextStyle(
-                color: Colors.white.withOpacity(0.7),
+                color: Colors.white.withValues(alpha: 0.7),
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
               ),

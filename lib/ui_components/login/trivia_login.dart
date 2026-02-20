@@ -707,8 +707,8 @@ class _FlutterLoginState extends State<FlutterLogin>
         filled: inputTheme.filled,
         fillColor: inputTheme.fillColor ??
             Color.alphaBlend(
-              primaryOrWhite.withOpacity(.07),
-              Colors.grey.withOpacity(.04),
+              primaryOrWhite.withValues(alpha: .07),
+              Colors.grey.withValues(alpha: .04),
             ),
         contentPadding: inputTheme.contentPadding ??
             const EdgeInsets.symmetric(vertical: 4.0),

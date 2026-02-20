@@ -437,7 +437,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen>
                 duration: const Duration(milliseconds: 200),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? Theme.of(context).primaryColor.withOpacity(0.1)
+                      ? Theme.of(context).primaryColor.withValues(alpha: 0.1)
                       : Colors.grey[100],
                   border: Border.all(
                     color: isSelected

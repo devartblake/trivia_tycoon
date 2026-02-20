@@ -45,7 +45,7 @@ class CustomAlertDialog extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 20,
               offset: const Offset(0, 10),
             ),
@@ -61,7 +61,7 @@ class CustomAlertDialog extends StatelessWidget {
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  color: _getIconBackgroundColor().withOpacity(0.15),
+                  color: _getIconBackgroundColor().withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
                 child: Center(

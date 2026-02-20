@@ -79,7 +79,7 @@ class _FavoritesQuizScreenEnhancedState
         child: Container(
           margin: const EdgeInsets.only(left: 12.0),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(12),
           ),
           child: IconButton(
@@ -98,7 +98,7 @@ class _FavoritesQuizScreenEnhancedState
           child: Container(
             margin: const EdgeInsets.only(right: 12.0),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
             ),
             child: IconButton(
@@ -146,7 +146,7 @@ class _FavoritesQuizScreenEnhancedState
                   Text(
                     '$categoriesCount categories • $questionsCount questions',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.white.withValues(alpha: 0.9),
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
@@ -171,7 +171,7 @@ class _FavoritesQuizScreenEnhancedState
         borderRadius: BorderRadius.circular(25),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -342,7 +342,7 @@ class _FavoritesQuizScreenEnhancedState
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 15,
             offset: const Offset(0, 4),
           ),
@@ -367,13 +367,13 @@ class _FavoritesQuizScreenEnhancedState
                       end: Alignment.bottomRight,
                       colors: [
                         category.color,
-                        category.color.withOpacity(0.7),
+                        category.color.withValues(alpha: 0.7),
                       ],
                     ),
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: category.color.withOpacity(0.3),
+                        color: category.color.withValues(alpha: 0.3),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),
@@ -471,13 +471,13 @@ class _FavoritesQuizScreenEnhancedState
                     gradient: LinearGradient(
                       colors: [
                         color,
-                        color.withOpacity(0.7),
+                        color.withValues(alpha: 0.7),
                       ],
                     ),
                     borderRadius: BorderRadius.circular(4),
                     boxShadow: [
                       BoxShadow(
-                        color: color.withOpacity(0.3),
+                        color: color.withValues(alpha: 0.3),
                         blurRadius: 4,
                         offset: const Offset(0, 2),
                       ),
@@ -492,7 +492,7 @@ class _FavoritesQuizScreenEnhancedState
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
@@ -520,7 +520,7 @@ class _FavoritesQuizScreenEnhancedState
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -738,10 +738,10 @@ class _FavoritesQuizScreenEnhancedState
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: color.withOpacity(0.3),
+          color: color.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -809,8 +809,8 @@ class _FavoritesQuizScreenEnhancedState
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    const Color(0xFF6366F1).withOpacity(0.1),
-                    const Color(0xFF8B5CF6).withOpacity(0.1),
+                    const Color(0xFF6366F1).withValues(alpha: 0.1),
+                    const Color(0xFF8B5CF6).withValues(alpha: 0.1),
                   ],
                 ),
                 shape: BoxShape.circle,
@@ -944,7 +944,7 @@ class _FavoritesQuizScreenEnhancedState
       leading: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: const Color(0xFF6366F1).withOpacity(0.1),
+          color: const Color(0xFF6366F1).withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Icon(icon, color: const Color(0xFF6366F1), size: 20),
@@ -1079,7 +1079,7 @@ class _FavoritesQuizScreenEnhancedState
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 10,
                     offset: const Offset(0, -4),
                   ),
@@ -1122,12 +1122,12 @@ class _FavoritesQuizScreenEnhancedState
         // Handle filter selection
       },
       backgroundColor: Colors.white,
-      selectedColor: color.withOpacity(0.2),
+      selectedColor: color.withValues(alpha: 0.2),
       labelStyle: TextStyle(
         color: color,
         fontWeight: FontWeight.w600,
       ),
-      side: BorderSide(color: color.withOpacity(0.3)),
+      side: BorderSide(color: color.withValues(alpha: 0.3)),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
@@ -1197,7 +1197,7 @@ class _FavoritesQuizScreenEnhancedState
                             gradient: LinearGradient(
                               colors: [
                                 question.categoryColor,
-                                question.categoryColor.withOpacity(0.7),
+                                question.categoryColor.withValues(alpha: 0.7),
                               ],
                             ),
                             borderRadius: BorderRadius.circular(12),

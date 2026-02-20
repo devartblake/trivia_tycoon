@@ -139,7 +139,7 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF64748B).withOpacity(0.1),
+              color: const Color(0xFF64748B).withValues(alpha: 0.1),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -221,7 +221,7 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: settings.primaryColor.withOpacity(0.3),
+                color: settings.primaryColor.withValues(alpha: 0.3),
                 blurRadius: 25,
                 offset: const Offset(0, 12),
               ),
@@ -236,7 +236,7 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: const Icon(
@@ -262,7 +262,7 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.15),
+                    color: Colors.white.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Row(
@@ -311,7 +311,7 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF64748B).withOpacity(0.08),
+                color: const Color(0xFF64748B).withValues(alpha: 0.08),
                 blurRadius: 25,
                 offset: const Offset(0, 8),
               ),
@@ -355,13 +355,13 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(
-                      color: const Color(0xFF64748B).withOpacity(0.2),
+                      color: const Color(0xFF64748B).withValues(alpha: 0.2),
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(
-                      color: const Color(0xFF64748B).withOpacity(0.2),
+                      color: const Color(0xFF64748B).withValues(alpha: 0.2),
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
@@ -401,7 +401,7 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF64748B).withOpacity(0.08),
+                color: const Color(0xFF64748B).withValues(alpha: 0.08),
                 blurRadius: 25,
                 offset: const Offset(0, 8),
               ),
@@ -423,7 +423,7 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
                         BoxShadow(
                           color: (isPrimary
                               ? ref.watch(themeSettingsProvider).primaryColor
-                              : ref.watch(themeSettingsProvider).secondaryColor).withOpacity(0.3),
+                              : ref.watch(themeSettingsProvider).secondaryColor).withValues(alpha: 0.3),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         ),
@@ -474,7 +474,7 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF64748B).withOpacity(0.08),
+                color: const Color(0xFF64748B).withValues(alpha: 0.08),
                 blurRadius: 25,
                 offset: const Offset(0, 8),
               ),
@@ -515,7 +515,7 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
                   color: const Color(0xFFF8FAFF),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: const Color(0xFF64748B).withOpacity(0.1),
+                    color: const Color(0xFF64748B).withValues(alpha: 0.1),
                   ),
                 ),
                 child: Row(
@@ -543,7 +543,7 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
                             isDark ? 'Easy on the eyes' : 'Bright and clear',
                             style: TextStyle(
                               fontSize: 12,
-                              color: const Color(0xFF64748B).withOpacity(0.8),
+                              color: const Color(0xFF64748B).withValues(alpha: 0.8),
                             ),
                           ),
                         ],
@@ -582,7 +582,7 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF64748B).withOpacity(0.08),
+                color: const Color(0xFF64748B).withValues(alpha: 0.08),
                 blurRadius: 25,
                 offset: const Offset(0, 8),
               ),

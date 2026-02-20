@@ -115,7 +115,7 @@ class _ConfettiThemeScreenState extends ConsumerState<ConfettiThemeScreen>
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -140,7 +140,7 @@ class _ConfettiThemeScreenState extends ConsumerState<ConfettiThemeScreen>
         Container(
           margin: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
           decoration: BoxDecoration(
-            color: const Color(0xFF667EEA).withOpacity(0.1),
+            color: const Color(0xFF667EEA).withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
           ),
           child: IconButton(
@@ -168,7 +168,7 @@ class _ConfettiThemeScreenState extends ConsumerState<ConfettiThemeScreen>
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF667EEA).withOpacity(0.3),
+            color: const Color(0xFF667EEA).withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -179,7 +179,7 @@ class _ConfettiThemeScreenState extends ConsumerState<ConfettiThemeScreen>
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(16),
             ),
             child: const Icon(
@@ -255,7 +255,7 @@ class _ConfettiThemeScreenState extends ConsumerState<ConfettiThemeScreen>
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.04),
+                          color: Colors.black.withValues(alpha: 0.04),
                           blurRadius: 10,
                           offset: const Offset(0, 2),
                         ),
@@ -309,7 +309,7 @@ class _ConfettiThemeScreenState extends ConsumerState<ConfettiThemeScreen>
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 20,
             offset: const Offset(0, 4),
           ),
@@ -323,7 +323,7 @@ class _ConfettiThemeScreenState extends ConsumerState<ConfettiThemeScreen>
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: iconColor.withOpacity(0.1),
+                  color: iconColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(
@@ -445,7 +445,7 @@ class _ConfettiThemeScreenState extends ConsumerState<ConfettiThemeScreen>
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF38B2AC).withOpacity(0.1),
+                  color: const Color(0xFF38B2AC).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -463,9 +463,9 @@ class _ConfettiThemeScreenState extends ConsumerState<ConfettiThemeScreen>
           SliderTheme(
             data: SliderTheme.of(context).copyWith(
               activeTrackColor: const Color(0xFF38B2AC),
-              inactiveTrackColor: const Color(0xFF38B2AC).withOpacity(0.2),
+              inactiveTrackColor: const Color(0xFF38B2AC).withValues(alpha: 0.2),
               thumbColor: const Color(0xFF38B2AC),
-              overlayColor: const Color(0xFF38B2AC).withOpacity(0.1),
+              overlayColor: const Color(0xFF38B2AC).withValues(alpha: 0.1),
               trackHeight: 6,
               thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12),
             ),
@@ -525,7 +525,7 @@ class _ConfettiThemeScreenState extends ConsumerState<ConfettiThemeScreen>
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 20,
             offset: const Offset(0, 4),
           ),
@@ -539,7 +539,7 @@ class _ConfettiThemeScreenState extends ConsumerState<ConfettiThemeScreen>
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF667EEA).withOpacity(0.1),
+                  color: const Color(0xFF667EEA).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Icon(

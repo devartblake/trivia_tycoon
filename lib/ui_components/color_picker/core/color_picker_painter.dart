@@ -127,7 +127,7 @@ class ColorPickerPainter extends CustomPainter {
       canvas.drawRect(rect, paint);
 
       // Add subtle border for better visual separation
-      paint.color = Colors.black.withOpacity(0.1);
+      paint.color = Colors.black.withValues(alpha: 0.1);
       paint.style = PaintingStyle.stroke;
       paint.strokeWidth = 0.5;
       canvas.drawRect(rect, paint);

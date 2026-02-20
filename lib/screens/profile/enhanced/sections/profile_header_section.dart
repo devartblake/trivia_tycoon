@@ -29,15 +29,15 @@ class ProfileHeaderSection extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.white.withOpacity(0.08),
-            Colors.white.withOpacity(0.04),
+            Colors.white.withValues(alpha: 0.08),
+            Colors.white.withValues(alpha: 0.04),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: Colors.white.withOpacity(0.12),
+          color: Colors.white.withValues(alpha: 0.12),
           width: 1.5,
         ),
       ),
@@ -82,12 +82,12 @@ class ProfileHeaderSection extends StatelessWidget {
           colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
         ),
         border: Border.all(
-          color: Colors.white.withOpacity(0.3),
+          color: Colors.white.withValues(alpha: 0.3),
           width: 3,
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF6366F1).withOpacity(0.4),
+            color: const Color(0xFF6366F1).withValues(alpha: 0.4),
             blurRadius: 16,
             offset: const Offset(0, 6),
           ),
@@ -153,7 +153,7 @@ class ProfileHeaderSection extends StatelessWidget {
     return Text(
       userData['username'] ?? '@user',
       style: TextStyle(
-        color: Colors.white.withOpacity(0.6),
+        color: Colors.white.withValues(alpha: 0.6),
         fontSize: 15,
         fontWeight: FontWeight.w600,
       ),
@@ -169,13 +169,13 @@ class ProfileHeaderSection extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            const Color(0xFF8B5CF6).withOpacity(0.3),
-            const Color(0xFF6366F1).withOpacity(0.2),
+            const Color(0xFF8B5CF6).withValues(alpha: 0.3),
+            const Color(0xFF6366F1).withValues(alpha: 0.2),
           ],
         ),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: const Color(0xFF8B5CF6).withOpacity(0.4),
+          color: const Color(0xFF8B5CF6).withValues(alpha: 0.4),
           width: 1,
         ),
       ),
@@ -216,7 +216,7 @@ class ProfileHeaderSection extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFFFBBF24).withOpacity(0.3),
+                color: const Color(0xFFFBBF24).withValues(alpha: 0.3),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -249,13 +249,13 @@ class ProfileHeaderSection extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Colors.white.withOpacity(0.15),
-                  Colors.white.withOpacity(0.08),
+                  Colors.white.withValues(alpha: 0.15),
+                  Colors.white.withValues(alpha: 0.08),
                 ],
               ),
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
               ),
             ),
             child: Text(
@@ -276,7 +276,7 @@ class ProfileHeaderSection extends StatelessWidget {
     return Text(
       userData['bio'],
       style: TextStyle(
-        color: Colors.white.withOpacity(0.8),
+        color: Colors.white.withValues(alpha: 0.8),
         fontSize: 14,
         fontWeight: FontWeight.w500,
         height: 1.5,

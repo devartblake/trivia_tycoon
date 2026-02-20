@@ -124,7 +124,7 @@ class _NotificationDetailScreenState
         icon: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withValues(alpha: 0.3),
             borderRadius: BorderRadius.circular(10),
           ),
           child: const Icon(Icons.arrow_back, color: Colors.white, size: 20),
@@ -142,7 +142,7 @@ class _NotificationDetailScreenState
           icon: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Icon(Icons.more_vert, color: Colors.white, size: 20),
@@ -158,7 +158,7 @@ class _NotificationDetailScreenState
               end: Alignment.bottomRight,
               colors: [
                 config.color,
-                config.color.withOpacity(0.7),
+                config.color.withValues(alpha: 0.7),
               ],
             ),
           ),
@@ -179,10 +179,10 @@ class _NotificationDetailScreenState
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: Colors.white.withOpacity(0.3),
+                      color: Colors.white.withValues(alpha: 0.3),
                       width: 2,
                     ),
                   ),
@@ -208,7 +208,7 @@ class _NotificationDetailScreenState
         color: const Color(0xFF2F3136),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: config.color.withOpacity(0.3),
+          color: config.color.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -223,10 +223,10 @@ class _NotificationDetailScreenState
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: config.color.withOpacity(0.15),
+                  color: config.color.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
-                    color: config.color.withOpacity(0.3),
+                    color: config.color.withValues(alpha: 0.3),
                     width: 1,
                   ),
                 ),
@@ -355,7 +355,7 @@ class _NotificationDetailScreenState
                 Text(
                   '@sarah_chen',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.6),
+                    color: Colors.white.withValues(alpha: 0.6),
                     fontSize: 13,
                   ),
                 ),
@@ -419,13 +419,13 @@ class _NotificationDetailScreenState
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            const Color(0xFFFAA61A).withOpacity(0.2),
-            const Color(0xFFFAA61A).withOpacity(0.05),
+            const Color(0xFFFAA61A).withValues(alpha: 0.2),
+            const Color(0xFFFAA61A).withValues(alpha: 0.05),
           ],
         ),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: const Color(0xFFFAA61A).withOpacity(0.3),
+          color: const Color(0xFFFAA61A).withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -495,10 +495,10 @@ class _NotificationDetailScreenState
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFED4245).withOpacity(0.1),
+        color: const Color(0xFFED4245).withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: const Color(0xFFED4245).withOpacity(0.3),
+          color: const Color(0xFFED4245).withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -510,7 +510,7 @@ class _NotificationDetailScreenState
             child: Text(
               'This is an important alert that requires your attention.',
               style: TextStyle(
-                color: Colors.white.withOpacity(0.9),
+                color: Colors.white.withValues(alpha: 0.9),
                 fontSize: 14,
                 height: 1.4,
               ),
@@ -554,7 +554,7 @@ class _NotificationDetailScreenState
           Container(
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: const Color(0xFF8B5CF6).withOpacity(0.15),
+              color: const Color(0xFF8B5CF6).withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(6),
             ),
             child: Icon(icon, color: const Color(0xFF8B5CF6), size: 16),

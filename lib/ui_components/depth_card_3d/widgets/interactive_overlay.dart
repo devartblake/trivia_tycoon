@@ -82,9 +82,9 @@ class InteractiveOverlay extends StatelessWidget {
                             style: const TextStyle(color: Colors.white),
                           ),
                           onPressed: a.onPressed,
-                          backgroundColor: Colors.black.withOpacity(0.30),
+                          backgroundColor: Colors.black.withValues(alpha: 0.30),
                           shape: StadiumBorder(
-                            side: BorderSide(color: Colors.white.withOpacity(0.25)),
+                            side: BorderSide(color: Colors.white.withValues(alpha: 0.25)),
                           ),
                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           labelPadding: const EdgeInsets.symmetric(horizontal: 8),

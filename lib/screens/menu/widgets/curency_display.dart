@@ -40,18 +40,18 @@ class CurrencyDisplay extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF6366F1).withOpacity(0.1),
+            color: const Color(0xFF6366F1).withValues(alpha: 0.1),
             blurRadius: 30,
             offset: const Offset(0, 10),
           ),
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
         ],
         border: Border.all(
-          color: const Color(0xFF6366F1).withOpacity(0.12),
+          color: const Color(0xFF6366F1).withValues(alpha: 0.12),
           width: 1.5,
         ),
       ),
@@ -85,7 +85,7 @@ class CurrencyDisplay extends StatelessWidget {
                       gradient: LinearGradient(
                         colors: [
                           Colors.transparent,
-                          const Color(0xFF64748B).withOpacity(0.15),
+                          const Color(0xFF64748B).withValues(alpha: 0.15),
                           Colors.transparent,
                         ],
                         begin: Alignment.topCenter,
@@ -273,12 +273,12 @@ class _CurrencyItemState extends State<_CurrencyItem>
             color: widget.bgColor,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
-              color: widget.color.withOpacity(0.25),
+              color: widget.color.withValues(alpha: 0.25),
               width: 1.5,
             ),
             boxShadow: [
               BoxShadow(
-                color: widget.color.withOpacity(0.15),
+                color: widget.color.withValues(alpha: 0.15),
                 blurRadius: 8,
                 offset: const Offset(0, 4),
               ),
@@ -305,7 +305,7 @@ class _CurrencyItemState extends State<_CurrencyItem>
                 border: Border.all(color: Colors.white, width: 2),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFFEF4444).withOpacity(0.5),
+                    color: const Color(0xFFEF4444).withValues(alpha: 0.5),
                     blurRadius: 6,
                     offset: const Offset(0, 2),
                   ),

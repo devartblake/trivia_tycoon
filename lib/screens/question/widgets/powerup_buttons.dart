@@ -22,7 +22,7 @@ class EnhancedPowerUpButtons extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -124,13 +124,13 @@ class _PowerUpButtonState extends State<_PowerUpButton>
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   color: widget.powerUp.isEnabled
-                      ? widget.powerUp.color.withOpacity(0.1)
-                      : Colors.grey.withOpacity(0.1),
+                      ? widget.powerUp.color.withValues(alpha: 0.1)
+                      : Colors.grey.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: widget.powerUp.isEnabled
-                        ? widget.powerUp.color.withOpacity(0.3)
-                        : Colors.grey.withOpacity(0.3),
+                        ? widget.powerUp.color.withValues(alpha: 0.3)
+                        : Colors.grey.withValues(alpha: 0.3),
                   ),
                 ),
                 child: Row(

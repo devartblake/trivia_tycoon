@@ -94,7 +94,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
             Container(
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(6),
               ),
               child: const Icon(
@@ -163,7 +163,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF64748B).withOpacity(0.1),
+              color: const Color(0xFF64748B).withValues(alpha: 0.1),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -222,7 +222,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF6366F1).withOpacity(0.3),
+              color: const Color(0xFF6366F1).withValues(alpha: 0.3),
               blurRadius: 25,
               offset: const Offset(0, 12),
             ),
@@ -236,10 +236,10 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: Colors.white.withOpacity(0.3),
+                      color: Colors.white.withValues(alpha: 0.3),
                       width: 2,
                     ),
                   ),
@@ -300,10 +300,10 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
       padding: const EdgeInsets.all(12),
       margin: const EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.15),
+        color: Colors.white.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Colors.white.withOpacity(0.2),
+          color: Colors.white.withValues(alpha: 0.2),
           width: 1,
         ),
       ),
@@ -328,7 +328,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
             label,
             style: TextStyle(
               fontSize: 12,
-              color: Colors.white.withOpacity(0.8),
+              color: Colors.white.withValues(alpha: 0.8),
             ),
             textAlign: TextAlign.center,
           ),
@@ -347,13 +347,13 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF64748B).withOpacity(0.08),
+              color: const Color(0xFF64748B).withValues(alpha: 0.08),
               blurRadius: 15,
               offset: const Offset(0, 4),
             ),
           ],
           border: Border.all(
-            color: const Color(0xFF64748B).withOpacity(0.1),
+            color: const Color(0xFF64748B).withValues(alpha: 0.1),
             width: 1,
           ),
         ),
@@ -385,11 +385,11 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                       margin: const EdgeInsets.symmetric(horizontal: 4),
                       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                       decoration: BoxDecoration(
-                        gradient: isSelected ? LinearGradient(colors: [color, color.withOpacity(0.8)]) : null,
-                        color: isSelected ? null : color.withOpacity(0.1),
+                        gradient: isSelected ? LinearGradient(colors: [color, color.withValues(alpha: 0.8)]) : null,
+                        color: isSelected ? null : color.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: color.withOpacity(isSelected ? 0.3 : 0.2),
+                          color: color.withValues(alpha: isSelected ? 0.3 : 0.2),
                           width: 1,
                         ),
                       ),
@@ -423,7 +423,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: const Color(0xFF64748B).withOpacity(0.1),
+              color: const Color(0xFF64748B).withValues(alpha: 0.1),
               width: 1,
             ),
           ),
@@ -487,15 +487,15 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF64748B).withOpacity(0.06),
+            color: const Color(0xFF64748B).withValues(alpha: 0.06),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
         ],
         border: Border.all(
           color: isPurchased
-              ? const Color(0xFF10B981).withOpacity(0.3)
-              : const Color(0xFF64748B).withOpacity(0.1),
+              ? const Color(0xFF10B981).withValues(alpha: 0.3)
+              : const Color(0xFF64748B).withValues(alpha: 0.1),
           width: 1,
         ),
       ),
@@ -534,7 +534,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
               song.artist ?? 'Unknown Artist',
               style: TextStyle(
                 fontSize: 14,
-                color: const Color(0xFF64748B).withOpacity(0.8),
+                color: const Color(0xFF64748B).withValues(alpha: 0.8),
               ),
             ),
             if (song.isExclusive) ...[
@@ -564,7 +564,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
             ? Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: const Color(0xFF10B981).withOpacity(0.1),
+            color: const Color(0xFF10B981).withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: const Icon(

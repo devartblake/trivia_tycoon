@@ -29,19 +29,19 @@ class EmptyStateWidget extends StatelessWidget {
                 shape: BoxShape.circle,
                 gradient: LinearGradient(
                   colors: [
-                    gradient[0].withOpacity(0.2),
-                    gradient[1].withOpacity(0.1),
+                    gradient[0].withValues(alpha: 0.2),
+                    gradient[1].withValues(alpha: 0.1),
                   ],
                 ),
                 border: Border.all(
-                  color: gradient[0].withOpacity(0.3),
+                  color: gradient[0].withValues(alpha: 0.3),
                   width: 2,
                 ),
               ),
               child: Icon(
                 icon,
                 size: 48,
-                color: gradient[0].withOpacity(0.6),
+                color: gradient[0].withValues(alpha: 0.6),
               ),
             ),
             const SizedBox(height: 16),
@@ -59,7 +59,7 @@ class EmptyStateWidget extends StatelessWidget {
               message,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.white.withOpacity(0.6),
+                color: Colors.white.withValues(alpha: 0.6),
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
                 height: 1.4,

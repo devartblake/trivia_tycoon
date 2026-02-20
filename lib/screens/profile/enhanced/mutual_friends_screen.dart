@@ -131,7 +131,7 @@ class _MutualFriendsScreenState extends State<MutualFriendsScreen>
                 end: Alignment.bottomCenter,
                 colors: [
                   Colors.transparent,
-                  Colors.black.withOpacity(0.3),
+                  Colors.black.withValues(alpha: 0.3),
                 ],
               ),
             ),
@@ -176,13 +176,13 @@ class _MutualFriendsScreenState extends State<MutualFriendsScreen>
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Colors.white.withOpacity(0.2),
-                  Colors.white.withOpacity(0.1),
+                  Colors.white.withValues(alpha: 0.2),
+                  Colors.white.withValues(alpha: 0.1),
                 ],
               ),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: Colors.white.withOpacity(0.3),
+                color: Colors.white.withValues(alpha: 0.3),
                 width: 1,
               ),
             ),
@@ -212,10 +212,10 @@ class _MutualFriendsScreenState extends State<MutualFriendsScreen>
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.05),
+              color: Colors.white.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: Colors.white.withOpacity(0.1),
+                color: Colors.white.withValues(alpha: 0.1),
               ),
             ),
             child: TextField(
@@ -224,7 +224,7 @@ class _MutualFriendsScreenState extends State<MutualFriendsScreen>
               decoration: InputDecoration(
                 hintText: 'Search mutual friends...',
                 hintStyle: TextStyle(
-                  color: Colors.white.withOpacity(0.5),
+                  color: Colors.white.withValues(alpha: 0.5),
                 ),
                 prefixIcon: const Icon(
                   Icons.search_rounded,
@@ -282,17 +282,17 @@ class _MutualFriendsScreenState extends State<MutualFriendsScreen>
               onSelected: (selected) {
                 setState(() => _selectedFilter = filter);
               },
-              backgroundColor: Colors.white.withOpacity(0.05),
+              backgroundColor: Colors.white.withValues(alpha: 0.05),
               selectedColor: const Color(0xFF6366F1),
               labelStyle: TextStyle(
                 fontSize: 14,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                color: isSelected ? Colors.white : Colors.white.withOpacity(0.7),
+                color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.7),
               ),
               side: BorderSide(
                 color: isSelected
                     ? const Color(0xFF6366F1)
-                    : Colors.white.withOpacity(0.1),
+                    : Colors.white.withValues(alpha: 0.1),
                 width: 1.5,
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -313,13 +313,13 @@ class _MutualFriendsScreenState extends State<MutualFriendsScreen>
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            const Color(0xFF6366F1).withOpacity(0.2),
-            const Color(0xFF8B5CF6).withOpacity(0.1),
+            const Color(0xFF6366F1).withValues(alpha: 0.2),
+            const Color(0xFF8B5CF6).withValues(alpha: 0.1),
           ],
         ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: const Color(0xFF6366F1).withOpacity(0.3),
+          color: const Color(0xFF6366F1).withValues(alpha: 0.3),
         ),
       ),
       child: Row(
@@ -353,7 +353,7 @@ class _MutualFriendsScreenState extends State<MutualFriendsScreen>
               Text(
                 'Connected through your network',
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.6),
+                  color: Colors.white.withValues(alpha: 0.6),
                   fontSize: 13,
                 ),
               ),
@@ -386,13 +386,13 @@ class _MutualFriendsScreenState extends State<MutualFriendsScreen>
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.white.withOpacity(0.08),
-              Colors.white.withOpacity(0.04),
+              Colors.white.withValues(alpha: 0.08),
+              Colors.white.withValues(alpha: 0.04),
             ],
           ),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: Colors.white.withOpacity(0.1),
+            color: Colors.white.withValues(alpha: 0.1),
           ),
         ),
         child: Material(
@@ -414,12 +414,12 @@ class _MutualFriendsScreenState extends State<MutualFriendsScreen>
                       shape: BoxShape.circle,
                       gradient: _getGradientForIndex(index),
                       border: Border.all(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         width: 2,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: _getGradientForIndex(index).colors.first.withOpacity(0.4),
+                          color: _getGradientForIndex(index).colors.first.withValues(alpha: 0.4),
                           blurRadius: 12,
                           offset: const Offset(0, 4),
                         ),
@@ -457,13 +457,13 @@ class _MutualFriendsScreenState extends State<MutualFriendsScreen>
                             Icon(
                               Icons.people_outline_rounded,
                               size: 14,
-                              color: Colors.white.withOpacity(0.6),
+                              color: Colors.white.withValues(alpha: 0.6),
                             ),
                             const SizedBox(width: 4),
                             Text(
                               '${friend['mutualCount']} mutual connections',
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.6),
+                                color: Colors.white.withValues(alpha: 0.6),
                                 fontSize: 13,
                               ),
                             ),
@@ -516,12 +516,12 @@ class _MutualFriendsScreenState extends State<MutualFriendsScreen>
           colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
         )
             : null,
-        color: isPrimary ? null : Colors.white.withOpacity(0.1),
+        color: isPrimary ? null : Colors.white.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isPrimary
               ? const Color(0xFF6366F1)
-              : Colors.white.withOpacity(0.2),
+              : Colors.white.withValues(alpha: 0.2),
         ),
       ),
       child: Material(
@@ -577,7 +577,7 @@ class _MutualFriendsScreenState extends State<MutualFriendsScreen>
                 : 'Connect with more people to find mutual friends',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.white.withOpacity(0.6),
+              color: Colors.white.withValues(alpha: 0.6),
               fontSize: 15,
             ),
           ),

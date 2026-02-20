@@ -229,7 +229,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
+                      color: Colors.black.withValues(alpha: 0.3),
                       blurRadius: 20,
                       offset: const Offset(0, 10),
                     ),
@@ -249,7 +249,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                             width: 80,
                             height: 80,
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.2),
+                              color: Colors.white.withValues(alpha: 0.2),
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
@@ -282,7 +282,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                       Text(
                         "Correct answer:",
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
+                          color: Colors.white.withValues(alpha: 0.8),
                           fontSize: 14,
                         ),
                       ),
@@ -290,7 +290,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
@@ -311,7 +311,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Row(
@@ -322,7 +322,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                             Text(
                               "XP Gained: ",
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.9),
+                                color: Colors.white.withValues(alpha: 0.9),
                                 fontSize: 12,
                               ),
                             ),
@@ -343,7 +343,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Row(
@@ -354,7 +354,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                               Text(
                                 "Time Bonus: 50% Extra!",
                                 style: TextStyle(
-                                  color: Colors.white.withOpacity(0.9),
+                                  color: Colors.white.withValues(alpha: 0.9),
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -372,7 +372,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.1),
+                          color: Colors.white.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Column(
@@ -382,14 +382,14 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                               children: [
                                 Icon(
                                   Icons.lightbulb_outline,
-                                  color: Colors.white.withOpacity(0.8),
+                                  color: Colors.white.withValues(alpha: 0.8),
                                   size: 16,
                                 ),
                                 const SizedBox(width: 6),
                                 Text(
                                   "Explanation:",
                                   style: TextStyle(
-                                    color: Colors.white.withOpacity(0.8),
+                                    color: Colors.white.withValues(alpha: 0.8),
                                     fontSize: 12,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -400,7 +400,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                             Text(
                               question.powerUpHint!,
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.9),
+                                color: Colors.white.withValues(alpha: 0.9),
                                 fontSize: 14,
                               ),
                             ),
@@ -523,7 +523,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
 
     if (quizState.isLoading) {
       return Scaffold(
-        backgroundColor: categoryColor.withOpacity(0.1),
+        backgroundColor: categoryColor.withValues(alpha: 0.1),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -546,7 +546,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
 
     if (quizState.error != null) {
       return Scaffold(
-        backgroundColor: categoryColor.withOpacity(0.1),
+        backgroundColor: categoryColor.withValues(alpha: 0.1),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -588,7 +588,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
 
     if (quizState.questions.isEmpty || quizState.currentQuestion == null) {
       return Scaffold(
-        backgroundColor: categoryColor.withOpacity(0.1),
+        backgroundColor: categoryColor.withValues(alpha: 0.1),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -646,7 +646,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
         }
       },
       child: Scaffold(
-        backgroundColor: categoryColor.withOpacity(0.1),
+        backgroundColor: categoryColor.withValues(alpha: 0.1),
         appBar: AppBar(
           title: Row(
             children: [
@@ -662,7 +662,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
           ),
           backgroundColor: Colors.white,
           elevation: 2,
-          shadowColor: categoryColor.withOpacity(0.2),
+          shadowColor: categoryColor.withValues(alpha: 0.2),
           actions: [
             // Score Display
             Padding(
@@ -692,7 +692,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: categoryColor.withOpacity(0.1),
+                    color: categoryColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
@@ -721,7 +721,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                     color: Colors.white,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
+                        color: Colors.grey.withValues(alpha: 0.1),
                         blurRadius: 4,
                         offset: const Offset(0, 2),
                       ),
@@ -743,10 +743,10 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
-                              color: categoryColor.withOpacity(0.1),
+                              color: categoryColor.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
-                                color: categoryColor.withOpacity(0.3),
+                                color: categoryColor.withValues(alpha: 0.3),
                                 width: 1,
                               ),
                             ),
@@ -832,7 +832,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: _getTimerColor(quizState.timeRemaining).withOpacity(0.3),
+                            color: _getTimerColor(quizState.timeRemaining).withValues(alpha: 0.3),
                             blurRadius: 8,
                             offset: const Offset(0, 4),
                           ),
@@ -848,7 +848,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                               value: quizState.timeRemaining / _getTimeLimitForClassLevel(quizState.classLevel),
                               strokeWidth: 6,
                               color: _getTimerColor(quizState.timeRemaining),
-                              backgroundColor: categoryColor.withOpacity(0.2),
+                              backgroundColor: categoryColor.withValues(alpha: 0.2),
                             ),
                           ),
                           Column(
@@ -936,9 +936,9 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

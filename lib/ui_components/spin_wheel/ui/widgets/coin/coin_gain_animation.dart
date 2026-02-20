@@ -121,7 +121,7 @@ class _CoinGainAnimationState extends State<CoinGainAnimation>
 
     _colorAnimation = ColorTween(
       begin: widget.color ?? Colors.amber,
-      end: (widget.color ?? Colors.amber).withOpacity(0.6),
+      end: (widget.color ?? Colors.amber).withValues(alpha: 0.6),
     ).animate(CurvedAnimation(
       parent: _mainController,
       curve: Curves.easeInOut,
@@ -209,7 +209,7 @@ class _CoinGainAnimationState extends State<CoinGainAnimation>
         borderRadius: BorderRadius.circular(widget.fontSize),
         boxShadow: [
           BoxShadow(
-            color: (_colorAnimation.value ?? Colors.amber).withOpacity(0.3),
+            color: (_colorAnimation.value ?? Colors.amber).withValues(alpha: 0.3),
             blurRadius: widget.fontSize * 0.8,
             spreadRadius: widget.fontSize * 0.2,
           ),
@@ -234,18 +234,18 @@ class _CoinGainAnimationState extends State<CoinGainAnimation>
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.white.withOpacity(0.9),
-                  Colors.white.withOpacity(0.7),
+                  Colors.white.withValues(alpha: 0.9),
+                  Colors.white.withValues(alpha: 0.7),
                 ],
               ),
               borderRadius: BorderRadius.circular(widget.fontSize * 0.6),
               border: Border.all(
-                color: (widget.color ?? Colors.amber).withOpacity(0.3),
+                color: (widget.color ?? Colors.amber).withValues(alpha: 0.3),
                 width: 1,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 4,
                   offset: const Offset(0, 2),
                 ),
@@ -269,7 +269,7 @@ class _CoinGainAnimationState extends State<CoinGainAnimation>
                     shadows: [
                       Shadow(
                         blurRadius: 2,
-                        color: Colors.black.withOpacity(0.3),
+                        color: Colors.black.withValues(alpha: 0.3),
                         offset: const Offset(0, 1),
                       ),
                     ],
@@ -334,7 +334,7 @@ class CoinParticlePainter extends CustomPainter {
       final x = center.dx + radius * math.cos(angle);
       final y = center.dy + radius * math.sin(angle);
 
-      paint.color = color.withOpacity(opacity * 0.8);
+      paint.color = color.withValues(alpha: opacity * 0.8);
 
       // Draw coin-like particles
       final particleRadius = 3 + (2 * math.sin(progress * math.pi));
@@ -444,7 +444,7 @@ class _PremiumCoinGainAnimationState extends State<PremiumCoinGainAnimation>
             borderRadius: BorderRadius.circular(widget.fontSize),
             boxShadow: [
               BoxShadow(
-                color: Colors.yellow.withOpacity(0.4 + (0.3 * _premiumGlowAnimation.value)),
+                color: Colors.yellow.withValues(alpha: 0.4 + (0.3 * _premiumGlowAnimation.value)),
                 blurRadius: widget.fontSize * (1.0 + _premiumGlowAnimation.value),
                 spreadRadius: widget.fontSize * 0.3,
               ),

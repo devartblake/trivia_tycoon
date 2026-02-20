@@ -83,7 +83,7 @@ class _CTAWidgetState extends State<CTAWidget> with SingleTickerProviderStateMix
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: widget.overlayColor.withOpacity(0.6),
+                color: widget.overlayColor.withValues(alpha: 0.6),
               ),
             ),
             Padding(

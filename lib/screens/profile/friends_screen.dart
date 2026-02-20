@@ -86,7 +86,7 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
             color: const Color(0xFFF8FAFF),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: const Color(0xFF6366F1).withOpacity(0.1),
+              color: const Color(0xFF6366F1).withValues(alpha: 0.1),
             ),
           ),
           child: const Icon(
@@ -145,7 +145,7 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
               color: const Color(0xFFF8FAFF),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: const Color(0xFF6366F1).withOpacity(0.1),
+                color: const Color(0xFF6366F1).withValues(alpha: 0.1),
               ),
             ),
             child: const Icon(
@@ -186,7 +186,7 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF6366F1).withOpacity(0.08),
+                    color: const Color(0xFF6366F1).withValues(alpha: 0.08),
                     blurRadius: 20,
                     offset: const Offset(0, 4),
                   ),
@@ -343,7 +343,7 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF64748B).withOpacity(0.08),
+                    color: const Color(0xFF64748B).withValues(alpha: 0.08),
                     blurRadius: 10,
                     offset: const Offset(0, 2),
                   ),
@@ -402,7 +402,7 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF64748B).withOpacity(0.08),
+                    color: const Color(0xFF64748B).withValues(alpha: 0.08),
                     blurRadius: 20,
                     offset: const Offset(0, 4),
                   ),
@@ -478,7 +478,7 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
         color: const Color(0xFFF8FAFF),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: const Color(0xFF6366F1).withOpacity(0.1),
+          color: const Color(0xFF6366F1).withValues(alpha: 0.1),
         ),
       ),
       child: Row(
@@ -494,7 +494,7 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
                   border: Border.all(
                     color: friend['isOnline'] == true
                         ? const Color(0xFF10B981)
-                        : const Color(0xFF64748B).withOpacity(0.2),
+                        : const Color(0xFF64748B).withValues(alpha: 0.2),
                     width: 2,
                   ),
                 ),
@@ -622,7 +622,7 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: const Color(0xFF6366F1).withOpacity(0.1),
+              color: const Color(0xFF6366F1).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: const Icon(

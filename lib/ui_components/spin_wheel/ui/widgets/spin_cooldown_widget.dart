@@ -117,13 +117,13 @@ class _SpinCooldownWidgetState extends ConsumerState<SpinCooldownWidget>
           end: Alignment.bottomRight,
           colors: [
             theme.colorScheme.surface,
-            theme.colorScheme.surface.withOpacity(0.8),
+            theme.colorScheme.surface.withValues(alpha: 0.8),
           ],
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -153,8 +153,8 @@ class _SpinCooldownWidgetState extends ConsumerState<SpinCooldownWidget>
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: canSpin
-                ? Colors.green.withOpacity(0.1)
-                : Colors.orange.withOpacity(0.1),
+                ? Colors.green.withValues(alpha: 0.1)
+                : Colors.orange.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(
@@ -203,7 +203,7 @@ class _SpinCooldownWidgetState extends ConsumerState<SpinCooldownWidget>
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: theme.colorScheme.primary.withOpacity(0.1),
+                color: theme.colorScheme.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
@@ -259,14 +259,14 @@ class _SpinCooldownWidgetState extends ConsumerState<SpinCooldownWidget>
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: canSpin
-                    ? [Colors.green.withOpacity(0.1), Colors.green.withOpacity(0.05)]
-                    : [Colors.grey.withOpacity(0.1), Colors.grey.withOpacity(0.05)],
+                    ? [Colors.green.withValues(alpha: 0.1), Colors.green.withValues(alpha: 0.05)]
+                    : [Colors.grey.withValues(alpha: 0.1), Colors.grey.withValues(alpha: 0.05)],
               ),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: canSpin
-                    ? Colors.green.withOpacity(0.3)
-                    : Colors.grey.withOpacity(0.3),
+                    ? Colors.green.withValues(alpha: 0.3)
+                    : Colors.grey.withValues(alpha: 0.3),
               ),
             ),
             child: Row(
@@ -346,7 +346,7 @@ class _SpinCooldownWidgetState extends ConsumerState<SpinCooldownWidget>
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Colors.green.withOpacity(0.3),
+            color: Colors.green.withValues(alpha: 0.3),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),

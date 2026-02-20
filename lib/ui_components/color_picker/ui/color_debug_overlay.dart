@@ -98,25 +98,25 @@ class _ColorDebugOverlayState extends State<ColorDebugOverlay>
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Colors.black.withOpacity(0.9),
-                      Colors.black.withOpacity(0.7),
+                      Colors.black.withValues(alpha: 0.9),
+                      Colors.black.withValues(alpha: 0.7),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(_isExpanded ? 16 : 12),
                   border: Border.all(
-                    color: _getPerformanceColor().withOpacity(0.5),
+                    color: _getPerformanceColor().withValues(alpha: 0.5),
                     width: 1.5,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: _getPerformanceColor().withOpacity(0.3),
+                      color: _getPerformanceColor().withValues(alpha: 0.3),
                       blurRadius: 8,
                       offset: const Offset(0, 4),
                     ),
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
+                      color: Colors.black.withValues(alpha: 0.3),
                       blurRadius: 12,
                       offset: const Offset(0, 6),
                     ),
@@ -182,7 +182,7 @@ class _ColorDebugOverlayState extends State<ColorDebugOverlay>
             const Spacer(),
             Icon(
               Icons.close_rounded,
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white.withValues(alpha: 0.7),
               size: 16,
             ),
           ],
@@ -194,10 +194,10 @@ class _ColorDebugOverlayState extends State<ColorDebugOverlay>
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: _getPerformanceColor().withOpacity(0.1),
+            color: _getPerformanceColor().withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: _getPerformanceColor().withOpacity(0.3),
+              color: _getPerformanceColor().withValues(alpha: 0.3),
               width: 1,
             ),
           ),
@@ -250,10 +250,10 @@ class _ColorDebugOverlayState extends State<ColorDebugOverlay>
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.1),
+            color: Colors.white.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               width: 1,
             ),
           ),
@@ -311,10 +311,10 @@ class _ColorDebugOverlayState extends State<ColorDebugOverlay>
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.blue.withOpacity(0.1),
+            color: Colors.blue.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: Colors.blue.withOpacity(0.3),
+              color: Colors.blue.withValues(alpha: 0.3),
               width: 1,
             ),
           ),

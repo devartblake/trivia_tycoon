@@ -330,7 +330,7 @@ class _QuestionListScreenState extends State<QuestionListScreen> {
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF3B82F6).withOpacity(0.3),
+                    color: const Color(0xFF3B82F6).withValues(alpha: 0.3),
                     blurRadius: 20,
                     offset: const Offset(0, 10),
                   ),
@@ -361,9 +361,9 @@ class _QuestionListScreenState extends State<QuestionListScreen> {
               child: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFEF4444).withOpacity(0.1),
+                  color: const Color(0xFFEF4444).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFFEF4444).withOpacity(0.3)),
+                  border: Border.all(color: const Color(0xFFEF4444).withValues(alpha: 0.3)),
                 ),
                 child: Row(
                   children: [
@@ -451,7 +451,7 @@ class _QuestionListScreenState extends State<QuestionListScreen> {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.04),
+                        color: Colors.black.withValues(alpha: 0.04),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),
@@ -478,7 +478,7 @@ class _QuestionListScreenState extends State<QuestionListScreen> {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: const Color(0xFF3B82F6).withOpacity(0.1),
+                                color: const Color(0xFF3B82F6).withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Text(
@@ -497,7 +497,7 @@ class _QuestionListScreenState extends State<QuestionListScreen> {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: const Color(0xFFF59E0B).withOpacity(0.1),
+                                color: const Color(0xFFF59E0B).withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Row(
@@ -533,7 +533,7 @@ class _QuestionListScreenState extends State<QuestionListScreen> {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: const Color(0xFF10B981).withOpacity(0.1),
+                                color: const Color(0xFF10B981).withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Text(
@@ -628,7 +628,7 @@ class _QuestionListScreenState extends State<QuestionListScreen> {
           border: Border.all(color: const Color(0xFFE9ECEF)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -708,7 +708,7 @@ class _QuestionListScreenState extends State<QuestionListScreen> {
                 _applyFilters();
               });
             },
-            selectedColor: const Color(0xFF6366F1).withOpacity(0.2),
+            selectedColor: const Color(0xFF6366F1).withValues(alpha: 0.2),
             checkmarkColor: const Color(0xFF6366F1),
             backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(

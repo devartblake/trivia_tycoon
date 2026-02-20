@@ -171,7 +171,7 @@ class _ColorSettingsDialogState extends State<ColorSettingsDialog>
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
+                    color: Colors.black.withValues(alpha: 0.2),
                     blurRadius: 24,
                     offset: const Offset(0, 12),
                   ),
@@ -186,8 +186,8 @@ class _ColorSettingsDialogState extends State<ColorSettingsDialog>
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          Colors.indigo.shade400.withOpacity(0.1),
-                          Colors.purple.shade400.withOpacity(0.05),
+                          Colors.indigo.shade400.withValues(alpha: 0.1),
+                          Colors.purple.shade400.withValues(alpha: 0.05),
                         ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -244,7 +244,7 @@ class _ColorSettingsDialogState extends State<ColorSettingsDialog>
                           Text(
                             "Loading palettes...",
                             style: TextStyle(
-                              color: colorScheme.onSurface.withOpacity(0.7),
+                              color: colorScheme.onSurface.withValues(alpha: 0.7),
                             ),
                           ),
                         ],
@@ -389,10 +389,10 @@ class _ColorSettingsDialogState extends State<ColorSettingsDialog>
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: colorScheme.surfaceContainer.withOpacity(0.5),
+        color: colorScheme.surfaceContainer.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: accentColor.withOpacity(0.2),
+          color: accentColor.withValues(alpha: 0.2),
           width: 1,
         ),
       ),
@@ -404,7 +404,7 @@ class _ColorSettingsDialogState extends State<ColorSettingsDialog>
               Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: accentColor.withOpacity(0.1),
+                  color: accentColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Icon(
@@ -437,7 +437,7 @@ class _ColorSettingsDialogState extends State<ColorSettingsDialog>
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: colorScheme.outline.withOpacity(0.2)),
+        border: Border.all(color: colorScheme.outline.withValues(alpha: 0.2)),
       ),
       child: DropdownButton<String>(
         value: _selectedPalette,
@@ -468,7 +468,7 @@ class _ColorSettingsDialogState extends State<ColorSettingsDialog>
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
-          side: BorderSide(color: Colors.pink.withOpacity(0.5)),
+          side: BorderSide(color: Colors.pink.withValues(alpha: 0.5)),
           foregroundColor: Colors.pink,
         ),
       ),
@@ -481,7 +481,7 @@ class _ColorSettingsDialogState extends State<ColorSettingsDialog>
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: colorScheme.outline.withOpacity(0.2)),
+        border: Border.all(color: colorScheme.outline.withValues(alpha: 0.2)),
       ),
       child: DropdownButton<String>(
         value: _localSettings.pickerMode,
@@ -512,7 +512,7 @@ class _ColorSettingsDialogState extends State<ColorSettingsDialog>
       subtitle: Text(
         "Enable custom color palettes",
         style: TextStyle(
-          color: colorScheme.onSurface.withOpacity(0.7),
+          color: colorScheme.onSurface.withValues(alpha: 0.7),
           fontSize: 12,
         ),
       ),

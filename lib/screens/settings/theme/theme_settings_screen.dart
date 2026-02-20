@@ -167,7 +167,7 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
         padding: EdgeInsets.all(Insets.sm),
         child: Container(
           decoration: BoxDecoration(
-            color: theme.surface.withOpacity(0.5),
+            color: theme.surface.withValues(alpha: 0.5),
             borderRadius: Corners.s8Border,
             boxShadow: Shadows.m(theme.greyWeak, 0.05),
           ),
@@ -222,10 +222,10 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
                   Container(
                     padding: EdgeInsets.all(Insets.m),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha: 0.2),
                       borderRadius: Corners.s8Border,
                       border: Border.all(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         width: 2,
                       ),
                     ),
@@ -243,7 +243,7 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
                         Text(
                           'Live Preview',
                           style: TextStyles.Caption.textColor(
-                            theme.accentTxt.withOpacity(0.8),
+                            theme.accentTxt.withValues(alpha: 0.8),
                           ),
                         ),
                         SizedBox(height: Insets.xs),
@@ -265,10 +265,10 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
               Container(
                 padding: EdgeInsets.all(Insets.m),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.15),
+                  color: Colors.white.withValues(alpha: 0.15),
                   borderRadius: Corners.s8Border,
                   border: Border.all(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                   ),
                 ),
                 child: Row(
@@ -344,15 +344,15 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                theme.focus.withOpacity(0.2),
-                theme.focus.withOpacity(0.1),
+                theme.focus.withValues(alpha: 0.2),
+                theme.focus.withValues(alpha: 0.1),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
             borderRadius: Corners.s10Border,
             border: Border.all(
-              color: theme.focus.withOpacity(0.4),
+              color: theme.focus.withValues(alpha: 0.4),
               width: 2,
             ),
           ),
@@ -450,7 +450,7 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
             return Container(
               margin: EdgeInsets.symmetric(horizontal: Insets.l, vertical: Insets.sm),
               decoration: BoxDecoration(
-                color: theme.surface.withOpacity(0.3),
+                color: theme.surface.withValues(alpha: 0.3),
                 borderRadius: Corners.s10Border,
                 border: Border.all(color: theme.greyWeak),
                 boxShadow: Shadows.m(theme.greyWeak, 0.05),
@@ -532,7 +532,7 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
           padding: EdgeInsets.all(Insets.l),
           decoration: BoxDecoration(
             color: isSelected
-                ? theme.accent1.withOpacity(0.1)
+                ? theme.accent1.withValues(alpha: 0.1)
                 : Colors.transparent,
             border: Border(
               bottom: BorderSide(
@@ -622,7 +622,7 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
                     color: theme.bg2,
                     borderRadius: Corners.s8Border,
                     border: Border.all(
-                      color: theme.accent1.withOpacity(0.2),
+                      color: theme.accent1.withValues(alpha: 0.2),
                     ),
                   ),
                   child: DropdownButtonFormField<String>(
@@ -735,7 +735,7 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
             leading: Container(
               padding: EdgeInsets.all(Insets.sm),
               decoration: BoxDecoration(
-                color: currentColor.withOpacity(0.1),
+                color: currentColor.withValues(alpha: 0.1),
                 borderRadius: Corners.s5Border,
               ),
               child: Icon(icon, color: currentColor, size: 20),
@@ -777,7 +777,7 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
         color: theme.bg2,
         borderRadius: Corners.s8Border,
         border: Border.all(
-          color: currentColor.withOpacity(0.2),
+          color: currentColor.withValues(alpha: 0.2),
         ),
       ),
       child: Column(
@@ -810,7 +810,7 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: color.withOpacity(0.3),
+                        color: color.withValues(alpha: 0.3),
                         blurRadius: isSelected ? 12 : 6,
                         offset: const Offset(0, 2),
                       ),
@@ -877,14 +877,14 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
                       child: Container(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
-                            colors: [color, color.withOpacity(0.7)],
+                            colors: [color, color.withValues(alpha: 0.7)],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
                           borderRadius: Corners.s10Border,
                           boxShadow: [
                             BoxShadow(
-                              color: color.withOpacity(0.3),
+                              color: color.withValues(alpha: 0.3),
                               blurRadius: 8,
                               offset: const Offset(0, 4),
                             ),
@@ -915,13 +915,13 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              theme.accent2.withOpacity(0.1),
-              theme.accent2.withOpacity(0.05),
+              theme.accent2.withValues(alpha: 0.1),
+              theme.accent2.withValues(alpha: 0.05),
             ],
           ),
           borderRadius: Corners.s10Border,
           border: Border.all(
-            color: theme.accent2.withOpacity(0.3),
+            color: theme.accent2.withValues(alpha: 0.3),
           ),
         ),
         child: Row(
@@ -961,8 +961,8 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            theme.accent1.withOpacity(0.1),
-            theme.accent1.withOpacity(0.05),
+            theme.accent1.withValues(alpha: 0.1),
+            theme.accent1.withValues(alpha: 0.05),
           ],
         ),
         borderRadius: BorderRadius.only(

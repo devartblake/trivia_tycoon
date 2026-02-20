@@ -91,7 +91,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF6366F1).withOpacity(0.1),
+                color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -158,7 +158,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFFEC4899).withOpacity(0.3),
+                    color: const Color(0xFFEC4899).withValues(alpha: 0.3),
                     blurRadius: 20,
                     offset: const Offset(0, 8),
                   ),
@@ -178,7 +178,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
                       Container(
                         width: 1,
                         height: 40,
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                       ),
                       Expanded(
                         child: _buildStatItem(
@@ -190,7 +190,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
                       Container(
                         width: 1,
                         height: 40,
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                       ),
                       Expanded(
                         child: _buildStatItem(
@@ -205,7 +205,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -258,7 +258,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
         Text(
           label,
           style: TextStyle(
-            color: Colors.white.withOpacity(0.8),
+            color: Colors.white.withValues(alpha: 0.8),
             fontSize: 12,
             fontWeight: FontWeight.w500,
           ),
@@ -300,8 +300,8 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
                           boxShadow: [
                             BoxShadow(
                               color: isSelected
-                                  ? const Color(0xFF6366F1).withOpacity(0.3)
-                                  : const Color(0xFF64748B).withOpacity(0.1),
+                                  ? const Color(0xFF6366F1).withValues(alpha: 0.3)
+                                  : const Color(0xFF64748B).withValues(alpha: 0.1),
                               blurRadius: isSelected ? 12 : 8,
                               offset: const Offset(0, 4),
                             ),
@@ -309,7 +309,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
                           border: Border.all(
                             color: isSelected
                                 ? const Color(0xFF6366F1)
-                                : const Color(0xFF64748B).withOpacity(0.1),
+                                : const Color(0xFF64748B).withValues(alpha: 0.1),
                           ),
                         ),
                         child: Center(
@@ -465,7 +465,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF64748B).withOpacity(0.08),
+                color: const Color(0xFF64748B).withValues(alpha: 0.08),
                 blurRadius: 20,
                 offset: const Offset(0, 8),
               ),
@@ -589,11 +589,11 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
         border: Border.all(
           color: isClaimed
               ? Colors.grey.shade300
-              : (gift['color'] as Color).withOpacity(0.3),
+              : (gift['color'] as Color).withValues(alpha: 0.3),
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF64748B).withOpacity(0.08),
+            color: const Color(0xFF64748B).withValues(alpha: 0.08),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -641,7 +641,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: (gift['color'] as Color).withOpacity(0.1),
+                  color: (gift['color'] as Color).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
@@ -679,7 +679,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
                         padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF10B981).withOpacity(0.1),
+                          color: const Color(0xFF10B981).withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Text(
@@ -745,11 +745,11 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: const Color(0xFF64748B).withOpacity(0.1),
+          color: const Color(0xFF64748B).withValues(alpha: 0.1),
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF64748B).withOpacity(0.05),
+            color: const Color(0xFF64748B).withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -761,7 +761,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              color: (gift['color'] as Color).withOpacity(0.1),
+              color: (gift['color'] as Color).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
@@ -850,11 +850,11 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: const Color(0xFF64748B).withOpacity(0.1),
+          color: const Color(0xFF64748B).withValues(alpha: 0.1),
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF64748B).withOpacity(0.05),
+            color: const Color(0xFF64748B).withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -866,7 +866,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: (item['color'] as Color).withOpacity(0.1),
+              color: (item['color'] as Color).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(
@@ -904,7 +904,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: statusColor.withOpacity(0.1),
+              color: statusColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
@@ -952,7 +952,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
               width: 80,
               height: 80,
               decoration: BoxDecoration(
-                color: (gift['color'] as Color).withOpacity(0.1),
+                color: (gift['color'] as Color).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(40),
               ),
               child: Icon(

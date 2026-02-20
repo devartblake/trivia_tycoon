@@ -15,7 +15,7 @@ class TycoonToastHelper {
       icon: Container(
         padding: EdgeInsets.all(2),
         decoration: BoxDecoration(
-          color: Colors.green.withOpacity(0.2),
+          color: Colors.green.withValues(alpha: 0.2),
           shape: BoxShape.circle,
         ),
         child: Icon(
@@ -28,8 +28,8 @@ class TycoonToastHelper {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          Colors.green[600]!.withOpacity(0.9),
-          Colors.green[400]!.withOpacity(0.8),
+          Colors.green[600]!.withValues(alpha: 0.9),
+          Colors.green[400]!.withValues(alpha: 0.8),
         ],
       ),
       toastType: TycoonToastType.success,
@@ -50,7 +50,7 @@ class TycoonToastHelper {
       icon: Container(
         padding: EdgeInsets.all(2),
         decoration: BoxDecoration(
-          color: Colors.blue.withOpacity(0.2),
+          color: Colors.blue.withValues(alpha: 0.2),
           shape: BoxShape.circle,
         ),
         child: Icon(
@@ -63,8 +63,8 @@ class TycoonToastHelper {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          Colors.blue[600]!.withOpacity(0.9),
-          Colors.blue[400]!.withOpacity(0.8),
+          Colors.blue[600]!.withValues(alpha: 0.9),
+          Colors.blue[400]!.withValues(alpha: 0.8),
         ],
       ),
       toastType: TycoonToastType.info,
@@ -85,7 +85,7 @@ class TycoonToastHelper {
       icon: Container(
         padding: EdgeInsets.all(2),
         decoration: BoxDecoration(
-          color: Colors.red.withOpacity(0.2),
+          color: Colors.red.withValues(alpha: 0.2),
           shape: BoxShape.circle,
         ),
         child: Icon(
@@ -98,8 +98,8 @@ class TycoonToastHelper {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          Colors.red[600]!.withOpacity(0.9),
-          Colors.red[400]!.withOpacity(0.8),
+          Colors.red[600]!.withValues(alpha: 0.9),
+          Colors.red[400]!.withValues(alpha: 0.8),
         ],
       ),
       toastType: TycoonToastType.error,
@@ -128,7 +128,7 @@ class TycoonToastHelper {
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: Colors.amber.withOpacity(0.5),
+              color: Colors.amber.withValues(alpha: 0.5),
               blurRadius: 8,
               spreadRadius: 2,
             ),
@@ -144,9 +144,9 @@ class TycoonToastHelper {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          Colors.amber[600]!.withOpacity(0.95),
-          Colors.orange[500]!.withOpacity(0.9),
-          Colors.pink[400]!.withOpacity(0.85),
+          Colors.amber[600]!.withValues(alpha: 0.95),
+          Colors.orange[500]!.withValues(alpha: 0.9),
+          Colors.pink[400]!.withValues(alpha: 0.85),
         ],
       ),
       toastType: TycoonToastType.reward,
@@ -155,12 +155,12 @@ class TycoonToastHelper {
       borderRadius: BorderRadius.circular(20),
       boxShadows: [
         BoxShadow(
-          color: Colors.amber.withOpacity(0.3),
+          color: Colors.amber.withValues(alpha: 0.3),
           blurRadius: 25,
           offset: Offset(0, 12),
         ),
         BoxShadow(
-          color: Colors.white.withOpacity(0.1),
+          color: Colors.white.withValues(alpha: 0.1),
           blurRadius: 1,
           offset: Offset(0, 1),
         ),
@@ -208,14 +208,14 @@ class TycoonToastHelper {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              rewardColor.withOpacity(0.8),
-              rewardColor.withOpacity(0.6),
+              rewardColor.withValues(alpha: 0.8),
+              rewardColor.withValues(alpha: 0.6),
             ],
           ),
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: rewardColor.withOpacity(0.4),
+              color: rewardColor.withValues(alpha: 0.4),
               blurRadius: 8,
               spreadRadius: 1,
             ),
@@ -233,13 +233,13 @@ class TycoonToastHelper {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.white.withOpacity(0.2),
-              Colors.white.withOpacity(0.1),
+              Colors.white.withValues(alpha: 0.2),
+              Colors.white.withValues(alpha: 0.1),
             ],
           ),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: Colors.white.withOpacity(0.3),
+            color: Colors.white.withValues(alpha: 0.3),
             width: 1,
           ),
         ),
@@ -273,13 +273,13 @@ class TycoonToastHelper {
       padding: EdgeInsets.all(16),
       boxShadows: [
         BoxShadow(
-          color: rewardColor.withOpacity(0.3),
+          color: rewardColor.withValues(alpha: 0.3),
           blurRadius: 20,
           offset: Offset(0, 8),
           spreadRadius: 2,
         ),
         BoxShadow(
-          color: Colors.white.withOpacity(0.1),
+          color: Colors.white.withValues(alpha: 0.1),
           blurRadius: 1,
           offset: Offset(0, 1),
         ),
@@ -302,8 +302,8 @@ class TycoonToastHelper {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          Colors.indigo[600]!.withOpacity(0.9),
-          Colors.purple[500]!.withOpacity(0.8),
+          Colors.indigo[600]!.withValues(alpha: 0.9),
+          Colors.purple[500]!.withValues(alpha: 0.8),
         ],
       ),
       toastType: TycoonToastType.custom,
@@ -332,19 +332,19 @@ class TycoonToastHelper {
           child: CircularProgressIndicator(
             strokeWidth: 2,
             valueColor: AlwaysStoppedAnimation<Color>(Colors.cyan[300]!),
-            backgroundColor: Colors.white.withOpacity(0.3),
+            backgroundColor: Colors.white.withValues(alpha: 0.3),
           ),
         ),
       ),
       showProgressIndicator: true,
       progressIndicatorController: progressIndicatorController,
-      progressIndicatorBackgroundColor: progressIndicatorBackgroundColor ?? Colors.white.withOpacity(0.2),
+      progressIndicatorBackgroundColor: progressIndicatorBackgroundColor ?? Colors.white.withValues(alpha: 0.2),
       backgroundGradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          Colors.cyan[600]!.withOpacity(0.9),
-          Colors.teal[500]!.withOpacity(0.8),
+          Colors.cyan[600]!.withValues(alpha: 0.9),
+          Colors.teal[500]!.withValues(alpha: 0.8),
         ],
       ),
       toastType: TycoonToastType.info,
@@ -368,8 +368,8 @@ class TycoonToastHelper {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          Colors.teal[600]!.withOpacity(0.9),
-          Colors.green[500]!.withOpacity(0.8),
+          Colors.teal[600]!.withValues(alpha: 0.9),
+          Colors.green[500]!.withValues(alpha: 0.8),
         ],
       ),
       toastType: TycoonToastType.custom,
@@ -393,8 +393,8 @@ class TycoonToastHelper {
           : null,
       backgroundGradient: LinearGradient(
         colors: [
-          (color ?? Colors.grey).withOpacity(0.9),
-          (color ?? Colors.grey).withOpacity(0.7),
+          (color ?? Colors.grey).withValues(alpha: 0.9),
+          (color ?? Colors.grey).withValues(alpha: 0.7),
         ],
       ),
       toastType: TycoonToastType.custom,

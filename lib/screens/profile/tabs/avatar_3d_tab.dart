@@ -68,15 +68,15 @@ class _Avatar3DTabState extends ConsumerState<Avatar3DTab> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            const Color(0xFF8B5CF6).withOpacity(0.2),
-            const Color(0xFFEC4899).withOpacity(0.15),
+            const Color(0xFF8B5CF6).withValues(alpha: 0.2),
+            const Color(0xFFEC4899).withValues(alpha: 0.15),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: const Color(0xFF8B5CF6).withOpacity(0.3),
+          color: const Color(0xFF8B5CF6).withValues(alpha: 0.3),
           width: 1.5,
         ),
       ),
@@ -147,7 +147,7 @@ class _Avatar3DTabState extends ConsumerState<Avatar3DTab> {
             Text(
               'Loading 3D avatars...',
               style: TextStyle(
-                color: Colors.white.withOpacity(0.7),
+                color: Colors.white.withValues(alpha: 0.7),
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
               ),

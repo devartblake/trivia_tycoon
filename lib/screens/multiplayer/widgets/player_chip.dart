@@ -35,10 +35,10 @@ class PlayerChip extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: isHost
-                ? const Color(0xFFEF4444).withOpacity(0.3)
+                ? const Color(0xFFEF4444).withValues(alpha: 0.3)
                 : isDark
-                ? Colors.black.withOpacity(0.2)
-                : Colors.grey.withOpacity(0.1),
+                ? Colors.black.withValues(alpha: 0.2)
+                : Colors.grey.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -69,8 +69,8 @@ class PlayerChip extends StatelessWidget {
                       height: 32,
                       decoration: BoxDecoration(
                         color: isHost
-                            ? Colors.white.withOpacity(0.2)
-                            : const Color(0xFF8B5CF6).withOpacity(0.1),
+                            ? Colors.white.withValues(alpha: 0.2)
+                            : const Color(0xFF8B5CF6).withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
@@ -118,7 +118,7 @@ class PlayerChip extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(2),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: const Icon(

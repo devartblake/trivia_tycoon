@@ -59,13 +59,13 @@ class _RecentlyPlayedSectionState extends State<RecentlyPlayedSection>
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: (theme['accentColor'] as Color).withOpacity(0.08),
+            color: (theme['accentColor'] as Color).withValues(alpha: 0.08),
             blurRadius: 25,
             offset: const Offset(0, 8),
           ),
         ],
         border: Border.all(
-          color: (theme['accentColor'] as Color).withOpacity(0.1),
+          color: (theme['accentColor'] as Color).withValues(alpha: 0.1),
           width: 1,
         ),
       ),
@@ -102,7 +102,7 @@ class _RecentlyPlayedSectionState extends State<RecentlyPlayedSection>
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: (theme['accentColor'] as Color).withOpacity(0.3),
+                    color: (theme['accentColor'] as Color).withValues(alpha: 0.3),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   ),
@@ -140,10 +140,10 @@ class _RecentlyPlayedSectionState extends State<RecentlyPlayedSection>
         ),
         Container(
           decoration: BoxDecoration(
-            color: (theme['accentColor'] as Color).withOpacity(0.1),
+            color: (theme['accentColor'] as Color).withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: (theme['accentColor'] as Color).withOpacity(0.2),
+              color: (theme['accentColor'] as Color).withValues(alpha: 0.2),
               width: 1,
             ),
           ),

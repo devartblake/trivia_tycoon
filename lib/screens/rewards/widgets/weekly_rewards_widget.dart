@@ -42,7 +42,7 @@ class WeeklyRewardsWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: Offset(0, 2),
           ),
@@ -71,7 +71,7 @@ class WeeklyRewardsWidget extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.1),
+                    color: Colors.green.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
@@ -140,16 +140,16 @@ class WeeklyRewardsWidget extends StatelessWidget {
             height: 90,
             decoration: BoxDecoration(
               color: claimed
-                  ? color.withOpacity(0.1)
+                  ? color.withValues(alpha: 0.1)
                   : canClaim
-                  ? color.withOpacity(0.15)
+                  ? color.withValues(alpha: 0.15)
                   : Colors.grey.shade100,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: claimed
-                    ? color.withOpacity(0.3)
+                    ? color.withValues(alpha: 0.3)
                     : canClaim
-                    ? color.withOpacity(0.4)
+                    ? color.withValues(alpha: 0.4)
                     : Colors.grey.shade300,
                 width: claimed || canClaim ? 2 : 1,
               ),
@@ -207,7 +207,7 @@ class WeeklyRewardsWidget extends StatelessWidget {
                         padding: EdgeInsets.all(6),
                         decoration: BoxDecoration(
                           color: claimed || canClaim
-                              ? color.withOpacity(0.2)
+                              ? color.withValues(alpha: 0.2)
                               : Colors.grey.shade300,
                           shape: BoxShape.circle,
                         ),
@@ -278,7 +278,7 @@ class WeeklyRewardsWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.purple.withOpacity(0.3),
+                  color: Colors.purple.withValues(alpha: 0.3),
                   blurRadius: 12,
                   offset: Offset(0, 4),
                 ),
@@ -317,7 +317,7 @@ class WeeklyRewardsWidget extends StatelessWidget {
                             Text(
                               'GRAND PRIZE',
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.9),
+                                color: Colors.white.withValues(alpha: 0.9),
                                 fontSize: 10,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -335,7 +335,7 @@ class WeeklyRewardsWidget extends StatelessWidget {
                             Container(
                               padding: EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
+                                color: Colors.white.withValues(alpha: 0.2),
                                 shape: BoxShape.circle,
                               ),
                               child: Icon(
@@ -365,7 +365,7 @@ class WeeklyRewardsWidget extends StatelessWidget {
                             Container(
                               padding: EdgeInsets.all(6),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
+                                color: Colors.white.withValues(alpha: 0.2),
                                 shape: BoxShape.circle,
                               ),
                               child: Icon(
@@ -378,7 +378,7 @@ class WeeklyRewardsWidget extends StatelessWidget {
                             Text(
                               '4 days',
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.9),
+                                color: Colors.white.withValues(alpha: 0.9),
                                 fontSize: 9,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -402,7 +402,7 @@ class _BackgroundPatternPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.white.withOpacity(0.1)
+      ..color = Colors.white.withValues(alpha: 0.1)
       ..strokeWidth = 1;
 
     // Draw diagonal lines pattern

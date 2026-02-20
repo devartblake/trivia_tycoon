@@ -64,16 +64,16 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 labelText: 'Profile Name',
-                labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
+                labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white.withOpacity(0.3)),
+                  borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(color: Color(0xFF6A5ACD)),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                fillColor: Colors.white.withOpacity(0.1),
+                fillColor: Colors.white.withValues(alpha: 0.1),
                 filled: true,
               ),
               maxLength: 20,
@@ -85,7 +85,7 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
             Text(
               'Age Group',
               style: TextStyle(
-                color: Colors.white.withOpacity(0.9),
+                color: Colors.white.withValues(alpha: 0.9),
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -101,16 +101,16 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
                       margin: const EdgeInsets.only(right: 8),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       decoration: BoxDecoration(
-                        color: isSelected ? const Color(0xFF6A5ACD) : Colors.white.withOpacity(0.1),
+                        color: isSelected ? const Color(0xFF6A5ACD) : Colors.white.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
-                          color: isSelected ? const Color(0xFF6A5ACD) : Colors.white.withOpacity(0.3),
+                          color: isSelected ? const Color(0xFF6A5ACD) : Colors.white.withValues(alpha: 0.3),
                         ),
                       ),
                       child: Text(
                         group.capitalize(),
                         style: TextStyle(
-                          color: isSelected ? Colors.white : Colors.white.withOpacity(0.7),
+                          color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.7),
                           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                         ),
                         textAlign: TextAlign.center,
@@ -127,7 +127,7 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
             Text(
               'Choose Avatar',
               style: TextStyle(
-                color: Colors.white.withOpacity(0.9),
+                color: Colors.white.withValues(alpha: 0.9),
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -151,14 +151,14 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
                           border: Border.all(
                             color: _selectedAvatar == null
                                 ? const Color(0xFF6A5ACD)
-                                : Colors.white.withOpacity(0.3),
+                                : Colors.white.withValues(alpha: 0.3),
                             width: 2,
                           ),
-                          color: Colors.white.withOpacity(0.1),
+                          color: Colors.white.withValues(alpha: 0.1),
                         ),
                         child: Icon(
                           Icons.person,
-                          color: Colors.white.withOpacity(0.7),
+                          color: Colors.white.withValues(alpha: 0.7),
                           size: 30,
                         ),
                       ),
@@ -179,7 +179,7 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
                         border: Border.all(
                           color: isSelected
                               ? const Color(0xFF6A5ACD)
-                              : Colors.white.withOpacity(0.3),
+                              : Colors.white.withValues(alpha: 0.3),
                           width: 2,
                         ),
                       ),
@@ -203,7 +203,7 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
                     onPressed: _isCreating ? null : () => Navigator.pop(context),
                     child: Text(
                       'Cancel',
-                      style: TextStyle(color: Colors.white.withOpacity(0.7)),
+                      style: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
                     ),
                   ),
                 ),

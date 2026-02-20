@@ -20,7 +20,7 @@ class WordSearchGrid extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF6366F1).withOpacity(0.1),
+                color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -87,7 +87,7 @@ class WordSearchGrid extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: highlight ?? (isSelected ? const Color(0xFF6366F1).withOpacity(0.3) : Colors.grey.shade100),
+        color: highlight ?? (isSelected ? const Color(0xFF6366F1).withValues(alpha: 0.3) : Colors.grey.shade100),
         borderRadius: BorderRadius.circular(4),
       ),
       child: Center(

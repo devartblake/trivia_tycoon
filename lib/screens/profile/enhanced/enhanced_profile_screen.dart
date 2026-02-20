@@ -289,7 +289,7 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.transparent,
-                    Colors.black.withOpacity(0.4),
+                    Colors.black.withValues(alpha: 0.4),
                   ],
                 ),
               ),
@@ -310,13 +310,13 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            Colors.white.withOpacity(0.15),
-                            Colors.white.withOpacity(0.08),
+                            Colors.white.withValues(alpha: 0.15),
+                            Colors.white.withValues(alpha: 0.08),
                           ],
                         ),
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                         ),
                       ),
                       child: Row(
@@ -331,7 +331,7 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
                                 colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
                               ),
                               border: Border.all(
-                                color: Colors.white.withOpacity(0.3),
+                                color: Colors.white.withValues(alpha: 0.3),
                                 width: 2,
                               ),
                             ),
@@ -355,7 +355,7 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
                                 Text(
                                   _userData['username'] ?? '@user',
                                   style: TextStyle(
-                                    color: Colors.white.withOpacity(0.7),
+                                    color: Colors.white.withValues(alpha: 0.7),
                                     fontSize: 13,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -432,13 +432,13 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Colors.white.withOpacity(0.2),
-                  Colors.white.withOpacity(0.1),
+                  Colors.white.withValues(alpha: 0.2),
+                  Colors.white.withValues(alpha: 0.1),
                 ],
               ),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: Colors.white.withOpacity(0.3),
+                color: Colors.white.withValues(alpha: 0.3),
                 width: 1,
               ),
             ),
@@ -472,15 +472,15 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                const Color(0xFF10B981).withOpacity(0.15),
-                const Color(0xFF3B82F6).withOpacity(0.1),
+                const Color(0xFF10B981).withValues(alpha: 0.15),
+                const Color(0xFF3B82F6).withValues(alpha: 0.1),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: const Color(0xFF10B981).withOpacity(0.3),
+              color: const Color(0xFF10B981).withValues(alpha: 0.3),
               width: 1.5,
             ),
           ),
@@ -503,15 +503,15 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.white.withOpacity(0.08),
-            Colors.white.withOpacity(0.04),
+            Colors.white.withValues(alpha: 0.08),
+            Colors.white.withValues(alpha: 0.04),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: Colors.white.withOpacity(0.12),
+          color: Colors.white.withValues(alpha: 0.12),
           width: 1.5,
         ),
       ),
@@ -575,7 +575,7 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
                   width: double.infinity,
                   height: 12,
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
+                    color: Colors.white.withValues(alpha: 0.1),
                   ),
                 ),
                 FractionallySizedBox(
@@ -599,7 +599,7 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
               Text(
                 'Level ${_userData['level']} → ${_userData['level'] + 1}',
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.8),
+                  color: Colors.white.withValues(alpha: 0.8),
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                 ),
@@ -607,7 +607,7 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
               Text(
                 '$xpNeeded XP to go',
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.6),
+                  color: Colors.white.withValues(alpha: 0.6),
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                 ),
@@ -623,10 +623,10 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Colors.white.withOpacity(0.1),
+          color: Colors.white.withValues(alpha: 0.1),
         ),
       ),
       child: TabBar(
@@ -640,7 +640,7 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
         indicatorSize: TabBarIndicatorSize.tab,
         dividerColor: Colors.transparent,
         labelColor: Colors.white,
-        unselectedLabelColor: Colors.white.withOpacity(0.5),
+        unselectedLabelColor: Colors.white.withValues(alpha: 0.5),
         labelStyle: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 13,
@@ -688,12 +688,12 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
         gradient: LinearGradient(
           colors: isWin
               ? [
-            const Color(0xFF10B981).withOpacity(0.15),
-            const Color(0xFF3B82F6).withOpacity(0.1),
+            const Color(0xFF10B981).withValues(alpha: 0.15),
+            const Color(0xFF3B82F6).withValues(alpha: 0.1),
           ]
               : [
-            const Color(0xFFEF4444).withOpacity(0.15),
-            const Color(0xFFF59E0B).withOpacity(0.1),
+            const Color(0xFFEF4444).withValues(alpha: 0.15),
+            const Color(0xFFF59E0B).withValues(alpha: 0.1),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -701,8 +701,8 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isWin
-              ? const Color(0xFF10B981).withOpacity(0.3)
-              : const Color(0xFFEF4444).withOpacity(0.3),
+              ? const Color(0xFF10B981).withValues(alpha: 0.3)
+              : const Color(0xFFEF4444).withValues(alpha: 0.3),
           width: 1.5,
         ),
       ),
@@ -741,7 +741,7 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
                 Text(
                   '${match['score']} points',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.6),
+                    color: Colors.white.withValues(alpha: 0.6),
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                   ),
@@ -752,7 +752,7 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
           Text(
             match['time'],
             style: TextStyle(
-              color: Colors.white.withOpacity(0.5),
+              color: Colors.white.withValues(alpha: 0.5),
               fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
@@ -779,10 +779,10 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Colors.white.withOpacity(0.1),
+          color: Colors.white.withValues(alpha: 0.1),
         ),
       ),
       child: Row(
@@ -818,7 +818,7 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
                 Text(
                   activity['time'],
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.5),
+                    color: Colors.white.withValues(alpha: 0.5),
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),
@@ -860,23 +860,23 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
           gradient: isUnlocked
               ? LinearGradient(
             colors: [
-              const Color(0xFFFBBF24).withOpacity(0.2),
-              const Color(0xFFF59E0B).withOpacity(0.15),
+              const Color(0xFFFBBF24).withValues(alpha: 0.2),
+              const Color(0xFFF59E0B).withValues(alpha: 0.15),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           )
               : LinearGradient(
             colors: [
-              Colors.white.withOpacity(0.05),
-              Colors.white.withOpacity(0.02),
+              Colors.white.withValues(alpha: 0.05),
+              Colors.white.withValues(alpha: 0.02),
             ],
           ),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isUnlocked
-                ? const Color(0xFFFBBF24).withOpacity(0.4)
-                : Colors.white.withOpacity(0.1),
+                ? const Color(0xFFFBBF24).withValues(alpha: 0.4)
+                : Colors.white.withValues(alpha: 0.1),
             width: 1.5,
           ),
         ),
@@ -892,8 +892,8 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
                 )
                     : LinearGradient(
                   colors: [
-                    Colors.white.withOpacity(0.15),
-                    Colors.white.withOpacity(0.08),
+                    Colors.white.withValues(alpha: 0.15),
+                    Colors.white.withValues(alpha: 0.08),
                   ],
                 ),
                 shape: BoxShape.circle,
@@ -901,7 +901,7 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
               child: Icon(
                 achievement['icon'],
                 size: 28,
-                color: Colors.white.withOpacity(isUnlocked ? 1 : 0.3),
+                color: Colors.white.withValues(alpha: isUnlocked ? 1 : 0.3),
               ),
             ),
             const SizedBox(height: 10),
@@ -910,7 +910,7 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
               style: TextStyle(
                 fontWeight: FontWeight.w800,
                 fontSize: 11,
-                color: Colors.white.withOpacity(isUnlocked ? 1 : 0.4),
+                color: Colors.white.withValues(alpha: isUnlocked ? 1 : 0.4),
               ),
               textAlign: TextAlign.center,
               maxLines: 2,
@@ -921,7 +921,7 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
+                  color: Colors.white.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
@@ -929,7 +929,7 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
                   style: TextStyle(
                     fontSize: 9,
                     fontWeight: FontWeight.w800,
-                    color: Colors.white.withOpacity(0.5),
+                    color: Colors.white.withValues(alpha: 0.5),
                   ),
                 ),
               ),
@@ -972,7 +972,7 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
         Text(
           title,
           style: TextStyle(
-            color: Colors.white.withOpacity(0.7),
+            color: Colors.white.withValues(alpha: 0.7),
             fontSize: 14,
             fontWeight: FontWeight.w600,
           ),
@@ -1002,13 +1002,13 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.white.withOpacity(0.08),
-            Colors.white.withOpacity(0.04),
+            Colors.white.withValues(alpha: 0.08),
+            Colors.white.withValues(alpha: 0.04),
           ],
         ),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Colors.white.withOpacity(0.12),
+          color: Colors.white.withValues(alpha: 0.12),
         ),
       ),
       child: Column(
@@ -1023,7 +1023,7 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
           Text(
             item['name'],
             style: TextStyle(
-              color: Colors.white.withOpacity(0.8),
+              color: Colors.white.withValues(alpha: 0.8),
               fontSize: 10,
               fontWeight: FontWeight.w600,
             ),
@@ -1253,7 +1253,7 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
             Text(
               achievement['description'],
               style: TextStyle(
-                color: Colors.white.withOpacity(0.8),
+                color: Colors.white.withValues(alpha: 0.8),
                 fontSize: 14,
               ),
             ),
@@ -1262,10 +1262,10 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF10B981).withOpacity(0.2),
+                  color: const Color(0xFF10B981).withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: const Color(0xFF10B981).withOpacity(0.3),
+                    color: const Color(0xFF10B981).withValues(alpha: 0.3),
                   ),
                 ),
                 child: Row(
@@ -1291,7 +1291,7 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.05),
+                  color: Colors.white.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Column(
@@ -1303,7 +1303,7 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
                         Text(
                           'Progress',
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.8),
+                            color: Colors.white.withValues(alpha: 0.8),
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                           ),
@@ -1323,7 +1323,7 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
                       borderRadius: BorderRadius.circular(4),
                       child: LinearProgressIndicator(
                         value: achievement['progress'] / 100,
-                        backgroundColor: Colors.white.withOpacity(0.1),
+                        backgroundColor: Colors.white.withValues(alpha: 0.1),
                         valueColor: const AlwaysStoppedAnimation<Color>(
                           Color(0xFF6366F1),
                         ),
@@ -1494,7 +1494,7 @@ class _GridPatternPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.white.withOpacity(0.05)
+      ..color = Colors.white.withValues(alpha: 0.05)
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
 

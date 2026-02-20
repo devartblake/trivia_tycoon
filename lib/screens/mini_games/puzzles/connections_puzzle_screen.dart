@@ -395,7 +395,7 @@ class _ConnectionsPuzzleScreenState extends State<ConnectionsPuzzleScreen> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF6366F1).withOpacity(0.1),
+                    color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(
@@ -498,7 +498,7 @@ class _ConnectionsPuzzleScreenState extends State<ConnectionsPuzzleScreen> {
               margin: const EdgeInsets.only(right: 8),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
@@ -522,7 +522,7 @@ class _ConnectionsPuzzleScreenState extends State<ConnectionsPuzzleScreen> {
               margin: const EdgeInsets.only(right: 8),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
@@ -577,10 +577,10 @@ class _ConnectionsPuzzleScreenState extends State<ConnectionsPuzzleScreen> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF6366F1).withOpacity(0.1),
+                            color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: const Color(0xFF6366F1).withOpacity(0.3),
+                              color: const Color(0xFF6366F1).withValues(alpha: 0.3),
                               width: 1,
                             ),
                           ),
@@ -645,7 +645,7 @@ class _ConnectionsPuzzleScreenState extends State<ConnectionsPuzzleScreen> {
                                     ),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.black.withOpacity(0.05),
+                                        color: Colors.black.withValues(alpha: 0.05),
                                         blurRadius: 4,
                                         offset: const Offset(0, 2),
                                       ),
@@ -681,7 +681,7 @@ class _ConnectionsPuzzleScreenState extends State<ConnectionsPuzzleScreen> {
                   color: Colors.white,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 10,
                       offset: const Offset(0, -4),
                     ),
@@ -749,7 +749,7 @@ class _ConnectionsPuzzleScreenState extends State<ConnectionsPuzzleScreen> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: category.color.withOpacity(0.3),
+            color: category.color.withValues(alpha: 0.3),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -793,8 +793,8 @@ class _ConnectionsPuzzleScreenState extends State<ConnectionsPuzzleScreen> {
       icon: Icon(icon, size: 18),
       label: Text(text, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
       style: ElevatedButton.styleFrom(
-        backgroundColor: isEnabled ? const Color(0xFFE0DDD9) : const Color(0xFFE0DDD9).withOpacity(0.5),
-        foregroundColor: isEnabled ? const Color(0xFF4A4A4A) : const Color(0xFF4A4A4A).withOpacity(0.5),
+        backgroundColor: isEnabled ? const Color(0xFFE0DDD9) : const Color(0xFFE0DDD9).withValues(alpha: 0.5),
+        foregroundColor: isEnabled ? const Color(0xFF4A4A4A) : const Color(0xFF4A4A4A).withValues(alpha: 0.5),
         elevation: isEnabled ? 2 : 0,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         shape: RoundedRectangleBorder(

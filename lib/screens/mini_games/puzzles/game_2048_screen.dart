@@ -113,7 +113,7 @@ class _Game2048ScreenState extends State<Game2048Screen> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF6366F1).withOpacity(0.1),
+                    color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(
@@ -216,7 +216,7 @@ class _Game2048ScreenState extends State<Game2048Screen> {
                   margin: const EdgeInsets.only(right: 8),
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
@@ -264,10 +264,10 @@ class _Game2048ScreenState extends State<Game2048Screen> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF6366F1).withOpacity(0.1),
+                            color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: const Color(0xFF6366F1).withOpacity(0.3),
+                              color: const Color(0xFF6366F1).withValues(alpha: 0.3),
                               width: 1,
                             ),
                           ),
@@ -315,7 +315,7 @@ class _Game2048ScreenState extends State<Game2048Screen> {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFFE0DDD9),
                               foregroundColor: const Color(0xFF4A4A4A),
-                              disabledBackgroundColor: const Color(0xFFE0DDD9).withOpacity(0.5),
+                              disabledBackgroundColor: const Color(0xFFE0DDD9).withValues(alpha: 0.5),
                               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -343,7 +343,7 @@ class _Game2048ScreenState extends State<Game2048Screen> {
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.3),
+            color: color.withValues(alpha: 0.3),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -761,7 +761,7 @@ class TileWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
           boxShadow: tile.merged ? [
             BoxShadow(
-              color: _getTileColor(tile.value).withOpacity(0.5),
+              color: _getTileColor(tile.value).withValues(alpha: 0.5),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),

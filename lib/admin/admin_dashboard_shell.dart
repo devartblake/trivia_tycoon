@@ -87,7 +87,7 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
               color: isDark ? const Color(0xFF1E1E2E) : Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(2, 0),
                 ),
@@ -159,7 +159,7 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF6366F1).withOpacity(0.1),
+                          color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
@@ -239,7 +239,7 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Divider(
-                      color: Colors.grey.withOpacity(0.2),
+                      color: Colors.grey.withValues(alpha: 0.2),
                     ),
                   ),
 
@@ -346,7 +346,7 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
             icon: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: const Color(0xFF6366F1).withOpacity(0.1),
+                color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Icon(
@@ -390,7 +390,7 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
             icon: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: const Color(0xFF10B981).withOpacity(0.1),
+                color: const Color(0xFF10B981).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Icon(
@@ -484,10 +484,10 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: color.withOpacity(0.3),
+              color: color.withValues(alpha: 0.3),
               width: 1,
             ),
           ),
@@ -544,7 +544,7 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Icon(
@@ -566,7 +566,7 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
                   Text(
                     'Manage your application',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.white.withValues(alpha: 0.9),
                       fontSize: 14,
                     ),
                   ),
@@ -617,7 +617,7 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
                     selectedIndex: selectedIndex,
                   ),
                   const SizedBox(height: 16),
-                  Divider(color: Colors.grey.withOpacity(0.2)),
+                  Divider(color: Colors.grey.withValues(alpha: 0.2)),
                   const SizedBox(height: 16),
                   _buildDrawerActionItem(
                     context,
@@ -776,10 +776,10 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: color.withOpacity(0.3),
+              color: color.withValues(alpha: 0.3),
               width: 1,
             ),
           ),
@@ -813,7 +813,7 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),

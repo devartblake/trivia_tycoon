@@ -106,7 +106,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-        color: theme.primaryColor.withOpacity(0.1),
+        color: theme.primaryColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: IconButton(
@@ -204,7 +204,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
       decoration: BoxDecoration(
         gradient: const LinearGradient(colors: [Color(0xFF9333EA), Color(0xFF7C3AED)]),
         borderRadius: BorderRadius.circular(24),
-        boxShadow: [BoxShadow(color: const Color(0xFF9333EA).withOpacity(0.3), blurRadius: 20, offset: const Offset(0, 10))],
+        boxShadow: [BoxShadow(color: const Color(0xFF9333EA).withValues(alpha: 0.3), blurRadius: 20, offset: const Offset(0, 10))],
       ),
       child: Column(
         children: [
@@ -226,7 +226,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
           const SizedBox(height: 12),
           Text(
             'Enjoy rewards through our points system when friends join!',
-            style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 14),
+            style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: 14),
           ),
         ],
       ),

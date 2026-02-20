@@ -248,7 +248,7 @@ class AdaptedMultipleChoiceWidget extends AdaptedQuestionWidget {
       backgroundColor = Colors.green.shade100;
       textColor = Colors.green.shade800;
     } else if (isSelected && isMultiplayer) {
-      backgroundColor = const Color(0xFF6366F1).withOpacity(0.1);
+      backgroundColor = const Color(0xFF6366F1).withValues(alpha: 0.1);
       borderColor = const Color(0xFF6366F1);
       textColor = const Color(0xFF6366F1);
     } else if (isSelected) {

@@ -75,7 +75,7 @@ class CustomDrawerRoute extends PageRouteBuilder {
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
+                      color: Colors.black.withValues(alpha: 0.3),
                       blurRadius: 20,
                       offset: const Offset(5, 0),
                     ),
@@ -124,7 +124,7 @@ class CustomDrawerRouteAdvanced extends PageRouteBuilder {
       Curve? curve,
       ) {
     final effectiveCurve = curve ?? Curves.easeOutExpo;
-    final effectiveBackgroundColor = backgroundColor ?? Colors.black.withOpacity(0.4);
+    final effectiveBackgroundColor = backgroundColor ?? Colors.black.withValues(alpha: 0.4);
 
     // Staggered animations for more sophisticated feel
     final slideAnimation = Tween<Offset>(
@@ -198,13 +198,13 @@ class CustomDrawerRouteAdvanced extends PageRouteBuilder {
                   decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.4),
+                        color: Colors.black.withValues(alpha: 0.4),
                         blurRadius: 30,
                         offset: const Offset(8, 0),
                         spreadRadius: 2,
                       ),
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
+                        color: Colors.black.withValues(alpha: 0.2),
                         blurRadius: 60,
                         offset: const Offset(15, 5),
                       ),

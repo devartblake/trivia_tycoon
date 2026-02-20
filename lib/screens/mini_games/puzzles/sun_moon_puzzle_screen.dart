@@ -350,7 +350,7 @@ class _SunMoonPuzzleScreenState extends State<SunMoonPuzzleScreen> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF6366F1).withOpacity(0.1),
+                    color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(
@@ -516,7 +516,7 @@ class _SunMoonPuzzleScreenState extends State<SunMoonPuzzleScreen> {
               margin: const EdgeInsets.only(right: 8),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
@@ -566,10 +566,10 @@ class _SunMoonPuzzleScreenState extends State<SunMoonPuzzleScreen> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF6366F1).withOpacity(0.1),
+                          color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
-                            color: const Color(0xFF6366F1).withOpacity(0.3),
+                            color: const Color(0xFF6366F1).withValues(alpha: 0.3),
                             width: 1,
                           ),
                         ),
@@ -608,7 +608,7 @@ class _SunMoonPuzzleScreenState extends State<SunMoonPuzzleScreen> {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF6366F1).withOpacity(0.15),
+                            color: const Color(0xFF6366F1).withValues(alpha: 0.15),
                             blurRadius: 20,
                             offset: const Offset(0, 8),
                           ),
@@ -641,7 +641,7 @@ class _SunMoonPuzzleScreenState extends State<SunMoonPuzzleScreen> {
                                       : Colors.white,
                                   border: Border.all(
                                     color: locked
-                                        ? const Color(0xFF6366F1).withOpacity(0.5)
+                                        ? const Color(0xFF6366F1).withValues(alpha: 0.5)
                                         : Colors.grey.shade300,
                                     width: locked ? 2 : 0.5,
                                   ),
@@ -761,7 +761,7 @@ class _SunMoonPuzzleScreenState extends State<SunMoonPuzzleScreen> {
             border: Border.all(color: const Color(0xFFD68910), width: 3),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFFF5A623).withOpacity(0.3),
+                color: const Color(0xFFF5A623).withValues(alpha: 0.3),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -785,8 +785,8 @@ class _SunMoonPuzzleScreenState extends State<SunMoonPuzzleScreen> {
       icon: Icon(icon, size: 18),
       label: Text(text, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
       style: ElevatedButton.styleFrom(
-        backgroundColor: isEnabled ? const Color(0xFFE0DDD9) : const Color(0xFFE0DDD9).withOpacity(0.5),
-        foregroundColor: isEnabled ? const Color(0xFF4A4A4A) : const Color(0xFF4A4A4A).withOpacity(0.5),
+        backgroundColor: isEnabled ? const Color(0xFFE0DDD9) : const Color(0xFFE0DDD9).withValues(alpha: 0.5),
+        foregroundColor: isEnabled ? const Color(0xFF4A4A4A) : const Color(0xFF4A4A4A).withValues(alpha: 0.5),
         elevation: isEnabled ? 2 : 0,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
         shape: RoundedRectangleBorder(
@@ -814,7 +814,7 @@ class MoonPainter extends CustomPainter {
 
     // Draw moon crescent with shadow
     final shadowPaint = Paint()
-      ..color = const Color(0xFF4A90E2).withOpacity(0.3)
+      ..color = const Color(0xFF4A90E2).withValues(alpha: 0.3)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
 
     final path = Path();

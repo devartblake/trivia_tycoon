@@ -130,7 +130,7 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
           Text(
             'Select your profile to continue',
             style: TextStyle(
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white.withValues(alpha: 0.7),
               fontSize: 16,
             ),
           ),
@@ -173,7 +173,7 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
             child: OutlinedButton(
               onPressed: () => _showManageProfilesDialog(),
               style: OutlinedButton.styleFrom(
-                side: BorderSide(color: Colors.white.withOpacity(0.3)),
+                side: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -182,7 +182,7 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
               child: Text(
                 'Manage Profiles',
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.8),
+                  color: Colors.white.withValues(alpha: 0.8),
                   fontSize: 16,
                 ),
               ),
@@ -202,7 +202,7 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: Colors.white.withOpacity(0.1),
+            color: Colors.white.withValues(alpha: 0.1),
             width: 1,
           ),
         ),
@@ -230,7 +230,7 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
                         backgroundImage: profile.avatar != null
                             ? AssetImage(profile.avatar!)
                             : null,
-                        backgroundColor: Colors.white.withOpacity(0.2),
+                        backgroundColor: Colors.white.withValues(alpha: 0.2),
                         child: profile.avatar == null
                             ? Text(
                           profile.name.substring(0, 1).toUpperCase(),
@@ -251,7 +251,7 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.6),
+                          color: Colors.black.withValues(alpha: 0.6),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
@@ -312,7 +312,7 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
                     Text(
                       profile.rank,
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.7),
+                        color: Colors.white.withValues(alpha: 0.7),
                         fontSize: 12,
                       ),
                       maxLines: 1,
@@ -335,7 +335,7 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: Colors.white.withOpacity(0.3),
+            color: Colors.white.withValues(alpha: 0.3),
             width: 2,
             style: BorderStyle.solid,
           ),
@@ -346,13 +346,13 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
             Icon(
               Icons.add_circle_outline,
               size: 48,
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white.withValues(alpha: 0.7),
             ),
             const SizedBox(height: 12),
             Text(
               'Add Profile',
               style: TextStyle(
-                color: Colors.white.withOpacity(0.7),
+                color: Colors.white.withValues(alpha: 0.7),
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -371,13 +371,13 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
           Icon(
             Icons.error_outline,
             size: 64,
-            color: Colors.white.withOpacity(0.7),
+            color: Colors.white.withValues(alpha: 0.7),
           ),
           const SizedBox(height: 16),
           Text(
             'Error loading profiles',
             style: TextStyle(
-              color: Colors.white.withOpacity(0.9),
+              color: Colors.white.withValues(alpha: 0.9),
               fontSize: 18,
               fontWeight: FontWeight.w600,
             ),
@@ -386,7 +386,7 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
           Text(
             error.toString(),
             style: TextStyle(
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white.withValues(alpha: 0.7),
               fontSize: 14,
             ),
             textAlign: TextAlign.center,
@@ -539,16 +539,16 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 labelText: 'Profile Name',
-                labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
+                labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white.withOpacity(0.3)),
+                  borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(color: Color(0xFF6A5ACD)),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                fillColor: Colors.white.withOpacity(0.1),
+                fillColor: Colors.white.withValues(alpha: 0.1),
                 filled: true,
               ),
               maxLength: 20,
@@ -560,7 +560,7 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
             Text(
               'Age Group',
               style: TextStyle(
-                color: Colors.white.withOpacity(0.9),
+                color: Colors.white.withValues(alpha: 0.9),
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -576,16 +576,16 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
                       margin: const EdgeInsets.only(right: 8),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       decoration: BoxDecoration(
-                        color: isSelected ? const Color(0xFF6A5ACD) : Colors.white.withOpacity(0.1),
+                        color: isSelected ? const Color(0xFF6A5ACD) : Colors.white.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
-                          color: isSelected ? const Color(0xFF6A5ACD) : Colors.white.withOpacity(0.3),
+                          color: isSelected ? const Color(0xFF6A5ACD) : Colors.white.withValues(alpha: 0.3),
                         ),
                       ),
                       child: Text(
                         group.capitalize(),
                         style: TextStyle(
-                          color: isSelected ? Colors.white : Colors.white.withOpacity(0.7),
+                          color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.7),
                           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                         ),
                         textAlign: TextAlign.center,
@@ -602,7 +602,7 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
             Text(
               'Choose Avatar',
               style: TextStyle(
-                color: Colors.white.withOpacity(0.9),
+                color: Colors.white.withValues(alpha: 0.9),
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -627,14 +627,14 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
                           border: Border.all(
                             color: _selectedAvatar == null
                                 ? const Color(0xFF6A5ACD)
-                                : Colors.white.withOpacity(0.3),
+                                : Colors.white.withValues(alpha: 0.3),
                             width: 2,
                           ),
-                          color: Colors.white.withOpacity(0.1),
+                          color: Colors.white.withValues(alpha: 0.1),
                         ),
                         child: Icon(
                           Icons.person,
-                          color: Colors.white.withOpacity(0.7),
+                          color: Colors.white.withValues(alpha: 0.7),
                           size: 30,
                         ),
                       ),
@@ -655,7 +655,7 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
                         border: Border.all(
                           color: isSelected
                               ? const Color(0xFF6A5ACD)
-                              : Colors.white.withOpacity(0.3),
+                              : Colors.white.withValues(alpha: 0.3),
                           width: 2,
                         ),
                       ),
@@ -679,7 +679,7 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
                     onPressed: _isCreating ? null : () => Navigator.pop(context),
                     child: Text(
                       'Cancel',
-                      style: TextStyle(color: Colors.white.withOpacity(0.7)),
+                      style: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
                     ),
                   ),
                 ),
@@ -859,7 +859,7 @@ class ManageProfilesDialog extends ConsumerWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
+        color: Colors.white.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -867,7 +867,7 @@ class ManageProfilesDialog extends ConsumerWidget {
           CircleAvatar(
             radius: 20,
             backgroundImage: profile.avatar != null ? AssetImage(profile.avatar!) : null,
-            backgroundColor: Colors.white.withOpacity(0.2),
+            backgroundColor: Colors.white.withValues(alpha: 0.2),
             child: profile.avatar == null
                 ? Text(
               profile.name.substring(0, 1).toUpperCase(),
@@ -891,7 +891,7 @@ class ManageProfilesDialog extends ConsumerWidget {
                 Text(
                   'Level ${profile.level} • ${profile.rank}',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.7),
+                    color: Colors.white.withValues(alpha: 0.7),
                     fontSize: 12,
                   ),
                 ),
@@ -899,7 +899,7 @@ class ManageProfilesDialog extends ConsumerWidget {
             ),
           ),
           PopupMenuButton<String>(
-            icon: Icon(Icons.more_vert, color: Colors.white.withOpacity(0.7)),
+            icon: Icon(Icons.more_vert, color: Colors.white.withValues(alpha: 0.7)),
             onSelected: (value) async {
               switch (value) {
                 case 'edit':

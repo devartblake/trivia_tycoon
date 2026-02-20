@@ -28,12 +28,12 @@ class PackageCardBundled extends ConsumerWidget {
             gradient: LinearGradient(
               colors: installed
                   ? [
-                Colors.white.withOpacity(0.06),
-                Colors.white.withOpacity(0.03),
+                Colors.white.withValues(alpha: 0.06),
+                Colors.white.withValues(alpha: 0.03),
               ]
                   : [
-                const Color(0xFFFBBF24).withOpacity(0.15),
-                const Color(0xFFF59E0B).withOpacity(0.1),
+                const Color(0xFFFBBF24).withValues(alpha: 0.15),
+                const Color(0xFFF59E0B).withValues(alpha: 0.1),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -41,8 +41,8 @@ class PackageCardBundled extends ConsumerWidget {
             borderRadius: BorderRadius.circular(18),
             border: Border.all(
               color: installed
-                  ? Colors.white.withOpacity(0.12)
-                  : const Color(0xFFFBBF24).withOpacity(0.3),
+                  ? Colors.white.withValues(alpha: 0.12)
+                  : const Color(0xFFFBBF24).withValues(alpha: 0.3),
               width: 1.5,
             ),
           ),
@@ -59,7 +59,7 @@ class PackageCardBundled extends ConsumerWidget {
                       shape: BoxShape.circle,
                       gradient: RadialGradient(
                         colors: [
-                          const Color(0xFFFBBF24).withOpacity(0.2),
+                          const Color(0xFFFBBF24).withValues(alpha: 0.2),
                           Colors.transparent,
                         ],
                       ),
@@ -74,19 +74,19 @@ class PackageCardBundled extends ConsumerWidget {
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
                         color: installed
-                            ? Colors.white.withOpacity(0.08)
-                            : const Color(0xFFFBBF24).withOpacity(0.2),
+                            ? Colors.white.withValues(alpha: 0.08)
+                            : const Color(0xFFFBBF24).withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(14),
                         border: Border.all(
                           color: installed
-                              ? Colors.white.withOpacity(0.15)
-                              : const Color(0xFFFBBF24).withOpacity(0.3),
+                              ? Colors.white.withValues(alpha: 0.15)
+                              : const Color(0xFFFBBF24).withValues(alpha: 0.3),
                         ),
                       ),
                       child: Icon(
                         Icons.inventory_2_rounded,
                         color: installed
-                            ? Colors.white.withOpacity(0.6)
+                            ? Colors.white.withValues(alpha: 0.6)
                             : const Color(0xFFFBBF24),
                         size: 28,
                       ),
@@ -113,13 +113,13 @@ class PackageCardBundled extends ConsumerWidget {
                                   vertical: 4,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.1),
+                                  color: Colors.white.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                                 child: Text(
                                   'v${meta.version}',
                                   style: TextStyle(
-                                    color: Colors.white.withOpacity(0.7),
+                                    color: Colors.white.withValues(alpha: 0.7),
                                     fontSize: 10,
                                     fontWeight: FontWeight.w800,
                                   ),
@@ -129,13 +129,13 @@ class PackageCardBundled extends ConsumerWidget {
                               Icon(
                                 Icons.circle,
                                 size: 4,
-                                color: Colors.white.withOpacity(0.4),
+                                color: Colors.white.withValues(alpha: 0.4),
                               ),
                               const SizedBox(width: 6),
                               Text(
                                 'Bundled',
                                 style: TextStyle(
-                                  color: Colors.white.withOpacity(0.6),
+                                  color: Colors.white.withValues(alpha: 0.6),
                                   fontSize: 12,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -205,14 +205,14 @@ class PackageCardBundled extends ConsumerWidget {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: installed
-                            ? Colors.white.withOpacity(0.1)
+                            ? Colors.white.withValues(alpha: 0.1)
                             : const Color(0xFFFBBF24),
                         foregroundColor:
                         installed ? Colors.white54 : const Color(0xFF0A0A0F),
                         elevation: installed ? 0 : 3,
                         shadowColor: installed
                             ? Colors.transparent
-                            : const Color(0xFFFBBF24).withOpacity(0.5),
+                            : const Color(0xFFFBBF24).withValues(alpha: 0.5),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),

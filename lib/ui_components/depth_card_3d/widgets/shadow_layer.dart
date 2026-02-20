@@ -76,7 +76,7 @@ class _ShadowLayerState extends State<ShadowLayer>
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: widget.theme.shadowColor.withOpacity(0.35 + glowStrength * 0.25),
+                color: widget.theme.shadowColor.withValues(alpha: 0.35 + glowStrength * 0.25),
                 blurRadius: widget.theme.elevation + (glowStrength + 8),
                 spreadRadius: 1+ ( glowStrength * 2),
                 offset: Offset(0 + tiltDx, 8 + tiltDy),

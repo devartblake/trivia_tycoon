@@ -154,7 +154,7 @@ class BranchPathOverlayPainter extends CustomPainter {
         highlightIndex! < centers!.length) {
       final center = centers![highlightIndex!];
       final ring = Paint()
-        ..color = ringColor.withOpacity(0.85)
+        ..color = ringColor.withValues(alpha: 0.85)
         ..style = PaintingStyle.stroke
         ..strokeWidth = thickness + 1;
       canvas.drawCircle(center, 22, ring);
@@ -170,7 +170,7 @@ class BranchPathOverlayPainter extends CustomPainter {
 
     // Outer soft halo
     final halo = Paint()
-      ..color = haloColor!.withOpacity(0.35)
+      ..color = haloColor!.withValues(alpha: 0.35)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 20);
     canvas.drawCircle(p, nodeRadius * 1.6, halo);
 

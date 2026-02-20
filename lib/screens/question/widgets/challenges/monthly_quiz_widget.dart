@@ -86,7 +86,7 @@ class MonthlyQuizWidget extends ConsumerWidget {
               Text(
                 "Loading...",
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.9),
+                  color: Colors.white.withValues(alpha: 0.9),
                   fontSize: 14,
                 ),
               ),
@@ -105,7 +105,7 @@ class MonthlyQuizWidget extends ConsumerWidget {
           width: 70,
           height: 70,
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
             shape: BoxShape.circle,
           ),
           child: const Icon(
@@ -137,7 +137,7 @@ class MonthlyQuizWidget extends ConsumerWidget {
               Text(
                 "Error loading challenge",
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.9),
+                  color: Colors.white.withValues(alpha: 0.9),
                   fontSize: 14,
                 ),
               ),
@@ -164,7 +164,7 @@ class MonthlyQuizWidget extends ConsumerWidget {
           width: 70,
           height: 70,
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
             shape: BoxShape.circle,
           ),
           child: const Icon(
@@ -210,7 +210,7 @@ class MonthlyQuizWidget extends ConsumerWidget {
               Text(
                 "${preview.theme.toUpperCase()} • ${preview.totalQuestions} questions",
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.9),
+                  color: Colors.white.withValues(alpha: 0.9),
                   fontSize: 12,
                 ),
               ),
@@ -219,7 +219,7 @@ class MonthlyQuizWidget extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.3),
+                    color: Colors.green.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: const Text(
@@ -238,14 +238,14 @@ class MonthlyQuizWidget extends ConsumerWidget {
                     Text(
                       "${(preview.completionRate * 100).round()}% Complete",
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                         fontSize: 10,
                       ),
                     ),
                     const SizedBox(height: 4),
                     LinearProgressIndicator(
                       value: preview.completionRate,
-                      backgroundColor: Colors.white.withOpacity(0.3),
+                      backgroundColor: Colors.white.withValues(alpha: 0.3),
                       valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
                   ],
@@ -276,7 +276,7 @@ class MonthlyQuizWidget extends ConsumerWidget {
               width: 70,
               height: 70,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 shape: BoxShape.circle,
               ),
               child: Icon(

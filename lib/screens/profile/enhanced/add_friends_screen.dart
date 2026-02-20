@@ -139,8 +139,8 @@ class _AddFriendByUsernameScreenState
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: _isSuccess
-            ? const Color(0xFF3BA55C).withOpacity(0.1)
-            : const Color(0xFFED4245).withOpacity(0.1),
+            ? const Color(0xFF3BA55C).withValues(alpha: 0.1)
+            : const Color(0xFFED4245).withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: _isSuccess ? const Color(0xFF3BA55C) : const Color(0xFFED4245),
@@ -178,7 +178,7 @@ class _AddFriendByUsernameScreenState
         onPressed: _isSending ? null : _sendFriendRequest,
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF5865F2),
-          disabledBackgroundColor: const Color(0xFF5865F2).withOpacity(0.5),
+          disabledBackgroundColor: const Color(0xFF5865F2).withValues(alpha: 0.5),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),

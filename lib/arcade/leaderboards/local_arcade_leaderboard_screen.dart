@@ -127,15 +127,15 @@ class _LocalArcadeLeaderboardScreenState
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                Colors.white.withOpacity(0.3),
-                                Colors.white.withOpacity(0.1),
+                                Colors.white.withValues(alpha: 0.3),
+                                Colors.white.withValues(alpha: 0.1),
                               ],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
                             borderRadius: BorderRadius.circular(18),
                             border: Border.all(
-                              color: Colors.white.withOpacity(0.2),
+                              color: Colors.white.withValues(alpha: 0.2),
                               width: 1.5,
                             ),
                           ),
@@ -186,10 +186,10 @@ class _LocalArcadeLeaderboardScreenState
         child: Container(
           margin: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.15),
+            color: Colors.white.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
             ),
           ),
           child: IconButton(
@@ -223,16 +223,16 @@ class _LocalArcadeLeaderboardScreenState
             const Color(0xFF2A2A35),
           ]
               : [
-            const Color(0xFFFBBF24).withOpacity(0.2),
-            const Color(0xFFF59E0B).withOpacity(0.15),
+            const Color(0xFFFBBF24).withValues(alpha: 0.2),
+            const Color(0xFFF59E0B).withValues(alpha: 0.15),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         border: Border.all(
           color: claimed
-              ? Colors.white.withOpacity(0.1)
-              : const Color(0xFFFBBF24).withOpacity(0.3),
+              ? Colors.white.withValues(alpha: 0.1)
+              : const Color(0xFFFBBF24).withValues(alpha: 0.3),
           width: 1.5,
         ),
       ),
@@ -249,7 +249,7 @@ class _LocalArcadeLeaderboardScreenState
                   shape: BoxShape.circle,
                   gradient: RadialGradient(
                     colors: [
-                      const Color(0xFFFBBF24).withOpacity(0.2),
+                      const Color(0xFFFBBF24).withValues(alpha: 0.2),
                       Colors.transparent,
                     ],
                   ),
@@ -264,18 +264,18 @@ class _LocalArcadeLeaderboardScreenState
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: claimed
-                        ? Colors.white.withOpacity(0.05)
-                        : const Color(0xFFFBBF24).withOpacity(0.2),
+                        ? Colors.white.withValues(alpha: 0.05)
+                        : const Color(0xFFFBBF24).withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
                       color: claimed
-                          ? Colors.white.withOpacity(0.1)
-                          : const Color(0xFFFBBF24).withOpacity(0.3),
+                          ? Colors.white.withValues(alpha: 0.1)
+                          : const Color(0xFFFBBF24).withValues(alpha: 0.3),
                     ),
                   ),
                   child: Icon(
                     Icons.card_giftcard_rounded,
-                    color: claimed ? Colors.white.withOpacity(0.4) : const Color(0xFFFBBF24),
+                    color: claimed ? Colors.white.withValues(alpha: 0.4) : const Color(0xFFFBBF24),
                     size: 32,
                   ),
                 ),
@@ -323,7 +323,7 @@ class _LocalArcadeLeaderboardScreenState
                             ? 'Come back tomorrow for more rewards!'
                             : '+250 Coins • +2 Gems',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.7),
+                          color: Colors.white.withValues(alpha: 0.7),
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
                         ),
@@ -359,11 +359,11 @@ class _LocalArcadeLeaderboardScreenState
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: claimed
-                            ? Colors.white.withOpacity(0.1)
+                            ? Colors.white.withValues(alpha: 0.1)
                             : const Color(0xFFFBBF24),
                         foregroundColor: claimed ? Colors.white54 : const Color(0xFF0A0A0F),
                         elevation: claimed ? 0 : 4,
-                        shadowColor: claimed ? Colors.transparent : const Color(0xFFFBBF24).withOpacity(0.5),
+                        shadowColor: claimed ? Colors.transparent : const Color(0xFFFBBF24).withValues(alpha: 0.5),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),
                         ),
@@ -391,7 +391,7 @@ class _LocalArcadeLeaderboardScreenState
                         child: Text(
                           'View All',
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.6),
+                            color: Colors.white.withValues(alpha: 0.6),
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
                           ),
@@ -412,10 +412,10 @@ class _LocalArcadeLeaderboardScreenState
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Colors.white.withOpacity(0.1),
+          color: Colors.white.withValues(alpha: 0.1),
         ),
       ),
       child: TabBar(
@@ -424,13 +424,13 @@ class _LocalArcadeLeaderboardScreenState
           borderRadius: BorderRadius.circular(14),
           gradient: LinearGradient(
             colors: [
-              const Color(0xFF6366F1).withOpacity(0.8),
-              const Color(0xFF8B5CF6).withOpacity(0.8),
+              const Color(0xFF6366F1).withValues(alpha: 0.8),
+              const Color(0xFF8B5CF6).withValues(alpha: 0.8),
             ],
           ),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF6366F1).withOpacity(0.3),
+              color: const Color(0xFF6366F1).withValues(alpha: 0.3),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -439,7 +439,7 @@ class _LocalArcadeLeaderboardScreenState
         indicatorSize: TabBarIndicatorSize.tab,
         dividerColor: Colors.transparent,
         labelColor: Colors.white,
-        unselectedLabelColor: Colors.white.withOpacity(0.5),
+        unselectedLabelColor: Colors.white.withValues(alpha: 0.5),
         labelStyle: const TextStyle(
           fontWeight: FontWeight.w900,
           fontSize: 13,
@@ -494,7 +494,7 @@ class _LocalArcadeLeaderboardScreenState
             ),
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.white,
-              side: BorderSide(color: Colors.white.withOpacity(0.2)),
+              side: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(14),
               ),
@@ -560,12 +560,12 @@ class _LocalArcadeLeaderboardScreenState
               end: Alignment.bottomRight,
             ),
             border: Border.all(
-              color: Colors.white.withOpacity(0.3),
+              color: Colors.white.withValues(alpha: 0.3),
               width: 3,
             ),
             boxShadow: [
               BoxShadow(
-                color: colors[0].withOpacity(0.4),
+                color: colors[0].withValues(alpha: 0.4),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
@@ -591,14 +591,14 @@ class _LocalArcadeLeaderboardScreenState
             borderRadius: BorderRadius.circular(16),
             gradient: LinearGradient(
               colors: [
-                colors[0].withOpacity(0.2),
-                colors[1].withOpacity(0.1),
+                colors[0].withValues(alpha: 0.2),
+                colors[1].withValues(alpha: 0.1),
               ],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
             border: Border.all(
-              color: colors[0].withOpacity(0.3),
+              color: colors[0].withValues(alpha: 0.3),
               width: 2,
             ),
           ),
@@ -626,7 +626,7 @@ class _LocalArcadeLeaderboardScreenState
               Text(
                 'points',
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.5),
+                  color: Colors.white.withValues(alpha: 0.5),
                   fontWeight: FontWeight.w700,
                   fontSize: 10,
                 ),
@@ -638,13 +638,13 @@ class _LocalArcadeLeaderboardScreenState
                   vertical: 4,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
+                  color: Colors.white.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   entry.difficulty.name.toUpperCase(),
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.7),
+                    color: Colors.white.withValues(alpha: 0.7),
                     fontWeight: FontWeight.w800,
                     fontSize: 9,
                   ),
@@ -667,10 +667,10 @@ class _LocalArcadeLeaderboardScreenState
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.03),
+        color: Colors.white.withValues(alpha: 0.03),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: Colors.white.withOpacity(0.1),
+          color: Colors.white.withValues(alpha: 0.1),
         ),
       ),
       child: Column(
@@ -701,7 +701,7 @@ class _LocalArcadeLeaderboardScreenState
             physics: const NeverScrollableScrollPhysics(),
             itemCount: displayScores.length,
             separatorBuilder: (_, __) => Divider(
-              color: Colors.white.withOpacity(0.05),
+              color: Colors.white.withValues(alpha: 0.05),
               height: 1,
             ),
             itemBuilder: (_, i) => _ModernLeaderboardRow(
@@ -728,19 +728,19 @@ class _LocalArcadeLeaderboardScreenState
                 shape: BoxShape.circle,
                 gradient: LinearGradient(
                   colors: [
-                    game.gradient[0].withOpacity(0.2),
-                    game.gradient[1].withOpacity(0.1),
+                    game.gradient[0].withValues(alpha: 0.2),
+                    game.gradient[1].withValues(alpha: 0.1),
                   ],
                 ),
                 border: Border.all(
-                  color: game.gradient[0].withOpacity(0.3),
+                  color: game.gradient[0].withValues(alpha: 0.3),
                   width: 2,
                 ),
               ),
               child: Icon(
                 game.icon,
                 size: 64,
-                color: game.gradient[0].withOpacity(0.6),
+                color: game.gradient[0].withValues(alpha: 0.6),
               ),
             ),
             const SizedBox(height: 24),
@@ -757,7 +757,7 @@ class _LocalArcadeLeaderboardScreenState
               'Be the first to set a record!\nPlay ${game.title} to get started.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.white.withOpacity(0.6),
+                color: Colors.white.withValues(alpha: 0.6),
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
                 height: 1.5,
@@ -797,7 +797,7 @@ class _LocalArcadeLeaderboardScreenState
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.3),
+                    color: Colors.white.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -829,7 +829,7 @@ class _LocalArcadeLeaderboardScreenState
                             Text(
                               'All Scores',
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.6),
+                                color: Colors.white.withValues(alpha: 0.6),
                                 fontWeight: FontWeight.w600,
                                 fontSize: 14,
                               ),
@@ -847,7 +847,7 @@ class _LocalArcadeLeaderboardScreenState
                     child: Text(
                       'No scores recorded yet.',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.6),
+                        color: Colors.white.withValues(alpha: 0.6),
                         fontSize: 15,
                       ),
                     ),
@@ -923,14 +923,14 @@ class _ModernLeaderboardRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
         color: isTopThree
-            ? gradient[0].withOpacity(0.1)
-            : Colors.white.withOpacity(0.03),
+            ? gradient[0].withValues(alpha: 0.1)
+            : Colors.white.withValues(alpha: 0.03),
         borderRadius: BorderRadius.circular(14),
         border: showBorder
             ? Border.all(
           color: isTopThree
-              ? gradient[0].withOpacity(0.3)
-              : Colors.white.withOpacity(0.08),
+              ? gradient[0].withValues(alpha: 0.3)
+              : Colors.white.withValues(alpha: 0.08),
         )
             : null,
       ),
@@ -944,8 +944,8 @@ class _ModernLeaderboardRow extends StatelessWidget {
                   ? LinearGradient(colors: gradient)
                   : LinearGradient(
                 colors: [
-                  Colors.white.withOpacity(0.1),
-                  Colors.white.withOpacity(0.05),
+                  Colors.white.withValues(alpha: 0.1),
+                  Colors.white.withValues(alpha: 0.05),
                 ],
               ),
               borderRadius: BorderRadius.circular(10),
@@ -983,13 +983,13 @@ class _ModernLeaderboardRow extends StatelessWidget {
                         vertical: 3,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.1),
+                        color: Colors.white.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
                         entry.difficulty.name.toUpperCase(),
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.7),
+                          color: Colors.white.withValues(alpha: 0.7),
                           fontWeight: FontWeight.w800,
                           fontSize: 10,
                         ),
@@ -999,13 +999,13 @@ class _ModernLeaderboardRow extends StatelessWidget {
                     Icon(
                       Icons.timer_outlined,
                       size: 14,
-                      color: Colors.white.withOpacity(0.5),
+                      color: Colors.white.withValues(alpha: 0.5),
                     ),
                     const SizedBox(width: 4),
                     Text(
                       '${secs}s',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.6),
+                        color: Colors.white.withValues(alpha: 0.6),
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
                       ),
@@ -1035,7 +1035,7 @@ class _GridPatternPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.white.withOpacity(0.05)
+      ..color = Colors.white.withValues(alpha: 0.05)
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
 

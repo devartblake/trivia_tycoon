@@ -28,13 +28,13 @@ class AvatarImageCard extends StatelessWidget {
           border: Border.all(
             color: isSelected
                 ? const Color(0xFF6366F1)
-                : Colors.white.withOpacity(0.1),
+                : Colors.white.withValues(alpha: 0.1),
             width: isSelected ? 3 : 1,
           ),
           boxShadow: isSelected
               ? [
             BoxShadow(
-              color: const Color(0xFF6366F1).withOpacity(0.3),
+              color: const Color(0xFF6366F1).withValues(alpha: 0.3),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -111,7 +111,7 @@ class AvatarImageCard extends StatelessWidget {
   Widget _buildLoadingWidget() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: Colors.white.withValues(alpha: 0.05),
       ),
       child: const Center(
         child: CircularProgressIndicator(

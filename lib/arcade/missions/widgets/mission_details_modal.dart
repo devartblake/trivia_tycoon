@@ -40,7 +40,7 @@ class MissionDetailsModal {
                 Text(
                   mission.subtitle,
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.75),
+                    color: Colors.white.withValues(alpha: 0.75),
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                   ),
@@ -53,7 +53,7 @@ class MissionDetailsModal {
                 Text(
                   'Progress',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.85),
+                    color: Colors.white.withValues(alpha: 0.85),
                     fontWeight: FontWeight.w800,
                   ),
                 ),
@@ -61,7 +61,7 @@ class MissionDetailsModal {
 
                 LinearProgressIndicator(
                   value: ratio,
-                  backgroundColor: Colors.white.withOpacity(0.10),
+                  backgroundColor: Colors.white.withValues(alpha: 0.10),
                   color: Colors.amberAccent,
                   minHeight: 7,
                 ),
@@ -72,7 +72,7 @@ class MissionDetailsModal {
                     Text(
                       '${progress.current}/${mission.target}',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.70),
+                        color: Colors.white.withValues(alpha: 0.70),
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
                       ),
@@ -93,7 +93,7 @@ class MissionDetailsModal {
                       child: OutlinedButton(
                         onPressed: () => Navigator.of(context).pop(),
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: Colors.white.withOpacity(0.20)),
+                          side: BorderSide(color: Colors.white.withValues(alpha: 0.20)),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
                           ),
@@ -144,7 +144,7 @@ class MissionDetailsModal {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: canClaim
                                   ? Colors.amberAccent
-                                  : Colors.white.withOpacity(0.12),
+                                  : Colors.white.withValues(alpha: 0.12),
                               foregroundColor: Colors.black,
                               elevation: 0,
                               shape: RoundedRectangleBorder(
@@ -217,9 +217,9 @@ class _TierBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: bg.withOpacity(0.20),
+        color: bg.withValues(alpha: 0.20),
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: bg.withOpacity(0.45)),
+        border: Border.all(color: bg.withValues(alpha: 0.45)),
       ),
       child: Text(
         label,
@@ -245,14 +245,14 @@ class _RewardRow extends StatelessWidget {
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.06),
+          color: Colors.white.withValues(alpha: 0.06),
           borderRadius: BorderRadius.circular(999),
-          border: Border.all(color: Colors.white.withOpacity(0.12)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 16, color: Colors.white.withOpacity(0.85)),
+            Icon(icon, size: 16, color: Colors.white.withValues(alpha: 0.85)),
             const SizedBox(width: 6),
             Text(
               text,
@@ -299,9 +299,9 @@ class _StatusChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.18),
+        color: color.withValues(alpha: 0.18),
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: color.withOpacity(0.40)),
+        border: Border.all(color: color.withValues(alpha: 0.40)),
       ),
       child: Text(
         text,

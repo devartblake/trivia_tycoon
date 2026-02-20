@@ -78,7 +78,7 @@ class _SegmentImageState extends State<SegmentImage>
                   boxShadow: _isHovered && !widget.isLocked
                       ? [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
+                      color: Colors.black.withValues(alpha: 0.2),
                       blurRadius: 8,
                       offset: const Offset(0, 4),
                     ),
@@ -104,7 +104,7 @@ class _SegmentImageState extends State<SegmentImage>
         width: 48,
         height: 48,
         fit: BoxFit.cover,
-        color: widget.isLocked ? Colors.grey.withOpacity(0.6) : null,
+        color: widget.isLocked ? Colors.grey.withValues(alpha: 0.6) : null,
         colorBlendMode: widget.isLocked ? BlendMode.saturation : null,
         errorBuilder: (context, error, stackTrace) {
           return _buildFallbackIcon();
@@ -120,8 +120,8 @@ class _SegmentImageState extends State<SegmentImage>
       height: 48,
       decoration: BoxDecoration(
         color: widget.isLocked
-            ? Colors.grey.withOpacity(0.3)
-            : widget.segment.color.withOpacity(0.2),
+            ? Colors.grey.withValues(alpha: 0.3)
+            : widget.segment.color.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Icon(

@@ -100,14 +100,14 @@ class _SegmentLabelState extends State<SegmentLabel>
 
   Color _getContainerColor() {
     if (widget.isLocked) {
-      return Colors.black.withOpacity(0.6);
+      return Colors.black.withValues(alpha: 0.6);
     }
 
     if (widget.isActive) {
-      return Colors.black.withOpacity(0.4);
+      return Colors.black.withValues(alpha: 0.4);
     }
 
-    return Colors.black.withOpacity(0.25);
+    return Colors.black.withValues(alpha: 0.25);
   }
 
   @override
@@ -151,14 +151,14 @@ class _SegmentLabelState extends State<SegmentLabel>
                   borderRadius: BorderRadius.circular(8),
                   border: widget.isActive
                       ? Border.all(
-                    color: Colors.amber.withOpacity(0.6),
+                    color: Colors.amber.withValues(alpha: 0.6),
                     width: 1,
                   )
                       : null,
                   boxShadow: widget.isActive
                       ? [
                     BoxShadow(
-                      color: Colors.amber.withOpacity(0.3),
+                      color: Colors.amber.withValues(alpha: 0.3),
                       blurRadius: 8,
                       spreadRadius: 1,
                     ),
@@ -166,7 +166,7 @@ class _SegmentLabelState extends State<SegmentLabel>
                       : _isHovered && !widget.isLocked
                       ? [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
+                      color: Colors.black.withValues(alpha: 0.3),
                       blurRadius: 4,
                       offset: const Offset(0, 2),
                     ),
@@ -177,8 +177,8 @@ class _SegmentLabelState extends State<SegmentLabel>
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Colors.amber.withOpacity(0.2),
-                      Colors.amber.withOpacity(0.1),
+                      Colors.amber.withValues(alpha: 0.2),
+                      Colors.amber.withValues(alpha: 0.1),
                     ],
                   )
                       : null,
@@ -193,7 +193,7 @@ class _SegmentLabelState extends State<SegmentLabel>
                             borderRadius: BorderRadius.circular(8),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.amber.withOpacity(_glowAnimation.value * 0.4),
+                                color: Colors.amber.withValues(alpha: _glowAnimation.value * 0.4),
                                 blurRadius: 12,
                                 spreadRadius: 2,
                               ),
@@ -233,14 +233,14 @@ class _SegmentLabelState extends State<SegmentLabel>
         shadows: widget.isActive
             ? [
           Shadow(
-            color: Colors.amber.withOpacity(0.8),
+            color: Colors.amber.withValues(alpha: 0.8),
             blurRadius: 4,
           ),
         ]
             : _isHovered && !widget.isLocked
             ? [
           Shadow(
-            color: Colors.black.withOpacity(0.5),
+            color: Colors.black.withValues(alpha: 0.5),
             blurRadius: 2,
             offset: const Offset(0, 1),
           ),
@@ -266,7 +266,7 @@ class _SegmentLabelState extends State<SegmentLabel>
                 end: Alignment(1.0 + (_controller.value * 2), 0),
                 colors: [
                   Colors.transparent,
-                  Colors.white.withOpacity(0.2),
+                  Colors.white.withValues(alpha: 0.2),
                   Colors.transparent,
                 ],
                 stops: const [0.0, 0.5, 1.0],
@@ -406,11 +406,11 @@ class _PremiumSegmentLabelState extends State<PremiumSegmentLabel>
                   child: Container(
                     padding: const EdgeInsets.all(2),
                     decoration: BoxDecoration(
-                      color: Colors.amber.withOpacity(0.9),
+                      color: Colors.amber.withValues(alpha: 0.9),
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.amber.withOpacity(0.6),
+                          color: Colors.amber.withValues(alpha: 0.6),
                           blurRadius: 4,
                           spreadRadius: 1,
                         ),

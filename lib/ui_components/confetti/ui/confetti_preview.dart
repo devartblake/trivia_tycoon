@@ -82,12 +82,12 @@ class _ConfettiPreviewState extends State<ConfettiPreview>
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFF667EEA).withOpacity(0.1),
-            const Color(0xFF764BA2).withOpacity(0.1),
+            const Color(0xFF667EEA).withValues(alpha: 0.1),
+            const Color(0xFF764BA2).withValues(alpha: 0.1),
           ],
         ),
         border: Border.all(
-          color: const Color(0xFF667EEA).withOpacity(0.2),
+          color: const Color(0xFF667EEA).withValues(alpha: 0.2),
           width: 2,
         ),
       ),
@@ -108,9 +108,9 @@ class _ConfettiPreviewState extends State<ConfettiPreview>
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.7),
+                        color: Colors.black.withValues(alpha: 0.7),
                         borderRadius: BorderRadius.circular(25),
-                        border: Border.all(color: Colors.white.withOpacity(0.3)),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,

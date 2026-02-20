@@ -99,7 +99,7 @@ class _CoinBalanceDisplayState extends ConsumerState<CoinBalanceDisplay>
 
     _glowAnimation = ColorTween(
       begin: widget.iconColor ?? Colors.amber,
-      end: (widget.iconColor ?? Colors.amber).withOpacity(0.6),
+      end: (widget.iconColor ?? Colors.amber).withValues(alpha: 0.6),
     ).animate(CurvedAnimation(
       parent: _pulseController,
       curve: Curves.easeInOut,
@@ -172,26 +172,26 @@ class _CoinBalanceDisplayState extends ConsumerState<CoinBalanceDisplay>
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    Colors.amber.withOpacity(0.1),
-                    Colors.amber.withOpacity(0.05),
+                    Colors.amber.withValues(alpha: 0.1),
+                    Colors.amber.withValues(alpha: 0.05),
                   ],
                 ),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: Colors.amber.withOpacity(0.3),
+                  color: Colors.amber.withValues(alpha: 0.3),
                   width: 1,
                 ),
                 boxShadow: _isIncreasing
                     ? [
                   BoxShadow(
-                    color: Colors.amber.withOpacity(0.4),
+                    color: Colors.amber.withValues(alpha: 0.4),
                     blurRadius: 12,
                     spreadRadius: 2,
                   ),
                 ]
                     : [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 4,
                     offset: const Offset(0, 2),
                   ),
@@ -227,7 +227,7 @@ class _CoinBalanceDisplayState extends ConsumerState<CoinBalanceDisplay>
         child: CustomPaint(
           painter: ShimmerPainter(
             animation: _shimmerAnimation.value,
-            color: Colors.white.withOpacity(0.3),
+            color: Colors.white.withValues(alpha: 0.3),
           ),
         ),
       ),
@@ -246,12 +246,12 @@ class _CoinBalanceDisplayState extends ConsumerState<CoinBalanceDisplay>
             gradient: RadialGradient(
               colors: [
                 _glowAnimation.value ?? Colors.amber,
-                (widget.iconColor ?? Colors.amber).withOpacity(0.8),
+                (widget.iconColor ?? Colors.amber).withValues(alpha: 0.8),
               ],
             ),
             boxShadow: [
               BoxShadow(
-                color: (_glowAnimation.value ?? Colors.amber).withOpacity(0.3),
+                color: (_glowAnimation.value ?? Colors.amber).withValues(alpha: 0.3),
                 blurRadius: 6,
                 spreadRadius: 1,
               ),
@@ -291,7 +291,7 @@ class _CoinBalanceDisplayState extends ConsumerState<CoinBalanceDisplay>
           color: widget.textColor ?? Colors.amber.shade700,
           shadows: [
             Shadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 1,
               offset: const Offset(0, 1),
             ),
@@ -387,8 +387,8 @@ class CoinBalanceDialog extends ConsumerWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Colors.amber.withOpacity(0.1),
-              Colors.amber.withOpacity(0.05),
+              Colors.amber.withValues(alpha: 0.1),
+              Colors.amber.withValues(alpha: 0.05),
             ],
           ),
           borderRadius: BorderRadius.circular(16),
@@ -450,7 +450,7 @@ class CoinBalanceDialog extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.amber.withOpacity(0.3),
+                    color: Colors.amber.withValues(alpha: 0.3),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   ),
@@ -468,7 +468,7 @@ class CoinBalanceDialog extends ConsumerWidget {
                   Text(
                     'Total Coins',
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.white.withValues(alpha: 0.9),
                     ),
                   ),
                 ],

@@ -146,7 +146,7 @@ class _VersusScreenState extends State<VersusScreen>
                                 borderRadius: BorderRadius.circular(20),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.3),
+                                    color: Colors.black.withValues(alpha: 0.3),
                                     blurRadius: 20,
                                     offset: const Offset(0, 10),
                                   ),
@@ -205,9 +205,9 @@ class _VersusScreenState extends State<VersusScreen>
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      widget.player1Color.withOpacity(0.9),
-                      widget.player1Color.withOpacity(0.7),
-                      widget.player1Color.withOpacity(0.5),
+                      widget.player1Color.withValues(alpha: 0.9),
+                      widget.player1Color.withValues(alpha: 0.7),
+                      widget.player1Color.withValues(alpha: 0.5),
                     ],
                   ),
                 ),
@@ -221,9 +221,9 @@ class _VersusScreenState extends State<VersusScreen>
                     begin: Alignment.topRight,
                     end: Alignment.bottomLeft,
                     colors: [
-                      widget.player2Color.withOpacity(0.9),
-                      widget.player2Color.withOpacity(0.7),
-                      widget.player2Color.withOpacity(0.5),
+                      widget.player2Color.withValues(alpha: 0.9),
+                      widget.player2Color.withValues(alpha: 0.7),
+                      widget.player2Color.withValues(alpha: 0.5),
                     ],
                   ),
                 ),
@@ -245,8 +245,8 @@ class _VersusScreenState extends State<VersusScreen>
         Positioned.fill(
           child: CustomPaint(
             painter: DiagonalSplitPainter(
-              leftColor: widget.player1Color.withOpacity(0.3),
-              rightColor: widget.player2Color.withOpacity(0.3),
+              leftColor: widget.player1Color.withValues(alpha: 0.3),
+              rightColor: widget.player2Color.withValues(alpha: 0.3),
             ),
           ),
         ),
@@ -318,20 +318,20 @@ class PlayerContainer extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            primaryColor.withOpacity(0.9),
-            primaryColor.withOpacity(0.7),
+            primaryColor.withValues(alpha: 0.9),
+            primaryColor.withValues(alpha: 0.7),
           ],
           begin: isLeftSide ? Alignment.centerLeft : Alignment.centerRight,
           end: isLeftSide ? Alignment.centerRight : Alignment.centerLeft,
         ),
         borderRadius: BorderRadius.circular(25),
         border: Border.all(
-          color: Colors.white.withOpacity(0.3),
+          color: Colors.white.withValues(alpha: 0.3),
           width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: primaryColor.withOpacity(0.4),
+            color: primaryColor.withValues(alpha: 0.4),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
@@ -378,10 +378,10 @@ class PlayerContainer extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.4),
+        color: Colors.black.withValues(alpha: 0.4),
         borderRadius: BorderRadius.circular(15),
         border: Border.all(
-          color: Colors.white.withOpacity(0.3),
+          color: Colors.white.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -415,8 +415,8 @@ class PlayerContainer extends StatelessWidget {
         shape: BoxShape.circle,
         gradient: LinearGradient(
           colors: [
-            primaryColor.withOpacity(0.8),
-            primaryColor.withOpacity(0.6),
+            primaryColor.withValues(alpha: 0.8),
+            primaryColor.withValues(alpha: 0.6),
           ],
         ),
         border: Border.all(
@@ -425,7 +425,7 @@ class PlayerContainer extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: primaryColor.withOpacity(0.5),
+            color: primaryColor.withValues(alpha: 0.5),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -447,7 +447,7 @@ class PlayerContainer extends StatelessWidget {
 
   Widget _buildDefaultAvatar() {
     return Container(
-      color: primaryColor.withOpacity(0.3),
+      color: primaryColor.withValues(alpha: 0.3),
       child: Icon(
         Icons.person,
         size: 35,
@@ -519,7 +519,7 @@ class ParticlesPainter extends CustomPainter {
       final offsetX = (isLeft ? -50 : 50) * (1 - animationValue);
       final opacity = animationValue * 0.6;
 
-      paint.color = (isLeft ? leftColor : rightColor).withOpacity(opacity);
+      paint.color = (isLeft ? leftColor : rightColor).withValues(alpha: opacity);
 
       canvas.drawCircle(
         Offset(baseX + offsetX, baseY),

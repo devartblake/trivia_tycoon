@@ -239,13 +239,13 @@ class _FloatingSpinCTAState extends ConsumerState<FloatingSpinCTA>
               boxShadow: [
                 BoxShadow(
                   color: (_colorAnimation.value ?? Colors.amber)
-                      .withOpacity(_glowAnimation.value * 0.6),
+                      .withValues(alpha: _glowAnimation.value * 0.6),
                   blurRadius: 20,
                   spreadRadius: 5,
                   offset: const Offset(0, 5),
                 ),
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
+                  color: Colors.black.withValues(alpha: 0.2),
                   blurRadius: 10,
                   offset: const Offset(0, 5),
                 ),
@@ -272,7 +272,7 @@ class _FloatingSpinCTAState extends ConsumerState<FloatingSpinCTA>
                     ),
                     borderRadius: BorderRadius.circular(30),
                     border: Border.all(
-                      color: Colors.white.withOpacity(0.3),
+                      color: Colors.white.withValues(alpha: 0.3),
                       width: 1,
                     ),
                   ),
@@ -305,7 +305,7 @@ class _FloatingSpinCTAState extends ConsumerState<FloatingSpinCTA>
             width: 32,
             height: 32,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -342,7 +342,7 @@ class _FloatingSpinCTAState extends ConsumerState<FloatingSpinCTA>
         Text(
           'Tap to spin now',
           style: TextStyle(
-            color: Colors.white.withOpacity(0.9),
+            color: Colors.white.withValues(alpha: 0.9),
             fontSize: 12,
             fontWeight: FontWeight.w500,
           ),
@@ -359,7 +359,7 @@ class _FloatingSpinCTAState extends ConsumerState<FloatingSpinCTA>
           size: const Size(20, 40),
           painter: SparklesPainter(
             animation: _glowAnimation.value,
-            color: Colors.white.withOpacity(0.8),
+            color: Colors.white.withValues(alpha: 0.8),
           ),
         );
       },
@@ -390,7 +390,7 @@ class SparklesPainter extends CustomPainter {
       final radius = 1 + (2 * math.sin(progress * math.pi));
       final opacity = 1.0 - progress;
 
-      paint.color = color.withOpacity(opacity);
+      paint.color = color.withValues(alpha: opacity);
       canvas.drawCircle(Offset(x, y), radius, paint);
     }
 
@@ -401,7 +401,7 @@ class SparklesPainter extends CustomPainter {
       final y = size.height * 0.5 + (10 * math.cos(progress * math.pi * 2));
       final opacity = math.sin(progress * math.pi);
 
-      _drawStar(canvas, Offset(x, y), 3, color.withOpacity(opacity));
+      _drawStar(canvas, Offset(x, y), 3, color.withValues(alpha: opacity));
     }
   }
 
@@ -546,7 +546,7 @@ class _PremiumFloatingSpinCTAState extends ConsumerState<PremiumFloatingSpinCTA>
                 boxShadow: [
                   BoxShadow(
                     color: (widget.primaryColor ?? Colors.amber)
-                        .withOpacity(0.6 + (0.4 * _premiumAnimation.value)),
+                        .withValues(alpha: 0.6 + (0.4 * _premiumAnimation.value)),
                     blurRadius: 25 + (10 * _premiumAnimation.value),
                     spreadRadius: 5 + (3 * _premiumAnimation.value),
                     offset: const Offset(0, 5),

@@ -33,8 +33,8 @@ class _AnswerControlsState extends State<AnswerControls> {
         boxShadow: [
           BoxShadow(
             color: isDark
-                ? Colors.black.withOpacity(0.3)
-                : Colors.grey.withOpacity(0.1),
+                ? Colors.black.withValues(alpha: 0.3)
+                : Colors.grey.withValues(alpha: 0.1),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -48,7 +48,7 @@ class _AnswerControlsState extends State<AnswerControls> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF8B5CF6).withOpacity(0.1),
+                  color: const Color(0xFF8B5CF6).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(
@@ -93,10 +93,10 @@ class _AnswerControlsState extends State<AnswerControls> {
               width: double.infinity,
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: const Color(0xFF10B981).withOpacity(0.1),
+                color: const Color(0xFF10B981).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: const Color(0xFF10B981).withOpacity(0.3),
+                  color: const Color(0xFF10B981).withValues(alpha: 0.3),
                 ),
               ),
               child: Row(
@@ -152,14 +152,14 @@ class _AnswerControlsState extends State<AnswerControls> {
               boxShadow: isSelected
                   ? [
                 BoxShadow(
-                  color: colors[index % colors.length][0].withOpacity(0.4),
+                  color: colors[index % colors.length][0].withValues(alpha: 0.4),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
               ]
                   : [
                 BoxShadow(
-                  color: colors[index % colors.length][0].withOpacity(0.2),
+                  color: colors[index % colors.length][0].withValues(alpha: 0.2),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -186,7 +186,7 @@ class _AnswerControlsState extends State<AnswerControls> {
                         width: 24,
                         height: 24,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.3),
+                          color: Colors.white.withValues(alpha: 0.3),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Center(

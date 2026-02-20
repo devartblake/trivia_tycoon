@@ -162,7 +162,7 @@ class AppTheme {
       ),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       textSelectionTheme: TextSelectionThemeData(
-        selectionColor: accent1.withOpacity(0.5),
+        selectionColor: accent1.withValues(alpha: 0.5),
         cursorColor: accent1,
         selectionHandleColor: accent1,
       ),

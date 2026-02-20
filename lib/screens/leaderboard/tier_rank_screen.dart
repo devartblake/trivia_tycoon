@@ -114,7 +114,7 @@ class _TierRankScreenState extends ConsumerState<TierRankScreen>
               padding: const EdgeInsets.only(left: 8),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: IconButton(
@@ -133,7 +133,7 @@ class _TierRankScreenState extends ConsumerState<TierRankScreen>
                     end: Alignment.bottomRight,
                     colors: [
                       theme.primaryColor,
-                      theme.primaryColor.withOpacity(0.8),
+                      theme.primaryColor.withValues(alpha: 0.8),
                     ],
                   ),
                 ),
@@ -162,7 +162,7 @@ class _TierRankScreenState extends ConsumerState<TierRankScreen>
                         'Compete with the best',
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.white.withOpacity(0.9),
+                          color: Colors.white.withValues(alpha: 0.9),
                           letterSpacing: 0.3,
                         ),
                       ),
@@ -182,7 +182,7 @@ class _TierRankScreenState extends ConsumerState<TierRankScreen>
                     padding: const EdgeInsets.only(right: 8),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: IconButton(
@@ -231,7 +231,7 @@ class _TierRankScreenState extends ConsumerState<TierRankScreen>
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 2),
                   ),
@@ -241,7 +241,7 @@ class _TierRankScreenState extends ConsumerState<TierRankScreen>
                 children: [
                   Icon(Icons.sort_rounded,
                     size: 20,
-                    color: theme.primaryColor.withOpacity(0.7),
+                    color: theme.primaryColor.withValues(alpha: 0.7),
                   ),
                   const SizedBox(width: 8),
                   Text(
@@ -257,7 +257,7 @@ class _TierRankScreenState extends ConsumerState<TierRankScreen>
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       decoration: BoxDecoration(
-                        color: theme.primaryColor.withOpacity(0.08),
+                        color: theme.primaryColor.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: DropdownButtonHideUnderline(
@@ -300,7 +300,7 @@ class _TierRankScreenState extends ConsumerState<TierRankScreen>
                   color: theme.primaryColor,
                   boxShadow: [
                     BoxShadow(
-                      color: theme.primaryColor.withOpacity(0.3),
+                      color: theme.primaryColor.withValues(alpha: 0.3),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -379,7 +379,7 @@ class _TierRankScreenState extends ConsumerState<TierRankScreen>
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
+                            color: Colors.black.withValues(alpha: 0.08),
                             blurRadius: 15,
                             offset: const Offset(0, 4),
                           ),
@@ -408,7 +408,7 @@ class _TierRankScreenState extends ConsumerState<TierRankScreen>
                                 borderRadius: BorderRadius.circular(16),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.04),
+                                    color: Colors.black.withValues(alpha: 0.04),
                                     blurRadius: 8,
                                     offset: const Offset(0, 2),
                                   ),

@@ -96,7 +96,7 @@ class _SimpleSplashScreenState extends State<SimpleSplashScreen>
                               borderRadius: BorderRadius.circular(10),
                               child: LinearProgressIndicator(
                                 value: _progressAnimation.value,
-                                backgroundColor: Colors.white.withOpacity(0.2),
+                                backgroundColor: Colors.white.withValues(alpha: 0.2),
                                 valueColor: const AlwaysStoppedAnimation<Color>(
                                   Colors.white,
                                 ),
@@ -120,7 +120,7 @@ class _SimpleSplashScreenState extends State<SimpleSplashScreen>
                     Text(
                       'Loading your experience...',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
                       ),
@@ -139,7 +139,7 @@ class _SimpleSplashScreenState extends State<SimpleSplashScreen>
                     Text(
                       'Powered by Theoretical Minds Technology',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.7),
+                        color: Colors.white.withValues(alpha: 0.7),
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                       ),
@@ -152,7 +152,7 @@ class _SimpleSplashScreenState extends State<SimpleSplashScreen>
                           width: 8,
                           height: 8,
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.7),
+                            color: Colors.white.withValues(alpha: 0.7),
                             shape: BoxShape.circle,
                           ),
                         ),
@@ -160,7 +160,7 @@ class _SimpleSplashScreenState extends State<SimpleSplashScreen>
                         Text(
                           'Version 0.1.0',
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.5),
+                            color: Colors.white.withValues(alpha: 0.5),
                             fontSize: 11,
                           ),
                         ),

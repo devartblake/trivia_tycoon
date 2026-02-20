@@ -58,7 +58,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -145,10 +145,10 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: color.withOpacity(0.3),
+          color: color.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -227,7 +227,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
         color: Colors.white,
         border: Border(
           bottom: BorderSide(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             width: 1,
           ),
         ),
@@ -291,7 +291,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: hasValue ? const Color(0xFF6366F1).withOpacity(0.1) : const Color(0xFFF3F4F6),
+          color: hasValue ? const Color(0xFF6366F1).withValues(alpha: 0.1) : const Color(0xFFF3F4F6),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: hasValue ? const Color(0xFF6366F1) : Colors.transparent,
@@ -384,7 +384,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                 gradient: LinearGradient(
                   colors: [
                     user.roleColor,
-                    user.roleColor.withOpacity(0.7),
+                    user.roleColor.withValues(alpha: 0.7),
                   ],
                 ),
                 shape: BoxShape.circle,
@@ -455,7 +455,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFEF4444).withOpacity(0.1),
+                        color: const Color(0xFFEF4444).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Text(
@@ -616,10 +616,10 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: const Color(0xFFEF4444).withOpacity(0.1),
+              color: const Color(0xFFEF4444).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: const Color(0xFFEF4444).withOpacity(0.3),
+                color: const Color(0xFFEF4444).withValues(alpha: 0.3),
                 width: 1,
               ),
             ),
@@ -692,10 +692,10 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: color.withOpacity(0.3),
+          color: color.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -751,10 +751,10 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: color.withOpacity(0.3),
+          color: color.withValues(alpha: 0.3),
           width: 1,
         ),
       ),

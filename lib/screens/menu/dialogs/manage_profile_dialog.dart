@@ -113,8 +113,8 @@ class ProfileManagementTile extends ConsumerWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isActive
-            ? const Color(0xFF6366F1).withOpacity(0.2)
-            : Colors.white.withOpacity(0.1),
+            ? const Color(0xFF6366F1).withValues(alpha: 0.2)
+            : Colors.white.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
         border: isActive
             ? Border.all(color: const Color(0xFF6366F1), width: 2)
@@ -125,7 +125,7 @@ class ProfileManagementTile extends ConsumerWidget {
           CircleAvatar(
             radius: 20,
             backgroundImage: profile.avatar != null ? AssetImage(profile.avatar!) : null,
-            backgroundColor: Colors.white.withOpacity(0.2),
+            backgroundColor: Colors.white.withValues(alpha: 0.2),
             child: profile.avatar == null
                 ? Text(
               profile.name.substring(0, 1).toUpperCase(),
@@ -171,7 +171,7 @@ class ProfileManagementTile extends ConsumerWidget {
                 Text(
                   'Level ${profile.level} • ${profile.rank}',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.7),
+                    color: Colors.white.withValues(alpha: 0.7),
                     fontSize: 12,
                   ),
                 ),
@@ -187,7 +187,7 @@ class ProfileManagementTile extends ConsumerWidget {
               ),
             ),
           PopupMenuButton<String>(
-            icon: Icon(Icons.more_vert, color: Colors.white.withOpacity(0.7)),
+            icon: Icon(Icons.more_vert, color: Colors.white.withValues(alpha: 0.7)),
             onSelected: (value) async {
               switch (value) {
                 case 'edit':

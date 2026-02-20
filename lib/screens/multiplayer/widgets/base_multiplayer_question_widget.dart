@@ -61,15 +61,15 @@ class MultipleChoiceQuestionWidget extends BaseMultiplayerQuestionWidget {
               gradient: isMultiplayer
                   ? LinearGradient(
                 colors: [
-                  primaryColor.withOpacity(0.1),
-                  accentColor.withOpacity(0.1),
+                  primaryColor.withValues(alpha: 0.1),
+                  accentColor.withValues(alpha: 0.1),
                 ],
               )
                   : null,
               color: isMultiplayer ? null : Colors.grey.shade50,
               borderRadius: BorderRadius.circular(20),
               border: isMultiplayer
-                  ? Border.all(color: primaryColor.withOpacity(0.3))
+                  ? Border.all(color: primaryColor.withValues(alpha: 0.3))
                   : null,
             ),
             child: Column(
@@ -170,7 +170,7 @@ class MultipleChoiceQuestionWidget extends BaseMultiplayerQuestionWidget {
       }
     } else if (isSelected) {
       if (isMultiplayer) {
-        cardColor = primaryColor.withOpacity(0.1);
+        cardColor = primaryColor.withValues(alpha: 0.1);
         borderColor = primaryColor;
         textColor = primaryColor;
       } else {
@@ -192,7 +192,7 @@ class MultipleChoiceQuestionWidget extends BaseMultiplayerQuestionWidget {
         boxShadow: [
           if (isSelected || showFeedback)
             BoxShadow(
-              color: borderColor.withOpacity(0.2),
+              color: borderColor.withValues(alpha: 0.2),
               blurRadius: 8,
               offset: const Offset(0, 4),
             ),
@@ -294,15 +294,15 @@ class TrueFalseQuestionWidget extends BaseMultiplayerQuestionWidget {
               gradient: isMultiplayer
                   ? LinearGradient(
                 colors: [
-                  primaryColor.withOpacity(0.1),
-                  accentColor.withOpacity(0.1),
+                  primaryColor.withValues(alpha: 0.1),
+                  accentColor.withValues(alpha: 0.1),
                 ],
               )
                   : null,
               color: isMultiplayer ? null : Colors.grey.shade50,
               borderRadius: BorderRadius.circular(20),
               border: isMultiplayer
-                  ? Border.all(color: primaryColor.withOpacity(0.3))
+                  ? Border.all(color: primaryColor.withValues(alpha: 0.3))
                   : null,
             ),
             child: Column(
@@ -392,7 +392,7 @@ class TrueFalseQuestionWidget extends BaseMultiplayerQuestionWidget {
       }
     } else if (isSelected) {
       if (isMultiplayer) {
-        cardColor = primaryColor.withOpacity(0.1);
+        cardColor = primaryColor.withValues(alpha: 0.1);
         borderColor = primaryColor;
         textColor = primaryColor;
       } else {
@@ -415,7 +415,7 @@ class TrueFalseQuestionWidget extends BaseMultiplayerQuestionWidget {
         boxShadow: [
           if (isSelected || showFeedback)
             BoxShadow(
-              color: borderColor.withOpacity(0.3),
+              color: borderColor.withValues(alpha: 0.3),
               blurRadius: 12,
               offset: const Offset(0, 6),
             ),
@@ -434,7 +434,7 @@ class TrueFalseQuestionWidget extends BaseMultiplayerQuestionWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: borderColor.withOpacity(0.2),
+                  color: borderColor.withValues(alpha: 0.2),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -492,15 +492,15 @@ class FillBlankQuestionWidget extends BaseMultiplayerQuestionWidget {
               gradient: isMultiplayer
                   ? LinearGradient(
                 colors: [
-                  primaryColor.withOpacity(0.1),
-                  accentColor.withOpacity(0.1),
+                  primaryColor.withValues(alpha: 0.1),
+                  accentColor.withValues(alpha: 0.1),
                 ],
               )
                   : null,
               color: isMultiplayer ? null : Colors.grey.shade50,
               borderRadius: BorderRadius.circular(20),
               border: isMultiplayer
-                  ? Border.all(color: primaryColor.withOpacity(0.3))
+                  ? Border.all(color: primaryColor.withValues(alpha: 0.3))
                   : null,
             ),
             child: Column(
@@ -565,7 +565,7 @@ class FillBlankQuestionWidget extends BaseMultiplayerQuestionWidget {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.1),
+                  color: Colors.grey.withValues(alpha: 0.1),
                   blurRadius: 8,
                   offset: const Offset(0, 4),
                 ),

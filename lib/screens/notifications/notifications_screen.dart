@@ -131,7 +131,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
         child: Container(
           margin: const EdgeInsets.only(left: 12.0),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(12),
           ),
           child: IconButton(
@@ -388,7 +388,7 @@ class NotificationCard extends StatelessWidget {
           color: const Color(0xFF2F3136),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: item.unread ? config.color.withOpacity(0.5) : Colors.transparent,
+            color: item.unread ? config.color.withValues(alpha: 0.5) : Colors.transparent,
             width: 1,
           ),
         ),
@@ -407,10 +407,10 @@ class NotificationCard extends StatelessWidget {
                     width: 48,
                     height: 48,
                     decoration: BoxDecoration(
-                      color: config.color.withOpacity(0.15),
+                      color: config.color.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: config.color.withOpacity(0.3),
+                        color: config.color.withValues(alpha: 0.3),
                         width: 1,
                       ),
                     ),
@@ -472,7 +472,7 @@ class NotificationCard extends StatelessWidget {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: config.color.withOpacity(0.15),
+                                color: config.color.withValues(alpha: 0.15),
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Text(

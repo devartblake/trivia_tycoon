@@ -253,7 +253,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF10B981).withOpacity(0.1),
+                  color: const Color(0xFF10B981).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(
@@ -299,7 +299,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF06B6D4).withOpacity(0.1),
+                  color: const Color(0xFF06B6D4).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(
@@ -343,7 +343,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFEF4444).withOpacity(0.1),
+                  color: const Color(0xFFEF4444).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(
@@ -405,7 +405,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF64748B).withOpacity(0.1),
+              color: const Color(0xFF64748B).withValues(alpha: 0.1),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -461,13 +461,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF64748B).withOpacity(0.08),
+                color: const Color(0xFF64748B).withValues(alpha: 0.08),
                 blurRadius: 25,
                 offset: const Offset(0, 8),
               ),
             ],
             border: Border.all(
-              color: const Color(0xFF64748B).withOpacity(0.1),
+              color: const Color(0xFF64748B).withValues(alpha: 0.1),
               width: 1,
             ),
           ),
@@ -505,8 +505,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            const Color(0xFF6366F1).withOpacity(0.1),
-            const Color(0xFF8B5CF6).withOpacity(0.05),
+            const Color(0xFF6366F1).withValues(alpha: 0.1),
+            const Color(0xFF8B5CF6).withValues(alpha: 0.05),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -525,7 +525,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF6366F1).withOpacity(0.3),
+                  color: const Color(0xFF6366F1).withValues(alpha: 0.3),
                   blurRadius: 8,
                   offset: const Offset(0, 4),
                 ),
@@ -570,7 +570,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
           bottom: isLast
               ? BorderSide.none
               : BorderSide(
-            color: const Color(0xFF64748B).withOpacity(0.1),
+            color: const Color(0xFF64748B).withValues(alpha: 0.1),
             width: 1,
           ),
         ),
@@ -580,7 +580,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
         leading: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(10),
           ),
           child: _isCheckingNotifications
@@ -614,14 +614,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               : (_notificationsEnabled ? 'Enabled - tap for settings' : 'Tap to enable'),
           style: TextStyle(
             fontSize: 12,
-            color: const Color(0xFF64748B).withOpacity(0.8),
+            color: const Color(0xFF64748B).withValues(alpha: 0.8),
           ),
         ),
         trailing: Icon(
           _notificationsEnabled
               ? Icons.settings_rounded
               : Icons.arrow_forward_ios_rounded,
-          color: const Color(0xFF64748B).withOpacity(0.5),
+          color: const Color(0xFF64748B).withValues(alpha: 0.5),
           size: 16,
         ),
         onTap: _handleNotificationTap,
@@ -636,7 +636,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
           bottom: isLast
               ? BorderSide.none
               : BorderSide(
-            color: const Color(0xFF64748B).withOpacity(0.1),
+            color: const Color(0xFF64748B).withValues(alpha: 0.1),
             width: 1,
           ),
         ),
@@ -646,7 +646,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
         leading: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: const Color(0xFF10B981).withOpacity(0.1),
+            color: const Color(0xFF10B981).withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Icon(
@@ -687,7 +687,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
           bottom: isLast
               ? BorderSide.none
               : BorderSide(
-            color: const Color(0xFF64748B).withOpacity(0.1),
+            color: const Color(0xFF64748B).withValues(alpha: 0.1),
             width: 1,
           ),
         ),
@@ -697,7 +697,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
         leading: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Icon(
@@ -719,13 +719,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
           item['subtitle'],
           style: TextStyle(
             fontSize: 12,
-            color: const Color(0xFF64748B).withOpacity(0.8),
+            color: const Color(0xFF64748B).withValues(alpha: 0.8),
           ),
         )
             : null,
         trailing: Icon(
           Icons.arrow_forward_ios_rounded,
-          color: const Color(0xFF64748B).withOpacity(0.5),
+          color: const Color(0xFF64748B).withValues(alpha: 0.5),
           size: 16,
         ),
         onTap: () {
@@ -752,7 +752,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFEF4444).withOpacity(0.1),
+                  color: const Color(0xFFEF4444).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(

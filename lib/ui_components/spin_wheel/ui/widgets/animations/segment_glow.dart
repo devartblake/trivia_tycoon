@@ -17,7 +17,7 @@ class SegmentGlow extends StatelessWidget {
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: Colors.yellow.withOpacity(0.6),
+            color: Colors.yellow.withValues(alpha: 0.6),
             blurRadius: 30,
             spreadRadius: 10,
           ),

@@ -97,7 +97,7 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -174,9 +174,9 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -217,13 +217,13 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              const Color(0xFFEC4899).withOpacity(0.1),
-              const Color(0xFF8B5CF6).withOpacity(0.1),
+              const Color(0xFFEC4899).withValues(alpha: 0.1),
+              const Color(0xFF8B5CF6).withValues(alpha: 0.1),
             ],
           ),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: const Color(0xFFEC4899).withOpacity(0.3),
+            color: const Color(0xFFEC4899).withValues(alpha: 0.3),
             width: 1,
           ),
         ),
@@ -374,7 +374,7 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -470,7 +470,7 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -524,7 +524,7 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
                       dotData: FlDotData(show: false),
                       belowBarData: BarAreaData(
                         show: true,
-                        color: const Color(0xFFEC4899).withOpacity(0.1),
+                        color: const Color(0xFFEC4899).withValues(alpha: 0.1),
                       ),
                     ),
                   ],
@@ -555,7 +555,7 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -591,7 +591,7 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
                   leading: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFEC4899).withOpacity(0.1),
+                      color: const Color(0xFFEC4899).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Icon(
@@ -617,7 +617,7 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
                   trailing: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF10B981).withOpacity(0.1),
+                      color: const Color(0xFF10B981).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(

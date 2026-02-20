@@ -91,7 +91,7 @@ class _MessageReactionPickerState extends State<MessageReactionPicker>
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
               border: Border.all(
-                color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+                color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
               ),
             ),
             child: Column(
@@ -137,7 +137,7 @@ class _MessageReactionPickerState extends State<MessageReactionPicker>
         Container(
           width: double.infinity,
           height: 1,
-          color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
         ),
         const SizedBox(height: 8),
         Row(
@@ -155,7 +155,7 @@ class _MessageReactionPickerState extends State<MessageReactionPicker>
         Container(
           width: double.infinity,
           height: 1,
-          color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
         ),
         const SizedBox(height: 8),
         Row(
@@ -206,7 +206,7 @@ class _MessageReactionPickerState extends State<MessageReactionPicker>
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
             style: BorderStyle.solid,
             width: 2,
           ),
@@ -400,7 +400,7 @@ class MessageReactionBar extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: Theme.of(context).colorScheme.outline.withOpacity(0.5),
+            color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.5),
           ),
         ),
         child: Icon(

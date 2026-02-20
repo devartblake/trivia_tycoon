@@ -21,9 +21,9 @@ class FeaturedCategoryChip extends ConsumerWidget {
         width: 100,
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: category.primaryColor.withOpacity(0.1),
+          color: category.primaryColor.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: category.primaryColor.withOpacity(0.3)),
+          border: Border.all(color: category.primaryColor.withValues(alpha: 0.3)),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

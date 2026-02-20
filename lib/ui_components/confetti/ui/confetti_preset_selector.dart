@@ -59,7 +59,7 @@ class _ConfettiPresetSelectorState extends State<ConfettiPresetSelector> {
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(isHovered ? 0.1 : 0.04),
+                            color: Colors.black.withValues(alpha: isHovered ? 0.1 : 0.04),
                             blurRadius: isHovered ? 15 : 8,
                             offset: Offset(0, isHovered ? 6 : 2),
                           ),
@@ -99,7 +99,7 @@ class _ConfettiPresetSelectorState extends State<ConfettiPresetSelector> {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF667EEA).withOpacity(0.1),
+                              color: const Color(0xFF667EEA).withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(

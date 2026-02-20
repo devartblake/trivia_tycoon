@@ -111,8 +111,8 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
         boxShadow: [
           BoxShadow(
             color: isDark
-                ? Colors.black.withOpacity(0.3)
-                : Colors.grey.withOpacity(0.1),
+                ? Colors.black.withValues(alpha: 0.3)
+                : Colors.grey.withValues(alpha: 0.1),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -282,7 +282,7 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF6366F1).withOpacity(0.3),
+                  color: const Color(0xFF6366F1).withValues(alpha: 0.3),
                   blurRadius: 15,
                   offset: const Offset(0, 8),
                 ),
@@ -314,7 +314,7 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
                       Text(
                         'Setting up your multiplayer room',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.9),
+                          color: Colors.white.withValues(alpha: 0.9),
                           fontSize: 14,
                         ),
                       ),
@@ -339,7 +339,7 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF10B981).withOpacity(0.3),
+            color: const Color(0xFF10B981).withValues(alpha: 0.3),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -353,7 +353,7 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(
@@ -377,7 +377,7 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
           Text(
             'Room ID: ${roomState.roomId}',
             style: TextStyle(
-              color: Colors.white.withOpacity(0.9),
+              color: Colors.white.withValues(alpha: 0.9),
               fontSize: 14,
             ),
           ),
@@ -412,7 +412,7 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
             : const Color(0xFFF0F9FF),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: const Color(0xFF0EA5E9).withOpacity(0.2),
+          color: const Color(0xFF0EA5E9).withValues(alpha: 0.2),
         ),
       ),
       child: Column(

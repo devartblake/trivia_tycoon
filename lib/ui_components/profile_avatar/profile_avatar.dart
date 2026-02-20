@@ -203,7 +203,7 @@ class _ProfileAvatarState extends State<ProfileAvatar>
           ),
           boxShadow: [
             BoxShadow(
-              color: colorScheme.shadow.withOpacity(0.1),
+              color: colorScheme.shadow.withValues(alpha: 0.1),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -325,7 +325,7 @@ class _ProfileAvatarState extends State<ProfileAvatar>
           ),
         if (_isHovered)
           BoxShadow(
-            color: colorScheme.primary.withOpacity(0.3),
+            color: colorScheme.primary.withValues(alpha: 0.3),
             blurRadius: 16,
             spreadRadius: 2,
             offset: const Offset(0, 4),
@@ -373,12 +373,12 @@ class _ProfileAvatarState extends State<ProfileAvatar>
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          colorScheme.surface.withOpacity(0.1),
-                          colorScheme.surface.withOpacity(0.05),
+                          colorScheme.surface.withValues(alpha: 0.1),
+                          colorScheme.surface.withValues(alpha: 0.05),
                         ],
                       ),
                       border: Border.all(
-                        color: colorScheme.outline.withOpacity(0.2),
+                        color: colorScheme.outline.withValues(alpha: 0.2),
                         width: 1,
                       ),
                     ),
@@ -422,7 +422,7 @@ class _ProfileAvatarState extends State<ProfileAvatar>
         ),
         boxShadow: [
           BoxShadow(
-            color: widget.statusColor!.withOpacity(0.4),
+            color: widget.statusColor!.withValues(alpha: 0.4),
             blurRadius: 4,
             spreadRadius: 1,
           ),
@@ -459,7 +459,7 @@ class _ProfileAvatarState extends State<ProfileAvatar>
             ),
             boxShadow: [
               BoxShadow(
-                color: colorScheme.shadow.withOpacity(0.2),
+                color: colorScheme.shadow.withValues(alpha: 0.2),
                 blurRadius: 4,
               ),
             ],

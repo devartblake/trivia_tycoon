@@ -36,21 +36,21 @@ class PremiumSpinReadyToast {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          const Color(0xFFFF6B35).withOpacity(0.95),
-          const Color(0xFFF7931E).withOpacity(0.95),
-          const Color(0xFFFFC837).withOpacity(0.95),
+          const Color(0xFFFF6B35).withValues(alpha: 0.95),
+          const Color(0xFFF7931E).withValues(alpha: 0.95),
+          const Color(0xFFFFC837).withValues(alpha: 0.95),
         ],
         stops: const [0.0, 0.5, 1.0],
       ),
       boxShadows: [
         BoxShadow(
-          color: const Color(0xFFFFA500).withOpacity(0.6),
+          color: const Color(0xFFFFA500).withValues(alpha: 0.6),
           blurRadius: 30,
           spreadRadius: 8,
           offset: const Offset(0, 10),
         ),
         BoxShadow(
-          color: Colors.black.withOpacity(0.3),
+          color: Colors.black.withValues(alpha: 0.3),
           blurRadius: 20,
           offset: const Offset(0, 8),
         ),
@@ -99,12 +99,12 @@ class PremiumSpinReadyToast {
               ),
               shape: BoxShape.circle,
               border: Border.all(
-                color: Colors.white.withOpacity(0.5),
+                color: Colors.white.withValues(alpha: 0.5),
                 width: 3,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFFFFD700).withOpacity(0.5),
+                  color: const Color(0xFFFFD700).withValues(alpha: 0.5),
                   blurRadius: 15,
                   spreadRadius: 3,
                 ),
@@ -131,10 +131,10 @@ class PremiumSpinReadyToast {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: Colors.white.withOpacity(0.3),
+                color: Colors.white.withValues(alpha: 0.3),
                 width: 1,
               ),
             ),
@@ -177,7 +177,7 @@ class PremiumSpinReadyToast {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFFFFD700).withOpacity(0.5),
+                color: const Color(0xFFFFD700).withValues(alpha: 0.5),
                 blurRadius: 15,
                 offset: const Offset(0, 6),
               ),
@@ -198,7 +198,7 @@ class PremiumSpinReadyToast {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withValues(alpha: 0.2),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(

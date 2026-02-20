@@ -141,7 +141,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF64748B).withOpacity(0.1),
+              color: const Color(0xFF64748B).withValues(alpha: 0.1),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -175,13 +175,13 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF64748B).withOpacity(0.08),
+              color: const Color(0xFF64748B).withValues(alpha: 0.08),
               blurRadius: 25,
               offset: const Offset(0, 8),
             ),
           ],
           border: Border.all(
-            color: const Color(0xFF64748B).withOpacity(0.1),
+            color: const Color(0xFF64748B).withValues(alpha: 0.1),
             width: 1,
           ),
         ),
@@ -202,8 +202,8 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            const Color(0xFF6366F1).withOpacity(0.1),
-            const Color(0xFF8B5CF6).withOpacity(0.05),
+            const Color(0xFF6366F1).withValues(alpha: 0.1),
+            const Color(0xFF8B5CF6).withValues(alpha: 0.05),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -222,7 +222,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF6366F1).withOpacity(0.3),
+                  color: const Color(0xFF6366F1).withValues(alpha: 0.3),
                   blurRadius: 8,
                   offset: const Offset(0, 4),
                 ),
@@ -256,7 +256,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: const Color(0xFF64748B).withOpacity(0.1),
+            color: const Color(0xFF64748B).withValues(alpha: 0.1),
             width: 1,
           ),
         ),
@@ -266,7 +266,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
         leading: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Icon(icon, color: color, size: 20),
@@ -283,7 +283,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
           subtitle,
           style: TextStyle(
             fontSize: 12,
-            color: const Color(0xFF64748B).withOpacity(0.8),
+            color: const Color(0xFF64748B).withValues(alpha: 0.8),
           ),
         ),
         trailing: Switch.adaptive(
@@ -306,7 +306,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: const Color(0xFF64748B).withOpacity(0.1),
+            color: const Color(0xFF64748B).withValues(alpha: 0.1),
             width: 1,
           ),
         ),
@@ -316,7 +316,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
         leading: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Icon(icon, color: color, size: 20),
@@ -333,12 +333,12 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
           subtitle,
           style: TextStyle(
             fontSize: 12,
-            color: const Color(0xFF64748B).withOpacity(0.8),
+            color: const Color(0xFF64748B).withValues(alpha: 0.8),
           ),
         ),
         trailing: Icon(
           Icons.arrow_forward_ios_rounded,
-          color: const Color(0xFF64748B).withOpacity(0.5),
+          color: const Color(0xFF64748B).withValues(alpha: 0.5),
           size: 16,
         ),
         onTap: onTap,

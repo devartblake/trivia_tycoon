@@ -29,18 +29,18 @@ class ActionButtons extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF6366F1).withOpacity(0.1),
+            color: const Color(0xFF6366F1).withValues(alpha: 0.1),
             blurRadius: 30,
             offset: const Offset(0, 10),
           ),
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
         ],
         border: Border.all(
-          color: const Color(0xFF6366F1).withOpacity(0.12),
+          color: const Color(0xFF6366F1).withValues(alpha: 0.12),
           width: 1.5,
         ),
       ),
@@ -324,7 +324,7 @@ class _ActionCardState extends State<_ActionCard>
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: gradient.colors.first.withOpacity(0.4),
+              color: gradient.colors.first.withValues(alpha: 0.4),
               blurRadius: 15,
               offset: const Offset(0, 6),
             ),
@@ -375,7 +375,7 @@ class _ActionCardState extends State<_ActionCard>
           border: Border.all(color: Colors.white, width: 2),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFFEF4444).withOpacity(0.5),
+              color: const Color(0xFFEF4444).withValues(alpha: 0.5),
               blurRadius: 8,
               offset: const Offset(0, 3),
             ),
@@ -490,7 +490,7 @@ class _ActionItemState extends State<_ActionItem>
                     borderRadius: BorderRadius.circular(18),
                     boxShadow: [
                       BoxShadow(
-                        color: gradient.colors.first.withOpacity(0.4),
+                        color: gradient.colors.first.withValues(alpha: 0.4),
                         blurRadius: 12,
                         offset: const Offset(0, 5),
                       ),
@@ -512,7 +512,7 @@ class _ActionItemState extends State<_ActionItem>
                         border: Border.all(color: Colors.white, width: 2),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFFEF4444).withOpacity(0.5),
+                            color: const Color(0xFFEF4444).withValues(alpha: 0.5),
                             blurRadius: 6,
                             offset: const Offset(0, 2),
                           ),

@@ -43,18 +43,24 @@ class AppInit {
     }
 
     // Open critical boxes required for theme/auth immediately
+    final authTokenBox = await Hive.openBox('auth_tokens'); // ← NEW: Dedicated box for auth tokens
     final settingsBox = await Hive.openBox('settings');
     final secretsBox = await Hive.openBox('secrets');
 
     // 2. Network & Backend
-    // Create deviceId early so auth flow always has it.
-    final deviceIdService = DeviceIdService(settingsBox as SecureStorage);
+    // Create SecureStorage instance (don't cast the box!)
+    final secureStorage = SecureStorage(); // ← FIXED: Create proper instance
+
+    // Create DeviceIdService with SecureStorage
+    final deviceIdService = DeviceIdService(secureStorage); // ← FIXED: Pass SecureStorage, not Box
     final deviceId = await deviceIdService.getOrCreate();
     debugPrint('✅ DeviceId ready: $deviceId');
-    final tokenStore = AuthTokenStore(settingsBox);
+
+    // Create AuthTokenStore with dedicated auth tokens box
+    final tokenStore = AuthTokenStore(authTokenBox); // ← FIXED: Use dedicated box
 
     final httpClient = http.Client();
-    final authApi = AuthApiClient(httpClient, apiBaseUrl: EnvConfig.apiBaseUrl);
+    final authApi = AuthApiClient(httpClient, apiBaseUrl: EnvConfig.apiBaseUrl, deviceId: deviceIdService);
 
     final authService = AuthService(
       deviceId: deviceIdService,

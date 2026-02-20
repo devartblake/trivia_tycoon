@@ -23,13 +23,13 @@ class StoreCategoryTab extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF6366F1).withOpacity(0.08),
+            color: const Color(0xFF6366F1).withValues(alpha: 0.08),
             blurRadius: 20,
             offset: const Offset(0, 4),
           ),
         ],
         border: Border.all(
-          color: const Color(0xFF6366F1).withOpacity(0.1),
+          color: const Color(0xFF6366F1).withValues(alpha: 0.1),
           width: 1,
         ),
       ),
@@ -43,7 +43,7 @@ class StoreCategoryTab extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF6366F1).withOpacity(0.1),
+                  color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(
@@ -65,7 +65,7 @@ class StoreCategoryTab extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF6366F1).withOpacity(0.1),
+                  color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -118,13 +118,13 @@ class StoreCategoryTab extends StatelessWidget {
           border: Border.all(
             color: isSelected
                 ? const Color(0xFF6366F1)
-                : const Color(0xFF64748B).withOpacity(0.2),
+                : const Color(0xFF64748B).withValues(alpha: 0.2),
             width: isSelected ? 2 : 1,
           ),
           boxShadow: isSelected
               ? [
             BoxShadow(
-              color: const Color(0xFF6366F1).withOpacity(0.25),
+              color: const Color(0xFF6366F1).withValues(alpha: 0.25),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),

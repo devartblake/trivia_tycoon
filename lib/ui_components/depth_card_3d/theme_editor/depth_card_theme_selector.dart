@@ -64,14 +64,14 @@ class _DepthCardThemeSelectorState extends State<DepthCardThemeSelector>
       return Container(
         height: 100,
         decoration: BoxDecoration(
-          color: colorScheme.surfaceContainer.withOpacity(0.5),
+          color: colorScheme.surfaceContainer.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Center(
           child: Text(
             'No themes available',
             style: TextStyle(
-              color: colorScheme.onSurface.withOpacity(0.6),
+              color: colorScheme.onSurface.withValues(alpha: 0.6),
             ),
           ),
         ),
@@ -147,18 +147,18 @@ class _DepthCardThemeSelectorState extends State<DepthCardThemeSelector>
             boxShadow: [
               if (isSelected || isHovered) ...[
                 BoxShadow(
-                  color: _getThemeAccentColor(theme).withOpacity(0.4),
+                  color: _getThemeAccentColor(theme).withValues(alpha: 0.4),
                   blurRadius: isSelected ? 20 : 12,
                   offset: const Offset(0, 8),
                 ),
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 8,
                   offset: const Offset(0, 4),
                 ),
               ] else ...[
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 6,
                   offset: const Offset(0, 2),
                 ),
@@ -179,15 +179,15 @@ class _DepthCardThemeSelectorState extends State<DepthCardThemeSelector>
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        _getThemeAccentColor(theme).withOpacity(0.9),
-                        _getThemeAccentColor(theme).withOpacity(0.7),
+                        _getThemeAccentColor(theme).withValues(alpha: 0.9),
+                        _getThemeAccentColor(theme).withValues(alpha: 0.7),
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha: 0.2),
                       width: 1,
                     ),
                   ),
@@ -224,7 +224,7 @@ class _DepthCardThemeSelectorState extends State<DepthCardThemeSelector>
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
+                          color: Colors.black.withValues(alpha: 0.3),
                           blurRadius: 4,
                           offset: const Offset(0, 2),
                         ),
@@ -253,8 +253,8 @@ class _DepthCardThemeSelectorState extends State<DepthCardThemeSelector>
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: [
-        accentColor.withOpacity(baseOpacity),
-        accentColor.withOpacity(baseOpacity * 0.7),
+        accentColor.withValues(alpha: baseOpacity),
+        accentColor.withValues(alpha: baseOpacity * 0.7),
       ],
     );
   }
@@ -412,10 +412,10 @@ class DepthCardThemeSelectorEnhanced extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: colorScheme.surfaceContainer.withOpacity(0.5),
+        color: colorScheme.surfaceContainer.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: colorScheme.outline.withOpacity(0.2),
+          color: colorScheme.outline.withValues(alpha: 0.2),
           width: 1,
         ),
       ),
@@ -449,8 +449,8 @@ class DepthCardThemeSelectorEnhanced extends StatelessWidget {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      selectedTheme.overlayColor.withOpacity(0.8),
-                      selectedTheme.shadowColor.withOpacity(0.6),
+                      selectedTheme.overlayColor.withValues(alpha: 0.8),
+                      selectedTheme.shadowColor.withValues(alpha: 0.6),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -458,7 +458,7 @@ class DepthCardThemeSelectorEnhanced extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   boxShadow: [
                     BoxShadow(
-                      color: selectedTheme.shadowColor.withOpacity(0.3),
+                      color: selectedTheme.shadowColor.withValues(alpha: 0.3),
                       blurRadius: 6,
                       offset: const Offset(0, 3),
                     ),
@@ -506,7 +506,7 @@ class DepthCardThemeSelectorEnhanced extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: 12,
-            color: colorScheme.onSurface.withOpacity(0.7),
+            color: colorScheme.onSurface.withValues(alpha: 0.7),
           ),
         ),
         Text(

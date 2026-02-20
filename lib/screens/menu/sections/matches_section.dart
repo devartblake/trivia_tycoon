@@ -48,18 +48,18 @@ class _MatchesSectionState extends State<MatchesSection>
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF6366F1).withOpacity(0.1),
+            color: const Color(0xFF6366F1).withValues(alpha: 0.1),
             blurRadius: 30,
             offset: const Offset(0, 10),
           ),
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
         ],
         border: Border.all(
-          color: const Color(0xFF6366F1).withOpacity(0.12),
+          color: const Color(0xFF6366F1).withValues(alpha: 0.12),
           width: 1.5,
         ),
       ),
@@ -109,7 +109,7 @@ class _MatchesSectionState extends State<MatchesSection>
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: const Color(0xFF64748B).withOpacity(0.12),
+            color: const Color(0xFF64748B).withValues(alpha: 0.12),
             width: 1.5,
           ),
         ),
@@ -169,7 +169,7 @@ class _MatchesSectionState extends State<MatchesSection>
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFFEF4444).withOpacity(0.4),
+                        color: const Color(0xFFEF4444).withValues(alpha: 0.4),
                         blurRadius: 6,
                         offset: const Offset(0, 2),
                       ),
@@ -210,7 +210,7 @@ class _MatchesSectionState extends State<MatchesSection>
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF6366F1).withOpacity(0.4),
+            color: const Color(0xFF6366F1).withValues(alpha: 0.4),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -267,7 +267,7 @@ class _MatchesSectionState extends State<MatchesSection>
                 setState(() => _selectedFilter = filter);
               },
               backgroundColor: Colors.white,
-              selectedColor: const Color(0xFF6366F1).withOpacity(0.1),
+              selectedColor: const Color(0xFF6366F1).withValues(alpha: 0.1),
               labelStyle: TextStyle(
                 fontSize: 14,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
@@ -308,7 +308,7 @@ class _MatchesSectionState extends State<MatchesSection>
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF6366F1).withOpacity(0.4),
+            color: const Color(0xFF6366F1).withValues(alpha: 0.4),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -331,11 +331,11 @@ class _MatchesSectionState extends State<MatchesSection>
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.25),
+                    color: Colors.white.withValues(alpha: 0.25),
                     borderRadius: BorderRadius.circular(24),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),
@@ -476,7 +476,7 @@ class _MatchCardState extends State<_MatchCard>
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 15,
             offset: const Offset(0, 6),
           ),
@@ -522,14 +522,14 @@ class _MatchCardState extends State<_MatchCard>
         height: 76,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [color, color.withOpacity(0.7)],
+            colors: [color, color.withValues(alpha: 0.7)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: color.withOpacity(0.4),
+              color: color.withValues(alpha: 0.4),
               blurRadius: 15,
               offset: const Offset(0, 6),
             ),
@@ -604,8 +604,8 @@ class _MatchCardState extends State<_MatchCard>
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            const Color(0xFF6366F1).withOpacity(0.1),
-            const Color(0xFF8B5CF6).withOpacity(0.1),
+            const Color(0xFF6366F1).withValues(alpha: 0.1),
+            const Color(0xFF8B5CF6).withValues(alpha: 0.1),
           ],
         ),
         borderRadius: const BorderRadius.only(

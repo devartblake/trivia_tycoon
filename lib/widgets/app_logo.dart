@@ -39,7 +39,7 @@ class AppLogo extends StatelessWidget {
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
@@ -90,7 +90,7 @@ class AppLogo extends StatelessWidget {
             'Challenge Your Mind',
             style: TextStyle(
               fontSize: size * 0.12,
-              color: defaultTextColor.withOpacity(0.7),
+              color: defaultTextColor.withValues(alpha: 0.7),
               fontWeight: FontWeight.w500,
               letterSpacing: 1.2,
             ),

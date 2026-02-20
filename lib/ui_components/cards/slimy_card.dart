@@ -78,7 +78,7 @@ class _SlimyCardState extends State<SlimyCard> with SingleTickerProviderStateMix
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.15),
+              color: Colors.black.withValues(alpha: 0.15),
               blurRadius: 16,
               offset: const Offset(0, 8),
             ),
@@ -110,7 +110,7 @@ class _SlimyCardState extends State<SlimyCard> with SingleTickerProviderStateMix
                           borderRadius: BorderRadius.circular(12),
                           boxShadow: [
                             BoxShadow(
-                              color: widget.badgeColor.withOpacity(0.4),
+                              color: widget.badgeColor.withValues(alpha: 0.4),
                               blurRadius: 8,
                               offset: const Offset(0, 2),
                             ),
@@ -136,7 +136,7 @@ class _SlimyCardState extends State<SlimyCard> with SingleTickerProviderStateMix
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.2),
+                    color: Colors.black.withValues(alpha: 0.2),
                   ),
                   padding: const EdgeInsets.all(16.0),
                   child: widget.bottomChild,
@@ -158,7 +158,7 @@ class _SlimyCardState extends State<SlimyCard> with SingleTickerProviderStateMix
                         borderRadius: BorderRadius.circular(24),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
+                            color: Colors.black.withValues(alpha: 0.1),
                             blurRadius: 8,
                             offset: const Offset(0, 2),
                           ),
@@ -198,12 +198,12 @@ class _SlimyCardState extends State<SlimyCard> with SingleTickerProviderStateMix
                 sigmaX: widget.blurAmount,
                 sigmaY: widget.blurAmount,
               ),
-              child: Container(color: Colors.black.withOpacity(0.05)),
+              child: Container(color: Colors.black.withValues(alpha: 0.05)),
             ),
           Container(
             margin: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.75),
+              color: Colors.white.withValues(alpha: 0.75),
               borderRadius: BorderRadius.circular(20),
               boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 6)],
             ),

@@ -443,7 +443,7 @@ extension QuizCategoryExtension on QuizCategory {
   List<Color> get gradientColors {
     return [
       primaryColor,
-      primaryColor.withOpacity(0.7),
+      primaryColor.withValues(alpha: 0.7),
     ];
   }
 }

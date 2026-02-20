@@ -27,11 +27,10 @@ class AuthService {
     required String email,
     required String password,
   }) async {
-    final deviceId = await _deviceId.getOrCreate();
+    // AuthApiClient gets device ID internally, don't pass it
     final session = await _api.login(
-        email: email,
-        password: password,
-        deviceId: deviceId
+      email: email,
+      password: password,
     );
     await _store.save(session);
     return session;
@@ -45,11 +44,10 @@ class AuthService {
     String? username,
     String? country,
   }) async {
-    final deviceId = await _deviceId.getOrCreate();
+    // AuthApiClient gets device ID internally, don't pass it
     final session = await _api.signup(
       email: email,
       password: password,
-      deviceId: deviceId,
       username: username,
       country: country,
     );
@@ -67,8 +65,8 @@ class AuthService {
     }
 
     final session = await _api.refresh(
-        refreshToken: existing.refreshToken,
-        deviceId: deviceId
+      refreshToken: existing.refreshToken,
+      deviceId: deviceId,
     );
     await _store.save(session);
     return session;

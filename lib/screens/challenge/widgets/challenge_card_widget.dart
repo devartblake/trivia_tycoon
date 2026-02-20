@@ -59,13 +59,13 @@ class ChallengeCard extends StatelessWidget {
         gradient: LinearGradient(
           colors: [
             theme.colorScheme.primary,
-            theme.colorScheme.primary.withOpacity(0.8),
+            theme.colorScheme.primary.withValues(alpha: 0.8),
           ],
         ),
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: theme.colorScheme.primary.withOpacity(0.3),
+            color: theme.colorScheme.primary.withValues(alpha: 0.3),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -152,8 +152,8 @@ class ChallengeCard extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            const Color(0xFFFFF4E6).withOpacity(0.9),
-            const Color(0xFFFFE8CC).withOpacity(0.9),
+            const Color(0xFFFFF4E6).withValues(alpha: 0.9),
+            const Color(0xFFFFE8CC).withValues(alpha: 0.9),
           ],
         ),
         borderRadius: BorderRadius.circular(12),
@@ -271,7 +271,7 @@ class ChallengeCard extends StatelessWidget {
         ),
         padding: const EdgeInsets.symmetric(vertical: 14),
         elevation: 2,
-        shadowColor: theme.colorScheme.primary.withOpacity(0.3),
+        shadowColor: theme.colorScheme.primary.withValues(alpha: 0.3),
       ),
       icon: const Icon(Icons.play_arrow_rounded, size: 22),
       label: const Text(

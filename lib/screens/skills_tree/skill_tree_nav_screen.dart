@@ -165,10 +165,10 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [bg, bg.withOpacity(0.7)],
+          colors: [bg, bg.withValues(alpha: 0.7)],
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1),
       ),
       child: Material(
         color: Colors.transparent,
@@ -195,9 +195,9 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
                           orientation: HexOrientation.pointy,
                           icon: Icon(group.icon, color: Colors.white),
                           gradient: LinearGradient(
-                            colors: [Colors.white.withOpacity(0.22), Colors.white.withOpacity(0.10)],
+                            colors: [Colors.white.withValues(alpha: 0.22), Colors.white.withValues(alpha: 0.10)],
                           ),
-                          borderColor: Colors.white.withOpacity(0.6),
+                          borderColor: Colors.white.withValues(alpha: 0.6),
                           badgeCount: group.availableSkills,
                         ),
                         const Spacer(),
@@ -208,7 +208,7 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
                             width: 24,
                             height: 24,
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.2),
+                              color: Colors.white.withValues(alpha: 0.2),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: const Icon(Icons.alt_route, color: Colors.white, size: 14),
@@ -234,7 +234,7 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
                           ),
                           Text(
                             '${group.branchCount} branches',
-                            style: TextStyle(color: Colors.white.withOpacity(0.85), fontSize: 9),
+                            style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 9),
                           ),
                         ],
                       ),
@@ -250,7 +250,7 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
                             MiniHexBranchPreview.fromGraph(
                               graph: skillTreeState.graph,
                               branchId: group.id,
-                              baseColor: bg.withOpacity(0.2),
+                              baseColor: bg.withValues(alpha: 0.2),
                               textColor: Colors.white,
                               highlightPath: true,
                             ),
@@ -300,7 +300,7 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.1),
+                          color: Colors.white.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
@@ -328,7 +328,7 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
       width: double.infinity,
       height: 6,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2),
+        color: Colors.white.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(3),
       ),
       child: FractionallySizedBox(

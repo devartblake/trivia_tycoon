@@ -71,7 +71,7 @@ class HexSpiderBackgroundPainter extends CustomPainter {
 
     // 1) Hex guide grid (a few rings around center)
     final paintHex = Paint()
-      ..color = gridColor.withOpacity(gridAlpha)
+      ..color = gridColor.withValues(alpha: gridAlpha)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0;
 
@@ -94,7 +94,7 @@ class HexSpiderBackgroundPainter extends CustomPainter {
     final rayColors = _safeColors(
       // palette.rayGradient is expected to exist; fallback to two-color rayColor gradient
       _tryGetColors(palette, 'rayGradient'),
-      fallback: [rayColor.withOpacity(rayAlpha), rayColor.withOpacity(0)],
+      fallback: [rayColor.withValues(alpha: rayAlpha), rayColor.withValues(alpha: 0)],
     );
     final rayStops  = _evenStops(rayColors.length);
 
@@ -102,9 +102,9 @@ class HexSpiderBackgroundPainter extends CustomPainter {
       // Prefer ringGradient if present; else reuse rayGradient; else fallback to ringColor fade
       _tryGetColors(palette, 'ringGradient') ?? _tryGetColors(palette, 'rayGradient'),
       fallback: [
-        ringColor.withOpacity(ringAlpha),
-        ringColor.withOpacity(ringAlpha * 0.6),
-        ringColor.withOpacity(0),
+        ringColor.withValues(alpha: ringAlpha),
+        ringColor.withValues(alpha: ringAlpha * 0.6),
+        ringColor.withValues(alpha: 0),
       ],
     );
     final ringStops  = _evenStops(ringColors.length);

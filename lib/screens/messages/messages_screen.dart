@@ -66,7 +66,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
         child: Container(
           margin: const EdgeInsets.only(left: 12.0),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(12),
           ),
           child: IconButton(
@@ -544,7 +544,7 @@ class OnlineGroupWidget extends StatelessWidget {
         color: const Color(0xFF40444B),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: const Color(0xFF3BA55C).withOpacity(0.3),
+          color: const Color(0xFF3BA55C).withValues(alpha: 0.3),
           width: 1,
         ),
       ),

@@ -118,7 +118,7 @@ class _PowerUpHUDOverlayState extends ConsumerState<PowerUpHUDOverlay> with Tick
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.85),
+              color: Colors.black.withValues(alpha: 0.85),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
@@ -133,7 +133,7 @@ class _PowerUpHUDOverlayState extends ConsumerState<PowerUpHUDOverlay> with Tick
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: glowColor.withOpacity(0.8),
+                              color: glowColor.withValues(alpha: 0.8),
                               blurRadius: glow,
                               spreadRadius: glow / 2,
                             )

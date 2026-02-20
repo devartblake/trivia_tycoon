@@ -89,7 +89,7 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Icon(
@@ -114,7 +114,7 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: const Text(
@@ -204,7 +204,7 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
             decoration: BoxDecoration(
               color: const Color(0xFFF8FAFF),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFF6366F1).withOpacity(0.2)),
+              border: Border.all(color: const Color(0xFF6366F1).withValues(alpha: 0.2)),
             ),
             child: Column(
               children: [
@@ -243,14 +243,14 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isBestValue ? const Color(0xFF10B981) : accentColor.withOpacity(0.3),
+          color: isBestValue ? const Color(0xFF10B981) : accentColor.withValues(alpha: 0.3),
           width: isBestValue ? 3 : 1,
         ),
         boxShadow: [
           BoxShadow(
             color: isBestValue
-                ? const Color(0xFF10B981).withOpacity(0.2)
-                : accentColor.withOpacity(0.1),
+                ? const Color(0xFF10B981).withValues(alpha: 0.2)
+                : accentColor.withValues(alpha: 0.1),
             blurRadius: isBestValue ? 15 : 10,
             offset: const Offset(0, 6),
           ),
@@ -288,7 +288,7 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
                     width: 50,
                     height: 50,
                     decoration: BoxDecoration(
-                      color: accentColor.withOpacity(0.1),
+                      color: accentColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: ClipRRect(
@@ -354,7 +354,7 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: const Text(
@@ -424,7 +424,7 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: const Color(0xFF10B981).withOpacity(0.1),
+                color: const Color(0xFF10B981).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Row(

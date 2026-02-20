@@ -143,12 +143,12 @@ class _ColorSaveButtonState extends State<ColorSaveButton>
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.teal.withOpacity(0.4),
+                  color: Colors.teal.withValues(alpha: 0.4),
                   blurRadius: 12,
                   offset: const Offset(0, 6),
                 ),
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -193,7 +193,7 @@ class _ColorSaveButtonState extends State<ColorSaveButton>
                             border: Border.all(color: Colors.white, width: 2),
                             boxShadow: [
                               BoxShadow(
-                                color: widget.selectedColor.withOpacity(0.4),
+                                color: widget.selectedColor.withValues(alpha: 0.4),
                                 blurRadius: 4,
                                 offset: const Offset(0, 2),
                               ),

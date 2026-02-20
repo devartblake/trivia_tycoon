@@ -66,12 +66,12 @@ class _ThemeSelectorDropdownState extends ConsumerState<ThemeSelectorDropdown>
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: currentTheme.primaryColor.withOpacity(0.2),
+          color: currentTheme.primaryColor.withValues(alpha: 0.2),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: currentTheme.primaryColor.withOpacity(0.08),
+            color: currentTheme.primaryColor.withValues(alpha: 0.08),
             blurRadius: 15,
             offset: const Offset(0, 4),
           ),
@@ -93,7 +93,7 @@ class _ThemeSelectorDropdownState extends ConsumerState<ThemeSelectorDropdown>
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [currentTheme.primaryColor, currentTheme.primaryColor.withOpacity(0.7)],
+                  colors: [currentTheme.primaryColor, currentTheme.primaryColor.withValues(alpha: 0.7)],
                 ),
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -134,7 +134,7 @@ class _ThemeSelectorDropdownState extends ConsumerState<ThemeSelectorDropdown>
                         borderRadius: BorderRadius.circular(6),
                         boxShadow: [
                           BoxShadow(
-                            color: preset.primaryColor.withOpacity(0.3),
+                            color: preset.primaryColor.withValues(alpha: 0.3),
                             blurRadius: 4,
                             offset: const Offset(0, 2),
                           ),
@@ -158,7 +158,7 @@ class _ThemeSelectorDropdownState extends ConsumerState<ThemeSelectorDropdown>
                             _getThemeDescription(preset.themeName),
                             style: TextStyle(
                               fontSize: 12,
-                              color: const Color(0xFF64748B).withOpacity(0.8),
+                              color: const Color(0xFF64748B).withValues(alpha: 0.8),
                             ),
                           ),
                         ],

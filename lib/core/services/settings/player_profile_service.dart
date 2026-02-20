@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 class PlayerProfileService {
   static const _boxName = 'settings';
   static const _playerNameKey = 'playerName';
+  static const _userIdKey = 'userId'; // ← NEW: For backend user ID
   static const _userRoleKey = 'userRole';
   static const _userRolesKey = 'userRoles';
   static const _isPremiumKey = 'isPremiumUser';
@@ -21,6 +22,20 @@ class PlayerProfileService {
       return Hive.box(_boxName);
     }
     return await Hive.openBox(_boxName);
+  }
+
+  // ------------------------- NEW METHOD ----------------------
+
+  /// Saves the backend user ID (from auth response)
+  Future<void> saveUserId(String userId) async {
+    final box = await _getBox();
+    await box.put(_userIdKey, userId);
+  }
+
+  /// Retrieves the backend user ID
+  Future<String?> getUserId() async {
+    final box = await _getBox();
+    return box.get(_userIdKey);
   }
 
   // ------------------------- EXISTING METHODS ----------------
@@ -129,6 +144,7 @@ class PlayerProfileService {
   Future<void> clearProfile() async {
     final box = await _getBox();
     await box.delete(_playerNameKey);
+    await box.delete(_userIdKey); // ← UPDATED: Also clear user ID
     await box.delete(_userRoleKey);
     await box.delete(_isPremiumKey);
     await box.delete(_countryKey);
@@ -145,6 +161,7 @@ class PlayerProfileService {
     try {
       final sessionData = {
         'timestamp': DateTime.now().toIso8601String(),
+        'user_id': await getUserId(), // ← UPDATED: Include user ID
         'player_name': await getPlayerName(),
         'user_role': await getUserRole(),
         'is_premium': await isPremiumUser(),
@@ -193,6 +210,7 @@ class PlayerProfileService {
   Future<Map<String, dynamic>> loadCompleteProfile() async {
     try {
       return {
+        'user_id': await getUserId(), // ← UPDATED: Include user ID
         'player_name': await getPlayerName(),
         'user_role': await getUserRole(),
         'user_roles': await getUserRoles(),
@@ -214,6 +232,9 @@ class PlayerProfileService {
     try {
       final box = await _getBox();
 
+      if (profileData.containsKey('user_id')) { // ← UPDATED: Handle user ID
+        await box.put(_userIdKey, profileData['user_id']);
+      }
       if (profileData.containsKey('player_name')) {
         await box.put(_playerNameKey, profileData['player_name']);
       }
@@ -255,7 +276,7 @@ class PlayerProfileService {
         'has_session_data': sessionData != null,
         'last_active': lastActive,
         'total_profile_keys': box.keys.where((key) => [
-          _playerNameKey, _userRoleKey, _userRolesKey, _isPremiumKey,
+          _playerNameKey, _userIdKey, _userRoleKey, _userRolesKey, _isPremiumKey,
           _countryKey, _ageGroupKey, _avatarKey
         ].contains(key)).length,
       };
@@ -268,6 +289,7 @@ class PlayerProfileService {
   Future<Map<String, bool>> validateProfile() async {
     try {
       return {
+        'has_user_id': (await getUserId()) != null, // ← UPDATED: Validate user ID
         'has_name': (await getPlayerName()) != 'Player',
         'has_role': (await getUserRole()) != null,
         'has_avatar': (await getAvatar()) != null,
@@ -296,6 +318,7 @@ class PlayerProfileService {
           'country': null,
           'ageGroup': 'teens',
           'avatar': null,
+          'userId': null, // ← UPDATED: Include in profile
         };
       }
 
@@ -311,6 +334,7 @@ class PlayerProfileService {
         'country': box.get(_countryKey),
         'ageGroup': box.get(_ageGroupKey, defaultValue: 'teens'),
         'avatar': box.get(_avatarKey),
+        'userId': box.get(_userIdKey), // ← UPDATED: Include in profile
       };
     } catch (e) {
       debugPrint('[PlayerProfile] Error getting profile: $e');
@@ -325,6 +349,7 @@ class PlayerProfileService {
         'country': null,
         'ageGroup': 'teens',
         'avatar': null,
+        'userId': null,
       };
     }
   }

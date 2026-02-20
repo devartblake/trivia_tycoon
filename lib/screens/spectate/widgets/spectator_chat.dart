@@ -50,9 +50,9 @@ class _SpectatorChatState extends State<SpectatorChat> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey.shade900.withOpacity(0.95),
+        color: Colors.grey.shade900.withValues(alpha: 0.95),
         border: Border(
-          left: BorderSide(color: Colors.white.withOpacity(0.1)),
+          left: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
         ),
       ),
       child: Column(
@@ -75,7 +75,7 @@ class _SpectatorChatState extends State<SpectatorChat> {
       ),
       decoration: BoxDecoration(
         border: Border(
-          bottom: BorderSide(color: Colors.white.withOpacity(0.1)),
+          bottom: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
         ),
       ),
       child: Column(
@@ -99,7 +99,7 @@ class _SpectatorChatState extends State<SpectatorChat> {
           Text(
             '${widget.spectatorCount} watching',
             style: TextStyle(
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white.withValues(alpha: 0.7),
               fontSize: 12,
             ),
           ),
@@ -129,13 +129,13 @@ class _SpectatorChatState extends State<SpectatorChat> {
           margin: const EdgeInsets.symmetric(vertical: 8),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.1),
+            color: Colors.white.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(
             message['message'],
             style: TextStyle(
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white.withValues(alpha: 0.7),
               fontSize: 12,
             ),
           ),
@@ -151,7 +151,7 @@ class _SpectatorChatState extends State<SpectatorChat> {
           Text(
             message['user'],
             style: TextStyle(
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white.withValues(alpha: 0.7),
               fontSize: 12,
               fontWeight: FontWeight.bold,
             ),
@@ -160,7 +160,7 @@ class _SpectatorChatState extends State<SpectatorChat> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.1),
+              color: Colors.white.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
@@ -186,7 +186,7 @@ class _SpectatorChatState extends State<SpectatorChat> {
       ),
       decoration: BoxDecoration(
         border: Border(
-          top: BorderSide(color: Colors.white.withOpacity(0.1)),
+          top: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
         ),
       ),
       child: Row(
@@ -197,13 +197,13 @@ class _SpectatorChatState extends State<SpectatorChat> {
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 hintText: 'Say something...',
-                hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+                hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
                   borderSide: BorderSide.none,
                 ),
                 filled: true,
-                fillColor: Colors.white.withOpacity(0.1),
+                fillColor: Colors.white.withValues(alpha: 0.1),
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 12,

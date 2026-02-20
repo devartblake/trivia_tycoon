@@ -154,7 +154,7 @@ class WheelPainter extends CustomPainter {
     final paint = Paint()..style = PaintingStyle.fill;
 
     for (int i = 0; i < categories.length; i++) {
-      paint.color = sliceColors[i % sliceColors.length].withOpacity(0.9);
+      paint.color = sliceColors[i % sliceColors.length].withValues(alpha: 0.9);
       canvas.drawArc(
         Rect.fromCircle(center: center, radius: radius),
         i * angle,

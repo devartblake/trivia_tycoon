@@ -112,7 +112,7 @@ class _SkillNodePainter {
 
   void paint(Canvas canvas, Size size) {
     final bgColor = categoryColor;
-    final glowColor = (isSelected || isUnlocked) ? bgColor.withOpacity(0.5) : Colors.transparent;
+    final glowColor = (isSelected || isUnlocked) ? bgColor.withValues(alpha: 0.5) : Colors.transparent;
     final borderColor = isSelected ? Colors.white : Colors.black;
 
     final center = Offset(size.width / 2, size.height / 2);

@@ -35,7 +35,7 @@ class StandardAppBar extends ConsumerWidget implements PreferredSizeWidget {
           gradient: theme['gradient'] as LinearGradient,
           boxShadow: [
             BoxShadow(
-              color: (theme['shadowColor'] as Color).withOpacity(0.2),
+              color: (theme['shadowColor'] as Color).withValues(alpha: 0.2),
               blurRadius: 20,
               offset: const Offset(0, 8),
             ),
@@ -46,10 +46,10 @@ class StandardAppBar extends ConsumerWidget implements PreferredSizeWidget {
         builder: (context) => Container(
           margin: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: Colors.white.withOpacity(0.3),
+              color: Colors.white.withValues(alpha: 0.3),
               width: 1,
             ),
           ),
@@ -78,10 +78,10 @@ class StandardAppBar extends ConsumerWidget implements PreferredSizeWidget {
           Container(
             margin: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: Colors.white.withOpacity(0.3),
+                color: Colors.white.withValues(alpha: 0.3),
                 width: 1,
               ),
             ),
@@ -107,10 +107,10 @@ class StandardAppBar extends ConsumerWidget implements PreferredSizeWidget {
               Container(
                 margin: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: Colors.white.withOpacity(0.3),
+                    color: Colors.white.withValues(alpha: 0.3),
                     width: 1,
                   ),
                 ),
@@ -142,7 +142,7 @@ class StandardAppBar extends ConsumerWidget implements PreferredSizeWidget {
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFFEF4444).withOpacity(0.5),
+                              color: const Color(0xFFEF4444).withValues(alpha: 0.5),
                               blurRadius: 4,
                               offset: const Offset(0, 1),
                             ),
@@ -167,10 +167,10 @@ class StandardAppBar extends ConsumerWidget implements PreferredSizeWidget {
         Container(
           margin: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: Colors.white.withOpacity(0.3),
+              color: Colors.white.withValues(alpha: 0.3),
               width: 1,
             ),
           ),
@@ -210,7 +210,7 @@ class StandardAppBar extends ConsumerWidget implements PreferredSizeWidget {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF10B981).withOpacity(0.5),
+                        color: const Color(0xFF10B981).withValues(alpha: 0.5),
                         blurRadius: 4,
                         offset: const Offset(0, 1),
                       ),

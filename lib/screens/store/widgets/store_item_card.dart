@@ -101,17 +101,17 @@ class _StoreItemCardState extends ConsumerState<StoreItemCard>
                       color: isEquipped
                           ? glowColor
                           : isPowerUp
-                          ? glowColor.withOpacity(0.3)
-                          : const Color(0xFF64748B).withOpacity(0.1),
+                          ? glowColor.withValues(alpha: 0.3)
+                          : const Color(0xFF64748B).withValues(alpha: 0.1),
                       width: isEquipped ? 2 : 1,
                     ),
                     boxShadow: [
                       BoxShadow(
                         color: isEquipped
-                            ? glowColor.withOpacity(0.3)
+                            ? glowColor.withValues(alpha: 0.3)
                             : isPowerUp
-                            ? glowColor.withOpacity(0.1)
-                            : const Color(0xFF64748B).withOpacity(0.08),
+                            ? glowColor.withValues(alpha: 0.1)
+                            : const Color(0xFF64748B).withValues(alpha: 0.08),
                         blurRadius: isEquipped ? 15 : 10,
                         offset: const Offset(0, 4),
                       ),
@@ -172,10 +172,10 @@ class _StoreItemCardState extends ConsumerState<StoreItemCard>
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 8, vertical: 4),
                                     decoration: BoxDecoration(
-                                      color: glowColor.withOpacity(0.1),
+                                      color: glowColor.withValues(alpha: 0.1),
                                       borderRadius: BorderRadius.circular(8),
                                       border: Border.all(
-                                        color: glowColor.withOpacity(0.3),
+                                        color: glowColor.withValues(alpha: 0.3),
                                       ),
                                     ),
                                     child: Text(
@@ -216,13 +216,13 @@ class _StoreItemCardState extends ConsumerState<StoreItemCard>
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
                                 color: isPowerUp
-                                    ? glowColor.withOpacity(0.1)
+                                    ? glowColor.withValues(alpha: 0.1)
                                     : const Color(0xFFF8FAFF),
                                 shape: BoxShape.circle,
                                 border: Border.all(
                                   color: isPowerUp
-                                      ? glowColor.withOpacity(0.3)
-                                      : const Color(0xFF64748B).withOpacity(0.1),
+                                      ? glowColor.withValues(alpha: 0.3)
+                                      : const Color(0xFF64748B).withValues(alpha: 0.1),
                                 ),
                               ),
                               child: ClipOval(
@@ -366,10 +366,10 @@ class _StoreItemCardState extends ConsumerState<StoreItemCard>
         return Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
-            color: const Color(0xFF10B981).withOpacity(0.1),
+            color: const Color(0xFF10B981).withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: const Color(0xFF10B981).withOpacity(0.3),
+              color: const Color(0xFF10B981).withValues(alpha: 0.3),
             ),
           ),
           child: const Row(

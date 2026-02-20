@@ -310,13 +310,13 @@ class _SpinButtonState extends ConsumerState<SpinButton>
     if (_canSpin && !widget.isSpinning) {
       return [
         BoxShadow(
-          color: Colors.blue.withOpacity(0.4),
+          color: Colors.blue.withValues(alpha: 0.4),
           blurRadius: 20,
           spreadRadius: 2,
           offset: const Offset(0, 8),
         ),
         BoxShadow(
-          color: Colors.blue.withOpacity(0.2),
+          color: Colors.blue.withValues(alpha: 0.2),
           blurRadius: 40,
           spreadRadius: 5,
           offset: const Offset(0, 12),
@@ -325,7 +325,7 @@ class _SpinButtonState extends ConsumerState<SpinButton>
     } else if (widget.isSpinning) {
       return [
         BoxShadow(
-          color: Colors.purple.withOpacity(0.4),
+          color: Colors.purple.withValues(alpha: 0.4),
           blurRadius: 25,
           spreadRadius: 3,
           offset: const Offset(0, 8),
@@ -334,7 +334,7 @@ class _SpinButtonState extends ConsumerState<SpinButton>
     } else {
       return [
         BoxShadow(
-          color: Colors.black.withOpacity(0.2),
+          color: Colors.black.withValues(alpha: 0.2),
           blurRadius: 10,
           offset: const Offset(0, 4),
         ),
@@ -356,9 +356,9 @@ class _SpinButtonState extends ConsumerState<SpinButton>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.purple.withOpacity(0.1),
+        color: Colors.purple.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.purple.withOpacity(0.3)),
+        border: Border.all(color: Colors.purple.withValues(alpha: 0.3)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -394,7 +394,7 @@ class _SpinButtonState extends ConsumerState<SpinButton>
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.green.withOpacity(0.3),
+            color: Colors.green.withValues(alpha: 0.3),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -425,9 +425,9 @@ class _SpinButtonState extends ConsumerState<SpinButton>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.orange.withOpacity(0.1),
+        color: Colors.orange.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.orange.withOpacity(0.3)),
+        border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

@@ -209,7 +209,7 @@ class _MultiplayerGameMatchmakingScreenState
         );
       },
       child: Scaffold(
-        backgroundColor: gameColor.withOpacity(0.1),
+        backgroundColor: gameColor.withValues(alpha: 0.1),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(24),
@@ -220,9 +220,9 @@ class _MultiplayerGameMatchmakingScreenState
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: gameColor.withOpacity(0.1),
+                    color: gameColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: gameColor.withOpacity(0.3)),
+                    border: Border.all(color: gameColor.withValues(alpha: 0.3)),
                   ),
                   child: Column(
                     children: [
@@ -259,12 +259,12 @@ class _MultiplayerGameMatchmakingScreenState
                           height: 120,
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
-                              colors: [gameColor, gameColor.withOpacity(0.7)],
+                              colors: [gameColor, gameColor.withValues(alpha: 0.7)],
                             ),
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: gameColor.withOpacity(0.3),
+                                color: gameColor.withValues(alpha: 0.3),
                                 blurRadius: 20,
                                 spreadRadius: 5,
                               ),
@@ -302,7 +302,7 @@ class _MultiplayerGameMatchmakingScreenState
                   const SizedBox(height: 32),
 
                   LinearProgressIndicator(
-                    backgroundColor: gameColor.withOpacity(0.2),
+                    backgroundColor: gameColor.withValues(alpha: 0.2),
                     valueColor: AlwaysStoppedAnimation<Color>(gameColor),
                   ),
 
@@ -316,7 +316,7 @@ class _MultiplayerGameMatchmakingScreenState
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.green.withOpacity(0.3),
+                          color: Colors.green.withValues(alpha: 0.3),
                           blurRadius: 15,
                           offset: const Offset(0, 8),
                         ),

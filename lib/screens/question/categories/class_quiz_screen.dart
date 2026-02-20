@@ -251,7 +251,7 @@ class _ClassQuizScreenState extends State<ClassQuizScreen> {
             'Choose a subject to start learning!',
             style: TextStyle(
               fontSize: 16,
-              color: Colors.white.withOpacity(0.9),
+              color: Colors.white.withValues(alpha: 0.9),
             ),
           ),
         ],
@@ -287,7 +287,7 @@ class _ClassQuizScreenState extends State<ClassQuizScreen> {
               onTap: () => setState(() => selectedSubject = subject['id']),
               child: Container(
                 decoration: BoxDecoration(
-                  color: isSelected ? subject['color'].withOpacity(0.1) : Colors.grey.shade50,
+                  color: isSelected ? subject['color'].withValues(alpha: 0.1) : Colors.grey.shade50,
                   border: Border.all(
                     color: isSelected ? subject['color'] : Colors.grey.shade300,
                     width: isSelected ? 2 : 1,

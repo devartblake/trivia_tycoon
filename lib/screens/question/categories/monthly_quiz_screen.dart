@@ -90,7 +90,7 @@ class MonthlyQuizScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [_getThemeColor().withOpacity(0.8), _getThemeColor()],
+                    colors: [_getThemeColor().withValues(alpha: 0.8), _getThemeColor()],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -122,7 +122,7 @@ class MonthlyQuizScreen extends ConsumerWidget {
                               Text(
                                 '${currentTheme.toUpperCase()} Theme',
                                 style: TextStyle(
-                                  color: Colors.white.withOpacity(0.9),
+                                  color: Colors.white.withValues(alpha: 0.9),
                                   fontSize: 14,
                                 ),
                               ),
@@ -135,7 +135,7 @@ class MonthlyQuizScreen extends ConsumerWidget {
                     Text(
                       _getThemeDescription(),
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                         fontSize: 14,
                       ),
                     ),
@@ -323,9 +323,9 @@ class _StatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Column(
         children: [
@@ -371,7 +371,7 @@ class _QuestionPreviewCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: _getDifficultyColor().withOpacity(0.1),
+              color: _getDifficultyColor().withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(6),
             ),
             child: Icon(

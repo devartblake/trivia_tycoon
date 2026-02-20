@@ -65,8 +65,8 @@ class ExtrudedText extends StatelessWidget {
             text,
             style: style.copyWith(
               color: Color.alphaBlend(
-                themedSide.withOpacity(0.85),
-                themedFace.withOpacity(0.15),
+                themedSide.withValues(alpha: 0.85),
+                themedFace.withValues(alpha: 0.15),
               ),
             ),
           ),
@@ -83,9 +83,9 @@ class ExtrudedText extends StatelessWidget {
             begin: Alignment(-1.2 + tilt.dx * 0.3, -0.8 + tilt.dy * 0.3),
             end: Alignment(1.2 + tilt.dx * 0.3, 0.8 + tilt.dy * 0.3),
             colors: [
-              Colors.white.withOpacity(0.15),
-              Colors.white.withOpacity(0.75),
-              Colors.white.withOpacity(0.15),
+              Colors.white.withValues(alpha: 0.15),
+              Colors.white.withValues(alpha: 0.75),
+              Colors.white.withValues(alpha: 0.15),
             ],
             stops: const [0.35, 0.5, 0.65],
           );
@@ -106,7 +106,7 @@ class ExtrudedText extends StatelessWidget {
                 foreground: Paint()
                   ..style = PaintingStyle.stroke
                   ..strokeWidth = 1.2
-                  ..color = Colors.black.withOpacity(0.45),
+                  ..color = Colors.black.withValues(alpha: 0.45),
               ),
             ),
             faceText,
@@ -128,7 +128,7 @@ class ExtrudedText extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: style.copyWith(
-              color: themedSide.withOpacity(opacity * (1 - (t * 0.35))),
+              color: themedSide.withValues(alpha: opacity * (1 - (t * 0.35))),
             ),
           ),
         ),

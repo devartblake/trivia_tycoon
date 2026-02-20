@@ -49,7 +49,7 @@ class _ChallengeScreenState extends State<ChallengeScreen>
         child: Container(
           margin: const EdgeInsets.only(left: 12.0),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(12),
           ),
           child: IconButton(
@@ -69,7 +69,7 @@ class _ChallengeScreenState extends State<ChallengeScreen>
           letterSpacing: 0.5,
         ),
       ),
-      backgroundColor: Colors.black.withOpacity(0.25),
+      backgroundColor: Colors.black.withValues(alpha: 0.25),
       elevation: 0,
       centerTitle: true,
       bottom: TabBar(
@@ -102,7 +102,7 @@ class _ChallengeScreenState extends State<ChallengeScreen>
         const LightModernBackdrop(),
 
         // Darkening overlay for readability
-        Container(color: Colors.black.withOpacity(0.20)),
+        Container(color: Colors.black.withValues(alpha: 0.20)),
 
         // Content
         SafeArea(

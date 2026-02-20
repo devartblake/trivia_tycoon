@@ -107,9 +107,9 @@ class _BranchCard extends StatelessWidget {
     final pct = (branch.progress * 100).toStringAsFixed(0);
 
     return Card(
-      color: branch.accent.withOpacity(0.08),
+      color: branch.accent.withValues(alpha: 0.08),
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: branch.accent.withOpacity(0.4)),
+        side: BorderSide(color: branch.accent.withValues(alpha: 0.4)),
         borderRadius: BorderRadius.circular(14),
       ),
       child: Padding(
@@ -126,12 +126,12 @@ class _BranchCard extends StatelessWidget {
                 children: [
                   Text(branch.title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                   const SizedBox(height: 4),
-                  Text(branch.description, style: TextStyle(color: Colors.white.withOpacity(0.7))),
+                  Text(branch.description, style: TextStyle(color: Colors.white.withValues(alpha: 0.7))),
                   const SizedBox(height: 8),
                   LinearProgressIndicator(
                     value: branch.progress,
                     color: branch.accent,
-                    backgroundColor: branch.accent.withOpacity(0.2),
+                    backgroundColor: branch.accent.withValues(alpha: 0.2),
                   ),
                 ],
               ),

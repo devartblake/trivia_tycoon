@@ -111,7 +111,7 @@ class _EncryptedFilePreviewState extends State<EncryptedFilePreview> {
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFFEF4444).withOpacity(0.3),
+                  color: const Color(0xFFEF4444).withValues(alpha: 0.3),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
@@ -159,7 +159,7 @@ class _EncryptedFilePreviewState extends State<EncryptedFilePreview> {
               border: Border.all(color: const Color(0xFFE9ECEF)),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
+                  color: Colors.black.withValues(alpha: 0.04),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -194,7 +194,7 @@ class _EncryptedFilePreviewState extends State<EncryptedFilePreview> {
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF6366F1).withOpacity(0.3),
+                          color: const Color(0xFF6366F1).withValues(alpha: 0.3),
                           blurRadius: 12,
                           offset: const Offset(0, 6),
                         ),
@@ -246,7 +246,7 @@ class _EncryptedFilePreviewState extends State<EncryptedFilePreview> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: const Color(0xFF10B981).withOpacity(0.1),
+                color: const Color(0xFF10B981).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: const Color(0xFF10B981)),
               ),
@@ -292,7 +292,7 @@ class _EncryptedFilePreviewState extends State<EncryptedFilePreview> {
               border: Border.all(color: const Color(0xFFE9ECEF)),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
+                  color: Colors.black.withValues(alpha: 0.04),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),

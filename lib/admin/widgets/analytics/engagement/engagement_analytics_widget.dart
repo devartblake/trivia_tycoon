@@ -24,7 +24,7 @@ class EngagementAnalyticsChart extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: const Color(0xFFF59E0B).withOpacity(0.1),
+                color: const Color(0xFFF59E0B).withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -203,8 +203,8 @@ class EngagementAnalyticsChart extends ConsumerWidget {
                     show: true,
                     gradient: LinearGradient(
                       colors: [
-                        const Color(0xFFF59E0B).withOpacity(0.3),
-                        const Color(0xFFF59E0B).withOpacity(0.05),
+                        const Color(0xFFF59E0B).withValues(alpha: 0.3),
+                        const Color(0xFFF59E0B).withValues(alpha: 0.05),
                       ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,

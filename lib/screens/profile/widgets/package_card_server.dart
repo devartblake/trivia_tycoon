@@ -26,12 +26,12 @@ class PackageCardServer extends ConsumerWidget {
             gradient: LinearGradient(
               colors: installed
                   ? [
-                Colors.white.withOpacity(0.06),
-                Colors.white.withOpacity(0.03),
+                Colors.white.withValues(alpha: 0.06),
+                Colors.white.withValues(alpha: 0.03),
               ]
                   : [
-                const Color(0xFF6366F1).withOpacity(0.15),
-                const Color(0xFF8B5CF6).withOpacity(0.1),
+                const Color(0xFF6366F1).withValues(alpha: 0.15),
+                const Color(0xFF8B5CF6).withValues(alpha: 0.1),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -39,8 +39,8 @@ class PackageCardServer extends ConsumerWidget {
             borderRadius: BorderRadius.circular(18),
             border: Border.all(
               color: installed
-                  ? Colors.white.withOpacity(0.12)
-                  : const Color(0xFF6366F1).withOpacity(0.3),
+                  ? Colors.white.withValues(alpha: 0.12)
+                  : const Color(0xFF6366F1).withValues(alpha: 0.3),
               width: 1.5,
             ),
           ),
@@ -57,7 +57,7 @@ class PackageCardServer extends ConsumerWidget {
                       shape: BoxShape.circle,
                       gradient: RadialGradient(
                         colors: [
-                          const Color(0xFF6366F1).withOpacity(0.2),
+                          const Color(0xFF6366F1).withValues(alpha: 0.2),
                           Colors.transparent,
                         ],
                       ),
@@ -74,8 +74,8 @@ class PackageCardServer extends ConsumerWidget {
                         gradient: installed
                             ? LinearGradient(
                           colors: [
-                            Colors.white.withOpacity(0.15),
-                            Colors.white.withOpacity(0.08),
+                            Colors.white.withValues(alpha: 0.15),
+                            Colors.white.withValues(alpha: 0.08),
                           ],
                         )
                             : const LinearGradient(
@@ -84,14 +84,14 @@ class PackageCardServer extends ConsumerWidget {
                         borderRadius: BorderRadius.circular(14),
                         border: Border.all(
                           color: installed
-                              ? Colors.white.withOpacity(0.2)
-                              : Colors.white.withOpacity(0.3),
+                              ? Colors.white.withValues(alpha: 0.2)
+                              : Colors.white.withValues(alpha: 0.3),
                         ),
                         boxShadow: installed
                             ? []
                             : [
                           BoxShadow(
-                            color: const Color(0xFF6366F1).withOpacity(0.3),
+                            color: const Color(0xFF6366F1).withValues(alpha: 0.3),
                             blurRadius: 8,
                             offset: const Offset(0, 2),
                           ),
@@ -127,13 +127,13 @@ class PackageCardServer extends ConsumerWidget {
                                   vertical: 4,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.1),
+                                  color: Colors.white.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                                 child: Text(
                                   'v${meta.version}',
                                   style: TextStyle(
-                                    color: Colors.white.withOpacity(0.7),
+                                    color: Colors.white.withValues(alpha: 0.7),
                                     fontSize: 10,
                                     fontWeight: FontWeight.w800,
                                   ),
@@ -144,13 +144,13 @@ class PackageCardServer extends ConsumerWidget {
                                 Icon(
                                   Icons.circle,
                                   size: 4,
-                                  color: Colors.white.withOpacity(0.4),
+                                  color: Colors.white.withValues(alpha: 0.4),
                                 ),
                                 const SizedBox(width: 6),
                                 Text(
                                   '${(meta.sizeBytes! / (1024 * 1024)).toStringAsFixed(1)} MB',
                                   style: TextStyle(
-                                    color: Colors.white.withOpacity(0.6),
+                                    color: Colors.white.withValues(alpha: 0.6),
                                     fontSize: 12,
                                     fontWeight: FontWeight.w700,
                                   ),
@@ -171,14 +171,14 @@ class PackageCardServer extends ConsumerWidget {
                       label: Text(installed ? 'Installed' : 'Download'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: installed
-                            ? Colors.white.withOpacity(0.1)
+                            ? Colors.white.withValues(alpha: 0.1)
                             : const Color(0xFF6366F1),
                         foregroundColor:
                         installed ? Colors.white54 : Colors.white,
                         elevation: installed ? 0 : 3,
                         shadowColor: installed
                             ? Colors.transparent
-                            : const Color(0xFF6366F1).withOpacity(0.5),
+                            : const Color(0xFF6366F1).withValues(alpha: 0.5),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),

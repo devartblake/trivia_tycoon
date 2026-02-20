@@ -54,7 +54,7 @@ class ArcadeResultsModal extends StatelessWidget {
                     width: 44,
                     height: 5,
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.18),
+                      color: Colors.white.withValues(alpha: 0.18),
                       borderRadius: BorderRadius.circular(999),
                     ),
                   ),
@@ -120,7 +120,7 @@ class ArcadeResultsModal extends StatelessWidget {
                                   ? 'Previous best: $previousBest'
                                   : 'Personal best: $previousBest',
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.70),
+                                color: Colors.white.withValues(alpha: 0.70),
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -222,7 +222,7 @@ class ArcadeResultsModal extends StatelessWidget {
                 style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
               ),
               style: OutlinedButton.styleFrom(
-                side: BorderSide(color: Colors.white.withOpacity(0.22)),
+                side: BorderSide(color: Colors.white.withValues(alpha: 0.22)),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),
@@ -242,7 +242,7 @@ class ArcadeResultsModal extends StatelessWidget {
             child: Text(
               'Continue',
               style: TextStyle(
-                color: Colors.white.withOpacity(0.85),
+                color: Colors.white.withValues(alpha: 0.85),
                 fontWeight: FontWeight.w800,
               ),
             ),
@@ -261,7 +261,7 @@ class ArcadeResultsModal extends StatelessWidget {
             child: Text(
               label,
               style: TextStyle(
-                color: Colors.white.withOpacity(0.75),
+                color: Colors.white.withValues(alpha: 0.75),
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -311,14 +311,14 @@ class LocalLeaderboardPreview extends ConsumerWidget {
         width: double.infinity,
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.06),
+          color: Colors.white.withValues(alpha: 0.06),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Colors.white12),
         ),
         child: Text(
           'Local Leaderboard\nNo local scores yet.',
           style: TextStyle(
-            color: Colors.white.withOpacity(0.75),
+            color: Colors.white.withValues(alpha: 0.75),
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -329,7 +329,7 @@ class LocalLeaderboardPreview extends ConsumerWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.06),
+        color: Colors.white.withValues(alpha: 0.06),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.white12),
       ),
@@ -372,7 +372,7 @@ class LocalLeaderboardPreview extends ConsumerWidget {
                   Text(
                     '${entry.durationMs} ms',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.70),
+                      color: Colors.white.withValues(alpha: 0.70),
                       fontWeight: FontWeight.w700,
                     ),
                   ),

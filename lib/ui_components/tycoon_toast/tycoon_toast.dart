@@ -244,12 +244,12 @@ class _TycoonToastState<K extends Object?> extends State<TycoonToast<K>>
               : null,
           boxShadow: widget.boxShadows ?? [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withValues(alpha: 0.2),
               blurRadius: 20,
               offset: const Offset(0, 10),
             ),
             BoxShadow(
-              color: Colors.white.withOpacity(0.1),
+              color: Colors.white.withValues(alpha: 0.1),
               blurRadius: 1,
               offset: const Offset(0, 1),
             ),
@@ -268,8 +268,8 @@ class _TycoonToastState<K extends Object?> extends State<TycoonToast<K>>
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        Colors.white.withOpacity(0.2),
-                        Colors.white.withOpacity(0.1),
+                        Colors.white.withValues(alpha: 0.2),
+                        Colors.white.withValues(alpha: 0.1),
                       ],
                     ),
                   ),
@@ -289,7 +289,7 @@ class _TycoonToastState<K extends Object?> extends State<TycoonToast<K>>
                             gradient: LinearGradient(
                               colors: [
                                 Colors.transparent,
-                                Colors.white.withOpacity(0.3),
+                                Colors.white.withValues(alpha: 0.3),
                                 Colors.transparent,
                               ],
                               stops: const [0.0, 0.5, 1.0],
@@ -321,7 +321,7 @@ class _TycoonToastState<K extends Object?> extends State<TycoonToast<K>>
                                   child: Container(
                                     padding: const EdgeInsets.all(8),
                                     decoration: BoxDecoration(
-                                      color: Colors.white.withOpacity(0.2),
+                                      color: Colors.white.withValues(alpha: 0.2),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: widget.icon,
@@ -356,7 +356,7 @@ class _TycoonToastState<K extends Object?> extends State<TycoonToast<K>>
                                   Text(
                                     widget.message!,
                                     style: TextStyle(
-                                      color: widget.messageColor ?? Colors.white.withOpacity(0.9),
+                                      color: widget.messageColor ?? Colors.white.withValues(alpha: 0.9),
                                       fontSize: widget.messageSize ?? 12,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -374,12 +374,12 @@ class _TycoonToastState<K extends Object?> extends State<TycoonToast<K>>
                               child: Container(
                                 padding: const EdgeInsets.all(6),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.1),
+                                  color: Colors.white.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                                 child: Icon(
                                   Icons.close,
-                                  color: Colors.white.withOpacity(0.8),
+                                  color: Colors.white.withValues(alpha: 0.8),
                                   size: 16,
                                 ),
                               ),
@@ -398,7 +398,7 @@ class _TycoonToastState<K extends Object?> extends State<TycoonToast<K>>
                         const SizedBox(height: 12),
                         LinearProgressIndicator(
                           backgroundColor: widget.progressIndicatorBackgroundColor ??
-                              Colors.white.withOpacity(0.2),
+                              Colors.white.withValues(alpha: 0.2),
                           valueColor: widget.progressIndicatorValueColor ??
                               AlwaysStoppedAnimation<Color>(Colors.white),
                         ),

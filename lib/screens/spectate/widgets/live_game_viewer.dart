@@ -88,7 +88,7 @@ class _LiveGameViewerState extends State<LiveGameViewer> with SingleTickerProvid
             child: Icon(
               Icons.hourglass_empty,
               size: 64,
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white.withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 24),
@@ -107,7 +107,7 @@ class _LiveGameViewerState extends State<LiveGameViewer> with SingleTickerProvid
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
+        color: Colors.white.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
@@ -129,7 +129,7 @@ class _LiveGameViewerState extends State<LiveGameViewer> with SingleTickerProvid
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.purple.withOpacity(0.3),
+            color: Colors.purple.withValues(alpha: 0.3),
             blurRadius: 20,
             spreadRadius: 5,
           ),
@@ -205,8 +205,8 @@ class _LiveGameViewerState extends State<LiveGameViewer> with SingleTickerProvid
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: isRevealed
-                      ? (isCorrect ? Colors.green.withOpacity(0.3) : Colors.white.withOpacity(0.1))
-                      : Colors.white.withOpacity(0.1),
+                      ? (isCorrect ? Colors.green.withValues(alpha: 0.3) : Colors.white.withValues(alpha: 0.1))
+                      : Colors.white.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: isRevealed && isCorrect ? Colors.green : Colors.white30,
@@ -219,7 +219,7 @@ class _LiveGameViewerState extends State<LiveGameViewer> with SingleTickerProvid
                       width: 32,
                       height: 32,
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withValues(alpha: 0.2),
                         shape: BoxShape.circle,
                       ),
                       child: Center(
@@ -264,8 +264,8 @@ class _LiveGameViewerState extends State<LiveGameViewer> with SingleTickerProvid
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
             color: player.isAnswering
-                ? Colors.amber.withOpacity(0.3)
-                : Colors.white.withOpacity(0.1),
+                ? Colors.amber.withValues(alpha: 0.3)
+                : Colors.white.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: player.isAnswering ? Colors.amber : Colors.white30,

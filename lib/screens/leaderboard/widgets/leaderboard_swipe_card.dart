@@ -119,7 +119,7 @@ class LeaderboardSwipeCard extends StatelessWidget {
         if (isPromotionEligible)
           Container(
             decoration: BoxDecoration(
-              color: Colors.lightBlueAccent.withOpacity(0.3),
+              color: Colors.lightBlueAccent.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(6),
               boxShadow: const [
                 BoxShadow(

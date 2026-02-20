@@ -93,7 +93,7 @@ class _CountdownTimerState extends State<CountdownTimer>
                   Text(
                     'remaining',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.white.withValues(alpha: 0.9),
                       fontSize: 14,
                     ),
                   ),
@@ -103,7 +103,7 @@ class _CountdownTimerState extends State<CountdownTimer>
               Container(
                 height: 6,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.3),
+                  color: Colors.white.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(3),
                 ),
                 child: ClipRRect(
@@ -112,7 +112,7 @@ class _CountdownTimerState extends State<CountdownTimer>
                     value: progress,
                     backgroundColor: Colors.transparent,
                     valueColor: AlwaysStoppedAnimation<Color>(
-                      isUrgent ? Colors.white : Colors.white.withOpacity(0.9),
+                      isUrgent ? Colors.white : Colors.white.withValues(alpha: 0.9),
                     ),
                   ),
                 ),

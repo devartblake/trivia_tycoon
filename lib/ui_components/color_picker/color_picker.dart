@@ -251,12 +251,12 @@ class _ModernColorPickerDialogState extends State<_ModernColorPickerDialog>
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: _selectedColor.withOpacity(0.2),
+                color: _selectedColor.withValues(alpha: 0.2),
                 blurRadius: 20,
                 offset: const Offset(0, 8),
               ),
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 40,
                 offset: const Offset(0, 16),
               ),
@@ -293,8 +293,8 @@ class _ModernColorPickerDialogState extends State<_ModernColorPickerDialog>
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            _selectedColor.withOpacity(0.1),
-            _selectedColor.withOpacity(0.05),
+            _selectedColor.withValues(alpha: 0.1),
+            _selectedColor.withValues(alpha: 0.05),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -365,7 +365,7 @@ class _ModernColorPickerDialogState extends State<_ModernColorPickerDialog>
               indicatorSize: TabBarIndicatorSize.tab,
               dividerColor: Colors.transparent,
               labelColor: Colors.white,
-              unselectedLabelColor: colorScheme.onSurface.withOpacity(0.6),
+              unselectedLabelColor: colorScheme.onSurface.withValues(alpha: 0.6),
               labelStyle: const TextStyle(fontWeight: FontWeight.w600),
               tabs: const [
                 Tab(text: "Wheel"),
@@ -409,7 +409,7 @@ class _ModernColorPickerDialogState extends State<_ModernColorPickerDialog>
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: colorScheme.surfaceContainer.withOpacity(0.5),
+        color: colorScheme.surfaceContainer.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -441,7 +441,7 @@ class _ModernColorPickerDialogState extends State<_ModernColorPickerDialog>
               child: Text(
                 "No custom swatches",
                 style: TextStyle(
-                  color: colorScheme.onSurface.withOpacity(0.6),
+                  color: colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
               ),
             )
@@ -465,12 +465,12 @@ class _ModernColorPickerDialogState extends State<_ModernColorPickerDialog>
                         border: Border.all(
                           color: isSelected
                               ? Colors.white
-                              : colorScheme.outline.withOpacity(0.3),
+                              : colorScheme.outline.withValues(alpha: 0.3),
                           width: isSelected ? 3 : 1,
                         ),
                         boxShadow: isSelected ? [
                           BoxShadow(
-                            color: color.withOpacity(0.4),
+                            color: color.withValues(alpha: 0.4),
                             blurRadius: 8,
                             offset: const Offset(0, 4),
                           ),

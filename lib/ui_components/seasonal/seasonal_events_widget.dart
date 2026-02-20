@@ -62,13 +62,13 @@ class _SeasonalEventsWidgetState extends State<SeasonalEventsWidget>
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: _getSeasonalColor(_currentEvent['theme']).withOpacity(0.3),
+              color: _getSeasonalColor(_currentEvent['theme']).withValues(alpha: 0.3),
               blurRadius: 20,
               offset: const Offset(0, 10),
             ),
           ],
           border: Border.all(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
             width: 1,
           ),
         ),
@@ -103,7 +103,7 @@ class _SeasonalEventsWidgetState extends State<SeasonalEventsWidget>
                 child: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(
@@ -132,11 +132,11 @@ class _SeasonalEventsWidgetState extends State<SeasonalEventsWidget>
               child: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.25),
+                  color: Colors.white.withValues(alpha: 0.25),
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.white.withOpacity(0.3),
+                      color: Colors.white.withValues(alpha: 0.3),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -154,7 +154,7 @@ class _SeasonalEventsWidgetState extends State<SeasonalEventsWidget>
             : Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.25),
+            color: Colors.white.withValues(alpha: 0.25),
             borderRadius: BorderRadius.circular(16),
           ),
           child: Icon(
@@ -215,7 +215,7 @@ class _SeasonalEventsWidgetState extends State<SeasonalEventsWidget>
             Text(
               _currentEvent['description'],
               style: TextStyle(
-                color: Colors.white.withOpacity(0.9),
+                color: Colors.white.withValues(alpha: 0.9),
                 fontSize: 14,
               ),
             ),
@@ -233,7 +233,7 @@ class _SeasonalEventsWidgetState extends State<SeasonalEventsWidget>
         Container(
           height: 8,
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(4),
           ),
           child: FractionallySizedBox(
@@ -245,7 +245,7 @@ class _SeasonalEventsWidgetState extends State<SeasonalEventsWidget>
                 borderRadius: BorderRadius.circular(4),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.white.withOpacity(0.5),
+                    color: Colors.white.withValues(alpha: 0.5),
                     blurRadius: 4,
                     offset: const Offset(0, 1),
                   ),
@@ -273,12 +273,12 @@ class _SeasonalEventsWidgetState extends State<SeasonalEventsWidget>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(isClaimed ? 0.25 : 0.15),
+        color: Colors.white.withValues(alpha: isClaimed ? 0.25 : 0.15),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isClaimed
-              ? Colors.white.withOpacity(0.4)
-              : Colors.white.withOpacity(0.2),
+              ? Colors.white.withValues(alpha: 0.4)
+              : Colors.white.withValues(alpha: 0.2),
           width: 1,
         ),
       ),
@@ -288,7 +288,7 @@ class _SeasonalEventsWidgetState extends State<SeasonalEventsWidget>
           Container(
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: isClaimed ? Colors.green : Colors.white.withOpacity(0.2),
+              color: isClaimed ? Colors.green : Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(
@@ -404,7 +404,7 @@ class _SeasonalPatternPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.white.withOpacity(0.1)
+      ..color = Colors.white.withValues(alpha: 0.1)
       ..style = PaintingStyle.fill;
 
     switch (theme) {

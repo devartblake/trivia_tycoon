@@ -127,7 +127,7 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
             borderRadius: BorderRadius.circular(28),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 40,
                 offset: const Offset(0, 20),
               ),
@@ -153,7 +153,7 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
         gradient: LinearGradient(
           colors: [
             theme.primaryColor,
-            theme.primaryColor.withOpacity(0.8),
+            theme.primaryColor.withValues(alpha: 0.8),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -168,7 +168,7 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               shape: BoxShape.circle,
             ),
             child: const Icon(
@@ -192,7 +192,7 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
             'Enter password to continue',
             style: TextStyle(
               fontSize: 14,
-              color: Colors.white.withOpacity(0.9),
+              color: Colors.white.withValues(alpha: 0.9),
             ),
           ),
         ],
@@ -296,7 +296,7 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
                   borderRadius: BorderRadius.circular(16),
                 ),
                 elevation: 0,
-                disabledBackgroundColor: theme.primaryColor.withOpacity(0.5),
+                disabledBackgroundColor: theme.primaryColor.withValues(alpha: 0.5),
               ),
               child: _isLoading
                   ? const SizedBox(

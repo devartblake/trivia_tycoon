@@ -219,9 +219,9 @@ class _LoadingShimmer extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                Colors.white.withOpacity(0.05),
-                Colors.white.withOpacity(0.02),
-                Colors.white.withOpacity(0.05),
+                Colors.white.withValues(alpha: 0.05),
+                Colors.white.withValues(alpha: 0.02),
+                Colors.white.withValues(alpha: 0.05),
               ],
               stops: const [0.0, 0.5, 1.0],
               begin: Alignment.topLeft,
@@ -229,7 +229,7 @@ class _LoadingShimmer extends StatelessWidget {
             ),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: Colors.white.withOpacity(0.1),
+              color: Colors.white.withValues(alpha: 0.1),
             ),
           ),
         );
@@ -248,10 +248,10 @@ class _ErrorCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.redAccent.withOpacity(0.1),
+        color: Colors.redAccent.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Colors.redAccent.withOpacity(0.3),
+          color: Colors.redAccent.withValues(alpha: 0.3),
         ),
       ),
       child: Row(
@@ -262,7 +262,7 @@ class _ErrorCard extends StatelessWidget {
             child: Text(
               message,
               style: TextStyle(
-                color: Colors.redAccent.withOpacity(0.9),
+                color: Colors.redAccent.withValues(alpha: 0.9),
                 fontWeight: FontWeight.w600,
                 fontSize: 13,
               ),
@@ -290,10 +290,10 @@ class _EmptyPlaceholder extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.03),
+        color: Colors.white.withValues(alpha: 0.03),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Colors.white.withOpacity(0.08),
+          color: Colors.white.withValues(alpha: 0.08),
         ),
       ),
       child: Column(
@@ -301,14 +301,14 @@ class _EmptyPlaceholder extends StatelessWidget {
           Icon(
             icon,
             size: 48,
-            color: color.withOpacity(0.5),
+            color: color.withValues(alpha: 0.5),
           ),
           const SizedBox(height: 12),
           Text(
             message,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.white.withOpacity(0.6),
+              color: Colors.white.withValues(alpha: 0.6),
               fontSize: 14,
               fontWeight: FontWeight.w600,
               height: 1.4,

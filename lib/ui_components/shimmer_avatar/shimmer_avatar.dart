@@ -211,7 +211,7 @@ class _ShimmerAvatarState extends State<ShimmerAvatar>
         : BoxDecoration(
       shape: BoxShape.circle,
       border: Border.all(
-        color: Colors.white.withOpacity(0.2),
+        color: Colors.white.withValues(alpha: 0.2),
         width: widget.borderWidth,
       ),
       boxShadow: shadows,

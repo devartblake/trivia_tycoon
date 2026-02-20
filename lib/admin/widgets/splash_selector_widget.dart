@@ -36,7 +36,7 @@ class _SplashSelectorWidgetState extends State<SplashSelectorWidget> {
               right: 32,
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.black.withValues(alpha: 0.5),
                   shape: BoxShape.circle,
                 ),
                 child: IconButton(
@@ -68,7 +68,7 @@ class _SplashSelectorWidgetState extends State<SplashSelectorWidget> {
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(isSelected ? 0.08 : 0.04),
+                color: Colors.black.withValues(alpha: isSelected ? 0.08 : 0.04),
                 blurRadius: isSelected ? 12 : 8,
                 offset: Offset(0, isSelected ? 6 : 4),
               ),
@@ -90,7 +90,7 @@ class _SplashSelectorWidgetState extends State<SplashSelectorWidget> {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),
@@ -156,7 +156,7 @@ class _SplashSelectorWidgetState extends State<SplashSelectorWidget> {
                         borderRadius: BorderRadius.circular(8),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF6366F1).withOpacity(0.3),
+                            color: const Color(0xFF6366F1).withValues(alpha: 0.3),
                             blurRadius: 8,
                             offset: const Offset(0, 4),
                           ),
@@ -195,7 +195,7 @@ class _SplashSelectorWidgetState extends State<SplashSelectorWidget> {
                     Container(
                       decoration: BoxDecoration(
                         color: isSelected
-                            ? const Color(0xFFF59E0B).withOpacity(0.1)
+                            ? const Color(0xFFF59E0B).withValues(alpha: 0.1)
                             : const Color(0xFFF8FAFC),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(

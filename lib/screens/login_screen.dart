@@ -138,35 +138,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
     await Future.delayed(const Duration(milliseconds: 1500));
 
-    // if (!mockUsers.containsKey(email)) {
-    //   _showErrorSnackBar('User does not exist');
-    //   setState(() => _isLoading = false);
-    //   return;
-    // }
-    //
-    // final mockUser = mockUsers[email]!;
-    // if (mockUser.password != password) {
-    //   _showErrorSnackBar('Incorrect password');
-    //   setState(() => _isLoading = false);
-    //   return;
-    // }
-
     try {
       final authOps = ref.read(authOperationsProvider);
-      final authService = ref.read(authServiceProvider);
       final multiProfileService = ref.read(multiProfileServiceProvider);
       final serviceManager = ref.read(serviceManagerProvider);
 
-      // await authOps.login(email);
-      // await authService.secureStorage.setSecret('user_role', mockUser.role);
-      // await authService.secureStorage.setSecret('is_premium', mockUser.isPremium.toString());
-
       if (ConfigService.useBackendAuth) {
-        final response = _isSignUpMode
-            ? await authOps.signup(email, password)
-            : await authOps.loginWithPassword(email, password);
-        await _applyBackendSession(response, authService);
+        // Backend authentication - authOps now uses LoginManager internally
+        // LoginManager handles: tokens, device ID, profile updates
+        if (_isSignUpMode) {
+          await authOps.signup(email, password);
+        } else {
+          await authOps.loginWithPassword(email, password);
+        }
       } else {
+        // Legacy mock authentication (when backend is disabled)
         if (!mockUsers.containsKey(email)) {
           _showErrorSnackBar('User does not exist');
           setState(() => _isLoading = false);
@@ -179,12 +165,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           setState(() => _isLoading = false);
           return;
         }
+
+        // Use local auth for mock mode
         await authOps.login(email);
+        final authService = ref.read(authServiceProvider);
         await authService.secureStorage.setSecret('user_role', mockUser.role);
         await authService.secureStorage
             .setSecret('is_premium', mockUser.isPremium.toString());
       }
 
+      // Handle multi-profile migration/loading
       final existingProfiles = await multiProfileService.getAllProfiles();
 
       if (existingProfiles.isNotEmpty) {
@@ -196,6 +186,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           ref.read(hasCompletedProfileProvider.notifier).state = true;
         }
       } else {
+        // Migrate existing profile data if present
         final playerProfileService = serviceManager.playerProfileService;
         final existingName = await playerProfileService.getPlayerName();
 
@@ -218,6 +209,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
             ref.read(hasCompletedProfileProvider.notifier).state = true;
           }
         } else {
+          // New user - needs onboarding
           ref.read(hasSeenIntroProvider.notifier).state = false;
           ref.read(hasCompletedProfileProvider.notifier).state = false;
         }
@@ -232,29 +224,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       _showErrorSnackBar('Login failed: ${e.toString()}');
       setState(() => _isLoading = false);
     }
-  }
-
-  Future<void> _applyBackendSession(
-      Map<String, dynamic> response,
-      AuthService authService,
-      ) async {
-    final role = _extractRole(response);
-    final isPremium = response['isPremium'] == true;
-
-    if (role != null) {
-      await authService.secureStorage.setSecret('user_role', role);
-    }
-    await authService.secureStorage
-        .setSecret('is_premium', isPremium.toString());
-  }
-
-  String? _extractRole(Map<String, dynamic> response) {
-    final roles = response['roles'];
-    if (roles is List && roles.isNotEmpty) {
-      return roles.first.toString();
-    }
-    final role = response['role'];
-    return role?.toString();
   }
 
   Future<void> _handleSocialLogin(String provider) async {
@@ -330,10 +299,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           flex: 5,
           child: Container(
             decoration: BoxDecoration(
-              color: const Color(0xFF1F2937).withOpacity(0.9),
+              color: const Color(0xFF1F2937).withValues(alpha: 0.9),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
+                  color: Colors.black.withValues(alpha: 0.3),
                   blurRadius: 30,
                   offset: const Offset(10, 0),
                 ),
@@ -411,7 +380,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                         : 'Sign in to access your games and progress',
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.white.withOpacity(0.7),
+                      color: Colors.white.withValues(alpha: 0.7),
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -452,7 +421,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                               _obscurePassword
                                   ? Icons.visibility_off_rounded
                                   : Icons.visibility_rounded,
-                              color: Colors.white.withOpacity(0.5),
+                              color: Colors.white.withValues(alpha: 0.5),
                             ),
                             onPressed: () {
                               setState(() => _obscurePassword = !_obscurePassword);
@@ -492,7 +461,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                                         return Colors.transparent;
                                       }),
                                       side: BorderSide(
-                                        color: Colors.white.withOpacity(0.3),
+                                        color: Colors.white.withValues(alpha: 0.3),
                                         width: 2,
                                       ),
                                     ),
@@ -501,7 +470,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                                   Text(
                                     'Remember me',
                                     style: TextStyle(
-                                      color: Colors.white.withOpacity(0.7),
+                                      color: Colors.white.withValues(alpha: 0.7),
                                       fontSize: 13,
                                     ),
                                   ),
@@ -550,7 +519,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                           children: [
                             Expanded(
                               child: Divider(
-                                color: Colors.white.withOpacity(0.2),
+                                color: Colors.white.withValues(alpha: 0.2),
                                 thickness: 1,
                               ),
                             ),
@@ -559,14 +528,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                               child: Text(
                                 'or continue with',
                                 style: TextStyle(
-                                  color: Colors.white.withOpacity(0.5),
+                                  color: Colors.white.withValues(alpha: 0.5),
                                   fontSize: 13,
                                 ),
                               ),
                             ),
                             Expanded(
                               child: Divider(
-                                color: Colors.white.withOpacity(0.2),
+                                color: Colors.white.withValues(alpha: 0.2),
                                 thickness: 1,
                               ),
                             ),
@@ -610,7 +579,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                                   ? 'Already have an account? '
                                   : 'Don\'t have account? ',
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.6),
+                                color: Colors.white.withValues(alpha: 0.6),
                                 fontSize: 14,
                               ),
                             ),
@@ -653,8 +622,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            const Color(0xFF6366F1).withOpacity(0.3),
-            const Color(0xFF8B5CF6).withOpacity(0.2),
+            const Color(0xFF6366F1).withValues(alpha: 0.3),
+            const Color(0xFF8B5CF6).withValues(alpha: 0.2),
             Colors.transparent,
           ],
         ),
@@ -681,7 +650,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF6366F1).withOpacity(0.3),
+                        color: const Color(0xFF6366F1).withValues(alpha: 0.3),
                         blurRadius: 50,
                         spreadRadius: 10,
                       ),
@@ -718,7 +687,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                   'Master every question, become the ultimate tycoon',
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.white.withOpacity(0.8),
+                    color: Colors.white.withValues(alpha: 0.8),
                     letterSpacing: 1,
                   ),
                 ),
@@ -733,10 +702,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.1),
+                color: Colors.white.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(30),
                 border: Border.all(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   width: 1,
                 ),
                 //backdropFilter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -746,14 +715,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                 children: [
                   Icon(
                     Icons.stars_rounded,
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.white.withValues(alpha: 0.9),
                     size: 20,
                   ),
                   const SizedBox(width: 8),
                   Text(
                     '10M+ Players Worldwide',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.white.withValues(alpha: 0.9),
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                     ),
@@ -785,27 +754,27 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       decoration: InputDecoration(
         labelText: label,
         labelStyle: TextStyle(
-          color: Colors.white.withOpacity(0.6),
+          color: Colors.white.withValues(alpha: 0.6),
           fontSize: 14,
         ),
         prefixIcon: Icon(
           prefixIcon,
-          color: Colors.white.withOpacity(0.5),
+          color: Colors.white.withValues(alpha: 0.5),
           size: 20,
         ),
         suffixIcon: suffixIcon,
         filled: true,
-        fillColor: Colors.white.withOpacity(0.05),
+        fillColor: Colors.white.withValues(alpha: 0.05),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: Colors.white.withOpacity(0.1),
+            color: Colors.white.withValues(alpha: 0.1),
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: Colors.white.withOpacity(0.1),
+            color: Colors.white.withValues(alpha: 0.1),
           ),
         ),
         focusedBorder: OutlineInputBorder(
@@ -849,7 +818,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF6366F1).withOpacity(0.4),
+            color: const Color(0xFF6366F1).withValues(alpha: 0.4),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -877,17 +846,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       width: 50,
       height: 50,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Colors.white.withOpacity(0.1),
+          color: Colors.white.withValues(alpha: 0.1),
         ),
       ),
       child: IconButton(
         onPressed: onPressed,
         icon: FaIcon(
           icon,
-          color: Colors.white.withOpacity(0.8),
+          color: Colors.white.withValues(alpha: 0.8),
           size: 20,
         ),
       ),
@@ -900,7 +869,7 @@ class GridPatternPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.white.withOpacity(0.03)
+      ..color = Colors.white.withValues(alpha: 0.03)
       ..strokeWidth = 1;
 
     const spacing = 40.0;

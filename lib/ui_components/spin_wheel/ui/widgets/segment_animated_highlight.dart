@@ -207,7 +207,7 @@ class _SegmentAnimatedHighlightState extends State<SegmentAnimatedHighlight>
           size: Size(widget.size, widget.size),
           painter: WaveEffectPainter(
             animation: _waveAnimation.value,
-            color: widget.primaryColor.withOpacity(0.2),
+            color: widget.primaryColor.withValues(alpha: 0.2),
           ),
         );
       },
@@ -224,7 +224,7 @@ class _SegmentAnimatedHighlightState extends State<SegmentAnimatedHighlight>
           shape: BoxShape.circle,
           border: Border.all(
             color: (_colorAnimation.value ?? widget.primaryColor)
-                .withOpacity(_opacityAnimation.value),
+                .withValues(alpha: _opacityAnimation.value),
             width: 3,
           ),
         ),
@@ -236,7 +236,7 @@ class _SegmentAnimatedHighlightState extends State<SegmentAnimatedHighlight>
               shape: BoxShape.circle,
               border: Border.all(
                 color: widget.secondaryColor
-                    .withOpacity(_opacityAnimation.value * 0.8),
+                    .withValues(alpha: _opacityAnimation.value * 0.8),
                 width: 2,
               ),
             ),
@@ -255,12 +255,12 @@ class _SegmentAnimatedHighlightState extends State<SegmentAnimatedHighlight>
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: widget.primaryColor.withOpacity(_opacityAnimation.value),
+            color: widget.primaryColor.withValues(alpha: _opacityAnimation.value),
             width: 4,
           ),
           boxShadow: [
             BoxShadow(
-              color: widget.primaryColor.withOpacity(_opacityAnimation.value * 0.5),
+              color: widget.primaryColor.withValues(alpha: _opacityAnimation.value * 0.5),
               blurRadius: 12,
               spreadRadius: 2,
             ),
@@ -290,8 +290,8 @@ class _SegmentAnimatedHighlightState extends State<SegmentAnimatedHighlight>
         shape: BoxShape.circle,
         gradient: RadialGradient(
           colors: [
-            widget.secondaryColor.withOpacity(_opacityAnimation.value),
-            widget.primaryColor.withOpacity(_opacityAnimation.value * 0.5),
+            widget.secondaryColor.withValues(alpha: _opacityAnimation.value),
+            widget.primaryColor.withValues(alpha: _opacityAnimation.value * 0.5),
             Colors.transparent,
           ],
         ),
@@ -325,7 +325,7 @@ class WaveEffectPainter extends CustomPainter {
       final radius = maxRadius * progress;
       final opacity = 1.0 - progress;
 
-      paint.color = color.withOpacity(opacity * 0.6);
+      paint.color = color.withValues(alpha: opacity * 0.6);
       canvas.drawCircle(center, radius, paint);
     }
   }
@@ -369,7 +369,7 @@ class SparklePainter extends CustomPainter {
 
       // Alternate colors for sparkles
       paint.color = (i % 2 == 0 ? primaryColor : secondaryColor)
-          .withOpacity(opacity * (0.5 + 0.5 * math.sin(animation * math.pi * 6)));
+          .withValues(alpha: opacity * (0.5 + 0.5 * math.sin(animation * math.pi * 6)));
 
       // Draw sparkle as a small star
       _drawStar(canvas, sparklePosition, 3, paint);
@@ -378,7 +378,7 @@ class SparklePainter extends CustomPainter {
     // Draw central burst lines
     paint.strokeWidth = 1.5;
     paint.style = PaintingStyle.stroke;
-    paint.color = primaryColor.withOpacity(opacity * 0.8);
+    paint.color = primaryColor.withValues(alpha: opacity * 0.8);
 
     for (int i = 0; i < 12; i++) {
       final angle = (i * math.pi / 6) + (animation * math.pi / 2);

@@ -172,8 +172,8 @@ class _MemoryFlipScreenState extends State<MemoryFlipScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: Colors.white.withOpacity(0.08),
-          border: Border.all(color: Colors.white.withOpacity(0.10)),
+          color: Colors.white.withValues(alpha: 0.08),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
         ),
         child: Row(
           children: [
@@ -183,7 +183,7 @@ class _MemoryFlipScreenState extends State<MemoryFlipScreen> {
               child: Text(
                 label,
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.70),
+                  color: Colors.white.withValues(alpha: 0.70),
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                 ),
@@ -209,8 +209,8 @@ class _MemoryFlipScreenState extends State<MemoryFlipScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
-          color: Colors.white.withOpacity(0.06),
-          border: Border.all(color: Colors.white.withOpacity(0.10)),
+          color: Colors.white.withValues(alpha: 0.06),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
         ),
         child: Column(
           children: [
@@ -219,7 +219,7 @@ class _MemoryFlipScreenState extends State<MemoryFlipScreen> {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                color: Colors.white.withOpacity(0.70),
+                color: Colors.white.withValues(alpha: 0.70),
                 fontSize: 10,
                 fontWeight: FontWeight.w700,
               ),
@@ -258,12 +258,12 @@ class _MemoryTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bg = matched
-        ? const Color(0xFF1B4332).withOpacity(0.95)
-        : Colors.white.withOpacity(faceUp ? 0.12 : 0.06);
+        ? const Color(0xFF1B4332).withValues(alpha: 0.95)
+        : Colors.white.withValues(alpha: faceUp ? 0.12 : 0.06);
 
     final border = matched
-        ? const Color(0xFF52B788).withOpacity(0.6)
-        : Colors.white.withOpacity(faceUp ? 0.18 : 0.10);
+        ? const Color(0xFF52B788).withValues(alpha: 0.6)
+        : Colors.white.withValues(alpha: faceUp ? 0.18 : 0.10);
 
     return InkWell(
       onTap: locked ? null : onTap,
@@ -287,7 +287,7 @@ class _MemoryTile extends StatelessWidget {
                 : Icon(
               Icons.question_mark_rounded,
               key: const ValueKey('back'),
-              color: Colors.white.withOpacity(0.55),
+              color: Colors.white.withValues(alpha: 0.55),
               size: 22,
             ),
           ),

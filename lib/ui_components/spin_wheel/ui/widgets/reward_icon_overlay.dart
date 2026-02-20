@@ -79,7 +79,7 @@ class _RewardIconOverlayState extends State<RewardIconOverlay>
     ));
 
     _colorAnimation = ColorTween(
-      begin: _getRewardColor().withOpacity(0.6),
+      begin: _getRewardColor().withValues(alpha: 0.6),
       end: _getRewardColor(),
     ).animate(CurvedAnimation(
       parent: _glowController,
@@ -234,18 +234,18 @@ class _RewardIconOverlayState extends State<RewardIconOverlay>
                   gradient: RadialGradient(
                     colors: [
                       Colors.white,
-                      (_colorAnimation.value ?? _getRewardColor()).withOpacity(0.9),
+                      (_colorAnimation.value ?? _getRewardColor()).withValues(alpha: 0.9),
                     ],
                   ),
                   boxShadow: [
                     BoxShadow(
                       color: (_colorAnimation.value ?? _getRewardColor())
-                          .withOpacity(_glowAnimation.value * 0.6),
+                          .withValues(alpha: _glowAnimation.value * 0.6),
                       blurRadius: 12,
                       spreadRadius: 2,
                     ),
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
+                      color: Colors.black.withValues(alpha: 0.2),
                       blurRadius: 4,
                       offset: const Offset(0, 2),
                     ),
@@ -272,7 +272,7 @@ class _RewardIconOverlayState extends State<RewardIconOverlay>
             height: 24,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: _getRewardColor().withOpacity(0.2),
+              color: _getRewardColor().withValues(alpha: 0.2),
             ),
           ),
         ),
@@ -338,7 +338,7 @@ class SparklePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = color.withOpacity(animation * 0.8)
+      ..color = color.withValues(alpha: animation * 0.8)
       ..strokeWidth = 1.5
       ..style = PaintingStyle.stroke;
 

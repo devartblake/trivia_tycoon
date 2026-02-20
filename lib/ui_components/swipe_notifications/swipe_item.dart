@@ -17,9 +17,9 @@ class SwipeItem extends StatefulWidget {
   static LinearGradient getGradient(Color color, double ratio, double sign) {
     return LinearGradient(
       colors: [
-        color.withOpacity(ratio * 1.0),
-        color.withOpacity(ratio * 0.30),
-        color.withOpacity(ratio * 0.10),
+        color.withValues(alpha: ratio * 1.0),
+        color.withValues(alpha: ratio * 0.30),
+        color.withValues(alpha: ratio * 0.10),
       ],
       stops: [
         0.012,
@@ -100,7 +100,7 @@ class SwipeItemState extends State<SwipeItem> {
                       boxShadow: [
                         if (widget.data.isFavorite && lToR)
                           BoxShadow(
-                            color: Colors.white70.withOpacity(swipeRatio), 
+                            color: Colors.white70.withValues(alpha: swipeRatio), 
                             blurRadius: 18
                           )
                       ],

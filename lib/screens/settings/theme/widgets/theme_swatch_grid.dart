@@ -82,13 +82,13 @@ class _ThemeSwatchGridState extends ConsumerState<ThemeSwatchGrid>
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF64748B).withOpacity(0.08),
+            color: const Color(0xFF64748B).withValues(alpha: 0.08),
             blurRadius: 25,
             offset: const Offset(0, 8),
           ),
         ],
         border: Border.all(
-          color: const Color(0xFF64748B).withOpacity(0.1),
+          color: const Color(0xFF64748B).withValues(alpha: 0.1),
           width: 1,
         ),
       ),
@@ -117,7 +117,7 @@ class _ThemeSwatchGridState extends ConsumerState<ThemeSwatchGrid>
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF6366F1).withOpacity(0.3),
+                color: const Color(0xFF6366F1).withValues(alpha: 0.3),
                 blurRadius: 8,
                 offset: const Offset(0, 4),
               ),
@@ -163,7 +163,7 @@ class _ThemeSwatchGridState extends ConsumerState<ThemeSwatchGrid>
                 border: Border.all(color: Colors.white, width: 2),
                 boxShadow: [
                   BoxShadow(
-                    color: currentColor.withOpacity(0.3),
+                    color: currentColor.withValues(alpha: 0.3),
                     blurRadius: 4,
                     offset: const Offset(0, 2),
                   ),
@@ -221,7 +221,7 @@ class _ThemeSwatchGridState extends ConsumerState<ThemeSwatchGrid>
                     duration: const Duration(milliseconds: 250),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [color, color.withOpacity(0.8)],
+                        colors: [color, color.withValues(alpha: 0.8)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -232,7 +232,7 @@ class _ThemeSwatchGridState extends ConsumerState<ThemeSwatchGrid>
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: color.withOpacity(isSelected ? 0.4 : 0.2),
+                          color: color.withValues(alpha: isSelected ? 0.4 : 0.2),
                           blurRadius: isSelected ? 12 : 6,
                           offset: Offset(0, isSelected ? 6 : 3),
                         ),
@@ -267,7 +267,7 @@ class _ThemeSwatchGridState extends ConsumerState<ThemeSwatchGrid>
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF6366F1).withOpacity(0.3),
+              color: const Color(0xFF6366F1).withValues(alpha: 0.3),
               blurRadius: 12,
               offset: const Offset(0, 6),
             ),

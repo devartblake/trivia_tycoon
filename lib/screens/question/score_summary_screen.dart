@@ -283,7 +283,7 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
         gradient: LinearGradient(
           colors: [
             Colors.white,
-            classColor.withOpacity(0.1),
+            classColor.withValues(alpha: 0.1),
           ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -291,7 +291,7 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: classColor.withOpacity(0.2),
+            color: classColor.withValues(alpha: 0.2),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -313,7 +313,7 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: classColor.withOpacity(0.3),
+                        color: classColor.withValues(alpha: 0.3),
                         blurRadius: 15,
                         offset: const Offset(0, 5),
                       ),
@@ -362,7 +362,7 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             decoration: BoxDecoration(
-              color: classColor.withOpacity(0.1),
+              color: classColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
@@ -394,7 +394,7 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: classColor.withOpacity(0.1),
+              color: classColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -427,7 +427,7 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -455,7 +455,7 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: classColor.withOpacity(0.1),
+              color: classColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -502,7 +502,7 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -593,7 +593,7 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
         return Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
@@ -632,7 +632,7 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -663,7 +663,7 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
               child: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.amber.withOpacity(0.1),
+                  color: Colors.amber.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
@@ -697,7 +697,7 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: classColor.withOpacity(0.2)),
+          border: Border.all(color: classColor.withValues(alpha: 0.2)),
         ),
         child: Row(
           children: [
@@ -733,7 +733,7 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -752,9 +752,9 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.amber.withOpacity(0.1),
+                color: Colors.amber.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.amber.withOpacity(0.3)),
+                border: Border.all(color: Colors.amber.withValues(alpha: 0.3)),
               ),
               child: Row(
                 children: [

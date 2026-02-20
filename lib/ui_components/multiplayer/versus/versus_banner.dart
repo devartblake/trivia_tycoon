@@ -26,8 +26,8 @@ class VersusBanner extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            (left.color ?? Colors.blueGrey).withOpacity(0.25),
-            (right.color ?? Colors.pink).withOpacity(0.25),
+            (left.color ?? Colors.blueGrey).withValues(alpha: 0.25),
+            (right.color ?? Colors.pink).withValues(alpha: 0.25),
           ],
         ),
         borderRadius: BorderRadius.circular(20),
@@ -73,7 +73,7 @@ class _SideInfo extends StatelessWidget {
             participant.subtitle!,
             textAlign: textAlign,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.8),
+              color: Theme.of(context).textTheme.bodySmall?.color?.withValues(alpha: 0.8),
             ),
           ),
         ],
@@ -94,7 +94,7 @@ class _AvatarOrLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = (color ?? Theme.of(context).colorScheme.primary).withOpacity(0.2);
+    final bg = (color ?? Theme.of(context).colorScheme.primary).withValues(alpha: 0.2);
     return CircleAvatar(
       radius: 28,
       backgroundColor: bg,

@@ -124,9 +124,9 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
       leading: Container(
         margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.1),
+          color: Colors.white.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.white.withOpacity(0.2)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
         ),
         child: IconButton(
           onPressed: () => context.pop(),
@@ -167,7 +167,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                     shape: BoxShape.circle,
                     gradient: RadialGradient(
                       colors: [
-                        Colors.purple.withOpacity(0.3),
+                        Colors.purple.withValues(alpha: 0.3),
                         Colors.transparent,
                       ],
                     ),
@@ -184,7 +184,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                     shape: BoxShape.circle,
                     gradient: RadialGradient(
                       colors: [
-                        Colors.blue.withOpacity(0.2),
+                        Colors.blue.withValues(alpha: 0.2),
                         Colors.transparent,
                       ],
                     ),
@@ -237,9 +237,9 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                   height: 120,
                   margin: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
-                    color: Colors.red.withOpacity(0.1),
+                    color: Colors.red.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.red.withOpacity(0.3)),
+                    border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
                   ),
                   child: Center(
                     child: Text(
@@ -272,13 +272,13 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF6C5CE7).withOpacity(0.3),
+                color: const Color(0xFF6C5CE7).withValues(alpha: 0.3),
                 blurRadius: 20,
                 offset: const Offset(0, 10),
               ),
             ],
             border: Border.all(
-              color: Colors.white.withOpacity(0.1),
+              color: Colors.white.withValues(alpha: 0.1),
               width: 1,
             ),
           ),
@@ -290,7 +290,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: const Icon(
@@ -348,10 +348,10 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.green.withOpacity(0.2),
+                                color: Colors.green.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(
-                                  color: Colors.green.withOpacity(0.3),
+                                  color: Colors.green.withValues(alpha: 0.3),
                                 ),
                               ),
                               child: const Text(
@@ -389,9 +389,9 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
+                  color: Colors.white.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white.withOpacity(0.2)),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -412,7 +412,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: const Row(
@@ -627,7 +627,7 @@ class _TierProgressionWidgetState extends State<TierProgressionWidget>
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF6366F1).withOpacity(0.3),
+            color: const Color(0xFF6366F1).withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -683,14 +683,14 @@ class _TierProgressionWidgetState extends State<TierProgressionWidget>
           color: isCurrentTier
               ? Colors.white
               : isUnlocked
-              ? Colors.white.withOpacity(0.5)
-              : Colors.white.withOpacity(0.2),
+              ? Colors.white.withValues(alpha: 0.5)
+              : Colors.white.withValues(alpha: 0.2),
           width: isCurrentTier ? 3 : 2,
         ),
         boxShadow: isCurrentTier
             ? [
           BoxShadow(
-            color: Colors.amber.withOpacity(0.5),
+            color: Colors.amber.withValues(alpha: 0.5),
             blurRadius: 15,
             spreadRadius: 2,
           ),
@@ -698,7 +698,7 @@ class _TierProgressionWidgetState extends State<TierProgressionWidget>
             : isUnlocked
             ? [
           BoxShadow(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
             blurRadius: 8,
             spreadRadius: 1,
           ),
@@ -717,7 +717,7 @@ class _TierProgressionWidgetState extends State<TierProgressionWidget>
             Icon(
               Icons.lock,
               size: 16, // Reduced lock icon size
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white.withValues(alpha: 0.7),
             ),
           if (isCurrentTier)
             Positioned(
@@ -758,8 +758,8 @@ class _TierProgressionWidgetState extends State<TierProgressionWidget>
       // Purple gradient for other unlocked tiers
       return LinearGradient(
         colors: [
-          const Color(0xFF8B5CF6).withOpacity(0.8),
-          const Color(0xFF7C3AED).withOpacity(0.6),
+          const Color(0xFF8B5CF6).withValues(alpha: 0.8),
+          const Color(0xFF7C3AED).withValues(alpha: 0.6),
         ],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
@@ -768,8 +768,8 @@ class _TierProgressionWidgetState extends State<TierProgressionWidget>
       // Gray gradient for locked tiers
       return LinearGradient(
         colors: [
-          Colors.grey.withOpacity(0.3),
-          Colors.grey.withOpacity(0.1),
+          Colors.grey.withValues(alpha: 0.3),
+          Colors.grey.withValues(alpha: 0.1),
         ],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,

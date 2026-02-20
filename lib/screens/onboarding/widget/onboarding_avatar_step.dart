@@ -66,8 +66,8 @@ class _OnboardingAvatarStepState extends State<OnboardingAvatarStep> {
                           ? Border.all(color: Colors.blueAccent, width: 3)
                           : Border.all(color: Colors.grey.shade300, width: 1),
                       color: isSelected
-                          ? avatar['color'].withOpacity(0.8)
-                          : avatar['color'].withOpacity(0.6),
+                          ? avatar['color'].withValues(alpha: 0.8)
+                          : avatar['color'].withValues(alpha: 0.6),
                     ),
                     child: Icon(
                       avatar['icon'],

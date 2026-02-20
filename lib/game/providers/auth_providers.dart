@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/services/storage/secure_storage.dart';
+import '../../ui_components/login/models/signup_data.dart';
 import '../providers/riverpod_providers.dart';
 import 'onboarding_providers.dart';
 
@@ -17,7 +18,7 @@ class AuthOperations {
 
   AuthOperations(this.ref);
 
-  /// Login user and update state
+  /// Login user and update state (legacy local-only mode)
   Future<void> login(String email) async {
     final authService = ref.read(authServiceProvider);
     final secureStorage = ref.read(secureStorageProvider);
@@ -26,108 +27,108 @@ class AuthOperations {
     await authService.login(email);
     await secureStorage.setLoggedIn(true);
 
-    // Update River-pod state immediately
+    // Update Riverpod state immediately
     ref.read(isLoggedInSyncProvider.notifier).state = true;
   }
 
-  /// Login user with password via backend API
-  Future<Map<String, dynamic>> loginWithPassword(String email, String password) async {
-    final authService = ref.read(authServiceProvider);
+  /// Login user with password via backend (uses LoginManager)
+  Future<void> loginWithPassword(String email, String password) async {
+    final loginManager = ref.read(loginManagerProvider);
     final secureStorage = ref.read(secureStorageProvider);
-    final apiService = ref.read(apiServiceProvider);
 
-    final response = await apiService.login(email: email, password: password);
-    final roles = _extractRoles(response);
-    final isPremium = response['isPremium'] == true;
-    final userId = response['userId']?.toString() ?? 'guest';
+    // LoginManager handles everything: tokens, device ID, profile
+    await loginManager.login(email, password);
 
-    await authService.login(
-      email,
-      userId: userId,
-      isPremiumUser: isPremium,
-      roles: roles,
-    );
-    await secureStorage.setLoggedIn(true);
-    await _persistAuthTokenIfPresent(response, secureStorage);
+    // Extract and store role/premium info from response if needed
+    await _updateRoleAndPremiumStatus(secureStorage);
 
+    // Update Riverpod state
     ref.read(isLoggedInSyncProvider.notifier).state = true;
-    return response;
   }
 
-  /// Signup user via backend API
-  Future<Map<String, dynamic>> signup(
+  /// Signup user via backend (uses LoginManager)
+  Future<void> signup(
       String email,
       String password, {
         Map<String, dynamic>? extra,
       }) async {
-    final authService = ref.read(authServiceProvider);
+    final loginManager = ref.read(loginManagerProvider);
     final secureStorage = ref.read(secureStorageProvider);
-    final apiService = ref.read(apiServiceProvider);
 
-    final response = await apiService.signup(
-      email: email,
+    // Build SignupData using the correct named constructor
+    final signupData = SignupData.fromSignupForm(
+      name: email,
       password: password,
-      extra: extra,
+      additionalSignupData: _convertToStringMap(extra),
     );
-    final roles = _extractRoles(response);
-    final isPremium = response['isPremium'] == true;
-    final userId = response['userId']?.toString() ?? 'guest';
 
-    await authService.login(
-      email,
-      userId: userId,
-      isPremiumUser: isPremium,
-      roles: roles,
-    );
-    await secureStorage.setLoggedIn(true);
-    await _persistAuthTokenIfPresent(response, secureStorage);
+    // LoginManager handles everything: tokens, device ID, profile
+    await loginManager.signup(signupData);
 
+    // Extract and store role/premium info from response if needed
+    await _updateRoleAndPremiumStatus(secureStorage);
+
+    // Update Riverpod state
     ref.read(isLoggedInSyncProvider.notifier).state = true;
-    return response;
   }
 
-  List<String> _extractRoles(Map<String, dynamic> response) {
-    final roles = response['roles'];
-    if (roles is List) {
-      return roles.map((role) => role.toString()).toList();
-    }
-    final role = response['role'];
-    if (role != null) {
-      return [role.toString()];
-    }
-    return const ['player'];
+  /// Convert Map<String, dynamic>? to Map<String, String>? for SignupData
+  Map<String, String>? _convertToStringMap(Map<String, dynamic>? input) {
+    if (input == null) return null;
+    return input.map((key, value) => MapEntry(key, value.toString()));
   }
 
-  Future<void> _persistAuthTokenIfPresent(
-      Map<String, dynamic> response,
-      SecureStorage secureStorage,
-      ) async {
-    final token = response['token'];
-    if (token is String && token.isNotEmpty) {
-      await secureStorage.setSecret('auth_token', token);
+  /// Update role and premium status from stored user data
+  /// This reads from the profile service which was updated by LoginManager
+  Future<void> _updateRoleAndPremiumStatus(SecureStorage secureStorage) async {
+    try {
+      final profileService = ref.read(playerProfileServiceProvider);
+
+      // Get role from profile (set by LoginManager)
+      final role = await profileService.getUserRole();
+      if (role != null && role.isNotEmpty) {
+        await secureStorage.setSecret('user_role', role);
+      } else {
+        // Default to 'player' if no role specified
+        await secureStorage.setSecret('user_role', 'player');
+      }
+
+      // Get premium status from profile
+      final isPremium = await profileService.isPremiumUser();
+      await secureStorage.setSecret('is_premium', isPremium.toString());
+
+    } catch (e) {
+      debugPrint('[AuthOperations] Error updating role/premium: $e');
+      // Set defaults on error
+      await secureStorage.setSecret('user_role', 'player');
+      await secureStorage.setSecret('is_premium', 'false');
     }
   }
 
   /// Logout user and clear state
   Future<void> logout([BuildContext? context]) async {
-    final authService = ref.read(authServiceProvider);
+    final loginManager = ref.read(loginManagerProvider);
 
     try {
-      // Your AuthService.logout requires BuildContext and handles navigation internally
+      // LoginManager handles backend logout + clearing tokens
       if (context != null) {
-        await authService.logout(context);
+        await loginManager.logout(context);
       } else {
-        // If no context provided, manually clear the storage without navigation
-        await authService.generalKey.setBool('isLoggedIn', false);
-        await authService.secureStorage.removeSecret('user_email');
-        await authService.playerProfileService.clearProfile();
+        // If no context, still clear storage
+        final secureStorage = ref.read(secureStorageProvider);
+        await secureStorage.setLoggedIn(false);
+        await secureStorage.removeSecret('user_email');
+        await secureStorage.removeSecret('user_role');
+        await secureStorage.removeSecret('is_premium');
+
+        final profileService = ref.read(playerProfileServiceProvider);
+        await profileService.clearProfile();
       }
     } catch (e) {
       debugPrint('Logout failed: $e');
-      // Continue with cleanup even if logout service call fails
     }
 
-    // Update River-pod state immediately
+    // Update Riverpod state immediately
     ref.read(isLoggedInSyncProvider.notifier).state = false;
 
     // Also clear onboarding state
@@ -145,6 +146,7 @@ class AuthState {
   final bool isLoggedIn;
   final String? userEmail;
   final String? userRole;
+  final bool isPremium;
   final bool isLoading;
   final String? error;
 
@@ -152,6 +154,7 @@ class AuthState {
     this.isLoggedIn = false,
     this.userEmail,
     this.userRole,
+    this.isPremium = false,
     this.isLoading = false,
     this.error,
   });
@@ -160,6 +163,7 @@ class AuthState {
     bool? isLoggedIn,
     String? userEmail,
     String? userRole,
+    bool? isPremium,
     bool? isLoading,
     String? error,
   }) {
@@ -167,6 +171,7 @@ class AuthState {
       isLoggedIn: isLoggedIn ?? this.isLoggedIn,
       userEmail: userEmail ?? this.userEmail,
       userRole: userRole ?? this.userRole,
+      isPremium: isPremium ?? this.isPremium,
       isLoading: isLoading ?? this.isLoading,
       error: error ?? this.error,
     );
@@ -218,5 +223,13 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
 
   void clearError() {
     state = state.copyWith(error: null);
+  }
+
+  void setRole(String role) {
+    state = state.copyWith(userRole: role);
+  }
+
+  void setPremiumStatus(bool isPremium) {
+    state = state.copyWith(isPremium: isPremium);
   }
 }

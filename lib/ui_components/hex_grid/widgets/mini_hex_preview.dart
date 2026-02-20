@@ -141,8 +141,8 @@ class MiniHexBranchPreview extends ConsumerWidget {
                   // Enhanced gradient based on state
                   final gradient = LinearGradient(
                     colors: [
-                      baseColor.withOpacity(isOnPath ? 0.45 : (isUnlocked ? 0.30 : 0.20)),
-                      baseColor.withOpacity(isOnPath ? 0.25 : (isUnlocked ? 0.15 : 0.10)),
+                      baseColor.withValues(alpha: isOnPath ? 0.45 : (isUnlocked ? 0.30 : 0.20)),
+                      baseColor.withValues(alpha: isOnPath ? 0.25 : (isUnlocked ? 0.15 : 0.10)),
                     ],
                   );
 
@@ -152,9 +152,9 @@ class MiniHexBranchPreview extends ConsumerWidget {
                     orientation: HexOrientation.pointy,
                     icon: null, // Numbers will be added as text overlay
                     gradient: gradient,
-                    borderColor: Colors.white.withOpacity(isOnPath ? 0.85 : 0.55),
+                    borderColor: Colors.white.withValues(alpha: isOnPath ? 0.85 : 0.55),
                     borderWidth: isOnPath ? 2.0 : 1.2,
-                    glowColor: isOnPath ? baseColor.withOpacity(0.3) : null,
+                    glowColor: isOnPath ? baseColor.withValues(alpha: 0.3) : null,
                   );
                 },
                 // Text overlay function - this will be called for each item to render text on top

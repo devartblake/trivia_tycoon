@@ -21,7 +21,7 @@ class AvatarOverlay extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.black.withOpacity(opacity),
+          color: Colors.black.withValues(alpha: opacity),
         ),
         child: Center(child: overlayWidget),
       ),

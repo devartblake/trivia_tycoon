@@ -22,15 +22,15 @@ class SkillTreeBackgroundPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paintHex = Paint()
-      ..color = Colors.grey.shade200.withOpacity(0.3)
+      ..color = Colors.grey.shade200.withValues(alpha: 0.3)
       ..style = PaintingStyle.stroke;
 
     final paintRings = Paint()
-      ..color = Colors.blueGrey.shade300.withOpacity(0.4)
+      ..color = Colors.blueGrey.shade300.withValues(alpha: 0.4)
       ..style = PaintingStyle.stroke;
 
     final paintRays = Paint()
-      ..color = Colors.blueGrey.shade300.withOpacity(0.4)
+      ..color = Colors.blueGrey.shade300.withValues(alpha: 0.4)
       ..style = PaintingStyle.stroke;
 
     final invMatrix = Matrix4.inverted(worldToScreen);

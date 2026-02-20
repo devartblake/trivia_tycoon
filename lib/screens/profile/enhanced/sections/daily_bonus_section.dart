@@ -26,15 +26,15 @@ class DailyBonusSection extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            const Color(0xFFFF6B6B).withOpacity(0.15),
-            const Color(0xFFFECA57).withOpacity(0.1),
+            const Color(0xFFFF6B6B).withValues(alpha: 0.15),
+            const Color(0xFFFECA57).withValues(alpha: 0.1),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: const Color(0xFFFF6B6B).withOpacity(0.3),
+          color: const Color(0xFFFF6B6B).withValues(alpha: 0.3),
           width: 1.5,
         ),
       ),
@@ -129,15 +129,15 @@ class DailyBonusSection extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            gradient[0].withOpacity(0.2),
-            gradient[1].withOpacity(0.15),
+            gradient[0].withValues(alpha: 0.2),
+            gradient[1].withValues(alpha: 0.15),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: gradient[0].withOpacity(0.3),
+          color: gradient[0].withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -164,7 +164,7 @@ class DailyBonusSection extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white.withValues(alpha: 0.7),
               fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
@@ -181,13 +181,13 @@ class DailyBonusSection extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.white.withOpacity(0.1),
-            Colors.white.withOpacity(0.05),
+            Colors.white.withValues(alpha: 0.1),
+            Colors.white.withValues(alpha: 0.05),
           ],
         ),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Colors.white.withOpacity(0.2),
+          color: Colors.white.withValues(alpha: 0.2),
         ),
       ),
       child: Row(
@@ -214,7 +214,7 @@ class DailyBonusSection extends StatelessWidget {
                 Text(
                   'Next Reward',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.7),
+                    color: Colors.white.withValues(alpha: 0.7),
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),
@@ -252,7 +252,7 @@ class DailyBonusSection extends StatelessWidget {
             borderRadius: BorderRadius.circular(14),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF10B981).withOpacity(0.4),
+                color: const Color(0xFF10B981).withValues(alpha: 0.4),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),

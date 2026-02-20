@@ -76,7 +76,7 @@ class ColorPickerTheme {
     final effectivePrimaryColor = primaryColor ?? presetButtonColor;
     final effectiveSecondaryColor = secondaryColor ?? sliderTrackColor;
     final effectiveErrorColor = errorColor ?? Colors.red.shade600;
-    final effectiveShadowColor = shadowColor ?? Colors.black.withOpacity(0.2);
+    final effectiveShadowColor = shadowColor ?? Colors.black.withValues(alpha: 0.2);
     final effectiveBorderRadius = borderRadius ?? BorderRadius.circular(12.0);
     final effectiveTextStyle = textStyle ?? const TextStyle(
       fontSize: 14,

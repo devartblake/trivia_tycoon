@@ -147,7 +147,7 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
 
     if (quizState.isLoading) {
       return Scaffold(
-        backgroundColor: gameColor.withOpacity(0.1),
+        backgroundColor: gameColor.withValues(alpha: 0.1),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -170,7 +170,7 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
 
     if (quizState.error != null) {
       return Scaffold(
-        backgroundColor: gameColor.withOpacity(0.1),
+        backgroundColor: gameColor.withValues(alpha: 0.1),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -231,7 +231,7 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
     final currentQuestion = quizState.currentQuestion;
     if (currentQuestion == null) {
       return Scaffold(
-        backgroundColor: gameColor.withOpacity(0.1),
+        backgroundColor: gameColor.withValues(alpha: 0.1),
         body: const Center(
           child: Text('No questions available'),
         ),
@@ -266,7 +266,7 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
         );
       },
       child: Scaffold(
-        backgroundColor: gameColor.withOpacity(0.1),
+        backgroundColor: gameColor.withValues(alpha: 0.1),
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Row(
@@ -281,7 +281,7 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
           ),
           backgroundColor: Colors.white,
           elevation: 2,
-          shadowColor: gameColor.withOpacity(0.2),
+          shadowColor: gameColor.withValues(alpha: 0.2),
           actions: [
             // Question counter
             Padding(
@@ -290,7 +290,7 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: gameColor.withOpacity(0.1),
+                    color: gameColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
@@ -339,7 +339,7 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
+                    color: Colors.grey.withValues(alpha: 0.1),
                     blurRadius: 4,
                     offset: const Offset(0, 2),
                   ),
@@ -365,7 +365,7 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: QuizHelpers.getTimerColor(quizState.timeRemaining).withOpacity(0.3),
+                          color: QuizHelpers.getTimerColor(quizState.timeRemaining).withValues(alpha: 0.3),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         ),
@@ -381,7 +381,7 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
                             value: quizState.timeRemaining / 30.0, // 30 second timer
                             strokeWidth: 6,
                             color: QuizHelpers.getTimerColor(quizState.timeRemaining),
-                            backgroundColor: gameColor.withOpacity(0.2),
+                            backgroundColor: gameColor.withValues(alpha: 0.2),
                           ),
                         ),
                         Column(
@@ -517,7 +517,7 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
           width: 60,
           height: 60,
           decoration: BoxDecoration(
-            color: hasAnswered ? color.withOpacity(0.2) : Colors.grey.shade200,
+            color: hasAnswered ? color.withValues(alpha: 0.2) : Colors.grey.shade200,
             shape: BoxShape.circle,
             border: Border.all(
               color: hasAnswered ? color : Colors.grey.shade400,
@@ -646,7 +646,7 @@ class _MultiplayerFeedbackDialogState extends State<_MultiplayerFeedbackDialog>
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
+                  color: Colors.black.withValues(alpha: 0.3),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
@@ -660,7 +660,7 @@ class _MultiplayerFeedbackDialogState extends State<_MultiplayerFeedbackDialog>
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -688,7 +688,7 @@ class _MultiplayerFeedbackDialogState extends State<_MultiplayerFeedbackDialog>
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Column(
@@ -696,7 +696,7 @@ class _MultiplayerFeedbackDialogState extends State<_MultiplayerFeedbackDialog>
                       Text(
                         'Correct Answer:',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
+                          color: Colors.white.withValues(alpha: 0.8),
                           fontSize: 14,
                         ),
                       ),
@@ -724,7 +724,7 @@ class _MultiplayerFeedbackDialogState extends State<_MultiplayerFeedbackDialog>
                     Container(
                       width: 2,
                       height: 40,
-                      color: Colors.white.withOpacity(0.3),
+                      color: Colors.white.withValues(alpha: 0.3),
                     ),
                     _buildScoreDisplay('Opponent', widget.opponentScore, widget.isOpponentCorrect),
                   ],
@@ -761,7 +761,7 @@ class _MultiplayerFeedbackDialogState extends State<_MultiplayerFeedbackDialog>
         Text(
           label,
           style: TextStyle(
-            color: Colors.white.withOpacity(0.8),
+            color: Colors.white.withValues(alpha: 0.8),
             fontSize: 14,
           ),
         ),

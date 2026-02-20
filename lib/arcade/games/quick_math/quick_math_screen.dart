@@ -90,7 +90,7 @@ class _QuickMathRushScreenState extends State<QuickMathRushScreen> {
               child: LinearProgressIndicator(
                 value: s.paceProgress.clamp(0.0, 1.0),
                 minHeight: 10,
-                backgroundColor: Colors.white.withOpacity(0.10),
+                backgroundColor: Colors.white.withValues(alpha: 0.10),
               ),
             ),
             const SizedBox(height: 16),
@@ -101,8 +101,8 @@ class _QuickMathRushScreenState extends State<QuickMathRushScreen> {
               padding: const EdgeInsets.fromLTRB(16, 18, 16, 18),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(18),
-                color: Colors.white.withOpacity(0.08),
-                border: Border.all(color: Colors.white.withOpacity(0.12)),
+                color: Colors.white.withValues(alpha: 0.08),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
               ),
               child: Column(
                 children: [
@@ -120,7 +120,7 @@ class _QuickMathRushScreenState extends State<QuickMathRushScreen> {
                   Text(
                     'Answer quickly to build streak multipliers.',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.70),
+                      color: Colors.white.withValues(alpha: 0.70),
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
                     ),
@@ -155,11 +155,11 @@ class _QuickMathRushScreenState extends State<QuickMathRushScreen> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white.withOpacity(0.10),
+                      backgroundColor: Colors.white.withValues(alpha: 0.10),
                       foregroundColor: Colors.white,
                       elevation: 0,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-                      side: BorderSide(color: Colors.white.withOpacity(0.12)),
+                      side: BorderSide(color: Colors.white.withValues(alpha: 0.12)),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                     child: Text(
@@ -198,8 +198,8 @@ class _QuickMathRushScreenState extends State<QuickMathRushScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: Colors.white.withOpacity(0.08),
-          border: Border.all(color: Colors.white.withOpacity(0.10)),
+          color: Colors.white.withValues(alpha: 0.08),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
         ),
         child: Row(
           children: [
@@ -209,7 +209,7 @@ class _QuickMathRushScreenState extends State<QuickMathRushScreen> {
               child: Text(
                 label,
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.70),
+                  color: Colors.white.withValues(alpha: 0.70),
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                 ),
@@ -235,8 +235,8 @@ class _QuickMathRushScreenState extends State<QuickMathRushScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
-          color: Colors.white.withOpacity(0.06),
-          border: Border.all(color: Colors.white.withOpacity(0.10)),
+          color: Colors.white.withValues(alpha: 0.06),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
         ),
         child: Column(
           children: [
@@ -245,7 +245,7 @@ class _QuickMathRushScreenState extends State<QuickMathRushScreen> {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                color: Colors.white.withOpacity(0.70),
+                color: Colors.white.withValues(alpha: 0.70),
                 fontSize: 10,
                 fontWeight: FontWeight.w700,
               ),

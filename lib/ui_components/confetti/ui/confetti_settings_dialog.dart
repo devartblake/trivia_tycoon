@@ -61,7 +61,7 @@ class _ConfettiSettingsDialogState extends ConsumerState<ConfettiSettingsDialog>
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 30,
                 offset: const Offset(0, 10),
               ),
@@ -153,7 +153,7 @@ class _ConfettiSettingsDialogState extends ConsumerState<ConfettiSettingsDialog>
       decoration: BoxDecoration(
         color: const Color(0xFFF7FAFC),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withOpacity(0.2)),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Column(
         children: [
@@ -162,7 +162,7 @@ class _ConfettiSettingsDialogState extends ConsumerState<ConfettiSettingsDialog>
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(icon, color: color, size: 20),
@@ -181,7 +181,7 @@ class _ConfettiSettingsDialogState extends ConsumerState<ConfettiSettingsDialog>
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -199,9 +199,9 @@ class _ConfettiSettingsDialogState extends ConsumerState<ConfettiSettingsDialog>
           SliderTheme(
             data: SliderTheme.of(context).copyWith(
               activeTrackColor: color,
-              inactiveTrackColor: color.withOpacity(0.2),
+              inactiveTrackColor: color.withValues(alpha: 0.2),
               thumbColor: color,
-              overlayColor: color.withOpacity(0.1),
+              overlayColor: color.withValues(alpha: 0.1),
               trackHeight: 6,
               thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12),
             ),
@@ -269,7 +269,7 @@ class _ConfettiSettingsDialogState extends ConsumerState<ConfettiSettingsDialog>
         Container(
           padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
-            color: value ? const Color(0xFF9F7AEA).withOpacity(0.1) : Colors.grey.withOpacity(0.1),
+            color: value ? const Color(0xFF9F7AEA).withValues(alpha: 0.1) : Colors.grey.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(6),
           ),
           child: Icon(
@@ -348,7 +348,7 @@ class _ConfettiSettingsDialogState extends ConsumerState<ConfettiSettingsDialog>
                 });
               },
               style: TextButton.styleFrom(
-                backgroundColor: const Color(0xFFED8936).withOpacity(0.1),
+                backgroundColor: const Color(0xFFED8936).withValues(alpha: 0.1),
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),

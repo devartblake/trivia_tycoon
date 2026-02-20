@@ -528,7 +528,7 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: const Color(0xFF40444B).withOpacity(0.5),
+        color: const Color(0xFF40444B).withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Text(
@@ -547,7 +547,7 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFFFAA61A).withOpacity(0.2),
+        color: const Color(0xFFFAA61A).withValues(alpha: 0.2),
         border: Border.all(color: const Color(0xFFFAA61A)),
         borderRadius: BorderRadius.circular(12),
       ),
@@ -571,7 +571,7 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFF3BA55C).withOpacity(0.2),
+        color: const Color(0xFF3BA55C).withValues(alpha: 0.2),
         border: Border.all(color: const Color(0xFF3BA55C)),
         borderRadius: BorderRadius.circular(12),
       ),
@@ -627,7 +627,7 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFF5865F2).withOpacity(0.2),
+        color: const Color(0xFF5865F2).withValues(alpha: 0.2),
         border: Border.all(color: const Color(0xFF5865F2)),
         borderRadius: BorderRadius.circular(12),
       ),
@@ -651,7 +651,7 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFFED4245).withOpacity(0.2),
+        color: const Color(0xFFED4245).withValues(alpha: 0.2),
         border: Border.all(color: const Color(0xFFED4245)),
         borderRadius: BorderRadius.circular(12),
       ),
@@ -675,7 +675,7 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFFF26522).withOpacity(0.2),
+        color: const Color(0xFFF26522).withValues(alpha: 0.2),
         border: Border.all(color: const Color(0xFFF26522)),
         borderRadius: BorderRadius.circular(12),
       ),
@@ -699,7 +699,7 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFFFEE75C).withOpacity(0.2),
+        color: const Color(0xFFFEE75C).withValues(alpha: 0.2),
         border: Border.all(color: const Color(0xFFFEE75C)),
         borderRadius: BorderRadius.circular(12),
       ),
@@ -723,7 +723,7 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFF3BA55C).withOpacity(0.2),
+        color: const Color(0xFF3BA55C).withValues(alpha: 0.2),
         border: Border.all(color: const Color(0xFF3BA55C)),
         borderRadius: BorderRadius.circular(12),
       ),

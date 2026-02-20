@@ -107,7 +107,7 @@ class _FABMenuState extends State<FABMenu> with SingleTickerProviderStateMixin {
             boxShadow: [
               BoxShadow(
                 color: (_isExpanded ? const Color(0xFFEF4444) : const Color(0xFF6366F1))
-                    .withOpacity(0.4),
+                    .withValues(alpha: 0.4),
                 blurRadius: 16,
                 offset: const Offset(0, 8),
               ),
@@ -151,12 +151,12 @@ class _FABMenuState extends State<FABMenu> with SingleTickerProviderStateMixin {
             height: 48,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [color, color.withOpacity(0.8)],
+                colors: [color, color.withValues(alpha: 0.8)],
               ),
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: color.withOpacity(0.3),
+                  color: color.withValues(alpha: 0.3),
                   blurRadius: 12,
                   offset: const Offset(0, 6),
                 ),

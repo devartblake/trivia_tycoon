@@ -30,7 +30,7 @@ class ConfettiSaveButton extends StatelessWidget {
         boxShadow: canSave
             ? [
           BoxShadow(
-            color: const Color(0xFF48BB78).withOpacity(0.3),
+            color: const Color(0xFF48BB78).withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),

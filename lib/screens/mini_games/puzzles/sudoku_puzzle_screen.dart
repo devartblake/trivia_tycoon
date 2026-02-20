@@ -367,7 +367,7 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF6366F1).withOpacity(0.1),
+                    color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(
@@ -513,7 +513,7 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
               margin: const EdgeInsets.only(right: 8),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
@@ -592,10 +592,10 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF6366F1).withOpacity(0.1),
+                            color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: const Color(0xFF6366F1).withOpacity(0.3),
+                              color: const Color(0xFF6366F1).withValues(alpha: 0.3),
                               width: 1,
                             ),
                           ),
@@ -627,10 +627,10 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: _getDifficultyColor().withOpacity(0.1),
+                          color: _getDifficultyColor().withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
-                            color: _getDifficultyColor().withOpacity(0.3),
+                            color: _getDifficultyColor().withValues(alpha: 0.3),
                           ),
                         ),
                         child: Text(
@@ -653,7 +653,7 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
                           borderRadius: BorderRadius.circular(12),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFF6366F1).withOpacity(0.15),
+                              color: const Color(0xFF6366F1).withValues(alpha: 0.15),
                               blurRadius: 20,
                               offset: const Offset(0, 8),
                             ),
@@ -677,7 +677,7 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
                   color: Colors.white,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 10,
                       offset: const Offset(0, -4),
                     ),
@@ -745,7 +745,7 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
       child: Container(
         decoration: BoxDecoration(
           color: isSelected
-              ? const Color(0xFF6366F1).withOpacity(0.2)
+              ? const Color(0xFF6366F1).withValues(alpha: 0.2)
               : isFixedCell
               ? Colors.grey.shade200
               : Colors.white,
@@ -789,7 +789,7 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF6366F1).withOpacity(0.3),
+              color: const Color(0xFF6366F1).withValues(alpha: 0.3),
               blurRadius: 4,
               offset: const Offset(0, 2),
             ),

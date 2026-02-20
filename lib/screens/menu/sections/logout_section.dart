@@ -24,7 +24,7 @@ class LogoutSection extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFFEF4444).withOpacity(0.3),
+                color: const Color(0xFFEF4444).withValues(alpha: 0.3),
                 blurRadius: 15,
                 offset: const Offset(0, 6),
               ),
@@ -34,7 +34,7 @@ class LogoutSection extends StatelessWidget {
             leading: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: const Icon(
@@ -53,7 +53,7 @@ class LogoutSection extends StatelessWidget {
             ),
             trailing: Icon(
               Icons.arrow_forward_ios_rounded,
-              color: Colors.white.withOpacity(0.8),
+              color: Colors.white.withValues(alpha: 0.8),
               size: 16,
             ),
             onTap: () => _showLogoutDialog(context),

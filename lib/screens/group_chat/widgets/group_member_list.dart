@@ -58,7 +58,7 @@ class GroupMemberList extends StatelessWidget {
   Widget _buildRoleHeader(BuildContext context, String role, int count) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.5),
+      color: Theme.of(context).colorScheme.surfaceVariant.withValues(alpha: 0.5),
       child: Text(
         '$role ($count)',
         style: Theme.of(context).textTheme.titleSmall?.copyWith(

@@ -177,7 +177,7 @@ class _MultiplayerResultsScreenState extends ConsumerState<MultiplayerResultsScr
         context.go('/multiplayer');
       },
       child: Scaffold(
-        backgroundColor: gameColor.withOpacity(0.1),
+        backgroundColor: gameColor.withValues(alpha: 0.1),
         body: Stack(
           children: [
             // Background decorations
@@ -245,7 +245,7 @@ class _MultiplayerResultsScreenState extends ConsumerState<MultiplayerResultsScr
     return Positioned.fill(
       child: CustomPaint(
         painter: ResultBackgroundPainter(
-          color: resultColor.withOpacity(0.1),
+          color: resultColor.withValues(alpha: 0.1),
           animation: _mainController,
         ),
       ),
@@ -274,10 +274,10 @@ class _MultiplayerResultsScreenState extends ConsumerState<MultiplayerResultsScr
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [gameColor.withOpacity(0.1), gameColor.withOpacity(0.05)],
+          colors: [gameColor.withValues(alpha: 0.1), gameColor.withValues(alpha: 0.05)],
         ),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: gameColor.withOpacity(0.3)),
+        border: Border.all(color: gameColor.withValues(alpha: 0.3)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -304,14 +304,14 @@ class _MultiplayerResultsScreenState extends ConsumerState<MultiplayerResultsScr
       decoration: BoxDecoration(
         gradient: RadialGradient(
           colors: [
-            resultColor.withOpacity(0.8),
+            resultColor.withValues(alpha: 0.8),
             resultColor,
           ],
         ),
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: resultColor.withOpacity(0.4),
+            color: resultColor.withValues(alpha: 0.4),
             blurRadius: 30,
             spreadRadius: 10,
             offset: const Offset(0, 10),
@@ -348,7 +348,7 @@ class _MultiplayerResultsScreenState extends ConsumerState<MultiplayerResultsScr
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -452,7 +452,7 @@ class _MultiplayerResultsScreenState extends ConsumerState<MultiplayerResultsScr
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
@@ -500,7 +500,7 @@ class _MultiplayerResultsScreenState extends ConsumerState<MultiplayerResultsScr
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -614,7 +614,7 @@ class ResultBackgroundPainter extends CustomPainter {
       final radius = size.width * 0.3 * progress;
       final opacity = (1.0 - progress) * 0.3;
 
-      paint.color = color.withOpacity(opacity);
+      paint.color = color.withValues(alpha: opacity);
 
       canvas.drawCircle(
         Offset(
@@ -657,7 +657,7 @@ class ConfettiPainter extends CustomPainter {
 
       if (progress > 0.9) continue; // Don't draw near bottom
 
-      paint.color = colors[i % colors.length].withOpacity(0.8);
+      paint.color = colors[i % colors.length].withValues(alpha: 0.8);
 
       // Draw confetti pieces as small rectangles
       canvas.save();

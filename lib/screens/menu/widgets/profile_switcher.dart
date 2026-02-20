@@ -127,19 +127,19 @@ class _ProfileChip extends StatelessWidget {
           border: Border.all(
             color: isActive
                 ? Colors.transparent
-                : const Color(0xFF64748B).withOpacity(0.2),
+                : const Color(0xFF64748B).withValues(alpha: 0.2),
             width: 2,
           ),
           boxShadow: [
             if (isActive)
               BoxShadow(
-                color: const Color(0xFF6366F1).withOpacity(0.3),
+                color: const Color(0xFF6366F1).withValues(alpha: 0.3),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               )
             else
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 4,
                 offset: const Offset(0, 2),
               ),
@@ -153,8 +153,8 @@ class _ProfileChip extends StatelessWidget {
               height: 36,
               decoration: BoxDecoration(
                 color: isActive
-                    ? Colors.white.withOpacity(0.2)
-                    : const Color(0xFF6366F1).withOpacity(0.1),
+                    ? Colors.white.withValues(alpha: 0.2)
+                    : const Color(0xFF6366F1).withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: Center(

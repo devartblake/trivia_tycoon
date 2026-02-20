@@ -144,7 +144,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> with TypingIndicatorM
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.2),
+                  color: Colors.green.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
@@ -233,7 +233,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> with TypingIndicatorM
               color: Theme.of(context).colorScheme.surfaceVariant,
               border: Border(
                 bottom: BorderSide(
-                  color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+                  color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
                 ),
               ),
             ),
@@ -336,7 +336,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> with TypingIndicatorM
         margin: const EdgeInsets.symmetric(vertical: 8),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.5),
+          color: Theme.of(context).colorScheme.surfaceVariant.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Text(
@@ -361,7 +361,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> with TypingIndicatorM
           color: Theme.of(context).colorScheme.surfaceVariant,
           border: Border(
             top: BorderSide(
-              color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+              color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
             ),
           ),
         ),
@@ -390,7 +390,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> with TypingIndicatorM
         color: Theme.of(context).colorScheme.surface,
         border: Border(
           top: BorderSide(
-            color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+            color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
           ),
         ),
       ),

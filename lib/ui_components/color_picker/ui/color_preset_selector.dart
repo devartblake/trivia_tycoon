@@ -81,18 +81,18 @@ class _ColorPresetSelectorState extends State<ColorPresetSelector>
                         border: Border.all(
                           color: isSelected
                               ? Colors.white
-                              : colorScheme.outline.withOpacity(0.3),
+                              : colorScheme.outline.withValues(alpha: 0.3),
                           width: isSelected ? 3 : 2,
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: color.withOpacity(0.4),
+                            color: color.withValues(alpha: 0.4),
                             blurRadius: isSelected ? 16 : 8,
                             offset: const Offset(0, 4),
                           ),
                           if (isSelected)
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
+                              color: Colors.black.withValues(alpha: 0.2),
                               blurRadius: 12,
                               offset: const Offset(0, 6),
                             ),
@@ -108,9 +108,9 @@ class _ColorPresetSelectorState extends State<ColorPresetSelector>
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                                 colors: [
-                                  Colors.white.withOpacity(0.2),
+                                  Colors.white.withValues(alpha: 0.2),
                                   Colors.transparent,
-                                  Colors.black.withOpacity(0.1),
+                                  Colors.black.withValues(alpha: 0.1),
                                 ],
                               ),
                             ),
@@ -127,7 +127,7 @@ class _ColorPresetSelectorState extends State<ColorPresetSelector>
                                   shape: BoxShape.circle,
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.3),
+                                      color: Colors.black.withValues(alpha: 0.3),
                                       blurRadius: 4,
                                       offset: const Offset(0, 2),
                                     ),
@@ -148,8 +148,8 @@ class _ColorPresetSelectorState extends State<ColorPresetSelector>
                             child: InkWell(
                               onTap: () => _selectColor(color),
                               customBorder: const CircleBorder(),
-                              splashColor: Colors.white.withOpacity(0.3),
-                              highlightColor: Colors.white.withOpacity(0.1),
+                              splashColor: Colors.white.withValues(alpha: 0.3),
+                              highlightColor: Colors.white.withValues(alpha: 0.1),
                               child: Container(
                                 width: 64,
                                 height: 64,

@@ -86,19 +86,19 @@ class _QuizCardState extends State<QuizCard> with SingleTickerProviderStateMixin
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF64748B).withOpacity(0.08),
+            color: const Color(0xFF64748B).withValues(alpha: 0.08),
             blurRadius: 15 + (10 * elevationValue),
             offset: Offset(0, 5 + (5 * elevationValue)),
           ),
           if (elevationValue > 0)
             BoxShadow(
-              color: scoreColor.withOpacity(0.2 * elevationValue),
+              color: scoreColor.withValues(alpha: 0.2 * elevationValue),
               blurRadius: 20,
               offset: const Offset(0, 0),
             ),
         ],
         border: Border.all(
-          color: scoreColor.withOpacity(0.1 + (0.1 * elevationValue)),
+          color: scoreColor.withValues(alpha: 0.1 + (0.1 * elevationValue)),
           width: 1,
         ),
       ),
@@ -126,7 +126,7 @@ class _QuizCardState extends State<QuizCard> with SingleTickerProviderStateMixin
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  scoreColor.withOpacity(0.8),
+                  scoreColor.withValues(alpha: 0.8),
                   scoreColor,
                 ],
                 begin: Alignment.topCenter,
@@ -136,7 +136,7 @@ class _QuizCardState extends State<QuizCard> with SingleTickerProviderStateMixin
             child: widget.quiz['image'] != null
                 ? ColorFiltered(
               colorFilter: ColorFilter.mode(
-                scoreColor.withOpacity(0.3),
+                scoreColor.withValues(alpha: 0.3),
                 BlendMode.overlay,
               ),
               child: Image.asset(
@@ -159,15 +159,15 @@ class _QuizCardState extends State<QuizCard> with SingleTickerProviderStateMixin
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.95),
+              color: Colors.white.withValues(alpha: 0.95),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: scoreColor.withOpacity(0.3),
+                color: scoreColor.withValues(alpha: 0.3),
                 width: 1,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 4,
                   offset: const Offset(0, 2),
                 ),
@@ -190,10 +190,10 @@ class _QuizCardState extends State<QuizCard> with SingleTickerProviderStateMixin
           child: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: Colors.white.withOpacity(0.3),
+                color: Colors.white.withValues(alpha: 0.3),
                 width: 1,
               ),
             ),
@@ -215,7 +215,7 @@ class _QuizCardState extends State<QuizCard> with SingleTickerProviderStateMixin
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            scoreColor.withOpacity(0.6),
+            scoreColor.withValues(alpha: 0.6),
             scoreColor,
           ],
           begin: Alignment.topLeft,
@@ -224,7 +224,7 @@ class _QuizCardState extends State<QuizCard> with SingleTickerProviderStateMixin
       ),
       child: Icon(
         _getCategoryIcon(widget.quiz['title'] ?? ''),
-        color: Colors.white.withOpacity(0.8),
+        color: Colors.white.withValues(alpha: 0.8),
         size: 32,
       ),
     );
@@ -301,10 +301,10 @@ class _QuizCardState extends State<QuizCard> with SingleTickerProviderStateMixin
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 4),
               decoration: BoxDecoration(
-                color: scoreColor.withOpacity(0.1),
+                color: scoreColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(6),
                 border: Border.all(
-                  color: scoreColor.withOpacity(0.2),
+                  color: scoreColor.withValues(alpha: 0.2),
                   width: 1,
                 ),
               ),

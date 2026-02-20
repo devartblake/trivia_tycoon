@@ -12,14 +12,14 @@ class MissionSwapButton extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: const Color(0xFF2C2C54).withOpacity(0.95),
+        color: const Color(0xFF2C2C54).withValues(alpha: 0.95),
         border: Border.all(
-          color: Colors.white.withOpacity(0.2),
+          color: Colors.white.withValues(alpha: 0.2),
           width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withValues(alpha: 0.3),
             blurRadius: 8,
             offset: const Offset(2, 3),
           ),
@@ -127,7 +127,7 @@ class MissionCardWithSwapButton extends StatelessWidget {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.3),
+                  color: Colors.white.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -145,7 +145,7 @@ class MissionCardWithSwapButton extends StatelessWidget {
                 "A new mission is ready for you! Keep in mind you will get a new one randomly assigned and you'll lose the progress in this one.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.8),
+                  color: Colors.white.withValues(alpha: 0.8),
                   height: 1.4,
                 ),
               ),
@@ -157,13 +157,13 @@ class MissionCardWithSwapButton extends StatelessWidget {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      const Color(0xFF6C5CE7).withOpacity(0.3),
-                      const Color(0xFF5A4FCF).withOpacity(0.2),
+                      const Color(0xFF6C5CE7).withValues(alpha: 0.3),
+                      const Color(0xFF5A4FCF).withValues(alpha: 0.2),
                     ],
                   ),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: Colors.white.withOpacity(0.1),
+                    color: Colors.white.withValues(alpha: 0.1),
                     width: 1,
                   ),
                 ),
@@ -185,7 +185,7 @@ class MissionCardWithSwapButton extends StatelessWidget {
                       borderRadius: 8,
                       linearProgressBarBorderRadius: 6,
                       colorLinearProgress: const Color(0xFF6C5CE7),
-                      backgroundColor: Colors.white.withOpacity(0.2),
+                      backgroundColor: Colors.white.withValues(alpha: 0.2),
                       showGlowOnComplete: true,
                       trailingXpIcon: const Icon(
                         Icons.flash_on_rounded,
@@ -200,7 +200,7 @@ class MissionCardWithSwapButton extends StatelessWidget {
                         Text(
                           "$currentProgress / $currentTotal",
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.8),
+                            color: Colors.white.withValues(alpha: 0.8),
                           ),
                         ),
                         Row(
@@ -235,7 +235,7 @@ class MissionCardWithSwapButton extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                           side: BorderSide(
-                            color: Colors.white.withOpacity(0.3),
+                            color: Colors.white.withValues(alpha: 0.3),
                           ),
                         ),
                       ),
@@ -364,12 +364,12 @@ class _MissionCardState extends State<MissionCard> with TickerProviderStateMixin
         gradient: LinearGradient(
           colors: isCompleted
               ? [
-            const Color(0xFF1B4332).withOpacity(0.92),
-            const Color(0xFF2D5A3D).withOpacity(0.88),
+            const Color(0xFF1B4332).withValues(alpha: 0.92),
+            const Color(0xFF2D5A3D).withValues(alpha: 0.88),
           ]
               : [
-            const Color(0xFF2C2C54).withOpacity(0.92),
-            const Color(0xFF1B1B2F).withOpacity(0.88),
+            const Color(0xFF2C2C54).withValues(alpha: 0.92),
+            const Color(0xFF1B1B2F).withValues(alpha: 0.88),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -377,15 +377,15 @@ class _MissionCardState extends State<MissionCard> with TickerProviderStateMixin
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isCompleted
-              ? const Color(0xFF40916C).withOpacity(0.55)
-              : Colors.white.withOpacity(0.12),
+              ? const Color(0xFF40916C).withValues(alpha: 0.55)
+              : Colors.white.withValues(alpha: 0.12),
           width: 1.2,
         ),
         boxShadow: [
           BoxShadow(
             color: isCompleted
-                ? const Color(0xFF40916C).withOpacity(0.22)
-                : Colors.black.withOpacity(0.22),
+                ? const Color(0xFF40916C).withValues(alpha: 0.22)
+                : Colors.black.withValues(alpha: 0.22),
             blurRadius: 12,
             offset: const Offset(0, 8),
           ),
@@ -435,10 +435,10 @@ class _MissionCardState extends State<MissionCard> with TickerProviderStateMixin
       width: 40,
       height: 40,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.12),
+        color: Colors.white.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Colors.white.withOpacity(0.10),
+          color: Colors.white.withValues(alpha: 0.10),
         ),
       ),
       child: Icon(
@@ -471,10 +471,10 @@ class _MissionCardState extends State<MissionCard> with TickerProviderStateMixin
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: badgeColor.withOpacity(0.22),
+            color: badgeColor.withValues(alpha: 0.22),
             borderRadius: BorderRadius.circular(999),
             border: Border.all(
-              color: badgeColor.withOpacity(0.45),
+              color: badgeColor.withValues(alpha: 0.45),
               width: 1,
             ),
           ),
@@ -508,7 +508,7 @@ class _MissionCardState extends State<MissionCard> with TickerProviderStateMixin
         Text(
           progressText,
           style: TextStyle(
-            color: Colors.white.withOpacity(0.70),
+            color: Colors.white.withValues(alpha: 0.70),
             fontSize: 11,
             fontWeight: FontWeight.w600,
           ),
@@ -526,10 +526,10 @@ class _MissionCardState extends State<MissionCard> with TickerProviderStateMixin
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           decoration: BoxDecoration(
-            color: const Color(0xFFFFD60A).withOpacity(0.20),
+            color: const Color(0xFFFFD60A).withValues(alpha: 0.20),
             borderRadius: BorderRadius.circular(999),
             border: Border.all(
-              color: const Color(0xFFFFD60A).withOpacity(0.45),
+              color: const Color(0xFFFFD60A).withValues(alpha: 0.45),
             ),
           ),
           child: Row(
@@ -563,7 +563,7 @@ class _MissionCardState extends State<MissionCard> with TickerProviderStateMixin
           Text(
             "In progress",
             style: TextStyle(
-              color: Colors.white.withOpacity(0.60),
+              color: Colors.white.withValues(alpha: 0.60),
               fontSize: 10,
               fontWeight: FontWeight.w600,
             ),
@@ -627,7 +627,7 @@ class _ProgressBarWithText extends StatelessWidget {
         linearProgressBarBorderRadius: innerRadius,
         colorLinearProgress:
         isCompleted ? const Color(0xFF52B788) : const Color(0xFF6C5CE7),
-        backgroundColor: Colors.white.withOpacity(0.18),
+        backgroundColor: Colors.white.withValues(alpha: 0.18),
         trailingXpIcon: Icon(
           isCompleted ? Icons.check_circle : Icons.flash_on_rounded,
           color: Colors.white,
@@ -650,7 +650,7 @@ class _CardPatternPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.white.withOpacity(0.03)
+      ..color = Colors.white.withValues(alpha: 0.03)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
 

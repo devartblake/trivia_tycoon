@@ -218,10 +218,10 @@ class _SkillTreeScreenState extends ConsumerState<SkillTreeScreen> {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: groupColor.withOpacity(0.2),
+                color: groupColor.withValues(alpha: 0.2),
                 border: Border(
                   bottom: BorderSide(
-                    color: groupColor.withOpacity(0.5),
+                    color: groupColor.withValues(alpha: 0.5),
                     width: 1,
                   ),
                 ),

@@ -73,7 +73,7 @@ class _ConfettiShapePickerState extends State<ConfettiShapePicker> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               color: isSelected
-                  ? const Color(0xFF667EEA).withOpacity(0.1)
+                  ? const Color(0xFF667EEA).withValues(alpha: 0.1)
                   : const Color(0xFFF7FAFC),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(

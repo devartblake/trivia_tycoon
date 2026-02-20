@@ -91,7 +91,7 @@ class ArcadeMissionsScreen extends ConsumerWidget {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: const Icon(
@@ -139,7 +139,7 @@ class ArcadeMissionsScreen extends ConsumerWidget {
         child: Container(
           margin: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(12),
           ),
           child: IconButton(
@@ -167,15 +167,15 @@ class ArcadeMissionsScreen extends ConsumerWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            const Color(0xFF6366F1).withOpacity(0.2),
-            const Color(0xFF8B5CF6).withOpacity(0.1),
+            const Color(0xFF6366F1).withValues(alpha: 0.2),
+            const Color(0xFF8B5CF6).withValues(alpha: 0.1),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: Colors.white.withOpacity(0.1),
+          color: Colors.white.withValues(alpha: 0.1),
         ),
       ),
       child: Row(
@@ -191,7 +191,7 @@ class ArcadeMissionsScreen extends ConsumerWidget {
           Container(
             width: 1,
             height: 40,
-            color: Colors.white.withOpacity(0.1),
+            color: Colors.white.withValues(alpha: 0.1),
           ),
           Expanded(
             child: _buildStatItem(
@@ -204,7 +204,7 @@ class ArcadeMissionsScreen extends ConsumerWidget {
           Container(
             width: 1,
             height: 40,
-            color: Colors.white.withOpacity(0.1),
+            color: Colors.white.withValues(alpha: 0.1),
           ),
           Expanded(
             child: _buildStatItem(
@@ -241,7 +241,7 @@ class ArcadeMissionsScreen extends ConsumerWidget {
         Text(
           label,
           style: TextStyle(
-            color: Colors.white.withOpacity(0.6),
+            color: Colors.white.withValues(alpha: 0.6),
             fontSize: 12,
           ),
         ),
@@ -260,8 +260,8 @@ class ArcadeMissionsScreen extends ConsumerWidget {
         gradient: LinearGradient(
           colors: claimed
               ? [
-            Colors.white.withOpacity(0.08),
-            Colors.white.withOpacity(0.04),
+            Colors.white.withValues(alpha: 0.08),
+            Colors.white.withValues(alpha: 0.04),
           ]
               : [
             const Color(0xFFFBBF24),
@@ -276,7 +276,7 @@ class ArcadeMissionsScreen extends ConsumerWidget {
             ? []
             : [
           BoxShadow(
-            color: const Color(0xFFFBBF24).withOpacity(0.4),
+            color: const Color(0xFFFBBF24).withValues(alpha: 0.4),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -295,7 +295,7 @@ class ArcadeMissionsScreen extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: Icon(
@@ -331,7 +331,7 @@ class ArcadeMissionsScreen extends ConsumerWidget {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
+                                color: Colors.white.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Row(
@@ -363,7 +363,7 @@ class ArcadeMissionsScreen extends ConsumerWidget {
                             ? 'Come back tomorrow for more rewards'
                             : 'Claim your daily reward now!',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.9),
+                          color: Colors.white.withValues(alpha: 0.9),
                           fontSize: 14,
                         ),
                       ),
@@ -377,7 +377,7 @@ class ArcadeMissionsScreen extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(
@@ -465,7 +465,7 @@ class ArcadeMissionsScreen extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.2),
+                color: color.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(icon, color: color, size: 20),
@@ -484,9 +484,9 @@ class ArcadeMissionsScreen extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.2),
+                color: color.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: color.withOpacity(0.3)),
+                border: Border.all(color: color.withValues(alpha: 0.3)),
               ),
               child: Text(
                 '${missions.length}',
@@ -531,8 +531,8 @@ class ArcadeMissionsScreen extends ConsumerWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.white.withOpacity(0.08),
-            Colors.white.withOpacity(0.04),
+            Colors.white.withValues(alpha: 0.08),
+            Colors.white.withValues(alpha: 0.04),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -540,14 +540,14 @@ class ArcadeMissionsScreen extends ConsumerWidget {
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: canClaim
-              ? tierColor.withOpacity(0.5)
-              : Colors.white.withOpacity(0.1),
+              ? tierColor.withValues(alpha: 0.5)
+              : Colors.white.withValues(alpha: 0.1),
           width: canClaim ? 2 : 1,
         ),
         boxShadow: canClaim
             ? [
           BoxShadow(
-            color: tierColor.withOpacity(0.3),
+            color: tierColor.withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),
@@ -578,13 +578,13 @@ class ArcadeMissionsScreen extends ConsumerWidget {
                         gradient: LinearGradient(
                           colors: [
                             tierColor,
-                            tierColor.withOpacity(0.7),
+                            tierColor.withValues(alpha: 0.7),
                           ],
                         ),
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: tierColor.withOpacity(0.3),
+                            color: tierColor.withValues(alpha: 0.3),
                             blurRadius: 8,
                             offset: const Offset(0, 4),
                           ),
@@ -619,7 +619,7 @@ class ArcadeMissionsScreen extends ConsumerWidget {
                           Text(
                             mission.subtitle,
                             style: TextStyle(
-                              color: Colors.white.withOpacity(0.7),
+                              color: Colors.white.withValues(alpha: 0.7),
                               fontSize: 13,
                             ),
                           ),
@@ -631,13 +631,13 @@ class ArcadeMissionsScreen extends ConsumerWidget {
                     Container(
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.1),
+                        color: Colors.white.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(
                         Icons.info_outline_rounded,
                         size: 18,
-                        color: Colors.white.withOpacity(0.7),
+                        color: Colors.white.withValues(alpha: 0.7),
                       ),
                     ),
                   ],
@@ -651,13 +651,13 @@ class ArcadeMissionsScreen extends ConsumerWidget {
                     Icon(
                       Icons.timer_outlined,
                       size: 16,
-                      color: Colors.white.withOpacity(0.6),
+                      color: Colors.white.withValues(alpha: 0.6),
                     ),
                     const SizedBox(width: 6),
                     Text(
                       '${progress.current}/${mission.target}',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.8),
+                        color: Colors.white.withValues(alpha: 0.8),
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                       ),
@@ -684,7 +684,7 @@ class ArcadeMissionsScreen extends ConsumerWidget {
                       Container(
                         height: 8,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.1),
+                          color: Colors.white.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
@@ -694,12 +694,12 @@ class ArcadeMissionsScreen extends ConsumerWidget {
                           height: 8,
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
-                              colors: [tierColor, tierColor.withOpacity(0.7)],
+                              colors: [tierColor, tierColor.withValues(alpha: 0.7)],
                             ),
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: [
                               BoxShadow(
-                                color: tierColor.withOpacity(0.4),
+                                color: tierColor.withValues(alpha: 0.4),
                                 blurRadius: 6,
                                 offset: const Offset(0, 2),
                               ),
@@ -762,9 +762,9 @@ class ArcadeMissionsScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.2),
+        color: color.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -799,7 +799,7 @@ class ArcadeMissionsScreen extends ConsumerWidget {
 
     if (claimed) {
       buttonText = 'Claimed';
-      buttonColor = Colors.white.withOpacity(0.1);
+      buttonColor = Colors.white.withValues(alpha: 0.1);
       textColor = Colors.white60;
     } else if (canClaim) {
       buttonText = 'Claim';
@@ -807,7 +807,7 @@ class ArcadeMissionsScreen extends ConsumerWidget {
       textColor = Colors.white;
     } else {
       buttonText = 'Locked';
-      buttonColor = Colors.white.withOpacity(0.1);
+      buttonColor = Colors.white.withValues(alpha: 0.1);
       textColor = Colors.white60;
     }
 
@@ -816,7 +816,7 @@ class ArcadeMissionsScreen extends ConsumerWidget {
       decoration: BoxDecoration(
         gradient: canClaim && !claimed
             ? LinearGradient(
-          colors: [tierColor, tierColor.withOpacity(0.8)],
+          colors: [tierColor, tierColor.withValues(alpha: 0.8)],
         )
             : null,
         color: !canClaim || claimed ? buttonColor : null,
@@ -824,7 +824,7 @@ class ArcadeMissionsScreen extends ConsumerWidget {
         boxShadow: canClaim && !claimed
             ? [
           BoxShadow(
-            color: tierColor.withOpacity(0.4),
+            color: tierColor.withValues(alpha: 0.4),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),

@@ -104,7 +104,7 @@ class _EnhancedRewardSectionState extends State<EnhancedRewardSection>
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            classColor.withOpacity(0.1),
+            classColor.withValues(alpha: 0.1),
             Colors.white,
           ],
           begin: Alignment.topLeft,
@@ -113,7 +113,7 @@ class _EnhancedRewardSectionState extends State<EnhancedRewardSection>
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -212,10 +212,10 @@ class _EnhancedRewardSectionState extends State<EnhancedRewardSection>
         return Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: color.withOpacity(0.3),
+              color: color.withValues(alpha: 0.3),
             ),
           ),
           child: Column(
@@ -265,10 +265,10 @@ class _EnhancedRewardSectionState extends State<EnhancedRewardSection>
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.green.withOpacity(0.1),
+        color: Colors.green.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Colors.green.withOpacity(0.3),
+          color: Colors.green.withValues(alpha: 0.3),
         ),
       ),
       child: Column(
@@ -341,7 +341,7 @@ class _EnhancedRewardSectionState extends State<EnhancedRewardSection>
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: _getClassColor().withOpacity(0.1),
+        color: _getClassColor().withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(

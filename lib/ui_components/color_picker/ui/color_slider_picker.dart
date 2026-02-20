@@ -152,10 +152,10 @@ class _ColorSliderPickerState extends State<ColorSliderPicker> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: colorScheme.surfaceContainer.withOpacity(0.5),
+        color: colorScheme.surfaceContainer.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: colorScheme.outline.withOpacity(0.2),
+          color: colorScheme.outline.withValues(alpha: 0.2),
           width: 1,
         ),
       ),
@@ -195,7 +195,7 @@ class _ColorSliderPickerState extends State<ColorSliderPicker> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
-                  color: colorScheme.primary.withOpacity(0.1),
+                  color: colorScheme.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
@@ -225,7 +225,7 @@ class _ColorSliderPickerState extends State<ColorSliderPicker> {
                     gradient: trackGradient,
                     borderRadius: BorderRadius.circular(2.5),
                     border: Border.all(
-                      color: colorScheme.outline.withOpacity(0.3),
+                      color: colorScheme.outline.withValues(alpha: 0.3),
                       width: 0.5,
                     ),
                   ),
@@ -240,7 +240,7 @@ class _ColorSliderPickerState extends State<ColorSliderPicker> {
                     activeTrackColor: Colors.transparent,
                     inactiveTrackColor: Colors.transparent,
                     thumbColor: Colors.white,
-                    overlayColor: colorScheme.primary.withOpacity(0.1),
+                    overlayColor: colorScheme.primary.withValues(alpha: 0.1),
                   ),
                   child: Slider(
                     value: value,
@@ -294,8 +294,8 @@ class _ColorSliderPickerState extends State<ColorSliderPicker> {
     final baseColor = HSLColor.fromAHSL(1, _hue, _saturation, _lightness).toColor();
     return LinearGradient(
       colors: [
-        baseColor.withOpacity(0),
-        baseColor.withOpacity(1),
+        baseColor.withValues(alpha: 0),
+        baseColor.withValues(alpha: 1),
       ],
     );
   }
@@ -330,7 +330,7 @@ class _CustomSliderThumb extends SliderComponentShape {
 
     // Shadow
     final shadowPaint = Paint()
-      ..color = Colors.black.withOpacity(0.3)
+      ..color = Colors.black.withValues(alpha: 0.3)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
     canvas.drawCircle(center + const Offset(0, 2), 10, shadowPaint);
 
@@ -348,7 +348,7 @@ class _CustomSliderThumb extends SliderComponentShape {
 
     // Border
     final borderPaint = Paint()
-      ..color = Colors.black.withOpacity(0.2)
+      ..color = Colors.black.withValues(alpha: 0.2)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
     canvas.drawCircle(center, 10, borderPaint);

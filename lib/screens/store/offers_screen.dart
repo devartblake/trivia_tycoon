@@ -89,7 +89,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF6366F1).withOpacity(0.1),
+                color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -147,7 +147,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF6366F1).withOpacity(0.1),
+                    color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -204,7 +204,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFFEF4444).withOpacity(0.3),
+                    color: const Color(0xFFEF4444).withValues(alpha: 0.3),
                     blurRadius: 20,
                     offset: const Offset(0, 8),
                   ),
@@ -223,7 +223,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 6),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
+                                color: Colors.white.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: const Text(
@@ -256,7 +256,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                             Text(
                               'Limited time offer ends soon!',
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.9),
+                                color: Colors.white.withValues(alpha: 0.9),
                                 fontSize: 14,
                               ),
                             ),
@@ -266,7 +266,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Column(
@@ -288,7 +288,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                             Text(
                               'Left',
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.8),
+                                color: Colors.white.withValues(alpha: 0.8),
                                 fontSize: 12,
                               ),
                             ),
@@ -367,8 +367,8 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                         boxShadow: [
                           BoxShadow(
                             color: isSelected
-                                ? const Color(0xFF6366F1).withOpacity(0.3)
-                                : const Color(0xFF64748B).withOpacity(0.1),
+                                ? const Color(0xFF6366F1).withValues(alpha: 0.3)
+                                : const Color(0xFF64748B).withValues(alpha: 0.1),
                             blurRadius: isSelected ? 12 : 8,
                             offset: const Offset(0, 4),
                           ),
@@ -376,7 +376,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                         border: Border.all(
                           color: isSelected
                               ? const Color(0xFF6366F1)
-                              : const Color(0xFF64748B).withOpacity(0.1),
+                              : const Color(0xFF64748B).withValues(alpha: 0.1),
                         ),
                       ),
                       child: Center(
@@ -464,12 +464,12 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
         borderRadius: BorderRadius.circular(20),
         border: isPopular
             ? Border.all(color: const Color(0xFF6366F1), width: 2)
-            : Border.all(color: const Color(0xFF64748B).withOpacity(0.1)),
+            : Border.all(color: const Color(0xFF64748B).withValues(alpha: 0.1)),
         boxShadow: [
           BoxShadow(
             color: isPopular
-                ? const Color(0xFF6366F1).withOpacity(0.15)
-                : const Color(0xFF64748B).withOpacity(0.08),
+                ? const Color(0xFF6366F1).withValues(alpha: 0.15)
+                : const Color(0xFF64748B).withValues(alpha: 0.08),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -561,7 +561,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFEF4444).withOpacity(0.1),
+                              color: const Color(0xFFEF4444).withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(

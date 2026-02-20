@@ -107,7 +107,7 @@ class _HeaderSection extends StatelessWidget {
           end: Alignment.bottomRight,
           colors: [
             config.primaryColor,
-            config.primaryColor.withOpacity(0.8),
+            config.primaryColor.withValues(alpha: 0.8),
           ],
         ),
       ),
@@ -119,7 +119,7 @@ class _HeaderSection extends StatelessWidget {
             width: 64,
             height: 64,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Icon(
@@ -156,7 +156,7 @@ class _HeaderSection extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 20,
                   offset: const Offset(0, 8),
                 ),
@@ -391,7 +391,7 @@ class _AchievementBadge extends StatelessWidget {
           width: 56,
           height: 56,
           decoration: BoxDecoration(
-            color: isEarned ? const Color(0xFFF59E0B).withOpacity(0.1) : Colors.grey.shade100,
+            color: isEarned ? const Color(0xFFF59E0B).withValues(alpha: 0.1) : Colors.grey.shade100,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(icon, size: 28, color: isEarned ? const Color(0xFFF59E0B) : Colors.grey.shade300),

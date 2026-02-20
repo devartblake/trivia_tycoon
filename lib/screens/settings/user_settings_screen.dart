@@ -117,7 +117,7 @@ class _UserSettingsScreenState extends ConsumerState<UserSettingsScreen>
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF64748B).withOpacity(0.1),
+              color: const Color(0xFF64748B).withValues(alpha: 0.1),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -180,7 +180,7 @@ class _UserSettingsScreenState extends ConsumerState<UserSettingsScreen>
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF6366F1).withOpacity(0.3),
+                color: const Color(0xFF6366F1).withValues(alpha: 0.3),
                 blurRadius: 25,
                 offset: const Offset(0, 12),
               ),
@@ -192,10 +192,10 @@ class _UserSettingsScreenState extends ConsumerState<UserSettingsScreen>
                 width: 60,
                 height: 60,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: Colors.white.withOpacity(0.3),
+                    color: Colors.white.withValues(alpha: 0.3),
                     width: 2,
                   ),
                 ),
@@ -264,13 +264,13 @@ class _UserSettingsScreenState extends ConsumerState<UserSettingsScreen>
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF64748B).withOpacity(0.08),
+              color: const Color(0xFF64748B).withValues(alpha: 0.08),
               blurRadius: 25,
               offset: const Offset(0, 8),
             ),
           ],
           border: Border.all(
-            color: const Color(0xFF64748B).withOpacity(0.1),
+            color: const Color(0xFF64748B).withValues(alpha: 0.1),
             width: 1,
           ),
         ),
@@ -282,8 +282,8 @@ class _UserSettingsScreenState extends ConsumerState<UserSettingsScreen>
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    const Color(0xFF64748B).withOpacity(0.1),
-                    const Color(0xFF64748B).withOpacity(0.05),
+                    const Color(0xFF64748B).withValues(alpha: 0.1),
+                    const Color(0xFF64748B).withValues(alpha: 0.05),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -302,7 +302,7 @@ class _UserSettingsScreenState extends ConsumerState<UserSettingsScreen>
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF64748B).withOpacity(0.3),
+                          color: const Color(0xFF64748B).withValues(alpha: 0.3),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         ),
@@ -352,7 +352,7 @@ class _UserSettingsScreenState extends ConsumerState<UserSettingsScreen>
             bottom: isLast
                 ? BorderSide.none
                 : BorderSide(
-              color: const Color(0xFF64748B).withOpacity(0.1),
+              color: const Color(0xFF64748B).withValues(alpha: 0.1),
               width: 1,
             ),
           ),
@@ -362,7 +362,7 @@ class _UserSettingsScreenState extends ConsumerState<UserSettingsScreen>
           leading: Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: (item['color'] as Color).withOpacity(0.1),
+              color: (item['color'] as Color).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
@@ -383,12 +383,12 @@ class _UserSettingsScreenState extends ConsumerState<UserSettingsScreen>
             item['subtitle'],
             style: TextStyle(
               fontSize: 12,
-              color: const Color(0xFF64748B).withOpacity(0.8),
+              color: const Color(0xFF64748B).withValues(alpha: 0.8),
             ),
           ),
           trailing: Icon(
             Icons.arrow_forward_ios_rounded,
-            color: const Color(0xFF64748B).withOpacity(0.5),
+            color: const Color(0xFF64748B).withValues(alpha: 0.5),
             size: 16,
           ),
           onTap: () {
@@ -420,7 +420,7 @@ class _UserSettingsScreenState extends ConsumerState<UserSettingsScreen>
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFFEF4444).withOpacity(0.3),
+                color: const Color(0xFFEF4444).withValues(alpha: 0.3),
                 blurRadius: 20,
                 offset: const Offset(0, 8),
               ),
@@ -431,10 +431,10 @@ class _UserSettingsScreenState extends ConsumerState<UserSettingsScreen>
             leading: Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: Colors.white.withOpacity(0.3),
+                  color: Colors.white.withValues(alpha: 0.3),
                   width: 1,
                 ),
               ),
@@ -461,7 +461,7 @@ class _UserSettingsScreenState extends ConsumerState<UserSettingsScreen>
             ),
             trailing: Icon(
               Icons.arrow_forward_ios_rounded,
-              color: Colors.white.withOpacity(0.8),
+              color: Colors.white.withValues(alpha: 0.8),
               size: 16,
             ),
             onTap: () => _showLogoutDialog(),
@@ -486,7 +486,7 @@ class _UserSettingsScreenState extends ConsumerState<UserSettingsScreen>
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFEF4444).withOpacity(0.1),
+                  color: const Color(0xFFEF4444).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(

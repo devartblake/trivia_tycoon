@@ -36,7 +36,7 @@ class MissionAnalyticsRadarChart extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: const Color(0xFF6366F1).withOpacity(0.1),
+                color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -97,7 +97,7 @@ class MissionAnalyticsRadarChart extends ConsumerWidget {
                       .map((e) => RadarEntry(value: e.missionsCompleted.toDouble()))
                       .toList(),
                   borderColor: const Color(0xFF10B981),
-                  fillColor: const Color(0xFF10B981).withOpacity(0.2),
+                  fillColor: const Color(0xFF10B981).withValues(alpha: 0.2),
                   borderWidth: 2,
                   entryRadius: 4,
                 ),
@@ -106,7 +106,7 @@ class MissionAnalyticsRadarChart extends ConsumerWidget {
                       .map((e) => RadarEntry(value: e.missionsSwapped.toDouble()))
                       .toList(),
                   borderColor: const Color(0xFFF59E0B),
-                  fillColor: const Color(0xFFF59E0B).withOpacity(0.2),
+                  fillColor: const Color(0xFFF59E0B).withValues(alpha: 0.2),
                   borderWidth: 2,
                   entryRadius: 4,
                 ),
@@ -115,7 +115,7 @@ class MissionAnalyticsRadarChart extends ConsumerWidget {
                       .map((e) => RadarEntry(value: e.xpEarned.toDouble()))
                       .toList(),
                   borderColor: const Color(0xFF6366F1),
-                  fillColor: const Color(0xFF6366F1).withOpacity(0.2),
+                  fillColor: const Color(0xFF6366F1).withValues(alpha: 0.2),
                   borderWidth: 2,
                   entryRadius: 4,
                 ),
@@ -149,7 +149,7 @@ class MissionAnalyticsRadarChart extends ConsumerWidget {
             borderRadius: BorderRadius.circular(4),
             boxShadow: [
               BoxShadow(
-                color: color.withOpacity(0.3),
+                color: color.withValues(alpha: 0.3),
                 blurRadius: 4,
                 offset: const Offset(0, 2),
               ),

@@ -62,7 +62,7 @@ class _FlowConnectPuzzleScreenState extends ConsumerState<FlowConnectPuzzleScree
             onPressed: () => _showHowToPlaySheet(context),
             tooltip: 'How to Play',
             style: IconButton.styleFrom(
-              backgroundColor: const Color(0xFF6366F1).withOpacity(0.1),
+              backgroundColor: const Color(0xFF6366F1).withValues(alpha: 0.1),
               foregroundColor: const Color(0xFF6366F1),
             ),
           ),
@@ -181,7 +181,7 @@ class _GameStatusHeader extends ConsumerWidget {
     switch (status) {
       case FlowConnectGameStatus.notStarted:
         message = 'Connect numbers in sequence';
-        bgColor = const Color(0xFF6366F1).withOpacity(0.1);
+        bgColor = const Color(0xFF6366F1).withValues(alpha: 0.1);
         textColor = const Color(0xFF6366F1);
         icon = Icons.info_outline_rounded;
         break;
@@ -190,19 +190,19 @@ class _GameStatusHeader extends ConsumerWidget {
         final totalNums = ref.watch(flowConnectStateProvider.select((p) => p.gameState.totalNumbers));
         final displayNum = (currentNum > totalNums) ? totalNums : currentNum;
         message = 'Find number $displayNum of $totalNums';
-        bgColor = const Color(0xFF3B82F6).withOpacity(0.1);
+        bgColor = const Color(0xFF3B82F6).withValues(alpha: 0.1);
         textColor = const Color(0xFF3B82F6);
         icon = Icons.play_circle_outline_rounded;
         break;
       case FlowConnectGameStatus.success:
         message = 'Puzzle Solved!';
-        bgColor = const Color(0xFF10B981).withOpacity(0.1);
+        bgColor = const Color(0xFF10B981).withValues(alpha: 0.1);
         textColor = const Color(0xFF10B981);
         icon = Icons.check_circle_outline_rounded;
         break;
       case FlowConnectGameStatus.failed:
         message = 'Incorrect Path!';
-        bgColor = const Color(0xFFEF4444).withOpacity(0.1);
+        bgColor = const Color(0xFFEF4444).withValues(alpha: 0.1);
         textColor = const Color(0xFFEF4444);
         icon = Icons.error_outline_rounded;
         break;
@@ -227,7 +227,7 @@ class _GameStatusHeader extends ConsumerWidget {
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: textColor.withOpacity(0.2)),
+          border: Border.all(color: textColor.withValues(alpha: 0.2)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -273,7 +273,7 @@ class _GameGrid extends ConsumerWidget {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF6366F1).withOpacity(0.08),
+                  color: const Color(0xFF6366F1).withValues(alpha: 0.08),
                   blurRadius: 24,
                   offset: const Offset(0, 8),
                   spreadRadius: 0,
@@ -337,8 +337,8 @@ class _GridCell extends StatelessWidget {
       curve: Curves.easeOut,
       decoration: BoxDecoration(
         color: isHint
-            ? const Color(0xFFFBBF24).withOpacity(0.15)
-            : (isPath ? const Color(0xFF6366F1).withOpacity(0.08) : Colors.transparent),
+            ? const Color(0xFFFBBF24).withValues(alpha: 0.15)
+            : (isPath ? const Color(0xFF6366F1).withValues(alpha: 0.08) : Colors.transparent),
         border: Border.all(
           color: Colors.grey.shade100,
           width: 0.5,
@@ -360,7 +360,7 @@ class _GridCell extends StatelessWidget {
             ),
             boxShadow: [
               BoxShadow(
-                color: (isPath ? const Color(0xFF6366F1) : const Color(0xFF3B82F6)).withOpacity(0.3),
+                color: (isPath ? const Color(0xFF6366F1) : const Color(0xFF3B82F6)).withValues(alpha: 0.3),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -398,7 +398,7 @@ class _GameControls extends ConsumerWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -457,7 +457,7 @@ class _ControlButton extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Material(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(16),
             child: InkWell(
               onTap: onPressed,
@@ -519,7 +519,7 @@ class _HowToPlayContent extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF6366F1).withOpacity(0.1),
+                  color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(
@@ -603,7 +603,7 @@ class _RuleItem extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(icon, color: color, size: 20),
@@ -650,7 +650,7 @@ class _PathPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     final shadowPaint = Paint()
-      ..color = const Color(0xFF6366F1).withOpacity(0.2)
+      ..color = const Color(0xFF6366F1).withValues(alpha: 0.2)
       ..strokeWidth = cellSize * 0.3
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
@@ -675,7 +675,7 @@ class _PathPainter extends CustomPainter {
     canvas.drawPath(uiPath, paint);
 
     if (hintPoint != null) {
-      final hintPaint = Paint()..color = const Color(0xFFFBBF24).withOpacity(0.6);
+      final hintPaint = Paint()..color = const Color(0xFFFBBF24).withValues(alpha: 0.6);
       final hintBorderPaint = Paint()
         ..color = const Color(0xFFFBBF24)
         ..style = PaintingStyle.stroke

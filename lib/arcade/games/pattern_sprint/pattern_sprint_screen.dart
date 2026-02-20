@@ -163,8 +163,8 @@ class _StatPill extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: Colors.white.withOpacity(0.08),
-          border: Border.all(color: Colors.white.withOpacity(0.10)),
+          color: Colors.white.withValues(alpha: 0.08),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
         ),
         child: Row(
           children: [
@@ -174,7 +174,7 @@ class _StatPill extends StatelessWidget {
               child: Text(
                 label,
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.70),
+                  color: Colors.white.withValues(alpha: 0.70),
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                 ),
@@ -209,13 +209,13 @@ class _PromptCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
         gradient: LinearGradient(
           colors: [
-            const Color(0xFF2C2C54).withOpacity(0.95),
-            const Color(0xFF1B1B2F).withOpacity(0.90),
+            const Color(0xFF2C2C54).withValues(alpha: 0.95),
+            const Color(0xFF1B1B2F).withValues(alpha: 0.90),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        border: Border.all(color: Colors.white.withOpacity(0.12)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,7 +223,7 @@ class _PromptCard extends StatelessWidget {
           Text(
             'Fill the missing value:',
             style: TextStyle(
-              color: Colors.white.withOpacity(0.75),
+              color: Colors.white.withValues(alpha: 0.75),
               fontSize: 12,
               fontWeight: FontWeight.w700,
             ),
@@ -239,12 +239,12 @@ class _PromptCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(14),
                   color: isMissing
-                      ? Colors.white.withOpacity(0.18)
-                      : Colors.white.withOpacity(0.08),
+                      ? Colors.white.withValues(alpha: 0.18)
+                      : Colors.white.withValues(alpha: 0.08),
                   border: Border.all(
                     color: isMissing
-                        ? Colors.amberAccent.withOpacity(0.6)
-                        : Colors.white.withOpacity(0.12),
+                        ? Colors.amberAccent.withValues(alpha: 0.6)
+                        : Colors.white.withValues(alpha: 0.12),
                   ),
                 ),
                 child: Text(
@@ -290,11 +290,11 @@ class _OptionsGrid extends StatelessWidget {
           return ElevatedButton(
             onPressed: () => onPick(value),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white.withOpacity(0.10),
+              backgroundColor: Colors.white.withValues(alpha: 0.10),
               foregroundColor: Colors.white,
               elevation: 0,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-              side: BorderSide(color: Colors.white.withOpacity(0.12)),
+              side: BorderSide(color: Colors.white.withValues(alpha: 0.12)),
               padding: const EdgeInsets.symmetric(vertical: 12),
             ),
             child: Text(
@@ -353,8 +353,8 @@ class _MiniChip extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
-          color: Colors.white.withOpacity(0.06),
-          border: Border.all(color: Colors.white.withOpacity(0.10)),
+          color: Colors.white.withValues(alpha: 0.06),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
         ),
         child: Column(
           children: [
@@ -363,7 +363,7 @@ class _MiniChip extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                color: Colors.white.withOpacity(0.70),
+                color: Colors.white.withValues(alpha: 0.70),
                 fontSize: 10,
                 fontWeight: FontWeight.w700,
               ),

@@ -19,7 +19,7 @@ class AvatarHelpers {
     double spreadRadius = 0,
     Offset offset = const Offset(0, 4),
   }) {
-    final shadowColor = color ?? Colors.black.withOpacity(0.15);
+    final shadowColor = color ?? Colors.black.withValues(alpha: 0.15);
     return [
       BoxShadow(
         color: shadowColor,
@@ -28,7 +28,7 @@ class AvatarHelpers {
         offset: offset,
       ),
       BoxShadow(
-        color: shadowColor.withOpacity(0.1),
+        color: shadowColor.withValues(alpha: 0.1),
         blurRadius: blurRadius * 1.5,
         spreadRadius: spreadRadius,
         offset: Offset(offset.dx, offset.dy + 2),
@@ -44,13 +44,13 @@ class AvatarHelpers {
     final glowColors = colors ?? getGradientBorderColors();
     return [
       BoxShadow(
-        color: glowColors.first.withOpacity(0.3),
+        color: glowColors.first.withValues(alpha: 0.3),
         blurRadius: blurRadius,
         spreadRadius: -2,
         offset: const Offset(-2, -2),
       ),
       BoxShadow(
-        color: glowColors.last.withOpacity(0.3),
+        color: glowColors.last.withValues(alpha: 0.3),
         blurRadius: blurRadius,
         spreadRadius: -2,
         offset: const Offset(2, 2),

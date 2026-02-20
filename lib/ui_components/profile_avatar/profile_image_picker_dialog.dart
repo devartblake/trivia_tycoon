@@ -141,7 +141,7 @@ class _ProfileImagePickerBottomSheetState
             ),
             boxShadow: [
               BoxShadow(
-                color: colorScheme.shadow.withOpacity(0.1),
+                color: colorScheme.shadow.withValues(alpha: 0.1),
                 blurRadius: 20,
                 offset: const Offset(0, -4),
               ),
@@ -158,7 +158,7 @@ class _ProfileImagePickerBottomSheetState
                   width: 36,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: colorScheme.onSurfaceVariant.withOpacity(0.4),
+                    color: colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -174,7 +174,7 @@ class _ProfileImagePickerBottomSheetState
                           gradient: LinearGradient(
                             colors: [
                               colorScheme.primaryContainer,
-                              colorScheme.primary.withOpacity(0.3),
+                              colorScheme.primary.withValues(alpha: 0.3),
                             ],
                           ),
                           borderRadius: BorderRadius.circular(16),
@@ -223,7 +223,7 @@ class _ProfileImagePickerBottomSheetState
                         gradient: LinearGradient(
                           colors: [
                             colorScheme.primaryContainer,
-                            colorScheme.primary.withOpacity(0.6),
+                            colorScheme.primary.withValues(alpha: 0.6),
                           ],
                         ),
                         iconColor: colorScheme.primary,
@@ -238,7 +238,7 @@ class _ProfileImagePickerBottomSheetState
                         gradient: LinearGradient(
                           colors: [
                             colorScheme.secondaryContainer,
-                            colorScheme.secondary.withOpacity(0.6),
+                            colorScheme.secondary.withValues(alpha: 0.6),
                           ],
                         ),
                         iconColor: colorScheme.secondary,
@@ -253,7 +253,7 @@ class _ProfileImagePickerBottomSheetState
                         gradient: LinearGradient(
                           colors: [
                             colorScheme.tertiaryContainer,
-                            colorScheme.tertiary.withOpacity(0.6),
+                            colorScheme.tertiary.withValues(alpha: 0.6),
                           ],
                         ),
                         iconColor: colorScheme.tertiary,
@@ -304,7 +304,7 @@ class _ProfileImagePickerBottomSheetState
                           borderRadius: BorderRadius.circular(16),
                         ),
                         backgroundColor: colorScheme.surfaceContainerHighest
-                            .withOpacity(0.5),
+                            .withValues(alpha: 0.5),
                       ),
                       child: Text(
                         'Cancel',
@@ -393,13 +393,13 @@ class _OptionCardState extends State<_OptionCard>
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: colorScheme.shadow.withOpacity(0.1),
+                    color: colorScheme.shadow.withValues(alpha: 0.1),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
                 ],
                 border: Border.all(
-                  color: colorScheme.outline.withOpacity(0.1),
+                  color: colorScheme.outline.withValues(alpha: 0.1),
                   width: 1,
                 ),
               ),
@@ -414,7 +414,7 @@ class _OptionCardState extends State<_OptionCard>
                         borderRadius: BorderRadius.circular(14),
                         boxShadow: [
                           BoxShadow(
-                            color: widget.iconColor.withOpacity(0.2),
+                            color: widget.iconColor.withValues(alpha: 0.2),
                             blurRadius: 8,
                             spreadRadius: -2,
                           ),
@@ -443,7 +443,7 @@ class _OptionCardState extends State<_OptionCard>
                             widget.subtitle,
                             style: textTheme.bodySmall?.copyWith(
                               color: colorScheme.onPrimaryContainer
-                                  .withOpacity(0.75),
+                                  .withValues(alpha: 0.75),
                             ),
                           ),
                         ],
@@ -452,7 +452,7 @@ class _OptionCardState extends State<_OptionCard>
                     Icon(
                       Icons.arrow_forward_ios_rounded,
                       size: 18,
-                      color: colorScheme.onPrimaryContainer.withOpacity(0.5),
+                      color: colorScheme.onPrimaryContainer.withValues(alpha: 0.5),
                     ),
                   ],
                 ),

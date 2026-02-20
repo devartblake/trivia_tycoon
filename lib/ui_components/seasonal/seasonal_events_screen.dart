@@ -148,9 +148,9 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
       leading: Container(
         margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.1),
+          color: Colors.white.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.white.withOpacity(0.2)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
         ),
         child: IconButton(
           onPressed: () => context.pop(),
@@ -219,21 +219,21 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
                     ? _getSeasonalGradient(event['theme'])
                     : LinearGradient(
                   colors: [
-                    Colors.white.withOpacity(0.1),
-                    Colors.white.withOpacity(0.05),
+                    Colors.white.withValues(alpha: 0.1),
+                    Colors.white.withValues(alpha: 0.05),
                   ],
                 ),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                   color: isSelected
-                      ? Colors.white.withOpacity(0.3)
-                      : Colors.white.withOpacity(0.1),
+                      ? Colors.white.withValues(alpha: 0.3)
+                      : Colors.white.withValues(alpha: 0.1),
                   width: isSelected ? 2 : 1,
                 ),
                 boxShadow: isSelected
                     ? [
                   BoxShadow(
-                    color: _getSeasonalColor(event['theme']).withOpacity(0.3),
+                    color: _getSeasonalColor(event['theme']).withValues(alpha: 0.3),
                     blurRadius: 20,
                     offset: const Offset(0, 8),
                   ),
@@ -305,7 +305,7 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: _getSeasonalColor(event['theme']).withOpacity(0.3),
+            color: _getSeasonalColor(event['theme']).withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -331,7 +331,7 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.2),
+        color: Colors.black.withValues(alpha: 0.2),
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(24),
           topRight: Radius.circular(24),
@@ -342,7 +342,7 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Icon(
@@ -390,7 +390,7 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
                 Text(
                   event['description'],
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.8),
+                    color: Colors.white.withValues(alpha: 0.8),
                     fontSize: 14,
                   ),
                 ),
@@ -442,7 +442,7 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
               Text(
                 '$completed/$total challenges',
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.8),
+                  color: Colors.white.withValues(alpha: 0.8),
                   fontSize: 14,
                 ),
               ),
@@ -452,7 +452,7 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
           Container(
             height: 12,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(6),
             ),
             child: FractionallySizedBox(
@@ -464,7 +464,7 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
                   borderRadius: BorderRadius.circular(6),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.white.withOpacity(0.5),
+                      color: Colors.white.withValues(alpha: 0.5),
                       blurRadius: 4,
                       offset: const Offset(0, 1),
                     ),
@@ -519,12 +519,12 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(isClaimed ? 0.15 : 0.1),
+        color: Colors.white.withValues(alpha: isClaimed ? 0.15 : 0.1),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isClaimed
-              ? Colors.green.withOpacity(0.5)
-              : Colors.white.withOpacity(0.2),
+              ? Colors.green.withValues(alpha: 0.5)
+              : Colors.white.withValues(alpha: 0.2),
           width: 1,
         ),
       ),
@@ -560,7 +560,7 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
                 Text(
                   reward['requirement'],
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.7),
+                    color: Colors.white.withValues(alpha: 0.7),
                     fontSize: 12,
                   ),
                 ),
@@ -571,7 +571,7 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: Colors.green.withOpacity(0.2),
+                color: Colors.green.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Text(
@@ -621,12 +621,12 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(isCompleted ? 0.15 : 0.1),
+        color: Colors.white.withValues(alpha: isCompleted ? 0.15 : 0.1),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isCompleted
-              ? Colors.green.withOpacity(0.5)
-              : Colors.white.withOpacity(0.2),
+              ? Colors.green.withValues(alpha: 0.5)
+              : Colors.white.withValues(alpha: 0.2),
           width: 1,
         ),
       ),
@@ -652,7 +652,7 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
                 Text(
                   '$progress/$total',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.8),
+                    color: Colors.white.withValues(alpha: 0.8),
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
@@ -663,7 +663,7 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
           Text(
             challenge['description'],
             style: TextStyle(
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white.withValues(alpha: 0.7),
               fontSize: 12,
             ),
           ),
@@ -672,7 +672,7 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
             Container(
               height: 6,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(3),
               ),
               child: FractionallySizedBox(
@@ -702,7 +702,7 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
         children: [
           Icon(
             isCompleted ? Icons.check_circle : Icons.schedule,
-            color: Colors.white.withOpacity(0.7),
+            color: Colors.white.withValues(alpha: 0.7),
             size: 64,
           ),
           const SizedBox(height: 16),
@@ -721,7 +721,7 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
                 : 'This seasonal event will be available soon. Stay tuned!',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.white.withOpacity(0.8),
+              color: Colors.white.withValues(alpha: 0.8),
               fontSize: 16,
             ),
           ),
@@ -730,7 +730,7 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
             Text(
               'Expected: ${event['startDate']} - ${event['endDate']}',
               style: TextStyle(
-                color: Colors.white.withOpacity(0.6),
+                color: Colors.white.withValues(alpha: 0.6),
                 fontSize: 14,
               ),
             ),

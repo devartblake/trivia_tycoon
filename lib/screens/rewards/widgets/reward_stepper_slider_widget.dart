@@ -102,7 +102,7 @@ class RewardStepperSliderState extends State<RewardStepperSlider> {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 4,
                       offset: Offset(0, 2),
                     ),
@@ -128,7 +128,7 @@ class RewardStepperSliderState extends State<RewardStepperSlider> {
                       border: Border.all(color: Colors.orange, width: 1),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withValues(alpha: 0.1),
                           blurRadius: 2,
                           offset: Offset(0, 1),
                         ),
@@ -157,7 +157,7 @@ class RewardStepperSliderState extends State<RewardStepperSlider> {
                       border: Border.all(color: Colors.white, width: 2),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.green.withOpacity(0.3),
+                          color: Colors.green.withValues(alpha: 0.3),
                           blurRadius: 4,
                           offset: Offset(0, 2),
                         ),

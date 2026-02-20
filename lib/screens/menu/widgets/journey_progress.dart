@@ -85,18 +85,18 @@ class _JourneyProgressState extends State<JourneyProgress>
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF6366F1).withOpacity(0.1),
+            color: const Color(0xFF6366F1).withValues(alpha: 0.1),
             blurRadius: 30,
             offset: const Offset(0, 10),
           ),
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
         ],
         border: Border.all(
-          color: const Color(0xFF6366F1).withOpacity(0.12),
+          color: const Color(0xFF6366F1).withValues(alpha: 0.12),
           width: 1.5,
         ),
       ),
@@ -131,7 +131,7 @@ class _JourneyProgressState extends State<JourneyProgress>
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF6366F1).withOpacity(0.3),
+                color: const Color(0xFF6366F1).withValues(alpha: 0.3),
                 blurRadius: 8,
                 offset: const Offset(0, 4),
               ),
@@ -181,7 +181,7 @@ class _JourneyProgressState extends State<JourneyProgress>
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF6366F1).withOpacity(0.3),
+                    color: const Color(0xFF6366F1).withValues(alpha: 0.3),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -199,9 +199,9 @@ class _JourneyProgressState extends State<JourneyProgress>
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          Colors.white.withOpacity(0.0),
-                          Colors.white.withOpacity(0.3),
-                          Colors.white.withOpacity(0.0),
+                          Colors.white.withValues(alpha: 0.0),
+                          Colors.white.withValues(alpha: 0.3),
+                          Colors.white.withValues(alpha: 0.0),
                         ],
                         stops: const [0.0, 0.5, 1.0],
                         begin: Alignment.centerLeft,
@@ -242,7 +242,7 @@ class _JourneyProgressState extends State<JourneyProgress>
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF6366F1).withOpacity(0.2),
+                    color: const Color(0xFF6366F1).withValues(alpha: 0.2),
                     blurRadius: 6,
                     offset: const Offset(0, 2),
                   ),
@@ -272,15 +272,15 @@ class _JourneyProgressState extends State<JourneyProgress>
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              const Color(0xFFFBBF24).withOpacity(0.15),
-              const Color(0xFFF59E0B).withOpacity(0.15),
+              const Color(0xFFFBBF24).withValues(alpha: 0.15),
+              const Color(0xFFF59E0B).withValues(alpha: 0.15),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: const Color(0xFFFBBF24).withOpacity(0.3),
+            color: const Color(0xFFFBBF24).withValues(alpha: 0.3),
             width: 1.5,
           ),
         ),
@@ -295,7 +295,7 @@ class _JourneyProgressState extends State<JourneyProgress>
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFFF59E0B).withOpacity(0.3),
+                    color: const Color(0xFFF59E0B).withValues(alpha: 0.3),
                     blurRadius: 6,
                     offset: const Offset(0, 2),
                   ),
@@ -322,7 +322,7 @@ class _JourneyProgressState extends State<JourneyProgress>
             Container(
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
-                color: const Color(0xFFFBBF24).withOpacity(0.2),
+                color: const Color(0xFFFBBF24).withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Icon(

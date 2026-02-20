@@ -81,18 +81,18 @@ class _RewardsBannerState extends ConsumerState<RewardsBanner>
               BoxShadow(
                 color: GradientThemes.getAgeGroupColors(widget.ageGroup)
                     .first
-                    .withOpacity(0.4),
+                    .withValues(alpha: 0.4),
                 blurRadius: 25,
                 offset: const Offset(0, 10),
               ),
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 15,
                 offset: const Offset(0, 5),
               ),
             ],
             border: Border.all(
-              color: Colors.white.withOpacity(0.3),
+              color: Colors.white.withValues(alpha: 0.3),
               width: 2,
             ),
           ),
@@ -113,11 +113,11 @@ class _RewardsBannerState extends ConsumerState<RewardsBanner>
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.25),
+        color: Colors.white.withValues(alpha: 0.25),
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -150,7 +150,7 @@ class _RewardsBannerState extends ConsumerState<RewardsBanner>
             'Tap to claim your rewards',
             style: TextStyle(
               fontSize: 15,
-              color: Colors.white.withOpacity(0.95),
+              color: Colors.white.withValues(alpha: 0.95),
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -163,7 +163,7 @@ class _RewardsBannerState extends ConsumerState<RewardsBanner>
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.25),
+        color: Colors.white.withValues(alpha: 0.25),
         borderRadius: BorderRadius.circular(14),
       ),
       child: const Icon(

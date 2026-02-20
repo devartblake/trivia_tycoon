@@ -82,7 +82,7 @@ class _AvatarStatusIndicatorState extends State<AvatarStatusIndicator>
         ),
         boxShadow: [
           BoxShadow(
-            color: gradientColors.first.withOpacity(0.4),
+            color: gradientColors.first.withValues(alpha: 0.4),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),

@@ -119,7 +119,7 @@ class _WheelImagePainter extends CustomPainter {
     ..style = PaintingStyle.stroke
     ..strokeWidth = 4;
   static final Paint _shadowPaint = Paint()
-    ..color = Colors.black.withOpacity(0.15)
+    ..color = Colors.black.withValues(alpha: 0.15)
     ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
 
   _WheelImagePainter({
@@ -176,7 +176,7 @@ class _WheelImagePainter extends CustomPainter {
       center,
       [
         segment.color,
-        segment.color.withOpacity(0.8),
+        segment.color.withValues(alpha: 0.8),
         segment.color,
       ],
       [0.0, 0.5, 1.0],
@@ -191,16 +191,16 @@ class _WheelImagePainter extends CustomPainter {
     canvas.drawArc(rect, startAngle, anglePerSegment, true, _segmentPaint);
 
     // Draw segment border
-    _borderPaint.color = segment.color.withOpacity(0.6);
+    _borderPaint.color = segment.color.withValues(alpha: 0.6);
     canvas.drawArc(rect, startAngle, anglePerSegment, true, _borderPaint);
 
     // Highlight active segment
     if (isActive) {
-      _highlightPaint.color = Colors.amber.withOpacity(0.8);
+      _highlightPaint.color = Colors.amber.withValues(alpha: 0.8);
       canvas.drawArc(rect, startAngle, anglePerSegment, true, _highlightPaint);
 
       // Add inner highlight
-      _highlightPaint.color = Colors.white.withOpacity(0.3);
+      _highlightPaint.color = Colors.white.withValues(alpha: 0.3);
       _highlightPaint.strokeWidth = 2;
       canvas.drawArc(
         Rect.fromCircle(center: center, radius: radius * 0.7),
@@ -301,7 +301,7 @@ class _WheelImagePainter extends CustomPainter {
       double startAngle,
       double anglePerSegment,
       ) {
-    final lockPaint = Paint()..color = Colors.black.withOpacity(0.6);
+    final lockPaint = Paint()..color = Colors.black.withValues(alpha: 0.6);
 
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),

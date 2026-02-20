@@ -138,7 +138,7 @@ class _MissionPanelState extends ConsumerState<MissionPanel>
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Icon(
@@ -222,8 +222,8 @@ class _MissionPanelState extends ConsumerState<MissionPanel>
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              const Color(0xFF1A1A2E).withOpacity(0.8),
-              const Color(0xFF16213E).withOpacity(0.6),
+              const Color(0xFF1A1A2E).withValues(alpha: 0.8),
+              const Color(0xFF16213E).withValues(alpha: 0.6),
             ],
           ),
           borderRadius: BorderRadius.circular(24),
@@ -241,15 +241,15 @@ class _MissionPanelState extends ConsumerState<MissionPanel>
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            const Color(0xFF1A1A2E).withOpacity(0.8),
-            const Color(0xFF16213E).withOpacity(0.6),
+            const Color(0xFF1A1A2E).withValues(alpha: 0.8),
+            const Color(0xFF16213E).withValues(alpha: 0.6),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: Colors.white.withOpacity(0.1),
+          color: Colors.white.withValues(alpha: 0.1),
           width: 1,
         ),
       ),
@@ -300,8 +300,8 @@ class _MissionPanelState extends ConsumerState<MissionPanel>
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            const Color(0xFF6C5CE7).withOpacity(0.8),
-            const Color(0xFF5A4FCF).withOpacity(0.6),
+            const Color(0xFF6C5CE7).withValues(alpha: 0.8),
+            const Color(0xFF5A4FCF).withValues(alpha: 0.6),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -318,7 +318,7 @@ class _MissionPanelState extends ConsumerState<MissionPanel>
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Stack(
@@ -332,7 +332,7 @@ class _MissionPanelState extends ConsumerState<MissionPanel>
                   Positioned.fill(
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.5),
+                        color: Colors.black.withValues(alpha: 0.5),
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: const Center(
@@ -369,7 +369,7 @@ class _MissionPanelState extends ConsumerState<MissionPanel>
                   _isSwapping ? "Swapping mission..." : "Complete missions to earn XP",
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.white.withOpacity(0.8),
+                    color: Colors.white.withValues(alpha: 0.8),
                   ),
                 ),
               ],
@@ -378,10 +378,10 @@ class _MissionPanelState extends ConsumerState<MissionPanel>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: Colors.white.withOpacity(0.3),
+                color: Colors.white.withValues(alpha: 0.3),
                 width: 1,
               ),
             ),
@@ -531,7 +531,7 @@ class _MissionPanelState extends ConsumerState<MissionPanel>
             borderRadius: BorderRadius.circular(16),
           ),
           elevation: 8,
-          shadowColor: const Color(0xFF6C5CE7).withOpacity(0.3),
+          shadowColor: const Color(0xFF6C5CE7).withValues(alpha: 0.3),
         ),
       ),
     );

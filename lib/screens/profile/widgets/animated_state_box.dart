@@ -79,7 +79,7 @@ class _AnimatedStatBoxState extends State<AnimatedStatBox>
             ),
             boxShadow: [
               BoxShadow(
-                color: widget.gradientColors.last.withOpacity(0.4),
+                color: widget.gradientColors.last.withValues(alpha: 0.4),
                 blurRadius: 12,
                 offset: const Offset(0, 6),
                 spreadRadius: 0,
@@ -126,7 +126,7 @@ class _AnimatedStatBoxState extends State<AnimatedStatBox>
                 child: Text(
                   widget.label,
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.white.withValues(alpha: 0.9),
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 0.5,

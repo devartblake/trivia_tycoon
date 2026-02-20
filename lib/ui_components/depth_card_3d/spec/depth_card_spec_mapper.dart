@@ -258,7 +258,7 @@ class _VignetteOverlay extends StatelessWidget {
             radius: 0.9,
             colors: [
               Colors.transparent,
-              Colors.black.withOpacity(opacity),
+              Colors.black.withValues(alpha: opacity),
             ],
           ),
         ),
@@ -282,9 +282,9 @@ class _SoftGlowOverlay extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Colors.white.withOpacity(0.10 * a),
+              Colors.white.withValues(alpha: 0.10 * a),
               Colors.transparent,
-              Colors.white.withOpacity(0.06 * a),
+              Colors.white.withValues(alpha: 0.06 * a),
             ],
           ),
         ),
@@ -314,7 +314,7 @@ class _CornerBadgeOverlay extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           decoration: BoxDecoration(
-            color: const Color(0xFF000000).withOpacity(0.35),
+            color: const Color(0xFF000000).withValues(alpha: 0.35),
             borderRadius: BorderRadius.circular(999),
           ),
           child: Text(
@@ -352,10 +352,10 @@ class _CornerChipOverlay extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           decoration: BoxDecoration(
-            color: const Color(0xFFFFFFFF).withOpacity(0.12),
+            color: const Color(0xFFFFFFFF).withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(999),
             border: Border.all(
-              color: const Color(0xFFFFFFFF).withOpacity(0.16),
+              color: const Color(0xFFFFFFFF).withValues(alpha: 0.16),
               width: 1,
             ),
           ),

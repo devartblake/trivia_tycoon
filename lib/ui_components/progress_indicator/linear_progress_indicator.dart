@@ -235,7 +235,7 @@ class _TycoonLinearProgressIndicatorState
                         borderRadius: BorderRadius.circular(widget.borderRadius),
                         boxShadow: [
                           BoxShadow(
-                            color: widget.colorLinearProgress.withOpacity(0.6),
+                            color: widget.colorLinearProgress.withValues(alpha: 0.6),
                             blurRadius: 16,
                             spreadRadius: 4,
                           ),

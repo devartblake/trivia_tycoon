@@ -24,7 +24,7 @@ class RetentionAnalyticsChart extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: const Color(0xFFEF4444).withOpacity(0.1),
+                color: const Color(0xFFEF4444).withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -203,8 +203,8 @@ class RetentionAnalyticsChart extends ConsumerWidget {
                     show: true,
                     gradient: LinearGradient(
                       colors: [
-                        const Color(0xFFEF4444).withOpacity(0.3),
-                        const Color(0xFFEF4444).withOpacity(0.05),
+                        const Color(0xFFEF4444).withValues(alpha: 0.3),
+                        const Color(0xFFEF4444).withValues(alpha: 0.05),
                       ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,

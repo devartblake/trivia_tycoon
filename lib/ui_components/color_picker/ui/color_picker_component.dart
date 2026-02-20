@@ -105,7 +105,7 @@ class _ColorPickerComponentState extends State<ColorPickerComponent>
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 14,
-              color: colorScheme.onSurface.withOpacity(0.8),
+              color: colorScheme.onSurface.withValues(alpha: 0.8),
             ),
           ),
           const SizedBox(height: 12),
@@ -115,11 +115,11 @@ class _ColorPickerComponentState extends State<ColorPickerComponent>
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: isDark
-                ? colorScheme.surfaceContainerLowest.withOpacity(0.5)
+                ? colorScheme.surfaceContainerLowest.withValues(alpha: 0.5)
                 : colorScheme.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: colorScheme.outline.withOpacity(0.2),
+              color: colorScheme.outline.withValues(alpha: 0.2),
               width: 1,
             ),
           ),
@@ -150,7 +150,7 @@ class _ColorPickerComponentState extends State<ColorPickerComponent>
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.indigo.withOpacity(0.3),
+                        color: Colors.indigo.withValues(alpha: 0.3),
                         blurRadius: 8,
                         offset: const Offset(0, 4),
                       ),
@@ -201,10 +201,10 @@ class _ColorPickerComponentState extends State<ColorPickerComponent>
     return Container(
       height: 48,
       decoration: BoxDecoration(
-        color: colorScheme.surfaceContainer.withOpacity(0.5),
+        color: colorScheme.surfaceContainer.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: colorScheme.outline.withOpacity(0.3),
+          color: colorScheme.outline.withValues(alpha: 0.3),
           width: 1,
           strokeAlign: BorderSide.strokeAlignInside,
         ),
@@ -214,14 +214,14 @@ class _ColorPickerComponentState extends State<ColorPickerComponent>
         children: [
           Icon(
             Icons.palette_outlined,
-            color: colorScheme.onSurface.withOpacity(0.5),
+            color: colorScheme.onSurface.withValues(alpha: 0.5),
             size: 20,
           ),
           const SizedBox(width: 8),
           Text(
             "No color selected",
             style: TextStyle(
-              color: colorScheme.onSurface.withOpacity(0.5),
+              color: colorScheme.onSurface.withValues(alpha: 0.5),
               fontSize: 14,
             ),
           ),
@@ -237,12 +237,12 @@ class _ColorPickerComponentState extends State<ColorPickerComponent>
         color: _colors.first,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: colorScheme.outline.withOpacity(0.3),
+          color: colorScheme.outline.withValues(alpha: 0.3),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: _colors.first.withOpacity(0.3),
+            color: _colors.first.withValues(alpha: 0.3),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -255,7 +255,7 @@ class _ColorPickerComponentState extends State<ColorPickerComponent>
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.7),
+                color: Colors.black.withValues(alpha: 0.7),
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Text(
@@ -281,7 +281,7 @@ class _ColorPickerComponentState extends State<ColorPickerComponent>
                   width: 24,
                   height: 24,
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.7),
+                    color: Colors.black.withValues(alpha: 0.7),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
@@ -346,7 +346,7 @@ class _ModernColorPickerDialogState extends State<_ModernColorPickerDialog>
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withValues(alpha: 0.2),
               blurRadius: 24,
               offset: const Offset(0, 12),
             ),
@@ -361,8 +361,8 @@ class _ModernColorPickerDialogState extends State<_ModernColorPickerDialog>
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    selectedColor.withOpacity(0.1),
-                    selectedColor.withOpacity(0.05),
+                    selectedColor.withValues(alpha: 0.1),
+                    selectedColor.withValues(alpha: 0.05),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -415,12 +415,12 @@ class _ModernColorPickerDialogState extends State<_ModernColorPickerDialog>
                       color: selectedColor,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: colorScheme.outline.withOpacity(0.3),
+                        color: colorScheme.outline.withValues(alpha: 0.3),
                         width: 1,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: selectedColor.withOpacity(0.3),
+                          color: selectedColor.withValues(alpha: 0.3),
                           blurRadius: 12,
                           offset: const Offset(0, 4),
                         ),
@@ -433,7 +433,7 @@ class _ModernColorPickerDialogState extends State<_ModernColorPickerDialog>
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.7),
+                          color: Colors.black.withValues(alpha: 0.7),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
@@ -474,7 +474,7 @@ class _ModernColorPickerDialogState extends State<_ModernColorPickerDialog>
                 indicatorSize: TabBarIndicatorSize.tab,
                 dividerColor: Colors.transparent,
                 labelColor: Colors.white,
-                unselectedLabelColor: colorScheme.onSurface.withOpacity(0.6),
+                unselectedLabelColor: colorScheme.onSurface.withValues(alpha: 0.6),
                 labelStyle: const TextStyle(fontWeight: FontWeight.w600),
                 tabs: const [
                   Tab(text: "Wheel"),

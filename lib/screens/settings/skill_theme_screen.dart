@@ -126,7 +126,7 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF64748B).withOpacity(0.1),
+              color: const Color(0xFF64748B).withValues(alpha: 0.1),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -184,7 +184,7 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: (currentTheme['gradient'] as LinearGradient).colors.first.withOpacity(0.3),
+                color: (currentTheme['gradient'] as LinearGradient).colors.first.withValues(alpha: 0.3),
                 blurRadius: 25,
                 offset: const Offset(0, 12),
               ),
@@ -198,10 +198,10 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         width: 2,
                       ),
                     ),
@@ -242,7 +242,7 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
               Text(
                 currentTheme['description'],
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.9),
+                  color: Colors.white.withValues(alpha: 0.9),
                   fontSize: 16,
                 ),
               ),
@@ -263,13 +263,13 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF64748B).withOpacity(0.08),
+              color: const Color(0xFF64748B).withValues(alpha: 0.08),
               blurRadius: 25,
               offset: const Offset(0, 8),
             ),
           ],
           border: Border.all(
-            color: const Color(0xFF64748B).withOpacity(0.1),
+            color: const Color(0xFF64748B).withValues(alpha: 0.1),
             width: 1,
           ),
         ),
@@ -285,7 +285,7 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF6366F1).withOpacity(0.3),
+                        color: const Color(0xFF6366F1).withValues(alpha: 0.3),
                         blurRadius: 8,
                         offset: const Offset(0, 4),
                       ),
@@ -338,13 +338,13 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isSelected
-                ? Colors.white.withOpacity(0.3)
-                : const Color(0xFF64748B).withOpacity(0.2),
+                ? Colors.white.withValues(alpha: 0.3)
+                : const Color(0xFF64748B).withValues(alpha: 0.2),
             width: isSelected ? 2 : 1,
           ),
           boxShadow: isSelected ? [
             BoxShadow(
-              color: (themeData['gradient'] as LinearGradient).colors.first.withOpacity(0.3),
+              color: (themeData['gradient'] as LinearGradient).colors.first.withValues(alpha: 0.3),
               blurRadius: 15,
               offset: const Offset(0, 6),
             ),
@@ -356,8 +356,8 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: isSelected
-                  ? Colors.white.withOpacity(0.2)
-                  : (themeData['gradient'] as LinearGradient).colors.first.withOpacity(0.1),
+                  ? Colors.white.withValues(alpha: 0.2)
+                  : (themeData['gradient'] as LinearGradient).colors.first.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
@@ -381,15 +381,15 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
             style: TextStyle(
               fontSize: 12,
               color: isSelected
-                  ? Colors.white.withOpacity(0.8)
-                  : const Color(0xFF64748B).withOpacity(0.8),
+                  ? Colors.white.withValues(alpha: 0.8)
+                  : const Color(0xFF64748B).withValues(alpha: 0.8),
             ),
           ),
           trailing: isSelected
               ? Container(
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(20),
             ),
             child: const Icon(
@@ -400,7 +400,7 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
           )
               : Icon(
             Icons.radio_button_unchecked,
-            color: const Color(0xFF64748B).withOpacity(0.5),
+            color: const Color(0xFF64748B).withValues(alpha: 0.5),
             size: 20,
           ),
           onTap: () {
@@ -429,13 +429,13 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF64748B).withOpacity(0.08),
+                color: const Color(0xFF64748B).withValues(alpha: 0.08),
                 blurRadius: 25,
                 offset: const Offset(0, 8),
               ),
             ],
             border: Border.all(
-              color: const Color(0xFF64748B).withOpacity(0.1),
+              color: const Color(0xFF64748B).withValues(alpha: 0.1),
               width: 1,
             ),
           ),
@@ -451,7 +451,7 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF10B981).withOpacity(0.3),
+                          color: const Color(0xFF10B981).withValues(alpha: 0.3),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         ),
@@ -481,7 +481,7 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
                   color: const Color(0xFFF8FAFF),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: const Color(0xFF64748B).withOpacity(0.1),
+                    color: const Color(0xFF64748B).withValues(alpha: 0.1),
                     width: 1,
                   ),
                 ),
@@ -491,8 +491,8 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: snap
-                            ? const Color(0xFF10B981).withOpacity(0.1)
-                            : const Color(0xFF64748B).withOpacity(0.1),
+                            ? const Color(0xFF10B981).withValues(alpha: 0.1)
+                            : const Color(0xFF64748B).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(
@@ -521,7 +521,7 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
                             'Align background grid with skill nodes',
                             style: TextStyle(
                               fontSize: 12,
-                              color: const Color(0xFF64748B).withOpacity(0.8),
+                              color: const Color(0xFF64748B).withValues(alpha: 0.8),
                             ),
                           ),
                         ],

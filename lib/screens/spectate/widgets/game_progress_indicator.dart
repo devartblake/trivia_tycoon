@@ -15,7 +15,7 @@ class GameProgressIndicator extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
+        color: Colors.white.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -26,7 +26,7 @@ class GameProgressIndicator extends StatelessWidget {
               Text(
                 'Progress',
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.7),
+                  color: Colors.white.withValues(alpha: 0.7),
                   fontSize: 12,
                 ),
               ),
@@ -46,7 +46,7 @@ class GameProgressIndicator extends StatelessWidget {
             child: LinearProgressIndicator(
               value: gameState.progress,
               minHeight: 6,
-              backgroundColor: Colors.white.withOpacity(0.2),
+              backgroundColor: Colors.white.withValues(alpha: 0.2),
               valueColor: const AlwaysStoppedAnimation<Color>(Colors.amber),
             ),
           ),

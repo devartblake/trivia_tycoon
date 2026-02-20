@@ -230,7 +230,7 @@ class TycoonToastRoute<T> extends OverlayRoute<T> {
         ),
       );
     }
-    return Container(color: Colors.black.withOpacity(0.1));
+    return Container(color: Colors.black.withValues(alpha: 0.1));
   }
 
   Widget _getDismissibleToast(Widget child) {

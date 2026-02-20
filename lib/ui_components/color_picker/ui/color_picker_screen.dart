@@ -231,14 +231,14 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: _controller.selectedColor.withOpacity(0.2),
+                          color: _controller.selectedColor.withValues(alpha: 0.2),
                           blurRadius: 20,
                           offset: const Offset(0, 8),
                         ),
                         BoxShadow(
                           color: isDark
-                              ? Colors.black.withOpacity(0.3)
-                              : Colors.black.withOpacity(0.08),
+                              ? Colors.black.withValues(alpha: 0.3)
+                              : Colors.black.withValues(alpha: 0.08),
                           blurRadius: 20,
                           offset: const Offset(0, 8),
                         ),
@@ -299,8 +299,8 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
                       boxShadow: [
                         BoxShadow(
                           color: isDark
-                              ? Colors.black.withOpacity(0.3)
-                              : Colors.black.withOpacity(0.08),
+                              ? Colors.black.withValues(alpha: 0.3)
+                              : Colors.black.withValues(alpha: 0.08),
                           blurRadius: 20,
                           offset: const Offset(0, 8),
                         ),
@@ -371,8 +371,8 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
                       boxShadow: [
                         BoxShadow(
                           color: isDark
-                              ? Colors.black.withOpacity(0.3)
-                              : Colors.black.withOpacity(0.08),
+                              ? Colors.black.withValues(alpha: 0.3)
+                              : Colors.black.withValues(alpha: 0.08),
                           blurRadius: 20,
                           offset: const Offset(0, 8),
                         ),
@@ -545,14 +545,14 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
           children: [
             Icon(
               icon,
-              color: isSelected ? Colors.white : colorScheme.onSurface.withOpacity(0.6),
+              color: isSelected ? Colors.white : colorScheme.onSurface.withValues(alpha: 0.6),
               size: 18,
             ),
             const SizedBox(width: 8),
             Text(
               title,
               style: TextStyle(
-                color: isSelected ? Colors.white : colorScheme.onSurface.withOpacity(0.6),
+                color: isSelected ? Colors.white : colorScheme.onSurface.withValues(alpha: 0.6),
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                 fontSize: 14,
               ),

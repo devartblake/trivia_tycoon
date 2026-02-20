@@ -206,7 +206,7 @@ class _EditProfileBottomSheetState
         borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, -4),
           ),
@@ -229,7 +229,7 @@ class _EditProfileBottomSheetState
             Positioned.fill(
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.black.withValues(alpha: 0.5),
                   borderRadius:
                   const BorderRadius.vertical(top: Radius.circular(28)),
                 ),
@@ -240,7 +240,7 @@ class _EditProfileBottomSheetState
                       color: const Color(0xFF1A1A24),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                        color: Colors.white.withOpacity(0.1),
+                        color: Colors.white.withValues(alpha: 0.1),
                       ),
                     ),
                     child: Column(
@@ -253,7 +253,7 @@ class _EditProfileBottomSheetState
                         Text(
                           'Saving profile...',
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.9),
+                            color: Colors.white.withValues(alpha: 0.9),
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
@@ -275,7 +275,7 @@ class _EditProfileBottomSheetState
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: Colors.white.withOpacity(0.1),
+            color: Colors.white.withValues(alpha: 0.1),
           ),
         ),
       ),
@@ -287,7 +287,7 @@ class _EditProfileBottomSheetState
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.3),
+                color: Colors.white.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -327,7 +327,7 @@ class _EditProfileBottomSheetState
                   padding:
                   const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFBBF24).withOpacity(0.2),
+                    color: const Color(0xFFFBBF24).withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
                       color: const Color(0xFFFBBF24),
@@ -472,7 +472,7 @@ class _EditProfileBottomSheetState
             Text(
               label,
               style: TextStyle(
-                color: Colors.white.withOpacity(0.9),
+                color: Colors.white.withValues(alpha: 0.9),
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -504,23 +504,23 @@ class _EditProfileBottomSheetState
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: TextStyle(
-              color: Colors.white.withOpacity(0.4),
+              color: Colors.white.withValues(alpha: 0.4),
               fontSize: 15,
             ),
             prefixIcon: Icon(
               icon,
-              color: Colors.white.withOpacity(0.6),
+              color: Colors.white.withValues(alpha: 0.6),
               size: 20,
             ),
             prefixText: prefix,
             prefixStyle: TextStyle(
-              color: Colors.white.withOpacity(0.8),
+              color: Colors.white.withValues(alpha: 0.8),
               fontSize: 16,
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
               borderSide: BorderSide(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 width: 1.5,
               ),
             ),
@@ -545,10 +545,10 @@ class _EditProfileBottomSheetState
                 width: 2,
               ),
             ),
-            fillColor: Colors.white.withOpacity(0.05),
+            fillColor: Colors.white.withValues(alpha: 0.05),
             filled: true,
             counterStyle: TextStyle(
-              color: Colors.white.withOpacity(0.5),
+              color: Colors.white.withValues(alpha: 0.5),
               fontSize: 12,
             ),
             errorStyle: const TextStyle(
@@ -571,7 +571,7 @@ class _EditProfileBottomSheetState
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.white,
               side: BorderSide(
-                color: Colors.white.withOpacity(0.3),
+                color: Colors.white.withValues(alpha: 0.3),
                 width: 1.5,
               ),
               padding: const EdgeInsets.symmetric(vertical: 16),
@@ -621,7 +621,7 @@ class _EditProfileBottomSheetState
                 ? []
                 : [
               BoxShadow(
-                color: const Color(0xFF6366F1).withOpacity(0.4),
+                color: const Color(0xFF6366F1).withValues(alpha: 0.4),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),

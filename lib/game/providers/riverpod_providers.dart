@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive/hive.dart';
+import 'package:http/http.dart' as http;
 import 'package:trivia_tycoon/core/services/settings/admin_settings_service.dart';
 import 'package:trivia_tycoon/core/services/settings/onboarding_settings_service.dart';
 import 'package:trivia_tycoon/core/services/settings/player_profile_service.dart';
@@ -49,6 +51,13 @@ import '../../core/services/question/question_service.dart';
 import '../../core/services/storage/secure_storage.dart';
 import '../../core/services/storage/app_cache_service.dart';
 import '../../core/services/theme/swatch_service.dart';
+
+// Core auth imports
+import '../../core/services/auth_service.dart' as core_auth;
+import '../../core/services/auth_api_client.dart';
+import '../../core/services/auth_token_store.dart';
+import '../../core/services/device_id_service.dart';
+import '../../core/env.dart';
 
 // 📦 Store & Inventory
 import '../../core/services/theme/theme_notifier.dart';
@@ -127,14 +136,63 @@ final apiServiceProvider = Provider<ApiService>((ref) {
   return ApiService(baseUrl: config.apiBaseUrl);
 });
 
+// --- 🔐 NEW: Core Auth Providers ---
+
+/// Provides the Hive box for auth tokens
+final authTokenBoxProvider = Provider<Box>((ref) {
+  if (!Hive.isBoxOpen('auth_tokens')) {
+    throw StateError('auth_tokens box must be opened in app_init.dart before creating providers');
+  }
+  return Hive.box('auth_tokens');
+});
+
+/// Provides the AuthTokenStore
+final authTokenStoreProvider = Provider<AuthTokenStore>((ref) {
+  final box = ref.watch(authTokenBoxProvider);
+  return AuthTokenStore(box);
+});
+
+/// Provides the DeviceIdService
+final deviceIdServiceProvider = Provider<DeviceIdService>((ref) {
+  final secureStorage = ref.watch(secureStorageProvider);
+  return DeviceIdService(secureStorage);
+});
+
+/// Provides the AuthApiClient
+final authApiClientProvider = Provider<AuthApiClient>((ref) {
+  return AuthApiClient(
+    http.Client(),
+    apiBaseUrl: EnvConfig.apiBaseUrl, deviceId: ref.watch(deviceIdServiceProvider),
+  );
+});
+
+/// Provides the core AuthService (backend token management)
+final coreAuthServiceProvider = Provider<core_auth.AuthService>((ref) {
+  return core_auth.AuthService(
+    deviceId: ref.watch(deviceIdServiceProvider),
+    tokenStore: ref.watch(authTokenStoreProvider),
+    api: ref.watch(authApiClientProvider),
+  );
+});
+
+/// Provides SecureStorage
+final secureStorageProvider = Provider<SecureStorage>((ref) {
+  return SecureStorage();
+});
+
+// --- 🔑 UPDATED: LoginManager Provider ---
+
+/// Provides the LoginManager with all required dependencies
 final loginManagerProvider = Provider<LoginManager>((ref) {
   final serviceManager = ref.read(serviceManagerProvider);
+
   return LoginManager(
-    authService: serviceManager.authService,
-    apiService: serviceManager.apiService,
+    authService: ref.watch(coreAuthServiceProvider),      // ← UPDATED: Core auth service
+    tokenStore: ref.watch(authTokenStoreProvider),        // ← NEW: Token store
+    deviceIdService: ref.watch(deviceIdServiceProvider),  // ← NEW: Device ID service
     profileService: serviceManager.playerProfileService,
     onboardingService: serviceManager.onboardingSettingsService,
-    secureStorage: serviceManager.secureStorage,
+    secureStorage: ref.watch(secureStorageProvider),      // ← UPDATED: Use provider
   );
 });
 
@@ -304,10 +362,6 @@ final confettiControllerProvider =
 // --- 💽 Local Storage Services ---
 final appCacheServiceProvider = Provider<AppCacheService>((ref) {
   return ref.read(serviceManagerProvider).appCacheService;
-});
-
-final secureStorageProvider = Provider<SecureStorage>((ref) {
-  return ref.read(serviceManagerProvider).secureStorage;
 });
 
 final qrSettingsServiceProvider = Provider<QrSettingsService>((ref) {

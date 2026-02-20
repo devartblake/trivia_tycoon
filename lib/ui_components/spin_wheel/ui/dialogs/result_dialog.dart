@@ -100,7 +100,7 @@ class _ResultDialogState extends State<ResultDialog>
 
     _colorAnimation = ColorTween(
       begin: _getRewardColor(),
-      end: _getRewardColor().withOpacity(0.8),
+      end: _getRewardColor().withValues(alpha: 0.8),
     ).animate(CurvedAnimation(
       parent: _celebrationController,
       curve: Curves.easeInOut,
@@ -184,7 +184,7 @@ class _ResultDialogState extends State<ResultDialog>
     if (!_isVisible) return const SizedBox.shrink();
 
     return Material(
-      color: Colors.black.withOpacity(0.6),
+      color: Colors.black.withValues(alpha: 0.6),
       child: Center(
         child: AnimatedBuilder(
           animation: Listenable.merge([
@@ -225,7 +225,7 @@ class _ResultDialogState extends State<ResultDialog>
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withValues(alpha: 0.3),
             blurRadius: 20,
             spreadRadius: 5,
             offset: const Offset(0, 10),
@@ -252,7 +252,7 @@ class _ResultDialogState extends State<ResultDialog>
         gradient: LinearGradient(
           colors: [
             _getRewardColor(),
-            _getRewardColor().withOpacity(0.8),
+            _getRewardColor().withValues(alpha: 0.8),
           ],
         ),
         borderRadius: const BorderRadius.only(
@@ -297,7 +297,7 @@ class _ResultDialogState extends State<ResultDialog>
               Text(
                 'You won an amazing reward!',
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  color: Colors.white.withOpacity(0.9),
+                  color: Colors.white.withValues(alpha: 0.9),
                 ),
               ),
             ],
@@ -314,7 +314,7 @@ class _ResultDialogState extends State<ResultDialog>
         return CustomPaint(
           painter: CelebrationPainter(
             animation: _celebrationAnimation.value,
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
           ),
           size: const Size(double.infinity, 120),
         );
@@ -341,8 +341,8 @@ class _ResultDialogState extends State<ResultDialog>
                       shape: BoxShape.circle,
                       gradient: RadialGradient(
                         colors: [
-                          _getRewardColor().withOpacity(0.3),
-                          _getRewardColor().withOpacity(0.1),
+                          _getRewardColor().withValues(alpha: 0.3),
+                          _getRewardColor().withValues(alpha: 0.1),
                           Colors.transparent,
                         ],
                       ),
@@ -386,10 +386,10 @@ class _ResultDialogState extends State<ResultDialog>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: _getRewardColor().withOpacity(0.1),
+              color: _getRewardColor().withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: _getRewardColor().withOpacity(0.3),
+                color: _getRewardColor().withValues(alpha: 0.3),
               ),
             ),
             child: Text(
@@ -427,13 +427,13 @@ class _ResultDialogState extends State<ResultDialog>
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.amber.withOpacity(0.1),
-            Colors.amber.withOpacity(0.05),
+            Colors.amber.withValues(alpha: 0.1),
+            Colors.amber.withValues(alpha: 0.05),
           ],
         ),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Colors.amber.withOpacity(0.3),
+          color: Colors.amber.withValues(alpha: 0.3),
         ),
       ),
       child: AnimatedBuilder(

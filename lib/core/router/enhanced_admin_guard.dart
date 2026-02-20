@@ -271,7 +271,7 @@ class _AdminAccessPromptState extends ConsumerState<_AdminAccessPrompt> {
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       color: _isHovering
-                          ? theme.primaryColor.withOpacity(0.1)
+                          ? theme.primaryColor.withValues(alpha: 0.1)
                           : Colors.red.shade50,
                       shape: BoxShape.circle,
                       border: Border.all(
@@ -282,7 +282,7 @@ class _AdminAccessPromptState extends ConsumerState<_AdminAccessPrompt> {
                       ),
                       boxShadow: _isHovering ? [
                         BoxShadow(
-                          color: theme.primaryColor.withOpacity(0.3),
+                          color: theme.primaryColor.withValues(alpha: 0.3),
                           blurRadius: 20,
                           spreadRadius: 2,
                         ),
@@ -405,9 +405,9 @@ class _AdminAccessPromptState extends ConsumerState<_AdminAccessPrompt> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: color.withOpacity(0.3)),
+            border: Border.all(color: color.withValues(alpha: 0.3)),
           ),
           child: Text(
             isComplete ? '✓' : '$current/$required',

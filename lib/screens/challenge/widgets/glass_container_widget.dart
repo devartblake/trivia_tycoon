@@ -34,12 +34,12 @@ class GlassCard extends StatelessWidget {
         boxShadow: elevated
             ? [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -77,7 +77,7 @@ class CompactGlassCard extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -138,7 +138,7 @@ class GlassExpansionCard extends StatelessWidget {
       initialElevation: 2,
       baseColor: tint ?? defaultTint,
       expandedColor: expandedTint ?? defaultExpandedTint,
-      shadowColor: Colors.black.withOpacity(0.08),
+      shadowColor: Colors.black.withValues(alpha: 0.08),
       duration: const Duration(milliseconds: 300),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       initialPadding: EdgeInsets.zero,
@@ -202,7 +202,7 @@ class CollapsedTileCard extends StatelessWidget {
       color: tint ?? defaultTint,
       borderRadius: BorderRadius.circular(borderRadius),
       elevation: 2,
-      shadowColor: Colors.black.withOpacity(0.08),
+      shadowColor: Colors.black.withValues(alpha: 0.08),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         customBorder: RoundedRectangleBorder(

@@ -91,12 +91,12 @@ class _ColorWheelPickerState extends State<ColorWheelPicker>
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: _currentColor.withOpacity(0.3),
+                    color: _currentColor.withValues(alpha: 0.3),
                     blurRadius: 20,
                     offset: const Offset(0, 8),
                   ),
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -195,10 +195,10 @@ class _ColorWheelPickerState extends State<ColorWheelPicker>
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: colorScheme.surfaceContainer.withOpacity(0.5),
+        color: colorScheme.surfaceContainer.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: colorScheme.outline.withOpacity(0.2),
+          color: colorScheme.outline.withValues(alpha: 0.2),
           width: 1,
         ),
       ),
@@ -238,7 +238,7 @@ class _ColorWheelPickerState extends State<ColorWheelPicker>
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
-                  color: colorScheme.primary.withOpacity(0.1),
+                  color: colorScheme.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
@@ -266,7 +266,7 @@ class _ColorWheelPickerState extends State<ColorWheelPicker>
                     gradient: trackGradient,
                     borderRadius: BorderRadius.circular(3),
                     border: Border.all(
-                      color: colorScheme.outline.withOpacity(0.3),
+                      color: colorScheme.outline.withValues(alpha: 0.3),
                       width: 0.5,
                     ),
                   ),
@@ -279,7 +279,7 @@ class _ColorWheelPickerState extends State<ColorWheelPicker>
                     activeTrackColor: Colors.transparent,
                     inactiveTrackColor: Colors.transparent,
                     thumbColor: Colors.white,
-                    overlayColor: colorScheme.primary.withOpacity(0.1),
+                    overlayColor: colorScheme.primary.withValues(alpha: 0.1),
                   ),
                   child: Slider(
                     value: value,
@@ -382,7 +382,7 @@ class _ColorWheelPainter extends CustomPainter {
 
     // Border
     final borderPaint = Paint()
-      ..color = Colors.black.withOpacity(0.3)
+      ..color = Colors.black.withValues(alpha: 0.3)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
     canvas.drawCircle(selectedPosition, 12, borderPaint);
@@ -421,7 +421,7 @@ class _CustomSliderThumb extends SliderComponentShape {
 
     // Shadow
     final shadowPaint = Paint()
-      ..color = Colors.black.withOpacity(0.3)
+      ..color = Colors.black.withValues(alpha: 0.3)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
     canvas.drawCircle(center + const Offset(0, 2), 10, shadowPaint);
 
@@ -439,7 +439,7 @@ class _CustomSliderThumb extends SliderComponentShape {
 
     // Border
     final borderPaint = Paint()
-      ..color = Colors.black.withOpacity(0.2)
+      ..color = Colors.black.withValues(alpha: 0.2)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
     canvas.drawCircle(center, 10, borderPaint);

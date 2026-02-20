@@ -127,7 +127,7 @@ class _CategoryQuizScreenState extends ConsumerState<CategoryQuizScreen> {
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [_getCategoryColor().withOpacity(0.8), _getCategoryColor()],
+                colors: [_getCategoryColor().withValues(alpha: 0.8), _getCategoryColor()],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -159,7 +159,7 @@ class _CategoryQuizScreenState extends ConsumerState<CategoryQuizScreen> {
                           Text(
                             '${categoryData.totalQuestions} questions available',
                             style: TextStyle(
-                              color: Colors.white.withOpacity(0.9),
+                              color: Colors.white.withValues(alpha: 0.9),
                               fontSize: 14,
                             ),
                           ),
@@ -172,7 +172,7 @@ class _CategoryQuizScreenState extends ConsumerState<CategoryQuizScreen> {
                 Text(
                   _getCategoryDescription(),
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.white.withValues(alpha: 0.9),
                     fontSize: 14,
                   ),
                 ),
@@ -308,7 +308,7 @@ class _CategoryQuizScreenState extends ConsumerState<CategoryQuizScreen> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(
-                        color: _getCategoryColor().withOpacity(0.1),
+                        color: _getCategoryColor().withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
@@ -583,9 +583,9 @@ class _StatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Column(
         children: [
@@ -668,7 +668,7 @@ class _QuestionPreviewCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: _getDifficultyColor().withOpacity(0.1),
+              color: _getDifficultyColor().withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(6),
             ),
             child: Icon(

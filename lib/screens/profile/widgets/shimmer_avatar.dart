@@ -183,7 +183,7 @@ class _ShimmerAvatarState extends State<ShimmerAvatar>
           ),
           boxShadow: [
             BoxShadow(
-              color: _getStatusColor().withOpacity(0.5),
+              color: _getStatusColor().withValues(alpha: 0.5),
               blurRadius: 4,
               offset: const Offset(0, 2),
             ),
@@ -258,7 +258,7 @@ class _ShimmerAvatarState extends State<ShimmerAvatar>
           border: Border.all(color: Colors.white, width: 2),
           boxShadow: [
             BoxShadow(
-              color: badgeColor.withOpacity(0.5),
+              color: badgeColor.withValues(alpha: 0.5),
               blurRadius: 4,
               offset: const Offset(0, 2),
             ),
@@ -280,7 +280,7 @@ class _ShimmerAvatarState extends State<ShimmerAvatar>
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.black.withOpacity(widget.overlayOpacity ?? 0.3),
+          color: Colors.black.withValues(alpha: widget.overlayOpacity ?? 0.3),
         ),
         child: Center(child: widget.overlayWidget),
       ),
@@ -304,7 +304,7 @@ class _ShimmerAvatarState extends State<ShimmerAvatar>
             ? [widget.customShadow!]
             : [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),

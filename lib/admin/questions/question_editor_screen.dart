@@ -162,7 +162,7 @@ class _QuestionEditorScreenState extends State<QuestionEditorScreen> {
               boxShadow: [
                 BoxShadow(
                   color: (isEditing ? const Color(0xFF3B82F6) : const Color(0xFF10B981))
-                      .withOpacity(0.3),
+                      .withValues(alpha: 0.3),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
@@ -219,7 +219,7 @@ class _QuestionEditorScreenState extends State<QuestionEditorScreen> {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
+                  color: Colors.black.withValues(alpha: 0.04),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),

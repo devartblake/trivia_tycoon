@@ -203,7 +203,7 @@ class _GradientPickerDialogState extends State<GradientPickerDialog>
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.2),
+                color: Colors.black.withValues(alpha: 0.2),
                 blurRadius: 24,
                 offset: const Offset(0, 12),
               ),
@@ -239,7 +239,7 @@ class _GradientPickerDialogState extends State<GradientPickerDialog>
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(
@@ -276,7 +276,7 @@ class _GradientPickerDialogState extends State<GradientPickerDialog>
         gradient: _currentGradient,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Colors.white.withOpacity(0.3),
+          color: Colors.white.withValues(alpha: 0.3),
           width: 2,
         ),
       ),
@@ -304,12 +304,12 @@ class _GradientPickerDialogState extends State<GradientPickerDialog>
                     color: stop.color,
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: isSelected ? Colors.white : Colors.black.withOpacity(0.3),
+                      color: isSelected ? Colors.white : Colors.black.withValues(alpha: 0.3),
                       width: isSelected ? 3 : 2,
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
+                        color: Colors.black.withValues(alpha: 0.3),
                         blurRadius: 4,
                         offset: const Offset(0, 2),
                       ),
@@ -347,7 +347,7 @@ class _GradientPickerDialogState extends State<GradientPickerDialog>
               indicatorSize: TabBarIndicatorSize.tab,
               dividerColor: Colors.transparent,
               labelColor: Colors.white,
-              unselectedLabelColor: colorScheme.onSurface.withOpacity(0.6),
+              unselectedLabelColor: colorScheme.onSurface.withValues(alpha: 0.6),
               labelStyle: const TextStyle(fontWeight: FontWeight.w600),
               tabs: const [
                 Tab(text: "Presets"),
@@ -398,7 +398,7 @@ class _GradientPickerDialogState extends State<GradientPickerDialog>
               gradient: gradient,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 width: 1,
               ),
             ),
@@ -434,12 +434,12 @@ class _GradientPickerDialogState extends State<GradientPickerDialog>
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? colorScheme.primary.withOpacity(0.1)
-                      : colorScheme.surfaceContainer.withOpacity(0.5),
+                      ? colorScheme.primary.withValues(alpha: 0.1)
+                      : colorScheme.surfaceContainer.withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: isSelected
-                        ? colorScheme.primary.withOpacity(0.3)
+                        ? colorScheme.primary.withValues(alpha: 0.3)
                         : Colors.transparent,
                     width: 1,
                   ),
@@ -456,7 +456,7 @@ class _GradientPickerDialogState extends State<GradientPickerDialog>
                           color: stop.color,
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
-                            color: colorScheme.outline.withOpacity(0.3),
+                            color: colorScheme.outline.withValues(alpha: 0.3),
                             width: 1,
                           ),
                         ),

@@ -183,7 +183,7 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
             return Container(
               margin: const EdgeInsets.only(bottom: 12),
               decoration: BoxDecoration(
-                color: isCorrect ? const Color(0xFF10B981).withOpacity(0.1) : const Color(0xFFF8FAFC),
+                color: isCorrect ? const Color(0xFF10B981).withValues(alpha: 0.1) : const Color(0xFFF8FAFC),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: isCorrect ? const Color(0xFF10B981) : Colors.grey[200]!,
@@ -379,7 +379,7 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF10B981).withOpacity(0.3),
+                    color: const Color(0xFF10B981).withValues(alpha: 0.3),
                     blurRadius: 12,
                     offset: const Offset(0, 6),
                   ),
@@ -422,7 +422,7 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(icon, color: color, size: 20),
