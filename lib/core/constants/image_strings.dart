@@ -17,7 +17,7 @@ const String tSunYellowImage = "assets/images/welcome_images/Sun-Yellow.png";
 const String tSunRedImage = "assets/images/welcome_images/Sun-Red.png";
 
 // -- Login & SignUp Images
-const String tTriviaGameImage = "assets/images/logo/appLogo.png";
+const String tTriviaGameImage = "assets/images/logo/trivia_tycoon_appLogo.png";
 
 // -- Forget Password Images
 const String tForgetPasswordImage = "assets/image/forget_password/forget_password.png";
