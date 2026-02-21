@@ -10,6 +10,21 @@ import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_stor
 import '../../game/models/seasonal_competition_model.dart';
 import 'analytics/config_service.dart';
 
+class ApiRequestException implements Exception {
+  final String message;
+  final int? statusCode;
+  final String? path;
+
+  ApiRequestException(this.message, {this.statusCode, this.path});
+
+  @override
+  String toString() {
+    final code = statusCode != null ? ' ($statusCode)' : '';
+    final target = path != null ? ' [$path]' : '';
+    return 'ApiRequestException$code$target: $message';
+  }
+}
+
 class ApiService {
   final Dio _dio;
   final String baseUrl;
@@ -163,11 +178,17 @@ class ApiService {
       if (ConfigService.enableLogging) {
         debugPrint("API Error [Dio]: ${e.message}");
       }
-      throw Exception("API Error: ${e.message}");
+
+      throw ApiRequestException(
+        e.message ?? 'Request failed',
+        statusCode: e.response?.statusCode,
+        path: e.requestOptions.path,
+      );
     } catch (e) {
       if (ConfigService.enableLogging) {
         debugPrint("API Error: $e");
       }
+      if (e is ApiRequestException) rethrow;
       throw Exception("Unexpected Error: $e");
     }
   }

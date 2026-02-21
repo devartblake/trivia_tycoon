@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'auth_api_client.dart';
 import 'auth_token_store.dart';
 import 'device_id_service.dart';
@@ -78,12 +79,17 @@ class AuthService {
     final existing = _store.load();
 
     try {
-      // Call backend logout to revoke token
+      // Call backend logout to revoke token.
+      // Some backends may return 401 for expired/rotated tokens; treat that as best-effort.
       await _api.logout(
         deviceId: deviceId,
         userId: existing.userId,
         accessToken: existing.accessToken,
       );
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('[AuthService] Logout request failed, proceeding with local clear: $e');
+      }
     } finally {
       // Always clear local tokens, even if backend call fails
       await _store.clear();
