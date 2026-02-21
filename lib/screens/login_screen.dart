@@ -8,6 +8,7 @@ import 'package:trivia_tycoon/core/services/analytics/config_service.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import 'package:trivia_tycoon/core/services/auth_error_messages.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../core/bootstrap/app_init.dart';
 import '../core/constants/image_strings.dart';
 import '../game/providers/auth_providers.dart';
 import '../game/providers/onboarding_providers.dart';
@@ -222,6 +223,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
               ),
             );
           }
+        }
+      }
+
+      if (ConfigService.useBackendAuth) {
+        if (_isSignUpMode) {
+          await authOps.signup(email, password);
+        } else {
+          await authOps.loginWithPassword(email, password);
+        }
+
+        // ✅ ADD THIS - Initialize WebSocket after successful login
+        final authService = ref.read(authServiceProvider);
+        if (authService.secureStorage != null) {
+          // Get token store from service manager or provider
+          final serviceManager = ref.read(serviceManagerProvider);
+          await AppInit.initializeWebSocket(
+              serviceManager.authService.tokenStore
+          );
         }
       }
 

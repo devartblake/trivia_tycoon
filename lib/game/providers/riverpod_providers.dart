@@ -22,6 +22,7 @@ import '../../arcade/missions/arcade_mission_service.dart';
 import '../../arcade/services/arcade_daily_bonus_service.dart';
 import '../../arcade/services/arcade_mission_claim_service.dart';
 import '../../arcade/services/arcade_personal_best_service.dart';
+import '../../core/bootstrap/app_init.dart';
 import '../../core/manager/login_manager.dart';
 import '../../core/manager/tier_manager.dart';
 import '../../core/repositories/message_repository.dart';
@@ -140,7 +141,17 @@ final apiServiceProvider = Provider<ApiService>((ref) {
   return ApiService(baseUrl: config.apiBaseUrl);
 });
 
-// --- 🔐 NEW: Core Auth Providers ---
+/// Global WebSocket client provider
+final globalWsClientProvider = Provider<WsClient?>((ref) {
+  return AppInit.wsClient;
+});
+
+/// WebSocket connection status provider
+final wsConnectionStatusProvider = StateProvider<bool>((ref) {
+  return AppInit.isWebSocketConnected;
+});
+
+// --- 🔐 Core Auth Providers ---
 
 /// Provides the Hive box for auth tokens
 final authTokenBoxProvider = Provider<Box>((ref) {
