@@ -4,7 +4,9 @@ import '../../../game/providers/auth_providers.dart';
 import '../../../game/providers/multi_profile_providers.dart';
 
 class LogoutDialog extends ConsumerWidget {
-  const LogoutDialog({super.key});
+  final BuildContext parentContext;
+
+  const LogoutDialog({super.key, required this.parentContext});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -39,7 +41,6 @@ class LogoutDialog extends ConsumerWidget {
 
   Future<void> _performLogout(BuildContext context, WidgetRef ref) async {
     Navigator.of(context).pop(); // Close logout dialog
-    Navigator.of(context).pop(); // Close drawer
 
     // Clear active profile immediately so stale profile data is not shown.
     ref.read(profileManagerProvider.notifier).clearActiveProfile();
