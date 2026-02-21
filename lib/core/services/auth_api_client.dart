@@ -35,6 +35,8 @@ class AuthApiClient {
       body: jsonEncode({
         'email': email,
         'password': password,
+        // Send both casing styles for backend compatibility
+        'device_id': deviceId,
         'deviceId': deviceId,
       }),
     );
@@ -82,10 +84,12 @@ class AuthApiClient {
       body: jsonEncode({
         'email': email,
         'password': password,
+        // Send both casing styles for backend compatibility
+        'device_id': deviceId,
         'deviceId': deviceId,
-        if (username != null) 'username': username,
-        if (username != null) 'handle': username, // Backend might use 'handle'
-        if (country != null) 'country': country,
+        if (username != null && username.isNotEmpty) 'username': username,
+        if (username != null && username.isNotEmpty) 'handle': username, // Backend might use 'handle'
+        if (country != null && country.isNotEmpty) 'country': country,
       }),
     );
 
@@ -165,7 +169,10 @@ class AuthApiClient {
       _u(refreshPath),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
+        // Send both casing styles for backend compatibility
+        'refresh_token': refreshToken,
         'refreshToken': refreshToken,
+        'device_id': deviceId,
         'deviceId': deviceId,
       }),
     );
@@ -195,7 +202,10 @@ class AuthApiClient {
       _u(logoutPath),
       headers: headers,
       body: jsonEncode({
+        // Send both casing styles for backend compatibility
+        'device_id': deviceId,
         'deviceId': deviceId,
+        if (userId != null) 'user_id': userId,
         if (userId != null) 'userId': userId,
       }),
     );
