@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../game/controllers/settings_controller.dart';
 import '../../core/services/notification_service.dart';
 import '../../game/providers/riverpod_providers.dart';
+import '../../game/providers/auth_providers.dart';
 
 final settingsControllerProvider = Provider<SettingsController>((ref) {
   final manager = ref.read(serviceManagerProvider);
@@ -783,7 +784,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                // Add actual sign out logic here
+                ref.read(authOperationsProvider).logout(this.context);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFEF4444),

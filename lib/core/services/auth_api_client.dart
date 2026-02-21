@@ -192,6 +192,11 @@ class AuthApiClient {
       }),
     );
 
+    // Best-effort logout: token may already be expired/revoked on server.
+    if (res.statusCode == 401 || res.statusCode == 404) {
+      return;
+    }
+
     if (res.statusCode < 200 || res.statusCode >= 300) {
       throw Exception('Logout failed: ${res.statusCode} ${res.body}');
     }
