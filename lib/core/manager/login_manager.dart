@@ -98,7 +98,7 @@ class LoginManager {
 
     // Navigate to login if context is still mounted
     if (context.mounted) {
-      context.go('/auth');
+      context.go('/login');
     }
   }
 
@@ -275,7 +275,7 @@ class LoginManager {
     if (lastQuiz != null && lastQuiz.isNotEmpty) {
       return '/quiz/resume?id=$lastQuiz';
     }
-    return '/menu';
+    return '/home';
   }
 
   /// Determine the next route user should see after splash
@@ -283,7 +283,7 @@ class LoginManager {
     final loggedIn = await isLoggedIn();
     final onboarded = await hasCompletedOnboarding();
 
-    if (!loggedIn) return '/auth';
+    if (!loggedIn) return '/login';
     if (!onboarded) return '/onboarding';
     return await _restorePreviousSession();
   }
