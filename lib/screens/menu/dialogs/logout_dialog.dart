@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+import '../../../game/providers/auth_providers.dart';
 import '../../../game/providers/multi_profile_providers.dart';
 
 class LogoutDialog extends ConsumerWidget {
-  const LogoutDialog({super.key});
+  final BuildContext parentContext;
+
+  const LogoutDialog({super.key, required this.parentContext});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,7 +25,7 @@ class LogoutDialog extends ConsumerWidget {
           child: const Text('Cancel'),
         ),
         ElevatedButton(
-          onPressed: () => _performLogout(context, ref),
+          onPressed: () async => _performLogout(context, ref),
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFFEF4444),
             foregroundColor: Colors.white,
@@ -37,23 +39,13 @@ class LogoutDialog extends ConsumerWidget {
     );
   }
 
-  void _performLogout(BuildContext context, WidgetRef ref) {
+  Future<void> _performLogout(BuildContext context, WidgetRef ref) async {
     Navigator.of(context).pop(); // Close logout dialog
-    Navigator.of(context).pop(); // Close drawer
 
-    // Clear the active profile
+    // Clear active profile immediately so stale profile data is not shown.
     ref.read(profileManagerProvider.notifier).clearActiveProfile();
 
-    // Navigate to profile selection or login screen
-    context.go('/profile-selection');
-
-    // Show confirmation message
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Successfully logged out'),
-        backgroundColor: Color(0xFF10B981),
-        duration: Duration(seconds: 2),
-      ),
-    );
+    // Use still-mounted screen context for centralized logout + navigation.
+    await ref.read(authOperationsProvider).logout(parentContext);
   }
 }
