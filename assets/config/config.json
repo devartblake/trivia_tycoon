@@ -1,6 +1,6 @@
 {
   "API_BASE_URL": "https://localhost:5000",
-  "ENABLE_LOGGING": true,
+  "ENABLE_LOGGING": false,
   "USE_BACKEND_AUTH": true,
   "THEME": "dark",
   "MAX_QUESTIONS": 10,

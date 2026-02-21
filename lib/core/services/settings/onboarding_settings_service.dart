@@ -18,8 +18,8 @@ class OnboardingSettingsService {
   }
 
   /// Alias for setting onboarding completed
-  Future<void> setOnboardingCompleted(bool bool) async =>
-      await setHasCompletedOnboarding(true);
+  Future<void> setOnboardingCompleted(bool value) async =>
+      await setHasCompletedOnboarding(value);
 
   /// Gets onboarding completed state
   Future<bool> getOnboardingStatus() async => await hasCompletedOnboarding();

@@ -104,7 +104,13 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
             size: 18,
           ),
         ),
-        onPressed: () => Navigator.of(context).pop(),
+        onPressed: () {
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go('/home');
+          }
+        },
       ),
       title: Row(
         mainAxisSize: MainAxisSize.min,
