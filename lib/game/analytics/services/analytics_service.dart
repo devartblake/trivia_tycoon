@@ -289,24 +289,6 @@ class AnalyticsService {
     try {
       // FIX: Changed named parameter from `data` to `body` to match ApiService.
       await apiService.post(endpoint, body: data);
-    } on ApiRequestException catch (e) {
-      final statusCode = e.statusCode ?? 0;
-
-      // Permanent client-side failures should not be retried forever.
-      if (statusCode >= 400 && statusCode < 500) {
-        if (statusCode == 404 && endpoint.startsWith('/analytics/')) {
-          _analyticsEndpointUnavailable = true;
-          LogManager.log(
-              'Analytics endpoint not found ($endpoint). Disabling analytics sends for this session.',
-              level: LogLevel.warning,
-              source: 'AnalyticsService');
-        }
-        return;
-      }
-
-      LogManager.log('Failed to send event to $endpoint, queuing for retry',
-          level: LogLevel.warning, source: 'AnalyticsService');
-      await eventQueueService.enqueueEvent(endpoint, data);
     } catch (e) {
       LogManager.log('Failed to send event to $endpoint, queuing for retry',
           level: LogLevel.warning, source: 'AnalyticsService');

@@ -7,10 +7,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class EnvConfig {
 
   /// API Base URL
-  static String? _apiBaseUrl;
+  static String? _apiBaseUrl = '';
 
   /// WebSocket Base URL
-  static String? _apiWsBaseUrl;
+  static String? _apiWsBaseUrl = '';
 
   /// SignalR hub URLs
   static String? _matchHubUrl;
@@ -65,9 +65,16 @@ class EnvConfig {
       await dotenv.load(fileName: ".env");
 
       // Load variables from the environment
-      _apiBaseUrl = dotenv.env['API_BASE_URL'];
-      _apiWsBaseUrl = dotenv.env['API_WS_BASE_URL'] ??
-          (_apiBaseUrl == null ? null : _deriveWsBaseUrl(_apiBaseUrl!));
+      _apiBaseUrl = dotenv.get('API_BASE_URL', fallback: 'http://localhost:5000');
+
+      // Derive WebSocket URL from HTTP URL
+      // Convert http:// to ws:// and https:// to wss://
+      _apiWsBaseUrl = '${apiBaseUrl
+          .replaceFirst('http://', 'ws://')
+          .replaceFirst('https://', 'wss://')}/ws';
+
+      debugPrint('[EnvConfig] API Base: $apiBaseUrl');
+      debugPrint('[EnvConfig] WebSocket: $apiWsBaseUrl');
 
       _matchHubUrl = dotenv.env['API_MATCH_HUB_URL'] ??
           (_apiWsBaseUrl == null ? null : '${_apiWsBaseUrl!}/ws/match');
