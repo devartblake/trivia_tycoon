@@ -130,6 +130,17 @@ Typical patterns:
 
 Update this section to match your actual configuration files and environment flow.
 
+#### Logging noise controls
+If you run a local ASP.NET backend and want quieter console output, set these environment variables:
+
+```bash
+ENABLE_LOGGING=false
+Logging__LogLevel__Default=Warning
+Logging__LogLevel__Microsoft.AspNetCore=Warning
+```
+
+This preserves warnings/errors while suppressing per-request informational lines such as request start/finish and endpoint execution traces.
+
 ### 5. Run the App
 Run on a connected device or emulator:
 ```bash
