@@ -29,8 +29,8 @@ class AuthApiClient {
   }) async {
     final deviceId = await _deviceId.getOrCreate();
 
-    final response = await http.post(
-      Uri.parse('$_apiBaseUrl$loginPath'),
+    final response = await _http.post(
+      _u(loginPath),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         'email': email,
@@ -76,8 +76,8 @@ class AuthApiClient {
   }) async {
     final deviceId = await _deviceId.getOrCreate();
 
-    final response = await http.post(
-      Uri.parse('$_apiBaseUrl$signupPath'),
+    final response = await _http.post(
+      _u(signupPath),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         'email': email,
