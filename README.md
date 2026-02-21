@@ -104,33 +104,50 @@ This repository includes the entire player-facing and admin-facing Flutter appli
 
 ### 1. Prerequisites
 - Flutter SDK (matching version in `pubspec.yaml`)
-- Xcode (macOS), Android SDK (any platform)
-- Optional: API backend for online sync
+- Xcode (macOS) and/or Android SDK
+- Optional: API backend for online sync/auth
 
 ### 2. Clone Project
 ```bash
 git clone https://github.com/devartblake/trivia_tycoon.git
 cd trivia_tycoon
-
----
+```
 
 ### 3. Install Dependencies
 ```bash
 flutter pub get
+```
 
 ### 4. Configure the App
-Depending on your setup, you may need to configure:
-	•	API endpoints (e.g., dev/stage/prod).
-	•	Encryption keys or secure tokens (stored via SecureStorage and not committed).
-	•	Feature flags (e.g., enable/disable QR scanner, missions, admin tools).
+Primary client config files in this repo:
+- `assets/config/config.json` (runtime app config used by `ConfigService`)
+- `.env.example` (example environment values)
 
-Typical patterns:
-	•	lib/config/ for environment constants.
-	•	.env / --dart-define values (if used in this repo).
+Common values:
+- `API_BASE_URL` (backend URL, e.g. `https://localhost:5000`)
+- `ENABLE_LOGGING` (`false` by default to reduce client console noise)
+- `USE_BACKEND_AUTH` (`true` to use `/auth/*` endpoints)
 
-Update this section to match your actual configuration files and environment flow.
+### Logging noise controls (client + backend)
+If you see high-volume logs in local development, use the following defaults:
+
+```bash
+# Flutter/client-side verbose logging
+ENABLE_LOGGING=false
+
+# ASP.NET Core backend request lifecycle logs
+Logging__LogLevel__Default=Warning
+Logging__LogLevel__Microsoft.AspNetCore=Warning
+```
+
+This keeps warnings/errors visible while suppressing request-level informational lines such as:
+- `Request starting ...`
+- `Executing endpoint ...`
+- `Request finished ...`
+
+> Note: the `Logging__...` keys must be applied to your **backend service environment** (or backend `appsettings`), not just the Flutter app.
 
 ### 5. Run the App
-Run on a connected device or emulator:
 ```bash
 flutter run
+```
