@@ -42,31 +42,21 @@ class AuthApiClient {
     );
 
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-
-      // Parse tokens
-      final accessToken = data['accessToken'] as String;
-      final refreshToken = data['refreshToken'] as String;
-      final expiresIn = data['expiresIn'] as int;
-      final expiresAtUtc = DateTime.now().toUtc().add(Duration(seconds: expiresIn));
-      final userId = data['userId'] as String?;
+      final data = _decodeBodyMap(response.body, context: 'login');
+      final session = _parseSession(data);
 
       // Extract user metadata for role/premium info
       final metadata = _extractMetadata(data);
-
-      return AuthSession(
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-        expiresAtUtc: expiresAtUtc,
-        userId: userId,
-        metadata: metadata,
-      );
-    } else if (response.statusCode == 401) {
-      final error = jsonDecode(response.body);
-      throw Exception(error['message'] ?? 'Invalid credentials');
-    } else {
-      throw Exception('Login failed: ${response.statusCode}');
+      return session.copyWith(metadata: metadata);
     }
+
+    if (response.statusCode == 401) {
+      throw Exception(_extractErrorMessage(response,
+          fallback: 'Invalid credentials'));
+    }
+
+    throw Exception(_extractErrorMessage(response,
+        fallback: 'Login failed (HTTP ${response.statusCode})'));
   }
 
   /// Signup endpoint (register + auto-login)
@@ -94,34 +84,26 @@ class AuthApiClient {
     );
 
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-
-      // Parse tokens
-      final accessToken = data['accessToken'] as String;
-      final refreshToken = data['refreshToken'] as String;
-      final expiresIn = data['expiresIn'] as int;
-      final expiresAtUtc = DateTime.now().toUtc().add(Duration(seconds: expiresIn));
-      final userId = data['userId'] as String?;
+      final data = _decodeBodyMap(response.body, context: 'signup');
+      final session = _parseSession(data);
 
       // Extract user metadata for role/premium info
       final metadata = _extractMetadata(data);
-
-      return AuthSession(
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-        expiresAtUtc: expiresAtUtc,
-        userId: userId,
-        metadata: metadata,
-      );
-    } else if (response.statusCode == 409) {
-      final error = jsonDecode(response.body);
-      throw Exception(error['message'] ?? 'Email already registered');
-    } else if (response.statusCode == 400) {
-      final error = jsonDecode(response.body);
-      throw Exception(error['message'] ?? 'Invalid signup data');
-    } else {
-      throw Exception('Signup failed: ${response.statusCode}');
+      return session.copyWith(metadata: metadata);
     }
+
+    if (response.statusCode == 409) {
+      throw Exception(_extractErrorMessage(response,
+          fallback: 'Email already registered'));
+    }
+
+    if (response.statusCode == 400) {
+      throw Exception(_extractErrorMessage(response,
+          fallback: 'Invalid signup data'));
+    }
+
+    throw Exception(_extractErrorMessage(response,
+        fallback: 'Signup failed (HTTP ${response.statusCode})'));
   }
 
   /// Extract metadata from backend response
@@ -213,6 +195,42 @@ class AuthApiClient {
     if (res.statusCode < 200 || res.statusCode >= 300) {
       throw Exception('Logout failed: ${res.statusCode} ${res.body}');
     }
+  }
+
+
+  Map<String, dynamic> _decodeBodyMap(String body, {required String context}) {
+    final parsed = _tryDecodeBodyMap(body);
+    if (parsed != null) return parsed;
+
+    throw Exception('Invalid $context response from server');
+  }
+
+  Map<String, dynamic>? _tryDecodeBodyMap(String body) {
+    final trimmed = body.trim();
+    if (trimmed.isEmpty) return null;
+
+    try {
+      final decoded = jsonDecode(trimmed);
+      if (decoded is Map<String, dynamic>) {
+        return decoded;
+      }
+    } catch (_) {
+      return null;
+    }
+
+    return null;
+  }
+
+  String _extractErrorMessage(http.Response response, {required String fallback}) {
+    final parsed = _tryDecodeBodyMap(response.body);
+    if (parsed != null) {
+      final dynamic message = parsed['message'] ?? parsed['error'] ?? parsed['detail'] ?? parsed['title'];
+      if (message is String && message.trim().isNotEmpty) {
+        return message.trim();
+      }
+    }
+
+    return fallback;
   }
 
   AuthSession _parseSession(Map<String, dynamic> json) {
