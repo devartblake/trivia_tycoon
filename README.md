@@ -147,6 +147,17 @@ This keeps warnings/errors visible while suppressing request-level informational
 
 > Note: the `Logging__...` keys must be applied to your **backend service environment** (or backend `appsettings`), not just the Flutter app.
 
+#### Logging noise controls
+If you run a local ASP.NET backend and want quieter console output, set these environment variables:
+
+```bash
+ENABLE_LOGGING=false
+Logging__LogLevel__Default=Warning
+Logging__LogLevel__Microsoft.AspNetCore=Warning
+```
+
+This preserves warnings/errors while suppressing per-request informational lines such as request start/finish and endpoint execution traces.
+
 ### 5. Run the App
 ```bash
 flutter run
