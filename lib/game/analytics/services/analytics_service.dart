@@ -164,9 +164,6 @@ class AnalyticsService {
           (_sessionMetrics['userActions'] ?? 0) + 1;
     }
 
-    LogManager.log('Event logged: $name',
-        level: LogLevel.info, source: 'AnalyticsService');
-
     if (_isOnline) {
       await _sendWithRetry('/analytics/events', {
         'event': name,
@@ -199,8 +196,6 @@ class AnalyticsService {
           '${DateTime.now().millisecondsSinceEpoch}_${const Uuid().v4()}';
       await _offlineEventsBox!.put(key, offlineEvent);
 
-      LogManager.log('Event stored offline: $eventName',
-          level: LogLevel.info, source: 'AnalyticsService');
     } catch (e) {
       LogManager.log('Failed to store offline event: $e',
           level: LogLevel.error, source: 'AnalyticsService');
@@ -220,8 +215,6 @@ class AnalyticsService {
 
       if (offlineEvents.isEmpty) return;
 
-      LogManager.log('Syncing ${offlineEvents.length} offline events',
-          level: LogLevel.info, source: 'AnalyticsService');
 
       for (final event in offlineEvents) {
         final eventData = Map<String, dynamic>.from(event);
@@ -233,8 +226,6 @@ class AnalyticsService {
 
       // Clear synced events
       await _offlineEventsBox!.clear();
-      LogManager.log('Offline events synced successfully',
-          level: LogLevel.info, source: 'AnalyticsService');
     } catch (e) {
       LogManager.log('Failed to sync offline events: $e',
           level: LogLevel.error, source: 'AnalyticsService');
@@ -293,8 +284,6 @@ class AnalyticsService {
     try {
       // FIX: Changed named parameter from `data` to `body` to match ApiService.
       await apiService.post(endpoint, body: data);
-      LogManager.log('Event sent successfully to $endpoint',
-          level: LogLevel.debug, source: 'AnalyticsService');
     } catch (e) {
       LogManager.log('Failed to send event to $endpoint, queuing for retry',
           level: LogLevel.warning, source: 'AnalyticsService');
@@ -343,8 +332,6 @@ class AnalyticsService {
       if (!_isPaused) {
         // Check if event queue is in cooldown before retrying
         if (!eventQueueService.isInCooldown) {
-          LogManager.log('Running periodic retry and sync',
-              level: LogLevel.debug, source: 'AnalyticsService');
           _retryQueuedEventsInBackground(); // Use background method
         } else {
           LogManager.log('Skipping retry - EventQueue in cooldown mode',
