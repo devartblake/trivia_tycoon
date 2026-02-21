@@ -67,7 +67,7 @@ class LogoutSection extends StatelessWidget {
   void _showLogoutDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => const LogoutDialog(),
+      builder: (dialogContext) => LogoutDialog(parentContext: context),
     );
   }
 }
