@@ -221,12 +221,6 @@ class EventQueueService {
         'last_retry': null,
       });
 
-      LogManager.logWithCustomColor(
-        'Event queued: $endpoint (Queue size: ${box.length})',
-        source: 'EventQueueService',
-        color: LogColors.yellow,
-      );
-
       // Notify analytics
       _notifyAnalytics('event_queued', {
         'endpoint': endpoint,
@@ -257,8 +251,6 @@ class EventQueueService {
 
     if (keys.isEmpty) return;
 
-    LogManager.info('Processing - ${keys.length} queued events', source: 'EventQueueService');
-
     int successCount = 0;
     int failureCount = 0;
 
@@ -280,11 +272,6 @@ class EventQueueService {
         successCount++;
         _consecutiveFailures = 0; // Reset on success
 
-        LogManager.logWithCustomColor(
-          'Event retry succeeded: ${event['endpoint']}',
-          source: 'EventQueueService',
-          color: LogColors.brightGreen,
-        );
       } catch (e) {
         failureCount++;
 
@@ -297,11 +284,6 @@ class EventQueueService {
           'last_error': e.toString(),
         });
 
-        LogManager.logWithCustomColor(
-          'Event retry failed: ${event['endpoint']} (Attempt: $retryCount)',
-          source: 'EventQueueService',
-          color: LogColors.brightRed,
-        );
       }
     }
 
