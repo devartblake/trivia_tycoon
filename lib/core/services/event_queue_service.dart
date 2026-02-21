@@ -2,6 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
+/// Used by queue handlers to mark a failed event as permanent (do not retry).
+class NonRetryableEventException implements Exception {
+  final String message;
+
+  NonRetryableEventException([this.message = 'Non-retryable event failure']);
+
+  @override
+  String toString() => message;
+}
+
 /// Enhanced event queue service with intelligent retry logic and failure tracking
 class EventQueueService {
   static const String _boxName = 'event_queue';
@@ -253,6 +263,7 @@ class EventQueueService {
 
     int successCount = 0;
     int failureCount = 0;
+    int droppedCount = 0;
 
     for (final key in keys) {
       final event = box.get(key);
@@ -273,6 +284,12 @@ class EventQueueService {
         _consecutiveFailures = 0; // Reset on success
 
       } catch (e) {
+        if (e is NonRetryableEventException) {
+          await box.delete(key);
+          droppedCount++;
+          continue;
+        }
+
         failureCount++;
 
         // Update retry metadata
@@ -293,7 +310,7 @@ class EventQueueService {
     }
 
     // Report results
-    _reportRetryCycle(successCount, failureCount, box.length);
+    _reportRetryCycle(successCount, failureCount, droppedCount, box.length);
 
     // Enforce queue size limit after retries
     await _enforceQueueSizeLimit();
@@ -345,13 +362,17 @@ class EventQueueService {
   }
 
   /// Report retry cycle results
-  void _reportRetryCycle(int successCount, int failureCount, int remainingCount) {
-    if (successCount > 0 || failureCount > 0) {
+  void _reportRetryCycle(int successCount, int failureCount, int droppedCount, int remainingCount) {
+    if (successCount > 0 || failureCount > 0 || droppedCount > 0) {
       LogManager.divider(label: 'RETRY CYCLE COMPLETE');
       LogManager.success('Succeeded: $successCount', source: 'EventQueueService');
 
       if (failureCount > 0) {
         LogManager.error('Failed: $failureCount', source: 'EventQueueService');
+      }
+
+      if (droppedCount > 0) {
+        LogManager.warning('Dropped (non-retryable): $droppedCount', source: 'EventQueueService');
       }
 
       LogManager.info('Remaining in queue: $remainingCount', source: 'EventQueueService');
@@ -362,6 +383,7 @@ class EventQueueService {
       'success_count': successCount,
       'failure_count': failureCount,
       'remaining_count': remainingCount,
+      'dropped_count': droppedCount,
       'consecutive_failures': _consecutiveFailures,
     });
   }

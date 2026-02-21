@@ -31,6 +31,7 @@ class AnalyticsService {
   DateTime? _sessionStartTime;
   bool _isPaused = false;
   Map<String, dynamic> _sessionMetrics = {};
+  bool _analyticsEndpointUnavailable = false;
 
   AnalyticsService(this.apiService, this.eventQueueService);
 
@@ -281,6 +282,10 @@ class AnalyticsService {
 
   /// Enhanced retry wrapper with better logging
   Future<void> _sendWithRetry( String endpoint, Map<String, dynamic> data) async {
+    if (_analyticsEndpointUnavailable && endpoint.startsWith('/analytics/')) {
+      return;
+    }
+
     try {
       // FIX: Changed named parameter from `data` to `body` to match ApiService.
       await apiService.post(endpoint, body: data);
@@ -296,12 +301,22 @@ class AnalyticsService {
     try {
       await eventQueueService.retryQueuedEvents((endpoint, payload) async {
         // Add timeout to prevent individual events from blocking too long
-        await apiService.post(endpoint, body: payload).timeout(
-          const Duration(seconds: 5),
-          onTimeout: () {
-            throw TimeoutException('API request timeout after 5 seconds');
-          },
-        );
+        try {
+          await apiService.post(endpoint, body: payload).timeout(
+            const Duration(seconds: 5),
+            onTimeout: () {
+              throw TimeoutException('API request timeout after 5 seconds');
+            },
+          );
+        } on ApiRequestException catch (e) {
+          final statusCode = e.statusCode ?? 0;
+          if (statusCode >= 400 && statusCode < 500) {
+            throw NonRetryableEventException(
+              'Dropping non-retryable event for $endpoint (HTTP $statusCode)',
+            );
+          }
+          rethrow;
+        }
       });
       LogManager.log('Event queue retry completed',
           level: LogLevel.debug, source: 'AnalyticsService');
