@@ -9,6 +9,9 @@ class AuthService {
   final AuthTokenStore _store;
   final AuthApiClient _api;
 
+  /// Exposes token storage for callers that still rely on direct access.
+  AuthTokenStore get tokenStore => _store;
+
   AuthService({
     required DeviceIdService deviceId,
     required AuthTokenStore tokenStore,
