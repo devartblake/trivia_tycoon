@@ -6,7 +6,7 @@ import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:trivia_tycoon/core/services/analytics/config_service.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
-import 'package:trivia_tycoon/ui_components/login/providers/auth.dart';
+import 'package:trivia_tycoon/core/services/auth_error_messages.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../core/constants/image_strings.dart';
 import '../game/providers/auth_providers.dart';
@@ -232,7 +232,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         context.go(needsOnboarding ? '/profile-setup' : '/home');
       }
     } catch (e) {
-      _showErrorSnackBar('Login failed: ${e.toString()}');
+      final errorMessage = ConfigService.useBackendAuth
+          ? (_isSignUpMode
+          ? AuthErrorMessages.getSignupErrorMessage(e)
+          : AuthErrorMessages.getLoginErrorMessage(e))
+          : 'Login failed: ${e.toString()}';
+
+      _showErrorSnackBar(errorMessage);
       setState(() => _isLoading = false);
     }
   }

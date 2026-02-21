@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../core/networkting/tycoon_api_client.dart';
+import '../../core/networking/tycoon_api_client.dart';
 import '../../game/models/ranked_leaderboard_models.dart';
 
 class RankedLeaderboardScreen extends StatefulWidget {
