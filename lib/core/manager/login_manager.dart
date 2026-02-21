@@ -54,7 +54,7 @@ class LoginManager {
     final email = data.name!;
     final username = data.additionalSignupData?["Username"] ??
         data.additionalSignupData?["username"] ??
-        'Player';
+        email.split('@').first;
     final country = data.additionalSignupData?["Country"] ??
         data.additionalSignupData?["country"];
 
