@@ -138,7 +138,6 @@ class ServiceManager {
   static Future<ServiceManager> initialize() async {
     final String baseUrl = EnvConfig.apiBaseUrl;
     final api = ApiService(baseUrl: '$baseUrl/api/v1');
-    final leaderboard = LeaderboardDataService(apiService: api);
 
     // Add async initialize methods
     final audio = await AudioSettingsService.initialize();
@@ -148,6 +147,7 @@ class ServiceManager {
     final fernetService = await FernetService.initialize(secureStorage);
     final encryptService = await EncryptionService.initialize(secureStorage);
     final cache = await AppCacheService.initialize();
+    final leaderboard = LeaderboardDataService(apiService: api, appCache: cache);
     final arcadePB = ArcadePersonalBestService(cache);
     final arcadeDaily = ArcadeDailyBonusService(cache);
     final arcadeMissions = ArcadeMissionService(cache);
