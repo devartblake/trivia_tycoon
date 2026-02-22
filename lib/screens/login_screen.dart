@@ -239,7 +239,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         final authService = ref.read(authServiceProvider);
         if (authService.secureStorage != null) {
           // Get token store from service manager or provider
-          final serviceManager = ref.read(serviceManagerProvider);
+          ref.read(serviceManagerProvider);
         }
       }
 

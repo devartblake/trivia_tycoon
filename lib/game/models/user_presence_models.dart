@@ -325,6 +325,7 @@ enum GameState {
   lobby,
   waiting,
   playing,
+  paused,
   finished;
 
   /// Get user-friendly display name
@@ -334,6 +335,8 @@ enum GameState {
         return 'In Lobby';
       case GameState.waiting:
         return 'Waiting';
+      case GameState.paused:
+        return 'Paused';
       case GameState.playing:
         return 'Playing';
       case GameState.finished:

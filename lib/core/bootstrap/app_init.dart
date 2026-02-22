@@ -23,6 +23,7 @@ import '../services/device_id_service.dart';
 import '../services/notification_service.dart';
 import '../../game/providers/auth_providers.dart';
 import '../helpers/educational_stats_initializer.dart';
+import '../services/presence/rich_presence_service.dart';
 import '../services/settings/app_settings.dart';
 import '../services/settings/multi_profile_service.dart';
 
@@ -260,8 +261,10 @@ class AppInit {
       if (isLoggedIn) {
         await _loadUserProfile(serviceManager, container);
 
-        // ✅ CHANGED - No parameter needed now
+        // No parameter needed now
         await initializeWebSocket();
+        // Initialize presence service
+        RichPresenceService().initialize(useWebSocket: true);
       }
     } catch (e) {
       debugPrint('[AppInit] Session check failed: $e');

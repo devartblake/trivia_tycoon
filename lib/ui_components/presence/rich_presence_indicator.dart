@@ -104,6 +104,8 @@ class RichPresenceIndicator extends StatelessWidget {
       switch (activity.gameState) {
         case GameState.playing:
           return 'Playing ${activity.gameType}${activity.gameMode != null ? " - ${activity.gameMode}" : ""}';
+        case GameState.paused:
+          return 'Paused ${activity.gameType}';
         case GameState.lobby:
           return 'In game lobby';
         case GameState.waiting:
@@ -140,6 +142,8 @@ extension GameStateExtension on GameState {
         return Icons.sports_esports;
       case GameState.lobby:
         return Icons.people;
+      case GameState.paused:
+        return Icons.pause;
       case GameState.waiting:
         return Icons.hourglass_empty;
       case GameState.finished:
