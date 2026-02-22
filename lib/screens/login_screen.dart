@@ -212,13 +212,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           // New user - needs onboarding
           ref.read(hasSeenIntroProvider.notifier).state = false;
           ref.read(hasCompletedProfileProvider.notifier).state = false;
+
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Complete onboarding to finish setting up your account.'),
+                behavior: SnackBarBehavior.floating,
+                duration: Duration(seconds: 3),
+              ),
+            );
+          }
         }
       }
 
       setState(() => _isLoading = false);
 
       if (mounted) {
-        context.go('/');
+        final needsOnboarding = !(ref.read(hasCompletedProfileProvider));
+        context.go(needsOnboarding ? '/profile-setup' : '/home');
       }
     } catch (e) {
       _showErrorSnackBar('Login failed: ${e.toString()}');
@@ -431,9 +442,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                             if (value == null || value.isEmpty) {
                               return 'Password is required';
                             }
-                            if (value.length < 3) {
+
+                            // Backend signup validation is stricter than login.
+                            if (_isSignUpMode) {
+                              if (value.length < 8) {
+                                return 'Use at least 8 characters';
+                              }
+                              final hasLetter = RegExp(r'[A-Za-z]').hasMatch(value);
+                              final hasNumber = RegExp(r'\d').hasMatch(value);
+                              if (!hasLetter || !hasNumber) {
+                                return 'Include at least one letter and one number';
+                              }
+                            } else if (value.length < 3) {
+                              // Keep login lenient for existing legacy accounts.
                               return 'Password must be at least 3 characters';
                             }
+
                             return null;
                           },
                         ),

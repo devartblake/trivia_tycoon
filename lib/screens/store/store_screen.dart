@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import 'package:trivia_tycoon/ui_components/power_ups/power_up_inventory_widget.dart';
 import '../../core/services/settings/app_settings.dart';
@@ -104,7 +105,13 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
             size: 18,
           ),
         ),
-        onPressed: () => Navigator.of(context).pop(),
+        onPressed: () {
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go('/home');
+          }
+        },
       ),
       title: Row(
         mainAxisSize: MainAxisSize.min,

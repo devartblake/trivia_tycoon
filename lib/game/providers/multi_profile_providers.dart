@@ -188,13 +188,14 @@ class ProfileManagerState {
     String? error,
     List<ProfileData>? profiles,
     ProfileData? activeProfile,
+    bool clearActiveProfile = false,
   }) {
     return ProfileManagerState(
       isInitialized: isInitialized ?? this.isInitialized,
       isLoading: isLoading ?? this.isLoading,
       error: error,
       profiles: profiles ?? this.profiles,
-      activeProfile: activeProfile ?? this.activeProfile,
+      activeProfile: clearActiveProfile ? null : (activeProfile ?? this.activeProfile),
     );
   }
 }
@@ -328,9 +329,15 @@ class ProfileManagerNotifier extends StateNotifier<ProfileManagerState> {
   }
 
   Future<void> clearActiveProfile() async {
-    state = const AsyncValue.data(null) as ProfileManagerState;
-    // Optionally clear from persistent storage if you're storing the active profile
-    // await _prefs.remove('active_profile_id');
+    // Keep provider state types consistent and clear synchronous mirrors.
+    ref.read(activeProfileStateProvider.notifier).state = null;
+    ref.read(profileAwareXPProvider.notifier).setXP(0);
+
+    state = state.copyWith(
+      activeProfile: null,
+      clearActiveProfile: true,
+      error: null,
+    );
   }
 
   Future<void> updateActiveProfileGameStats(Map<String, dynamic> stats) async {

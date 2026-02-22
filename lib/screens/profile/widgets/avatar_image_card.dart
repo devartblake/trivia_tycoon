@@ -86,8 +86,18 @@ class AvatarImageCard extends StatelessWidget {
           },
         );
       case AvatarSource.remote:
-        // TODO: Handle this case.
-        throw UnimplementedError();
+        // Treat remote references like network URLs to avoid runtime crashes.
+        return Image.network(
+          avatarRef.path,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return _buildErrorWidget();
+          },
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return _buildLoadingWidget();
+          },
+        );
     }
   }
 
