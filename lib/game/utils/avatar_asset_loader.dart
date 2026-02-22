@@ -131,11 +131,13 @@ class AvatarAssetLoader {
     final idxItems = await _tryLoadIndexItems(imagesIndexAsset);
 
     if (idxItems != null) {
-      // items contain "avatars/xxx.png" relative to assets/images/
+      // items may contain either:
+      // - "avatars/xxx.png" (relative to assets/images/)
+      // - full asset path
       final paths = idxItems
-          .where((p) => p.startsWith('avatars/'))
           .where(_isImageRel)
-          .map((rel) => 'assets/images/$rel')
+          .where((p) => p.startsWith('avatars/') || p.startsWith('assets/images/avatars/'))
+          .map((rel) => rel.startsWith('assets/images/') ? rel : 'assets/images/$rel')
           .toList()
         ..sort();
 
@@ -155,11 +157,16 @@ class AvatarAssetLoader {
     final idxItems = await _tryLoadIndexItems(threeDIndexAsset);
 
     if (idxItems != null) {
-      // items contain "characters/xxx.glb" relative to assets/3d/
+      // items may contain either:
+      // - "characters/xxx.glb" (relative to assets/3d/)
+      // - "xxx.fbx" from generator file schema
       final paths = idxItems
-          .where((p) => p.startsWith('characters/'))
           .where(_is3dRel)
-          .map((rel) => 'assets/3d/$rel')
+          .map((rel) {
+            if (rel.startsWith('assets/3d/')) return rel;
+            if (rel.startsWith('characters/')) return 'assets/3d/$rel';
+            return 'assets/3d/characters/$rel';
+          })
           .toList()
         ..sort();
 
@@ -181,12 +188,27 @@ class AvatarAssetLoader {
       final map = jsonDecode(s);
 
       if (map is! Map<String, dynamic>) return null;
-      final raw = map['items'];
-      if (raw is! List) return null;
 
-      final items = raw.map((e) => e.toString()).toList();
-      if (items.isEmpty) return null;
-      return items;
+      // Preferred schema: {"items": ["avatars/a.png", ...]}
+      final rawItems = map['items'];
+      if (rawItems is List) {
+        final items = rawItems.map((e) => e.toString()).toList();
+        if (items.isNotEmpty) return items;
+      }
+
+      // New index schema used by asset index generator:
+      // {"files": [{"path": "avatars/a.png", ...}, ...]}
+      final rawFiles = map['files'];
+      if (rawFiles is List) {
+        final items = rawFiles
+            .whereType<Map>()
+            .map((e) => e['path'])
+            .whereType<String>()
+            .toList();
+        if (items.isNotEmpty) return items;
+      }
+
+      return null;
     } catch (_) {
       return null;
     }
@@ -240,7 +262,7 @@ class AvatarAssetLoader {
 
   static bool _is3dRel(String rel) {
     final l = rel.toLowerCase();
-    return l.endsWith('.glb') || l.endsWith('.gltf');
+    return l.endsWith('.glb') || l.endsWith('.gltf') || l.endsWith('.fbx');
   }
 
   static List<String> _dedupeSorted(List<String> items) {
