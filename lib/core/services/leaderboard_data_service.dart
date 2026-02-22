@@ -56,10 +56,10 @@ class LeaderboardDataService extends ChangeNotifier {
   LeaderboardDataService({
     required this.apiService,
     this.assetLoader,
-    AppCacheService? appCacheService,
+    required this.appCache,
   }){
     // Initialize appCache with provided instance or create new one
-   appCache = appCacheService ?? AppCacheService();
+   //appCache = appCacheService ?? AppCacheService();
   }
 
   Future<List<LeaderboardEntry>> loadLeaderboard() async {
