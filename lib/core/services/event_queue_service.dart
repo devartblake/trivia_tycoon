@@ -2,6 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
+/// Used by queue handlers to mark a failed event as permanent (do not retry).
+class NonRetryableEventException implements Exception {
+  final String message;
+
+  NonRetryableEventException([this.message = 'Non-retryable event failure']);
+
+  @override
+  String toString() => message;
+}
+
 /// Enhanced event queue service with intelligent retry logic and failure tracking
 class EventQueueService {
   static const String _boxName = 'event_queue';
@@ -221,12 +231,6 @@ class EventQueueService {
         'last_retry': null,
       });
 
-      LogManager.logWithCustomColor(
-        'Event queued: $endpoint (Queue size: ${box.length})',
-        source: 'EventQueueService',
-        color: LogColors.yellow,
-      );
-
       // Notify analytics
       _notifyAnalytics('event_queued', {
         'endpoint': endpoint,
@@ -257,10 +261,9 @@ class EventQueueService {
 
     if (keys.isEmpty) return;
 
-    LogManager.info('Processing - ${keys.length} queued events', source: 'EventQueueService');
-
     int successCount = 0;
     int failureCount = 0;
+    int droppedCount = 0;
 
     for (final key in keys) {
       final event = box.get(key);
@@ -280,12 +283,13 @@ class EventQueueService {
         successCount++;
         _consecutiveFailures = 0; // Reset on success
 
-        LogManager.logWithCustomColor(
-          'Event retry succeeded: ${event['endpoint']}',
-          source: 'EventQueueService',
-          color: LogColors.brightGreen,
-        );
       } catch (e) {
+        if (e is NonRetryableEventException) {
+          await box.delete(key);
+          droppedCount++;
+          continue;
+        }
+
         failureCount++;
 
         // Update retry metadata
@@ -297,11 +301,6 @@ class EventQueueService {
           'last_error': e.toString(),
         });
 
-        LogManager.logWithCustomColor(
-          'Event retry failed: ${event['endpoint']} (Attempt: $retryCount)',
-          source: 'EventQueueService',
-          color: LogColors.brightRed,
-        );
       }
     }
 
@@ -311,7 +310,7 @@ class EventQueueService {
     }
 
     // Report results
-    _reportRetryCycle(successCount, failureCount, box.length);
+    _reportRetryCycle(successCount, failureCount, droppedCount, box.length);
 
     // Enforce queue size limit after retries
     await _enforceQueueSizeLimit();
@@ -363,13 +362,17 @@ class EventQueueService {
   }
 
   /// Report retry cycle results
-  void _reportRetryCycle(int successCount, int failureCount, int remainingCount) {
-    if (successCount > 0 || failureCount > 0) {
+  void _reportRetryCycle(int successCount, int failureCount, int droppedCount, int remainingCount) {
+    if (successCount > 0 || failureCount > 0 || droppedCount > 0) {
       LogManager.divider(label: 'RETRY CYCLE COMPLETE');
       LogManager.success('Succeeded: $successCount', source: 'EventQueueService');
 
       if (failureCount > 0) {
         LogManager.error('Failed: $failureCount', source: 'EventQueueService');
+      }
+
+      if (droppedCount > 0) {
+        LogManager.warning('Dropped (non-retryable): $droppedCount', source: 'EventQueueService');
       }
 
       LogManager.info('Remaining in queue: $remainingCount', source: 'EventQueueService');
@@ -380,6 +383,7 @@ class EventQueueService {
       'success_count': successCount,
       'failure_count': failureCount,
       'remaining_count': remainingCount,
+      'dropped_count': droppedCount,
       'consecutive_failures': _consecutiveFailures,
     });
   }

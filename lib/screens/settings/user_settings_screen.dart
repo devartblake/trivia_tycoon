@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
+import 'package:trivia_tycoon/game/providers/auth_providers.dart';
 
 class UserSettingsScreen extends ConsumerStatefulWidget {
   const UserSettingsScreen({super.key});
@@ -472,7 +473,6 @@ class _UserSettingsScreenState extends ConsumerState<UserSettingsScreen>
   }
 
   void _showLogoutDialog() async {
-    final authService = ref.read(authServiceProvider);
 
     final confirmed = await showDialog<bool>(
       context: context,
@@ -531,7 +531,7 @@ class _UserSettingsScreenState extends ConsumerState<UserSettingsScreen>
     );
 
     if (confirmed == true) {
-      await authService.logout(context);
+      await ref.read(authOperationsProvider).logout(context);
     }
   }
 }
