@@ -7,10 +7,18 @@ import '../../game/models/leaderboard_entry.dart';
 import '../../game/services/leaderboard_service.dart';
 import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
 
-class LeaderboardDataService {
+import 'leaderboard/leaderboard_websocket_adapter.dart';
+
+class LeaderboardDataService extends ChangeNotifier {
   final ApiService apiService;
   final AppCacheService appCache;
   final Future<List<LeaderboardEntry>> Function()? assetLoader;
+
+  // Add after existing fields
+  LeaderboardWebSocketAdapter? _wsAdapter;
+  bool _useWebSocket = false;
+  List<LeaderboardEntry> _currentLeaderboard = [];
+  final Map<int, LeaderboardEntry> _entriesById = {};
 
   // Cache and refresh settings
   static const Duration _refreshInterval = Duration(minutes: 5);
@@ -22,7 +30,37 @@ class LeaderboardDataService {
   DateTime? _lastRefreshTime;
   bool _isRefreshing = false;
 
-  LeaderboardDataService({required this.apiService, required this.appCache, this.assetLoader});
+  // Add initialization
+  void initializeWebSocket({bool useWebSocket = true}) {
+    _useWebSocket = useWebSocket;
+
+    if (_useWebSocket) {
+      _wsAdapter = LeaderboardWebSocketAdapter(
+        onRankChange: _handleRankChange,
+        onSnapshot: _handleSnapshot,
+        onPlayerPassedYou: _handlePlayerPassed,
+      );
+      _wsAdapter!.initialize();
+      debugPrint('[Leaderboard] Using WebSocket mode');
+    }
+  }
+
+  // ✅ ADD THIS - Build entries lookup map
+  void _buildEntriesMap() {
+    _entriesById.clear();
+    for (final entry in _currentLeaderboard) {
+      _entriesById[entry.userId] = entry;
+    }
+  }
+
+  LeaderboardDataService({
+    required this.apiService,
+    this.assetLoader,
+    AppCacheService? appCacheService,
+  }){
+    // Initialize appCache with provided instance or create new one
+   appCache = appCacheService ?? AppCacheService();
+  }
 
   Future<List<LeaderboardEntry>> loadLeaderboard() async {
     // Check if we need to refresh data first
@@ -58,25 +96,82 @@ class LeaderboardDataService {
       final remote = await LeaderboardService(apiService: apiService).fetchLeaderboard();
       await appCache.cacheLeaderboard(remote);
       await _updateLastRefresh();
+
+      // ✅ Update current leaderboard for WebSocket
+      _currentLeaderboard = remote;
+      _buildEntriesMap();
+
       debugPrint("🌐 Loaded ${remote.length} entries from API");
       return remote;
     } catch (e) {
       debugPrint("🌐 API load failed: $e");
+
+      // ✅ If 404, backend not ready - use empty list
+      if (e.toString().contains('404')) {
+        debugPrint("⚠️ Backend /leaderboard endpoint not ready yet");
+        _currentLeaderboard = [];
+        return [];
+      }
+
       await _incrementRefreshFailureCount();
     }
 
     return [];
   }
 
-  List<LeaderboardEntry> _parseLeaderboardJson(String jsonStr) {
-    try {
-      final List<dynamic> decoded = json.decode(jsonStr);
-      return decoded.map((e) => LeaderboardEntry.fromJson(e)).toList();
-    } catch (e) {
-      debugPrint("❌ Failed to parse leaderboard JSON: $e");
-      return [];
+  void _handleRankChange(LeaderboardUpdate update) {
+    final entry = _entriesById[int.parse(update.userId)];
+    if (entry != null) {
+      final updatedEntry = entry.copyWith(
+        rank: update.rank,
+        score: update.score,
+      );
+
+      _entriesById[entry.userId] = updatedEntry;
+
+      final index = _currentLeaderboard.indexWhere((e) => e.userId == entry.userId);
+      if (index != -1) {
+        _currentLeaderboard[index] = updatedEntry;
+        _currentLeaderboard.sort((a, b) => a.rank.compareTo(b.rank));
+        notifyListeners();
+      }
     }
   }
+
+  void _handleSnapshot(List<LeaderboardEntry> entries) {
+    _currentLeaderboard = entries;
+    _entriesById.clear();
+    for (final entry in entries) {
+      _entriesById[entry.userId] = entry;
+    }
+    notifyListeners();
+  }
+
+  void _handlePlayerPassed(String userId, int newRank, int yourRank) {
+    debugPrint('[Leaderboard] Player $userId passed you! (#$newRank vs #$yourRank)');
+    // Show notification
+  }
+
+  /// Subscribe to leaderboard updates via WebSocket
+  void subscribe({
+    String type = 'global',
+    int? tier,
+    String? category,
+  }) {
+    if (_useWebSocket && _wsAdapter != null) {
+      _wsAdapter!.subscribe(type: type, tier: tier, category: category);
+    }
+  }
+
+  /// Unsubscribe from leaderboard updates
+  void unsubscribe() {
+    if (_useWebSocket && _wsAdapter != null) {
+      _wsAdapter!.unsubscribe();
+    }
+  }
+
+  /// Get current leaderboard (for UI to access)
+  List<LeaderboardEntry> get currentLeaderboard => _currentLeaderboard;
 
   Future<void> submitScore(String playerName, int score) async {
     try {
@@ -510,8 +605,11 @@ class LeaderboardDataService {
   }
 
   /// Dispose method to clean up resources
+  @override
   void dispose() {
+    _wsAdapter?.dispose();
     _isRefreshing = false;
     _lastRefreshTime = null;
+    super.dispose();
   }
 }

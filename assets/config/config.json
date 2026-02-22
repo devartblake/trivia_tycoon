@@ -1,5 +1,6 @@
 {
   "API_BASE_URL": "https://localhost:5000",
+  "API_WS_BASE_URL": "https://10.0.2.2:5000/ws",
   "ENABLE_LOGGING": false,
   "USE_BACKEND_AUTH": true,
   "THEME": "dark",

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/services/auth_error_messages.dart';
 import '../../core/services/storage/secure_storage.dart';
 import '../../ui_components/login/models/signup_data.dart';
 import '../providers/riverpod_providers.dart';
@@ -33,43 +34,55 @@ class AuthOperations {
 
   /// Login user with password via backend (uses LoginManager)
   Future<void> loginWithPassword(String email, String password) async {
-    final loginManager = ref.read(loginManagerProvider);
-    final secureStorage = ref.read(secureStorageProvider);
+    try {
+      final loginManager = ref.read(loginManagerProvider);
+      final secureStorage = ref.read(secureStorageProvider);
 
-    // LoginManager handles everything: tokens, device ID, profile
-    await loginManager.login(email, password);
+      // LoginManager handles everything: tokens, device ID, profile
+      await loginManager.login(email, password);
 
-    // Extract and store role/premium info from response if needed
-    await _updateRoleAndPremiumStatus(secureStorage);
+      // Extract and store role/premium info from response if needed
+      await _updateRoleAndPremiumStatus(secureStorage);
 
-    // Update Riverpod state
-    ref.read(isLoggedInSyncProvider.notifier).state = true;
+      // Update Riverpod state
+      ref.read(isLoggedInSyncProvider.notifier).state = true;
+    } catch (e) {
+      // Rethrow with user-friendly message
+      final message = AuthErrorMessages.getLoginErrorMessage(e);
+      throw Exception(message);
+    }
   }
 
   /// Signup user via backend (uses LoginManager)
   Future<void> signup(
-      String email,
-      String password, {
-        Map<String, dynamic>? extra,
-      }) async {
-    final loginManager = ref.read(loginManagerProvider);
-    final secureStorage = ref.read(secureStorageProvider);
+    String email,
+    String password, {
+    Map<String, dynamic>? extra,
+  }) async {
+    try {
+      final loginManager = ref.read(loginManagerProvider);
+      final secureStorage = ref.read(secureStorageProvider);
 
-    // Build SignupData using the correct named constructor
-    final signupData = SignupData.fromSignupForm(
-      name: email,
-      password: password,
-      additionalSignupData: _convertToStringMap(extra),
-    );
+      // Build SignupData using the correct named constructor
+      final signupData = SignupData.fromSignupForm(
+        name: email,
+        password: password,
+        additionalSignupData: _convertToStringMap(extra),
+      );
 
-    // LoginManager handles everything: tokens, device ID, profile
-    await loginManager.signup(signupData);
+      // LoginManager handles everything: tokens, device ID, profile
+      await loginManager.signup(signupData);
 
-    // Extract and store role/premium info from response if needed
-    await _updateRoleAndPremiumStatus(secureStorage);
+      // Extract and store role/premium info from response if needed
+      await _updateRoleAndPremiumStatus(secureStorage);
 
-    // Update Riverpod state
-    ref.read(isLoggedInSyncProvider.notifier).state = true;
+      // Update Riverpod state
+      ref.read(isLoggedInSyncProvider.notifier).state = true;
+    } catch (e) {
+      // Rethrow with user-friendly message
+      final message = AuthErrorMessages.getSignupErrorMessage(e);
+      throw Exception(message);
+    }
   }
 
   /// Convert Map<String, dynamic>? to Map<String, String>? for SignupData
@@ -96,7 +109,6 @@ class AuthOperations {
       // Get premium status from profile
       final isPremium = await profileService.isPremiumUser();
       await secureStorage.setSecret('is_premium', isPremium.toString());
-
     } catch (e) {
       debugPrint('[AuthOperations] Error updating role/premium: $e');
       // Set defaults on error
@@ -138,7 +150,8 @@ class AuthOperations {
 }
 
 /// Legacy providers for backward compatibility if needed
-final authStateProvider = StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
+final authStateProvider =
+    StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
   return AuthStateNotifier();
 });
 
@@ -199,7 +212,8 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  Future<void> signup(String email, String password, Map<String, dynamic> additionalData) async {
+  Future<void> signup(String email, String password,
+      Map<String, dynamic> additionalData) async {
     state = state.copyWith(isLoading: true, error: null);
 
     try {

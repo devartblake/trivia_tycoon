@@ -18,19 +18,19 @@ This repository includes the entire player-facing and admin-facing Flutter appli
 > Add your real screenshots to `assets/screenshots/` and update paths below.
 
 ### 📱 Gameplay
-<img src="assets/screenshots/gameplay.png" width="300">
+<img src="assets/screenshots/gameplay.png" width="300" alt="">
 
 ### 🧠 Skill Tree (Honeycomb Layout)
-<img src="assets/screenshots/skill_tree.png" width="300">
+<img src="assets/screenshots/skill_tree.png" width="300" alt="">
 
 ### 🏆 Leaderboard (Tier System)
-<img src="assets/screenshots/leaderboard.png" width="300">
+<img src="assets/screenshots/leaderboard.png" width="300" alt="">
 
 ### 🛠 Admin Dashboard
-<img src="assets/screenshots/admin_dashboard.png" width="300">
+<img src="assets/screenshots/admin_dashboard.png" width="300" alt="">
 
 ### Mini Games
-<img src="assets/screenshots/mini_games.png" width="300">
+<img src="assets/screenshots/mini_games.png" width="300" alt="">
 
 ---
 

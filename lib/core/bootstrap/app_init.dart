@@ -12,6 +12,10 @@ import '../../game/analytics/services/spin_analytics_tracker.dart';
 import '../../game/providers/multi_profile_providers.dart';
 import '../../game/services/referral_storage_service.dart';
 import '../env.dart';
+import '../networking/ws_client.dart';
+import '../networking/http_client.dart';
+import '../networking/tycoon_api_client.dart';
+import '../services/auth_http_client.dart';
 import '../services/auth_api_client.dart';
 import '../services/auth_service.dart';
 import '../services/auth_token_store.dart';
@@ -19,6 +23,7 @@ import '../services/device_id_service.dart';
 import '../services/notification_service.dart';
 import '../../game/providers/auth_providers.dart';
 import '../helpers/educational_stats_initializer.dart';
+import '../services/presence/rich_presence_service.dart';
 import '../services/settings/app_settings.dart';
 import '../services/settings/multi_profile_service.dart';
 
@@ -29,6 +34,15 @@ class AppInit {
   static bool _backgroundServicesReady = false;
   static SpinAnalyticsTracker? _spinAnalyticsTracker;
   static SpinAnalyticsTracker? get spinAnalyticsTracker => _spinAnalyticsTracker;
+
+  // WebSocket management
+  static WsClient? _wsClient;
+  static WsClient? get wsClient => _wsClient;
+  static bool _wsConnected = false;
+
+  // ✅ Store tokenStore for WebSocket
+  static AuthTokenStore? _tokenStore;
+  static AuthTokenStore? get tokenStore => _tokenStore;
 
   // --- CRITICAL INITIALIZATION (Required for first frame) ---
   static Future<(ServiceManager, ThemeNotifier)> initialize({ProviderContainer? container}) async {
@@ -58,7 +72,10 @@ class AppInit {
     debugPrint('✅ DeviceId ready: $deviceId');
 
     // Create AuthTokenStore with dedicated auth tokens box
-    final tokenStore = AuthTokenStore(authTokenBox); // ← FIXED: Use dedicated box
+    final tokenStore = AuthTokenStore(authTokenBox);
+
+    // Store for after use
+    _tokenStore = tokenStore;
 
     final httpClient = http.Client();
     final authApi = AuthApiClient(httpClient, apiBaseUrl: EnvConfig.apiBaseUrl, deviceId: deviceIdService);
@@ -82,6 +99,73 @@ class AppInit {
     debugPrint('[AppInit] Critical initialization complete');
     return (serviceManager, serviceManager.themeNotifier);
   }
+
+  /// Initialize WebSocket connection
+  /// Should be called after user login
+  static Future<void> initializeWebSocket() async {
+    try {
+      debugPrint('[AppInit] Initializing WebSocket...');
+
+      // ✅ CHANGED - Use stored tokenStore
+      if (_tokenStore == null) {
+        debugPrint('[AppInit] TokenStore not initialized');
+        return;
+      }
+
+      // Get auth token
+      final session = _tokenStore!.load();
+      if (!session.hasTokens) {
+        debugPrint('[AppInit] No auth token, skipping WebSocket');
+        return;
+      }
+
+      // Determine WebSocket URL based on environment
+      final wsUrl = EnvConfig.apiWsBaseUrl;
+
+      // Create WebSocket client
+      _wsClient = WsClient(
+        url: wsUrl,
+        onMessage: (message) {
+          debugPrint('[WS] ← ${message.op}');
+        },
+        onStateChange: (state) {
+          debugPrint('[WS] State: $state');
+          _wsConnected = (state == WsState.connected);
+        },
+        onError: (error) {
+          debugPrint('[WS] Error: $error');
+        },
+      );
+
+      // Connect
+      await _wsClient!.connect();
+      debugPrint('[AppInit] WebSocket initialized');
+
+    } catch (e) {
+      debugPrint('[AppInit] WebSocket initialization failed: $e');
+    }
+  }
+
+  /// Disconnect WebSocket
+  static Future<void> disconnectWebSocket() async {
+    if (_wsClient != null) {
+      debugPrint('[AppInit] Disconnecting WebSocket...');
+      await _wsClient!.disconnect();
+      _wsClient = null;
+      _wsConnected = false;
+    }
+  }
+
+  /// Reconnect WebSocket (for app resume)
+  static Future<void> reconnectWebSocket() async {
+    if (_wsClient != null && !_wsConnected) {
+      debugPrint('[AppInit] Reconnecting WebSocket...');
+      await _wsClient!.reconnect();
+    }
+  }
+
+  /// Check if WebSocket is connected
+  static bool get isWebSocketConnected => _wsConnected;
 
   // --- BACKGROUND INITIALIZATION (Deferred for performance) ---
   static Future<void> initializeBackgroundServices(ServiceManager serviceManager, ProviderContainer? container) async {
@@ -176,6 +260,11 @@ class AppInit {
       }
       if (isLoggedIn) {
         await _loadUserProfile(serviceManager, container);
+
+        // No parameter needed now
+        await initializeWebSocket();
+        // Initialize presence service
+        RichPresenceService().initialize(useWebSocket: true);
       }
     } catch (e) {
       debugPrint('[AppInit] Session check failed: $e');

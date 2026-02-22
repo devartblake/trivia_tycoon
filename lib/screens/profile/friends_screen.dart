@@ -3,6 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'dialogs/add_friend_dialog.dart';
+import '../../core/services/presence/rich_presence_service.dart';
+import '../../game/models/user_presence_models.dart';
+import '../../ui_components/presence/presence_status_widget.dart';
 
 class FriendsScreen extends ConsumerStatefulWidget {
   const FriendsScreen({super.key});
@@ -19,6 +22,14 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
 
   final List<String> _tabs = ['Friends', 'Requests', 'Suggested'];
 
+  // ✅ ADD THIS - Presence service
+  final _presenceService = RichPresenceService();
+
+  // ✅ ADD THIS - Friend data (replace with your actual friend service)
+  List<Friend> _friends = [];
+  List<Friend> _onlineFriends = [];
+  bool _isLoadingFriends = true;
+
   @override
   void initState() {
     super.initState();
@@ -34,12 +45,142 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
       curve: Curves.easeOut,
     ));
     _fadeController.forward();
+
+    // ✅ ADD THIS - Initialize presence and friends
+    _initializeFriends();
+
+    // ✅ ADD THIS - Listen to presence changes
+    _presenceService.addListener(_onPresenceChanged);
   }
 
   @override
   void dispose() {
     _fadeController.dispose();
+    _presenceService.removeListener(_onPresenceChanged);
     super.dispose();
+  }
+
+  // ✅ ADD THIS - Initialize friends and subscribe to presence
+  Future<void> _initializeFriends() async {
+    // Load friends from your friend service
+    await _loadFriends();
+
+    // Subscribe to friend presence updates
+    _subscribeToFriends();
+
+    setState(() {
+      _isLoadingFriends = false;
+    });
+  }
+
+  // ✅ ADD THIS - Load friends (replace with your actual friend service)
+  Future<void> _loadFriends() async {
+    // TODO: Replace with actual friend service call
+    // Example: final friendsData = await ref.read(friendServiceProvider).getFriends();
+
+    // Mock data for now - replace with real data
+    _friends = [
+      Friend(
+        id: 'user_1',
+        name: 'David Wilson',
+        username: '@davidw',
+        avatar: 'assets/images/avatars/avatar-2.png',
+      ),
+      Friend(
+        id: 'user_2',
+        name: 'Sarah Johnson',
+        username: '@sarahj',
+        avatar: 'assets/images/avatars/avatar-3.png',
+      ),
+      Friend(
+        id: 'user_3',
+        name: 'Mike Chen',
+        username: '@mikec',
+        avatar: 'assets/images/avatars/avatar-4.png',
+      ),
+      Friend(
+        id: 'user_4',
+        name: 'Emma Roberts',
+        username: '@emmar',
+        avatar: 'assets/images/avatars/avatar-5.png',
+      ),
+    ];
+  }
+
+  // ✅ ADD THIS - Subscribe to friends' presence
+  void _subscribeToFriends() {
+    if (_friends.isEmpty) return;
+
+    // Get friend IDs
+    final friendIds = _friends.map((f) => f.id).toList();
+
+    // Subscribe to their presence updates via WebSocket
+    _presenceService.subscribeToUsers(friendIds);
+
+    debugPrint('[Friends] Subscribed to ${friendIds.length} friends');
+  }
+
+  // ✅ ADD THIS - Handle presence changes
+  void _onPresenceChanged() {
+    if (!mounted) return;
+
+    // Update online friends list
+    _updateOnlineFriends();
+
+    setState(() {
+      // Rebuild UI with new presence data
+    });
+  }
+
+  // ✅ ADD THIS - Update online friends based on presence
+  void _updateOnlineFriends() {
+    _onlineFriends = _friends.where((friend) {
+      final presence = _presenceService.getUserPresence(friend.id);
+      return presence?.status == PresenceStatus.online ||
+          presence?.status == PresenceStatus.inGame ||
+          presence?.status == PresenceStatus.busy;
+    }).toList();
+  }
+
+  // ✅ ADD THIS - Start quiz (update my presence)
+  void _startQuiz({
+    String difficulty = 'Easy',
+    String category = 'General',
+  }) {
+    _presenceService.setGameActivity(
+      gameType: 'quiz',
+      gameMode: 'solo',
+      currentLevel: difficulty,
+      gameState: GameState.playing,
+      metadata: {
+        'category': category,
+        'startedAt': DateTime.now().toIso8601String(),
+      },
+    );
+
+    debugPrint('[Friends] Started quiz - presence updated');
+
+    // Navigate to quiz screen
+    // Navigator.of(context).push(...);
+  }
+
+  // ✅ ADD THIS - Join match (update my presence)
+  void _joinMatch(String matchId, {String? opponentId, String? opponentName}) {
+    _presenceService.setGameActivity(
+      gameType: 'match',
+      gameMode: 'pvp',
+      gameState: GameState.lobby,
+      metadata: {
+        'matchId': matchId,
+        if (opponentId != null) 'opponentId': opponentId,
+        if (opponentName != null) 'opponentName': opponentName,
+      },
+    );
+
+    debugPrint('[Friends] Joined match $matchId - presence updated');
+
+    // Navigate to match screen
+    // Navigator.of(context).push(...);
   }
 
   @override
@@ -49,7 +190,9 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
       appBar: _buildAppBar(),
       body: FadeTransition(
         opacity: _fadeAnimation,
-        child: CustomScrollView(
+        child: _isLoadingFriends
+            ? const Center(child: CircularProgressIndicator())
+            : CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
             // Online Friends Section
@@ -74,6 +217,9 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
   }
 
   PreferredSizeWidget _buildAppBar() {
+    // ✅ CHANGED - Use real online count
+    final onlineCount = _onlineFriends.length;
+
     return AppBar(
       elevation: 0,
       backgroundColor: Colors.white,
@@ -114,10 +260,10 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
             ),
           ),
           const SizedBox(width: 12),
-          const Column(
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Friends',
                 style: TextStyle(
                   fontSize: 18,
@@ -126,8 +272,8 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
                 ),
               ),
               Text(
-                '24 friends online',
-                style: TextStyle(
+                '$onlineCount friends online', // ✅ Real count
+                style: const TextStyle(
                   fontSize: 12,
                   color: Color(0xFF64748B),
                 ),
@@ -162,13 +308,10 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
   }
 
   Widget _buildOnlineFriendsSection() {
-    final onlineFriends = [
-      {'name': 'You', 'avatar': 'assets/images/avatars/avatar-1.png', 'isOnline': true},
-      {'name': 'David', 'avatar': 'assets/images/avatars/avatar-2.png', 'isOnline': true},
-      {'name': 'Sarah', 'avatar': 'assets/images/avatars/avatar-3.png', 'isOnline': true},
-      {'name': 'Mike', 'avatar': 'assets/images/avatars/avatar-4.png', 'isOnline': true},
-      {'name': 'Emma', 'avatar': 'assets/images/avatars/avatar-5.png', 'isOnline': true},
-    ];
+    // ✅ CHANGED - Use real online friends with presence
+    if (_onlineFriends.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
     return TweenAnimationBuilder<double>(
       duration: const Duration(milliseconds: 800),
@@ -216,7 +359,7 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
                       ),
                       const Spacer(),
                       Text(
-                        '${onlineFriends.length} online',
+                        '${_onlineFriends.length} online',
                         style: const TextStyle(
                           fontSize: 12,
                           color: Color(0xFF64748B),
@@ -229,18 +372,20 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
                     height: 80,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: onlineFriends.length,
+                      itemCount: _onlineFriends.length,
                       itemBuilder: (context, index) {
-                        final friend = onlineFriends[index];
+                        final friend = _onlineFriends[index];
+                        final presence = _presenceService.getUserPresence(friend.id);
+
                         return TweenAnimationBuilder<double>(
                           duration: Duration(milliseconds: 900 + (index * 100)),
                           tween: Tween(begin: 0.0, end: 1.0),
                           builder: (context, animValue, child) {
                             return Transform.scale(
                               scale: animValue,
-                              child: Container(
-                                margin: const EdgeInsets.only(right: 16),
-                                child: _buildOnlineFriendAvatar(friend),
+                              child: Opacity(
+                                opacity: animValue,
+                                child: _buildOnlineFriendAvatar(friend, presence),
                               ),
                             );
                           },
@@ -257,307 +402,248 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
     );
   }
 
-  Widget _buildOnlineFriendAvatar(Map<String, dynamic> friend) {
-    final bool isYou = friend['name'] == 'You';
-
+  Widget _buildOnlineFriendAvatar(Friend friend, UserPresence? presence) {
     return GestureDetector(
-      onTap: () {
-        if (!isYou) {
-          _showFriendProfile(friend);
-        }
-      },
-      child: Column(
-        children: [
-          Stack(
-            children: [
-              Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  gradient: isYou
-                      ? const LinearGradient(colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)])
-                      : null,
-                  color: isYou ? null : const Color(0xFFF1F5F9),
-                  borderRadius: BorderRadius.circular(25),
-                  border: Border.all(
-                    color: const Color(0xFF10B981),
-                    width: 2,
-                  ),
-                ),
-                child: isYou
-                    ? const Icon(Icons.person, color: Colors.white, size: 24)
-                    : ClipRRect(
-                  borderRadius: BorderRadius.circular(23),
-                  child: Image.asset(
-                    friend['avatar'],
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Icon(Icons.person, color: Color(0xFF64748B));
-                    },
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: Container(
-                  width: 16,
-                  height: 16,
+      onTap: () => _showFriendDetails(friend),
+      child: Container(
+        margin: const EdgeInsets.only(right: 12),
+        child: Column(
+          children: [
+            // ✅ Use YOUR PresenceStatusIndicator
+            Stack(
+              children: [
+                Container(
+                  width: 50,
+                  height: 50,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF10B981),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.white, width: 2),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: const Color(0xFF6366F1),
+                      width: 2,
+                    ),
+                  ),
+                  child: CircleAvatar(
+                    radius: 23,
+                    backgroundImage: friend.avatar != null
+                        ? AssetImage(friend.avatar!)
+                        : null,
+                    child: friend.avatar == null
+                        ? Text(friend.name[0])
+                        : null,
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            friend['name'],
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: isYou ? const Color(0xFF6366F1) : const Color(0xFF64748B),
+                if (presence != null)
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: PresenceStatusIndicator(
+                      status: presence.status,
+                      size: 14,
+                      showBorder: true,
+                      animated: true,
+                    ),
+                  ),
+              ],
             ),
-          ),
-        ],
+            const SizedBox(height: 4),
+            SizedBox(
+              width: 60,
+              child: Text(
+                friend.name.split(' ').first,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 10,
+                  color: Color(0xFF64748B),
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildTabBar() {
-    return TweenAnimationBuilder<double>(
-      duration: const Duration(milliseconds: 900),
-      tween: Tween(begin: 0.0, end: 1.0),
-      builder: (context, value, child) {
-        return Transform.translate(
-          offset: Offset(0, 20 * (1 - value)),
-          child: Opacity(
-            opacity: value,
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF64748B).withValues(alpha: 0.08),
-                    blurRadius: 10,
-                    offset: const Offset(0, 2),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF6366F1).withValues(alpha: 0.08),
+            blurRadius: 20,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: _tabs.map((tab) {
+          final isSelected = tab == _selectedTab;
+          return Expanded(
+            child: GestureDetector(
+              onTap: () => setState(() => _selectedTab = tab),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? const Color(0xFF6366F1)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  tab,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: isSelected
+                        ? Colors.white
+                        : const Color(0xFF64748B),
                   ),
-                ],
-              ),
-              child: Row(
-                children: _tabs.map((tab) {
-                  final isSelected = tab == _selectedTab;
-                  return Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        HapticFeedback.selectionClick();
-                        setState(() => _selectedTab = tab);
-                      },
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        decoration: BoxDecoration(
-                          color: isSelected ? const Color(0xFF6366F1) : Colors.transparent,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          tab,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: isSelected ? Colors.white : const Color(0xFF64748B),
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                }).toList(),
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        }).toList(),
+      ),
     );
   }
 
   Widget _buildFriendsList() {
-    return TweenAnimationBuilder<double>(
-      duration: const Duration(milliseconds: 1000),
-      tween: Tween(begin: 0.0, end: 1.0),
-      builder: (context, value, child) {
-        return Transform.translate(
-          offset: Offset(0, 20 * (1 - value)),
-          child: Opacity(
-            opacity: value,
-            child: Container(
-              margin: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF64748B).withValues(alpha: 0.08),
-                    blurRadius: 20,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Row(
-                      children: [
-                        Text(
-                          _getTabTitle(),
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF1E293B),
-                          ),
-                        ),
-                        const Spacer(),
-                        if (_selectedTab == 'Requests')
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFEF4444),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: const Text(
-                              '3',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                  ..._getFriendsForTab().asMap().entries.map((entry) {
-                    final index = entry.key;
-                    final friend = entry.value;
-                    return TweenAnimationBuilder<double>(
-                      duration: Duration(milliseconds: 1100 + (index * 100)),
-                      tween: Tween(begin: 0.0, end: 1.0),
-                      builder: (context, animValue, child) {
-                        return Transform.translate(
-                          offset: Offset(0, 20 * (1 - animValue)),
-                          child: Opacity(
-                            opacity: animValue,
-                            child: _buildFriendTile(friend),
-                          ),
-                        );
-                      },
-                    );
-                  }).toList(),
-                  const SizedBox(height: 20),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
+    final friends = _getFriendsForTab();
 
-  Widget _buildFriendTile(Map<String, dynamic> friend) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FAFF),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: const Color(0xFF6366F1).withValues(alpha: 0.1),
-        ),
-      ),
-      child: Row(
-        children: [
-          Stack(
-            children: [
-              Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF1F5F9),
-                  borderRadius: BorderRadius.circular(25),
-                  border: Border.all(
-                    color: friend['isOnline'] == true
-                        ? const Color(0xFF10B981)
-                        : const Color(0xFF64748B).withValues(alpha: 0.2),
-                    width: 2,
-                  ),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(23),
-                  child: Image.asset(
-                    friend['avatar'] ?? 'assets/images/avatars/default-avatar.png',
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Icon(Icons.person, color: Color(0xFF64748B));
-                    },
-                  ),
-                ),
-              ),
-              if (friend['isOnline'] == true)
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    width: 14,
-                    height: 14,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF10B981),
-                      borderRadius: BorderRadius.circular(7),
-                      border: Border.all(color: Colors.white, width: 2),
-                    ),
-                  ),
-                ),
-            ],
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF6366F1).withValues(alpha: 0.08),
+            blurRadius: 20,
+            offset: const Offset(0, 4),
           ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  friend['name'],
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF1E293B),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  friend['status'] ?? 'Playing Trivia Tycoon',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: friend['isOnline'] == true
-                        ? const Color(0xFF10B981)
-                        : const Color(0xFF64748B),
-                  ),
-                ),
-              ],
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            _getTabTitle(),
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF1E293B),
             ),
           ),
-          _buildActionButton(friend),
+          const SizedBox(height: 16),
+          ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: friends.length,
+            separatorBuilder: (context, index) => const Divider(height: 24),
+            itemBuilder: (context, index) {
+              final friend = friends[index];
+              return _buildFriendItem(friend);
+            },
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildActionButton(Map<String, dynamic> friend) {
+  Widget _buildFriendItem(Friend friend) {
+    // ✅ CHANGED - Get real presence
+    final presence = _presenceService.getUserPresence(friend.id);
+    final presenceText = presence != null
+        ? _presenceService.getFormattedPresence(friend.id)
+        : 'Offline';
+
+    return TweenAnimationBuilder<double>(
+      duration: const Duration(milliseconds: 400),
+      tween: Tween(begin: 0.0, end: 1.0),
+      builder: (context, value, child) {
+        return Opacity(
+          opacity: value,
+          child: Row(
+            children: [
+              // ✅ Use YOUR PresenceStatusIndicator
+              Stack(
+                children: [
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: const Color(0xFF6366F1).withValues(alpha: 0.2),
+                        width: 2,
+                      ),
+                    ),
+                    child: CircleAvatar(
+                      radius: 22,
+                      backgroundImage: friend.avatar != null
+                          ? AssetImage(friend.avatar!)
+                          : null,
+                      child: friend.avatar == null
+                          ? Text(friend.name[0])
+                          : null,
+                    ),
+                  ),
+                  if (presence != null)
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: PresenceStatusIndicator(
+                        status: presence.status,
+                        size: 12,
+                        showBorder: true,
+                        animated: true,
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      friend.name,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF1E293B),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      presenceText,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: presence?.status == PresenceStatus.online ||
+                            presence?.status == PresenceStatus.inGame
+                            ? const Color(0xFF10B981)
+                            : const Color(0xFF64748B),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              _buildActionButton(friend),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildActionButton(Friend friend) {
     switch (_selectedTab) {
       case 'Requests':
         return Row(
@@ -614,7 +700,8 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
           onSelected: (value) => _handleFriendAction(friend, value),
           itemBuilder: (context) => [
             const PopupMenuItem(value: 'message', child: Text('Send Message')),
-            const PopupMenuItem(value: 'challenge', child: Text('Challenge')),
+            const PopupMenuItem(value: 'challenge', child: Text('Challenge to Match')),
+            const PopupMenuItem(value: 'quiz', child: Text('Start Quiz Together')),
             const PopupMenuItem(value: 'profile', child: Text('View Profile')),
             const PopupMenuItem(value: 'remove', child: Text('Remove Friend')),
           ],
@@ -659,27 +746,39 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
     }
   }
 
-  List<Map<String, dynamic>> _getFriendsForTab() {
+  List<Friend> _getFriendsForTab() {
     switch (_selectedTab) {
       case 'Requests':
-        return [
-          {'name': 'Alex Thompson', 'avatar': 'assets/images/avatars/avatar-6.png', 'isOnline': true},
-          {'name': 'Jessica Wong', 'avatar': 'assets/images/avatars/avatar-7.png', 'isOnline': false},
-          {'name': 'Marcus Johnson', 'avatar': 'assets/images/avatars/avatar-8.png', 'isOnline': true},
-        ];
+      // TODO: Return actual friend requests
+        return [];
       case 'Suggested':
-        return [
-          {'name': 'Chris Miller', 'avatar': 'assets/images/avatars/avatar-9.png', 'isOnline': true, 'mutualFriends': 5},
-          {'name': 'Amanda Davis', 'avatar': 'assets/images/avatars/avatar-10.png', 'isOnline': false, 'mutualFriends': 3},
-        ];
+      // TODO: Return suggested friends
+        return [];
       default:
-        return [
-          {'name': 'David Wilson', 'avatar': 'assets/images/avatars/avatar-2.png', 'isOnline': true, 'status': 'Currently playing'},
-          {'name': 'Sarah Johnson', 'avatar': 'assets/images/avatars/avatar-3.png', 'isOnline': true, 'status': 'Last seen 5m ago'},
-          {'name': 'Mike Chen', 'avatar': 'assets/images/avatars/avatar-4.png', 'isOnline': false, 'status': 'Last seen 2h ago'},
-          {'name': 'Emma Roberts', 'avatar': 'assets/images/avatars/avatar-5.png', 'isOnline': true, 'status': 'Online'},
-        ];
+        return _friends;
     }
+  }
+
+  // ✅ ADD THIS - Show friend details with presence
+  void _showFriendDetails(Friend friend) {
+    final presence = _presenceService.getUserPresence(friend.id);
+
+    if (presence == null) {
+      _showFriendProfile(friend);
+      return;
+    }
+
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => DetailedPresenceCard(
+        presence: presence,
+        userName: friend.name,
+        userAvatar: friend.avatar,
+      ),
+    );
   }
 
   void _showSearchDialog() {
@@ -708,8 +807,9 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
     );
   }
 
-  void _showFriendProfile(Map<String, dynamic> friend) {
+  void _showFriendProfile(Friend friend) {
     // Navigate to friend profile screen
+    debugPrint('[Friends] Showing profile for ${friend.name}');
   }
 
   void _showAddFriendDialog() {
@@ -720,31 +820,47 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
     );
   }
 
-  void _acceptFriendRequest(Map<String, dynamic> friend) {
-    _showSuccessMessage('${friend['name']} is now your friend!');
+  void _acceptFriendRequest(Friend friend) {
+    _showSuccessMessage('${friend.name} is now your friend!');
+    // TODO: Call friend service to accept request
   }
 
-  void _declineFriendRequest(Map<String, dynamic> friend) {
+  void _declineFriendRequest(Friend friend) {
     _showSuccessMessage('Friend request declined');
+    // TODO: Call friend service to decline request
   }
 
-  void _sendFriendRequest(Map<String, dynamic> friend) {
-    _showSuccessMessage('Friend request sent to ${friend['name']}');
+  void _sendFriendRequest(Friend friend) {
+    _showSuccessMessage('Friend request sent to ${friend.name}');
+    // TODO: Call friend service to send request
   }
 
-  void _handleFriendAction(Map<String, dynamic> friend, String action) {
+  void _handleFriendAction(Friend friend, String action) {
     switch (action) {
       case 'message':
-        _showSuccessMessage('Opening chat with ${friend['name']}');
+        _showSuccessMessage('Opening chat with ${friend.name}');
+        // TODO: Navigate to chat
         break;
       case 'challenge':
-        _showSuccessMessage('Challenge sent to ${friend['name']}');
+      // ✅ Use _joinMatch method
+        _joinMatch(
+          'match_${DateTime.now().millisecondsSinceEpoch}',
+          opponentId: friend.id,
+          opponentName: friend.name,
+        );
+        _showSuccessMessage('Challenge sent to ${friend.name}');
+        break;
+      case 'quiz':
+      // ✅ Use _startQuiz method
+        _startQuiz(difficulty: 'Medium', category: 'General');
+        _showSuccessMessage('Starting quiz with ${friend.name}');
         break;
       case 'profile':
         _showFriendProfile(friend);
         break;
       case 'remove':
-        _showSuccessMessage('${friend['name']} removed from friends');
+        _showSuccessMessage('${friend.name} removed from friends');
+        // TODO: Call friend service to remove friend
         break;
     }
   }
@@ -759,4 +875,19 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
       ),
     );
   }
+}
+
+// ✅ ADD THIS - Friend model (if you don't have one already)
+class Friend {
+  final String id;
+  final String name;
+  final String username;
+  final String? avatar;
+
+  Friend({
+    required this.id,
+    required this.name,
+    required this.username,
+    this.avatar,
+  });
 }
