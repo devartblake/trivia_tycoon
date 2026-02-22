@@ -45,7 +45,22 @@ class LeaderboardDataService extends ChangeNotifier {
     }
   }
 
-  LeaderboardDataService({required this.apiService, this.assetLoader});
+  // ✅ ADD THIS - Build entries lookup map
+  void _buildEntriesMap() {
+    _entriesById.clear();
+    for (final entry in _currentLeaderboard) {
+      _entriesById[entry.userId] = entry;
+    }
+  }
+
+  LeaderboardDataService({
+    required this.apiService,
+    this.assetLoader,
+    AppCacheService? appCacheService,
+  }){
+    // Initialize appCache with provided instance or create new one
+   appCache = appCacheService ?? AppCacheService();
+  }
 
   Future<List<LeaderboardEntry>> loadLeaderboard() async {
     // Check if we need to refresh data first
@@ -81,10 +96,23 @@ class LeaderboardDataService extends ChangeNotifier {
       final remote = await LeaderboardService(apiService: apiService).fetchLeaderboard();
       await appCache.cacheLeaderboard(remote);
       await _updateLastRefresh();
+
+      // ✅ Update current leaderboard for WebSocket
+      _currentLeaderboard = remote;
+      _buildEntriesMap();
+
       debugPrint("🌐 Loaded ${remote.length} entries from API");
       return remote;
     } catch (e) {
       debugPrint("🌐 API load failed: $e");
+
+      // ✅ If 404, backend not ready - use empty list
+      if (e.toString().contains('404')) {
+        debugPrint("⚠️ Backend /leaderboard endpoint not ready yet");
+        _currentLeaderboard = [];
+        return [];
+      }
+
       await _incrementRefreshFailureCount();
     }
 
