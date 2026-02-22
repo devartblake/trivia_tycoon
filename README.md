@@ -18,19 +18,19 @@ This repository includes the entire player-facing and admin-facing Flutter appli
 > Add your real screenshots to `assets/screenshots/` and update paths below.
 
 ### 📱 Gameplay
-<img src="assets/screenshots/gameplay.png" width="300">
+<img src="assets/screenshots/gameplay.png" width="300" alt="">
 
 ### 🧠 Skill Tree (Honeycomb Layout)
-<img src="assets/screenshots/skill_tree.png" width="300">
+<img src="assets/screenshots/skill_tree.png" width="300" alt="">
 
 ### 🏆 Leaderboard (Tier System)
-<img src="assets/screenshots/leaderboard.png" width="300">
+<img src="assets/screenshots/leaderboard.png" width="300" alt="">
 
 ### 🛠 Admin Dashboard
-<img src="assets/screenshots/admin_dashboard.png" width="300">
+<img src="assets/screenshots/admin_dashboard.png" width="300" alt="">
 
 ### Mini Games
-<img src="assets/screenshots/mini_games.png" width="300">
+<img src="assets/screenshots/mini_games.png" width="300" alt="">
 
 ---
 
@@ -125,8 +125,6 @@ Primary client config files in this repo:
 
 Common values:
 - `API_BASE_URL` (backend URL, e.g. `https://localhost:5000`)
-- `API_WS_BASE_URL` (optional WS base, e.g. `ws://10.0.2.2:5000`; defaults to API base with ws/wss scheme)
-- `API_MATCH_HUB_URL`, `API_PRESENCE_HUB_URL`, `API_NOTIFY_HUB_URL` (optional explicit WS endpoints)
 - `ENABLE_LOGGING` (`false` by default to reduce client console noise)
 - `USE_BACKEND_AUTH` (`true` to use `/auth/*` endpoints)
 
@@ -148,6 +146,17 @@ This keeps warnings/errors visible while suppressing request-level informational
 - `Request finished ...`
 
 > Note: the `Logging__...` keys must be applied to your **backend service environment** (or backend `appsettings`), not just the Flutter app.
+
+#### Logging noise controls
+If you run a local ASP.NET backend and want quieter console output, set these environment variables:
+
+```bash
+ENABLE_LOGGING=false
+Logging__LogLevel__Default=Warning
+Logging__LogLevel__Microsoft.AspNetCore=Warning
+```
+
+This preserves warnings/errors while suppressing per-request informational lines such as request start/finish and endpoint execution traces.
 
 ### 5. Run the App
 ```bash

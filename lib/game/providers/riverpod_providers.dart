@@ -22,6 +22,7 @@ import '../../arcade/missions/arcade_mission_service.dart';
 import '../../arcade/services/arcade_daily_bonus_service.dart';
 import '../../arcade/services/arcade_mission_claim_service.dart';
 import '../../arcade/services/arcade_personal_best_service.dart';
+import '../../core/bootstrap/app_init.dart';
 import '../../core/manager/login_manager.dart';
 import '../../core/manager/tier_manager.dart';
 import '../../core/repositories/message_repository.dart';
@@ -54,9 +55,13 @@ import '../../core/services/theme/swatch_service.dart';
 
 // Core auth imports
 import '../../core/services/auth_service.dart' as core_auth;
+import '../../core/services/auth_http_client.dart';
 import '../../core/services/auth_api_client.dart';
 import '../../core/services/auth_token_store.dart';
 import '../../core/services/device_id_service.dart';
+import '../../core/networking/http_client.dart';
+import '../../core/networking/ws_client.dart';
+import '../../core/networking/tycoon_api_client.dart';
 import '../../core/env.dart';
 
 // 📦 Store & Inventory
@@ -136,7 +141,17 @@ final apiServiceProvider = Provider<ApiService>((ref) {
   return ApiService(baseUrl: config.apiBaseUrl);
 });
 
-// --- 🔐 NEW: Core Auth Providers ---
+/// Global WebSocket client provider
+final globalWsClientProvider = Provider<WsClient?>((ref) {
+  return AppInit.wsClient;
+});
+
+/// WebSocket connection status provider
+final wsConnectionStatusProvider = StateProvider<bool>((ref) {
+  return AppInit.isWebSocketConnected;
+});
+
+// --- 🔐 Core Auth Providers ---
 
 /// Provides the Hive box for auth tokens
 final authTokenBoxProvider = Provider<Box>((ref) {
@@ -172,6 +187,53 @@ final coreAuthServiceProvider = Provider<core_auth.AuthService>((ref) {
     deviceId: ref.watch(deviceIdServiceProvider),
     tokenStore: ref.watch(authTokenStoreProvider),
     api: ref.watch(authApiClientProvider),
+  );
+});
+
+/// Provides authenticated HTTP client with auto-refresh
+final authHttpClientProvider = Provider<AuthHttpClient>((ref) {
+  return AuthHttpClient(
+    ref.watch(coreAuthServiceProvider),
+    ref.watch(authTokenStoreProvider),
+    autoRefresh: true,
+    onTokenRefreshed: () {
+      debugPrint('[Auth] ✅ Token auto-refreshed');
+    },
+    onRefreshFailed: (error) {
+      debugPrint('[Auth] ❌ Refresh failed: $error');
+      // Optional: Navigate to login or show notification
+    },
+  );
+});
+
+/// Provides HttpClient wrapper
+final httpClientProvider = Provider<HttpClient>((ref) {
+  return HttpClient(
+    authClient: ref.watch(authHttpClientProvider),
+    baseUrl: EnvConfig.apiBaseUrl,
+  );
+});
+
+/// Provides TycoonApiClient
+final tycoonApiClientProvider = Provider<TycoonApiClient>((ref) {
+  return TycoonApiClient(
+    httpClient: ref.watch(httpClientProvider),
+  );
+});
+
+/// Provides WebSocket client
+final wsClientProvider = Provider<WsClient>((ref) {
+  return WsClient(
+    url: EnvConfig.apiWsBaseUrl,
+    onMessage: (message) {
+      debugPrint('[WS] Message: ${message.op}');
+    },
+    onStateChange: (state) {
+      debugPrint('[WS] State: $state');
+    },
+    onError: (error) {
+      debugPrint('[WS] Error: $error');
+    },
   );
 });
 

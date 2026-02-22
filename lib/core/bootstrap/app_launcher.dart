@@ -55,16 +55,22 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
       // This is now safe because we made trackAppLifecycle robust in app_init.dart
         AppInit.trackAppLifecycle(serviceManager, 'app_resumed');
         _checkSpinStatusOnResume();
+        // Reconnect WebSocket
+        AppInit.reconnectWebSocket();
         break;
       case AppLifecycleState.paused:
         AppInit.trackAppLifecycle(serviceManager, 'app_paused');
         _flushAnalyticsOnPause(); // Added safety inside this method below
+        // Disconnect WebSocket to save battery
+        AppInit.disconnectWebSocket();
         break;
       case AppLifecycleState.inactive:
         AppInit.trackAppLifecycle(serviceManager, 'app_inactive');
         break;
       case AppLifecycleState.detached:
         AppInit.trackAppLifecycle(serviceManager, 'app_detached');
+        // Cleanup on app close
+        AppInit.disconnectWebSocket();
         break;
       case AppLifecycleState.hidden:
         AppInit.trackAppLifecycle(serviceManager, 'app_hidden');
