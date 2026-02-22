@@ -47,14 +47,42 @@ class EnvConfig {
     return _notifyHubUrl!;
   }
 
-  static String _deriveWsBaseUrl(String apiBaseUrl) {
-    if (apiBaseUrl.startsWith('https://')) {
-      return apiBaseUrl.replaceFirst('https://', 'wss://');
+  static String _normalizeWsUrl(String rawUrl) {
+    final parsed = Uri.parse(rawUrl.trim());
+
+    final normalizedScheme = switch (parsed.scheme) {
+      'https' => 'wss',
+      'http' => 'ws',
+      _ => parsed.scheme,
+    };
+
+    var normalizedPath = parsed.path;
+    if (normalizedPath.endsWith('/')) {
+      normalizedPath = normalizedPath.substring(0, normalizedPath.length - 1);
     }
-    if (apiBaseUrl.startsWith('http://')) {
-      return apiBaseUrl.replaceFirst('http://', 'ws://');
+
+    return parsed
+        .replace(
+          scheme: normalizedScheme,
+          path: normalizedPath,
+          fragment: '',
+        )
+        .toString();
+  }
+
+  static String _joinWsPath(String baseUrl, String suffixPath) {
+    final baseUri = Uri.parse(baseUrl);
+    final baseSegments = baseUri.pathSegments.where((s) => s.isNotEmpty).toList();
+    final suffixSegments = Uri.parse(suffixPath).pathSegments.where((s) => s.isNotEmpty).toList();
+
+    final mergedSegments = <String>[...baseSegments];
+    if (mergedSegments.isNotEmpty && suffixSegments.isNotEmpty && mergedSegments.last == suffixSegments.first) {
+      mergedSegments.addAll(suffixSegments.skip(1));
+    } else {
+      mergedSegments.addAll(suffixSegments);
     }
-    return apiBaseUrl;
+
+    return baseUri.replace(pathSegments: mergedSegments, fragment: '').toString();
   }
 
   /// Loads all environment variables from the .env file into memory.
@@ -77,11 +105,11 @@ class EnvConfig {
       debugPrint('[EnvConfig] WebSocket: $apiWsBaseUrl');
 
       _matchHubUrl = dotenv.env['API_MATCH_HUB_URL'] ??
-          (_apiWsBaseUrl == null ? null : '${_apiWsBaseUrl!}/ws/match');
+          (_apiWsBaseUrl == null ? null : _joinWsPath(_apiWsBaseUrl!, '/ws/match'));
       _presenceHubUrl = dotenv.env['API_PRESENCE_HUB_URL'] ??
-          (_apiWsBaseUrl == null ? null : '${_apiWsBaseUrl!}/ws/presence');
+          (_apiWsBaseUrl == null ? null : _joinWsPath(_apiWsBaseUrl!, '/ws/presence'));
       _notifyHubUrl = dotenv.env['API_NOTIFY_HUB_URL'] ??
-          (_apiWsBaseUrl == null ? null : '${_apiWsBaseUrl!}/ws/notify');
+          (_apiWsBaseUrl == null ? null : _joinWsPath(_apiWsBaseUrl!, '/ws/notify'));
 
       // Perform checks to ensure essential variables are present
       if (_apiBaseUrl == null ||
