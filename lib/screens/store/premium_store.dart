@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/screens/store/widgets/ad_remove_options.dart';
 import 'package:trivia_tycoon/screens/store/widgets/reward_center.dart';
 import 'package:trivia_tycoon/screens/store/widgets/sale_info.dart';
@@ -189,7 +190,13 @@ class _StoreSecondaryScreenState extends ConsumerState<StoreSecondaryScreen>
             size: 18,
           ),
         ),
-        onPressed: () => Navigator.of(context).pop(),
+        onPressed: () {
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go('/home');
+          }
+        },
       ),
       title: Row(
         children: [

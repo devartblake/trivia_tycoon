@@ -9,7 +9,7 @@ import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
 
 class LeaderboardDataService {
   final ApiService apiService;
-  late AppCacheService appCache;
+  final AppCacheService appCache;
   final Future<List<LeaderboardEntry>> Function()? assetLoader;
 
   // Cache and refresh settings
@@ -22,7 +22,7 @@ class LeaderboardDataService {
   DateTime? _lastRefreshTime;
   bool _isRefreshing = false;
 
-  LeaderboardDataService({required this.apiService, this.assetLoader});
+  LeaderboardDataService({required this.apiService, required this.appCache, this.assetLoader});
 
   Future<List<LeaderboardEntry>> loadLeaderboard() async {
     // Check if we need to refresh data first
@@ -117,7 +117,10 @@ class LeaderboardDataService {
   Future<List<Map<String, dynamic>>> _getPendingSubmissions() async {
     try {
       final raw = appCache.get<List<dynamic>>('pending_submissions') ?? [];
-      return raw.cast<Map<String, dynamic>>();
+      return raw
+          .whereType<Map>()
+          .map((entry) => Map<String, dynamic>.from(entry))
+          .toList();
     } catch (e) {
       debugPrint('❌ Failed to get pending submissions: $e');
       return [];

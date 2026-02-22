@@ -93,6 +93,11 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     Future.delayed(const Duration(milliseconds: 800), () {
       if (mounted) _showGreetingToast();
     });
+
+    // Remind users to complete onboarding when needed.
+    Future.delayed(const Duration(milliseconds: 1100), () {
+      if (mounted) _showOnboardingReminderIfNeeded();
+    });
   }
 
   void _showGreetingToast() {
@@ -129,6 +134,25 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     );
 
     _greetingToast!.show(context);
+  }
+
+
+  Future<void> _showOnboardingReminderIfNeeded() async {
+    try {
+      final serviceManager = ref.read(serviceManagerProvider);
+      final completed = await serviceManager.onboardingSettingsService.hasCompletedOnboarding();
+      if (!mounted || completed) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Complete onboarding to unlock your profile and avatar setup.'),
+          duration: Duration(seconds: 3),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } catch (_) {
+      // Ignore reminder failures
+    }
   }
 
   @override

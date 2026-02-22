@@ -302,8 +302,13 @@ final leaderboardControllerProvider =
 
 final leaderboardDataServiceProvider = Provider<LeaderboardDataService>((ref) {
   final api = ref.watch(apiServiceProvider);
+  final cache = ref.watch(appCacheServiceProvider);
   assetLoader() => ref.watch(leaderboardAssetProvider.future);
-  return LeaderboardDataService(apiService: api, assetLoader: assetLoader);
+  return LeaderboardDataService(
+    apiService: api,
+    appCache: cache,
+    assetLoader: assetLoader,
+  );
 });
 
 /// Loads leaderboard.json from assets/data
@@ -470,9 +475,8 @@ final referralRepositoryProvider = Provider<ReferralRepository>((ref) {
 });
 
 final referralStorageServiceProvider = Provider<ReferralStorageService>((ref) {
-  final storage = ReferralStorageService();
-  // Initialize is called in main.dart before runApp
-  return storage;
+  // Reuse initialized singleton from ServiceManager to ensure Hive box is ready.
+  return ref.watch(serviceManagerProvider).referralStorageService;
 });
 
 final referralApiServiceProvider = Provider<ReferralApiService>((ref) {
@@ -545,9 +549,9 @@ final referralStatsProvider = FutureProvider<Map<String, dynamic>>((ref) async {
 });
 
 /// Provides the ReferralInviteStorageService
-final referralInviteStorageServiceProvider = Provider<ReferralInviteStorageService>((ref) {
+final referralInviteStorageServiceProvider = FutureProvider<ReferralInviteStorageService>((ref) async {
   final storage = ReferralInviteStorageService();
-  // Initialize is called in main.dart before runApp
+  await storage.initialize();
   return storage;
 });
 
@@ -560,19 +564,22 @@ final referralInviteApiServiceProvider = Provider<ReferralInviteApiService>((ref
 /// Provides the ReferralInviteService (synchronous with default userId)
 /// Use asyncReferralInviteServiceProvider for async operations
 final referralInviteServiceProvider = Provider<ReferralInviteService>((ref) {
-  final storage = ref.watch(referralInviteStorageServiceProvider);
+  final storageAsync = ref.watch(referralInviteStorageServiceProvider);
   final api = ref.watch(referralInviteApiServiceProvider);
 
-  return ReferralInviteService(
-    storage: storage,
+  return storageAsync.maybeWhen(
+    data: (storage) => ReferralInviteService(
+      storage: storage,
     api: api,
-    userId: 'guest', // Temporary default, use async version for actual userId
+      userId: 'guest', // Temporary default, use async version for actual userId
+    ),
+    orElse: () => throw StateError('ReferralInviteStorageService is not initialized yet.'),
   );
 });
 
 /// Async provider that waits for userId (RECOMMENDED for most use cases)
 final asyncReferralInviteServiceProvider = FutureProvider<ReferralInviteService>((ref) async {
-  final storage = ref.watch(referralInviteStorageServiceProvider);
+  final storage = await ref.watch(referralInviteStorageServiceProvider.future);
   final api = ref.watch(referralInviteApiServiceProvider);
   final userId = await ref.watch(currentUserIdProvider.future);
 
@@ -603,11 +610,10 @@ final inviteStatsProvider = FutureProvider<Map<String, int>>((ref) async {
 
 /// Stream provider for real-time invite updates (updates every 5 seconds)
 final liveInvitesProvider = StreamProvider.family<List<ReferralInvite>, String>((ref, userId) {
-  final storage = ref.watch(referralInviteStorageServiceProvider);
-
-  return Stream.periodic(const Duration(seconds: 5), (_) {
+  return Stream.periodic(const Duration(seconds: 5), (_) async {
+    final storage = await ref.read(referralInviteStorageServiceProvider.future);
     return storage.getUserInvites(userId);
-  }).map((invites) => invites);
+  }).asyncMap((invites) async => invites);
 });
 
 /// Provider to create a new invite
@@ -781,7 +787,10 @@ final equippedPowerUpProvider = StateNotifierProvider<PowerUpController, PowerUp
 
 // Notification and UI state providers
 final unreadNotificationsProvider = StateProvider<int>((ref) => 0);
-final pendingInvitesProvider = StateProvider<int>((ref) => 0);
+final pendingInvitesProvider = Provider<int>((ref) {
+  final countAsync = ref.watch(pendingInvitesCountProvider);
+  return countAsync.maybeWhen(data: (count) => count, orElse: () => 0);
+});
 final dailyRewardsAvailableProvider = StateProvider<bool>((ref) => true);
 
 // Premium status provider
