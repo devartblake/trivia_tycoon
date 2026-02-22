@@ -39,6 +39,10 @@ class AppInit {
   static WsClient? get wsClient => _wsClient;
   static bool _wsConnected = false;
 
+  // ✅ Store tokenStore for WebSocket
+  static AuthTokenStore? _tokenStore;
+  static AuthTokenStore? get tokenStore => _tokenStore;
+
   // --- CRITICAL INITIALIZATION (Required for first frame) ---
   static Future<(ServiceManager, ThemeNotifier)> initialize({ProviderContainer? container}) async {
     await EnvConfig.load();
@@ -67,7 +71,10 @@ class AppInit {
     debugPrint('✅ DeviceId ready: $deviceId');
 
     // Create AuthTokenStore with dedicated auth tokens box
-    final tokenStore = AuthTokenStore(authTokenBox); // ← FIXED: Use dedicated box
+    final tokenStore = AuthTokenStore(authTokenBox);
+
+    // Store for after use
+    _tokenStore = tokenStore;
 
     final httpClient = http.Client();
     final authApi = AuthApiClient(httpClient, apiBaseUrl: EnvConfig.apiBaseUrl, deviceId: deviceIdService);
@@ -94,12 +101,18 @@ class AppInit {
 
   /// Initialize WebSocket connection
   /// Should be called after user login
-  static Future<void> initializeWebSocket(AuthTokenStore tokenStore) async {
+  static Future<void> initializeWebSocket() async {
     try {
       debugPrint('[AppInit] Initializing WebSocket...');
 
+      // ✅ CHANGED - Use stored tokenStore
+      if (_tokenStore == null) {
+        debugPrint('[AppInit] TokenStore not initialized');
+        return;
+      }
+
       // Get auth token
-      final session = tokenStore.load();
+      final session = _tokenStore!.load();
       if (!session.hasTokens) {
         debugPrint('[AppInit] No auth token, skipping WebSocket');
         return;
@@ -113,7 +126,6 @@ class AppInit {
         url: wsUrl,
         onMessage: (message) {
           debugPrint('[WS] ← ${message.op}');
-          // Messages will be handled by specific services
         },
         onStateChange: (state) {
           debugPrint('[WS] State: $state');
@@ -248,11 +260,8 @@ class AppInit {
       if (isLoggedIn) {
         await _loadUserProfile(serviceManager, container);
 
-        // Initialize WebSocket after login
-        final authService = serviceManager.authService;
-        if (authService is AuthService) {
-          await initializeWebSocket(authService.tokenStore);
-        }
+        // ✅ CHANGED - No parameter needed now
+        await initializeWebSocket();
       }
     } catch (e) {
       debugPrint('[AppInit] Session check failed: $e');
