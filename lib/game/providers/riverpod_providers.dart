@@ -364,8 +364,13 @@ final leaderboardControllerProvider =
 
 final leaderboardDataServiceProvider = Provider<LeaderboardDataService>((ref) {
   final api = ref.watch(apiServiceProvider);
+  final cache = ref.watch(appCacheServiceProvider);
   assetLoader() => ref.watch(leaderboardAssetProvider.future);
-  return LeaderboardDataService(apiService: api, assetLoader: assetLoader);
+  return LeaderboardDataService(
+    apiService: api,
+    appCache: cache,
+    assetLoader: assetLoader,
+  );
 });
 
 /// Loads leaderboard.json from assets/data

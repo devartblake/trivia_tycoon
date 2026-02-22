@@ -11,7 +11,7 @@ import 'leaderboard/leaderboard_websocket_adapter.dart';
 
 class LeaderboardDataService extends ChangeNotifier {
   final ApiService apiService;
-  late AppCacheService appCache;
+  final AppCacheService appCache;
   final Future<List<LeaderboardEntry>> Function()? assetLoader;
 
   // Add after existing fields
@@ -212,7 +212,10 @@ class LeaderboardDataService extends ChangeNotifier {
   Future<List<Map<String, dynamic>>> _getPendingSubmissions() async {
     try {
       final raw = appCache.get<List<dynamic>>('pending_submissions') ?? [];
-      return raw.cast<Map<String, dynamic>>();
+      return raw
+          .whereType<Map>()
+          .map((entry) => Map<String, dynamic>.from(entry))
+          .toList();
     } catch (e) {
       debugPrint('❌ Failed to get pending submissions: $e');
       return [];
