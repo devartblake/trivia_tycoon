@@ -45,7 +45,7 @@ class LogoutDialog extends ConsumerWidget {
     // Clear active profile immediately so stale profile data is not shown.
     ref.read(profileManagerProvider.notifier).clearActiveProfile();
 
-    // Use still-mounted screen context for centralized logout + navigation.
-    await ref.read(authOperationsProvider).logout(parentContext);
+    // Run full auth logout flow (backend revoke + local state reset + route redirect).
+    await ref.read(authOperationsProvider).logout(context);
   }
 }

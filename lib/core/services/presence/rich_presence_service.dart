@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:trivia_tycoon/core/services/presence/presence_websocket_adapter.dart';
 import '../../../game/models/user_presence_models.dart';
 import '../../utils/input_validator.dart';
 
@@ -16,6 +17,10 @@ class RichPresenceService extends ChangeNotifier {
   // ADD: Stream controllers for real-time updates
   final Map<String, StreamController<UserPresence?>> _presenceStreams = {};
 
+  //WebSocket adapter
+  PresenceWebSocketAdapter? _wsAdapter;
+  bool _useWebSocket = false;
+
   // Current user's presence
   UserPresence? get currentUserPresence => _currentUserPresence;
 
@@ -26,8 +31,20 @@ class RichPresenceService extends ChangeNotifier {
   UserPresence? getUserPresence(String userId) => _userPresences[userId];
 
   /// Initialize the presence service
-  void initialize() {
-    _startHeartbeat();
+  void initialize({bool useWebSocket = true}) {
+    _useWebSocket = useWebSocket;
+
+    if (_useWebSocket) {
+      // Use WebSocket for real-time updates
+      _wsAdapter = PresenceWebSocketAdapter(this);
+      _wsAdapter!.initialize();
+      debugPrint('[Presence] Using WebSocket mode');
+    } else {
+      // Legacy mode - polling with timers
+      _startHeartbeat();
+      debugPrint('[Presence] Using legacy polling mode');
+    }
+
     _setCurrentUserPresence(UserPresence.createDefault());
   }
 
@@ -50,7 +67,13 @@ class RichPresenceService extends ChangeNotifier {
     );
 
     await _setCurrentUserPresence(updatedPresence);
-    await _broadcastPresenceUpdate(updatedPresence);
+
+    // Use WebSocket instead of polling
+    if (_useWebSocket && _wsAdapter != null) {
+      _wsAdapter!.updateMyPresence(updatedPresence);
+    } else {
+      await _broadcastPresenceUpdate(updatedPresence);
+    }
   }
 
   /// Set game activity for current user
@@ -88,6 +111,20 @@ class RichPresenceService extends ChangeNotifier {
       activity: null,
       gameActivity: null,
     );
+  }
+
+  /// Subscribe to presence updates for specific users (friends, group members)
+  void subscribeToUsers(List<String> userIds) {
+    if (_useWebSocket && _wsAdapter != null) {
+      _wsAdapter!.subscribeToUsers(userIds);
+    }
+  }
+
+  /// Unsubscribe from presence updates
+  void unsubscribeFromUsers(List<String> userIds) {
+    if (_useWebSocket && _wsAdapter != null) {
+      _wsAdapter!.unsubscribeFromUsers(userIds);
+    }
   }
 
   /// Update friend's presence (received from server/network)
@@ -185,6 +222,7 @@ class RichPresenceService extends ChangeNotifier {
   void dispose() {
     _presenceUpdateTimer?.cancel();
     _heartbeatTimer?.cancel();
+    _wsAdapter?.dispose();
 
     // ADD: Close all stream controllers
     for (final controller in _presenceStreams.values) {
@@ -241,6 +279,8 @@ class RichPresenceService extends ChangeNotifier {
           buffer.write(' (Score: ${activity.score})');
         }
         break;
+      case GameState.paused:
+        buffer.write('Paused ${activity.gameType}');
       case GameState.waiting:
         buffer.write('Waiting for players');
         if (activity.gameMode != null) {

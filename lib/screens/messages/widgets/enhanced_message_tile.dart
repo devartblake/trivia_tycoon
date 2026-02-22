@@ -135,6 +135,9 @@ class _EnhancedMessageTileState extends State<EnhancedMessageTile> {
       case GameState.playing:
         icon = Icons.sports_esports;
         break;
+      case GameState.paused:
+        icon = Icons.pause;
+        break;
       case GameState.finished:
         icon = Icons.check_circle;
         break;
