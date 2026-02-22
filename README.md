@@ -18,19 +18,19 @@ This repository includes the entire player-facing and admin-facing Flutter appli
 > Add your real screenshots to `assets/screenshots/` and update paths below.
 
 ### 📱 Gameplay
-<img src="assets/screenshots/gameplay.png" width="300">
+<img src="assets/screenshots/gameplay.png" width="300" alt="">
 
 ### 🧠 Skill Tree (Honeycomb Layout)
-<img src="assets/screenshots/skill_tree.png" width="300">
+<img src="assets/screenshots/skill_tree.png" width="300" alt="">
 
 ### 🏆 Leaderboard (Tier System)
-<img src="assets/screenshots/leaderboard.png" width="300">
+<img src="assets/screenshots/leaderboard.png" width="300" alt="">
 
 ### 🛠 Admin Dashboard
-<img src="assets/screenshots/admin_dashboard.png" width="300">
+<img src="assets/screenshots/admin_dashboard.png" width="300" alt="">
 
 ### Mini Games
-<img src="assets/screenshots/mini_games.png" width="300">
+<img src="assets/screenshots/mini_games.png" width="300" alt="">
 
 ---
 
@@ -125,8 +125,6 @@ Primary client config files in this repo:
 
 Common values:
 - `API_BASE_URL` (backend URL, e.g. `https://localhost:5000`)
-- `API_WS_BASE_URL` (optional WS base, e.g. `ws://10.0.2.2:5000`; defaults to API base with ws/wss scheme)
-- `API_MATCH_HUB_URL`, `API_PRESENCE_HUB_URL`, `API_NOTIFY_HUB_URL` (optional explicit WS endpoints)
 - `ENABLE_LOGGING` (`false` by default to reduce client console noise)
 - `USE_BACKEND_AUTH` (`true` to use `/auth/*` endpoints)
 
@@ -149,46 +147,18 @@ This keeps warnings/errors visible while suppressing request-level informational
 
 > Note: the `Logging__...` keys must be applied to your **backend service environment** (or backend `appsettings`), not just the Flutter app.
 
+#### Logging noise controls
+If you run a local ASP.NET backend and want quieter console output, set these environment variables:
+
+```bash
+ENABLE_LOGGING=false
+Logging__LogLevel__Default=Warning
+Logging__LogLevel__Microsoft.AspNetCore=Warning
+```
+
+This preserves warnings/errors while suppressing per-request informational lines such as request start/finish and endpoint execution traces.
+
 ### 5. Run the App
 ```bash
 flutter run
 ```
-
-### 6. Performance Strategy (Flutter vs Flame)
-
-You can use Flame in this project, but it should be scoped to mini-games or animation-heavy surfaces—not the whole app shell.
-
-**Current architecture fit**
-- The app is primarily a standard Flutter product app (forms, routing, profile/admin/settings screens) where Flutter widgets are the right default.
-- The project already uses many `CustomPainter`/animation-heavy components, so the main wins usually come first from frame-budget and rebuild optimization.
-
-**When Flame helps most**
-- Real-time loops (60 FPS gameplay), sprite systems, collision systems, and camera/world transforms.
-- Particle-heavy mini-games and deterministic game state updates.
-- A contained game scene embedded in existing Flutter screens.
-
-**When Flutter-only is usually better**
-- CRUD/auth/profile/settings/menu flows.
-- UI-first screens with moderate animation where you can optimize repaints and layout churn.
-
-**Recommended hybrid approach**
-1. Keep app shell/navigation/auth/settings in Flutter widgets.
-2. Introduce Flame only for modules that need a fixed game loop (e.g., arcade/mini-games).
-3. Bridge state through Riverpod adapters (Flutter side owns session/profile; Flame side consumes immutable snapshots/events).
-
-**High-impact optimizations without Flame**
-- Measure first in `--profile` and DevTools (CPU/GPU/frame timeline), then optimize bottlenecks.
-- Reduce rebuild scope (`const` widgets, finer-grained providers/selectors, avoid broad `setState`).
-- Bound paint cost (`RepaintBoundary` for expensive painters, cache static layers, ensure `shouldRepaint` is strict).
-- Lower overdraw/compositing pressure (limit large transparent stacks and blur/shadow-heavy layers in animated screens).
-- Precache heavy assets and decode images at display size.
-- Move heavy parsing/transforms to isolates (`compute`) when they affect UI frames.
-
-**If adopting Flame**
-- Start with one isolated game feature behind a flag.
-- Define clear handoff boundaries (enter game scene, emit result, return to Flutter route).
-- Keep networking/auth outside the game loop where possible.
-- Track frame time/p99 jank before vs after to validate value.
-
-In short: yes, Flame is compatible, but best results usually come from a hybrid strategy plus profiling-led Flutter optimizations first.
-

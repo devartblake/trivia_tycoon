@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../core/networkting/tycoon_api_client.dart';
+import '../../core/networking/tycoon_api_client.dart';
 import '../../game/models/season_reward_preview_models.dart';
 
 class SeasonRewardsPreviewScreen extends StatelessWidget {
