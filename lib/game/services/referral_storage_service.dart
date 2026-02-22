@@ -39,8 +39,8 @@ class ReferralStorageService {
 
   Future<void> saveScanEvent(ReferralScanEvent event) async {
     final history = getScanHistory();
-    history.add(event.toJson() as ReferralScanEvent);
-    await _box?.put(_scanHistoryKey, history);
+    history.add(event);
+    await _box?.put(_scanHistoryKey, history.map((e) => e.toJson()).toList());
   }
 
   List<ReferralScanEvent> getScanHistory() {
