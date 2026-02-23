@@ -19,17 +19,7 @@ import '../../game/utils/gradient_themes.dart';
 import '../../game/utils/greeting_utils.dart';
 import '../../ui_components/tycoon_toast/tycoon_toast.dart';
 import '../../game/providers/riverpod_providers.dart';
-
-// Import all modular components
-// import 'main_menu_screen/widgets/rewards_banner.dart';
-// import 'main_menu_screen/widgets/currency_display.dart';
-// import 'main_menu_screen/widgets/action_buttons.dart';
-// import 'main_menu_screen/widgets/journey_progress.dart';
-// import 'main_menu_screen/widgets/matches_section.dart';
-// import 'main_menu_screen/widgets/rank_card_widget.dart';
-// import 'main_menu_screen/widgets/recently_played_widget.dart';
-// import 'main_menu_screen/utils/greeting_utils.dart';
-// import 'main_menu_screen/utils/gradient_themes.dart';
+import '../../core/animations/animation_manager.dart';
 
 /// Modern, modular main menu screen
 ///
@@ -127,7 +117,6 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
 
     _greetingToast!.show(context);
   }
-
 
   Future<void> _showOnboardingReminderIfNeeded() async {
     try {
@@ -322,6 +311,8 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     );
   }
 
+  // ✅ Still using controllers for more control over timing
+  // But AnimationManager handles creation/disposal
   Widget _animatedComponent(int index, Widget child) {
     return AnimationManager.fadeSlideIn(
       animation: _cardAnimationControllers[index],
