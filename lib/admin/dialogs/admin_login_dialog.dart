@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../core/services/settings/app_settings.dart';
+import '../../core/services/auth_token_store.dart';
+import '../providers/admin_auth_providers.dart';
 
 /// Modern admin login dialog with server-based authentication.
 class AdminLoginDialog extends ConsumerStatefulWidget {
@@ -14,6 +16,7 @@ class AdminLoginDialog extends ConsumerStatefulWidget {
 class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
     with SingleTickerProviderStateMixin {
   final _passwordController = TextEditingController();
+  final _otpController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   bool _obscurePassword = true;
@@ -36,6 +39,7 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
   @override
   void dispose() {
     _passwordController.dispose();
+    _otpController.dispose();
     _shakeController.dispose();
     super.dispose();
   }
@@ -81,31 +85,20 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
     final secureStorage = ref.read(secureStorageProvider);
     final email = await secureStorage.getSecret('user_email');
 
+    if (email == null || email.isEmpty) {
+      throw Exception('A logged-in user email is required for admin authentication.');
+    }
+
     final payload = <String, dynamic>{
+      'email': email,
       'password': password,
-      if (email != null && email.isNotEmpty) 'email': email,
+      if (_otpController.text.trim().isNotEmpty) 'otpCode': _otpController.text.trim(),
     };
 
-    final possiblePaths = <String>[
+    final response = await serviceManager.apiService.post(
       '/admin/auth/login',
-      '/admin/authenticate',
-    ];
-
-    Map<String, dynamic>? response;
-    Object? lastError;
-
-    for (final path in possiblePaths) {
-      try {
-        response = await serviceManager.apiService.post(path, body: payload);
-        break;
-      } catch (e) {
-        lastError = e;
-      }
-    }
-
-    if (response == null) {
-      throw Exception(lastError?.toString() ?? 'Admin authentication failed');
-    }
+      body: payload,
+    );
 
     final success = response['success'] == true ||
         response['authenticated'] == true ||
@@ -113,21 +106,59 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
         response.containsKey('access_token');
     if (!success) return false;
 
+    final accessToken = response['accessToken']?.toString() ?? '';
+    final refreshToken = response['refreshToken']?.toString() ?? '';
+    final expiresIn = response['expiresIn'];
+    DateTime? expiresAt;
+    if (expiresIn is int) {
+      expiresAt = DateTime.now().toUtc().add(Duration(seconds: expiresIn));
+    }
+
     final admin = response['admin'];
     String? primaryRole;
+    List<String> resolvedRoles = const ['admin'];
+    List<String> permissions = const [];
     if (admin is Map<String, dynamic>) {
-      final roles = admin['roles'];
-      if (roles is List && roles.isNotEmpty) {
-        primaryRole = roles.first.toString();
+      final rolesRaw = admin['roles'];
+      if (rolesRaw is List && rolesRaw.isNotEmpty) {
+        primaryRole = rolesRaw.first.toString();
+        resolvedRoles = rolesRaw.map((r) => r.toString()).toList();
       } else if (admin['role'] is String) {
         primaryRole = admin['role'] as String;
+        resolvedRoles = [primaryRole!];
+      }
+
+      final perms = admin['permissions'];
+      if (perms is List) {
+        permissions = perms.map((p) => p.toString()).toList();
       }
     }
     primaryRole ??= 'admin';
 
+    if (accessToken.isNotEmpty && refreshToken.isNotEmpty) {
+      final tokenStore = ref.read(authTokenStoreProvider);
+      await tokenStore.save(
+        AuthSession(
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+          expiresAtUtc: expiresAt,
+          userId: admin is Map<String, dynamic> ? admin['id']?.toString() : null,
+          metadata: {
+            'role': primaryRole,
+            'roles': resolvedRoles,
+            'permissions': permissions,
+          },
+        ),
+      );
+    }
+
     await serviceManager.playerProfileService.saveUserRole(primaryRole);
+    await serviceManager.playerProfileService.saveUserRoles(resolvedRoles);
     await AppSettings.setString('userRole', primaryRole);
     await AppSettings.setAdminUser(primaryRole == 'admin');
+
+    ref.invalidate(adminClaimsProvider);
+    ref.invalidate(unifiedIsAdminProvider);
 
     return primaryRole == 'admin';
   }

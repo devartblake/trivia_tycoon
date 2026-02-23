@@ -1,8 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/services/notification_service.dart';
-import '../../core/services/settings/app_settings.dart';
-import 'riverpod_providers.dart';
+import '../../admin/providers/admin_auth_providers.dart';
 import '../services/channel_prefs.dart';
 import 'notification_history_store.dart';
 import 'notification_template_store.dart';
@@ -173,13 +172,7 @@ final notificationHistoryProvider = StreamProvider((ref) {
   return NotificationHistoryStore.instance.stream;
 });
 
-/// Admin role provider sourced from authenticated profile/settings state.
+/// Unified admin role provider sourced from backend admin claims.
 final isAdminProvider = FutureProvider<bool>((ref) async {
-  final profileRole = await ref.read(playerProfileServiceProvider).getUserRole();
-  if (profileRole == 'admin') {
-    return true;
-  }
-
-  // Fallback for legacy paths until all auth/role sources are unified.
-  return AppSettings.isAdminUser();
+  return ref.watch(unifiedIsAdminProvider.future);
 });
