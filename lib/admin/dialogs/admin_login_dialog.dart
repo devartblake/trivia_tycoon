@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../core/services/settings/app_settings.dart';
 import '../../core/services/auth_token_store.dart';
+import '../../core/services/api_service.dart';
 import '../providers/admin_auth_providers.dart';
 
 /// Modern admin login dialog with server-based authentication.
@@ -69,6 +70,13 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
         _shakeController.forward(from: 0).then((_) => _shakeController.reset());
         _passwordController.clear();
       }
+    } on ApiRequestException catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _errorMessage = _mapAuthError(e);
+        _isLoading = false;
+      });
+      _shakeController.forward(from: 0).then((_) => _shakeController.reset());
     } catch (e) {
       if (!mounted) return;
       setState(() {
@@ -106,8 +114,10 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
         response.containsKey('access_token');
     if (!success) return false;
 
-    final accessToken = response['accessToken']?.toString() ?? '';
-    final refreshToken = response['refreshToken']?.toString() ?? '';
+    final accessToken =
+        response['accessToken']?.toString() ?? response['access_token']?.toString() ?? '';
+    final refreshToken =
+        response['refreshToken']?.toString() ?? response['refresh_token']?.toString() ?? '';
     final expiresIn = response['expiresIn'];
     DateTime? expiresAt;
     if (expiresIn is int) {
@@ -161,6 +171,19 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
     ref.invalidate(unifiedIsAdminProvider);
 
     return primaryRole == 'admin';
+  }
+
+  String _mapAuthError(ApiRequestException e) {
+    switch (e.statusCode) {
+      case 401:
+        return 'Invalid credentials. Please verify your admin password.';
+      case 403:
+        return 'Your account does not have admin access.';
+      case 429:
+        return 'Too many attempts. Please try again in a moment.';
+      default:
+        return e.message;
+    }
   }
 
   @override
@@ -343,6 +366,37 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
                 }
                 return null;
               },
+              onFieldSubmitted: (_) => _handleLogin(),
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
+              controller: _otpController,
+              enabled: !_isLoading,
+              keyboardType: TextInputType.number,
+              style: const TextStyle(fontSize: 16),
+              decoration: InputDecoration(
+                labelText: 'OTP (optional)',
+                hintText: 'Enter MFA code if required',
+                prefixIcon: Icon(Icons.password_rounded, color: theme.primaryColor),
+                filled: true,
+                fillColor: Colors.grey[50],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide.none,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide(color: Colors.grey[200]!),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide(color: theme.primaryColor, width: 2),
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 18,
+                ),
+              ),
               onFieldSubmitted: (_) => _handleLogin(),
             ),
             const SizedBox(height: 24),
