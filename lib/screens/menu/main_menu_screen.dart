@@ -18,17 +18,7 @@ import '../../game/utils/gradient_themes.dart';
 import '../../game/utils/greeting_utils.dart';
 import '../../ui_components/tycoon_toast/tycoon_toast.dart';
 import '../../game/providers/riverpod_providers.dart';
-
-// Import all modular components
-// import 'main_menu_screen/widgets/rewards_banner.dart';
-// import 'main_menu_screen/widgets/currency_display.dart';
-// import 'main_menu_screen/widgets/action_buttons.dart';
-// import 'main_menu_screen/widgets/journey_progress.dart';
-// import 'main_menu_screen/widgets/matches_section.dart';
-// import 'main_menu_screen/widgets/rank_card_widget.dart';
-// import 'main_menu_screen/widgets/recently_played_widget.dart';
-// import 'main_menu_screen/utils/greeting_utils.dart';
-// import 'main_menu_screen/utils/gradient_themes.dart';
+import '../../core/animations/animation_manager.dart';
 
 /// Modern, modular main menu screen
 ///
@@ -49,8 +39,6 @@ class MainMenuScreen extends ConsumerStatefulWidget {
 
 class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     with TickerProviderStateMixin {
-  AnimationController? _animationController;
-  Animation<double>? _fadeAnimation;
   late List<AnimationController> _cardAnimationControllers;
   TycoonToast? _greetingToast;
 
@@ -58,36 +46,21 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
   void initState() {
     super.initState();
 
-    // Main fade animation
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 1200),
+    // ✅ Use AnimationManager helper
+    _cardAnimationControllers = AnimationManager.createStaggeredControllers(
       vsync: this,
+      count: 6,
+      baseDuration: 600,
+      durationIncrement: 100,
     );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController!,
-      curve: Curves.easeInOut,
-    ));
-
-    // Card stagger animations
-    _cardAnimationControllers = List.generate(
-      6,
-          (index) => AnimationController(
-        duration: Duration(milliseconds: 600 + (index * 100)),
-        vsync: this,
-      ),
+    // ✅ Use AnimationManager helper
+    AnimationManager.startStaggered(
+      controllers: _cardAnimationControllers,
+      baseDelay: 200,
+      delayIncrement: 150,
+      mounted: mounted,
     );
-
-    // Start animations
-    _animationController!.forward();
-    for (int i = 0; i < _cardAnimationControllers.length; i++) {
-      Future.delayed(Duration(milliseconds: i * 150), () {
-        if (mounted) _cardAnimationControllers[i].forward();
-      });
-    }
 
     // Show greeting toast after delay
     Future.delayed(const Duration(milliseconds: 800), () {
@@ -136,7 +109,6 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     _greetingToast!.show(context);
   }
 
-
   Future<void> _showOnboardingReminderIfNeeded() async {
     try {
       final serviceManager = ref.read(serviceManagerProvider);
@@ -157,10 +129,8 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
 
   @override
   void dispose() {
-    _animationController?.dispose();
-    for (final controller in _cardAnimationControllers) {
-      controller.dispose();
-    }
+    // Use AnimationManager Helper
+    AnimationManager.disposeControllers(_cardAnimationControllers);
     super.dispose();
   }
 
@@ -187,12 +157,12 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
         backgroundColor: appTheme.bg2,
         drawer: const AppDrawer(),
         appBar: _buildAppBar(),
-        body: _fadeAnimation != null
-            ? FadeTransition(
-          opacity: _fadeAnimation!,
+        // ✅ Use AnimationManager.fadeIn
+        body: AnimationManager.fadeIn(
           child: _buildResponsiveBody(),
-        )
-            : _buildResponsiveBody(),
+          duration: const Duration(milliseconds: 1200),
+          curve: Curves.easeInOut,
+        ),
       ),
     );
   }
@@ -334,6 +304,8 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     );
   }
 
+  // ✅ Still using controllers for more control over timing
+  // But AnimationManager handles creation/disposal
   Widget _animatedComponent(int index, Widget child) {
     return SlideTransition(
       position: Tween<Offset>(

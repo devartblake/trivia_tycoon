@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:trivia_tycoon/ui_components/presence/rich_presence_indicator.dart';
 import '../../game/models/user_presence_models.dart';
+import '../../core/animations/animation_manager.dart';
 
-class PresenceStatusIndicator extends StatefulWidget {
+class PresenceStatusIndicator extends StatelessWidget {
   final PresenceStatus status;
   final double size;
   final bool showBorder;
@@ -17,59 +18,14 @@ class PresenceStatusIndicator extends StatefulWidget {
   });
 
   @override
-  State<PresenceStatusIndicator> createState() => _PresenceStatusIndicatorState();
-}
-
-class _PresenceStatusIndicatorState extends State<PresenceStatusIndicator>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _pulseAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: this,
-    );
-    _pulseAnimation = Tween<double>(
-      begin: 0.8,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
-
-    if (widget.animated && widget.status == PresenceStatus.online) {
-      _animationController.repeat(reverse: true);
-    }
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  @override
-  void didUpdateWidget(PresenceStatusIndicator oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.animated && widget.status == PresenceStatus.online) {
-      _animationController.repeat(reverse: true);
-    } else {
-      _animationController.stop();
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     Widget indicator = Container(
-      width: widget.size,
-      height: widget.size,
+      width: size,
+      height: size,
       decoration: BoxDecoration(
-        color: widget.status.color,
+        color: status.color,
         shape: BoxShape.circle,
-        border: widget.showBorder
+        border: showBorder
             ? Border.all(
           color: Theme.of(context).colorScheme.surface,
           width: 2,
@@ -78,10 +34,13 @@ class _PresenceStatusIndicatorState extends State<PresenceStatusIndicator>
       ),
     );
 
-    if (widget.animated && widget.status == PresenceStatus.online) {
-      return ScaleTransition(
-        scale: _pulseAnimation,
+    // ✅ Use AnimationManager.pulse instead of manual animation
+    if (animated && status == PresenceStatus.online) {
+      return AnimationManager.pulse(
         child: indicator,
+        minScale: 0.8,
+        maxScale: 1.0,
+        duration: const Duration(seconds: 2),
       );
     }
 
