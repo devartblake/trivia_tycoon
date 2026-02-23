@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
-import '../../animations/physics/constrained_scroll_physics.dart';
+import 'package:trivia_tycoon/animations/animations.dart';
 
 import 'demo_data.dart';
 
