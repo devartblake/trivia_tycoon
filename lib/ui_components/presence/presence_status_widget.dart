@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trivia_tycoon/core/animations/animation_manager.dart';
 import 'package:trivia_tycoon/ui_components/presence/rich_presence_indicator.dart';
 import '../../game/models/user_presence_models.dart';
 import '../../core/animations/animation_manager.dart';
@@ -19,7 +20,7 @@ class PresenceStatusIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget indicator = Container(
+    final indicator = Container(
       width: size,
       height: size,
       decoration: BoxDecoration(
@@ -27,16 +28,17 @@ class PresenceStatusIndicator extends StatelessWidget {
         shape: BoxShape.circle,
         border: showBorder
             ? Border.all(
-          color: Theme.of(context).colorScheme.surface,
-          width: 2,
-        )
+                color: Theme.of(context).colorScheme.surface,
+                width: 2,
+              )
             : null,
       ),
     );
 
-    // ✅ Use AnimationManager.pulse instead of manual animation
     if (animated && status == PresenceStatus.online) {
       return AnimationManager.pulse(
+        minScale: 0.8,
+        maxScale: 1.0,
         child: indicator,
         minScale: 0.8,
         maxScale: 1.0,

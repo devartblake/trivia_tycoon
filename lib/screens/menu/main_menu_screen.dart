@@ -11,6 +11,7 @@ import 'package:trivia_tycoon/screens/menu/widgets/rank_card_widget.dart';
 import 'package:trivia_tycoon/screens/menu/widgets/recently_played_widget.dart';
 import 'package:trivia_tycoon/screens/menu/widgets/rewards_banner.dart';
 import 'package:trivia_tycoon/screens/menu/widgets/standard_appbar.dart';
+import '../../core/animations/animation_manager.dart';
 import '../../core/helpers/responsive_layout.dart';
 import '../../core/services/theme/seasonal_theme_service.dart';
 import '../../core/theme/themes.dart';
@@ -39,6 +40,7 @@ class MainMenuScreen extends ConsumerStatefulWidget {
 
 class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     with TickerProviderStateMixin {
+  AnimationController? _animationController;
   late List<AnimationController> _cardAnimationControllers;
   TycoonToast? _greetingToast;
 
@@ -46,19 +48,26 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
   void initState() {
     super.initState();
 
-    // ✅ Use AnimationManager helper
+    // Main fade animation
+    _animationController = AnimationManager.createController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+
+    // Card stagger animations
     _cardAnimationControllers = AnimationManager.createStaggeredControllers(
       vsync: this,
       count: 6,
-      baseDuration: 600,
-      durationIncrement: 100,
+      baseDurationMs: 600,
+      durationIncrementMs: 100,
     );
 
-    // ✅ Use AnimationManager helper
+    // Start animations
+    _animationController!.forward();
     AnimationManager.startStaggered(
       controllers: _cardAnimationControllers,
-      baseDelay: 200,
-      delayIncrement: 150,
+      baseDelayMs: 0,
+      delayIncrementMs: 150,
       mounted: mounted,
     );
 
@@ -129,7 +138,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
 
   @override
   void dispose() {
-    // Use AnimationManager Helper
+    _animationController?.dispose();
     AnimationManager.disposeControllers(_cardAnimationControllers);
     super.dispose();
   }
@@ -157,11 +166,9 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
         backgroundColor: appTheme.bg2,
         drawer: const AppDrawer(),
         appBar: _buildAppBar(),
-        // ✅ Use AnimationManager.fadeIn
-        body: AnimationManager.fadeIn(
+        body: FadeTransition(
+          opacity: AnimationManager.fadeIn(_animationController!),
           child: _buildResponsiveBody(),
-          duration: const Duration(milliseconds: 1200),
-          curve: Curves.easeInOut,
         ),
       ),
     );
@@ -307,14 +314,9 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
   // ✅ Still using controllers for more control over timing
   // But AnimationManager handles creation/disposal
   Widget _animatedComponent(int index, Widget child) {
-    return SlideTransition(
-      position: Tween<Offset>(
-        begin: const Offset(0, 0.5),
-        end: Offset.zero,
-      ).animate(CurvedAnimation(
-        parent: _cardAnimationControllers[index],
-        curve: Curves.easeOutBack,
-      )),
+    return AnimationManager.fadeSlideIn(
+      animation: _cardAnimationControllers[index],
+      begin: const Offset(0, 0.5),
       child: child,
     );
   }
