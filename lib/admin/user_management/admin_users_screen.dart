@@ -1,23 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../game/models/admin_user_model.dart';
+import '../../game/providers/riverpod_providers.dart';
 import '../../screens/widgets/custom_alert_dialog.dart';
 import '../../ui_components/cards/slide_to_expand_card.dart';
 
-class AdminUsersScreen extends StatefulWidget {
+class AdminUsersScreen extends ConsumerStatefulWidget {
   const AdminUsersScreen({super.key});
 
   @override
-  State<AdminUsersScreen> createState() => _AdminUsersScreenState();
+  ConsumerState<AdminUsersScreen> createState() => _AdminUsersScreenState();
 }
 
-class _AdminUsersScreenState extends State<AdminUsersScreen> {
+class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
   final _searchController = TextEditingController();
   String _searchQuery = '';
   UserStatus? _filterStatus;
   UserRole? _filterRole;
   AgeGroup? _filterAgeGroup;
   String _sortBy = 'lastActive'; // lastActive, username, points
+  List<AdminUserModel> _users = [];
+  bool _isLoadingUsers = false;
+  String? _usersError;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUsersFromBackend();
+  }
+
+  Future<void> _loadUsersFromBackend() async {
+    setState(() {
+      _isLoadingUsers = true;
+      _usersError = null;
+    });
+
+    try {
+      final serviceManager = ref.read(serviceManagerProvider);
+      final response = await serviceManager.apiService.get('/admin/users');
+      final items = response['items'];
+      if (items is List) {
+        _users = items
+            .whereType<Map>()
+            .map((e) => Map<String, dynamic>.from(e))
+            .map(AdminUserModel.fromJson)
+            .toList();
+      } else {
+        _users = [];
+      }
+    } catch (e) {
+      _usersError = 'Using local sample users (backend unavailable): $e';
+      _users = _getMockUsers();
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoadingUsers = false;
+        });
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -34,6 +76,18 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
       body: Column(
         children: [
           _buildHeader(),
+          if (_isLoadingUsers)
+            const LinearProgressIndicator(minHeight: 2),
+          if (_usersError != null)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              color: const Color(0xFFFFF7ED),
+              child: Text(
+                _usersError!,
+                style: const TextStyle(color: Color(0xFF9A3412), fontSize: 12),
+              ),
+            ),
           _buildFilters(),
           Expanded(
             child: users.isEmpty
@@ -817,7 +871,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
 
   // Mock data - replace with actual data from your backend
   List<AdminUserModel> _getFilteredUsers() {
-    var users = _getMockUsers();
+    var users = _users;
 
     // Apply search filter
     if (_searchQuery.isNotEmpty) {
