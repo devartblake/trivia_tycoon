@@ -40,8 +40,6 @@ class PresenceStatusIndicator extends StatelessWidget {
         minScale: 0.8,
         maxScale: 1.0,
         child: indicator,
-        minScale: 0.8,
-        maxScale: 1.0,
         duration: const Duration(seconds: 2),
       );
     }
