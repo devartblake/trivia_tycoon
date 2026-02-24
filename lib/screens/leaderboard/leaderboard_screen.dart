@@ -29,9 +29,9 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 800),
+    _animationController = AnimationManager.createController(
       vsync: this,
+      duration: const Duration(milliseconds: 800),
     );
     _animationController!.forward();
 
