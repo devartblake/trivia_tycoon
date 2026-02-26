@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/core/bootstrap/app_init.dart';
 import 'package:trivia_tycoon/core/bootstrap/app_launcher.dart';
 import '/offline_fallback_screen.dart';
-import 'package:trivia_tycoon/screens/splash_variants/main_splash.dart';
 import 'package:trivia_tycoon/widgets/app_logo.dart';
 import 'core/env.dart';
 import 'core/manager/service_manager.dart';
@@ -92,7 +91,6 @@ class TriviaTycoonApp extends StatefulWidget {
 class _TriviaTycoonAppState extends State<TriviaTycoonApp> {
   (ServiceManager, ThemeNotifier)? _initialData;
   bool _initialized = false;
-  bool _splashFinished = false;
   Object? _error;
 
   @override
@@ -120,12 +118,6 @@ class _TriviaTycoonAppState extends State<TriviaTycoonApp> {
     }
   }
 
-  void _onSplashFinished() {
-    setState(() {
-      _splashFinished = true;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -142,12 +134,6 @@ class _TriviaTycoonAppState extends State<TriviaTycoonApp> {
   Widget _buildContent() {
     if (_error != null) {
       return OfflineFallbackScreen(onRetry: _init);
-    }
-
-    if (!_splashFinished) {
-      return SimpleSplashScreen(
-        onDone: _onSplashFinished,
-      );
     }
 
     if (!_initialized || _initialData == null) {
