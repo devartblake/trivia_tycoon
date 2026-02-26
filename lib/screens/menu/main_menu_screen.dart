@@ -11,6 +11,7 @@ import 'package:trivia_tycoon/screens/menu/widgets/rank_card_widget.dart';
 import 'package:trivia_tycoon/screens/menu/widgets/recently_played_widget.dart';
 import 'package:trivia_tycoon/screens/menu/widgets/rewards_banner.dart';
 import 'package:trivia_tycoon/screens/menu/widgets/standard_appbar.dart';
+import '../../core/animations/animation_manager.dart';
 import '../../core/helpers/responsive_layout.dart';
 import '../../core/services/theme/seasonal_theme_service.dart';
 import '../../core/theme/themes.dart';
@@ -50,7 +51,6 @@ class MainMenuScreen extends ConsumerStatefulWidget {
 class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     with TickerProviderStateMixin {
   AnimationController? _animationController;
-  Animation<double>? _fadeAnimation;
   late List<AnimationController> _cardAnimationControllers;
   TycoonToast? _greetingToast;
 
@@ -59,35 +59,27 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     super.initState();
 
     // Main fade animation
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 1200),
+    _animationController = AnimationManager.createController(
       vsync: this,
+      duration: const Duration(milliseconds: 1200),
     );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController!,
-      curve: Curves.easeInOut,
-    ));
-
     // Card stagger animations
-    _cardAnimationControllers = List.generate(
-      6,
-          (index) => AnimationController(
-        duration: Duration(milliseconds: 600 + (index * 100)),
-        vsync: this,
-      ),
+    _cardAnimationControllers = AnimationManager.createStaggeredControllers(
+      vsync: this,
+      count: 6,
+      baseDurationMs: 600,
+      durationIncrementMs: 100,
     );
 
     // Start animations
     _animationController!.forward();
-    for (int i = 0; i < _cardAnimationControllers.length; i++) {
-      Future.delayed(Duration(milliseconds: i * 150), () {
-        if (mounted) _cardAnimationControllers[i].forward();
-      });
-    }
+    AnimationManager.startStaggered(
+      controllers: _cardAnimationControllers,
+      baseDelayMs: 0,
+      delayIncrementMs: 150,
+      mounted: mounted,
+    );
 
     // Show greeting toast after delay
     Future.delayed(const Duration(milliseconds: 800), () {
@@ -158,9 +150,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
   @override
   void dispose() {
     _animationController?.dispose();
-    for (final controller in _cardAnimationControllers) {
-      controller.dispose();
-    }
+    AnimationManager.disposeControllers(_cardAnimationControllers);
     super.dispose();
   }
 
@@ -187,12 +177,10 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
         backgroundColor: appTheme.bg2,
         drawer: const AppDrawer(),
         appBar: _buildAppBar(),
-        body: _fadeAnimation != null
-            ? FadeTransition(
-          opacity: _fadeAnimation!,
+        body: FadeTransition(
+          opacity: AnimationManager.fadeIn(_animationController!),
           child: _buildResponsiveBody(),
-        )
-            : _buildResponsiveBody(),
+        ),
       ),
     );
   }
@@ -335,14 +323,9 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
   }
 
   Widget _animatedComponent(int index, Widget child) {
-    return SlideTransition(
-      position: Tween<Offset>(
-        begin: const Offset(0, 0.5),
-        end: Offset.zero,
-      ).animate(CurvedAnimation(
-        parent: _cardAnimationControllers[index],
-        curve: Curves.easeOutBack,
-      )),
+    return AnimationManager.fadeSlideIn(
+      animation: _cardAnimationControllers[index],
+      begin: const Offset(0, 0.5),
       child: child,
     );
   }

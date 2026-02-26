@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/screens/leaderboard/widgets/live_countdown_timer_widget.dart';
 import 'package:trivia_tycoon/ui_components/mission/mission_panel.dart';
 import 'package:trivia_tycoon/ui_components/seasonal/seasonal_events_widget.dart';
+import '../../core/animations/animation_manager.dart';
 import '../../game/models/leaderboard_entry.dart';
 import '../../game/models/seasonal_competition_model.dart';
 import '../../game/providers/riverpod_providers.dart';
@@ -16,11 +17,9 @@ class LeaderboardScreen extends ConsumerStatefulWidget {
 }
 
 class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
-    with TickerProviderStateMixin {
+    with SingleTickerProviderStateMixin {
   int playerXP = 1200; // Mocked value; replace with actual user XP
   AnimationController? _animationController;
-  Animation<double>? _fadeAnimation;
-  Animation<Offset>? _slideAnimation;
 
   // Leaderboard state
   bool _isLoadingLeaderboard = true;
@@ -30,24 +29,10 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 800),
+    _animationController = AnimationManager.createController(
       vsync: this,
+      duration: const Duration(milliseconds: 800),
     );
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController!,
-      curve: Curves.easeInOut,
-    ));
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.3),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animationController!,
-      curve: Curves.easeOutBack,
-    ));
     _animationController!.forward();
 
     // Initialize leaderboard
@@ -154,41 +139,23 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
         slivers: [
           _buildSliverAppBar(),
           SliverToBoxAdapter(
-            child: _fadeAnimation != null && _slideAnimation != null
-                ? FadeTransition(
-              opacity: _fadeAnimation!,
-              child: SlideTransition(
-                position: _slideAnimation!,
-                child: Column(
-                  children: [
-                    _buildTierHeader(),
-                    const SizedBox(height: 24),
-                    MissionPanel(
-                      playerXP: playerXP,
-                      onXPAdded: _handleXPAdded,
+            child: AnimationManager.fadeSlideIn(
+                    animation: _animationController!,
+                    begin: const Offset(0, 0.3),
+                    child: Column(
+                      children: [
+                        _buildTierHeader(),
+                        const SizedBox(height: 24),
+                        MissionPanel(
+                          playerXP: playerXP,
+                          onXPAdded: _handleXPAdded,
+                        ),
+                        const SizedBox(height: 24),
+                        const SeasonalEventsWidget(),
+                        const SizedBox(height: 100), // Bottom padding
+                      ],
                     ),
-                    const SizedBox(height: 24),
-                    const SeasonalEventsWidget(),
-                    const SizedBox(height: 100), // Bottom padding
-                  ],
-                ),
-              ),
-            )
-                : Column(
-              children: [
-                _buildTierHeader(),
-                const SizedBox(height: 24),
-                _buildLeaderboardSection(),
-                const SizedBox(height: 24),
-                MissionPanel(
-                  playerXP: playerXP,
-                  onXPAdded: _handleXPAdded,
-                ),
-                const SizedBox(height: 24),
-                const SeasonalEventsWidget(),
-                const SizedBox(height: 100), // Bottom padding
-              ],
-            ),
+                  ),
           ),
         ],
       ),
