@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/core/bootstrap/app_init.dart';
 import 'package:trivia_tycoon/core/bootstrap/app_launcher.dart';
 import '/offline_fallback_screen.dart';
+import 'package:trivia_tycoon/screens/splash_variants/main_splash.dart';
 import 'package:trivia_tycoon/widgets/app_logo.dart';
 import 'core/env.dart';
 import 'core/manager/service_manager.dart';
@@ -91,6 +92,7 @@ class TriviaTycoonApp extends StatefulWidget {
 class _TriviaTycoonAppState extends State<TriviaTycoonApp> {
   (ServiceManager, ThemeNotifier)? _initialData;
   bool _initialized = false;
+  bool _splashFinished = false;
   bool _recoveryChecked = false; // Track recovery check
   Object? _error;
 
@@ -117,6 +119,13 @@ class _TriviaTycoonAppState extends State<TriviaTycoonApp> {
         _error = e;
       });
     }
+  }
+
+  void _onSplashFinished() {
+    setState(() {
+      _splashFinished = true;
+    });
+
     // Check for crash recovery after splash
     _checkForCrashRecovery();
   }
@@ -305,6 +314,13 @@ class _TriviaTycoonAppState extends State<TriviaTycoonApp> {
   Widget _buildContent() {
     if (_error != null) {
       return OfflineFallbackScreen(onRetry: _init);
+    }
+
+    // Show splash screen first
+    if (!_splashFinished) {
+      return SimpleSplashScreen(
+        onDone: _onSplashFinished,
+      );
     }
 
     // Wait for recovery check to complete
