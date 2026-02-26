@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trivia_tycoon/core/animations/animation_manager.dart';
 import 'package:trivia_tycoon/ui_components/presence/rich_presence_indicator.dart';
 import '../../game/models/user_presence_models.dart';
+import '../../core/animations/animation_manager.dart';
 
 class PresenceStatusIndicator extends StatelessWidget {
   final PresenceStatus status;
@@ -39,6 +40,7 @@ class PresenceStatusIndicator extends StatelessWidget {
         minScale: 0.8,
         maxScale: 1.0,
         child: indicator,
+        duration: const Duration(seconds: 2),
       );
     }
 
