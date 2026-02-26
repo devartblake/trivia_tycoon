@@ -40,6 +40,10 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+
+    // Cleanup on dispose
+    AppInit.dispose();
+
     super.dispose();
   }
 
@@ -55,23 +59,40 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
       // This is now safe because we made trackAppLifecycle robust in app_init.dart
         AppInit.trackAppLifecycle(serviceManager, 'app_resumed');
         _checkSpinStatusOnResume();
+
         // Reconnect WebSocket
         AppInit.reconnectWebSocket();
         break;
+
       case AppLifecycleState.paused:
         AppInit.trackAppLifecycle(serviceManager, 'app_paused');
         _flushAnalyticsOnPause(); // Added safety inside this method below
+
         // Disconnect WebSocket to save battery
         AppInit.disconnectWebSocket();
+
+        // NOTE: AppLifecycleManager handles the save automatically
+        // No need to call forceSave() here - it's triggered by the manager
+
         break;
+
       case AppLifecycleState.inactive:
         AppInit.trackAppLifecycle(serviceManager, 'app_inactive');
+
+        // ✅ NOTE: AppLifecycleManager handles quick save automatically
+
         break;
+
       case AppLifecycleState.detached:
         AppInit.trackAppLifecycle(serviceManager, 'app_detached');
+
         // Cleanup on app close
         AppInit.disconnectWebSocket();
+
+        // ✅ NOTE: AppLifecycleManager handles final save + cleanup automatically
+
         break;
+
       case AppLifecycleState.hidden:
         AppInit.trackAppLifecycle(serviceManager, 'app_hidden');
         break;
