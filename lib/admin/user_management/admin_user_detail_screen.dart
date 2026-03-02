@@ -1219,7 +1219,7 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
     }
   }
 
-// Mock data getter
+// Fallback sample user lookup for offline/unsupported backend environments.
   AdminUserModel? _getUserById(String userId) {
     final users = [
       AdminUserModel(
@@ -1250,7 +1250,7 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
         winRate: 0.54,
         isVerified: true,
       ),
-// Add more mock users...
+// Additional fallback users can be added here if needed.
     ];
     try {
       return users.firstWhere((user) => user.id == userId);

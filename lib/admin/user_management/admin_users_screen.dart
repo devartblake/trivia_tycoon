@@ -869,7 +869,7 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
     );
   }
 
-  // Mock data - replace with actual data from your backend
+  // Fallback sample users for offline/unsupported backend environments.
   List<AdminUserModel> _getFilteredUsers() {
     var users = _users;
 

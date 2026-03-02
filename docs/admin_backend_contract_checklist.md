@@ -674,15 +674,15 @@ Suggested shared error codes:
 ## 7) Parallel Work Plan (Frontend vs Backend)
 
 ## 7.1 Frontend checklist
-- [ ] Replace hardcoded admin login with `/admin/auth/login`.
-- [ ] Store and refresh tokens via `/admin/auth/refresh`.
-- [ ] Drive role gate from `/admin/auth/me` claims (replace local always-true admin).
-- [ ] Replace mock user list/detail/actions with `/admin/users*` APIs.
-- [ ] Wire user activity log endpoint.
-- [ ] Move question sync to `/admin/questions*` endpoints with auth headers.
-- [ ] Wire event queue upload to `/admin/event-queue/upload`.
+- [x] Replace hardcoded admin login with `/admin/auth/login`.
+- [x] Store and refresh tokens via `/admin/auth/refresh`.
+- [x] Drive role gate from `/admin/auth/me` claims (replace local always-true admin).
+- [x] Replace mock user list/detail/actions with `/admin/users*` APIs.
+- [x] Wire user activity log endpoint.
+- [x] Move question sync to `/admin/questions*` endpoints with auth headers.
+- [x] Wire event queue upload to `/admin/event-queue/upload`.
 - [ ] If central notifications are desired, wire `/admin/notifications*` endpoints.
-- [ ] Standardize API error handling to shared error envelope.
+- [~] Standardize API error handling to shared error envelope (partially complete; continue rollout).
 
 ## 7.2 Backend checklist
 - [ ] Implement auth endpoints with JWT + refresh and role claims.
@@ -706,4 +706,3 @@ Suggested shared error codes:
 - [ ] Event deduplication key (`eventId` only vs hash).
 - [ ] Whether notification admin remains local-only or becomes server-managed.
 - [ ] Whether config settings are device-local or global server state.
-
