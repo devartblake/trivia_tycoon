@@ -160,18 +160,22 @@ class ApiService {
     try {
       return await request();
     } on DioException catch (e) {
-      // Silently handle timeout errors in development (no backend)
-      if (e.type == DioExceptionType.connectionTimeout ||
+      final isTimeoutLike = e.type == DioExceptionType.connectionTimeout ||
           e.type == DioExceptionType.receiveTimeout ||
-          e.type == DioExceptionType.sendTimeout) {
+          e.type == DioExceptionType.sendTimeout ||
+          e.type == DioExceptionType.connectionError;
 
-        // Only log in debug mode with reduced verbosity
+      // Preserve silent timeout/offline behavior while keeping exception type consistent.
+      if (isTimeoutLike) {
         if (ConfigService.enableLogging && kDebugMode) {
           debugPrint("[API Timeout]: ${e.requestOptions.path} - No backend available");
         }
 
-        // Throw a custom exception instead of the verbose Dio one
-        throw Exception("API Timeout");
+        throw ApiRequestException(
+          'API Timeout',
+          statusCode: e.response?.statusCode,
+          path: e.requestOptions.path,
+        );
       }
 
       final normalizedMessage = _extractErrorMessageFromResponse(e);
