@@ -10,7 +10,6 @@ import 'package:trivia_tycoon/screens/menu/game_menu_screen.dart';
 import 'package:trivia_tycoon/screens/not_found_screen.dart';
 import 'package:trivia_tycoon/screens/question/categories/favorites_quiz_screen.dart';
 import 'package:trivia_tycoon/screens/question/question_screen.dart';
-import 'package:trivia_tycoon/screens/splash_variants/main_splash.dart';
 import 'package:trivia_tycoon/screens/store/store_screen.dart';
 import 'package:trivia_tycoon/screens/leaderboard/leaderboard_screen.dart';
 import 'package:trivia_tycoon/screens/settings/settings_screen.dart';
@@ -119,7 +118,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
   // Create a new router instance when state changes
   return GoRouter(
-    initialLocation: '/',
+    initialLocation: '/home',
     errorBuilder: (context, state) => const NotFoundScreen(),
     debugLogDiagnostics: true,
 
@@ -130,15 +129,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     },
 
     routes: [
-      /// 🌟 Universal Splash Entry Point
+      /// 🌟 Root Entry Point
       GoRoute(
         path: '/',
-        builder: (context, state) => SimpleSplashScreen(
-          onDone: () {
-            // Let redirect logic handle where to go next
-            context.go('/home');
-          },
-        ),
+        redirect: (context, state) => '/home',
       ),
 
       /// 🔐 Auth + Onboarding
