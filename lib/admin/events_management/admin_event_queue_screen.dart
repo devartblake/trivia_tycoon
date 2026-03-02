@@ -232,16 +232,35 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
       final exportData = await serviceManager.eventQueueService
           .exportFailedEventsForUpload(playerId);
 
-      // TODO: Send to server
-      // await serviceManager.apiService.post('/admin/event-queue/upload', body: exportData);
+      final response = await serviceManager.apiService.post(
+        '/admin/event-queue/upload',
+        body: exportData,
+      );
 
-      // For now, copy JSON to clipboard
-      final jsonString = jsonEncode(exportData);
-      await Clipboard.setData(ClipboardData(text: jsonString));
+      final accepted = response['accepted'];
+      final rejected = response['rejected'];
+      final duplicates = response['duplicates'];
 
-      _showSuccess('Export data copied to clipboard');
+      _showSuccess(
+        'Upload complete'
+        '${accepted != null ? ' • accepted: $accepted' : ''}'
+        '${rejected != null ? ', rejected: $rejected' : ''}'
+        '${duplicates != null ? ', duplicates: $duplicates' : ''}',
+      );
     } catch (e) {
-      _showError('Failed to export: $e');
+      // Keep previous operational fallback for offline/unsupported environments.
+      try {
+        final serviceManager = ref.read(serviceManagerProvider);
+        final playerProfile = serviceManager.playerProfileService;
+        final playerId = await playerProfile.getPlayerName();
+        final exportData = await serviceManager.eventQueueService
+            .exportFailedEventsForUpload(playerId);
+        final jsonString = jsonEncode(exportData);
+        await Clipboard.setData(ClipboardData(text: jsonString));
+        _showError('Server upload failed. Copied payload to clipboard instead. Error: $e');
+      } catch (_) {
+        _showError('Failed to export: $e');
+      }
     }
   }
 

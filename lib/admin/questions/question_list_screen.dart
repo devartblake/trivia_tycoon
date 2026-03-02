@@ -1,21 +1,22 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:trivia_tycoon/admin/questions/question_editor_screen.dart';
 import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
 import 'package:trivia_tycoon/game/models/question_model.dart';
-import '../../core/services/question/question_api_service.dart';
+import '../../game/providers/riverpod_providers.dart';
 import '../widgets/fab_menu.dart';
 
-class QuestionListScreen extends StatefulWidget {
+class QuestionListScreen extends ConsumerStatefulWidget {
   const QuestionListScreen({super.key});
 
   @override
-  State<QuestionListScreen> createState() => _QuestionListScreenState();
+  ConsumerState<QuestionListScreen> createState() => _QuestionListScreenState();
 }
 
-class _QuestionListScreenState extends State<QuestionListScreen> {
+class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
   List<QuestionModel> _questions = [];
   List<QuestionModel> _filtered = [];
 
@@ -32,6 +33,7 @@ class _QuestionListScreenState extends State<QuestionListScreen> {
   @override
   void initState() {
     super.initState();
+    appCache = ref.read(serviceManagerProvider).appCacheService;
     _loadQuestions();
   }
 
@@ -148,6 +150,12 @@ class _QuestionListScreenState extends State<QuestionListScreen> {
     );
 
     if (confirmed == true) {
+      try {
+        final serviceManager = ref.read(serviceManagerProvider);
+        await serviceManager.apiService.delete('/admin/questions/$id');
+      } catch (_) {
+        // Keep local delete behavior even if backend is unavailable.
+      }
       setState(() => _questions.removeWhere((q) => q.id == id));
       await appCache.saveQuestions(_questions);
       _applyFilters();
@@ -253,7 +261,17 @@ class _QuestionListScreenState extends State<QuestionListScreen> {
   }
 
   Future<void> _syncFromServer() async {
-    final fetched = await QuestionApiService.fetchQuestions();
+    final serviceManager = ref.read(serviceManagerProvider);
+    final response = await serviceManager.apiService.get('/admin/questions');
+    final items = response['items'];
+    final fetched = items is List
+        ? items
+            .whereType<Map>()
+            .map((e) => Map<String, dynamic>.from(e))
+            .map(QuestionModel.fromJson)
+            .toList()
+        : <QuestionModel>[];
+    if (!mounted) return;
     setState(() {
       _questions = fetched;
       _applyFilters();
@@ -262,7 +280,11 @@ class _QuestionListScreenState extends State<QuestionListScreen> {
   }
 
   Future<void> _syncToServer() async {
-    await QuestionApiService.uploadQuestions(_questions);
+    final serviceManager = ref.read(serviceManagerProvider);
+    await serviceManager.apiService.post('/admin/questions/bulk', body: {
+      'mode': 'upsert',
+      'questions': _questions.map((q) => q.toJson()).toList(),
+    });
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
