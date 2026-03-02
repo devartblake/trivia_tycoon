@@ -1170,10 +1170,9 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
     );
   }
   void _showAddUserDialog() {
-// TODO: Implement add user dialog
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Add user functionality coming soon'),
+        content: Text('Create user endpoint is not wired in this pass.'),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -1216,12 +1215,7 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
                 title: const Text('Edit User'),
                 onTap: () {
                   Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Edit user functionality coming soon'),
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
+                  _showEditUserDialog(user);
                 },
               ),
               ListTile(
@@ -1280,17 +1274,39 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
       type: user.isBanned ? AlertType.success : AlertType.warning,
       confirmText: user.isBanned ? 'Unban User' : 'Ban User',
       cancelText: 'Cancel',
-      onConfirm: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              user.isBanned
-                  ? '${user.username} has been unbanned'
-                  : '${user.username} has been banned',
+      onConfirm: () async {
+        try {
+          final serviceManager = ref.read(serviceManagerProvider);
+          if (user.isBanned) {
+            await serviceManager.apiService.post('/admin/users/${user.id}/unban', body: {});
+          } else {
+            await serviceManager.apiService.post(
+              '/admin/users/${user.id}/ban',
+              body: {'reason': 'Admin action'},
+            );
+          }
+          await _loadUsersFromBackend();
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                user.isBanned
+                    ? '${user.username} has been unbanned'
+                    : '${user.username} has been banned',
+              ),
+              behavior: SnackBarBehavior.floating,
             ),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
+          );
+        } catch (e) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Failed to update ban state: $e'),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: const Color(0xFFEF4444),
+            ),
+          );
+        }
       },
     );
   }
@@ -1302,14 +1318,29 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
       type: AlertType.delete,
       confirmText: 'Delete User',
       cancelText: 'Cancel',
-      onConfirm: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${user.username} has been deleted'),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: const Color(0xFFEF4444),
-          ),
-        );
+      onConfirm: () async {
+        try {
+          final serviceManager = ref.read(serviceManagerProvider);
+          await serviceManager.apiService.delete('/admin/users/${user.id}');
+          await _loadUsersFromBackend();
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('${user.username} has been deleted'),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: const Color(0xFFEF4444),
+            ),
+          );
+        } catch (e) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Failed to delete user: $e'),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: const Color(0xFFEF4444),
+            ),
+          );
+        }
       },
     );
   }
@@ -1322,10 +1353,127 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
     );
   }
   void _viewActivityLog(AdminUserModel user) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Activity log functionality coming soon'),
-        behavior: SnackBarBehavior.floating,
+    _loadActivityLog(user);
+  }
+
+  Future<void> _loadActivityLog(AdminUserModel user) async {
+    try {
+      final serviceManager = ref.read(serviceManagerProvider);
+      final response = await serviceManager.apiService.get('/admin/users/${user.id}/activity');
+      final items = response['items'];
+      final logs = items is List
+          ? items.whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList()
+          : <Map<String, dynamic>>[];
+      if (!mounted) return;
+      _showActivityLogDialog(user, logs);
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to load activity log: $e'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
+  void _showActivityLogDialog(AdminUserModel user, List<Map<String, dynamic>> logs) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Activity Log • ${user.username}'),
+        content: SizedBox(
+          width: 500,
+          child: logs.isEmpty
+              ? const Text('No activity records found.')
+              : ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: logs.length,
+                  separatorBuilder: (_, __) => const Divider(height: 12),
+                  itemBuilder: (_, i) {
+                    final log = logs[i];
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(log['type']?.toString() ?? 'UNKNOWN',
+                            style: const TextStyle(fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 4),
+                        Text(log['description']?.toString() ?? '-'),
+                        const SizedBox(height: 4),
+                        Text(log['createdAt']?.toString() ?? '-',
+                            style: const TextStyle(color: Color(0xFF6B7280), fontSize: 12)),
+                      ],
+                    );
+                  },
+                ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showEditUserDialog(AdminUserModel user) {
+    UserRole selectedRole = user.role;
+    bool verified = user.isVerified;
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: Text('Edit ${user.username}'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              DropdownButtonFormField<UserRole>(
+                value: selectedRole,
+                items: UserRole.values
+                    .map((r) => DropdownMenuItem(value: r, child: Text(_getRoleText(r))))
+                    .toList(),
+                onChanged: (v) {
+                  if (v != null) setDialogState(() => selectedRole = v);
+                },
+                decoration: const InputDecoration(labelText: 'Role'),
+              ),
+              const SizedBox(height: 12),
+              SwitchListTile(
+                value: verified,
+                title: const Text('Verified'),
+                onChanged: (v) => setDialogState(() => verified = v),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+            ElevatedButton(
+              onPressed: () async {
+                try {
+                  final serviceManager = ref.read(serviceManagerProvider);
+                  await serviceManager.apiService.patch('/admin/users/${user.id}', body: {
+                    'role': selectedRole.name,
+                    'isVerified': verified,
+                  });
+                  if (!mounted) return;
+                  Navigator.pop(context);
+                  await _loadUsersFromBackend();
+                  if (!mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('User updated'), behavior: SnackBarBehavior.floating),
+                  );
+                } catch (e) {
+                  if (!mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Failed to update user: $e')),
+                  );
+                }
+              },
+              child: const Text('Save'),
+            )
+          ],
+        ),
       ),
     );
   }
