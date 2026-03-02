@@ -66,6 +66,13 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
     if (updated != null && updated is QuestionModel) {
       final i = _questions.indexWhere((q) => q.id == question.id);
       if (i != -1) {
+        try {
+          final serviceManager = ref.read(serviceManagerProvider);
+          await serviceManager.apiService.patch('/admin/questions/${updated.id}',
+              body: updated.toJson());
+        } catch (_) {
+          // Keep local update behavior when backend patch is unavailable.
+        }
         setState(() => _questions[i] = updated);
         await appCache.saveQuestions(_questions);
         _applyFilters();
@@ -308,6 +315,12 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
       MaterialPageRoute(builder: (_) => const QuestionEditorScreen()),
     );
     if (newQ != null && newQ is QuestionModel) {
+      try {
+        final serviceManager = ref.read(serviceManagerProvider);
+        await serviceManager.apiService.post('/admin/questions', body: newQ.toJson());
+      } catch (_) {
+        // Keep local create behavior when backend create is unavailable.
+      }
       setState(() => _questions.add(newQ));
       await appCache.saveQuestions(_questions);
       _applyFilters();
