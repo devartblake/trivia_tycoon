@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../game/providers/riverpod_providers.dart';
+import '../../core/services/settings/app_settings.dart';
+import '../../core/services/auth_token_store.dart';
+import '../../core/services/api_service.dart';
+import '../providers/admin_auth_providers.dart';
 
-/// Modern admin login dialog with hardcoded and server-based authentication
+/// Modern admin login dialog with server-based authentication.
 class AdminLoginDialog extends ConsumerStatefulWidget {
   const AdminLoginDialog({super.key});
 
@@ -12,16 +17,13 @@ class AdminLoginDialog extends ConsumerStatefulWidget {
 class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
     with SingleTickerProviderStateMixin {
   final _passwordController = TextEditingController();
+  final _otpController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   bool _obscurePassword = true;
   String? _errorMessage;
   late AnimationController _shakeController;
   late Animation<double> _shakeAnimation;
-
-  // TODO: Move to secure config/environment variables
-  static const String _hardcodedPassword = 'admin123';
-  static const bool _useServerAuth = false; // Toggle for server authentication
 
   @override
   void initState() {
@@ -38,6 +40,7 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
   @override
   void dispose() {
     _passwordController.dispose();
+    _otpController.dispose();
     _shakeController.dispose();
     super.dispose();
   }
@@ -51,17 +54,7 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
     });
 
     try {
-      bool authenticated = false;
-
-      if (_useServerAuth) {
-        // Server-based authentication
-        authenticated = await _authenticateWithServer(_passwordController.text);
-      } else {
-        // Hardcoded authentication
-        authenticated = _passwordController.text == _hardcodedPassword;
-        // Simulate network delay for consistency
-        await Future.delayed(const Duration(milliseconds: 800));
-      }
+      final authenticated = await _authenticateWithServer(_passwordController.text);
 
       if (!mounted) return;
 
@@ -77,6 +70,13 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
         _shakeController.forward(from: 0).then((_) => _shakeController.reset());
         _passwordController.clear();
       }
+    } on ApiRequestException catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _errorMessage = _mapAuthError(e);
+        _isLoading = false;
+      });
+      _shakeController.forward(from: 0).then((_) => _shakeController.reset());
     } catch (e) {
       if (!mounted) return;
       setState(() {
@@ -87,20 +87,103 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
     }
   }
 
-  /// Server-based authentication
-  /// TODO: Implement actual API call to your backend
+  /// Server-based authentication and local role claim update.
   Future<bool> _authenticateWithServer(String password) async {
-    // Example implementation:
-    // final serviceManager = ref.read(serviceManagerProvider);
-    // final response = await serviceManager.apiService.post(
-    //   '/admin/authenticate',
-    //   body: {'password': password},
-    // );
-    // return response['success'] == true;
+    final serviceManager = ref.read(serviceManagerProvider);
+    final secureStorage = ref.read(secureStorageProvider);
+    final email = await secureStorage.getSecret('user_email');
 
-    // Placeholder - replace with actual server call
-    await Future.delayed(const Duration(seconds: 1));
-    return password == 'server_admin_password';
+    if (email == null || email.isEmpty) {
+      throw Exception('A logged-in user email is required for admin authentication.');
+    }
+
+    final payload = <String, dynamic>{
+      'email': email,
+      'password': password,
+      if (_otpController.text.trim().isNotEmpty) 'otpCode': _otpController.text.trim(),
+    };
+
+    final response = await serviceManager.apiService.post(
+      '/admin/auth/login',
+      body: payload,
+    );
+
+    final success = response['success'] == true ||
+        response['authenticated'] == true ||
+        response.containsKey('accessToken') ||
+        response.containsKey('access_token');
+    if (!success) return false;
+
+    final accessToken =
+        response['accessToken']?.toString() ?? response['access_token']?.toString() ?? '';
+    final refreshToken =
+        response['refreshToken']?.toString() ?? response['refresh_token']?.toString() ?? '';
+    final expiresIn = response['expiresIn'];
+    DateTime? expiresAt;
+    if (expiresIn is int) {
+      expiresAt = DateTime.now().toUtc().add(Duration(seconds: expiresIn));
+    }
+
+    final admin = response['admin'];
+    String? primaryRole;
+    List<String> resolvedRoles = const ['admin'];
+    List<String> permissions = const [];
+    if (admin is Map<String, dynamic>) {
+      final rolesRaw = admin['roles'];
+      if (rolesRaw is List && rolesRaw.isNotEmpty) {
+        primaryRole = rolesRaw.first.toString();
+        resolvedRoles = rolesRaw.map((r) => r.toString()).toList();
+      } else if (admin['role'] is String) {
+        primaryRole = admin['role'] as String;
+        resolvedRoles = [primaryRole!];
+      }
+
+      final perms = admin['permissions'];
+      if (perms is List) {
+        permissions = perms.map((p) => p.toString()).toList();
+      }
+    }
+    primaryRole ??= 'admin';
+
+    if (accessToken.isNotEmpty && refreshToken.isNotEmpty) {
+      final tokenStore = ref.read(authTokenStoreProvider);
+      await tokenStore.save(
+        AuthSession(
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+          expiresAtUtc: expiresAt,
+          userId: admin is Map<String, dynamic> ? admin['id']?.toString() : null,
+          metadata: {
+            'role': primaryRole,
+            'roles': resolvedRoles,
+            'permissions': permissions,
+          },
+        ),
+      );
+    }
+
+    await serviceManager.playerProfileService.saveUserRole(primaryRole);
+    await serviceManager.playerProfileService.saveUserRoles(resolvedRoles);
+    await AppSettings.setString('userRole', primaryRole);
+    await AppSettings.setAdminUser(primaryRole == 'admin');
+
+    ref.invalidate(adminClaimsProvider);
+    ref.invalidate(unifiedIsAdminProvider);
+
+    return primaryRole == 'admin';
+  }
+
+  String _mapAuthError(ApiRequestException e) {
+    switch (e.statusCode) {
+      case 401:
+        return 'Invalid credentials. Please verify your admin password.';
+      case 403:
+        return 'Your account does not have admin access.';
+      case 429:
+        return 'Too many attempts. Please try again in a moment.';
+      default:
+        return e.message;
+    }
   }
 
   @override
@@ -283,6 +366,37 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
                 }
                 return null;
               },
+              onFieldSubmitted: (_) => _handleLogin(),
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
+              controller: _otpController,
+              enabled: !_isLoading,
+              keyboardType: TextInputType.number,
+              style: const TextStyle(fontSize: 16),
+              decoration: InputDecoration(
+                labelText: 'OTP (optional)',
+                hintText: 'Enter MFA code if required',
+                prefixIcon: Icon(Icons.password_rounded, color: theme.primaryColor),
+                filled: true,
+                fillColor: Colors.grey[50],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide.none,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide(color: Colors.grey[200]!),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide(color: theme.primaryColor, width: 2),
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 18,
+                ),
+              ),
               onFieldSubmitted: (_) => _handleLogin(),
             ),
             const SizedBox(height: 24),
