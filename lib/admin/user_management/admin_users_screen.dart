@@ -1170,10 +1170,123 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
     );
   }
   void _showAddUserDialog() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Create user endpoint is not wired in this pass.'),
-        behavior: SnackBarBehavior.floating,
+    final usernameCtrl = TextEditingController();
+    final emailCtrl = TextEditingController();
+    final passwordCtrl = TextEditingController();
+    UserRole selectedRole = UserRole.user;
+    AgeGroup selectedAge = AgeGroup.adult;
+    bool isVerified = false;
+
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: const Text('Add User'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: usernameCtrl,
+                  decoration: const InputDecoration(labelText: 'Username'),
+                ),
+                const SizedBox(height: 10),
+                TextField(
+                  controller: emailCtrl,
+                  decoration: const InputDecoration(labelText: 'Email'),
+                ),
+                const SizedBox(height: 10),
+                TextField(
+                  controller: passwordCtrl,
+                  decoration: const InputDecoration(labelText: 'Temporary Password'),
+                  obscureText: true,
+                ),
+                const SizedBox(height: 10),
+                DropdownButtonFormField<UserRole>(
+                  value: selectedRole,
+                  items: UserRole.values
+                      .map((r) => DropdownMenuItem(value: r, child: Text(_getRoleText(r))))
+                      .toList(),
+                  onChanged: (v) {
+                    if (v != null) setDialogState(() => selectedRole = v);
+                  },
+                  decoration: const InputDecoration(labelText: 'Role'),
+                ),
+                const SizedBox(height: 10),
+                DropdownButtonFormField<AgeGroup>(
+                  value: selectedAge,
+                  items: AgeGroup.values
+                      .map((a) => DropdownMenuItem(value: a, child: Text(_getAgeGroupText(a))))
+                      .toList(),
+                  onChanged: (v) {
+                    if (v != null) setDialogState(() => selectedAge = v);
+                  },
+                  decoration: const InputDecoration(labelText: 'Age Group'),
+                ),
+                const SizedBox(height: 6),
+                SwitchListTile(
+                  value: isVerified,
+                  onChanged: (v) => setDialogState(() => isVerified = v),
+                  title: const Text('Verified'),
+                  dense: true,
+                  contentPadding: EdgeInsets.zero,
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final username = usernameCtrl.text.trim();
+                final email = emailCtrl.text.trim();
+                final tempPassword = passwordCtrl.text.trim();
+                if (username.isEmpty || email.isEmpty || tempPassword.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Username, email and temporary password are required.')),
+                  );
+                  return;
+                }
+
+                try {
+                  final serviceManager = ref.read(serviceManagerProvider);
+                  await serviceManager.apiService.post('/admin/users', body: {
+                    'username': username,
+                    'email': email,
+                    'role': selectedRole.name,
+                    'ageGroup': selectedAge.name,
+                    'isVerified': isVerified,
+                    'temporaryPassword': tempPassword,
+                  });
+
+                  if (!mounted) return;
+                  Navigator.pop(context);
+                  await _loadUsersFromBackend();
+                  if (!mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('User created successfully'),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                } catch (e) {
+                  if (!mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to create user: $e'),
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: const Color(0xFFEF4444),
+                    ),
+                  );
+                }
+              },
+              child: const Text('Create'),
+            ),
+          ],
+        ),
       ),
     );
   }
