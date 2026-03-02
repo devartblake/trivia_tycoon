@@ -45,7 +45,7 @@ class LeaderboardDataService extends ChangeNotifier {
     }
   }
 
-  // ✅ ADD THIS - Build entries lookup map
+  // Build entries lookup map
   void _buildEntriesMap() {
     _entriesById.clear();
     for (final entry in _currentLeaderboard) {
