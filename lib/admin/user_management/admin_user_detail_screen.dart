@@ -37,10 +37,28 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
       final response = await serviceManager.apiService.get('/admin/users/${widget.userId}');
       _user = AdminUserModel.fromJson(response);
     } catch (_) {
-      _user = _getUserById(widget.userId);
+      _user = await _loadUserFromListEndpoint(widget.userId) ?? _getUserById(widget.userId);
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
+  }
+
+  Future<AdminUserModel?> _loadUserFromListEndpoint(String userId) async {
+    try {
+      final serviceManager = ref.read(serviceManagerProvider);
+      final response = await serviceManager.apiService.get('/admin/users');
+      final items = response['items'];
+      if (items is! List) return null;
+      for (final item in items.whereType<Map>()) {
+        final map = Map<String, dynamic>.from(item);
+        if (map['id']?.toString() == userId) {
+          return AdminUserModel.fromJson(map);
+        }
+      }
+    } catch (_) {
+      return null;
+    }
+    return null;
   }
 
   @override
@@ -1201,7 +1219,7 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
     }
   }
 
-// Mock data getter
+// Fallback sample user lookup for offline/unsupported backend environments.
   AdminUserModel? _getUserById(String userId) {
     final users = [
       AdminUserModel(
@@ -1232,7 +1250,7 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
         winRate: 0.54,
         isVerified: true,
       ),
-// Add more mock users...
+// Additional fallback users can be added here if needed.
     ];
     try {
       return users.firstWhere((user) => user.id == userId);
