@@ -198,17 +198,19 @@ class ApiService {
   String _extractErrorMessageFromResponse(DioException e) {
     final responseData = e.response?.data;
 
-    if (responseData is Map<String, dynamic>) {
+    if (responseData is Map) {
+      final responseMap = _asJsonMap(responseData);
       final nestedError = responseData['error'];
-      if (nestedError is Map<String, dynamic>) {
-        final nestedMessage = nestedError['message'];
+      if (nestedError is Map) {
+        final nestedErrorMap = _asJsonMap(nestedError);
+        final nestedMessage = nestedErrorMap['message'];
         if (nestedMessage is String && nestedMessage.trim().isNotEmpty) {
           return nestedMessage.trim();
         }
       }
 
       for (final key in const ['message', 'error', 'detail', 'title']) {
-        final value = responseData[key];
+        final value = responseMap[key];
         if (value is String && value.trim().isNotEmpty) {
           return value.trim();
         }
@@ -220,6 +222,16 @@ class ApiService {
     }
 
     return e.message ?? 'Request failed';
+  }
+
+  Map<String, dynamic> _asJsonMap(Object? value) {
+    if (value is Map<String, dynamic>) {
+      return value;
+    }
+    if (value is Map) {
+      return value.map((key, entry) => MapEntry(key.toString(), entry));
+    }
+    return <String, dynamic>{};
   }
 
   /// Loads mock data from assets/json
@@ -243,9 +255,22 @@ class ApiService {
         }),
       );
       // Ensure the response data is a map, otherwise return an empty map.
-      return response.data is Map<String, dynamic>
-          ? response.data as Map<String, dynamic>
-          : {};
+      return _asJsonMap(response.data);
+    });
+  }
+
+  /// **🔹 Generic GET Request (JSON map response)**
+  Future<Map<String, dynamic>> get(String path,
+      {Map<String, String>? headers}) async {
+    return _handleRequest(() async {
+      final response = await _dio.get(
+        path,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          if (headers != null) ...headers,
+        }),
+      );
+      return _asJsonMap(response.data);
     });
   }
 
@@ -275,9 +300,7 @@ class ApiService {
           'Content-Type': 'application/json',
         }),
       );
-      return response.data is Map<String, dynamic>
-          ? response.data as Map<String, dynamic>
-          : {};
+      return _asJsonMap(response.data);
     });
   }
 
@@ -292,9 +315,7 @@ class ApiService {
           'Content-Type': 'application/json',
         }),
       );
-      return response.data is Map<String, dynamic>
-          ? response.data as Map<String, dynamic>
-          : {};
+      return _asJsonMap(response.data);
     });
   }
 
@@ -309,9 +330,7 @@ class ApiService {
           'Content-Type': 'application/json',
         }),
       );
-      return response.data is Map<String, dynamic>
-          ? response.data as Map<String, dynamic>
-          : {};
+      return _asJsonMap(response.data);
     });
   }
 
@@ -353,8 +372,8 @@ class ApiService {
   Future<String?> getOAuthUrl(String provider) async {
     return _handleRequest(() async {
       final response = await _dio.get('/auth/oauth/$provider');
-      if (response.data is Map<String, dynamic>) {
-        final data = response.data as Map<String, dynamic>;
+      if (response.data is Map) {
+        final data = _asJsonMap(response.data);
         return (data['url'] ?? data['authUrl'] ?? data['redirectUrl'])?.toString();
       }
       if (response.data is String) {
