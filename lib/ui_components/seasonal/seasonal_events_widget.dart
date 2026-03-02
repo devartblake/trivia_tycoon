@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:trivia_tycoon/core/animations/animation_manager.dart';
 
 class SeasonalEventsWidget extends StatefulWidget {
   const SeasonalEventsWidget({super.key});
@@ -8,10 +9,7 @@ class SeasonalEventsWidget extends StatefulWidget {
   State<SeasonalEventsWidget> createState() => _SeasonalEventsWidgetState();
 }
 
-class _SeasonalEventsWidgetState extends State<SeasonalEventsWidget>
-    with TickerProviderStateMixin {
-  AnimationController? _animationController;
-  Animation<double>? _pulseAnimation;
+class _SeasonalEventsWidgetState extends State<SeasonalEventsWidget> {
 
   // Mock seasonal event data
   final Map<String, dynamic> _currentEvent = {
@@ -28,28 +26,6 @@ class _SeasonalEventsWidgetState extends State<SeasonalEventsWidget>
     'description': 'Celebrate the season with special rewards!',
   };
 
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 2000),
-      vsync: this,
-    );
-    _pulseAnimation = Tween<double>(
-      begin: 1.0,
-      end: 1.05,
-    ).animate(CurvedAnimation(
-      parent: _animationController!,
-      curve: Curves.easeInOut,
-    ));
-    _animationController!.repeat(reverse: true);
-  }
-
-  @override
-  void dispose() {
-    _animationController?.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,44 +99,27 @@ class _SeasonalEventsWidgetState extends State<SeasonalEventsWidget>
   Widget _buildHeader() {
     return Row(
       children: [
-        _pulseAnimation != null
-            ? AnimatedBuilder(
-          animation: _pulseAnimation!,
-          builder: (context, child) {
-            return Transform.scale(
-              scale: _pulseAnimation!.value,
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.25),
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.white.withValues(alpha: 0.3),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
+        AnimationManager.pulse(
+          minScale: 1.0,
+          maxScale: 1.05,
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.25),
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.white.withValues(alpha: 0.3),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
                 ),
-                child: Icon(
-                  _currentEvent['icon'],
-                  color: Colors.white,
-                  size: 24,
-                ),
-              ),
-            );
-          },
-        )
-            : Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.25),
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Icon(
-            _currentEvent['icon'],
-            color: Colors.white,
-            size: 24,
+              ],
+            ),
+            child: Icon(
+              _currentEvent['icon'],
+              color: Colors.white,
+              size: 24,
+            ),
           ),
         ),
         const SizedBox(width: 16),
