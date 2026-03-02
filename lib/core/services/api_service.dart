@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
@@ -238,6 +239,33 @@ class ApiService {
     return <String, dynamic>{};
   }
 
+  String? _loadAccessToken() {
+    if (!Hive.isBoxOpen('auth_tokens')) return null;
+    final box = Hive.box('auth_tokens');
+    final token = box.get('auth_access_token')?.toString();
+    if (token == null || token.trim().isEmpty) return null;
+    return token.trim();
+  }
+
+  Map<String, String> _buildJsonHeaders([Map<String, String>? headers]) {
+    final resolved = <String, String>{
+      'Content-Type': 'application/json',
+      if (headers != null) ...headers,
+    };
+
+    final hasAuthorization = resolved.keys
+        .any((key) => key.toLowerCase() == 'authorization');
+
+    if (!hasAuthorization) {
+      final accessToken = _loadAccessToken();
+      if (accessToken != null && accessToken.isNotEmpty) {
+        resolved['Authorization'] = 'Bearer $accessToken';
+      }
+    }
+
+    return resolved;
+  }
+
   /// Loads mock data from assets/json
   Future<dynamic> getMockData(String filename) async {
     final String jsonString = await rootBundle.loadString('assets/data/analytics/$filename');
@@ -249,14 +277,12 @@ class ApiService {
   /// Handles errors using the unified [_handleRequest] wrapper.
   /// FIX: Returns a type-safe Map for predictable JSON responses.
   Future<Map<String, dynamic>> post(String path,
-      {required Map<String, dynamic> body}) async {
+      {required Map<String, dynamic> body, Map<String, String>? headers}) async {
     return _handleRequest(() async {
       final response = await _dio.post(
         path,
         data: body,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-        }),
+        options: Options(headers: _buildJsonHeaders(headers)),
       );
       // Ensure the response data is a map, otherwise return an empty map.
       return _asJsonMap(response.data);
@@ -269,25 +295,18 @@ class ApiService {
     return _handleRequest(() async {
       final response = await _dio.get(
         path,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-          if (headers != null) ...headers,
-        }),
+        options: Options(headers: _buildJsonHeaders(headers)),
       );
-      return response.data is Map<String, dynamic>
-          ? response.data as Map<String, dynamic>
-          : {};
+      return _asJsonMap(response.data);
     });
   }
 
   /// **🔹 Generic DELETE Request**
-  Future<Map<String, dynamic>> delete(String path) async {
+  Future<Map<String, dynamic>> delete(String path, {Map<String, String>? headers}) async {
     return _handleRequest(() async {
       final response = await _dio.delete(
         path,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-        }),
+        options: Options(headers: _buildJsonHeaders(headers)),
       );
       return _asJsonMap(response.data);
     });
@@ -295,14 +314,12 @@ class ApiService {
 
   /// **🔹 Generic PATCH Request**
   Future<Map<String, dynamic>> patch(String path,
-      {required Map<String, dynamic> body}) async {
+      {required Map<String, dynamic> body, Map<String, String>? headers}) async {
     return _handleRequest(() async {
       final response = await _dio.patch(
         path,
         data: body,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-        }),
+        options: Options(headers: _buildJsonHeaders(headers)),
       );
       return _asJsonMap(response.data);
     });
@@ -310,14 +327,12 @@ class ApiService {
 
   /// **🔹 Generic PUT Request**
   Future<Map<String, dynamic>> put(String path,
-      {required Map<String, dynamic> body}) async {
+      {required Map<String, dynamic> body, Map<String, String>? headers}) async {
     return _handleRequest(() async {
       final response = await _dio.put(
         path,
         data: body,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-        }),
+        options: Options(headers: _buildJsonHeaders(headers)),
       );
       return _asJsonMap(response.data);
     });
