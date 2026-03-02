@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:trivia_tycoon/core/animations/animation_manager.dart';
 import '../../../game/models/drawer_menu_data.dart';
-import '../../../game/utils/drawer_animations.dart';
 
 /// Gradient-styled menu item with animation
 class GradientMenuItemWidget extends StatelessWidget {
@@ -18,7 +18,7 @@ class GradientMenuItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DrawerAnimations.slideFromLeft(
+    return AnimationManager.slideFromLeft(
       animation: animationController,
       child: Container(
         margin: const EdgeInsets.only(bottom: 8),
