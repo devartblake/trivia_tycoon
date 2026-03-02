@@ -270,21 +270,6 @@ class ApiService {
           if (headers != null) ...headers,
         }),
       );
-      return _asJsonMap(response.data);
-    });
-  }
-
-  /// **🔹 Generic GET Request (JSON map response)**
-  Future<Map<String, dynamic>> get(String path,
-      {Map<String, String>? headers}) async {
-    return _handleRequest(() async {
-      final response = await _dio.get(
-        path,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-          if (headers != null) ...headers,
-        }),
-      );
       return response.data is Map<String, dynamic>
           ? response.data as Map<String, dynamic>
           : {};

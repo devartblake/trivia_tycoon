@@ -23,7 +23,7 @@ class AppLifecycleManager with WidgetsBindingObserver {
   Timer? _autoSaveTimer;
 
   // Minimum time between auto-saves (prevent too frequent saves)
-  static const Duration _minSaveInterval = Duration(seconds: 10);
+  static const Duration _minSaveInterval = Duration(seconds: 30);
 
   AppLifecycleManager({
     this.onAppPaused,
