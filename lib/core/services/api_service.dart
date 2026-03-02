@@ -174,13 +174,15 @@ class ApiService {
         throw Exception("API Timeout");
       }
 
+      final normalizedMessage = _extractErrorMessageFromResponse(e);
+
       // Log other Dio errors normally
       if (ConfigService.enableLogging) {
-        debugPrint("API Error [Dio]: ${e.message}");
+        debugPrint("API Error [Dio]: $normalizedMessage");
       }
 
       throw ApiRequestException(
-        e.message ?? 'Request failed',
+        normalizedMessage,
         statusCode: e.response?.statusCode,
         path: e.requestOptions.path,
       );
@@ -191,6 +193,33 @@ class ApiService {
       if (e is ApiRequestException) rethrow;
       throw Exception("Unexpected Error: $e");
     }
+  }
+
+  String _extractErrorMessageFromResponse(DioException e) {
+    final responseData = e.response?.data;
+
+    if (responseData is Map<String, dynamic>) {
+      final nestedError = responseData['error'];
+      if (nestedError is Map<String, dynamic>) {
+        final nestedMessage = nestedError['message'];
+        if (nestedMessage is String && nestedMessage.trim().isNotEmpty) {
+          return nestedMessage.trim();
+        }
+      }
+
+      for (final key in const ['message', 'error', 'detail', 'title']) {
+        final value = responseData[key];
+        if (value is String && value.trim().isNotEmpty) {
+          return value.trim();
+        }
+      }
+    }
+
+    if (responseData is String && responseData.trim().isNotEmpty) {
+      return responseData.trim();
+    }
+
+    return e.message ?? 'Request failed';
   }
 
   /// Loads mock data from assets/json
