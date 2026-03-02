@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../game/models/admin_user_model.dart';
+import '../../game/providers/riverpod_providers.dart';
 import '../../screens/widgets/custom_alert_dialog.dart';
 
-class AdminUserDetailScreen extends StatefulWidget {
+class AdminUserDetailScreen extends ConsumerStatefulWidget {
   final String userId;
 
   const AdminUserDetailScreen({
@@ -12,17 +14,51 @@ class AdminUserDetailScreen extends StatefulWidget {
   });
 
   @override
-  State<AdminUserDetailScreen> createState() => _AdminUserDetailScreenState();
+  ConsumerState<AdminUserDetailScreen> createState() => _AdminUserDetailScreenState();
 }
 
-class _AdminUserDetailScreenState extends State<AdminUserDetailScreen>
+class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  AdminUserModel? _user;
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
+    _loadUser();
+  }
+
+  Future<void> _loadUser() async {
+    setState(() => _isLoading = true);
+    try {
+      final serviceManager = ref.read(serviceManagerProvider);
+      final response = await serviceManager.apiService.get('/admin/users/${widget.userId}');
+      _user = AdminUserModel.fromJson(response);
+    } catch (_) {
+      _user = await _loadUserFromListEndpoint(widget.userId) ?? _getUserById(widget.userId);
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  Future<AdminUserModel?> _loadUserFromListEndpoint(String userId) async {
+    try {
+      final serviceManager = ref.read(serviceManagerProvider);
+      final response = await serviceManager.apiService.get('/admin/users');
+      final items = response['items'];
+      if (items is! List) return null;
+      for (final item in items.whereType<Map>()) {
+        final map = Map<String, dynamic>.from(item);
+        if (map['id']?.toString() == userId) {
+          return AdminUserModel.fromJson(map);
+        }
+      }
+    } catch (_) {
+      return null;
+    }
+    return null;
   }
 
   @override
@@ -33,7 +69,11 @@ class _AdminUserDetailScreenState extends State<AdminUserDetailScreen>
 
   @override
   Widget build(BuildContext context) {
-    final user = _getUserById(widget.userId);
+    final user = _user;
+
+    if (_isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
 
     if (user == null) {
       return Scaffold(
@@ -1179,7 +1219,7 @@ class _AdminUserDetailScreenState extends State<AdminUserDetailScreen>
     }
   }
 
-// Mock data getter
+// Fallback sample user lookup for offline/unsupported backend environments.
   AdminUserModel? _getUserById(String userId) {
     final users = [
       AdminUserModel(
@@ -1210,7 +1250,7 @@ class _AdminUserDetailScreenState extends State<AdminUserDetailScreen>
         winRate: 0.54,
         isVerified: true,
       ),
-// Add more mock users...
+// Additional fallback users can be added here if needed.
     ];
     try {
       return users.firstWhere((user) => user.id == userId);
@@ -1221,17 +1261,65 @@ class _AdminUserDetailScreenState extends State<AdminUserDetailScreen>
 
 // Action methods
   void _showEditDialog(AdminUserModel user) {
+    UserRole selectedRole = user.role;
+    bool verified = user.isVerified;
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Edit User'),
-        content: const Text('Edit user functionality coming soon'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: Text('Edit ${user.username}'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              DropdownButtonFormField<UserRole>(
+                value: selectedRole,
+                items: UserRole.values
+                    .map((r) => DropdownMenuItem(value: r, child: Text(r.name)))
+                    .toList(),
+                onChanged: (v) {
+                  if (v != null) setDialogState(() => selectedRole = v);
+                },
+                decoration: const InputDecoration(labelText: 'Role'),
+              ),
+              const SizedBox(height: 12),
+              SwitchListTile(
+                value: verified,
+                title: const Text('Verified'),
+                onChanged: (v) => setDialogState(() => verified = v),
+              ),
+            ],
           ),
-        ],
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                try {
+                  final serviceManager = ref.read(serviceManagerProvider);
+                  await serviceManager.apiService.patch('/admin/users/${user.id}', body: {
+                    'role': selectedRole.name,
+                    'isVerified': verified,
+                  });
+                  if (!mounted) return;
+                  Navigator.pop(context);
+                  await _loadUser();
+                  if (!mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('User updated')),
+                  );
+                } catch (e) {
+                  if (!mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Failed to update user: $e')),
+                  );
+                }
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1246,17 +1334,29 @@ class _AdminUserDetailScreenState extends State<AdminUserDetailScreen>
       type: user.isBanned ? AlertType.success : AlertType.warning,
       confirmText: user.isBanned ? 'Unban User' : 'Ban User',
       cancelText: 'Cancel',
-      onConfirm: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              user.isBanned
-                  ? '${user.username} has been unbanned'
-                  : '${user.username} has been banned',
+      onConfirm: () async {
+        try {
+          final serviceManager = ref.read(serviceManagerProvider);
+          if (user.isBanned) {
+            await serviceManager.apiService.post('/admin/users/${user.id}/unban', body: {});
+          } else {
+            await serviceManager.apiService.post('/admin/users/${user.id}/ban',
+                body: {'reason': 'Admin action'});
+          }
+          await _loadUser();
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(user.isBanned ? '${user.username} has been unbanned' : '${user.username} has been banned'),
+              behavior: SnackBarBehavior.floating,
             ),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
+          );
+        } catch (e) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to update ban state: $e')),
+          );
+        }
       },
     );
   }
@@ -1269,15 +1369,25 @@ class _AdminUserDetailScreenState extends State<AdminUserDetailScreen>
       type: AlertType.delete,
       confirmText: 'Delete User',
       cancelText: 'Cancel',
-      onConfirm: () {
-        context.go('/admin/users');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${user.username} has been deleted'),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: const Color(0xFFEF4444),
-          ),
-        );
+      onConfirm: () async {
+        try {
+          final serviceManager = ref.read(serviceManagerProvider);
+          await serviceManager.apiService.delete('/admin/users/${user.id}');
+          if (!mounted) return;
+          context.go('/admin/users');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('${user.username} has been deleted'),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: const Color(0xFFEF4444),
+            ),
+          );
+        } catch (e) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to delete user: $e')),
+          );
+        }
       },
     );
   }
@@ -1292,12 +1402,46 @@ class _AdminUserDetailScreenState extends State<AdminUserDetailScreen>
   }
 
   void _viewActivityLog(AdminUserModel user) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Activity log functionality coming soon'),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+    _loadActivityLog(user);
+  }
+
+  Future<void> _loadActivityLog(AdminUserModel user) async {
+    try {
+      final serviceManager = ref.read(serviceManagerProvider);
+      final response = await serviceManager.apiService.get('/admin/users/${user.id}/activity');
+      final items = response['items'];
+      final logs = items is List
+          ? items.whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList()
+          : <Map<String, dynamic>>[];
+      if (!mounted) return;
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Activity Log'),
+          content: SizedBox(
+            width: 500,
+            child: logs.isEmpty
+                ? const Text('No activity records found.')
+                : ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: logs.length,
+                    itemBuilder: (_, i) => ListTile(
+                      dense: true,
+                      title: Text(logs[i]['type']?.toString() ?? 'UNKNOWN'),
+                      subtitle: Text(logs[i]['description']?.toString() ?? '-'),
+                      trailing: Text(logs[i]['createdAt']?.toString() ?? ''),
+                    ),
+                  ),
+          ),
+          actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Close'))],
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load activity log: $e')),
+      );
+    }
   }
 
 }
