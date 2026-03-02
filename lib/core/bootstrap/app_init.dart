@@ -13,9 +13,7 @@ import '../../game/providers/multi_profile_providers.dart';
 import '../../game/services/referral_storage_service.dart';
 import '../env.dart';
 import '../networking/ws_client.dart';
-import '../networking/http_client.dart';
-import '../networking/tycoon_api_client.dart';
-import '../services/auth_http_client.dart';
+import '../services/app_lifecycle_manager.dart';
 import '../services/auth_api_client.dart';
 import '../services/auth_service.dart';
 import '../services/auth_token_store.dart';
@@ -26,6 +24,7 @@ import '../helpers/educational_stats_initializer.dart';
 import '../services/presence/rich_presence_service.dart';
 import '../services/settings/app_settings.dart';
 import '../services/settings/multi_profile_service.dart';
+import '../services/state_persistence_service.dart';
 
 /// App bootstrapper
 /// - Loads env
@@ -40,9 +39,19 @@ class AppInit {
   static WsClient? get wsClient => _wsClient;
   static bool _wsConnected = false;
 
-  // ✅ Store tokenStore for WebSocket
+  // Store tokenStore for WebSocket
   static AuthTokenStore? _tokenStore;
   static AuthTokenStore? get tokenStore => _tokenStore;
+
+  // Graceful shutdown services
+  static AppLifecycleManager? _lifecycleManager;
+  static AppLifecycleManager? get lifecycleManager => _lifecycleManager;
+
+  static StatePersistenceService? _persistenceService;
+  static StatePersistenceService? get persistenceService => _persistenceService;
+
+  // Store ServiceManager for lifecycle callbacks
+  static ServiceManager? _serviceManager;
 
   // --- CRITICAL INITIALIZATION (Required for first frame) ---
   static Future<(ServiceManager, ThemeNotifier)> initialize({ProviderContainer? container}) async {
@@ -61,6 +70,11 @@ class AppInit {
     final authTokenBox = await Hive.openBox('auth_tokens'); // ← NEW: Dedicated box for auth tokens
     final settingsBox = await Hive.openBox('settings');
     final secretsBox = await Hive.openBox('secrets');
+
+    // Initialize persistence service early
+    _persistenceService = StatePersistenceService();
+    await _persistenceService!.initialize();
+    debugPrint(' StatePersistence ready');
 
     // 2. Network & Backend
     // Create SecureStorage instance (don't cast the box!)
@@ -91,6 +105,31 @@ class AppInit {
 
     // 3. Service Manager & Core Logic
     final serviceManager = await ServiceManager.initialize();
+    _serviceManager = serviceManager; // Store for lifecycle callbacks
+
+    // ✅ NEW - Initialize lifecycle manager with save callbacks
+    _lifecycleManager = AppLifecycleManager(
+      onAppPaused: () {
+        debugPrint('[Lifecycle] 📱 App PAUSED - saving state...');
+      },
+      onAppResumed: () {
+        debugPrint('[Lifecycle] 📱 App RESUMED');
+      },
+      onAppDetached: () {
+        debugPrint('[Lifecycle] 📱 App DETACHED - final save...');
+      },
+      onAppInactive: () {
+        debugPrint('[Lifecycle] 📱 App INACTIVE - quick save...');
+      },
+      onSaveState: () async {
+        await _saveAppState();
+      },
+      onClearTempData: () async {
+        await _persistenceService?.clearTemporaryData();
+      },
+    );
+    _lifecycleManager!.initialize();
+    debugPrint('✅ AppLifecycleManager initialized');
 
     // Check session & load profile using safe casting
     await _initializeUserSession(serviceManager, container);
@@ -98,6 +137,125 @@ class AppInit {
 
     debugPrint('[AppInit] Critical initialization complete');
     return (serviceManager, serviceManager.themeNotifier);
+  }
+
+  // Save all app state
+  static Future<void> _saveAppState() async {
+    if (_serviceManager == null || _persistenceService == null) {
+      debugPrint('[AppInit] ⚠️ Services not ready, skipping save');
+      return;
+    }
+
+    try {
+      // 1. Gather game state (if in active game)
+      final gameState = await _getCurrentGameState();
+
+      // 2. Gather user session
+      final userSession = await _getCurrentUserSession();
+
+      // 3. Gather WebSocket state
+      final wsState = await _getCurrentWebSocketState();
+
+      // 4. Gather pending actions
+      final pendingActions = await _getPendingActions();
+
+      // 5. Save everything
+      await _persistenceService!.saveAll(
+        gameState: gameState,
+        userSession: userSession,
+        wsState: wsState,
+        pendingActions: pendingActions,
+      );
+
+      debugPrint('[AppInit] ✅ App state saved successfully');
+    } catch (e, stack) {
+      debugPrint('[AppInit] ❌ App state save failed: $e');
+      debugPrint('[AppInit] Stack: $stack');
+    }
+  }
+
+  // Get current game state
+  static Future<Map<String, dynamic>?> _getCurrentGameState() async {
+    try {
+      // TODO: Get actual game state from your game providers/services
+      // For now, return null if no active game
+
+      // Example if you're in a quiz:
+      // final quizBox = await Hive.openBox('current_quiz');
+      // if (quizBox.isEmpty) return null;
+      // return {
+      //   'quiz_id': quizBox.get('quiz_id'),
+      //   'current_question': quizBox.get('current_question'),
+      //   'score': quizBox.get('score'),
+      //   'lives': quizBox.get('lives'),
+      //   'answers': quizBox.get('answers'),
+      //   'time_started': DateTime.now().toIso8601String(),
+      // };
+
+      return null; // No active game state to save
+    } catch (e) {
+      debugPrint('[AppInit] ⚠️ Get game state error: $e');
+      return null;
+    }
+  }
+
+  // Get current user session
+  static Future<Map<String, dynamic>?> _getCurrentUserSession() async {
+    try {
+      if (_serviceManager == null) return null;
+
+      final isLoggedIn = await _serviceManager!.authService.isLoggedIn();
+      if (!isLoggedIn) return null;
+
+      // Get auth tokens
+      final session = _tokenStore?.load();
+
+      // Get user profile
+      final rawProfile = await _serviceManager!.playerProfileService.getProfile();
+      final profile = rawProfile != null ? Map<String, dynamic>.from(rawProfile as Map) : {};
+
+      return {
+        'is_logged_in': isLoggedIn,
+        'user_id': profile['id'],
+        'user_name': profile['name'],
+        'has_tokens': session?.hasTokens ?? false,
+        'session_start': DateTime.now().toIso8601String(),
+      };
+    } catch (e) {
+      debugPrint('[AppInit] ⚠️ Get user session error: $e');
+      return null;
+    }
+  }
+
+  // Get WebSocket state
+  static Future<Map<String, dynamic>?> _getCurrentWebSocketState() async {
+    try {
+      if (_wsClient == null) return null;
+
+      return {
+        'connected': _wsConnected,
+        'url': EnvConfig.apiWsBaseUrl,
+        'last_connection': DateTime.now().toIso8601String(),
+      };
+    } catch (e) {
+      debugPrint('[AppInit] ⚠️ Get WebSocket state error: $e');
+      return null;
+    }
+  }
+
+  // Get pending actions (failed requests)
+  static Future<List<Map<String, dynamic>>> _getPendingActions() async {
+    try {
+      // TODO: Get from your queue/retry system
+      // Example:
+      // final pendingBox = await Hive.openBox('pending_requests');
+      // return pendingBox.values.toList();
+
+      return []; // No pending actions
+    } catch (e) {
+      debugPrint('[AppInit] ⚠️ Get pending actions error: $e');
+      return [];
+    }
   }
 
   /// Initialize WebSocket connection
@@ -131,6 +289,9 @@ class AppInit {
         onStateChange: (state) {
           debugPrint('[WS] State: $state');
           _wsConnected = (state == WsState.connected);
+
+          // Save WebSocket state on connection change
+          _saveAppState();
         },
         onError: (error) {
           debugPrint('[WS] Error: $error');
@@ -153,6 +314,9 @@ class AppInit {
       await _wsClient!.disconnect();
       _wsClient = null;
       _wsConnected = false;
+
+      // Save state after disconnect
+      await _saveAppState();
     }
   }
 
@@ -301,5 +465,32 @@ class AppInit {
   static Future<void> _initializeReferralStorage() async {
     final referralStorage = ReferralStorageService();
     await referralStorage.initialize();
+  }
+
+  // Force save (call before critical operations)
+  static Future<void> forceSave() async {
+    if (_lifecycleManager != null) {
+      await _lifecycleManager!.forceSave();
+    }
+  }
+
+  // Cleanup on app shutdown
+  static Future<void> dispose() async {
+    try {
+      debugPrint('[AppInit] 👋 Disposing services...');
+
+      // Disconnect WebSocket
+      await disconnectWebSocket();
+
+      // Final save
+      await _saveAppState();
+
+      // Dispose lifecycle manager
+      _lifecycleManager?.dispose();
+
+      debugPrint('[AppInit] ✅ Cleanup complete');
+    } catch (e) {
+      debugPrint('[AppInit] ❌ Dispose error: $e');
+    }
   }
 }

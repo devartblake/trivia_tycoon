@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/animations/animation_manager.dart';
 import '../../core/services/presence/typing_indicator_service.dart';
 import '../../screens/messages/widgets/safe_text.dart';
 
@@ -48,13 +49,7 @@ class _TypingIndicatorWidgetState extends State<TypingIndicatorWidget>
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _fadeController,
-      curve: Curves.easeInOut,
-    ));
+    _fadeAnimation = AnimationManager.fadeIn(_fadeController);
 
     _slideAnimation = Tween<double>(
       begin: -10.0,
@@ -154,9 +149,8 @@ class _TypingIndicatorWidgetState extends State<TypingIndicatorWidget>
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(3, (index) {
-              final delay = index * 0.2;
-              final animationValue = (_dotsController.value + delay) % 1.0;
-              final opacity = _calculateDotOpacity(animationValue);
+              final dotOpacities = AnimationManager.typingDots(_dotsController.value);
+              final opacity = dotOpacities[index];
 
               return Container(
                 width: 4,
@@ -174,15 +168,7 @@ class _TypingIndicatorWidgetState extends State<TypingIndicatorWidget>
     );
   }
 
-  double _calculateDotOpacity(double animationValue) {
-    if (animationValue < 0.4) {
-      return 0.3 + (animationValue / 0.4) * 0.7; // Fade in
-    } else if (animationValue < 0.6) {
-      return 1.0; // Full opacity
-    } else {
-      return 1.0 - ((animationValue - 0.6) / 0.4) * 0.7; // Fade out
-    }
-  }
+
 }
 
 /// Compact typing indicator for message tiles
