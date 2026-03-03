@@ -23,6 +23,8 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
   Map<String, dynamic>? _queueStatus;
   bool _isLoading = true;
   bool _isUploading = false;
+  DateTime? _uploadCooldownUntil;
+  final Map<dynamic, DateTime> _reprocessCooldownUntil = {};
   final Map<dynamic, Map<String, dynamic>> _serverOutcomeByKey = {};
   final Set<dynamic> _selectedEvents = {};
 
@@ -34,6 +36,32 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
   void initState() {
     super.initState();
     _loadEventQueue();
+  }
+
+
+  int _secondsRemaining(DateTime? until) {
+    if (until == null) return 0;
+    final diff = until.difference(DateTime.now());
+    return diff.isNegative ? 0 : diff.inSeconds + 1;
+  }
+
+  bool get _isUploadCoolingDown => _secondsRemaining(_uploadCooldownUntil) > 0;
+
+  bool _isReprocessCoolingDown(dynamic key) {
+    return _secondsRemaining(_reprocessCooldownUntil[key]) > 0;
+  }
+
+  void _startCooldownTimer() {
+    Future<void>.delayed(const Duration(seconds: 1), () {
+      if (!mounted) return;
+      final hasUploadCooldown = _isUploadCoolingDown;
+      final hasReprocessCooldown = _reprocessCooldownUntil.entries
+          .any((entry) => _secondsRemaining(entry.value) > 0);
+      if (hasUploadCooldown || hasReprocessCooldown) {
+        setState(() {});
+        _startCooldownTimer();
+      }
+    });
   }
 
   Future<void> _loadEventQueue() async {
@@ -258,6 +286,8 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
     } on ApiRequestException catch (e) {
       final retryIn = e.retryAfter?.inSeconds;
       if (e.errorCode == 'RATE_LIMITED' && retryIn != null) {
+        setState(() => _uploadCooldownUntil = DateTime.now().add(Duration(seconds: retryIn)));
+        _startCooldownTimer();
         _showError('Upload rate-limited. Try again in ${retryIn}s.');
         return;
       }
@@ -327,6 +357,8 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
     } on ApiRequestException catch (e) {
       final retryIn = e.retryAfter?.inSeconds;
       if (e.errorCode == 'RATE_LIMITED' && retryIn != null) {
+        setState(() => _reprocessCooldownUntil[queueKey] = DateTime.now().add(Duration(seconds: retryIn)));
+        _startCooldownTimer();
         _showError('Reprocess rate-limited. Retry in ${retryIn}s.');
         return;
       }
@@ -563,10 +595,12 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
             _exportQueueToFile,
           ),
           _buildActionChip(
-            _isUploading ? 'Uploading...' : 'Export Server',
+            _isUploadCoolingDown
+                ? 'Retry in ${_secondsRemaining(_uploadCooldownUntil)}s'
+                : (_isUploading ? 'Uploading...' : 'Export Server'),
             Icons.upload_file_rounded,
             Colors.cyan,
-            _exportToServer,
+            (_isUploading || _isUploadCoolingDown) ? () {} : _exportToServer,
           ),
           _buildActionChip(
             'Sync Now',
@@ -824,10 +858,12 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
                             IconButton(
                               icon: const Icon(Icons.refresh_rounded),
                               color: Colors.orange,
-                              onPressed: _canReprocess(entry.key, event)
+                              onPressed: _canReprocess(entry.key, event) && !_isReprocessCoolingDown(entry.key)
                                   ? () => _reprocessEvent(entry.key, event)
                                   : null,
-                              tooltip: 'Reprocess failed event',
+                              tooltip: _isReprocessCoolingDown(entry.key)
+                                  ? 'Retry in ${_secondsRemaining(_reprocessCooldownUntil[entry.key])}s'
+                                  : 'Reprocess failed event',
                             ),
                             IconButton(
                               icon: const Icon(Icons.delete_outline_rounded),
