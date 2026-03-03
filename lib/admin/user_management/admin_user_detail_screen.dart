@@ -189,6 +189,16 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
               ),
               onTap: () => _viewActivityLog(user),
             ),
+            PopupMenuItem(
+              child: const Row(
+                children: [
+                  Icon(Icons.manage_search, color: Color(0xFF4F46E5), size: 20),
+                  SizedBox(width: 12),
+                  Text('View Audit Log'),
+                ],
+              ),
+              onTap: () => _viewAuditLog(user),
+            ),
             const PopupMenuDivider(),
             PopupMenuItem(
               child: const Row(
@@ -1400,6 +1410,11 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
         behavior: SnackBarBehavior.floating,
       ),
     );
+  }
+
+
+  void _viewAuditLog(AdminUserModel user) {
+    context.go('/admin/audit?userId=${Uri.encodeComponent(user.id)}');
   }
 
   void _viewActivityLog(AdminUserModel user) {

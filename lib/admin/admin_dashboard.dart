@@ -4,6 +4,7 @@ import 'package:trivia_tycoon/admin/questions/question_list_screen.dart';
 import 'package:trivia_tycoon/admin/splash_screen/splash_selector_screen.dart';
 import '../screens/widgets/slimy_card_preview_screen.dart';
 import 'analytics/analytics_screen.dart';
+import 'audit/admin_audit_log_screen.dart';
 import 'config/config_settings_screen.dart';
 import 'encryption/encryption_manager_screen.dart';
 import 'events_management/admin_event_queue_screen.dart';
@@ -416,6 +417,17 @@ class AdminDashboardScreen extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const AdminEventQueueScreen()),
+            ),
+      ),
+      _AdminAction(
+        title: 'Audit Log',
+        subtitle: 'User/question mutations and reprocess actions',
+        icon: Icons.history_rounded,
+        color: Colors.deepPurple,
+        onTap: () =>
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const AdminAuditLogScreen()),
             ),
       ),
       _AdminAction(
