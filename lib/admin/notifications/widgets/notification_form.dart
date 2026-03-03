@@ -123,6 +123,7 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
       scheduledAt: _scheduleAt!,
       payload: _parsePayload(),
       repeats: _repeats,
+      weeklyWeekday: _weeklyWeekday,
     );
     if (mounted) {
       final err = ref.read(notificationAdminActionsProvider).error;
@@ -140,6 +141,7 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
         setState(() {
           _scheduleAt = null;
           _repeats = false;
+          _weeklyWeekday = null;
         });
       }
     }
@@ -759,41 +761,51 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
             children: [
               Checkbox(
                 value: _repeats,
-                onChanged: (v) => setState(() => _repeats = v ?? false),
+                onChanged: (v) => setState(() {
+                  _repeats = v ?? false;
+                  if (!_repeats) {
+                    _weeklyWeekday = null;
+                  }
+                }),
                 activeColor: const Color(0xFF3B82F6),
               ),
               const Text(
-                'Repeat daily at this time',
+                'Repeat at this time',
                 style: TextStyle(fontSize: 14, color: Color(0xFF1F2937)),
               ),
             ],
           ),
           const SizedBox(height: 8),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: const Color(0xFFE5E7EB)),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: DropdownButton<int?>(
-              value: _weeklyWeekday,
-              hint: const Text('Weekly (select weekday)', style: TextStyle(fontSize: 13)),
-              isExpanded: true,
-              underline: const SizedBox.shrink(),
-              items: [
-                const DropdownMenuItem(value: null, child: Text('No weekly repeat')),
-                ...List.generate(7, (i) {
-                  final val = i + 1;
-                  final days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-                  return DropdownMenuItem(
-                    value: val,
-                    child: Text(days[i], style: const TextStyle(fontSize: 13)),
-                  );
-                }),
-              ],
-              onChanged: (v) => setState(() => _weeklyWeekday = v),
-              icon: const Icon(Icons.arrow_drop_down, color: Color(0xFF6366F1)),
+          Opacity(
+            opacity: _repeats ? 1 : 0.6,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: const Color(0xFFE5E7EB)),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: DropdownButton<int?>(
+                value: _weeklyWeekday,
+                hint: const Text('Weekly (select weekday)', style: TextStyle(fontSize: 13)),
+                isExpanded: true,
+                underline: const SizedBox.shrink(),
+                items: [
+                  const DropdownMenuItem(value: null, child: Text('No weekly repeat')),
+                  ...List.generate(7, (i) {
+                    final val = i + 1;
+                    final days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+                    return DropdownMenuItem(
+                      value: val,
+                      child: Text(days[i], style: const TextStyle(fontSize: 13)),
+                    );
+                  }),
+                ],
+                onChanged: _repeats
+                    ? (v) => setState(() => _weeklyWeekday = v)
+                    : null,
+                icon: const Icon(Icons.arrow_drop_down, color: Color(0xFF6366F1)),
+              ),
             ),
           ),
         ],

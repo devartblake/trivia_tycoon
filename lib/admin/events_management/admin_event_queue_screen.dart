@@ -87,7 +87,7 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
           } else {
             return null;
           }
-        } catch (ex) {
+        } catch (_) {
           return null;
         }
       }).whereType<MapEntry<dynamic, Map<String, dynamic>>>().toList();

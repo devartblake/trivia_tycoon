@@ -109,6 +109,7 @@ class NotificationAdminActions extends AutoDisposeAsyncNotifier<void> {
     required DateTime scheduledAt,
     Map<String, String>? payload,
     bool repeats = false,
+    int? weeklyWeekday,
   }) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
@@ -122,21 +123,13 @@ class NotificationAdminActions extends AutoDisposeAsyncNotifier<void> {
           'body': body,
           'scheduledAt': scheduledAt.toUtc().toIso8601String(),
           'repeats': repeats,
+          if (repeats && weeklyWeekday != null) 'weekday': weeklyWeekday,
           if (payload != null) 'payload': payload,
         },
       );
 
-      await NotificationService().scheduleAt(
-        id: id,
-        channelKey: channelKey,
-        title: title,
-        body: body,
-        scheduledAt: scheduledAt,
-        payload: payload,
-        precise: !repeats,
-      );
       if (repeats) {
-        // Re-schedule using repeats by components (portable, cron-like)
+        // Schedule repeat-only notifications without creating an extra one-off schedule.
         await AwesomeNotifications().createNotification(
           content: NotificationContent(
             id: id,
@@ -153,10 +146,20 @@ class NotificationAdminActions extends AutoDisposeAsyncNotifier<void> {
             minute: scheduledAt.minute,
             second: 0,
             millisecond: 0,
-            weekday: null, // set 1-7 for weekly if desired
+            weekday: weeklyWeekday,
             repeats: true,
             allowWhileIdle: true,
           ),
+        );
+      } else {
+        await NotificationService().scheduleAt(
+          id: id,
+          channelKey: channelKey,
+          title: title,
+          body: body,
+          scheduledAt: scheduledAt,
+          payload: payload,
+          precise: true,
         );
       }
       ref.invalidate(scheduledProvider);
