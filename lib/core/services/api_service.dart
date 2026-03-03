@@ -302,16 +302,14 @@ class ApiService {
         path.contains('/party/') && path.endsWith('/enqueue');
   }
 
-  String _loadAccessToken() {
-    if (!Hive.isBoxOpen('auth_tokens')) return '';
-    final box = Hive.box('auth_tokens');
-    return (box.get('auth_access_token', defaultValue: '') as String?) ?? '';
-  }
+  String _loadAccessToken() => _loadTokenByKey('auth_access_token');
 
-  String _loadRefreshToken() {
+  String _loadRefreshToken() => _loadTokenByKey('auth_refresh_token');
+
+  String _loadTokenByKey(String key) {
     if (!Hive.isBoxOpen('auth_tokens')) return '';
     final box = Hive.box('auth_tokens');
-    return (box.get('auth_refresh_token', defaultValue: '') as String?) ?? '';
+    return (box.get(key, defaultValue: '') as String?) ?? '';
   }
 
   bool _shouldAttemptRefresh(DioException error, ApiErrorEnvelope? envelope) {
