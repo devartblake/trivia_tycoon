@@ -49,9 +49,9 @@ class _AdminAuditLogScreenState extends ConsumerState<AdminAuditLogScreen> {
       final serviceManager = ref.read(serviceManagerProvider);
       final response = await serviceManager.apiService.get(
         '/admin/audit',
-        headers: {
+        queryParameters: {
           if (widget.userId != null && widget.userId!.isNotEmpty)
-            'x-user-id': widget.userId!,
+            'userId': widget.userId!,
         },
       );
 
@@ -83,13 +83,20 @@ class _AdminAuditLogScreenState extends ConsumerState<AdminAuditLogScreen> {
     final query = _actionFilterController.text.trim().toLowerCase();
     return _entries.where((entry) {
       final action = entry['action']?.toString().toLowerCase() ?? '';
-      final entity = entry['entityType']?.toString().toLowerCase() ?? '';
+      final entity = _normalizedEntity(entry);
 
       final actionMatches = query.isEmpty || action.contains(query);
       final entityMatches = _entityFilter == null || _entityFilter == entity;
 
       return actionMatches && entityMatches;
     }).toList();
+  }
+
+
+  String _normalizedEntity(Map<String, dynamic> entry) {
+    return (entry['entityType'] ?? entry['entity_type'] ?? '')
+        .toString()
+        .toLowerCase();
   }
 
   @override
@@ -162,7 +169,7 @@ class _AdminAuditLogScreenState extends ConsumerState<AdminAuditLogScreen> {
                     separatorBuilder: (_, __) => const Divider(height: 1),
                     itemBuilder: (_, i) {
                       final entry = rows[i];
-                      final createdAtRaw = entry['createdAt']?.toString();
+                      final createdAtRaw = (entry['createdAt'] ?? entry['created_at'])?.toString();
                       DateTime? createdAt;
                       if (createdAtRaw != null && createdAtRaw.isNotEmpty) {
                         createdAt = DateTime.tryParse(createdAtRaw)?.toUtc();
@@ -173,8 +180,8 @@ class _AdminAuditLogScreenState extends ConsumerState<AdminAuditLogScreen> {
                         leading: const Icon(Icons.history_toggle_off),
                         title: Text(entry['action']?.toString() ?? 'unknown.action'),
                         subtitle: Text(
-                          'entity=${entry['entityType'] ?? '-'} • actor=${entry['actorUserId'] ?? '-'}\n'
-                          'target=${entry['targetId'] ?? '-'}',
+                          'entity=${entry['entityType'] ?? entry['entity_type'] ?? '-'} • actor=${entry['actorUserId'] ?? entry['actor_user_id'] ?? '-'}\n'
+                          'target=${entry['targetId'] ?? entry['target_id'] ?? '-'}',
                         ),
                         trailing: Text(
                           localCreatedAt == null

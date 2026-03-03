@@ -281,7 +281,7 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
 
     for (final item in outcomesRaw.whereType<Map>()) {
       final normalized = Map<String, dynamic>.from(item);
-      final dynamic key = normalized['queueKey'] ?? normalized['eventKey'] ?? normalized['id'];
+      final dynamic key = normalized['queueKey'] ?? normalized['queue_key'] ?? normalized['eventKey'] ?? normalized['event_key'] ?? normalized['id'];
       if (key != null) {
         _serverOutcomeByKey[key] = normalized;
       }
@@ -303,9 +303,9 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
         },
       );
 
-      final status = response['status']?.toString() ?? 'submitted';
-      final failureReason = response['failureReason']?.toString();
-      final dedupe = response['dedupeOutcome']?.toString();
+      final status = (response['status'] ?? response['eventStatus'])?.toString() ?? 'submitted';
+      final failureReason = (response['failureReason'] ?? response['failure_reason'])?.toString();
+      final dedupe = (response['dedupeOutcome'] ?? response['dedupe_outcome'])?.toString();
 
       _serverOutcomeByKey[queueKey] = {
         'status': status,

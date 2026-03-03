@@ -463,11 +463,15 @@ class ApiService {
   }
 
   /// **🔹 Generic GET Request (JSON map response)**
-  Future<Map<String, dynamic>> get(String path,
-      {Map<String, String>? headers}) async {
+  Future<Map<String, dynamic>> get(
+    String path, {
+    Map<String, String>? headers,
+    Map<String, dynamic>? queryParameters,
+  }) async {
     return _handleRequest(() async {
       final response = await _dio.get(
         path,
+        queryParameters: queryParameters,
         options: Options(headers: {
           'Content-Type': 'application/json',
           if (headers != null) ...headers,
