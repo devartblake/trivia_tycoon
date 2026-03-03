@@ -158,6 +158,7 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
       return;
     }
     final payload = _parsePayload();
+    var savedToServer = true;
     try {
       final serviceManager = ref.read(serviceManagerProvider);
       await serviceManager.apiService.post(
@@ -170,16 +171,22 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
         },
       );
     } catch (_) {
-      // keep local template flow as fallback when backend templates endpoint is unavailable.
+      // Keep local template flow as fallback when backend templates endpoint is unavailable.
+      savedToServer = false;
     }
 
     await store.saveRaw(id, _titleCtrl.text.trim(), _bodyCtrl.text.trim(), payload);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Template saved successfully!'),
+        SnackBar(
+          content: Text(
+            savedToServer
+                ? 'Template saved successfully!'
+                : 'Template saved locally (server unavailable).',
+          ),
           behavior: SnackBarBehavior.floating,
-          backgroundColor: Color(0xFF10B981),
+          backgroundColor:
+              savedToServer ? const Color(0xFF10B981) : const Color(0xFFF59E0B),
         ),
       );
     }
