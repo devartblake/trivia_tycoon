@@ -5,6 +5,7 @@ import '../../admin/providers/admin_auth_providers.dart';
 import '../services/channel_prefs.dart';
 import 'notification_history_store.dart';
 import 'notification_template_store.dart';
+import 'riverpod_providers.dart';
 
 /// Permission status
 final permissionAllowedProvider = FutureProvider<bool>((ref) async {
@@ -71,6 +72,18 @@ class NotificationAdminActions extends AutoDisposeAsyncNotifier<void> {
   }) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
+      final serviceManager = ref.read(serviceManagerProvider);
+      await serviceManager.apiService.post(
+        '/admin/notifications/send',
+        body: {
+          'id': id,
+          'channelKey': channelKey,
+          'title': title,
+          'body': body,
+          if (payload != null) 'payload': payload,
+        },
+      );
+
       await NotificationService().sendNow(
         id: id,
         channelKey: channelKey,
@@ -99,6 +112,20 @@ class NotificationAdminActions extends AutoDisposeAsyncNotifier<void> {
   }) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
+      final serviceManager = ref.read(serviceManagerProvider);
+      await serviceManager.apiService.post(
+        '/admin/notifications/schedule',
+        body: {
+          'id': id,
+          'channelKey': channelKey,
+          'title': title,
+          'body': body,
+          'scheduledAt': scheduledAt.toUtc().toIso8601String(),
+          'repeats': repeats,
+          if (payload != null) 'payload': payload,
+        },
+      );
+
       await NotificationService().scheduleAt(
         id: id,
         channelKey: channelKey,
