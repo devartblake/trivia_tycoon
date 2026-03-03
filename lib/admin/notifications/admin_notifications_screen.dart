@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:trivia_tycoon/admin/notifications/widgets/role_gate.dart';
 import '../../core/services/notification_service.dart';
 import '../../game/providers/notification_providers.dart';
+import '../../game/providers/riverpod_providers.dart';
 import 'channel_manager_screen.dart';
 import 'widgets/notification_form.dart';
 import 'widgets/scheduled_list.dart';
@@ -25,9 +26,61 @@ class _AdminNotificationsScreenState
   final _dateFormat = DateFormat('EEE, MMM d – h:mm a');
   int _tabIndex = 0;
 
+  final _fromController = TextEditingController();
+  final _toController = TextEditingController();
+  final _channelFilterController = TextEditingController();
+  String? _statusFilter;
+  bool _isHistoryLoading = false;
+  List<Map<String, dynamic>> _serverHistory = <Map<String, dynamic>>[];
+
+
+  @override
+  void initState() {
+    super.initState();
+    _loadServerHistory();
+  }
+
+  @override
+  void dispose() {
+    _fromController.dispose();
+    _toController.dispose();
+    _channelFilterController.dispose();
+    super.dispose();
+  }
+
   Future<void> _refresh() async {
     ref.invalidate(scheduledProvider);
     ref.invalidate(permissionAllowedProvider);
+    await _loadServerHistory();
+  }
+
+  Future<void> _loadServerHistory() async {
+    setState(() => _isHistoryLoading = true);
+    try {
+      final serviceManager = ref.read(serviceManagerProvider);
+      final response = await serviceManager.apiService.get(
+        '/admin/notifications/history',
+        queryParameters: {
+          if (_fromController.text.trim().isNotEmpty) 'from': _fromController.text.trim(),
+          if (_toController.text.trim().isNotEmpty) 'to': _toController.text.trim(),
+          if (_channelFilterController.text.trim().isNotEmpty)
+            'channelKey': _channelFilterController.text.trim(),
+          if (_statusFilter != null && _statusFilter!.isNotEmpty) 'status': _statusFilter!,
+        },
+      );
+
+      final items = serviceManager.apiService
+          .parsePageEnvelope<Map<String, dynamic>>(response, (json) => json)
+          .items;
+      if (!mounted) return;
+      setState(() => _serverHistory = items);
+    } catch (_) {
+      // leave existing local history widget as fallback data source.
+    } finally {
+      if (mounted) {
+        setState(() => _isHistoryLoading = false);
+      }
+    }
   }
 
   @override
@@ -379,10 +432,137 @@ class _AdminNotificationsScreenState
       case 1: // Scheduled tab
         return _buildScheduledSection(scheduledAsync);
       case 2: // History tab
-        return const HistoryList();
+        return _buildServerHistorySection();
       default:
         return _buildComposeSection(isAdmin);
     }
+  }
+
+
+  Widget _buildServerHistorySection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _fromController,
+                decoration: const InputDecoration(
+                  labelText: 'From (ISO-8601)',
+                  hintText: '2026-01-01T00:00:00Z',
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: TextField(
+                controller: _toController,
+                decoration: const InputDecoration(
+                  labelText: 'To (ISO-8601)',
+                  hintText: '2026-01-31T23:59:59Z',
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _channelFilterController,
+                decoration: const InputDecoration(
+                  labelText: 'Channel Key',
+                  hintText: 'marketing.push',
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            DropdownButton<String?>(
+              value: _statusFilter,
+              hint: const Text('Status'),
+              items: const [
+                DropdownMenuItem(value: null, child: Text('All')),
+                DropdownMenuItem(value: 'queued', child: Text('queued')),
+                DropdownMenuItem(value: 'sent', child: Text('sent')),
+                DropdownMenuItem(value: 'failed', child: Text('failed')),
+                DropdownMenuItem(value: 'retrying', child: Text('retrying')),
+              ],
+              onChanged: (value) => setState(() => _statusFilter = value),
+            ),
+            const SizedBox(width: 8),
+            ElevatedButton.icon(
+              onPressed: _isHistoryLoading ? null : _loadServerHistory,
+              icon: const Icon(Icons.search),
+              label: const Text('Apply'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        if (_isHistoryLoading) const LinearProgressIndicator(minHeight: 2),
+        if (_serverHistory.isEmpty)
+          const HistoryList()
+        else
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
+            ),
+            child: ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: _serverHistory.length,
+              separatorBuilder: (_, __) => const Divider(height: 1),
+              itemBuilder: (context, i) {
+                final item = _serverHistory[i];
+                final rawStatus = (item['status'] ?? 'queued').toString().toLowerCase();
+                final statusColor = switch (rawStatus) {
+                  'sent' => const Color(0xFF10B981),
+                  'failed' => const Color(0xFFEF4444),
+                  'retrying' => const Color(0xFFF59E0B),
+                  _ => const Color(0xFF3B82F6),
+                };
+
+                final sentAtRaw = (item['sentAt'] ?? item['createdAt'])?.toString();
+                String when = '-';
+                if (sentAtRaw != null && sentAtRaw.isNotEmpty) {
+                  final dt = DateTime.tryParse(sentAtRaw)?.toUtc().toLocal();
+                  if (dt != null) {
+                    when = _dateFormat.format(dt);
+                  }
+                }
+
+                return ListTile(
+                  leading: const Icon(Icons.notifications_active_outlined),
+                  title: Text(item['title']?.toString() ?? '(untitled)'),
+                  subtitle: Text(
+                    'channel=${item['channelKey'] ?? '-'} • $when\n'
+                    '${item['failureReason'] ?? item['message'] ?? ''}',
+                  ),
+                  isThreeLine: true,
+                  trailing: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: statusColor.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      rawStatus,
+                      style: TextStyle(
+                        color: statusColor,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+      ],
+    );
   }
 
   Widget _buildComposeSection(bool isAdmin) {
