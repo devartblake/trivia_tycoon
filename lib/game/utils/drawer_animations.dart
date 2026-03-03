@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:trivia_tycoon/core/animations/animation_manager.dart';
 
 /// Helper functions for drawer animations
+@Deprecated('Use AnimationManager in core/animations/animation_manager.dart')
 class DrawerAnimations {
   /// Create staggered animation controllers
   static List<AnimationController> createStaggeredControllers({
@@ -9,12 +11,11 @@ class DrawerAnimations {
     int baseDelay = 400,
     int delayIncrement = 50,
   }) {
-    return List.generate(
-      count,
-          (index) => AnimationController(
-        duration: Duration(milliseconds: baseDelay + (index * delayIncrement)),
-        vsync: vsync,
-      ),
+    return AnimationManager.createStaggeredControllers(
+      vsync: vsync,
+      count: count,
+      baseDurationMs: baseDelay,
+      durationIncrementMs: delayIncrement,
     );
   }
 
@@ -25,20 +26,17 @@ class DrawerAnimations {
     int delayIncrement = 80,
     required bool mounted,
   }) {
-    for (int i = 0; i < controllers.length; i++) {
-      Future.delayed(Duration(milliseconds: baseDelay + (i * delayIncrement)), () {
-        if (mounted) {
-          controllers[i].forward();
-        }
-      });
-    }
+    AnimationManager.startStaggered(
+      controllers: controllers,
+      baseDelayMs: baseDelay,
+      delayIncrementMs: delayIncrement,
+      mounted: mounted,
+    );
   }
 
   /// Dispose multiple controllers
   static void disposeControllers(List<AnimationController> controllers) {
-    for (final controller in controllers) {
-      controller.dispose();
-    }
+    AnimationManager.disposeControllers(controllers);
   }
 
   /// Create slide transition from left
@@ -47,14 +45,9 @@ class DrawerAnimations {
     required Widget child,
     Curve curve = Curves.easeOutBack,
   }) {
-    return SlideTransition(
-      position: Tween<Offset>(
-        begin: const Offset(-1, 0),
-        end: Offset.zero,
-      ).animate(CurvedAnimation(
-        parent: animation,
-        curve: curve,
-      )),
+    return AnimationManager.slideFromLeft(
+      animation: animation,
+      curve: curve,
       child: child,
     );
   }
@@ -66,13 +59,7 @@ class DrawerAnimations {
     Curve curve = Curves.easeInOut,
   }) {
     return FadeTransition(
-      opacity: Tween<double>(
-        begin: 0.0,
-        end: 1.0,
-      ).animate(CurvedAnimation(
-        parent: animation,
-        curve: curve,
-      )),
+      opacity: AnimationManager.fadeIn(animation, curve: curve),
       child: child,
     );
   }

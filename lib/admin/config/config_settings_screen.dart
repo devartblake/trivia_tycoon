@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../core/services/settings/app_settings.dart';
+import '../../game/providers/riverpod_providers.dart';
 
 class ConfigSettingsScreen extends ConsumerStatefulWidget {
   const ConfigSettingsScreen({super.key});
@@ -13,6 +15,10 @@ class _ConfigSettingsScreenState extends ConsumerState<ConfigSettingsScreen> {
   final TextEditingController _apiUrlController = TextEditingController();
   bool _isLoggingEnabled = false;
   bool _isSaving = false;
+  bool _isLoadingRemote = false;
+
+  String _lastSyncedApiUrl = '';
+  bool _lastSyncedLogging = false;
 
   @override
   void initState() {
@@ -21,31 +27,78 @@ class _ConfigSettingsScreenState extends ConsumerState<ConfigSettingsScreen> {
   }
 
   Future<void> _loadSettings() async {
-    final apiUrl = await AppSettings.getString('api_url') ?? '';
-    final logging = await AppSettings.getBool('enable_logging') ?? false;
+    setState(() => _isLoadingRemote = true);
+
+    // Start with local fallback values first.
+    final localApiUrl = await AppSettings.getString('api_url') ?? '';
+    final localLogging = await AppSettings.getBool('enable_logging') ?? false;
 
     setState(() {
-      _apiUrlController.text = apiUrl;
-      _isLoggingEnabled = logging;
+      _apiUrlController.text = localApiUrl;
+      _isLoggingEnabled = localLogging;
+      _lastSyncedApiUrl = localApiUrl;
+      _lastSyncedLogging = localLogging;
     });
+
+    // Then attempt to hydrate from backend admin config.
+    try {
+      final serviceManager = ref.read(serviceManagerProvider);
+      final response = await serviceManager.apiService.get('/admin/config');
+      final remoteApiUrl =
+          (response['apiUrl'] ?? response['api_url'] ?? localApiUrl).toString();
+      final remoteLogging =
+          (response['enableLogging'] ?? response['enable_logging'] ?? localLogging) == true;
+
+      if (!mounted) return;
+      setState(() {
+        _apiUrlController.text = remoteApiUrl;
+        _isLoggingEnabled = remoteLogging;
+        _lastSyncedApiUrl = remoteApiUrl;
+        _lastSyncedLogging = remoteLogging;
+      });
+
+      await AppSettings.setString('api_url', remoteApiUrl);
+      await AppSettings.setBool('enable_logging', remoteLogging);
+    } catch (_) {
+      // keep local fallback silently for unsupported/offline environments.
+    } finally {
+      if (mounted) {
+        setState(() => _isLoadingRemote = false);
+      }
+    }
   }
 
   Future<void> _saveSettings() async {
+    final optimisticApiUrl = _apiUrlController.text.trim();
+    final optimisticLogging = _isLoggingEnabled;
+
     setState(() => _isSaving = true);
 
-    await AppSettings.setString('api_url', _apiUrlController.text.trim());
-    await AppSettings.setBool('enable_logging', _isLoggingEnabled);
+    // Optimistic local persistence.
+    await AppSettings.setString('api_url', optimisticApiUrl);
+    await AppSettings.setBool('enable_logging', optimisticLogging);
 
-    setState(() => _isSaving = false);
+    try {
+      final serviceManager = ref.read(serviceManagerProvider);
+      await serviceManager.apiService.patch(
+        '/admin/config',
+        body: {
+          'apiUrl': optimisticApiUrl,
+          'enableLogging': optimisticLogging,
+        },
+      );
 
-    if (mounted) {
+      _lastSyncedApiUrl = optimisticApiUrl;
+      _lastSyncedLogging = optimisticLogging;
+
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Row(
             children: [
               Icon(Icons.check_circle, color: Colors.white),
               SizedBox(width: 12),
-              Text('Configuration saved successfully!'),
+              Text('Configuration synced with server.'),
             ],
           ),
           backgroundColor: const Color(0xFF10B981),
@@ -55,6 +108,26 @@ class _ConfigSettingsScreenState extends ConsumerState<ConfigSettingsScreen> {
           ),
         ),
       );
+    } catch (e) {
+      // Rollback local values when backend update fails.
+      _apiUrlController.text = _lastSyncedApiUrl;
+      _isLoggingEnabled = _lastSyncedLogging;
+      await AppSettings.setString('api_url', _lastSyncedApiUrl);
+      await AppSettings.setBool('enable_logging', _lastSyncedLogging);
+
+      if (!mounted) return;
+      setState(() {});
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to sync config. Reverted changes: $e'),
+          backgroundColor: const Color(0xFFEF4444),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isSaving = false);
+      }
     }
   }
 
@@ -78,6 +151,11 @@ class _ConfigSettingsScreenState extends ConsumerState<ConfigSettingsScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          if (_isLoadingRemote)
+            const Padding(
+              padding: EdgeInsets.only(bottom: 12),
+              child: LinearProgressIndicator(minHeight: 2),
+            ),
           // Header Section
           Container(
             padding: const EdgeInsets.all(20),
@@ -250,28 +328,28 @@ class _ConfigSettingsScreenState extends ConsumerState<ConfigSettingsScreen> {
                 child: Center(
                   child: _isSaving
                       ? const SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
-                      strokeWidth: 2,
-                    ),
-                  )
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
                       : const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.save, color: Colors.white),
-                      SizedBox(width: 12),
-                      Text(
-                        'Save Settings',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.save, color: Colors.white),
+                            SizedBox(width: 12),
+                            Text(
+                              'Save Settings',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
                 ),
               ),
             ),
