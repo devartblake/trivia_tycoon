@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
@@ -160,27 +161,33 @@ class ApiService {
     try {
       return await request();
     } on DioException catch (e) {
-      // Silently handle timeout errors in development (no backend)
-      if (e.type == DioExceptionType.connectionTimeout ||
+      final isTimeoutLike = e.type == DioExceptionType.connectionTimeout ||
           e.type == DioExceptionType.receiveTimeout ||
-          e.type == DioExceptionType.sendTimeout) {
+          e.type == DioExceptionType.sendTimeout ||
+          e.type == DioExceptionType.connectionError;
 
-        // Only log in debug mode with reduced verbosity
+      // Preserve silent timeout/offline behavior while keeping exception type consistent.
+      if (isTimeoutLike) {
         if (ConfigService.enableLogging && kDebugMode) {
           debugPrint("[API Timeout]: ${e.requestOptions.path} - No backend available");
         }
 
-        // Throw a custom exception instead of the verbose Dio one
-        throw Exception("API Timeout");
+        throw ApiRequestException(
+          'API Timeout',
+          statusCode: e.response?.statusCode,
+          path: e.requestOptions.path,
+        );
       }
+
+      final normalizedMessage = _extractErrorMessageFromResponse(e);
 
       // Log other Dio errors normally
       if (ConfigService.enableLogging) {
-        debugPrint("API Error [Dio]: ${e.message}");
+        debugPrint("API Error [Dio]: $normalizedMessage");
       }
 
       throw ApiRequestException(
-        e.message ?? 'Request failed',
+        normalizedMessage,
         statusCode: e.response?.statusCode,
         path: e.requestOptions.path,
       );
@@ -191,6 +198,72 @@ class ApiService {
       if (e is ApiRequestException) rethrow;
       throw Exception("Unexpected Error: $e");
     }
+  }
+
+  String _extractErrorMessageFromResponse(DioException e) {
+    final responseData = e.response?.data;
+
+    if (responseData is Map) {
+      final responseMap = _asJsonMap(responseData);
+      final nestedError = responseData['error'];
+      if (nestedError is Map) {
+        final nestedErrorMap = _asJsonMap(nestedError);
+        final nestedMessage = nestedErrorMap['message'];
+        if (nestedMessage is String && nestedMessage.trim().isNotEmpty) {
+          return nestedMessage.trim();
+        }
+      }
+
+      for (final key in const ['message', 'error', 'detail', 'title']) {
+        final value = responseMap[key];
+        if (value is String && value.trim().isNotEmpty) {
+          return value.trim();
+        }
+      }
+    }
+
+    if (responseData is String && responseData.trim().isNotEmpty) {
+      return responseData.trim();
+    }
+
+    return e.message ?? 'Request failed';
+  }
+
+  Map<String, dynamic> _asJsonMap(Object? value) {
+    if (value is Map<String, dynamic>) {
+      return value;
+    }
+    if (value is Map) {
+      return value.map((key, entry) => MapEntry(key.toString(), entry));
+    }
+    return <String, dynamic>{};
+  }
+
+  String? _loadAccessToken() {
+    if (!Hive.isBoxOpen('auth_tokens')) return null;
+    final box = Hive.box('auth_tokens');
+    final token = box.get('auth_access_token')?.toString();
+    if (token == null || token.trim().isEmpty) return null;
+    return token.trim();
+  }
+
+  Map<String, String> _buildJsonHeaders([Map<String, String>? headers]) {
+    final resolved = <String, String>{
+      'Content-Type': 'application/json',
+      if (headers != null) ...headers,
+    };
+
+    final hasAuthorization = resolved.keys
+        .any((key) => key.toLowerCase() == 'authorization');
+
+    if (!hasAuthorization) {
+      final accessToken = _loadAccessToken();
+      if (accessToken != null && accessToken.isNotEmpty) {
+        resolved['Authorization'] = 'Bearer $accessToken';
+      }
+    }
+
+    return resolved;
   }
 
   /// Loads mock data from assets/json
@@ -204,68 +277,64 @@ class ApiService {
   /// Handles errors using the unified [_handleRequest] wrapper.
   /// FIX: Returns a type-safe Map for predictable JSON responses.
   Future<Map<String, dynamic>> post(String path,
-      {required Map<String, dynamic> body}) async {
+      {required Map<String, dynamic> body, Map<String, String>? headers}) async {
     return _handleRequest(() async {
       final response = await _dio.post(
         path,
         data: body,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-        }),
+        options: Options(headers: _buildJsonHeaders(headers)),
       );
       // Ensure the response data is a map, otherwise return an empty map.
-      return response.data is Map<String, dynamic>
-          ? response.data as Map<String, dynamic>
-          : {};
+      return _asJsonMap(response.data);
+    });
+  }
+
+  /// **🔹 Generic GET Request (JSON map response)**
+  Future<Map<String, dynamic>> get(String path,
+      {Map<String, String>? headers}) async {
+    return _handleRequest(() async {
+      final response = await _dio.get(
+        path,
+        options: Options(headers: _buildJsonHeaders(headers)),
+      );
+      return _asJsonMap(response.data);
     });
   }
 
   /// **🔹 Generic DELETE Request**
-  Future<Map<String, dynamic>> delete(String path) async {
+  Future<Map<String, dynamic>> delete(String path, {Map<String, String>? headers}) async {
     return _handleRequest(() async {
       final response = await _dio.delete(
         path,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-        }),
+        options: Options(headers: _buildJsonHeaders(headers)),
       );
-      return response.data is Map<String, dynamic>
-          ? response.data as Map<String, dynamic>
-          : {};
+      return _asJsonMap(response.data);
     });
   }
 
   /// **🔹 Generic PATCH Request**
   Future<Map<String, dynamic>> patch(String path,
-      {required Map<String, dynamic> body}) async {
+      {required Map<String, dynamic> body, Map<String, String>? headers}) async {
     return _handleRequest(() async {
       final response = await _dio.patch(
         path,
         data: body,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-        }),
+        options: Options(headers: _buildJsonHeaders(headers)),
       );
-      return response.data is Map<String, dynamic>
-          ? response.data as Map<String, dynamic>
-          : {};
+      return _asJsonMap(response.data);
     });
   }
 
   /// **🔹 Generic PUT Request**
   Future<Map<String, dynamic>> put(String path,
-      {required Map<String, dynamic> body}) async {
+      {required Map<String, dynamic> body, Map<String, String>? headers}) async {
     return _handleRequest(() async {
       final response = await _dio.put(
         path,
         data: body,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-        }),
+        options: Options(headers: _buildJsonHeaders(headers)),
       );
-      return response.data is Map<String, dynamic>
-          ? response.data as Map<String, dynamic>
-          : {};
+      return _asJsonMap(response.data);
     });
   }
 
@@ -307,8 +376,8 @@ class ApiService {
   Future<String?> getOAuthUrl(String provider) async {
     return _handleRequest(() async {
       final response = await _dio.get('/auth/oauth/$provider');
-      if (response.data is Map<String, dynamic>) {
-        final data = response.data as Map<String, dynamic>;
+      if (response.data is Map) {
+        final data = _asJsonMap(response.data);
         return (data['url'] ?? data['authUrl'] ?? data['redirectUrl'])?.toString();
       }
       if (response.data is String) {
