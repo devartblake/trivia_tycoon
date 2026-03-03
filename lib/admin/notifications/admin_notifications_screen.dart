@@ -93,7 +93,6 @@ class _AdminNotificationsScreenState
     }
   }
 
-
   Future<void> _loadServerTemplates() async {
     try {
       final serviceManager = ref.read(serviceManagerProvider);
