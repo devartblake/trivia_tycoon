@@ -270,9 +270,14 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
   Future<void> _syncFromServer() async {
     final serviceManager = ref.read(serviceManagerProvider);
     final response = await serviceManager.apiService.get('/admin/questions');
-    final fetched = serviceManager.apiService
-        .parsePageEnvelope<QuestionModel>(response, QuestionModel.fromJson)
-        .items;
+    final items = response['items'];
+    final fetched = items is List
+        ? items
+            .whereType<Map>()
+            .map((e) => Map<String, dynamic>.from(e))
+            .map(QuestionModel.fromJson)
+            .toList()
+        : <QuestionModel>[];
     if (!mounted) return;
     setState(() {
       _questions = fetched;

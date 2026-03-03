@@ -91,15 +91,19 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
   Future<bool> _authenticateWithServer(String password) async {
     final serviceManager = ref.read(serviceManagerProvider);
     final secureStorage = ref.read(secureStorageProvider);
+    final deviceIdService = ref.read(deviceIdServiceProvider);
     final email = await secureStorage.getSecret('user_email');
 
     if (email == null || email.isEmpty) {
       throw Exception('A logged-in user email is required for admin authentication.');
     }
 
+    final deviceIdentity = await deviceIdService.getDeviceIdentityPayload();
+
     final payload = <String, dynamic>{
       'email': email,
       'password': password,
+      ...deviceIdentity,
       if (_otpController.text.trim().isNotEmpty) 'otpCode': _otpController.text.trim(),
     };
 

@@ -47,13 +47,12 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
     try {
       final serviceManager = ref.read(serviceManagerProvider);
       final response = await serviceManager.apiService.get('/admin/users');
-      final envelope = serviceManager.apiService.parsePageEnvelope<AdminUserModel>(
-        response,
-        AdminUserModel.fromJson,
-      );
-      for (final user in envelope.items) {
-        if (user.id == userId) {
-          return user;
+      final items = response['items'];
+      if (items is! List) return null;
+      for (final item in items.whereType<Map>()) {
+        final map = Map<String, dynamic>.from(item);
+        if (map['id']?.toString() == userId) {
+          return AdminUserModel.fromJson(map);
         }
       }
     } catch (_) {
@@ -1425,9 +1424,10 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
     try {
       final serviceManager = ref.read(serviceManagerProvider);
       final response = await serviceManager.apiService.get('/admin/users/${user.id}/activity');
-      final logs = serviceManager.apiService
-          .parsePageEnvelope<Map<String, dynamic>>(response, (json) => json)
-          .items;
+      final items = response['items'];
+      final logs = items is List
+          ? items.whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList()
+          : <Map<String, dynamic>>[];
       if (!mounted) return;
       showDialog(
         context: context,
