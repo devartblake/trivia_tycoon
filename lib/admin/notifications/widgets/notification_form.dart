@@ -583,12 +583,20 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
           }
         }
 
-        if (!items.any((e) => e.value == _channelKey) && items.isNotEmpty) {
-          _channelKey = items.first.value!;
+        final hasCurrentChannel = items.any((e) => e.value == _channelKey);
+        final selectedChannel = hasCurrentChannel
+            ? _channelKey
+            : (items.isNotEmpty ? items.first.value! : _channelKey);
+
+        if (!hasCurrentChannel && items.isNotEmpty) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!mounted) return;
+            setState(() => _channelKey = selectedChannel);
+          });
         }
 
         return DropdownButtonFormField<String>(
-          value: _channelKey,
+          value: selectedChannel,
           decoration: InputDecoration(
             labelText: 'Channel',
             border: OutlineInputBorder(

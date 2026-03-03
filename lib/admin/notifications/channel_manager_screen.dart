@@ -24,6 +24,7 @@ class _ChannelManagerSheetState extends ConsumerState<ChannelManagerSheet> {
   /// Cache enabled states for quick rebuilds.
   final Map<String, bool> _enabled = {};
   bool _isLoadingServerChannels = false;
+  bool _didLoadServerChannels = false;
   List<Map<String, dynamic>> _serverChannels = <Map<String, dynamic>>[];
 
   @override
@@ -53,7 +54,10 @@ class _ChannelManagerSheetState extends ConsumerState<ChannelManagerSheet> {
           .parsePageEnvelope<Map<String, dynamic>>(response, (json) => json)
           .items;
       if (!mounted) return;
-      setState(() => _serverChannels = items);
+      setState(() {
+        _serverChannels = items;
+        _didLoadServerChannels = true;
+      });
     } catch (_) {
       // Keep local channel list as fallback in unsupported environments.
     } finally {
@@ -113,25 +117,32 @@ class _ChannelManagerSheetState extends ConsumerState<ChannelManagerSheet> {
                       padding: EdgeInsets.all(16),
                       child: LinearProgressIndicator(),
                     )
-                  : (_remoteRows.isNotEmpty
-                      ? ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: _remoteRows.length,
-                          separatorBuilder: (_, __) => const Divider(height: 1),
-                          itemBuilder: (_, i) {
-                            final row = _remoteRows[i];
-                            final current = _enabled[row.key] ?? row.enabled;
-                            return ListTile(
-                              title: Text(row.name),
-                              subtitle: Text(row.key),
-                              trailing: Switch.adaptive(
-                                value: current,
-                                onChanged: (v) => _toggleChannel(row.key, v),
+                  : (_didLoadServerChannels
+                      ? (_remoteRows.isEmpty
+                          ? const Padding(
+                              padding: EdgeInsets.all(16),
+                              child: Text(
+                                'No server notification channels found.',
                               ),
-                            );
-                          },
-                        )
+                            )
+                          : ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: _remoteRows.length,
+                              separatorBuilder: (_, __) => const Divider(height: 1),
+                              itemBuilder: (_, i) {
+                                final row = _remoteRows[i];
+                                final current = _enabled[row.key] ?? row.enabled;
+                                return ListTile(
+                                  title: Text(row.name),
+                                  subtitle: Text(row.key),
+                                  trailing: Switch.adaptive(
+                                    value: current,
+                                    onChanged: (v) => _toggleChannel(row.key, v),
+                                  ),
+                                );
+                              },
+                            ))
                       : channelsAsync.when(
                           data: (channels) => ListView.separated(
                             shrinkWrap: true,

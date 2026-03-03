@@ -222,7 +222,8 @@ class ApiService {
       final envelope = _extractErrorEnvelope(e.response?.data);
       final normalizedMessage = envelope?.message ?? _extractErrorMessageFromResponse(e);
 
-      if (ConfigService.enableLogging) {
+      // Log other Dio errors normally
+      if (ConfigService.enableLogging && kDebugMode) {
         debugPrint("API Error [Dio]: $normalizedMessage");
       }
 
@@ -235,7 +236,7 @@ class ApiService {
         retryAfter: _extractRetryAfter(e.response),
       );
     } catch (e) {
-      if (ConfigService.enableLogging) {
+      if (ConfigService.enableLogging && kDebugMode) {
         debugPrint("API Error: $e");
       }
       if (e is ApiRequestException) rethrow;
@@ -372,7 +373,7 @@ class ApiService {
 
   void _handleErrorCodeSideEffects(RequestOptions options, ApiErrorEnvelope? envelope) {
     if (envelope == null) return;
-    if (!ConfigService.enableLogging) return;
+    if (!ConfigService.enableLogging || !kDebugMode) return;
 
     final path = options.path;
     final matchId = options.data is Map ? (options.data as Map)['matchId'] : null;

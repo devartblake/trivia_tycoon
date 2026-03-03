@@ -77,16 +77,6 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
       // Read directly from Hive box
       final box = await Hive.openBox('event_queue');
 
-      // Debug: Check what's in the box
-      debugPrint('Box length: ${box.length}');
-      debugPrint('Box keys: ${box.keys.toList()}');
-
-      if (box.isNotEmpty) {
-        final firstValue = box.values.first;
-        debugPrint('First value type: ${firstValue.runtimeType}');
-        debugPrint('First value: $firstValue');
-      }
-
       final eventEntries = box.toMap().entries.map((e) {
         try {
           // Handle different possible types
@@ -95,11 +85,9 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
           } else if (e.value is Map) {
             return MapEntry(e.key, Map<String, dynamic>.from(e.value as Map));
           } else {
-            debugPrint('Unexpected value type: ${e.value.runtimeType}');
             return null;
           }
         } catch (ex) {
-          debugPrint('Error converting entry: $ex');
           return null;
         }
       }).whereType<MapEntry<dynamic, Map<String, dynamic>>>().toList();
@@ -111,10 +99,7 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
         _currentPage = 0;
       });
 
-      debugPrint('Loaded ${_events.length} events');
-    } catch (e, stackTrace) {
-      debugPrint('Error loading queue: $e');
-      debugPrint('Stack trace: $stackTrace');
+    } catch (e) {
       setState(() => _isLoading = false);
       _showError('Failed to load event queue: $e');
     }
@@ -168,14 +153,7 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
     try {
       final serviceManager = ref.read(serviceManagerProvider);
 
-      // Check before clear
-      final box = await Hive.openBox('event_queue');
-      debugPrint('Queue size BEFORE clear: ${box.length}');
-
       await serviceManager.eventQueueService.clearAll();
-
-      // Check after clear
-      debugPrint('Queue size AFTER clear: ${box.length}');
 
       setState(() => _selectedEvents.clear());
       await _loadEventQueue();
