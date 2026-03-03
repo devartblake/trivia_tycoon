@@ -249,6 +249,8 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
         body: exportData,
       );
 
+      _applyServerOutcomes(response);
+
       final accepted = response['accepted'];
       final rejected = response['rejected'];
       final duplicates = response['duplicates'];
@@ -259,7 +261,14 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
         '${rejected != null ? ', rejected: $rejected' : ''}'
         '${duplicates != null ? ', duplicates: $duplicates' : ''}',
       );
-    } catch (e) {
+    } on ApiRequestException catch (e) {
+      final retryIn = e.retryAfter?.inSeconds;
+      if (e.errorCode == 'RATE_LIMITED' && retryIn != null) {
+        setState(() => _uploadCooldownUntil = DateTime.now().add(Duration(seconds: retryIn)));
+        _startCooldownTimer();
+        _showError('Upload rate-limited. Try again in ${retryIn}s.');
+        return;
+      }
       // Keep previous operational fallback for offline/unsupported environments.
       try {
         final serviceManager = ref.read(serviceManagerProvider);
@@ -273,6 +282,67 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
       } catch (_) {
         _showError('Failed to export: $e');
       }
+    } finally {
+      if (mounted) {
+        setState(() => _isUploading = false);
+      }
+    }
+  }
+
+  void _applyServerOutcomes(Map<String, dynamic> response) {
+    final outcomesRaw = response['items'] ?? response['results'] ?? response['events'];
+    if (outcomesRaw is! List) return;
+
+    for (final item in outcomesRaw.whereType<Map>()) {
+      final normalized = Map<String, dynamic>.from(item);
+      final dynamic key = normalized['queueKey'] ?? normalized['queue_key'] ?? normalized['eventKey'] ?? normalized['event_key'] ?? normalized['id'];
+      if (key != null) {
+        _serverOutcomeByKey[key] = normalized;
+      }
+    }
+
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  Future<void> _reprocessEvent(dynamic queueKey, Map<String, dynamic> event) async {
+    try {
+      final serviceManager = ref.read(serviceManagerProvider);
+      final response = await serviceManager.apiService.post(
+        '/admin/event-queue/reprocess',
+        body: {
+          'queueKey': queueKey,
+          'event': event,
+        },
+      );
+
+      final status = (response['status'] ?? response['eventStatus'])?.toString() ?? 'submitted';
+      final failureReason = (response['failureReason'] ?? response['failure_reason'])?.toString();
+      final dedupe = (response['dedupeOutcome'] ?? response['dedupe_outcome'])?.toString();
+
+      _serverOutcomeByKey[queueKey] = {
+        'status': status,
+        if (dedupe != null && dedupe.isNotEmpty) 'dedupeOutcome': dedupe,
+        if (failureReason != null && failureReason.isNotEmpty) 'failureReason': failureReason,
+      };
+
+      if (mounted) {
+        setState(() {});
+      }
+
+      _showSuccess('Reprocess requested (${status.toUpperCase()})');
+    } on ApiRequestException catch (e) {
+      final retryIn = e.retryAfter?.inSeconds;
+      if (e.errorCode == 'RATE_LIMITED' && retryIn != null) {
+        setState(() => _reprocessCooldownUntil[queueKey] = DateTime.now().add(Duration(seconds: retryIn)));
+        _startCooldownTimer();
+        _showError('Reprocess rate-limited. Retry in ${retryIn}s.');
+        return;
+      }
+      _showError('Reprocess failed: ${e.message}');
+    } catch (e) {
+      _showError('Reprocess failed: $e');
     }
   }
 
