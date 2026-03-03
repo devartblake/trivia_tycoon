@@ -21,6 +21,8 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
   List<MapEntry<dynamic, Map<String, dynamic>>> _events = [];
   Map<String, dynamic>? _queueStatus;
   bool _isLoading = true;
+  bool _isUploading = false;
+  final Map<dynamic, Map<String, dynamic>> _serverOutcomeByKey = {};
   final Set<dynamic> _selectedEvents = {};
 
   // Pagination
@@ -224,6 +226,9 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
   }
 
   Future<void> _exportToServer() async {
+    if (_isUploading) return;
+
+    setState(() => _isUploading = true);
     try {
       final serviceManager = ref.read(serviceManagerProvider);
       final playerProfile = serviceManager.playerProfileService;
@@ -236,6 +241,8 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
         '/admin/event-queue/upload',
         body: exportData,
       );
+
+      _applyServerOutcomes(response);
 
       final accepted = response['accepted'];
       final rejected = response['rejected'];
@@ -261,6 +268,58 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
       } catch (_) {
         _showError('Failed to export: $e');
       }
+    } finally {
+      if (mounted) {
+        setState(() => _isUploading = false);
+      }
+    }
+  }
+
+  void _applyServerOutcomes(Map<String, dynamic> response) {
+    final outcomesRaw = response['items'] ?? response['results'] ?? response['events'];
+    if (outcomesRaw is! List) return;
+
+    for (final item in outcomesRaw.whereType<Map>()) {
+      final normalized = Map<String, dynamic>.from(item);
+      final dynamic key = normalized['queueKey'] ?? normalized['eventKey'] ?? normalized['id'];
+      if (key != null) {
+        _serverOutcomeByKey[key] = normalized;
+      }
+    }
+
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  Future<void> _reprocessEvent(dynamic queueKey, Map<String, dynamic> event) async {
+    try {
+      final serviceManager = ref.read(serviceManagerProvider);
+      final response = await serviceManager.apiService.post(
+        '/admin/event-queue/reprocess',
+        body: {
+          'queueKey': queueKey,
+          'event': event,
+        },
+      );
+
+      final status = response['status']?.toString() ?? 'submitted';
+      final failureReason = response['failureReason']?.toString();
+      final dedupe = response['dedupeOutcome']?.toString();
+
+      _serverOutcomeByKey[queueKey] = {
+        'status': status,
+        if (dedupe != null && dedupe.isNotEmpty) 'dedupeOutcome': dedupe,
+        if (failureReason != null && failureReason.isNotEmpty) 'failureReason': failureReason,
+      };
+
+      if (mounted) {
+        setState(() {});
+      }
+
+      _showSuccess('Reprocess requested (${status.toUpperCase()})');
+    } catch (e) {
+      _showError('Reprocess failed: $e');
     }
   }
 
@@ -491,7 +550,7 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
             _exportQueueToFile,
           ),
           _buildActionChip(
-            'Export Server',
+            _isUploading ? 'Uploading...' : 'Export Server',
             Icons.upload_file_rounded,
             Colors.cyan,
             _exportToServer,
@@ -750,11 +809,31 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
                               tooltip: 'View Details',
                             ),
                             IconButton(
+                              icon: const Icon(Icons.refresh_rounded),
+                              color: Colors.orange,
+                              onPressed: _canReprocess(entry.key, event)
+                                  ? () => _reprocessEvent(entry.key, event)
+                                  : null,
+                              tooltip: 'Reprocess failed event',
+                            ),
+                            IconButton(
                               icon: const Icon(Icons.delete_outline_rounded),
                               color: Colors.red,
                               onPressed: () => _deleteEvent(entry.key),
                               tooltip: 'Delete',
                             ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            _buildOutcomeBadge('Status', _resolveStatus(entry.key, event)),
+                            if (_resolveDedupeOutcome(entry.key, event) != null)
+                              _buildOutcomeBadge('Dedupe', _resolveDedupeOutcome(entry.key, event)!),
+                            if (_resolveFailureReason(entry.key, event) != null)
+                              _buildOutcomeBadge('Failure', _resolveFailureReason(entry.key, event)!),
                           ],
                         ),
                         const SizedBox(height: 8),
@@ -790,6 +869,65 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
           ),
         ),
       ],
+    );
+  }
+
+
+  String _resolveStatus(dynamic queueKey, Map<String, dynamic> event) {
+    final server = _serverOutcomeByKey[queueKey];
+    return (server?['status'] ?? event['status'] ?? 'queued').toString();
+  }
+
+  String? _resolveDedupeOutcome(dynamic queueKey, Map<String, dynamic> event) {
+    final server = _serverOutcomeByKey[queueKey];
+    final value = server?['dedupeOutcome'] ?? event['dedupe_outcome'];
+    if (value == null) return null;
+    final text = value.toString().trim();
+    return text.isEmpty ? null : text;
+  }
+
+  String? _resolveFailureReason(dynamic queueKey, Map<String, dynamic> event) {
+    final server = _serverOutcomeByKey[queueKey];
+    final value = server?['failureReason'] ?? event['failure_reason'] ?? event['last_error'];
+    if (value == null) return null;
+    final text = value.toString().trim();
+    return text.isEmpty ? null : text;
+  }
+
+  bool _canReprocess(dynamic queueKey, Map<String, dynamic> event) {
+    final status = _resolveStatus(queueKey, event).toLowerCase();
+    return status == 'failed' || status == 'error';
+  }
+
+  Widget _buildOutcomeBadge(String label, String value) {
+    final normalized = value.toLowerCase();
+    Color color;
+    if (normalized == 'sent' || normalized == 'success' || normalized == 'processed') {
+      color = Colors.green;
+    } else if (normalized == 'queued' || normalized == 'pending' || normalized == 'retrying') {
+      color = Colors.blue;
+    } else if (normalized == 'duplicate' || normalized == 'deduped') {
+      color = Colors.purple;
+    } else if (normalized == 'failed' || normalized == 'error') {
+      color = Colors.red;
+    } else {
+      color = Colors.grey;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        '$label: $value',
+        style: TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+          color: color,
+        ),
+      ),
     );
   }
 
