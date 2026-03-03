@@ -50,7 +50,6 @@ class ApiService {
   ApiService({required this.baseUrl})
       : _dio = Dio(BaseOptions(
     baseUrl: baseUrl,
-    // Shorter timeouts for development to fail fast
     connectTimeout: const Duration(seconds: 3),
     receiveTimeout: const Duration(seconds: 3),
     sendTimeout: const Duration(seconds: 3),
@@ -63,12 +62,12 @@ class ApiService {
     // Disable or reduce logging in release mode
     if (ConfigService.enableLogging && kDebugMode) {
       _dio.interceptors.add(LogInterceptor(
-        request: false,           // Disable request logging
-        requestHeader: false,      // Disable header logging
-        requestBody: false,        // Disable body logging
+        request: false,
+        requestHeader: false,
+        requestBody: false,
         responseHeader: false,
         responseBody: false,
-        error: true,              // Only log errors
+        error: true,
         logPrint: (log) => debugPrint("[API Log]: $log"),
       ));
     }
@@ -112,21 +111,20 @@ class ApiService {
 
   /// **🔹 Initialize Cache**
   Future<void> _initializeCache() async {
-    Directory cacheDir = await getTemporaryDirectory(); // Corrected Cache Directory
-    _cacheStore = HiveCacheStore(cacheDir.path); // ✅ Store reference here
+    Directory cacheDir = await getTemporaryDirectory();
+    _cacheStore = HiveCacheStore(cacheDir.path);
 
     _cacheOptions = CacheOptions(
-      store: _cacheStore, // ✅ Uses HiveCacheStore
+      store: _cacheStore,
       policy: CachePolicy.request,
-      maxStale: const Duration(days: 7), // Cache expires in 7 days
-      hitCacheOnErrorExcept: [], // Cache API errors except for connectivity issues
+      maxStale: const Duration(days: 7),
+      hitCacheOnErrorExcept: [],
       priority: CachePriority.high,
     );
     _cacheInterceptor = DioCacheInterceptor(options: _cacheOptions);
     _dio.interceptors.add(_cacheInterceptor);
   }
 
-  /// **🔹 Fetch Questions with Cache**
   Future<List<Map<String, dynamic>>> fetchQuestions({
     required int amount,
     String? category,
@@ -146,7 +144,6 @@ class ApiService {
     });
   }
 
-  /// **🔹 Fetch Leaderboard with Cache**
   Future<List<Map<String, dynamic>>> fetchLeaderboard() async {
     return _handleRequest(() async {
       final response = await _dio.get(
@@ -157,7 +154,6 @@ class ApiService {
     });
   }
 
-  /// **🔹 Fetch Achievements with Cache**
   Future<List<Map<String, dynamic>>> fetchAchievements(String playerName) async {
     return _handleRequest(() async {
       final response = await _dio.get(
@@ -169,7 +165,6 @@ class ApiService {
     });
   }
 
-  /// **🔹 Submit Score**
   Future<void> submitScore(String playerName, int score) async {
     await _handleRequest(() async {
       await _dio.post('/leaderboard', data: {
@@ -179,7 +174,6 @@ class ApiService {
     });
   }
 
-  /// **🔹 Unlock Achievement**
   Future<void> unlockAchievement(String playerName, String achievement) async {
     await _handleRequest(() async {
       await _dio.post('/achievements', data: {
@@ -189,12 +183,10 @@ class ApiService {
     });
   }
 
-  /// **🔹 Clear Cache Manually**
   Future<void> clearCache() async {
     await _cacheStore.clean();
   }
 
-  /// **🔹 Generic GET Request Handler**
   Future<dynamic> getRequest(String endpoint) async {
     return _handleRequest(() async {
       final response = await http.get(Uri.parse('$baseUrl/$endpoint'));
@@ -206,7 +198,6 @@ class ApiService {
     });
   }
 
-  /// Unified API Request Handler with silent timeout handling
   Future<T> _handleRequest<T>(Future<T> Function() request) async {
     try {
       return await request();
@@ -216,7 +207,6 @@ class ApiService {
           e.type == DioExceptionType.sendTimeout ||
           e.type == DioExceptionType.connectionError;
 
-      // Preserve silent timeout/offline behavior while keeping exception type consistent.
       if (isTimeoutLike) {
         if (ConfigService.enableLogging && kDebugMode) {
           debugPrint("[API Timeout]: ${e.requestOptions.path} - No backend available");
@@ -232,7 +222,6 @@ class ApiService {
       final envelope = _extractErrorEnvelope(e.response?.data);
       final normalizedMessage = envelope?.message ?? _extractErrorMessageFromResponse(e);
 
-      // Log other Dio errors normally
       if (ConfigService.enableLogging) {
         debugPrint("API Error [Dio]: $normalizedMessage");
       }
@@ -447,27 +436,38 @@ class ApiService {
     return <String, dynamic>{};
   }
 
-  /// Loads mock data from assets/json
+  Map<String, String> _buildJsonHeaders([Map<String, String>? headers]) {
+    final resolved = <String, String>{
+      'Content-Type': 'application/json',
+      if (headers != null) ...headers,
+    };
+
+    final hasAuthorization = resolved.keys
+        .any((key) => key.toLowerCase() == 'authorization');
+
+    if (!hasAuthorization) {
+      final accessToken = _loadAccessToken();
+      if (accessToken != null && accessToken.isNotEmpty) {
+        resolved['Authorization'] = 'Bearer $accessToken';
+      }
+    }
+
+    return resolved;
+  }
+
   Future<dynamic> getMockData(String filename) async {
     final String jsonString = await rootBundle.loadString('assets/data/analytics/$filename');
     return jsonDecode(jsonString);
   }
 
-  /// **🔹 Generic POST Request**
-  /// Sends a POST request to the specified [path] with a JSON [data] payload.
-  /// Handles errors using the unified [_handleRequest] wrapper.
-  /// FIX: Returns a type-safe Map for predictable JSON responses.
   Future<Map<String, dynamic>> post(String path,
-      {required Map<String, dynamic> body}) async {
+      {required Map<String, dynamic> body, Map<String, String>? headers}) async {
     return _handleRequest(() async {
       final response = await _dio.post(
         path,
         data: body,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-        }),
+        options: Options(headers: _buildJsonHeaders(headers)),
       );
-      // Ensure the response data is a map, otherwise return an empty map.
       return _asJsonMap(response.data);
     });
   }
@@ -487,64 +487,48 @@ class ApiService {
           if (headers != null) ...headers,
         }),
       );
-      return response.data is Map<String, dynamic>
-          ? response.data as Map<String, dynamic>
-          : {};
+      return _asJsonMap(response.data);
     });
   }
 
-  /// **🔹 Generic DELETE Request**
-  Future<Map<String, dynamic>> delete(String path) async {
+  Future<Map<String, dynamic>> delete(String path, {Map<String, String>? headers}) async {
     return _handleRequest(() async {
       final response = await _dio.delete(
         path,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-        }),
+        options: Options(headers: _buildJsonHeaders(headers)),
       );
       return _asJsonMap(response.data);
     });
   }
 
-  /// **🔹 Generic PATCH Request**
   Future<Map<String, dynamic>> patch(String path,
-      {required Map<String, dynamic> body}) async {
+      {required Map<String, dynamic> body, Map<String, String>? headers}) async {
     return _handleRequest(() async {
       final response = await _dio.patch(
         path,
         data: body,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-        }),
+        options: Options(headers: _buildJsonHeaders(headers)),
       );
       return _asJsonMap(response.data);
     });
   }
 
-  /// **🔹 Generic PUT Request**
   Future<Map<String, dynamic>> put(String path,
-      {required Map<String, dynamic> body}) async {
+      {required Map<String, dynamic> body, Map<String, String>? headers}) async {
     return _handleRequest(() async {
       final response = await _dio.put(
         path,
         data: body,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-        }),
+        options: Options(headers: _buildJsonHeaders(headers)),
       );
       return _asJsonMap(response.data);
     });
   }
 
-  /// **🔹 Analytics Event Submission**
-  /// Sends a lightweight event to the `/events/:name` endpoint with the given [data].
-  /// Useful for custom tracking (e.g., startup, session, screen views).
   Future<void> sendEvent(String name, Map<String, dynamic> data) async {
     await post('/events/$name', body: data);
   }
 
-  /// **🔹 Auth: Login**
-  /// Sends credentials to the backend auth endpoint.
   Future<Map<String, dynamic>> login({
     required String email,
     required String password,
@@ -555,8 +539,6 @@ class ApiService {
     });
   }
 
-  /// **🔹 Auth: Signup**
-  /// Registers a new user. Additional fields can be passed in [extra].
   Future<Map<String, dynamic>> signup({
     required String email,
     required String password,
@@ -569,8 +551,6 @@ class ApiService {
     });
   }
 
-  /// **🔹 Auth: OAuth URL**
-  /// Requests the backend-generated OAuth URL for a provider.
   Future<String?> getOAuthUrl(String provider) async {
     return _handleRequest(() async {
       final response = await _dio.get('/auth/oauth/$provider');
@@ -614,12 +594,10 @@ class ApiPageEnvelope<T> {
 
 extension SeasonalApiExtensions on ApiService {
   Future<List<SeasonPlayer>> getSeasonLeaderboard(String seasonId) async {
-    // Implementation would call your backend
     throw UnimplementedError('Implement season leaderboard API call');
   }
 
   Future<void> resetPlayerSeasonPoints(String playerId) async {
-    // Implementation would reset player's seasonal progress
     throw UnimplementedError('Implement reset player points API call');
   }
 
@@ -627,7 +605,6 @@ extension SeasonalApiExtensions on ApiService {
     required List<String> players,
     required DateTime scheduledTime,
   }) async {
-    // Implementation would schedule tiebreaker quiz
     throw UnimplementedError('Implement tiebreaker quiz scheduling');
   }
 }
