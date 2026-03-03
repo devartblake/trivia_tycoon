@@ -104,7 +104,11 @@ class ApiService {
             }
           }
 
+<<<<<<< codex/integrate-error-envelope-contract-7juf0i
+          _handleErrorCodeSideEffects(error.requestOptions, envelope);
+=======
           _handleErrorCodeSideEffects(error.requestOptions.path, envelope);
+>>>>>>> main
           handler.next(error);
         },
       ),
@@ -303,6 +307,16 @@ class ApiService {
         path.contains('/party/') && path.endsWith('/enqueue');
   }
 
+<<<<<<< codex/integrate-error-envelope-contract-7juf0i
+  String _loadAccessToken() => _loadTokenByKey('auth_access_token');
+
+  String _loadRefreshToken() => _loadTokenByKey('auth_refresh_token');
+
+  String _loadTokenByKey(String key) {
+    if (!Hive.isBoxOpen('auth_tokens')) return '';
+    final box = Hive.box('auth_tokens');
+    return (box.get(key, defaultValue: '') as String?) ?? '';
+=======
   String _loadAccessToken() {
     if (!Hive.isBoxOpen('auth_tokens')) return '';
     final box = Hive.box('auth_tokens');
@@ -313,6 +327,7 @@ class ApiService {
     if (!Hive.isBoxOpen('auth_tokens')) return '';
     final box = Hive.box('auth_tokens');
     return (box.get('auth_refresh_token', defaultValue: '') as String?) ?? '';
+>>>>>>> main
   }
 
   bool _shouldAttemptRefresh(DioException error, ApiErrorEnvelope? envelope) {
@@ -384,9 +399,27 @@ class ApiService {
     return ApiErrorEnvelope(code: code, message: message, details: details);
   }
 
+<<<<<<< codex/integrate-error-envelope-contract-7juf0i
+  void _handleErrorCodeSideEffects(RequestOptions options, ApiErrorEnvelope? envelope) {
+    if (envelope == null) return;
+    if (!ConfigService.enableLogging) return;
+
+    final path = options.path;
+    final matchId = options.data is Map ? (options.data as Map)['matchId'] : null;
+    final userId = options.data is Map
+        ? (options.data as Map)['userId'] ?? (options.data as Map)['adminUserId']
+        : null;
+
+    debugPrint(
+      '[API Telemetry] endpoint=$path errorCode=${envelope.code} '
+      'matchId=${matchId ?? '-'} userId=${userId ?? '-'}',
+    );
+
+=======
   void _handleErrorCodeSideEffects(String path, ApiErrorEnvelope? envelope) {
     if (envelope == null) return;
     if (!ConfigService.enableLogging) return;
+>>>>>>> main
     switch (envelope.code) {
       case 'UNAUTHORIZED':
         debugPrint('[API:$path] UNAUTHORIZED -> trigger reauth/session recovery');
