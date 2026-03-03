@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
@@ -14,8 +16,18 @@ class ApiRequestException implements Exception {
   final String message;
   final int? statusCode;
   final String? path;
+  final String? errorCode;
+  final Map<String, dynamic>? details;
+  final Duration? retryAfter;
 
-  ApiRequestException(this.message, {this.statusCode, this.path});
+  ApiRequestException(
+    this.message, {
+    this.statusCode,
+    this.path,
+    this.errorCode,
+    this.details,
+    this.retryAfter,
+  });
 
   @override
   String toString() {
@@ -27,11 +39,13 @@ class ApiRequestException implements Exception {
 
 class ApiService {
   final Dio _dio;
+  final Dio _refreshDio;
   final String baseUrl;
   late CacheOptions _cacheOptions;
   late final HiveCacheStore _cacheStore;
   late DioCacheInterceptor _cacheInterceptor;
   final ConfigService _configService;
+  bool _isRefreshingToken = false;
 
   ApiService({required this.baseUrl})
       : _dio = Dio(BaseOptions(
@@ -41,7 +55,10 @@ class ApiService {
     receiveTimeout: const Duration(seconds: 3),
     sendTimeout: const Duration(seconds: 3),
   )),
+        _refreshDio = Dio(BaseOptions(baseUrl: baseUrl)),
         _configService = ConfigService.instance {
+
+    _attachAuthAndErrorInterceptors();
 
     // Disable or reduce logging in release mode
     if (ConfigService.enableLogging && kDebugMode) {
@@ -57,6 +74,40 @@ class ApiService {
     }
 
     _initializeCache();
+  }
+
+  void _attachAuthAndErrorInterceptors() {
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          final path = options.path;
+          if (_isProtectedPath(path)) {
+            final token = _loadAccessToken();
+            if (token.isNotEmpty) {
+              options.headers['Authorization'] = 'Bearer $token';
+            }
+            final opsKey = dotenv.env['ADMIN_OPS_KEY'];
+            if (path.startsWith('/admin/') && opsKey != null && opsKey.isNotEmpty) {
+              options.headers['x-ops-key'] = opsKey;
+            }
+          }
+          handler.next(options);
+        },
+        onError: (error, handler) async {
+          final envelope = _extractErrorEnvelope(error.response?.data);
+
+          if (_shouldAttemptRefresh(error, envelope) && await _refreshSessionToken()) {
+            final retried = await _retryWithFreshToken(error.requestOptions);
+            if (retried != null) {
+              return handler.resolve(retried);
+            }
+          }
+
+          _handleErrorCodeSideEffects(error.requestOptions.path, envelope);
+          handler.next(error);
+        },
+      ),
+    );
   }
 
   /// **🔹 Initialize Cache**
@@ -178,7 +229,8 @@ class ApiService {
         );
       }
 
-      final normalizedMessage = _extractErrorMessageFromResponse(e);
+      final envelope = _extractErrorEnvelope(e.response?.data);
+      final normalizedMessage = envelope?.message ?? _extractErrorMessageFromResponse(e);
 
       // Log other Dio errors normally
       if (ConfigService.enableLogging) {
@@ -189,6 +241,9 @@ class ApiService {
         normalizedMessage,
         statusCode: e.response?.statusCode,
         path: e.requestOptions.path,
+        errorCode: envelope?.code,
+        details: envelope?.details,
+        retryAfter: _extractRetryAfter(e.response),
       );
     } catch (e) {
       if (ConfigService.enableLogging) {
@@ -226,6 +281,150 @@ class ApiService {
     }
 
     return e.message ?? 'Request failed';
+  }
+
+  Duration? _extractRetryAfter(Response<dynamic>? response) {
+    final raw = response?.headers.value('retry-after');
+    if (raw == null || raw.trim().isEmpty) return null;
+    final seconds = int.tryParse(raw.trim());
+    if (seconds != null && seconds > 0) {
+      return Duration(seconds: seconds);
+    }
+    return null;
+  }
+
+  bool _isProtectedPath(String path) {
+    return path.startsWith('/admin/') ||
+        path == '/matches/start' ||
+        path == '/mobile/matches/start' ||
+        path == '/matches/submit' ||
+        path == '/matchmaking/enqueue' ||
+        path.contains('/party/') && path.endsWith('/enqueue');
+  }
+
+  String _loadAccessToken() {
+    if (!Hive.isBoxOpen('auth_tokens')) return '';
+    final box = Hive.box('auth_tokens');
+    return (box.get('auth_access_token', defaultValue: '') as String?) ?? '';
+  }
+
+  String _loadRefreshToken() {
+    if (!Hive.isBoxOpen('auth_tokens')) return '';
+    final box = Hive.box('auth_tokens');
+    return (box.get('auth_refresh_token', defaultValue: '') as String?) ?? '';
+  }
+
+  bool _shouldAttemptRefresh(DioException error, ApiErrorEnvelope? envelope) {
+    if (_isRefreshingToken) return false;
+    final path = error.requestOptions.path;
+    if (!path.startsWith('/admin/')) return false;
+    if (path == '/admin/auth/login' || path == '/admin/auth/refresh') return false;
+    if (error.requestOptions.extra['refreshRetried'] == true) return false;
+    return envelope?.code == 'UNAUTHORIZED' || error.response?.statusCode == 401;
+  }
+
+  Future<bool> _refreshSessionToken() async {
+    final refreshToken = _loadRefreshToken();
+    if (refreshToken.isEmpty) return false;
+
+    _isRefreshingToken = true;
+    try {
+      final response = await _refreshDio.post('/admin/auth/refresh', data: {
+        'refreshToken': refreshToken,
+      });
+      final data = _asJsonMap(response.data);
+      final access = data['accessToken']?.toString() ?? data['access_token']?.toString() ?? '';
+      if (access.isEmpty) return false;
+
+      if (!Hive.isBoxOpen('auth_tokens')) return false;
+      final box = Hive.box('auth_tokens');
+      await box.put('auth_access_token', access);
+      final newRefresh = data['refreshToken']?.toString() ?? data['refresh_token']?.toString();
+      if (newRefresh != null && newRefresh.isNotEmpty) {
+        await box.put('auth_refresh_token', newRefresh);
+      }
+      return true;
+    } catch (_) {
+      return false;
+    } finally {
+      _isRefreshingToken = false;
+    }
+  }
+
+  Future<Response<dynamic>?> _retryWithFreshToken(RequestOptions requestOptions) async {
+    try {
+      final opts = Options(
+        method: requestOptions.method,
+        headers: Map<String, dynamic>.from(requestOptions.headers)
+          ..['Authorization'] = 'Bearer ${_loadAccessToken()}',
+        extra: Map<String, dynamic>.from(requestOptions.extra)..['refreshRetried'] = true,
+      );
+      return _dio.request<dynamic>(
+        requestOptions.path,
+        data: requestOptions.data,
+        queryParameters: requestOptions.queryParameters,
+        options: opts,
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
+  ApiErrorEnvelope? _extractErrorEnvelope(dynamic responseData) {
+    if (responseData is! Map) return null;
+    final root = _asJsonMap(responseData);
+    final nested = root['error'];
+    if (nested is! Map) return null;
+    final error = _asJsonMap(nested);
+    final code = error['code']?.toString();
+    final message = error['message']?.toString();
+    final details = error['details'] is Map ? _asJsonMap(error['details']) : <String, dynamic>{};
+    if (code == null || message == null || code.isEmpty || message.isEmpty) return null;
+    return ApiErrorEnvelope(code: code, message: message, details: details);
+  }
+
+  void _handleErrorCodeSideEffects(String path, ApiErrorEnvelope? envelope) {
+    if (envelope == null) return;
+    if (!ConfigService.enableLogging) return;
+    switch (envelope.code) {
+      case 'UNAUTHORIZED':
+        debugPrint('[API:$path] UNAUTHORIZED -> trigger reauth/session recovery');
+        break;
+      case 'FORBIDDEN':
+        debugPrint('[API:$path] FORBIDDEN -> show permission denied UI');
+        break;
+      case 'RATE_LIMITED':
+        debugPrint('[API:$path] RATE_LIMITED -> disable actions + cooldown timer');
+        break;
+      case 'VALIDATION_ERROR':
+        debugPrint('[API:$path] VALIDATION_ERROR -> map details to form errors');
+        break;
+      case 'NOT_FOUND':
+        debugPrint('[API:$path] NOT_FOUND -> stale resource/list refresh');
+        break;
+      case 'CONFLICT':
+        debugPrint('[API:$path] CONFLICT -> refresh state + conflict UI');
+        break;
+    }
+  }
+
+  ApiPageEnvelope<T> parsePageEnvelope<T>(
+    Map<String, dynamic> payload,
+    T Function(Map<String, dynamic> json) fromJson,
+  ) {
+    final itemsRaw = payload['items'];
+    final items = itemsRaw is List
+        ? itemsRaw
+            .whereType<Map>()
+            .map((e) => fromJson(Map<String, dynamic>.from(e)))
+            .toList()
+        : <T>[];
+    return ApiPageEnvelope<T>(
+      page: (payload['page'] as num?)?.toInt() ?? 1,
+      pageSize: (payload['pageSize'] as num?)?.toInt() ?? items.length,
+      total: (payload['total'] as num?)?.toInt() ?? items.length,
+      items: items,
+    );
   }
 
   Map<String, dynamic> _asJsonMap(Object? value) {
@@ -371,6 +570,32 @@ class ApiService {
       return null;
     });
   }
+}
+
+class ApiErrorEnvelope {
+  final String code;
+  final String message;
+  final Map<String, dynamic> details;
+
+  const ApiErrorEnvelope({
+    required this.code,
+    required this.message,
+    required this.details,
+  });
+}
+
+class ApiPageEnvelope<T> {
+  final int page;
+  final int pageSize;
+  final int total;
+  final List<T> items;
+
+  const ApiPageEnvelope({
+    required this.page,
+    required this.pageSize,
+    required this.total,
+    required this.items,
+  });
 }
 
 extension SeasonalApiExtensions on ApiService {

@@ -47,12 +47,13 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
     try {
       final serviceManager = ref.read(serviceManagerProvider);
       final response = await serviceManager.apiService.get('/admin/users');
-      final items = response['items'];
-      if (items is! List) return null;
-      for (final item in items.whereType<Map>()) {
-        final map = Map<String, dynamic>.from(item);
-        if (map['id']?.toString() == userId) {
-          return AdminUserModel.fromJson(map);
+      final envelope = serviceManager.apiService.parsePageEnvelope<AdminUserModel>(
+        response,
+        AdminUserModel.fromJson,
+      );
+      for (final user in envelope.items) {
+        if (user.id == userId) {
+          return user;
         }
       }
     } catch (_) {
