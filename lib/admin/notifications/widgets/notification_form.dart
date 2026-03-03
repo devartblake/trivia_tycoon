@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/notification_service.dart';
 import '../../../game/providers/notification_providers.dart';
 import '../../../game/providers/notification_template_store.dart';
+import '../../../game/providers/riverpod_providers.dart';
 
 class NotificationForm extends ConsumerStatefulWidget {
   const NotificationForm({super.key});
@@ -156,7 +157,23 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
       );
       return;
     }
-    await store.saveRaw(id, _titleCtrl.text.trim(), _bodyCtrl.text.trim(), _parsePayload());
+    final payload = _parsePayload();
+    try {
+      final serviceManager = ref.read(serviceManagerProvider);
+      await serviceManager.apiService.post(
+        '/admin/notifications/templates',
+        body: {
+          'id': id,
+          'title': _titleCtrl.text.trim(),
+          'body': _bodyCtrl.text.trim(),
+          if (payload != null) 'payload': payload,
+        },
+      );
+    } catch (_) {
+      // keep local template flow as fallback when backend templates endpoint is unavailable.
+    }
+
+    await store.saveRaw(id, _titleCtrl.text.trim(), _bodyCtrl.text.trim(), payload);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -566,12 +583,20 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
           }
         }
 
-        if (!items.any((e) => e.value == _channelKey) && items.isNotEmpty) {
-          _channelKey = items.first.value!;
+        final hasCurrentChannel = items.any((e) => e.value == _channelKey);
+        final selectedChannel = hasCurrentChannel
+            ? _channelKey
+            : (items.isNotEmpty ? items.first.value! : _channelKey);
+
+        if (!hasCurrentChannel && items.isNotEmpty) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!mounted) return;
+            setState(() => _channelKey = selectedChannel);
+          });
         }
 
         return DropdownButtonFormField<String>(
-          value: _channelKey,
+          value: selectedChannel,
           decoration: InputDecoration(
             labelText: 'Channel',
             border: OutlineInputBorder(
