@@ -41,15 +41,9 @@ Future<bool> _tryAdminRefresh(
   if (session.refreshToken.isEmpty) return false;
 
   try {
-    final deviceIdService = ref.read(deviceIdServiceProvider);
-    final deviceIdentity = await deviceIdService.getDeviceIdentityPayload();
-
     final response = await serviceManager.apiService.post(
       '/admin/auth/refresh',
-      body: {
-        'refreshToken': session.refreshToken,
-        ...deviceIdentity,
-      },
+      body: {'refreshToken': session.refreshToken},
     );
 
     final newAccess =

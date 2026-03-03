@@ -71,7 +71,6 @@ class AuthService {
     final session = await _api.refresh(
       refreshToken: existing.refreshToken,
       deviceId: deviceId,
-      deviceType: _deviceId.getDeviceType(),
     );
     await _store.save(session);
     return session;
@@ -87,7 +86,6 @@ class AuthService {
       // Some backends may return 401 for expired/rotated tokens; treat that as best-effort.
       await _api.logout(
         deviceId: deviceId,
-        deviceType: _deviceId.getDeviceType(),
         userId: existing.userId,
         accessToken: existing.accessToken,
       );
