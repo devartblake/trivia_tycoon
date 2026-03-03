@@ -21,13 +21,13 @@ class ApiRequestException implements Exception {
   final Duration? retryAfter;
 
   ApiRequestException(
-      this.message, {
-        this.statusCode,
-        this.path,
-        this.errorCode,
-        this.details,
-        this.retryAfter,
-      });
+    this.message, {
+    this.statusCode,
+    this.path,
+    this.errorCode,
+    this.details,
+    this.retryAfter,
+  });
 
   @override
   String toString() {
@@ -59,6 +59,7 @@ class ApiService {
 
     _attachAuthAndErrorInterceptors();
 
+    // Disable or reduce logging in release mode
     if (ConfigService.enableLogging && kDebugMode) {
       _dio.interceptors.add(LogInterceptor(
         request: false,
@@ -108,6 +109,7 @@ class ApiService {
     );
   }
 
+  /// **🔹 Initialize Cache**
   Future<void> _initializeCache() async {
     Directory cacheDir = await getTemporaryDirectory();
     _cacheStore = HiveCacheStore(cacheDir.path);
@@ -289,18 +291,14 @@ class ApiService {
         path.contains('/party/') && path.endsWith('/enqueue');
   }
 
-  // ✅ FIXED - Single implementation of _loadAccessToken
-  String _loadAccessToken() {
-    if (!Hive.isBoxOpen('auth_tokens')) return '';
-    final box = Hive.box('auth_tokens');
-    return (box.get('auth_access_token', defaultValue: '') as String?) ?? '';
-  }
+  String _loadAccessToken() => _loadTokenByKey('auth_access_token');
 
-  // ✅ FIXED - Single implementation of _loadRefreshToken
-  String _loadRefreshToken() {
+  String _loadRefreshToken() => _loadTokenByKey('auth_refresh_token');
+
+  String _loadTokenByKey(String key) {
     if (!Hive.isBoxOpen('auth_tokens')) return '';
     final box = Hive.box('auth_tokens');
-    return (box.get('auth_refresh_token', defaultValue: '') as String?) ?? '';
+    return (box.get(key, defaultValue: '') as String?) ?? '';
   }
 
   bool _shouldAttemptRefresh(DioException error, ApiErrorEnvelope? envelope) {
@@ -372,7 +370,6 @@ class ApiService {
     return ApiErrorEnvelope(code: code, message: message, details: details);
   }
 
-  // ✅ FIXED - Single implementation with RequestOptions parameter
   void _handleErrorCodeSideEffects(RequestOptions options, ApiErrorEnvelope? envelope) {
     if (envelope == null) return;
     if (!ConfigService.enableLogging) return;
@@ -385,7 +382,7 @@ class ApiService {
 
     debugPrint(
       '[API Telemetry] endpoint=$path errorCode=${envelope.code} '
-          'matchId=${matchId ?? '-'} userId=${userId ?? '-'}',
+      'matchId=${matchId ?? '-'} userId=${userId ?? '-'}',
     );
 
     switch (envelope.code) {
@@ -411,15 +408,15 @@ class ApiService {
   }
 
   ApiPageEnvelope<T> parsePageEnvelope<T>(
-      Map<String, dynamic> payload,
-      T Function(Map<String, dynamic> json) fromJson,
-      ) {
+    Map<String, dynamic> payload,
+    T Function(Map<String, dynamic> json) fromJson,
+  ) {
     final itemsRaw = payload['items'];
     final items = itemsRaw is List
         ? itemsRaw
-        .whereType<Map>()
-        .map((e) => fromJson(Map<String, dynamic>.from(e)))
-        .toList()
+            .whereType<Map>()
+            .map((e) => fromJson(Map<String, dynamic>.from(e)))
+            .toList()
         : <T>[];
     return ApiPageEnvelope<T>(
       page: (payload['page'] as num?)?.toInt() ?? 1,
@@ -475,11 +472,12 @@ class ApiService {
     });
   }
 
+  /// **🔹 Generic GET Request (JSON map response)**
   Future<Map<String, dynamic>> get(
-      String path, {
-        Map<String, String>? headers,
-        Map<String, dynamic>? queryParameters,
-      }) async {
+    String path, {
+    Map<String, String>? headers,
+    Map<String, dynamic>? queryParameters,
+  }) async {
     return _handleRequest(() async {
       final response = await _dio.get(
         path,

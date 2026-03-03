@@ -8,7 +8,6 @@ import '../../game/providers/notification_providers.dart';
 import '../../game/providers/riverpod_providers.dart';
 import 'channel_manager_screen.dart';
 import 'widgets/notification_form.dart';
-import 'widgets/scheduled_list.dart';
 import 'widgets/history_list.dart';
 import 'widgets/segmented_tabs.dart';
 
@@ -31,13 +30,19 @@ class _AdminNotificationsScreenState
   final _channelFilterController = TextEditingController();
   String? _statusFilter;
   bool _isHistoryLoading = false;
+  bool _didLoadServerHistory = false;
   List<Map<String, dynamic>> _serverHistory = <Map<String, dynamic>>[];
+  bool _isServerScheduledLoading = false;
+  bool _didLoadServerScheduled = false;
+  List<Map<String, dynamic>> _serverScheduled = <Map<String, dynamic>>[];
 
 
   @override
   void initState() {
     super.initState();
     _loadServerHistory();
+    _loadServerTemplates();
+    _loadServerScheduled();
   }
 
   @override
@@ -52,6 +57,8 @@ class _AdminNotificationsScreenState
     ref.invalidate(scheduledProvider);
     ref.invalidate(permissionAllowedProvider);
     await _loadServerHistory();
+    await _loadServerTemplates();
+    await _loadServerScheduled();
   }
 
   Future<void> _loadServerHistory() async {
@@ -73,12 +80,63 @@ class _AdminNotificationsScreenState
           .parsePageEnvelope<Map<String, dynamic>>(response, (json) => json)
           .items;
       if (!mounted) return;
-      setState(() => _serverHistory = items);
+      setState(() {
+        _serverHistory = items;
+        _didLoadServerHistory = true;
+      });
     } catch (_) {
       // leave existing local history widget as fallback data source.
     } finally {
       if (mounted) {
         setState(() => _isHistoryLoading = false);
+      }
+    }
+  }
+
+  Future<void> _loadServerTemplates() async {
+    try {
+      final serviceManager = ref.read(serviceManagerProvider);
+      final response = await serviceManager.apiService.get('/admin/notifications/templates');
+      final items = serviceManager.apiService
+          .parsePageEnvelope<Map<String, dynamic>>(response, (json) => json)
+          .items;
+      final store = ref.read(templateStoreProvider);
+      for (final t in items) {
+        final id = (t['id'] ?? t['templateId'] ?? '').toString();
+        if (id.isEmpty) continue;
+        final title = (t['title'] ?? '').toString();
+        final body = (t['body'] ?? '').toString();
+        final payloadRaw = t['payload'];
+        Map<String, String>? payload;
+        if (payloadRaw is Map) {
+          payload = payloadRaw.map((k, v) => MapEntry(k.toString(), v.toString()));
+        }
+        await store.saveRaw(id, title, body, payload);
+      }
+    } catch (_) {
+      // keep local template store fallback
+    }
+  }
+
+
+  Future<void> _loadServerScheduled() async {
+    setState(() => _isServerScheduledLoading = true);
+    try {
+      final serviceManager = ref.read(serviceManagerProvider);
+      final response = await serviceManager.apiService.get('/admin/notifications/schedule');
+      final items = serviceManager.apiService
+          .parsePageEnvelope<Map<String, dynamic>>(response, (json) => json)
+          .items;
+      if (!mounted) return;
+      setState(() {
+        _serverScheduled = items;
+        _didLoadServerScheduled = true;
+      });
+    } catch (_) {
+      // Keep local scheduled list as fallback.
+    } finally {
+      if (mounted) {
+        setState(() => _isServerScheduledLoading = false);
       }
     }
   }
@@ -501,8 +559,10 @@ class _AdminNotificationsScreenState
         ),
         const SizedBox(height: 16),
         if (_isHistoryLoading) const LinearProgressIndicator(minHeight: 2),
-        if (_serverHistory.isEmpty)
+        if (!_didLoadServerHistory)
           const HistoryList()
+        else if (_serverHistory.isEmpty)
+          _buildHistoryEmptyState()
         else
           Container(
             decoration: BoxDecoration(
@@ -517,7 +577,9 @@ class _AdminNotificationsScreenState
               separatorBuilder: (_, __) => const Divider(height: 1),
               itemBuilder: (context, i) {
                 final item = _serverHistory[i];
-                final rawStatus = (item['status'] ?? 'queued').toString().toLowerCase();
+                final rawStatus = (item['status'] ?? item['deliveryStatus'] ?? item['delivery_status'] ?? 'queued')
+                    .toString()
+                    .toLowerCase();
                 final statusColor = switch (rawStatus) {
                   'sent' => const Color(0xFF10B981),
                   'failed' => const Color(0xFFEF4444),
@@ -525,7 +587,7 @@ class _AdminNotificationsScreenState
                   _ => const Color(0xFF3B82F6),
                 };
 
-                final sentAtRaw = (item['sentAt'] ?? item['createdAt'])?.toString();
+                final sentAtRaw = (item['sentAt'] ?? item['sent_at'] ?? item['createdAt'] ?? item['created_at'])?.toString();
                 String when = '-';
                 if (sentAtRaw != null && sentAtRaw.isNotEmpty) {
                   final dt = DateTime.tryParse(sentAtRaw)?.toUtc().toLocal();
@@ -538,8 +600,8 @@ class _AdminNotificationsScreenState
                   leading: const Icon(Icons.notifications_active_outlined),
                   title: Text(item['title']?.toString() ?? '(untitled)'),
                   subtitle: Text(
-                    'channel=${item['channelKey'] ?? '-'} • $when\n'
-                    '${item['failureReason'] ?? item['message'] ?? ''}',
+                    'channel=${item['channelKey'] ?? item['channel_key'] ?? '-'} • $when\n'
+                    '${item['failureReason'] ?? item['failure_reason'] ?? item['message'] ?? ''}',
                   ),
                   isThreeLine: true,
                   trailing: Container(
@@ -607,6 +669,11 @@ class _AdminNotificationsScreenState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        if (_isServerScheduledLoading)
+          const Padding(
+            padding: EdgeInsets.only(bottom: 10),
+            child: LinearProgressIndicator(minHeight: 2),
+          ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -635,98 +702,190 @@ class _AdminNotificationsScreenState
                 ),
               ],
             ),
-            scheduledAsync.when(
-              data: (items) {
-                if (items.isEmpty) return const SizedBox.shrink();
-                return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF3B82F6).withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    '${items.length}',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF3B82F6),
-                    ),
-                  ),
-                );
-              },
-              loading: () => const SizedBox.shrink(),
-              error: (_, __) => const SizedBox.shrink(),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: const Color(0xFF3B82F6).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                '${_didLoadServerScheduled ? _serverScheduled.length : (scheduledAsync.valueOrNull?.length ?? 0)}',
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF3B82F6),
+                ),
+              ),
             ),
           ],
         ),
         const SizedBox(height: 16),
-        scheduledAsync.when(
-          data: (items) {
-            if (items.isEmpty) {
-              return _buildEmptyState();
-            }
-            return Container(
+        if (_didLoadServerScheduled)
+          _serverScheduled.isEmpty
+              ? _buildEmptyState()
+              : Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: const Color(0xFFE5E7EB),
+                      width: 1,
+                    ),
+                  ),
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _serverScheduled.length,
+                    separatorBuilder: (_, __) => const Divider(height: 1),
+                    itemBuilder: (context, i) {
+                      final item = _serverScheduled[i];
+                      final status =
+                          (item['status'] ?? item['deliveryStatus'] ?? 'queued')
+                              .toString()
+                              .toLowerCase();
+                      final statusColor = switch (status) {
+                        'sent' => const Color(0xFF10B981),
+                        'failed' => const Color(0xFFEF4444),
+                        'retrying' => const Color(0xFFF59E0B),
+                        _ => const Color(0xFF3B82F6),
+                      };
+
+                      final atRaw = (item['scheduledAt'] ??
+                              item['scheduled_at'] ??
+                              item['createdAt'] ??
+                              item['created_at'])
+                          ?.toString();
+                      String scheduledAt = '-';
+                      if (atRaw != null && atRaw.isNotEmpty) {
+                        final dt = DateTime.tryParse(atRaw)?.toUtc().toLocal();
+                        if (dt != null) {
+                          scheduledAt = _dateFormat.format(dt);
+                        }
+                      }
+
+                      return ListTile(
+                        leading: const Icon(Icons.schedule),
+                        title: Text(item['title']?.toString() ?? '(untitled)'),
+                        subtitle: Text(
+                          'channel=${item['channelKey'] ?? item['channel_key'] ?? '-'} • $scheduledAt',
+                        ),
+                        trailing: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: statusColor.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            status,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: statusColor,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                )
+        else
+          scheduledAsync.when(
+            data: (items) {
+              if (items.isEmpty) {
+                return _buildEmptyState();
+              }
+              return Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: const Color(0xFFE5E7EB),
+                    width: 1,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: items.length,
+                  separatorBuilder: (_, __) => const Divider(height: 1),
+                  itemBuilder: (context, i) {
+                    final n = items[i];
+                    final schedule = n.schedule;
+                    return _buildScheduledItem(n, schedule);
+                  },
+                ),
+              );
+            },
+            loading: () => const Center(
+              child: Padding(
+                padding: EdgeInsets.all(32),
+                child: CircularProgressIndicator(),
+              ),
+            ),
+            error: (e, _) => Container(
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
+                color: const Color(0xFFEF4444).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: const Color(0xFFE5E7EB),
+                  color: const Color(0xFFEF4444).withValues(alpha: 0.3),
                   width: 1,
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.error_outline, color: Color(0xFFEF4444)),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      'Failed to load scheduled: $e',
+                      style: const TextStyle(color: Color(0xFFEF4444)),
+                    ),
                   ),
                 ],
               ),
-              child: ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: items.length,
-                separatorBuilder: (_, __) => const Divider(height: 1),
-                itemBuilder: (context, i) {
-                  final n = items[i];
-                  final schedule = n.schedule;
-                  return _buildScheduledItem(n, schedule);
-                },
-              ),
-            );
-          },
-          loading: () => const Center(
-            child: Padding(
-              padding: EdgeInsets.all(32),
-              child: CircularProgressIndicator(),
             ),
           ),
-          error: (e, _) => Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: const Color(0xFFEF4444).withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: const Color(0xFFEF4444).withValues(alpha: 0.3),
-                width: 1,
-              ),
-            ),
-            child: Row(
-              children: [
-                const Icon(Icons.error_outline, color: Color(0xFFEF4444)),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    'Failed to load scheduled: $e',
-                    style: const TextStyle(color: Color(0xFFEF4444)),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
       ],
     );
   }
+
+  Widget _buildHistoryEmptyState() {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: const Color(0xFFE5E7EB),
+          width: 1,
+        ),
+      ),
+      child: const Row(
+        children: [
+          Icon(Icons.inbox_outlined, color: Color(0xFF6B7280)),
+          SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              'No notification history found for the selected filters.',
+              style: TextStyle(color: Color(0xFF6B7280)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 
   Widget _buildScheduledItem(dynamic n, dynamic schedule) {
     return Container(
