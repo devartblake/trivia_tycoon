@@ -5,6 +5,7 @@ import '../../admin/providers/admin_auth_providers.dart';
 import '../services/channel_prefs.dart';
 import 'notification_history_store.dart';
 import 'notification_template_store.dart';
+import 'riverpod_providers.dart';
 
 /// Permission status
 final permissionAllowedProvider = FutureProvider<bool>((ref) async {
@@ -71,6 +72,18 @@ class NotificationAdminActions extends AutoDisposeAsyncNotifier<void> {
   }) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
+      final serviceManager = ref.read(serviceManagerProvider);
+      await serviceManager.apiService.post(
+        '/admin/notifications/send',
+        body: {
+          'id': id,
+          'channelKey': channelKey,
+          'title': title,
+          'body': body,
+          if (payload != null) 'payload': payload,
+        },
+      );
+
       await NotificationService().sendNow(
         id: id,
         channelKey: channelKey,
@@ -96,20 +109,27 @@ class NotificationAdminActions extends AutoDisposeAsyncNotifier<void> {
     required DateTime scheduledAt,
     Map<String, String>? payload,
     bool repeats = false,
+    int? weeklyWeekday,
   }) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      await NotificationService().scheduleAt(
-        id: id,
-        channelKey: channelKey,
-        title: title,
-        body: body,
-        scheduledAt: scheduledAt,
-        payload: payload,
-        precise: !repeats,
+      final serviceManager = ref.read(serviceManagerProvider);
+      await serviceManager.apiService.post(
+        '/admin/notifications/schedule',
+        body: {
+          'id': id,
+          'channelKey': channelKey,
+          'title': title,
+          'body': body,
+          'scheduledAt': scheduledAt.toUtc().toIso8601String(),
+          'repeats': repeats,
+          if (repeats && weeklyWeekday != null) 'weekday': weeklyWeekday,
+          if (payload != null) 'payload': payload,
+        },
       );
+
       if (repeats) {
-        // Re-schedule using repeats by components (portable, cron-like)
+        // Schedule repeat-only notifications without creating an extra one-off schedule.
         await AwesomeNotifications().createNotification(
           content: NotificationContent(
             id: id,
@@ -126,10 +146,20 @@ class NotificationAdminActions extends AutoDisposeAsyncNotifier<void> {
             minute: scheduledAt.minute,
             second: 0,
             millisecond: 0,
-            weekday: null, // set 1-7 for weekly if desired
+            weekday: weeklyWeekday,
             repeats: true,
             allowWhileIdle: true,
           ),
+        );
+      } else {
+        await NotificationService().scheduleAt(
+          id: id,
+          channelKey: channelKey,
+          title: title,
+          body: body,
+          scheduledAt: scheduledAt,
+          payload: payload,
+          precise: true,
         );
       }
       ref.invalidate(scheduledProvider);

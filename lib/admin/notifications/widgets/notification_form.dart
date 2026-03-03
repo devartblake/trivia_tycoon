@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/notification_service.dart';
 import '../../../game/providers/notification_providers.dart';
 import '../../../game/providers/notification_template_store.dart';
+import '../../../game/providers/riverpod_providers.dart';
 
 class NotificationForm extends ConsumerStatefulWidget {
   const NotificationForm({super.key});
@@ -122,6 +123,7 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
       scheduledAt: _scheduleAt!,
       payload: _parsePayload(),
       repeats: _repeats,
+      weeklyWeekday: _weeklyWeekday,
     );
     if (mounted) {
       final err = ref.read(notificationAdminActionsProvider).error;
@@ -139,6 +141,7 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
         setState(() {
           _scheduleAt = null;
           _repeats = false;
+          _weeklyWeekday = null;
         });
       }
     }
@@ -156,13 +159,36 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
       );
       return;
     }
-    await store.saveRaw(id, _titleCtrl.text.trim(), _bodyCtrl.text.trim(), _parsePayload());
+    final payload = _parsePayload();
+    var savedToServer = true;
+    try {
+      final serviceManager = ref.read(serviceManagerProvider);
+      await serviceManager.apiService.post(
+        '/admin/notifications/templates',
+        body: {
+          'id': id,
+          'title': _titleCtrl.text.trim(),
+          'body': _bodyCtrl.text.trim(),
+          if (payload != null) 'payload': payload,
+        },
+      );
+    } catch (_) {
+      // Keep local template flow as fallback when backend templates endpoint is unavailable.
+      savedToServer = false;
+    }
+
+    await store.saveRaw(id, _titleCtrl.text.trim(), _bodyCtrl.text.trim(), payload);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Template saved successfully!'),
+        SnackBar(
+          content: Text(
+            savedToServer
+                ? 'Template saved successfully!'
+                : 'Template saved locally (server unavailable).',
+          ),
           behavior: SnackBarBehavior.floating,
-          backgroundColor: Color(0xFF10B981),
+          backgroundColor:
+              savedToServer ? const Color(0xFF10B981) : const Color(0xFFF59E0B),
         ),
       );
     }
@@ -566,12 +592,20 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
           }
         }
 
-        if (!items.any((e) => e.value == _channelKey) && items.isNotEmpty) {
-          _channelKey = items.first.value!;
+        final hasCurrentChannel = items.any((e) => e.value == _channelKey);
+        final selectedChannel = hasCurrentChannel
+            ? _channelKey
+            : (items.isNotEmpty ? items.first.value! : _channelKey);
+
+        if (!hasCurrentChannel && items.isNotEmpty) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!mounted) return;
+            setState(() => _channelKey = selectedChannel);
+          });
         }
 
         return DropdownButtonFormField<String>(
-          value: _channelKey,
+          value: selectedChannel,
           decoration: InputDecoration(
             labelText: 'Channel',
             border: OutlineInputBorder(
@@ -727,41 +761,51 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
             children: [
               Checkbox(
                 value: _repeats,
-                onChanged: (v) => setState(() => _repeats = v ?? false),
+                onChanged: (v) => setState(() {
+                  _repeats = v ?? false;
+                  if (!_repeats) {
+                    _weeklyWeekday = null;
+                  }
+                }),
                 activeColor: const Color(0xFF3B82F6),
               ),
               const Text(
-                'Repeat daily at this time',
+                'Repeat at this time',
                 style: TextStyle(fontSize: 14, color: Color(0xFF1F2937)),
               ),
             ],
           ),
           const SizedBox(height: 8),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: const Color(0xFFE5E7EB)),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: DropdownButton<int?>(
-              value: _weeklyWeekday,
-              hint: const Text('Weekly (select weekday)', style: TextStyle(fontSize: 13)),
-              isExpanded: true,
-              underline: const SizedBox.shrink(),
-              items: [
-                const DropdownMenuItem(value: null, child: Text('No weekly repeat')),
-                ...List.generate(7, (i) {
-                  final val = i + 1;
-                  final days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-                  return DropdownMenuItem(
-                    value: val,
-                    child: Text(days[i], style: const TextStyle(fontSize: 13)),
-                  );
-                }),
-              ],
-              onChanged: (v) => setState(() => _weeklyWeekday = v),
-              icon: const Icon(Icons.arrow_drop_down, color: Color(0xFF6366F1)),
+          Opacity(
+            opacity: _repeats ? 1 : 0.6,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: const Color(0xFFE5E7EB)),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: DropdownButton<int?>(
+                value: _weeklyWeekday,
+                hint: const Text('Weekly (select weekday)', style: TextStyle(fontSize: 13)),
+                isExpanded: true,
+                underline: const SizedBox.shrink(),
+                items: [
+                  const DropdownMenuItem(value: null, child: Text('No weekly repeat')),
+                  ...List.generate(7, (i) {
+                    final val = i + 1;
+                    final days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+                    return DropdownMenuItem(
+                      value: val,
+                      child: Text(days[i], style: const TextStyle(fontSize: 13)),
+                    );
+                  }),
+                ],
+                onChanged: _repeats
+                    ? (v) => setState(() => _weeklyWeekday = v)
+                    : null,
+                icon: const Icon(Icons.arrow_drop_down, color: Color(0xFF6366F1)),
+              ),
             ),
           ),
         ],
