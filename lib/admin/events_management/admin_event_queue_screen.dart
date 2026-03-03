@@ -9,6 +9,7 @@ import 'package:hive/hive.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 
 import '../../core/router/enhanced_admin_guard.dart';
+import '../../core/services/api_service.dart';
 
 class AdminEventQueueScreen extends ConsumerStatefulWidget {
   const AdminEventQueueScreen({super.key});
@@ -254,7 +255,12 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
         '${rejected != null ? ', rejected: $rejected' : ''}'
         '${duplicates != null ? ', duplicates: $duplicates' : ''}',
       );
-    } catch (e) {
+    } on ApiRequestException catch (e) {
+      final retryIn = e.retryAfter?.inSeconds;
+      if (e.errorCode == 'RATE_LIMITED' && retryIn != null) {
+        _showError('Upload rate-limited. Try again in ${retryIn}s.');
+        return;
+      }
       // Keep previous operational fallback for offline/unsupported environments.
       try {
         final serviceManager = ref.read(serviceManagerProvider);
@@ -318,6 +324,13 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
       }
 
       _showSuccess('Reprocess requested (${status.toUpperCase()})');
+    } on ApiRequestException catch (e) {
+      final retryIn = e.retryAfter?.inSeconds;
+      if (e.errorCode == 'RATE_LIMITED' && retryIn != null) {
+        _showError('Reprocess rate-limited. Retry in ${retryIn}s.');
+        return;
+      }
+      _showError('Reprocess failed: ${e.message}');
     } catch (e) {
       _showError('Reprocess failed: $e');
     }

@@ -1468,10 +1468,9 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
     try {
       final serviceManager = ref.read(serviceManagerProvider);
       final response = await serviceManager.apiService.get('/admin/users/${user.id}/activity');
-      final items = response['items'];
-      final logs = items is List
-          ? items.whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList()
-          : <Map<String, dynamic>>[];
+      final logs = serviceManager.apiService
+          .parsePageEnvelope<Map<String, dynamic>>(response, (json) => json)
+          .items;
       if (!mounted) return;
       _showActivityLogDialog(user, logs);
     } catch (e) {
