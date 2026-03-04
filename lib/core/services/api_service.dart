@@ -272,7 +272,7 @@ class ApiService {
         normalizedMessage = '$normalizedMessage (retry after ${retryAfter}s)';
       }
 
-      _handleErrorCodeSideEffects(e.response?.statusCode);
+      await _handleErrorCodeSideEffects(e.response?.statusCode);
 
       // Log other Dio errors normally
       if (_configService.enableLogging) {
@@ -562,16 +562,19 @@ class ApiService {
     }
   }
 
-  void _handleErrorCodeSideEffects(int? statusCode) {
+  Future<void> _handleErrorCodeSideEffects(int? statusCode) async {
     if (statusCode == 401) {
-      _clearAccessToken();
+      await _clearSessionTokens();
     }
   }
 
-  void _clearAccessToken() {
+  Future<void> _clearSessionTokens() async {
     if (!Hive.isBoxOpen('auth_tokens')) return;
+
     final box = Hive.box('auth_tokens');
-    box.delete('auth_access_token');
+    await box.delete('auth_access_token');
+    await box.delete('auth_refresh_token');
+    await box.delete('auth_expires_at_utc');
   }
 
   int? _extractRetryAfter(DioException e) {

@@ -82,6 +82,25 @@ Future<bool> _tryAdminRefresh(
 }
 
 Future<Map<String, dynamic>> _fallbackClaims(Ref ref) async {
+  final tokenStore = ref.read(authTokenStoreProvider);
+  final session = tokenStore.load();
+  final storedRoles = session.roles
+      .map((role) => role.toLowerCase())
+      .where((role) => role.isNotEmpty)
+      .toSet()
+      .toList(growable: false);
+
+  if (storedRoles.isNotEmpty) {
+    return {
+      'roles': storedRoles,
+      'permissions': session.metadata?['permissions'] is List
+          ? (session.metadata?['permissions'] as List)
+              .map((permission) => permission.toString())
+              .toList(growable: false)
+          : <String>[],
+    };
+  }
+
   final profile = ref.read(playerProfileServiceProvider);
   final role = await profile.getUserRole();
   final isAdmin = role == 'admin' || await AppSettings.isAdminUser();
