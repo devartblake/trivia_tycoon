@@ -9,6 +9,7 @@ import 'package:hive/hive.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 
 import '../../core/router/enhanced_admin_guard.dart';
+import '../../core/services/api_service.dart';
 
 class AdminEventQueueScreen extends ConsumerStatefulWidget {
   const AdminEventQueueScreen({super.key});
@@ -21,6 +22,10 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
   List<MapEntry<dynamic, Map<String, dynamic>>> _events = [];
   Map<String, dynamic>? _queueStatus;
   bool _isLoading = true;
+  bool _isUploading = false;
+  DateTime? _uploadCooldownUntil;
+  final Map<dynamic, DateTime> _reprocessCooldownUntil = {};
+  final Map<dynamic, Map<String, dynamic>> _serverOutcomeByKey = {};
   final Set<dynamic> _selectedEvents = {};
 
   // Pagination
@@ -31,6 +36,32 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
   void initState() {
     super.initState();
     _loadEventQueue();
+  }
+
+
+  int _secondsRemaining(DateTime? until) {
+    if (until == null) return 0;
+    final diff = until.difference(DateTime.now());
+    return diff.isNegative ? 0 : diff.inSeconds + 1;
+  }
+
+  bool get _isUploadCoolingDown => _secondsRemaining(_uploadCooldownUntil) > 0;
+
+  bool _isReprocessCoolingDown(dynamic key) {
+    return _secondsRemaining(_reprocessCooldownUntil[key]) > 0;
+  }
+
+  void _startCooldownTimer() {
+    Future<void>.delayed(const Duration(seconds: 1), () {
+      if (!mounted) return;
+      final hasUploadCooldown = _isUploadCoolingDown;
+      final hasReprocessCooldown = _reprocessCooldownUntil.entries
+          .any((entry) => _secondsRemaining(entry.value) > 0);
+      if (hasUploadCooldown || hasReprocessCooldown) {
+        setState(() {});
+        _startCooldownTimer();
+      }
+    });
   }
 
   Future<void> _loadEventQueue() async {
@@ -46,16 +77,6 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
       // Read directly from Hive box
       final box = await Hive.openBox('event_queue');
 
-      // Debug: Check what's in the box
-      debugPrint('Box length: ${box.length}');
-      debugPrint('Box keys: ${box.keys.toList()}');
-
-      if (box.isNotEmpty) {
-        final firstValue = box.values.first;
-        debugPrint('First value type: ${firstValue.runtimeType}');
-        debugPrint('First value: $firstValue');
-      }
-
       final eventEntries = box.toMap().entries.map((e) {
         try {
           // Handle different possible types
@@ -64,11 +85,9 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
           } else if (e.value is Map) {
             return MapEntry(e.key, Map<String, dynamic>.from(e.value as Map));
           } else {
-            debugPrint('Unexpected value type: ${e.value.runtimeType}');
             return null;
           }
-        } catch (ex) {
-          debugPrint('Error converting entry: $ex');
+        } catch (_) {
           return null;
         }
       }).whereType<MapEntry<dynamic, Map<String, dynamic>>>().toList();
@@ -80,10 +99,7 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
         _currentPage = 0;
       });
 
-      debugPrint('Loaded ${_events.length} events');
-    } catch (e, stackTrace) {
-      debugPrint('Error loading queue: $e');
-      debugPrint('Stack trace: $stackTrace');
+    } catch (e) {
       setState(() => _isLoading = false);
       _showError('Failed to load event queue: $e');
     }
@@ -161,14 +177,7 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
     try {
       final serviceManager = ref.read(serviceManagerProvider);
 
-      // Check before clear
-      final box = await Hive.openBox('event_queue');
-      debugPrint('Queue size BEFORE clear: ${box.length}');
-
       await serviceManager.eventQueueService.clearAll();
-
-      // Check after clear
-      debugPrint('Queue size AFTER clear: ${box.length}');
 
       setState(() => _selectedEvents.clear());
       await _loadEventQueue();
@@ -248,6 +257,9 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
   }
 
   Future<void> _exportToServer() async {
+    if (_isUploading) return;
+
+    setState(() => _isUploading = true);
     try {
       final serviceManager = ref.read(serviceManagerProvider);
       final playerProfile = serviceManager.playerProfileService;
@@ -515,10 +527,12 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
             _exportQueueToFile,
           ),
           _buildActionChip(
-            'Export Server',
+            _isUploadCoolingDown
+                ? 'Retry in ${_secondsRemaining(_uploadCooldownUntil)}s'
+                : (_isUploading ? 'Uploading...' : 'Export Server'),
             Icons.upload_file_rounded,
             Colors.cyan,
-            _exportToServer,
+            (_isUploading || _isUploadCoolingDown) ? () {} : _exportToServer,
           ),
           _buildActionChip(
             'Sync Now',
@@ -774,11 +788,33 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
                               tooltip: 'View Details',
                             ),
                             IconButton(
+                              icon: const Icon(Icons.refresh_rounded),
+                              color: Colors.orange,
+                              onPressed: _canReprocess(entry.key, event) && !_isReprocessCoolingDown(entry.key)
+                                  ? () => _reprocessEvent(entry.key, event)
+                                  : null,
+                              tooltip: _isReprocessCoolingDown(entry.key)
+                                  ? 'Retry in ${_secondsRemaining(_reprocessCooldownUntil[entry.key])}s'
+                                  : 'Reprocess failed event',
+                            ),
+                            IconButton(
                               icon: const Icon(Icons.delete_outline_rounded),
                               color: Colors.red,
                               onPressed: () => _deleteEvent(entry.key),
                               tooltip: 'Delete',
                             ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            _buildOutcomeBadge('Status', _resolveStatus(entry.key, event)),
+                            if (_resolveDedupeOutcome(entry.key, event) != null)
+                              _buildOutcomeBadge('Dedupe', _resolveDedupeOutcome(entry.key, event)!),
+                            if (_resolveFailureReason(entry.key, event) != null)
+                              _buildOutcomeBadge('Failure', _resolveFailureReason(entry.key, event)!),
                           ],
                         ),
                         const SizedBox(height: 8),
@@ -814,6 +850,65 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
           ),
         ),
       ],
+    );
+  }
+
+
+  String _resolveStatus(dynamic queueKey, Map<String, dynamic> event) {
+    final server = _serverOutcomeByKey[queueKey];
+    return (server?['status'] ?? event['status'] ?? 'queued').toString();
+  }
+
+  String? _resolveDedupeOutcome(dynamic queueKey, Map<String, dynamic> event) {
+    final server = _serverOutcomeByKey[queueKey];
+    final value = server?['dedupeOutcome'] ?? event['dedupe_outcome'];
+    if (value == null) return null;
+    final text = value.toString().trim();
+    return text.isEmpty ? null : text;
+  }
+
+  String? _resolveFailureReason(dynamic queueKey, Map<String, dynamic> event) {
+    final server = _serverOutcomeByKey[queueKey];
+    final value = server?['failureReason'] ?? event['failure_reason'] ?? event['last_error'];
+    if (value == null) return null;
+    final text = value.toString().trim();
+    return text.isEmpty ? null : text;
+  }
+
+  bool _canReprocess(dynamic queueKey, Map<String, dynamic> event) {
+    final status = _resolveStatus(queueKey, event).toLowerCase();
+    return status == 'failed' || status == 'error';
+  }
+
+  Widget _buildOutcomeBadge(String label, String value) {
+    final normalized = value.toLowerCase();
+    Color color;
+    if (normalized == 'sent' || normalized == 'success' || normalized == 'processed') {
+      color = Colors.green;
+    } else if (normalized == 'queued' || normalized == 'pending' || normalized == 'retrying') {
+      color = Colors.blue;
+    } else if (normalized == 'duplicate' || normalized == 'deduped') {
+      color = Colors.purple;
+    } else if (normalized == 'failed' || normalized == 'error') {
+      color = Colors.red;
+    } else {
+      color = Colors.grey;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        '$label: $value',
+        style: TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+          color: color,
+        ),
+      ),
     );
   }
 
