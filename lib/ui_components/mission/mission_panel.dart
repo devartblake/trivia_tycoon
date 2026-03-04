@@ -5,6 +5,7 @@ import 'widgets/mission_card_widget.dart';
 import '../../game/providers/xp_provider.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../core/services/notification_service.dart';
+import '../../core/animations/animation_manager.dart';
 
 class MissionPanel extends ConsumerStatefulWidget {
   final int playerXP;
@@ -21,32 +22,32 @@ class MissionPanel extends ConsumerStatefulWidget {
 }
 
 class _MissionPanelState extends ConsumerState<MissionPanel>
-    with TickerProviderStateMixin {
-  AnimationController? _headerAnimationController;
-  Animation<double>? _headerSlideAnimation;
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _headerAnimationController;
+  late final Animation<double> _headerSlideAnimation;
   bool _isSwapping = false;
   final NotificationService _notificationService = NotificationService();
 
   @override
   void initState() {
     super.initState();
-    _headerAnimationController = AnimationController(
-      duration: const Duration(milliseconds: 600),
+    _headerAnimationController = AnimationManager.createController(
       vsync: this,
+      duration: const Duration(milliseconds: 600),
     );
     _headerSlideAnimation = Tween<double>(
       begin: -50.0,
       end: 0.0,
     ).animate(CurvedAnimation(
-      parent: _headerAnimationController!,
+      parent: _headerAnimationController,
       curve: Curves.easeOutBack,
     ));
-    _headerAnimationController!.forward();
+    _headerAnimationController.forward();
   }
 
   @override
   void dispose() {
-    _headerAnimationController?.dispose();
+    _headerAnimationController.dispose();
     super.dispose();
   }
 
@@ -281,17 +282,15 @@ class _MissionPanelState extends ConsumerState<MissionPanel>
   }
 
   Widget _buildHeader(int currentXP) {
-    return _headerAnimationController != null && _headerSlideAnimation != null
-        ? AnimatedBuilder(
-      animation: _headerAnimationController!,
+    return AnimatedBuilder(
+      animation: _headerAnimationController,
       builder: (context, child) {
         return Transform.translate(
-          offset: Offset(_headerSlideAnimation!.value, 0),
+          offset: Offset(_headerSlideAnimation.value, 0),
           child: _headerContent(currentXP),
         );
       },
-    )
-        : _headerContent(currentXP);
+    );
   }
 
   Widget _buildHeaderContent(int currentXP) {
