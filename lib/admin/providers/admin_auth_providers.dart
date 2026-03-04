@@ -3,6 +3,7 @@ import '../../core/services/api_service.dart';
 import '../../core/services/auth_token_store.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../core/services/settings/app_settings.dart';
+import '../../core/manager/service_manager.dart';
 
 /// Canonical admin claims resolved from backend `/admin/auth/me`.
 ///
@@ -35,15 +36,22 @@ final adminClaimsProvider = FutureProvider<Map<String, dynamic>>((ref) async {
 Future<bool> _tryAdminRefresh(
   Ref ref,
   AuthTokenStore tokenStore,
-  dynamic serviceManager,
+  ServiceManager serviceManager,
 ) async {
   final session = tokenStore.load();
   if (session.refreshToken.isEmpty) return false;
 
   try {
+    final deviceIdService = ref.read(deviceIdServiceProvider);
+    final deviceIdentity = await deviceIdService.getDeviceIdentityPayload();
+
     final response = await serviceManager.apiService.post(
       '/admin/auth/refresh',
-      body: {'refreshToken': session.refreshToken},
+      body: {
+        'refreshToken': session.refreshToken,
+        'refresh_token': session.refreshToken,
+        ...deviceIdentity,
+      },
     );
 
     final newAccess =

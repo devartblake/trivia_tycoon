@@ -109,7 +109,7 @@ class AuthApiClient {
 
     // Extract user object if present
     if (response.containsKey('user') && response['user'] is Map) {
-      final user = _asJsonMap(response['user']);
+      final user = _asJsonMap(response['user']) ?? <String, dynamic>{};
 
       // Add all user fields to metadata
       metadata.addAll(user);
@@ -144,7 +144,7 @@ class AuthApiClient {
     required String deviceId,
     String? deviceType,
   }) async {
-    final resolvedDeviceType = await _deviceId.getOrCreate();
+    final resolvedDeviceType = deviceType ?? _deviceId.getDeviceType();
 
     final res = await _http.post(
       _u(refreshPath),
@@ -164,7 +164,7 @@ class AuthApiClient {
       throw Exception('Refresh failed: ${res.statusCode} ${res.body}');
     }
 
-    final json = jsonDecode(res.body) as Map<String, dynamic>;
+    final json = _decodeBodyMap(res.body, context: 'refresh');
     return _parseSession(json);
   }
 
@@ -220,19 +220,21 @@ class AuthApiClient {
 
     try {
       final decoded = jsonDecode(trimmed);
-      if (decoded is Map<String, dynamic>) {
-        return decoded;
-      }
+      return _asJsonMap(decoded);
     } catch (_) {
       return null;
     }
-
-    return null;
   }
 
   String _extractErrorMessage(http.Response response, {required String fallback}) {
     final parsed = _tryDecodeBodyMap(response.body);
     if (parsed != null) {
+      final nestedError = _asJsonMap(parsed['error']);
+      final nestedMessage = _asNullableString(nestedError?['message']);
+      if (nestedMessage != null) {
+        return nestedMessage;
+      }
+
       final dynamic message = parsed['message'] ?? parsed['error'] ?? parsed['detail'] ?? parsed['title'];
       if (message is String && message.trim().isNotEmpty) {
         return message.trim();
@@ -242,12 +244,12 @@ class AuthApiClient {
     return fallback;
   }
 
-  Map<String, dynamic> _asJsonMap(Object? value) {
+  Map<String, dynamic>? _asJsonMap(Object? value) {
     if (value is Map<String, dynamic>) return value;
     if (value is Map) {
       return value.map((key, entry) => MapEntry(key.toString(), entry));
     }
-    return <String, dynamic>{};
+    return null;
   }
 
   String _asString(Object? value) {

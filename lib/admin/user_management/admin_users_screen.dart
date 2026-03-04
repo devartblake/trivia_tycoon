@@ -39,11 +39,16 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
     try {
       final serviceManager = ref.read(serviceManagerProvider);
       final response = await serviceManager.apiService.get('/admin/users');
-      final envelope = serviceManager.apiService.parsePageEnvelope<AdminUserModel>(
-        response,
-        AdminUserModel.fromJson,
-      );
-      _users = envelope.items;
+      final items = response['items'];
+      if (items is List) {
+        _users = items
+            .whereType<Map>()
+            .map((e) => Map<String, dynamic>.from(e))
+            .map(AdminUserModel.fromJson)
+            .toList();
+      } else {
+        _users = [];
+      }
     } catch (e) {
       _usersError = 'Using local sample users (backend unavailable): $e';
       _users = _getMockUsers();
@@ -1468,9 +1473,10 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
     try {
       final serviceManager = ref.read(serviceManagerProvider);
       final response = await serviceManager.apiService.get('/admin/users/${user.id}/activity');
-      final logs = serviceManager.apiService
-          .parsePageEnvelope<Map<String, dynamic>>(response, (json) => json)
-          .items;
+      final items = response['items'];
+      final logs = items is List
+          ? items.whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList()
+          : <Map<String, dynamic>>[];
       if (!mounted) return;
       _showActivityLogDialog(user, logs);
     } catch (e) {
