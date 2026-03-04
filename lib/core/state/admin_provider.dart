@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
+import '../../admin/providers/admin_auth_providers.dart';
 
 /// Provider for checking if admin mode is enabled
 final isAdminModeEnabledProvider = FutureProvider<bool>((ref) async {
@@ -8,7 +9,7 @@ final isAdminModeEnabledProvider = FutureProvider<bool>((ref) async {
 
 /// Provider for checking if current user is an admin
 final isAdminUserProvider = FutureProvider<bool>((ref) async {
-  return await AppSettings.isAdminUser();
+  return await ref.watch(unifiedIsAdminProvider.future);
 });
 
 /// Combined provider that checks both admin mode and admin user status
@@ -70,7 +71,7 @@ class AdminStateNotifier extends StateNotifier<AdminState> {
 
     try {
       final isAdminModeEnabled = await AppSettings.isAdminMode();
-      final isAdminUser = await AppSettings.isAdminUser();
+      final isAdminUser = await ref.read(unifiedIsAdminProvider.future);
 
       state = state.copyWith(
         isAdminModeEnabled: isAdminModeEnabled,
