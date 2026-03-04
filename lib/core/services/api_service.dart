@@ -57,6 +57,22 @@ class ApiPageEnvelope<T> {
 
   bool get hasNext => page < totalPages;
   bool get hasPrevious => page > 1;
+
+  // Backward-compatible aliases used by some admin call sites.
+  int get limit => pageSize;
+  int get pages => totalPages;
+
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'items': items,
+        'page': page,
+        'pageSize': pageSize,
+        'limit': limit,
+        'total': total,
+        'totalPages': totalPages,
+        'pages': pages,
+        'hasNext': hasNext,
+        'hasPrevious': hasPrevious,
+      };
 }
 
 class ApiService {
@@ -402,8 +418,9 @@ class ApiService {
 
   /// Parses common paginated envelope variants into a typed structure.
   ApiPageEnvelope<T> parsePageEnvelope<T>(
-    Map<String, dynamic> response,
-    T Function(Map<String, dynamic>) itemParser, {
+    Map<String, dynamic> response, [
+    T Function(Map<String, dynamic>)? itemParser,
+  ], {
     List<String> dataKeys = const ['items', 'data', 'results', 'rows'],
   }) {
     List<dynamic> rawItems = const <dynamic>[];
@@ -443,12 +460,14 @@ class ApiService {
         readInt(paging['pages']) ??
         ((pageSize > 0) ? (total / pageSize).ceil() : 1);
 
+    final parser = itemParser ?? (Map<String, dynamic> map) => map as T;
+
     final items = rawItems.map((item) {
       if (item is Map<String, dynamic>) {
-        return itemParser(item);
+        return parser(item);
       }
       if (item is Map) {
-        return itemParser(_asJsonMap(item));
+        return parser(_asJsonMap(item));
       }
       throw ApiRequestException('Invalid paginated item type: ${item.runtimeType}');
     }).toList(growable: false);
