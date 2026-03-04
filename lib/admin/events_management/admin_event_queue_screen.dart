@@ -105,6 +105,30 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
     }
   }
 
+  Future<void> _reprocessEvent(dynamic key, Map<String, dynamic> event) async {
+    try {
+      final serviceManager = ref.read(serviceManagerProvider);
+      final endpoint = event['endpoint']?.toString();
+      final payloadRaw = event['payload'];
+
+      if (endpoint == null || endpoint.isEmpty || payloadRaw is! Map) {
+        _showError('Invalid queued event payload');
+        return;
+      }
+
+      final payload = Map<String, dynamic>.from(payloadRaw);
+      await serviceManager.apiService.post(endpoint, body: payload);
+
+      final box = await Hive.openBox('event_queue');
+      await box.delete(key);
+
+      _showSuccess('Event reprocessed successfully');
+      await _loadEventQueue();
+    } catch (e) {
+      _showError('Failed to reprocess event: $e');
+    }
+  }
+
   Future<void> _deleteEvent(dynamic key) async {
     try {
       final box = await Hive.openBox('event_queue');

@@ -38,6 +38,27 @@ class ApiRequestException implements Exception {
   }
 }
 
+
+
+class ApiPageEnvelope<T> {
+  final List<T> items;
+  final int page;
+  final int pageSize;
+  final int total;
+  final int totalPages;
+
+  const ApiPageEnvelope({
+    required this.items,
+    required this.page,
+    required this.pageSize,
+    required this.total,
+    required this.totalPages,
+  });
+
+  bool get hasNext => page < totalPages;
+  bool get hasPrevious => page > 1;
+}
+
 class ApiService {
   final Dio _dio;
   final Dio _refreshDio;
@@ -378,28 +399,26 @@ class ApiService {
     });
   }
 
-  /// Parses common paginated envelope variants into a normalized map.
-  ///
-  /// Supported item keys include: `items`, `data`, `results`, `rows`.
-  /// Supported pagination keys include: `page`, `limit`, `total`, `totalPages`,
-  /// or nested under `pagination` / `meta`.
-  Map<String, dynamic> parsePageEnvelope(
-    Map<String, dynamic> response, {
+
+  /// Parses common paginated envelope variants into a typed structure.
+  ApiPageEnvelope<T> parsePageEnvelope<T>(
+    Map<String, dynamic> response,
+    T Function(Map<String, dynamic>) itemParser, {
     List<String> dataKeys = const ['items', 'data', 'results', 'rows'],
   }) {
-    List<dynamic> items = const <dynamic>[];
+    List<dynamic> rawItems = const <dynamic>[];
 
     for (final key in dataKeys) {
       final candidate = response[key];
       if (candidate is List) {
-        items = candidate;
+        rawItems = candidate;
         break;
       }
     }
 
-    final pagination = _asJsonMap(response['pagination']).isNotEmpty
-        ? _asJsonMap(response['pagination'])
-        : _asJsonMap(response['meta']);
+    final paginationData = _asJsonMap(response['pagination']);
+    final metaData = _asJsonMap(response['meta']);
+    final paging = paginationData.isNotEmpty ? paginationData : metaData;
 
     int? readInt(Object? value) {
       if (value is int) return value;
@@ -407,32 +426,68 @@ class ApiService {
       return null;
     }
 
-    final page = readInt(response['page']) ?? readInt(pagination['page']) ?? 1;
-    final limit = readInt(response['limit']) ??
-        readInt(response['pageSize']) ??
-        readInt(pagination['limit']) ??
-        readInt(pagination['pageSize']) ??
-        items.length;
+    final page = readInt(response['page']) ?? readInt(paging['page']) ?? 1;
+    final pageSize = readInt(response['pageSize']) ??
+        readInt(response['limit']) ??
+        readInt(paging['pageSize']) ??
+        readInt(paging['limit']) ??
+        rawItems.length;
     final total = readInt(response['total']) ??
         readInt(response['count']) ??
-        readInt(pagination['total']) ??
-        readInt(pagination['count']) ??
-        items.length;
+        readInt(paging['total']) ??
+        readInt(paging['count']) ??
+        rawItems.length;
     final totalPages = readInt(response['totalPages']) ??
         readInt(response['pages']) ??
-        readInt(pagination['totalPages']) ??
-        readInt(pagination['pages']) ??
-        ((limit > 0) ? (total / limit).ceil() : 1);
+        readInt(paging['totalPages']) ??
+        readInt(paging['pages']) ??
+        ((pageSize > 0) ? (total / pageSize).ceil() : 1);
 
-    return <String, dynamic>{
-      'items': items,
-      'page': page,
-      'limit': limit,
-      'total': total,
-      'totalPages': totalPages,
-      'hasNext': page < totalPages,
-      'hasPrevious': page > 1,
-    };
+    final items = rawItems.map((item) {
+      if (item is Map<String, dynamic>) {
+        return itemParser(item);
+      }
+      if (item is Map) {
+        return itemParser(_asJsonMap(item));
+      }
+      throw ApiRequestException('Invalid paginated item type: ${item.runtimeType}');
+    }).toList(growable: false);
+
+    return ApiPageEnvelope<T>(
+      items: items,
+      page: page,
+      pageSize: pageSize,
+      total: total,
+      totalPages: totalPages,
+    );
+  }
+
+  // Compatibility helpers for branches that still reference these methods.
+  bool _isProtectedPath(String path) => path.startsWith('/admin/');
+
+  Map<String, dynamic> _extractErrorEnvelope(Object? responseData) {
+    if (responseData is Map) {
+      final map = _asJsonMap(responseData);
+      final nested = _asJsonMap(map['error']);
+      return nested.isNotEmpty ? nested : map;
+    }
+    return <String, dynamic>{};
+  }
+
+  bool _shouldAttemptRefresh(DioException e) => e.response?.statusCode == 401;
+
+  Future<bool> _refreshSessionToken() async => false;
+
+  Future<Response<dynamic>> _retryWithFreshToken(DioException e) {
+    return _dio.fetch<dynamic>(e.requestOptions);
+  }
+
+  void _handleErrorCodeSideEffects(int? statusCode) {}
+
+  int? _extractRetryAfter(DioException e) {
+    final value = e.response?.headers.value('retry-after');
+    if (value == null) return null;
+    return int.tryParse(value);
   }
 
   /// **🔹 Analytics Event Submission**
