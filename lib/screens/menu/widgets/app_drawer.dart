@@ -4,9 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/screens/menu/widgets/profile_switcher.dart';
 import 'package:trivia_tycoon/screens/menu/widgets/simple_menu_item.dart';
 import '../../../core/services/settings/multi_profile_service.dart';
+import '../../../core/animations/animation_manager.dart';
 import '../../../game/providers/multi_profile_providers.dart';
 import '../../../game/providers/riverpod_providers.dart';
-import '../../../game/utils/drawer_animations.dart';
 import '../../../game/utils/drawer_menu_config.dart';
 import '../../profile/widgets/theme_drawer.dart';
 
@@ -63,14 +63,14 @@ class _AppDrawerState extends ConsumerState<AppDrawer>
         DrawerMenuConfig.bottomMenuItems.length +
         1; // +1 for logout
 
-    _itemControllers = DrawerAnimations.createStaggeredControllers(
+    _itemControllers = AnimationManager.createStaggeredControllers(
       vsync: this,
       count: totalItems,
     );
 
     // Start animations
     _fadeController!.forward();
-    DrawerAnimations.startStaggered(
+    AnimationManager.startStaggered(
       controllers: _itemControllers,
       mounted: mounted,
     );
@@ -79,7 +79,7 @@ class _AppDrawerState extends ConsumerState<AppDrawer>
   @override
   void dispose() {
     _fadeController?.dispose();
-    DrawerAnimations.disposeControllers(_itemControllers);
+    AnimationManager.disposeControllers(_itemControllers);
     super.dispose();
   }
 

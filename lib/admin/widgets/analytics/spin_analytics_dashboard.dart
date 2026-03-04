@@ -710,11 +710,11 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
   String _formatTimestamp(dynamic timestamp) {
     if (timestamp == null) return 'Unknown';
     try {
-      final date = timestamp is DateTime
-          ? timestamp
-          : DateTime.parse(timestamp.toString());
-      final now = DateTime.now();
-      final difference = now.difference(date);
+      final utcDate = timestamp is DateTime
+          ? timestamp.toUtc()
+          : DateTime.parse(timestamp.toString()).toUtc();
+      final localDate = utcDate.toLocal();
+      final difference = DateTime.now().difference(localDate);
 
       if (difference.inMinutes < 60) {
         return '${difference.inMinutes}m ago';
@@ -723,7 +723,7 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
       } else if (difference.inDays < 7) {
         return '${difference.inDays}d ago';
       } else {
-        return '${date.month}/${date.day}/${date.year}';
+        return '${localDate.month}/${localDate.day}/${localDate.year}';
       }
     } catch (e) {
       return 'Unknown';
