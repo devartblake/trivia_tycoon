@@ -38,8 +38,6 @@ class ApiRequestException implements Exception {
   }
 }
 
-
-
 class ApiPageEnvelope<T> {
   final List<T> items;
   final int page;
@@ -98,7 +96,7 @@ class ApiService {
     _attachAuthAndErrorInterceptors();
 
     // Disable or reduce logging in release mode
-    if (ConfigService.enableLogging && kDebugMode) {
+    if (_configService.enableLogging && kDebugMode) {
       _dio.interceptors.add(LogInterceptor(
         request: false,
         requestHeader: false,
@@ -236,7 +234,8 @@ class ApiService {
     });
   }
 
-  Future<T> _handleRequest<T>(Future<T> Function() request) async {
+  /// Unified API Request Handler with silent timeout handling
+  Future<T> _handleRequest<T>(Future<T> Function() request, {bool allowAuthRetry = true}) async {
     try {
       return await request();
     } on DioException catch (e) {
@@ -247,7 +246,7 @@ class ApiService {
 
       // Preserve silent timeout/offline behavior while keeping exception type consistent.
       if (isTimeoutLike) {
-        if (ConfigService.enableLogging && kDebugMode) {
+        if (_configService.enableLogging && kDebugMode) {
           debugPrint("[API Timeout]: ${e.requestOptions.path} - No backend available");
         }
 
@@ -258,10 +257,25 @@ class ApiService {
         );
       }
 
-      final normalizedMessage = _extractErrorMessageFromResponse(e);
+      final envelope = _extractErrorEnvelope(e.response?.data);
+      final retryAfter = _extractRetryAfter(e);
+      var normalizedMessage = _extractErrorMessageFromResponse(e, envelope: envelope);
+
+      if (_shouldAttemptRefresh(e, allowAuthRetry)) {
+        final refreshed = await _refreshSessionToken();
+        if (refreshed) {
+          return _handleRequest(request, allowAuthRetry: false);
+        }
+      }
+
+      if (e.response?.statusCode == 429 && retryAfter != null) {
+        normalizedMessage = '$normalizedMessage (retry after ${retryAfter}s)';
+      }
+
+      _handleErrorCodeSideEffects(e.response?.statusCode);
 
       // Log other Dio errors normally
-      if (ConfigService.enableLogging) {
+      if (_configService.enableLogging) {
         debugPrint("API Error [Dio]: $normalizedMessage");
       }
 
@@ -274,7 +288,7 @@ class ApiService {
         retryAfter: _extractRetryAfter(e.response),
       );
     } catch (e) {
-      if (ConfigService.enableLogging && kDebugMode) {
+      if (_configService.enableLogging) {
         debugPrint("API Error: $e");
       }
       if (e is ApiRequestException) rethrow;
@@ -282,12 +296,12 @@ class ApiService {
     }
   }
 
-  String _extractErrorMessageFromResponse(DioException e) {
+  String _extractErrorMessageFromResponse(DioException e, {Map<String, dynamic>? envelope}) {
     final responseData = e.response?.data;
 
-    if (responseData is Map) {
-      final responseMap = _asJsonMap(responseData);
-      final nestedError = responseData['error'];
+    final responseMap = envelope ?? (responseData is Map ? _asJsonMap(responseData) : <String, dynamic>{});
+    if (responseMap.isNotEmpty) {
+      final nestedError = responseMap['error'];
       if (nestedError is Map) {
         final nestedErrorMap = _asJsonMap(nestedError);
         final nestedMessage = nestedErrorMap['message'];
@@ -329,7 +343,7 @@ class ApiService {
     return token.trim();
   }
 
-  Map<String, String> _buildJsonHeaders([Map<String, String>? headers]) {
+  Map<String, String> _buildJsonHeaders(String path, [Map<String, String>? headers]) {
     final resolved = <String, String>{
       'Content-Type': 'application/json',
       if (headers != null) ...headers,
@@ -338,7 +352,7 @@ class ApiService {
     final hasAuthorization = resolved.keys
         .any((key) => key.toLowerCase() == 'authorization');
 
-    if (!hasAuthorization) {
+    if (!hasAuthorization && _isProtectedPath(path)) {
       final accessToken = _loadAccessToken();
       if (accessToken != null && accessToken.isNotEmpty) {
         resolved['Authorization'] = 'Bearer $accessToken';
@@ -360,7 +374,7 @@ class ApiService {
       final response = await _dio.post(
         path,
         data: body,
-        options: Options(headers: _buildJsonHeaders(headers)),
+        options: Options(headers: _buildJsonHeaders(path, headers)),
       );
       // Ensure the response data is a map, otherwise return an empty map.
       return _asJsonMap(response.data);
@@ -374,7 +388,7 @@ class ApiService {
       final response = await _dio.get(
         path,
         queryParameters: queryParameters,
-        options: Options(headers: _buildJsonHeaders(headers)),
+        options: Options(headers: _buildJsonHeaders(path, headers)),
       );
       return _asJsonMap(response.data);
     });
@@ -385,7 +399,7 @@ class ApiService {
     return _handleRequest(() async {
       final response = await _dio.delete(
         path,
-        options: Options(headers: _buildJsonHeaders(headers)),
+        options: Options(headers: _buildJsonHeaders(path, headers)),
       );
       return _asJsonMap(response.data);
     });
@@ -397,7 +411,7 @@ class ApiService {
       final response = await _dio.patch(
         path,
         data: body,
-        options: Options(headers: _buildJsonHeaders(headers)),
+        options: Options(headers: _buildJsonHeaders(path, headers)),
       );
       return _asJsonMap(response.data);
     });
@@ -409,12 +423,11 @@ class ApiService {
       final response = await _dio.put(
         path,
         data: body,
-        options: Options(headers: _buildJsonHeaders(headers)),
+        options: Options(headers: _buildJsonHeaders(path, headers)),
       );
       return _asJsonMap(response.data);
     });
   }
-
 
   /// Parses common paginated envelope variants into a typed structure.
   ApiPageEnvelope<T> parsePageEnvelope<T>(
@@ -482,7 +495,8 @@ class ApiService {
   }
 
   // Compatibility helpers for branches that still reference these methods.
-  bool _isProtectedPath(String path) => path.startsWith('/admin/');
+  bool _isProtectedPath(String path) =>
+      path == '/admin' || path.startsWith('/admin/');
 
   Map<String, dynamic> _extractErrorEnvelope(Object? responseData) {
     if (responseData is Map) {
@@ -493,15 +507,72 @@ class ApiService {
     return <String, dynamic>{};
   }
 
-  bool _shouldAttemptRefresh(DioException e) => e.response?.statusCode == 401;
+  bool _shouldAttemptRefresh(DioException e, bool allowAuthRetry) {
+    if (!allowAuthRetry) return false;
+    if (e.response?.statusCode != 401) return false;
 
-  Future<bool> _refreshSessionToken() async => false;
+    final path = e.requestOptions.path;
+    if (!_isProtectedPath(path)) return false;
 
-  Future<Response<dynamic>> _retryWithFreshToken(DioException e) {
-    return _dio.fetch<dynamic>(e.requestOptions);
+    // Avoid refreshing on refresh endpoint itself.
+    return !path.endsWith('/auth/refresh') && !path.endsWith('/admin/auth/refresh');
   }
 
-  void _handleErrorCodeSideEffects(int? statusCode) {}
+  Future<bool> _refreshSessionToken() async {
+    if (!Hive.isBoxOpen('auth_tokens')) return false;
+
+    final box = Hive.box('auth_tokens');
+    final refreshToken = box.get('auth_refresh_token')?.toString() ?? '';
+    if (refreshToken.trim().isEmpty) return false;
+
+    try {
+      final response = await _dio.post(
+        '/admin/auth/refresh',
+        data: {
+          'refreshToken': refreshToken,
+          'refresh_token': refreshToken,
+        },
+        options: Options(headers: {'Content-Type': 'application/json'}),
+      );
+
+      final payload = _asJsonMap(response.data);
+      final access = payload['accessToken']?.toString() ??
+          payload['access_token']?.toString() ??
+          '';
+      if (access.trim().isEmpty) {
+        return false;
+      }
+
+      final newRefresh = payload['refreshToken']?.toString() ??
+          payload['refresh_token']?.toString() ??
+          refreshToken;
+
+      box.put('auth_access_token', access.trim());
+      box.put('auth_refresh_token', newRefresh.trim());
+
+      final expiresIn = payload['expiresIn'];
+      if (expiresIn is int && expiresIn > 0) {
+        final expiresAt = DateTime.now().toUtc().add(Duration(seconds: expiresIn));
+        box.put('auth_expires_at_utc', expiresAt.millisecondsSinceEpoch);
+      }
+
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  void _handleErrorCodeSideEffects(int? statusCode) {
+    if (statusCode == 401) {
+      _clearAccessToken();
+    }
+  }
+
+  void _clearAccessToken() {
+    if (!Hive.isBoxOpen('auth_tokens')) return;
+    final box = Hive.box('auth_tokens');
+    box.delete('auth_access_token');
+  }
 
   int? _extractRetryAfter(DioException e) {
     final value = e.response?.headers.value('retry-after');
