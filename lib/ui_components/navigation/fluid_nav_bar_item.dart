@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../animations/math/curves.dart';
+import 'package:trivia_tycoon/animations/animations.dart';
 import '../../ui_components/navigation/fluid_nav_bar_icon.dart';
 
 typedef FluidNavBarButtonTappedCallback = void Function();
