@@ -34,7 +34,11 @@ class _AdminNotificationsScreenState
   Widget build(BuildContext context) {
     final allowedAsync = ref.watch(permissionAllowedProvider);
     final scheduledAsync = ref.watch(scheduledProvider);
-    final isAdmin = ref.watch(isAdminProvider);
+    final isAdminAsync = ref.watch(isAdminProvider);
+    final isAdmin = isAdminAsync.maybeWhen(
+      data: (value) => value,
+      orElse: () => false,
+    );
 
     return Scaffold(
       key: _scaffoldKey,
