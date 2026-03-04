@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
-import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
@@ -22,13 +21,13 @@ class ApiRequestException implements Exception {
   final Duration? retryAfter;
 
   ApiRequestException(
-    this.message, {
-    this.statusCode,
-    this.path,
-    this.errorCode,
-    this.details,
-    this.retryAfter,
-  });
+      this.message, {
+        this.statusCode,
+        this.path,
+        this.errorCode,
+        this.details,
+        this.retryAfter,
+      });
 
   @override
   String toString() {
@@ -36,6 +35,18 @@ class ApiRequestException implements Exception {
     final target = path != null ? ' [$path]' : '';
     return 'ApiRequestException$code$target: $message';
   }
+}
+
+class ApiErrorEnvelope {
+  final String code;
+  final String message;
+  final Map<String, dynamic> details;
+
+  const ApiErrorEnvelope({
+    required this.code,
+    required this.message,
+    required this.details,
+  });
 }
 
 class ApiPageEnvelope<T> {
@@ -55,22 +66,6 @@ class ApiPageEnvelope<T> {
 
   bool get hasNext => page < totalPages;
   bool get hasPrevious => page > 1;
-
-  // Backward-compatible aliases used by some admin call sites.
-  int get limit => pageSize;
-  int get pages => totalPages;
-
-  Map<String, dynamic> toMap() => <String, dynamic>{
-        'items': items,
-        'page': page,
-        'pageSize': pageSize,
-        'limit': limit,
-        'total': total,
-        'totalPages': totalPages,
-        'pages': pages,
-        'hasNext': hasNext,
-        'hasPrevious': hasPrevious,
-      };
 }
 
 class ApiService {
@@ -80,7 +75,6 @@ class ApiService {
   late CacheOptions _cacheOptions;
   late final HiveCacheStore _cacheStore;
   late DioCacheInterceptor _cacheInterceptor;
-  final ConfigService _configService;
   bool _isRefreshingToken = false;
 
   ApiService({required this.baseUrl})
@@ -90,13 +84,10 @@ class ApiService {
     receiveTimeout: const Duration(seconds: 3),
     sendTimeout: const Duration(seconds: 3),
   )),
-        _refreshDio = Dio(BaseOptions(baseUrl: baseUrl)),
-        _configService = ConfigService.instance {
-
+        _refreshDio = Dio(BaseOptions(baseUrl: baseUrl)) {
     _attachAuthAndErrorInterceptors();
 
-    // Disable or reduce logging in release mode
-    if (_configService.enableLogging && kDebugMode) {
+    if (ConfigService.enableLogging && kDebugMode) {
       _dio.interceptors.add(LogInterceptor(
         request: false,
         requestHeader: false,
@@ -145,7 +136,6 @@ class ApiService {
     );
   }
 
-  /// **🔹 Initialize Cache**
   Future<void> _initializeCache() async {
     Directory cacheDir = await getTemporaryDirectory();
     _cacheStore = HiveCacheStore(cacheDir.path);
@@ -234,8 +224,7 @@ class ApiService {
     });
   }
 
-  /// Unified API Request Handler with silent timeout handling
-  Future<T> _handleRequest<T>(Future<T> Function() request, {bool allowAuthRetry = true}) async {
+  Future<T> _handleRequest<T>(Future<T> Function() request) async {
     try {
       return await request();
     } on DioException catch (e) {
@@ -244,9 +233,8 @@ class ApiService {
           e.type == DioExceptionType.sendTimeout ||
           e.type == DioExceptionType.connectionError;
 
-      // Preserve silent timeout/offline behavior while keeping exception type consistent.
       if (isTimeoutLike) {
-        if (_configService.enableLogging && kDebugMode) {
+        if (ConfigService.enableLogging && kDebugMode) {
           debugPrint("[API Timeout]: ${e.requestOptions.path} - No backend available");
         }
 
@@ -258,24 +246,9 @@ class ApiService {
       }
 
       final envelope = _extractErrorEnvelope(e.response?.data);
-      final retryAfter = _extractRetryAfter(e);
-      var normalizedMessage = _extractErrorMessageFromResponse(e, envelope: envelope);
+      final normalizedMessage = envelope?.message ?? _extractErrorMessageFromResponse(e);
 
-      if (_shouldAttemptRefresh(e, allowAuthRetry)) {
-        final refreshed = await _refreshSessionToken();
-        if (refreshed) {
-          return _handleRequest(request, allowAuthRetry: false);
-        }
-      }
-
-      if (e.response?.statusCode == 429 && retryAfter != null) {
-        normalizedMessage = '$normalizedMessage (retry after ${retryAfter}s)';
-      }
-
-      await _handleErrorCodeSideEffects(e.response?.statusCode);
-
-      // Log other Dio errors normally
-      if (_configService.enableLogging) {
+      if (ConfigService.enableLogging) {
         debugPrint("API Error [Dio]: $normalizedMessage");
       }
 
@@ -288,7 +261,7 @@ class ApiService {
         retryAfter: _extractRetryAfter(e.response),
       );
     } catch (e) {
-      if (_configService.enableLogging) {
+      if (ConfigService.enableLogging && kDebugMode) {
         debugPrint("API Error: $e");
       }
       if (e is ApiRequestException) rethrow;
@@ -296,12 +269,12 @@ class ApiService {
     }
   }
 
-  String _extractErrorMessageFromResponse(DioException e, {Map<String, dynamic>? envelope}) {
+  String _extractErrorMessageFromResponse(DioException e) {
     final responseData = e.response?.data;
 
-    final responseMap = envelope ?? (responseData is Map ? _asJsonMap(responseData) : <String, dynamic>{});
-    if (responseMap.isNotEmpty) {
-      final nestedError = responseMap['error'];
+    if (responseData is Map) {
+      final responseMap = _asJsonMap(responseData);
+      final nestedError = responseData['error'];
       if (nestedError is Map) {
         final nestedErrorMap = _asJsonMap(nestedError);
         final nestedMessage = nestedErrorMap['message'];
@@ -335,26 +308,31 @@ class ApiService {
     return <String, dynamic>{};
   }
 
-  String? _loadAccessToken() {
-    if (!Hive.isBoxOpen('auth_tokens')) return null;
+  String _loadAccessToken() {
+    if (!Hive.isBoxOpen('auth_tokens')) return '';
     final box = Hive.box('auth_tokens');
     final token = box.get('auth_access_token')?.toString();
-    if (token == null || token.trim().isEmpty) return null;
+    if (token == null || token.trim().isEmpty) return '';
     return token.trim();
   }
 
-  Map<String, String> _buildJsonHeaders(String path, [Map<String, String>? headers]) {
+  String _loadRefreshToken() {
+    if (!Hive.isBoxOpen('auth_tokens')) return '';
+    final box = Hive.box('auth_tokens');
+    return (box.get('auth_refresh_token', defaultValue: '') as String?) ?? '';
+  }
+
+  Map<String, String> _buildJsonHeaders([Map<String, String>? headers]) {
     final resolved = <String, String>{
       'Content-Type': 'application/json',
       if (headers != null) ...headers,
     };
 
-    final hasAuthorization = resolved.keys
-        .any((key) => key.toLowerCase() == 'authorization');
+    final hasAuthorization = resolved.keys.any((key) => key.toLowerCase() == 'authorization');
 
-    if (!hasAuthorization && _isProtectedPath(path)) {
+    if (!hasAuthorization) {
       final accessToken = _loadAccessToken();
-      if (accessToken != null && accessToken.isNotEmpty) {
+      if (accessToken.isNotEmpty) {
         resolved['Authorization'] = 'Bearer $accessToken';
       }
     }
@@ -362,80 +340,89 @@ class ApiService {
     return resolved;
   }
 
-  /// Loads mock data from assets/json
   Future<dynamic> getMockData(String filename) async {
     final String jsonString = await rootBundle.loadString('assets/data/analytics/$filename');
     return jsonDecode(jsonString);
   }
 
-  Future<Map<String, dynamic>> post(String path,
-      {required Map<String, dynamic> body, Map<String, String>? headers}) async {
+  Future<Map<String, dynamic>> post(
+      String path, {
+        required Map<String, dynamic> body,
+        Map<String, String>? headers,
+      }) async {
     return _handleRequest(() async {
       final response = await _dio.post(
         path,
         data: body,
-        options: Options(headers: _buildJsonHeaders(path, headers)),
+        options: Options(headers: _buildJsonHeaders(headers)),
       );
-      // Ensure the response data is a map, otherwise return an empty map.
       return _asJsonMap(response.data);
     });
   }
 
-  /// **🔹 Generic GET Request (JSON map response)**
-  Future<Map<String, dynamic>> get(String path,
-      {Map<String, String>? headers, Map<String, dynamic>? queryParameters}) async {
+  Future<Map<String, dynamic>> get(
+      String path, {
+        Map<String, String>? headers,
+        Map<String, dynamic>? queryParameters,
+      }) async {
     return _handleRequest(() async {
       final response = await _dio.get(
         path,
         queryParameters: queryParameters,
-        options: Options(headers: _buildJsonHeaders(path, headers)),
+        options: Options(headers: _buildJsonHeaders(headers)),
       );
       return _asJsonMap(response.data);
     });
   }
 
-  /// **🔹 Generic DELETE Request**
-  Future<Map<String, dynamic>> delete(String path, {Map<String, String>? headers}) async {
+  Future<Map<String, dynamic>> delete(
+      String path, {
+        Map<String, String>? headers,
+      }) async {
     return _handleRequest(() async {
       final response = await _dio.delete(
         path,
-        options: Options(headers: _buildJsonHeaders(path, headers)),
+        options: Options(headers: _buildJsonHeaders(headers)),
       );
       return _asJsonMap(response.data);
     });
   }
 
-  Future<Map<String, dynamic>> patch(String path,
-      {required Map<String, dynamic> body, Map<String, String>? headers}) async {
+  Future<Map<String, dynamic>> patch(
+      String path, {
+        required Map<String, dynamic> body,
+        Map<String, String>? headers,
+      }) async {
     return _handleRequest(() async {
       final response = await _dio.patch(
         path,
         data: body,
-        options: Options(headers: _buildJsonHeaders(path, headers)),
+        options: Options(headers: _buildJsonHeaders(headers)),
       );
       return _asJsonMap(response.data);
     });
   }
 
-  Future<Map<String, dynamic>> put(String path,
-      {required Map<String, dynamic> body, Map<String, String>? headers}) async {
+  Future<Map<String, dynamic>> put(
+      String path, {
+        required Map<String, dynamic> body,
+        Map<String, String>? headers,
+      }) async {
     return _handleRequest(() async {
       final response = await _dio.put(
         path,
         data: body,
-        options: Options(headers: _buildJsonHeaders(path, headers)),
+        options: Options(headers: _buildJsonHeaders(headers)),
       );
       return _asJsonMap(response.data);
     });
   }
 
-  /// Parses common paginated envelope variants into a typed structure.
   ApiPageEnvelope<T> parsePageEnvelope<T>(
-    Map<String, dynamic> response, [
-    T Function(Map<String, dynamic>)? itemParser,
-  ], {
-    List<String> dataKeys = const ['items', 'data', 'results', 'rows'],
-  }) {
+      Map<String, dynamic> response,
+      T Function(Map<String, dynamic>) itemParser, {
+        List<String> dataKeys = const ['items', 'data', 'results', 'rows'],
+      }) {
     List<dynamic> rawItems = const <dynamic>[];
 
     for (final key in dataKeys) {
@@ -473,14 +460,12 @@ class ApiService {
         readInt(paging['pages']) ??
         ((pageSize > 0) ? (total / pageSize).ceil() : 1);
 
-    final parser = itemParser ?? (Map<String, dynamic> map) => map as T;
-
     final items = rawItems.map((item) {
       if (item is Map<String, dynamic>) {
-        return parser(item);
+        return itemParser(item);
       }
       if (item is Map) {
-        return parser(_asJsonMap(item));
+        return itemParser(_asJsonMap(item));
       }
       throw ApiRequestException('Invalid paginated item type: ${item.runtimeType}');
     }).toList(growable: false);
@@ -494,98 +479,131 @@ class ApiService {
     );
   }
 
-  // Compatibility helpers for branches that still reference these methods.
-  bool _isProtectedPath(String path) =>
-      path == '/admin' || path.startsWith('/admin/');
-
-  Map<String, dynamic> _extractErrorEnvelope(Object? responseData) {
-    if (responseData is Map) {
-      final map = _asJsonMap(responseData);
-      final nested = _asJsonMap(map['error']);
-      return nested.isNotEmpty ? nested : map;
-    }
-    return <String, dynamic>{};
+  bool _isProtectedPath(String path) {
+    return path.startsWith('/admin/') ||
+        path == '/matches/start' ||
+        path == '/mobile/matches/start' ||
+        path == '/matches/submit' ||
+        path == '/matchmaking/enqueue' ||
+        path.contains('/party/') && path.endsWith('/enqueue');
   }
 
-  bool _shouldAttemptRefresh(DioException e, bool allowAuthRetry) {
-    if (!allowAuthRetry) return false;
-    if (e.response?.statusCode != 401) return false;
+  ApiErrorEnvelope? _extractErrorEnvelope(Object? responseData) {
+    if (responseData is! Map) return null;
+    final root = _asJsonMap(responseData);
+    final nested = root['error'];
+    if (nested is! Map) return null;
+    final error = _asJsonMap(nested);
+    final code = error['code']?.toString();
+    final message = error['message']?.toString();
+    final details = error['details'] is Map ? _asJsonMap(error['details']) : <String, dynamic>{};
+    if (code == null || message == null || code.isEmpty || message.isEmpty) return null;
+    return ApiErrorEnvelope(code: code, message: message, details: details);
+  }
 
-    final path = e.requestOptions.path;
-    if (!_isProtectedPath(path)) return false;
-
-    // Avoid refreshing on refresh endpoint itself.
-    return !path.endsWith('/auth/refresh') && !path.endsWith('/admin/auth/refresh');
+  bool _shouldAttemptRefresh(DioException error, ApiErrorEnvelope? envelope) {
+    if (_isRefreshingToken) return false;
+    final path = error.requestOptions.path;
+    if (!path.startsWith('/admin/')) return false;
+    if (path == '/admin/auth/login' || path == '/admin/auth/refresh') return false;
+    if (error.requestOptions.extra['refreshRetried'] == true) return false;
+    return envelope?.code == 'UNAUTHORIZED' || error.response?.statusCode == 401;
   }
 
   Future<bool> _refreshSessionToken() async {
-    if (!Hive.isBoxOpen('auth_tokens')) return false;
+    final refreshToken = _loadRefreshToken();
+    if (refreshToken.isEmpty) return false;
 
-    final box = Hive.box('auth_tokens');
-    final refreshToken = box.get('auth_refresh_token')?.toString() ?? '';
-    if (refreshToken.trim().isEmpty) return false;
-
+    _isRefreshingToken = true;
     try {
-      final response = await _dio.post(
-        '/admin/auth/refresh',
-        data: {
-          'refreshToken': refreshToken,
-          'refresh_token': refreshToken,
-        },
-        options: Options(headers: {'Content-Type': 'application/json'}),
-      );
+      final response = await _refreshDio.post('/admin/auth/refresh', data: {
+        'refreshToken': refreshToken,
+      });
+      final data = _asJsonMap(response.data);
+      final access = data['accessToken']?.toString() ?? data['access_token']?.toString() ?? '';
+      if (access.isEmpty) return false;
 
-      final payload = _asJsonMap(response.data);
-      final access = payload['accessToken']?.toString() ??
-          payload['access_token']?.toString() ??
-          '';
-      if (access.trim().isEmpty) {
-        return false;
+      if (!Hive.isBoxOpen('auth_tokens')) return false;
+      final box = Hive.box('auth_tokens');
+      await box.put('auth_access_token', access);
+      final newRefresh = data['refreshToken']?.toString() ?? data['refresh_token']?.toString();
+      if (newRefresh != null && newRefresh.isNotEmpty) {
+        await box.put('auth_refresh_token', newRefresh);
       }
-
-      final newRefresh = payload['refreshToken']?.toString() ??
-          payload['refresh_token']?.toString() ??
-          refreshToken;
-
-      box.put('auth_access_token', access.trim());
-      box.put('auth_refresh_token', newRefresh.trim());
-
-      final expiresIn = payload['expiresIn'];
-      if (expiresIn is int && expiresIn > 0) {
-        final expiresAt = DateTime.now().toUtc().add(Duration(seconds: expiresIn));
-        box.put('auth_expires_at_utc', expiresAt.millisecondsSinceEpoch);
-      }
-
       return true;
     } catch (_) {
       return false;
+    } finally {
+      _isRefreshingToken = false;
     }
   }
 
-  Future<void> _handleErrorCodeSideEffects(int? statusCode) async {
-    if (statusCode == 401) {
-      await _clearSessionTokens();
+  Future<Response<dynamic>?> _retryWithFreshToken(RequestOptions requestOptions) async {
+    try {
+      final opts = Options(
+        method: requestOptions.method,
+        headers: Map<String, dynamic>.from(requestOptions.headers)
+          ..['Authorization'] = 'Bearer ${_loadAccessToken()}',
+        extra: Map<String, dynamic>.from(requestOptions.extra)..['refreshRetried'] = true,
+      );
+      return _dio.request<dynamic>(
+        requestOptions.path,
+        data: requestOptions.data,
+        queryParameters: requestOptions.queryParameters,
+        options: opts,
+      );
+    } catch (_) {
+      return null;
     }
   }
 
-  Future<void> _clearSessionTokens() async {
-    if (!Hive.isBoxOpen('auth_tokens')) return;
+  void _handleErrorCodeSideEffects(RequestOptions options, ApiErrorEnvelope? envelope) {
+    if (envelope == null) return;
+    if (!ConfigService.enableLogging) return;
 
-    final box = Hive.box('auth_tokens');
-    await box.delete('auth_access_token');
-    await box.delete('auth_refresh_token');
-    await box.delete('auth_expires_at_utc');
+    final path = options.path;
+    final matchId = options.data is Map ? (options.data as Map)['matchId'] : null;
+    final userId = options.data is Map
+        ? (options.data as Map)['userId'] ?? (options.data as Map)['adminUserId']
+        : null;
+
+    debugPrint(
+      '[API Telemetry] endpoint=$path errorCode=${envelope.code} '
+          'matchId=${matchId ?? '-'} userId=${userId ?? '-'}',
+    );
+
+    switch (envelope.code) {
+      case 'UNAUTHORIZED':
+        debugPrint('[API:$path] UNAUTHORIZED -> trigger reauth/session recovery');
+        break;
+      case 'FORBIDDEN':
+        debugPrint('[API:$path] FORBIDDEN -> show permission denied UI');
+        break;
+      case 'RATE_LIMITED':
+        debugPrint('[API:$path] RATE_LIMITED -> disable actions + cooldown timer');
+        break;
+      case 'VALIDATION_ERROR':
+        debugPrint('[API:$path] VALIDATION_ERROR -> map details to form errors');
+        break;
+      case 'NOT_FOUND':
+        debugPrint('[API:$path] NOT_FOUND -> stale resource/list refresh');
+        break;
+      case 'CONFLICT':
+        debugPrint('[API:$path] CONFLICT -> refresh state + conflict UI');
+        break;
+    }
   }
 
-  int? _extractRetryAfter(DioException e) {
-    final value = e.response?.headers.value('retry-after');
-    if (value == null) return null;
-    return int.tryParse(value);
+  Duration? _extractRetryAfter(Response<dynamic>? response) {
+    final raw = response?.headers.value('retry-after');
+    if (raw == null || raw.trim().isEmpty) return null;
+    final seconds = int.tryParse(raw.trim());
+    if (seconds != null && seconds > 0) {
+      return Duration(seconds: seconds);
+    }
+    return null;
   }
 
-  /// **🔹 Analytics Event Submission**
-  /// Sends a lightweight event to the `/events/:name` endpoint with the given [data].
-  /// Useful for custom tracking (e.g., startup, session, screen views).
   Future<void> sendEvent(String name, Map<String, dynamic> data) async {
     await post('/events/$name', body: data);
   }
@@ -625,47 +643,24 @@ class ApiService {
       return null;
     });
   }
-}
 
-class ApiErrorEnvelope {
-  final String code;
-  final String message;
-  final Map<String, dynamic> details;
-
-  const ApiErrorEnvelope({
-    required this.code,
-    required this.message,
-    required this.details,
-  });
-}
-
-class ApiPageEnvelope<T> {
-  final int page;
-  final int pageSize;
-  final int total;
-  final List<T> items;
-
-  const ApiPageEnvelope({
-    required this.page,
-    required this.pageSize,
-    required this.total,
-    required this.items,
-  });
-}
-
-extension SeasonalApiExtensions on ApiService {
   Future<List<SeasonPlayer>> getSeasonLeaderboard(String seasonId) async {
-    throw UnimplementedError('Implement season leaderboard API call');
+    final response = await get('/seasons/$seasonId/leaderboard');
+    final items = response['items'] as List? ?? response['data'] as List? ?? [];
+    return items.map((item) => SeasonPlayer.fromJson(item as Map<String, dynamic>)).toList();
   }
 
   Future<void> resetPlayerSeasonPoints(String playerId) async {
-    throw UnimplementedError('Implement reset player points API call');
+    await post('/admin/seasons/reset-player', body: {'playerId': playerId});
   }
 
   Future<void> scheduleTiebreakerQuiz({
     required List<String> players,
     required DateTime scheduledTime,
   }) async {
-    throw UnimplementedError('Implement tiebreaker quiz scheduling');
+    await post('/admin/seasons/schedule-tiebreaker', body: {
+      'players': players,
+      'scheduledTime': scheduledTime.toIso8601String(),
+    });
   }
 }
