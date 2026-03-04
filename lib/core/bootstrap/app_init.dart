@@ -83,7 +83,8 @@ class AppInit {
     // Create DeviceIdService with SecureStorage
     final deviceIdService = DeviceIdService(secureStorage); // ← FIXED: Pass SecureStorage, not Box
     final deviceId = await deviceIdService.getOrCreate();
-    debugPrint('✅ DeviceId ready: $deviceId');
+    final deviceType = deviceIdService.getDeviceType();
+    debugPrint('✅ DeviceId identity ready: id=$deviceId, type=$deviceType');
 
     // Create AuthTokenStore with dedicated auth tokens box
     final tokenStore = AuthTokenStore(authTokenBox);
