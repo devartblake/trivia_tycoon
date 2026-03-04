@@ -332,10 +332,11 @@ class ApiService {
 
   /// **🔹 Generic GET Request (JSON map response)**
   Future<Map<String, dynamic>> get(String path,
-      {Map<String, String>? headers}) async {
+      {Map<String, String>? headers, Map<String, dynamic>? queryParameters}) async {
     return _handleRequest(() async {
       final response = await _dio.get(
         path,
+        queryParameters: queryParameters,
         options: Options(headers: _buildJsonHeaders(headers)),
       );
       return _asJsonMap(response.data);
@@ -377,6 +378,66 @@ class ApiService {
     });
   }
 
+  /// Parses common paginated envelope variants into a normalized map.
+  ///
+  /// Supported item keys include: `items`, `data`, `results`, `rows`.
+  /// Supported pagination keys include: `page`, `limit`, `total`, `totalPages`,
+  /// or nested under `pagination` / `meta`.
+  Map<String, dynamic> parsePageEnvelope(
+    Map<String, dynamic> response, {
+    List<String> dataKeys = const ['items', 'data', 'results', 'rows'],
+  }) {
+    List<dynamic> items = const <dynamic>[];
+
+    for (final key in dataKeys) {
+      final candidate = response[key];
+      if (candidate is List) {
+        items = candidate;
+        break;
+      }
+    }
+
+    final pagination = _asJsonMap(response['pagination']).isNotEmpty
+        ? _asJsonMap(response['pagination'])
+        : _asJsonMap(response['meta']);
+
+    int? readInt(Object? value) {
+      if (value is int) return value;
+      if (value is String) return int.tryParse(value);
+      return null;
+    }
+
+    final page = readInt(response['page']) ?? readInt(pagination['page']) ?? 1;
+    final limit = readInt(response['limit']) ??
+        readInt(response['pageSize']) ??
+        readInt(pagination['limit']) ??
+        readInt(pagination['pageSize']) ??
+        items.length;
+    final total = readInt(response['total']) ??
+        readInt(response['count']) ??
+        readInt(pagination['total']) ??
+        readInt(pagination['count']) ??
+        items.length;
+    final totalPages = readInt(response['totalPages']) ??
+        readInt(response['pages']) ??
+        readInt(pagination['totalPages']) ??
+        readInt(pagination['pages']) ??
+        ((limit > 0) ? (total / limit).ceil() : 1);
+
+    return <String, dynamic>{
+      'items': items,
+      'page': page,
+      'limit': limit,
+      'total': total,
+      'totalPages': totalPages,
+      'hasNext': page < totalPages,
+      'hasPrevious': page > 1,
+    };
+  }
+
+  /// **🔹 Analytics Event Submission**
+  /// Sends a lightweight event to the `/events/:name` endpoint with the given [data].
+  /// Useful for custom tracking (e.g., startup, session, screen views).
   Future<void> sendEvent(String name, Map<String, dynamic> data) async {
     await post('/events/$name', body: data);
   }
