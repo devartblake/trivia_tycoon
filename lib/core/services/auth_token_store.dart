@@ -187,16 +187,22 @@ class AuthTokenStore {
 
     if (session.expiresAtUtc != null) {
       await _box.put(_expiresAtKey, session.expiresAtUtc!.millisecondsSinceEpoch);
+    } else {
+      await _box.delete(_expiresAtKey);
     }
 
-    if (session.userId != null) {
+    if (session.userId != null && session.userId!.isNotEmpty) {
       await _box.put(_userIdKey, session.userId);
+    } else {
+      await _box.delete(_userIdKey);
     }
 
-    // Save metadata if present
+    // Save metadata if present; clear stale metadata when omitted/empty.
     if (session.metadata != null && session.metadata!.isNotEmpty) {
       final metadataJson = jsonEncode(session.metadata);
       await _box.put(_metadataKey, metadataJson);
+    } else {
+      await _box.delete(_metadataKey);
     }
   }
 

@@ -27,7 +27,7 @@ class AuthApiClient {
     required String email,
     required String password,
   }) async {
-    final deviceId = await _deviceId.getOrCreate();
+    final deviceIdentity = await _deviceId.getDeviceIdentityPayload();
 
     final response = await _http.post(
       _u(loginPath),
@@ -35,9 +35,7 @@ class AuthApiClient {
       body: jsonEncode({
         'email': email,
         'password': password,
-        // Send both casing styles for backend compatibility
-        'device_id': deviceId,
-        'deviceId': deviceId,
+        ...deviceIdentity,
       }),
     );
 
@@ -66,7 +64,7 @@ class AuthApiClient {
     String? username,
     String? country,
   }) async {
-    final deviceId = await _deviceId.getOrCreate();
+    final deviceIdentity = await _deviceId.getDeviceIdentityPayload();
 
     final response = await _http.post(
       _u(signupPath),
@@ -74,9 +72,7 @@ class AuthApiClient {
       body: jsonEncode({
         'email': email,
         'password': password,
-        // Send both casing styles for backend compatibility
-        'device_id': deviceId,
-        'deviceId': deviceId,
+        ...deviceIdentity,
         if (username != null && username.isNotEmpty) 'username': username,
         if (username != null && username.isNotEmpty) 'handle': username, // Backend might use 'handle'
         if (country != null && country.isNotEmpty) 'country': country,
@@ -113,7 +109,7 @@ class AuthApiClient {
 
     // Extract user object if present
     if (response.containsKey('user') && response['user'] is Map) {
-      final user = response['user'] as Map<String, dynamic>;
+      final user = _asJsonMap(response['user']) ?? <String, dynamic>{};
 
       // Add all user fields to metadata
       metadata.addAll(user);
@@ -146,7 +142,10 @@ class AuthApiClient {
   Future<AuthSession> refresh({
     required String refreshToken,
     required String deviceId,
+    String? deviceType,
   }) async {
+    final resolvedDeviceType = deviceType ?? _deviceId.getDeviceType();
+
     final res = await _http.post(
       _u(refreshPath),
       headers: {'Content-Type': 'application/json'},
@@ -156,6 +155,8 @@ class AuthApiClient {
         'refreshToken': refreshToken,
         'device_id': deviceId,
         'deviceId': deviceId,
+        'device_type': resolvedDeviceType,
+        'deviceType': resolvedDeviceType,
       }),
     );
 
@@ -163,12 +164,13 @@ class AuthApiClient {
       throw Exception('Refresh failed: ${res.statusCode} ${res.body}');
     }
 
-    final json = jsonDecode(res.body) as Map<String, dynamic>;
+    final json = _decodeBodyMap(res.body, context: 'refresh');
     return _parseSession(json);
   }
 
   Future<void> logout({
     required String deviceId,
+    String? deviceType,
     String? userId,
     String? accessToken,
   }) async {
@@ -187,6 +189,8 @@ class AuthApiClient {
         // Send both casing styles for backend compatibility
         'device_id': deviceId,
         'deviceId': deviceId,
+        'device_type': deviceType ?? _deviceId.getDeviceType(),
+        'deviceType': deviceType ?? _deviceId.getDeviceType(),
         if (userId != null) 'user_id': userId,
         if (userId != null) 'userId': userId,
       }),
@@ -216,19 +220,21 @@ class AuthApiClient {
 
     try {
       final decoded = jsonDecode(trimmed);
-      if (decoded is Map<String, dynamic>) {
-        return decoded;
-      }
+      return _asJsonMap(decoded);
     } catch (_) {
       return null;
     }
-
-    return null;
   }
 
   String _extractErrorMessage(http.Response response, {required String fallback}) {
     final parsed = _tryDecodeBodyMap(response.body);
     if (parsed != null) {
+      final nestedError = _asJsonMap(parsed['error']);
+      final nestedMessage = _asNullableString(nestedError?['message']);
+      if (nestedMessage != null) {
+        return nestedMessage;
+      }
+
       final dynamic message = parsed['message'] ?? parsed['error'] ?? parsed['detail'] ?? parsed['title'];
       if (message is String && message.trim().isNotEmpty) {
         return message.trim();
@@ -238,14 +244,34 @@ class AuthApiClient {
     return fallback;
   }
 
+  Map<String, dynamic>? _asJsonMap(Object? value) {
+    if (value is Map<String, dynamic>) return value;
+    if (value is Map) {
+      return value.map((key, entry) => MapEntry(key.toString(), entry));
+    }
+    return null;
+  }
+
+  String _asString(Object? value) {
+    if (value == null) return '';
+    final raw = value.toString().trim();
+    return raw;
+  }
+
+  String? _asNullableString(Object? value) {
+    final raw = _asString(value);
+    if (raw.isEmpty) return null;
+    return raw;
+  }
+
   AuthSession _parseSession(Map<String, dynamic> json) {
     // Try common shapes:
     // { accessToken, refreshToken, expiresAtUtc, userId }
     // { access_token, refresh_token, expires_at, user_id }
-    final access = (json['accessToken'] ?? json['access_token'] ?? '') as String;
-    final refresh = (json['refreshToken'] ?? json['refresh_token'] ?? '') as String;
+    final access = _asString(json['accessToken'] ?? json['access_token']);
+    final refresh = _asString(json['refreshToken'] ?? json['refresh_token']);
 
-    final userId = (json['userId'] ?? json['user_id']) as String?;
+    final userId = _asNullableString(json['userId'] ?? json['user_id']);
 
     // Parse expiration
     DateTime? expiresAtUtc;
