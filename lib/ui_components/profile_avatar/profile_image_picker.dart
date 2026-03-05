@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:trivia_tycoon/core/animations/animation_manager.dart';
 
 /// Modern Material 3 Profile Image Picker
 ///
@@ -42,15 +43,12 @@ class _ProfileImagePickerState extends State<ProfileImagePicker>
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
+    _animationController = AnimationManager.createController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
 
-    _fadeAnimation = CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    );
+    _fadeAnimation = AnimationManager.fadeIn(_animationController);
 
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0, 0.1),
