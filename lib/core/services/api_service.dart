@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
+import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
@@ -78,8 +79,13 @@ class ApiService {
   final ConfigService _configService;
   bool _isRefreshingToken = false;
 
-  ApiService({required this.baseUrl})
-      : _dio = Dio(BaseOptions(
+  ApiService({
+    required this.baseUrl,
+    Dio? dio,
+    ConfigService? configService,
+    bool initializeCache = true,
+  })
+      : _dio = dio ?? Dio(BaseOptions(
     baseUrl: baseUrl,
     connectTimeout: const Duration(seconds: 3),
     receiveTimeout: const Duration(seconds: 3),
@@ -101,7 +107,9 @@ class ApiService {
       ));
     }
 
-    _initializeCache();
+    if (initializeCache) {
+      _initializeCache();
+    }
   }
 
   void _attachAuthAndErrorInterceptors() {
