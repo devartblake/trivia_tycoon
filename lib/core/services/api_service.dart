@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
-import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
@@ -76,6 +75,7 @@ class ApiService {
   late CacheOptions _cacheOptions;
   late final HiveCacheStore _cacheStore;
   late DioCacheInterceptor _cacheInterceptor;
+  final ConfigService _configService;
   bool _isRefreshingToken = false;
 
   ApiService({required this.baseUrl})
@@ -85,7 +85,8 @@ class ApiService {
     receiveTimeout: const Duration(seconds: 3),
     sendTimeout: const Duration(seconds: 3),
   )),
-        _refreshDio = Dio(BaseOptions(baseUrl: baseUrl)) {
+        _refreshDio = Dio(BaseOptions(baseUrl: baseUrl)),
+        _configService = ConfigService.instance {
     _attachAuthAndErrorInterceptors();
 
     if (ConfigService.enableLogging && kDebugMode) {
@@ -511,32 +512,102 @@ class ApiService {
     return envelope?.code == 'UNAUTHORIZED' || error.response?.statusCode == 401;
   }
 
+  // Enhanced refresh with multiple endpoint support and better token expiry handling
   Future<bool> _refreshSessionToken() async {
     final refreshToken = _loadRefreshToken();
     if (refreshToken.isEmpty) return false;
 
     _isRefreshingToken = true;
-    try {
-      final response = await _refreshDio.post('/admin/auth/refresh', data: {
-        'refreshToken': refreshToken,
-      });
-      final data = _asJsonMap(response.data);
-      final access = data['accessToken']?.toString() ?? data['access_token']?.toString() ?? '';
-      if (access.isEmpty) return false;
 
-      if (!Hive.isBoxOpen('auth_tokens')) return false;
-      final box = Hive.box('auth_tokens');
-      await box.put('auth_access_token', access);
-      final newRefresh = data['refreshToken']?.toString() ?? data['refresh_token']?.toString();
-      if (newRefresh != null && newRefresh.isNotEmpty) {
-        await box.put('auth_refresh_token', newRefresh);
+    // Try both admin and regular auth refresh endpoints
+    const refreshPaths = ['/admin/auth/refresh', '/auth/refresh'];
+
+    for (final refreshPath in refreshPaths) {
+      try {
+        final response = await _refreshDio.post(
+          refreshPath,
+          data: {
+            'refreshToken': refreshToken,
+            'refresh_token': refreshToken,
+          },
+        );
+
+        final payload = _asJsonMap(response.data);
+        final access = payload['accessToken']?.toString() ??
+            payload['access_token']?.toString() ??
+            '';
+
+        if (access.trim().isEmpty) {
+          continue; // Try next endpoint
+        }
+
+        final newRefresh = payload['refreshToken']?.toString() ??
+            payload['refresh_token']?.toString() ??
+            refreshToken;
+
+        if (!Hive.isBoxOpen('auth_tokens')) {
+          _isRefreshingToken = false;
+          return false;
+        }
+
+        final box = Hive.box('auth_tokens');
+        await box.put('auth_access_token', access.trim());
+        await box.put('auth_refresh_token', newRefresh.trim());
+
+        // ✅ NEW: Better expiry handling
+        final expiresAtEpochMs = _resolveExpiryEpochMs(payload);
+        if (expiresAtEpochMs != null) {
+          await box.put('auth_expires_at_utc', expiresAtEpochMs);
+        } else {
+          await box.delete('auth_expires_at_utc');
+        }
+
+        _isRefreshingToken = false;
+        return true;
+      } on DioException catch (e) {
+        final statusCode = e.response?.statusCode;
+        if (statusCode == 401 || statusCode == 403) {
+          // Invalid refresh token - clear session
+          await _clearSessionTokens();
+          _isRefreshingToken = false;
+          return false;
+        }
+        // Try the next refresh endpoint variant
+      } catch (_) {
+        // Try the next refresh endpoint variant
       }
-      return true;
-    } catch (_) {
-      return false;
-    } finally {
-      _isRefreshingToken = false;
     }
+
+    _isRefreshingToken = false;
+    return false;
+  }
+
+  // Smart expiry resolution from multiple payload formats
+  int? _resolveExpiryEpochMs(Map<String, dynamic> payload) {
+    // Try expiresIn (seconds from now)
+    final expiresInRaw = payload['expiresIn'] ?? payload['expires_in'];
+    final expiresIn = expiresInRaw is int
+        ? expiresInRaw
+        : (expiresInRaw is String ? int.tryParse(expiresInRaw) : null);
+
+    if (expiresIn != null && expiresIn > 0) {
+      return DateTime.now().toUtc().add(Duration(seconds: expiresIn)).millisecondsSinceEpoch;
+    }
+
+    // Try expiresAt (absolute timestamp)
+    final expiresAtRaw = payload['expiresAtUtc'] ?? payload['expires_at'] ?? payload['expiresAt'];
+
+    if (expiresAtRaw is String && expiresAtRaw.isNotEmpty) {
+      final parsed = DateTime.tryParse(expiresAtRaw)?.toUtc();
+      if (parsed != null) return parsed.millisecondsSinceEpoch;
+    }
+
+    if (expiresAtRaw is int && expiresAtRaw > 0) {
+      // Support both seconds and milliseconds epoch formats
+      return expiresAtRaw > 9999999999 ? expiresAtRaw : expiresAtRaw * 1000;
+    }
+
+    return null;
   }
 
   Future<Response<dynamic>?> _retryWithFreshToken(RequestOptions requestOptions) async {
@@ -593,6 +664,15 @@ class ApiService {
         debugPrint('[API:$path] CONFLICT -> refresh state + conflict UI');
         break;
     }
+  }
+
+  // Clear session tokens helper
+  Future<void> _clearSessionTokens() async {
+    if (!Hive.isBoxOpen('auth_tokens')) return;
+    final box = Hive.box('auth_tokens');
+    await box.delete('auth_access_token');
+    await box.delete('auth_refresh_token');
+    await box.delete('auth_expires_at_utc');
   }
 
   Duration? _extractRetryAfter(Response<dynamic>? response) {
