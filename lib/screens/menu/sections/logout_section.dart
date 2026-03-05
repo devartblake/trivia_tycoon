@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../game/utils/drawer_animations.dart';
+import 'package:trivia_tycoon/core/animations/animation_manager.dart';
 import '../../../game/utils/drawer_menu_config.dart';
 import '../dialogs/logout_dialog.dart';
 
@@ -16,7 +16,7 @@ class LogoutSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: DrawerAnimations.slideFromLeft(
+      child: AnimationManager.slideFromLeft(
         animation: animationController,
         child: Container(
           decoration: BoxDecoration(
