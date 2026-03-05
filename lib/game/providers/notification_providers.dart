@@ -1,6 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/services/notification_service.dart';
+import '../../admin/providers/admin_auth_providers.dart';
 import '../services/channel_prefs.dart';
 import 'notification_history_store.dart';
 import 'notification_template_store.dart';
@@ -171,5 +172,7 @@ final notificationHistoryProvider = StreamProvider((ref) {
   return NotificationHistoryStore.instance.stream;
 });
 
-/// Simple role provider (replace with your Auth role provider)
-final isAdminProvider = Provider<bool>((_) => true); // TODO wire real role
+/// Unified admin role provider sourced from backend admin claims.
+final isAdminProvider = FutureProvider<bool>((ref) async {
+  return ref.watch(unifiedIsAdminProvider.future);
+});
