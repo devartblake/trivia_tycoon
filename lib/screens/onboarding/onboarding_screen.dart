@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import '../../game/controllers/onboarding_controller.dart';
-import '../../game/models/onboarding_step.dart';
+import 'steps/welcome_step.dart';
+import 'steps/username_step.dart';
+import 'steps/age_group_step.dart';
+import 'steps/country_step.dart';
+import 'steps/categories_step.dart';
+import 'steps/completion_step.dart';
+import '../../game/providers/riverpod_providers.dart';
 
+/// Modern onboarding screen with smooth step transitions
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -12,86 +18,187 @@ class OnboardingScreen extends ConsumerStatefulWidget {
   ConsumerState<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
-class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
-  late final OnboardingController _controller;
-  final Map<String, dynamic> _userData = {}; // Store form values across steps
+class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
+    with SingleTickerProviderStateMixin {
+  late final ModernOnboardingController _controller;
+  late final PageController _pageController;
+  late final AnimationController _progressAnimationController;
 
   @override
   void initState() {
     super.initState();
-    _controller = OnboardingController(context);
+    _controller = ModernOnboardingController(totalSteps: 6);
+    _pageController = PageController();
+    _progressAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    _controller.addListener(_onControllerChanged);
   }
 
-  /// Called when a step (form, avatar picker, etc.) submits data
-  void _onUserDataChanged(Map<String, dynamic> newData) {
-    setState(() {
-      _userData.addAll(newData); // merge new values into existing map
-    });
+  void _onControllerChanged() {
+    if (!mounted) return;
+
+    // Animate to the new page
+    _pageController.animateToPage(
+      _controller.currentStep,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOutCubic,
+    );
+
+    // Animate progress bar
+    _progressAnimationController.animateTo(
+      _controller.progress,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
   }
 
-  /// Called by the final onboarding step to save and navigate
-  Future<void> _onFinalStepComplete() async {
-    final serviceManager = ProviderScope.containerOf(context, listen: false).read(serviceManagerProvider);
+  @override
+  void dispose() {
+    _controller.removeListener(_onControllerChanged);
+    _controller.dispose();
+    _pageController.dispose();
+    _progressAnimationController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleCompletion() async {
+    final serviceManager = ref.read(serviceManagerProvider);
     final profileService = serviceManager.playerProfileService;
     final onboardingService = serviceManager.onboardingSettingsService;
 
-    // Save onboarding flag
+    // Save all user data
     await onboardingService.setOnboardingCompleted(true);
-
-    // Save to persistent storage
     await onboardingService.setHasCompletedOnboarding(true);
-    await profileService.savePlayerName(_userData['username'] ?? 'player');
-    await profileService.setPremiumStatus(_userData['isPremiumUser'] == true);
-    await profileService.saveUserRole("player");
-    await profileService.saveUserRoles(["player"]);
-    await profileService.saveCountry(_userData['country']);
-    await profileService.saveAgeGroup(_userData['ageGroup']);
-    await profileService.saveAvatar(_userData['avatar']);
 
-    final bool wantsPremium = _userData['isPremiumUser'] == true;
+    if (_controller.userData['username'] != null) {
+      await profileService.savePlayerName(_controller.userData['username']);
+    }
+    if (_controller.userData['ageGroup'] != null) {
+      await profileService.saveAgeGroup(_controller.userData['ageGroup']);
+    }
+    if (_controller.userData['country'] != null) {
+      await profileService.saveCountry(_controller.userData['country']);
+    }
+    if (_controller.userData['categories'] != null) {
+      // Save preferred categories
+      // await profileService.savePreferredCategories(_controller.userData['categories']);
+    }
 
-    if (context.mounted) {
-      if (wantsPremium) {
-        if (!mounted) return;
-        context.go('/store');
-      } else {
-        if (!mounted) return;
-        context.go('/');
-      }
+    if (mounted) {
+      context.go('/');
+    }
+  }
+
+  Future<void> _handleSkip() async {
+    final serviceManager = ref.read(serviceManagerProvider);
+    final onboardingService = serviceManager.onboardingSettingsService;
+
+    await onboardingService.setHasCompletedOnboarding(true);
+
+    if (mounted) {
+      context.go('/');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // Generate steps and inject callbacks
-    final steps = OnboardingStep.defaultSteps(
-      controller: _controller, // ✅ inject controller
-      onUserDataChanged: _onUserDataChanged,
-      onFinalStepComplete: _onFinalStepComplete,
-    );
+    final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: _controller.getBackgroundColor(),
-        elevation: 0,
-        actions: [
-          if (_controller.currentIndex < steps.length - 1)
-            TextButton(
-              onPressed: () async {
-                final onboardingService = ref.read(onboardingSettingsServiceProvider);
-                await onboardingService.setHasCompletedOnboarding(true);
-                if (context.mounted) context.go('/');
-              },
-              child: const Text("Skip", style: TextStyle(color: Colors.blue),),
-            )
-        ],
+      backgroundColor: theme.colorScheme.surface,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Header with progress and skip
+            _buildHeader(context),
+
+            // Main content area
+            Expanded(
+              child: PageView(
+                controller: _pageController,
+                physics: const NeverScrollableScrollPhysics(),
+                children: [
+                  WelcomeStep(controller: _controller),
+                  UsernameStep(controller: _controller),
+                  AgeGroupStep(controller: _controller),
+                  CountryStep(controller: _controller),
+                  CategoriesStep(controller: _controller),
+                  CompletionStep(
+                    controller: _controller,
+                    onComplete: _handleCompletion,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
-      body: PageView.builder(
-        controller: _controller.pageController,
-        itemCount: steps.length,
-        onPageChanged: _controller.onPageChanged,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (context, index) => steps[index].widget,
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          // Skip button and progress indicator
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Back button (hidden on first step)
+              if (!_controller.isFirstStep)
+                IconButton(
+                  onPressed: _controller.previousStep,
+                  icon: const Icon(Icons.arrow_back),
+                  tooltip: 'Back',
+                )
+              else
+                const SizedBox(width: 48),
+
+              // Step indicator
+              Text(
+                'Step ${_controller.currentStep + 1} of ${_controller.totalSteps}',
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+
+              // Skip button (hidden on last step)
+              if (!_controller.isLastStep)
+                TextButton(
+                  onPressed: _handleSkip,
+                  child: const Text('Skip'),
+                )
+              else
+                const SizedBox(width: 48),
+            ],
+          ),
+
+          const SizedBox(height: 12),
+
+          // Progress bar
+          AnimatedBuilder(
+            animation: _progressAnimationController,
+            builder: (context, child) {
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: LinearProgressIndicator(
+                  value: _progressAnimationController.value,
+                  minHeight: 8,
+                  backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    theme.colorScheme.primary,
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }

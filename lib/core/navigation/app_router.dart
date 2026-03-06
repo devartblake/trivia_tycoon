@@ -74,8 +74,6 @@ import '../../screens/browse/all_actions_screen.dart';
 import '../../screens/browse/all_categories_screen.dart';
 import '../../screens/browse/all_classes_screen.dart';
 import '../../screens/menu/main_menu_screen.dart';
-import '../../screens/onboarding/profile_setup_screen.dart';
-import '../../screens/onboarding/intro_carousel_screen.dart';
 import '../../screens/question/categories/daily_quiz_screen.dart';
 import '../../screens/question/question_view_screen.dart';
 import '../../screens/settings/skill_theme_screen.dart';
@@ -144,16 +142,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
 
       /// 📚 Onboarding Routes
-      GoRoute(
-        path: '/intro',
-        name: 'intro',
-        builder: (context, state) => const IntroCarouselScreen(),
-      ),
-      GoRoute(
-        path: '/profile-setup',
-        name: 'profileSetup',
-        builder: (context, state) => const ProfileSetupScreen(),
-      ),
       GoRoute(
         path: '/onboarding',
         builder: (context, state) => const OnboardingScreen(),

@@ -13,7 +13,7 @@ import '../core/constants/image_strings.dart';
 import '../game/providers/auth_providers.dart';
 import '../game/providers/onboarding_providers.dart';
 import '../game/providers/multi_profile_providers.dart';
-import 'onboarding/widget/constants.dart';
+import 'onboarding/steps/constants.dart';
 
 /// User data model for mock authentication
 class MockUser {
