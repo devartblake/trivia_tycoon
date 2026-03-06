@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 import 'storage/secure_storage.dart';
 
@@ -34,6 +35,41 @@ class DeviceIdService {
     }
 
     return id;
+  }
+
+
+  /// Returns a backend-friendly device type label for this runtime.
+  String getDeviceType() {
+    if (kIsWeb) return 'web';
+
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return 'android';
+      case TargetPlatform.iOS:
+        return 'ios';
+      case TargetPlatform.macOS:
+        return 'macos';
+      case TargetPlatform.windows:
+        return 'windows';
+      case TargetPlatform.linux:
+        return 'linux';
+      case TargetPlatform.fuchsia:
+        return 'fuchsia';
+    }
+  }
+
+  /// Returns a reusable payload with device identity fields
+  /// in common backend casing variants.
+  Future<Map<String, String>> getDeviceIdentityPayload() async {
+    final id = await getOrCreate();
+    final type = getDeviceType();
+
+    return <String, String>{
+      'device_id': id,
+      'deviceId': id,
+      'device_type': type,
+      'deviceType': type,
+    };
   }
 
   /// Clear the device ID.
