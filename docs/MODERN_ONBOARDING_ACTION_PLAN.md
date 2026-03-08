@@ -31,9 +31,9 @@ The modern onboarding specification file is:
 ## Phase 1 — Stabilize contract and naming (1 day)
 
 ### Tasks
-- [ ] Define a single naming convention for the “modern onboarding” module (either keep `OnboardingScreen` naming or rename files/classes consistently to `ModernOnboarding*`).
-- [ ] Update `docs/MODERN_ONBOARDING_README.md` file paths and integration snippets to match the real implementation.
-- [ ] Add a short architecture section documenting:
+- [x] Define a single naming convention for the module: keep `OnboardingScreen` and `OnboardingController` for transition stability.
+- [x] Update `docs/MODERN_ONBOARDING_README.md` file paths and integration snippets to match the real implementation.
+- [x] Add a short architecture section documenting:
   - source of truth for onboarding state
   - persistence mechanism
   - route decision points (`/splash`, `/onboarding`, `/`)
@@ -47,14 +47,14 @@ The modern onboarding specification file is:
 ## Phase 2 — Consolidate onboarding state model (1–2 days)
 
 ### Tasks
-- [ ] Introduce a single persisted onboarding state object (e.g., `OnboardingProgress`) with fields:
+- [x] Introduce a single persisted onboarding state object (`OnboardingProgress`) with fields:
   - `completed: bool`
   - `currentStep: int`
   - `username`, `ageGroup`, `country`, `categories`
   - `lastUpdatedAt`
-- [ ] Refactor `OnboardingSettingsService` to read/write this model instead of only one boolean.
-- [ ] Replace placeholder `StateProvider` values in `onboarding_providers.dart` with values derived from the persisted model.
-- [ ] Normalize storage keys to avoid dual keys like `onboarding_completed` vs `onboarding_complete`.
+- [x] Refactor `OnboardingSettingsService` to read/write this model instead of only one boolean.
+- [x] Replace placeholder `StateProvider` values in `onboarding_providers.dart` with values derived from the persisted model.
+- [x] Normalize storage keys to avoid dual keys like `onboarding_completed` vs `onboarding_complete`.
 
 ### Acceptance Criteria
 - One persisted source of truth is used for onboarding decisions.
@@ -65,10 +65,10 @@ The modern onboarding specification file is:
 ## Phase 3 — Complete data persistence and submit behavior (1 day)
 
 ### Tasks
-- [ ] Implement category persistence in profile/settings service (uncomment and wire category save path).
-- [ ] Ensure “Skip” captures explicit partial state (e.g., `completed=false`, `currentStep`, timestamp).
-- [ ] Add recovery behavior: if user returns and onboarding is incomplete, reopen at the last unfinished step.
-- [ ] Add defensive validation before completion submit (non-empty required fields or explicit skip policy).
+- [x] Implement category persistence in profile/settings service (uncomment and wire category save path).
+- [x] Ensure “Skip” captures explicit partial state (e.g., `completed=false`, `currentStep`, timestamp).
+- [x] Add recovery behavior: if user returns and onboarding is incomplete, reopen at the last unfinished step.
+- [x] Add defensive validation before completion submit (non-empty required fields or explicit skip policy).
 
 ### Acceptance Criteria
 - Full profile payload is persisted after completion.
@@ -79,13 +79,13 @@ The modern onboarding specification file is:
 ## Phase 4 — Harden routing and guard behavior (1 day)
 
 ### Tasks
-- [ ] Audit splash/router guards to ensure consistent behavior across:
+- [x] Audit splash/router guards to ensure consistent behavior across:
   - logged out
   - logged in + never onboarded
   - logged in + partially onboarded
   - logged in + completed onboarding
-- [ ] Centralize guard logic so only one place determines onboarding redirect policy.
-- [ ] Add telemetry/log events for guard decisions for debugging.
+- [x] Centralize guard logic so only one place determines onboarding redirect policy.
+- [x] Add telemetry/log events for guard decisions for debugging.
 
 ### Acceptance Criteria
 - Route outcomes are deterministic and consistent for all user states.
@@ -96,14 +96,14 @@ The modern onboarding specification file is:
 ## Phase 5 — Testing and release readiness (1–2 days)
 
 ### Tasks
-- [ ] Add unit tests for onboarding controller step transitions and validation boundaries.
-- [ ] Add service tests for onboarding persistence serialization/deserialization.
-- [ ] Add widget/integration tests for:
+- [x] Add unit tests for onboarding controller step transitions and validation boundaries.
+- [x] Add service tests for onboarding persistence serialization/deserialization.
+- [x] Add widget/integration tests for:
   - complete flow
   - skip flow
   - relaunch-resume flow
   - post-completion app entry
-- [ ] Add manual QA checklist in docs with expected outcomes and test accounts.
+- [x] Add manual QA checklist in docs with expected outcomes and test accounts.
 
 ### Acceptance Criteria
 - Automated tests cover critical onboarding transitions.

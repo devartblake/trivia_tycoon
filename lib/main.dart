@@ -66,8 +66,7 @@ Future<void> _initializeAuthState(ServiceManager serviceManager) async {
 
     // Update onboarding state based on completion status
     if (hasOnboarded) {
-      container.read(hasSeenIntroProvider.notifier).state = true;
-      container.read(hasCompletedProfileProvider.notifier).state = true;
+      await container.read(onboardingProgressProvider.notifier).markOnboardingCompleted(true);
     }
 
     // Dispose the temporary container

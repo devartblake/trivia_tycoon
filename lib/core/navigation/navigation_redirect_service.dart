@@ -1,51 +1,78 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/services/settings/onboarding_settings_service.dart';
 import '../../game/providers/auth_providers.dart';
 import '../../game/providers/onboarding_providers.dart';
 
-/// Navigation redirect service that determines where users should be redirected
+/// Navigation redirect service that determines where users should be redirected.
 class NavigationRedirectService {
   final Ref ref;
 
   NavigationRedirectService(this.ref);
 
-  String? determineRedirect(String currentPath) {
-    final isLoggedIn = ref.read(isLoggedInSyncProvider);
-    final onboardingPhase = ref.read(onboardingPhaseProvider);
+  static OnboardingPhase _phaseFromProgress(OnboardingProgress progress) {
+    if (progress.completed) return OnboardingPhase.done;
+    if (!progress.hasSeenIntro) return OnboardingPhase.intro;
+    if (!progress.hasCompletedProfile) return OnboardingPhase.profileSetup;
+    return OnboardingPhase.done;
+  }
 
-    // Debug logging
-    debugPrint('REDIRECT DEBUG: isLoggedIn = $isLoggedIn, path = $currentPath, phase = $onboardingPhase');
-
-    // 1) Always allow splash screen
-    if (currentPath == '/') return null;
-
-    // 2) If not logged in -> force auth (except on auth screens)
+  static String? resolveOnboardingRedirect({
+    required String currentPath,
+    required bool isLoggedIn,
+    required OnboardingPhase phase,
+  }) {
+    // Not authenticated: allow auth paths, block protected paths.
     if (!isLoggedIn) {
       if (currentPath == '/login' || currentPath == '/signup') return null;
       return '/login';
     }
 
-    // 3) Logged in → gate by onboarding phase
-    switch (onboardingPhase) {
-      case OnboardingPhase.intro:
-        if (currentPath != '/intro') return '/intro';
-        return null;
-      case OnboardingPhase.profileSetup:
-      // Allow profile-related routes during setup phase
-        if (currentPath == '/profile-setup' ||
+    // Authenticated users should not stay on auth screens.
+    if (currentPath == '/login' || currentPath == '/signup') {
+      return '/home';
+    }
+
+    // Onboarding policy.
+    switch (phase) {
+      case OnboardingPhase.done:
+        // Keep completed users away from onboarding-only routes.
+        if (currentPath == '/onboarding' ||
             currentPath == '/profile-selection' ||
             currentPath == '/avatar-selection') {
-          return null;
-        }
-        // For other paths during profile setup, redirect to profile selection
-        return '/profile-selection';
-      case OnboardingPhase.done:
-      // Redirect away from auth/onboarding screens if already complete
-        if (['/intro', '/profile-setup', '/login', '/signup'].contains(currentPath)) {
-          return '/main';
+          return '/home';
         }
         return null;
+      case OnboardingPhase.intro:
+      case OnboardingPhase.profileSetup:
+        // During onboarding, keep user in onboarding flow routes.
+        const allowed = {
+          '/onboarding',
+          '/profile-selection',
+          '/avatar-selection',
+        };
+        if (allowed.contains(currentPath)) return null;
+        return '/onboarding';
     }
+  }
+
+  String? determineRedirect(String currentPath) {
+    final isLoggedIn = ref.read(isLoggedInSyncProvider);
+    final progress = ref.read(onboardingProgressProvider).progress;
+    final phase = _phaseFromProgress(progress);
+
+    final redirect = resolveOnboardingRedirect(
+      currentPath: currentPath,
+      isLoggedIn: isLoggedIn,
+      phase: phase,
+    );
+
+    debugPrint(
+      '[NavRedirect] path=$currentPath, isLoggedIn=$isLoggedIn, phase=$phase, '
+      'completed=${progress.completed}, step=${progress.currentStep}, redirect=$redirect',
+    );
+
+    return redirect;
   }
 }
 
@@ -57,11 +84,11 @@ final navigationRedirectServiceProvider = Provider<NavigationRedirectService>((r
 /// Provider that watches for navigation state changes
 final navigationStateProvider = Provider<NavigationState>((ref) {
   final isLoggedIn = ref.watch(isLoggedInSyncProvider);
-  final onboardingPhase = ref.watch(onboardingPhaseProvider);
+  final progress = ref.watch(onboardingProgressProvider).progress;
 
   return NavigationState(
     isLoggedIn: isLoggedIn,
-    onboardingPhase: onboardingPhase,
+    onboardingPhase: NavigationRedirectService._phaseFromProgress(progress),
   );
 });
 
@@ -77,10 +104,10 @@ class NavigationState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is NavigationState &&
-              runtimeType == other.runtimeType &&
-              isLoggedIn == other.isLoggedIn &&
-              onboardingPhase == other.onboardingPhase;
+      other is NavigationState &&
+          runtimeType == other.runtimeType &&
+          isLoggedIn == other.isLoggedIn &&
+          onboardingPhase == other.onboardingPhase;
 
   @override
   int get hashCode => isLoggedIn.hashCode ^ onboardingPhase.hashCode;

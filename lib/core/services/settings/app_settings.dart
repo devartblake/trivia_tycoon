@@ -926,7 +926,7 @@ class AppSettings {
 
   /// Example: onboarding flag
   static Future<void> setOnboardingComplete(bool value) =>
-      setBool('onboarding_complete', value);
+      setBool('onboarding_completed', value);
 
   /// Saves the last jackpot win timestamp
   static Future<void> setJackpotTime(DateTime time) async {

@@ -5,7 +5,8 @@ import 'package:hive/hive.dart';
 class QuizProgressService {
   static const String _settingsBox = 'settings';
   static const String _quizProgressKey = 'quizProgress';
-  static const String _onboardingCompleteKey = 'onboarding_complete';
+  static const String _onboardingCompleteKey = 'onboarding_completed';
+  static const String _legacyOnboardingCompleteKey = 'onboarding_complete';
   static const String _playerNameKey = 'playerName';
   static const String _playerProgressKey = 'playerProgress';
   static const String _autoSaveKey = 'autoSaveData';
@@ -39,12 +40,20 @@ class QuizProgressService {
   Future<void> setOnboardingCompleted() async {
     final box = await Hive.openBox(_settingsBox);
     await box.put(_onboardingCompleteKey, true);
+    await box.delete(_legacyOnboardingCompleteKey);
   }
 
   /// Returns whether onboarding is completed.
   Future<bool> getOnboardingStatus() async {
     final box = await Hive.openBox(_settingsBox);
-    return box.get(_onboardingCompleteKey, defaultValue: false);
+    final current = box.get(_onboardingCompleteKey);
+    if (current is bool) return current;
+
+    final legacy = box.get(_legacyOnboardingCompleteKey, defaultValue: false);
+    final migrated = legacy is bool ? legacy : false;
+    await box.put(_onboardingCompleteKey, migrated);
+    await box.delete(_legacyOnboardingCompleteKey);
+    return migrated;
   }
 
   /// Saves the player's display name.

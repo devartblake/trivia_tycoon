@@ -1,36 +1,140 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Provider for tracking if user has seen the intro carousel
-/// TODO: Replace StateProvider with your persisted service when ready
-/// Example: ref.read(onboardingSettingsServiceProvider).hasSeenIntro()
-final hasSeenIntroProvider = StateProvider<bool>((ref) => false);
+import '../../core/services/settings/onboarding_settings_service.dart';
+import 'riverpod_providers.dart';
 
-/// Provider for tracking if user has completed profile setup
-/// TODO: Replace StateProvider with your persisted service when ready
-/// Example: ref.read(onboardingSettingsServiceProvider).hasCompletedProfile()
-final hasCompletedProfileProvider = StateProvider<bool>((ref) => false);
+final onboardingProgressProvider =
+    StateNotifierProvider<OnboardingProgressNotifier, OnboardingProgressState>((
+      ref,
+    ) {
+      return OnboardingProgressNotifier(ref);
+    });
+
+/// Provider for tracking if user has seen the intro carousel.
+/// Backed by persisted onboarding progress.
+final hasSeenIntroProvider = Provider<bool>((ref) {
+  return ref.watch(onboardingProgressProvider).progress.hasSeenIntro;
+});
+
+/// Provider for tracking if user has completed profile setup.
+/// Backed by persisted onboarding progress.
+final hasCompletedProfileProvider = Provider<bool>((ref) {
+  return ref.watch(onboardingProgressProvider).progress.hasCompletedProfile;
+});
 
 /// Enum for different onboarding phases
 enum OnboardingPhase {
-  intro,        // User needs to see intro carousel
+  intro, // User needs to see intro carousel
   profileSetup, // User needs to complete profile setup
-  done          // User has completed all onboarding
+  done, // User has completed all onboarding
 }
 
 /// Provider that determines current onboarding phase based on completion flags
 final onboardingPhaseProvider = Provider<OnboardingPhase>((ref) {
-  final seenIntro = ref.watch(hasSeenIntroProvider);
-  final completedProfile = ref.watch(hasCompletedProfileProvider);
+  final progress = ref.watch(onboardingProgressProvider).progress;
 
-  if (!seenIntro) return OnboardingPhase.intro;
-  if (!completedProfile) return OnboardingPhase.profileSetup;
+  if (!progress.hasSeenIntro) return OnboardingPhase.intro;
+  if (!progress.hasCompletedProfile) return OnboardingPhase.profileSetup;
   return OnboardingPhase.done;
 });
 
 /// Provider for onboarding state management
-final onboardingStateProvider = StateNotifierProvider<OnboardingStateNotifier, OnboardingState>((ref) {
-  return OnboardingStateNotifier();
-});
+final onboardingStateProvider =
+    StateNotifierProvider<OnboardingStateNotifier, OnboardingState>((ref) {
+      return OnboardingStateNotifier(ref);
+    });
+
+class OnboardingProgressState {
+  final OnboardingProgress progress;
+  final bool isLoading;
+  final String? error;
+
+  const OnboardingProgressState({
+    this.progress = const OnboardingProgress(),
+    this.isLoading = true,
+    this.error,
+  });
+
+  OnboardingProgressState copyWith({
+    OnboardingProgress? progress,
+    bool? isLoading,
+    String? error,
+  }) {
+    return OnboardingProgressState(
+      progress: progress ?? this.progress,
+      isLoading: isLoading ?? this.isLoading,
+      error: error,
+    );
+  }
+}
+
+class OnboardingProgressNotifier extends StateNotifier<OnboardingProgressState> {
+  final Ref ref;
+
+  OnboardingProgressNotifier(this.ref) : super(const OnboardingProgressState()) {
+    load();
+  }
+
+  OnboardingSettingsService get _service => ref.read(onboardingSettingsServiceProvider);
+
+  Future<void> load() async {
+    try {
+      state = state.copyWith(isLoading: true, error: null);
+      final progress = await _service.getOnboardingProgress();
+      state = state.copyWith(progress: progress, isLoading: false);
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+    }
+  }
+
+  Future<void> updateProgress({
+    bool? completed,
+    bool? hasSeenIntro,
+    bool? hasCompletedProfile,
+    int? currentStep,
+    String? username,
+    String? ageGroup,
+    String? country,
+    List<String>? categories,
+  }) async {
+    try {
+      await _service.updateOnboardingProgress(
+        completed: completed,
+        hasSeenIntro: hasSeenIntro,
+        hasCompletedProfile: hasCompletedProfile,
+        currentStep: currentStep,
+        username: username,
+        ageGroup: ageGroup,
+        country: country,
+        categories: categories,
+      );
+      await load();
+    } catch (e) {
+      state = state.copyWith(error: e.toString());
+    }
+  }
+
+  Future<void> markIntroSeen([bool value = true]) async {
+    await updateProgress(hasSeenIntro: value);
+  }
+
+  Future<void> markProfileCompleted([bool value = true]) async {
+    await updateProgress(hasCompletedProfile: value);
+  }
+
+  Future<void> markOnboardingCompleted([bool value = true]) async {
+    await updateProgress(
+      completed: value,
+      hasSeenIntro: value ? true : state.progress.hasSeenIntro,
+      hasCompletedProfile: value ? true : state.progress.hasCompletedProfile,
+    );
+  }
+
+  Future<void> reset() async {
+    await _service.resetOnboardingProgress();
+    await load();
+  }
+}
 
 /// Onboarding state model
 class OnboardingState {
@@ -77,10 +181,25 @@ class OnboardingState {
 
 /// Onboarding state notifier for managing onboarding flow
 class OnboardingStateNotifier extends StateNotifier<OnboardingState> {
-  OnboardingStateNotifier() : super(const OnboardingState());
+  final Ref ref;
 
-  void completeIntro() {
+  OnboardingStateNotifier(this.ref) : super(const OnboardingState()) {
+    _loadPersistedState();
+  }
+
+  Future<void> _loadPersistedState() async {
+    await ref.read(onboardingProgressProvider.notifier).load();
+    final persisted = ref.read(onboardingProgressProvider).progress;
+    state = state.copyWith(
+      hasSeenIntro: persisted.hasSeenIntro,
+      hasCompletedProfile: persisted.hasCompletedProfile,
+      username: persisted.username,
+    );
+  }
+
+  Future<void> completeIntro() async {
     state = state.copyWith(hasSeenIntro: true);
+    await ref.read(onboardingProgressProvider.notifier).markIntroSeen(true);
   }
 
   void setUsername(String username) {
@@ -95,22 +214,19 @@ class OnboardingStateNotifier extends StateNotifier<OnboardingState> {
     state = state.copyWith(isLoading: true, error: null);
 
     try {
-      // TODO: Save profile data to your services
-      // await ref.read(profileService).saveProfile(state.username, state.selectedAvatar);
-
-      state = state.copyWith(
+      await ref.read(onboardingProgressProvider.notifier).updateProgress(
         hasCompletedProfile: true,
-        isLoading: false,
+        username: state.username,
       );
+
+      state = state.copyWith(hasCompletedProfile: true, isLoading: false);
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      );
+      state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
 
-  void resetOnboarding() {
+  Future<void> resetOnboarding() async {
+    await ref.read(onboardingProgressProvider.notifier).reset();
     state = const OnboardingState();
   }
 

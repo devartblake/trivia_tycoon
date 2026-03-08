@@ -13,6 +13,7 @@ class PlayerProfileService {
   static const _countryKey = 'country';
   static const _ageGroupKey = 'ageGroup';
   static const _avatarKey = 'avatar';
+  static const _preferredCategoriesKey = 'preferredCategories';
   static const _sessionDataKey = 'currentSession';
   static const _lastActiveKey = 'lastActive';
   static const _userProfileKey = 'preferredCategories';
@@ -140,6 +141,20 @@ class PlayerProfileService {
     return box.get(_avatarKey);
   }
 
+  /// Saves preferred trivia categories.
+  Future<void> savePreferredCategories(List<String> categories) async {
+    final box = await _getBox();
+    await box.put(_preferredCategoriesKey, categories);
+  }
+
+  /// Retrieves preferred trivia categories.
+  Future<List<String>> getPreferredCategories() async {
+    final box = await _getBox();
+    return List<String>.from(
+      box.get(_preferredCategoriesKey, defaultValue: <String>[]),
+    );
+  }
+
   /// Checks if player is admin based on legacy role or role list.
   Future<bool> isAdminUser() async {
     final legacy = await getUserRole();
@@ -163,6 +178,7 @@ class PlayerProfileService {
     await box.delete(_countryKey);
     await box.delete(_ageGroupKey);
     await box.delete(_avatarKey);
+    await box.delete(_preferredCategoriesKey);
     await box.delete(_sessionDataKey);
     await box.delete(_lastActiveKey);
   }
@@ -181,6 +197,7 @@ class PlayerProfileService {
         'country': await getCountry(),
         'age_group': await getAgeGroup(),
         'avatar': await getAvatar(),
+        'preferred_categories': await getPreferredCategories(),
         'save_reason': 'lifecycle_event',
       };
 
@@ -231,6 +248,7 @@ class PlayerProfileService {
         'country': await getCountry(),
         'age_group': await getAgeGroup(),
         'avatar': await getAvatar(),
+        'preferred_categories': await getPreferredCategories(),
         'is_admin': await isAdminUser(),
         'last_active': await getLastActiveTime(),
       };

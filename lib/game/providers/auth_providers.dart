@@ -144,8 +144,7 @@ class AuthOperations {
     ref.read(isLoggedInSyncProvider.notifier).state = false;
 
     // Also clear onboarding state
-    ref.read(hasSeenIntroProvider.notifier).state = false;
-    ref.read(hasCompletedProfileProvider.notifier).state = false;
+    await ref.read(onboardingProgressProvider.notifier).reset();
   }
 }
 
