@@ -16,6 +16,7 @@ class PlayerProfileService {
   static const _preferredCategoriesKey = 'preferredCategories';
   static const _sessionDataKey = 'currentSession';
   static const _lastActiveKey = 'lastActive';
+  static const _userProfileKey = 'preferredCategories';
 
   /// Gets the settings box, opening it if necessary
   Future<Box> _getBox() async {
@@ -40,6 +41,18 @@ class PlayerProfileService {
   }
 
   // ------------------------- EXISTING METHODS ----------------
+
+  /// Saves the preferred categories
+  Future<void> savePreferredCategories(List<String> categories) async {
+    final box = await _getBox();
+    await box.put(_userProfileKey, categories);
+  }
+
+  Future<List<String>> getPreferredCategories() async {
+    final box = await _getBox();
+    final categories = box.get(_userProfileKey, defaultValue: <String>[]);
+    return List<String>.from(categories);
+  }
 
   /// Saves the player's name.
   Future<void> savePlayerName(String name) async {

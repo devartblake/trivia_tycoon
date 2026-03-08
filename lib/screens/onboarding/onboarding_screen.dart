@@ -10,8 +10,10 @@ import 'steps/username_step.dart';
 import 'steps/age_group_step.dart';
 import 'steps/country_step.dart';
 import 'steps/categories_step.dart';
+import 'steps/avatar_step.dart';
 import 'steps/completion_step.dart';
 import '../../game/providers/riverpod_providers.dart';
+import 'dart:math' as math;
 
 // Confetti particle class
 class Confetti {
@@ -271,7 +273,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
             // Header with progress and skip
             _buildHeader(context),
@@ -289,6 +291,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                       AgeGroupStep(controller: _controller),
                       CountryStep(controller: _controller),
                       CategoriesStep(controller: _controller),
+                      AvatarStep(controller: _controller),
                       CompletionStep(
                         controller: _controller,
                         onComplete: _handleCompletion,
@@ -310,6 +313,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                 ],
               ),
             ),
+
+            // Confetti overlay
+            if (_showConfetti)
+              IgnorePointer(
+                child: CustomPaint(
+                  painter: ConfettiPainter(_confetti),
+                  size: Size.infinite,
+                ),
+              ),
           ],
         ),
       ),
@@ -337,11 +349,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
               else
                 const SizedBox(width: 48),
 
-              // Step indicator
-              Text(
-                'Step ${_controller.currentStep + 1} of ${_controller.totalSteps}',
-                style: theme.textTheme.labelLarge?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
+              // Step indicator with tooltip
+              Tooltip(
+                message: 'Progress through onboarding',
+                child: Text(
+                  'Step ${_controller.currentStep + 1} of ${_controller.totalSteps}',
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ),
 
@@ -358,20 +373,39 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
 
           const SizedBox(height: 12),
 
-          // Progress bar
+          // Progress bar with glow effect
           AnimatedBuilder(
             animation: _progressAnimationController,
             builder: (context, child) {
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: LinearProgressIndicator(
-                  value: _progressAnimationController.value,
-                  minHeight: 8,
-                  backgroundColor: theme.colorScheme.surfaceContainerHighest,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    theme.colorScheme.primary,
+              return Stack(
+                children: [
+                  // Glow effect
+                  Container(
+                    height: 8,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme.colorScheme.primary.withValues(alpha: 0.3),
+                          blurRadius: 8,
+                          spreadRadius: 2,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+                  // Progress bar
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: LinearProgressIndicator(
+                      value: _progressAnimationController.value,
+                      minHeight: 8,
+                      backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        theme.colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                ],
               );
             },
           ),
