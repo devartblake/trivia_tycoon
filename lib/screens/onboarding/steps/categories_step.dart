@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../game/controllers/onboarding_controller.dart';
 
 class CategoriesStep extends StatefulWidget {
-  final ModernOnboardingController controller;
+  final OnboardingController controller;
 
   const CategoriesStep({
     super.key,

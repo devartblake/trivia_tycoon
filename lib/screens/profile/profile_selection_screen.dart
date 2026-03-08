@@ -434,7 +434,7 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
         );
 
         // After successfully selecting/switching to a profile, add this:
-        ref.read(hasCompletedProfileProvider.notifier).state = true;
+        await ref.read(onboardingProgressProvider.notifier).markProfileCompleted(true);
 
         // And update the onboarding phase
         final serviceManager = ref.read(serviceManagerProvider);

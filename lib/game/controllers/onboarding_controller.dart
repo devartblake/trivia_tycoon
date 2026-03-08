@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 /// Modern onboarding controller for step-by-step flow
-class ModernOnboardingController extends ChangeNotifier {
+class OnboardingController extends ChangeNotifier {
   int _currentStep = 0;
   final int totalSteps;
   final Map<String, dynamic> userData = {};
 
-  ModernOnboardingController({required this.totalSteps});
+  OnboardingController({required this.totalSteps});
 
   int get currentStep => _currentStep;
   double get progress => (_currentStep + 1) / totalSteps;

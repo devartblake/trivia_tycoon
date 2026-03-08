@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../game/controllers/onboarding_controller.dart';
 
 class CountryStep extends StatefulWidget {
-  final ModernOnboardingController controller;
+  final OnboardingController controller;
 
   const CountryStep({
     super.key,
