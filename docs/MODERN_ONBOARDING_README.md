@@ -29,12 +29,10 @@ A complete redesign of the onboarding flow with **modern UI/UX patterns**, **tri
 
 ```
 lib/
-├── game/
-│   └── controllers/
-│       └── onboarding_controller.dart         # State management
 └── screens/
     └── onboarding/
-        ├── onboarding_screen.dart             # Main screen
+        ├── modern_onboarding_screen.dart      # Main screen
+        ├── modern_onboarding_controller.dart  # State management
         └── steps/
             ├── welcome_step.dart              # Step 1: Welcome
             ├── username_step.dart             # Step 2: Username
@@ -52,8 +50,8 @@ lib/
 
 ```bash
 # Copy all files to your project
-cp onboarding_screen.dart lib/screens/onboarding/
-cp onboarding_controller.dart lib/game/controllers/
+cp modern_onboarding_screen.dart lib/screens/onboarding/
+cp modern_onboarding_controller.dart lib/screens/onboarding/
 cp -r steps/ lib/screens/onboarding/
 ```
 
@@ -62,34 +60,22 @@ cp -r steps/ lib/screens/onboarding/
 In your `app_router.dart`:
 
 ```dart
-import '../screens/onboarding/onboarding_screen.dart';
+import '../screens/onboarding/modern_onboarding_screen.dart';
 
 // Add route
 GoRoute(
   path: '/onboarding',
-  builder: (context, state) => const OnboardingScreen(),
+  builder: (context, state) => const ModernOnboardingScreen(),
 ),
 ```
 
 ### Step 3: Update Imports
 
-Make sure these imports are correct in `onboarding_screen.dart`:
+Make sure these imports are correct in `modern_onboarding_screen.dart`:
 
 ```dart
 import '../../game/providers/riverpod_providers.dart';  // Your Riverpod providers
 ```
-
----
-
-
-### Architecture (Phase 1 Contract)
-
-- **Source of truth (current):** `OnboardingScreen` + `OnboardingController` for in-flow UI state, and `OnboardingSettingsService` for persisted completion flag.
-- **Persistence mechanism (current):** Hive `settings` box via `OnboardingSettingsService` (`onboarding_completed`).
-- **Route decision points:**
-  - `/splash` decides whether user should continue to auth/onboarding/app entry.
-  - `/onboarding` runs the modern multi-step onboarding experience.
-  - `/` (and main routes) are used after onboarding is complete.
 
 ---
 
@@ -175,7 +161,7 @@ The controller collects all data in `userData` map:
 }
 ```
 
-In `onboarding_screen.dart`, the `_handleCompletion()` method saves everything:
+In `modern_onboarding_screen.dart`, the `_handleCompletion()` method saves everything:
 
 ```dart
 Future<void> _handleCompletion() async {
@@ -325,7 +311,7 @@ GoRoute(path: '/age-selection', builder: (context, state) => AgeSelectionScreen(
 
 **New:**
 ```dart
-GoRoute(path: '/onboarding', builder: (context, state) => OnboardingScreen()),
+GoRoute(path: '/onboarding', builder: (context, state) => ModernOnboardingScreen()),
 ```
 
 ### Update Redirect Logic

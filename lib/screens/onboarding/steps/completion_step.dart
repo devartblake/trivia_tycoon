@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../game/controllers/onboarding_controller.dart';
 
 class CompletionStep extends StatefulWidget {
-  final OnboardingController controller;
+  final ModernOnboardingController controller;
   final VoidCallback onComplete;
 
   const CompletionStep({

@@ -178,7 +178,8 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
 
       if (isLoggedIn && hasOnboarded) {
         // User is returning and has completed onboarding
-        await ref.read(onboardingProgressProvider.notifier).markOnboardingCompleted(true);
+        ref.read(hasSeenIntroProvider.notifier).state = true;
+        ref.read(hasCompletedProfileProvider.notifier).state = true;
       }
 
       setState(() {

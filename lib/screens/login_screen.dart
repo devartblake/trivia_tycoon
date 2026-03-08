@@ -183,10 +183,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
         if (activeProfile != null) {
           ref.read(activeProfileStateProvider.notifier).state = activeProfile;
-          await ref.read(onboardingProgressProvider.notifier).updateProgress(
-            hasSeenIntro: true,
-            hasCompletedProfile: true,
-          );
+          ref.read(hasSeenIntroProvider.notifier).state = true;
+          ref.read(hasCompletedProfileProvider.notifier).state = true;
         }
       } else {
         // Migrate existing profile data if present
@@ -208,14 +206,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           if (migratedProfile != null) {
             await multiProfileService.setActiveProfile(migratedProfile.id);
             ref.read(activeProfileStateProvider.notifier).state = migratedProfile;
-            await ref.read(onboardingProgressProvider.notifier).updateProgress(
-              hasSeenIntro: true,
-              hasCompletedProfile: true,
-            );
+            ref.read(hasSeenIntroProvider.notifier).state = true;
+            ref.read(hasCompletedProfileProvider.notifier).state = true;
           }
         } else {
           // New user - needs onboarding
-          await ref.read(onboardingProgressProvider.notifier).reset();
+          ref.read(hasSeenIntroProvider.notifier).state = false;
+          ref.read(hasCompletedProfileProvider.notifier).state = false;
 
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
