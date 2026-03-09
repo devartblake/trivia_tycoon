@@ -1,27 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../game/services/question_loader_service.dart';
+import '../../../game/providers/question_providers.dart' as question_data;
 import '../../../game/models/question_model.dart';
 
 // Provider for category quiz data
 final categoryQuizProvider = FutureProvider.family<CategoryQuizData, String>((ref, category) async {
-  final loader = AdaptedQuestionLoaderService();
+  final repository = ref.watch(question_data.questionRepositoryProvider);
 
   try {
-    // Get questions for this category
-    final questions = await loader.getQuestionsByCategory(category);
+    final categoryQuestions = await repository.getQuestionsForCategory(
+      category: category,
+      amount: 200,
+    );
 
-    // Get category-specific stats
-    final allQuestions = await loader.loadAllQuestions();
-    final categoryQuestions = allQuestions.where((q) => q.category.toLowerCase() == category.toLowerCase()).toList();
-
-    // Calculate difficulty distribution
     final easyCount = categoryQuestions.where((q) => q.difficulty == 1).length;
     final mediumCount = categoryQuestions.where((q) => q.difficulty == 2).length;
     final hardCount = categoryQuestions.where((q) => q.difficulty == 3).length;
 
-    // Calculate media type distribution
     final audioCount = categoryQuestions.where((q) => q.hasAudio).length;
     final videoCount = categoryQuestions.where((q) => q.hasVideo).length;
     final imageCount = categoryQuestions.where((q) => q.hasImage).length;
@@ -36,8 +32,10 @@ final categoryQuizProvider = FutureProvider.family<CategoryQuizData, String>((re
       videoCount: videoCount,
       imageCount: imageCount,
       sampleQuestions: categoryQuestions.take(3).toList(),
-      averageDifficulty: categoryQuestions.isEmpty ? 1.0 :
-      categoryQuestions.map((q) => q.difficulty).reduce((a, b) => a + b) / categoryQuestions.length,
+      averageDifficulty: categoryQuestions.isEmpty
+          ? 1.0
+          : categoryQuestions.map((q) => q.difficulty).reduce((a, b) => a + b) /
+              categoryQuestions.length,
     );
   } catch (e) {
     debugPrint('Error loading category quiz data: $e');
