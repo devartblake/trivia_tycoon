@@ -433,7 +433,7 @@ class PlayerContainer extends StatelessWidget {
           ],
           Column(
             crossAxisAlignment:
-            isLeftSide ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+                isLeftSide ? CrossAxisAlignment.start : CrossAxisAlignment.end,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
