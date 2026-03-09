@@ -12,7 +12,6 @@ final questionHubServiceProvider = Provider<QuestionHubService>((ref) {
   );
 });
 
-
 final questionRepositoryProvider = Provider<QuestionRepository>((ref) {
   final serviceManager = ref.watch(serviceManagerProvider);
   final hubService = ref.watch(questionHubServiceProvider);
