@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 class VersusScreen extends StatefulWidget {
@@ -30,12 +31,20 @@ class VersusScreen extends StatefulWidget {
 
 class _VersusScreenState extends State<VersusScreen>
     with TickerProviderStateMixin {
+  static const int _initialCountdown = 5;
+
   late AnimationController _slideController;
   late AnimationController _vsController;
   late Animation<Offset> _player1SlideAnimation;
   late Animation<Offset> _player2SlideAnimation;
   late Animation<double> _vsScaleAnimation;
   late Animation<double> _vsOpacityAnimation;
+
+  int _countdown = _initialCountdown;
+  Timer? _countdownTimer;
+  bool _isPlayer1Ready = false;
+  bool _isPlayer2Ready = false;
+  bool _matchStarting = false;
 
   @override
   void initState() {
@@ -88,12 +97,65 @@ class _VersusScreenState extends State<VersusScreen>
     // Start animations
     _slideController.forward();
     Future.delayed(const Duration(milliseconds: 600), () {
+      if (!mounted) return;
       _vsController.forward();
+      _startCountdown();
+    });
+  }
+
+  void _startCountdown() {
+    _countdownTimer?.cancel();
+    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+
+      if (_countdown <= 1) {
+        timer.cancel();
+        _startMatch();
+        return;
+      }
+
+      setState(() {
+        _countdown -= 1;
+      });
+    });
+  }
+
+  void _toggleReady(bool isPlayer1) {
+    if (_matchStarting) return;
+
+    setState(() {
+      if (isPlayer1) {
+        _isPlayer1Ready = !_isPlayer1Ready;
+      } else {
+        _isPlayer2Ready = !_isPlayer2Ready;
+      }
+
+      if (_isPlayer1Ready && _isPlayer2Ready && _countdown > 1) {
+        _countdown = 1;
+      }
+    });
+  }
+
+  void _startMatch() {
+    if (_matchStarting || !mounted) return;
+
+    setState(() {
+      _matchStarting = true;
+    });
+
+    Future.delayed(const Duration(milliseconds: 450), () {
+      if (mounted && Navigator.of(context).canPop()) {
+        Navigator.of(context).pop(true);
+      }
     });
   }
 
   @override
   void dispose() {
+    _countdownTimer?.cancel();
     _slideController.dispose();
     _vsController.dispose();
     super.dispose();
@@ -123,6 +185,8 @@ class _VersusScreenState extends State<VersusScreen>
                     score: widget.player1Score,
                     isLeftSide: true,
                     primaryColor: widget.player1Color,
+                    isReady: _isPlayer1Ready,
+                    onReadyPressed: () => _toggleReady(true),
                   ),
                 ),
 
@@ -152,14 +216,30 @@ class _VersusScreenState extends State<VersusScreen>
                                   ),
                                 ],
                               ),
-                              child: const Text(
-                                'VS',
-                                style: TextStyle(
-                                  fontSize: 48,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
-                                  letterSpacing: 4,
-                                ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Text(
+                                    'VS',
+                                    style: TextStyle(
+                                      fontSize: 48,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87,
+                                      letterSpacing: 4,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    _matchStarting
+                                        ? 'Starting…'
+                                        : 'Match starts in $_countdown',
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black54,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -178,6 +258,8 @@ class _VersusScreenState extends State<VersusScreen>
                     score: widget.player2Score,
                     isLeftSide: false,
                     primaryColor: widget.player2Color,
+                    isReady: _isPlayer2Ready,
+                    onReadyPressed: () => _toggleReady(false),
                   ),
                 ),
 
@@ -277,6 +359,8 @@ class PlayerContainer extends StatelessWidget {
   final int score;
   final bool isLeftSide;
   final Color primaryColor;
+  final bool isReady;
+  final VoidCallback onReadyPressed;
 
   const PlayerContainer({
     super.key,
@@ -285,6 +369,8 @@ class PlayerContainer extends StatelessWidget {
     required this.score,
     required this.isLeftSide,
     required this.primaryColor,
+    required this.isReady,
+    required this.onReadyPressed,
   });
 
   @override
@@ -295,18 +381,43 @@ class PlayerContainer extends StatelessWidget {
         right: isLeftSide ? 60 : 20,
         bottom: 20,
       ),
-      child: Row(
-        mainAxisAlignment: isLeftSide ? MainAxisAlignment.start : MainAxisAlignment.end,
+      child: Column(
+        crossAxisAlignment:
+          isLeftSide ? CrossAxisAlignment.start : CrossAxisAlignment.end,
         children: [
-          if (isLeftSide) ...[
-            _buildPlayerInfo(),
-            const SizedBox(width: 16),
-            _buildAvatar(),
-          ] else ...[
-            _buildAvatar(),
-            const SizedBox(width: 16),
-            _buildPlayerInfo(),
-          ],
+          Row(
+            mainAxisAlignment:
+            isLeftSide ? MainAxisAlignment.start : MainAxisAlignment.end,
+            children: [
+              if (isLeftSide) ...[
+                _buildPlayerInfo(),
+                const SizedBox(width: 16),
+                _buildAvatar(),
+              ] else ...[
+                _buildAvatar(),
+                const SizedBox(width: 16),
+                _buildPlayerInfo(),
+              ],
+            ],
+          ),
+          const SizedBox(height: 8),
+          Align(
+            alignment: isLeftSide ? Alignment.centerLeft : Alignment.centerRight,
+            child: ElevatedButton.icon(
+              onPressed: onReadyPressed,
+              icon: Icon(isReady ? Icons.check_circle : Icons.play_arrow_rounded),
+              label: Text(isReady ? 'Ready' : 'Ready Up'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: isReady
+                    ? Colors.green.withValues(alpha: 0.92)
+                    : Colors.white.withValues(alpha: 0.9),
+                foregroundColor: isReady ? Colors.white : primaryColor,
+                elevation: 0,
+                padding:
+                const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -345,7 +456,8 @@ class PlayerContainer extends StatelessWidget {
             const SizedBox(width: 12),
           ],
           Column(
-            crossAxisAlignment: isLeftSide ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+            crossAxisAlignment:
+            isLeftSide ? CrossAxisAlignment.start : CrossAxisAlignment.end,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
@@ -434,12 +546,12 @@ class PlayerContainer extends StatelessWidget {
       child: ClipOval(
         child: playerAvatar.startsWith('http')
             ? Image.network(
-          playerAvatar,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return _buildDefaultAvatar();
-          },
-        )
+              playerAvatar,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return _buildDefaultAvatar();
+              },
+            )
             : _buildDefaultAvatar(),
       ),
     );
@@ -448,7 +560,7 @@ class PlayerContainer extends StatelessWidget {
   Widget _buildDefaultAvatar() {
     return Container(
       color: primaryColor.withValues(alpha: 0.3),
-      child: Icon(
+      child: const Icon(
         Icons.person,
         size: 35,
         color: Colors.white,

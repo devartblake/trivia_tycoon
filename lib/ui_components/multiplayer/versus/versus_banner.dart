@@ -54,34 +54,60 @@ class _SideInfo extends StatelessWidget {
     final align = alignEnd ? CrossAxisAlignment.end : CrossAxisAlignment.start;
     final textAlign = alignEnd ? TextAlign.right : TextAlign.left;
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: align,
-      children: [
-        _AvatarOrLogo(url: participant.avatarUrl, fallbackChar: participant.displayName.isNotEmpty ? participant.displayName[0] : '?', color: participant.color),
-        const SizedBox(height: 8),
-        Text(
-          participant.displayName,
-          textAlign: textAlign,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.w800,
-          ),
-        ),
-        if (participant.subtitle != null) ...[
-          const SizedBox(height: 2),
-          Text(
-            participant.subtitle!,
-            textAlign: textAlign,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Theme.of(context).textTheme.bodySmall?.color?.withValues(alpha: 0.8),
+    return LayoutBuilder(
+        builder: (context, constraints) {
+          final compact = constraints.maxHeight <= 110;
+
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: align,
+            children: [
+            _AvatarOrLogo(
+            url: participant.avatarUrl,
+            fallbackChar:
+            participant.displayName.isNotEmpty ? participant.displayName[0] : '?',
+            color: participant.color,
+            radius: compact ? 22 : 28,
             ),
-          ),
-        ],
-        if (participant.isTeam) ...[
-          const SizedBox(height: 6),
-          _MemberStack(members: participant.members, alignEnd: alignEnd),
-        ],
-      ],
+              SizedBox(height: compact ? 4 : 8),
+              Text(
+                participant.displayName,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: textAlign,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w800,
+                  fontSize: compact ? 18 : null,
+                ),
+              ),
+              if (participant.subtitle != null) ...[
+                const SizedBox(height: 2),
+                Text(
+                  participant.subtitle!,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: textAlign,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.color
+                        ?.withValues(alpha: 0.8),
+                  ),
+                ),
+              ],
+              if (participant.isTeam) ...[
+                SizedBox(height: compact ? 4 : 6),
+                _MemberStack(
+                  members: participant.members,
+                  alignEnd: alignEnd,
+                  compact: compact,
+                ),
+              ],
+            ],
+          );
+        },
     );
   }
 }
@@ -90,19 +116,25 @@ class _AvatarOrLogo extends StatelessWidget {
   final String? url;
   final String fallbackChar;
   final Color? color;
-  const _AvatarOrLogo({this.url, required this.fallbackChar, this.color});
+  final double radius;
+  const _AvatarOrLogo({
+    this.url,
+    required this.fallbackChar,
+    this.color,
+    this.radius = 28,
+  });
 
   @override
   Widget build(BuildContext context) {
     final bg = (color ?? Theme.of(context).colorScheme.primary).withValues(alpha: 0.2);
     return CircleAvatar(
-      radius: 28,
+      radius: radius,
       backgroundColor: bg,
       backgroundImage: url != null ? NetworkImage(url!) : null,
       child: url == null
           ? Text(
         fallbackChar.toUpperCase(),
-        style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
+        style: TextStyle(fontSize: radius * 0.78, fontWeight: FontWeight.w900),
       )
           : null,
     );
@@ -112,40 +144,53 @@ class _AvatarOrLogo extends StatelessWidget {
 class _MemberStack extends StatelessWidget {
   final List<Member> members;
   final bool alignEnd;
-  const _MemberStack({required this.members, this.alignEnd = false});
+  final bool compact;
+  const _MemberStack({
+    required this.members,
+    this.alignEnd = false,
+    this.compact = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final children = members.take(5).toList();
+    final avatarRadius = compact ? 14.0 : 18.0;
+    final gap = compact ? 18.0 : 24.0;
+    final children = members.take(compact ? 3 : 5).toList();
     return SizedBox(
-      height: 38,
+      height: compact ? 30 : 38,
       child: Stack(
         alignment: alignEnd ? Alignment.centerRight : Alignment.centerLeft,
         children: [
           for (int i = 0; i < children.length; i++)
             Positioned(
-              left: alignEnd ? null : i * 24.0,
-              right: alignEnd ? i * 24.0 : null,
+              left: alignEnd ? null : i * gap,
+              right: alignEnd ? i * gap : null,
               child: CircleAvatar(
-                radius: 18,
+                radius: avatarRadius,
                 backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
                 backgroundImage: children[i].avatarUrl != null
                     ? NetworkImage(children[i].avatarUrl!)
                     : null,
                 child: children[i].avatarUrl == null
                     ? Text(children[i].name[0].toUpperCase(),
-                    style: const TextStyle(fontWeight: FontWeight.bold))
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: compact ? 10 : 12,
+                    ))
                     : null,
               ),
             ),
           if (members.length > children.length)
             Positioned(
-              left: alignEnd ? null : children.length * 24.0,
-              right: alignEnd ? children.length * 24.0 : null,
+              left: alignEnd ? null : children.length * gap,
+              right: alignEnd ? children.length * gap : null,
               child: CircleAvatar(
-                radius: 18,
+                radius: avatarRadius,
                 backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-                child: Text('+${members.length - children.length}'),
+                child: Text(
+                  '+${members.length - children.length}',
+                  style: TextStyle(fontSize: compact ? 9 : 11),
+                ),
               ),
             ),
         ],
