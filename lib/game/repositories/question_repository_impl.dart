@@ -46,4 +46,9 @@ class QuestionRepositoryImpl implements QuestionRepository {
   Future<Map<String, dynamic>> getDatasetInfo() {
     return _questionHubService.getDatasetInfo();
   }
+
+  @override
+  Future<Map<String, dynamic>> getCategoryStats(QuizCategory category) {
+    return _questionHubService.getCategoryStats(category);
+  }
 }

@@ -43,13 +43,6 @@ final datasetInfoProvider = FutureProvider<Map<String, dynamic>>((ref) async {
 
 // Provider for category stats
 final categoryStatsProvider = FutureProvider.family<Map<String, dynamic>, QuizCategory>((ref, category) async {
-  final loader = AdaptedQuestionLoaderService();
-  final questionCount = await loader.getQuizCategoryQuestionCount(category);
-  final difficulty = await loader.getQuizCategoryDifficulty(category);
-
-  return {
-    'questionCount': questionCount,
-    'difficulty': difficulty,
-    'category': category,
-  };
+  final repository = ref.watch(questionRepositoryProvider);
+  return repository.getCategoryStats(category);
 });

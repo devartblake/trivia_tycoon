@@ -55,59 +55,59 @@ class _SideInfo extends StatelessWidget {
     final textAlign = alignEnd ? TextAlign.right : TextAlign.left;
 
     return LayoutBuilder(
-        builder: (context, constraints) {
-          final compact = constraints.maxHeight <= 110;
+      builder: (context, constraints) {
+        final compact = constraints.maxHeight <= 110;
 
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: align,
-            children: [
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: align,
+          children: [
             _AvatarOrLogo(
-            url: participant.avatarUrl,
-            fallbackChar:
-            participant.displayName.isNotEmpty ? participant.displayName[0] : '?',
-            color: participant.color,
-            radius: compact ? 22 : 28,
+              url: participant.avatarUrl,
+              fallbackChar:
+                  participant.displayName.isNotEmpty ? participant.displayName[0] : '?',
+              color: participant.color,
+              radius: compact ? 22 : 28,
             ),
-              SizedBox(height: compact ? 4 : 8),
+            SizedBox(height: compact ? 4 : 8),
+            Text(
+              participant.displayName,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: textAlign,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    fontSize: compact ? 18 : null,
+                  ),
+            ),
+            if (participant.subtitle != null) ...[
+              const SizedBox(height: 2),
               Text(
-                participant.displayName,
+                participant.subtitle!,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 textAlign: textAlign,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w800,
-                  fontSize: compact ? 18 : null,
-                ),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context)
+                          .textTheme
+                          .bodySmall
+                          ?.color
+                          ?.withValues(alpha: 0.8),
+                    ),
               ),
-              if (participant.subtitle != null) ...[
-                const SizedBox(height: 2),
-                Text(
-                  participant.subtitle!,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: textAlign,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.color
-                        ?.withValues(alpha: 0.8),
-                  ),
-                ),
-              ],
-              if (participant.isTeam) ...[
-                SizedBox(height: compact ? 4 : 6),
-                _MemberStack(
-                  members: participant.members,
-                  alignEnd: alignEnd,
-                  compact: compact,
-                ),
-              ],
             ],
-          );
-        },
+            if (participant.isTeam) ...[
+              SizedBox(height: compact ? 4 : 6),
+              _MemberStack(
+                members: participant.members,
+                alignEnd: alignEnd,
+                compact: compact,
+              ),
+            ],
+          ],
+        );
+      },
     );
   }
 }

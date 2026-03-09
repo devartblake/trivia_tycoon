@@ -50,13 +50,11 @@ class _VersusScreenState extends State<VersusScreen>
   void initState() {
     super.initState();
 
-    // Slide animations for players
     _slideController = AnimationController(
       duration: const Duration(milliseconds: 1200),
       vsync: this,
     );
 
-    // VS animation
     _vsController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
@@ -94,7 +92,6 @@ class _VersusScreenState extends State<VersusScreen>
       curve: Curves.easeIn,
     ));
 
-    // Start animations
     _slideController.forward();
     Future.delayed(const Duration(milliseconds: 600), () {
       if (!mounted) return;
@@ -166,17 +163,11 @@ class _VersusScreenState extends State<VersusScreen>
     return Scaffold(
       body: Stack(
         children: [
-          // Background
           _buildBackground(),
-
-          // Content
           SafeArea(
             child: Column(
               children: [
-                // Top padding
                 const SizedBox(height: 60),
-
-                // Player 1 container
                 SlideTransition(
                   position: _player1SlideAnimation,
                   child: PlayerContainer(
@@ -189,8 +180,6 @@ class _VersusScreenState extends State<VersusScreen>
                     onReadyPressed: () => _toggleReady(true),
                   ),
                 ),
-
-                // VS Section
                 Expanded(
                   child: Center(
                     child: AnimatedBuilder(
@@ -248,8 +237,6 @@ class _VersusScreenState extends State<VersusScreen>
                     ),
                   ),
                 ),
-
-                // Player 2 container
                 SlideTransition(
                   position: _player2SlideAnimation,
                   child: PlayerContainer(
@@ -262,8 +249,6 @@ class _VersusScreenState extends State<VersusScreen>
                     onReadyPressed: () => _toggleReady(false),
                   ),
                 ),
-
-                // Bottom padding
                 const SizedBox(height: 60),
               ],
             ),
@@ -276,10 +261,8 @@ class _VersusScreenState extends State<VersusScreen>
   Widget _buildBackground() {
     return Stack(
       children: [
-        // Split background with gradients
         Row(
           children: [
-            // Player 1 side
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
@@ -295,7 +278,6 @@ class _VersusScreenState extends State<VersusScreen>
                 ),
               ),
             ),
-            // Player 2 side
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
@@ -313,8 +295,6 @@ class _VersusScreenState extends State<VersusScreen>
             ),
           ],
         ),
-
-        // Background image overlay if provided
         if (widget.backgroundImage != null)
           Positioned.fill(
             child: Image.asset(
@@ -322,8 +302,6 @@ class _VersusScreenState extends State<VersusScreen>
               fit: BoxFit.cover,
             ),
           ),
-
-        // Diagonal split effect
         Positioned.fill(
           child: CustomPaint(
             painter: DiagonalSplitPainter(
@@ -332,8 +310,6 @@ class _VersusScreenState extends State<VersusScreen>
             ),
           ),
         ),
-
-        // Animated particles
         Positioned.fill(
           child: AnimatedBuilder(
             animation: _slideController,
@@ -582,7 +558,6 @@ class DiagonalSplitPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint();
 
-    // Create diagonal split path
     final path = Path();
     path.moveTo(size.width * 0.4, 0);
     path.lineTo(size.width * 0.6, 0);
@@ -590,7 +565,6 @@ class DiagonalSplitPainter extends CustomPainter {
     path.lineTo(size.width * 0.4, size.height);
     path.close();
 
-    // Apply gradient
     paint.shader = LinearGradient(
       colors: [
         leftColor,
@@ -622,7 +596,6 @@ class ParticlesPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..style = PaintingStyle.fill;
 
-    // Draw animated particles
     for (int i = 0; i < 20; i++) {
       final isLeft = i % 2 == 0;
       final baseX = isLeft ? size.width * 0.25 : size.width * 0.75;

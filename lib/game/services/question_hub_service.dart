@@ -47,6 +47,34 @@ class QuestionHubService {
     return _localLoader.getAllDatasetStats();
   }
 
+
+  Future<Map<String, dynamic>> getCategoryStats(QuizCategory category) async {
+    final categorySlug = category.name;
+    for (final endpoint in [
+      '/quiz/categories/$categorySlug/stats',
+      '/questions/categories/$categorySlug/stats',
+    ]) {
+      try {
+        final response = await _apiService.get(endpoint);
+        if (response.isNotEmpty) {
+          return response;
+        }
+      } on ApiRequestException {
+        // try next endpoint or fallback
+      }
+    }
+
+    final questionCount = await _localLoader.getQuizCategoryQuestionCount(category);
+    final difficulty = await _localLoader.getQuizCategoryDifficulty(category);
+
+    return {
+      'questionCount': questionCount,
+      'difficulty': difficulty,
+      'category': category.name,
+      'source': 'local_fallback',
+    };
+  }
+
   Future<Map<String, dynamic>> getDatasetInfo() async {
     for (final endpoint in const ['/quiz/datasets/info', '/questions/datasets/info']) {
       try {

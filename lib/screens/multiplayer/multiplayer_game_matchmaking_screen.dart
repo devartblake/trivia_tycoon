@@ -356,7 +356,7 @@ class _MultiplayerGameMatchmakingScreenState
                 // Cancel button
                 if (_isSearching)
                   OutlinedButton.icon(
-                    onPressed: () => context.go('/play'),
+                    onPressed: () => context.go('/quiz/play'),
                     icon: const Icon(Icons.close),
                     label: const Text('Cancel Search'),
                     style: OutlinedButton.styleFrom(

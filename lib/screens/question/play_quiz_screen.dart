@@ -83,7 +83,7 @@ class _PlayQuizScreenState extends State<PlayQuizScreen> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            _buildModeSectionLabel('Sinble Player'),
+            _buildModeSectionLabel('Single Player'),
             const SizedBox(height: 12),
             // Classic Mode - Large Card
             _SimpleGameCard(

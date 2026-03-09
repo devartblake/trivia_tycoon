@@ -15,4 +15,6 @@ abstract class QuestionRepository {
   Future<Map<String, dynamic>> getQuestionStats();
 
   Future<Map<String, dynamic>> getDatasetInfo();
+
+  Future<Map<String, dynamic>> getCategoryStats(QuizCategory category);
 }
