@@ -14,7 +14,6 @@ import '../../game/providers/question_providers.dart';
 import '../question/widgets/main_sections/top_menu_section.dart';
 import '../question/widgets/main_sections/grid_menu_section.dart';
 import '../question/widgets/main_sections/cta_widget.dart';
-import '../../game/services/question_loader_service.dart';
 
 class QuestionScreen extends ConsumerStatefulWidget {
   const QuestionScreen({super.key});
@@ -25,7 +24,6 @@ class QuestionScreen extends ConsumerStatefulWidget {
 
 class _QuestionScreenState extends ConsumerState<QuestionScreen> {
   int _currentBottomNavIndex = 0;
-  final AdaptedQuestionLoaderService _questionLoader = AdaptedQuestionLoaderService();
 
   @override
   void initState() {
@@ -36,14 +34,9 @@ class _QuestionScreenState extends ConsumerState<QuestionScreen> {
 
   void _preloadData() async {
     try {
-      // Pre-load daily quiz questions for faster access
-      await _questionLoader.getDailyQuiz();
-
-      // Pre-load QuizCategory data
-      await _questionLoader.getAvailableQuizCategories();
-
-      // Run comprehensive test for debugging
-      await _questionLoader.runComprehensiveTest();
+      final hubService = ref.read(questionHubServiceProvider);
+      await hubService.getDailyQuiz(questionCount: 5);
+      await hubService.getAvailableCategories();
     } catch (e) {
       // Handle silently for now
       debugPrint('Preload warning: $e');
@@ -88,7 +81,6 @@ class _QuestionScreenState extends ConsumerState<QuestionScreen> {
   Widget build(BuildContext context) {
     final statsAsync = ref.watch(questionStatsProvider);
     final categoriesAsync = ref.watch(quizCategoriesProvider);
-    final datasetInfoAsync = ref.watch(datasetInfoProvider);
 
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
