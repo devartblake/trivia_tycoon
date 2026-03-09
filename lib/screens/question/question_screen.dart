@@ -34,9 +34,9 @@ class _QuestionScreenState extends ConsumerState<QuestionScreen> {
 
   void _preloadData() async {
     try {
-      final repository = ref.read(questionRepositoryProvider);
-      await repository.getDailyQuestions();
-      await repository.getAvailableCategories();
+      final hubService = ref.read(questionHubServiceProvider);
+      await hubService.getDailyQuiz(questionCount: 5);
+      await hubService.getAvailableCategories();
     } catch (e) {
       // Handle silently for now
       debugPrint('Preload warning: $e');
@@ -172,7 +172,6 @@ class _QuestionScreenState extends ConsumerState<QuestionScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
-
 
   Widget _buildPrimaryQuizLaunchPanel(BuildContext context) {
     return Container(

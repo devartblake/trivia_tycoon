@@ -210,13 +210,13 @@ class TopMenuSection extends StatelessWidget {
   void _handlePlayQuizTap(BuildContext context) {
     // TODO: Add analytics tracking in Phase 2
     // TODO: Check if user has completed onboarding in Phase 2
-    context.push('/play-quiz');
+    context.push('/quiz/play');
   }
 
   void _handleCreateQuizTap(BuildContext context) {
     // TODO: Check if user has premium access in Phase 2
     // TODO: Add analytics tracking in Phase 2
-    context.push('/create-quiz');
+    context.push('/quiz/create');
   }
 
   void _handleAchievementsTap(BuildContext context) {
