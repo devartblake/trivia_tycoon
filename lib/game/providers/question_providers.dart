@@ -45,3 +45,23 @@ final categoryStatsProvider = FutureProvider.family<Map<String, dynamic>, QuizCa
   final repository = ref.watch(questionRepositoryProvider);
   return repository.getCategoryStats(category);
 });
+
+const _defaultClassIds = [
+  'kindergarten', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
+];
+
+final classStatsProvider = FutureProvider.family<Map<String, dynamic>, String>((ref, classId) async {
+  final repository = ref.watch(questionRepositoryProvider);
+  return repository.getClassStats(classId);
+});
+
+final allClassesStatsProvider = FutureProvider<Map<String, dynamic>>((ref) async {
+  final repository = ref.watch(questionRepositoryProvider);
+  final stats = <String, Map<String, dynamic>>{};
+
+  for (final classId in _defaultClassIds) {
+    stats[classId] = await repository.getClassStats(classId);
+  }
+
+  return {'classStats': stats};
+});
