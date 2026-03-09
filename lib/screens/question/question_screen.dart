@@ -99,6 +99,10 @@ class _QuestionScreenState extends ConsumerState<QuestionScreen> {
 
               const SizedBox(height: 24),
 
+              _buildPrimaryQuizLaunchPanel(context),
+
+              const SizedBox(height: 20),
+
               // Quick Access Section with QuizCategory integration
               QuickAccessSection(),
 
@@ -166,6 +170,109 @@ class _QuestionScreenState extends ConsumerState<QuestionScreen> {
         child: const Icon(Icons.add, color: Colors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
+  }
+
+  Widget _buildPrimaryQuizLaunchPanel(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withValues(alpha: 0.12),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Play Quiz',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'Use this hub to start single-player, multiplayer, or category quizzes.',
+            style: TextStyle(color: Colors.grey.shade700, fontSize: 12),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: _buildLaunchChip(
+                  context: context,
+                  icon: Icons.person_outline,
+                  label: 'Single Player',
+                  route: '/quiz/play',
+                  color: const Color(0xFF2563EB),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _buildLaunchChip(
+                  context: context,
+                  icon: Icons.groups_outlined,
+                  label: 'Multiplayer',
+                  route: '/multiplayer',
+                  color: const Color(0xFF7C3AED),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _buildLaunchChip(
+                  context: context,
+                  icon: Icons.grid_view_rounded,
+                  label: 'Categories',
+                  route: '/all-categories',
+                  color: const Color(0xFF059669),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLaunchChip({
+    required BuildContext context,
+    required IconData icon,
+    required String label,
+    required String route,
+    required Color color,
+  }) {
+    return InkWell(
+      onTap: () => context.push(route),
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: color.withValues(alpha: 0.25)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 18, color: color),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: color,
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
