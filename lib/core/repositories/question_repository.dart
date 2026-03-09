@@ -17,4 +17,13 @@ abstract class QuestionRepository {
   Future<Map<String, dynamic>> getDatasetInfo();
 
   Future<Map<String, dynamic>> getCategoryStats(QuizCategory category);
+
+  Future<Map<String, dynamic>> getClassStats(String classId);
+
+  Future<List<QuestionModel>> getMixedQuiz({
+    int questionCount = 10,
+    List<String>? categories,
+    List<String>? difficulties,
+    bool balanceDifficulties = false,
+  });
 }

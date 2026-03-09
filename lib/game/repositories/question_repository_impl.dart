@@ -51,4 +51,24 @@ class QuestionRepositoryImpl implements QuestionRepository {
   Future<Map<String, dynamic>> getCategoryStats(QuizCategory category) {
     return _questionHubService.getCategoryStats(category);
   }
+
+  @override
+  Future<Map<String, dynamic>> getClassStats(String classId) {
+    return _questionHubService.getClassStats(classId);
+  }
+
+  @override
+  Future<List<QuestionModel>> getMixedQuiz({
+    int questionCount = 10,
+    List<String>? categories,
+    List<String>? difficulties,
+    bool balanceDifficulties = false,
+  }) {
+    return _questionHubService.getMixedQuiz(
+      questionCount: questionCount,
+      categories: categories,
+      difficulties: difficulties,
+      balanceDifficulties: balanceDifficulties,
+    );
+  }
 }

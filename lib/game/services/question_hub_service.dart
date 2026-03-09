@@ -75,6 +75,41 @@ class QuestionHubService {
     };
   }
 
+  Future<Map<String, dynamic>> getClassStats(String classId) async {
+    for (final endpoint in [
+      '/quiz/classes/$classId/stats',
+      '/questions/classes/$classId/stats',
+    ]) {
+      try {
+        final response = await _apiService.get(endpoint);
+        if (response.isNotEmpty) {
+          final categoriesRaw = _extractList(response, keys: const ['availableCategories', 'categories', 'items']);
+          final categories = categoriesRaw.map(_parseCategory).whereType<QuizCategory>().toList();
+
+          return {
+            'questionCount': (response['questionCount'] as num?)?.toInt() ?? 0,
+            'subjectCount': (response['subjectCount'] as num?)?.toInt() ?? categories.length,
+            'availableCategories': categories,
+            'source': 'backend',
+          };
+        }
+      } on ApiRequestException {
+        // try next endpoint or fallback
+      }
+    }
+
+    final questionCount = await _localLoader.getClassQuestionCount(classId);
+    final subjectCount = await _localLoader.getClassSubjectCount(classId);
+    final categories = QuizCategoryManager.getCategoriesForClass(classId);
+
+    return {
+      'questionCount': questionCount,
+      'subjectCount': subjectCount,
+      'availableCategories': categories,
+      'source': 'local_fallback',
+    };
+  }
+
   Future<Map<String, dynamic>> getDatasetInfo() async {
     for (final endpoint in const ['/quiz/datasets/info', '/questions/datasets/info']) {
       try {
@@ -88,6 +123,53 @@ class QuestionHubService {
     }
 
     return _localLoader.getDatasetInfo();
+  }
+
+  Future<List<QuestionModel>> getMixedQuiz({
+    int questionCount = 10,
+    List<String>? categories,
+    List<String>? difficulties,
+    bool balanceDifficulties = false,
+  }) async {
+    for (final endpoint in const ['/quiz/mixed', '/questions/mixed']) {
+      try {
+        final response = await _apiService.get(
+          endpoint,
+          queryParameters: {
+            'count': questionCount,
+            if (categories != null && categories.isNotEmpty) 'categories': categories.join(','),
+            if (difficulties != null && difficulties.isNotEmpty) 'difficulties': difficulties.join(','),
+            'balanceDifficulties': balanceDifficulties,
+          },
+        );
+
+        final raw = _extractList(response, keys: const ['items', 'questions', 'data']);
+        final questions = raw
+            .whereType<Map>()
+            .map((e) => Map<String, dynamic>.from(e))
+            .map(QuestionModel.fromJson)
+            .toList();
+
+        if (questions.isNotEmpty) {
+          return questions;
+        }
+      } on ApiRequestException {
+        // try next endpoint or fallback
+      }
+    }
+
+    final quizCategories = categories
+            ?.map(QuizCategoryManager.fromString)
+            .whereType<QuizCategory>()
+            .toList() ??
+        const <QuizCategory>[];
+
+    return _localLoader.getMixedQuizByCategories(
+      questionCount: questionCount,
+      categories: quizCategories.isEmpty ? null : quizCategories,
+      difficulties: difficulties,
+      balanceDifficulties: balanceDifficulties,
+    );
   }
 
   Future<List<QuestionModel>> getDailyQuiz({int questionCount = 5}) async {
