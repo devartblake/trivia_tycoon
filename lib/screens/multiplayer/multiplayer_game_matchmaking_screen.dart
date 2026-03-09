@@ -84,7 +84,7 @@ class _MultiplayerGameMatchmakingScreenState
         await _showVersusScreen(result);
 
         // Navigate to multiplayer question screen
-        context.go('/quiz/multiplayer/${widget.gameMode}');
+        context.go('/multiplayer/quiz/${widget.gameMode}');
       }
     } catch (e) {
       if (context.mounted) {
@@ -159,7 +159,7 @@ class _MultiplayerGameMatchmakingScreenState
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              context.go('/play');
+              context.go('/quiz/play');
             },
             child: const Text('Back to Games'),
           ),
@@ -199,7 +199,7 @@ class _MultiplayerGameMatchmakingScreenState
                 onPressed: () {
                   Navigator.pop(context);
                   if (context.mounted) {
-                    context.go('/play');
+                    context.go('/quiz/play');
                   }
                 },
                 child: const Text('Cancel'),
