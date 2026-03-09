@@ -75,7 +75,6 @@ class QuestionHubService {
     };
   }
 
-
   Future<Map<String, dynamic>> getClassStats(String classId) async {
     for (final endpoint in [
       '/quiz/classes/$classId/stats',
@@ -125,7 +124,6 @@ class QuestionHubService {
 
     return _localLoader.getDatasetInfo();
   }
-
 
   Future<List<QuestionModel>> getMixedQuiz({
     int questionCount = 10,
@@ -198,9 +196,9 @@ class QuestionHubService {
   }
 
   List<dynamic> _extractList(
-    Map<String, dynamic> response, {
-    required List<String> keys,
-  }) {
+      Map<String, dynamic> response, {
+        required List<String> keys,
+      }) {
     for (final key in keys) {
       final value = response[key];
       if (value is List) {

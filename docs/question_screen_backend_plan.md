@@ -27,9 +27,6 @@ QuestionScreen remains the main discovery and launch hub for:
 ### Phase 2 (in progress)
 - ✅ Introduced a `QuestionRepository` interface + implementation and wired `QuestionController` + QuestionScreen-level providers to use it.
 - Continue migrating remaining consumers (single-player, categories, daily, multiplayer prefetch) to repository-only access.
-- ✅ Migrated `AllCategoriesScreen` and `quiz_providers` category metadata paths to repository-backed providers.
-- ✅ Migrated `AllClassesScreen` and `GridCategorySection` class/category stat reads to repository-backed providers.
-- ✅ Migrated category/monthly/featured challenge question providers to repository-backed methods (`getDailyQuestions`, `getMixedQuiz`, `getQuestionsForCategory`).
 - ✅ Migrated category stats access to repository-backed provider (`categoryStatsProvider`).
 - Route all question fetches through repository methods:
   - `getQuestionsForMode(...)`
