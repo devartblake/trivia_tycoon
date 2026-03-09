@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/question_model.dart';
 import '../services/question_loader_service.dart';
 import '../services/quiz_category.dart';
+import 'question_providers.dart' as question_data;
 import '../state/quiz_state.dart'; // Use your existing quiz_state.dart
 
 // Provider for the question loader service
@@ -44,18 +45,17 @@ final timerColorProvider = Provider<Color>((ref) {
 
 // Category-specific providers
 final availableQuizCategoriesProvider = FutureProvider<List<QuizCategory>>((ref) async {
-  final service = ref.read(adaptedQuestionLoaderProvider);
-  return await service.getAvailableQuizCategories();
+  return ref.watch(question_data.quizCategoriesProvider.future);
 });
 
 final categoryQuestionCountProvider = FutureProvider.family<int, QuizCategory>((ref, category) async {
-  final service = ref.read(adaptedQuestionLoaderProvider);
-  return await service.getQuizCategoryQuestionCount(category);
+  final stats = await ref.watch(question_data.categoryStatsProvider(category).future);
+  return (stats['questionCount'] as num?)?.toInt() ?? 0;
 });
 
 final categoryDifficultyProvider = FutureProvider.family<String, QuizCategory>((ref, category) async {
-  final service = ref.read(adaptedQuestionLoaderProvider);
-  return await service.getQuizCategoryDifficulty(category);
+  final stats = await ref.watch(question_data.categoryStatsProvider(category).future);
+  return (stats['difficulty']?.toString() ?? 'mixed').toLowerCase();
 });
 
 // Class-specific providers
