@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../game/services/question_loader_service.dart';
+import '../../../../game/providers/question_providers.dart' as question_data;
 import '../../../../game/models/question_model.dart';
 
 // Provider for featured challenge data
 final featuredChallengeProvider = FutureProvider<FeaturedChallenge>((ref) async {
-  final loader = AdaptedQuestionLoaderService();
+  final repository = ref.watch(question_data.questionRepositoryProvider);
 
   try {
-    // Get featured challenge questions - using science as an example with bonus questions
-    final questions = await loader.getMixedQuiz(
+    final questions = await repository.getMixedQuiz(
       questionCount: 10,
-      categories: ['science', 'technology'], // Featured categories
-      difficulties: ['hard'], // Featured challenges are hard
-      datasets: ['Science & Technology', 'Bonus Questions'], // Use bonus dataset if available
+      categories: ['science', 'technology'],
+      difficulties: ['hard'],
+      balanceDifficulties: false,
     );
 
     return FeaturedChallenge(
