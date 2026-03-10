@@ -58,9 +58,19 @@ To mark Phase 2 as complete, the following still needs to be shipped:
    - ✅ Added normalization of repository output shapes in providers (`questionCount`, `difficulty`, class/category metadata).
    - ⏳ Add small provider/repository tests to lock fallback behavior and prevent contract regressions.
 
+2. **Repository-first cleanup**
+   - Audit remaining feature areas for direct `QuestionService` or `AdaptedQuestionLoaderService` usage.
+   - Ensure all runtime question reads use `QuestionRepository` as the sole read boundary.
+
+3. **Provider contract hardening**
+   - ✅ Added normalization of repository output shapes in providers (`questionCount`, `difficulty`, class/category metadata).
+   - ⏳ Add small provider/repository tests to lock fallback behavior and prevent contract regressions.
+
 4. **Migration verification gates**
    - Add/enable automated checks for key flows (daily, mixed, category/class, multiplayer prefetch).
    - Capture backend-unavailable scenarios in tests to verify local fallback parity.
+
+- ✅ Added initial response-contract enforcement in `QuestionHubService` for collection endpoints (required `items` keys and `meta` on quiz payload endpoints) with fallback on invalid envelopes.
 
 5. **Definition of done**
    - No direct loader/service reads in quiz presentation/controller paths.

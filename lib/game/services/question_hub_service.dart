@@ -14,7 +14,6 @@ class QuestionHubService {
   final ApiService _apiService;
   final AdaptedQuestionLoaderService _localLoader;
 
-
   Future<List<QuestionModel>> getQuestionsForCategory({
     required String category,
     int amount = 10,
