@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/screens/multiplayer/room_lobby_screen.dart';
 import '../../game/multiplayer/providers/multiplayer_providers.dart';
 import '../../game/multiplayer/services/multiplayer_service.dart';
+import '../../game/services/multiplayer_quiz_service.dart';
 import '../../ui_components/multiplayer/versus/versus_screen.dart';
 import '../question/play_quiz_screen.dart';
 import '../question/question_view_screen.dart';
@@ -49,6 +50,8 @@ class _MultiplayerGameMatchmakingScreenState
 
     // Auto-start search for the specific game mode
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Warm up multiplayer question payloads through repository-backed service path.
+      ref.read(multiplayerQuizServiceProvider).prefetchQuestionsForGameMode(widget.gameMode);
       _startMatchmaking();
     });
   }

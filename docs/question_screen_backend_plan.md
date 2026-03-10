@@ -8,14 +8,14 @@ QuestionScreen remains the main discovery and launch hub for:
 
 ## Architecture Decisions
 1. **Hub-first navigation**
-    - Keep `QuestionScreen` as the entry point.
-    - Preserve existing layout and cards; only refine routing + data source plumbing.
+   - Keep `QuestionScreen` as the entry point.
+   - Preserve existing layout and cards; only refine routing + data source plumbing.
 2. **Backend-first data strategy**
-    - Read categories, stats, and daily quiz from backend endpoints first.
-    - Automatically fallback to local question assets when backend is missing/unavailable.
+   - Read categories, stats, and daily quiz from backend endpoints first.
+   - Automatically fallback to local question assets when backend is missing/unavailable.
 3. **Single source of truth for game mode routing**
-    - Use the shared `GameMode` model and route mapping in one place.
-    - Multiplayer routes always go through `/multiplayer/...` route space.
+   - Use the shared `GameMode` model and route mapping in one place.
+   - Multiplayer routes always go through `/multiplayer/...` route space.
 
 ## Delivery Phases
 
@@ -35,10 +35,10 @@ QuestionScreen remains the main discovery and launch hub for:
 - ✅ Migrated `AdaptedQuizNotifier` (`quiz_state.dart`) to repository-backed question/class loading instead of direct local loader service calls.
 - ✅ Migrated category stats access to repository-backed provider (`categoryStatsProvider`).
 - ✅ Added mode-aware repository entry points for all quiz fetches:
-    - `getQuestionsForMode(...)`
-    - `getMultiplayerQuestions(...)`
-    - `getQuestionsForCategory(...)`
-    - `getDailyQuestions(...)`
+  - `getQuestionsForMode(...)`
+  - `getMultiplayerQuestions(...)`
+  - `getQuestionsForCategory(...)`
+  - `getDailyQuestions(...)`
 - ✅ Migrated `GameController` session start to repository mode-loading (`GameMode.classic`) instead of direct `QuestionService` reads.
 
 ### Phase 2 completion checklist
@@ -54,45 +54,45 @@ QuestionScreen remains the main discovery and launch hub for:
 Phase 2 completion record and post-phase follow-ups:
 
 1. **Strict backend response contract validation**
-    - ✅ Introduced typed collection/object envelope parsing for quiz backend responses.
-    - ✅ Validate required fields (`items`, typed `meta`) before mapping and fallback when invalid.
-    - ✅ Centralized contract/parsing errors into `QuestionContractException`.
-    - 📝 Post-phase follow-up: extend typed contract models/DTOs for singleton payloads (stats + dataset variants) and retire dynamic maps in repository outputs.
+   - ✅ Introduced typed collection/object envelope parsing for quiz backend responses.
+   - ✅ Validate required fields (`items`, typed `meta`) before mapping and fallback when invalid.
+   - ✅ Centralized contract/parsing errors into `QuestionContractException`.
+   - 📝 Post-phase follow-up: extend typed contract models/DTOs for singleton payloads (stats + dataset variants) and retire dynamic maps in repository outputs.
 
 2. **Repository-first cleanup**
-    - ✅ Removed `QuestionRepositoryImpl` dependency on `QuestionService`; category reads now flow through `QuestionHubService` backend-first/fallback path.
-    - 📝 Post-phase follow-up: continue periodic audits for any direct `QuestionService` or `AdaptedQuestionLoaderService` usage.
+   - ✅ Removed `QuestionRepositoryImpl` dependency on `QuestionService`; category reads now flow through `QuestionHubService` backend-first/fallback path.
+   - 📝 Post-phase follow-up: continue periodic audits for any direct `QuestionService` or `AdaptedQuestionLoaderService` usage.
 
 3. **Provider contract hardening**
-    - ✅ Added normalization of repository output shapes in providers (`questionCount`, `difficulty`, class/category metadata).
-    - 📝 Post-phase follow-up: add broader provider/repository regression tests as flows expand.
+   - ✅ Added normalization of repository output shapes in providers (`questionCount`, `difficulty`, class/category metadata).
+   - 📝 Post-phase follow-up: add broader provider/repository regression tests as flows expand.
 
 4. **Migration verification gates**
-    - ✅ Added `QuestionHubService` tests for backend-success/local-fallback category reads, plus daily/mixed/class fallback validations.
-    - ✅ Added repository routing tests for `topicExplorer`, `daily`, and `arena` mode dispatch behavior.
-    - ✅ Added provider-level integration tests validating normalized repository outputs and service status composition.
-    - ✅ Added multiplayer prefetch verification in `MultiplayerQuizService` and tests for repository-backed prefetch reuse and HTTP fallback when repository is unavailable.
+   - ✅ Added `QuestionHubService` tests for backend-success/local-fallback category reads, plus daily/mixed/class fallback validations.
+   - ✅ Added repository routing tests for `topicExplorer`, `daily`, and `arena` mode dispatch behavior.
+   - ✅ Added provider-level integration tests validating normalized repository outputs and service status composition.
+   - ✅ Added multiplayer prefetch verification in `MultiplayerQuizService` and tests for repository-backed prefetch reuse and HTTP fallback when repository is unavailable.
 
 5. **Definition of done**
-    - No direct loader/service reads in quiz presentation/controller paths.
-    - Contract tests in place for backend envelope parsing and fallback behavior.
-    - QA pass on QuestionScreen hub routes + multiplayer entry points using repository-only data.
+   - No direct loader/service reads in quiz presentation/controller paths.
+   - Contract tests in place for backend envelope parsing and fallback behavior.
+   - QA pass on QuestionScreen hub routes + multiplayer entry points using repository-only data.
 
 ### UX Refinement (in progress)
 - ✅ Added explicit primary launch panel on `QuestionScreen` for Single Player, Multiplayer, and Categories entry points while preserving existing design sections.
 
 ### Phase 3
 - Move question creation/admin ingestion to backend workflows:
-    - upload/bulk import endpoints
-    - validation + dedupe server-side
-    - publish/unpublish datasets
+  - upload/bulk import endpoints
+  - validation + dedupe server-side
+  - publish/unpublish datasets
 - Replace local asset-only assumptions in deeper feature areas.
 
 ### Phase 4
 - Add observability:
-    - request success/fallback ratio
-    - endpoint latency
-    - category coverage drift vs local fallback
+  - request success/fallback ratio
+  - endpoint latency
+  - category coverage drift vs local fallback
 - Remove local dataset fallback from production builds once backend parity is proven.
 
 ## Backend Contract Recommendations
