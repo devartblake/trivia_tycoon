@@ -3,20 +3,25 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../game/models/question_model.dart';
 import '../../../core/utils/encryption_utils.dart';
+import '../../../core/services/api_service.dart';
+import 'question_ingestion_service.dart';
 
-class FileImportExportScreen extends StatefulWidget {
+class FileImportExportScreen extends ConsumerStatefulWidget {
   const FileImportExportScreen({super.key});
 
   @override
-  State<FileImportExportScreen> createState() => _FileImportExportScreenState();
+  ConsumerState<FileImportExportScreen> createState() => _FileImportExportScreenState();
 }
 
-class _FileImportExportScreenState extends State<FileImportExportScreen> {
+class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen> {
   List<QuestionModel> _importedQuestions = [];
   String? _status;
   bool _isProcessing = false;
+  final TextEditingController _datasetNameController = TextEditingController(text: 'community_pack');
+  bool _publishAfterImport = false;
 
   Future<void> _importFromFile() async {
     setState(() {
@@ -142,6 +147,118 @@ class _FileImportExportScreenState extends State<FileImportExportScreen> {
         _isProcessing = false;
       });
     }
+  }
+
+  Future<void> _validateAndUploadToBackend() async {
+    if (_importedQuestions.isEmpty) {
+      setState(() {
+        _status = 'Import questions first before backend upload.';
+      });
+      return;
+    }
+
+    final datasetName = _datasetNameController.text.trim();
+    if (datasetName.isEmpty) {
+      setState(() {
+        _status = 'Dataset name is required for backend import.';
+      });
+      return;
+    }
+
+    setState(() {
+      _isProcessing = true;
+      _status = 'Validating questions with backend...';
+    });
+
+    try {
+      final service = ref.read(questionIngestionServiceProvider);
+      final validation = await service.validateBulkImport(
+        questions: _importedQuestions,
+        datasetName: datasetName,
+      );
+
+      final errors = (validation['errors'] as List?) ?? const [];
+      if (errors.isNotEmpty) {
+        setState(() {
+          _isProcessing = false;
+          _status = 'Validation failed: ${errors.length} issue(s) found.';
+        });
+        return;
+      }
+
+      setState(() {
+        _status = 'Validation passed. Uploading to backend...';
+      });
+
+      final importResponse = await service.importBulkQuestions(
+        questions: _importedQuestions,
+        datasetName: datasetName,
+        publishAfterImport: _publishAfterImport,
+      );
+
+      final imported = importResponse['importedCount'] ?? _importedQuestions.length;
+      setState(() {
+        _isProcessing = false;
+        _status = 'Backend import successful: $imported question(s) synced to $datasetName.';
+      });
+    } on ApiRequestException catch (e) {
+      setState(() {
+        _isProcessing = false;
+        _status = 'Backend import failed: ${e.message}';
+      });
+    } catch (e) {
+      setState(() {
+        _isProcessing = false;
+        _status = 'Backend import failed: $e';
+      });
+    }
+  }
+
+  Future<void> _publishDataset(bool publish) async {
+    final datasetName = _datasetNameController.text.trim();
+    if (datasetName.isEmpty) {
+      setState(() {
+        _status = 'Dataset name is required for publish actions.';
+      });
+      return;
+    }
+
+    setState(() {
+      _isProcessing = true;
+      _status = publish ? 'Publishing dataset...' : 'Unpublishing dataset...';
+    });
+
+    try {
+      final service = ref.read(questionIngestionServiceProvider);
+      if (publish) {
+        await service.publishDataset(datasetName);
+      } else {
+        await service.unpublishDataset(datasetName);
+      }
+
+      setState(() {
+        _isProcessing = false;
+        _status = publish
+            ? 'Dataset $datasetName published successfully.'
+            : 'Dataset $datasetName unpublished successfully.';
+      });
+    } on ApiRequestException catch (e) {
+      setState(() {
+        _isProcessing = false;
+        _status = 'Dataset action failed: ${e.message}';
+      });
+    } catch (e) {
+      setState(() {
+        _isProcessing = false;
+        _status = 'Dataset action failed: $e';
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _datasetNameController.dispose();
+    super.dispose();
   }
 
   @override
@@ -351,6 +468,80 @@ class _FileImportExportScreenState extends State<FileImportExportScreen> {
                       ),
                     ),
                   ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          // Backend Ingestion Card
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: const Color(0xFFE9ECEF), width: 1),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Backend Ingestion Workflow',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1A1A1A)),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: _datasetNameController,
+                  decoration: InputDecoration(
+                    labelText: 'Dataset Name',
+                    hintText: 'community_pack',
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  value: _publishAfterImport,
+                  onChanged: _isProcessing
+                      ? null
+                      : (value) => setState(() => _publishAfterImport = value),
+                  title: const Text('Publish immediately after import'),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: _isProcessing ? null : _validateAndUploadToBackend,
+                        icon: const Icon(Icons.cloud_upload),
+                        label: const Text('Validate + Import'),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: _isProcessing ? null : () => _publishDataset(true),
+                        icon: const Icon(Icons.publish),
+                        label: const Text('Publish'),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: _isProcessing ? null : () => _publishDataset(false),
+                        icon: const Icon(Icons.unpublished),
+                        label: const Text('Unpublish'),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

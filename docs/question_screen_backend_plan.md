@@ -81,11 +81,11 @@ Phase 2 completion record and post-phase follow-ups:
 ### UX Refinement (in progress)
 - ✅ Added explicit primary launch panel on `QuestionScreen` for Single Player, Multiplayer, and Categories entry points while preserving existing design sections.
 
-### Phase 3
+### Phase 3 (in progress)
 - Move question creation/admin ingestion to backend workflows:
-  - upload/bulk import endpoints
-  - validation + dedupe server-side
-  - publish/unpublish datasets
+  - ✅ Added `QuestionIngestionService` with backend endpoints for validation, bulk import, publish, and unpublish actions.
+  - ✅ Updated admin `FileImportExportScreen` with backend ingestion controls (dataset name, validate/import, publish/unpublish).
+  - ⏳ Wire server-side dedupe/conflict details into rich admin review UI.
 - Replace local asset-only assumptions in deeper feature areas.
 
 ### Phase 4
