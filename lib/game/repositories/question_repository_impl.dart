@@ -1,5 +1,4 @@
 import '../../core/repositories/question_repository.dart';
-import '../../core/services/question/question_service.dart';
 import '../models/game_mode.dart';
 import '../models/question_model.dart';
 import '../services/question_hub_service.dart';
@@ -7,12 +6,9 @@ import '../services/quiz_category.dart';
 
 class QuestionRepositoryImpl implements QuestionRepository {
   QuestionRepositoryImpl({
-    required QuestionService questionService,
     required QuestionHubService questionHubService,
-  })  : _questionService = questionService,
-        _questionHubService = questionHubService;
+  }) : _questionHubService = questionHubService;
 
-  final QuestionService _questionService;
   final QuestionHubService _questionHubService;
 
   @override
@@ -21,9 +17,9 @@ class QuestionRepositoryImpl implements QuestionRepository {
     int amount = 10,
     int? difficulty,
   }) {
-    return _questionService.fetchQuestionsWithFallback(
-      amount: amount,
+    return _questionHubService.getQuestionsForCategory(
       category: category,
+      amount: amount,
       difficulty: difficulty,
     );
   }

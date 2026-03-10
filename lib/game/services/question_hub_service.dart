@@ -14,6 +14,39 @@ class QuestionHubService {
   final ApiService _apiService;
   final AdaptedQuestionLoaderService _localLoader;
 
+  Future<List<QuestionModel>> getQuestionsForCategory({
+    required String category,
+    int amount = 10,
+    int? difficulty,
+  }) async {
+    try {
+      final response = await _apiService.fetchQuestions(
+        amount: amount,
+        category: category,
+        difficulty: difficulty?.toString(),
+      );
+      final questions = response.map(QuestionModel.fromJson).toList();
+      if (questions.isNotEmpty) {
+        return questions;
+      }
+    } on ApiRequestException {
+      // fallback below
+    } catch (_) {
+      // fallback below
+    }
+
+    final localQuestions = await _localLoader.getQuestionsByCategory(category);
+    final filtered = difficulty == null
+        ? localQuestions
+        : localQuestions.where((q) => q.difficulty == difficulty).toList();
+
+    if (filtered.length <= amount) {
+      return filtered;
+    }
+
+    return filtered.take(amount).toList();
+  }
+
   Future<List<QuizCategory>> getAvailableCategories() async {
     try {
       final response = await _apiService.get('/quiz/categories');

@@ -34,10 +34,6 @@ QuestionScreen remains the main discovery and launch hub for:
 - ✅ Migrated `ClassQuizScreen` to repository-backed class/category stats (removed simulated loader counts for primary path).
 - ✅ Migrated `AdaptedQuizNotifier` (`quiz_state.dart`) to repository-backed question/class loading instead of direct local loader service calls.
 - ✅ Migrated category stats access to repository-backed provider (`categoryStatsProvider`).
-<<<<<<< codex/fix-error-in-user-flow-implementation-p3dgez
-=======
-<<<<<<< codex/fix-error-in-user-flow-implementation-ze69j1
->>>>>>> main
 - ✅ Added mode-aware repository entry points for all quiz fetches:
   - `getQuestionsForMode(...)`
   - `getMultiplayerQuestions(...)`
@@ -49,54 +45,37 @@ QuestionScreen remains the main discovery and launch hub for:
 To mark Phase 2 as complete, the following still needs to be shipped:
 
 1. **Strict backend response contract validation**
-<<<<<<< codex/fix-error-in-user-flow-implementation-p3dgez
    - ✅ Introduced typed collection/object envelope parsing for quiz backend responses.
    - ✅ Validate required fields (`items`, typed `meta`) before mapping and fallback when invalid.
    - ✅ Centralized contract/parsing errors into `QuestionContractException`.
    - ⏳ Extend typed contract models/DTOs for all singleton payloads (stats + dataset variants) and retire dynamic maps in repository outputs.
-=======
-   - Introduce typed DTOs/envelopes for categories, stats, datasets, and quiz question payloads.
-   - Validate required fields (`items`, stable `meta`) before mapping and fallback when invalid.
-   - Centralize mapping/parsing errors into repository-level typed failures.
->>>>>>> main
+
+2. **Repository-first cleanup**
+   - ✅ Removed `QuestionRepositoryImpl` dependency on `QuestionService`; category reads now flow through `QuestionHubService` backend-first/fallback path.
+   - ⏳ Audit remaining feature areas for direct `QuestionService` or `AdaptedQuestionLoaderService` usage and finish migration to repository-only read boundaries.
+
+3. **Provider contract hardening**
+   - ✅ Added normalization of repository output shapes in providers (`questionCount`, `difficulty`, class/category metadata).
+   - ⏳ Add small provider/repository tests to lock fallback behavior and prevent contract regressions.
 
 2. **Repository-first cleanup**
    - Audit remaining feature areas for direct `QuestionService` or `AdaptedQuestionLoaderService` usage.
    - Ensure all runtime question reads use `QuestionRepository` as the sole read boundary.
 
 3. **Provider contract hardening**
-<<<<<<< codex/fix-error-in-user-flow-implementation-p3dgez
    - ✅ Added normalization of repository output shapes in providers (`questionCount`, `difficulty`, class/category metadata).
    - ⏳ Add small provider/repository tests to lock fallback behavior and prevent contract regressions.
-=======
-   - Normalize repository output shapes used by UI providers (`questionCount`, `difficulty`, category/class metadata).
-   - Add small provider/repository tests to lock fallback behavior and prevent contract regressions.
->>>>>>> main
 
 4. **Migration verification gates**
    - Add/enable automated checks for key flows (daily, mixed, category/class, multiplayer prefetch).
    - Capture backend-unavailable scenarios in tests to verify local fallback parity.
 
-<<<<<<< codex/fix-error-in-user-flow-implementation-p3dgez
-=======
 - ✅ Added initial response-contract enforcement in `QuestionHubService` for collection endpoints (required `items` keys and `meta` on quiz payload endpoints) with fallback on invalid envelopes.
 
->>>>>>> main
 5. **Definition of done**
    - No direct loader/service reads in quiz presentation/controller paths.
    - Contract tests in place for backend envelope parsing and fallback behavior.
    - QA pass on QuestionScreen hub routes + multiplayer entry points using repository-only data.
-<<<<<<< codex/fix-error-in-user-flow-implementation-p3dgez
-=======
-=======
-- Route all question fetches through repository methods:
-  - `getQuestionsForMode(...)`
-  - `getQuestionsForCategory(...)`
-  - `getDailyQuestions(...)`
-  - `getMultiplayerQuestions(...)`
-- Add strict response contracts for backend payloads (`items`, pagination, metadata).
->>>>>>> main
->>>>>>> main
 
 ### UX Refinement (in progress)
 - ✅ Added explicit primary launch panel on `QuestionScreen` for Single Player, Multiplayer, and Categories entry points while preserving existing design sections.
