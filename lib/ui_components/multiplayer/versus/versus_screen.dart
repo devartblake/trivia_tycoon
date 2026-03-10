@@ -1,8 +1,4 @@
 import 'dart:async';
-<<<<<<< codex/fix-error-in-user-flow-implementation-p3dgez
-
-=======
->>>>>>> main
 import 'package:flutter/material.dart';
 
 class VersusScreen extends StatefulWidget {
@@ -526,21 +522,12 @@ class PlayerContainer extends StatelessWidget {
       child: ClipOval(
         child: playerAvatar.startsWith('http')
             ? Image.network(
-<<<<<<< codex/fix-error-in-user-flow-implementation-p3dgez
                 playerAvatar,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return _buildDefaultAvatar();
                 },
               )
-=======
-              playerAvatar,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return _buildDefaultAvatar();
-              },
-            )
->>>>>>> main
             : _buildDefaultAvatar(),
       ),
     );
