@@ -38,19 +38,12 @@ final bridgedIsLoggedInProvider = Provider<bool>((ref) {
 
 /// Provider that bridges onboarding intro state
 final bridgedHasSeenIntroProvider = Provider<bool>((ref) {
-  final simpleState = ref.watch(hasSeenIntroProvider);
-
-  // For intro, we can rely on the simple state since it's session-based
-  // Your existing onboarding service tracks overall completion
-  return simpleState;
+  return ref.watch(hasSeenIntroProvider);
 });
 
 /// Provider that bridges onboarding profile state
 final bridgedHasCompletedProfileProvider = Provider<bool>((ref) {
-  final simpleState = ref.watch(hasCompletedProfileProvider);
-
-  // For profile setup, we can rely on the simple state since it's session-based
-  return simpleState;
+  return ref.watch(hasCompletedProfileProvider);
 });
 
 /// Provider that calculates onboarding phase using bridged providers
@@ -122,8 +115,7 @@ class ProviderBridgeNotifier extends StateNotifier<ProviderBridgeState> {
         // Check if they've completed onboarding
         final hasCompletedOnboarding = await onboardingService.hasCompletedOnboarding();
         if (hasCompletedOnboarding) {
-          ref.read(hasSeenIntroProvider.notifier).state = true;
-          ref.read(hasCompletedProfileProvider.notifier).state = true;
+          await ref.read(onboardingProgressProvider.notifier).markOnboardingCompleted(true);
         }
       }
 
@@ -138,10 +130,7 @@ class ProviderBridgeNotifier extends StateNotifier<ProviderBridgeState> {
     try {
       final onboardingService = ref.read(onboardingSettingsServiceProvider);
       await onboardingService.setHasCompletedOnboarding(true);
-
-      // Update provider states
-      ref.read(hasSeenIntroProvider.notifier).state = true;
-      ref.read(hasCompletedProfileProvider.notifier).state = true;
+      await ref.read(onboardingProgressProvider.notifier).markOnboardingCompleted(true);
     } catch (e) {
       state = state.copyWith(error: e.toString());
     }
@@ -150,7 +139,6 @@ class ProviderBridgeNotifier extends StateNotifier<ProviderBridgeState> {
   /// Call this when user logs out to clear all states
   Future<void> clearAllStates() async {
     ref.read(isLoggedInSyncProvider.notifier).state = false;
-    ref.read(hasSeenIntroProvider.notifier).state = false;
-    ref.read(hasCompletedProfileProvider.notifier).state = false;
+    await ref.read(onboardingProgressProvider.notifier).reset();
   }
 }
