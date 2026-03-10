@@ -1,41 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../game/services/question_loader_service.dart';
+import '../../../../game/providers/question_providers.dart' as question_data;
 import '../../../../game/services/quiz_category.dart';
-
-// Providers for grid section data
-final gridClassStatsProvider = FutureProvider<Map<String, dynamic>>((ref) async {
-  final service = AdaptedQuestionLoaderService();
-  final classLevels = ['kindergarten', '1', '2', '3'];
-  final stats = <String, int>{};
-
-  for (final level in classLevels) {
-    try {
-      stats[level] = await service.getClassQuestionCount(level);
-    } catch (e) {
-      stats[level] = 0;
-    }
-  }
-
-  return {'classStats': stats};
-});
-
-final gridCategoryStatsProvider = FutureProvider<Map<String, dynamic>>((ref) async {
-  final service = AdaptedQuestionLoaderService();
-  final coreCategories = QuizCategoryManager.coreCategories.take(6).toList();
-  final stats = <String, int>{};
-
-  for (final category in coreCategories) {
-    try {
-      stats[category.name] = await service.getQuizCategoryQuestionCount(category);
-    } catch (e) {
-      stats[category.name] = 0;
-    }
-  }
-
-  return {'categoryStats': stats, 'categories': coreCategories};
-});
 
 class GridCategorySection extends ConsumerStatefulWidget {
   const GridCategorySection({super.key});
@@ -90,8 +57,8 @@ class _GridCategorySectionState extends ConsumerState<GridCategorySection> {
   @override
   Widget build(BuildContext context) {
     final classLevels = _getEducationalClassLevels();
-    final classStatsAsync = ref.watch(gridClassStatsProvider);
-    final categoryStatsAsync = ref.watch(gridCategoryStatsProvider);
+    final classStatsAsync = ref.watch(question_data.allClassesStatsProvider);
+    final categoryStatsAsync = ref.watch(question_data.quizCategoriesProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,7 +110,7 @@ class _GridCategorySectionState extends ConsumerState<GridCategorySection> {
 
         classStatsAsync.when(
           data: (data) {
-            final classStats = data['classStats'] as Map<String, int>;
+            final classStats = data['classStats'] as Map<String, dynamic>? ?? const {};
             return GridView.count(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -152,7 +119,8 @@ class _GridCategorySectionState extends ConsumerState<GridCategorySection> {
               crossAxisSpacing: 12,
               childAspectRatio: 2.2,
               children: classLevels.map((classLevel) {
-                final questionCount = classStats[classLevel['id']] ?? 0;
+                final classData = classStats[classLevel['id']] as Map<String, dynamic>?;
+                final questionCount = (classData?['questionCount'] as num?)?.toInt() ?? 0;
                 return _EducationalClassCard(
                   title: classLevel['title'],
                   subtitle: classLevel['subtitle'],
@@ -219,9 +187,8 @@ class _GridCategorySectionState extends ConsumerState<GridCategorySection> {
         const SizedBox(height: 16),
 
         categoryStatsAsync.when(
-          data: (data) {
-            final categoryStats = data['categoryStats'] as Map<String, int>;
-            final categories = data['categories'] as List<QuizCategory>;
+          data: (categoriesData) {
+            final categories = categoriesData.take(6).toList();
             return GridView.count(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -230,12 +197,21 @@ class _GridCategorySectionState extends ConsumerState<GridCategorySection> {
               crossAxisSpacing: 12,
               childAspectRatio: 1.2,
               children: categories.map((category) {
-                final questionCount = categoryStats[category.name] ?? 0;
-                return _EnhancedEducationalCategoryCard(
-                  category: category,
-                  questionCount: questionCount,
-                  onTap: () {
-                    context.push('/category-quiz/${category.name}');
+                return Consumer(
+                  builder: (context, ref, child) {
+                    final categoryStats = ref.watch(question_data.categoryStatsProvider(category));
+                    final questionCount = categoryStats.maybeWhen(
+                      data: (stats) => (stats['questionCount'] as num?)?.toInt() ?? 0,
+                      orElse: () => 0,
+                    );
+
+                    return _EnhancedEducationalCategoryCard(
+                      category: category,
+                      questionCount: questionCount,
+                      onTap: () {
+                        context.push('/category-quiz/${category.name}');
+                      },
+                    );
                   },
                 );
               }).toList(),
