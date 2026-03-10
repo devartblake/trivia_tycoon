@@ -98,11 +98,17 @@ class QuestionHubService {
     ]) {
       try {
         final response = await _apiService.get(endpoint);
-        if (response.isNotEmpty) {
-          return response;
-        }
+        final envelope = QuestionResponseContract.parseObject(
+          response,
+          endpoint: endpoint,
+          anyOfKeys: const ['questionCount', 'totalQuestions', 'total'],
+        );
+
+        return envelope.data;
       } on ApiRequestException {
         // try next endpoint or fallback
+      } on QuestionContractException {
+        // invalid contract, try next endpoint or fallback
       }
     }
 

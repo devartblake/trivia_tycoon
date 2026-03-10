@@ -18,6 +18,10 @@ class _FakeQuestionHubService extends QuestionHubService {
   String? lastCategory;
   int? lastAmount;
   int? lastDifficulty;
+  int? lastDailyCount;
+  int? lastMixedCount;
+  List<String>? lastMixedCategories;
+  bool? lastBalanceDifficulties;
 
   @override
   Future<List<QuestionModel>> getQuestionsForCategory({
@@ -32,7 +36,10 @@ class _FakeQuestionHubService extends QuestionHubService {
   }
 
   @override
-  Future<List<QuestionModel>> getDailyQuiz({int questionCount = 5}) async => const [];
+  Future<List<QuestionModel>> getDailyQuiz({int questionCount = 5}) async {
+    lastDailyCount = questionCount;
+    return const [];
+  }
 
   @override
   Future<List<QuestionModel>> getMixedQuiz({
@@ -40,7 +47,12 @@ class _FakeQuestionHubService extends QuestionHubService {
     List<String>? categories,
     List<String>? difficulties,
     bool balanceDifficulties = false,
-  }) async => const [];
+  }) async {
+    lastMixedCount = questionCount;
+    lastMixedCategories = categories;
+    lastBalanceDifficulties = balanceDifficulties;
+    return const [];
+  }
 
   @override
   Future<List<QuizCategory>> getAvailableCategories() async => const [];
@@ -73,5 +85,29 @@ void main() {
     expect(hub.lastCategory, 'science');
     expect(hub.lastAmount, 7);
     expect(hub.lastDifficulty, 2);
+  });
+
+  test('daily mode routes to daily hub loader with requested count', () async {
+    final hub = _FakeQuestionHubService();
+    final repo = QuestionRepositoryImpl(questionHubService: hub);
+
+    await repo.getQuestionsForMode(mode: GameMode.daily, amount: 6);
+
+    expect(hub.lastDailyCount, 6);
+  });
+
+  test('arena mode routes to mixed hub loader with multiplayer balance', () async {
+    final hub = _FakeQuestionHubService();
+    final repo = QuestionRepositoryImpl(questionHubService: hub);
+
+    await repo.getQuestionsForMode(
+      mode: GameMode.arena,
+      category: 'history',
+      amount: 8,
+    );
+
+    expect(hub.lastMixedCount, 8);
+    expect(hub.lastMixedCategories, ['history']);
+    expect(hub.lastBalanceDifficulties, isTrue);
   });
 }

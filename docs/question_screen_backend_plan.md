@@ -42,6 +42,14 @@ QuestionScreen remains the main discovery and launch hub for:
 - ✅ Migrated `GameController` session start to repository mode-loading (`GameMode.classic`) instead of direct `QuestionService` reads.
 
 ### Phase 2 completion checklist (remaining)
+<<<<<<< codex/fix-error-in-user-flow-implementation
+
+### Phase 2 remaining snapshot
+- Completed tracks: **3.5 / 4** (contract parsing, repository-first wiring, provider output normalization, partial verification gate coverage).
+- Remaining track: **0.5 / 4** (finish verification gates for remaining flows + backend-partial scenarios).
+
+=======
+>>>>>>> main
 To mark Phase 2 as complete, the following still needs to be shipped:
 
 1. **Strict backend response contract validation**
@@ -58,6 +66,12 @@ To mark Phase 2 as complete, the following still needs to be shipped:
    - ✅ Added normalization of repository output shapes in providers (`questionCount`, `difficulty`, class/category metadata).
    - ⏳ Add small provider/repository tests to lock fallback behavior and prevent contract regressions.
 
+<<<<<<< codex/fix-error-in-user-flow-implementation
+4. **Migration verification gates**
+   - ✅ Added `QuestionHubService` tests for backend-success/local-fallback category reads, plus daily/mixed/class fallback validations.
+   - ✅ Added repository routing tests for `topicExplorer`, `daily`, and `arena` mode dispatch behavior.
+   - ⏳ Add/enable remaining automated checks for multiplayer prefetch flow + backend-partial scenarios across full provider stack.
+=======
 2. **Repository-first cleanup**
    - Audit remaining feature areas for direct `QuestionService` or `AdaptedQuestionLoaderService` usage.
    - Ensure all runtime question reads use `QuestionRepository` as the sole read boundary.
@@ -71,6 +85,7 @@ To mark Phase 2 as complete, the following still needs to be shipped:
    - Capture backend-unavailable scenarios in tests to verify local fallback parity.
 
 - ✅ Added initial response-contract enforcement in `QuestionHubService` for collection endpoints (required `items` keys and `meta` on quiz payload endpoints) with fallback on invalid envelopes.
+>>>>>>> main
 
 5. **Definition of done**
    - No direct loader/service reads in quiz presentation/controller paths.

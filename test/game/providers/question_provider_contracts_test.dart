@@ -32,11 +32,11 @@ void main() {
   test('normalizeClassStats enforces availableCategories type', () {
     final normalized = normalizeClassStats({
       'questionCount': '11',
-      'availableCategories': [QuizCategory.mathematics, 'invalid'],
+      'availableCategories': [QuizCategory.math, 'invalid'],
     });
 
     expect(normalized['questionCount'], 11);
     expect(normalized['subjectCount'], 1);
-    expect(normalized['availableCategories'], [QuizCategory.mathematics]);
+    expect(normalized['availableCategories'], [QuizCategory.math]);
   });
 }
