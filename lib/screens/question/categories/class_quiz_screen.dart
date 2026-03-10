@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../game/providers/question_providers.dart' as question_data;
+import '../../../game/services/quiz_category.dart';
 // import '../services/adapted_question_loader_service.dart';
 // import '../models/question.dart';
 
-class ClassQuizScreen extends StatefulWidget {
+class ClassQuizScreen extends ConsumerStatefulWidget {
   final String classLevel;
 
   const ClassQuizScreen({
@@ -12,10 +15,10 @@ class ClassQuizScreen extends StatefulWidget {
   });
 
   @override
-  State<ClassQuizScreen> createState() => _ClassQuizScreenState();
+  ConsumerState<ClassQuizScreen> createState() => _ClassQuizScreenState();
 }
 
-class _ClassQuizScreenState extends State<ClassQuizScreen> {
+class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
   // final AdaptedQuestionLoaderService _questionService = AdaptedQuestionLoaderService();
 
   bool isLoading = true;
@@ -35,26 +38,38 @@ class _ClassQuizScreenState extends State<ClassQuizScreen> {
     setState(() => isLoading = true);
 
     try {
-      // Simulate loading class-appropriate subjects and content
-      await Future.delayed(const Duration(milliseconds: 800));
+      final classStats =
+          await ref.read(question_data.classStatsProvider(widget.classLevel).future);
+      final categories = (classStats['availableCategories'] as List?)
+              ?.whereType<QuizCategory>()
+              .toList() ??
+          <QuizCategory>[];
 
-      // Get age-appropriate content based on class level
-      final subjects = _getSubjectsForClass(widget.classLevel);
+      final subjects = categories.isNotEmpty
+          ? categories.map(_buildSubjectFromCategory).toList()
+          : _getSubjectsForClass(widget.classLevel);
+
       final counts = <String, int>{};
 
-      // Simulate loading question counts for each subject
       for (final subject in subjects) {
-        // In real implementation:
-        // counts[subject['id']] = await _questionService.getQuestionCount(
-        //   category: subject['id'],
-        //   difficulty: _getDifficultyForClass(widget.classLevel)
-        // );
-        counts[subject['id']] = _getSimulatedQuestionCount(subject['id']);
+        final parsed = QuizCategoryManager.fromString(subject['id'].toString());
+        if (parsed != null) {
+          final categoryStats =
+              await ref.read(question_data.categoryStatsProvider(parsed).future);
+          counts[subject['id'].toString()] =
+              (categoryStats['questionCount'] as num?)?.toInt() ?? 0;
+        } else {
+          counts[subject['id'].toString()] =
+              (classStats['questionCount'] as num?)?.toInt() ?? 0;
+        }
       }
 
       setState(() {
         availableSubjects = subjects;
         questionCounts = counts;
+        if (selectedSubject != null && !questionCounts.containsKey(selectedSubject)) {
+          selectedSubject = null;
+        }
         isLoading = false;
       });
     } catch (e) {
@@ -65,6 +80,15 @@ class _ClassQuizScreenState extends State<ClassQuizScreen> {
         );
       }
     }
+  }
+
+  Map<String, dynamic> _buildSubjectFromCategory(QuizCategory category) {
+    return {
+      'id': category.name,
+      'name': category.displayName,
+      'icon': category.icon,
+      'color': category.primaryColor,
+    };
   }
 
   List<Map<String, dynamic>> _getSubjectsForClass(String classLevel) {
@@ -124,32 +148,6 @@ class _ClassQuizScreenState extends State<ClassQuizScreen> {
       default:
         return ['easy', 'medium', 'hard'];
     }
-  }
-
-  int _getSimulatedQuestionCount(String subjectId) {
-    // Simulate question counts - in real implementation, this comes from the service
-    final counts = {
-      'colors_shapes': 25,
-      'numbers': 30,
-      'alphabet': 40,
-      'animals': 35,
-      'math_basic': 50,
-      'reading': 45,
-      'science_nature': 30,
-      'social_studies': 25,
-      'math_intermediate': 60,
-      'language_arts': 55,
-      'science_earth': 40,
-      'geography': 35,
-      'math_fractions': 45,
-      'science_body': 38,
-      'history': 42,
-      'art_music': 28,
-      'mathematics': 100,
-      'science': 85,
-      'english': 90,
-    };
-    return counts[subjectId] ?? 50;
   }
 
   void _startQuiz() {

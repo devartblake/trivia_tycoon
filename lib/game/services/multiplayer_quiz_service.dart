@@ -8,17 +8,24 @@ import '../../screens/multiplayer/widgets/base_multiplayer_question_widget.dart'
 import '../../screens/question/widgets/adapted_question_widgets.dart';
 import '../models/answer.dart';
 import '../models/question_model.dart';
+import '../models/game_mode.dart';
+import '../../core/repositories/question_repository.dart';
 import '../providers/multiplayer_quiz_providers.dart';
+import '../providers/question_providers.dart';
 
 class MultiplayerQuizService {
   final String baseUrl;
   final http.Client _client;
   final Map<String, StreamController<OpponentUpdate>> _updateStreams = {};
+  final Map<String, List<QuestionModel>> _prefetchedQuestions = {};
+  final QuestionRepository? _questionRepository;
 
   MultiplayerQuizService({
     this.baseUrl = 'https://your-api-endpoint.com',
     http.Client? client,
-  }) : _client = client ?? http.Client();
+    QuestionRepository? questionRepository,
+  })  : _client = client ?? http.Client(),
+        _questionRepository = questionRepository;
 
   // Initialize a multiplayer match
   Future<MatchData> initializeMatch(String gameMode) async {
@@ -50,6 +57,16 @@ class MultiplayerQuizService {
 
   // Get questions for a specific game mode
   Future<List<QuestionModel>> getQuestionsForGameMode(String gameMode) async {
+    final prefetched = _prefetchedQuestions.remove(gameMode);
+    if (prefetched != null && prefetched.isNotEmpty) {
+      return prefetched;
+    }
+
+    final fromRepository = await _tryRepositoryQuestions(gameMode);
+    if (fromRepository.isNotEmpty) {
+      return fromRepository;
+    }
+
     try {
       final category = _getCategoryForGameMode(gameMode);
       final difficulty = _getDifficultyForGameMode(gameMode);
@@ -77,6 +94,40 @@ class MultiplayerQuizService {
     } catch (e) {
       // Fallback to mock questions for development
       return _generateMockQuestions(gameMode);
+    }
+  }
+
+  Future<void> prefetchQuestionsForGameMode(String gameMode) async {
+    if (_prefetchedQuestions.containsKey(gameMode)) return;
+
+    final questions = await _tryRepositoryQuestions(gameMode);
+    if (questions.isNotEmpty) {
+      _prefetchedQuestions[gameMode] = questions;
+    }
+  }
+
+  Future<List<QuestionModel>> _tryRepositoryQuestions(String gameMode) async {
+    if (_questionRepository == null) {
+      return const [];
+    }
+
+    final mode = _mapGameMode(gameMode);
+    if (mode == null) {
+      return const [];
+    }
+
+    try {
+      final category = _getCategoryForGameMode(gameMode);
+      final count = _getQuestionCountForGameMode(gameMode);
+
+      return await _questionRepository.getQuestionsForMode(
+        mode: mode,
+        amount: count,
+        category: category == 'mixed' ? null : category,
+        difficulty: _getDifficultyLevelForGameMode(gameMode),
+      );
+    } catch (_) {
+      return const [];
     }
   }
 
@@ -162,6 +213,19 @@ class MultiplayerQuizService {
         return 'general'; // Survival Arena uses general knowledge
       default:
         return 'mixed';
+    }
+  }
+
+  GameMode? _mapGameMode(String gameMode) {
+    switch (gameMode) {
+      case 'arena':
+        return GameMode.arena;
+      case 'teams':
+        return GameMode.teams;
+      case 'daily':
+        return GameMode.daily;
+      default:
+        return null;
     }
   }
 
@@ -425,13 +489,15 @@ class MultiplayerQuizService {
       controller.close();
     }
     _updateStreams.clear();
+    _prefetchedQuestions.clear();
     _client.close();
   }
 }
 
 // Provider for the service
 final multiplayerQuizServiceProvider = Provider<MultiplayerQuizService>((ref) {
-  final service = MultiplayerQuizService();
+  final repository = ref.read(questionRepositoryProvider);
+  final service = MultiplayerQuizService(questionRepository: repository);
   ref.onDispose(() => service.dispose());
   return service;
 });
