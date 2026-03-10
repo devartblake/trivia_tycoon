@@ -34,6 +34,7 @@ QuestionScreen remains the main discovery and launch hub for:
 - ✅ Migrated `ClassQuizScreen` to repository-backed class/category stats (removed simulated loader counts for primary path).
 - ✅ Migrated `AdaptedQuizNotifier` (`quiz_state.dart`) to repository-backed question/class loading instead of direct local loader service calls.
 - ✅ Migrated category stats access to repository-backed provider (`categoryStatsProvider`).
+<<<<<<< codex/fix-error-in-user-flow-implementation-ze69j1
 - ✅ Added mode-aware repository entry points for all quiz fetches:
   - `getQuestionsForMode(...)`
   - `getMultiplayerQuestions(...)`
@@ -67,6 +68,14 @@ To mark Phase 2 as complete, the following still needs to be shipped:
    - No direct loader/service reads in quiz presentation/controller paths.
    - Contract tests in place for backend envelope parsing and fallback behavior.
    - QA pass on QuestionScreen hub routes + multiplayer entry points using repository-only data.
+=======
+- Route all question fetches through repository methods:
+  - `getQuestionsForMode(...)`
+  - `getQuestionsForCategory(...)`
+  - `getDailyQuestions(...)`
+  - `getMultiplayerQuestions(...)`
+- Add strict response contracts for backend payloads (`items`, pagination, metadata).
+>>>>>>> main
 
 ### UX Refinement (in progress)
 - ✅ Added explicit primary launch panel on `QuestionScreen` for Single Player, Multiplayer, and Categories entry points while preserving existing design sections.
