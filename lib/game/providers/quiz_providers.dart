@@ -7,7 +7,8 @@ import '../state/quiz_state.dart'; // Use your existing quiz_state.dart
 
 // Main quiz provider - uses your existing quiz_state.dart implementation
 final adaptedQuizProvider = StateNotifierProvider<AdaptedQuizNotifier, AdaptedQuizState>((ref) {
-  return AdaptedQuizNotifier();
+  final repository = ref.watch(question_data.questionRepositoryProvider);
+  return AdaptedQuizNotifier(repository: repository);
 });
 
 // Helper providers for computed values

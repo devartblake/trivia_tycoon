@@ -31,6 +31,8 @@ QuestionScreen remains the main discovery and launch hub for:
 - ✅ Migrated `AllClassesScreen` and `GridCategorySection` class/category stat reads to repository-backed providers.
 - ✅ Migrated category/monthly/featured challenge question providers to repository-backed methods (`getDailyQuestions`, `getMixedQuiz`, `getQuestionsForCategory`).
 - ✅ Migrated remaining `quiz_providers` class/service metadata providers to repository-backed providers (`classStatsProvider`, `questionStatsProvider`, `datasetInfoProvider`).
+- ✅ Migrated `ClassQuizScreen` to repository-backed class/category stats (removed simulated loader counts for primary path).
+- ✅ Migrated `AdaptedQuizNotifier` (`quiz_state.dart`) to repository-backed question/class loading instead of direct local loader service calls.
 - ✅ Migrated category stats access to repository-backed provider (`categoryStatsProvider`).
 - Route all question fetches through repository methods:
   - `getQuestionsForMode(...)`
