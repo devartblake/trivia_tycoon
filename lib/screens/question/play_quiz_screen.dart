@@ -1,15 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:async';
-
-enum GameMode {
-  classic,
-  topicExplorer,
-  survival,
-  arena,
-  teams,
-  daily,
-}
+import '../../game/models/game_mode.dart';
 
 class PlayQuizScreen extends StatefulWidget {
   const PlayQuizScreen({super.key});
@@ -91,6 +83,8 @@ class _PlayQuizScreenState extends State<PlayQuizScreen> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
+            _buildModeSectionLabel('Single Player'),
+            const SizedBox(height: 12),
             // Classic Mode - Large Card
             _SimpleGameCard(
               title: 'CLASSIC',
@@ -121,23 +115,25 @@ class _PlayQuizScreenState extends State<PlayQuizScreen> {
 
             const SizedBox(height: 16),
 
-            // Survival and Arena Row
+            _SimpleGameCard(
+              title: 'SURVIVAL',
+              gradient: const LinearGradient(
+                colors: [Color(0xFFFFB74D), Color(0xFFFF9800)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              height: 140,
+              titleSize: 18,
+              onTap: () => _navigateToHowToPlay(context, GameMode.survival),
+            ),
+
+            const SizedBox(height: 20),
+
+            _buildModeSectionLabel('Multiplayer'),
+            const SizedBox(height: 12),
+
             Row(
               children: [
-                Expanded(
-                  child: _SimpleGameCard(
-                    title: 'SURVIVAL',
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFFFFB74D), Color(0xFFFF9800)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    height: 140,
-                    titleSize: 18,
-                    onTap: () => _navigateToHowToPlay(context, GameMode.survival),
-                  ),
-                ),
-                const SizedBox(width: 12),
                 Expanded(
                   child: _SimpleGameCard(
                     title: 'TREASURE MINE',
@@ -149,27 +145,25 @@ class _PlayQuizScreenState extends State<PlayQuizScreen> {
                     height: 140,
                     titleSize: 16,
                     isMultiplayer: true,
-                    onTap: () => _navigateToHowToPlay(context, GameMode.arena), // This will route to multiplayer
+                    onTap: () => _navigateToHowToPlay(context, GameMode.arena),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _SimpleGameCard(
+                    title: 'SURVIVAL ARENA',
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFFAB47BC), Color(0xFF9C27B0)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    height: 140,
+                    titleSize: 14,
+                    isMultiplayer: true,
+                    onTap: () => _navigateToHowToPlay(context, GameMode.teams),
                   ),
                 ),
               ],
-            ),
-
-            const SizedBox(height: 16),
-
-            // Survival Arena - Single Card
-            _SimpleGameCard(
-              title: 'SURVIVAL ARENA',
-              gradient: const LinearGradient(
-                colors: [Color(0xFFAB47BC), Color(0xFF9C27B0)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              height: 120,
-              titleSize: 20,
-              width: MediaQuery.of(context).size.width * 0.6,
-              isMultiplayer: true,
-              onTap: () => _navigateToHowToPlay(context, GameMode.teams), // This will route to multiplayer
             ),
 
             const SizedBox(height: 32),
@@ -202,6 +196,21 @@ class _PlayQuizScreenState extends State<PlayQuizScreen> {
               onTap: () => _showComingSoon(context, 'Grand Prix Event'),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildModeSectionLabel(String label) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Text(
+        label,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w700,
+          color: Color(0xFF4B5563),
+          letterSpacing: 0.3,
         ),
       ),
     );
