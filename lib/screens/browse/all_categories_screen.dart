@@ -1,26 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../game/services/question_loader_service.dart';
+import '../../game/providers/question_providers.dart' as question_data;
 import '../../game/services/quiz_category.dart'; // Import QuizCategory
-
-// Providers for QuizCategory data
-final availableCategoriesProvider = FutureProvider<List<QuizCategory>>((ref) async {
-  final service = AdaptedQuestionLoaderService();
-  return await service.getAvailableQuizCategories();
-});
-
-final categoryStatsProvider = FutureProvider.family<Map<String, dynamic>, QuizCategory>((ref, category) async {
-  final service = AdaptedQuestionLoaderService();
-  final questionCount = await service.getQuizCategoryQuestionCount(category);
-  final difficulty = await service.getQuizCategoryDifficulty(category);
-
-  return {
-    'questionCount': questionCount,
-    'difficulty': difficulty,
-    'category': category,
-  };
-});
 
 class AllCategoriesScreen extends ConsumerStatefulWidget {
   const AllCategoriesScreen({super.key});
@@ -33,18 +15,6 @@ class _AllCategoriesScreenState extends ConsumerState<AllCategoriesScreen> {
   String searchQuery = '';
   String selectedDifficulty = 'all';
   QuizCategory? selectedCategoryType;
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeScreen();
-  }
-
-  Future<void> _initializeScreen() async {
-    // Run comprehensive test for debugging
-    final service = AdaptedQuestionLoaderService();
-    await service.runComprehensiveTest();
-  }
 
   List<QuizCategory> _getFilteredCategories(List<QuizCategory> categories) {
     return categories.where((category) {
@@ -75,7 +45,7 @@ class _AllCategoriesScreenState extends ConsumerState<AllCategoriesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final categoriesAsync = ref.watch(availableCategoriesProvider);
+    final categoriesAsync = ref.watch(question_data.quizCategoriesProvider);
 
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
@@ -268,7 +238,7 @@ class _AllCategoriesScreenState extends ConsumerState<AllCategoriesScreen> {
           const SizedBox(height: 24),
           ElevatedButton.icon(
             onPressed: () {
-              ref.invalidate(availableCategoriesProvider);
+              ref.invalidate(question_data.quizCategoriesProvider);
             },
             icon: const Icon(Icons.refresh),
             label: const Text('Retry'),
@@ -337,7 +307,7 @@ class _EnhancedCategoryCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final statsAsync = ref.watch(categoryStatsProvider(category));
+    final statsAsync = ref.watch(question_data.categoryStatsProvider(category));
 
     return GestureDetector(
       onTap: onTap,
