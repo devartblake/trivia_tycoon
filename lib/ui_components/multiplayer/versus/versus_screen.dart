@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 class VersusScreen extends StatefulWidget {
@@ -391,7 +390,7 @@ class PlayerContainer extends StatelessWidget {
                 foregroundColor: isReady ? Colors.white : primaryColor,
                 elevation: 0,
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               ),
             ),
           ),
@@ -523,12 +522,12 @@ class PlayerContainer extends StatelessWidget {
       child: ClipOval(
         child: playerAvatar.startsWith('http')
             ? Image.network(
-                playerAvatar,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return _buildDefaultAvatar();
-                },
-              )
+              playerAvatar,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return _buildDefaultAvatar();
+              },
+            )
             : _buildDefaultAvatar(),
       ),
     );
