@@ -13,7 +13,6 @@ import 'steps/categories_step.dart';
 import 'steps/avatar_step.dart';
 import 'steps/completion_step.dart';
 import '../../game/providers/riverpod_providers.dart';
-import 'dart:math' as math;
 
 // Confetti particle class
 class Confetti {
@@ -214,9 +213,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     final ageGroup = _controller.userData['ageGroup'] as String?;
     final country = _controller.userData['country'] as String?;
     final categories =
-        (_controller.userData['categories'] as List<dynamic>?)
-            ?.map((e) => e.toString())
-            .toList();
+    (_controller.userData['categories'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList();
+    final avatar = _controller.userData['avatar'] as String?;
 
     if (username == null ||
         username.isEmpty ||
@@ -252,6 +252,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     if (categories != null) {
       await profileService.savePreferredCategories(categories);
     }
+    if (avatar != null) {
+      await profileService.saveAvatar(avatar);
+    }
 
     if (mounted) {
       context.go('/');
@@ -273,7 +276,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       body: SafeArea(
-        child: Stack(
+        child: Column(
           children: [
             // Header with progress and skip
             _buildHeader(context),
@@ -299,6 +302,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                     ],
                   ),
 
+                  // Confetti overlay - only show on last step (completion)
                   if (_controller.isLastStep)
                     Positioned.fill(
                       child: IgnorePointer(
