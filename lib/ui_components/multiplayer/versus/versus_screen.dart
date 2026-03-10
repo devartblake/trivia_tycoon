@@ -359,11 +359,11 @@ class PlayerContainer extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment:
-          isLeftSide ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+            isLeftSide ? CrossAxisAlignment.start : CrossAxisAlignment.end,
         children: [
           Row(
             mainAxisAlignment:
-            isLeftSide ? MainAxisAlignment.start : MainAxisAlignment.end,
+                isLeftSide ? MainAxisAlignment.start : MainAxisAlignment.end,
             children: [
               if (isLeftSide) ...[
                 _buildPlayerInfo(),

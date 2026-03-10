@@ -196,9 +196,9 @@ class QuestionHubService {
   }
 
   List<dynamic> _extractList(
-      Map<String, dynamic> response, {
-        required List<String> keys,
-      }) {
+    Map<String, dynamic> response, {
+    required List<String> keys,
+  }) {
     for (final key in keys) {
       final value = response[key];
       if (value is List) {
