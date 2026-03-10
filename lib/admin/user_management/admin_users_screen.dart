@@ -66,6 +66,10 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
     }
   }
 
+<<<<<<< codex/fix-error-in-user-flow-implementation-ze69j1
+
+=======
+>>>>>>> main
   String _buildFallbackNotice(ApiRequestException e) {
     if (e.statusCode == 404 && e.path == '/admin/users') {
       return 'Admin users endpoint is not available in this environment. Showing local sample users.';

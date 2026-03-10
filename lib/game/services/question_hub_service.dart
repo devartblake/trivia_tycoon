@@ -47,7 +47,6 @@ class QuestionHubService {
     return _localLoader.getAllDatasetStats();
   }
 
-
   Future<Map<String, dynamic>> getCategoryStats(QuizCategory category) async {
     final categorySlug = category.name;
     for (final endpoint in [
@@ -95,6 +94,8 @@ class QuestionHubService {
         }
       } on ApiRequestException {
         // try next endpoint or fallback
+      } on FormatException {
+        // invalid contract, fallback below
       }
     }
 

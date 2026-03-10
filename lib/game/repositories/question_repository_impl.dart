@@ -1,5 +1,9 @@
 import '../../core/repositories/question_repository.dart';
 import '../../core/services/question/question_service.dart';
+<<<<<<< codex/fix-error-in-user-flow-implementation-ze69j1
+import '../models/game_mode.dart';
+=======
+>>>>>>> main
 import '../models/question_model.dart';
 import '../services/question_hub_service.dart';
 import '../services/quiz_category.dart';
@@ -71,4 +75,48 @@ class QuestionRepositoryImpl implements QuestionRepository {
       balanceDifficulties: balanceDifficulties,
     );
   }
+<<<<<<< codex/fix-error-in-user-flow-implementation-ze69j1
+
+  @override
+  Future<List<QuestionModel>> getQuestionsForMode({
+    required GameMode mode,
+    int amount = 10,
+    String? category,
+    int? difficulty,
+  }) {
+    switch (mode) {
+      case GameMode.daily:
+        return getDailyQuestions(count: amount);
+      case GameMode.arena:
+      case GameMode.teams:
+        return getMultiplayerQuestions(
+          amount: amount,
+          category: category,
+        );
+      case GameMode.topicExplorer:
+        return getQuestionsForCategory(
+          category: category ?? 'general',
+          amount: amount,
+          difficulty: difficulty,
+        );
+      case GameMode.classic:
+      case GameMode.survival:
+        return getMixedQuiz(questionCount: amount);
+    }
+  }
+
+  @override
+  Future<List<QuestionModel>> getMultiplayerQuestions({
+    int amount = 10,
+    String? category,
+  }) {
+    final categories = category == null ? null : <String>[category];
+    return getMixedQuiz(
+      questionCount: amount,
+      categories: categories,
+      balanceDifficulties: true,
+    );
+  }
+=======
+>>>>>>> main
 }

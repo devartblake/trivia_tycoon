@@ -34,12 +34,48 @@ QuestionScreen remains the main discovery and launch hub for:
 - ✅ Migrated `ClassQuizScreen` to repository-backed class/category stats (removed simulated loader counts for primary path).
 - ✅ Migrated `AdaptedQuizNotifier` (`quiz_state.dart`) to repository-backed question/class loading instead of direct local loader service calls.
 - ✅ Migrated category stats access to repository-backed provider (`categoryStatsProvider`).
+<<<<<<< codex/fix-error-in-user-flow-implementation-ze69j1
+- ✅ Added mode-aware repository entry points for all quiz fetches:
+  - `getQuestionsForMode(...)`
+  - `getMultiplayerQuestions(...)`
+  - `getQuestionsForCategory(...)`
+  - `getDailyQuestions(...)`
+- ✅ Migrated `GameController` session start to repository mode-loading (`GameMode.classic`) instead of direct `QuestionService` reads.
+
+### Phase 2 completion checklist (remaining)
+To mark Phase 2 as complete, the following still needs to be shipped:
+
+1. **Strict backend response contract validation**
+   - Introduce typed DTOs/envelopes for categories, stats, datasets, and quiz question payloads.
+   - Validate required fields (`items`, stable `meta`) before mapping and fallback when invalid.
+   - Centralize mapping/parsing errors into repository-level typed failures.
+
+2. **Repository-first cleanup**
+   - Audit remaining feature areas for direct `QuestionService` or `AdaptedQuestionLoaderService` usage.
+   - Ensure all runtime question reads use `QuestionRepository` as the sole read boundary.
+
+3. **Provider contract hardening**
+   - Normalize repository output shapes used by UI providers (`questionCount`, `difficulty`, category/class metadata).
+   - Add small provider/repository tests to lock fallback behavior and prevent contract regressions.
+
+4. **Migration verification gates**
+   - Add/enable automated checks for key flows (daily, mixed, category/class, multiplayer prefetch).
+   - Capture backend-unavailable scenarios in tests to verify local fallback parity.
+
+- ✅ Added initial response-contract enforcement in `QuestionHubService` for collection endpoints (required `items` keys and `meta` on quiz payload endpoints) with fallback on invalid envelopes.
+
+5. **Definition of done**
+   - No direct loader/service reads in quiz presentation/controller paths.
+   - Contract tests in place for backend envelope parsing and fallback behavior.
+   - QA pass on QuestionScreen hub routes + multiplayer entry points using repository-only data.
+=======
 - Route all question fetches through repository methods:
   - `getQuestionsForMode(...)`
   - `getQuestionsForCategory(...)`
   - `getDailyQuestions(...)`
   - `getMultiplayerQuestions(...)`
 - Add strict response contracts for backend payloads (`items`, pagination, metadata).
+>>>>>>> main
 
 ### UX Refinement (in progress)
 - ✅ Added explicit primary launch panel on `QuestionScreen` for Single Player, Multiplayer, and Categories entry points while preserving existing design sections.

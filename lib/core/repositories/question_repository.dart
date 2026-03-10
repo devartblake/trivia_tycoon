@@ -1,4 +1,5 @@
 import '../../game/models/question_model.dart';
+import '../../game/models/game_mode.dart';
 import '../../game/services/quiz_category.dart';
 
 abstract class QuestionRepository {
@@ -25,5 +26,17 @@ abstract class QuestionRepository {
     List<String>? categories,
     List<String>? difficulties,
     bool balanceDifficulties = false,
+  });
+
+  Future<List<QuestionModel>> getQuestionsForMode({
+    required GameMode mode,
+    int amount = 10,
+    String? category,
+    int? difficulty,
+  });
+
+  Future<List<QuestionModel>> getMultiplayerQuestions({
+    int amount = 10,
+    String? category,
   });
 }

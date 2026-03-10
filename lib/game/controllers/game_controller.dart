@@ -9,9 +9,11 @@ import '../../game/models/power_up.dart';
 import '../../game/models/achievement.dart';
 import '../../game/models/question_model.dart';
 import '../../game/models/player_progress.dart';
+import '../../game/models/game_mode.dart';
 import '../../game/controllers/settings_controller.dart';
-import '../../core/services/question/question_service.dart';
+import '../../core/repositories/question_repository.dart';
 import '../../game/services/achievement_service.dart';
+import '../../game/providers/question_providers.dart';
 import '../providers/riverpod_providers.dart' as providers;
 
 enum GameState { idle, playing, paused, ended }
@@ -19,14 +21,14 @@ enum GameState { idle, playing, paused, ended }
 /// Provides an instance of GameController using Riverpod.
 final gameControllerProvider = ChangeNotifierProvider<GameController>((ref) {
   final settingsController = ref.read(providers.settingsControllerProvider);
-  final questionService = ref.read(providers.questionServiceProvider);
+  final questionRepository = ref.read(questionRepositoryProvider);
   final achievementService = ref.read(providers.achievementServiceProvider);
   final quizProgressService = ref.read(providers.quizProgressServiceProvider);
   final router = ref.read(providers.routerProvider).value!;
 
   return GameController(
       settingsController: settingsController,
-      questionService: questionService,
+      questionRepository: questionRepository,
       achievementService: achievementService,
       quizProgressService: quizProgressService,
       router: router
@@ -37,7 +39,7 @@ class GameController extends ChangeNotifier {
   static final _log = Logger('GameController');
 
   final SettingsController settingsController;
-  final QuestionService questionService;
+  final QuestionRepository questionRepository;
   final AchievementService achievementService;
   final QuizProgressService quizProgressService;
   final GoRouter router;
@@ -58,7 +60,7 @@ class GameController extends ChangeNotifier {
 
   GameController({
     required this.settingsController,
-    required this.questionService,
+    required this.questionRepository,
     required this.achievementService,
     required this.quizProgressService,
     required this.router,
@@ -105,7 +107,10 @@ class GameController extends ChangeNotifier {
     _gameState = GameState.playing;
     _score = 0;
     _streak = 0;
-    _questions = await questionService.fetchQuestionsWithFallback();
+    _questions = await questionRepository.getQuestionsForMode(
+      mode: GameMode.classic,
+      amount: 10,
+    );
     _currentQuestionIndex = 0;
     notifyListeners();
     _log.fine('Game started with ${_questions.length} questions.');
@@ -149,7 +154,7 @@ class GameController extends ChangeNotifier {
   /// Saves player progress.
   Future<void> _saveProgress() async {
     final progress = PlayerProgress(score: _score, streak: _streak);
-    await quizProgressService.savePlayerProgress(progress as Map<String, dynamic>);
+    await quizProgressService.savePlayerProgress(progress.toJson());
   }
 
   /// Pauses the game.
