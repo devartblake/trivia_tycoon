@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import '../services/quiz_category.dart';
 import '../models/question_model.dart';
-import '../services/question_loader_service.dart';
+import '../../core/repositories/question_repository.dart';
+import '../providers/question_providers.dart';
 
 /// Enhanced quiz state with category enum support
 class AdaptedQuizState {
@@ -146,9 +147,11 @@ class AdaptedQuizState {
 
 /// Enhanced quiz provider with category enum support
 class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
-  AdaptedQuizNotifier() : super(const AdaptedQuizState());
+  AdaptedQuizNotifier({required QuestionRepository repository})
+      : _repository = repository,
+        super(const AdaptedQuizState());
 
-  final AdaptedQuestionLoaderService service = AdaptedQuestionLoaderService();
+  final QuestionRepository _repository;
   Timer? _timer;
 
   /// Start a quiz with category enum support
@@ -175,20 +178,30 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
 
       if (category != null) {
         // Load questions for specific category
-        questions = await service.startCategoryQuiz(
-          category: category,
-          questionCount: questionCount,
-          difficulties: difficulties,
-          includeImages: includeImages,
-          includeVideos: includeVideos,
-          includeAudio: includeAudio,
+        questions = await _repository.getQuestionsForCategory(
+          category: category.name,
+          amount: questionCount,
+          difficulty: difficulties != null && difficulties.isNotEmpty
+              ? difficulties.first
+              : null,
         );
       } else {
         // Fallback to class-based quiz
-        final classNumber = int.tryParse(classLevel) ?? 1;
-        questions = await service.getQuizByClass(
-          classNumber,
-          questionCount: questionCount,
+        final classStats = await _repository.getClassStats(classLevel);
+        final availableCategories =
+            (classStats['availableCategories'] as List?)?.whereType<QuizCategory>().toList() ??
+                <QuizCategory>[];
+
+        final targetCategory = availableCategories.isNotEmpty
+            ? availableCategories.first.name
+            : 'general';
+
+        questions = await _repository.getQuestionsForCategory(
+          category: targetCategory,
+          amount: questionCount,
+          difficulty: difficulties != null && difficulties.isNotEmpty
+              ? difficulties.first
+              : null,
         );
       }
 
@@ -501,12 +514,13 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
 }
 
 /// Provider for the adapted quiz
-final adaptedQuizProvider = StateNotifierProvider<AdaptedQuizNotifier, AdaptedQuizState>((ref) {
-  return AdaptedQuizNotifier();
+final adaptedQuizProvider =
+    StateNotifierProvider<AdaptedQuizNotifier, AdaptedQuizState>((ref) {
+  final repository = ref.watch(questionRepositoryProvider);
+  return AdaptedQuizNotifier(repository: repository);
 });
 
 /// Provider for available quiz categories
 final availableQuizCategoriesProvider = FutureProvider<List<QuizCategory>>((ref) async {
-  final service = AdaptedQuestionLoaderService();
-  return await service.getAvailableQuizCategories();
+  return ref.watch(quizCategoriesProvider.future);
 });
