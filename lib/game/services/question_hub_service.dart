@@ -1,6 +1,7 @@
 import '../../core/services/api_service.dart';
 import '../models/question_model.dart';
 import 'question_loader_service.dart';
+import 'question_response_contract.dart';
 import 'quiz_category.dart';
 
 class QuestionHubService {
@@ -16,17 +17,20 @@ class QuestionHubService {
   Future<List<QuizCategory>> getAvailableCategories() async {
     try {
       final response = await _apiService.get('/quiz/categories');
-      final raw = _extractList(response, keys: const ['items', 'categories', 'data']);
-      final categories = raw
-          .map(_parseCategory)
-          .whereType<QuizCategory>()
-          .toSet()
-          .toList();
+      final envelope = QuestionResponseContract.parseCollection(
+        response,
+        endpoint: '/quiz/categories',
+        itemKeys: const ['items', 'categories', 'data'],
+      );
+
+      final categories = envelope.items.map(_parseCategory).whereType<QuizCategory>().toSet().toList();
       if (categories.isNotEmpty) {
         return categories;
       }
     } on ApiRequestException {
       // fallback below
+    } on QuestionContractException {
+      // invalid contract, fallback below
     }
 
     return _localLoader.getAvailableQuizCategories();
@@ -36,11 +40,17 @@ class QuestionHubService {
     for (final endpoint in const ['/quiz/stats', '/questions/stats']) {
       try {
         final response = await _apiService.get(endpoint);
-        if (response.isNotEmpty) {
-          return response;
-        }
+        final envelope = QuestionResponseContract.parseObject(
+          response,
+          endpoint: endpoint,
+          anyOfKeys: const ['totalQuestions', 'questionCount', 'total'],
+        );
+
+        return envelope.data;
       } on ApiRequestException {
         // try next endpoint or fallback
+      } on QuestionContractException {
+        // invalid contract, try next endpoint or fallback
       }
     }
 
@@ -82,19 +92,24 @@ class QuestionHubService {
       try {
         final response = await _apiService.get(endpoint);
         if (response.isNotEmpty) {
-          final categoriesRaw = _extractList(response, keys: const ['availableCategories', 'categories', 'items']);
-          final categories = categoriesRaw.map(_parseCategory).whereType<QuizCategory>().toList();
+          final envelope = QuestionResponseContract.parseCollection(
+            response,
+            endpoint: endpoint,
+            itemKeys: const ['availableCategories', 'categories', 'items'],
+          );
+          final categories = envelope.items.map(_parseCategory).whereType<QuizCategory>().toList();
 
           return {
             'questionCount': (response['questionCount'] as num?)?.toInt() ?? 0,
             'subjectCount': (response['subjectCount'] as num?)?.toInt() ?? categories.length,
             'availableCategories': categories,
             'source': 'backend',
+            'meta': envelope.meta,
           };
         }
       } on ApiRequestException {
         // try next endpoint or fallback
-      } on FormatException {
+      } on QuestionContractException {
         // invalid contract, fallback below
       }
     }
@@ -115,11 +130,17 @@ class QuestionHubService {
     for (final endpoint in const ['/quiz/datasets/info', '/questions/datasets/info']) {
       try {
         final response = await _apiService.get(endpoint);
-        if (response.isNotEmpty) {
-          return response;
-        }
+        final envelope = QuestionResponseContract.parseObject(
+          response,
+          endpoint: endpoint,
+          anyOfKeys: const ['name', 'version', 'datasetName'],
+        );
+
+        return envelope.data;
       } on ApiRequestException {
         // try next endpoint or fallback
+      } on QuestionContractException {
+        // invalid contract, try next endpoint or fallback
       }
     }
 
@@ -144,8 +165,14 @@ class QuestionHubService {
           },
         );
 
-        final raw = _extractList(response, keys: const ['items', 'questions', 'data']);
-        final questions = raw
+        final envelope = QuestionResponseContract.parseCollection(
+          response,
+          endpoint: endpoint,
+          itemKeys: const ['items', 'questions', 'data'],
+          requireMeta: true,
+        );
+
+        final questions = envelope.items
             .whereType<Map>()
             .map((e) => Map<String, dynamic>.from(e))
             .map(QuestionModel.fromJson)
@@ -156,14 +183,12 @@ class QuestionHubService {
         }
       } on ApiRequestException {
         // try next endpoint or fallback
+      } on QuestionContractException {
+        // invalid contract, fallback below
       }
     }
 
-    final quizCategories = categories
-            ?.map(QuizCategoryManager.fromString)
-            .whereType<QuizCategory>()
-            .toList() ??
-        const <QuizCategory>[];
+    final quizCategories = categories?.map(QuizCategoryManager.fromString).whereType<QuizCategory>().toList() ?? const <QuizCategory>[];
 
     return _localLoader.getMixedQuizByCategories(
       questionCount: questionCount,
@@ -179,8 +204,14 @@ class QuestionHubService {
         '/quiz/daily',
         queryParameters: {'count': questionCount},
       );
-      final raw = _extractList(response, keys: const ['items', 'questions', 'data']);
-      final questions = raw
+      final envelope = QuestionResponseContract.parseCollection(
+        response,
+        endpoint: '/quiz/daily',
+        itemKeys: const ['items', 'questions', 'data'],
+        requireMeta: true,
+      );
+
+      final questions = envelope.items
           .whereType<Map>()
           .map((e) => Map<String, dynamic>.from(e))
           .map(QuestionModel.fromJson)
@@ -191,22 +222,11 @@ class QuestionHubService {
       }
     } on ApiRequestException {
       // fallback below
+    } on QuestionContractException {
+      // invalid contract, fallback below
     }
 
     return _localLoader.getDailyQuiz(questionCount: questionCount);
-  }
-
-  List<dynamic> _extractList(
-    Map<String, dynamic> response, {
-    required List<String> keys,
-  }) {
-    for (final key in keys) {
-      final value = response[key];
-      if (value is List) {
-        return value;
-      }
-    }
-    return const [];
   }
 
   QuizCategory? _parseCategory(dynamic value) {

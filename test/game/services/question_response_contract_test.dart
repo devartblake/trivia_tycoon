@@ -23,7 +23,7 @@ void main() {
           endpoint: '/quiz/mixed',
           itemKeys: const ['items', 'questions'],
         ),
-        throwsA(isA<FormatException>()),
+        throwsA(isA<QuestionContractException>()),
       );
     });
 
@@ -39,7 +39,7 @@ void main() {
           itemKeys: const ['items', 'questions'],
           requireMeta: true,
         ),
-        throwsA(isA<FormatException>()),
+        throwsA(isA<QuestionContractException>()),
       );
     });
 
@@ -53,7 +53,31 @@ void main() {
           endpoint: '/quiz/daily',
           itemKeys: const ['items'],
         ),
-        throwsA(isA<FormatException>()),
+        throwsA(isA<QuestionContractException>()),
+      );
+    });
+  });
+
+  group('QuestionResponseContract.parseObject', () {
+    test('parses object with one-of key requirement', () {
+      final envelope = QuestionResponseContract.parseObject(
+        {'questionCount': 12},
+        endpoint: '/quiz/stats',
+        anyOfKeys: const ['totalQuestions', 'questionCount'],
+      );
+
+      expect(envelope.data['questionCount'], 12);
+      expect(envelope.meta, isEmpty);
+    });
+
+    test('throws when required keys are missing', () {
+      expect(
+        () => QuestionResponseContract.parseObject(
+          {'name': 'dataset'},
+          endpoint: '/quiz/datasets/info',
+          requiredKeys: const ['version'],
+        ),
+        throwsA(isA<QuestionContractException>()),
       );
     });
   });

@@ -34,9 +34,9 @@ class _QuestionScreenState extends ConsumerState<QuestionScreen> {
 
   void _preloadData() async {
     try {
-      final hubService = ref.read(questionHubServiceProvider);
-      await hubService.getDailyQuiz(questionCount: 5);
-      await hubService.getAvailableCategories();
+      final repository = ref.read(questionRepositoryProvider);
+      await repository.getDailyQuestions();
+      await repository.getAvailableCategories();
     } catch (e) {
       // Handle silently for now
       debugPrint('Preload warning: $e');

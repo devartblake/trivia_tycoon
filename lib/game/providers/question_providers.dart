@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/repositories/question_repository.dart';
 import '../repositories/question_repository_impl.dart';
 import '../services/question_hub_service.dart';
+import 'question_provider_contracts.dart';
 import '../services/quiz_category.dart';
 import 'riverpod_providers.dart';
 
@@ -25,7 +26,8 @@ final questionRepositoryProvider = Provider<QuestionRepository>((ref) {
 // Provider for the question loader service with QuizCategory support
 final questionStatsProvider = FutureProvider<Map<String, dynamic>>((ref) async {
   final repository = ref.watch(questionRepositoryProvider);
-  return repository.getQuestionStats();
+  final raw = await repository.getQuestionStats();
+  return normalizeQuestionStats(raw);
 });
 
 // Provider for available QuizCategories
@@ -37,13 +39,15 @@ final quizCategoriesProvider = FutureProvider<List<QuizCategory>>((ref) async {
 // Provider for dataset info with QuizCategory integration
 final datasetInfoProvider = FutureProvider<Map<String, dynamic>>((ref) async {
   final repository = ref.watch(questionRepositoryProvider);
-  return repository.getDatasetInfo();
+  final raw = await repository.getDatasetInfo();
+  return normalizeDatasetInfo(raw);
 });
 
 // Provider for category stats
 final categoryStatsProvider = FutureProvider.family<Map<String, dynamic>, QuizCategory>((ref, category) async {
   final repository = ref.watch(questionRepositoryProvider);
-  return repository.getCategoryStats(category);
+  final raw = await repository.getCategoryStats(category);
+  return normalizeCategoryStats(raw, category);
 });
 
 const _defaultClassIds = [
@@ -52,7 +56,8 @@ const _defaultClassIds = [
 
 final classStatsProvider = FutureProvider.family<Map<String, dynamic>, String>((ref, classId) async {
   final repository = ref.watch(questionRepositoryProvider);
-  return repository.getClassStats(classId);
+  final raw = await repository.getClassStats(classId);
+  return normalizeClassStats(raw);
 });
 
 final allClassesStatsProvider = FutureProvider<Map<String, dynamic>>((ref) async {
@@ -60,7 +65,8 @@ final allClassesStatsProvider = FutureProvider<Map<String, dynamic>>((ref) async
   final stats = <String, Map<String, dynamic>>{};
 
   for (final classId in _defaultClassIds) {
-    stats[classId] = await repository.getClassStats(classId);
+    final raw = await repository.getClassStats(classId);
+    stats[classId] = normalizeClassStats(raw);
   }
 
   return {'classStats': stats};
