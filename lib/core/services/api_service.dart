@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
-import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
@@ -57,14 +56,14 @@ class ApiPageEnvelope<T> {
   bool get hasPrevious => page > 1;
 
   Map<String, dynamic> toMap() => <String, dynamic>{
-        'items': items,
-        'page': page,
-        'pageSize': pageSize,
-        'total': total,
-        'totalPages': totalPages,
-        'hasNext': hasNext,
-        'hasPrevious': hasPrevious,
-      };
+    'items': items,
+    'page': page,
+    'pageSize': pageSize,
+    'total': total,
+    'totalPages': totalPages,
+    'hasNext': hasNext,
+    'hasPrevious': hasPrevious,
+  };
 }
 
 class ApiService {
@@ -79,19 +78,25 @@ class ApiService {
   ApiService({
     required this.baseUrl,
     Dio? dio,
+    Dio? refreshDio,
     ConfigService? configService,
     bool initializeCache = true,
-  })
-      : _dio = dio ?? Dio(BaseOptions(
-    baseUrl: baseUrl,
-    connectTimeout: const Duration(seconds: 3),
-    receiveTimeout: const Duration(seconds: 3),
-    sendTimeout: const Duration(seconds: 3),
-  )),
+  })  : _dio = dio ??
+      Dio(BaseOptions(
+        baseUrl: baseUrl,
+        connectTimeout: const Duration(seconds: 3),
+        receiveTimeout: const Duration(seconds: 3),
+        sendTimeout: const Duration(seconds: 3),
+      )),
+        _refreshDio = refreshDio ??
+            Dio(BaseOptions(
+              baseUrl: baseUrl,
+              connectTimeout: const Duration(seconds: 5),
+              receiveTimeout: const Duration(seconds: 5),
+            )),
         _configService = configService ?? ConfigService.instance {
-
     // Disable or reduce logging in release mode
-    if (_configService.enableLogging && kDebugMode) {
+    if (ConfigService.enableLogging && kDebugMode) {
       _dio.interceptors.add(LogInterceptor(
         request: false,
         requestHeader: false,
@@ -197,7 +202,8 @@ class ApiService {
   }
 
   /// Unified API Request Handler with silent timeout handling
-  Future<T> _handleRequest<T>(Future<T> Function() request, {bool allowAuthRetry = true}) async {
+  Future<T> _handleRequest<T>(Future<T> Function() request,
+      {bool allowAuthRetry = true}) async {
     try {
       return await request();
     } on DioException catch (e) {
@@ -208,8 +214,9 @@ class ApiService {
 
       // Preserve silent timeout/offline behavior while keeping exception type consistent.
       if (isTimeoutLike) {
-        if (_configService.enableLogging && kDebugMode) {
-          debugPrint("[API Timeout]: ${e.requestOptions.path} - No backend available");
+        if (ConfigService.enableLogging && kDebugMode) {
+          debugPrint(
+              "[API Timeout]: ${e.requestOptions.path} - No backend available");
         }
 
         throw ApiRequestException(
@@ -220,8 +227,9 @@ class ApiService {
       }
 
       final envelope = _extractErrorEnvelope(e.response?.data);
-      final retryAfter = _extractRetryAfter(e);
-      var normalizedMessage = _extractErrorMessageFromResponse(e, envelope: envelope);
+      final retryAfterDuration = _extractRetryAfter(e);
+      var normalizedMessage =
+      _extractErrorMessageFromResponse(e, envelope: envelope);
 
       if (_shouldAttemptRefresh(e, allowAuthRetry)) {
         final refreshed = await _refreshSessionToken();
@@ -230,14 +238,15 @@ class ApiService {
         }
       }
 
-      if (e.response?.statusCode == 429 && retryAfter != null) {
-        normalizedMessage = '$normalizedMessage (retry after ${retryAfter}s)';
+      if (e.response?.statusCode == 429 && retryAfterDuration != null) {
+        normalizedMessage =
+        '$normalizedMessage (retry after ${retryAfterDuration.inSeconds}s)';
       }
 
       await _handleErrorCodeSideEffects(e.response?.statusCode);
 
       // Log other Dio errors normally
-      if (_configService.enableLogging) {
+      if (ConfigService.enableLogging) {
         debugPrint("API Error [Dio]: $normalizedMessage");
       }
 
@@ -245,12 +254,12 @@ class ApiService {
         normalizedMessage,
         statusCode: e.response?.statusCode,
         path: e.requestOptions.path,
-        errorCode: envelope?.code,
-        details: envelope?.details,
-        retryAfter: _extractRetryAfter(e.response),
+        errorCode: envelope['code']?.toString(),
+        details: envelope['details'] as Map<String, dynamic>?,
+        retryAfter: retryAfterDuration,
       );
     } catch (e) {
-      if (_configService.enableLogging) {
+      if (ConfigService.enableLogging) {
         debugPrint("API Error: $e");
       }
       if (e is ApiRequestException) rethrow;
@@ -258,10 +267,12 @@ class ApiService {
     }
   }
 
-  String _extractErrorMessageFromResponse(DioException e, {Map<String, dynamic>? envelope}) {
+  String _extractErrorMessageFromResponse(DioException e,
+      {Map<String, dynamic>? envelope}) {
     final responseData = e.response?.data;
 
-    final responseMap = envelope ?? (responseData is Map ? _asJsonMap(responseData) : <String, dynamic>{});
+    final responseMap = envelope ??
+        (responseData is Map ? _asJsonMap(responseData) : <String, dynamic>{});
     if (responseMap.isNotEmpty) {
       final nestedError = responseMap['error'];
       if (nestedError is Map) {
@@ -305,14 +316,15 @@ class ApiService {
     return token.trim();
   }
 
-  Map<String, String> _buildJsonHeaders(String path, [Map<String, String>? headers]) {
+  Map<String, String> _buildJsonHeaders(String path,
+      [Map<String, String>? headers]) {
     final resolved = <String, String>{
       'Content-Type': 'application/json',
       if (headers != null) ...headers,
     };
 
-    final hasAuthorization = resolved.keys
-        .any((key) => key.toLowerCase() == 'authorization');
+    final hasAuthorization =
+    resolved.keys.any((key) => key.toLowerCase() == 'authorization');
 
     if (!hasAuthorization && _isProtectedPath(path)) {
       final accessToken = _loadAccessToken();
@@ -326,7 +338,8 @@ class ApiService {
 
   /// Loads mock data from assets/json
   Future<dynamic> getMockData(String filename) async {
-    final String jsonString = await rootBundle.loadString('assets/data/analytics/$filename');
+    final String jsonString =
+    await rootBundle.loadString('assets/data/analytics/$filename');
     return jsonDecode(jsonString);
   }
 
@@ -335,7 +348,8 @@ class ApiService {
   /// Handles errors using the unified [_handleRequest] wrapper.
   /// FIX: Returns a type-safe Map for predictable JSON responses.
   Future<Map<String, dynamic>> post(String path,
-      {required Map<String, dynamic> body, Map<String, String>? headers}) async {
+      {required Map<String, dynamic> body,
+        Map<String, String>? headers}) async {
     return _handleRequest(() async {
       final response = await _dio.post(
         path,
@@ -349,7 +363,8 @@ class ApiService {
 
   /// **🔹 Generic GET Request (JSON map response)**
   Future<Map<String, dynamic>> get(String path,
-      {Map<String, String>? headers, Map<String, dynamic>? queryParameters}) async {
+      {Map<String, String>? headers,
+        Map<String, dynamic>? queryParameters}) async {
     return _handleRequest(() async {
       final response = await _dio.get(
         path,
@@ -361,7 +376,8 @@ class ApiService {
   }
 
   /// **🔹 Generic DELETE Request**
-  Future<Map<String, dynamic>> delete(String path, {Map<String, String>? headers}) async {
+  Future<Map<String, dynamic>> delete(String path,
+      {Map<String, String>? headers}) async {
     return _handleRequest(() async {
       final response = await _dio.delete(
         path,
@@ -373,7 +389,8 @@ class ApiService {
 
   /// **🔹 Generic PATCH Request**
   Future<Map<String, dynamic>> patch(String path,
-      {required Map<String, dynamic> body, Map<String, String>? headers}) async {
+      {required Map<String, dynamic> body,
+        Map<String, String>? headers}) async {
     return _handleRequest(() async {
       final response = await _dio.patch(
         path,
@@ -386,7 +403,8 @@ class ApiService {
 
   /// **🔹 Generic PUT Request**
   Future<Map<String, dynamic>> put(String path,
-      {required Map<String, dynamic> body, Map<String, String>? headers}) async {
+      {required Map<String, dynamic> body,
+        Map<String, String>? headers}) async {
     return _handleRequest(() async {
       final response = await _dio.put(
         path,
@@ -398,12 +416,12 @@ class ApiService {
   }
 
   /// Parses common paginated envelope variants into a typed structure.
+  /// Supports optional itemParser as second positional parameter.
   ApiPageEnvelope<T> parsePageEnvelope<T>(
-    Map<String, dynamic> response, [
-    T Function(Map<String, dynamic>)? itemParser,
-  ], {
-    List<String> dataKeys = const ['items', 'data', 'results', 'rows'],
-  }) {
+      Map<String, dynamic> response,
+      [T Function(Map<String, dynamic>)? itemParser]) {
+    // Default data keys to try
+    const dataKeys = ['items', 'data', 'results', 'rows'];
     List<dynamic> rawItems = const <dynamic>[];
 
     for (final key in dataKeys) {
@@ -450,7 +468,8 @@ class ApiService {
       if (item is Map) {
         return parser(_asJsonMap(item));
       }
-      throw ApiRequestException('Invalid paginated item type: ${item.runtimeType}');
+      throw ApiRequestException(
+          'Invalid paginated item type: ${item.runtimeType}');
     }).toList(growable: false);
 
     return ApiPageEnvelope<T>(
@@ -483,7 +502,8 @@ class ApiService {
     if (!_isProtectedPath(path)) return false;
 
     // Avoid refreshing on refresh endpoint itself.
-    return !path.endsWith('/auth/refresh') && !path.endsWith('/admin/auth/refresh');
+    return !path.endsWith('/auth/refresh') &&
+        !path.endsWith('/admin/auth/refresh');
   }
 
   Future<bool> _refreshSessionToken() async {
@@ -497,7 +517,7 @@ class ApiService {
 
     for (final refreshPath in refreshPaths) {
       try {
-        final response = await _dio.post(
+        final response = await _refreshDio.post(
           refreshPath,
           data: {
             'refreshToken': refreshToken,
@@ -551,10 +571,14 @@ class ApiService {
         : (expiresInRaw is String ? int.tryParse(expiresInRaw) : null);
 
     if (expiresIn != null && expiresIn > 0) {
-      return DateTime.now().toUtc().add(Duration(seconds: expiresIn)).millisecondsSinceEpoch;
+      return DateTime.now()
+          .toUtc()
+          .add(Duration(seconds: expiresIn))
+          .millisecondsSinceEpoch;
     }
 
-    final expiresAtRaw = payload['expiresAtUtc'] ?? payload['expires_at'] ?? payload['expiresAt'];
+    final expiresAtRaw =
+        payload['expiresAtUtc'] ?? payload['expires_at'] ?? payload['expiresAt'];
     if (expiresAtRaw is String && expiresAtRaw.isNotEmpty) {
       final parsed = DateTime.tryParse(expiresAtRaw)?.toUtc();
       if (parsed != null) return parsed.millisecondsSinceEpoch;
@@ -583,10 +607,12 @@ class ApiService {
     await box.delete('auth_expires_at_utc');
   }
 
-  int? _extractRetryAfter(DioException e) {
+  Duration? _extractRetryAfter(DioException e) {
     final value = e.response?.headers.value('retry-after');
     if (value == null) return null;
-    return int.tryParse(value);
+    final seconds = int.tryParse(value);
+    if (seconds == null) return null;
+    return Duration(seconds: seconds);
   }
 
   /// **🔹 Analytics Event Submission**
@@ -623,7 +649,8 @@ class ApiService {
       final response = await _dio.get('/auth/oauth/$provider');
       if (response.data is Map) {
         final data = _asJsonMap(response.data);
-        return (data['url'] ?? data['authUrl'] ?? data['redirectUrl'])?.toString();
+        return (data['url'] ?? data['authUrl'] ?? data['redirectUrl'])
+            ?.toString();
       }
       if (response.data is String) {
         return response.data as String;
@@ -635,7 +662,9 @@ class ApiService {
   Future<List<SeasonPlayer>> getSeasonLeaderboard(String seasonId) async {
     final response = await get('/seasons/$seasonId/leaderboard');
     final items = response['items'] as List? ?? response['data'] as List? ?? [];
-    return items.map((item) => SeasonPlayer.fromJson(item as Map<String, dynamic>)).toList();
+    return items
+        .map((item) => SeasonPlayer.fromJson(item as Map<String, dynamic>))
+        .toList();
   }
 
   Future<void> resetPlayerSeasonPoints(String playerId) async {
