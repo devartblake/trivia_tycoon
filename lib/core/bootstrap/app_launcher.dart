@@ -89,6 +89,7 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
     }
   }
 
+<<<<<<< codex/find-spin-analytics-implementation
   Future<String> _resolveUserId() async {
     final serviceManager = widget.initialData.$1;
     final profileUserId = await serviceManager.playerProfileService.getUserId();
@@ -98,6 +99,8 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
     return (secureUserId != null && secureUserId.isNotEmpty) ? secureUserId : 'unknown';
   }
 
+=======
+>>>>>>> main
   void _printSpinAnalyticsSummary(Map<String, dynamic> summary) {
     debugPrint('╔════════════════════════════════════════════════╗');
     debugPrint('              SPIN ANALYTICS SUMMARY              ');
@@ -186,7 +189,11 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
         final enrichedSummary = {
           ...summary,
           'user_name': await profileService.getPlayerName(),
+<<<<<<< codex/find-spin-analytics-implementation
           'user_id': await _resolveUserId(),
+=======
+          'user_id': await profileService.getUserId() ?? 'unknown',
+>>>>>>> main
           'snapshot_at': DateTime.now().toIso8601String(),
           'source': 'app_launch',
         };
@@ -220,7 +227,11 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
         'can_spin': summary['can_spin'],
         'reward_points': summary['reward_points'],
         'user_name': await serviceManager.playerProfileService.getPlayerName(),
+<<<<<<< codex/find-spin-analytics-implementation
         'user_id': await _resolveUserId(),
+=======
+        'user_id': await serviceManager.playerProfileService.getUserId() ?? 'unknown',
+>>>>>>> main
         'snapshot_at': DateTime.now().toIso8601String(),
       });
 
