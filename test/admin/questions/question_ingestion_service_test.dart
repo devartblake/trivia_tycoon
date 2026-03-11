@@ -15,6 +15,16 @@ class _FakeApiService extends ApiService {
   Map<String, dynamic> nextResponse = const {};
 
   @override
+  Future<Map<String, dynamic>> get(
+    String path, {
+    Map<String, String>? headers,
+    Map<String, dynamic>? queryParameters,
+  }) async {
+    lastPath = path;
+    return nextResponse;
+  }
+
+  @override
   Future<Map<String, dynamic>> post(
     String path, {
     required Map<String, dynamic> body,
@@ -85,5 +95,21 @@ void main() {
 
     await service.unpublishDataset('phase3_pack');
     expect(api.lastPath, '/admin/questions/datasets/phase3_pack/unpublish');
+  });
+
+  test('getDatasetStatuses maps dataset list response', () async {
+    final api = _FakeApiService()
+      ..nextResponse = {
+        'items': [
+          {'name': 'pack_1', 'published': true, 'questionCount': 12},
+        ],
+      };
+    final service = QuestionIngestionService(apiService: api);
+
+    final datasets = await service.getDatasetStatuses();
+
+    expect(api.lastPath, '/admin/questions/datasets');
+    expect(datasets.length, 1);
+    expect(datasets.first['name'], 'pack_1');
   });
 }

@@ -24,6 +24,7 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
   bool _publishAfterImport = false;
   List<String> _validationErrors = const [];
   List<String> _validationWarnings = const [];
+  List<Map<String, dynamic>> _datasetStatuses = const [];
 
   Future<void> _importFromFile() async {
     setState(() {
@@ -168,6 +169,35 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
       }
       return issue.toString();
     }).toList();
+  }
+
+  Future<void> _refreshDatasetStatuses() async {
+    setState(() {
+      _isProcessing = true;
+      _status = 'Loading dataset statuses...';
+    });
+
+    try {
+      final service = ref.read(questionIngestionServiceProvider);
+      final datasets = await service.getDatasetStatuses();
+      setState(() {
+        _isProcessing = false;
+        _datasetStatuses = datasets;
+        _status = datasets.isEmpty
+            ? 'No backend datasets found.'
+            : 'Loaded ${datasets.length} dataset status record(s).';
+      });
+    } on ApiRequestException catch (e) {
+      setState(() {
+        _isProcessing = false;
+        _status = 'Failed to load dataset statuses: ${e.message}';
+      });
+    } catch (e) {
+      setState(() {
+        _isProcessing = false;
+        _status = 'Failed to load dataset statuses: $e';
+      });
+    }
   }
 
   Future<void> _validateAndUploadToBackend() async {
@@ -577,6 +607,15 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
                     ),
                   ],
                 ),
+                const SizedBox(height: 10),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: OutlinedButton.icon(
+                    onPressed: _isProcessing ? null : _refreshDatasetStatuses,
+                    icon: const Icon(Icons.sync),
+                    label: const Text('Refresh Dataset Status'),
+                  ),
+                ),
               ],
             ),
           ),
@@ -687,6 +726,54 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
                         ),
                       ),
                   ],
+                ],
+              ),
+            ),
+
+          if (_datasetStatuses.isNotEmpty)
+            Container(
+              margin: const EdgeInsets.only(bottom: 24),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: const Color(0xFFE9ECEF), width: 1),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Backend Datasets',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  for (final dataset in _datasetStatuses)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              (dataset['name'] ?? dataset['datasetName'] ?? 'unknown').toString(),
+                              style: const TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                          Text('items: ${(dataset['questionCount'] ?? dataset['count'] ?? 0).toString()}'),
+                          const SizedBox(width: 10),
+                          Text(
+                            (dataset['published'] == true || dataset['status'] == 'published')
+                                ? 'published'
+                                : 'draft',
+                            style: TextStyle(
+                              color: (dataset['published'] == true || dataset['status'] == 'published')
+                                  ? const Color(0xFF10B981)
+                                  : const Color(0xFFF59E0B),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                 ],
               ),
             ),

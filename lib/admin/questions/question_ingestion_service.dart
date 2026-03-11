@@ -45,6 +45,20 @@ class QuestionIngestionService {
     );
   }
 
+  Future<List<Map<String, dynamic>>> getDatasetStatuses() async {
+    final response = await _apiService.get('/admin/questions/datasets');
+
+    final rawItems = response['items'] ?? response['datasets'] ?? response['data'];
+    if (rawItems is! List) {
+      return const <Map<String, dynamic>>[];
+    }
+
+    return rawItems
+        .whereType<Map>()
+        .map((item) => Map<String, dynamic>.from(item))
+        .toList();
+  }
+
   Future<Map<String, dynamic>> publishDataset(String datasetName) {
     return _apiService.post(
       '/admin/questions/datasets/$datasetName/publish',
