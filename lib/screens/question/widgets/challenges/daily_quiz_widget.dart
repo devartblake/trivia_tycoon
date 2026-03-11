@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../game/services/question_loader_service.dart';
+import '../../../../game/providers/question_providers.dart' as question_data;
 import '../../../../game/models/question_model.dart';
 
 // Provider for daily quiz data
 final dailyQuizProvider = FutureProvider<DailyQuizData>((ref) async {
-  final loader = AdaptedQuestionLoaderService();
+  final repository = ref.watch(question_data.questionRepositoryProvider);
 
   try {
-    final questions = await loader.getDailyQuiz(questionCount: 5);
-    final stats = await loader.getAllDatasetStats();
+    final questions = await repository.getDailyQuestions(count: 5);
 
     return DailyQuizData(
       questions: questions,
