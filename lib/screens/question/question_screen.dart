@@ -173,7 +173,6 @@ class _QuestionScreenState extends ConsumerState<QuestionScreen> {
     );
   }
 
-
   Widget _buildPrimaryQuizLaunchPanel(BuildContext context) {
     return Container(
       width: double.infinity,
