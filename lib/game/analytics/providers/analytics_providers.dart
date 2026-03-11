@@ -6,6 +6,7 @@ import '../models/mission_analytics_entry.dart';
 import '../models/engagement_entry.dart';
 import '../models/retention_entry.dart';
 import '../models/spin_live_summary.dart';
+import '../../../core/bootstrap/app_init.dart';
 import '../../../core/services/settings/app_settings.dart';
 import '../../../core/services/analytics/spin_analytics_websocket_adapter.dart';
 
@@ -37,46 +38,69 @@ final spinLiveSummaryProvider = StreamProvider.autoDispose<SpinLiveSummary>((ref
   final controller = StreamController<SpinLiveSummary>.broadcast();
   final adapter = SpinAnalyticsWebSocketAdapter();
   StreamSubscription<SpinLiveSummary>? wsSub;
+  Timer? localRefreshTimer;
+  String? lastDedupeKey;
+
+  void emitIfChanged(SpinLiveSummary summary) {
+    if (summary.dedupeKey == lastDedupeKey) return;
+    lastDedupeKey = summary.dedupeKey;
+    controller.add(summary);
+  }
+
+  Future<SpinLiveSummary> loadLocalSnapshot() async {
+    final serviceManager = ServiceManager.instance;
+    final profileService = serviceManager.playerProfileService;
+    final userName = await profileService.getPlayerName();
+    final userId = await profileService.getUserId() ?? 'unknown';
+
+    final todayCount = await AppSettings.getTodaySpinCount();
+    final dailyLimit = await AppSettings.getDailySpinLimit();
+    final weeklyCount = await AppSettings.getWeeklySpinCount();
+    final totalSpins = await AppSettings.getTotalLifetimeSpins();
+    final canSpin = await AppSettings.canSpinToday();
+    final spinsRemaining = await AppSettings.getRemainingSpinsToday();
+    final rewardPoints = await AppSettings.getSpinRewardPoints();
+
+    return SpinLiveSummary(
+      todayCount: todayCount,
+      dailyLimit: dailyLimit,
+      weeklyCount: weeklyCount,
+      totalSpins: totalSpins,
+      canSpin: canSpin,
+      spinsRemaining: spinsRemaining,
+      rewardPoints: rewardPoints,
+      userName: userName,
+      userId: userId,
+      snapshotAt: DateTime.now(),
+      source: 'local_cache',
+    );
+  }
 
   Future<void> publishLocalSnapshot() async {
     try {
-      final serviceManager = ServiceManager.instance;
-      final profileService = serviceManager.playerProfileService;
-      final userName = await profileService.getPlayerName();
-      final userId = await profileService.getUserId() ?? 'unknown';
+      final localSnapshot = await loadLocalSnapshot();
+      emitIfChanged(localSnapshot);
 
-      final todayCount = await AppSettings.getTodaySpinCount();
-      final dailyLimit = await AppSettings.getDailySpinLimit();
-      final weeklyCount = await AppSettings.getWeeklySpinCount();
-      final totalSpins = await AppSettings.getTotalLifetimeSpins();
-      final canSpin = await AppSettings.canSpinToday();
-      final spinsRemaining = await AppSettings.getRemainingSpinsToday();
-      final rewardPoints = await AppSettings.getSpinRewardPoints();
-
-      controller.add(
-        SpinLiveSummary(
-          todayCount: todayCount,
-          dailyLimit: dailyLimit,
-          weeklyCount: weeklyCount,
-          totalSpins: totalSpins,
-          canSpin: canSpin,
-          spinsRemaining: spinsRemaining,
-          rewardPoints: rewardPoints,
-          userName: userName,
-          userId: userId,
-          snapshotAt: DateTime.now(),
-          source: 'local_cache',
-        ),
+      adapter.initialize(
+        userName: localSnapshot.userName,
+        userId: localSnapshot.userId,
       );
+      wsSub = adapter.summaryStream.listen(emitIfChanged);
 
-      adapter.initialize(userName: userName, userId: userId);
-      wsSub = adapter.summaryStream.listen(controller.add);
+      localRefreshTimer = Timer.periodic(const Duration(seconds: 30), (_) async {
+        if (!AppInit.isWebSocketConnected) {
+          final refreshedSnapshot = await loadLocalSnapshot();
+          emitIfChanged(refreshedSnapshot);
+        }
+        adapter.requestLatestSummary();
+      });
     } catch (_) {
       // Keep stream alive with local defaults if anything fails.
     }
   }
 
   ref.onDispose(() {
+    localRefreshTimer?.cancel();
     wsSub?.cancel();
     adapter.dispose();
     controller.close();

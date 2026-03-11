@@ -30,6 +30,8 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
   GoRouter? _router;
   bool _authStateInitialized = false;
   ProviderSubscription<AsyncValue<SpinLiveSummary>>? _spinSummarySubscription;
+  String? _lastSpinSummaryDedupeKey;
+  bool _printedInitialLocalSummary = false;
 
   @override
   void initState() {
@@ -57,8 +59,20 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
       spinLiveSummaryProvider,
       (previous, next) {
         next.whenData((summary) {
-          _printSpinAnalyticsSummary(summary.toMap());
-          _trackLiveSpinSummary(summary);
+          if (_lastSpinSummaryDedupeKey == summary.dedupeKey) return;
+          _lastSpinSummaryDedupeKey = summary.dedupeKey;
+
+          final isWebSocketSummary = summary.source.startsWith('websocket:');
+          if (isWebSocketSummary || !_printedInitialLocalSummary) {
+            _printSpinAnalyticsSummary(summary.toMap());
+            if (!isWebSocketSummary) {
+              _printedInitialLocalSummary = true;
+            }
+          }
+
+          if (summary.source.startsWith('websocket:')) {
+            _trackLiveSpinSummary(summary);
+          }
         });
       },
     );

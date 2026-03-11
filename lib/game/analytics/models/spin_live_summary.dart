@@ -31,6 +31,8 @@ class SpinLiveSummary {
     required String fallbackUserId,
     required String source,
   }) {
+    final rawTimestamp = map['snapshot_at'] ?? map['timestamp'] ?? map['date'];
+
     return SpinLiveSummary(
       todayCount: (map['today_count'] as num?)?.toInt() ?? 0,
       dailyLimit: (map['daily_limit'] as num?)?.toInt() ?? 0,
@@ -45,7 +47,7 @@ class SpinLiveSummary {
       userId: (map['user_id'] as String?)?.trim().isNotEmpty == true
           ? map['user_id'] as String
           : fallbackUserId,
-      snapshotAt: DateTime.tryParse(map['snapshot_at']?.toString() ?? '') ?? DateTime.now(),
+      snapshotAt: DateTime.tryParse(rawTimestamp?.toString() ?? '') ?? DateTime.now(),
       source: source,
     );
   }
@@ -65,4 +67,18 @@ class SpinLiveSummary {
       'source': source,
     };
   }
+
+  /// Used to suppress duplicate UI/log/analytics updates.
+  String get dedupeKey => [
+    todayCount,
+    dailyLimit,
+    weeklyCount,
+    totalSpins,
+    canSpin,
+    spinsRemaining,
+    rewardPoints,
+    userId,
+    snapshotAt.toIso8601String(),
+    source,
+  ].join('|');
 }

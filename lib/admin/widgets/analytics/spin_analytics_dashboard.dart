@@ -280,6 +280,19 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
                   ),
               ],
             ),
+            if (liveSummary != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                'Live: ${liveSummary.userName} (${liveSummary.userId}) • ${liveSummary.snapshotAt.toLocal()}',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 11,
+                  color: Color(0xFF6B7280),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
             const SizedBox(height: 16),
             Row(
               children: [
