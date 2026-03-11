@@ -7,6 +7,7 @@ import '../models/engagement_entry.dart';
 import '../models/retention_entry.dart';
 import '../models/spin_live_summary.dart';
 import '../../../core/bootstrap/app_init.dart';
+import '../../../core/services/user_identity_resolver.dart';
 import '../../../core/services/settings/app_settings.dart';
 import '../../../core/services/analytics/spin_analytics_websocket_adapter.dart';
 
@@ -49,11 +50,8 @@ final spinLiveSummaryProvider = StreamProvider.autoDispose<SpinLiveSummary>((ref
 
   Future<SpinLiveSummary> loadLocalSnapshot() async {
     final serviceManager = ServiceManager.instance;
-    final profileService = serviceManager.playerProfileService;
-    final userName = await profileService.getPlayerName();
-    final profileUserId = await profileService.getUserId();
-    final secureUserId = await serviceManager.secureStorage.getSecret('user_id');
-    final userId = ((profileUserId?.isNotEmpty ?? false) ? profileUserId : secureUserId) ?? 'unknown';
+    final userName = await UserIdentityResolver.resolveUserName(serviceManager);
+    final userId = await UserIdentityResolver.resolveUserId(serviceManager);
 
     final todayCount = await AppSettings.getTodaySpinCount();
     final dailyLimit = await AppSettings.getDailySpinLimit();

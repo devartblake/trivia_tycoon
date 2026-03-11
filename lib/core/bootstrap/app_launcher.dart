@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/core/services/analytics/app_lifecycle.dart';
 import 'package:trivia_tycoon/core/manager/service_manager.dart';
 import 'package:trivia_tycoon/core/services/theme/theme_notifier.dart';
+import 'package:trivia_tycoon/core/services/user_identity_resolver.dart';
 import 'package:trivia_tycoon/game/analytics/models/spin_live_summary.dart';
 import 'package:trivia_tycoon/game/analytics/providers/analytics_providers.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart' as providers;
@@ -91,11 +92,7 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
 
   Future<String> _resolveUserId() async {
     final serviceManager = widget.initialData.$1;
-    final profileUserId = await serviceManager.playerProfileService.getUserId();
-    if (profileUserId != null && profileUserId.isNotEmpty) return profileUserId;
-
-    final secureUserId = await serviceManager.secureStorage.getSecret('user_id');
-    return (secureUserId != null && secureUserId.isNotEmpty) ? secureUserId : 'unknown';
+    return UserIdentityResolver.resolveUserId(serviceManager);
   }
 
   void _printSpinAnalyticsSummary(Map<String, dynamic> summary) {
@@ -182,10 +179,9 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
 
         final summary = await AppInit.getSpinAnalyticsSummary();
 
-        final profileService = serviceManager.playerProfileService;
         final enrichedSummary = {
           ...summary,
-          'user_name': await profileService.getPlayerName(),
+          'user_name': await UserIdentityResolver.resolveUserName(serviceManager),
           'user_id': await _resolveUserId(),
           'snapshot_at': DateTime.now().toIso8601String(),
           'source': 'app_launch',
@@ -219,7 +215,7 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
         'spins_remaining': summary['spins_remaining'],
         'can_spin': summary['can_spin'],
         'reward_points': summary['reward_points'],
-        'user_name': await serviceManager.playerProfileService.getPlayerName(),
+        'user_name': await UserIdentityResolver.resolveUserName(serviceManager),
         'user_id': await _resolveUserId(),
         'snapshot_at': DateTime.now().toIso8601String(),
       });

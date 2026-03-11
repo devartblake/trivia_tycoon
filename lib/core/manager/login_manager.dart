@@ -117,6 +117,7 @@ class LoginManager {
     // Extract username from email if not provided
     final username = email.split('@')[0];
     await profileService.savePlayerName(username);
+    await profileService.saveUsername(username.toLowerCase());
 
     // Save user ID if available
     if (session.userId != null && session.userId!.isNotEmpty) {
@@ -244,6 +245,7 @@ class LoginManager {
   Future<void> _legacySignup(String email, String username) async {
     await secureStorage.setSecret('user_email', email);
     await profileService.savePlayerName(username);
+    await profileService.saveUsername(username.toLowerCase());
     await profileService.saveUserRole("player");
     await profileService.saveUserRoles(["player"]);
     await secureStorage.setLoggedIn(true);
