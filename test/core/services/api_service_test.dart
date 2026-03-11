@@ -92,6 +92,83 @@ void main() {
     expect(protectedAttempts, 2);
   });
 
+  test('falls back to /auth/refresh when /admin/auth/refresh is unavailable', () async {
+    await authBox.put('auth_access_token', 'expired-token');
+    await authBox.put('auth_refresh_token', 'refresh-token');
+
+    final dio = Dio(BaseOptions(baseUrl: 'https://example.test'));
+    var refreshAttempts = 0;
+
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          if (options.path == '/admin/users') {
+            handler.reject(
+              DioException(
+                requestOptions: options,
+                response: Response(
+                  requestOptions: options,
+                  statusCode: 401,
+                  data: {'message': 'expired'},
+                ),
+                type: DioExceptionType.badResponse,
+              ),
+            );
+            return;
+          }
+
+          if (options.path == '/admin/auth/refresh') {
+            refreshAttempts++;
+            handler.reject(
+              DioException(
+                requestOptions: options,
+                response: Response(
+                  requestOptions: options,
+                  statusCode: 404,
+                  data: {'message': 'not found'},
+                ),
+                type: DioExceptionType.badResponse,
+              ),
+            );
+            return;
+          }
+
+          if (options.path == '/auth/refresh') {
+            refreshAttempts++;
+            handler.resolve(
+              Response(
+                requestOptions: options,
+                statusCode: 200,
+                data: {
+                  'access_token': 'fallback-access-token',
+                  'refresh_token': 'fallback-refresh-token',
+                },
+              ),
+            );
+            return;
+          }
+
+          handler.next(options);
+        },
+      ),
+    );
+
+    final service = ApiService(
+      baseUrl: 'https://example.test',
+      dio: dio,
+      initializeCache: false,
+    );
+
+    await expectLater(
+      () => service.get('/admin/users'),
+      throwsA(isA<ApiRequestException>()),
+    );
+
+    expect(authBox.get('auth_access_token'), 'fallback-access-token');
+    expect(authBox.get('auth_refresh_token'), 'fallback-refresh-token');
+    expect(refreshAttempts, 2);
+  });
+
   test('clears tokens when refresh endpoint returns unauthorized', () async {
     await authBox.put('auth_access_token', 'expired-token');
     await authBox.put('auth_refresh_token', 'invalid-refresh-token');
