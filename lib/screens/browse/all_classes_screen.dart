@@ -1,53 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../game/services/question_loader_service.dart';
+import '../../game/providers/question_providers.dart' as question_data;
 import '../../game/services/quiz_category.dart';
-
-// Providers for class data
-final classStatsProvider = FutureProvider.family<Map<String, dynamic>, String>((ref, classId) async {
-  final service = AdaptedQuestionLoaderService();
-  final questionCount = await service.getClassQuestionCount(classId);
-  final subjectCount = await service.getClassSubjectCount(classId);
-  final categories = QuizCategoryManager.getCategoriesForClass(classId);
-
-  return {
-    'questionCount': questionCount,
-    'subjectCount': subjectCount,
-    'availableCategories': categories,
-  };
-});
-
-final allClassesStatsProvider = FutureProvider<Map<String, dynamic>>((ref) async {
-  final service = AdaptedQuestionLoaderService();
-  await service.runComprehensiveTest();
-
-  final classes = ['kindergarten', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
-  final stats = <String, Map<String, dynamic>>{};
-
-  for (final classId in classes) {
-    try {
-      final questionCount = await service.getClassQuestionCount(classId);
-      final subjectCount = await service.getClassSubjectCount(classId);
-      final categories = QuizCategoryManager.getCategoriesForClass(classId);
-
-      stats[classId] = {
-        'questionCount': questionCount,
-        'subjectCount': subjectCount,
-        'availableCategories': categories,
-      };
-    } catch (e) {
-      stats[classId] = {
-        'questionCount': 0,
-        'subjectCount': 0,
-        'availableCategories': <QuizCategory>[],
-        'error': e.toString(),
-      };
-    }
-  }
-
-  return {'classStats': stats};
-});
 
 class AllClassesScreen extends ConsumerStatefulWidget {
   const AllClassesScreen({super.key});
@@ -236,7 +191,7 @@ class _AllClassesScreenState extends ConsumerState<AllClassesScreen> {
   @override
   Widget build(BuildContext context) {
     final filteredClasses = _getFilteredClasses();
-    final allStatsAsync = ref.watch(allClassesStatsProvider);
+    final allStatsAsync = ref.watch(question_data.allClassesStatsProvider);
 
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
@@ -368,7 +323,7 @@ class _AllClassesScreenState extends ConsumerState<AllClassesScreen> {
           const SizedBox(height: 24),
           ElevatedButton.icon(
             onPressed: () {
-              ref.invalidate(allClassesStatsProvider);
+              ref.invalidate(question_data.allClassesStatsProvider);
             },
             icon: const Icon(Icons.refresh),
             label: const Text('Retry'),
