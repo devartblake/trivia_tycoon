@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/core/services/analytics/app_lifecycle.dart';
 import 'package:trivia_tycoon/core/manager/service_manager.dart';
 import 'package:trivia_tycoon/core/services/theme/theme_notifier.dart';
+import 'package:trivia_tycoon/core/services/user_identity_resolver.dart';
+import 'package:trivia_tycoon/game/analytics/models/spin_live_summary.dart';
+import 'package:trivia_tycoon/game/analytics/providers/analytics_providers.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart' as providers;
 import 'package:go_router/go_router.dart';
 import '../../game/providers/auth_providers.dart';
@@ -27,6 +30,9 @@ class AppLauncher extends ConsumerStatefulWidget {
 class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingObserver {
   GoRouter? _router;
   bool _authStateInitialized = false;
+  ProviderSubscription<AsyncValue<SpinLiveSummary>>? _spinSummarySubscription;
+  String? _lastSpinSummaryDedupeKey;
+  bool _printedInitialLocalSummary = false;
 
   @override
   void initState() {
@@ -35,6 +41,7 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
     _initializeAuthState();
     _initRouter();
     _trackAppLaunch();
+    _listenToLiveSpinSummary();
   }
 
   @override
@@ -42,9 +49,67 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
     WidgetsBinding.instance.removeObserver(this);
 
     // Cleanup on dispose
+    _spinSummarySubscription?.close();
     AppInit.dispose();
 
     super.dispose();
+  }
+
+  void _listenToLiveSpinSummary() {
+    _spinSummarySubscription = ref.listenManual<AsyncValue<SpinLiveSummary>>(
+      spinLiveSummaryProvider,
+      (previous, next) {
+        next.whenData((summary) {
+          if (_lastSpinSummaryDedupeKey == summary.dedupeKey) return;
+          _lastSpinSummaryDedupeKey = summary.dedupeKey;
+
+          final isWebSocketSummary = summary.source.startsWith('websocket:');
+          if (isWebSocketSummary || !_printedInitialLocalSummary) {
+            _printSpinAnalyticsSummary(summary.toMap());
+            if (!isWebSocketSummary) {
+              _printedInitialLocalSummary = true;
+            }
+          }
+
+          if (summary.source.startsWith('websocket:')) {
+            _trackLiveSpinSummary(summary);
+          }
+        });
+      },
+    );
+  }
+
+  Future<void> _trackLiveSpinSummary(SpinLiveSummary summary) async {
+    try {
+      final serviceManager = widget.initialData.$1;
+      await serviceManager.analyticsService.trackEvent('spin_summary_live_update', {
+        ...summary.toMap(),
+      });
+    } catch (e) {
+      debugPrint('[AppLauncher] Failed to track live spin summary update: $e');
+    }
+  }
+
+  Future<String> _resolveUserId() async {
+    final serviceManager = widget.initialData.$1;
+    return UserIdentityResolver.resolveUserId(serviceManager);
+  }
+
+  void _printSpinAnalyticsSummary(Map<String, dynamic> summary) {
+    debugPrint('╔════════════════════════════════════════════════╗');
+    debugPrint('              SPIN ANALYTICS SUMMARY              ');
+    debugPrint('╠════════════════════════════════════════════════╣');
+    debugPrint(' User Name:     ${summary['user_name'] ?? 'Unknown'}');
+    debugPrint(' User ID:       ${summary['user_id'] ?? 'unknown'}');
+    debugPrint(' Snapshot At:   ${summary['snapshot_at'] ?? DateTime.now().toIso8601String()}');
+    debugPrint(' Today:         ${summary['today_count'] ?? 0}/${summary['daily_limit'] ?? 0}');
+    debugPrint(' Weekly:        ${summary['weekly_count'] ?? 0}');
+    debugPrint(' Total:         ${summary['total_spins'] ?? 0}');
+    debugPrint(' Can Spin:      ${summary['can_spin'] ?? false}');
+    debugPrint(' Remaining:     ${summary['spins_remaining'] ?? 0}');
+    debugPrint(' Reward Points: ${summary['reward_points'] ?? 0}');
+    debugPrint(' Source:        ${summary['source'] ?? 'unknown'}');
+    debugPrint('╚════════════════════════════════════════════════╝');
   }
 
   // ============ LIFECYCLE TRACKING ============
@@ -114,17 +179,15 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
 
         final summary = await AppInit.getSpinAnalyticsSummary();
 
-        // Use null-aware operators ?? 0 to prevent crashes if a key is missing
-        debugPrint('╔════════════════════════════════════════════════╗');
-        debugPrint('              SPIN ANALYTICS SUMMARY              ');
-        debugPrint('╠════════════════════════════════════════════════╣');
-        debugPrint(' Today:         ${summary['today_count'] ?? 0}/${summary['daily_limit'] ?? 0}');
-        debugPrint(' Weekly:        ${summary['weekly_count'] ?? 0}');
-        debugPrint(' Total:         ${summary['total_spins'] ?? 0}');
-        debugPrint(' Can Spin:      ${summary['can_spin'] ?? false}');
-        debugPrint(' Remaining:     ${summary['spins_remaining'] ?? 0}');
-        debugPrint(' Reward Points: ${summary['reward_points'] ?? 0}');
-        debugPrint('╚════════════════════════════════════════════════╝');
+        final enrichedSummary = {
+          ...summary,
+          'user_name': await UserIdentityResolver.resolveUserName(serviceManager),
+          'user_id': await _resolveUserId(),
+          'snapshot_at': DateTime.now().toIso8601String(),
+          'source': 'app_launch',
+        };
+
+        _printSpinAnalyticsSummary(enrichedSummary);
       }
     } catch (e) {
       debugPrint('[AppLauncher] Failed to track app launch: $e');
@@ -152,6 +215,9 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
         'spins_remaining': summary['spins_remaining'],
         'can_spin': summary['can_spin'],
         'reward_points': summary['reward_points'],
+        'user_name': await UserIdentityResolver.resolveUserName(serviceManager),
+        'user_id': await _resolveUserId(),
+        'snapshot_at': DateTime.now().toIso8601String(),
       });
 
       debugPrint('[AppLauncher] Spin status checked on resume: ${summary['spins_remaining']} spins remaining');
