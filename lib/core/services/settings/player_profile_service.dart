@@ -27,6 +27,18 @@ class PlayerProfileService {
 
   // ------------------------- NEW METHOD ----------------------
 
+  /// Saves the preferred categories
+  Future<void> savePreferredCategories(List<String> categories) async {
+    final box = await _getBox();
+    await box.put(_userProfileKey, categories);
+  }
+
+  Future<List<String>> getPreferredCategories() async {
+    final box = await _getBox();
+    final categories = box.get(_userProfileKey, defaultValue: <String>[]);
+    return List<String>.from(categories);
+  }
+
   /// Saves the backend user ID (from auth response)
   Future<void> saveUserId(String userId) async {
     final box = await _getBox();
@@ -40,18 +52,6 @@ class PlayerProfileService {
   }
 
   // ------------------------- EXISTING METHODS ----------------
-
-  /// Saves the preferred categories
-  Future<void> savePreferredCategories(List<String> categories) async {
-    final box = await _getBox();
-    await box.put(_userProfileKey, categories);
-  }
-
-  Future<List<String>> getPreferredCategories() async {
-    final box = await _getBox();
-    final categories = box.get(_userProfileKey, defaultValue: <String>[]);
-    return List<String>.from(categories);
-  }
 
   /// Saves the player's name.
   Future<void> savePlayerName(String name) async {
