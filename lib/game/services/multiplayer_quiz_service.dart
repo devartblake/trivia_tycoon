@@ -120,7 +120,7 @@ class MultiplayerQuizService {
       final category = _getCategoryForGameMode(gameMode);
       final count = _getQuestionCountForGameMode(gameMode);
 
-      return await _questionRepository.getQuestionsForMode(
+      return await _questionRepository!.getQuestionsForMode(
         mode: mode,
         amount: count,
         category: category == 'mixed' ? null : category,
