@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
@@ -15,8 +17,18 @@ class ApiRequestException implements Exception {
   final String message;
   final int? statusCode;
   final String? path;
+  final String? errorCode;
+  final Map<String, dynamic>? details;
+  final Duration? retryAfter;
 
-  ApiRequestException(this.message, {this.statusCode, this.path});
+  ApiRequestException(
+      this.message, {
+        this.statusCode,
+        this.path,
+        this.errorCode,
+        this.details,
+        this.retryAfter,
+      });
 
   @override
   String toString() {
@@ -57,6 +69,7 @@ class ApiPageEnvelope<T> {
 
 class ApiService {
   final Dio _dio;
+  final Dio _refreshDio;
   final String baseUrl;
   late CacheOptions _cacheOptions;
   late final HiveCacheStore _cacheStore;
@@ -71,7 +84,6 @@ class ApiService {
   })
       : _dio = dio ?? Dio(BaseOptions(
     baseUrl: baseUrl,
-    // Shorter timeouts for development to fail fast
     connectTimeout: const Duration(seconds: 3),
     receiveTimeout: const Duration(seconds: 3),
     sendTimeout: const Duration(seconds: 3),
@@ -81,12 +93,12 @@ class ApiService {
     // Disable or reduce logging in release mode
     if (_configService.enableLogging && kDebugMode) {
       _dio.interceptors.add(LogInterceptor(
-        request: false,           // Disable request logging
-        requestHeader: false,      // Disable header logging
-        requestBody: false,        // Disable body logging
+        request: false,
+        requestHeader: false,
+        requestBody: false,
         responseHeader: false,
         responseBody: false,
-        error: true,              // Only log errors
+        error: true,
         logPrint: (log) => debugPrint("[API Log]: $log"),
       ));
     }
@@ -96,23 +108,21 @@ class ApiService {
     }
   }
 
-  /// **🔹 Initialize Cache**
   Future<void> _initializeCache() async {
-    Directory cacheDir = await getTemporaryDirectory(); // Corrected Cache Directory
-    _cacheStore = HiveCacheStore(cacheDir.path); // ✅ Store reference here
+    Directory cacheDir = await getTemporaryDirectory();
+    _cacheStore = HiveCacheStore(cacheDir.path);
 
     _cacheOptions = CacheOptions(
-      store: _cacheStore, // ✅ Uses HiveCacheStore
+      store: _cacheStore,
       policy: CachePolicy.request,
-      maxStale: const Duration(days: 7), // Cache expires in 7 days
-      hitCacheOnErrorExcept: [], // Cache API errors except for connectivity issues
+      maxStale: const Duration(days: 7),
+      hitCacheOnErrorExcept: [],
       priority: CachePriority.high,
     );
     _cacheInterceptor = DioCacheInterceptor(options: _cacheOptions);
     _dio.interceptors.add(_cacheInterceptor);
   }
 
-  /// **🔹 Fetch Questions with Cache**
   Future<List<Map<String, dynamic>>> fetchQuestions({
     required int amount,
     String? category,
@@ -132,7 +142,6 @@ class ApiService {
     });
   }
 
-  /// **🔹 Fetch Leaderboard with Cache**
   Future<List<Map<String, dynamic>>> fetchLeaderboard() async {
     return _handleRequest(() async {
       final response = await _dio.get(
@@ -143,7 +152,6 @@ class ApiService {
     });
   }
 
-  /// **🔹 Fetch Achievements with Cache**
   Future<List<Map<String, dynamic>>> fetchAchievements(String playerName) async {
     return _handleRequest(() async {
       final response = await _dio.get(
@@ -155,7 +163,6 @@ class ApiService {
     });
   }
 
-  /// **🔹 Submit Score**
   Future<void> submitScore(String playerName, int score) async {
     await _handleRequest(() async {
       await _dio.post('/leaderboard', data: {
@@ -165,7 +172,6 @@ class ApiService {
     });
   }
 
-  /// **🔹 Unlock Achievement**
   Future<void> unlockAchievement(String playerName, String achievement) async {
     await _handleRequest(() async {
       await _dio.post('/achievements', data: {
@@ -175,12 +181,10 @@ class ApiService {
     });
   }
 
-  /// **🔹 Clear Cache Manually**
   Future<void> clearCache() async {
     await _cacheStore.clean();
   }
 
-  /// **🔹 Generic GET Request Handler**
   Future<dynamic> getRequest(String endpoint) async {
     return _handleRequest(() async {
       final response = await http.get(Uri.parse('$baseUrl/$endpoint'));
@@ -241,6 +245,9 @@ class ApiService {
         normalizedMessage,
         statusCode: e.response?.statusCode,
         path: e.requestOptions.path,
+        errorCode: envelope?.code,
+        details: envelope?.details,
+        retryAfter: _extractRetryAfter(e.response),
       );
     } catch (e) {
       if (_configService.enableLogging) {
@@ -589,8 +596,6 @@ class ApiService {
     await post('/events/$name', body: data);
   }
 
-  /// **🔹 Auth: Login**
-  /// Sends credentials to the backend auth endpoint.
   Future<Map<String, dynamic>> login({
     required String email,
     required String password,
@@ -601,8 +606,6 @@ class ApiService {
     });
   }
 
-  /// **🔹 Auth: Signup**
-  /// Registers a new user. Additional fields can be passed in [extra].
   Future<Map<String, dynamic>> signup({
     required String email,
     required String password,
@@ -615,8 +618,6 @@ class ApiService {
     });
   }
 
-  /// **🔹 Auth: OAuth URL**
-  /// Requests the backend-generated OAuth URL for a provider.
   Future<String?> getOAuthUrl(String provider) async {
     return _handleRequest(() async {
       final response = await _dio.get('/auth/oauth/$provider');
@@ -630,24 +631,24 @@ class ApiService {
       return null;
     });
   }
-}
 
-extension SeasonalApiExtensions on ApiService {
   Future<List<SeasonPlayer>> getSeasonLeaderboard(String seasonId) async {
-    // Implementation would call your backend
-    throw UnimplementedError('Implement season leaderboard API call');
+    final response = await get('/seasons/$seasonId/leaderboard');
+    final items = response['items'] as List? ?? response['data'] as List? ?? [];
+    return items.map((item) => SeasonPlayer.fromJson(item as Map<String, dynamic>)).toList();
   }
 
   Future<void> resetPlayerSeasonPoints(String playerId) async {
-    // Implementation would reset player's seasonal progress
-    throw UnimplementedError('Implement reset player points API call');
+    await post('/admin/seasons/reset-player', body: {'playerId': playerId});
   }
 
   Future<void> scheduleTiebreakerQuiz({
     required List<String> players,
     required DateTime scheduledTime,
   }) async {
-    // Implementation would schedule tiebreaker quiz
-    throw UnimplementedError('Implement tiebreaker quiz scheduling');
+    await post('/admin/seasons/schedule-tiebreaker', body: {
+      'players': players,
+      'scheduledTime': scheduledTime.toIso8601String(),
+    });
   }
 }

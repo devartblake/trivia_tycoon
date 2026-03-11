@@ -1,0 +1,519 @@
+{
+  "version": "1.0.0",
+  "totalItems": 50,
+  "categories": [
+    "Arts", "Art History", "Music", "Visual Arts",
+    "Biology", "Chemistry", "Astronomy", "Physics", "Natural Science",
+    "Geography", "World Geography", "Global Cultures",
+    "History", "World History", "Literature",
+    "Entertainment", "Film", "Sports",
+    "Computer Science", "Technology", "Engineering",
+    "Psychology", "Philosophy",
+    "Law", "Civics", "Politics",
+    "Economics", "Finance", "Business",
+    "Environmental Science", "Environment",
+    "Mathematics"
+  ],
+  "items": [
+    {
+      "id": "col_001",
+      "name": "Renaissance Palette",
+      "category": "Arts",
+      "rarity": "epic",
+      "description": "A treasured artist's palette from the Renaissance era",
+      "aiImagePrompt": "A worn wooden artist's palette covered in dried oil paints in vibrant colors - reds, blues, yellows, and greens. Paint brushes rest in the thumb hole. Renaissance-era styling with ornate gold trim around the edges. Soft lighting, museum-quality presentation on velvet background.",
+      "pointValue": 500,
+      "unlockCondition": "Master Arts category with 95% accuracy"
+    },
+    {
+      "id": "col_002",
+      "name": "Ancient Greek Mask",
+      "category": "Art History",
+      "rarity": "legendary",
+      "description": "A theatrical mask from ancient Greek drama",
+      "aiImagePrompt": "A theatrical marble mask from ancient Greece with exaggerated features - large eye holes, dramatic expression. Weathered white stone with cracks showing age. Gold leaf accents around the eyes and mouth. Dramatic side lighting casting deep shadows. Museum display aesthetic.",
+      "pointValue": 1000,
+      "unlockCondition": "Complete 500 Art History questions correctly"
+    },
+    {
+      "id": "col_003",
+      "name": "Jazz Saxophone",
+      "category": "Music",
+      "rarity": "rare",
+      "description": "A vintage golden saxophone from the jazz age",
+      "aiImagePrompt": "A golden brass saxophone with intricate key mechanisms gleaming in warm spotlight. Art deco styling with engraved patterns. Slightly tarnished with character, showing it's been well-played. Dark smoky background suggesting a jazz club atmosphere. Photorealistic metal textures.",
+      "pointValue": 300,
+      "unlockCondition": "Answer 200 Music questions correctly"
+    },
+    {
+      "id": "col_004",
+      "name": "Calligraphy Brush Set",
+      "category": "Visual Arts",
+      "rarity": "common",
+      "description": "Traditional calligraphy tools for elegant writing",
+      "aiImagePrompt": "Traditional Asian calligraphy brushes with bamboo handles and fine animal hair bristles. Arranged in an elegant wooden stand. Black ink stone nearby with ground ink. Minimalist zen aesthetic with rice paper in background. Soft natural lighting.",
+      "pointValue": 50,
+      "unlockCondition": "Complete first Visual Arts quiz"
+    },
+    {
+      "id": "col_005",
+      "name": "DNA Double Helix Crystal",
+      "category": "Biology",
+      "rarity": "epic",
+      "description": "A crystalline representation of life's building blocks",
+      "aiImagePrompt": "A glowing crystalline sculpture of a DNA double helix. Translucent blue and purple colors spiraling upward. Bioluminescent glow from within. Floating on a holographic display stand. Futuristic laboratory aesthetic. Photorealistic glass/crystal material with internal lighting.",
+      "pointValue": 500,
+      "unlockCondition": "Master Biology category"
+    },
+    {
+      "id": "col_006",
+      "name": "Atomic Model Globe",
+      "category": "Chemistry",
+      "rarity": "rare",
+      "description": "A vintage scientific model of atomic structure",
+      "aiImagePrompt": "A vintage brass orrery-style atomic model showing electrons orbiting a nucleus. Steampunk aesthetic with copper and bronze tones. Spheres connected by thin metal rods. Mechanical gears visible at the base. Victorian-era scientific instrument styling on dark wood pedestal.",
+      "pointValue": 300,
+      "unlockCondition": "Answer 250 Chemistry questions correctly"
+    },
+    {
+      "id": "col_007",
+      "name": "Telescope Lens",
+      "category": "Astronomy",
+      "rarity": "legendary",
+      "description": "An antique lens that gazed upon distant stars",
+      "aiImagePrompt": "An antique brass telescope objective lens with multiple glass elements visible in cross-section. Intricate mechanical focusing mechanism. Engraved with star charts around the rim. Deep blue night sky with stars visible through the glass. Vintage astronomical instrument aesthetic.",
+      "pointValue": 1000,
+      "unlockCondition": "Complete 500 Astronomy questions with 98% accuracy"
+    },
+    {
+      "id": "col_008",
+      "name": "Newton's Apple",
+      "category": "Physics",
+      "rarity": "epic",
+      "description": "The legendary apple that revealed gravity's secrets",
+      "aiImagePrompt": "A perfect red apple suspended in mid-fall with motion blur. Mathematical equations and force vectors drawn as glowing lines around it. Dark background with chalk-drawn physics formulas. The apple has a subtle golden glow. Academic/scientific illustration style.",
+      "pointValue": 500,
+      "unlockCondition": "Master Physics with perfect score streak"
+    },
+    {
+      "id": "col_009",
+      "name": "Petri Dish Culture",
+      "category": "Science",
+      "rarity": "uncommon",
+      "description": "Glowing bacterial colonies in beautiful patterns",
+      "aiImagePrompt": "A glass petri dish containing glowing bioluminescent bacterial colonies in beautiful fractal patterns. Electric blue and green glow. Laboratory countertop setting with scientific equipment blurred in background. Top-down view. Clean, clinical aesthetic with ethereal lighting.",
+      "pointValue": 150,
+      "unlockCondition": "Complete 100 Science questions"
+    },
+    {
+      "id": "col_010",
+      "name": "Crystal Geode",
+      "category": "Natural Science",
+      "rarity": "rare",
+      "description": "Nature's hidden treasure of purple crystals",
+      "aiImagePrompt": "A split geode revealing purple amethyst crystals inside. Rough gray exterior contrasts with gleaming geometric crystal formations within. Dramatic lighting highlighting the facets. Specimen display stand. Museum-quality mineral photography style.",
+      "pointValue": 300,
+      "unlockCondition": "Answer 200 Natural Science questions"
+    },
+    {
+      "id": "col_011",
+      "name": "Antique Compass",
+      "category": "Geography",
+      "rarity": "epic",
+      "description": "A navigator's trusted companion from exploration's golden age",
+      "aiImagePrompt": "Brass navigational compass with intricate engravings of wind roses and cardinal directions. Glass dome protecting the brass needle. Weathered patina showing age and use. Leather carrying case partially visible. Warm candlelight illumination. Explorer's journal and old map in background.",
+      "pointValue": 500,
+      "unlockCondition": "Master Geography category"
+    },
+    {
+      "id": "col_012",
+      "name": "Globe of Discovery",
+      "category": "World Geography",
+      "rarity": "legendary",
+      "description": "An ornate globe from the age of exploration",
+      "aiImagePrompt": "An ornate vintage desk globe on a mahogany stand. Hand-painted continents in aged parchment colors. Brass meridian ring with zodiac symbols. Old-world cartography style with sea monsters in the oceans. Warm library lighting with leather-bound books in background.",
+      "pointValue": 1000,
+      "unlockCondition": "Complete all World Geography challenges"
+    },
+    {
+      "id": "col_013",
+      "name": "Mountain Peak Flag",
+      "category": "Geography",
+      "rarity": "rare",
+      "description": "A flag planted atop the world's highest peaks",
+      "aiImagePrompt": "A colorful expedition flag planted at a snowy mountain summit. Flag whipping dramatically in the wind against bright blue sky. Prayer flags visible nearby. Ice-covered peak panorama. Adventure photography style with dramatic clouds and sunlight.",
+      "pointValue": 300,
+      "unlockCondition": "Answer 300 Geography questions"
+    },
+    {
+      "id": "col_014",
+      "name": "Tribal Mask Collection",
+      "category": "Global Cultures",
+      "rarity": "epic",
+      "description": "Ceremonial masks from diverse world cultures",
+      "aiImagePrompt": "Three ceremonial masks from different cultures - African, Pacific Islander, and Native American. Vibrant colors, feathers, and intricate carvings. Displayed on a museum wall with soft spotlighting. Each mask shows unique artistic traditions and materials.",
+      "pointValue": 500,
+      "unlockCondition": "Master Global Cultures category"
+    },
+    {
+      "id": "col_015",
+      "name": "Ancient Scroll",
+      "category": "History",
+      "rarity": "legendary",
+      "description": "A papyrus scroll containing ancient wisdom",
+      "aiImagePrompt": "A partially unrolled papyrus scroll with hieroglyphics or ancient text. Yellowed and fragile with frayed edges. Wooden scroll rods on each end. Wax seal visible. Dramatic side lighting emphasizing texture. Library archive aesthetic with stone background.",
+      "pointValue": 1000,
+      "unlockCondition": "Complete 600 History questions correctly"
+    },
+    {
+      "id": "col_016",
+      "name": "Roman Gladius",
+      "category": "World History",
+      "rarity": "epic",
+      "description": "An ancient Roman warrior's blade",
+      "aiImagePrompt": "An ancient Roman short sword (gladius) with ornate brass handle featuring eagle motif. Blade shows battle wear and patina. Leather scabbard decorated with metal studs. Displayed on red velvet in museum case. Dramatic lighting highlighting the metal's age.",
+      "pointValue": 500,
+      "unlockCondition": "Master World History"
+    },
+    {
+      "id": "col_017",
+      "name": "Shakespeare's Quill",
+      "category": "Literature",
+      "rarity": "legendary",
+      "description": "The pen that wrote timeless masterpieces",
+      "aiImagePrompt": "An elegant white feather quill pen resting in an antique brass inkwell. Drops of black ink visible on the nib. Parchment with flowing script in background. Candlelight creating warm glow. Renaissance writing desk aesthetic with leather-bound book.",
+      "pointValue": 1000,
+      "unlockCondition": "Complete 500 Literature questions with 95% accuracy"
+    },
+    {
+      "id": "col_018",
+      "name": "Medieval Crown",
+      "category": "History",
+      "rarity": "legendary",
+      "description": "A royal crown adorned with precious jewels",
+      "aiImagePrompt": "A royal crown of gold with rubies, emeralds, and sapphires embedded in ornate settings. Velvet-lined interior visible. Cross at the apex. Displayed on purple velvet cushion. Treasure vault aesthetic with dramatic theatrical lighting. Photorealistic jewels and gold.",
+      "pointValue": 1000,
+      "unlockCondition": "Achieve History mastery level 10"
+    },
+    {
+      "id": "col_019",
+      "name": "Library Card Catalog",
+      "category": "Literature",
+      "rarity": "uncommon",
+      "description": "A vintage index of literary knowledge",
+      "aiImagePrompt": "A vintage wooden card catalog drawer pulled open revealing handwritten index cards. Brass label holder on front. Warm wood tones with worn finish. Cozy library atmosphere with books stacked nearby. Nostalgic, scholarly aesthetic.",
+      "pointValue": 150,
+      "unlockCondition": "Complete 150 Literature questions"
+    },
+    {
+      "id": "col_020",
+      "name": "Ancient Coin Collection",
+      "category": "History",
+      "rarity": "rare",
+      "description": "Coins from civilizations across the ages",
+      "aiImagePrompt": "Five ancient coins from different civilizations - Roman, Greek, Egyptian, Chinese, Byzantine. Each showing wear but with visible portraits and symbols. Arranged on aged leather with magnifying glass nearby. Numismatic display aesthetic. Detailed metal textures.",
+      "pointValue": 300,
+      "unlockCondition": "Answer 250 History questions"
+    },
+    {
+      "id": "col_021",
+      "name": "Golden Film Reel",
+      "category": "Entertainment",
+      "rarity": "epic",
+      "description": "A reel containing cinema's greatest moments",
+      "aiImagePrompt": "A vintage 35mm film reel made of gold-plated metal. Film strip partially unspooled showing classic movie frames. Art deco styling with Hollywood glamour. Dramatic spotlight on black background. Cinema collectible aesthetic with movie poster hints in background.",
+      "pointValue": 500,
+      "unlockCondition": "Master Entertainment category"
+    },
+    {
+      "id": "col_022",
+      "name": "Retro Gaming Cartridge",
+      "category": "Technology",
+      "rarity": "rare",
+      "description": "A classic video game from the 8-bit era",
+      "aiImagePrompt": "A classic 80s video game cartridge with colorful pixel art label. Nostalgic design showing 8-bit graphics. Slight wear on plastic casing. Displayed on retro TV or gaming console. Neon lighting creating arcade atmosphere. Photorealistic plastic textures.",
+      "pointValue": 300,
+      "unlockCondition": "Answer 200 Technology questions"
+    },
+    {
+      "id": "col_023",
+      "name": "Vinyl Record Collection",
+      "category": "Music",
+      "rarity": "rare",
+      "description": "Iconic albums from music history",
+      "aiImagePrompt": "Stack of classic vinyl records with vibrant album covers visible. Turntable needle touching the grooves. Warm amber lighting. Record store aesthetic. Visible album artwork from different eras - psychedelic 60s, punk 70s, hip-hop 80s.",
+      "pointValue": 300,
+      "unlockCondition": "Complete 250 Music questions"
+    },
+    {
+      "id": "col_024",
+      "name": "Director's Clapperboard",
+      "category": "Film",
+      "rarity": "uncommon",
+      "description": "The tool that marks cinematic history",
+      "aiImagePrompt": "Classic black and white movie clapperboard with chalk markings. Director's name and scene numbers visible. Worn wooden edges showing use on film sets. Hollywood studio background blurred. Cinematic lighting with lens flare effects.",
+      "pointValue": 150,
+      "unlockCondition": "Complete 100 Film questions"
+    },
+    {
+      "id": "col_025",
+      "name": "Olympic Gold Medal",
+      "category": "Sports",
+      "rarity": "legendary",
+      "description": "The ultimate symbol of athletic achievement",
+      "aiImagePrompt": "Olympic gold medal hanging from red, white, and blue ribbon. Embossed with Olympic rings and athlete figure. Highly polished gold surface catching light. Victory podium or flame in soft-focus background. Dramatic upward lighting creating heroic feel.",
+      "pointValue": 1000,
+      "unlockCondition": "Win 100 Sports quizzes in a row"
+    },
+    {
+      "id": "col_026",
+      "name": "Vintage Baseball Glove",
+      "category": "Sports",
+      "rarity": "rare",
+      "description": "A well-worn glove from America's pastime",
+      "aiImagePrompt": "Well-worn leather baseball glove with baseball nestled in the pocket. Rich brown leather with visible stitching and oil stains from years of use. American flag in background. Nostalgic Americana aesthetic. Warm sunset lighting through window.",
+      "pointValue": 300,
+      "unlockCondition": "Answer 200 Sports questions"
+    },
+    {
+      "id": "col_027",
+      "name": "Soccer World Cup Trophy",
+      "category": "Sports",
+      "rarity": "legendary",
+      "description": "The pinnacle of global soccer competition",
+      "aiImagePrompt": "Miniature replica of FIFA World Cup trophy - gold figure holding globe above head. Malachite base with engraved text. Stadium crowd visible in blurred background. Spotlit on pedestal. Photorealistic gold metal with reflective surface.",
+      "pointValue": 1000,
+      "unlockCondition": "Master Sports category completely"
+    },
+    {
+      "id": "col_028",
+      "name": "Championship Belt",
+      "category": "Sports",
+      "rarity": "epic",
+      "description": "A champion's symbol of dominance",
+      "aiImagePrompt": "Wrestling or boxing championship belt with large gold center plate. Red leather strap with metal studs. Engraved with title and symbols. Multiple smaller plates on either side. Dramatic lighting against black background. Highly detailed metalwork.",
+      "pointValue": 500,
+      "unlockCondition": "Win 50 Sports challenges"
+    },
+    {
+      "id": "col_029",
+      "name": "Circuit Board Chip",
+      "category": "Computer Science",
+      "rarity": "rare",
+      "description": "The brain of modern computing",
+      "aiImagePrompt": "Futuristic microprocessor chip with visible circuit pathways glowing electric blue. Gold contact pins on edges. Magnified view showing intricate pathways. High-tech laboratory background. Photorealistic silicon and metal materials with internal lighting effects.",
+      "pointValue": 300,
+      "unlockCondition": "Complete 250 Computer Science questions"
+    },
+    {
+      "id": "col_030",
+      "name": "Vintage Robot Toy",
+      "category": "Technology",
+      "rarity": "epic",
+      "description": "A retro vision of the robotic future",
+      "aiImagePrompt": "Retro tin wind-up robot from the 1950s with bright red and blue paint. Mechanical details visible through clear plastic chest panel. Antenna on head. Slightly worn paint showing character. Toy collector's shelf background. Warm nostalgic lighting.",
+      "pointValue": 500,
+      "unlockCondition": "Master Technology category"
+    },
+    {
+      "id": "col_031",
+      "name": "Holographic Display",
+      "category": "Engineering",
+      "rarity": "legendary",
+      "description": "A glimpse into future technology",
+      "aiImagePrompt": "Futuristic holographic projection showing rotating 3D technical schematics. Cyan and magenta light beams. Sleek black projector base with glowing accents. Dark room with other sci-fi equipment blurred in background. Photorealistic light effects.",
+      "pointValue": 1000,
+      "unlockCondition": "Complete 500 Engineering questions perfectly"
+    },
+    {
+      "id": "col_032",
+      "name": "First Computer Mouse",
+      "category": "Computer Science",
+      "rarity": "epic",
+      "description": "The original pointing device that changed computing",
+      "aiImagePrompt": "Vintage wooden computer mouse from 1960s with single button and cord. Boxy rectangular design. Worn wood finish showing age. Museum display case aesthetic. Black and white photo of inventor in background for historical context.",
+      "pointValue": 500,
+      "unlockCondition": "Answer 400 Computer Science questions"
+    },
+    {
+      "id": "col_033",
+      "name": "Brain in a Jar",
+      "category": "Psychology",
+      "rarity": "epic",
+      "description": "A preserved specimen of cognitive wonder",
+      "aiImagePrompt": "Anatomically accurate brain model preserved in clear glass jar filled with blue-tinted liquid. Electrical synapses shown as tiny lightning bolts. Laboratory shelf background. Scientific specimen aesthetic. Eerie but educational lighting.",
+      "pointValue": 500,
+      "unlockCondition": "Master Psychology category"
+    },
+    {
+      "id": "col_034",
+      "name": "Zen Garden Set",
+      "category": "Philosophy",
+      "rarity": "uncommon",
+      "description": "Tools for cultivating inner peace",
+      "aiImagePrompt": "Miniature Japanese zen garden in wooden tray. White sand raked in circular patterns around black stones. Tiny bamboo rake beside it. Minimalist aesthetic with soft natural lighting. Peaceful meditation space background. Top-down view.",
+      "pointValue": 150,
+      "unlockCondition": "Complete 100 Philosophy questions"
+    },
+    {
+      "id": "col_035",
+      "name": "Philosopher's Stone",
+      "category": "Philosophy",
+      "rarity": "legendary",
+      "description": "The mythical object of alchemical perfection",
+      "aiImagePrompt": "Mystical glowing red stone floating above an alchemical diagram. Magical energy particles swirling around it. Ancient symbols etched on surface. Dark medieval laboratory background with alchemical equipment. Fantasy-realism art style with dramatic lighting.",
+      "pointValue": 1000,
+      "unlockCondition": "Achieve Philosophy enlightenment (perfect 500 questions)"
+    },
+    {
+      "id": "col_036",
+      "name": "Ancient Library Scroll Room",
+      "category": "Literature",
+      "rarity": "epic",
+      "description": "The legendary repository of Alexandria",
+      "aiImagePrompt": "Circular room filled with scroll-filled cubbies reaching to domed ceiling. Ladder leaning against shelves. Warm candlelight from chandelier. Ancient Alexandria library aesthetic. Scholars in robes reading scrolls in background. Wide establishing shot.",
+      "pointValue": 500,
+      "unlockCondition": "Read 1000 Literature questions"
+    },
+    {
+      "id": "col_037",
+      "name": "Gavel of Justice",
+      "category": "Law",
+      "rarity": "rare",
+      "description": "The symbol of legal authority",
+      "aiImagePrompt": "Polished wooden judge's gavel with brass band. Sound block beneath it. Courtroom bench background with scales of justice visible. Dramatic lighting from above. Professional legal aesthetic. Rich mahogany wood grain texture.",
+      "pointValue": 300,
+      "unlockCondition": "Answer 200 Law questions correctly"
+    },
+    {
+      "id": "col_038",
+      "name": "Constitution Manuscript",
+      "category": "Civics",
+      "rarity": "legendary",
+      "description": "The founding document of democratic governance",
+      "aiImagePrompt": "Aged parchment document with 'We the People' visible in elegant calligraphy. Quill pen and inkwell beside it. Wax seal and ribbon. American flag in soft focus background. Historical document preservation aesthetic. Warm patriotic lighting.",
+      "pointValue": 1000,
+      "unlockCondition": "Master Civics and Law completely"
+    },
+    {
+      "id": "col_039",
+      "name": "Voting Ballot Box",
+      "category": "Politics",
+      "rarity": "uncommon",
+      "description": "Democracy's most important tool",
+      "aiImagePrompt": "Wooden ballot box with slot on top and lock on front. 'VOTE' painted on side. Stack of paper ballots beside it. American flag bunting decoration. Civic duty aesthetic. Clean, democratic presentation with natural lighting.",
+      "pointValue": 150,
+      "unlockCondition": "Complete 100 Politics questions"
+    },
+    {
+      "id": "col_040",
+      "name": "United Nations Flag",
+      "category": "Politics",
+      "rarity": "rare",
+      "description": "Symbol of international cooperation",
+      "aiImagePrompt": "UN flag showing light blue background with white world map and olive branches. Flag on pole with other international flags in background. Diplomatic assembly hall setting. Professional international relations aesthetic. Soft professional lighting.",
+      "pointValue": 300,
+      "unlockCondition": "Answer 250 Politics questions"
+    },
+    {
+      "id": "col_041",
+      "name": "Gold Bullion Bar",
+      "category": "Economics",
+      "rarity": "epic",
+      "description": "Pure wealth in its most tangible form",
+      "aiImagePrompt": "Solid gold ingot bar stamped with '999.9 FINE GOLD' and serial number. Highly reflective surface showing fingerprints. Vault background with other bars stacked. Dramatic lighting creating intense gold color. Photorealistic precious metal rendering.",
+      "pointValue": 500,
+      "unlockCondition": "Master Economics category"
+    },
+    {
+      "id": "col_042",
+      "name": "Stock Exchange Bell",
+      "category": "Finance",
+      "rarity": "legendary",
+      "description": "The bell that opens and closes markets",
+      "aiImagePrompt": "Brass trading floor opening bell mounted on wooden stand. Engraved with stock exchange logo and date. Ticker tape visible in background. Wall Street aesthetic. Dynamic business atmosphere with motion blur suggesting activity.",
+      "pointValue": 1000,
+      "unlockCondition": "Complete 500 Finance questions with 98% accuracy"
+    },
+    {
+      "id": "col_043",
+      "name": "Antique Cash Register",
+      "category": "Business",
+      "rarity": "rare",
+      "description": "The original point of sale system",
+      "aiImagePrompt": "Ornate brass cash register from early 1900s with decorative scrollwork. Number keys with white porcelain buttons. Drawer partially open showing cash compartments. General store or pharmacy background. Warm vintage Americana lighting.",
+      "pointValue": 300,
+      "unlockCondition": "Answer 200 Business questions"
+    },
+    {
+      "id": "col_044",
+      "name": "Bitcoin Coin",
+      "category": "Technology",
+      "rarity": "epic",
+      "description": "Digital currency made physical",
+      "aiImagePrompt": "Physical bitcoin coin with orange 'B' symbol. Metallic finish with circuit board pattern visible. Digital matrix code background. Futuristic cryptocurrency aesthetic. Blue and orange neon lighting creating modern financial tech vibe.",
+      "pointValue": 500,
+      "unlockCondition": "Master cryptocurrency and blockchain questions"
+    },
+    {
+      "id": "col_045",
+      "name": "Terrarium Ecosystem",
+      "category": "Environmental Science",
+      "rarity": "uncommon",
+      "description": "A self-sustaining world in glass",
+      "aiImagePrompt": "Glass sphere terrarium containing miniature ecosystem - moss, small plants, stones, tiny water feature. Self-sustaining closed system. Condensation on glass. Natural sunlight filtering through. Eco-friendly aesthetic. Macro photography style showing intricate details.",
+      "pointValue": 150,
+      "unlockCondition": "Complete 150 Environmental Science questions"
+    },
+    {
+      "id": "col_046",
+      "name": "Endangered Species Medallion",
+      "category": "Environment",
+      "rarity": "rare",
+      "description": "Honoring creatures we must protect",
+      "aiImagePrompt": "Bronze medallion embossed with panda, tiger, and whale images. 'PROTECTED SPECIES' text around rim. Verdigris patina showing age. Conservation organization seal on reverse. Natural forest background. Wildlife conservation aesthetic.",
+      "pointValue": 300,
+      "unlockCondition": "Answer 200 Environment questions"
+    },
+    {
+      "id": "col_047",
+      "name": "Recycling Symbol Trophy",
+      "category": "Environment",
+      "rarity": "uncommon",
+      "description": "Recognition for environmental stewardship",
+      "aiImagePrompt": "Green glass sculpture of recycling arrows forming triangle. Sustainable materials aesthetic. Sunlight passing through creating green glow. Earth day celebration background. Eco-friendly presentation. Photorealistic glass material.",
+      "pointValue": 150,
+      "unlockCondition": "Complete green initiative challenges"
+    },
+    {
+      "id": "col_048",
+      "name": "Weather Vane Compass",
+      "category": "Geography",
+      "rarity": "rare",
+      "description": "Reading nature's directional signs",
+      "aiImagePrompt": "Ornate copper weather vane with rooster on top and directional arrows. Verdigris patina from weather exposure. Mounted on old barn roof. Stormy sky background with dramatic clouds. Rustic farmland aesthetic. Wind motion suggested.",
+      "pointValue": 300,
+      "unlockCondition": "Answer 300 Geography questions"
+    },
+    {
+      "id": "col_049",
+      "name": "Golden Ratio Spiral Shell",
+      "category": "Mathematics",
+      "rarity": "epic",
+      "description": "Nature's perfect mathematical pattern",
+      "aiImagePrompt": "Nautilus shell cut in half showing perfect fibonacci spiral. Mathematical golden ratio overlay lines drawn in gold. Black background making shell stand out. Educational museum display aesthetic. Macro photography emphasizing geometric perfection.",
+      "pointValue": 500,
+      "unlockCondition": "Master Mathematics category"
+    },
+    {
+      "id": "col_050",
+      "name": "Abacus of Antiquity",
+      "category": "Mathematics",
+      "rarity": "rare",
+      "description": "The ancient calculator of civilizations",
+      "aiImagePrompt": "Ancient wooden abacus with jade and amber beads on brass rods. Chinese or Roman design with ornate carved frame. Mathematical equations in ancient script on background scroll. Scholarly aesthetic. Warm library lighting. Detailed wood grain and bead textures.",
+      "pointValue": 300,
+      "unlockCondition": "Complete 250 Mathematics questions"
+    }
+  ]
+}
