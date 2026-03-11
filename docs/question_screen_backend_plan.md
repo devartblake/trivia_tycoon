@@ -85,7 +85,7 @@ Phase 2 completion record and post-phase follow-ups:
 - Move question creation/admin ingestion to backend workflows:
   - ✅ Added `QuestionIngestionService` with backend endpoints for validation, bulk import, publish, and unpublish actions.
   - ✅ Updated admin `FileImportExportScreen` with backend ingestion controls (dataset name, validate/import, publish/unpublish).
-  - ⏳ Wire server-side dedupe/conflict details into rich admin review UI.
+  - ✅ Added validation review UI for server-side errors/warnings in admin import flow (dedupe/conflict details now surfaced when backend returns them).
 - Replace local asset-only assumptions in deeper feature areas.
 
 ### Phase 4
