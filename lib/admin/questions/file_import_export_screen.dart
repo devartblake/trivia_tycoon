@@ -22,6 +22,8 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
   bool _isProcessing = false;
   final TextEditingController _datasetNameController = TextEditingController(text: 'community_pack');
   bool _publishAfterImport = false;
+  List<String> _validationErrors = const [];
+  List<String> _validationWarnings = const [];
 
   Future<void> _importFromFile() async {
     setState(() {
@@ -149,10 +151,31 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
     }
   }
 
+
+  List<String> _formatValidationIssues(dynamic value) {
+    if (value is! List) return const [];
+
+    return value.map((issue) {
+      if (issue is String) return issue;
+      if (issue is Map) {
+        final map = Map<String, dynamic>.from(issue);
+        final field = map['field']?.toString();
+        final message = map['message']?.toString() ?? map['error']?.toString() ?? issue.toString();
+        if (field != null && field.isNotEmpty) {
+          return '$field: $message';
+        }
+        return message;
+      }
+      return issue.toString();
+    }).toList();
+  }
+
   Future<void> _validateAndUploadToBackend() async {
     if (_importedQuestions.isEmpty) {
       setState(() {
         _status = 'Import questions first before backend upload.';
+        _validationErrors = const [];
+        _validationWarnings = const [];
       });
       return;
     }
@@ -161,6 +184,8 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
     if (datasetName.isEmpty) {
       setState(() {
         _status = 'Dataset name is required for backend import.';
+        _validationErrors = const [];
+        _validationWarnings = const [];
       });
       return;
     }
@@ -168,6 +193,8 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
     setState(() {
       _isProcessing = true;
       _status = 'Validating questions with backend...';
+      _validationErrors = const [];
+      _validationWarnings = const [];
     });
 
     try {
@@ -177,17 +204,24 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
         datasetName: datasetName,
       );
 
-      final errors = (validation['errors'] as List?) ?? const [];
+      final errors = _formatValidationIssues(validation['errors']);
+      final warnings = _formatValidationIssues(validation['warnings']);
       if (errors.isNotEmpty) {
         setState(() {
           _isProcessing = false;
+          _validationErrors = errors;
+          _validationWarnings = warnings;
           _status = 'Validation failed: ${errors.length} issue(s) found.';
         });
         return;
       }
 
       setState(() {
-        _status = 'Validation passed. Uploading to backend...';
+        _validationErrors = const [];
+        _validationWarnings = warnings;
+        _status = warnings.isEmpty
+            ? 'Validation passed. Uploading to backend...'
+            : 'Validation passed with ${warnings.length} warning(s). Uploading to backend...';
       });
 
       final importResponse = await service.importBulkQuestions(
@@ -587,6 +621,72 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
                       ),
                     ),
                   ),
+                ],
+              ),
+            ),
+
+          if (_validationErrors.isNotEmpty || _validationWarnings.isNotEmpty)
+            Container(
+              margin: const EdgeInsets.only(bottom: 24),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: const Color(0xFFE9ECEF), width: 1),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Validation Review',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  if (_validationErrors.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    const Text(
+                      'Errors (must fix)',
+                      style: TextStyle(color: Color(0xFFEF4444), fontWeight: FontWeight.w600),
+                    ),
+                    const SizedBox(height: 8),
+                    for (final issue in _validationErrors)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 6),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(top: 2),
+                              child: Icon(Icons.error_outline, size: 16, color: Color(0xFFEF4444)),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(child: Text(issue)),
+                          ],
+                        ),
+                      ),
+                  ],
+                  if (_validationWarnings.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    const Text(
+                      'Warnings (review)',
+                      style: TextStyle(color: Color(0xFFF59E0B), fontWeight: FontWeight.w600),
+                    ),
+                    const SizedBox(height: 8),
+                    for (final issue in _validationWarnings)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 6),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(top: 2),
+                              child: Icon(Icons.warning_amber_rounded, size: 16, color: Color(0xFFF59E0B)),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(child: Text(issue)),
+                          ],
+                        ),
+                      ),
+                  ],
                 ],
               ),
             ),
