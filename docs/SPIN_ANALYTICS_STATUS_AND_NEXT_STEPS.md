@@ -1,93 +1,93 @@
-# Spin Analytics + Related Stability Work: Status & Next Steps
+# Spin Analytics + Identity Reliability: Status & Next Steps
 
 ## Overview
-This document summarizes what has been completed across the recent live Spin & Earn analytics iterations, what is currently stable, what remains at risk, and the concrete implementation plan for next steps.
+This document tracks progress on live Spin & Earn analytics, identity reliability, and supporting robustness fixes.
 
 ---
 
-## What has been completed so far
+## Completed so far
 
-### 1) Live spin analytics data pipeline (first pass)
-- Added a live summary domain model: `SpinLiveSummary`.
-- Added a websocket adapter: `SpinAnalyticsWebSocketAdapter`.
-- Added a unified live provider: `spinLiveSummaryProvider` (`StreamProvider.autoDispose`) that:
-  - emits local snapshot fallback,
-  - subscribes to websocket updates,
-  - handles refresh cycles,
-  - dedupes repeated summaries.
+### A) Live Spin analytics pipeline
+- Implemented live summary model (`SpinLiveSummary`), websocket adapter, and `spinLiveSummaryProvider` stream pipeline.
+- Provider emits local fallback snapshot + websocket updates and dedupes repeated emissions.
+- App launcher subscribes to live summary for debug prints + analytics tracking.
+- Admin dashboard displays live metadata (name/id/timestamp) in daily metrics.
 
-### 2) App + UI integration
-- `AppLauncher` now listens to `spinLiveSummaryProvider`.
-- Added formatted debug summary printing for spin metrics.
-- Added analytics tracking for websocket-originated live summary updates.
-- Admin dashboard (`SpinAnalyticsDashboard`) renders live metadata (name/id/timestamp) in the daily metrics card.
+### B) Backend integration fixes
+- Leaderboard requests now include required `limit` query parameter end-to-end.
+- Eliminated backend 500 caused by missing `limit` on `/leaderboard`.
 
-### 3) Leaderboard error fix
-- Fixed `/leaderboard` requests by adding required `limit` query param and propagating it through service call sites.
-- This addresses backend 500 caused by missing required query parameter.
+### C) Analytics service stability
+- Added lazy/memoized box initialization in `AnalyticsService`.
+- Reduced startup race warnings and guarded connectivity subscription disposal.
 
-### 4) User ID consistency improvements
-- Persisted session `userId` into profile storage during login.
-- Backfilled profile bootstrap by saving profile `id`/`user_id` during app init.
-- Added fallback lookup paths where needed to reduce `user_id = unknown` output.
-
-### 5) Analytics initialization robustness
-- Improved analytics storage initialization for offline/session boxes.
-- Added lazy/memoized initialization path to reduce race failures.
-- Reduced repeated warning noise for uninitialized offline storage.
-- Guarded connectivity subscription cancellation to avoid dispose hazards.
+### D) Profile identity improvements
+- Added username persistence in `PlayerProfileService`.
+- Edit profile flow now normalizes username to lowercase and auto-generates one from display name if empty.
+- Active profile updates now sync into legacy settings used by app-wide identity consumers.
+- Login/bootstrap paths persist username/userId when available.
 
 ---
 
-## Current known-good behavior
-- Live spin summary is wired end-to-end (local + websocket).
-- Dashboard receives optional live summary metadata.
-- Leaderboard refresh no longer omits required `limit`.
-- Analytics service is more stable during early startup windows.
+## Current status of the user ID problem
+
+### What was happening
+- Some runtime paths still resolved `user_id` as unknown due to source inconsistency/race (profile settings vs secure storage vs auth token store).
+
+### What has now been implemented
+- `UserIdentityResolver` now resolves user id using a prioritized chain:
+  1. `PlayerProfileService.getUserId()`
+  2. secure storage `user_id`
+  3. core auth token Hive box (`auth_tokens.auth_user_id`)
+  4. generated **stable local fallback id** persisted in secure storage (`generated_local_user_id`)
+- Resolved IDs are backfilled to profile storage for consistency.
+- UI auth login service now persists user id/username when available (and avoids saving the `guest` placeholder as canonical id).
+
+### Why local fallback is used
+- Yes, creating a local id fallback is a good safety mechanism when backend ID is temporarily unavailable.
+- This keeps game analytics and live summaries consistent within the device/session.
+- Backend ID remains preferred and automatically supersedes fallback whenever available.
 
 ---
 
-## Remaining risks / follow-up opportunities
-
-1. **Identity resolution duplication**
-   - User ID resolution currently exists in multiple places.
-   - Risk: divergence across launch/provider/analytics paths.
-
-2. **Observability for unresolved identity**
-   - We still need consistent, centralized diagnostics when user identity cannot be resolved.
-
-3. **Test coverage for live/identity glue code**
-   - Add focused tests for identity fallback behavior and summary metadata propagation.
-
-4. **Backend contract hardening**
-   - Confirm accepted websocket payload variants (`data` vs `data.summary`) and required ops.
+## Remaining gaps / risks
+1. **Backend profile persistence from edit flow**
+   - Current enhanced profile edit still writes locally through `MultiProfileService`; no confirmed backend profile update endpoint is wired in this flow.
+2. **Cross-device consistency**
+   - Locally generated fallback IDs are device-local by design; true canonical identity still depends on backend user ID.
+3. **Automated test coverage**
+   - Need focused tests for resolver priority order and fallback promotion when backend id appears.
 
 ---
 
 ## Next implementation plan
 
-### Phase A (immediate)
-- Introduce a centralized user identity resolver service in core layer.
-- Use it in:
-  - `AppLauncher` summary enrichment and lifecycle analytics,
-  - `spinLiveSummaryProvider` local snapshot metadata.
-- Add single warning path when identity falls back to `unknown`.
+### Phase 1 (now)
+- ✅ Complete unified resolver + fallback persistence (done).
+- ✅ Ensure edit flow-generated usernames propagate into global identity consumers (done).
 
-### Phase B
-- Add targeted tests for:
-  - identity fallback chain,
-  - live summary metadata enrichment behavior,
-  - dedupe semantics.
+### Phase 2 (next)
+- Add backend profile sync hook for display name/username updates (if endpoint exists):
+  - update backend profile,
+  - on success, persist backend-confirmed values locally,
+  - on failure, keep local optimistic value and enqueue retry.
 
-### Phase C
-- Add structured telemetry counters for live summary source mix:
-  - websocket updates,
-  - local fallback updates,
-  - unknown-user summaries.
+### Phase 3
+- Add tests:
+  - resolver source priority and backfill,
+  - fallback ID generation and persistence,
+  - transition from local fallback ID to backend user ID.
+
+### Phase 4
+- Add observability counters/events:
+  - `identity_source: profile|secure|token_store|generated_local`,
+  - count unknown/fallback generations,
+  - count fallback-to-backend promotions.
 
 ---
 
-## Definition of done for next step
-- One shared user identity resolution implementation is used by both launcher and analytics provider.
-- Unknown user ID warnings are throttled and actionable.
-- No regression in current live spin summary behavior.
+## Definition of done (User ID reliability)
+- No runtime path returns `unknown` once any resolvable source exists.
+- Generated local IDs are stable (persistent) and only used as last resort.
+- Backend user ID, when available, is persisted and preferred everywhere.
+- Live spin summary and analytics events consistently include non-empty `user_id`.
