@@ -9,7 +9,7 @@ import 'package:trivia_tycoon/game/services/quiz_category.dart';
 
 class _FakeQuestionRepository implements QuestionRepository {
   @override
-  Future<List<QuizCategory>> getAvailableCategories() async => const [QuizCategory.science, QuizCategory.math];
+  Future<List<QuizCategory>> getAvailableCategories() async => [QuizCategory.science, QuizCategory.mathematics];
 
   @override
   Future<Map<String, dynamic>> getCategoryStats(QuizCategory category) async {
