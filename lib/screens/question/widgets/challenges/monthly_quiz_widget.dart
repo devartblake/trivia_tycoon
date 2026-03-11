@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../game/services/question_loader_service.dart';
+import '../../../../game/providers/question_providers.dart' as question_data;
 import '../../../../game/models/question_model.dart';
 
 // Provider for monthly quiz preview data
 final monthlyQuizPreviewProvider = FutureProvider<MonthlyQuizPreview>((ref) async {
-  final loader = AdaptedQuestionLoaderService();
+  final repository = ref.watch(question_data.questionRepositoryProvider);
   final now = DateTime.now();
 
   // Monthly themes
@@ -19,11 +19,11 @@ final monthlyQuizPreviewProvider = FutureProvider<MonthlyQuizPreview>((ref) asyn
   final currentTheme = monthThemes[now.month] ?? 'general';
 
   try {
-    // Get a preview of questions for the monthly challenge
-    final questions = await loader.getMixedQuiz(
-      questionCount: 3, // Just for preview
+    final questions = await repository.getMixedQuiz(
+      questionCount: 3,
       categories: [currentTheme],
       difficulties: ['medium', 'hard'],
+      balanceDifficulties: true,
     );
 
     return MonthlyQuizPreview(

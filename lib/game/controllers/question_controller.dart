@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
-import '../../core/services/question/question_service.dart';
+import 'package:trivia_tycoon/game/providers/question_providers.dart';
+import '../../core/repositories/question_repository.dart';
 import '../../core/services/question/quiz_session_service.dart';
 import '../logic/power_up_effect_applier.dart';
 import '../models/question_model.dart';
@@ -9,20 +10,29 @@ import '../state/question_state.dart';
 
 class QuestionController extends StateNotifier<QuestionState> {
   final Ref ref;
-  final QuestionService _questionService;
+  final QuestionRepository _questionRepository;
   Timer? _timer;
 
   QuestionController({required this.ref})
-      : _questionService = QuestionService(
-    apiService: ref.read(apiServiceProvider),
-    quizProgressService: ref.read(quizProgressServiceProvider),
-  ),
+      : _questionRepository = ref.read(questionRepositoryProvider),
         super(QuestionState.initial());
 
   Future<void> loadQuestions(String category) async {
-    final fallback = await _questionService.fetchLocalQuestions();
-    final fetched = await _questionService.fetchQuestionsFromServer(category);
-    final loaded = fetched.isNotEmpty ? fetched : fallback;
+    final loaded = await _questionRepository.getQuestionsForCategory(
+      category: category,
+      amount: 10,
+    );
+
+    if (loaded.isEmpty) {
+      state = state.copyWith(
+        questions: const [],
+        currentIndex: 0,
+        selectedAnswer: null,
+        powerUpUsed: false,
+        timeLeft: 30,
+      );
+      return;
+    }
 
     final powerUp = ref.read(equippedPowerUpProvider);
     final first = PowerUpEffectApplier.apply(powerUp, loaded.first);

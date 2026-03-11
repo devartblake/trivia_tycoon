@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/screens/multiplayer/room_lobby_screen.dart';
 import '../../game/multiplayer/providers/multiplayer_providers.dart';
 import '../../game/multiplayer/services/multiplayer_service.dart';
+import '../../game/services/multiplayer_quiz_service.dart';
 import '../../ui_components/multiplayer/versus/versus_screen.dart';
 import '../question/play_quiz_screen.dart';
 import '../question/question_view_screen.dart';
@@ -49,6 +50,8 @@ class _MultiplayerGameMatchmakingScreenState
 
     // Auto-start search for the specific game mode
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Warm up multiplayer question payloads through repository-backed service path.
+      ref.read(multiplayerQuizServiceProvider).prefetchQuestionsForGameMode(widget.gameMode);
       _startMatchmaking();
     });
   }
@@ -84,7 +87,7 @@ class _MultiplayerGameMatchmakingScreenState
         await _showVersusScreen(result);
 
         // Navigate to multiplayer question screen
-        context.go('/quiz/multiplayer/${widget.gameMode}');
+        context.go('/multiplayer/quiz/${widget.gameMode}');
       }
     } catch (e) {
       if (context.mounted) {
@@ -159,7 +162,7 @@ class _MultiplayerGameMatchmakingScreenState
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              context.go('/play');
+              context.go('/quiz/play');
             },
             child: const Text('Back to Games'),
           ),
@@ -199,7 +202,7 @@ class _MultiplayerGameMatchmakingScreenState
                 onPressed: () {
                   Navigator.pop(context);
                   if (context.mounted) {
-                    context.go('/play');
+                    context.go('/quiz/play');
                   }
                 },
                 child: const Text('Cancel'),
@@ -356,7 +359,7 @@ class _MultiplayerGameMatchmakingScreenState
                 // Cancel button
                 if (_isSearching)
                   OutlinedButton.icon(
-                    onPressed: () => context.go('/play'),
+                    onPressed: () => context.go('/quiz/play'),
                     icon: const Icon(Icons.close),
                     label: const Text('Cancel Search'),
                     style: OutlinedButton.styleFrom(
