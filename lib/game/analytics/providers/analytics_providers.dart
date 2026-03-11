@@ -1,10 +1,13 @@
+import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/manager/service_manager.dart';
 import '../services/analytics_service.dart';
 import '../models/mission_analytics_entry.dart';
 import '../models/engagement_entry.dart';
 import '../models/retention_entry.dart';
+import '../models/spin_live_summary.dart';
 import '../../../core/services/settings/app_settings.dart';
+import '../../../core/services/analytics/spin_analytics_websocket_adapter.dart';
 
 /// Provide the AnalyticsService instance
 final analyticsServiceProvider = Provider<AnalyticsService>((ref) {
@@ -28,6 +31,61 @@ final retentionAnalyticsRawProvider = FutureProvider<List<RetentionEntry>>((ref)
 });
 
 // ============ SPIN & EARN ANALYTICS PROVIDERS ============
+
+
+final spinLiveSummaryProvider = StreamProvider.autoDispose<SpinLiveSummary>((ref) {
+  final controller = StreamController<SpinLiveSummary>.broadcast();
+  final adapter = SpinAnalyticsWebSocketAdapter();
+  StreamSubscription<SpinLiveSummary>? wsSub;
+
+  Future<void> publishLocalSnapshot() async {
+    try {
+      final serviceManager = ServiceManager.instance;
+      final profileService = serviceManager.playerProfileService;
+      final userName = await profileService.getPlayerName();
+      final userId = await profileService.getUserId() ?? 'unknown';
+
+      final todayCount = await AppSettings.getTodaySpinCount();
+      final dailyLimit = await AppSettings.getDailySpinLimit();
+      final weeklyCount = await AppSettings.getWeeklySpinCount();
+      final totalSpins = await AppSettings.getTotalLifetimeSpins();
+      final canSpin = await AppSettings.canSpinToday();
+      final spinsRemaining = await AppSettings.getRemainingSpinsToday();
+      final rewardPoints = await AppSettings.getSpinRewardPoints();
+
+      controller.add(
+        SpinLiveSummary(
+          todayCount: todayCount,
+          dailyLimit: dailyLimit,
+          weeklyCount: weeklyCount,
+          totalSpins: totalSpins,
+          canSpin: canSpin,
+          spinsRemaining: spinsRemaining,
+          rewardPoints: rewardPoints,
+          userName: userName,
+          userId: userId,
+          snapshotAt: DateTime.now(),
+          source: 'local_cache',
+        ),
+      );
+
+      adapter.initialize(userName: userName, userId: userId);
+      wsSub = adapter.summaryStream.listen(controller.add);
+    } catch (_) {
+      // Keep stream alive with local defaults if anything fails.
+    }
+  }
+
+  ref.onDispose(() {
+    wsSub?.cancel();
+    adapter.dispose();
+    controller.close();
+  });
+
+  publishLocalSnapshot();
+
+  return controller.stream;
+});
 
 /// Spin statistics provider
 final spinStatisticsProvider = FutureProvider<Map<String, dynamic>>((ref) async {
