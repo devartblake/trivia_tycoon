@@ -51,7 +51,9 @@ final spinLiveSummaryProvider = StreamProvider.autoDispose<SpinLiveSummary>((ref
     final serviceManager = ServiceManager.instance;
     final profileService = serviceManager.playerProfileService;
     final userName = await profileService.getPlayerName();
-    final userId = await profileService.getUserId() ?? 'unknown';
+    final profileUserId = await profileService.getUserId();
+    final secureUserId = await serviceManager.secureStorage.getSecret('user_id');
+    final userId = ((profileUserId?.isNotEmpty ?? false) ? profileUserId : secureUserId) ?? 'unknown';
 
     final todayCount = await AppSettings.getTodaySpinCount();
     final dailyLimit = await AppSettings.getDailySpinLimit();

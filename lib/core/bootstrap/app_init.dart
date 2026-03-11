@@ -443,6 +443,11 @@ class AppInit {
       final profile = rawProfile != null ? Map<String, dynamic>.from(rawProfile as Map) : {};
 
       if (profile.isNotEmpty) {
+        final rawUserId = profile['id'] ?? profile['user_id'];
+        final parsedUserId = rawUserId?.toString();
+        if (parsedUserId != null && parsedUserId.isNotEmpty) {
+          await serviceManager.playerProfileService.saveUserId(parsedUserId);
+        }
         debugPrint('[AppInit] Profile loaded for: ${profile['name']}');
       }
     } catch (e) {

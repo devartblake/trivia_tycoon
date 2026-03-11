@@ -121,6 +121,7 @@ class LoginManager {
     // Save user ID if available
     if (session.userId != null && session.userId!.isNotEmpty) {
       await secureStorage.setSecret('user_id', session.userId!);
+      await profileService.saveUserId(session.userId!);
     }
 
     // Extract and store user role from session metadata
