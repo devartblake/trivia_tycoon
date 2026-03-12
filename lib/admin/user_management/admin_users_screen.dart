@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../game/models/admin_user_model.dart';
 import '../../game/providers/riverpod_providers.dart';
-import '../../core/services/api_service.dart';
 import '../../screens/widgets/custom_alert_dialog.dart';
 import '../../ui_components/cards/slide_to_expand_card.dart';
 
@@ -23,7 +22,7 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
   String _sortBy = 'lastActive'; // lastActive, username, points
   List<AdminUserModel> _users = [];
   bool _isLoadingUsers = false;
-  String? _usersNotice;
+  String? _usersError;
 
   @override
   void initState() {
@@ -34,7 +33,7 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
   Future<void> _loadUsersFromBackend() async {
     setState(() {
       _isLoadingUsers = true;
-      _usersNotice = null;
+      _usersError = null;
     });
 
     try {
@@ -50,11 +49,8 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
       } else {
         _users = [];
       }
-    } on ApiRequestException catch (e) {
-      _usersNotice = _buildFallbackNotice(e);
-      _users = _getMockUsers();
-    } catch (_) {
-      _usersNotice = 'Showing local sample users while backend is unavailable.';
+    } catch (e) {
+      _usersError = 'Using local sample users (backend unavailable): $e';
       _users = _getMockUsers();
     } finally {
       if (mounted) {
@@ -63,19 +59,6 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
         });
       }
     }
-  }
-
-
-  String _buildFallbackNotice(ApiRequestException e) {
-    if (e.statusCode == 404 && e.path == '/admin/users') {
-      return 'Admin users endpoint is not available in this environment. Showing local sample users.';
-    }
-
-    if (e.statusCode == 401 || e.statusCode == 403) {
-      return 'Unable to load admin users with current permissions. Showing local sample users.';
-    }
-
-    return 'Showing local sample users while backend is unavailable.';
   }
 
   @override
@@ -95,13 +78,13 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
           _buildHeader(),
           if (_isLoadingUsers)
             const LinearProgressIndicator(minHeight: 2),
-          if (_usersNotice != null)
+          if (_usersError != null)
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               color: const Color(0xFFFFF7ED),
               child: Text(
-                _usersNotice!,
+                _usersError!,
                 style: const TextStyle(color: Color(0xFF9A3412), fontSize: 12),
               ),
             ),

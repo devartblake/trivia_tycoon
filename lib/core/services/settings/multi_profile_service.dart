@@ -180,6 +180,47 @@ class MultiProfileService {
     }
   }
 
+  String _generateUsernameFromDisplayName(String displayName) {
+    final normalized = displayName
+        .toLowerCase()
+        .trim()
+        .replaceAll(RegExp(r'\s+'), '_')
+        .replaceAll(RegExp(r'[^a-z0-9_]'), '');
+
+    if (normalized.isEmpty) return 'player';
+    return normalized;
+  }
+
+  Future<void> _syncActiveProfileToLegacySettings(ProfileData profile) async {
+    try {
+      final legacyService = PlayerProfileService();
+      final existingUsername = (profile.preferences['username'] as String?)?.trim();
+      final generatedUsername = _generateUsernameFromDisplayName(profile.name);
+
+      await legacyService.savePlayerName(profile.name);
+      await legacyService.saveUsername(
+        (existingUsername != null && existingUsername.isNotEmpty)
+            ? existingUsername.toLowerCase()
+            : generatedUsername,
+      );
+
+      await legacyService.saveProfileBatch({
+        'player_name': profile.name,
+        'username': (existingUsername != null && existingUsername.isNotEmpty)
+            ? existingUsername.toLowerCase()
+            : generatedUsername,
+        'country': profile.country,
+        'age_group': profile.ageGroup,
+        'user_role': profile.userRole,
+        'user_roles': profile.userRoles,
+        'is_premium': profile.isPremium,
+        'avatar': profile.avatar,
+      });
+    } catch (e) {
+      debugPrint('[MultiProfile] Failed syncing active profile to legacy settings: $e');
+    }
+  }
+
   /// Gets the profiles box, opening it if necessary
   Future<Box> _getBox() async {
     if (Hive.isBoxOpen(_boxName)) {
