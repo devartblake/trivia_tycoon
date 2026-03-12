@@ -42,6 +42,34 @@ class UserIdentityResolver {
           // Best effort only: identity resolution should not fail due to telemetry.
         }
       },
+      onResolutionSource: (source, userId) async {
+        try {
+          await serviceManager.analyticsService.trackEvent(
+            'identity_user_id_resolved',
+            {
+              'user_id_source': source,
+              'user_id': userId,
+              'timestamp': DateTime.now().toIso8601String(),
+            },
+          );
+        } catch (_) {
+          // Best effort only.
+        }
+      },
+      onGeneratedFallback: (generatedUserId) async {
+        try {
+          await serviceManager.analyticsService.trackEvent(
+            'identity_user_id_generated_local',
+            {
+              'user_id': generatedUserId,
+              'timestamp': DateTime.now().toIso8601String(),
+              'source': 'user_identity_resolver',
+            },
+          );
+        } catch (_) {
+          // Best effort only.
+        }
+      },
     );
   }
 
@@ -54,6 +82,8 @@ class UserIdentityResolver {
     required String? Function() readAuthTokenStoreUserId,
     required String Function() seedNowIso,
     Future<void> Function(String previousId, String canonicalId)? onCanonicalPromotion,
+    Future<void> Function(String source, String userId)? onResolutionSource,
+    Future<void> Function(String generatedUserId)? onGeneratedFallback,
   }) async {
     // Load known sources
     final profileUserId = await getProfileUserId();
@@ -78,6 +108,10 @@ class UserIdentityResolver {
 
       await setSecureSecret('user_id', canonical);
       await saveProfileUserId(canonical);
+      await onResolutionSource?.call(
+        _canonicalSource(profileUserId, secureUserId, tokenStoreUserId, canonical),
+        canonical,
+      );
       return canonical;
     }
 
@@ -88,6 +122,10 @@ class UserIdentityResolver {
     if (existingLocal != null) {
       await setSecureSecret('user_id', existingLocal);
       await saveProfileUserId(existingLocal);
+      await onResolutionSource?.call(
+        _existingLocalSource(profileUserId, secureUserId),
+        existingLocal,
+      );
       return existingLocal;
     }
 
@@ -95,6 +133,7 @@ class UserIdentityResolver {
     final existingGenerated = await getSecureSecret(_generatedLocalUserIdKey);
     if (existingGenerated != null && existingGenerated.isNotEmpty) {
       await saveProfileUserId(existingGenerated);
+      await onResolutionSource?.call('generated_local_existing', existingGenerated);
       return existingGenerated;
     }
 
@@ -106,6 +145,8 @@ class UserIdentityResolver {
 
     await setSecureSecret(_generatedLocalUserIdKey, generatedLocalUserId);
     await saveProfileUserId(generatedLocalUserId);
+    await onGeneratedFallback?.call(generatedLocalUserId);
+    await onResolutionSource?.call('generated_local_new', generatedLocalUserId);
 
     if (!_hasLoggedUnknownUserWarning) {
       _hasLoggedUnknownUserWarning = true;
@@ -135,6 +176,34 @@ class UserIdentityResolver {
   }
 
   static bool _isGeneratedLocalId(String id) => id.startsWith('local_');
+
+  static String _canonicalSource(
+    String? profileUserId,
+    String? secureUserId,
+    String? tokenStoreUserId,
+    String canonical,
+  ) {
+    if (profileUserId == canonical && !_isGeneratedLocalId(profileUserId)) {
+      return 'profile';
+    }
+    if (secureUserId == canonical && !_isGeneratedLocalId(secureUserId)) {
+      return 'secure';
+    }
+    if (tokenStoreUserId == canonical && !_isGeneratedLocalId(tokenStoreUserId)) {
+      return 'token_store';
+    }
+    return 'canonical_unknown';
+  }
+
+  static String _existingLocalSource(String? profileUserId, String? secureUserId) {
+    if (profileUserId != null && profileUserId.isNotEmpty) {
+      return 'profile_existing';
+    }
+    if (secureUserId != null && secureUserId.isNotEmpty) {
+      return 'secure_existing';
+    }
+    return 'existing_unknown';
+  }
 
   static Future<String> resolveUserName(ServiceManager serviceManager) async {
     final username = await serviceManager.playerProfileService.getUsername();

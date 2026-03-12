@@ -15,6 +15,8 @@ void main() {
     Future<String> resolve({
       String? tokenStoreUserId,
       Future<void> Function(String previousId, String canonicalId)? onCanonicalPromotion,
+      Future<void> Function(String source, String userId)? onResolutionSource,
+      Future<void> Function(String generatedUserId)? onGeneratedFallback,
     }) {
       return UserIdentityResolver.resolveUserIdFromSources(
         getProfileUserId: () async => profileUserId,
@@ -28,6 +30,8 @@ void main() {
         readAuthTokenStoreUserId: () => tokenStoreUserId,
         seedNowIso: () => '2026-01-01T00:00:00.000Z',
         onCanonicalPromotion: onCanonicalPromotion,
+        onResolutionSource: onResolutionSource,
+        onGeneratedFallback: onGeneratedFallback,
       );
     }
 
@@ -99,11 +103,37 @@ void main() {
     test('generates deterministic local fallback from email seed', () async {
       secure['user_email'] = 'PlayerOne@Example.com';
 
-      final resolved = await resolve();
+      String? source;
+      String? generated;
+
+      final resolved = await resolve(
+        onResolutionSource: (resolvedSource, _) async {
+          source = resolvedSource;
+        },
+        onGeneratedFallback: (generatedUserId) async {
+          generated = generatedUserId;
+        },
+      );
 
       expect(resolved.startsWith('local_'), isTrue);
       expect(secure['generated_local_user_id'], resolved);
       expect(profileUserId, resolved);
+      expect(source, 'generated_local_new');
+      expect(generated, resolved);
+    });
+
+    test('emits canonical source telemetry for secure source', () async {
+      secure['user_id'] = 'backend-secure';
+      String? source;
+
+      final resolved = await resolve(
+        onResolutionSource: (resolvedSource, _) async {
+          source = resolvedSource;
+        },
+      );
+
+      expect(resolved, 'backend-secure');
+      expect(source, 'secure');
     });
   });
 
