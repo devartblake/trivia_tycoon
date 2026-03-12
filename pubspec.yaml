@@ -161,7 +161,7 @@ flutter:
    - assets/images/store/themes/
    - assets/images/welcome_images/
    - assets/models/
-   - assets/packages/
+   - assets/avatarPackages/
    - assets/questions/
    - assets/questions/architecture/
    - assets/questions/art_history/
@@ -221,61 +221,61 @@ flutter:
   fonts:
     - family: OpenSans
       fonts:
-        - asset: assets/fonts/Open-Sans/OpenSans-Regular.ttf
-        - asset: assets/fonts/Open-Sans/OpenSans-Italic.ttf
+        - asset: fonts/Open-Sans/OpenSans-Regular.ttf
+        - asset: fonts/Open-Sans/OpenSans-Italic.ttf
           style: italic
-        - asset: assets/fonts/Open-Sans/OpenSans-Light.ttf
+        - asset: fonts/Open-Sans/OpenSans-Light.ttf
           weight: 300
-        - asset: assets/fonts/Open-Sans/OpenSans-LightItalic.ttf
+        - asset: fonts/Open-Sans/OpenSans-LightItalic.ttf
           style: italic
           weight: 300
-        - asset: assets/fonts/Open-Sans/OpenSans-Bold.ttf
+        - asset: fonts/Open-Sans/OpenSans-Bold.ttf
           weight: 700
-        - asset: assets/fonts/Open-Sans/OpenSans-BoldItalic.ttf
+        - asset: fonts/Open-Sans/OpenSans-BoldItalic.ttf
           weight: 700
           style: italic
-        - asset: assets/fonts/Open-Sans/OpenSans-Semibold.ttf
+        - asset: fonts/Open-Sans/OpenSans-Semibold.ttf
           weight: 600
-        - asset: assets/fonts/Open-Sans/OpenSans-SemiboldItalic.ttf
+        - asset: fonts/Open-Sans/OpenSans-SemiboldItalic.ttf
           weight: 600
           style: italic
-        - asset: assets/fonts/Open-Sans/OpenSans-ExtraBold.ttf
+        - asset: fonts/Open-Sans/OpenSans-ExtraBold.ttf
           weight: 800
-        - asset: assets/fonts/Open-Sans/OpenSans-ExtraBoldItalic.ttf
+        - asset: fonts/Open-Sans/OpenSans-ExtraBoldItalic.ttf
           weight: 800
           style: italic
     - family: OpenSansEmoji
       fonts:
-        - asset: assets/fonts/Open-Sans/OpenSansEmoji.ttf
+        - asset: fonts/Open-Sans/OpenSansEmoji.ttf
     - family: Faustina
       fonts:
-        - asset: assets/fonts/Faustina/Faustina-Italic.ttf
+        - asset: fonts/Faustina/Faustina-Italic.ttf
           style: italic
-        - asset: assets/fonts/Faustina/Faustina-Light.ttf
+        - asset: fonts/Faustina/Faustina-Light.ttf
           weight: 300
-        - asset: assets/fonts/Faustina/Faustina-LightItalic.ttf
+        - asset: fonts/Faustina/Faustina-LightItalic.ttf
           style: italic
           weight: 300
-        - asset: assets/fonts/Faustina/Faustina-Regular.ttf
+        - asset: fonts/Faustina/Faustina-Regular.ttf
           weight: 400
-        - asset: assets/fonts/Faustina/Faustina-Medium.ttf
+        - asset: fonts/Faustina/Faustina-Medium.ttf
           weight: 500
-        - asset: assets/fonts/Faustina/Faustina-MediumItalic.ttf
+        - asset: fonts/Faustina/Faustina-MediumItalic.ttf
           style: italic
           weight: 500
-        - asset: assets/fonts/Faustina/Faustina-SemiBold.ttf
+        - asset: fonts/Faustina/Faustina-SemiBold.ttf
           weight: 600
-        - asset: assets/fonts/Faustina/Faustina-SemiBoldItalic.ttf
+        - asset: fonts/Faustina/Faustina-SemiBoldItalic.ttf
           style: italic
           weight: 600
-        - asset: assets/fonts/Faustina/Faustina-Bold.ttf
+        - asset: fonts/Faustina/Faustina-Bold.ttf
           weight: 700
-        - asset: assets/fonts/Faustina/Faustina-BoldItalic.ttf
+        - asset: fonts/Faustina/Faustina-BoldItalic.ttf
           style: italic
           weight: 700
-        - asset: assets/fonts/Faustina/Faustina-ExtraBold.ttf
+        - asset: fonts/Faustina/Faustina-ExtraBold.ttf
           weight: 800
-        - asset: assets/fonts/Faustina/Faustina-Bold.ttf
+        - asset: fonts/Faustina/Faustina-Bold.ttf
           style: italic
           weight: 800
   # For details regarding fonts from package dependencies,

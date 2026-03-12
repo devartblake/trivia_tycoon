@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 class VersusScreen extends StatefulWidget {
@@ -30,6 +31,8 @@ class VersusScreen extends StatefulWidget {
 
 class _VersusScreenState extends State<VersusScreen>
     with TickerProviderStateMixin {
+  static const int _initialCountdown = 5;
+
   late AnimationController _slideController;
   late AnimationController _vsController;
   late Animation<Offset> _player1SlideAnimation;
@@ -37,17 +40,21 @@ class _VersusScreenState extends State<VersusScreen>
   late Animation<double> _vsScaleAnimation;
   late Animation<double> _vsOpacityAnimation;
 
+  int _countdown = _initialCountdown;
+  Timer? _countdownTimer;
+  bool _isPlayer1Ready = false;
+  bool _isPlayer2Ready = false;
+  bool _matchStarting = false;
+
   @override
   void initState() {
     super.initState();
 
-    // Slide animations for players
     _slideController = AnimationController(
       duration: const Duration(milliseconds: 1200),
       vsync: this,
     );
 
-    // VS animation
     _vsController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
@@ -85,15 +92,67 @@ class _VersusScreenState extends State<VersusScreen>
       curve: Curves.easeIn,
     ));
 
-    // Start animations
     _slideController.forward();
     Future.delayed(const Duration(milliseconds: 600), () {
+      if (!mounted) return;
       _vsController.forward();
+      _startCountdown();
+    });
+  }
+
+  void _startCountdown() {
+    _countdownTimer?.cancel();
+    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+
+      if (_countdown <= 1) {
+        timer.cancel();
+        _startMatch();
+        return;
+      }
+
+      setState(() {
+        _countdown -= 1;
+      });
+    });
+  }
+
+  void _toggleReady(bool isPlayer1) {
+    if (_matchStarting) return;
+
+    setState(() {
+      if (isPlayer1) {
+        _isPlayer1Ready = !_isPlayer1Ready;
+      } else {
+        _isPlayer2Ready = !_isPlayer2Ready;
+      }
+
+      if (_isPlayer1Ready && _isPlayer2Ready && _countdown > 1) {
+        _countdown = 1;
+      }
+    });
+  }
+
+  void _startMatch() {
+    if (_matchStarting || !mounted) return;
+
+    setState(() {
+      _matchStarting = true;
+    });
+
+    Future.delayed(const Duration(milliseconds: 450), () {
+      if (mounted && Navigator.of(context).canPop()) {
+        Navigator.of(context).pop(true);
+      }
     });
   }
 
   @override
   void dispose() {
+    _countdownTimer?.cancel();
     _slideController.dispose();
     _vsController.dispose();
     super.dispose();
@@ -104,17 +163,11 @@ class _VersusScreenState extends State<VersusScreen>
     return Scaffold(
       body: Stack(
         children: [
-          // Background
           _buildBackground(),
-
-          // Content
           SafeArea(
             child: Column(
               children: [
-                // Top padding
                 const SizedBox(height: 60),
-
-                // Player 1 container
                 SlideTransition(
                   position: _player1SlideAnimation,
                   child: PlayerContainer(
@@ -123,10 +176,10 @@ class _VersusScreenState extends State<VersusScreen>
                     score: widget.player1Score,
                     isLeftSide: true,
                     primaryColor: widget.player1Color,
+                    isReady: _isPlayer1Ready,
+                    onReadyPressed: () => _toggleReady(true),
                   ),
                 ),
-
-                // VS Section
                 Expanded(
                   child: Center(
                     child: AnimatedBuilder(
@@ -152,14 +205,30 @@ class _VersusScreenState extends State<VersusScreen>
                                   ),
                                 ],
                               ),
-                              child: const Text(
-                                'VS',
-                                style: TextStyle(
-                                  fontSize: 48,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
-                                  letterSpacing: 4,
-                                ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Text(
+                                    'VS',
+                                    style: TextStyle(
+                                      fontSize: 48,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87,
+                                      letterSpacing: 4,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    _matchStarting
+                                        ? 'Starting…'
+                                        : 'Match starts in $_countdown',
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black54,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -168,8 +237,6 @@ class _VersusScreenState extends State<VersusScreen>
                     ),
                   ),
                 ),
-
-                // Player 2 container
                 SlideTransition(
                   position: _player2SlideAnimation,
                   child: PlayerContainer(
@@ -178,10 +245,10 @@ class _VersusScreenState extends State<VersusScreen>
                     score: widget.player2Score,
                     isLeftSide: false,
                     primaryColor: widget.player2Color,
+                    isReady: _isPlayer2Ready,
+                    onReadyPressed: () => _toggleReady(false),
                   ),
                 ),
-
-                // Bottom padding
                 const SizedBox(height: 60),
               ],
             ),
@@ -194,10 +261,8 @@ class _VersusScreenState extends State<VersusScreen>
   Widget _buildBackground() {
     return Stack(
       children: [
-        // Split background with gradients
         Row(
           children: [
-            // Player 1 side
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
@@ -213,7 +278,6 @@ class _VersusScreenState extends State<VersusScreen>
                 ),
               ),
             ),
-            // Player 2 side
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
@@ -231,8 +295,6 @@ class _VersusScreenState extends State<VersusScreen>
             ),
           ],
         ),
-
-        // Background image overlay if provided
         if (widget.backgroundImage != null)
           Positioned.fill(
             child: Image.asset(
@@ -240,8 +302,6 @@ class _VersusScreenState extends State<VersusScreen>
               fit: BoxFit.cover,
             ),
           ),
-
-        // Diagonal split effect
         Positioned.fill(
           child: CustomPaint(
             painter: DiagonalSplitPainter(
@@ -250,8 +310,6 @@ class _VersusScreenState extends State<VersusScreen>
             ),
           ),
         ),
-
-        // Animated particles
         Positioned.fill(
           child: AnimatedBuilder(
             animation: _slideController,
@@ -277,6 +335,8 @@ class PlayerContainer extends StatelessWidget {
   final int score;
   final bool isLeftSide;
   final Color primaryColor;
+  final bool isReady;
+  final VoidCallback onReadyPressed;
 
   const PlayerContainer({
     super.key,
@@ -285,6 +345,8 @@ class PlayerContainer extends StatelessWidget {
     required this.score,
     required this.isLeftSide,
     required this.primaryColor,
+    required this.isReady,
+    required this.onReadyPressed,
   });
 
   @override
@@ -295,18 +357,43 @@ class PlayerContainer extends StatelessWidget {
         right: isLeftSide ? 60 : 20,
         bottom: 20,
       ),
-      child: Row(
-        mainAxisAlignment: isLeftSide ? MainAxisAlignment.start : MainAxisAlignment.end,
+      child: Column(
+        crossAxisAlignment:
+            isLeftSide ? CrossAxisAlignment.start : CrossAxisAlignment.end,
         children: [
-          if (isLeftSide) ...[
-            _buildPlayerInfo(),
-            const SizedBox(width: 16),
-            _buildAvatar(),
-          ] else ...[
-            _buildAvatar(),
-            const SizedBox(width: 16),
-            _buildPlayerInfo(),
-          ],
+          Row(
+            mainAxisAlignment:
+                isLeftSide ? MainAxisAlignment.start : MainAxisAlignment.end,
+            children: [
+              if (isLeftSide) ...[
+                _buildPlayerInfo(),
+                const SizedBox(width: 16),
+                _buildAvatar(),
+              ] else ...[
+                _buildAvatar(),
+                const SizedBox(width: 16),
+                _buildPlayerInfo(),
+              ],
+            ],
+          ),
+          const SizedBox(height: 8),
+          Align(
+            alignment: isLeftSide ? Alignment.centerLeft : Alignment.centerRight,
+            child: ElevatedButton.icon(
+              onPressed: onReadyPressed,
+              icon: Icon(isReady ? Icons.check_circle : Icons.play_arrow_rounded),
+              label: Text(isReady ? 'Ready' : 'Ready Up'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: isReady
+                    ? Colors.green.withValues(alpha: 0.92)
+                    : Colors.white.withValues(alpha: 0.9),
+                foregroundColor: isReady ? Colors.white : primaryColor,
+                elevation: 0,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -345,7 +432,8 @@ class PlayerContainer extends StatelessWidget {
             const SizedBox(width: 12),
           ],
           Column(
-            crossAxisAlignment: isLeftSide ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+            crossAxisAlignment:
+                isLeftSide ? CrossAxisAlignment.start : CrossAxisAlignment.end,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
@@ -434,12 +522,12 @@ class PlayerContainer extends StatelessWidget {
       child: ClipOval(
         child: playerAvatar.startsWith('http')
             ? Image.network(
-          playerAvatar,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return _buildDefaultAvatar();
-          },
-        )
+                playerAvatar,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return _buildDefaultAvatar();
+                },
+              )
             : _buildDefaultAvatar(),
       ),
     );
@@ -448,7 +536,7 @@ class PlayerContainer extends StatelessWidget {
   Widget _buildDefaultAvatar() {
     return Container(
       color: primaryColor.withValues(alpha: 0.3),
-      child: Icon(
+      child: const Icon(
         Icons.person,
         size: 35,
         color: Colors.white,
@@ -470,7 +558,6 @@ class DiagonalSplitPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint();
 
-    // Create diagonal split path
     final path = Path();
     path.moveTo(size.width * 0.4, 0);
     path.lineTo(size.width * 0.6, 0);
@@ -478,7 +565,6 @@ class DiagonalSplitPainter extends CustomPainter {
     path.lineTo(size.width * 0.4, size.height);
     path.close();
 
-    // Apply gradient
     paint.shader = LinearGradient(
       colors: [
         leftColor,
@@ -510,7 +596,6 @@ class ParticlesPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..style = PaintingStyle.fill;
 
-    // Draw animated particles
     for (int i = 0; i < 20; i++) {
       final isLeft = i % 2 == 0;
       final baseX = isLeft ? size.width * 0.25 : size.width * 0.75;

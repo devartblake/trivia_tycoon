@@ -1,135 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:hive/hive.dart';
 
-class OnboardingController extends ChangeNotifier {
-  final PageController pageController = PageController();
-  final BuildContext context;
+/// Modern onboarding controller for step-by-step flow
+class ModernOnboardingController extends ChangeNotifier {
+  int _currentStep = 0;
+  final int totalSteps;
+  final Map<String, dynamic> userData = {};
 
-  int currentIndex = 0;
-  bool hasCompletedOnboarding = false;
-  late Box settingsBox;
+  ModernOnboardingController({required this.totalSteps});
 
-  // Form fields
-  String name = '';
-  String username = '';
-  String country = '';
-  String ageGroup = '';
-  String selectedAvatar = '';
+  int get currentStep => _currentStep;
+  double get progress => (_currentStep + 1) / totalSteps;
+  bool get isFirstStep => _currentStep == 0;
+  bool get isLastStep => _currentStep == totalSteps - 1;
 
-  OnboardingController(this.context) {
-    _init();
-  }
-
-  /// Initialize Hive storage and check onboarding state
-  Future<void> _init() async {
-    settingsBox = await Hive.openBox('settings');
-    hasCompletedOnboarding = settingsBox.get('onboarding_seen', defaultValue: false);
-
-    if (hasCompletedOnboarding) {
-      _navigateToMainMenu();
-    }
-  }
-
-  Future<bool> shouldEnableAvatar() async {
-    final configBox = await Hive.openBox('config');
-    return configBox.get('enableAvatars', defaultValue: true);
-  }
-
-  // Update individual user fields
-  void updateField(String key, String value) {
-    switch (key) {
-      case 'name':
-        name = value;
-        break;
-      case 'username':
-        username = value;
-        break;
-      case 'country':
-        country = value;
-        break;
-      case 'ageGroup':
-        ageGroup = value;
-        break;
-      case 'avatar':
-        selectedAvatar = value;
-        break;
-    }
-    notifyListeners();
-  }
-
-  Map<String, String> getCollectedData() {
-    return {
-      'name': name,
-      'username': username,
-      'country': country,
-      'ageGroup': ageGroup,
-      'avatar': selectedAvatar,
-    };
-  }
-
-  bool validateStep(int step) {
-    switch (step) {
-      case 1:
-        return username.isNotEmpty && ageGroup.isNotEmpty && country.isNotEmpty;
-      case 2:
-        return selectedAvatar.isNotEmpty;
-      default:
-        return true;
-    }
-  }
-
-  void completeOnboarding() {
-    settingsBox.put('onboarding_seen', true);
-    hasCompletedOnboarding = true;
-    notifyListeners();
-    _navigateToMainMenu();
-  }
-
-  void nextPage() {
-    if (currentIndex < 3) {
-      currentIndex++;
-      pageController.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
-      notifyListeners();
-    } else {
-      completeOnboarding();
-    }
-  }
-
-  void previousPage() {
-    if (currentIndex > 0) {
-      currentIndex--;
-      pageController.previousPage(duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
+  void nextStep() {
+    if (_currentStep < totalSteps - 1) {
+      _currentStep++;
       notifyListeners();
     }
   }
 
-  void onPageChanged(int index) {
-    currentIndex = index;
-    notifyListeners();
-  }
-
-  void skipOnboarding() {
-    settingsBox.put('onboarding_seen', true);
-    hasCompletedOnboarding = true;
-    notifyListeners();
-    _navigateToMainMenu();
-  }
-
-  void _navigateToMainMenu() {
-    context.go('/');
-  }
-
-  Color getBackgroundColor() {
-    switch (currentIndex) {
-      case 0:
-        return Colors.redAccent;
-      case 1:
-        return Colors.blueAccent;
-      case 2:
-        return Colors.greenAccent;
-      default:
-        return Colors.white;
+  void previousStep() {
+    if (_currentStep > 0) {
+      _currentStep--;
+      notifyListeners();
     }
+  }
+
+  void goToStep(int step) {
+    if (step >= 0 && step < totalSteps) {
+      _currentStep = step;
+      notifyListeners();
+    }
+  }
+
+  void updateUserData(Map<String, dynamic> data) {
+    userData.addAll(data);
+    notifyListeners();
+  }
+
+  void reset() {
+    _currentStep = 0;
+    userData.clear();
+    notifyListeners();
   }
 }

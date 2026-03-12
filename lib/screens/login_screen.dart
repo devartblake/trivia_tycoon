@@ -13,7 +13,7 @@ import '../core/constants/image_strings.dart';
 import '../game/providers/auth_providers.dart';
 import '../game/providers/onboarding_providers.dart';
 import '../game/providers/multi_profile_providers.dart';
-import 'onboarding/widget/constants.dart';
+import 'onboarding/steps/constants.dart';
 
 /// User data model for mock authentication
 class MockUser {
@@ -183,8 +183,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
         if (activeProfile != null) {
           ref.read(activeProfileStateProvider.notifier).state = activeProfile;
-          ref.read(hasSeenIntroProvider.notifier).state = true;
-          ref.read(hasCompletedProfileProvider.notifier).state = true;
+          await ref.read(onboardingProgressProvider.notifier).updateProgress(
+            hasSeenIntro: true,
+            hasCompletedProfile: true,
+          );
         }
       } else {
         // Migrate existing profile data if present
@@ -206,13 +208,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           if (migratedProfile != null) {
             await multiProfileService.setActiveProfile(migratedProfile.id);
             ref.read(activeProfileStateProvider.notifier).state = migratedProfile;
-            ref.read(hasSeenIntroProvider.notifier).state = true;
-            ref.read(hasCompletedProfileProvider.notifier).state = true;
+            await ref.read(onboardingProgressProvider.notifier).updateProgress(
+              hasSeenIntro: true,
+              hasCompletedProfile: true,
+            );
           }
         } else {
           // New user - needs onboarding
-          ref.read(hasSeenIntroProvider.notifier).state = false;
-          ref.read(hasCompletedProfileProvider.notifier).state = false;
+          await ref.read(onboardingProgressProvider.notifier).reset();
 
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(

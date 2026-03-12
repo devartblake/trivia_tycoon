@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "generatedAtUtc": "2026-01-13T12:43:25Z",
+  "root": "fonts",
+  "fileCount": 25,
+  "folders": [
+    "Faustina",
+    "Open-Sans"
+  ],
+  "files": [
+    {
+      "path": "Faustina/Faustina-Bold.ttf",
+      "size": 74996,
+      "sha256": "3d748d65aebfb21c792a0dd890b98c1338dd53788663363bb00484d8b72cc1f9",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "Faustina/Faustina-BoldItalic.ttf",
+      "size": 76856,
+      "sha256": "55236183d8cdff95133d340dc467de259286d9f1bc50d789be99393be2aaae86",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "Faustina/Faustina-ExtraBold.ttf",
+      "size": 75148,
+      "sha256": "75fc08e61e6b5b81002e4bc5799ff6b994b9dafe6203d25f400a56c4217250b2",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "Faustina/Faustina-ExtraBoldItalic.ttf",
+      "size": 76964,
+      "sha256": "c5bf65fc08bfd7eac5fff0135b4026665ca9134c2430bb327e9017b41d192fc3",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "Faustina/Faustina-Italic.ttf",
+      "size": 76852,
+      "sha256": "53aa999ca9f3e5b39dcd06af076cbe7c28205935d2872a01efb558c06ddb592e",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "Faustina/Faustina-Light.ttf",
+      "size": 74956,
+      "sha256": "87dc7d2a1e7757546791cd1fcb13ec06ebcee29444ba0d51ee7e33679693122a",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "Faustina/Faustina-LightItalic.ttf",
+      "size": 77004,
+      "sha256": "3cd724d982ff060adffaff88afbcddc8c1ae2c45d05d718fcbd6e2349d3268be",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "Faustina/Faustina-Medium.ttf",
+      "size": 75208,
+      "sha256": "c6feb786b39df501df81683c28ce6f2cfb0091191693cf4499a85a65124ea7f7",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "Faustina/Faustina-MediumItalic.ttf",
+      "size": 77020,
+      "sha256": "d94cb574564a423b330c21ca1241ea76f17819ba43e15a753029c061cb640b08",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "Faustina/Faustina-Regular.ttf",
+      "size": 75124,
+      "sha256": "8464904d830401b51195b445ed1541eb3c6462221df6f91a51211887dfccd501",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "Faustina/Faustina-SemiBold.ttf",
+      "size": 75140,
+      "sha256": "17ba29199b67e73fb8961b59ae9f94767ed4fc498cc375ab68460a27aa5203c6",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "Faustina/Faustina-SemiBoldItalic.ttf",
+      "size": 76980,
+      "sha256": "c99324819fc52f3cd648532788f471911f1f850b9c0c84111a49979b29dcfddc",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "Faustina/OFL.txt",
+      "size": 4484,
+      "sha256": "f45b32677a212298b69f63e5d9b9d7c433eb8da8c3e88cad184f355512455e2a",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "Faustina/README.txt",
+      "size": 2516,
+      "sha256": "dd675157e062ee926eefdf6d31192c984bc9270954bd81123d2714f40a06dcf7",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "Open-Sans/OpenSans-Bold.ttf",
+      "size": 224592,
+      "sha256": "5894a3649b213cf5b2d673b6e7a871815fd1d120fa68a463592f27db14eae323",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "Open-Sans/OpenSans-BoldItalic.ttf",
+      "size": 213292,
+      "sha256": "3ca680f2444cc9e50447d057c006464566e92f2e77b0b6e26491e5bd757ed4e7",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "Open-Sans/OpenSans-ExtraBold.ttf",
+      "size": 222584,
+      "sha256": "0fcbdb5cbeea00ae532352c7c94a7d288ebc911ba85f4d595012032dcab64ba8",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "Open-Sans/OpenSans-ExtraBoldItalic.ttf",
+      "size": 213420,
+      "sha256": "0eeca981116621a96a484ecc58fbfcdc78fda0065fd21fd13707b63bf8a9912c",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "Open-Sans/OpenSans-Italic.ttf",
+      "size": 212896,
+      "sha256": "a54dc8488f8193bf30c3820cf6f261f911f9d328d699e1a1b8042641554cec70",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "Open-Sans/OpenSans-Light.ttf",
+      "size": 222412,
+      "sha256": "cf5f5184c1441a1660aa52526328e9d5c2793e77b6d8d3a3ad654bdb07ab8424",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "Open-Sans/OpenSans-LightItalic.ttf",
+      "size": 213128,
+      "sha256": "4482d18b30c4534b5481d594b7c0bc7a9913a7c4c261985e452010a89ab755fc",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "Open-Sans/OpenSans-Regular.ttf",
+      "size": 217360,
+      "sha256": "e64e508b2aa2880f907e470c4550980ec4c0694d103a43f36150ac3f93189bee",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "Open-Sans/OpenSans-Semibold.ttf",
+      "size": 221328,
+      "sha256": "aa3b0ef53db12e3d45094030cac0e69d384e44cc5978643dd4390041cad546e2",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "Open-Sans/OpenSans-SemiboldItalic.ttf",
+      "size": 212820,
+      "sha256": "30536248e59274548d51245662f9deec7fb52946faba33aade28c41473bdd39b",
+      "modified": "2025-09-03T11:59:14"
+    },
+    {
+      "path": "Open-Sans/OpenSansEmoji.ttf",
+      "size": 561512,
+      "sha256": "150c9074ca7957525ce5917d309887e8460abf0ad3bbac7458e3483c8191f5b3",
+      "modified": "2025-09-03T11:59:14"
+    }
+  ]
+}

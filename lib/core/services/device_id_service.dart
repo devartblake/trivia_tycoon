@@ -37,7 +37,6 @@ class DeviceIdService {
     return id;
   }
 
-
   /// Returns a backend-friendly device type label for this runtime.
   String getDeviceType() {
     if (kIsWeb) return 'web';

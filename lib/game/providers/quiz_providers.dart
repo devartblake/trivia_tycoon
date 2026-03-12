@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/question_model.dart';
-import '../services/question_loader_service.dart';
 import '../services/quiz_category.dart';
+import 'question_providers.dart' as question_data;
 import '../state/quiz_state.dart'; // Use your existing quiz_state.dart
-
-// Provider for the question loader service
-final adaptedQuestionLoaderProvider = Provider<AdaptedQuestionLoaderService>((ref) {
-  return AdaptedQuestionLoaderService();
-});
 
 // Main quiz provider - uses your existing quiz_state.dart implementation
 final adaptedQuizProvider = StateNotifierProvider<AdaptedQuizNotifier, AdaptedQuizState>((ref) {
-  return AdaptedQuizNotifier();
+  final repository = ref.watch(question_data.questionRepositoryProvider);
+  return AdaptedQuizNotifier(repository: repository);
 });
 
 // Helper providers for computed values
@@ -44,33 +40,39 @@ final timerColorProvider = Provider<Color>((ref) {
 
 // Category-specific providers
 final availableQuizCategoriesProvider = FutureProvider<List<QuizCategory>>((ref) async {
-  final service = ref.read(adaptedQuestionLoaderProvider);
-  return await service.getAvailableQuizCategories();
+  return ref.watch(question_data.quizCategoriesProvider.future);
 });
 
 final categoryQuestionCountProvider = FutureProvider.family<int, QuizCategory>((ref, category) async {
-  final service = ref.read(adaptedQuestionLoaderProvider);
-  return await service.getQuizCategoryQuestionCount(category);
+  final stats = await ref.watch(question_data.categoryStatsProvider(category).future);
+  return (stats['questionCount'] as num?)?.toInt() ?? 0;
 });
 
 final categoryDifficultyProvider = FutureProvider.family<String, QuizCategory>((ref, category) async {
-  final service = ref.read(adaptedQuestionLoaderProvider);
-  return await service.getQuizCategoryDifficulty(category);
+  final stats = await ref.watch(question_data.categoryStatsProvider(category).future);
+  return (stats['difficulty']?.toString() ?? 'mixed').toLowerCase();
 });
 
 // Class-specific providers
 final classQuestionCountProvider = FutureProvider.family<int, String>((ref, classId) async {
-  final service = ref.read(adaptedQuestionLoaderProvider);
-  return await service.getClassQuestionCount(classId);
+  final stats = await ref.watch(question_data.classStatsProvider(classId).future);
+  return (stats['questionCount'] as num?)?.toInt() ?? 0;
 });
 
 final classSubjectCountProvider = FutureProvider.family<int, String>((ref, classId) async {
-  final service = ref.read(adaptedQuestionLoaderProvider);
-  return await service.getClassSubjectCount(classId);
+  final stats = await ref.watch(question_data.classStatsProvider(classId).future);
+  return (stats['subjectCount'] as num?)?.toInt() ?? 0;
 });
 
 // Service status provider
 final serviceStatusProvider = FutureProvider<Map<String, dynamic>>((ref) async {
-  final service = ref.read(adaptedQuestionLoaderProvider);
-  return await service.getServiceStatus();
+  final questionStats = await ref.watch(question_data.questionStatsProvider.future);
+  final datasetInfo = await ref.watch(question_data.datasetInfoProvider.future);
+
+  return {
+    'isHealthy': true,
+    'source': 'repository',
+    'questionStats': questionStats,
+    'datasetInfo': datasetInfo,
+  };
 });

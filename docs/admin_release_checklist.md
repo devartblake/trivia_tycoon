@@ -31,6 +31,7 @@ Tooling required in the runner:
 
 ---
 
+<<<<<<< codex/analyze-admin-directory-for-backend-integration
 
 ## 0) CI automation
 
@@ -43,6 +44,8 @@ A manual `workflow_dispatch` can also run live smoke checks when secrets are con
 
 ---
 
+=======
+>>>>>>> main
 ## 1) Preflight checks
 
 Run from repo root:

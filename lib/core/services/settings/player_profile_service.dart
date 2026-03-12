@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 class PlayerProfileService {
   static const _boxName = 'settings';
   static const _playerNameKey = 'playerName';
+  static const _usernameKey = 'username';
   static const _userIdKey = 'userId'; // ← NEW: For backend user ID
   static const _userRoleKey = 'userRole';
   static const _userRolesKey = 'userRoles';
@@ -15,6 +16,7 @@ class PlayerProfileService {
   static const _avatarKey = 'avatar';
   static const _sessionDataKey = 'currentSession';
   static const _lastActiveKey = 'lastActive';
+  static const _userProfileKey = 'preferredCategories';
 
   /// Gets the settings box, opening it if necessary
   Future<Box> _getBox() async {
@@ -25,6 +27,18 @@ class PlayerProfileService {
   }
 
   // ------------------------- NEW METHOD ----------------------
+
+  /// Saves the preferred categories
+  Future<void> savePreferredCategories(List<String> categories) async {
+    final box = await _getBox();
+    await box.put(_userProfileKey, categories);
+  }
+
+  Future<List<String>> getPreferredCategories() async {
+    final box = await _getBox();
+    final categories = box.get(_userProfileKey, defaultValue: <String>[]);
+    return List<String>.from(categories);
+  }
 
   /// Saves the backend user ID (from auth response)
   Future<void> saveUserId(String userId) async {
@@ -50,6 +64,18 @@ class PlayerProfileService {
   Future<String> getPlayerName() async {
     final box = await _getBox();
     return box.get(_playerNameKey, defaultValue: 'Player');
+  }
+
+  /// Saves the player's username/handle.
+  Future<void> saveUsername(String username) async {
+    final box = await _getBox();
+    await box.put(_usernameKey, username);
+  }
+
+  /// Retrieves the player's username/handle.
+  Future<String?> getUsername() async {
+    final box = await _getBox();
+    return box.get(_usernameKey);
   }
 
   /// Saves the player's role.
@@ -144,6 +170,7 @@ class PlayerProfileService {
   Future<void> clearProfile() async {
     final box = await _getBox();
     await box.delete(_playerNameKey);
+    await box.delete(_usernameKey);
     await box.delete(_userIdKey); // ← UPDATED: Also clear user ID
     await box.delete(_userRoleKey);
     await box.delete(_isPremiumKey);
@@ -163,6 +190,7 @@ class PlayerProfileService {
         'timestamp': DateTime.now().toIso8601String(),
         'user_id': await getUserId(), // ← UPDATED: Include user ID
         'player_name': await getPlayerName(),
+        'username': await getUsername(),
         'user_role': await getUserRole(),
         'is_premium': await isPremiumUser(),
         'country': await getCountry(),
@@ -212,6 +240,7 @@ class PlayerProfileService {
       return {
         'user_id': await getUserId(), // ← UPDATED: Include user ID
         'player_name': await getPlayerName(),
+        'username': await getUsername(),
         'user_role': await getUserRole(),
         'user_roles': await getUserRoles(),
         'is_premium': await isPremiumUser(),
@@ -237,6 +266,9 @@ class PlayerProfileService {
       }
       if (profileData.containsKey('player_name')) {
         await box.put(_playerNameKey, profileData['player_name']);
+      }
+      if (profileData.containsKey('username')) {
+        await box.put(_usernameKey, profileData['username']);
       }
       if (profileData.containsKey('user_role')) {
         await box.put(_userRoleKey, profileData['user_role']);
@@ -291,6 +323,7 @@ class PlayerProfileService {
       return {
         'has_user_id': (await getUserId()) != null, // ← UPDATED: Validate user ID
         'has_name': (await getPlayerName()) != 'Player',
+        'has_username': (await getUsername()) != null,
         'has_role': (await getUserRole()) != null,
         'has_avatar': (await getAvatar()) != null,
         'has_country': (await getCountry()) != null,
@@ -325,6 +358,7 @@ class PlayerProfileService {
       final box = Hive.box(_boxName);
       return {
         'name': box.get(_playerNameKey, defaultValue: 'Player'),
+        'username': box.get(_usernameKey),
         'rank': _calculateRank(box.get('level', defaultValue: 0)),
         'level': box.get('level', defaultValue: 0),
         'currentXP': box.get('currentXP', defaultValue: 0),
@@ -340,6 +374,7 @@ class PlayerProfileService {
       debugPrint('[PlayerProfile] Error getting profile: $e');
       return {
         'name': 'Player',
+        'username': null,
         'rank': 'Trivia Master',
         'level': 12,
         'currentXP': 340,
