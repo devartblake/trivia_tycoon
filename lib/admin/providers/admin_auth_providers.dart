@@ -3,10 +3,6 @@ import '../../core/services/api_service.dart';
 import '../../core/services/auth_token_store.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../core/services/settings/app_settings.dart';
-<<<<<<< codex/analyze-admin-directory-for-backend-integration
-=======
-import '../../core/manager/service_manager.dart';
->>>>>>> main
 
 /// Canonical admin claims resolved from backend `/admin/auth/me`.
 ///
