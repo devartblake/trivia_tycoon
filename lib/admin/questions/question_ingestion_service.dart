@@ -60,15 +60,17 @@ class QuestionIngestionService {
   }
 
   Future<Map<String, dynamic>> publishDataset(String datasetName) {
+    final encodedName = Uri.encodeComponent(datasetName.trim());
     return _apiService.post(
-      '/admin/questions/datasets/$datasetName/publish',
+      '/admin/questions/datasets/$encodedName/publish',
       body: const {},
     );
   }
 
   Future<Map<String, dynamic>> unpublishDataset(String datasetName) {
+    final encodedName = Uri.encodeComponent(datasetName.trim());
     return _apiService.post(
-      '/admin/questions/datasets/$datasetName/unpublish',
+      '/admin/questions/datasets/$encodedName/unpublish',
       body: const {},
     );
   }
