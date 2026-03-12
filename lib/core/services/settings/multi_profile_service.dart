@@ -180,47 +180,6 @@ class MultiProfileService {
     }
   }
 
-  String _generateUsernameFromDisplayName(String displayName) {
-    final normalized = displayName
-        .toLowerCase()
-        .trim()
-        .replaceAll(RegExp(r'\s+'), '_')
-        .replaceAll(RegExp(r'[^a-z0-9_]'), '');
-
-    if (normalized.isEmpty) return 'player';
-    return normalized;
-  }
-
-  Future<void> _syncActiveProfileToLegacySettings(ProfileData profile) async {
-    try {
-      final legacyService = PlayerProfileService();
-      final existingUsername = (profile.preferences['username'] as String?)?.trim();
-      final generatedUsername = _generateUsernameFromDisplayName(profile.name);
-
-      await legacyService.savePlayerName(profile.name);
-      await legacyService.saveUsername(
-        (existingUsername != null && existingUsername.isNotEmpty)
-            ? existingUsername.toLowerCase()
-            : generatedUsername,
-      );
-
-      await legacyService.saveProfileBatch({
-        'player_name': profile.name,
-        'username': (existingUsername != null && existingUsername.isNotEmpty)
-            ? existingUsername.toLowerCase()
-            : generatedUsername,
-        'country': profile.country,
-        'age_group': profile.ageGroup,
-        'user_role': profile.userRole,
-        'user_roles': profile.userRoles,
-        'is_premium': profile.isPremium,
-        'avatar': profile.avatar,
-      });
-    } catch (e) {
-      debugPrint('[MultiProfile] Failed syncing active profile to legacy settings: $e');
-    }
-  }
-
   /// Gets the profiles box, opening it if necessary
   Future<Box> _getBox() async {
     if (Hive.isBoxOpen(_boxName)) {
@@ -242,23 +201,33 @@ class MultiProfileService {
           .toList()
         ..sort((a, b) => b.lastActive.compareTo(a.lastActive)); // Most recent first
     } catch (e) {
-      debugPrint('[MultiProfile] Error getting all profiles: $e');
+      debugPrint('[MultiProfile] Error getting profiles: $e');
       return [];
     }
   }
 
-  /// Get current active profile
+  /// Get the currently active profile
   Future<ProfileData?> getActiveProfile() async {
     try {
       final box = await _getBox();
       final activeProfileId = box.get(_activeProfileKey);
 
-      if (activeProfileId == null) return null;
+      if (activeProfileId == null) {
+        // If no active profile set, return the first profile
+        final profiles = await getAllProfiles();
+        if (profiles.isNotEmpty) {
+          await box.put(_activeProfileKey, profiles.first.id);
+          return profiles.first;
+        }
+        return null;
+      }
 
       final profilesData = box.get(_profilesKey, defaultValue: <String, dynamic>{});
       final Map<String, dynamic> profilesMap = Map<String, dynamic>.from(profilesData);
 
-      if (!profilesMap.containsKey(activeProfileId)) return null;
+      if (!profilesMap.containsKey(activeProfileId)) {
+        return null;
+      }
 
       return ProfileData.fromJson(Map<String, dynamic>.from(profilesMap[activeProfileId]));
     } catch (e) {
@@ -267,7 +236,7 @@ class MultiProfileService {
     }
   }
 
-  /// Set active profile
+  /// Set the active profile
   Future<bool> setActiveProfile(String profileId) async {
     try {
       final box = await _getBox();
@@ -281,15 +250,15 @@ class MultiProfileService {
 
       await box.put(_activeProfileKey, profileId);
 
-      // Update last active time for the profile
-      final profileData = ProfileData.fromJson(Map<String, dynamic>.from(profilesMap[profileId]));
-      final updatedProfile = profileData.copyWith(lastActive: DateTime.now());
+      // Update last active timestamp
+      final profile = ProfileData.fromJson(Map<String, dynamic>.from(profilesMap[profileId]));
+      final updatedProfile = profile.copyWith(lastActive: DateTime.now());
       profilesMap[profileId] = updatedProfile.toJson();
       await box.put(_profilesKey, profilesMap);
 
       await _syncActiveProfileToLegacySettings(updatedProfile);
 
-      debugPrint('[MultiProfile] Active profile set to: ${updatedProfile.name}');
+      debugPrint('[MultiProfile] Switched to profile: ${profile.name}');
       return true;
     } catch (e) {
       debugPrint('[MultiProfile] Error setting active profile: $e');
@@ -311,21 +280,16 @@ class MultiProfileService {
       final profiles = await getAllProfiles();
 
       if (profiles.length >= _maxProfiles) {
-        debugPrint('[MultiProfile] Maximum profiles reached ($_maxProfiles)');
+        debugPrint('[MultiProfile] Maximum number of profiles reached');
         return null;
       }
 
-      // Check for duplicate names
-      if (profiles.any((p) => p.name.toLowerCase() == name.toLowerCase())) {
-        debugPrint('[MultiProfile] Profile name already exists: $name');
-        return null;
-      }
-
-      final profileId = _uuid.v4();
-      final now = DateTime.now();
+      final box = await _getBox();
+      final profilesData = box.get(_profilesKey, defaultValue: <String, dynamic>{});
+      final Map<String, dynamic> profilesMap = Map<String, dynamic>.from(profilesData);
 
       final newProfile = ProfileData(
-        id: profileId,
+        id: _uuid.v4(),
         name: name,
         avatar: avatar,
         country: country,
@@ -333,20 +297,17 @@ class MultiProfileService {
         userRole: userRole,
         userRoles: userRoles ?? [],
         isPremium: isPremium,
-        createdAt: now,
-        lastActive: now,
+        createdAt: DateTime.now(),
+        lastActive: DateTime.now(),
       );
 
-      final box = await _getBox();
-      final profilesData = box.get(_profilesKey, defaultValue: <String, dynamic>{});
-      final Map<String, dynamic> profilesMap = Map<String, dynamic>.from(profilesData);
-
-      profilesMap[profileId] = newProfile.toJson();
+      profilesMap[newProfile.id] = newProfile.toJson();
       await box.put(_profilesKey, profilesMap);
 
       // If this is the first profile, make it active
       if (profiles.isEmpty) {
-        await box.put(_activeProfileKey, profileId);
+        await box.put(_activeProfileKey, newProfile.id);
+        await _syncActiveProfileToLegacySettings(newProfile);
       }
 
       debugPrint('[MultiProfile] Created new profile: ${newProfile.name}');
@@ -358,20 +319,21 @@ class MultiProfileService {
   }
 
   /// Update an existing profile
-  Future<bool> updateProfile(String profileId, {
-    String? name,
-    String? avatar,
-    String? country,
-    String? ageGroup,
-    String? userRole,
-    List<String>? userRoles,
-    bool? isPremium,
-    int? level,
-    int? currentXP,
-    int? maxXP,
-    Map<String, dynamic>? gameStats,
-    Map<String, dynamic>? preferences,
-  }) async {
+  Future<bool> updateProfile(
+      String profileId, {
+        String? name,
+        String? avatar,
+        String? country,
+        String? ageGroup,
+        String? userRole,
+        List<String>? userRoles,
+        bool? isPremium,
+        int? level,
+        int? currentXP,
+        int? maxXP,
+        Map<String, dynamic>? gameStats,
+        Map<String, dynamic>? preferences,
+      }) async {
     try {
       final box = await _getBox();
       final profilesData = box.get(_profilesKey, defaultValue: <String, dynamic>{});
@@ -385,33 +347,21 @@ class MultiProfileService {
       final currentProfile = ProfileData.fromJson(Map<String, dynamic>.from(profilesMap[profileId]));
       final activeProfileId = box.get(_activeProfileKey);
 
-      // Check for duplicate names if name is being changed
-      if (name != null && name != currentProfile.name) {
-        final allProfiles = await getAllProfiles();
-        if (allProfiles.any((p) => p.id != profileId && p.name.toLowerCase() == name.toLowerCase())) {
-          debugPrint('[MultiProfile] Profile name already exists: $name');
-          return false;
-        }
-      }
+      // Resolve display name and username with ProfileSyncService
+      String resolvedName = name ?? currentProfile.name;
+      Map<String, dynamic> mergedPreferences = preferences ?? currentProfile.preferences;
 
-      var mergedPreferences = preferences;
-      var resolvedName = name;
+      if (_profileSyncService != null && name != null && name != currentProfile.name) {
+        final syncResult = await _profileSyncService!.syncProfileData(
+          displayName: name,
+          existingUsername: (preferences?['username'] as String?) ??
+              (currentProfile.preferences['username'] as String?),
+        );
 
-      if (_profileSyncService != null && activeProfileId == profileId) {
-        await _profileSyncService!.retryQueuedUpdates();
-
-        final requestedUsername = (preferences?['username'] as String?)?.trim();
-        final candidateDisplayName = (name ?? currentProfile.name).trim();
-
-        if (requestedUsername != null && requestedUsername.isNotEmpty) {
-          final syncResult = await _profileSyncService!.syncProfileUpdate(
-            displayName: candidateDisplayName,
-            username: requestedUsername,
-          );
-
+        if (syncResult.success) {
           if (syncResult.confirmedDisplayName != null &&
               syncResult.confirmedDisplayName!.isNotEmpty) {
-            resolvedName = syncResult.confirmedDisplayName;
+            resolvedName = syncResult.confirmedDisplayName!;
           }
 
           if (syncResult.confirmedUsername != null &&

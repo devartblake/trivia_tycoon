@@ -178,18 +178,19 @@ class UserIdentityResolver {
   static bool _isGeneratedLocalId(String id) => id.startsWith('local_');
 
   static String _canonicalSource(
-    String? profileUserId,
-    String? secureUserId,
-    String? tokenStoreUserId,
-    String canonical,
-  ) {
-    if (profileUserId == canonical && !_isGeneratedLocalId(profileUserId)) {
+      String? profileUserId,
+      String? secureUserId,
+      String? tokenStoreUserId,
+      String canonical,
+      ) {
+    // Since we check equality with canonical, we know the value is non-null when equal
+    if (profileUserId == canonical && profileUserId != null && !_isGeneratedLocalId(profileUserId)) {
       return 'profile';
     }
-    if (secureUserId == canonical && !_isGeneratedLocalId(secureUserId)) {
+    if (secureUserId == canonical && secureUserId != null && !_isGeneratedLocalId(secureUserId)) {
       return 'secure';
     }
-    if (tokenStoreUserId == canonical && !_isGeneratedLocalId(tokenStoreUserId)) {
+    if (tokenStoreUserId == canonical && tokenStoreUserId != null && !_isGeneratedLocalId(tokenStoreUserId)) {
       return 'token_store';
     }
     return 'canonical_unknown';

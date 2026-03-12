@@ -5,12 +5,14 @@ import 'package:trivia_tycoon/core/services/api_service.dart';
 import 'package:trivia_tycoon/game/analytics/services/analytics_service.dart';
 
 class ProfileSyncResult {
+  final bool success;
   final bool synced;
   final bool queuedForRetry;
   final String? confirmedDisplayName;
   final String? confirmedUsername;
 
   const ProfileSyncResult({
+    required this.success,
     required this.synced,
     required this.queuedForRetry,
     this.confirmedDisplayName,
@@ -29,6 +31,32 @@ class ProfileSyncService {
     required AnalyticsService analyticsService,
   })  : _apiService = apiService,
         _analyticsService = analyticsService;
+
+  /// Sync profile data with optional username generation
+  Future<ProfileSyncResult> syncProfileData({
+    required String displayName,
+    String? existingUsername,
+  }) async {
+    // Generate username from display name if none exists
+    final username = existingUsername != null && existingUsername.trim().isNotEmpty
+        ? existingUsername.trim().toLowerCase()
+        : _generateUsernameFromDisplayName(displayName);
+
+    // Call the existing sync method
+    final result = await syncProfileUpdate(
+      displayName: displayName,
+      username: username,
+    );
+
+    // Return result with success field
+    return ProfileSyncResult(
+      success: result.synced,
+      synced: result.synced,
+      queuedForRetry: result.queuedForRetry,
+      confirmedDisplayName: result.confirmedDisplayName,
+      confirmedUsername: result.confirmedUsername,
+    );
+  }
 
   Future<ProfileSyncResult> syncProfileUpdate({
     required String displayName,
@@ -60,6 +88,7 @@ class ProfileSyncService {
       });
 
       return ProfileSyncResult(
+        success: true,
         synced: true,
         queuedForRetry: false,
         confirmedDisplayName: confirmedDisplayName,
@@ -72,7 +101,11 @@ class ProfileSyncService {
       'timestamp': DateTime.now().toIso8601String(),
     });
 
-    return const ProfileSyncResult(synced: false, queuedForRetry: true);
+    return const ProfileSyncResult(
+      success: false,
+      synced: false,
+      queuedForRetry: true,
+    );
   }
 
   Future<void> retryQueuedUpdates() async {
@@ -154,5 +187,16 @@ class ProfileSyncService {
     }
 
     return null;
+  }
+
+  String _generateUsernameFromDisplayName(String displayName) {
+    final normalized = displayName
+        .toLowerCase()
+        .trim()
+        .replaceAll(RegExp(r'\s+'), '_')
+        .replaceAll(RegExp(r'[^a-z0-9_]'), '');
+
+    if (normalized.isEmpty) return 'player';
+    return normalized;
   }
 }
