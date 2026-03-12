@@ -7,6 +7,20 @@ This document tracks progress on live Spin & Earn analytics, identity reliabilit
 
 ## Completed so far
 
+### 2026-03 follow-up: user-id reliability hardening
+- Added prioritized resolver sources for `user_id`:
+  1) profile storage,
+  2) secure storage,
+  3) auth token Hive box,
+  4) stable generated local fallback.
+- Resolved IDs are backfilled into profile storage to keep app-wide consumers consistent.
+- Added focused resolver tests (source priority + fallback behavior) in
+  `test/core/services/user_identity_resolver_test.dart`.
+- Added canonical ID promotion logic so non-local backend IDs from secure/token
+  sources supersede previously generated local IDs and backfill profile storage.
+- Added promotion telemetry hook (`identity_user_id_promoted`) when generated
+  local IDs are upgraded to canonical backend IDs.
+
 ### A) Live Spin analytics pipeline
 - Implemented live summary model (`SpinLiveSummary`), websocket adapter, and `spinLiveSummaryProvider` stream pipeline.
 - Provider emits local fallback snapshot + websocket updates and dedupes repeated emissions.
@@ -71,6 +85,7 @@ This document tracks progress on live Spin & Earn analytics, identity reliabilit
   - update backend profile,
   - on success, persist backend-confirmed values locally,
   - on failure, keep local optimistic value and enqueue retry.
+- Validate promotion telemetry in staging dashboards and define alert thresholds.
 
 ### Phase 3
 - Add tests:
