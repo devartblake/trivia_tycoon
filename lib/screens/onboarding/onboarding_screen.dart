@@ -94,7 +94,7 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 }
 
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late final ModernOnboardingController _controller;
   late final PageController _pageController;
   late final AnimationController _progressAnimationController;
