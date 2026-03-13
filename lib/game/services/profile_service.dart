@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/xp_provider.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// ProfileService owns player XP and other profile data.
 /// Implements XPService so existing controller code works with the same API.
@@ -30,7 +31,7 @@ class ProfileService {
   // ---- Additional profile data hooks (extend later as needed) ----
   void unlockCategory(String name) {
     unlockedCategories.add(name);
-    debugPrint('ProfileService: unlockCategory($name)');
+    LogManager.debug('ProfileService: unlockCategory($name)');
     // TODO: persist
   }
 
@@ -46,12 +47,12 @@ class ProfileService {
   /// In some games timer belongs to GameSession instead;
   /// kept here as a convenience hook so existing effect code compiles.
   void increaseTimer(int seconds) {
-    debugPrint('ProfileService: increaseTimer($seconds) [route to GameSession if needed]');
+    LogManager.debug('ProfileService: increaseTimer($seconds) [route to GameSession if needed]');
     // TODO: route to session if needed
   }
 
   void addScoreBonus(double multiplier) {
-    debugPrint('ProfileService: addScoreBonus($multiplier) [route to scoring system]');
+    LogManager.debug('ProfileService: addScoreBonus($multiplier) [route to scoring system]');
     // TODO
   }
 

@@ -98,20 +98,29 @@ class MultiplayerRepositoryImpl implements MultiplayerRepository {
   Stream<GameEvent> events() => wsClient.events;
 
   @override
-  Future<Room?> currentRoom() {
-    // TODO: implement currentRoom
-    throw UnimplementedError();
+  Future<Room?> currentRoom() async {
+    // No server snapshot endpoint yet; current room state is tracked via
+    // GameEvent stream (JoinedRoom / PlayerJoined events).
+    return null;
   }
 
   @override
-  Future<void> leaveRoom() {
-    // TODO: implement leaveRoom
-    throw UnimplementedError();
+  Future<void> leaveRoom() async {
+    await wsClient.send({
+      'type': 'leave_room',
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+    });
   }
 
   @override
-  Future<void> submitAnswer(String matchId, String questionId, String answerId) {
-    // TODO: implement submitAnswer
-    throw UnimplementedError();
+  Future<void> submitAnswer(
+      String matchId, String questionId, String answerId) async {
+    await wsClient.send({
+      'type': 'submit_answer',
+      'match_id': matchId,
+      'question_id': questionId,
+      'answer_id': answerId,
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+    });
   }
 }

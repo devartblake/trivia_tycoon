@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../game/models/seasonal_theme_models.dart';
 import '../../theme/themes.dart';
 import '../settings/general_key_value_storage_service.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Service for managing seasonal themes
 class SeasonalThemeService {
@@ -22,7 +23,7 @@ class SeasonalThemeService {
       final theme = SeasonalTheme.fromJson(json);
       return theme.isCurrentlyActive() ? theme : null;
     } catch (e) {
-      debugPrint('[SeasonalTheme] Error loading seasonal theme: $e');
+      LogManager.debug('[SeasonalTheme] Error loading seasonal theme: $e');
       return null;
     }
   }
@@ -32,9 +33,9 @@ class SeasonalThemeService {
     try {
       // FIXED: Use setJson() instead of set()
       await _storage.setJson(_seasonalThemeKey, theme.toJson());
-      debugPrint('[SeasonalTheme] ✓ Saved seasonal theme: ${theme.name}');
+      LogManager.debug('[SeasonalTheme] ✓ Saved seasonal theme: ${theme.name}');
     } catch (e) {
-      debugPrint('[SeasonalTheme] ❌ Error saving seasonal theme: $e');
+      LogManager.debug('[SeasonalTheme] ❌ Error saving seasonal theme: $e');
     }
   }
 
@@ -44,9 +45,9 @@ class SeasonalThemeService {
     try {
       final theme = SeasonalTheme.fromJson(themeData);
       await saveSeasonalTheme(theme);
-      debugPrint('[SeasonalTheme] ✓ Updated from backend: ${theme.name}');
+      LogManager.debug('[SeasonalTheme] ✓ Updated from backend: ${theme.name}');
     } catch (e) {
-      debugPrint('[SeasonalTheme] ❌ Error updating from backend: $e');
+      LogManager.debug('[SeasonalTheme] ❌ Error updating from backend: $e');
     }
   }
 
@@ -65,7 +66,7 @@ class SeasonalThemeService {
       if (themeName == null) return null;
       return AppTheme.fromString(themeName);
     } catch (e) {
-      debugPrint('[SeasonalTheme] Error loading user override: $e');
+      LogManager.debug('[SeasonalTheme] Error loading user override: $e');
       return null;
     }
   }
@@ -75,14 +76,14 @@ class SeasonalThemeService {
     try {
       if (themeType == null) {
         await _storage.remove(_userThemeOverrideKey);
-        debugPrint('[SeasonalTheme] ✓ Removed user theme override');
+        LogManager.debug('[SeasonalTheme] ✓ Removed user theme override');
       } else {
         // FIXED: Use setString() instead of set()
         await _storage.setString(_userThemeOverrideKey, themeType.name);
-        debugPrint('[SeasonalTheme] ✓ Set user theme override: ${themeType.name}');
+        LogManager.debug('[SeasonalTheme] ✓ Set user theme override: ${themeType.name}');
       }
     } catch (e) {
-      debugPrint('[SeasonalTheme] ❌ Error setting user override: $e');
+      LogManager.debug('[SeasonalTheme] ❌ Error setting user override: $e');
     }
   }
 
@@ -92,19 +93,19 @@ class SeasonalThemeService {
     // 1. Check user override first
     final userOverride = await getUserThemeOverride();
     if (userOverride != null) {
-      debugPrint('[SeasonalTheme] Using user override: ${userOverride.name}');
+      LogManager.debug('[SeasonalTheme] Using user override: ${userOverride.name}');
       return userOverride;
     }
 
     // 2. Check seasonal theme
     final seasonalTheme = await getCurrentSeasonalTheme();
     if (seasonalTheme != null) {
-      debugPrint('[SeasonalTheme] Using seasonal theme: ${seasonalTheme.name}');
+      LogManager.debug('[SeasonalTheme] Using seasonal theme: ${seasonalTheme.name}');
       return seasonalTheme.themeType;
     }
 
     // 3. Default theme
-    debugPrint('[SeasonalTheme] Using default theme');
+    LogManager.debug('[SeasonalTheme] Using default theme');
     return AppTheme.defaultTheme;
   }
 

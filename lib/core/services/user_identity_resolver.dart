@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
 import '../manager/service_manager.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class UserIdentityResolver {
   static bool _hasLoggedUnknownUserWarning = false;
@@ -150,7 +151,7 @@ class UserIdentityResolver {
 
     if (!_hasLoggedUnknownUserWarning) {
       _hasLoggedUnknownUserWarning = true;
-      debugPrint(
+      LogManager.debug(
           '[UserIdentityResolver] Backend user_id unavailable; using generated local id.');
     }
 

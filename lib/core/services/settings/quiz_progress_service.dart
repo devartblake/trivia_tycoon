@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Service to manage quiz session data, onboarding flags, and player metadata.
 class QuizProgressService {
@@ -81,9 +82,9 @@ class QuizProgressService {
       currentData['save_reason'] = 'lifecycle_pause';
 
       await saveQuizProgress(currentData);
-      debugPrint('[QuizProgress] Current progress saved for lifecycle event');
+      LogManager.debug('[QuizProgress] Current progress saved for lifecycle event');
     } catch (e) {
-      debugPrint('[QuizProgress] Error saving current progress: $e');
+      LogManager.debug('[QuizProgress] Error saving current progress: $e');
     }
   }
 
@@ -97,9 +98,9 @@ class QuizProgressService {
       };
 
       await _box.put(_autoSaveKey, autoSaveData);
-      debugPrint('[QuizProgress] Auto-save completed');
+      LogManager.debug('[QuizProgress] Auto-save completed');
     } catch (e) {
-      debugPrint('[QuizProgress] Auto-save failed: $e');
+      LogManager.debug('[QuizProgress] Auto-save failed: $e');
     }
   }
 
@@ -113,9 +114,9 @@ class QuizProgressService {
       // For now, we just update the last sync timestamp
       await _box.put(_lastSyncKey, DateTime.now().toIso8601String());
 
-      debugPrint('[QuizProgress] Progress synced to server');
+      LogManager.debug('[QuizProgress] Progress synced to server');
     } catch (e) {
-      debugPrint('[QuizProgress] Sync failed: $e');
+      LogManager.debug('[QuizProgress] Sync failed: $e');
     }
   }
 
@@ -128,7 +129,7 @@ class QuizProgressService {
       }
       return null;
     } catch (e) {
-      debugPrint('[QuizProgress] Error restoring from auto-save: $e');
+      LogManager.debug('[QuizProgress] Error restoring from auto-save: $e');
       return null;
     }
   }
@@ -142,7 +143,7 @@ class QuizProgressService {
       }
       return null;
     } catch (e) {
-      debugPrint('[QuizProgress] Error getting last sync time: $e');
+      LogManager.debug('[QuizProgress] Error getting last sync time: $e');
       return null;
     }
   }
@@ -178,7 +179,7 @@ class QuizProgressService {
       currentProgress['last_updated'] = DateTime.now().toIso8601String();
       await savePlayerProgress(currentProgress);
     } catch (e) {
-      debugPrint('[QuizProgress] Error updating quiz stats: $e');
+      LogManager.debug('[QuizProgress] Error updating quiz stats: $e');
     }
   }
 
@@ -190,9 +191,9 @@ class QuizProgressService {
       await _box.delete(_autoSaveKey);
       await _box.delete(_lastSyncKey);
 
-      debugPrint('[QuizProgress] All progress data cleared');
+      LogManager.debug('[QuizProgress] All progress data cleared');
     } catch (e) {
-      debugPrint('[QuizProgress] Error clearing progress: $e');
+      LogManager.debug('[QuizProgress] Error clearing progress: $e');
     }
   }
 
@@ -235,7 +236,7 @@ class QuizProgressService {
 
       return _getDefaultRecentQuizzes();
     } catch (e) {
-      debugPrint('[QuizProgress] Error getting recent quizzes: $e');
+      LogManager.debug('[QuizProgress] Error getting recent quizzes: $e');
       return _getDefaultRecentQuizzes();
     }
   }
@@ -296,9 +297,9 @@ class QuizProgressService {
       }
 
       await box.put('recent_quizzes', recentQuizzes);
-      debugPrint('[QuizProgress] Saved completed quiz: $title');
+      LogManager.debug('[QuizProgress] Saved completed quiz: $title');
     } catch (e) {
-      debugPrint('[QuizProgress] Error saving completed quiz: $e');
+      LogManager.debug('[QuizProgress] Error saving completed quiz: $e');
     }
   }
 
@@ -327,7 +328,7 @@ class QuizProgressService {
         'accuracyPercentage': _calculateAccuracy(playerProgress),
       };
     } catch (e) {
-      debugPrint('[QuizProgress] Error getting quiz stats: $e');
+      LogManager.debug('[QuizProgress] Error getting quiz stats: $e');
       return {};
     }
   }
@@ -390,9 +391,9 @@ class QuizProgressService {
       currentProgress['last_quiz_date'] = DateTime.now().toIso8601String();
 
       await savePlayerProgress(currentProgress);
-      debugPrint('[QuizProgress] Updated quiz completion stats');
+      LogManager.debug('[QuizProgress] Updated quiz completion stats');
     } catch (e) {
-      debugPrint('[QuizProgress] Error updating quiz completion: $e');
+      LogManager.debug('[QuizProgress] Error updating quiz completion: $e');
     }
   }
 }

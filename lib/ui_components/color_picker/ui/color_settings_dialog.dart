@@ -4,6 +4,7 @@ import 'package:trivia_tycoon/ui_components/color_picker/models/color_palette.da
 import '../core/color_picker_settings.dart';
 import '../utils/color_storage.dart';
 import 'color_picker_component.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class ColorSettingsDialog extends StatefulWidget {
   final ColorPickerSettings settings;
@@ -132,7 +133,7 @@ class _ColorSettingsDialogState extends State<ColorSettingsDialog>
         widget.onPaletteSelected(palette);
       }
     } catch (e) {
-      debugPrint('Error applying palette: $e');
+      LogManager.debug('Error applying palette: $e');
     }
   }
 

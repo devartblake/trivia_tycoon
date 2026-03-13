@@ -5,6 +5,7 @@ import '../services/xp_service.dart';
 import '../services/profile_service.dart';
 import '../services/skill_cooldown_service.dart';
 import '../models/skill_tree_graph.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class SkillEffectHandler {
   // Injected services
@@ -52,7 +53,7 @@ class SkillEffectHandler {
     } else if (arg is Map<String, num>) {
       _applyEffectMap(arg);
     } else {
-      debugPrint('[SkillEffectHandler] Unsupported argument to applySkillEffects: ${arg.runtimeType}');
+      LogManager.debug('[SkillEffectHandler] Unsupported argument to applySkillEffects: ${arg.runtimeType}');
     }
   }
 
@@ -135,22 +136,22 @@ class SkillEffectHandler {
     // ---- Known gameplay knobs from your sample data ----
       case 'streakMult':
       // TODO route to a dedicated combo/streak system
-        debugPrint('[SkillEffectHandler] streakMult=${value.toDouble()} (route to combo system)');
+        LogManager.debug('[SkillEffectHandler] streakMult=${value.toDouble()} (route to combo system)');
         break;
 
       case 'sportsScoreBoost':
       // TODO route to scoring model with category-specific multiplier
-        debugPrint('[SkillEffectHandler] sportsScoreBoost=${value.toDouble()} (route to scoring)');
+        LogManager.debug('[SkillEffectHandler] sportsScoreBoost=${value.toDouble()} (route to scoring)');
         break;
 
       case 'hardBonus':
       // TODO route to difficulty bonus logic
-        debugPrint('[SkillEffectHandler] hardBonus=${value.toDouble()} (route to difficulty bonus)');
+        LogManager.debug('[SkillEffectHandler] hardBonus=${value.toDouble()} (route to difficulty bonus)');
         break;
 
       case 'eliteAccess':
       // TODO route to feature flags / mode unlocks
-        debugPrint('[SkillEffectHandler] eliteAccess=${value.toInt()} (route to mode unlocks)');
+        LogManager.debug('[SkillEffectHandler] eliteAccess=${value.toInt()} (route to mode unlocks)');
         break;
 
     // ---- Administrative keys: handled elsewhere, ignore here ----
@@ -161,7 +162,7 @@ class SkillEffectHandler {
     // ---- Unknown / not yet implemented ----
       default:
       // Keep silent in release; verbose in debug for dev visibility.
-        debugPrint('[SkillEffectHandler] Unknown effect: $key=$value');
+        LogManager.debug('[SkillEffectHandler] Unknown effect: $key=$value');
         break;
     }
   }

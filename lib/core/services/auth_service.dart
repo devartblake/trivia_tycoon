@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'auth_api_client.dart';
 import 'auth_token_store.dart';
 import 'device_id_service.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Core authentication service that manages tokens and communicates with backend.
 class AuthService {
@@ -93,7 +94,7 @@ class AuthService {
       );
     } catch (e) {
       if (kDebugMode) {
-        debugPrint('[AuthService] Logout request failed, proceeding with local clear: $e');
+        LogManager.debug('[AuthService] Logout request failed, proceeding with local clear: $e');
       }
     } finally {
       // Always clear local tokens, even if backend call fails

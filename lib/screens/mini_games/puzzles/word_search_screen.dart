@@ -7,6 +7,7 @@ import 'package:trivia_tycoon/screens/mini_games/widgets/word_search_grid_widget
 
 import '../dialogs/game_result_dialog.dart';
 import '../dialogs/word_search_settings_dialog.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class WordSearchScreen extends StatefulWidget {
   const WordSearchScreen({super.key});
@@ -141,10 +142,10 @@ class _WordSearchScreenState extends State<WordSearchScreen> {
         gameIcon: Icons.search,
       ),
       onShare: () {
-        debugPrint('Share tapped');
+        LogManager.debug('Share tapped');
       },
       onClose: () {
-        debugPrint('Close tapped');
+        LogManager.debug('Close tapped');
       },
       onPlayAgain: () {
         _initGame();

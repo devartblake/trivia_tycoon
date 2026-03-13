@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// A simple utility service for general-purpose key-value storage using Hive.
 class GeneralKeyValueStorageService {
@@ -105,7 +106,7 @@ class GeneralKeyValueStorageService {
     try {
       return jsonDecode(jsonString) as Map<String, dynamic>;
     } catch (e) {
-      debugPrint('[Storage] Error decoding JSON for key "$key": $e');
+      LogManager.debug('[Storage] Error decoding JSON for key "$key": $e');
       return null;
     }
   }

@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 
 import 'package:trivia_tycoon/core/services/api_service.dart';
 import 'package:trivia_tycoon/game/analytics/services/analytics_service.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class ProfileSyncResult {
   final bool success;
@@ -148,7 +149,7 @@ class ProfileSyncService {
         final response = await _apiService.patch(endpoint, body: payload);
         return response;
       } catch (e) {
-        debugPrint('[ProfileSync] endpoint failed ($endpoint): $e');
+        LogManager.debug('[ProfileSync] endpoint failed ($endpoint): $e');
       }
     }
 

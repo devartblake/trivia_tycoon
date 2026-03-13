@@ -7,6 +7,7 @@ import '../../game/logic/quiz_completion_handler.dart';
 import '../../game/providers/quiz_results_provider.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../game/state/tier_update_result.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class ScoreSummaryScreenWrapper extends ConsumerStatefulWidget {
   const ScoreSummaryScreenWrapper({super.key});
@@ -48,9 +49,9 @@ class _ScoreSummaryScreenWrapperState extends ConsumerState<ScoreSummaryScreenWr
           _showTierProgressionDialog();
         }
 
-        debugPrint('Educational data updated successfully for quiz completion');
+        LogManager.debug('Educational data updated successfully for quiz completion');
       } catch (e) {
-        debugPrint('Error updating educational data: $e');
+        LogManager.debug('Error updating educational data: $e');
       }
     }
   }
@@ -91,7 +92,7 @@ class _ScoreSummaryScreenWrapperState extends ConsumerState<ScoreSummaryScreenWr
     }
 
     // Debug print for duration tracking
-    debugPrint('Quiz Duration: ${results.quizDuration.inMinutes}m ${results.quizDuration.inSeconds % 60}s');
+    LogManager.debug('Quiz Duration: ${results.quizDuration.inMinutes}m ${results.quizDuration.inSeconds % 60}s');
 
     return EnhancedScoreSummaryScreen(
       score: results.score,

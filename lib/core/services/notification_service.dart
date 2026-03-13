@@ -7,6 +7,7 @@ import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
 import '../../game/providers/notification_history_store.dart';
 import '../../game/services/channel_prefs.dart' show kNotifDraftsKey, kNotifEnabledPrefix;
 import '../../ui_components/spin_wheel/services/spin_tracker.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class NotificationService {
   // -------- Singleton (keeps your original pattern) --------
@@ -177,7 +178,7 @@ class NotificationService {
         onDismissActionReceivedMethod: _onDismissed,
       );
 
-      debugPrint('[NotificationService] Channels initialized successfully');
+      LogManager.debug('[NotificationService] Channels initialized successfully');
 
       // Check permissions but don't request yet
       await _checkPermissions();
@@ -185,7 +186,7 @@ class NotificationService {
       _initialized = true;
       return _hasPermissions;
     } catch (e) {
-      debugPrint('[NotificationService] Initialization failed: $e');
+      LogManager.debug('[NotificationService] Initialization failed: $e');
       _initialized = true;
       _hasPermissions = false;
       return false;
@@ -208,10 +209,10 @@ class NotificationService {
       try {
         _hasPermissions =
             await AwesomeNotifications().requestPermissionToSendNotifications();
-        debugPrint(
+        LogManager.debug(
             '[NotificationService] Permission request result: $_hasPermissions');
       } catch (e) {
-        debugPrint(
+        LogManager.debug(
             '[NotificationService] Silent permission request failed: $e');
         _hasPermissions = false;
       }
@@ -223,9 +224,9 @@ class NotificationService {
     try {
       _hasPermissions = await AwesomeNotifications().isNotificationAllowed();
       _permissionsChecked = true;
-      debugPrint('[NotificationService] Permission status: $_hasPermissions');
+      LogManager.debug('[NotificationService] Permission status: $_hasPermissions');
     } catch (e) {
-      debugPrint('[NotificationService] Permission check failed: $e');
+      LogManager.debug('[NotificationService] Permission check failed: $e');
       _hasPermissions = false;
       _permissionsChecked = true;
     }
@@ -242,7 +243,7 @@ class NotificationService {
       _hasPermissions = granted;
       _permissionsChecked = true;
     } catch (e) {
-      debugPrint('[NotificationService] requestPermission() failed: $e');
+      LogManager.debug('[NotificationService] requestPermission() failed: $e');
     }
   }
 
@@ -269,7 +270,7 @@ class NotificationService {
     try {
       final hasPermission = await _ensurePermissions();
       if (!hasPermission) {
-        debugPrint(
+        LogManager.debug(
             '[NotificationService] No notification permissions - skipping basic notification');
         return false;
       }
@@ -287,10 +288,10 @@ class NotificationService {
               : NotificationLayout.Default,
         ),
       );
-      debugPrint('[NotificationService] Basic notification sent: $title');
+      LogManager.debug('[NotificationService] Basic notification sent: $title');
       return true;
     } catch (e) {
-      debugPrint('[NotificationService] Failed to show basic notification: $e');
+      LogManager.debug('[NotificationService] Failed to show basic notification: $e');
       return false;
     }
   }
@@ -305,7 +306,7 @@ class NotificationService {
     try {
       final hasPermission = await _ensurePermissions();
       if (!hasPermission) {
-        debugPrint(
+        LogManager.debug(
             '[NotificationService] No notification permissions - skipping mission notification');
         return false;
       }
@@ -323,10 +324,10 @@ class NotificationService {
         ),
       );
 
-      debugPrint('[NotificationService] Mission notification sent: $title');
+      LogManager.debug('[NotificationService] Mission notification sent: $title');
       return true;
     } catch (e) {
-      debugPrint(
+      LogManager.debug(
           '[NotificationService] Failed to show mission notification: $e');
       return false;
     }
@@ -337,7 +338,7 @@ class NotificationService {
     try {
       final hasPermission = await _ensurePermissions();
       if (!hasPermission) {
-        debugPrint(
+        LogManager.debug(
             '[NotificationService] No notification permissions - skipping spin notification');
         return false;
       }
@@ -364,11 +365,11 @@ class NotificationService {
         ),
       );
 
-      debugPrint(
+      LogManager.debug(
           '[NotificationService] Spin notification scheduled for: $readyTime');
       return true;
     } catch (e) {
-      debugPrint(
+      LogManager.debug(
           '[NotificationService] Failed to schedule spin notification: $e');
       return false;
     }
@@ -379,7 +380,7 @@ class NotificationService {
     try {
       final hasPermission = await _ensurePermissions();
       if (!hasPermission) {
-        debugPrint(
+        LogManager.debug(
             '[NotificationService] No notification permissions - skipping reminder');
         return false;
       }
@@ -404,10 +405,10 @@ class NotificationService {
         ),
       );
 
-      debugPrint('[NotificationService] Reminder scheduled at: $scheduledDate');
+      LogManager.debug('[NotificationService] Reminder scheduled at: $scheduledDate');
       return true;
     } catch (e) {
-      debugPrint('[NotificationService] Failed to schedule reminder: $e');
+      LogManager.debug('[NotificationService] Failed to schedule reminder: $e');
       return false;
     }
   }
@@ -429,7 +430,7 @@ class NotificationService {
   }) async {
     await _ensurePermissions();
     if (!await _isChannelEnabled(channelKey)) {
-      debugPrint('[NotificationService] Channel "$channelKey" is disabled. Skipping sendNow.');
+      LogManager.debug('[NotificationService] Channel "$channelKey" is disabled. Skipping sendNow.');
       return;
     }
     await AwesomeNotifications().createNotification(
@@ -457,7 +458,7 @@ class NotificationService {
   }) async {
     await _ensurePermissions();
     if (!await _isChannelEnabled(channelKey)) {
-      debugPrint('[NotificationService] Channel "$channelKey" is disabled. Skipping sendNow.');
+      LogManager.debug('[NotificationService] Channel "$channelKey" is disabled. Skipping sendNow.');
       return;
     }
     await AwesomeNotifications().createNotification(
@@ -488,18 +489,18 @@ class NotificationService {
   Future<void> cancelAllNotifications() async {
     try {
       await AwesomeNotifications().cancelAll();
-      debugPrint('[NotificationService] All notifications cancelled');
+      LogManager.debug('[NotificationService] All notifications cancelled');
     } catch (e) {
-      debugPrint('[NotificationService] Failed to cancel notifications: $e');
+      LogManager.debug('[NotificationService] Failed to cancel notifications: $e');
     }
   }
 
   Future<void> cancelNotification(int id) async {
     try {
       await AwesomeNotifications().cancel(id);
-      debugPrint('[NotificationService] Notification $id cancelled');
+      LogManager.debug('[NotificationService] Notification $id cancelled');
     } catch (e) {
-      debugPrint('[NotificationService] Failed to cancel notification $id: $e');
+      LogManager.debug('[NotificationService] Failed to cancel notification $id: $e');
     }
   }
 
@@ -606,7 +607,7 @@ class NotificationService {
 
       return false;
     } catch (e) {
-      debugPrint('[NotificationService] Permission dialog failed: $e');
+      LogManager.debug('[NotificationService] Permission dialog failed: $e');
       return false;
     }
   }
@@ -691,8 +692,8 @@ class _NotificationFeatureRow extends StatelessWidget {
    await NotificationService().cancelSpinNotifications();
    final success = await NotificationService().scheduleSpinReadyNotification(SpinTracker.cooldown);
    if (!success) {
-     debugPrint('[WheelScreen] Notification not scheduled - permissions may be disabled');
+     LogManager.debug('[WheelScreen] Notification not scheduled - permissions may be disabled');
    } else {
-     debugPrint('[WheelScreen] Spin ready notification scheduled');
+     LogManager.debug('[WheelScreen] Spin ready notification scheduled');
    }
  }

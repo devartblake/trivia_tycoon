@@ -5,6 +5,7 @@ import 'package:trivia_tycoon/ui_components/flip_card/flip_card.dart';
 import 'package:trivia_tycoon/ui_components/flip_card/controller/flip_card_controller.dart';
 
 import '../dialogs/game_result_dialog.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class MemoryMatchScreen extends StatefulWidget {
   const MemoryMatchScreen({super.key});
@@ -184,10 +185,10 @@ class _MemoryMatchScreenState extends State<MemoryMatchScreen> {
         gameIcon: Icons.psychology,
       ),
       onShare: () {
-        debugPrint('Share tapped');
+        LogManager.debug('Share tapped');
       },
       onClose: () {
-        debugPrint('Close tapped');
+        LogManager.debug('Close tapped');
       },
       onPlayAgain: () {
         _controller.reset();

@@ -20,6 +20,7 @@ import '../../game/utils/greeting_utils.dart';
 import '../../ui_components/tycoon_toast/tycoon_toast.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../core/animations/animation_manager.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Modern, modular main menu screen
 ///
@@ -151,7 +152,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
       data: (themeType) => _buildScaffold(themeType),
       loading: () => _buildScaffold(AppTheme.defaultTheme),
       error: (error, stack) {
-        debugPrint('[Theme] Error loading theme: $error');
+        LogManager.debug('[Theme] Error loading theme: $error');
         return _buildScaffold(AppTheme.defaultTheme);
       },
     );

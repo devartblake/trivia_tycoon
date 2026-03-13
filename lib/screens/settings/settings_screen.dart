@@ -5,6 +5,7 @@ import '../../../game/controllers/settings_controller.dart';
 import '../../core/services/notification_service.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../game/providers/auth_providers.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 final settingsControllerProvider = Provider<SettingsController>((ref) {
   final manager = ref.read(serviceManagerProvider);
@@ -79,7 +80,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
         });
       }
     } catch (e) {
-      debugPrint('Failed to check notification status: $e');
+      LogManager.debug('Failed to check notification status: $e');
       if (mounted) {
         setState(() {
           _notificationsEnabled = false;
@@ -232,7 +233,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
           _showNotificationSuccessDialog();
         }
       } catch (e) {
-        debugPrint('Error requesting notification permissions: $e');
+        LogManager.debug('Error requesting notification permissions: $e');
         if (mounted) {
           setState(() {
             _isCheckingNotifications = false;
