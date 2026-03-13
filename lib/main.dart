@@ -80,16 +80,16 @@ Future<void> _initializeAuthState(ServiceManager serviceManager) async {
   }
 }
 
-class TriviaTycoonApp extends StatefulWidget {
+class TriviaTycoonApp extends ConsumerStatefulWidget {
   final (ServiceManager, ThemeNotifier)? initialData;
 
   const TriviaTycoonApp({super.key, this.initialData});
 
   @override
-  State<TriviaTycoonApp> createState() => _TriviaTycoonAppState();
+  ConsumerState<TriviaTycoonApp> createState() => _TriviaTycoonAppState();
 }
 
-class _TriviaTycoonAppState extends State<TriviaTycoonApp> {
+class _TriviaTycoonAppState extends ConsumerState<TriviaTycoonApp> {
   (ServiceManager, ThemeNotifier)? _initialData;
   bool _initialized = false;
   bool _splashFinished = false;
@@ -262,14 +262,23 @@ class _TriviaTycoonAppState extends State<TriviaTycoonApp> {
       LogManager.debug('[Recovery] User session: ${userSession != null ? 'YES' : 'NO'}', source: '_TriviaTycoonAppState');
       LogManager.debug('[Recovery] Pending actions: ${pendingActions.length}', source: '_TriviaTycoonAppState');
 
-      // TODO: Actually restore the data to your app state
-      // Example:
-      // if (gameState != null) {
-      //   ref.read(quizStateProvider.notifier).restore(gameState);
-      // }
-      // if (pendingActions.isNotEmpty) {
-      //   ref.read(pendingActionsProvider.notifier).addAll(pendingActions);
-      // }
+      // Restore auth state from saved user session
+      if (userSession != null) {
+        final wasLoggedIn = userSession['is_logged_in'] as bool? ?? false;
+        if (wasLoggedIn) {
+          ref.read(isLoggedInSyncProvider.notifier).state = true;
+          LogManager.info('[Recovery] Auth state restored: logged in', source: '_TriviaTycoonAppState');
+        }
+      }
+
+      // Pending actions are left in the persistence service and will be
+      // retried by the background task service on next sync cycle.
+      if (pendingActions.isNotEmpty) {
+        LogManager.info(
+          '[Recovery] ${pendingActions.length} pending action(s) queued for retry',
+          source: '_TriviaTycoonAppState',
+        );
+      }
 
       // Show success message
       if (mounted) {

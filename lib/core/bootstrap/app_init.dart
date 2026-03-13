@@ -176,25 +176,27 @@ class AppInit {
     }
   }
 
-  // Get current game state
+  // Get current game state from QuizProgressService
   static Future<Map<String, dynamic>?> _getCurrentGameState() async {
     try {
-      // TODO: Get actual game state from your game providers/services
-      // For now, return null if no active game
+      if (_serviceManager == null) return null;
 
-      // Example if you're in a quiz:
-      // final quizBox = await Hive.openBox('current_quiz');
-      // if (quizBox.isEmpty) return null;
-      // return {
-      //   'quiz_id': quizBox.get('quiz_id'),
-      //   'current_question': quizBox.get('current_question'),
-      //   'score': quizBox.get('score'),
-      //   'lives': quizBox.get('lives'),
-      //   'answers': quizBox.get('answers'),
-      //   'time_started': DateTime.now().toIso8601String(),
-      // };
+      final quizProgress =
+          await _serviceManager!.quizProgressService.getQuizProgress();
+      final playerProgress =
+          await _serviceManager!.quizProgressService.getPlayerProgress();
 
-      return null; // No active game state to save
+      // Only snapshot state when there is an active in-progress quiz.
+      final hasActiveQuiz = quizProgress.isNotEmpty &&
+          quizProgress.containsKey('quiz_id');
+
+      if (!hasActiveQuiz) return null;
+
+      return {
+        'quiz_progress': quizProgress,
+        'player_progress': playerProgress,
+        'snapshot_time': DateTime.now().toIso8601String(),
+      };
     } catch (e) {
       LogManager.debug('[AppInit] ⚠️ Get game state error: $e');
       return null;
@@ -245,15 +247,14 @@ class AppInit {
     }
   }
 
-  // Get pending actions (failed requests)
+  // Get pending actions from the StatePersistenceService retry queue
   static Future<List<Map<String, dynamic>>> _getPendingActions() async {
     try {
-      // TODO: Get from your queue/retry system
-      // Example:
-      // final pendingBox = await Hive.openBox('pending_requests');
-      // return pendingBox.values.toList();
-
-      return []; // No pending actions
+      if (_persistenceService == null) return [];
+      // Carry forward any pending actions already stored from the last session
+      // so they survive across restarts until the background task service
+      // successfully processes them.
+      return await _persistenceService!.getPendingActions();
     } catch (e) {
       LogManager.debug('[AppInit] ⚠️ Get pending actions error: $e');
       return [];
