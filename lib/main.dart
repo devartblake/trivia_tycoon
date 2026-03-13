@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/core/bootstrap/app_init.dart';
 import 'package:trivia_tycoon/core/bootstrap/app_launcher.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import '/offline_fallback_screen.dart';
 import 'package:trivia_tycoon/screens/splash_variants/main_splash.dart';
 import 'package:trivia_tycoon/widgets/app_logo.dart';
@@ -34,7 +35,7 @@ Future<void> main() async {
       ),
     );
   } catch (e) {
-    debugPrint('App initialization failed: $e');
+    LogManager.error('App initialization failed: $e', source: 'main');
 
     // Fallback - run app without pre-initialized state
     runApp(
@@ -59,7 +60,7 @@ Future<void> _initializeAuthState(ServiceManager serviceManager) async {
     final isLoggedIn = await serviceManager.authService.isLoggedIn();
     final hasOnboarded = await serviceManager.onboardingSettingsService.hasCompletedOnboarding();
 
-    debugPrint('Session loaded: isLoggedIn=$isLoggedIn, hasOnboarded=$hasOnboarded');
+    LogManager.info('Session loaded: isLoggedIn=$isLoggedIn, hasOnboarded=$hasOnboarded', source: 'main');
 
     // Sync with River-pod providers
     container.read(isLoggedInSyncProvider.notifier).state = isLoggedIn;
@@ -72,9 +73,9 @@ Future<void> _initializeAuthState(ServiceManager serviceManager) async {
     // Dispose the temporary container
     container.dispose();
 
-    debugPrint('River-pod providers synchronized with service state');
+    LogManager.info('River-pod providers synchronized with service state', source: 'main');
   } catch (e) {
-    debugPrint('Auth state initialization failed: $e');
+    LogManager.error('Auth state initialization failed: $e', source: 'main');
     // Continue with default state - app should still work
   }
 }
@@ -151,7 +152,7 @@ class _TriviaTycoonAppState extends State<TriviaTycoonApp> {
         setState(() => _recoveryChecked = true);
       }
     } catch (e) {
-      debugPrint('[Recovery] Check failed: $e');
+      LogManager.error('[Recovery] Check failed: $e', source: '_TriviaTycoonAppState');
       setState(() => _recoveryChecked = true);
     }
   }
@@ -256,10 +257,10 @@ class _TriviaTycoonAppState extends State<TriviaTycoonApp> {
       final userSession = await persistenceService.getUserSession();
       final pendingActions = await persistenceService.getPendingActions();
 
-      debugPrint('[Recovery] Restoring session...');
-      debugPrint('[Recovery] Game state: ${gameState != null ? 'YES' : 'NO'}');
-      debugPrint('[Recovery] User session: ${userSession != null ? 'YES' : 'NO'}');
-      debugPrint('[Recovery] Pending actions: ${pendingActions.length}');
+      LogManager.info('[Recovery] Restoring session...', source: '_TriviaTycoonAppState');
+      LogManager.debug('[Recovery] Game state: ${gameState != null ? 'YES' : 'NO'}', source: '_TriviaTycoonAppState');
+      LogManager.debug('[Recovery] User session: ${userSession != null ? 'YES' : 'NO'}', source: '_TriviaTycoonAppState');
+      LogManager.debug('[Recovery] Pending actions: ${pendingActions.length}', source: '_TriviaTycoonAppState');
 
       // TODO: Actually restore the data to your app state
       // Example:
@@ -281,9 +282,9 @@ class _TriviaTycoonAppState extends State<TriviaTycoonApp> {
         );
       }
 
-      debugPrint('[Recovery] ✅ Session restored successfully');
+      LogManager.info('[Recovery] Session restored successfully', source: '_TriviaTycoonAppState');
     } catch (e) {
-      debugPrint('[Recovery] ❌ Restore failed: $e');
+      LogManager.error('[Recovery] Restore failed: $e', source: '_TriviaTycoonAppState');
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
