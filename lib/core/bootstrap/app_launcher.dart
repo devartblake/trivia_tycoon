@@ -173,23 +173,8 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
       // 1. Track the launch (This is safe/silent if analytics aren't ready)
       await AppInit.trackAppLifecycle(serviceManager, 'app_launched');
 
-      // 2. Show debug info
-      if (!const bool.fromEnvironment('dart.vm.product')) {
-        // Small delay to ensure Hive boxes are opened by the background loader
-        await Future.delayed(const Duration(milliseconds: 500));
-
-        final summary = await AppInit.getSpinAnalyticsSummary();
-
-        final enrichedSummary = {
-          ...summary,
-          'user_name': await UserIdentityResolver.resolveUserName(serviceManager),
-          'user_id': await _resolveUserId(),
-          'snapshot_at': DateTime.now().toIso8601String(),
-          'source': 'app_launch',
-        };
-
-        _printSpinAnalyticsSummary(enrichedSummary);
-      }
+      // Spin analytics summary is logged by _listenToLiveSpinSummary on first
+      // local_cache emission — no duplicate call needed here.
     } catch (e) {
       LogManager.debug('[AppLauncher] Failed to track app launch: $e');
     }
