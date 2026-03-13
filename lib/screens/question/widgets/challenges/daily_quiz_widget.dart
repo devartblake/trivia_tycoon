@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../game/providers/question_providers.dart' as question_data;
 import '../../../../game/models/question_model.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 // Provider for daily quiz data
 final dailyQuizProvider = FutureProvider<DailyQuizData>((ref) async {
@@ -19,7 +20,7 @@ final dailyQuizProvider = FutureProvider<DailyQuizData>((ref) async {
       lastCompletedDate: null, // TODO: Get from user progress
     );
   } catch (e) {
-    debugPrint('Error loading daily quiz: $e');
+    LogManager.debug('Error loading daily quiz: $e');
     rethrow;
   }
 });

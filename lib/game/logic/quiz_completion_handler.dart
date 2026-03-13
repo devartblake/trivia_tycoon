@@ -4,6 +4,7 @@ import '../providers/quiz_results_provider.dart';
 import '../providers/riverpod_providers.dart';
 import '../providers/xp_provider.dart';
 import '../services/educational_stats_service.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class QuizCompletionHandler {
   final WidgetRef ref;
@@ -13,7 +14,7 @@ class QuizCompletionHandler {
   /// Main method to handle quiz completion with full integration
   Future<void> handleQuizCompletion(QuizResults result) async {
     try {
-      debugPrint('Starting quiz completion processing...');
+      LogManager.debug('Starting quiz completion processing...');
 
       // Initialize services if needed
       final educationalStatsService = ref.read(educationalStatsServiceProvider);
@@ -35,10 +36,10 @@ class QuizCompletionHandler {
       ref.invalidate(educationalStatsProvider);
       ref.invalidate(weeklyActivityProvider);
 
-      debugPrint('Quiz completion processed successfully');
+      LogManager.debug('Quiz completion processed successfully');
 
     } catch (e) {
-      debugPrint('Error processing quiz completion: $e');
+      LogManager.debug('Error processing quiz completion: $e');
       // Don't throw - we don't want to break the quiz flow if stats fail
     }
   }
@@ -55,29 +56,29 @@ class QuizCompletionHandler {
       await _checkVolumeAchievements(stats);
 
     } catch (e) {
-      debugPrint('Error checking achievements: $e');
+      LogManager.debug('Error checking achievements: $e');
     }
   }
 
   Future<void> _checkFirstQuizAchievement(EducationalStats stats) async {
     if (stats.totalQuizzes == 1) {
-      debugPrint('Achievement Unlocked: First Steps!');
+      LogManager.debug('Achievement Unlocked: First Steps!');
     }
   }
 
   Future<void> _checkStreakAchievements(EducationalStats stats) async {
     switch (stats.currentStreak) {
       case 3:
-        debugPrint('Achievement Unlocked: Getting Started (3-day streak)!');
+        LogManager.debug('Achievement Unlocked: Getting Started (3-day streak)!');
         break;
       case 7:
-        debugPrint('Achievement Unlocked: Weekly Warrior (7-day streak)!');
+        LogManager.debug('Achievement Unlocked: Weekly Warrior (7-day streak)!');
         break;
       case 30:
-        debugPrint('Achievement Unlocked: Monthly Master (30-day streak)!');
+        LogManager.debug('Achievement Unlocked: Monthly Master (30-day streak)!');
         break;
       case 100:
-        debugPrint('Achievement Unlocked: Dedication Legend (100-day streak)!');
+        LogManager.debug('Achievement Unlocked: Dedication Legend (100-day streak)!');
         break;
     }
   }
@@ -88,34 +89,34 @@ class QuizCompletionHandler {
       // Math achievements
       if (result.category.toLowerCase().contains('math')) {
         if (subjectStats.quizzesCompleted == 25) {
-          debugPrint('Achievement Unlocked: Math Wizard!');
+          LogManager.debug('Achievement Unlocked: Math Wizard!');
         }
         if (subjectStats.averageScore >= 95 && subjectStats.quizzesCompleted >= 10) {
-          debugPrint('Achievement Unlocked: Math Genius!');
+          LogManager.debug('Achievement Unlocked: Math Genius!');
         }
       }
 
       // Science achievements
       if (result.category.toLowerCase().contains('science')) {
         if (subjectStats.correctAnswers >= 100) {
-          debugPrint('Achievement Unlocked: Science Explorer!');
+          LogManager.debug('Achievement Unlocked: Science Explorer!');
         }
         if (subjectStats.averageScore >= 90 && subjectStats.quizzesCompleted >= 15) {
-          debugPrint('Achievement Unlocked: Future Scientist!');
+          LogManager.debug('Achievement Unlocked: Future Scientist!');
         }
       }
 
       // History achievements
       if (result.category == 'History') {
         if (subjectStats.quizzesCompleted == 20) {
-          debugPrint('Achievement Unlocked: History Buff!');
+          LogManager.debug('Achievement Unlocked: History Buff!');
         }
       }
 
       // Literature achievements
       if (result.category == 'Literature') {
         if (subjectStats.quizzesCompleted == 15) {
-          debugPrint('Achievement Unlocked: Bookworm!');
+          LogManager.debug('Achievement Unlocked: Bookworm!');
         }
       }
     }
@@ -125,27 +126,27 @@ class QuizCompletionHandler {
     final scorePercentage = (result.score / result.totalQuestions) * 100;
 
     if (scorePercentage == 100) {
-      debugPrint('Achievement Unlocked: Perfect Score!');
+      LogManager.debug('Achievement Unlocked: Perfect Score!');
     }
 
     if (scorePercentage >= 95) {
-      debugPrint('Achievement Unlocked: Nearly Perfect!');
+      LogManager.debug('Achievement Unlocked: Nearly Perfect!');
     }
   }
 
   Future<void> _checkVolumeAchievements(EducationalStats stats) async {
     switch (stats.totalQuizzes) {
       case 10:
-        debugPrint('Achievement Unlocked: Getting Serious (10 quizzes)!');
+        LogManager.debug('Achievement Unlocked: Getting Serious (10 quizzes)!');
         break;
       case 50:
-        debugPrint('Achievement Unlocked: Quiz Master (50 quizzes)!');
+        LogManager.debug('Achievement Unlocked: Quiz Master (50 quizzes)!');
         break;
       case 100:
-        debugPrint('Achievement Unlocked: Centennial Scholar (100 quizzes)!');
+        LogManager.debug('Achievement Unlocked: Centennial Scholar (100 quizzes)!');
         break;
       case 250:
-        debugPrint('Achievement Unlocked: Quiz Legend (250 quizzes)!');
+        LogManager.debug('Achievement Unlocked: Quiz Legend (250 quizzes)!');
         break;
     }
 
@@ -160,7 +161,7 @@ class QuizCompletionHandler {
       // Check if user completed at least one quiz each day this week
       final daysWithQuizzes = weeklyData.where((day) => day['quizzes'] > 0).length;
       if (daysWithQuizzes >= 7) {
-        debugPrint('Achievement Unlocked: Weekly Dedication!');
+        LogManager.debug('Achievement Unlocked: Weekly Dedication!');
 
         // Check if all scores this week were 90% or higher
         final allScoresHigh = weeklyData.every((day) =>
@@ -168,11 +169,11 @@ class QuizCompletionHandler {
         );
 
         if (allScoresHigh && daysWithQuizzes >= 7) {
-          debugPrint('Achievement Unlocked: Perfect Week!');
+          LogManager.debug('Achievement Unlocked: Perfect Week!');
         }
       }
     } catch (e) {
-      debugPrint('Error checking weekly performance: $e');
+      LogManager.debug('Error checking weekly performance: $e');
     }
   }
 }
@@ -215,7 +216,7 @@ class ProfileDataUpdater {
       final tierResult = await tierManager.updateTierProgress();
 
       if (tierResult.tierChanged) {
-        debugPrint('Tier progression: ${tierResult.oldTierId} -> ${tierResult.newTierId}');
+        LogManager.debug('Tier progression: ${tierResult.oldTierId} -> ${tierResult.newTierId}');
 
         // Award tier rewards
         final newTier = await tierManager.getCurrentTier();
@@ -231,7 +232,7 @@ class ProfileDataUpdater {
       // Handle any new tier unlocks
       if (tierResult.hasNewUnlocks) {
         for (final tier in tierResult.newUnlocks) {
-          debugPrint('New tier unlocked: ${tier.name}');
+          LogManager.debug('New tier unlocked: ${tier.name}');
           await tierManager.awardTierRewards(tier);
         }
       }
@@ -242,9 +243,9 @@ class ProfileDataUpdater {
         confettiController.play();
       }
 
-      debugPrint('Quiz completion processing finished successfully');
+      LogManager.debug('Quiz completion processing finished successfully');
     } catch (e) {
-      debugPrint('Error in ProfileDataUpdater.updateAfterQuiz: $e');
+      LogManager.debug('Error in ProfileDataUpdater.updateAfterQuiz: $e');
       rethrow;
     }
   }

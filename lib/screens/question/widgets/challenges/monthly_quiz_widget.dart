@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../game/providers/question_providers.dart' as question_data;
 import '../../../../game/models/question_model.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 // Provider for monthly quiz preview data
 final monthlyQuizPreviewProvider = FutureProvider<MonthlyQuizPreview>((ref) async {
@@ -37,7 +38,7 @@ final monthlyQuizPreviewProvider = FutureProvider<MonthlyQuizPreview>((ref) asyn
       completionRate: 0.0, // TODO: Get from user progress
     );
   } catch (e) {
-    debugPrint('Error loading monthly quiz preview: $e');
+    LogManager.debug('Error loading monthly quiz preview: $e');
     rethrow;
   }
 });

@@ -7,6 +7,7 @@ import '../../admin/leaderboard/leaderboard_filter_screen.dart';
 import '../../core/services/leaderboard_data_service.dart';
 import '../../game/models/leaderboard_entry.dart';
 import '../models/leaderboard_filter_settings.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 enum LeaderboardCategory { topXP, mostWins, daily, weekly, global }
 
@@ -58,7 +59,7 @@ class LeaderboardController extends ChangeNotifier {
         _leaderboardStats = Map<String, dynamic>.from(jsonDecode(statsStr));
       }
     } catch (e) {
-      debugPrint('Failed to load leaderboard state: $e');
+      LogManager.debug('Failed to load leaderboard state: $e');
     }
   }
 
@@ -93,7 +94,7 @@ class LeaderboardController extends ChangeNotifier {
       await _storage.setString('last_leaderboard_refresh', _lastRefreshTime!.toIso8601String());
 
     } catch (e) {
-      if (kDebugMode) debugPrint("⚠️ Error fetching leaderboard: $e");
+      if (kDebugMode) LogManager.debug("⚠️ Error fetching leaderboard: $e");
     }
 
     _isLoading = false;
@@ -179,7 +180,7 @@ class LeaderboardController extends ChangeNotifier {
       final currentUser = _allEntries.firstWhere((e) => e.userId == userId);
       filtered = filtered.where((e) => e.tier == currentUser.tier).toList();
     } catch (e) {
-      if (kDebugMode) debugPrint("⚠️ Tier restriction skipped (no matching user): $e");
+      if (kDebugMode) LogManager.debug("⚠️ Tier restriction skipped (no matching user): $e");
     }
 
     filteredEntries = filtered;
@@ -244,7 +245,7 @@ class LeaderboardController extends ChangeNotifier {
 
       await _storage.setString('leaderboard_stats', jsonEncode(_leaderboardStats));
     } catch (e) {
-      debugPrint('Failed to update leaderboard stats: $e');
+      LogManager.debug('Failed to update leaderboard stats: $e');
     }
   }
 
@@ -271,9 +272,9 @@ class LeaderboardController extends ChangeNotifier {
 
       await _storage.setString('leaderboard_state_snapshot', jsonEncode(stateSnapshot));
 
-      debugPrint('Leaderboard state saved successfully');
+      LogManager.debug('Leaderboard state saved successfully');
     } catch (e) {
-      debugPrint('Failed to save leaderboard state: $e');
+      LogManager.debug('Failed to save leaderboard state: $e');
     }
   }
 
@@ -295,9 +296,9 @@ class LeaderboardController extends ChangeNotifier {
       // Resume normal operations
       _isPaused = false;
 
-      debugPrint('Leaderboard data refresh completed');
+      LogManager.debug('Leaderboard data refresh completed');
     } catch (e) {
-      debugPrint('Leaderboard data refresh failed: $e');
+      LogManager.debug('Leaderboard data refresh failed: $e');
       await _resetLeaderboardState();
     }
   }
@@ -341,10 +342,10 @@ class LeaderboardController extends ChangeNotifier {
       if (needsRepair) {
         await _applyFilters();
         await _updateLeaderboardStats();
-        debugPrint('Leaderboard integrity restored');
+        LogManager.debug('Leaderboard integrity restored');
       }
     } catch (e) {
-      debugPrint('Failed to validate leaderboard integrity: $e');
+      LogManager.debug('Failed to validate leaderboard integrity: $e');
     }
   }
 
@@ -365,10 +366,10 @@ class LeaderboardController extends ChangeNotifier {
       await _storage.remove('leaderboard_stats');
       await _storage.remove('last_leaderboard_refresh');
 
-      debugPrint('Leaderboard state reset to defaults');
+      LogManager.debug('Leaderboard state reset to defaults');
       notifyListeners();
     } catch (e) {
-      debugPrint('Failed to reset leaderboard state: $e');
+      LogManager.debug('Failed to reset leaderboard state: $e');
     }
   }
 
@@ -433,9 +434,9 @@ class LeaderboardController extends ChangeNotifier {
       await _updateLeaderboardStats();
       notifyListeners();
 
-      debugPrint('Leaderboard data imported successfully');
+      LogManager.debug('Leaderboard data imported successfully');
     } catch (e) {
-      debugPrint('Failed to import leaderboard data: $e');
+      LogManager.debug('Failed to import leaderboard data: $e');
       rethrow;
     }
   }

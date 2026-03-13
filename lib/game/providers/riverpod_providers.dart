@@ -117,6 +117,7 @@ import '../models/badge.dart';
 import '../state/tier_progression_state.dart';
 import '../state/tier_update_result.dart';
 import 'message_providers.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 // --- 🌍 Global Services ---
 final configServiceProvider =
@@ -197,10 +198,10 @@ final authHttpClientProvider = Provider<AuthHttpClient>((ref) {
     ref.watch(authTokenStoreProvider),
     autoRefresh: true,
     onTokenRefreshed: () {
-      debugPrint('[Auth] ✅ Token auto-refreshed');
+      LogManager.debug('[Auth] ✅ Token auto-refreshed');
     },
     onRefreshFailed: (error) {
-      debugPrint('[Auth] ❌ Refresh failed: $error');
+      LogManager.debug('[Auth] ❌ Refresh failed: $error');
       // Optional: Navigate to login or show notification
     },
   );
@@ -226,13 +227,13 @@ final wsClientProvider = Provider<WsClient>((ref) {
   return WsClient(
     url: EnvConfig.apiWsBaseUrl,
     onMessage: (message) {
-      debugPrint('[WS] Message: ${message.op}');
+      LogManager.debug('[WS] Message: ${message.op}');
     },
     onStateChange: (state) {
-      debugPrint('[WS] State: $state');
+      LogManager.debug('[WS] State: $state');
     },
     onError: (error) {
-      debugPrint('[WS] Error: $error');
+      LogManager.debug('[WS] Error: $error');
     },
   );
 });

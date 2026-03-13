@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 import 'package:trivia_tycoon/core/services/settings/player_profile_service.dart';
 import 'package:trivia_tycoon/core/services/settings/profile_sync_service.dart';
 import 'package:uuid/uuid.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// ProfileData model for individual profiles
 class ProfileData {
@@ -176,7 +177,7 @@ class MultiProfileService {
         'avatar': profile.avatar,
       });
     } catch (e) {
-      debugPrint('[MultiProfile] Failed syncing active profile to legacy settings: $e');
+      LogManager.debug('[MultiProfile] Failed syncing active profile to legacy settings: $e');
     }
   }
 
@@ -201,7 +202,7 @@ class MultiProfileService {
           .toList()
         ..sort((a, b) => b.lastActive.compareTo(a.lastActive)); // Most recent first
     } catch (e) {
-      debugPrint('[MultiProfile] Error getting profiles: $e');
+      LogManager.debug('[MultiProfile] Error getting profiles: $e');
       return [];
     }
   }
@@ -231,7 +232,7 @@ class MultiProfileService {
 
       return ProfileData.fromJson(Map<String, dynamic>.from(profilesMap[activeProfileId]));
     } catch (e) {
-      debugPrint('[MultiProfile] Error getting active profile: $e');
+      LogManager.debug('[MultiProfile] Error getting active profile: $e');
       return null;
     }
   }
@@ -244,7 +245,7 @@ class MultiProfileService {
       final Map<String, dynamic> profilesMap = Map<String, dynamic>.from(profilesData);
 
       if (!profilesMap.containsKey(profileId)) {
-        debugPrint('[MultiProfile] Profile $profileId not found');
+        LogManager.debug('[MultiProfile] Profile $profileId not found');
         return false;
       }
 
@@ -258,10 +259,10 @@ class MultiProfileService {
 
       await _syncActiveProfileToLegacySettings(updatedProfile);
 
-      debugPrint('[MultiProfile] Switched to profile: ${profile.name}');
+      LogManager.debug('[MultiProfile] Switched to profile: ${profile.name}');
       return true;
     } catch (e) {
-      debugPrint('[MultiProfile] Error setting active profile: $e');
+      LogManager.debug('[MultiProfile] Error setting active profile: $e');
       return false;
     }
   }
@@ -280,7 +281,7 @@ class MultiProfileService {
       final profiles = await getAllProfiles();
 
       if (profiles.length >= _maxProfiles) {
-        debugPrint('[MultiProfile] Maximum number of profiles reached');
+        LogManager.debug('[MultiProfile] Maximum number of profiles reached');
         return null;
       }
 
@@ -310,10 +311,10 @@ class MultiProfileService {
         await _syncActiveProfileToLegacySettings(newProfile);
       }
 
-      debugPrint('[MultiProfile] Created new profile: ${newProfile.name}');
+      LogManager.debug('[MultiProfile] Created new profile: ${newProfile.name}');
       return newProfile;
     } catch (e) {
-      debugPrint('[MultiProfile] Error creating profile: $e');
+      LogManager.debug('[MultiProfile] Error creating profile: $e');
       return null;
     }
   }
@@ -340,7 +341,7 @@ class MultiProfileService {
       final Map<String, dynamic> profilesMap = Map<String, dynamic>.from(profilesData);
 
       if (!profilesMap.containsKey(profileId)) {
-        debugPrint('[MultiProfile] Profile $profileId not found for update');
+        LogManager.debug('[MultiProfile] Profile $profileId not found for update');
         return false;
       }
 
@@ -397,10 +398,10 @@ class MultiProfileService {
         await _syncActiveProfileToLegacySettings(updatedProfile);
       }
 
-      debugPrint('[MultiProfile] Updated profile: ${updatedProfile.name}');
+      LogManager.debug('[MultiProfile] Updated profile: ${updatedProfile.name}');
       return true;
     } catch (e) {
-      debugPrint('[MultiProfile] Error updating profile: $e');
+      LogManager.debug('[MultiProfile] Error updating profile: $e');
       return false;
     }
   }
@@ -411,7 +412,7 @@ class MultiProfileService {
       final profiles = await getAllProfiles();
 
       if (profiles.length <= 1) {
-        debugPrint('[MultiProfile] Cannot delete the last remaining profile');
+        LogManager.debug('[MultiProfile] Cannot delete the last remaining profile');
         return false;
       }
 
@@ -420,7 +421,7 @@ class MultiProfileService {
       final Map<String, dynamic> profilesMap = Map<String, dynamic>.from(profilesData);
 
       if (!profilesMap.containsKey(profileId)) {
-        debugPrint('[MultiProfile] Profile $profileId not found for deletion');
+        LogManager.debug('[MultiProfile] Profile $profileId not found for deletion');
         return false;
       }
 
@@ -437,10 +438,10 @@ class MultiProfileService {
         }
       }
 
-      debugPrint('[MultiProfile] Deleted profile: ${profileToDelete.name}');
+      LogManager.debug('[MultiProfile] Deleted profile: ${profileToDelete.name}');
       return true;
     } catch (e) {
-      debugPrint('[MultiProfile] Error deleting profile: $e');
+      LogManager.debug('[MultiProfile] Error deleting profile: $e');
       return false;
     }
   }
@@ -500,7 +501,7 @@ class MultiProfileService {
         'profile': updatedProfile,
       };
     } catch (e) {
-      debugPrint('[MultiProfile] Error adding XP to profile: $e');
+      LogManager.debug('[MultiProfile] Error adding XP to profile: $e');
       return {'error': e.toString()};
     }
   }
@@ -530,7 +531,7 @@ class MultiProfileService {
       final box = await _getBox();
       return Map<String, dynamic>.from(box.get(_accountDataKey, defaultValue: {}));
     } catch (e) {
-      debugPrint('[MultiProfile] Error getting account data: $e');
+      LogManager.debug('[MultiProfile] Error getting account data: $e');
       return {};
     }
   }
@@ -541,7 +542,7 @@ class MultiProfileService {
       final box = await _getBox();
       await box.put(_accountDataKey, accountData);
     } catch (e) {
-      debugPrint('[MultiProfile] Error saving account data: $e');
+      LogManager.debug('[MultiProfile] Error saving account data: $e');
     }
   }
 
@@ -563,10 +564,10 @@ class MultiProfileService {
           isPremium: legacyProfile['isPremium'] ?? false,
         );
 
-        debugPrint('[MultiProfile] Migrated legacy profile to multi-profile system');
+        LogManager.debug('[MultiProfile] Migrated legacy profile to multi-profile system');
       }
     } catch (e) {
-      debugPrint('[MultiProfile] Error during initialization/migration: $e');
+      LogManager.debug('[MultiProfile] Error during initialization/migration: $e');
     }
   }
 
@@ -597,9 +598,9 @@ class MultiProfileService {
     try {
       final box = await _getBox();
       await box.clear();
-      debugPrint('[MultiProfile] All profile data cleared');
+      LogManager.debug('[MultiProfile] All profile data cleared');
     } catch (e) {
-      debugPrint('[MultiProfile] Error clearing profiles: $e');
+      LogManager.debug('[MultiProfile] Error clearing profiles: $e');
     }
   }
 }

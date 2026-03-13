@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'widgets/skill_tree_view.dart';
 import '../../game/controllers/skill_tree_controller.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class SkillTreeScreen extends ConsumerStatefulWidget {
   final String? groupId;
@@ -160,7 +161,7 @@ class _SkillTreeScreenState extends ConsumerState<SkillTreeScreen> {
   void _highlightSkillCategory(String category) {
     // Implement logic to highlight or filter skills of a specific category
     // This could involve updating the skill tree state or passing filters to SkillTreeView
-    debugPrint('Highlighting skills in category: $category');
+    LogManager.debug('Highlighting skills in category: $category');
   }
 
   Color _getGroupColor(String groupId) {

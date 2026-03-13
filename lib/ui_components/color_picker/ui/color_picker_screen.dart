@@ -77,7 +77,7 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
         });
       }
     } catch (e) {
-      debugPrint('Error loading theme: $e');
+      LogManager.debug('Error loading theme: $e');
     }
   }
 
@@ -90,7 +90,7 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
         });
       }
     } catch (e) {
-      debugPrint('Error loading saved colors: $e');
+      LogManager.debug('Error loading saved colors: $e');
     }
   }
 

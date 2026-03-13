@@ -8,6 +8,7 @@ import 'package:trivia_tycoon/core/services/settings/player_profile_service.dart
 import 'package:trivia_tycoon/core/services/storage/secure_storage.dart';
 import 'package:trivia_tycoon/ui_components/login/models/signup_data.dart';
 import '../services/analytics/config_service.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// LoginManager handles login, logout, onboarding, and resume state.
 ///
@@ -174,7 +175,7 @@ class LoginManager {
     await profileService.saveUserRole(role);
     await secureStorage.setSecret('user_role', role);
 
-    debugPrint('[LoginManager] User role set to: $role');
+    LogManager.debug('[LoginManager] User role set to: $role');
   }
 
   /// Extract premium status from session metadata
@@ -205,7 +206,7 @@ class LoginManager {
     await profileService.setPremiumStatus(isPremium);
     await secureStorage.setSecret('is_premium', isPremium.toString());
 
-    debugPrint('[LoginManager] Premium status set to: $isPremium');
+    LogManager.debug('[LoginManager] Premium status set to: $isPremium');
   }
 
   /// Map backend tier to role

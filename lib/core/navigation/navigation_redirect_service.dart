@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../game/providers/auth_providers.dart';
 import '../../game/providers/onboarding_providers.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Navigation redirect service that determines where users should be redirected
 class NavigationRedirectService {
@@ -14,7 +15,7 @@ class NavigationRedirectService {
     final onboardingPhase = ref.read(onboardingPhaseProvider);
 
     // Debug logging
-    debugPrint('REDIRECT DEBUG: isLoggedIn = $isLoggedIn, path = $currentPath, phase = $onboardingPhase');
+    LogManager.debug('REDIRECT DEBUG: isLoggedIn = $isLoggedIn, path = $currentPath, phase = $onboardingPhase');
 
     // 1) Always allow splash screen
     if (currentPath == '/') return null;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/challenge_models.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Controller for challenge interactions
 /// TODO: Hook up with your routing and game flow
@@ -9,7 +10,7 @@ class ChallengeController {
       BuildContext context,
       Challenge challenge,
       ) async {
-    debugPrint('[ChallengeController] Starting challenge: ${challenge.title}');
+    LogManager.debug('[ChallengeController] Starting challenge: ${challenge.title}');
 
     // TODO: Navigate to the proper game mode based on challenge type
     // Example:
@@ -38,7 +39,7 @@ class ChallengeController {
       BuildContext context,
       Challenge challenge,
       ) async {
-    debugPrint('[ChallengeController] Claiming reward for: ${challenge.title}');
+    LogManager.debug('[ChallengeController] Claiming reward for: ${challenge.title}');
 
     // TODO: Show reward dialog/bottom sheet
     // Example:

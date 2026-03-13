@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import '../../utils/input_validator.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Service for managing typing indicators in chat conversations
 class TypingIndicatorService extends ChangeNotifier {
@@ -197,7 +198,7 @@ class TypingIndicatorService extends ChangeNotifier {
   Future<void> _broadcastTypingStatus(String conversationId, bool isTyping) async {
     // TODO: Implement network broadcast
     // This would typically send typing status to server or other users
-    debugPrint('Broadcasting typing status: $conversationId - $isTyping');
+    LogManager.debug('Broadcasting typing status: $conversationId - $isTyping');
 
     // Example implementation would be:
     // await _chatService.sendTypingStatus(conversationId, isTyping);

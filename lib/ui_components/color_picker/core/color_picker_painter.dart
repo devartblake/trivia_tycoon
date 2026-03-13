@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class ColorPickerPainter extends CustomPainter {
   final List<Color> colors;
@@ -67,7 +68,7 @@ class ColorPickerPainter extends CustomPainter {
         _imageCache.remove(oldestKey);
       }
     } catch (e) {
-      debugPrint('Error caching color picker image: $e');
+      LogManager.debug('Error caching color picker image: $e');
       // Fallback to direct drawing
       if (isCircular) {
         _drawColorWheel(canvas, size, paint);

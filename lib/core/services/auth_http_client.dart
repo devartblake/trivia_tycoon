@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'auth_token_store.dart';
 import 'auth_service.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// HTTP client that automatically adds auth headers and refreshes expired tokens
 ///
@@ -42,12 +43,12 @@ class AuthHttpClient extends http.BaseClient {
     // Check if token is expired and auto-refresh is enabled
     if (autoRefresh && session.hasTokens && session.isExpired) {
       try {
-        debugPrint('[AuthHttpClient] Token expired, refreshing...');
+        LogManager.debug('[AuthHttpClient] Token expired, refreshing...');
         await _authService.refresh();
         onTokenRefreshed?.call();
-        debugPrint('[AuthHttpClient] Token refreshed successfully');
+        LogManager.debug('[AuthHttpClient] Token refreshed successfully');
       } catch (e) {
-        debugPrint('[AuthHttpClient] Token refresh failed: $e');
+        LogManager.debug('[AuthHttpClient] Token refresh failed: $e');
         onRefreshFailed?.call(e as Exception);
         // Continue with expired token - backend will reject and user will need to re-login
       }
@@ -69,7 +70,7 @@ class AuthHttpClient extends http.BaseClient {
 
       // If we get 401, token might be invalid - try refresh once
       if (response.statusCode == 401 && autoRefresh && currentSession.hasTokens) {
-        debugPrint('[AuthHttpClient] Got 401, attempting token refresh...');
+        LogManager.debug('[AuthHttpClient] Got 401, attempting token refresh...');
 
         try {
           await _authService.refresh();
@@ -82,7 +83,7 @@ class AuthHttpClient extends http.BaseClient {
 
           return await _inner.send(retryRequest);
         } catch (e) {
-          debugPrint('[AuthHttpClient] Retry failed: $e');
+          LogManager.debug('[AuthHttpClient] Retry failed: $e');
           onRefreshFailed?.call(e as Exception);
           // Return original 401 response
           return response;
@@ -91,7 +92,7 @@ class AuthHttpClient extends http.BaseClient {
 
       return response;
     } catch (e) {
-      debugPrint('[AuthHttpClient] Request error: $e');
+      LogManager.debug('[AuthHttpClient] Request error: $e');
       rethrow;
     }
   }

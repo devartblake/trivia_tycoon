@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'gift_transaction_service.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class CustomizationService extends ChangeNotifier {
   static final CustomizationService _instance = CustomizationService._internal();
@@ -19,7 +20,7 @@ class CustomizationService extends ChangeNotifier {
 
   void initialize() {
     _loadDefaultItems();
-    debugPrint('CustomizationService initialized');
+    LogManager.debug('CustomizationService initialized');
   }
 
   void dispose() {
@@ -39,7 +40,7 @@ class CustomizationService extends ChangeNotifier {
   Future<bool> purchaseTheme(String userId, String themeId, int price) async {
     // Check if already owned
     if (ownsTheme(userId, themeId)) {
-      debugPrint('Theme already owned');
+      LogManager.debug('Theme already owned');
       return false;
     }
 
@@ -57,7 +58,7 @@ class CustomizationService extends ChangeNotifier {
     _ownedThemes[userId] ??= {};
     _ownedThemes[userId]!.add(themeId);
 
-    debugPrint('Theme purchased: $themeId by $userId');
+    LogManager.debug('Theme purchased: $themeId by $userId');
     notifyListeners();
 
     return true;
@@ -66,13 +67,13 @@ class CustomizationService extends ChangeNotifier {
   Future<bool> applyTheme(String userId, String themeId) async {
     // Check if owned
     if (!ownsTheme(userId, themeId)) {
-      debugPrint('Theme not owned');
+      LogManager.debug('Theme not owned');
       return false;
     }
 
     _activeThemes[userId] = themeId;
 
-    debugPrint('Theme applied: $themeId for $userId');
+    LogManager.debug('Theme applied: $themeId for $userId');
     _broadcastThemeUpdate(userId);
     notifyListeners();
 
@@ -96,7 +97,7 @@ class CustomizationService extends ChangeNotifier {
   Future<bool> purchaseStickerPack(String userId, String packId, int price) async {
     // Check if already owned
     if (ownsStickerPack(userId, packId)) {
-      debugPrint('Sticker pack already owned');
+      LogManager.debug('Sticker pack already owned');
       return false;
     }
 
@@ -114,7 +115,7 @@ class CustomizationService extends ChangeNotifier {
     _ownedStickerPacks[userId] ??= {};
     _ownedStickerPacks[userId]!.add(packId);
 
-    debugPrint('Sticker pack purchased: $packId by $userId');
+    LogManager.debug('Sticker pack purchased: $packId by $userId');
     _broadcastStickerUpdate(userId);
     notifyListeners();
 
@@ -156,7 +157,7 @@ class CustomizationService extends ChangeNotifier {
     _userPreferences[userId] ??= {};
     _userPreferences[userId]![key] = value;
 
-    debugPrint('Preference set for $userId: $key = $value');
+    LogManager.debug('Preference set for $userId: $key = $value');
     notifyListeners();
   }
 
@@ -258,7 +259,7 @@ class CustomizationService extends ChangeNotifier {
 
   Future<void> syncCustomizations(String userId) async {
     // In a real app, this would sync with backend
-    debugPrint('Syncing customizations for $userId');
+    LogManager.debug('Syncing customizations for $userId');
     await Future.delayed(const Duration(milliseconds: 500));
     notifyListeners();
   }
@@ -309,11 +310,11 @@ class CustomizationService extends ChangeNotifier {
         _userPreferences[userId] = prefs;
       }
 
-      debugPrint('Customizations imported for $userId');
+      LogManager.debug('Customizations imported for $userId');
       notifyListeners();
       return true;
     } catch (e) {
-      debugPrint('Failed to import customizations: $e');
+      LogManager.debug('Failed to import customizations: $e');
       return false;
     }
   }

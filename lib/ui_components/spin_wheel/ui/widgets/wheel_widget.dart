@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../models/spin_system_models.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class WheelWidget extends StatefulWidget {
   final List<WheelSegment> segments;
@@ -63,7 +64,7 @@ class _WheelWidgetState extends State<WheelWidget> {
           final frame = await codec.getNextFrame();
           newImages[segment.imagePath!] = frame.image;
         } catch (e) {
-          debugPrint('Failed to load image: ${segment.imagePath}');
+          LogManager.debug('Failed to load image: ${segment.imagePath}');
         }
       }
     }
