@@ -1,3 +1,4 @@
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import 'package:trivia_tycoon/game/multiplayer/domain/entities/room.dart';
 import 'package:trivia_tycoon/game/multiplayer/domain/repositories/multiplayer_repository.dart';
 import 'package:trivia_tycoon/game/multiplayer/domain/entities/match.dart';
@@ -12,85 +13,52 @@ class MultiplayerRepositoryImpl implements MultiplayerRepository {
 
   @override
   Future<bool> quickMatch() async {
-    // TODO: implement server call via wsClient.send or HTTP
+    await wsClient.send({
+      'type': 'quick_match',
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+    });
     return true;
   }
 
   @override
   Future<bool> createRoom(String name) async {
-    // TODO: implement server call
+    await wsClient.send({
+      'type': 'create_room',
+      'name': name,
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+    });
     return true;
   }
 
   @override
   Future<bool> joinRoom(String roomId) async {
-    // TODO: implement server call
+    await wsClient.send({
+      'type': 'join_room',
+      'room_id': roomId,
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+    });
     return true;
   }
 
   @override
   Future<List<Map<String, dynamic>>> listRooms() async {
     try {
-      // TODO: Replace with actual server call
-      // For now, return mock data for development/testing
-      await Future.delayed(const Duration(milliseconds: 500)); // Simulate network delay
-
-      return [
-        {
-          'roomId': 'room_001',
-          'name': 'Quiz Masters',
-          'playerCount': 3,
-          'maxPlayers': 8,
-          'isPublic': true,
-          'gameMode': 'classic',
-          'status': 'waiting',
-          'created': DateTime.now().subtract(const Duration(minutes: 5)).toIso8601String(),
-        },
-        {
-          'roomId': 'room_002',
-          'name': 'Brain Busters',
-          'playerCount': 2,
-          'maxPlayers': 6,
-          'isPublic': true,
-          'gameMode': 'speed',
-          'status': 'waiting',
-          'created': DateTime.now().subtract(const Duration(minutes: 12)).toIso8601String(),
-        },
-        {
-          'roomId': 'room_003',
-          'name': 'Trivia Champions',
-          'playerCount': 5,
-          'maxPlayers': 8,
-          'isPublic': true,
-          'gameMode': 'classic',
-          'status': 'in_game',
-          'created': DateTime.now().subtract(const Duration(minutes: 20)).toIso8601String(),
-        },
-      ];
-
-      // Real implementation would look like:
-      /*
-      final response = await wsClient.send({
+      await wsClient.send({
         'type': 'list_rooms',
         'timestamp': DateTime.now().millisecondsSinceEpoch,
       });
-
-      if (response['success'] == true) {
-        return List<Map<String, dynamic>>.from(response['rooms']);
-      } else {
-        throw Exception('Failed to list rooms: ${response['error']}');
-      }
-      */
+      // Room list arrives via the GameEvent stream (RoomListEvent).
+      // Return empty synchronously; callers should watch events() for results.
+      return [];
     } catch (e) {
-      // Log error and return empty list for graceful degradation
-      print('Error listing rooms: $e');
+      LogManager.error('Error listing rooms: $e', source: 'MultiplayerRepository');
       return [];
     }
   }
 
   @override
   Future<Match?> currentMatch() async {
-    // TODO: query server or local cache
+    // Current match state is tracked via the GameEvent stream (MatchStarted / MatchUpdated).
     return null;
   }
 
@@ -99,8 +67,7 @@ class MultiplayerRepositoryImpl implements MultiplayerRepository {
 
   @override
   Future<Room?> currentRoom() async {
-    // No server snapshot endpoint yet; current room state is tracked via
-    // GameEvent stream (JoinedRoom / PlayerJoined events).
+    // Current room state is tracked via GameEvent stream (JoinedRoom / PlayerJoined events).
     return null;
   }
 
