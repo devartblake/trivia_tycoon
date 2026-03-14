@@ -1,0 +1,111 @@
+name: Test Coverage
+
+on:
+  pull_request:
+    paths:
+      - 'lib/**'
+      - 'test/**'
+      - 'pubspec.yaml'
+      - '.github/workflows/test-coverage.yml'
+  push:
+    branches:
+      - main
+      - 'claude/**'
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Dart format check
+        run: dart format --set-exit-if-changed lib test
+
+      - name: Flutter analyze
+        run: flutter analyze
+
+      - name: Run tests with coverage
+        run: flutter test --coverage
+
+      - name: Check coverage threshold (lib/game/ and lib/core/)
+        run: |
+          pip install lcov-badge 2>/dev/null || true
+
+          # Extract line coverage for lib/game/ and lib/core/ from lcov.info
+          GAME_LINES_HIT=0
+          GAME_LINES_FOUND=0
+          CORE_LINES_HIT=0
+          CORE_LINES_FOUND=0
+
+          IN_GAME=0
+          IN_CORE=0
+
+          while IFS= read -r line; do
+            if [[ "$line" == SF:lib/game/* ]]; then
+              IN_GAME=1
+              IN_CORE=0
+            elif [[ "$line" == SF:lib/core/* ]]; then
+              IN_CORE=1
+              IN_GAME=0
+            elif [[ "$line" == SF:* ]]; then
+              IN_GAME=0
+              IN_CORE=0
+            fi
+
+            if [[ "$line" == LH:* ]]; then
+              HIT="${line#LH:}"
+              if [[ $IN_GAME -eq 1 ]]; then GAME_LINES_HIT=$((GAME_LINES_HIT + HIT)); fi
+              if [[ $IN_CORE -eq 1 ]]; then CORE_LINES_HIT=$((CORE_LINES_HIT + HIT)); fi
+            fi
+
+            if [[ "$line" == LF:* ]]; then
+              FOUND="${line#LF:}"
+              if [[ $IN_GAME -eq 1 ]]; then GAME_LINES_FOUND=$((GAME_LINES_FOUND + FOUND)); fi
+              if [[ $IN_CORE -eq 1 ]]; then CORE_LINES_FOUND=$((CORE_LINES_FOUND + FOUND)); fi
+            fi
+          done < coverage/lcov.info
+
+          echo "lib/game/ coverage: ${GAME_LINES_HIT}/${GAME_LINES_FOUND} lines"
+          echo "lib/core/ coverage: ${CORE_LINES_HIT}/${CORE_LINES_FOUND} lines"
+
+          THRESHOLD=40
+
+          if [[ $GAME_LINES_FOUND -gt 0 ]]; then
+            GAME_PCT=$(( GAME_LINES_HIT * 100 / GAME_LINES_FOUND ))
+            echo "lib/game/ line coverage: ${GAME_PCT}%"
+            if [[ $GAME_PCT -lt $THRESHOLD ]]; then
+              echo "::error::lib/game/ coverage ${GAME_PCT}% is below the ${THRESHOLD}% threshold."
+              exit 1
+            fi
+          fi
+
+          if [[ $CORE_LINES_FOUND -gt 0 ]]; then
+            CORE_PCT=$(( CORE_LINES_HIT * 100 / CORE_LINES_FOUND ))
+            echo "lib/core/ line coverage: ${CORE_PCT}%"
+            if [[ $CORE_PCT -lt $THRESHOLD ]]; then
+              echo "::error::lib/core/ coverage ${CORE_PCT}% is below the ${THRESHOLD}% threshold."
+              exit 1
+            fi
+          fi
+
+          echo "Coverage check passed."
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-lcov
+          path: coverage/lcov.info
+          retention-days: 14
