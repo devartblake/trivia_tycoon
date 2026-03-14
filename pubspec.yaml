@@ -39,7 +39,6 @@ dependencies:
   intl: ^0.20.2
   encrypt: ^5.0.3
   http: ^1.3.0
-  rive: ^0.13.20
   path: ^1.9.0
   dio: ^5.8.0+1
   crypto: ^3.0.6
@@ -63,21 +62,17 @@ dependencies:
   phone_numbers_parser: ^9.0.3
   intl_phone_number_input: ^0.7.4
   another_transformer_page_view: ^2.0.1
-  http_cache_hive_store: ^5.0.2
   dio_cache_interceptor_hive_store: ^4.0.0
   textstyle_extensions: ^2.0.0-nullsafety
   file_picker: ^10.0.0
   permission_handler: ^12.0.0
   awesome_notifications: ^0.10.1
   just_audio: ^0.9.46
-  audio_service: ^0.18.17
   sign_in_button: ^3.2.0
   image: ^4.5.4
-  image_editor: ^1.6.0  
   fernet: ^0.0.4
   camera: ^0.11.1
   fl_chart: ^1.1.1
-  animated_text_kit: ^4.2.3
   logger: ^2.6.1
   connectivity_plus: ^7.0.0
   video_player: ^2.10.0
