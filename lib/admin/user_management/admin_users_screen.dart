@@ -701,7 +701,7 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
     final emailCtrl = TextEditingController();
     final passwordCtrl = TextEditingController();
     UserRole selectedRole = UserRole.user;
-    AgeGroup selectedAge = AgeGroup.adult;
+    AgeGroup selectedAge = AgeGroup.adults;
     bool isVerified = false;
 
     showDialog(

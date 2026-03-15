@@ -81,27 +81,27 @@ IconData getRoleIcon(UserRole role) {
 
 Color getAgeGroupColor(AgeGroup ageGroup) {
   switch (ageGroup) {
-    case AgeGroup.child:
+    case AgeGroup.kids:
       return const Color(0xFF8B5CF6);
-    case AgeGroup.teen:
+    case AgeGroup.teens:
       return const Color(0xFF3B82F6);
-    case AgeGroup.adult:
+    case AgeGroup.adults:
       return const Color(0xFF10B981);
-    case AgeGroup.senior:
+    case AgeGroup.general:
       return const Color(0xFFF59E0B);
   }
 }
 
 String getAgeGroupText(AgeGroup ageGroup) {
   switch (ageGroup) {
-    case AgeGroup.child:
-      return 'Child (6-12)';
-    case AgeGroup.teen:
-      return 'Teen (13-17)';
-    case AgeGroup.adult:
-      return 'Adult (18-64)';
-    case AgeGroup.senior:
-      return 'Senior (65+)';
+    case AgeGroup.kids:
+      return 'Kids (Under 13)';
+    case AgeGroup.teens:
+      return 'Teens (13-17)';
+    case AgeGroup.adults:
+      return 'Adults (18-24)';
+    case AgeGroup.general:
+      return 'General (25+)';
   }
 }
 
