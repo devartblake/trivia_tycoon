@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'widgets/skill_tree_view.dart';
 import '../../game/controllers/skill_tree_controller.dart';
+import '../../game/providers/skill_tree_provider.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class SkillTreeScreen extends ConsumerStatefulWidget {
@@ -17,6 +18,7 @@ class SkillTreeScreen extends ConsumerStatefulWidget {
 class _SkillTreeScreenState extends ConsumerState<SkillTreeScreen> {
   String? _selectedGroupId;
   String _groupTitle = 'Skill Tree';
+  SkillNodeFilterMode _filterMode = SkillNodeFilterMode.all;
 
   @override
   void initState() {
@@ -262,8 +264,7 @@ class _SkillTreeScreenState extends ConsumerState<SkillTreeScreen> {
           // Main skill tree view
           Expanded(
             child: SkillTreeView(
-              //selectedGroupId: _selectedGroupId,
-              //highlightCategory: _selectedGroupId,
+              filterMode: _filterMode,
             ),
           ),
         ],
@@ -305,50 +306,92 @@ class _SkillTreeScreenState extends ConsumerState<SkillTreeScreen> {
   }
 
   void _showGroupFilter() {
-    showModalBottomSheet(
+    final graph = ref.read(skillTreeProvider).graph;
+
+    // Pre-compute counts for each filter mode
+    int _count(SkillNodeFilterMode mode) => switch (mode) {
+          SkillNodeFilterMode.all => graph.nodes.length,
+          SkillNodeFilterMode.unlocked => graph.unlockedNodes.length,
+          SkillNodeFilterMode.available =>
+            graph.availableNodes.length,
+          SkillNodeFilterMode.locked => graph.nodes
+              .where((n) => !n.unlocked && !n.available)
+              .length,
+        };
+
+    // Use a StatefulBuilder so the radio updates immediately inside the sheet
+    SkillNodeFilterMode sheetSelected = _filterMode;
+
+    showModalBottomSheet<SkillNodeFilterMode>(
       context: context,
       backgroundColor: const Color(0xFF15183A),
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Filter ${_getGroupDisplayName(_selectedGroupId!)}',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setSheetState) => Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Handle
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.white24,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            // Add filter options here
-            ListTile(
-              leading: const Icon(Icons.check_circle, color: Colors.green),
-              title: const Text('Unlocked Only', style: TextStyle(color: Colors.white)),
-              onTap: () {
-                // Implement filter logic
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.lock, color: Colors.orange),
-              title: const Text('Available to Unlock', style: TextStyle(color: Colors.white)),
-              onTap: () {
-                // Implement filter logic
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.all_inclusive, color: Colors.blue),
-              title: const Text('Show All', style: TextStyle(color: Colors.white)),
-              onTap: () {
-                // Implement filter logic
-                Navigator.pop(context);
-              },
-            ),
-          ],
+              const Text(
+                'Filter Skills',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12),
+              ...SkillNodeFilterMode.values.map((mode) {
+                final count = _count(mode);
+                return ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Radio<SkillNodeFilterMode>(
+                    value: mode,
+                    groupValue: sheetSelected,
+                    activeColor: mode.color,
+                    onChanged: (v) {
+                      if (v == null) return;
+                      setSheetState(() => sheetSelected = v);
+                      setState(() => _filterMode = v);
+                      Navigator.pop(ctx);
+                    },
+                  ),
+                  title: Row(
+                    children: [
+                      Icon(mode.icon, color: mode.color, size: 18),
+                      const SizedBox(width: 8),
+                      Text(mode.label,
+                          style: const TextStyle(color: Colors.white)),
+                    ],
+                  ),
+                  subtitle: Text(
+                    '$count skill${count == 1 ? '' : 's'}',
+                    style: const TextStyle(color: Colors.white38, fontSize: 12),
+                  ),
+                  onTap: () {
+                    setSheetState(() => sheetSelected = mode);
+                    setState(() => _filterMode = mode);
+                    Navigator.pop(ctx);
+                  },
+                );
+              }),
+            ],
+          ),
         ),
       ),
     );

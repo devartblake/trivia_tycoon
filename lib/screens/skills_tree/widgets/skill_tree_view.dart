@@ -10,23 +10,58 @@ import '../../../game/controllers/skill_tree_controller.dart';
 import '../../../game/models/skill_tree_category_colors.dart';
 import '../../../game/providers/hex_theme_providers.dart';
 import '../../../game/providers/skill_cooldown_service_provider.dart';
+import '../../../game/providers/skill_tree_provider.dart';
+import '../../../game/providers/xp_provider.dart';
 import '../../../ui_components/hex_grid/model/hex_free_item.dart';
+import 'skill_node_detail_sheet.dart';
+
+enum SkillNodeFilterMode { all, unlocked, available, locked }
+
+extension SkillNodeFilterModeLabel on SkillNodeFilterMode {
+  String get label => switch (this) {
+        SkillNodeFilterMode.all => 'Show All',
+        SkillNodeFilterMode.unlocked => 'Unlocked Only',
+        SkillNodeFilterMode.available => 'Available to Unlock',
+        SkillNodeFilterMode.locked => 'Locked Only',
+      };
+
+  IconData get icon => switch (this) {
+        SkillNodeFilterMode.all => Icons.all_inclusive,
+        SkillNodeFilterMode.unlocked => Icons.check_circle,
+        SkillNodeFilterMode.available => Icons.lock_open,
+        SkillNodeFilterMode.locked => Icons.lock,
+      };
+
+  Color get color => switch (this) {
+        SkillNodeFilterMode.all => Colors.blue,
+        SkillNodeFilterMode.unlocked => Colors.green,
+        SkillNodeFilterMode.available => Colors.amber,
+        SkillNodeFilterMode.locked => Colors.white54,
+      };
+}
 
 class SkillTreeView extends ConsumerStatefulWidget {
-  const SkillTreeView({super.key});
+  final SkillNodeFilterMode filterMode;
+
+  const SkillTreeView({
+    super.key,
+    this.filterMode = SkillNodeFilterMode.all,
+  });
 
   @override
   ConsumerState<SkillTreeView> createState() => _SkillTreeViewState();
 }
 
-class _SkillTreeViewState extends ConsumerState<SkillTreeView> with SingleTickerProviderStateMixin {
+class _SkillTreeViewState extends ConsumerState<SkillTreeView>
+    with SingleTickerProviderStateMixin {
   final TransformationController _transform = TransformationController();
   static const double _nodeRadius = 40;
-  bool _showTree = true;
 
   // IMPORTANT: this must match the "size" you used when generating positions via hexToPixel
   // in _overrideWithHexLayout. You used 200.0 there, so use the same here to recover coords.
   static const double _layoutHexRadius = 200.0; // pointy-top axial radius
+
+  bool _showTree = true;
 
   @override
   void initState() {
@@ -62,7 +97,8 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView> with SingleTicker
   }
 
   // Hit test for nodes
-  String? _hitTestNode(Offset localPos, Map<String, Offset> positions, vmath.Matrix4 worldToScreen) {
+  String? _hitTestNode(
+      Offset localPos, Map<String, Offset> positions, vmath.Matrix4 worldToScreen) {
     final inv = vmath.Matrix4.inverted(worldToScreen);
     final world = _transformPoint(inv, localPos);
     for (final entry in positions.entries) {
@@ -73,28 +109,29 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView> with SingleTicker
     return null;
   }
 
-  // Handle tap down events
+  // Handle tap down events — select node and show detail sheet
   void _handleTapDown(TapDownDetails details) {
     final state = ref.read(skillTreeProvider);
     final ctrl = ref.read(skillTreeProvider.notifier);
 
-    // Build complete position map including children
     final allPositions = <String, Offset>{};
     allPositions.addAll(state.positions);
     _addChildPositions(state, allPositions);
 
     final id = _hitTestNode(details.localPosition, allPositions, _transform.value);
+    if (id == null) return;
     ctrl.select(id);
+
+    final node = state.graph.byId[id];
+    if (node == null) return;
+
+    // Show the rich detail modal
+    SkillNodeDetailSheet.show(context, ref, node);
   }
 
-  // Handle tap events
+  // Handle tap events — no longer unlocks directly
   void _handleTap() {
-    final state = ref.read(skillTreeProvider);
-    final ctrl = ref.read(skillTreeProvider.notifier);
-    final selected = state.selectedId;
-    if (selected != null) {
-      ctrl.unlock(selected);
-    }
+    // Unlock/use is now handled exclusively inside SkillNodeDetailSheet.
   }
 
   // --- Simple example layout override using axial hex coordinates -> world offsets
@@ -137,28 +174,25 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView> with SingleTicker
 
   // Add child positions in hex pattern around parents
   void _addChildPositions(SkillTreeState state, Map<String, Offset> allPositions) {
-    // Hex offset directions (pointy-top hexagon neighbors)
     final hexDirections = [
-      Offset(_layoutHexRadius * 1.5, 0),                           // Right
-      Offset(_layoutHexRadius * 0.75, _layoutHexRadius * 1.299),   // Bottom-right
-      Offset(_layoutHexRadius * -0.75, _layoutHexRadius * 1.299),  // Bottom-left
-      Offset(_layoutHexRadius * -1.5, 0),                          // Left
-      Offset(_layoutHexRadius * -0.75, _layoutHexRadius * -1.299), // Top-left
-      Offset(_layoutHexRadius * 0.75, _layoutHexRadius * -1.299),  // Top-right
+      Offset(_layoutHexRadius * 1.5, 0),
+      Offset(_layoutHexRadius * 0.75, _layoutHexRadius * 1.299),
+      Offset(_layoutHexRadius * -0.75, _layoutHexRadius * 1.299),
+      Offset(_layoutHexRadius * -1.5, 0),
+      Offset(_layoutHexRadius * -0.75, _layoutHexRadius * -1.299),
+      Offset(_layoutHexRadius * 0.75, _layoutHexRadius * -1.299),
     ];
 
     for (final parentEntry in state.positions.entries) {
       final parentId = parentEntry.key;
       final parentPos = parentEntry.value;
 
-      // Find children of this parent
       final children = state.graph.edges
           .where((e) => e.fromId == parentId)
           .map((e) => e.toId)
           .where((id) => state.graph.byId.containsKey(id))
           .toList();
 
-      // Place children in hex pattern around parent
       for (int i = 0; i < children.length && i < 6; i++) {
         final childId = children[i];
         final childPos = parentPos + hexDirections[i];
@@ -168,7 +202,6 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView> with SingleTicker
   }
 
   // Build sub-nodes for each parent based on outgoing edges.
-  // These render as small satellites around the parent.
   List<HexSubItem> _buildSubItemsFor(SkillTreeState state, String parentId) {
     final children = state.graph.edges
         .where((e) => e.fromId == parentId)
@@ -178,10 +211,9 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView> with SingleTicker
 
     if (children.isEmpty) return const [];
 
-    // Distribute evenly in a ring
     final step = 360.0 / children.length;
-    const baseRadiusFactor = 0.9; // slightly outside parent
-    const baseScale = 0.55;       // smaller than parent
+    const baseRadiusFactor = 0.9;
+    const baseScale = 0.55;
 
     return [
       for (var i = 0; i < children.length; i++)
@@ -194,20 +226,32 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView> with SingleTicker
     ];
   }
 
-  // Helper: current scale from InteractiveViewer's matrix.
-  // InteractiveViewer applies uniform scale; matrix[0] is good enough here.
   double _currentScale() => _transform.value.storage[0];
+
+  /// Apply the current [widget.filterMode] to a positions map.
+  Map<String, Offset> _applyFilter(
+      Map<String, Offset> allPositions, SkillTreeGraph graph) {
+    if (widget.filterMode == SkillNodeFilterMode.all) return allPositions;
+
+    return Map.fromEntries(allPositions.entries.where((entry) {
+      final node = graph.byId[entry.key];
+      if (node == null) return false;
+      return switch (widget.filterMode) {
+        SkillNodeFilterMode.unlocked => node.unlocked,
+        SkillNodeFilterMode.available => node.available && !node.unlocked,
+        SkillNodeFilterMode.locked => !node.unlocked && !node.available,
+        SkillNodeFilterMode.all => true,
+      };
+    }));
+  }
 
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(skillTreeProvider);
     final ctrl = ref.read(skillTreeProvider.notifier);
 
-    // Background theme + snap preference (from SettingsScreen)
     final bgTheme = ref.watch(hexSpiderThemeProvider);
     final snapToNodes = ref.watch(hexSnapToNodesProvider);
-
-    // Cooldowns for badges
     final cooldowns = ref.read(skillCooldownServiceProvider);
 
     return Column(
@@ -236,12 +280,13 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView> with SingleTicker
                     builder: (context, c) {
                       final currentScale = _currentScale();
 
-                      // Build all node positions (parent + children in hex pattern)
-                      final allPositions = <String, Offset>{};
-                      allPositions.addAll(state.positions);
-                      _addChildPositions(state, allPositions);
+                      final rawPositions = <String, Offset>{};
+                      rawPositions.addAll(state.positions);
+                      _addChildPositions(state, rawPositions);
 
-                      // Build coords + id map for background
+                      // Apply filter for rendering nodes
+                      final allPositions = _applyFilter(rawPositions, state.graph);
+
                       final Set<Coordinates> coords = {};
                       final Map<Coordinates, String> coordToNodeId = {};
                       allPositions.forEach((id, world) {
@@ -256,60 +301,58 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView> with SingleTicker
                         behavior: HitTestBehavior.opaque,
                         onTapDown: _handleTapDown,
                         onTap: _handleTap,
-                        onDoubleTapDown: (d) {
-                          final id = _hitTestNode(
-                              d.localPosition, allPositions, _transform.value);
-                          if (id != null) ctrl.unlock(id);
-                        },
                         child: Stack(
                           clipBehavior: Clip.none,
                           children: [
-                            // 1) Background spider/hex - BEHIND EVERYTHING (very subtle)
+                            // 1) Background spider/hex
                             Positioned.fill(
                               child: CustomPaint(
                                 painter: HexSpiderBackgroundPainter(
-                                  ringCount: 4,              // Reduced further
-                                  ringSpacing: 60,           // Smaller spacing
-                                  rayCount: 8,               // Fewer rays
-                                  hexRadius: _nodeRadius * 0.4, // Much smaller hex grid
+                                  ringCount: 4,
+                                  ringSpacing: 60,
+                                  rayCount: 8,
+                                  hexRadius: _nodeRadius * 0.4,
                                   orientation: HexOrientation.pointy,
                                   scale: currentScale,
                                   alignToNodes: snapToNodes,
                                   worldToScreen: _transform.value,
-                                  positions: allPositions, // Use all positions including children
+                                  positions: allPositions,
                                   theme: bgTheme,
-                                  // legacy params still work:
-                                  baseGridAlpha: 0.08,       // Very low opacity
-                                  baseRingAlpha: 0.12,       // Very low opacity
-                                  baseRayAlpha: 0.10,        // Very low opacity
+                                  baseGridAlpha: 0.08,
+                                  baseRingAlpha: 0.12,
+                                  baseRayAlpha: 0.10,
                                 ),
                               ),
                             ),
 
-                            // 2) Edges behind nodes but above background
+                            // 2) Edges — full lines coloured by unlock state
                             Positioned.fill(
                               child: CustomPaint(
                                 painter: _EdgesPainter(
                                   graph: state.graph,
-                                  positions: allPositions, // Use all positions for edges
+                                  positions: rawPositions, // use unfiltered so edges are always drawn
                                   worldToScreen: _transform.value,
                                 ),
                               ),
                             ),
 
-                            // 3) All skill nodes (parents and children) with hex-aligned positioning
+                            // 3) Skill nodes
                             if (_showTree)
                               ...allPositions.entries.map((entry) {
                                 final nodeId = entry.key;
                                 final worldPos = entry.value;
-                                final screenPos = _transformPoint(_transform.value, worldPos);
+                                final screenPos =
+                                    _transformPoint(_transform.value, worldPos);
                                 final node = state.graph.byId[nodeId];
 
                                 if (node == null) return const SizedBox.shrink();
 
                                 final isParent = state.positions.containsKey(nodeId);
-                                final size = isParent ? SkillNodeSize.large : SkillNodeSize.medium;
-                                final effectiveRadius = isParent ? _nodeRadius : _nodeRadius * 0.75;
+                                final size = isParent
+                                    ? SkillNodeSize.large
+                                    : SkillNodeSize.medium;
+                                final effectiveRadius =
+                                    isParent ? _nodeRadius : _nodeRadius * 0.75;
 
                                 return Positioned(
                                   left: screenPos.dx - effectiveRadius,
@@ -321,9 +364,18 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView> with SingleTicker
                                     isUnlocked: node.unlocked,
                                     isSelected: state.selectedId == node.id,
                                     size: size,
-                                    categoryColor: SkillTreeCategoryColors.categoryColors[node.category] ?? Colors.grey,
-                                    cooldownService: ref.read(skillCooldownServiceProvider),
-                                    onTap: () => ref.read(skillTreeProvider.notifier).select(node.id),
+                                    categoryColor: SkillTreeCategoryColors
+                                            .categoryColors[node.category] ??
+                                        Colors.grey,
+                                    cooldownService: ref
+                                        .read(skillCooldownServiceProvider),
+                                    onTap: () {
+                                      ref
+                                          .read(skillTreeProvider.notifier)
+                                          .select(node.id);
+                                      SkillNodeDetailSheet.show(
+                                          context, ref, node);
+                                    },
                                   ),
                                 );
                               }).toList(),
@@ -337,27 +389,17 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView> with SingleTicker
             ),
           ),
         ),
-        _BottomSheet(
-          state: state,
-          controller: ctrl,
-          currentScale: _currentScale(), // Pass the current scale to bottom sheet
-        ),
       ],
     );
   }
 
 // ====== Axial math (pointy-top) ======
-  // Convert world pixel -> axial (fractional)
   _Axial _pixelToAxialPointy(Offset p, double size) {
-    // Inverse of pointy-top axial:
-    // x = size * 3/2 * q
-    // y = size * sqrt(3) * (r + q/2)
     final q = (2.0 / 3.0) * (p.dx / size);
     final r = (p.dy / (sqrt(3) * size)) - (q / 2.0);
     return _Axial(q, r);
   }
 
-  // Round fractional axial to nearest integer axial using cube rounding
   _AxialInt _axialRound(_Axial a) {
     final cx = a.q;
     final cz = a.r;
@@ -379,7 +421,7 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView> with SingleTicker
       rz = -rx - ry;
     }
 
-    return _AxialInt(rx, rz); // axial(q=x, r=z)
+    return _AxialInt(rx, rz);
   }
 }
 
@@ -393,9 +435,9 @@ class _AxialInt {
   const _AxialInt(this.q, this.r);
 }
 
-// ---------------- UI Framing ----------------
+// ---------------- Top Bar ----------------
 
-class _TopBar extends StatelessWidget {
+class _TopBar extends ConsumerWidget {
   final SkillTreeState state;
   final SkillTreeController controller;
   final VoidCallback onZoomIn;
@@ -417,91 +459,113 @@ class _TopBar extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final playerXP = ref.watch(playerXPProvider);
+    final unlockedCount = state.graph.unlockedNodes.length;
+    final totalCount = state.graph.nodes.length;
+
     return Material(
       color: barColor,
       child: SizedBox(
         height: 56,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const SizedBox(width: 12),
-            const Text('Skill Tree', style: TextStyle(color: Colors.white70, fontSize: 16)),
-            const Spacer(),
-            Text('Points: ${state.playerPoints}', style: const TextStyle(color: Colors.white)),
-            const SizedBox(width: 8),
-            TextButton(
-              onPressed: controller.respec,
-              child: const Text('Respec'),
-            ),
-            const Spacer(),
-            IconButton( icon: const Icon(Icons.zoom_in), onPressed: onZoomIn),
-            IconButton( icon: const Icon(Icons.zoom_out), onPressed: onZoomOut),
-            IconButton( icon: const Icon(Icons.refresh),  onPressed: onResetZoom),
-            IconButton(
-              icon: Icon(isTreeVisible ? Icons.visibility_off : Icons.visibility),
-              onPressed: onToggleTree,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _BottomSheet extends StatelessWidget {
-  final SkillTreeState state;
-  final SkillTreeController controller;
-  final double currentScale;
-  final Color sheetColor;
-
-  const _BottomSheet({
-    required this.state,
-    required this.controller,
-    required this.currentScale,
-    this.sheetColor = const Color(0xFF0E1522),
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final id = state.selectedId;
-    final node = id == null ? null : state.graph.byId[id];
-
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
-      width: double.infinity,
-      color: sheetColor,
-      child: AnimatedSize(
-        duration: const Duration(milliseconds: 200),
-        child: node == null
-            ? _buildScaleBadgeOnly()
-            : Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Scale badge at the top of the bottom sheet
+            // XP display
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(node.title, style: const TextStyle(color: Colors.white, fontSize: 18)),
-                _buildScaleBadge(),
+                const Text('⭐', style: TextStyle(fontSize: 14)),
+                const SizedBox(width: 4),
+                Text(
+                  '$playerXP XP',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ],
             ),
-            const SizedBox(height: 6),
-            Text(node.description, style: const TextStyle(color: Colors.white70)),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: node.effects.entries.map((e) => Chip(label: Text('${e.key}: ${e.value}'))).toList(),
+            const SizedBox(width: 12),
+            // Progress
+            Text(
+              '$unlockedCount / $totalCount unlocked',
+              style: const TextStyle(color: Colors.white54, fontSize: 12),
             ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Text('Cost: ${node.cost}', style: const TextStyle(color: Colors.white70)),
-                const Spacer(),
-                ElevatedButton(
-                  onPressed: controller.canUnlock(node.id) ? () => controller.unlock(node.id) : null,
-                  child: Text(node.unlocked ? 'Unlocked' : 'Unlock'),
+            const Spacer(),
+            // Zoom controls
+            IconButton(
+              icon: const Icon(Icons.zoom_in, size: 20),
+              onPressed: onZoomIn,
+              tooltip: 'Zoom in',
+            ),
+            IconButton(
+              icon: const Icon(Icons.zoom_out, size: 20),
+              onPressed: onZoomOut,
+              tooltip: 'Zoom out',
+            ),
+            IconButton(
+              icon: const Icon(Icons.refresh, size: 20),
+              onPressed: onResetZoom,
+              tooltip: 'Reset zoom',
+            ),
+            IconButton(
+              icon: Icon(
+                isTreeVisible ? Icons.visibility_off : Icons.visibility,
+                size: 20,
+              ),
+              onPressed: onToggleTree,
+              tooltip: isTreeVisible ? 'Hide nodes' : 'Show nodes',
+            ),
+            // Overflow menu — respec lives here to prevent accidental taps
+            PopupMenuButton<String>(
+              icon: const Icon(Icons.more_vert, size: 20),
+              color: const Color(0xFF1A2035),
+              onSelected: (value) {
+                if (value == 'respec') {
+                  showDialog<void>(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      backgroundColor: const Color(0xFF15183A),
+                      title: const Text(
+                        'Respec Skills?',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      content: const Text(
+                        'This will reset all unlocked skills and refund 50% of their XP cost.',
+                        style: TextStyle(color: Colors.white70),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(ctx),
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            controller.respec();
+                            Navigator.pop(ctx);
+                          },
+                          child: const Text(
+                            'Respec',
+                            style: TextStyle(color: Colors.redAccent),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              },
+              itemBuilder: (_) => const [
+                PopupMenuItem(
+                  value: 'respec',
+                  child: Row(
+                    children: [
+                      Icon(Icons.restart_alt, color: Colors.redAccent, size: 18),
+                      SizedBox(width: 8),
+                      Text('Respec Skills',
+                          style: TextStyle(color: Colors.redAccent)),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -510,37 +574,10 @@ class _BottomSheet extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildScaleBadge() {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: const Color(0x5512182B),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: Text(
-          'Scale: ${currentScale.toStringAsFixed(2)}x',
-          style: const TextStyle(color: Colors.white70, fontSize: 11),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildScaleBadgeOnly() {
-    return SizedBox(
-      height: 32,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          _buildScaleBadge(),
-        ],
-      ),
-    );
-  }
 }
 
-// ---------------- Private Edges Painter ----------------
+// ---------------- Edges Painter ----------------
+
 class _EdgesPainter extends CustomPainter {
   final SkillTreeGraph graph;
   final Map<String, Offset> positions; // world coords
@@ -557,41 +594,71 @@ class _EdgesPainter extends CustomPainter {
     return Offset(v.x, v.y);
   }
 
+  /// Draw a dashed line between [p1] and [p2].
+  void _drawDashed(
+    Canvas canvas,
+    Offset p1,
+    Offset p2,
+    Paint paint, {
+    double dashLen = 8.0,
+    double gapLen = 5.0,
+  }) {
+    final dir = p2 - p1;
+    final dist = dir.distance;
+    if (dist == 0) return;
+    final unit = dir / dist;
+    double drawn = 0;
+    while (drawn < dist) {
+      final start = p1 + unit * drawn;
+      final end = p1 + unit * (drawn + dashLen).clamp(0.0, dist);
+      canvas.drawLine(start, end, paint);
+      drawn += dashLen + gapLen;
+    }
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = const Color(0x33FFFFFF) // More subtle
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1; // Thinner
-
     for (final e in graph.edges) {
       final a = positions[e.fromId];
       final b = positions[e.toId];
       if (a == null || b == null) continue;
 
+      final fromNode = graph.byId[e.fromId];
+      final toNode = graph.byId[e.toId];
+
       final p1 = _toScreen(worldToScreen, a);
       final p2 = _toScreen(worldToScreen, b);
 
-      // Draw only short connection stubs instead of full lines
-      final direction = (p2 - p1);
-      final distance = direction.distance;
-      if (distance == 0) continue;
+      final paint = Paint()..style = PaintingStyle.stroke;
 
-      final normalized = direction / distance;
-      final stubLength = 25.0; // Short stub length
-
-      final stub1End = p1 + (normalized * stubLength);
-      final stub2Start = p2 - (normalized * stubLength);
-
-      // Draw two short stubs instead of full line
-      canvas.drawLine(p1, stub1End, paint);
-      canvas.drawLine(stub2Start, p2, paint);
+      if (fromNode?.unlocked == true && toNode?.unlocked == true) {
+        // Both unlocked — bright solid line tinted to fromNode's category
+        final catColor =
+            SkillTreeCategoryColors.categoryColors[fromNode?.category] ??
+                Colors.white;
+        paint
+          ..color = catColor.withValues(alpha: 0.55)
+          ..strokeWidth = 2.0;
+        canvas.drawLine(p1, p2, paint);
+      } else if (fromNode?.unlocked == true) {
+        // Path available (parent unlocked, child not yet) — dashed amber
+        paint
+          ..color = const Color(0xFFFFB300).withValues(alpha: 0.45)
+          ..strokeWidth = 1.5;
+        _drawDashed(canvas, p1, p2, paint);
+      } else {
+        // Fully locked — dim white
+        paint
+          ..color = Colors.white.withValues(alpha: 0.10)
+          ..strokeWidth = 1.0;
+        canvas.drawLine(p1, p2, paint);
+      }
     }
   }
 
   @override
   bool shouldRepaint(covariant _EdgesPainter old) =>
       old.graph != graph ||
-          old.positions != positions ||
-          old.worldToScreen != worldToScreen;
+      old.positions != positions ||
+      old.worldToScreen != worldToScreen;
 }
