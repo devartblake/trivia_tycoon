@@ -1,11 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/core_providers.dart';
 import '../providers/xp_provider.dart';
+import '../providers/game_bonus_providers.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
 
 /// ProfileService owns player XP and other profile data.
 /// Implements XPService so existing controller code works with the same API.
 class ProfileService {
+  static const _categoriesKey = 'unlockedCategories';
+
   final Ref ref;
 
   // ---- Profile-centric state ----
@@ -21,7 +26,17 @@ class ProfileService {
         Set<String>? unlockedCategories,
         Map<String, dynamic>? preferences,
       })  : unlockedCategories = unlockedCategories ?? <String>{},
-        preferences = preferences ?? <String, dynamic>{};
+        preferences = preferences ?? <String, dynamic>{} {
+    _loadFromStorage();
+  }
+
+  GeneralKeyValueStorageService get _storage =>
+      ref.read(generalKeyValueStorageProvider);
+
+  Future<void> _loadFromStorage() async {
+    final stored = await _storage.getStringList(_categoriesKey);
+    if (stored != null) unlockedCategories.addAll(stored);
+  }
 
   // ---------- Profile operations ----------
   void setDisplayName(String name) {
@@ -32,7 +47,7 @@ class ProfileService {
   void unlockCategory(String name) {
     unlockedCategories.add(name);
     LogManager.debug('ProfileService: unlockCategory($name)');
-    // TODO: persist
+    _storage.setStringList(_categoriesKey, unlockedCategories.toList());
   }
 
   bool isCategoryUnlocked(String name) => unlockedCategories.contains(name);
@@ -44,16 +59,17 @@ class ProfileService {
   T? getPreference<T>(String key) => preferences[key] as T?;
 
   // ---------- Game convenience ops ----------
-  /// In some games timer belongs to GameSession instead;
-  /// kept here as a convenience hook so existing effect code compiles.
+  /// Posts a timer bonus to [pendingTimerBonusProvider] so the active
+  /// QuestionController can pick it up on the next timer tick.
   void increaseTimer(int seconds) {
-    LogManager.debug('ProfileService: increaseTimer($seconds) [route to GameSession if needed]');
-    // TODO: route to session if needed
+    LogManager.debug('ProfileService: increaseTimer($seconds)');
+    ref.read(pendingTimerBonusProvider.notifier).state += seconds;
   }
 
   void addScoreBonus(double multiplier) {
-    LogManager.debug('ProfileService: addScoreBonus($multiplier) [route to scoring system]');
-    // TODO
+    LogManager.debug('ProfileService: addScoreBonus($multiplier)');
+    final current = ref.read(scoreBonusMultiplierProvider);
+    ref.read(scoreBonusMultiplierProvider.notifier).state = current * multiplier;
   }
 
   // ---------- XP convenience (delegates to XPService via composition) ----------

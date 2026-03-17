@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/game_bonus_providers.dart';
 import '../services/game_session.dart';
 import '../services/xp_service.dart';
 import '../services/profile_service.dart';
@@ -18,6 +19,9 @@ class SkillEffectHandler {
   final dynamic powerUpController;
   final dynamic achievementService;
 
+  // Riverpod ref used to write to game-bonus providers
+  final Ref? _ref;
+
   /// Primary constructor (preferred)
   SkillEffectHandler({
     required this.gameSession,
@@ -26,7 +30,8 @@ class SkillEffectHandler {
     required this.cooldownService,
     this.powerUpController,
     this.achievementService,
-  });
+    Ref? ref,
+  }) : _ref = ref;
 
   /// Legacy positional constructor to minimize breakage where this was used like:
   ///   SkillEffectHandler(ref.read(gameSessionProvider), ref.read(xpServiceProvider), ref.read(achievementServiceProvider), ref.read(powerUpControllerProvider))
@@ -39,7 +44,8 @@ class SkillEffectHandler {
         ProfileService? profileService,
         SkillCooldownService? cooldownService,
       })  : profileService = profileService ?? gameSession.getProfileService(),
-        cooldownService = cooldownService ?? gameSession.getSkillCooldownService();
+        cooldownService = cooldownService ?? gameSession.getSkillCooldownService(),
+        _ref = null;
 
   // ---------------------------
   // Public API (compat friendly)
@@ -133,25 +139,36 @@ class SkillEffectHandler {
         gameSession.unlockCategory(value.toString());
         break;
 
-    // ---- Known gameplay knobs from your sample data ----
+    // ---- Known gameplay knobs from skill tree data ----
       case 'streakMult':
-      // TODO route to a dedicated combo/streak system
-        LogManager.debug('[SkillEffectHandler] streakMult=${value.toDouble()} (route to combo system)');
+        if (_ref != null) {
+          final current = _ref.read(streakMultiplierProvider);
+          _ref.read(streakMultiplierProvider.notifier).state = current * value.toDouble();
+          LogManager.debug('[SkillEffectHandler] streakMult applied: ${current * value.toDouble()}');
+        }
         break;
 
       case 'sportsScoreBoost':
-      // TODO route to scoring model with category-specific multiplier
-        LogManager.debug('[SkillEffectHandler] sportsScoreBoost=${value.toDouble()} (route to scoring)');
+        if (_ref != null) {
+          final current = _ref.read(scoreBonusMultiplierProvider);
+          _ref.read(scoreBonusMultiplierProvider.notifier).state = current * (1.0 + value.toDouble());
+          LogManager.debug('[SkillEffectHandler] sportsScoreBoost applied: +${value.toDouble() * 100}%');
+        }
         break;
 
       case 'hardBonus':
-      // TODO route to difficulty bonus logic
-        LogManager.debug('[SkillEffectHandler] hardBonus=${value.toDouble()} (route to difficulty bonus)');
+        if (_ref != null) {
+          final current = _ref.read(scoreBonusMultiplierProvider);
+          _ref.read(scoreBonusMultiplierProvider.notifier).state = current * (1.0 + value.toDouble());
+          LogManager.debug('[SkillEffectHandler] hardBonus applied: +${value.toDouble() * 100}%');
+        }
         break;
 
       case 'eliteAccess':
-      // TODO route to feature flags / mode unlocks
-        LogManager.debug('[SkillEffectHandler] eliteAccess=${value.toInt()} (route to mode unlocks)');
+        if (_ref != null && value.toInt() > 0) {
+          _ref.read(eliteAccessUnlockedProvider.notifier).state = true;
+          LogManager.debug('[SkillEffectHandler] eliteAccess unlocked');
+        }
         break;
 
     // ---- Administrative keys: handled elsewhere, ignore here ----
@@ -179,8 +196,6 @@ final skillEffectHandlerProvider = Provider<SkillEffectHandler>((ref) {
     profileService: session.getProfileService(),
     xpService: ref.read(xpServiceProvider),
     cooldownService: session.getSkillCooldownService(),
-    // If you still have these in your project, they'll just be unused here:
-    // achievementService: ref.read(achievementServiceProvider),
-    // powerUpController: ref.read(powerUpControllerProvider),
+    ref: ref,
   );
 });

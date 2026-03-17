@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import 'package:trivia_tycoon/game/providers/question_providers.dart';
+import 'package:trivia_tycoon/game/providers/game_bonus_providers.dart';
+import 'package:trivia_tycoon/game/providers/xp_provider.dart';
 import '../../core/repositories/question_repository.dart';
 import '../../core/services/question/quiz_session_service.dart';
 import '../logic/power_up_effect_applier.dart';
@@ -51,6 +53,13 @@ class QuestionController extends StateNotifier<QuestionState> {
   void _startTimer() {
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      // Drain any pending timer bonus from skill tree effects
+      final bonus = ref.read(pendingTimerBonusProvider);
+      if (bonus > 0) {
+        ref.read(pendingTimerBonusProvider.notifier).state = 0;
+        state = state.copyWith(timeLeft: state.timeLeft + bonus);
+      }
+
       if (state.timeLeft > 0) {
         state = state.copyWith(timeLeft: state.timeLeft - 1);
       } else {
@@ -71,9 +80,34 @@ class QuestionController extends StateNotifier<QuestionState> {
     _timer?.cancel();
 
     final correct = state.currentQuestion?.isCorrectAnswer(state.selectedAnswer ?? '') ?? false;
-    final updatedScore = correct ? state.score + 10 : state.score;
-    final updatedMoney = correct ? state.money + 5 : state.money;
-    final updatedDiamonds = correct ? state.diamonds + 1 : state.diamonds;
+
+    int updatedScore = state.score;
+    int updatedMoney = state.money;
+    int updatedDiamonds = state.diamonds;
+
+    if (correct) {
+      const basePoints = 10;
+
+      // Power-up multiplier (set on the question by PowerUpEffectApplier)
+      final powerUpMultiplier = state.currentQuestion?.multiplier ?? 1;
+
+      // Skill-tree score bonus multiplier (set by streakMult / sportsScoreBoost / hardBonus)
+      final skillScoreBonus = ref.read(scoreBonusMultiplierProvider);
+
+      // Streak multiplier from skill tree
+      final streakMult = ref.read(streakMultiplierProvider);
+
+      final scorePoints = (basePoints * powerUpMultiplier * skillScoreBonus * streakMult).round();
+
+      updatedScore = state.score + scorePoints;
+      updatedMoney = state.money + 5;
+      updatedDiamonds = state.diamonds + 1;
+
+      // Award XP — XPService applies its own active boost internally
+      final xpService = ref.read(xpServiceProvider);
+      xpService.addXP(scorePoints);
+      ref.read(playerXPProvider.notifier).state = xpService.playerXP;
+    }
 
     state = state.copyWith(
       score: updatedScore,
