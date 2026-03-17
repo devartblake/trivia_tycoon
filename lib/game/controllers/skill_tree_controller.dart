@@ -4,6 +4,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../logic/skill_effect_handler.dart';
 import '../models/skill_tree_graph.dart';
+import '../providers/core_providers.dart';
 import '../providers/game_session_provider.dart';
 import '../providers/profile_service_provider.dart';
 import '../providers/skill_cooldown_service_provider.dart';
@@ -127,6 +128,7 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
       playerPoints: state.playerPoints - state.graph.byId[id]!.cost,
     );
     _persistProfile();
+    _persistUnlock(id);
   }
 
   // ----- XP-based unlock via XPService (unified approach) -----
@@ -180,6 +182,7 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
     }
 
     _persistProfile();
+    _persistUnlock(nodeId);
   }
 
   // ----- Unified skill usage through SkillEffectHandler -----
@@ -286,6 +289,31 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
     _persistProfile();
   }
 
+  // ----- Server Sync -----
+
+  /// Fire-and-forget API call to persist an unlocked node to the server.
+  /// Local state is already updated optimistically; server will re-sync on
+  /// the next app launch. All errors are swallowed — do not revert local state.
+  void _persistUnlock(String nodeId) {
+    try {
+      final userId = ref
+          .read(serviceManagerProvider)
+          .authService
+          .currentSession
+          .userId;
+      if (userId == null || userId.isEmpty) return;
+      ref
+          .read(serviceManagerProvider)
+          .tycoonApiClient
+          .unlockSkillNode(playerId: userId, nodeId: nodeId)
+          .catchError((_) {
+        // Log only — local state is source of truth until next server sync
+      });
+    } catch (_) {
+      // Service unavailable (e.g., test environment) — skip server sync
+    }
+  }
+
   // ----- Profile Sync (optional, safe no-op if not provided) -----
   Future<void> _restoreProfile() async {
     if (loadProfile == null) return;
@@ -308,83 +336,3 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
   }
 }
 
-// ---------------- Provider ----------------
-
-final skillTreeProvider =
-StateNotifierProvider<SkillTreeController, SkillTreeState>((ref) {
-  // Demo data:
-  final nodes = [
-    SkillNode(
-      id: 'root',
-      title: 'Quick Learner',
-      description: '+10% XP',
-      tier: 0,
-      cost: 1,
-      effects: {'xpBoost': 0.1},
-      category: SkillCategory.xp,
-      available: true, // usually root/tier 0 is available
-    ),
-    SkillNode(
-      id: 'time1',
-      title: 'Steady Timer',
-      description: '+5s',
-      tier: 1,
-      cost: 1,
-      effects: {'timeBonusSec': 5},
-      category: SkillCategory.strategist,
-    ),
-    SkillNode(
-      id: 'combo1',
-      title: 'Combo Starter',
-      description: 'Streak x1.2',
-      tier: 1,
-      cost: 1,
-      effects: {'streakMult': 1.2},
-      category: SkillCategory.strategist,
-    ),
-    SkillNode(
-      id: 'cat1',
-      title: 'Sports Expert',
-      description: '+10% Sports',
-      tier: 2,
-      cost: 2,
-      effects: {'sportsScoreBoost': 0.1},
-      category: SkillCategory.scholar,
-    ),
-    SkillNode(
-      id: 'risk1',
-      title: 'Risk Taker',
-      description: 'Hard Q bonus',
-      tier: 2,
-      cost: 2,
-      effects: {'hardBonus': 0.15},
-      category: SkillCategory.xp,
-    ),
-    SkillNode(
-      id: 'sage',
-      title: 'Trivia Sage',
-      description: 'Elite mode',
-      tier: 3,
-      cost: 3,
-      effects: {'eliteAccess': 1},
-      category: SkillCategory.scholar,
-    ),
-  ];
-
-  final edges = [
-    SkillEdge(fromId: 'root', toId: 'time1'),
-    SkillEdge(fromId: 'root', toId: 'combo1'),
-    SkillEdge(fromId: 'time1', toId: 'cat1'),
-    SkillEdge(fromId: 'combo1', toId: 'risk1'),
-    SkillEdge(fromId: 'cat1', toId: 'sage'),
-    SkillEdge(fromId: 'risk1', toId: 'sage'),
-  ];
-
-  return SkillTreeController(
-    ref,
-    initialGraph: SkillTreeGraph(nodes: nodes, edges: edges),
-    // Optional: pass persistence hooks if you have a profile service ready.
-    // saveProfile: (g) => ref.read(profileServiceProvider).saveSkillGraph(g),
-    // loadProfile: () => ref.read(profileServiceProvider).loadSkillGraph(),
-  );
-});
