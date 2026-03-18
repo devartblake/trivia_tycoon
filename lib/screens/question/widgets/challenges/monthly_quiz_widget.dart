@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../game/providers/question_providers.dart' as question_data;
+import '../../../../game/providers/game_providers.dart';
 import '../../../../game/models/question_model.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 // Provider for monthly quiz preview data
 final monthlyQuizPreviewProvider = FutureProvider<MonthlyQuizPreview>((ref) async {
   final repository = ref.watch(question_data.questionRepositoryProvider);
+  final quizService = ref.read(quizProgressServiceProvider);
   final now = DateTime.now();
 
   // Monthly themes
@@ -18,6 +20,9 @@ final monthlyQuizPreviewProvider = FutureProvider<MonthlyQuizPreview>((ref) asyn
   };
 
   final currentTheme = monthThemes[now.month] ?? 'general';
+  final isCompleted = quizService.getMonthlyQuizCompletedSync(now.year, now.month);
+  final completionRate =
+      quizService.getMonthlyQuizCompletionRateSync(now.year, now.month);
 
   try {
     final questions = await repository.getMixedQuiz(
@@ -30,12 +35,12 @@ final monthlyQuizPreviewProvider = FutureProvider<MonthlyQuizPreview>((ref) asyn
     return MonthlyQuizPreview(
       theme: currentTheme,
       monthName: _getMonthName(now.month),
-      totalQuestions: 15, // Full monthly quiz has 15 questions
+      totalQuestions: 15,
       previewQuestions: questions,
       difficulty: 'Medium-Hard',
-      xpReward: 375, // 15 questions * 25 XP each
-      isCompleted: false, // TODO: Check completion status
-      completionRate: 0.0, // TODO: Get from user progress
+      xpReward: 375,
+      isCompleted: isCompleted,
+      completionRate: completionRate,
     );
   } catch (e) {
     LogManager.debug('Error loading monthly quiz preview: $e');
