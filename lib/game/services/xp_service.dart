@@ -1,5 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 class XPService {
   int _playerXP = 0;
   double _xpMultiplier = 1.0;
@@ -66,8 +64,3 @@ class XPService {
   String toString() =>
       'XPService(xp=$_playerXP, multiplier=$_xpMultiplier, activeBoost=$isBoostActive, expire=$_boostExpiry)';
 }
-
-// River-pod provider
-final xpServiceProvider = Provider<XPService>((ref) {
-  return XPService(startingPlayerXP: 0);
-});

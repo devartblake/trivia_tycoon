@@ -304,7 +304,7 @@ final customThemeServiceProvider = Provider<CustomThemeService>((ref) {
 
 final generalKeyValueStorageProvider =
     Provider<GeneralKeyValueStorageService>((ref) {
-  return GeneralKeyValueStorageService();
+  return ref.watch(serviceManagerProvider).generalKeyValueStorageService;
 });
 
 final authServiceProvider = Provider<AuthService>((ref) {
