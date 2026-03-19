@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:trivia_tycoon/game/controllers/skill_tree_controller.dart';
 import 'package:trivia_tycoon/game/models/skill_tree_graph.dart';
 import 'package:trivia_tycoon/game/providers/skill_tree_provider.dart';
-import 'package:trivia_tycoon/game/services/xp_service.dart';
+import 'package:trivia_tycoon/game/services/xp_service.dart' hide xpServiceProvider;
 import 'package:trivia_tycoon/game/providers/xp_provider.dart';
 
 // ── Helpers ────────────────────────────────────────────────────────────────

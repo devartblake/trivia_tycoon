@@ -5,6 +5,7 @@ import '../data/skill_tree_dto_mapper.dart';
 import '../models/skill_tree_graph.dart';
 import '../controllers/skill_tree_controller.dart';
 import 'core_providers.dart';
+import 'game_providers.dart';
 
 /// Loads the skill tree definition from the bundled asset JSON.
 /// This is the source of truth for all node definition fields.
@@ -33,11 +34,9 @@ final mergedSkillTreeGraphProvider =
     FutureProvider.autoDispose<SkillTreeGraph>((ref) async {
   final assetGraph = await ref.watch(skillTreeGraphProvider.future);
 
-  final playerId = ref
-      .read(serviceManagerProvider)
-      .authService
-      .currentSession
-      .userId;
+  // Get player ID from local profile storage (set during login)
+  final profileService = ref.read(playerProfileServiceProvider);
+  final playerId = await profileService.getUserId();
 
   if (playerId == null || playerId.isEmpty) return assetGraph;
 

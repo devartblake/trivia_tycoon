@@ -6,7 +6,7 @@ library;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/manager/currency_manager.dart';
-import '../../game/controllers/coin_balance_notifier.dart';
+import '../../game/controllers/coin_balance_notifier.dart' hide generalKeyValueStorageProvider;
 import '../../game/controllers/energy_lives_notifier.dart';
 import '../../game/data/referral_repository.dart';
 import '../../game/models/currency_type.dart';
@@ -93,18 +93,21 @@ final userProfileProvider = Provider<Map<String, dynamic>>((ref) {
 // ---------------------------------------------------------------------------
 
 final currentUserIdProvider = FutureProvider<String>((ref) async {
-  final authService = ref.watch(authServiceProvider);
+  final secureStorage = ref.read(secureStorageProvider);
   final playerProfile = ref.watch(playerProfileServiceProvider);
 
-  final email = await authService.getStoredEmail();
+  // Prefer the stored backend user ID
+  final userId = await playerProfile.getUserId();
+  if (userId != null && userId.isNotEmpty) return userId;
+
+  // Fall back to the email prefix stored by the auth flow
+  final email = await secureStorage.getSecret('user_email');
   if (email != null && email.isNotEmpty) {
     return email.split('@').first;
   }
 
   final playerName = await playerProfile.getPlayerName();
-  if (playerName != 'Player') {
-    return playerName;
-  }
+  if (playerName != 'Player') return playerName;
 
   return 'guest';
 });

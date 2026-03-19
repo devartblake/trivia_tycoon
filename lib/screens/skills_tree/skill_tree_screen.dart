@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'widgets/skill_tree_view.dart';
-import '../../game/controllers/skill_tree_controller.dart';
 import '../../game/providers/skill_tree_provider.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 

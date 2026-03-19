@@ -7,7 +7,7 @@ import '../../../game/models/skill_tree_graph.dart';
 import '../../../game/providers/skill_cooldown_service_provider.dart';
 import '../../../game/providers/skill_tree_provider.dart';
 import '../../../game/providers/xp_provider.dart';
-import '../../../game/services/skill_cooldown_service.dart';
+import '../../../game/services/skill_cooldown_service.dart' hide skillCooldownServiceProvider;
 import 'skill_effect_labels.dart';
 import 'skill_node_widget.dart';
 
