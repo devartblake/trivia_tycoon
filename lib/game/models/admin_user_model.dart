@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 enum UserStatus { online, offline, away, busy }
 enum UserRole { user, premium, moderator, admin }
-enum AgeGroup { child, teen, adult, senior }
+enum AgeGroup { kids, teens, adults, general }
 
 class AdminUserModel {
   final String id;
@@ -111,26 +111,26 @@ class AdminUserModel {
   // Age group helpers
   String get ageGroupText {
     switch (ageGroup) {
-      case AgeGroup.child:
+      case AgeGroup.kids:
         return 'Child (6-12)';
-      case AgeGroup.teen:
+      case AgeGroup.teens:
         return 'Teen (13-17)';
-      case AgeGroup.adult:
+      case AgeGroup.adults:
         return 'Adult (18-64)';
-      case AgeGroup.senior:
+      case AgeGroup.general:
         return 'Senior (65+)';
     }
   }
 
   Color get ageGroupColor {
     switch (ageGroup) {
-      case AgeGroup.child:
+      case AgeGroup.kids:
         return const Color(0xFF8B5CF6);
-      case AgeGroup.teen:
+      case AgeGroup.teens:
         return const Color(0xFF3B82F6);
-      case AgeGroup.adult:
+      case AgeGroup.adults:
         return const Color(0xFF10B981);
-      case AgeGroup.senior:
+      case AgeGroup.general:
         return const Color(0xFFF59E0B);
     }
   }
@@ -212,7 +212,7 @@ class AdminUserModel {
       ),
       ageGroup: AgeGroup.values.firstWhere(
             (e) => e.name == json['ageGroup'],
-        orElse: () => AgeGroup.adult,
+        orElse: () => AgeGroup.adults,
       ),
       createdAt: DateTime.parse(json['createdAt'] as String),
       lastActive: DateTime.parse(json['lastActive'] as String),

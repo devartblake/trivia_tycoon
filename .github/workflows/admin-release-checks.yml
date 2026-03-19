@@ -18,8 +18,7 @@ on:
       - 'lib/core/state/admin_provider.dart'
       - 'lib/game/providers/notification_providers.dart'
       - 'scripts/admin_backend_smoke_checks.sh'
-      - 'test/admin/**'
-      - 'test/core/services/api_service_test.dart'
+      - 'test/**'
       - 'docs/admin_backend_smoke_checks.md'
       - 'docs/admin_release_checklist.md'
       - '.github/workflows/admin-release-checks.yml'
@@ -68,7 +67,7 @@ jobs:
           flutter test test/admin/providers/admin_auth_providers_test.dart
 
       - name: Full test suite
-        run: flutter test
+        run: flutter test --coverage
 
   live-smoke:
     if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_live_smoke == 'true' }}

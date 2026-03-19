@@ -1,5 +1,5 @@
 # Trivia Tycoon — Repository Review
-> Generated: 2026-03-13
+> Generated: 2026-03-13 | Last updated: 2026-03-17
 
 ---
 
@@ -53,6 +53,18 @@ A feature-rich Flutter trivia gaming platform with multi-platform support (iOS, 
 - **73 `UnimplementedError` / stub exceptions** across multiplayer, challenge, and notification services
 - Crash recovery restoration logic is a TODO in `main.dart:264`
 - Several services marked "TODO: Replace with actual API calls"
+
+> **March 2026 progress** — Several game-loop stubs resolved:
+> - `XPService._playerXP` `// TODO: persist` → ✅ Hive-backed persistence via `GeneralKeyValueStorageService`
+> - `ProfileService.unlockedCategories` `// TODO: persist` → ✅ Hive-backed persistence
+> - `ProfileService.increaseTimer()` (no-op) → ✅ Routed to `pendingTimerBonusProvider`
+> - `ProfileService.addScoreBonus()` (no-op) → ✅ Routed to `scoreBonusMultiplierProvider`
+> - `SkillEffectHandler` 28+ `default` (log-only) fallthrough cases → ✅ All 5 effect groups fully implemented
+> - `QuestionController._evaluateAnswer()` — scoring pipeline fully wired (power-up mult, streak mult, speed bonus, category bonus, accuracy bonus, double-or-nothing, retry, auto-correct, periodic chaos)
+> - `QuestionController._startTimer()` — timer bonus drain and freeze fully wired
+> - Skill tree UI `_BottomSheet` stub → ✅ Replaced with rich `SkillNodeDetailSheet` modal
+> - `_showGroupFilter()` stub tiles → ✅ Live Radio filter with per-mode node counts
+> - `_highlightSkillCategory()` no-op → ✅ Replaced by live `SkillNodeFilterMode` prop on `SkillTreeView`
 
 ### 2. Low Test Coverage
 - Only 13 test files for 1,020 source files
@@ -126,7 +138,7 @@ Trivia Tycoon has a **solid architectural foundation** with thoughtful module or
 ## Phase 2 — Solid Ground: Crash Recovery + Core Stubs
 **Goal:** Implement the crash recovery restoration and knock out the most user-visible unimplemented paths.
 **Impact:** App stability, user trust.
-**Effort:** ~2 days
+**Effort:** ~2 days (game-loop stubs largely resolved; remaining effort on crash recovery + notifications)
 
 ### Tasks
 - [ ] **`lib/main.dart:264`** — Implement crash recovery state restoration
@@ -139,6 +151,11 @@ Trivia Tycoon has a **solid architectural foundation** with thoughtful module or
   - `BLOCK`: Must fix before release
   - `DEFER`: Safe to defer (feature not yet enabled)
   - `REMOVE`: Dead code, delete it
+- [x] ~~XP persistence (`XPService._playerXP`)~~ — ✅ Resolved (2026-03-17)
+- [x] ~~Profile persistence (`unlockedCategories`, `increaseTimer`, `addScoreBonus`)~~ — ✅ Resolved (2026-03-17)
+- [x] ~~Skill effect handler 28 stub cases~~ — ✅ Resolved (2026-03-17)
+- [x] ~~QuestionController scoring pipeline stubs~~ — ✅ Resolved (2026-03-17)
+- [x] ~~Skill tree UI stub bottom sheet + filter~~ — ✅ Resolved (2026-03-17)
 
 ### Definition of Done
 - Crash recovery works end-to-end

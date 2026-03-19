@@ -12,6 +12,11 @@ class QuestionState {
   final int diamonds;
   final bool powerUpUsed;
 
+  /// In-session streak / accuracy tracking (used by skill effects).
+  final int streakCount;    // consecutive correct answers this game
+  final int correctCount;   // total correct answers (for accuracyBonus)
+  final int totalAnswered;  // total questions answered  (for accuracyBonus)
+
   const QuestionState({
     this.questions = const [],
     this.currentIndex = 0,
@@ -21,6 +26,9 @@ class QuestionState {
     this.money = 0,
     this.diamonds = 0,
     this.powerUpUsed = false,
+    this.streakCount = 0,
+    this.correctCount = 0,
+    this.totalAnswered = 0,
   });
 
   QuestionModel? get currentQuestion =>
@@ -29,6 +37,9 @@ class QuestionState {
           : null;
 
   bool get isQuizOver => currentIndex >= questions.length;
+
+  double get accuracy =>
+      totalAnswered > 0 ? correctCount / totalAnswered : 0.0;
 
   QuestionState copyWith({
     List<QuestionModel>? questions,
@@ -39,6 +50,9 @@ class QuestionState {
     int? money,
     int? diamonds,
     bool? powerUpUsed,
+    int? streakCount,
+    int? correctCount,
+    int? totalAnswered,
   }) {
     return QuestionState(
       questions: questions ?? this.questions,
@@ -49,19 +63,12 @@ class QuestionState {
       money: money ?? this.money,
       diamonds: diamonds ?? this.diamonds,
       powerUpUsed: powerUpUsed ?? this.powerUpUsed,
+      streakCount: streakCount ?? this.streakCount,
+      correctCount: correctCount ?? this.correctCount,
+      totalAnswered: totalAnswered ?? this.totalAnswered,
     );
   }
 
-  // Inside question_state.dart
-  factory QuestionState.initial() => QuestionState(
-    questions: [],
-    currentIndex: 0,
-    selectedAnswer: null,
-    score: 0,
-    money: 0,
-    diamonds: 0,
-    powerUpUsed: false,
-    timeLeft: 30,
-  );
+  factory QuestionState.initial() => const QuestionState();
 
 }

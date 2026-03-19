@@ -1,6 +1,13 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'http_client.dart';
+import '../dto/player_dto.dart';
+import '../dto/season_dto.dart';
+import '../dto/skill_dto.dart';
+import '../dto/game_event_dto.dart';
+import '../dto/guardian_dto.dart';
+import '../dto/territory_dto.dart';
+import '../dto/vote_dto.dart';
 
 /// API client for Trivia Tycoon backend
 ///
@@ -323,6 +330,291 @@ class TycoonApiClient {
         if (until != null) 'until': until.toIso8601String(),
       },
     );
+  }
+
+  // ========================================
+  // Players
+  // ========================================
+
+  Future<PlayerDto> getPlayer(String playerId) async {
+    final j = await _http.getJson('/players/$playerId');
+    return PlayerDto.fromJson(j);
+  }
+
+  Future<PlayerDto> createPlayer({
+    required String username,
+    required String ageGroup,
+    String? country,
+    String? avatarUrl,
+  }) async {
+    final j = await _http.postJson(
+      '/players',
+      body: {
+        'username': username,
+        'ageGroup': ageGroup,
+        if (country != null) 'country': country,
+        if (avatarUrl != null) 'avatarUrl': avatarUrl,
+      },
+    );
+    return PlayerDto.fromJson(j);
+  }
+
+  // ========================================
+  // Matchmaking
+  // ========================================
+
+  Future<void> joinMatchmakingQueue({
+    required String playerId,
+    required String mode,
+  }) async {
+    await _http.postJson(
+      '/matchmaking/queue',
+      body: {'playerId': playerId, 'mode': mode},
+    );
+  }
+
+  Future<void> cancelMatchmakingQueue({required String playerId}) async {
+    await _http.deleteJson('/matchmaking/queue/$playerId');
+  }
+
+  // ========================================
+  // Matches — list
+  // ========================================
+
+  Future<List<Map<String, dynamic>>> listMatches({
+    required String playerId,
+    int limit = 20,
+    int offset = 0,
+  }) async {
+    final data = await _http.getJsonList(
+      '/matches',
+      query: {
+        'playerId': playerId,
+        'limit': limit.toString(),
+        'offset': offset.toString(),
+      },
+    );
+    return data.cast<Map<String, dynamic>>();
+  }
+
+  Future<Map<String, dynamic>> submitMatch({
+    required String matchId,
+    required String playerId,
+    required List<Map<String, dynamic>> answers,
+    required int score,
+  }) async {
+    return await _http.postJson(
+      '/matches/$matchId/submit',
+      body: {'playerId': playerId, 'answers': answers, 'score': score},
+    );
+  }
+
+  // ========================================
+  // Seasons
+  // ========================================
+
+  Future<SeasonDto> getActiveSeason() async {
+    final j = await _http.getJson('/seasons/active');
+    return SeasonDto.fromJson(j);
+  }
+
+  Future<PlayerSeasonStateDto> getPlayerSeasonState({
+    required String playerId,
+  }) async {
+    final j = await _http.getJson('/seasons/player-state/$playerId');
+    return PlayerSeasonStateDto.fromJson(j);
+  }
+
+  // ========================================
+  // Skills
+  // ========================================
+
+  Future<SkillTreeDto> getSkillTree({required String playerId}) async {
+    final j = await _http.getJson('/skills/tree', query: {'playerId': playerId});
+    return SkillTreeDto.fromJson(j);
+  }
+
+  Future<SkillNodeDto> unlockSkillNode({
+    required String playerId,
+    required String nodeId,
+  }) async {
+    final j = await _http.postJson(
+      '/skills/$nodeId/unlock',
+      body: {'playerId': playerId},
+    );
+    return SkillNodeDto.fromJson(j);
+  }
+
+  // ========================================
+  // Game Events
+  // ========================================
+
+  Future<List<GameEventDto>> getUpcomingGameEvents() async {
+    final data = await _http.getJsonList('/game-events/upcoming');
+    return data
+        .cast<Map<String, dynamic>>()
+        .map(GameEventDto.fromJson)
+        .toList();
+  }
+
+  Future<GameEventDto> getGameEventStatus({
+    required String gameEventId,
+  }) async {
+    final j = await _http.getJson('/game-events/$gameEventId/status');
+    return GameEventDto.fromJson(j);
+  }
+
+  Future<void> enterGameEvent({
+    required String gameEventId,
+    required String playerId,
+  }) async {
+    await _http.postJson(
+      '/game-events/enter',
+      body: {'gameEventId': gameEventId, 'playerId': playerId},
+    );
+  }
+
+  Future<void> reviveInGameEvent({
+    required String gameEventId,
+    required String playerId,
+  }) async {
+    await _http.postJson(
+      '/game-events/revive',
+      body: {'gameEventId': gameEventId, 'playerId': playerId},
+    );
+  }
+
+  Future<List<GameEventLeaderboardEntryDto>> getGameEventLeaderboard({
+    required String gameEventId,
+  }) async {
+    final data =
+    await _http.getJsonList('/game-events/$gameEventId/leaderboard');
+    return data
+        .cast<Map<String, dynamic>>()
+        .map(GameEventLeaderboardEntryDto.fromJson)
+        .toList();
+  }
+
+  Future<List<GameEventLeaderboardEntryDto>> getGameEventSeasonLeaderboard({
+    required String seasonId,
+    String? sortBy,
+  }) async {
+    final data = await _http.getJsonList(
+      '/game-events/season-leaderboard',
+      query: {
+        'seasonId': seasonId,
+        if (sortBy != null) 'sortBy': sortBy,
+      },
+    );
+    return data
+        .cast<Map<String, dynamic>>()
+        .map(GameEventLeaderboardEntryDto.fromJson)
+        .toList();
+  }
+
+  // ========================================
+  // Guardians
+  // ========================================
+
+  Future<List<GuardianDto>> getGuardians({
+    required String seasonId,
+    required int tierNumber,
+  }) async {
+    final data =
+    await _http.getJsonList('/guardians/$seasonId/$tierNumber');
+    return data.cast<Map<String, dynamic>>().map(GuardianDto.fromJson).toList();
+  }
+
+  /// Returns the matchId for the created guardian challenge match.
+  Future<String> challengeGuardian({
+    required String guardianId,
+    required String playerId,
+  }) async {
+    final j = await _http.postJson(
+      '/guardians/challenge',
+      body: {'guardianId': guardianId, 'playerId': playerId},
+    );
+    return j['matchId'] as String;
+  }
+
+  Future<MyGuardianStatusDto> getMyGuardianStatus({
+    required String playerId,
+  }) async {
+    final j = await _http.getJson('/guardians/my', query: {'playerId': playerId});
+    return MyGuardianStatusDto.fromJson(j);
+  }
+
+  // ========================================
+  // Territory
+  // ========================================
+
+  Future<TerritoryBoardDto> getTerritoryBoard({
+    required String seasonId,
+    required int tierNumber,
+  }) async {
+    final j = await _http.getJson('/territory/$seasonId/$tierNumber');
+    return TerritoryBoardDto.fromJson(j);
+  }
+
+  /// Returns a [DuelResultDto] containing the matchId and the challenged tileId.
+  Future<DuelResultDto> startTerritoryDuel({
+    required String seasonId,
+    required int tierNumber,
+    required String tileId,
+    required String playerId,
+  }) async {
+    final j = await _http.postJson(
+      '/territory/duel',
+      body: {
+        'seasonId': seasonId,
+        'tierNumber': tierNumber,
+        'tileId': tileId,
+        'playerId': playerId,
+      },
+    );
+    return DuelResultDto.fromJson(j);
+  }
+
+  Future<List<TileDto>> getTerritoryDominanceLeaderboard({
+    required String seasonId,
+    required int tierNumber,
+  }) async {
+    final data = await _http.getJsonList(
+      '/territory/$seasonId/$tierNumber/dominance',
+    );
+    return data.cast<Map<String, dynamic>>().map(TileDto.fromJson).toList();
+  }
+
+  Future<double> getPlayerTerritoryMultiplier({
+    required String seasonId,
+    required int tierNumber,
+    required String playerId,
+  }) async {
+    final j = await _http.getJson(
+      '/territory/$seasonId/$tierNumber/multiplier',
+      query: {'playerId': playerId},
+    );
+    return (j['multiplier'] as num?)?.toDouble() ?? 1.0;
+  }
+
+  // ========================================
+  // Votes
+  // ========================================
+
+  Future<void> castVote({
+    required String topic,
+    required String choice,
+    required String playerId,
+  }) async {
+    await _http.postJson(
+      '/votes',
+      body: {'topic': topic, 'choice': choice, 'playerId': playerId},
+    );
+  }
+
+  Future<VoteResultDto> getVoteResults({required String topic}) async {
+    final j = await _http.getJson('/votes/$topic/results');
+    return VoteResultDto.fromJson(j);
   }
 
   // ========================================

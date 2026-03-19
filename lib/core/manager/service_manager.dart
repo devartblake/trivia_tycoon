@@ -41,6 +41,11 @@ import '../../game/services/referral_api_service.dart';
 import '../../game/services/referral_service.dart';
 import '../../game/services/referral_storage_service.dart';
 import '../env.dart';
+import '../networking/http_client.dart';
+import '../networking/signalr/match_hub.dart';
+import '../services/auth_http_client.dart';
+import '../networking/signalr/notification_hub.dart';
+import '../networking/tycoon_api_client.dart';
 import '../repositories/mission_repository.dart';
 
 class ServiceManager {
@@ -87,6 +92,9 @@ class ServiceManager {
   final ArcadeDailyBonusService arcadeDailyBonusService;
   final ArcadeMissionService arcadeMissionService;
   final LocalArcadeLeaderboardService localArcadeLeaderboardService;
+  final TycoonApiClient tycoonApiClient;
+  final NotificationHub notificationHub;
+  final MatchHub matchHub;
 
   ServiceManager({
     required this.apiService,
@@ -130,7 +138,40 @@ class ServiceManager {
     required this.referralStorageService,
     required this.referralApiService,
     required this.referralService,
+    required this.tycoonApiClient,
+    required this.notificationHub,
+    required this.matchHub,
   });
+
+  // ── Hub lifecycle helpers ────────────────────────────────────────────────
+
+  /// Call after a successful login to connect the persistent notification hub.
+  Future<void> connectHubs({
+    required String accessToken,
+    required String playerId,
+  }) async {
+    final notifyUrl =
+        '${EnvConfig.notifyHubUrl}?playerId=$playerId&access_token=$accessToken';
+    await notificationHub.start(url: notifyUrl, accessToken: accessToken);
+  }
+
+  /// Call on logout to tear down all hub connections.
+  Future<void> disconnectHubs() async {
+    await notificationHub.stop();
+    await matchHub.stop();
+  }
+
+  /// Connect the match hub for a specific match session.
+  Future<void> connectMatchHub({
+    required String accessToken,
+    required String playerId,
+  }) async {
+    final matchUrl =
+        '${EnvConfig.matchHubUrl}?playerId=$playerId&access_token=$accessToken';
+    await matchHub.start(url: matchUrl, accessToken: accessToken);
+  }
+
+  Future<void> disconnectMatchHub() => matchHub.stop();
 
   static EnvConfig? get envConfig => null;
 
@@ -215,6 +256,15 @@ class ServiceManager {
     final auth = AuthService(secureStorage: secureStorage, generalKey: generalKey, playerProfileService: playerProfile);
     final history = QrHistoryService(cache: cache, settings: qrSettings);
 
+    final authHttpClient = AuthHttpClient(auth, auth.tokenStore);
+    final httpClient = HttpClient(
+      authClient: authHttpClient,
+      baseUrl: '$baseUrl/api/v1',
+    );
+    final tycoonApi = TycoonApiClient(httpClient: httpClient);
+    final notifyHub = NotificationHub();
+    final mHub = MatchHub();
+
     // Save it globally here
     final manager = ServiceManager(
       apiService: api,
@@ -259,6 +309,9 @@ class ServiceManager {
       referralStorageService: referralStorage,
       referralApiService: referralApi,
       referralService: referralServiceTemp,
+      tycoonApiClient: tycoonApi,
+      notificationHub: notifyHub,
+      matchHub: mHub,
     );
 
     instance = manager;

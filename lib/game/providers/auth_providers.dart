@@ -26,7 +26,7 @@ class AuthOperations {
     final secureStorage = ref.read(secureStorageProvider);
 
     // Perform login through services
-    await authService.login(email);
+    await authService.login(email: '', password: '');
     await secureStorage.setLoggedIn(true);
 
     // Update Riverpod state immediately

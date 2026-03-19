@@ -21,6 +21,11 @@ final hasCompletedProfileProvider = Provider<bool>((ref) {
   return ref.watch(onboardingProgressProvider).progress.hasCompletedProfile;
 });
 
+/// Single-flag provider: true once the user has finished all onboarding steps.
+final onboardingCompleteProvider = Provider<bool>((ref) {
+  return ref.watch(onboardingProgressProvider).progress.completed;
+});
+
 /// Enum for different onboarding phases
 enum OnboardingPhase {
   intro,        // User needs to see intro carousel
