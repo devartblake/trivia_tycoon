@@ -514,24 +514,33 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
   }
 
   void _showLivesInfo(BuildContext context, int currentLives, int maxLives) {
-    final livesRefillTime = ref.read(livesRefillTimeProvider);
+    final livesState = ref.read(livesProvider);
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Lives System'),
+        title: const Text('Challenge Lives'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Current Lives: $currentLives/$maxLives'),
+            Text('Lives per run: $maxLives'),
             const SizedBox(height: 8),
-            if (currentLives < maxLives)
-              Text('Next life in: ${_formatDuration(livesRefillTime)}'),
+            if (livesState.isRunActive) ...[
+              Text('Current run lives: $currentLives/$maxLives'),
+              const SizedBox(height: 4),
+              Text(
+                livesState.canRevive
+                    ? 'Premium revive available (1 per run)'
+                    : 'No revives remaining for this run',
+              ),
+            ],
             const SizedBox(height: 16),
             const Text(
-              'Lives are lost when you fail a quiz. They refill automatically or you can ask friends for help.',
+              'Lives are used only in Challenge mode — 3 lives per run. '
+              'They do not refill over time. Start a new run to restore lives. '
+              'One premium revive is available per run.',
               style: TextStyle(fontSize: 14, color: Colors.grey),
             ),
           ],
@@ -541,14 +550,6 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
             onPressed: () => Navigator.of(context).pop(),
             child: const Text('OK'),
           ),
-          if (currentLives < maxLives)
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                context.push('/ask-friends-lives');
-              },
-              child: const Text('Ask Friends'),
-            ),
         ],
       ),
     );
