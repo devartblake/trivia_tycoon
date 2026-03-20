@@ -29,7 +29,11 @@ class _FakeDeviceIdService extends DeviceIdService {
 }
 
 class _StubHttpClient extends http.BaseClient {
-  final Map<String, http.Response> Function(http.Request) handler;
+  // FIX: was `Map<String, http.Response> Function(http.Request)`.
+  // The handler returns a single http.Response, not a Map.
+  // This one wrong type annotation caused every lambda and every property
+  // access on `resp` (bodyBytes, statusCode, headers) to fail — 9 errors total.
+  final http.Response Function(http.Request) handler;
 
   _StubHttpClient(this.handler);
 
@@ -59,12 +63,12 @@ AuthApiClient _makeApiClient(
       deviceId: deviceId,
     );
 
-AuthService _makeAuthService({
+BackendAuthService _makeAuthService({
   required AuthTokenStore store,
   required _StubHttpClient httpClient,
 }) {
   final deviceId = _FakeDeviceIdService();
-  return AuthService(
+  return BackendAuthService(
     deviceId: deviceId,
     tokenStore: store,
     api: _makeApiClient(httpClient, deviceId),

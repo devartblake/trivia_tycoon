@@ -26,7 +26,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../game/controllers/power_up_controller.dart';
 import '../../game/models/power_up.dart';
 import '../../game/state/premium_profile_state.dart';
-import 'profile_providers.dart';
 
 // Power-ups
 final equippedPowerUpProvider =

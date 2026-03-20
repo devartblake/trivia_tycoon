@@ -24,7 +24,10 @@ import '../../core/services/settings/reward_settings_service.dart';
 import '../../core/services/settings/spin_wheel_settings_service.dart';
 import '../../core/services/settings/splash_settings_service.dart';
 import '../../core/services/settings/theme_settings_service.dart';
-import '../../core/services/auth_service.dart';
+// FIX: was `import '../../core/services/auth_service.dart'` which exports
+// BackendAuthService — not the AuthService type that ServiceManager.authService
+// actually holds. Import the legacy AuthService from its real location instead.
+import 'package:trivia_tycoon/ui_components/login/providers/auth.dart';
 import '../../core/services/encryption/encryption_service.dart';
 import '../../core/services/encryption/fernet_service.dart';
 import '../../core/services/theme/swatch_service.dart';
@@ -88,6 +91,8 @@ final customThemeServiceProvider = Provider<CustomThemeService>((ref) {
   return ref.read(serviceManagerProvider).customThemeService;
 });
 
+// Provider<AuthService> is now valid because AuthService is imported from
+// ui_components/login/providers/auth.dart — matching the field type on ServiceManager.
 final authServiceProvider = Provider<AuthService>((ref) {
   return ref.watch(serviceManagerProvider).authService;
 });

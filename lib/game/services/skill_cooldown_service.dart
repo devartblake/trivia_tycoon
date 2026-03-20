@@ -1,5 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 class SkillCooldownService {
   final Map<String, DateTime> _expiry = {};
 
@@ -43,7 +41,3 @@ class SkillCooldownService {
   void clear(String skillId) => _expiry.remove(skillId);
   void resetAll() => _expiry.clear();
 }
-
-final skillCooldownServiceProvider = Provider<SkillCooldownService>((ref) {
-  return SkillCooldownService();
-});

@@ -107,8 +107,10 @@ final authApiClientProvider = Provider<AuthApiClient>((ref) {
   );
 });
 
-final coreAuthServiceProvider = Provider<core_auth.AuthService>((ref) {
-  return core_auth.AuthService(
+// FIX: was Provider<core_auth.AuthService> / core_auth.AuthService(...)
+// The class in core/services/auth_service.dart is BackendAuthService, not AuthService.
+final coreAuthServiceProvider = Provider<core_auth.BackendAuthService>((ref) {
+  return core_auth.BackendAuthService(
     deviceId: ref.watch(deviceIdServiceProvider),
     tokenStore: ref.watch(authTokenStoreProvider),
     api: ref.watch(authApiClientProvider),

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/xp_provider.dart';
 import '../services/game_session.dart';
 import '../services/xp_service.dart';
 import '../services/profile_service.dart';

@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
 
 class XPService {
@@ -80,8 +79,3 @@ class XPService {
   String toString() =>
       'XPService(xp=$_playerXP, multiplier=$_xpMultiplier, activeBoost=$isBoostActive, expire=$_boostExpiry)';
 }
-
-// River-pod provider
-final xpServiceProvider = Provider<XPService>((ref) {
-  return XPService(startingPlayerXP: 0);
-});
