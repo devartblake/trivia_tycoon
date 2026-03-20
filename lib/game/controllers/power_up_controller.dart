@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/controllers/coin_balance_notifier.dart';
+import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import '../../core/services/settings/general_key_value_storage_service.dart';
 import '../models/power_up.dart';
 

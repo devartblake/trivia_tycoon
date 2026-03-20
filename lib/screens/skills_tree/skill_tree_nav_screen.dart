@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../game/controllers/skill_tree_controller.dart';
+import 'package:trivia_tycoon/game/providers/skill_tree_provider.dart';
 import '../../../ui_components/hex_grid/widgets/hex_nav_button.dart';
 import '../../../ui_components/hex_grid/math/hex_orientation.dart';
 import '../../game/models/skill_tree_nav_models.dart';

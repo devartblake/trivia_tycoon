@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../game/controllers/skill_tree_controller.dart';
+import 'package:trivia_tycoon/game/providers/skill_tree_provider.dart';
 import '../../../game/models/skill_tree_graph.dart';
 import '../../../game/planning/skill_branch_path_planner.dart';
 import '../../../ui_components/hex_grid/math/hex_orientation.dart';

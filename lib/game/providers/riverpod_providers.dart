@@ -183,8 +183,8 @@ final authApiClientProvider = Provider<AuthApiClient>((ref) {
 });
 
 /// Provides the core AuthService (backend token management)
-final coreAuthServiceProvider = Provider<core_auth.AuthService>((ref) {
-  return core_auth.AuthService(
+final coreAuthServiceProvider = Provider<core_auth.BackendAuthService>((ref) {
+  return core_auth.BackendAuthService(
     deviceId: ref.watch(deviceIdServiceProvider),
     tokenStore: ref.watch(authTokenStoreProvider),
     api: ref.watch(authApiClientProvider),
