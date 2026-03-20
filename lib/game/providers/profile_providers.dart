@@ -7,7 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/manager/currency_manager.dart';
 import '../../game/controllers/coin_balance_notifier.dart';
-import '../../game/controllers/energy_lives_notifier.dart';
+import '../../game/controllers/energy_notifier.dart';
+import '../../game/controllers/challenge_lives_notifier.dart';
 import '../../game/data/referral_repository.dart';
 import '../../game/models/currency_type.dart';
 import '../../game/models/referral_models.dart';
@@ -56,22 +57,21 @@ StateNotifierProvider<EnergyNotifier, EnergyState>((ref) {
 });
 
 final livesProvider =
-StateNotifierProvider<LivesNotifier, LivesState>((ref) {
+StateNotifierProvider<ChallengeLivesNotifier, ChallengeLivesState>((ref) {
   final storage = ref.read(generalKeyValueStorageProvider);
-  return LivesNotifier(storage);
+  return ChallengeLivesNotifier(storage);
 });
 
 final energyRefillTimeProvider = StateProvider<Duration>((ref) {
   final energyState = ref.watch(energyProvider);
   if (energyState.current >= energyState.max) return Duration.zero;
-  return const Duration(minutes: 20);
+  return kEnergyRefillInterval;
 });
 
-final livesRefillTimeProvider = StateProvider<Duration>((ref) {
-  final livesState = ref.watch(livesProvider);
-  if (livesState.current >= livesState.max) return Duration.zero;
-  return const Duration(minutes: 30);
-});
+/// Challenge lives do not refill over time — they reset when a new run starts.
+/// Returns [Duration.zero] for UI compatibility with [main_menu_screen.dart].
+/// TODO: Remove once the lives info dialog no longer references a refill time.
+final livesRefillTimeProvider = StateProvider<Duration>((ref) => Duration.zero);
 
 // ---------------------------------------------------------------------------
 // User profile data
