@@ -6,7 +6,7 @@ library;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/manager/currency_manager.dart';
-import '../../game/controllers/coin_balance_notifier.dart' hide generalKeyValueStorageProvider;
+import '../../game/controllers/coin_balance_notifier.dart';
 import '../../game/controllers/energy_lives_notifier.dart';
 import '../../game/data/referral_repository.dart';
 import '../../game/models/currency_type.dart';

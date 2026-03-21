@@ -70,7 +70,7 @@ final secureStorageProvider = Provider<SecureStorage>((ref) {
 
 final generalKeyValueStorageProvider =
     Provider<GeneralKeyValueStorageService>((ref) {
-  return GeneralKeyValueStorageService();
+  return ref.read(serviceManagerProvider).generalKeyValueStorageService;
 });
 
 final appCacheServiceProvider = Provider<AppCacheService>((ref) {

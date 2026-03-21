@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trivia_tycoon/game/services/profile_service.dart';
-import 'package:trivia_tycoon/game/services/xp_service.dart' hide xpServiceProvider;
+import 'package:trivia_tycoon/game/services/xp_service.dart';
 import 'package:trivia_tycoon/game/providers/xp_provider.dart';
 
 // ---------------------------------------------------------------------------
