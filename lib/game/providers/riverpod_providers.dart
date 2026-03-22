@@ -19,6 +19,7 @@ export 'profile_providers.dart';
 export 'multiplayer_providers.dart';
 export 'admin_providers.dart';
 export 'arcade_providers.dart';
+export 'economy_providers.dart';
 // ---------------------------------------------------------------------------
 // Providers that remain here pending further migration
 // ---------------------------------------------------------------------------
