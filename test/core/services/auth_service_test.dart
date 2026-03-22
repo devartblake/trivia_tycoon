@@ -29,7 +29,7 @@ class _FakeDeviceIdService extends DeviceIdService {
 }
 
 class _StubHttpClient extends http.BaseClient {
-  final Map<String, http.Response> Function(http.Request) handler;
+  final http.Response Function(http.Request) handler;
 
   _StubHttpClient(this.handler);
 
@@ -59,12 +59,12 @@ AuthApiClient _makeApiClient(
       deviceId: deviceId,
     );
 
-AuthService _makeAuthService({
+BackendAuthService _makeAuthService({
   required AuthTokenStore store,
   required _StubHttpClient httpClient,
 }) {
   final deviceId = _FakeDeviceIdService();
-  return AuthService(
+  return BackendAuthService(
     deviceId: deviceId,
     tokenStore: store,
     api: _makeApiClient(httpClient, deviceId),
