@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../logic/skill_effect_handler.dart';
 import '../models/skill_tree_graph.dart';
 import '../providers/core_providers.dart';
+import '../providers/game_providers.dart' show playerProfileServiceProvider;
 import '../providers/game_session_provider.dart';
 import '../providers/profile_service_provider.dart';
 import '../providers/skill_cooldown_service_provider.dart';
@@ -296,18 +297,18 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
   /// the next app launch. All errors are swallowed — do not revert local state.
   void _persistUnlock(String nodeId) {
     try {
-      final userId = ref
-          .read(serviceManagerProvider)
-          .authService
-          .currentSession
-          .userId;
-      if (userId == null || userId.isEmpty) return;
       ref
-          .read(serviceManagerProvider)
-          .tycoonApiClient
-          .unlockSkillNode(playerId: userId, nodeId: nodeId)
-          .catchError((_) {
-        // Log only — local state is source of truth until next server sync
+          .read(playerProfileServiceProvider)
+          .getUserId()
+          .then((userId) {
+        if (userId == null || userId.isEmpty) return;
+        ref
+            .read(serviceManagerProvider)
+            .tycoonApiClient
+            .unlockSkillNode(playerId: userId, nodeId: nodeId)
+            .catchError((_) {
+          // Log only — local state is source of truth until next server sync
+        });
       });
     } catch (_) {
       // Service unavailable (e.g., test environment) — skip server sync
