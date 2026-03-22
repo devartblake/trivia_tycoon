@@ -17,7 +17,7 @@ import 'package:trivia_tycoon/core/manager/log_manager.dart';
 /// - Differentiates between regular and premium players
 /// - Stores role information for access control
 class LoginManager {
-  final AuthService authService;
+  final BackendAuthService authService;
   final AuthTokenStore tokenStore;
   final DeviceIdService deviceIdService;
   final OnboardingSettingsService onboardingService;

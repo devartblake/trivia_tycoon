@@ -42,16 +42,16 @@ jobs:
       - name: Check coverage threshold (lib/game/ and lib/core/)
         run: |
           pip install lcov-badge 2>/dev/null || true
-
+          
           # Extract line coverage for lib/game/ and lib/core/ from lcov.info
           GAME_LINES_HIT=0
           GAME_LINES_FOUND=0
           CORE_LINES_HIT=0
           CORE_LINES_FOUND=0
-
+          
           IN_GAME=0
           IN_CORE=0
-
+          
           while IFS= read -r line; do
             if [[ "$line" == SF:lib/game/* ]]; then
               IN_GAME=1
@@ -63,25 +63,25 @@ jobs:
               IN_GAME=0
               IN_CORE=0
             fi
-
+          
             if [[ "$line" == LH:* ]]; then
               HIT="${line#LH:}"
               if [[ $IN_GAME -eq 1 ]]; then GAME_LINES_HIT=$((GAME_LINES_HIT + HIT)); fi
               if [[ $IN_CORE -eq 1 ]]; then CORE_LINES_HIT=$((CORE_LINES_HIT + HIT)); fi
             fi
-
+          
             if [[ "$line" == LF:* ]]; then
               FOUND="${line#LF:}"
               if [[ $IN_GAME -eq 1 ]]; then GAME_LINES_FOUND=$((GAME_LINES_FOUND + FOUND)); fi
               if [[ $IN_CORE -eq 1 ]]; then CORE_LINES_FOUND=$((CORE_LINES_FOUND + FOUND)); fi
             fi
           done < coverage/lcov.info
-
+          
           echo "lib/game/ coverage: ${GAME_LINES_HIT}/${GAME_LINES_FOUND} lines"
           echo "lib/core/ coverage: ${CORE_LINES_HIT}/${CORE_LINES_FOUND} lines"
-
+          
           THRESHOLD=40
-
+          
           if [[ $GAME_LINES_FOUND -gt 0 ]]; then
             GAME_PCT=$(( GAME_LINES_HIT * 100 / GAME_LINES_FOUND ))
             echo "lib/game/ line coverage: ${GAME_PCT}%"
@@ -90,7 +90,7 @@ jobs:
               exit 1
             fi
           fi
-
+          
           if [[ $CORE_LINES_FOUND -gt 0 ]]; then
             CORE_PCT=$(( CORE_LINES_HIT * 100 / CORE_LINES_FOUND ))
             echo "lib/core/ line coverage: ${CORE_PCT}%"
@@ -99,7 +99,7 @@ jobs:
               exit 1
             fi
           fi
-
+          
           echo "Coverage check passed."
 
       - name: Upload coverage report

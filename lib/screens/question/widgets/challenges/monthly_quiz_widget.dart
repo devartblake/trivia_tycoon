@@ -22,7 +22,7 @@ final monthlyQuizPreviewProvider = FutureProvider<MonthlyQuizPreview>((ref) asyn
   final currentTheme = monthThemes[now.month] ?? 'general';
   final isCompleted = quizService.getMonthlyQuizCompletedSync(now.year, now.month);
   final completionRate =
-      quizService.getMonthlyQuizCompletionRateSync(now.year, now.month);
+  quizService.getMonthlyQuizCompletionRateSync(now.year, now.month);
 
   try {
     final questions = await repository.getMixedQuiz(

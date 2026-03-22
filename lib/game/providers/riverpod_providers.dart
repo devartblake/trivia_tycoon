@@ -1,4 +1,3 @@
-/// Barrel file — re-exports all domain provider files.
 ///
 /// Existing import sites (`import '...riverpod_providers.dart'`) continue to
 /// work without modification.  New code should import the specific domain
@@ -20,21 +19,17 @@ export 'profile_providers.dart';
 export 'multiplayer_providers.dart';
 export 'admin_providers.dart';
 export 'arcade_providers.dart';
-
 // ---------------------------------------------------------------------------
 // Providers that remain here pending further migration
 // ---------------------------------------------------------------------------
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../game/controllers/power_up_controller.dart';
 import '../../game/models/power_up.dart';
 import '../../game/state/premium_profile_state.dart';
-import 'profile_providers.dart';
 
 // Power-ups
 final equippedPowerUpProvider =
-    StateNotifierProvider<PowerUpController, PowerUp?>((ref) {
+StateNotifierProvider<PowerUpController, PowerUp?>((ref) {
   return PowerUpController(ref);
 });
 

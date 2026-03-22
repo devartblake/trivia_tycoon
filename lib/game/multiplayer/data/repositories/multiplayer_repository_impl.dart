@@ -47,7 +47,7 @@ class MultiplayerRepositoryImpl implements MultiplayerRepository {
         'type': 'list_rooms',
         'timestamp': DateTime.now().millisecondsSinceEpoch,
       });
-      // Room list arrives via the GameEvent stream (RoomListEvent).
+// Room list arrives via the GameEvent stream (RoomListEvent).
       // Return empty synchronously; callers should watch events() for results.
       return [];
     } catch (e) {

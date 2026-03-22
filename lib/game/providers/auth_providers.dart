@@ -25,7 +25,8 @@ class AuthOperations {
     final authService = ref.read(authServiceProvider);
     final secureStorage = ref.read(secureStorageProvider);
 
-    // Perform login through services
+    // FIX: legacy AuthService.login takes a single positional String argument,
+    // not the named email:/password: params that belong to BackendAuthService.
     await authService.login(email);
     await secureStorage.setLoggedIn(true);
 
@@ -56,10 +57,10 @@ class AuthOperations {
 
   /// Signup user via backend (uses LoginManager)
   Future<void> signup(
-    String email,
-    String password, {
-    Map<String, dynamic>? extra,
-  }) async {
+      String email,
+      String password, {
+        Map<String, dynamic>? extra,
+      }) async {
     try {
       final loginManager = ref.read(loginManagerProvider);
       final secureStorage = ref.read(secureStorageProvider);
@@ -151,7 +152,7 @@ class AuthOperations {
 
 /// Legacy providers for backward compatibility if needed
 final authStateProvider =
-    StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
+StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
   return AuthStateNotifier();
 });
 

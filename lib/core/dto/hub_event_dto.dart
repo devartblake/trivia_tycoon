@@ -31,10 +31,10 @@ class MatchUpdateDto {
   });
 
   factory MatchUpdateDto.fromJson(Map<String, dynamic> j) => MatchUpdateDto(
-        matchId: j['matchId'] as String,
-        status: j['status'] as String? ?? '',
-        data: j['data'] as Map<String, dynamic>?,
-      );
+    matchId: j['matchId'] as String,
+    status: j['status'] as String? ?? '',
+    data: j['data'] as Map<String, dynamic>?,
+  );
 }
 
 class GameEventEliminationDto {
@@ -149,7 +149,7 @@ class VoteTallyUpdatedDto {
         topic: j['topic'] as String,
         tally: (j['tally'] as Map<String, dynamic>?)?.map(
               (k, v) => MapEntry(k, (v as num).toInt()),
-            ) ??
+        ) ??
             {},
         totalVotes: j['totalVotes'] as int? ?? 0,
       );

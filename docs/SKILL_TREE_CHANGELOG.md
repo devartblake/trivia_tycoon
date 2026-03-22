@@ -1,6 +1,6 @@
 # Skill Tree & Game Loop — Implementation Changelog
 > Session: 2026-03-17 | Branch: `claude/review-repository-CjAuu`
-
+ 
 ---
 
 ## Overview
@@ -36,7 +36,7 @@ final xpServiceProvider = Provider<XPService>((ref) {
   return XPService(storage: storage);
 });
 ```
-
+ 
 ---
 
 ### `lib/game/services/profile_service.dart`
@@ -65,7 +65,7 @@ Created a shared `StateProvider` bus between `SkillEffectHandler` (writer) and `
 | `eliteAccessUnlockedProvider` | `StateProvider<bool>` | Elite mode gate |
 
 **19 new providers added (see section 2 for full list).**
-
+ 
 ---
 
 ### `lib/game/controllers/question_controller.dart`
@@ -159,7 +159,7 @@ Created a shared `StateProvider` bus between `SkillEffectHandler` (writer) and `
 | `periodicChaosIntervalProvider` | `StateProvider<int>` | Chaos triggers every N questions |
 | `randomBenefitActiveProvider` | `StateProvider<bool>` | Random benefit triggered at game start |
 | `speedBonusMultiplierProvider` | `StateProvider<double>` | Speed-based score multiplier |
-
+ 
 ---
 
 ### `lib/game/logic/skill_effect_handler.dart`
@@ -199,7 +199,7 @@ Created a shared `StateProvider` bus between `SkillEffectHandler` (writer) and `
 | `randomBenefit` | Sets `randomBenefitActiveProvider` true |
 | `speedBonus` | Sets `speedBonusMultiplierProvider` + timed reset via `Future.delayed` using `speedDuration` sibling key |
 | `speedDuration` / `duration` | `break` — administrative sibling keys, handled by parent case |
-
+ 
 ---
 
 ## 3. Honeycomb Skill Tree UI Refinement
@@ -217,7 +217,7 @@ SkillEffectLabels.isHidden('duration')      // → true (filters admin keys)
 ```
 
 Administrative keys (`duration`, `speedDuration`, `cooldownSec`) return `''` so callers can filter with `.isEmpty`.
-
+ 
 ---
 
 #### `lib/screens/skills_tree/widgets/skill_node_detail_sheet.dart`
@@ -251,7 +251,7 @@ Rich `DraggableScrollableSheet` modal bottom sheet (`initialChildSize: 0.55`, `m
 ```dart
 await SkillNodeDetailSheet.show(context, ref, node);
 ```
-
+ 
 ---
 
 ### Modified Files
@@ -304,7 +304,7 @@ Extension provides `.label`, `.icon`, `.color` for each mode.
 ```
 
 Added `import 'package:flutter_animate/flutter_animate.dart'`.
-
+ 
 ---
 
 #### `lib/screens/skills_tree/skill_tree_screen.dart`
@@ -322,7 +322,7 @@ Passed to `SkillTreeView(filterMode: _filterMode)`.
 - Selecting a mode updates `_filterMode` on parent via `setState` + pops sheet
 
 Added imports: `'../../game/providers/skill_tree_provider.dart'`
-
+ 
 ---
 
 ## Files Changed Summary
@@ -342,7 +342,7 @@ Added imports: `'../../game/providers/skill_tree_provider.dart'`
 | `lib/screens/skills_tree/widgets/skill_tree_view.dart` | Modified | Modal tap, TopBar XP, full edges, filter prop |
 | `lib/screens/skills_tree/widgets/skill_node_widget.dart` | Modified | Amber available state + pulse animation |
 | `lib/screens/skills_tree/skill_tree_screen.dart` | Modified | Live filter mode state + `_showGroupFilter` impl |
-
+ 
 ---
 
 ## Architecture Notes

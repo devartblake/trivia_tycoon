@@ -158,9 +158,9 @@ class AdminUsersHeader extends StatelessWidget {
           prefixIcon: const Icon(Icons.search, color: Color(0xFF6366F1)),
           suffixIcon: searchQuery.isNotEmpty
               ? IconButton(
-                  icon: const Icon(Icons.clear, color: Color(0xFF9CA3AF)),
-                  onPressed: () => onSearchChanged(''),
-                )
+            icon: const Icon(Icons.clear, color: Color(0xFF9CA3AF)),
+            onPressed: () => onSearchChanged(''),
+          )
               : null,
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(vertical: 14),

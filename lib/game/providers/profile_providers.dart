@@ -7,7 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/manager/currency_manager.dart';
 import '../../game/controllers/coin_balance_notifier.dart';
-import '../../game/controllers/energy_lives_notifier.dart';
+import '../../game/controllers/energy_notifier.dart';
+import '../../game/controllers/challenge_lives_notifier.dart';
 import '../../game/data/referral_repository.dart';
 import '../../game/models/currency_type.dart';
 import '../../game/models/referral_models.dart';
@@ -25,10 +26,10 @@ import 'game_providers.dart';
 // ---------------------------------------------------------------------------
 
 final currencyManagerProvider =
-    Provider<CurrencyManager>((ref) => CurrencyManager(ref));
+Provider<CurrencyManager>((ref) => CurrencyManager(ref));
 
 final coinBalanceProvider =
-    StateNotifierProvider<CoinBalanceNotifier, int>((ref) {
+StateNotifierProvider<CoinBalanceNotifier, int>((ref) {
   final storage = ref.read(generalKeyValueStorageProvider);
   return CoinBalanceNotifier(storage);
 });
@@ -50,35 +51,34 @@ final diamondNotifierProvider = Provider<CurrencyNotifier>((ref) {
 // ---------------------------------------------------------------------------
 
 final energyProvider =
-    StateNotifierProvider<EnergyNotifier, EnergyState>((ref) {
+StateNotifierProvider<EnergyNotifier, EnergyState>((ref) {
   final storage = ref.read(generalKeyValueStorageProvider);
   return EnergyNotifier(storage);
 });
 
 final livesProvider =
-    StateNotifierProvider<LivesNotifier, LivesState>((ref) {
+StateNotifierProvider<ChallengeLivesNotifier, ChallengeLivesState>((ref) {
   final storage = ref.read(generalKeyValueStorageProvider);
-  return LivesNotifier(storage);
+  return ChallengeLivesNotifier(storage);
 });
 
 final energyRefillTimeProvider = StateProvider<Duration>((ref) {
   final energyState = ref.watch(energyProvider);
   if (energyState.current >= energyState.max) return Duration.zero;
-  return const Duration(minutes: 20);
+  return kEnergyRefillInterval;
 });
 
-final livesRefillTimeProvider = StateProvider<Duration>((ref) {
-  final livesState = ref.watch(livesProvider);
-  if (livesState.current >= livesState.max) return Duration.zero;
-  return const Duration(minutes: 30);
-});
+/// Challenge lives do not refill over time — they reset when a new run starts.
+/// Returns [Duration.zero] for UI compatibility with [main_menu_screen.dart].
+/// TODO: Remove once the lives info dialog no longer references a refill time.
+final livesRefillTimeProvider = StateProvider<Duration>((ref) => Duration.zero);
 
 // ---------------------------------------------------------------------------
 // User profile data
 // ---------------------------------------------------------------------------
 
 final recentQuizzesProvider =
-    FutureProvider<List<Map<String, String>>>((ref) async {
+FutureProvider<List<Map<String, String>>>((ref) async {
   final quizService = ref.read(quizProgressServiceProvider);
   return quizService.getRecentQuizzes();
 });
@@ -93,21 +93,18 @@ final userProfileProvider = Provider<Map<String, dynamic>>((ref) {
 // ---------------------------------------------------------------------------
 
 final currentUserIdProvider = FutureProvider<String>((ref) async {
-  final secureStorage = ref.read(secureStorageProvider);
+  final authService = ref.watch(authServiceProvider);
   final playerProfile = ref.watch(playerProfileServiceProvider);
 
-  // Prefer the stored backend user ID
-  final userId = await playerProfile.getUserId();
-  if (userId != null && userId.isNotEmpty) return userId;
-
-  // Fall back to the email prefix stored by the auth flow
-  final email = await secureStorage.getSecret('user_email');
+  final email = await authService.getStoredEmail();
   if (email != null && email.isNotEmpty) {
     return email.split('@').first;
   }
 
   final playerName = await playerProfile.getPlayerName();
-  if (playerName != 'Player') return playerName;
+  if (playerName != 'Player') {
+    return playerName;
+  }
 
   return 'guest';
 });
@@ -145,7 +142,7 @@ final referralServiceProvider = Provider<ReferralService>((ref) {
 });
 
 final asyncReferralServiceProvider =
-    FutureProvider<ReferralService>((ref) async {
+FutureProvider<ReferralService>((ref) async {
   final storage = ref.watch(referralStorageServiceProvider);
   final api = ref.watch(referralApiServiceProvider);
   final userId = await ref.watch(currentUserIdProvider.future);
@@ -159,14 +156,14 @@ final asyncReferralServiceProvider =
 
 final userReferralCodeProvider = FutureProvider<ReferralCode>((ref) async {
   final referralService =
-      await ref.watch(asyncReferralServiceProvider.future);
+  await ref.watch(asyncReferralServiceProvider.future);
   return await referralService.getOrCreateReferralCode();
 });
 
 final referralStatsProvider =
-    FutureProvider<Map<String, dynamic>>((ref) async {
+FutureProvider<Map<String, dynamic>>((ref) async {
   final referralService =
-      await ref.watch(asyncReferralServiceProvider.future);
+  await ref.watch(asyncReferralServiceProvider.future);
   return await referralService.getStats();
 });
 
@@ -175,14 +172,14 @@ final referralStatsProvider =
 // ---------------------------------------------------------------------------
 
 final referralInviteStorageServiceProvider =
-    FutureProvider<ReferralInviteStorageService>((ref) async {
+FutureProvider<ReferralInviteStorageService>((ref) async {
   final storage = ReferralInviteStorageService();
   await storage.initialize();
   return storage;
 });
 
 final referralInviteApiServiceProvider =
-    Provider<ReferralInviteApiService>((ref) {
+Provider<ReferralInviteApiService>((ref) {
   final apiService = ref.watch(apiServiceProvider);
   return ReferralInviteApiService(apiService);
 });
@@ -197,14 +194,14 @@ final referralInviteServiceProvider = Provider<ReferralInviteService>((ref) {
       userId: 'guest',
     ),
     orElse: () =>
-        throw StateError('ReferralInviteStorageService is not initialized yet.'),
+    throw StateError('ReferralInviteStorageService is not initialized yet.'),
   );
 });
 
 final asyncReferralInviteServiceProvider =
-    FutureProvider<ReferralInviteService>((ref) async {
+FutureProvider<ReferralInviteService>((ref) async {
   final storage =
-      await ref.watch(referralInviteStorageServiceProvider.future);
+  await ref.watch(referralInviteStorageServiceProvider.future);
   final api = ref.watch(referralInviteApiServiceProvider);
   final userId = await ref.watch(currentUserIdProvider.future);
   return ReferralInviteService(
@@ -215,41 +212,41 @@ final asyncReferralInviteServiceProvider =
 });
 
 final userInvitesProvider =
-    FutureProvider<List<ReferralInvite>>((ref) async {
+FutureProvider<List<ReferralInvite>>((ref) async {
   final service =
-      await ref.watch(asyncReferralInviteServiceProvider.future);
+  await ref.watch(asyncReferralInviteServiceProvider.future);
   return service.getInvites();
 });
 
 final pendingInvitesCountProvider = FutureProvider<int>((ref) async {
   final service =
-      await ref.watch(asyncReferralInviteServiceProvider.future);
+  await ref.watch(asyncReferralInviteServiceProvider.future);
   return service.getPendingInvites().length;
 });
 
 final inviteStatsProvider =
-    FutureProvider<Map<String, int>>((ref) async {
+FutureProvider<Map<String, int>>((ref) async {
   final service =
-      await ref.watch(asyncReferralInviteServiceProvider.future);
+  await ref.watch(asyncReferralInviteServiceProvider.future);
   return service.getStats();
 });
 
 final liveInvitesProvider =
-    StreamProvider.family<List<ReferralInvite>, String>((ref, userId) {
+StreamProvider.family<List<ReferralInvite>, String>((ref, userId) {
   return Stream.periodic(const Duration(seconds: 5), (_) async {
     final storage =
-        await ref.read(referralInviteStorageServiceProvider.future);
+    await ref.read(referralInviteStorageServiceProvider.future);
     return storage.getUserInvites(userId);
   }).asyncMap((invites) async => invites);
 });
 
 final createInviteProvider = Provider<
     Future<ReferralInvite> Function({
-  required String referralCode,
-  String? inviteeName,
-  String? inviteeEmail,
-  int expirationDays,
-})>((ref) {
+    required String referralCode,
+    String? inviteeName,
+    String? inviteeEmail,
+    int expirationDays,
+    })>((ref) {
   return ({
     required String referralCode,
     String? inviteeName,
@@ -257,7 +254,7 @@ final createInviteProvider = Provider<
     int expirationDays = 7,
   }) async {
     final service =
-        await ref.read(asyncReferralInviteServiceProvider.future);
+    await ref.read(asyncReferralInviteServiceProvider.future);
     return await service.createInvite(
       referralCode: referralCode,
       inviteeName: inviteeName,
@@ -269,17 +266,17 @@ final createInviteProvider = Provider<
 
 final redeemInviteProvider = Provider<
     Future<bool> Function({
-  required String inviteId,
-  required String redeemedByUserId,
-  String? redeemerName,
-})>((ref) {
+    required String inviteId,
+    required String redeemedByUserId,
+    String? redeemerName,
+    })>((ref) {
   return ({
     required String inviteId,
     required String redeemedByUserId,
     String? redeemerName,
   }) async {
     final service =
-        await ref.read(asyncReferralInviteServiceProvider.future);
+    await ref.read(asyncReferralInviteServiceProvider.future);
     return await service.redeemInvite(
       inviteId: inviteId,
       redeemedByUserId: redeemedByUserId,

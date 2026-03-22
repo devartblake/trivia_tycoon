@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/game_bonus_providers.dart';
 import '../providers/xp_provider.dart';
 import '../services/game_session.dart';
 import '../services/xp_service.dart';

@@ -28,32 +28,32 @@ final matchHubProvider = Provider<MatchHub>((ref) {
 // ── NotificationHub stream providers ────────────────────────────────────────
 
 final playerNotificationStreamProvider =
-    StreamProvider<PlayerNotificationDto>((ref) {
+StreamProvider<PlayerNotificationDto>((ref) {
   return ref.watch(notificationHubProvider).playerNotifications;
 });
 
 final gameEventEliminationStreamProvider =
-    StreamProvider<GameEventEliminationDto>((ref) {
+StreamProvider<GameEventEliminationDto>((ref) {
   return ref.watch(notificationHubProvider).gameEventEliminations;
 });
 
 final gameEventClosedStreamProvider =
-    StreamProvider<GameEventClosedDto>((ref) {
+StreamProvider<GameEventClosedDto>((ref) {
   return ref.watch(notificationHubProvider).gameEventsClosed;
 });
 
 final guardianChangedStreamProvider =
-    StreamProvider<GuardianChangedDto>((ref) {
+StreamProvider<GuardianChangedDto>((ref) {
   return ref.watch(notificationHubProvider).guardianChanges;
 });
 
 final territoryCaptureStreamProvider =
-    StreamProvider<TerritoryCaptureDto>((ref) {
+StreamProvider<TerritoryCaptureDto>((ref) {
   return ref.watch(notificationHubProvider).territoryCaptures;
 });
 
 final voteTallyStreamProvider =
-    StreamProvider<VoteTallyUpdatedDto>((ref) {
+StreamProvider<VoteTallyUpdatedDto>((ref) {
   return ref.watch(notificationHubProvider).voteTallyUpdates;
 });
 
@@ -67,14 +67,14 @@ final matchUpdateStreamProvider = StreamProvider<MatchUpdateDto>((ref) {
 
 /// Upcoming game events from GET /game-events/upcoming.
 final upcomingGameEventsProvider =
-    FutureProvider<List<GameEventDto>>((ref) async {
+FutureProvider<List<GameEventDto>>((ref) async {
   final api = ref.read(serviceManagerProvider).tycoonApiClient;
   return api.getUpcomingGameEvents();
 });
 
 /// Current active season from GET /seasons/active.
 final activeSeasonProvider =
-    FutureProvider.autoDispose((ref) async {
+FutureProvider.autoDispose((ref) async {
   final api = ref.read(serviceManagerProvider).tycoonApiClient;
   return api.getActiveSeason();
 });
@@ -97,7 +97,8 @@ final territoryBoardProvider = FutureProvider.autoDispose
 
 /// Vote results for a given topic.
 final voteResultsProvider =
-    FutureProvider.autoDispose.family<VoteResultDto, String>((ref, topic) async {
+FutureProvider.autoDispose.family<VoteResultDto, String>((ref, topic) async {
   final api = ref.read(serviceManagerProvider).tycoonApiClient;
   return api.getVoteResults(topic: topic);
 });
+

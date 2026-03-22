@@ -298,22 +298,22 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
           ),
         ],
       ),
-      child: ElevatedButton.icon(
-        onPressed: () => ref.refresh(activeProfileProvider),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-          shape: RoundedRectangleBorder(
+        child: ElevatedButton.icon(
+            onPressed: () => ref.refresh(activeProfileProvider),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.transparent,
+              shadowColor: Colors.transparent,
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+              shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
         ),
-        icon: const Icon(Icons.refresh_rounded, color: Colors.white, size: 20),
-        label: const Text(
-          'Retry',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
+          icon: const Icon(Icons.refresh_rounded, color: Colors.white, size: 20),
+          label: const Text(
+            'Retry',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
         ),

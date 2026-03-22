@@ -435,7 +435,7 @@ class QuizProgressService {
     try {
       final box = Hive.box(_settingsBox);
       final progress =
-          Map<String, dynamic>.from(box.get(_playerProgressKey, defaultValue: {}));
+      Map<String, dynamic>.from(box.get(_playerProgressKey, defaultValue: {}));
       final totalQuizzes = (progress['total_quizzes'] ?? 0 as num).toInt();
       return totalQuizzes >= 3;
     } catch (_) {

@@ -31,10 +31,10 @@ class SkillNodeDetailSheet extends ConsumerWidget {
   // ── Static show helper ────────────────────────────────────────────────────
 
   static Future<void> show(
-    BuildContext context,
-    WidgetRef ref,
-    SkillNode node,
-  ) {
+      BuildContext context,
+      WidgetRef ref,
+      SkillNode node,
+      ) {
     final graph = ref.read(skillTreeProvider).graph;
     final ctrl = ref.read(skillTreeProvider.notifier);
     final cooldowns = ref.read(skillCooldownServiceProvider);
@@ -315,13 +315,13 @@ class SkillNodeDetailSheet extends ConsumerWidget {
   }
 
   Widget _buildActionRow(
-    BuildContext context,
-    WidgetRef ref,
-    Color categoryColor,
-    int playerXP,
-    bool onCooldown,
-    Duration? remaining,
-  ) {
+      BuildContext context,
+      WidgetRef ref,
+      Color categoryColor,
+      int playerXP,
+      bool onCooldown,
+      Duration? remaining,
+      ) {
     // Determine button state
     final _ButtonState btnState = _resolveButtonState(
       playerXP: playerXP,
@@ -376,13 +376,13 @@ class SkillNodeDetailSheet extends ConsumerWidget {
           FilledButton(
             onPressed: enabled
                 ? () {
-                    if (btnState == _ButtonState.canUnlock) {
-                      controller.unlockSkill(node.id);
-                    } else {
-                      controller.useSkill(node.id);
-                    }
-                    Navigator.of(context).pop();
-                  }
+              if (btnState == _ButtonState.canUnlock) {
+                controller.unlockSkill(node.id);
+              } else {
+                controller.useSkill(node.id);
+              }
+              Navigator.of(context).pop();
+            }
                 : null,
             style: FilledButton.styleFrom(
               backgroundColor: enabled ? categoryColor : Colors.white12,

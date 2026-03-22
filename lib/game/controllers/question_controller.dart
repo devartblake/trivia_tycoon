@@ -4,8 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import 'package:trivia_tycoon/game/providers/question_providers.dart';
 import 'package:trivia_tycoon/game/providers/game_bonus_providers.dart';
-import 'package:trivia_tycoon/game/providers/xp_provider.dart';
-import '../../core/repositories/question_repository.dart';
+import 'package:trivia_tycoon/game/providers/xp_provider.dart';import '../../core/repositories/question_repository.dart';
 import '../../core/services/question/quiz_session_service.dart';
 import '../logic/power_up_effect_applier.dart';
 import '../models/question_model.dart';
@@ -172,11 +171,11 @@ class QuestionController extends StateNotifier<QuestionState> {
       }
 
       int scorePoints = (basePoints *
-              powerUpMult *
-              skillBonus *
-              streakMult *
-              speedBonus *
-              catBonus)
+          powerUpMult *
+          skillBonus *
+          streakMult *
+          speedBonus *
+          catBonus)
           .round();
 
       // ── accuracyBonus ────────────────────────────────────────────────────
@@ -280,7 +279,7 @@ class QuestionController extends StateNotifier<QuestionState> {
 
       case 'eliminate':
         final incorrect =
-            updated.options.where((c) => c != updated.correctAnswer).toList();
+        updated.options.where((c) => c != updated.correctAnswer).toList();
         incorrect.shuffle();
         final reduced = updated.options
             .where((c) => c == updated.correctAnswer || c == incorrect.first)
@@ -387,15 +386,15 @@ class QuestionController extends StateNotifier<QuestionState> {
   void _triggerPeriodicChaos() {
     final options = <void Function()>[
       // Penalty: lose 5s on next question
-      () => state = state.copyWith(timeLeft: (state.timeLeft - 5).clamp(1, 999)),
+          () => state = state.copyWith(timeLeft: (state.timeLeft - 5).clamp(1, 999)),
       // Penalty: halve streak count
-      () {
+          () {
         final half = (state.streakCount / 2).floor();
         ref.read(streakCountProvider.notifier).state = half;
         state = state.copyWith(streakCount: half);
       },
       // Penalty: reduce score bonus multiplier by 10%
-      () {
+          () {
         final cur = ref.read(scoreBonusMultiplierProvider);
         if (cur > 1.0) {
           ref.read(scoreBonusMultiplierProvider.notifier).state =

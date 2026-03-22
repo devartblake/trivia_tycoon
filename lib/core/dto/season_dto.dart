@@ -14,20 +14,20 @@ class SeasonDto {
   });
 
   factory SeasonDto.fromJson(Map<String, dynamic> j) => SeasonDto(
-        id: j['id'] as String,
-        name: j['name'] as String,
-        startsAt: DateTime.parse(j['startsAt'] as String),
-        endsAt: DateTime.parse(j['endsAt'] as String),
-        isActive: j['isActive'] as bool? ?? false,
-      );
+    id: j['id'] as String,
+    name: j['name'] as String,
+    startsAt: DateTime.parse(j['startsAt'] as String),
+    endsAt: DateTime.parse(j['endsAt'] as String),
+    isActive: j['isActive'] as bool? ?? false,
+  );
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'startsAt': startsAt.toIso8601String(),
-        'endsAt': endsAt.toIso8601String(),
-        'isActive': isActive,
-      };
+    'id': id,
+    'name': name,
+    'startsAt': startsAt.toIso8601String(),
+    'endsAt': endsAt.toIso8601String(),
+    'isActive': isActive,
+  };
 }
 
 class PlayerSeasonStateDto {
@@ -61,12 +61,12 @@ class PlayerSeasonStateDto {
       );
 
   Map<String, dynamic> toJson() => {
-        'playerId': playerId,
-        'seasonId': seasonId,
-        'tier': tier,
-        'xp': xp,
-        'rank': rank,
-        'guardiansDefeated': guardiansDefeated,
-        'tilesControlled': tilesControlled,
-      };
+    'playerId': playerId,
+    'seasonId': seasonId,
+    'tier': tier,
+    'xp': xp,
+    'rank': rank,
+    'guardiansDefeated': guardiansDefeated,
+    'tilesControlled': tilesControlled,
+  };
 }

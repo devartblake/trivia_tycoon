@@ -7,7 +7,7 @@
 This document records the reasoning behind every direct dependency in
 `pubspec.yaml`.  Update it whenever a package is added, removed, or its
 role changes.
-
+ 
 ---
 
 ## Removed in Phase 4
@@ -19,7 +19,7 @@ role changes.
 | `audio_service` | ^0.18.17 | Zero imports across `lib/`. Background-audio OS integration is not yet implemented; add back when background playback is required. |
 | `http_cache_hive_store` | ^5.0.2 | Zero imports across `lib/`. HTTP-level caching is handled by `dio_cache_interceptor_hive_store` via `ApiService`. |
 | `image_editor` | ^1.6.0 | Zero imports across `lib/`. Image editing is not yet implemented; add back when crop/filter features land. |
-
+ 
 ---
 
 ## HTTP Clients — Dual Strategy (Intentional)
@@ -53,7 +53,7 @@ until a broader networking refactor sprint.
 |---------|------|
 | `dio_cache_interceptor` ^3.5.1 | Cache interceptor wired into `ApiService` |
 | `dio_cache_interceptor_hive_store` ^4.0.0 | Hive-backed cache store for the interceptor |
-
+ 
 ---
 
 ## Audio — Intentional Dual Library
@@ -76,7 +76,7 @@ pipeline and cannot match this latency for short SFX.
 **Consolidation is not recommended**: removing `flutter_soloud` and
 routing SFX through `just_audio` would introduce perceptible input lag
 on game interactions.
-
+ 
 ---
 
 ## All Retained Packages
@@ -135,7 +135,7 @@ on game interactions.
 | `qr_flutter` | QR code generation for referral and challenge links |
 | `archive` | ZIP archive handling for bulk question import/export |
 | `uuid` | UUID v4 generation for entity IDs, session tokens |
-
+ 
 ---
 
 ## Dev Dependencies
@@ -146,7 +146,7 @@ on game interactions.
 | `build_runner` | Code generation runner for Hive type adapters |
 | `hive_generator` | Generates `TypeAdapter` classes from Hive annotations |
 | `in_app_purchase_platform_interface` | Pinned to satisfy a transitive version conflict with `in_app_purchase`; review when upgrading `in_app_purchase` to a new major version |
-
+ 
 ---
 
 ## Dependency Overrides

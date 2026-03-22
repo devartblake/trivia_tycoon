@@ -18,26 +18,26 @@ class GuardianDto {
   });
 
   factory GuardianDto.fromJson(Map<String, dynamic> j) => GuardianDto(
-        id: j['id'] as String,
-        playerId: j['playerId'] as String,
-        username: j['username'] as String,
-        avatarUrl: j['avatarUrl'] as String?,
-        tier: j['tier'] as int? ?? 1,
-        defenceCount: j['defenceCount'] as int? ?? 0,
-        lastChallengedAt: j['lastChallengedAt'] != null
-            ? DateTime.tryParse(j['lastChallengedAt'] as String)
-            : null,
-      );
+    id: j['id'] as String,
+    playerId: j['playerId'] as String,
+    username: j['username'] as String,
+    avatarUrl: j['avatarUrl'] as String?,
+    tier: j['tier'] as int? ?? 1,
+    defenceCount: j['defenceCount'] as int? ?? 0,
+    lastChallengedAt: j['lastChallengedAt'] != null
+        ? DateTime.tryParse(j['lastChallengedAt'] as String)
+        : null,
+  );
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'playerId': playerId,
-        'username': username,
-        'avatarUrl': avatarUrl,
-        'tier': tier,
-        'defenceCount': defenceCount,
-        'lastChallengedAt': lastChallengedAt?.toIso8601String(),
-      };
+    'id': id,
+    'playerId': playerId,
+    'username': username,
+    'avatarUrl': avatarUrl,
+    'tier': tier,
+    'defenceCount': defenceCount,
+    'lastChallengedAt': lastChallengedAt?.toIso8601String(),
+  };
 }
 
 class MyGuardianStatusDto {
@@ -65,10 +65,10 @@ class MyGuardianStatusDto {
       );
 
   Map<String, dynamic> toJson() => {
-        'playerId': playerId,
-        'isGuardian': isGuardian,
-        'tier': tier,
-        'defenceCount': defenceCount,
-        'currentMatchId': currentMatchId,
-      };
+    'playerId': playerId,
+    'isGuardian': isGuardian,
+    'tier': tier,
+    'defenceCount': defenceCount,
+    'currentMatchId': currentMatchId,
+  };
 }

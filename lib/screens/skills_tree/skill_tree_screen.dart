@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'widgets/skill_tree_view.dart';
+import '../../game/controllers/skill_tree_controller.dart';
 import '../../game/providers/skill_tree_provider.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
@@ -309,14 +310,14 @@ class _SkillTreeScreenState extends ConsumerState<SkillTreeScreen> {
 
     // Pre-compute counts for each filter mode
     int _count(SkillNodeFilterMode mode) => switch (mode) {
-          SkillNodeFilterMode.all => graph.nodes.length,
-          SkillNodeFilterMode.unlocked => graph.unlockedNodes.length,
-          SkillNodeFilterMode.available =>
-            graph.availableNodes.length,
-          SkillNodeFilterMode.locked => graph.nodes
-              .where((n) => !n.unlocked && !n.available)
-              .length,
-        };
+      SkillNodeFilterMode.all => graph.nodes.length,
+      SkillNodeFilterMode.unlocked => graph.unlockedNodes.length,
+      SkillNodeFilterMode.available =>
+      graph.availableNodes.length,
+      SkillNodeFilterMode.locked => graph.nodes
+          .where((n) => !n.unlocked && !n.available)
+          .length,
+    };
 
     // Use a StatefulBuilder so the radio updates immediately inside the sheet
     SkillNodeFilterMode sheetSelected = _filterMode;
@@ -334,17 +335,17 @@ class _SkillTreeScreenState extends ConsumerState<SkillTreeScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Handle
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  margin: const EdgeInsets.only(bottom: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.white24,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
+          // Handle
+          Center(
+          child: Container(
+          width: 40,
+            height: 4,
+            margin: const EdgeInsets.only(bottom: 16),
+            decoration: BoxDecoration(
+              color: Colors.white24,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
               ),
               const Text(
                 'Filter Skills',

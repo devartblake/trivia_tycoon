@@ -516,7 +516,7 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
               ),
               ListTile(
                 leading:
-                    const Icon(Icons.history, color: Color(0xFF6B7280)),
+                const Icon(Icons.history, color: Color(0xFF6B7280)),
                 title: const Text('View Activity Log'),
                 onTap: () {
                   Navigator.pop(context);
@@ -592,7 +592,7 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
       context: context,
       title: 'Delete User',
       message:
-          'Are you sure you want to permanently delete ${user.username}? This action cannot be undone.',
+      'Are you sure you want to permanently delete ${user.username}? This action cannot be undone.',
       type: AlertType.delete,
       confirmText: 'Delete User',
       cancelText: 'Cancel',
@@ -634,9 +634,9 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
       final items = response['items'];
       final logs = items is List
           ? items
-              .whereType<Map>()
-              .map((e) => Map<String, dynamic>.from(e))
-              .toList()
+          .whereType<Map>()
+          .map((e) => Map<String, dynamic>.from(e))
+          .toList()
           : <Map<String, dynamic>>[];
       if (!mounted) return;
       _showActivityLogDialog(user, logs);
@@ -716,13 +716,13 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
                 TextField(
                   controller: usernameCtrl,
                   decoration:
-                      const InputDecoration(labelText: 'Username'),
+                  const InputDecoration(labelText: 'Username'),
                 ),
                 const SizedBox(height: 10),
                 TextField(
                   controller: emailCtrl,
                   decoration:
-                      const InputDecoration(labelText: 'Email'),
+                  const InputDecoration(labelText: 'Email'),
                 ),
                 const SizedBox(height: 10),
                 TextField(
@@ -736,26 +736,26 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
                   value: selectedRole,
                   items: UserRole.values
                       .map((r) => DropdownMenuItem(
-                          value: r, child: Text(getRoleText(r))))
+                      value: r, child: Text(getRoleText(r))))
                       .toList(),
                   onChanged: (v) {
                     if (v != null) setDialogState(() => selectedRole = v);
                   },
                   decoration:
-                      const InputDecoration(labelText: 'Role'),
+                  const InputDecoration(labelText: 'Role'),
                 ),
                 const SizedBox(height: 10),
                 DropdownButtonFormField<AgeGroup>(
                   value: selectedAge,
                   items: AgeGroup.values
                       .map((a) => DropdownMenuItem(
-                          value: a, child: Text(getAgeGroupText(a))))
+                      value: a, child: Text(getAgeGroupText(a))))
                       .toList(),
                   onChanged: (v) {
                     if (v != null) setDialogState(() => selectedAge = v);
                   },
                   decoration:
-                      const InputDecoration(labelText: 'Age Group'),
+                  const InputDecoration(labelText: 'Age Group'),
                 ),
                 const SizedBox(height: 6),
                 SwitchListTile(
@@ -838,7 +838,7 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
                 value: selectedRole,
                 items: UserRole.values
                     .map((r) => DropdownMenuItem(
-                        value: r, child: Text(getRoleText(r))))
+                    value: r, child: Text(getRoleText(r))))
                     .toList(),
                 onChanged: (v) {
                   if (v != null) setDialogState(() => selectedRole = v);

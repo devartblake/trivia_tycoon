@@ -7,9 +7,9 @@ import 'package:trivia_tycoon/core/manager/log_manager.dart';
 class ChallengeController {
   /// Start a challenge by routing to the matching game mode.
   static Future<void> startChallenge(
-    BuildContext context,
-    Challenge challenge,
-  ) async {
+      BuildContext context,
+      Challenge challenge,
+      ) async {
     LogManager.debug(
         '[ChallengeController] Starting challenge: ${challenge.title}');
 
@@ -19,19 +19,19 @@ class ChallengeController {
       case ChallengeType.daily:
         context.push('/daily-quiz');
       case ChallengeType.weekly:
-        // Weekly challenges use the standard quiz flow with classic mode.
+      // Weekly challenges use the standard quiz flow with classic mode.
         context.push('/quiz/start/classic');
       case ChallengeType.special:
-        // Special/event challenges open the multiplayer arena mode.
+      // Special/event challenges open the multiplayer arena mode.
         context.push('/multiplayer/quiz/arena');
     }
   }
 
-  /// Claim a completed challenge reward — shows a reward bottom sheet.
+  /// Claim a completed challenge reward - shows a reward bottom sheet.
   static Future<void> claimReward(
-    BuildContext context,
-    Challenge challenge,
-  ) async {
+      BuildContext context,
+      Challenge challenge,
+      ) async {
     LogManager.debug(
         '[ChallengeController] Claiming reward for: ${challenge.title}');
 
@@ -59,53 +59,53 @@ class _RewardSheet extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Handle bar
-          Container(
-            width: 40,
-            height: 4,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          const SizedBox(height: 24),
+        // Handle bar
+        Container(
+        width: 40,
+        height: 4,
+        decoration: BoxDecoration(
+          color: Colors.grey.shade300,
+          borderRadius: BorderRadius.circular(2),
+        ),
+      ),
+      const SizedBox(height: 24),
 
-          // Trophy icon
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFFFFD700), Color(0xFFFFA500)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+      // Trophy icon
+      Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFFFFD700), Color(0xFFFFA500)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
               ),
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.orange.withValues(alpha: 0.4),
-                  blurRadius: 16,
-                  offset: const Offset(0, 6),
-                ),
-              ],
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.orange.withValues(alpha: 0.4),
+              blurRadius: 16,
+              offset: const Offset(0, 6),
             ),
-            child: const Icon(Icons.emoji_events, color: Colors.white, size: 40),
+          ],
+        ),
+        child: const Icon(Icons.emoji_events, color: Colors.white, size: 40),
           ),
-          const SizedBox(height: 20),
+      const SizedBox(height: 20),
 
-          Text(
-            'Challenge Complete!',
-            style: Theme.of(context)
-                .textTheme
-                .headlineSmall
-                ?.copyWith(fontWeight: FontWeight.bold),
+      Text(
+        'Challenge Complete!',
+        style: Theme.of(context)
+            .textTheme
+            .headlineSmall
+            ?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
 
           Text(
             challenge.title,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Colors.grey.shade600,
-                ),
+              color: Colors.grey.shade600,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
@@ -149,7 +149,7 @@ class _RewardSheet extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text('Claim Reward', fontSize: 16),
+              child: const Text('Claim Reward', style:TextStyle(fontSize: 16)),
             ),
           ),
         ],

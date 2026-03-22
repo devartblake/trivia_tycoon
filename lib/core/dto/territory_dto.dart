@@ -16,22 +16,22 @@ class TileDto {
   });
 
   factory TileDto.fromJson(Map<String, dynamic> j) => TileDto(
-        id: j['id'] as String,
-        ownerId: j['ownerId'] as String?,
-        ownerUsername: j['ownerUsername'] as String?,
-        row: j['row'] as int? ?? 0,
-        col: j['col'] as int? ?? 0,
-        xpMultiplier: (j['xpMultiplier'] as num?)?.toDouble() ?? 1.0,
-      );
+    id: j['id'] as String,
+    ownerId: j['ownerId'] as String?,
+    ownerUsername: j['ownerUsername'] as String?,
+    row: j['row'] as int? ?? 0,
+    col: j['col'] as int? ?? 0,
+    xpMultiplier: (j['xpMultiplier'] as num?)?.toDouble() ?? 1.0,
+  );
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'ownerId': ownerId,
-        'ownerUsername': ownerUsername,
-        'row': row,
-        'col': col,
-        'xpMultiplier': xpMultiplier,
-      };
+    'id': id,
+    'ownerId': ownerId,
+    'ownerUsername': ownerUsername,
+    'row': row,
+    'col': col,
+    'xpMultiplier': xpMultiplier,
+  };
 }
 
 class TerritoryBoardDto {
@@ -50,16 +50,16 @@ class TerritoryBoardDto {
         seasonId: j['seasonId'] as String,
         tierNumber: j['tierNumber'] as int? ?? 1,
         tiles: (j['tiles'] as List<dynamic>?)
-                ?.map((e) => TileDto.fromJson(e as Map<String, dynamic>))
-                .toList() ??
+            ?.map((e) => TileDto.fromJson(e as Map<String, dynamic>))
+            .toList() ??
             [],
       );
 
   Map<String, dynamic> toJson() => {
-        'seasonId': seasonId,
-        'tierNumber': tierNumber,
-        'tiles': tiles.map((t) => t.toJson()).toList(),
-      };
+    'seasonId': seasonId,
+    'tierNumber': tierNumber,
+    'tiles': tiles.map((t) => t.toJson()).toList(),
+  };
 }
 
 class DuelResultDto {
@@ -69,9 +69,9 @@ class DuelResultDto {
   const DuelResultDto({required this.matchId, required this.tileId});
 
   factory DuelResultDto.fromJson(Map<String, dynamic> j) => DuelResultDto(
-        matchId: j['matchId'] as String,
-        tileId: j['tileId'] as String,
-      );
+    matchId: j['matchId'] as String,
+    tileId: j['tileId'] as String,
+  );
 
   Map<String, dynamic> toJson() => {'matchId': matchId, 'tileId': tileId};
 }

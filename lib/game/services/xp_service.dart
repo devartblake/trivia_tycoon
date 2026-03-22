@@ -63,7 +63,7 @@ class XPService {
     _playerXP = 0;
     _xpMultiplier = 1.0;
     _boostExpiry = null;
-    _storage?.setInt(_xpKey, 0);
+    _storage?.setInt(_xpKey, _playerXP);
   }
 
   /// Optional: call from a timer/tick to clear expired boost.

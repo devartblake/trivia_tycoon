@@ -53,12 +53,12 @@ This repository includes the entire player-facing and admin-facing Flutter appli
 
 ### 🧠 Gameplay & Player Progression
 - Honeycomb-style skill tree (Knowledge, Power-ups, Strategy, Timer, Stealth, Wildcard, and more)
-  - **28+ skill effects** fully routed through `SkillEffectHandler` across 5 effect groups
-  - **Tap-to-detail UX** — tapping any node opens a rich modal bottom sheet with full description, human-readable effect labels, prerequisites, tier indicator, and a context-aware action button
-  - **3 visual node states** — locked (white lock), available-to-unlock (amber pulsing ring + `lock_open` icon), unlocked (green check)
-  - **Full edge rendering** — bright category-tinted lines for unlocked paths, dashed amber for available paths, dim white for locked paths
-  - **Live filter sheet** — filter by All / Unlocked / Available / Locked with per-mode node counts
-  - **XP-based unlock** — skill costs deducted from persisted XP via `XPService`; progress bar shows live `⭐ XP` + `X/Y unlocked`
+- **28+ skill effects** fully routed through `SkillEffectHandler` across 5 effect groups
+- **Tap-to-detail UX** — tapping any node opens a rich modal bottom sheet with full description, human-readable effect labels, prerequisites, tier indicator, and a context-aware action button
+- **3 visual node states** — locked (white lock), available-to-unlock (amber pulsing ring + `lock_open` icon), unlocked (green check)
+- **Full edge rendering** — bright category-tinted lines for unlocked paths, dashed amber for available paths, dim white for locked paths
+- **Live filter sheet** — filter by All / Unlocked / Available / Locked with per-mode node counts
+- **XP-based unlock** — skill costs deducted from persisted XP via `XPService`; progress bar shows live `⭐ XP` + `X/Y unlocked`
 - Daily/weekly missions with XP, streaks, and bonuses
 - Animated XP bar with glow and transitions
 - Question categories, difficulty scaling, and media support
@@ -70,6 +70,15 @@ This repository includes the entire player-facing and admin-facing Flutter appli
 - Top 25 = promotion eligibility  
 - Top 20 = daily rewards  
 - Auto-scroll to player within tier
+
+### ⚙️ Game Loop — Skill & Power-up Integration
+- **Scoring pipeline** — base points × power-up multiplier × skill bonus × streak multiplier × speed bonus × category bonus
+- **Auto-correct chance**, **retry-on-wrong**, **streak shield consumption**, and **double-or-nothing** all wired into `QuestionController._evaluateAnswer()`
+- **Timer manipulation** — `pendingTimerBonusProvider` drains into each tick; `timerFrozenProvider` halts countdown entirely
+- **Question manipulation** — eliminate one/half wrong answers, auto-show hints, resolved per-question via `_applyPendingQuestionEffects()`
+- **Periodic chaos** and **random benefit** mechanics trigger at defined intervals from `QuestionController`
+- **23 Riverpod `StateProvider` buses** in `game_bonus_providers.dart` bridge `SkillEffectHandler` writes to `QuestionController` reads
+- **Cooldown reduction** — `SkillCooldownService` supports both per-skill and global cooldown reduction
 
 ### 📊 Leaderboard & Player Profiles
 - Streaks, engagement scores, activity tracking
@@ -97,7 +106,7 @@ This repository includes the entire player-facing and admin-facing Flutter appli
 - Encryption Manager (AES & Fernet)
 - Mission analytics dashboard
 - Scan analytics dashboard
-- Splash screen selector + animated previews
+- Splash screen selector + animated previews 
 
 ---
 

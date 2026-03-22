@@ -24,7 +24,10 @@ import '../../core/services/settings/reward_settings_service.dart';
 import '../../core/services/settings/spin_wheel_settings_service.dart';
 import '../../core/services/settings/splash_settings_service.dart';
 import '../../core/services/settings/theme_settings_service.dart';
-import '../../ui_components/login/providers/auth.dart' show LocalAuthService;
+// FIX: was `import '../../core/services/auth_service.dart'` which exports
+// BackendAuthService — not the AuthService type that ServiceManager.authService
+// actually holds. Import the legacy AuthService from its real location instead.
+import 'package:trivia_tycoon/ui_components/login/providers/auth.dart';
 import '../../core/services/encryption/encryption_service.dart';
 import '../../core/services/encryption/fernet_service.dart';
 import '../../core/services/theme/swatch_service.dart';
@@ -67,12 +70,12 @@ final quizProgressServiceProvider = Provider<QuizProgressService>((ref) {
 });
 
 final spinWheelSettingsServiceProvider =
-    Provider<SpinWheelSettingsService>((ref) {
+Provider<SpinWheelSettingsService>((ref) {
   return ref.watch(serviceManagerProvider).spinWheelSettingsService;
 });
 
 final confettiSettingsServiceProvider =
-    Provider<ConfettiSettingsService>((ref) {
+Provider<ConfettiSettingsService>((ref) {
   return ref.watch(serviceManagerProvider).confettiSettingsService;
 });
 
@@ -88,7 +91,9 @@ final customThemeServiceProvider = Provider<CustomThemeService>((ref) {
   return ref.read(serviceManagerProvider).customThemeService;
 });
 
-final authServiceProvider = Provider<LocalAuthService>((ref) {
+// Provider<AuthService> is now valid because AuthService is imported from
+// ui_components/login/providers/auth.dart — matching the field type on ServiceManager.
+final authServiceProvider = Provider<AuthService>((ref) {
   return ref.watch(serviceManagerProvider).authService;
 });
 
@@ -97,7 +102,7 @@ final playerProfileServiceProvider = Provider<PlayerProfileService>((ref) {
 });
 
 final purchaseSettingsServiceProvider =
-    Provider<PurchaseSettingsService>((ref) {
+Provider<PurchaseSettingsService>((ref) {
   return ref.read(serviceManagerProvider).purchaseSettingsService;
 });
 
@@ -106,7 +111,7 @@ final prizeLogServiceProvider = Provider<PrizeLogService>((ref) {
 });
 
 final onboardingSettingsServiceProvider =
-    Provider<OnboardingSettingsService>((ref) {
+Provider<OnboardingSettingsService>((ref) {
   return ref.read(serviceManagerProvider).onboardingSettingsService;
 });
 
@@ -123,7 +128,7 @@ final achievementServiceProvider = Provider<AchievementService>((ref) {
 // ---------------------------------------------------------------------------
 
 final questionControllerProvider =
-    StateNotifierProvider<QuestionController, QuestionState>((ref) {
+StateNotifierProvider<QuestionController, QuestionState>((ref) {
   return QuestionController(ref: ref);
 });
 
@@ -136,7 +141,7 @@ final questionServiceProvider = Provider<QuestionService>((ref) {
 // ---------------------------------------------------------------------------
 
 final leaderboardControllerProvider =
-    ChangeNotifierProvider<LeaderboardController>((ref) {
+ChangeNotifierProvider<LeaderboardController>((ref) {
   final dataService = ref.read(leaderboardDataServiceProvider);
   final storage = ref.read(generalKeyValueStorageProvider);
   return LeaderboardController(
@@ -155,9 +160,9 @@ final leaderboardDataServiceProvider = Provider<LeaderboardDataService>((ref) {
 });
 
 final leaderboardAssetProvider =
-    FutureProvider<List<LeaderboardEntry>>((ref) async {
+FutureProvider<List<LeaderboardEntry>>((ref) async {
   final jsonStr =
-      await rootBundle.loadString('assets/data/leaderboard/leaderboard.json');
+  await rootBundle.loadString('assets/data/leaderboard/leaderboard.json');
   final List<dynamic> decoded = json.decode(jsonStr);
   return decoded.map((e) => LeaderboardEntry.fromJson(e)).toList();
 });
@@ -167,7 +172,7 @@ final leaderboardAssetProvider =
 // ---------------------------------------------------------------------------
 
 final profileAvatarControllerProvider =
-    ChangeNotifierProvider<ProfileAvatarController>((ref) {
+ChangeNotifierProvider<ProfileAvatarController>((ref) {
   final serviceManager = ref.read(serviceManagerProvider);
   return ProfileAvatarController(
     keyValueStorage: serviceManager.generalKeyValueStorageService,
@@ -208,7 +213,7 @@ final splashControllerProvider = Provider<SplashController>((ref) {
 });
 
 final confettiControllerProvider =
-    ChangeNotifierProvider<ConfettiController>((ref) {
+ChangeNotifierProvider<ConfettiController>((ref) {
   return ConfettiController();
 });
 
@@ -227,8 +232,8 @@ final qrHistoryServiceProvider = Provider<QrHistoryService>((ref) {
 });
 
 final qrSettingsProvider =
-    StateNotifierProvider<QrSettingsNotifier, QrSettingsModel>(
-  (ref) => QrSettingsNotifier(),
+StateNotifierProvider<QrSettingsNotifier, QrSettingsModel>(
+      (ref) => QrSettingsNotifier(),
 );
 
 // ---------------------------------------------------------------------------
@@ -236,19 +241,19 @@ final qrSettingsProvider =
 // ---------------------------------------------------------------------------
 
 final storeServiceProvider =
-    Provider((ref) => ref.read(serviceManagerProvider).storeService);
+Provider((ref) => ref.read(serviceManagerProvider).storeService);
 
 final storeItemsProvider = FutureProvider<List<StoreItemModel>>((ref) async {
   final jsonString =
-      await rootBundle.loadString('assets/data/store_items.json');
+  await rootBundle.loadString('assets/data/store_items.json');
   final List<dynamic> jsonData = jsonDecode(jsonString);
   return jsonData.map((e) => StoreItemModel.fromJson(e)).toList();
 });
 
 final powerUpInventoryProvider =
-    FutureProvider<List<StoreItemModel>>((ref) async {
+FutureProvider<List<StoreItemModel>>((ref) async {
   final ids =
-      await ref.read(purchaseSettingsServiceProvider).getAllPurchasedItems();
+  await ref.read(purchaseSettingsServiceProvider).getAllPurchasedItems();
   final all = await StoreDataService.loadStoreItems();
   return all
       .where((item) => ids.contains(item.id) && item.category == 'power-up')
@@ -260,7 +265,7 @@ final powerUpInventoryProvider =
 // ---------------------------------------------------------------------------
 
 final encryptionServiceProvider =
-    FutureProvider<EncryptionService>((ref) async {
+FutureProvider<EncryptionService>((ref) async {
   final fernet = await ref.watch(fernetControllerProvider.future);
   return EncryptionService(fernetService: fernet);
 });
@@ -270,5 +275,5 @@ final fernetServiceProvider = Provider<FernetService>((ref) {
 });
 
 final fernetControllerProvider =
-    AsyncNotifierProvider<FernetController, FernetService>(
+AsyncNotifierProvider<FernetController, FernetService>(
         () => FernetController());

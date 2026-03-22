@@ -16,8 +16,8 @@ import 'core_providers.dart';
 // ---------------------------------------------------------------------------
 
 final adminFilterProvider =
-    StateNotifierProvider<AdminFilterController, AdminFilterState>(
-  (ref) => AdminFilterController(ref),
+StateNotifierProvider<AdminFilterController, AdminFilterState>(
+      (ref) => AdminFilterController(ref),
 );
 
 // ---------------------------------------------------------------------------

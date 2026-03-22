@@ -23,13 +23,13 @@ abstract class HubClientBase {
 
     _connection = HubConnectionBuilder()
         .withUrl(
-          url,
-          options: HttpConnectionOptions(
-            accessTokenFactory: () async => accessToken,
-            transport: HttpTransportType.WebSockets,
-            skipNegotiation: true,
-          ),
-        )
+      url,
+      options: HttpConnectionOptions(
+        accessTokenFactory: () async => accessToken,
+        transport: HttpTransportType.WebSockets,
+        skipNegotiation: true,
+      ),
+    )
         .withAutomaticReconnect()
         .build();
 

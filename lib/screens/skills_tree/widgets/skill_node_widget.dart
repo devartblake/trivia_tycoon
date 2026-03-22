@@ -122,8 +122,8 @@ class SkillNodeWidget extends StatelessWidget {
     final border = isAvailable
         ? const Color(0xFFFFB300).withValues(alpha: 0.80)
         : isUnlocked || isSelected
-            ? glow.withValues(alpha: 0.5)
-            : _tint(base, 0.30);
+        ? glow.withValues(alpha: 0.5)
+        : _tint(base, 0.30);
 
     // Elevation/glow rules
     final elevation = isSelected ? 8.0 : (isUnlocked ? 5.0 : (isAvailable ? 4.0 : 2.0));
@@ -191,6 +191,56 @@ class SkillNodeWidget extends StatelessWidget {
             end: Alignment.bottomRight,
           )
         : null;
+    Widget hexWidget = Stack(
+      children: [
+        // Hexagon background
+        Hexagon(
+          radius: _effectiveRadius,
+          orientation: orientation,
+          cornerRadius: cornerRadius,
+          elevation: elevation,
+          borderWidth: isAvailable ? 2.5 : borderWidth,
+          color: gradient == null ? bg : null,
+          gradient: gradient,
+          borderColor: border,
+          shadowColor: isSelected || isUnlocked
+              ? glow.withValues(alpha: 0.35)
+              : isAvailable
+              ? const Color(0xFFFFB300).withValues(alpha: 0.25)
+              : const Color(0x33000000),
+          onTap: onTap,
+          child: Padding(
+            padding: EdgeInsets.all(_effectiveRadius * _paddingFactor),
+            child: Center(child: body),
+          ),
+        ),
+        // Cooldown badge overlay if any
+        badge,
+      ],
+    );
+
+    // Amber pulse animation for available nodes
+    if (isAvailable) {
+      hexWidget = hexWidget
+          .animate(onPlay: (c) => c.repeat(reverse: true))
+          .custom(
+        duration: 1200.ms,
+        curve: Curves.easeInOut,
+        builder: (_, value, child) => DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(cornerRadius + 4),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFFFFB300).withValues(alpha: 0.35 * value),
+                blurRadius: 12,
+                spreadRadius: 2,
+              ),
+            ],
+          ),
+          child: child,
+        ),
+      );
+    }
 
     Widget hexWidget = Stack(
       children: [

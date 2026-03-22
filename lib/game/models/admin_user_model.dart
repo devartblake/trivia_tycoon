@@ -4,6 +4,7 @@ export 'menu_enums.dart' show AgeGroup;
 
 enum UserStatus { online, offline, away, busy }
 enum UserRole { user, premium, moderator, admin }
+enum AgeGroup { kids, teens, adults, general }
 
 class AdminUserModel {
   final String id;
@@ -113,13 +114,13 @@ class AdminUserModel {
   String get ageGroupText {
     switch (ageGroup) {
       case AgeGroup.kids:
-        return 'Kids (Under 13)';
+        return 'Child (6-12)';
       case AgeGroup.teens:
-        return 'Teens (13-17)';
+        return 'Teen (13-17)';
       case AgeGroup.adults:
-        return 'Adults (18-24)';
+        return 'Adult (18-64)';
       case AgeGroup.general:
-        return 'General (25+)';
+        return 'Senior (65+)';
     }
   }
 

@@ -20,26 +20,26 @@ class GameEventDto {
   });
 
   factory GameEventDto.fromJson(Map<String, dynamic> j) => GameEventDto(
-        id: j['id'] as String,
-        name: j['name'] as String,
-        status: j['status'] as String? ?? 'upcoming',
-        startsAt: DateTime.parse(j['startsAt'] as String),
-        entryFee: j['entryFee'] as int? ?? 0,
-        maxPlayers: j['maxPlayers'] as int? ?? 0,
-        currentPlayers: j['currentPlayers'] as int? ?? 0,
-        aliveCount: j['aliveCount'] as int? ?? 0,
-      );
+    id: j['id'] as String,
+    name: j['name'] as String,
+    status: j['status'] as String? ?? 'upcoming',
+    startsAt: DateTime.parse(j['startsAt'] as String),
+    entryFee: j['entryFee'] as int? ?? 0,
+    maxPlayers: j['maxPlayers'] as int? ?? 0,
+    currentPlayers: j['currentPlayers'] as int? ?? 0,
+    aliveCount: j['aliveCount'] as int? ?? 0,
+  );
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'status': status,
-        'startsAt': startsAt.toIso8601String(),
-        'entryFee': entryFee,
-        'maxPlayers': maxPlayers,
-        'currentPlayers': currentPlayers,
-        'aliveCount': aliveCount,
-      };
+    'id': id,
+    'name': name,
+    'status': status,
+    'startsAt': startsAt.toIso8601String(),
+    'entryFee': entryFee,
+    'maxPlayers': maxPlayers,
+    'currentPlayers': currentPlayers,
+    'aliveCount': aliveCount,
+  };
 }
 
 class GameEventLeaderboardEntryDto {
@@ -67,10 +67,10 @@ class GameEventLeaderboardEntryDto {
       );
 
   Map<String, dynamic> toJson() => {
-        'playerId': playerId,
-        'username': username,
-        'rank': rank,
-        'score': score,
-        'isEliminated': isEliminated,
-      };
+    'playerId': playerId,
+    'username': username,
+    'rank': rank,
+    'score': score,
+    'isEliminated': isEliminated,
+  };
 }

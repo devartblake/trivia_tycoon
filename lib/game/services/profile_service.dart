@@ -2,6 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/core_providers.dart';
 import '../providers/xp_provider.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/core_providers.dart';
+import '../providers/xp_provider.dart';
 import '../providers/game_bonus_providers.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
@@ -59,7 +63,7 @@ class ProfileService {
   T? getPreference<T>(String key) => preferences[key] as T?;
 
   // ---------- Game convenience ops ----------
-  /// Posts a timer bonus to [pendingTimerBonusProvider] so the active
+  //// Posts a timer bonus to [pendingTimerBonusProvider] so the active
   /// QuestionController can pick it up on the next timer tick.
   void increaseTimer(int seconds) {
     LogManager.debug('ProfileService: increaseTimer($seconds)');

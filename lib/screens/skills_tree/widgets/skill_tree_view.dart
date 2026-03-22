@@ -19,25 +19,25 @@ enum SkillNodeFilterMode { all, unlocked, available, locked }
 
 extension SkillNodeFilterModeLabel on SkillNodeFilterMode {
   String get label => switch (this) {
-        SkillNodeFilterMode.all => 'Show All',
-        SkillNodeFilterMode.unlocked => 'Unlocked Only',
-        SkillNodeFilterMode.available => 'Available to Unlock',
-        SkillNodeFilterMode.locked => 'Locked Only',
-      };
+    SkillNodeFilterMode.all => 'Show All',
+    SkillNodeFilterMode.unlocked => 'Unlocked Only',
+    SkillNodeFilterMode.available => 'Available to Unlock',
+    SkillNodeFilterMode.locked => 'Locked Only',
+  };
 
   IconData get icon => switch (this) {
-        SkillNodeFilterMode.all => Icons.all_inclusive,
-        SkillNodeFilterMode.unlocked => Icons.check_circle,
-        SkillNodeFilterMode.available => Icons.lock_open,
-        SkillNodeFilterMode.locked => Icons.lock,
-      };
+    SkillNodeFilterMode.all => Icons.all_inclusive,
+    SkillNodeFilterMode.unlocked => Icons.check_circle,
+    SkillNodeFilterMode.available => Icons.lock_open,
+    SkillNodeFilterMode.locked => Icons.lock,
+  };
 
   Color get color => switch (this) {
-        SkillNodeFilterMode.all => Colors.blue,
-        SkillNodeFilterMode.unlocked => Colors.green,
-        SkillNodeFilterMode.available => Colors.amber,
-        SkillNodeFilterMode.locked => Colors.white54,
-      };
+    SkillNodeFilterMode.all => Colors.blue,
+    SkillNodeFilterMode.unlocked => Colors.green,
+    SkillNodeFilterMode.available => Colors.amber,
+    SkillNodeFilterMode.locked => Colors.white54,
+  };
 }
 
 class SkillTreeView extends ConsumerStatefulWidget {
@@ -109,7 +109,7 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
     return null;
   }
 
-  // Handle tap down events — select node and show detail sheet
+  // Handle tap down events - select node and show detail sheet
   void _handleTapDown(TapDownDetails details) {
     final state = ref.read(skillTreeProvider);
     final ctrl = ref.read(skillTreeProvider.notifier);
@@ -129,7 +129,7 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
     SkillNodeDetailSheet.show(context, ref, node);
   }
 
-  // Handle tap events — no longer unlocks directly
+  // Handle tap events - no longer unlocks directly
   void _handleTap() {
     // Unlock/use is now handled exclusively inside SkillNodeDetailSheet.
   }
@@ -342,7 +342,7 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
                                 final nodeId = entry.key;
                                 final worldPos = entry.value;
                                 final screenPos =
-                                    _transformPoint(_transform.value, worldPos);
+                                _transformPoint(_transform.value, worldPos);
                                 final node = state.graph.byId[nodeId];
 
                                 if (node == null) return const SizedBox.shrink();
@@ -352,7 +352,7 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
                                     ? SkillNodeSize.large
                                     : SkillNodeSize.medium;
                                 final effectiveRadius =
-                                    isParent ? _nodeRadius : _nodeRadius * 0.75;
+                                isParent ? _nodeRadius : _nodeRadius * 0.75;
 
                                 return Positioned(
                                   left: screenPos.dx - effectiveRadius,
@@ -365,7 +365,7 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
                                     isSelected: state.selectedId == node.id,
                                     size: size,
                                     categoryColor: SkillTreeCategoryColors
-                                            .categoryColors[node.category] ??
+                                        .categoryColors[node.category] ??
                                         Colors.grey,
                                     cooldownService: ref
                                         .read(skillCooldownServiceProvider),
@@ -577,7 +577,6 @@ class _TopBar extends ConsumerWidget {
 }
 
 // ---------------- Edges Painter ----------------
-
 class _EdgesPainter extends CustomPainter {
   final SkillTreeGraph graph;
   final Map<String, Offset> positions; // world coords
@@ -596,13 +595,13 @@ class _EdgesPainter extends CustomPainter {
 
   /// Draw a dashed line between [p1] and [p2].
   void _drawDashed(
-    Canvas canvas,
-    Offset p1,
-    Offset p2,
-    Paint paint, {
-    double dashLen = 8.0,
-    double gapLen = 5.0,
-  }) {
+      Canvas canvas,
+      Offset p1,
+      Offset p2,
+      Paint paint, {
+        double dashLen = 8.0,
+        double gapLen = 5.0,
+      }) {
     final dir = p2 - p1;
     final dist = dir.distance;
     if (dist == 0) return;

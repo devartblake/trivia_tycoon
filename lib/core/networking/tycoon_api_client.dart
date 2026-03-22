@@ -488,7 +488,7 @@ class TycoonApiClient {
     required String gameEventId,
   }) async {
     final data =
-        await _http.getJsonList('/game-events/$gameEventId/leaderboard');
+    await _http.getJsonList('/game-events/$gameEventId/leaderboard');
     return data
         .cast<Map<String, dynamic>>()
         .map(GameEventLeaderboardEntryDto.fromJson)
@@ -521,7 +521,7 @@ class TycoonApiClient {
     required int tierNumber,
   }) async {
     final data =
-        await _http.getJsonList('/guardians/$seasonId/$tierNumber');
+    await _http.getJsonList('/guardians/$seasonId/$tierNumber');
     return data.cast<Map<String, dynamic>>().map(GuardianDto.fromJson).toList();
   }
 

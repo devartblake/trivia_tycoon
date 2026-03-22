@@ -413,17 +413,17 @@ class ProfileGameCard extends ConsumerWidget {
             decoration: BoxDecoration(
               gradient: adminModeEnabled
                   ? const LinearGradient(
-                      colors: [Color(0xFF10B981), Color(0xFF059669)],
-                    )
+                colors: [Color(0xFF10B981), Color(0xFF059669)],
+              )
                   : LinearGradient(
-                      colors: [Colors.grey.shade700, Colors.grey.shade600],
-                    ),
+                colors: [Colors.grey.shade700, Colors.grey.shade600],
+              ),
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
                   color: (adminModeEnabled
-                          ? const Color(0xFF10B981)
-                          : Colors.grey.shade700)
+                      ? const Color(0xFF10B981)
+                      : Colors.grey.shade700)
                       .withValues(alpha: 0.4),
                   blurRadius: 12,
                   offset: const Offset(0, 6),

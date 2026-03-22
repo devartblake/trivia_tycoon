@@ -10,9 +10,9 @@ import 'hub_client_base.dart';
 /// eliminations/closures, guardian changes, territory captures, and vote tallies.
 class NotificationHub extends HubClientBase {
   final _playerNotifications =
-      StreamController<PlayerNotificationDto>.broadcast();
+  StreamController<PlayerNotificationDto>.broadcast();
   final _gameEventEliminations =
-      StreamController<GameEventEliminationDto>.broadcast();
+  StreamController<GameEventEliminationDto>.broadcast();
   final _gameEventsClosed = StreamController<GameEventClosedDto>.broadcast();
   final _guardianChanges = StreamController<GuardianChangedDto>.broadcast();
   final _territoryCaptures = StreamController<TerritoryCaptureDto>.broadcast();

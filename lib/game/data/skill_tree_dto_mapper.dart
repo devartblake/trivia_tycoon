@@ -35,10 +35,10 @@ class SkillTreeDtoMapper {
   /// nodes (i.e. nodes with edges pointing to this node) are unlocked.
   /// Nodes with no prerequisites are always available.
   static bool _deriveAvailable(
-    SkillNode node,
-    SkillTreeGraph graph,
-    Map<String, SkillNodeDto> serverById,
-  ) {
+      SkillNode node,
+      SkillTreeGraph graph,
+      Map<String, SkillNodeDto> serverById,
+      ) {
     if (node.unlocked) return false;
 
     final prereqIds = graph.edges

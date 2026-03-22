@@ -14,8 +14,7 @@ class NavigationRedirectService {
     final isOnboardingComplete = ref.read(onboardingCompleteProvider);
 
     LogManager.debug(
-      'REDIRECT DEBUG: isLoggedIn=$isLoggedIn, onboardingComplete=$isOnboardingComplete, path=$currentPath',
-    );
+        'REDIRECT DEBUG: isLoggedIn=$isLoggedIn, onboardingComplete=$isOnboardingComplete, path=$currentPath');
 
     // 1) Always allow splash / root
     if (currentPath == '/') return null;
@@ -40,7 +39,9 @@ class NavigationRedirectService {
     }
 
     return null;
-  }
+  } // FIX 1: Removed the extra stray `}` that was closing the class one brace early,
+// pushing all of section 4 outside the method and making the trailing `}` dangle
+// at the top level (triggering "expected_executable" at what was line 44).
 }
 
 /// Provider for the navigation redirect service
@@ -65,7 +66,8 @@ class NavigationState {
 
   const NavigationState({
     required this.isLoggedIn,
-    required this.isOnboardingComplete,
+    required this.isOnboardingComplete, // FIX 2: was `required this.onboardingPhase`
+    // which doesn't match the declared field name
   });
 
   @override
@@ -74,8 +76,8 @@ class NavigationState {
           other is NavigationState &&
               runtimeType == other.runtimeType &&
               isLoggedIn == other.isLoggedIn &&
-              isOnboardingComplete == other.isOnboardingComplete;
+              isOnboardingComplete == other.isOnboardingComplete; // FIX 2 (cont.)
 
   @override
-  int get hashCode => isLoggedIn.hashCode ^ isOnboardingComplete.hashCode;
+  int get hashCode => isLoggedIn.hashCode ^ isOnboardingComplete.hashCode; // FIX 2 (cont.)
 }
