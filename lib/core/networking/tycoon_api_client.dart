@@ -8,6 +8,7 @@ import '../dto/game_event_dto.dart';
 import '../dto/guardian_dto.dart';
 import '../dto/territory_dto.dart';
 import '../dto/vote_dto.dart';
+import '../dto/economy_dto.dart';
 
 /// API client for Trivia Tycoon backend
 ///
@@ -628,6 +629,97 @@ class TycoonApiClient {
       return response.statusCode == 200;
     } catch (e) {
       return false;
+    }
+  }
+
+  // ========================================
+  // Economy  (GET/POST /mobile/economy/*)
+  // ========================================
+
+  /// GET /mobile/economy/state
+  Future<EconomyStateDto> getEconomyState({required String playerId}) async {
+    final j = await _http.getJson(
+      '/mobile/economy/state',
+      query: {'playerId': playerId},
+    );
+    return EconomyStateDto.fromJson(j);
+  }
+
+  /// POST /mobile/economy/session/start
+  Future<SessionStartDto> startEconomySession({required String playerId}) async {
+    final j = await _http.postJson(
+      '/mobile/economy/session/start',
+      query: {'playerId': playerId},
+    );
+    return SessionStartDto.fromJson(j);
+  }
+
+  /// POST /mobile/economy/daily-jackpot-ticket/claim
+  Future<DailyTicketClaimDto> claimDailyJackpotTicket(
+      {required String playerId}) async {
+    final j = await _http.postJson(
+      '/mobile/economy/daily-jackpot-ticket/claim',
+      query: {'playerId': playerId},
+    );
+    return DailyTicketClaimDto.fromJson(j);
+  }
+
+  /// POST /mobile/economy/revive/quote
+  Future<ReviveQuoteDto> getReviveQuote(
+      {required String playerId, required bool almostWin}) async {
+    final j = await _http.postJson(
+      '/mobile/economy/revive/quote',
+      query: {'playerId': playerId, 'almostWin': almostWin.toString()},
+    );
+    return ReviveQuoteDto.fromJson(j);
+  }
+
+  /// POST /mobile/economy/pity/report-loss
+  Future<PityResponseDto> reportPityLoss({required String playerId}) async {
+    final j = await _http.postJson(
+      '/mobile/economy/pity/report-loss',
+      query: {'playerId': playerId},
+    );
+    return PityResponseDto.fromJson(j);
+  }
+
+  /// POST /mobile/economy/pity/report-win
+  Future<PityResponseDto> reportPityWin({required String playerId}) async {
+    final j = await _http.postJson(
+      '/mobile/economy/pity/report-win',
+      query: {'playerId': playerId},
+    );
+    return PityResponseDto.fromJson(j);
+  }
+
+  /// POST /mobile/matches/start — policy-enforced.
+  /// Returns [MatchStartResultDto] with started=false + denyReason on 409 CONFLICT.
+  Future<MatchStartResultDto> startPolicyMatch({
+    required String playerId,
+    required String mode,
+    Map<String, dynamic>? settings,
+  }) async {
+    try {
+      final j = await _http.postJson(
+        '/mobile/matches/start',
+        body: {
+          'playerId': playerId,
+          'mode': mode,
+          if (settings != null) ...settings,
+        },
+      );
+      return MatchStartResultDto(
+        started: true,
+        matchId: j['matchId'] as String?,
+      );
+    } on HttpException catch (e) {
+      if (e.statusCode == 409) {
+        return MatchStartResultDto(
+          started: false,
+          denyReason: e.message,
+        );
+      }
+      rethrow;
     }
   }
 

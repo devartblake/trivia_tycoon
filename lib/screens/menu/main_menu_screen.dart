@@ -21,6 +21,7 @@ import '../../ui_components/tycoon_toast/tycoon_toast.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../core/animations/animation_manager.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'widgets/economy_hud_widget.dart';
 
 /// Modern, modular main menu screen
 ///
@@ -44,6 +45,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
   AnimationController? _animationController;
   late List<AnimationController> _cardAnimationControllers;
   TycoonToast? _greetingToast;
+  AppLifecycleListener? _lifecycleListener;
 
   @override
   void initState() {
@@ -76,6 +78,12 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     Future.delayed(const Duration(milliseconds: 800), () {
       if (mounted) _showGreetingToast();
     });
+
+    // Fetch economy state on first load and on app resume
+    _fetchEconomy();
+    _lifecycleListener = AppLifecycleListener(
+      onResume: _fetchEconomy,
+    );
 
     // Remind users to complete onboarding when needed.
     Future.delayed(const Duration(milliseconds: 1100), () {
@@ -137,8 +145,20 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     }
   }
 
+  Future<void> _fetchEconomy() async {
+    if (!mounted) return;
+    try {
+      final playerId = await ref.read(currentUserIdProvider.future);
+      if (!mounted) return;
+      ref.read(economyProvider.notifier).fetchState(playerId);
+    } catch (_) {
+      // Economy state is non-blocking — the HUD will show cached values.
+    }
+  }
+
   @override
   void dispose() {
+    _lifecycleListener?.dispose();
     _animationController?.dispose();
     AnimationManager.disposeControllers(_cardAnimationControllers);
     super.dispose();
@@ -367,17 +387,24 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
         final livesState = ref.watch(livesProvider);
         final ageGroup = ref.watch(userAgeGroupProvider);
 
-        return CurrencyDisplay(
-          ageGroup: ageGroup,
-          coins: coins,
-          gems: diamonds,
-          currentEnergy: energyState.current,
-          maxEnergy: energyState.max,
-          currentLives: livesState.current,
-          maxLives: livesState.max,
-          ref: ref,
-          showEnergyInfo: (cur, max) => _showEnergyInfo(context, cur, max),
-          showLivesInfo: (cur, max) => _showLivesInfo(context, cur, max),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CurrencyDisplay(
+              ageGroup: ageGroup,
+              coins: coins,
+              gems: diamonds,
+              currentEnergy: energyState.current,
+              maxEnergy: energyState.max,
+              currentLives: livesState.current,
+              maxLives: livesState.max,
+              ref: ref,
+              showEnergyInfo: (cur, max) => _showEnergyInfo(context, cur, max),
+              showLivesInfo: (cur, max) => _showLivesInfo(context, cur, max),
+            ),
+            const SizedBox(height: 10),
+            const EconomyHudWidget(),
+          ],
         );
       },
     );
