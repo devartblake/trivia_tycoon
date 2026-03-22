@@ -628,8 +628,9 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
 
   void _viewActivityLog(AdminUserModel user) async {
     try {
-      final serviceManager = ref.read(serviceManagerProvider);
-      final response = await serviceManager.apiService.get('/admin/users/${user.id}/activity');
+      final sm = ref.read(serviceManagerProvider);
+      final response =
+          await sm.apiService.get('/admin/users/${user.id}/activity');
       final items = response['items'];
       final logs = items is List
           ? items

@@ -271,14 +271,12 @@ class QuestionController extends StateNotifier<QuestionState> {
   void usePowerUp(String type) {
     if (state.powerUpUsed || state.currentQuestion == null) return;
 
-    /// Hint power-up
     QuestionModel updated = state.currentQuestion!;
     switch (type) {
       case 'hint':
         updated = updated.copyWith(showHint: true);
         break;
 
-      /// Eliminate power-up
       case 'eliminate':
         final incorrect =
         updated.options.where((c) => c != updated.correctAnswer).toList();
@@ -289,20 +287,15 @@ class QuestionController extends StateNotifier<QuestionState> {
         updated = updated.copyWith(options: reduced, reducedOptions: reduced);
         break;
 
-      /// Extra time power-up
       case 'extra_time':
         state = state.copyWith(timeLeft: state.timeLeft + 10);
         return;
     }
 
-    // 🛠️ Replace the updated question in the list
     final updatedQuestions = [...state.questions];
     updatedQuestions[state.currentIndex] = updated;
-
-    // ✅ Update state
     state = state.copyWith(questions: updatedQuestions, powerUpUsed: true);
   }
-
 
   void reset() {
     _timer?.cancel();

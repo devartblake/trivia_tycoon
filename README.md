@@ -91,6 +91,15 @@ This repository includes the entire player-facing and admin-facing Flutter appli
 - Scan preview modal and full scan history
 - Scan-type filters (profile, referral, mission, promo)
 
+### ⚙️ Game Loop — Skill & Power-up Integration
+- **Scoring pipeline** — base points × power-up multiplier × skill bonus × streak multiplier × speed bonus × category bonus
+- **Auto-correct chance**, **retry-on-wrong**, **streak shield consumption**, and **double-or-nothing** all wired into `QuestionController._evaluateAnswer()`
+- **Timer manipulation** — `pendingTimerBonusProvider` drains into each tick; `timerFrozenProvider` halts countdown entirely
+- **Question manipulation** — eliminate one/half wrong answers, auto-show hints, resolved per-question via `_applyPendingQuestionEffects()`
+- **Periodic chaos** and **random benefit** mechanics trigger at defined intervals from `QuestionController`
+- **23 Riverpod `StateProvider` buses** in `game_bonus_providers.dart` bridge `SkillEffectHandler` writes to `QuestionController` reads
+- **Cooldown reduction** — `SkillCooldownService` supports both per-skill and global cooldown reduction
+
 ### 🛠 Admin Tools
 - Question editor with tags, media, and encryption support
 - Question list with bulk delete, search, filtering

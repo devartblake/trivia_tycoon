@@ -216,7 +216,6 @@ class TopMenuSection extends ConsumerWidget {
     );
   }
 
-  // Enhanced navigation handlers with custom logic
   void _handlePlayQuizTap(BuildContext context) {
     context.push('/quiz/play');
   }
@@ -229,7 +228,6 @@ class TopMenuSection extends ConsumerWidget {
     context.push('/achievements');
   }
 
-  // Dynamic greeting based on time of day
   String _getGreeting() {
     final hour = DateTime.now().hour;
     if (hour < 12) {

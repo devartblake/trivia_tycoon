@@ -61,7 +61,7 @@ class ServiceManager {
   static late final ServiceManager instance;
 
   final ApiService apiService;
-  final AuthService authService;
+  final LocalAuthService authService;
   final AnalyticsService analyticsService;
   final EventQueueService eventQueueService;
   final AudioSettingsService audioSettingsService;
@@ -288,6 +288,22 @@ class ServiceManager {
     final authHttpClient = AuthHttpClient(coreAuth, tokenStore); // FIX: was AuthHttpClient(auth, auth.tokenStore)
 
     final history = QrHistoryService(cache: cache, settings: qrSettings);
+    final httpClient = HttpClient(
+      authClient: authHttpClient,
+      baseUrl: '$baseUrl/api/v1',
+    );
+    final tycoonApi = TycoonApiClient(httpClient: httpClient);
+    final notifyHub = NotificationHub();
+    final mHub = MatchHub();
+
+    // Core auth service (token-based) used exclusively by AuthHttpClient
+    final deviceId = DeviceIdService(secureStorage);
+    final authTokenBox = Hive.box('auth_tokens');
+    final tokenStore = AuthTokenStore(authTokenBox);
+    final authApi = AuthApiClient(http.Client(), apiBaseUrl: EnvConfig.apiBaseUrl, deviceId: deviceId);
+    final coreAuth = core_auth.AuthService(deviceId: deviceId, tokenStore: tokenStore, api: authApi);
+
+    final authHttpClient = AuthHttpClient(coreAuth, tokenStore);
     final httpClient = HttpClient(
       authClient: authHttpClient,
       baseUrl: '$baseUrl/api/v1',

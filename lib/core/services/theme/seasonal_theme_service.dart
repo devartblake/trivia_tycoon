@@ -159,12 +159,6 @@ class SeasonalThemeService {
   }
 }
 
-/// Riverpod provider for GeneralKeyValueStorageService
-/// ADD THIS to your riverpod_providers.dart if not already present
-final generalKeyValueStorageProvider = Provider<GeneralKeyValueStorageService>((ref) {
-  return GeneralKeyValueStorageService();
-});
-
 /// Riverpod provider for SeasonalThemeService
 final seasonalThemeServiceProvider = Provider<SeasonalThemeService>((ref) {
   final storage = ref.watch(generalKeyValueStorageProvider);

@@ -4,6 +4,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../logic/skill_effect_handler.dart';
 import '../models/skill_tree_graph.dart';
+import '../providers/core_providers.dart';
 import '../providers/game_session_provider.dart';
 import '../providers/profile_service_provider.dart';
 import '../providers/skill_cooldown_service_provider.dart';
@@ -127,6 +128,7 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
       playerPoints: state.playerPoints - state.graph.byId[id]!.cost,
     );
     _persistProfile();
+    _persistUnlock(id);
   }
 
   // ----- XP-based unlock via XPService (unified approach) -----
@@ -180,6 +182,7 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
     }
 
     _persistProfile();
+    _persistUnlock(nodeId);
   }
 
   // ----- Unified skill usage through SkillEffectHandler -----
@@ -284,6 +287,31 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
       state = state.copyWith(positions: merged);
     }
     _persistProfile();
+  }
+
+  // ----- Server Sync -----
+
+  /// Fire-and-forget API call to persist an unlocked node to the server.
+  /// Local state is already updated optimistically; server will re-sync on
+  /// the next app launch. All errors are swallowed — do not revert local state.
+  void _persistUnlock(String nodeId) {
+    try {
+      final userId = ref
+          .read(serviceManagerProvider)
+          .authService
+          .currentSession
+          .userId;
+      if (userId == null || userId.isEmpty) return;
+      ref
+          .read(serviceManagerProvider)
+          .tycoonApiClient
+          .unlockSkillNode(playerId: userId, nodeId: nodeId)
+          .catchError((_) {
+        // Log only — local state is source of truth until next server sync
+      });
+    } catch (_) {
+      // Service unavailable (e.g., test environment) — skip server sync
+    }
   }
 
   // ----- Profile Sync (optional, safe no-op if not provided) -----

@@ -238,9 +238,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     }
 
     // Save all user data
-    await onboardingService.setOnboardingCompleted(true);
-    await _persistProgressSnapshot(completed: true, hasCompletedProfile: true);
-
     if (username.isNotEmpty) {
       await profileService.savePlayerName(username);
     }

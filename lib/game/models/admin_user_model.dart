@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'menu_enums.dart';
+export 'menu_enums.dart' show AgeGroup;
 
 enum UserStatus { online, offline, away, busy }
 enum UserRole { user, premium, moderator, admin }

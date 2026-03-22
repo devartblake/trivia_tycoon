@@ -58,10 +58,8 @@ StateNotifierProvider<SkillTreeController, SkillTreeState>((ref) {
     orElse: () => const SkillTreeGraph(nodes: [], edges: []),
   );
 
-  // If your controller already expects (ref, initialGraph: ...)
   return SkillTreeController(
     ref,
     initialGraph: graph,
-    // optional persistence hooks can still be passed here
   );
 });

@@ -358,4 +358,3 @@ Added imports: `'../../game/providers/skill_tree_provider.dart'`
 
 ### Persistence pattern
 Follows the existing `CoinBalanceNotifier` pattern: fire-and-forget `_loadFromStorage()` from the constructor; `Future`-returning persist calls that are not awaited at call sites (fire-and-forget writes).
-

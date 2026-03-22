@@ -39,7 +39,6 @@ dependencies:
   intl: ^0.20.2
   encrypt: ^5.0.3
   http: ^1.3.0
-  rive: ^0.13.20
   path: ^1.9.0
   dio: ^5.8.0+1
   crypto: ^3.0.6

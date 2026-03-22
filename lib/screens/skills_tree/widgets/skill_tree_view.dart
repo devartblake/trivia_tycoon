@@ -114,7 +114,6 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
     final state = ref.read(skillTreeProvider);
     final ctrl = ref.read(skillTreeProvider.notifier);
 
-    // Build complete position map including children
     final allPositions = <String, Offset>{};
     allPositions.addAll(state.positions);
     _addChildPositions(state, allPositions);
@@ -175,7 +174,6 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
 
   // Add child positions in hex pattern around parents
   void _addChildPositions(SkillTreeState state, Map<String, Offset> allPositions) {
-    // Hex offset directions (pointy-top hexagon neighbors)
     final hexDirections = [
       Offset(_layoutHexRadius * 1.5, 0),
       Offset(_layoutHexRadius * 0.75, _layoutHexRadius * 1.299),
@@ -189,14 +187,12 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
       final parentId = parentEntry.key;
       final parentPos = parentEntry.value;
 
-      // Find children of this parent
       final children = state.graph.edges
           .where((e) => e.fromId == parentId)
           .map((e) => e.toId)
           .where((id) => state.graph.byId.containsKey(id))
           .toList();
 
-      // Place children in hex pattern around parent
       for (int i = 0; i < children.length && i < 6; i++) {
         final childId = children[i];
         final childPos = parentPos + hexDirections[i];
@@ -215,7 +211,6 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
 
     if (children.isEmpty) return const [];
 
-    // Distribute evenly in a ring
     final step = 360.0 / children.length;
     const baseRadiusFactor = 0.9;
     const baseScale = 0.55;
@@ -255,11 +250,8 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
     final state = ref.watch(skillTreeProvider);
     final ctrl = ref.read(skillTreeProvider.notifier);
 
-    // Background theme + snap preference (from SettingsScreen)
     final bgTheme = ref.watch(hexSpiderThemeProvider);
     final snapToNodes = ref.watch(hexSnapToNodesProvider);
-
-    // Cooldowns for badges
     final cooldowns = ref.read(skillCooldownServiceProvider);
 
     return Column(
@@ -295,7 +287,6 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
                       // Apply filter for rendering nodes
                       final allPositions = _applyFilter(rawPositions, state.graph);
 
-                      // Build coords + id map for background
                       final Set<Coordinates> coords = {};
                       final Map<Coordinates, String> coordToNodeId = {};
                       allPositions.forEach((id, world) {
@@ -409,7 +400,6 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
     return _Axial(q, r);
   }
 
-  // Round fractional axial to nearest integer axial using cube rounding
   _AxialInt _axialRound(_Axial a) {
     final cx = a.q;
     final cz = a.r;
@@ -627,7 +617,6 @@ class _EdgesPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-
     for (final e in graph.edges) {
       final a = positions[e.fromId];
       final b = positions[e.toId];

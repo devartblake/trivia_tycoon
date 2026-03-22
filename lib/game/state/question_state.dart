@@ -70,5 +70,4 @@ class QuestionState {
   }
 
   factory QuestionState.initial() => const QuestionState();
-
 }
