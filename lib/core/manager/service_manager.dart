@@ -17,6 +17,11 @@ import 'package:trivia_tycoon/core/services/settings/splash_settings_service.dar
 import 'package:trivia_tycoon/core/services/settings/theme_settings_service.dart';
 import 'package:trivia_tycoon/core/services/storage/config_storage_service.dart';
 import 'package:trivia_tycoon/core/services/theme/theme_notifier.dart';
+import 'package:http/http.dart' as http;
+import 'package:trivia_tycoon/core/services/auth_api_client.dart';
+import 'package:trivia_tycoon/core/services/auth_service.dart' as core_auth;
+import 'package:trivia_tycoon/core/services/auth_token_store.dart';
+import 'package:trivia_tycoon/core/services/device_id_service.dart';
 import 'package:trivia_tycoon/ui_components/login/providers/auth.dart';
 import 'package:trivia_tycoon/ui_components/qr_code/services/qr_history_service.dart';
 import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
@@ -52,7 +57,7 @@ class ServiceManager {
   static late final ServiceManager instance;
 
   final ApiService apiService;
-  final AuthService authService;
+  final LocalAuthService authService;
   final AnalyticsService analyticsService;
   final EventQueueService eventQueueService;
   final AudioSettingsService audioSettingsService;
@@ -253,10 +258,17 @@ class ServiceManager {
       profileService: playerProfile,
       purchaseService: purchaseService,
     );
-    final auth = AuthService(secureStorage: secureStorage, generalKey: generalKey, playerProfileService: playerProfile);
+    final auth = LocalAuthService(secureStorage: secureStorage, generalKey: generalKey, playerProfileService: playerProfile);
     final history = QrHistoryService(cache: cache, settings: qrSettings);
 
-    final authHttpClient = AuthHttpClient(auth, auth.tokenStore);
+    // Core auth service (token-based) used exclusively by AuthHttpClient
+    final deviceId = DeviceIdService(secureStorage);
+    final authTokenBox = Hive.box('auth_tokens');
+    final tokenStore = AuthTokenStore(authTokenBox);
+    final authApi = AuthApiClient(http.Client(), apiBaseUrl: EnvConfig.apiBaseUrl, deviceId: deviceId);
+    final coreAuth = core_auth.AuthService(deviceId: deviceId, tokenStore: tokenStore, api: authApi);
+
+    final authHttpClient = AuthHttpClient(coreAuth, tokenStore);
     final httpClient = HttpClient(
       authClient: authHttpClient,
       baseUrl: '$baseUrl/api/v1',

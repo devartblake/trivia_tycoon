@@ -24,7 +24,7 @@ import '../../core/services/settings/reward_settings_service.dart';
 import '../../core/services/settings/spin_wheel_settings_service.dart';
 import '../../core/services/settings/splash_settings_service.dart';
 import '../../core/services/settings/theme_settings_service.dart';
-import '../../core/services/auth_service.dart';
+import '../../ui_components/login/providers/auth.dart' show LocalAuthService;
 import '../../core/services/encryption/encryption_service.dart';
 import '../../core/services/encryption/fernet_service.dart';
 import '../../core/services/theme/swatch_service.dart';
@@ -88,7 +88,7 @@ final customThemeServiceProvider = Provider<CustomThemeService>((ref) {
   return ref.read(serviceManagerProvider).customThemeService;
 });
 
-final authServiceProvider = Provider<AuthService>((ref) {
+final authServiceProvider = Provider<LocalAuthService>((ref) {
   return ref.watch(serviceManagerProvider).authService;
 });
 
