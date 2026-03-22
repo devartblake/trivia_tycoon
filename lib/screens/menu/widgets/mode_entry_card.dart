@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/dto/economy_dto.dart';
 import '../../../game/providers/economy_providers.dart';
 import '../../../game/providers/profile_providers.dart';
+
+// Re-export for callers that import this file.
+export '../../../core/dto/economy_dto.dart' show ModeCostDto;
 
 /// Wraps any mode button/card with economy-aware CTA logic.
 ///
@@ -208,6 +212,3 @@ class _DiscountChip extends StatelessWidget {
     );
   }
 }
-
-// Re-export for callers that import this file.
-export '../../../core/dto/economy_dto.dart' show ModeCostDto;
