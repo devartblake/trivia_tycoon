@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,6 +32,12 @@ class EconomyState {
   });
 
   static const EconomyState initial = EconomyState();
+
+  /// True when data is from cache because the last fetch failed.
+  bool get isOffline => error != null && lastFetched != null;
+
+  /// True when no data is available at all (first load, offline, no cache).
+  bool get isEmpty => modes.isEmpty && lastFetched == null;
 
   EconomyState copyWith({
     bool? isLoading,
@@ -106,22 +113,72 @@ class EconomyNotifier extends StateNotifier<EconomyState> {
   // ── Public API ────────────────────────────────────────────────────────────
 
   /// Fetch authoritative economy state from the server and sync energy.
-  Future<void> fetchState(String playerId) async {
+  ///
+  /// Retries up to [maxRetries] times with exponential back-off on network /
+  /// 5xx errors. On final failure the cached state (hydrated at startup)
+  /// remains visible and [EconomyState.error] is set so the HUD can show a
+  /// subtle offline indicator.
+  Future<void> fetchState(
+    String playerId, {
+    int maxRetries = 3,
+  }) async {
     state = state.copyWith(isLoading: true);
-    try {
-      final dto = await _api.getEconomyState(playerId: playerId);
-      _applyDto(dto);
-      // Persist to cache for next cold start
-      await _storage.setString(
-          _kEconomyStateCacheKey, jsonEncode(dto.toJson()));
-      _analytics.logEvent('economy_state_loaded', {
-        'playerId': playerId,
-        'energy': dto.energy,
-        'pityActive': dto.pityActive,
-      });
-    } catch (e) {
-      state = state.copyWith(isLoading: false, error: e.toString());
+
+    final sw = Stopwatch()..start();
+    Exception? lastError;
+
+    for (int attempt = 0; attempt <= maxRetries; attempt++) {
+      if (attempt > 0) {
+        // Exponential back-off: 2s, 4s, 8s
+        await Future.delayed(Duration(seconds: 1 << attempt));
+      }
+      try {
+        final dto = await _api.getEconomyState(playerId: playerId);
+        _applyDto(dto);
+        await _storage.setString(
+            _kEconomyStateCacheKey, jsonEncode(dto.toJson()));
+        _analytics.logEvent('economy_state_loaded', {
+          'playerId': playerId,
+          'energy': dto.energy,
+          'maxEnergy': dto.maxEnergy,
+          'regenIntervalMinutes': dto.regenIntervalMinutes,
+          'pityActive': dto.pityActive,
+          'firstSessionDiscount': dto.firstSessionDiscount,
+          'dailyTicketAvailable': dto.dailyTicketAvailable,
+          'dailyTicketsRemaining': dto.dailyTicketsRemaining,
+          'modesCount': dto.modes.length,
+          'attempt': attempt,
+          'latencyMs': sw.elapsedMilliseconds,
+        });
+        return; // success
+      } catch (e) {
+        lastError = e is Exception ? e : Exception(e.toString());
+        // Only retry on transient errors; 4xx are permanent
+        final isTransient = _isTransientError(e);
+        if (!isTransient || attempt == maxRetries) break;
+      }
     }
+
+    // All attempts failed — surface cached data with error flag
+    state = state.copyWith(isLoading: false, error: lastError?.toString());
+    _analytics.logEvent('economy_state_load_failed', {
+      'playerId': playerId,
+      'error': lastError?.toString(),
+      'retriesExhausted': maxRetries,
+    });
+  }
+
+  static bool _isTransientError(Object e) {
+    final msg = e.toString().toLowerCase();
+    // Treat network errors and 5xx as transient; 4xx as permanent
+    if (msg.contains('socketexception') ||
+        msg.contains('timeout') ||
+        msg.contains('connection')) {
+      return true;
+    }
+    // HttpException from http_client.dart carries statusCode in message
+    final codeMatch = RegExp(r'\b(5\d\d)\b').firstMatch(msg);
+    return codeMatch != null;
   }
 
   /// Call before showing adjusted mode costs to the player.

@@ -63,6 +63,11 @@ class _EconomyHudWidgetState extends ConsumerState<EconomyHudWidget> {
           const SizedBox(width: 6),
           const _PityHintDot(),
         ],
+        // ── Offline indicator ────────────────────────────────────────────
+        if (economy.isOffline) ...[
+          const SizedBox(width: 6),
+          const _OfflineDot(),
+        ],
       ],
     );
   }
@@ -168,6 +173,24 @@ class _TicketBadge extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Small cloud-off icon shown when economy data is stale (fetch failed but
+/// cached data is available).  Tapping shows a tooltip with the reason.
+class _OfflineDot extends StatelessWidget {
+  const _OfflineDot();
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: 'Economy data may be outdated',
+      child: Icon(
+        Icons.cloud_off_outlined,
+        size: 14,
+        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.45),
       ),
     );
   }
