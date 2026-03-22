@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/quiz_results_provider.dart';
 import '../providers/riverpod_providers.dart';
 import '../providers/xp_provider.dart';
+import '../providers/economy_providers.dart';
 import '../services/educational_stats_service.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
@@ -244,9 +245,28 @@ class ProfileDataUpdater {
       }
 
       LogManager.debug('Quiz completion processing finished successfully');
+
+      // Report win/loss to pity system (non-blocking, fire-and-forget)
+      _reportPity(ref, results);
     } catch (e) {
       LogManager.debug('Error in ProfileDataUpdater.updateAfterQuiz: $e');
       rethrow;
     }
+  }
+
+  /// Reports the quiz outcome to the pity system.
+  /// A score above 50% of total questions is treated as a win.
+  static void _reportPity(WidgetRef ref, QuizResults results) {
+    ref.read(currentUserIdProvider.future).then((playerId) {
+      final isWin = results.totalQuestions > 0 &&
+          (results.score / results.totalQuestions) > 0.5;
+      if (isWin) {
+        ref.read(economyProvider.notifier).reportWin(playerId);
+      } else {
+        ref.read(economyProvider.notifier).reportLoss(playerId);
+      }
+    }).catchError((_) {
+      // Pity reporting is non-blocking and should never interrupt the flow.
+    });
   }
 }

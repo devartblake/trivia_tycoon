@@ -29,7 +29,7 @@ class _FakeDeviceIdService extends DeviceIdService {
 }
 
 class _StubHttpClient extends http.BaseClient {
-  final Map<String, http.Response> Function(http.Request) handler;
+  final http.Response Function(http.Request) handler;
 
   _StubHttpClient(this.handler);
 
