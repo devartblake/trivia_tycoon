@@ -242,57 +242,6 @@ class SkillNodeWidget extends StatelessWidget {
       );
     }
 
-    Widget hexWidget = Stack(
-      children: [
-        // Hexagon background
-        Hexagon(
-          radius: _effectiveRadius,
-          orientation: orientation,
-          cornerRadius: cornerRadius,
-          elevation: elevation,
-          borderWidth: isAvailable ? 2.5 : borderWidth,
-          color: gradient == null ? bg : null,
-          gradient: gradient,
-          borderColor: border,
-          shadowColor: isSelected || isUnlocked
-              ? glow.withValues(alpha: 0.35)
-              : isAvailable
-                  ? const Color(0xFFFFB300).withValues(alpha: 0.25)
-                  : const Color(0x33000000),
-          onTap: onTap,
-          child: Padding(
-            padding: EdgeInsets.all(_effectiveRadius * _paddingFactor),
-            child: Center(child: body),
-          ),
-        ),
-        // Cooldown badge overlay if any
-        badge,
-      ],
-    );
-
-    // Amber pulse animation for available nodes
-    if (isAvailable) {
-      hexWidget = hexWidget
-          .animate(onPlay: (c) => c.repeat(reverse: true))
-          .custom(
-            duration: 1200.ms,
-            curve: Curves.easeInOut,
-            builder: (_, value, child) => DecoratedBox(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(cornerRadius + 4),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFFFFB300).withValues(alpha: 0.35 * value),
-                    blurRadius: 12,
-                    spreadRadius: 2,
-                  ),
-                ],
-              ),
-              child: child,
-            ),
-          );
-    }
-
     return GestureDetector(
       onTap: onTap,
       child: hexWidget,

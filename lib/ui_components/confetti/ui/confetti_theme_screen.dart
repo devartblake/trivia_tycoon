@@ -4,6 +4,7 @@ import 'package:trivia_tycoon/game/controllers/coin_balance_notifier.dart';
 import 'package:trivia_tycoon/ui_components/confetti/confetti.dart';
 import 'package:trivia_tycoon/ui_components/confetti/utils/confetti_settings_storage.dart';
 import '../../../core/services/theme/seasonal_theme_service.dart';
+import '../../../game/providers/core_providers.dart';
 import '../core/confetti_theme.dart';
 import '../ui/confetti_preview.dart';
 import '../ui/confetti_color_picker.dart';

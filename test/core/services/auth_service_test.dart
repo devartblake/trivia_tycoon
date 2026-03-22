@@ -59,12 +59,12 @@ AuthApiClient _makeApiClient(
       deviceId: deviceId,
     );
 
-AuthService _makeAuthService({
+BackendAuthService _makeAuthService({
   required AuthTokenStore store,
   required _StubHttpClient httpClient,
 }) {
   final deviceId = _FakeDeviceIdService();
-  return AuthService(
+  return BackendAuthService(
     deviceId: deviceId,
     tokenStore: store,
     api: _makeApiClient(httpClient, deviceId),

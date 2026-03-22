@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../game/models/seasonal_theme_models.dart';
+import '../../../game/providers/core_providers.dart';
 import '../../theme/themes.dart';
 import '../settings/general_key_value_storage_service.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';

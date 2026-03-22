@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/services/auth_service.dart';
 import '../../core/services/leaderboard_data_service.dart';
 import '../../core/services/question/question_service.dart';
 import '../../core/services/settings/admin_settings_service.dart';
@@ -93,7 +94,7 @@ final customThemeServiceProvider = Provider<CustomThemeService>((ref) {
 
 // Provider<AuthService> is now valid because AuthService is imported from
 // ui_components/login/providers/auth.dart — matching the field type on ServiceManager.
-final authServiceProvider = Provider<AuthService>((ref) {
+final authServiceProvider = Provider<LocalAuthService>((ref) {
   return ref.watch(serviceManagerProvider).authService;
 });
 
