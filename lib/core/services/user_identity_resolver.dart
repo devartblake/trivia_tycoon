@@ -185,13 +185,13 @@ class UserIdentityResolver {
     String? tokenStoreUserId,
     String canonical,
   ) {
-    if (profileUserId == canonical && !_isGeneratedLocalId(profileUserId)) {
+    if (profileUserId == canonical && !_isGeneratedLocalId(profileUserId!)) {
       return 'profile';
     }
-    if (secureUserId == canonical && !_isGeneratedLocalId(secureUserId)) {
+    if (secureUserId == canonical && !_isGeneratedLocalId(secureUserId!)) {
       return 'secure';
     }
-    if (tokenStoreUserId == canonical && !_isGeneratedLocalId(tokenStoreUserId)) {
+    if (tokenStoreUserId == canonical && !_isGeneratedLocalId(tokenStoreUserId!)) {
       return 'token_store';
     }
     return 'token_store';

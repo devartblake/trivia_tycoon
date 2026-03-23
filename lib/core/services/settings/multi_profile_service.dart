@@ -177,11 +177,7 @@ class MultiProfileService {
         'avatar': profile.avatar,
       });
     } catch (e) {
-<<<<<<< codex/find-spin-analytics-implementation-0sbply
-      debugPrint('[MultiProfile] Failed syncing active profile to legacy settings: $e');
-=======
       LogManager.debug('[MultiProfile] Failed syncing active profile to legacy settings: $e');
->>>>>>> main
     }
   }
 
@@ -263,11 +259,7 @@ class MultiProfileService {
 
       await _syncActiveProfileToLegacySettings(updatedProfile);
 
-<<<<<<< codex/find-spin-analytics-implementation-0sbply
-      debugPrint('[MultiProfile] Active profile set to: ${updatedProfile.name}');
-=======
       LogManager.debug('[MultiProfile] Switched to profile: ${profile.name}');
->>>>>>> main
       return true;
     } catch (e) {
       LogManager.debug('[MultiProfile] Error setting active profile: $e');
@@ -355,8 +347,6 @@ class MultiProfileService {
 
       final currentProfile = ProfileData.fromJson(Map<String, dynamic>.from(profilesMap[profileId]));
       final activeProfileId = box.get(_activeProfileKey);
-<<<<<<< codex/find-spin-analytics-implementation-0sbply
-=======
 
       // Resolve display name and username with ProfileSyncService
       String resolvedName = name ?? currentProfile.name;
@@ -368,42 +358,12 @@ class MultiProfileService {
           existingUsername: (preferences?['username'] as String?) ??
               (currentProfile.preferences['username'] as String?),
         );
->>>>>>> main
+
 
         if (syncResult.success) {
           if (syncResult.confirmedDisplayName != null &&
               syncResult.confirmedDisplayName!.isNotEmpty) {
             resolvedName = syncResult.confirmedDisplayName!;
-          }
-
-          if (syncResult.confirmedUsername != null &&
-              syncResult.confirmedUsername!.isNotEmpty) {
-            mergedPreferences = {
-              ...(preferences ?? currentProfile.preferences),
-              'username': syncResult.confirmedUsername,
-            };
-          }
-        }
-      }
-
-      var mergedPreferences = preferences;
-      var resolvedName = name;
-
-      if (_profileSyncService != null && activeProfileId == profileId) {
-        await _profileSyncService!.retryQueuedUpdates();
-
-        final requestedUsername = (preferences?['username'] as String?)?.trim();
-        final candidateDisplayName = (name ?? currentProfile.name).trim();
-
-        if (requestedUsername != null && requestedUsername.isNotEmpty) {
-          final syncResult = await _profileSyncService!.syncProfileUpdate(
-            displayName: candidateDisplayName,
-            username: requestedUsername,
-          );
-
-          if (syncResult.confirmedDisplayName != null &&
-              syncResult.confirmedDisplayName!.isNotEmpty) {
-            resolvedName = syncResult.confirmedDisplayName;
           }
 
           if (syncResult.confirmedUsername != null &&
@@ -469,11 +429,7 @@ class MultiProfileService {
         await _syncActiveProfileToLegacySettings(updatedProfile);
       }
 
-<<<<<<< codex/find-spin-analytics-implementation-0sbply
-      debugPrint('[MultiProfile] Updated profile: ${updatedProfile.name}');
-=======
       LogManager.debug('[MultiProfile] Updated profile: ${updatedProfile.name}');
->>>>>>> main
       return true;
     } catch (e) {
       LogManager.debug('[MultiProfile] Error updating profile: $e');

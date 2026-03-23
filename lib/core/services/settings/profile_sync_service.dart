@@ -3,6 +3,8 @@ import 'package:hive/hive.dart';
 
 import 'package:trivia_tycoon/core/services/api_service.dart';
 
+import '../../manager/log_manager.dart';
+
 class ProfileSyncResult {
   final bool synced;
   final bool queuedForRetry;
