@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Modern currency display with animated counters and glass morphism
 class CurrencyDisplay extends StatelessWidget {
@@ -155,12 +156,12 @@ class CurrencyDisplay extends StatelessWidget {
 
   void _showCoinStore() {
     // TODO: Navigate to coin store
-    debugPrint('Show coin store');
+    LogManager.debug('Show coin store');
   }
 
   void _showGemStore() {
     // TODO: Navigate to gem store
-    debugPrint('Show gem store');
+    LogManager.debug('Show gem store');
   }
 }
 

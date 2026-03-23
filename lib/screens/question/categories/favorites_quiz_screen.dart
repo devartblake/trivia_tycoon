@@ -4,6 +4,7 @@ import 'package:trivia_tycoon/game/providers/favorites_providers.dart';
 import '../../../core/delegates/sliver_appbar_delegate.dart';
 import '../../../game/models/favorite_category_models.dart';
 import '../../../game/models/favorite_question_models.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class FavoritesQuizScreen extends ConsumerStatefulWidget {
   const FavoritesQuizScreen({super.key});
@@ -1153,7 +1154,7 @@ class _FavoritesQuizScreenEnhancedState
 
   void _onCategoryTap(FavoriteCategory category) {
     // Navigate to category quiz
-    debugPrint('Category tapped: ${category.name}');
+    LogManager.debug('Category tapped: ${category.name}');
   }
 
   void _onQuestionTap(FavoriteQuestion question) {

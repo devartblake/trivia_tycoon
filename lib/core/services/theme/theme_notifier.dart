@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
 import '../../../game/providers/riverpod_providers.dart';
 import '../../theme/themes.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// River-pod provider for ThemeNotifier
 final themeNotifierProvider = ChangeNotifierProvider<ThemeNotifier>((ref) {
@@ -37,7 +38,7 @@ class ThemeNotifier extends ChangeNotifier {
 
   /// Initialize theme settings from persistent storage (Hive)
   Future<void> _initializeTheme() async {
-    debugPrint("Initializing theme settings from Hive...");
+    LogManager.debug("Initializing theme settings from Hive...");
     try {
       final savedTheme = await storage.getString(_themeKey);
       final savedThemeMode = await storage.getString(_themeModeKey);
@@ -46,24 +47,24 @@ class ThemeNotifier extends ChangeNotifier {
       if (savedTheme != null) {
         final themeType = AppTheme.fromString(savedTheme);
         _currentTheme = AppTheme.fromType(themeType, _themeMode);
-        debugPrint("Loaded theme type: $savedTheme");
+        LogManager.debug("Loaded theme type: $savedTheme");
       } else {
         await storage.setString(_themeKey, AppTheme.defaultTheme.name);
-        debugPrint("Default theme type saved: ${AppTheme.defaultTheme.name}");
+        LogManager.debug("Default theme type saved: ${AppTheme.defaultTheme.name}");
       }
 
       /// Load ThemeMode
       if (savedThemeMode != null) {
         _themeMode = _themeModeFromString(savedThemeMode);
-        debugPrint("Loaded theme mode: $savedThemeMode");
+        LogManager.debug("Loaded theme mode: $savedThemeMode");
       } else {
         await storage.setString(_themeModeKey, _themeMode.name);
-        debugPrint("Default theme mode saved: ${_themeMode.name}");
+        LogManager.debug("Default theme mode saved: ${_themeMode.name}");
       }
 
       notifyListeners();
     } catch (e) {
-      debugPrint("Error initializing theme: $e");
+      LogManager.debug("Error initializing theme: $e");
     }
   }
 
@@ -71,7 +72,7 @@ class ThemeNotifier extends ChangeNotifier {
   Future<void> setTheme(ThemeType themeType) async {
     _currentTheme = AppTheme.fromType(themeType, _themeMode);
     await storage.setString(_themeKey, themeType.name);
-    debugPrint("Theme type updated and saved: ${themeType.name}");
+    LogManager.debug("Theme type updated and saved: ${themeType.name}");
     notifyListeners();
   }
 
@@ -79,7 +80,7 @@ class ThemeNotifier extends ChangeNotifier {
   Future<void> setThemeMode(ThemeMode mode) async {
     _themeMode = mode;
     await storage.setString(_themeModeKey, mode.name);
-    debugPrint("Theme mode updated and saved: ${mode.name}");
+    LogManager.debug("Theme mode updated and saved: ${mode.name}");
     notifyListeners();
   }
 
