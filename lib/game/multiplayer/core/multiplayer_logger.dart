@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Tiny logger wrapper so you can turn logs on/off from config.
 class MultiplayerLogger {
@@ -8,31 +9,31 @@ class MultiplayerLogger {
   void d(String msg) {
     if (enabled) {
       // ignore: avoid_print
-      debugPrint('[MP][D] $msg');
+      LogManager.debug('[MP][D] $msg');
     }
   }
 
   void i(String msg) {
     if (enabled) {
       // ignore: avoid_print
-      debugPrint('[MP][I] $msg');
+      LogManager.debug('[MP][I] $msg');
     }
   }
 
   void w(String msg) {
     if (enabled) {
       // ignore: avoid_print
-      debugPrint('[MP][W] $msg');
+      LogManager.debug('[MP][W] $msg');
     }
   }
 
   void e(String msg, [Object? err, StackTrace? st]) {
     if (enabled) {
       // ignore: avoid_print
-      debugPrint('[MP][E] $msg ${err != null ? ' err=$err' : ''}');
+      LogManager.debug('[MP][E] $msg ${err != null ? ' err=$err' : ''}');
       if (st != null) {
         // ignore: avoid_print
-        debugPrint(st.toString());
+        LogManager.debug(st.toString());
       }
     }
   }

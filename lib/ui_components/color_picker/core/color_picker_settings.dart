@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../utils/color_storage.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 @immutable
 class ColorPickerSettings {
@@ -159,7 +160,7 @@ class ColorPickerSettings {
         colors: colors,
       );
     } catch (e) {
-      debugPrint('Error parsing ColorPickerSettings from map: $e');
+      LogManager.debug('Error parsing ColorPickerSettings from map: $e');
       return ColorPickerSettings(); // Return default settings
     }
   }
@@ -170,7 +171,7 @@ class ColorPickerSettings {
       await ColorStorage.savePickerSettings(this);
       return true;
     } catch (e) {
-      debugPrint('Error saving ColorPickerSettings: $e');
+      LogManager.debug('Error saving ColorPickerSettings: $e');
       return false;
     }
   }
@@ -181,7 +182,7 @@ class ColorPickerSettings {
       final settings = await ColorStorage.getPickerSettings();
       return settings ?? ColorPickerSettings();
     } catch (e) {
-      debugPrint('Error loading ColorPickerSettings: $e');
+      LogManager.debug('Error loading ColorPickerSettings: $e');
       return ColorPickerSettings();
     }
   }

@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 import 'package:trivia_tycoon/core/services/settings/player_profile_service.dart';
 import 'package:trivia_tycoon/core/services/settings/profile_sync_service.dart';
 import 'package:uuid/uuid.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// ProfileData model for individual profiles
 class ProfileData {
@@ -176,7 +177,11 @@ class MultiProfileService {
         'avatar': profile.avatar,
       });
     } catch (e) {
+<<<<<<< codex/find-spin-analytics-implementation-0sbply
       debugPrint('[MultiProfile] Failed syncing active profile to legacy settings: $e');
+=======
+      LogManager.debug('[MultiProfile] Failed syncing active profile to legacy settings: $e');
+>>>>>>> main
     }
   }
 
@@ -201,32 +206,42 @@ class MultiProfileService {
           .toList()
         ..sort((a, b) => b.lastActive.compareTo(a.lastActive)); // Most recent first
     } catch (e) {
-      debugPrint('[MultiProfile] Error getting all profiles: $e');
+      LogManager.debug('[MultiProfile] Error getting profiles: $e');
       return [];
     }
   }
 
-  /// Get current active profile
+  /// Get the currently active profile
   Future<ProfileData?> getActiveProfile() async {
     try {
       final box = await _getBox();
       final activeProfileId = box.get(_activeProfileKey);
 
-      if (activeProfileId == null) return null;
+      if (activeProfileId == null) {
+        // If no active profile set, return the first profile
+        final profiles = await getAllProfiles();
+        if (profiles.isNotEmpty) {
+          await box.put(_activeProfileKey, profiles.first.id);
+          return profiles.first;
+        }
+        return null;
+      }
 
       final profilesData = box.get(_profilesKey, defaultValue: <String, dynamic>{});
       final Map<String, dynamic> profilesMap = Map<String, dynamic>.from(profilesData);
 
-      if (!profilesMap.containsKey(activeProfileId)) return null;
+      if (!profilesMap.containsKey(activeProfileId)) {
+        return null;
+      }
 
       return ProfileData.fromJson(Map<String, dynamic>.from(profilesMap[activeProfileId]));
     } catch (e) {
-      debugPrint('[MultiProfile] Error getting active profile: $e');
+      LogManager.debug('[MultiProfile] Error getting active profile: $e');
       return null;
     }
   }
 
-  /// Set active profile
+  /// Set the active profile
   Future<bool> setActiveProfile(String profileId) async {
     try {
       final box = await _getBox();
@@ -234,24 +249,28 @@ class MultiProfileService {
       final Map<String, dynamic> profilesMap = Map<String, dynamic>.from(profilesData);
 
       if (!profilesMap.containsKey(profileId)) {
-        debugPrint('[MultiProfile] Profile $profileId not found');
+        LogManager.debug('[MultiProfile] Profile $profileId not found');
         return false;
       }
 
       await box.put(_activeProfileKey, profileId);
 
-      // Update last active time for the profile
-      final profileData = ProfileData.fromJson(Map<String, dynamic>.from(profilesMap[profileId]));
-      final updatedProfile = profileData.copyWith(lastActive: DateTime.now());
+      // Update last active timestamp
+      final profile = ProfileData.fromJson(Map<String, dynamic>.from(profilesMap[profileId]));
+      final updatedProfile = profile.copyWith(lastActive: DateTime.now());
       profilesMap[profileId] = updatedProfile.toJson();
       await box.put(_profilesKey, profilesMap);
 
       await _syncActiveProfileToLegacySettings(updatedProfile);
 
+<<<<<<< codex/find-spin-analytics-implementation-0sbply
       debugPrint('[MultiProfile] Active profile set to: ${updatedProfile.name}');
+=======
+      LogManager.debug('[MultiProfile] Switched to profile: ${profile.name}');
+>>>>>>> main
       return true;
     } catch (e) {
-      debugPrint('[MultiProfile] Error setting active profile: $e');
+      LogManager.debug('[MultiProfile] Error setting active profile: $e');
       return false;
     }
   }
@@ -270,21 +289,16 @@ class MultiProfileService {
       final profiles = await getAllProfiles();
 
       if (profiles.length >= _maxProfiles) {
-        debugPrint('[MultiProfile] Maximum profiles reached ($_maxProfiles)');
+        LogManager.debug('[MultiProfile] Maximum number of profiles reached');
         return null;
       }
 
-      // Check for duplicate names
-      if (profiles.any((p) => p.name.toLowerCase() == name.toLowerCase())) {
-        debugPrint('[MultiProfile] Profile name already exists: $name');
-        return null;
-      }
-
-      final profileId = _uuid.v4();
-      final now = DateTime.now();
+      final box = await _getBox();
+      final profilesData = box.get(_profilesKey, defaultValue: <String, dynamic>{});
+      final Map<String, dynamic> profilesMap = Map<String, dynamic>.from(profilesData);
 
       final newProfile = ProfileData(
-        id: profileId,
+        id: _uuid.v4(),
         name: name,
         avatar: avatar,
         country: country,
@@ -292,64 +306,113 @@ class MultiProfileService {
         userRole: userRole,
         userRoles: userRoles ?? [],
         isPremium: isPremium,
-        createdAt: now,
-        lastActive: now,
+        createdAt: DateTime.now(),
+        lastActive: DateTime.now(),
       );
 
-      final box = await _getBox();
-      final profilesData = box.get(_profilesKey, defaultValue: <String, dynamic>{});
-      final Map<String, dynamic> profilesMap = Map<String, dynamic>.from(profilesData);
-
-      profilesMap[profileId] = newProfile.toJson();
+      profilesMap[newProfile.id] = newProfile.toJson();
       await box.put(_profilesKey, profilesMap);
 
       // If this is the first profile, make it active
       if (profiles.isEmpty) {
-        await box.put(_activeProfileKey, profileId);
+        await box.put(_activeProfileKey, newProfile.id);
+        await _syncActiveProfileToLegacySettings(newProfile);
       }
 
-      debugPrint('[MultiProfile] Created new profile: ${newProfile.name}');
+      LogManager.debug('[MultiProfile] Created new profile: ${newProfile.name}');
       return newProfile;
     } catch (e) {
-      debugPrint('[MultiProfile] Error creating profile: $e');
+      LogManager.debug('[MultiProfile] Error creating profile: $e');
       return null;
     }
   }
 
   /// Update an existing profile
-  Future<bool> updateProfile(String profileId, {
-    String? name,
-    String? avatar,
-    String? country,
-    String? ageGroup,
-    String? userRole,
-    List<String>? userRoles,
-    bool? isPremium,
-    int? level,
-    int? currentXP,
-    int? maxXP,
-    Map<String, dynamic>? gameStats,
-    Map<String, dynamic>? preferences,
-  }) async {
+  Future<bool> updateProfile(
+      String profileId, {
+        String? name,
+        String? avatar,
+        String? country,
+        String? ageGroup,
+        String? userRole,
+        List<String>? userRoles,
+        bool? isPremium,
+        int? level,
+        int? currentXP,
+        int? maxXP,
+        Map<String, dynamic>? gameStats,
+        Map<String, dynamic>? preferences,
+      }) async {
     try {
       final box = await _getBox();
       final profilesData = box.get(_profilesKey, defaultValue: <String, dynamic>{});
       final Map<String, dynamic> profilesMap = Map<String, dynamic>.from(profilesData);
 
       if (!profilesMap.containsKey(profileId)) {
-        debugPrint('[MultiProfile] Profile $profileId not found for update');
+        LogManager.debug('[MultiProfile] Profile $profileId not found for update');
         return false;
       }
 
       final currentProfile = ProfileData.fromJson(Map<String, dynamic>.from(profilesMap[profileId]));
       final activeProfileId = box.get(_activeProfileKey);
+<<<<<<< codex/find-spin-analytics-implementation-0sbply
+=======
 
-      // Check for duplicate names if name is being changed
-      if (name != null && name != currentProfile.name) {
-        final allProfiles = await getAllProfiles();
-        if (allProfiles.any((p) => p.id != profileId && p.name.toLowerCase() == name.toLowerCase())) {
-          debugPrint('[MultiProfile] Profile name already exists: $name');
-          return false;
+      // Resolve display name and username with ProfileSyncService
+      String resolvedName = name ?? currentProfile.name;
+      Map<String, dynamic> mergedPreferences = preferences ?? currentProfile.preferences;
+
+      if (_profileSyncService != null && name != null && name != currentProfile.name) {
+        final syncResult = await _profileSyncService!.syncProfileData(
+          displayName: name,
+          existingUsername: (preferences?['username'] as String?) ??
+              (currentProfile.preferences['username'] as String?),
+        );
+>>>>>>> main
+
+        if (syncResult.success) {
+          if (syncResult.confirmedDisplayName != null &&
+              syncResult.confirmedDisplayName!.isNotEmpty) {
+            resolvedName = syncResult.confirmedDisplayName!;
+          }
+
+          if (syncResult.confirmedUsername != null &&
+              syncResult.confirmedUsername!.isNotEmpty) {
+            mergedPreferences = {
+              ...(preferences ?? currentProfile.preferences),
+              'username': syncResult.confirmedUsername,
+            };
+          }
+        }
+      }
+
+      var mergedPreferences = preferences;
+      var resolvedName = name;
+
+      if (_profileSyncService != null && activeProfileId == profileId) {
+        await _profileSyncService!.retryQueuedUpdates();
+
+        final requestedUsername = (preferences?['username'] as String?)?.trim();
+        final candidateDisplayName = (name ?? currentProfile.name).trim();
+
+        if (requestedUsername != null && requestedUsername.isNotEmpty) {
+          final syncResult = await _profileSyncService!.syncProfileUpdate(
+            displayName: candidateDisplayName,
+            username: requestedUsername,
+          );
+
+          if (syncResult.confirmedDisplayName != null &&
+              syncResult.confirmedDisplayName!.isNotEmpty) {
+            resolvedName = syncResult.confirmedDisplayName;
+          }
+
+          if (syncResult.confirmedUsername != null &&
+              syncResult.confirmedUsername!.isNotEmpty) {
+            mergedPreferences = {
+              ...(preferences ?? currentProfile.preferences),
+              'username': syncResult.confirmedUsername,
+            };
+          }
         }
       }
 
@@ -406,10 +469,14 @@ class MultiProfileService {
         await _syncActiveProfileToLegacySettings(updatedProfile);
       }
 
+<<<<<<< codex/find-spin-analytics-implementation-0sbply
       debugPrint('[MultiProfile] Updated profile: ${updatedProfile.name}');
+=======
+      LogManager.debug('[MultiProfile] Updated profile: ${updatedProfile.name}');
+>>>>>>> main
       return true;
     } catch (e) {
-      debugPrint('[MultiProfile] Error updating profile: $e');
+      LogManager.debug('[MultiProfile] Error updating profile: $e');
       return false;
     }
   }
@@ -420,7 +487,7 @@ class MultiProfileService {
       final profiles = await getAllProfiles();
 
       if (profiles.length <= 1) {
-        debugPrint('[MultiProfile] Cannot delete the last remaining profile');
+        LogManager.debug('[MultiProfile] Cannot delete the last remaining profile');
         return false;
       }
 
@@ -429,7 +496,7 @@ class MultiProfileService {
       final Map<String, dynamic> profilesMap = Map<String, dynamic>.from(profilesData);
 
       if (!profilesMap.containsKey(profileId)) {
-        debugPrint('[MultiProfile] Profile $profileId not found for deletion');
+        LogManager.debug('[MultiProfile] Profile $profileId not found for deletion');
         return false;
       }
 
@@ -446,10 +513,10 @@ class MultiProfileService {
         }
       }
 
-      debugPrint('[MultiProfile] Deleted profile: ${profileToDelete.name}');
+      LogManager.debug('[MultiProfile] Deleted profile: ${profileToDelete.name}');
       return true;
     } catch (e) {
-      debugPrint('[MultiProfile] Error deleting profile: $e');
+      LogManager.debug('[MultiProfile] Error deleting profile: $e');
       return false;
     }
   }
@@ -509,7 +576,7 @@ class MultiProfileService {
         'profile': updatedProfile,
       };
     } catch (e) {
-      debugPrint('[MultiProfile] Error adding XP to profile: $e');
+      LogManager.debug('[MultiProfile] Error adding XP to profile: $e');
       return {'error': e.toString()};
     }
   }
@@ -539,7 +606,7 @@ class MultiProfileService {
       final box = await _getBox();
       return Map<String, dynamic>.from(box.get(_accountDataKey, defaultValue: {}));
     } catch (e) {
-      debugPrint('[MultiProfile] Error getting account data: $e');
+      LogManager.debug('[MultiProfile] Error getting account data: $e');
       return {};
     }
   }
@@ -550,7 +617,7 @@ class MultiProfileService {
       final box = await _getBox();
       await box.put(_accountDataKey, accountData);
     } catch (e) {
-      debugPrint('[MultiProfile] Error saving account data: $e');
+      LogManager.debug('[MultiProfile] Error saving account data: $e');
     }
   }
 
@@ -574,10 +641,21 @@ class MultiProfileService {
           isPremium: legacyProfile['isPremium'] ?? false,
         );
 
-        debugPrint('[MultiProfile] Migrated legacy profile to multi-profile system');
+        LogManager.debug('[MultiProfile] Migrated legacy profile to multi-profile system');
       }
     } catch (e) {
-      debugPrint('[MultiProfile] Error during initialization/migration: $e');
+      LogManager.debug('[MultiProfile] Error during initialization/migration: $e');
+    }
+  }
+
+  /// Retries pending backend profile sync updates, if sync service is enabled.
+  Future<void> retryQueuedProfileSyncUpdates() async {
+    if (_profileSyncService == null) return;
+
+    try {
+      await _profileSyncService!.retryQueuedUpdates();
+    } catch (e) {
+      debugPrint('[MultiProfile] Failed to retry queued profile sync updates: $e');
     }
   }
 
@@ -619,9 +697,9 @@ class MultiProfileService {
     try {
       final box = await _getBox();
       await box.clear();
-      debugPrint('[MultiProfile] All profile data cleared');
+      LogManager.debug('[MultiProfile] All profile data cleared');
     } catch (e) {
-      debugPrint('[MultiProfile] Error clearing profiles: $e');
+      LogManager.debug('[MultiProfile] Error clearing profiles: $e');
     }
   }
 }

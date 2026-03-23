@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 import 'ws_protocol.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Reliability layer for WebSocket messages
 ///
@@ -80,7 +81,7 @@ class WsReliability {
 
     if (pending != null) {
       pending.timeoutTimer?.cancel();
-      debugPrint('[WsReliability] ✅ ACK received for $msgId');
+      LogManager.debug('[WsReliability] ✅ ACK received for $msgId');
     }
   }
 
@@ -91,12 +92,12 @@ class WsReliability {
     if (pending == null) return;
 
     if (pending.retries >= _maxRetries) {
-      debugPrint('[WsReliability] ❌ Max retries reached for $msgId');
+      LogManager.debug('[WsReliability] ❌ Max retries reached for $msgId');
       _pendingMessages.remove(msgId);
       return;
     }
 
-    debugPrint('[WsReliability] ⏱️ ACK timeout for $msgId, retrying...');
+    LogManager.debug('[WsReliability] ⏱️ ACK timeout for $msgId, retrying...');
 
     // Retry after delay
     Timer(_retryDelay, () {
@@ -120,7 +121,7 @@ class WsReliability {
     }
 
     if (_receivedSeqs.contains(message.seq)) {
-      debugPrint('[WsReliability] Duplicate message seq=${message.seq}, ignoring');
+      LogManager.debug('[WsReliability] Duplicate message seq=${message.seq}, ignoring');
       return false; // Duplicate
     }
 
@@ -145,7 +146,7 @@ class WsReliability {
     _pendingMessages.clear();
     _receivedSeqs.clear();
 
-    debugPrint('[WsReliability] Reset');
+    LogManager.debug('[WsReliability] Reset');
   }
 
   /// Get pending message count

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 enum GameResult {
   win,
@@ -309,7 +310,7 @@ class ProfileStatsService extends ChangeNotifier {
   void initialize() {
     _initializeAchievements();
     _loadMockData();
-    debugPrint('ProfileStatsService initialized');
+    LogManager.debug('ProfileStatsService initialized');
   }
 
   void dispose() {
@@ -332,7 +333,7 @@ class ProfileStatsService extends ChangeNotifier {
     // Check achievements
     await _checkAchievements(match.userId);
 
-    debugPrint('Match recorded for user ${match.userId}: ${match.result.displayName}');
+    LogManager.debug('Match recorded for user ${match.userId}: ${match.result.displayName}');
     _broadcastStatsUpdate(match.userId);
     notifyListeners();
   }
@@ -671,7 +672,7 @@ class ProfileStatsService extends ChangeNotifier {
           unlockedAt: DateTime.now(),
         );
         hasNewAchievement = true;
-        debugPrint('🎉 Achievement unlocked: ${achievements[i].name}');
+        LogManager.debug('🎉 Achievement unlocked: ${achievements[i].name}');
       }
     }
 
@@ -816,7 +817,7 @@ class ProfileStatsService extends ChangeNotifier {
     _updateUserStats(mockUserId);
     _checkAchievements(mockUserId);
 
-    debugPrint('Loaded mock data: ${mockMatches.length} matches');
+    LogManager.debug('Loaded mock data: ${mockMatches.length} matches');
   }
 
   // ============ Analytics ============

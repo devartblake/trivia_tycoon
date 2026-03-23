@@ -112,14 +112,10 @@ class ProfileSyncService {
 
     for (final endpoint in endpoints) {
       try {
-        final response = await _apiService.patch(
-          endpoint,
-          body: payload,
-          headers: _authHeaders(),
-        );
+        final response = await _apiService.patch(endpoint, body: payload, headers: _authHeaders());
         return response;
       } catch (e) {
-        debugPrint('[ProfileSync] endpoint failed ($endpoint): $e');
+        LogManager.debug('[ProfileSync] endpoint failed ($endpoint): $e');
       }
     }
 
@@ -167,5 +163,16 @@ class ProfileSyncService {
     }
 
     return null;
+  }
+
+  String _generateUsernameFromDisplayName(String displayName) {
+    final normalized = displayName
+        .toLowerCase()
+        .trim()
+        .replaceAll(RegExp(r'\s+'), '_')
+        .replaceAll(RegExp(r'[^a-z0-9_]'), '');
+
+    if (normalized.isEmpty) return 'player';
+    return normalized;
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Manages persistent state across app sessions using Hive
 ///
@@ -32,12 +33,12 @@ class StatePersistenceService {
       _box = await Hive.openBox(_boxName);
       _isInitialized = true;
 
-      debugPrint('[StatePersistence] ✅ Initialized');
+      LogManager.debug('[StatePersistence] ✅ Initialized');
 
       // Check if last session crashed
       await _checkForCrash();
     } catch (e) {
-      debugPrint('[StatePersistence] ❌ Init error: $e');
+      LogManager.debug('[StatePersistence] ❌ Init error: $e');
     }
   }
 
@@ -49,7 +50,7 @@ class StatePersistenceService {
     List<Map<String, dynamic>>? pendingActions,
   }) async {
     if (!_isInitialized) {
-      debugPrint('[StatePersistence] ⚠️ Not initialized, skipping save');
+      LogManager.debug('[StatePersistence] ⚠️ Not initialized, skipping save');
       return;
     }
 
@@ -59,35 +60,35 @@ class StatePersistenceService {
       // Save game state (current quiz, score, etc.)
       if (gameState != null && gameState.isNotEmpty) {
         await _box.put(_gameStateKey, gameState);
-        debugPrint('[StatePersistence] 💾 Game state saved');
+        LogManager.debug('[StatePersistence] 💾 Game state saved');
       }
 
       // Save user session (auth tokens, preferences)
       if (userSession != null && userSession.isNotEmpty) {
         await _box.put(_userSessionKey, userSession);
-        debugPrint('[StatePersistence] 💾 User session saved');
+        LogManager.debug('[StatePersistence] 💾 User session saved');
       }
 
       // Save WebSocket state
       if (wsState != null && wsState.isNotEmpty) {
         await _box.put(_wsStateKey, wsState);
-        debugPrint('[StatePersistence] 💾 WebSocket state saved');
+        LogManager.debug('[StatePersistence] 💾 WebSocket state saved');
       }
 
       // Save pending actions (unsent data)
       if (pendingActions != null && pendingActions.isNotEmpty) {
         await _box.put(_pendingActionsKey, pendingActions);
-        debugPrint('[StatePersistence] 💾 Saved ${pendingActions.length} pending actions');
+        LogManager.debug('[StatePersistence] 💾 Saved ${pendingActions.length} pending actions');
       }
 
       // Mark successful save (clear crash flag)
       await _markSaveComplete();
 
       final duration = DateTime.now().difference(startTime);
-      debugPrint('[StatePersistence] ✅ Saved all state in ${duration.inMilliseconds}ms');
+      LogManager.debug('[StatePersistence] ✅ Saved all state in ${duration.inMilliseconds}ms');
     } catch (e, stack) {
-      debugPrint('[StatePersistence] ❌ Save failed: $e');
-      debugPrint('[StatePersistence] Stack: $stack');
+      LogManager.debug('[StatePersistence] ❌ Save failed: $e');
+      LogManager.debug('[StatePersistence] Stack: $stack');
     }
   }
 
@@ -104,16 +105,16 @@ class StatePersistenceService {
       final didCrash = _box.get(_crashRecoveryKey, defaultValue: false) as bool;
 
       if (didCrash) {
-        debugPrint('[StatePersistence] ⚠️ CRASH DETECTED - Previous session crashed!');
-        debugPrint('[StatePersistence] 🔄 Recovery data available');
+        LogManager.debug('[StatePersistence] ⚠️ CRASH DETECTED - Previous session crashed!');
+        LogManager.debug('[StatePersistence] 🔄 Recovery data available');
       } else {
-        debugPrint('[StatePersistence] ✅ Previous session closed normally');
+        LogManager.debug('[StatePersistence] ✅ Previous session closed normally');
       }
 
       // Mark this session as potentially crashed (cleared on normal save)
       await _box.put(_crashRecoveryKey, true);
     } catch (e) {
-      debugPrint('[StatePersistence] ❌ Crash check failed: $e');
+      LogManager.debug('[StatePersistence] ❌ Crash check failed: $e');
     }
   }
 
@@ -126,7 +127,7 @@ class StatePersistenceService {
       // Convert to Map<String, dynamic> safely
       return Map<String, dynamic>.from(state as Map);
     } catch (e) {
-      debugPrint('[StatePersistence] ❌ Get game state failed: $e');
+      LogManager.debug('[StatePersistence] ❌ Get game state failed: $e');
       return null;
     }
   }
@@ -139,7 +140,7 @@ class StatePersistenceService {
 
       return Map<String, dynamic>.from(session as Map);
     } catch (e) {
-      debugPrint('[StatePersistence] ❌ Get user session failed: $e');
+      LogManager.debug('[StatePersistence] ❌ Get user session failed: $e');
       return null;
     }
   }
@@ -152,7 +153,7 @@ class StatePersistenceService {
 
       return Map<String, dynamic>.from(state as Map);
     } catch (e) {
-      debugPrint('[StatePersistence] ❌ Get WebSocket state failed: $e');
+      LogManager.debug('[StatePersistence] ❌ Get WebSocket state failed: $e');
       return null;
     }
   }
@@ -168,7 +169,7 @@ class StatePersistenceService {
           .map((item) => Map<String, dynamic>.from(item as Map))
           .toList();
     } catch (e) {
-      debugPrint('[StatePersistence] ❌ Get pending actions failed: $e');
+      LogManager.debug('[StatePersistence] ❌ Get pending actions failed: $e');
       return [];
     }
   }
@@ -177,9 +178,9 @@ class StatePersistenceService {
   Future<void> clearPendingActions() async {
     try {
       await _box.delete(_pendingActionsKey);
-      debugPrint('[StatePersistence] 🗑️ Cleared pending actions');
+      LogManager.debug('[StatePersistence] 🗑️ Cleared pending actions');
     } catch (e) {
-      debugPrint('[StatePersistence] ❌ Clear pending actions failed: $e');
+      LogManager.debug('[StatePersistence] ❌ Clear pending actions failed: $e');
     }
   }
 
@@ -192,9 +193,9 @@ class StatePersistenceService {
       // Keep user session and pending actions
       // Only clear game-specific data
 
-      debugPrint('[StatePersistence] 🗑️ Cleared temporary data');
+      LogManager.debug('[StatePersistence] 🗑️ Cleared temporary data');
     } catch (e) {
-      debugPrint('[StatePersistence] ❌ Clear temp data failed: $e');
+      LogManager.debug('[StatePersistence] ❌ Clear temp data failed: $e');
     }
   }
 
@@ -202,9 +203,9 @@ class StatePersistenceService {
   Future<void> clearAll() async {
     try {
       await _box.clear();
-      debugPrint('[StatePersistence] 🗑️ Cleared all persistence data');
+      LogManager.debug('[StatePersistence] 🗑️ Cleared all persistence data');
     } catch (e) {
-      debugPrint('[StatePersistence] ❌ Clear all failed: $e');
+      LogManager.debug('[StatePersistence] ❌ Clear all failed: $e');
     }
   }
 
@@ -215,7 +216,7 @@ class StatePersistenceService {
       if (timestamp == null) return null;
       return DateTime.parse(timestamp);
     } catch (e) {
-      debugPrint('[StatePersistence] ❌ Get last save time failed: $e');
+      LogManager.debug('[StatePersistence] ❌ Get last save time failed: $e');
       return null;
     }
   }
@@ -231,7 +232,7 @@ class StatePersistenceService {
 
       return gameState != null || pendingActions.isNotEmpty;
     } catch (e) {
-      debugPrint('[StatePersistence] ❌ Check recoverable data failed: $e');
+      LogManager.debug('[StatePersistence] ❌ Check recoverable data failed: $e');
       return false;
     }
   }
@@ -251,7 +252,7 @@ class StatePersistenceService {
         'last_save': lastSave?.toIso8601String(),
       };
     } catch (e) {
-      debugPrint('[StatePersistence] ❌ Get recovery summary failed: $e');
+      LogManager.debug('[StatePersistence] ❌ Get recovery summary failed: $e');
       return {};
     }
   }
@@ -262,9 +263,9 @@ class StatePersistenceService {
       // Hive boxes don't need explicit disposal
       // They're managed by Hive globally
       _isInitialized = false;
-      debugPrint('[StatePersistence] 👋 Disposed');
+      LogManager.debug('[StatePersistence] 👋 Disposed');
     } catch (e) {
-      debugPrint('[StatePersistence] ❌ Dispose error: $e');
+      LogManager.debug('[StatePersistence] ❌ Dispose error: $e');
     }
   }
 }

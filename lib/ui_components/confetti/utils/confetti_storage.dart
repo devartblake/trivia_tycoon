@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
 import '../models/confetti_settings.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class ConfettiStorage {
   static const String _settingsKey = 'confetti_settings';
@@ -21,7 +22,7 @@ class ConfettiStorage {
         final Map<String, dynamic> data = jsonDecode(jsonStr);
         return ConfettiSettings.fromMap(data);
       } catch (e) {
-        debugPrint('Failed to parse ConfettiSettings: $e');
+        LogManager.debug('Failed to parse ConfettiSettings: $e');
       }
     }
     return ConfettiSettings(); // Fallback default

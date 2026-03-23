@@ -18,6 +18,7 @@ import '../theme/app_scroll_behavior.dart';
 import '../theme/themes.dart';
 import '../services/theme/seasonal_theme_service.dart';
 import 'app_init.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// AppLauncher handles config + service initialization and launches the app
 class AppLauncher extends ConsumerStatefulWidget {
@@ -88,7 +89,7 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
         ...summary.toMap(),
       });
     } catch (e) {
-      debugPrint('[AppLauncher] Failed to track live spin summary update: $e');
+      LogManager.debug('[AppLauncher] Failed to track live spin summary update: $e');
     }
   }
 
@@ -98,20 +99,20 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
   }
 
   void _printSpinAnalyticsSummary(Map<String, dynamic> summary) {
-    debugPrint('╔════════════════════════════════════════════════╗');
-    debugPrint('              SPIN ANALYTICS SUMMARY              ');
-    debugPrint('╠════════════════════════════════════════════════╣');
-    debugPrint(' User Name:     ${summary['user_name'] ?? 'Unknown'}');
-    debugPrint(' User ID:       ${summary['user_id'] ?? 'unknown'}');
-    debugPrint(' Snapshot At:   ${summary['snapshot_at'] ?? DateTime.now().toIso8601String()}');
-    debugPrint(' Today:         ${summary['today_count'] ?? 0}/${summary['daily_limit'] ?? 0}');
-    debugPrint(' Weekly:        ${summary['weekly_count'] ?? 0}');
-    debugPrint(' Total:         ${summary['total_spins'] ?? 0}');
-    debugPrint(' Can Spin:      ${summary['can_spin'] ?? false}');
-    debugPrint(' Remaining:     ${summary['spins_remaining'] ?? 0}');
-    debugPrint(' Reward Points: ${summary['reward_points'] ?? 0}');
-    debugPrint(' Source:        ${summary['source'] ?? 'unknown'}');
-    debugPrint('╚════════════════════════════════════════════════╝');
+    LogManager.debug('╔════════════════════════════════════════════════╗');
+    LogManager.debug('              SPIN ANALYTICS SUMMARY              ');
+    LogManager.debug('╠════════════════════════════════════════════════╣');
+    LogManager.debug(' User Name:     ${summary['user_name'] ?? 'Unknown'}');
+    LogManager.debug(' User ID:       ${summary['user_id'] ?? 'unknown'}');
+    LogManager.debug(' Snapshot At:   ${summary['snapshot_at'] ?? DateTime.now().toIso8601String()}');
+    LogManager.debug(' Today:         ${summary['today_count'] ?? 0}/${summary['daily_limit'] ?? 0}');
+    LogManager.debug(' Weekly:        ${summary['weekly_count'] ?? 0}');
+    LogManager.debug(' Total:         ${summary['total_spins'] ?? 0}');
+    LogManager.debug(' Can Spin:      ${summary['can_spin'] ?? false}');
+    LogManager.debug(' Remaining:     ${summary['spins_remaining'] ?? 0}');
+    LogManager.debug(' Reward Points: ${summary['reward_points'] ?? 0}');
+    LogManager.debug(' Source:        ${summary['source'] ?? 'unknown'}');
+    LogManager.debug('╚════════════════════════════════════════════════╝');
   }
 
   // ============ LIFECYCLE TRACKING ============
@@ -202,7 +203,7 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
         _printSpinAnalyticsSummary(enrichedSummary);
       }
     } catch (e) {
-      debugPrint('[AppLauncher] Failed to track app launch: $e');
+      LogManager.debug('[AppLauncher] Failed to track app launch: $e');
     }
   }
 
@@ -211,9 +212,9 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
     try {
       final serviceManager = widget.initialData.$1;
       serviceManager.analyticsService.flushEvents();
-      debugPrint('[AppLauncher] Analytics flushed on app pause');
+      LogManager.debug('[AppLauncher] Analytics flushed on app pause');
     } catch (e) {
-      debugPrint('[AppLauncher] Failed to flush analytics: $e');
+      LogManager.debug('[AppLauncher] Failed to flush analytics: $e');
     }
   }
 
@@ -232,9 +233,9 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
         'snapshot_at': DateTime.now().toIso8601String(),
       });
 
-      debugPrint('[AppLauncher] Spin status checked on resume: ${summary['spins_remaining']} spins remaining');
+      LogManager.debug('[AppLauncher] Spin status checked on resume: ${summary['spins_remaining']} spins remaining');
     } catch (e) {
-      debugPrint('[AppLauncher] Failed to check spin status: $e');
+      LogManager.debug('[AppLauncher] Failed to check spin status: $e');
     }
   }
 
@@ -263,9 +264,9 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
         _authStateInitialized = true;
       });
 
-      debugPrint('Auth state initialized: isLoggedIn=$isLoggedIn, hasOnboarded=$hasOnboarded');
+      LogManager.debug('Auth state initialized: isLoggedIn=$isLoggedIn, hasOnboarded=$hasOnboarded');
     } catch (e) {
-      debugPrint('Error initializing auth state: $e');
+      LogManager.debug('Error initializing auth state: $e');
       setState(() {
         _authStateInitialized = true; // Continue anyway
       });

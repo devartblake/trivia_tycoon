@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 enum TransactionType {
   giftSent,
@@ -108,7 +109,7 @@ class GiftTransactionService extends ChangeNotifier {
 
   void initialize() {
     _loadInitialBalances();
-    debugPrint('GiftTransactionService initialized');
+    LogManager.debug('GiftTransactionService initialized');
   }
 
   void dispose() {
@@ -159,7 +160,7 @@ class GiftTransactionService extends ChangeNotifier {
     _transactionHistory[userId] ??= [];
     _transactionHistory[userId]!.add(transaction);
 
-    debugPrint('Added $amount coins to $userId. New balance: $newBalance');
+    LogManager.debug('Added $amount coins to $userId. New balance: $newBalance');
 
     _broadcastBalanceUpdate(userId);
     _broadcastTransactionUpdate(userId);
@@ -180,7 +181,7 @@ class GiftTransactionService extends ChangeNotifier {
 
     final currentBalance = getCoinBalance(userId);
     if (currentBalance < amount) {
-      debugPrint('Insufficient balance for user $userId');
+      LogManager.debug('Insufficient balance for user $userId');
       return false;
     }
 
@@ -203,7 +204,7 @@ class GiftTransactionService extends ChangeNotifier {
     _transactionHistory[userId] ??= [];
     _transactionHistory[userId]!.add(transaction);
 
-    debugPrint('Deducted $amount coins from $userId. New balance: $newBalance');
+    LogManager.debug('Deducted $amount coins from $userId. New balance: $newBalance');
 
     _broadcastBalanceUpdate(userId);
     _broadcastTransactionUpdate(userId);
@@ -235,7 +236,7 @@ class GiftTransactionService extends ChangeNotifier {
     // Add to recipient (maybe partial value, or no value - just for tracking)
     // For now, gifts don't add coins to recipient, just a social gesture
 
-    debugPrint('Gift sent from $senderId to $recipientId');
+    LogManager.debug('Gift sent from $senderId to $recipientId');
     return true;
   }
 
