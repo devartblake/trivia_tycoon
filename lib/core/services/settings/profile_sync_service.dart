@@ -128,6 +128,45 @@ class ProfileSyncService {
     }
   }
 
+  Future<Map<String, dynamic>> getQueueDiagnostics() async {
+    final box = await Hive.openBox(_queueBoxName);
+    if (box.isEmpty) {
+      return {
+        'queue_length': 0,
+        'max_queue_size': _maxQueueSize,
+        'max_retry_count': _maxRetryCount,
+        'oldest_created_at': null,
+        'newest_created_at': null,
+        'highest_retry_count': 0,
+      };
+    }
+
+    DateTime? oldest;
+    DateTime? newest;
+    var highestRetryCount = 0;
+
+    for (final key in box.keys) {
+      final data = box.get(key);
+      if (data is! Map) continue;
+
+      final createdAt = _parseIso(data['created_at']);
+      final retryCount = data['retry_count'] as int? ?? 0;
+
+      if (oldest == null || createdAt.isBefore(oldest)) oldest = createdAt;
+      if (newest == null || createdAt.isAfter(newest)) newest = createdAt;
+      if (retryCount > highestRetryCount) highestRetryCount = retryCount;
+    }
+
+    return {
+      'queue_length': box.length,
+      'max_queue_size': _maxQueueSize,
+      'max_retry_count': _maxRetryCount,
+      'oldest_created_at': oldest?.toIso8601String(),
+      'newest_created_at': newest?.toIso8601String(),
+      'highest_retry_count': highestRetryCount,
+    };
+  }
+
   Future<Map<String, dynamic>?> _trySync(Map<String, dynamic> payload) async {
     const endpoints = <String>[
       '/profile',

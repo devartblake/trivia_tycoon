@@ -122,6 +122,18 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
     try {
       final multiProfileService = ref.read(multiProfileServiceProvider);
       await multiProfileService.retryQueuedProfileSyncUpdates();
+
+      final diagnostics = await multiProfileService.getProfileSyncDiagnostics();
+      LogManager.info(
+        'Profile sync diagnostics after retry: $diagnostics',
+        source: 'AppLauncher',
+      );
+
+      final serviceManager = widget.initialData.$1;
+      await serviceManager.analyticsService.trackEvent(
+        'profile_sync_queue_diagnostics',
+        diagnostics,
+      );
     } catch (e) {
       LogManager.error('Failed retrying queued profile sync updates', source: 'AppLauncher', error: e);
     }

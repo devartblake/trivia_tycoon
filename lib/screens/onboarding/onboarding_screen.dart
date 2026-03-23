@@ -278,6 +278,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
         error: e,
       );
     }
+    if (ageGroup != null) {
+      await profileService.saveAgeGroup(ageGroup);
+    }
     await profileService.saveAgeGroup(ageGroup);
     if (country != null) {
       await profileService.saveCountry(country);

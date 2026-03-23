@@ -272,4 +272,48 @@ void main() {
     expect(queueBox.length, 0);
     expect(events, contains('profile_sync_dropped_max_retries'));
   });
+
+  test('getQueueDiagnostics returns queue metadata', () async {
+    final dio = Dio(BaseOptions(baseUrl: 'https://example.test'));
+
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          handler.reject(
+            DioException(
+              requestOptions: options,
+              response: Response(
+                requestOptions: options,
+                statusCode: 503,
+                data: {'message': 'offline'},
+              ),
+              type: DioExceptionType.badResponse,
+            ),
+          );
+        },
+      ),
+    );
+
+    final apiService = ApiService(
+      baseUrl: 'https://example.test',
+      dio: dio,
+      initializeCache: false,
+    );
+
+    final service = ProfileSyncService(
+      apiService: apiService,
+      trackEvent: (_, __) async {},
+    );
+
+    await service.syncProfileUpdate(displayName: 'Diag One', username: 'diag_one');
+    await service.syncProfileUpdate(displayName: 'Diag Two', username: 'diag_two');
+
+    final diagnostics = await service.getQueueDiagnostics();
+    expect(diagnostics['queue_length'], 2);
+    expect(diagnostics['max_queue_size'], 100);
+    expect(diagnostics['max_retry_count'], 10);
+    expect(diagnostics['highest_retry_count'], 0);
+    expect(diagnostics['oldest_created_at'], isNotNull);
+    expect(diagnostics['newest_created_at'], isNotNull);
+  });
 }

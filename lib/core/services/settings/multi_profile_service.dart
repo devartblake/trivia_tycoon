@@ -602,6 +602,32 @@ class MultiProfileService {
     }
   }
 
+  Future<Map<String, dynamic>> getProfileSyncDiagnostics() async {
+    if (_profileSyncService == null) {
+      return {
+        'enabled': false,
+        'queue_length': 0,
+      };
+    }
+
+    try {
+      final diagnostics = await _profileSyncService!.getQueueDiagnostics();
+      return {
+        'enabled': true,
+        ...diagnostics,
+      };
+    } catch (e) {
+      LogManager.info(
+        '[MultiProfile] Failed to read profile sync diagnostics: $e',
+        source: 'MultiProfileService',
+      );
+      return {
+        'enabled': true,
+        'error': e.toString(),
+      };
+    }
+  }
+
   /// Get statistics about profiles
   Map<String, dynamic> getProfileStats() {
     try {
