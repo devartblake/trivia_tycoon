@@ -1,7 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/controllers/coin_balance_notifier.dart';
 import '../../core/services/settings/general_key_value_storage_service.dart';
+import '../../core/services/theme/seasonal_theme_service.dart';
 import '../models/power_up.dart';
+import '../providers/core_providers.dart';
 
 class PowerUpController extends StateNotifier<PowerUp?> {
   final Ref ref;

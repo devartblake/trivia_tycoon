@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:math';
 
 import '../dialogs/game_result_dialog.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class SudokuPuzzleScreen extends StatefulWidget {
   const SudokuPuzzleScreen({super.key});
@@ -317,10 +318,10 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
         gameIcon: Icons.grid_4x4,
       ),
       onShare: () {
-        debugPrint('Share tapped');
+        LogManager.debug('Share tapped');
       },
       onClose: () {
-        debugPrint('Close tapped');
+        LogManager.debug('Close tapped');
       },
       onPlayAgain: () {
         setState(() {

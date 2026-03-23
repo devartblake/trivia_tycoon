@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import '../../core/repositories/mission_repository.dart';
 import '../../core/services/notification_service.dart';
 import '../models/mission_model.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class MissionService {
   final NotificationService _notificationService = NotificationService();
@@ -62,7 +63,7 @@ class MissionService {
         'user_mission_id': userMissionId,
         'new_mission_id': swappedMission.mission.id,
       }).catchError((e) {
-        debugPrint('Analytics call failed: $e');
+        LogManager.debug('Analytics call failed: $e');
       });
 
       return swappedMission;
@@ -113,7 +114,7 @@ class MissionService {
           'user_id': updatedMission.userId,
           'reward_amount': updatedMission.mission.rewardXp,
         }).catchError((e) {
-          debugPrint('Reward processing failed: $e');
+          LogManager.debug('Reward processing failed: $e');
         });
       }
 
@@ -142,7 +143,7 @@ class MissionService {
           await _repository.assignMissionToUser(userId, missionId);
           assignedMissions.add(assigned);
         } catch (e) {
-          debugPrint('Failed to assign mission $missionId: $e');
+          LogManager.debug('Failed to assign mission $missionId: $e');
         }
       }
 
@@ -189,7 +190,7 @@ class MissionService {
         }
       }
     } catch (e) {
-      debugPrint('Failed to track user action: $e');
+      LogManager.debug('Failed to track user action: $e');
       // Tracking should never break gameplay
     }
   }

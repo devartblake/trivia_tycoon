@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
 import '../../game/models/currency_type.dart';
 import '../../game/utils/balance_change_effect.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 final currencyManagerProvider = Provider<CurrencyManager>((ref) {
   return CurrencyManager(ref);
@@ -32,7 +33,7 @@ class CurrencyManager {
           // If stored as JSON string
           _transactionHistory = Map<String, int>.from(json.decode(historyStr));
         } catch (parseError) {
-          debugPrint('Failed to parse transaction history: $parseError');
+          LogManager.debug('Failed to parse transaction history: $parseError');
           _transactionHistory = {};
         }
       }
@@ -42,7 +43,7 @@ class CurrencyManager {
         _lastSaveTime = DateTime.parse(lastSaveStr);
       }
     } catch (e) {
-      debugPrint('Failed to load currency state: $e');
+      LogManager.debug('Failed to load currency state: $e');
       // Initialize with defaults on error
       _transactionHistory = {};
       _lastSaveTime = null;
@@ -97,7 +98,7 @@ class CurrencyManager {
       _transactionHistory[transactionType] = (_transactionHistory[transactionType] ?? 0) + amount;
       await AppSettings.setString('transaction_history', _transactionHistory.toString());
     } catch (e) {
-      debugPrint('Failed to record transaction: $e');
+      LogManager.debug('Failed to record transaction: $e');
     }
   }
 
@@ -124,9 +125,9 @@ class CurrencyManager {
       await AppSettings.setString('currency_state_snapshot', stateSnapshot.toString());
       _lastSaveTime = DateTime.now();
 
-      debugPrint('Currency state saved successfully');
+      LogManager.debug('Currency state saved successfully');
     } catch (e) {
-      debugPrint('Failed to save currency state: $e');
+      LogManager.debug('Failed to save currency state: $e');
     }
   }
 
@@ -140,9 +141,9 @@ class CurrencyManager {
       // Resume normal operations
       _isPaused = false;
 
-      debugPrint('Currency state validation completed');
+      LogManager.debug('Currency state validation completed');
     } catch (e) {
-      debugPrint('Currency state validation failed: $e');
+      LogManager.debug('Currency state validation failed: $e');
       await _resetCurrencyState();
     }
   }
@@ -171,10 +172,10 @@ class CurrencyManager {
 
       if (needsRepair) {
         await AppSettings.setString('transaction_history', _transactionHistory.toString());
-        debugPrint('Currency integrity restored');
+        LogManager.debug('Currency integrity restored');
       }
     } catch (e) {
-      debugPrint('Failed to validate currency integrity: $e');
+      LogManager.debug('Failed to validate currency integrity: $e');
     }
   }
 
@@ -189,9 +190,9 @@ class CurrencyManager {
       await AppSettings.setString('transaction_history', '');
       await AppSettings.setString('currency_last_save', '');
 
-      debugPrint('Currency state reset to defaults');
+      LogManager.debug('Currency state reset to defaults');
     } catch (e) {
-      debugPrint('Failed to reset currency state: $e');
+      LogManager.debug('Failed to reset currency state: $e');
     }
   }
 
@@ -242,9 +243,9 @@ class CurrencyManager {
         await AppSettings.setString('transaction_history', _transactionHistory.toString());
       }
 
-      debugPrint('Currency data imported successfully');
+      LogManager.debug('Currency data imported successfully');
     } catch (e) {
-      debugPrint('Failed to import currency data: $e');
+      LogManager.debug('Failed to import currency data: $e');
       rethrow;
     }
   }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:math';
 
 import '../dialogs/game_result_dialog.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class ConnectionsPuzzleScreen extends StatefulWidget {
   const ConnectionsPuzzleScreen({super.key});
@@ -285,10 +286,10 @@ class _ConnectionsPuzzleScreenState extends State<ConnectionsPuzzleScreen> {
         gameIcon: Icons.link,
       ),
       onShare: () {
-        debugPrint('Share tapped');
+        LogManager.debug('Share tapped');
       },
       onClose: () {
-        debugPrint('Close tapped');
+        LogManager.debug('Close tapped');
       },
       onPlayAgain: () {
         setState(() {

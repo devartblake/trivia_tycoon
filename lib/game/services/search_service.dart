@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/search.dart';
 import '../providers/skill_search_provider.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class SearchService {
   final List<SearchProvider> _providers;
@@ -18,7 +19,7 @@ class SearchService {
         final results = await provider.search(query.trim(), filter);
         allResults.addAll(results);
       } catch (e) {
-        debugPrint('Search error in ${provider.category}: $e');
+        LogManager.debug('Search error in ${provider.category}: $e');
       }
     }
 

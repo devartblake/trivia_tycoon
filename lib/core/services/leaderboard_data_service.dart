@@ -8,6 +8,7 @@ import '../../game/services/leaderboard_service.dart';
 import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
 
 import 'leaderboard/leaderboard_websocket_adapter.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class LeaderboardDataService extends ChangeNotifier {
   final ApiService apiService;
@@ -41,7 +42,7 @@ class LeaderboardDataService extends ChangeNotifier {
         onPlayerPassedYou: _handlePlayerPassed,
       );
       _wsAdapter!.initialize();
-      debugPrint('[Leaderboard] Using WebSocket mode');
+      LogManager.debug('[Leaderboard] Using WebSocket mode');
     }
   }
 
@@ -71,24 +72,24 @@ class LeaderboardDataService extends ChangeNotifier {
     // 1. Try loading from asset loader if provided (Riverpod-based)
     try {
       final jsonStr = await rootBundle.loadString('assets/data/leaderboard/leaderboard.json');
-      debugPrint("✅ Loaded JSON content: ${jsonStr.substring(0, 100)}...");
+      LogManager.debug("✅ Loaded JSON content: ${jsonStr.substring(0, 100)}...");
       if (assetLoader != null) {
         final assetData = await assetLoader!();
         if (assetData.isNotEmpty) return assetData;
       }
     } catch (e) {
-      debugPrint("📄 Asset loader failed: $e");
+      LogManager.debug("📄 Asset loader failed: $e");
     }
 
     // 2. Try local cache first for better performance
     try {
       final cached = await appCache.getCachedLeaderboard();
       if (cached.isNotEmpty) {
-        debugPrint("💾 Loaded ${cached.length} entries from cache");
+        LogManager.debug("💾 Loaded ${cached.length} entries from cache");
         return cached;
       }
     } catch (e) {
-      debugPrint("💾 Hive cache failed: $e");
+      LogManager.debug("💾 Hive cache failed: $e");
     }
 
     // 3. Try API as fallback
@@ -101,14 +102,14 @@ class LeaderboardDataService extends ChangeNotifier {
       _currentLeaderboard = remote;
       _buildEntriesMap();
 
-      debugPrint("🌐 Loaded ${remote.length} entries from API");
+      LogManager.debug("🌐 Loaded ${remote.length} entries from API");
       return remote;
     } catch (e) {
-      debugPrint("🌐 API load failed: $e");
+      LogManager.debug("🌐 API load failed: $e");
 
       // ✅ If 404, backend not ready - use empty list
       if (e.toString().contains('404')) {
-        debugPrint("⚠️ Backend /leaderboard endpoint not ready yet");
+        LogManager.debug("⚠️ Backend /leaderboard endpoint not ready yet");
         _currentLeaderboard = [];
         return [];
       }
@@ -148,7 +149,7 @@ class LeaderboardDataService extends ChangeNotifier {
   }
 
   void _handlePlayerPassed(String userId, int newRank, int yourRank) {
-    debugPrint('[Leaderboard] Player $userId passed you! (#$newRank vs #$yourRank)');
+    LogManager.debug('[Leaderboard] Player $userId passed you! (#$newRank vs #$yourRank)');
     // Show notification
   }
 
@@ -181,9 +182,9 @@ class LeaderboardDataService extends ChangeNotifier {
 
       // Force a refresh after successful score submission
       await refreshData(force: true);
-      debugPrint('✅ Score submitted successfully for $playerName: $score');
+      LogManager.debug('✅ Score submitted successfully for $playerName: $score');
     } catch (e) {
-      debugPrint('⚠️ Failed to submit score: $e');
+      LogManager.debug('⚠️ Failed to submit score: $e');
 
       // Store failed submission for retry later
       await _storePendingSubmission(playerName, score);
@@ -202,9 +203,9 @@ class LeaderboardDataService extends ChangeNotifier {
       });
 
       await appCache.set('pending_submissions', pendingSubmissions);
-      debugPrint('💾 Stored pending submission for retry: $playerName - $score');
+      LogManager.debug('💾 Stored pending submission for retry: $playerName - $score');
     } catch (e) {
-      debugPrint('❌ Failed to store pending submission: $e');
+      LogManager.debug('❌ Failed to store pending submission: $e');
     }
   }
 
@@ -217,7 +218,7 @@ class LeaderboardDataService extends ChangeNotifier {
           .map((entry) => Map<String, dynamic>.from(entry))
           .toList();
     } catch (e) {
-      debugPrint('❌ Failed to get pending submissions: $e');
+      LogManager.debug('❌ Failed to get pending submissions: $e');
       return [];
     }
   }
@@ -238,9 +239,9 @@ class LeaderboardDataService extends ChangeNotifier {
             submission['score'],
           );
           successfulSubmissions.add(i);
-          debugPrint('✅ Retry successful: ${submission['playerName']} - ${submission['score']}');
+          LogManager.debug('✅ Retry successful: ${submission['playerName']} - ${submission['score']}');
         } catch (e) {
-          debugPrint('❌ Retry failed for ${submission['playerName']}: $e');
+          LogManager.debug('❌ Retry failed for ${submission['playerName']}: $e');
         }
       }
 
@@ -256,10 +257,10 @@ class LeaderboardDataService extends ChangeNotifier {
 
         // Refresh leaderboard after successful retries
         await refreshData(force: true);
-        debugPrint('🔄 Processed ${successfulSubmissions.length} pending submissions');
+        LogManager.debug('🔄 Processed ${successfulSubmissions.length} pending submissions');
       }
     } catch (e) {
-      debugPrint('❌ Failed to retry pending submissions: $e');
+      LogManager.debug('❌ Failed to retry pending submissions: $e');
     }
   }
 
@@ -284,7 +285,7 @@ class LeaderboardDataService extends ChangeNotifier {
 
       return false;
     } catch (e) {
-      debugPrint('❌ Error checking refresh criteria: $e');
+      LogManager.debug('❌ Error checking refresh criteria: $e');
       return true; // Default to refresh on error
     }
   }
@@ -293,14 +294,14 @@ class LeaderboardDataService extends ChangeNotifier {
   /// Called when app resumes or when data needs to be updated
   Future<void> refreshData({bool force = false}) async {
     if (_isRefreshing && !force) {
-      debugPrint('⏳ Refresh already in progress, skipping...');
+      LogManager.debug('⏳ Refresh already in progress, skipping...');
       return;
     }
 
     _isRefreshing = true;
 
     try {
-      debugPrint('🔄 Starting leaderboard data refresh...');
+      LogManager.debug('🔄 Starting leaderboard data refresh...');
 
       // First, retry any pending submissions
       await retryPendingSubmissions();
@@ -315,13 +316,13 @@ class LeaderboardDataService extends ChangeNotifier {
         await _updateLastRefresh();
         await _resetRefreshFailureCount();
 
-        debugPrint('✅ Leaderboard refresh completed: ${freshData.length} entries');
+        LogManager.debug('✅ Leaderboard refresh completed: ${freshData.length} entries');
       } else {
-        debugPrint('⚠️ Received empty leaderboard data');
+        LogManager.debug('⚠️ Received empty leaderboard data');
         await _incrementRefreshFailureCount();
       }
     } catch (e) {
-      debugPrint('❌ Leaderboard refresh failed: $e');
+      LogManager.debug('❌ Leaderboard refresh failed: $e');
       await _incrementRefreshFailureCount();
 
       // Don't rethrow unless this is a forced refresh
@@ -334,7 +335,7 @@ class LeaderboardDataService extends ChangeNotifier {
   /// Forces a complete data refresh (clears cache first)
   Future<void> forceRefresh() async {
     try {
-      debugPrint('🔄 Forcing complete leaderboard refresh...');
+      LogManager.debug('🔄 Forcing complete leaderboard refresh...');
 
       // Clear existing cache
       await appCache.remove('leaderboard_data');
@@ -342,9 +343,9 @@ class LeaderboardDataService extends ChangeNotifier {
       // Force refresh
       await refreshData(force: true);
 
-      debugPrint('✅ Force refresh completed');
+      LogManager.debug('✅ Force refresh completed');
     } catch (e) {
-      debugPrint('❌ Force refresh failed: $e');
+      LogManager.debug('❌ Force refresh failed: $e');
       rethrow;
     }
   }
@@ -425,7 +426,7 @@ class LeaderboardDataService extends ChangeNotifier {
       // Check for basic data integrity
       for (final entry in cached) {
         if (entry.playerName.isEmpty || entry.score < 0) {
-          debugPrint('⚠️ Invalid leaderboard entry found: ${entry.playerName} - ${entry.score}');
+          LogManager.debug('⚠️ Invalid leaderboard entry found: ${entry.playerName} - ${entry.score}');
           return false;
         }
       }
@@ -433,15 +434,15 @@ class LeaderboardDataService extends ChangeNotifier {
       // Check if data is sorted correctly (highest scores first)
       for (int i = 0; i < cached.length - 1; i++) {
         if (cached[i].score < cached[i + 1].score) {
-          debugPrint('⚠️ Leaderboard data not properly sorted');
+          LogManager.debug('⚠️ Leaderboard data not properly sorted');
           return false;
         }
       }
 
-      debugPrint('✅ Leaderboard data validation passed');
+      LogManager.debug('✅ Leaderboard data validation passed');
       return true;
     } catch (e) {
-      debugPrint('❌ Leaderboard data validation failed: $e');
+      LogManager.debug('❌ Leaderboard data validation failed: $e');
       return false;
     }
   }
@@ -563,9 +564,9 @@ class LeaderboardDataService extends ChangeNotifier {
       await appCache.remove(_refreshFailureCountKey);
 
       _lastRefreshTime = null;
-      debugPrint('🗑️ All leaderboard data cleared');
+      LogManager.debug('🗑️ All leaderboard data cleared');
     } catch (e) {
-      debugPrint('❌ Failed to clear leaderboard data: $e');
+      LogManager.debug('❌ Failed to clear leaderboard data: $e');
     }
   }
 
@@ -597,9 +598,9 @@ class LeaderboardDataService extends ChangeNotifier {
       }
 
       await _updateLastRefresh();
-      debugPrint('✅ Leaderboard data imported successfully');
+      LogManager.debug('✅ Leaderboard data imported successfully');
     } catch (e) {
-      debugPrint('❌ Failed to import leaderboard data: $e');
+      LogManager.debug('❌ Failed to import leaderboard data: $e');
       rethrow;
     }
   }
