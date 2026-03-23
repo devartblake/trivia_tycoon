@@ -487,8 +487,16 @@ class ApiService {
   }
 
   // Compatibility helpers for branches that still reference these methods.
-  bool _isProtectedPath(String path) =>
-      path == '/admin' || path.startsWith('/admin/');
+  bool _isProtectedPath(String path) {
+    if (path == '/admin' || path.startsWith('/admin/')) return true;
+
+    // User-scoped/profile endpoints also require auth headers and token refresh handling.
+    if (path == '/profile' || path.startsWith('/profile/')) return true;
+    if (path == '/auth/profile' || path.startsWith('/auth/profile/')) return true;
+    if (path == '/user/profile' || path.startsWith('/user/profile/')) return true;
+
+    return false;
+  }
 
   Map<String, dynamic> _extractErrorEnvelope(Object? responseData) {
     if (responseData is Map) {

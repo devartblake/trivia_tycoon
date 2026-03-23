@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 import '../manager/service_manager.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class UserIdentityResolver {
   static bool _hasLoggedUnknownUserWarning = false;
@@ -152,8 +152,10 @@ class UserIdentityResolver {
 
     if (!_hasLoggedUnknownUserWarning) {
       _hasLoggedUnknownUserWarning = true;
-      LogManager.debug(
-          '[UserIdentityResolver] Backend user_id unavailable; using generated local id.');
+      LogManager.warning(
+        'Backend user_id unavailable; using generated local id.',
+        source: 'UserIdentityResolver',
+      );
     }
 
     return generatedLocalUserId;
@@ -185,13 +187,13 @@ class UserIdentityResolver {
     String? tokenStoreUserId,
     String canonical,
   ) {
-    if (profileUserId == canonical && !_isGeneratedLocalId(profileUserId!)) {
+    if (profileUserId == canonical && !_isGeneratedLocalId(profileUserId)) {
       return 'profile';
     }
-    if (secureUserId == canonical && !_isGeneratedLocalId(secureUserId!)) {
+    if (secureUserId == canonical && !_isGeneratedLocalId(secureUserId)) {
       return 'secure';
     }
-    if (tokenStoreUserId == canonical && !_isGeneratedLocalId(tokenStoreUserId!)) {
+    if (tokenStoreUserId == canonical && !_isGeneratedLocalId(tokenStoreUserId)) {
       return 'token_store';
     }
     return 'token_store';

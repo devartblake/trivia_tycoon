@@ -4,6 +4,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:trivia_tycoon/core/services/settings/profile_sync_service.dart';
 import '../../game/controllers/onboarding_controller.dart';
 import 'steps/welcome_step.dart';
 import 'steps/username_step.dart';
@@ -210,7 +212,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     final serviceManager = ref.read(serviceManagerProvider);
     final profileService = serviceManager.playerProfileService;
     final onboardingService = serviceManager.onboardingSettingsService;
-    final username = (_controller.userData['username'] as String?)?.trim();
+    final rawUsername = (_controller.userData['username'] as String?)?.trim();
+    final username = _resolveOnboardingUsername(rawUsername);
     final ageGroup = _controller.userData['ageGroup'] as String?;
     final country = _controller.userData['country'] as String?;
     final categories =
@@ -219,9 +222,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
         .toList();
     final avatar = _controller.userData['avatar'] as String?;
 
-    if (username == null ||
-        username.isEmpty ||
-        ageGroup == null ||
+    if (ageGroup == null ||
         country == null ||
         categories == null ||
         categories.isEmpty) {
@@ -238,8 +239,44 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     }
 
     // Save all user data
-    if (username.isNotEmpty) {
-      await profileService.savePlayerName(username);
+    await onboardingService.setOnboardingCompleted(true);
+    await _persistProgressSnapshot(completed: true, hasCompletedProfile: true);
+
+    await profileService.savePlayerName(username);
+    await profileService.saveUsername(username);
+
+    final profileSyncService = ProfileSyncService(
+      apiService: serviceManager.apiService,
+      trackEvent: serviceManager.analyticsService.trackEvent,
+    );
+
+    try {
+      final syncResult = await profileSyncService.syncProfileUpdate(
+        displayName: username,
+        username: username,
+      );
+
+      if (syncResult.confirmedDisplayName != null &&
+          syncResult.confirmedDisplayName!.trim().isNotEmpty) {
+        await profileService.savePlayerName(syncResult.confirmedDisplayName!.trim());
+      }
+
+      if (syncResult.confirmedUsername != null &&
+          syncResult.confirmedUsername!.trim().isNotEmpty) {
+        await profileService.saveUsername(
+          _normalizeUsername(syncResult.confirmedUsername!),
+        );
+      }
+    } catch (e) {
+      LogManager.warning(
+        'Failed to sync onboarding username to backend. Local values were kept.',
+        source: 'OnboardingScreen',
+      );
+      LogManager.error(
+        'Onboarding profile sync failure',
+        source: 'OnboardingScreen',
+        error: e,
+      );
     }
     await profileService.saveAgeGroup(ageGroup);
     if (country != null) {
@@ -264,6 +301,28 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     if (mounted) {
       context.go('/home');
     }
+  }
+
+  String _normalizeUsername(String input) {
+    return input
+        .toLowerCase()
+        .trim()
+        .replaceAll(RegExp(r'\s+'), '_')
+        .replaceAll(RegExp(r'[^a-z0-9_]'), '');
+  }
+
+  String _resolveOnboardingUsername(String? rawUsername) {
+    final normalized = _normalizeUsername(rawUsername ?? '');
+    if (normalized.isNotEmpty) return normalized;
+
+    final countrySeed = (_controller.userData['country'] as String?)?.trim();
+    final normalizedCountry = _normalizeUsername(countrySeed ?? '');
+    if (normalizedCountry.isNotEmpty) {
+      return 'player_$normalizedCountry';
+    }
+
+    final millis = DateTime.now().millisecondsSinceEpoch.toString();
+    return 'player_${millis.substring(millis.length - 6)}';
   }
 
   Future<void> _handleSkip() async {

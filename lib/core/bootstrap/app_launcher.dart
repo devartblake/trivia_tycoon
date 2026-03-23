@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import 'package:trivia_tycoon/core/services/analytics/app_lifecycle.dart';
 import 'package:trivia_tycoon/core/manager/service_manager.dart';
 import 'package:trivia_tycoon/core/services/theme/theme_notifier.dart';
@@ -89,7 +90,7 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
         ...summary.toMap(),
       });
     } catch (e) {
-      LogManager.debug('[AppLauncher] Failed to track live spin summary update: $e');
+      LogManager.error('Failed to track live spin summary update', source: 'AppLauncher', error: e);
     }
   }
 
@@ -99,20 +100,20 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
   }
 
   void _printSpinAnalyticsSummary(Map<String, dynamic> summary) {
-    LogManager.debug('╔════════════════════════════════════════════════╗');
-    LogManager.debug('              SPIN ANALYTICS SUMMARY              ');
-    LogManager.debug('╠════════════════════════════════════════════════╣');
-    LogManager.debug(' User Name:     ${summary['user_name'] ?? 'Unknown'}');
-    LogManager.debug(' User ID:       ${summary['user_id'] ?? 'unknown'}');
-    LogManager.debug(' Snapshot At:   ${summary['snapshot_at'] ?? DateTime.now().toIso8601String()}');
-    LogManager.debug(' Today:         ${summary['today_count'] ?? 0}/${summary['daily_limit'] ?? 0}');
-    LogManager.debug(' Weekly:        ${summary['weekly_count'] ?? 0}');
-    LogManager.debug(' Total:         ${summary['total_spins'] ?? 0}');
-    LogManager.debug(' Can Spin:      ${summary['can_spin'] ?? false}');
-    LogManager.debug(' Remaining:     ${summary['spins_remaining'] ?? 0}');
-    LogManager.debug(' Reward Points: ${summary['reward_points'] ?? 0}');
-    LogManager.debug(' Source:        ${summary['source'] ?? 'unknown'}');
-    LogManager.debug('╚════════════════════════════════════════════════╝');
+    LogManager.info('╔════════════════════════════════════════════════╗', source: 'AppLauncher');
+    LogManager.info('              SPIN ANALYTICS SUMMARY              ', source: 'AppLauncher');
+    LogManager.info('╠════════════════════════════════════════════════╣', source: 'AppLauncher');
+    LogManager.info(' User Name:     ${summary['user_name'] ?? 'Unknown'}', source: 'AppLauncher');
+    LogManager.info(' User ID:       ${summary['user_id'] ?? 'unknown'}', source: 'AppLauncher');
+    LogManager.info(' Snapshot At:   ${summary['snapshot_at'] ?? DateTime.now().toIso8601String()}', source: 'AppLauncher');
+    LogManager.info(' Today:         ${summary['today_count'] ?? 0}/${summary['daily_limit'] ?? 0}', source: 'AppLauncher');
+    LogManager.info(' Weekly:        ${summary['weekly_count'] ?? 0}', source: 'AppLauncher');
+    LogManager.info(' Total:         ${summary['total_spins'] ?? 0}', source: 'AppLauncher');
+    LogManager.info(' Can Spin:      ${summary['can_spin'] ?? false}', source: 'AppLauncher');
+    LogManager.info(' Remaining:     ${summary['spins_remaining'] ?? 0}', source: 'AppLauncher');
+    LogManager.info(' Reward Points: ${summary['reward_points'] ?? 0}', source: 'AppLauncher');
+    LogManager.info(' Source:        ${summary['source'] ?? 'unknown'}', source: 'AppLauncher');
+    LogManager.info('╚════════════════════════════════════════════════╝', source: 'AppLauncher');
   }
 
   // ============ LIFECYCLE TRACKING ============
@@ -122,7 +123,7 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
       final multiProfileService = ref.read(multiProfileServiceProvider);
       await multiProfileService.retryQueuedProfileSyncUpdates();
     } catch (e) {
-      debugPrint('[AppLauncher] Failed retrying queued profile sync updates: $e');
+      LogManager.error('Failed retrying queued profile sync updates', source: 'AppLauncher', error: e);
     }
   }
 
@@ -203,7 +204,7 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
         _printSpinAnalyticsSummary(enrichedSummary);
       }
     } catch (e) {
-      LogManager.debug('[AppLauncher] Failed to track app launch: $e');
+      LogManager.error('Failed to track app launch', source: 'AppLauncher', error: e);
     }
   }
 
@@ -212,9 +213,9 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
     try {
       final serviceManager = widget.initialData.$1;
       serviceManager.analyticsService.flushEvents();
-      LogManager.debug('[AppLauncher] Analytics flushed on app pause');
+      LogManager.info('Analytics flushed on app pause', source: 'AppLauncher');
     } catch (e) {
-      LogManager.debug('[AppLauncher] Failed to flush analytics: $e');
+      LogManager.error('Failed to flush analytics', source: 'AppLauncher', error: e);
     }
   }
 
@@ -233,9 +234,9 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
         'snapshot_at': DateTime.now().toIso8601String(),
       });
 
-      LogManager.debug('[AppLauncher] Spin status checked on resume: ${summary['spins_remaining']} spins remaining');
+      LogManager.info('Spin status checked on resume: ${summary['spins_remaining']} spins remaining', source: 'AppLauncher');
     } catch (e) {
-      LogManager.debug('[AppLauncher] Failed to check spin status: $e');
+      LogManager.error('Failed to check spin status', source: 'AppLauncher', error: e);
     }
   }
 
@@ -264,9 +265,9 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
         _authStateInitialized = true;
       });
 
-      LogManager.debug('Auth state initialized: isLoggedIn=$isLoggedIn, hasOnboarded=$hasOnboarded');
+      LogManager.info('Auth state initialized: isLoggedIn=$isLoggedIn, hasOnboarded=$hasOnboarded', source: 'AppLauncher');
     } catch (e) {
-      LogManager.debug('Error initializing auth state: $e');
+      LogManager.error('Error initializing auth state', source: 'AppLauncher', error: e);
       setState(() {
         _authStateInitialized = true; // Continue anyway
       });

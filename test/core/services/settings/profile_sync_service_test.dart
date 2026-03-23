@@ -9,21 +9,30 @@ import 'package:trivia_tycoon/core/services/settings/profile_sync_service.dart';
 void main() {
   late Directory tempDir;
 
-  setUp(() async {
+  setUpAll(() async {
     tempDir = await Directory.systemTemp.createTemp('profile_sync_service_test');
     Hive.init(tempDir.path);
+  });
+
+  setUp(() async {
     await Hive.openBox('auth_tokens');
   });
 
   tearDown(() async {
     if (Hive.isBoxOpen('profile_sync_queue')) {
+      await Hive.box('profile_sync_queue').clear();
       await Hive.box('profile_sync_queue').close();
       await Hive.deleteBoxFromDisk('profile_sync_queue');
     }
     if (Hive.isBoxOpen('auth_tokens')) {
+      await Hive.box('auth_tokens').clear();
       await Hive.box('auth_tokens').close();
       await Hive.deleteBoxFromDisk('auth_tokens');
     }
+  });
+
+  tearDownAll(() async {
+    await Hive.close();
     await tempDir.delete(recursive: true);
   });
 
@@ -178,5 +187,89 @@ void main() {
 
     final queueBoxAfter = await Hive.openBox('profile_sync_queue');
     expect(queueBoxAfter.length, 0);
+  });
+
+  test('enqueue de-duplicates identical payloads', () async {
+    final dio = Dio(BaseOptions(baseUrl: 'https://example.test'));
+
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          handler.reject(
+            DioException(
+              requestOptions: options,
+              response: Response(
+                requestOptions: options,
+                statusCode: 503,
+                data: {'message': 'offline'},
+              ),
+              type: DioExceptionType.badResponse,
+            ),
+          );
+        },
+      ),
+    );
+
+    final apiService = ApiService(
+      baseUrl: 'https://example.test',
+      dio: dio,
+      initializeCache: false,
+    );
+
+    final service = ProfileSyncService(
+      apiService: apiService,
+      trackEvent: (_, __) async {},
+    );
+
+    await service.syncProfileUpdate(displayName: 'Same User', username: 'same_user');
+    await service.syncProfileUpdate(displayName: 'Same User', username: 'same_user');
+
+    final queueBox = await Hive.openBox('profile_sync_queue');
+    expect(queueBox.length, 1);
+  });
+
+  test('drops queued item after max retry threshold', () async {
+    final dio = Dio(BaseOptions(baseUrl: 'https://example.test'));
+
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          handler.reject(
+            DioException(
+              requestOptions: options,
+              response: Response(
+                requestOptions: options,
+                statusCode: 503,
+                data: {'message': 'offline'},
+              ),
+              type: DioExceptionType.badResponse,
+            ),
+          );
+        },
+      ),
+    );
+
+    final events = <String>[];
+    final apiService = ApiService(
+      baseUrl: 'https://example.test',
+      dio: dio,
+      initializeCache: false,
+    );
+
+    final service = ProfileSyncService(
+      apiService: apiService,
+      trackEvent: (event, _) async {
+        events.add(event);
+      },
+    );
+
+    await service.syncProfileUpdate(displayName: 'Retry User', username: 'retry_user');
+    for (var i = 0; i < 11; i++) {
+      await service.retryQueuedUpdates();
+    }
+
+    final queueBox = await Hive.openBox('profile_sync_queue');
+    expect(queueBox.length, 0);
+    expect(events, contains('profile_sync_dropped_max_retries'));
   });
 }

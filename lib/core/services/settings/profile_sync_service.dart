@@ -1,9 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import 'package:trivia_tycoon/core/services/api_service.dart';
-
-import '../../manager/log_manager.dart';
 
 class ProfileSyncResult {
   final bool synced;
@@ -21,6 +20,8 @@ class ProfileSyncResult {
 
 class ProfileSyncService {
   static const String _queueBoxName = 'profile_sync_queue';
+  static const int _maxQueueSize = 100;
+  static const int _maxRetryCount = 10;
 
   final ApiService _apiService;
   final Future<void> Function(String event, Map<String, dynamic> data) _trackEvent;
@@ -79,11 +80,33 @@ class ProfileSyncService {
 
   Future<void> retryQueuedUpdates() async {
     final box = await Hive.openBox(_queueBoxName);
-    final keys = box.keys.toList();
+    final keys = box.keys.toList()
+      ..sort((a, b) {
+        final aData = box.get(a);
+        final bData = box.get(b);
+        final aCreated = _parseIso((aData is Map) ? aData['created_at'] : null);
+        final bCreated = _parseIso((bData is Map) ? bData['created_at'] : null);
+        return aCreated.compareTo(bCreated);
+      });
 
     for (final key in keys) {
       final data = box.get(key);
       if (data is! Map) continue;
+
+      final retryCount = (data['retry_count'] as int? ?? 0);
+      if (retryCount >= _maxRetryCount) {
+        await box.delete(key);
+        await _trackEvent('profile_sync_dropped_max_retries', {
+          'max_retry_count': _maxRetryCount,
+          'created_at': data['created_at'],
+          'dropped_at': DateTime.now().toIso8601String(),
+        });
+        LogManager.warning(
+          'Dropped queued profile sync item after max retries ($retryCount)',
+          source: 'ProfileSyncService',
+        );
+        continue;
+      }
 
       final payload = Map<String, dynamic>.from(data['payload'] as Map? ?? const {});
       if (payload.isEmpty) {
@@ -95,10 +118,10 @@ class ProfileSyncService {
       if (synced != null) {
         await box.delete(key);
       } else {
-        final retryCount = (data['retry_count'] as int? ?? 0) + 1;
+        final updatedRetryCount = retryCount + 1;
         await box.put(key, {
           ...data,
-          'retry_count': retryCount,
+          'retry_count': updatedRetryCount,
           'last_retry': DateTime.now().toIso8601String(),
         });
       }
@@ -114,10 +137,17 @@ class ProfileSyncService {
 
     for (final endpoint in endpoints) {
       try {
-        final response = await _apiService.patch(endpoint, body: payload, headers: _authHeaders());
+        final response = await _apiService.patch(
+          endpoint,
+          body: payload,
+          headers: _authHeaders(),
+        );
         return response;
       } catch (e) {
-        LogManager.debug('[ProfileSync] endpoint failed ($endpoint): $e');
+        LogManager.warning(
+          'Endpoint failed ($endpoint): $e',
+          source: 'ProfileSyncService',
+        );
       }
     }
 
@@ -135,6 +165,21 @@ class ProfileSyncService {
 
   Future<void> _enqueueRetry(Map<String, dynamic> payload) async {
     final box = await Hive.openBox(_queueBoxName);
+
+    final existingKey = _findExistingPayloadKey(box, payload);
+    if (existingKey != null) {
+      final existingData = box.get(existingKey);
+      if (existingData is Map) {
+        await box.put(existingKey, {
+          ...existingData,
+          'payload': payload,
+          'last_retry': DateTime.now().toIso8601String(),
+        });
+      }
+      return;
+    }
+
+    await _enforceQueueLimit(box);
     final id = DateTime.now().millisecondsSinceEpoch.toString();
 
     await box.put(id, {
@@ -143,6 +188,55 @@ class ProfileSyncService {
       'created_at': DateTime.now().toIso8601String(),
       'last_retry': null,
     });
+  }
+
+  Future<void> _enforceQueueLimit(Box box) async {
+    if (box.length < _maxQueueSize) return;
+
+    final entries = box.toMap().entries.toList()
+      ..sort((a, b) {
+        final aCreated = _parseIso((a.value is Map) ? a.value['created_at'] : null);
+        final bCreated = _parseIso((b.value is Map) ? b.value['created_at'] : null);
+        return aCreated.compareTo(bCreated);
+      });
+
+    final toDelete = entries.length - _maxQueueSize + 1;
+    for (var i = 0; i < toDelete; i++) {
+      await box.delete(entries[i].key);
+    }
+
+    await _trackEvent('profile_sync_queue_trimmed', {
+      'deleted_count': toDelete,
+      'queue_limit': _maxQueueSize,
+      'timestamp': DateTime.now().toIso8601String(),
+    });
+  }
+
+  dynamic _findExistingPayloadKey(Box box, Map<String, dynamic> payload) {
+    for (final key in box.keys) {
+      final data = box.get(key);
+      if (data is! Map) continue;
+      final existingPayload = Map<String, dynamic>.from(
+        data['payload'] as Map? ?? const {},
+      );
+      if (_payloadSignature(existingPayload) == _payloadSignature(payload)) {
+        return key;
+      }
+    }
+    return null;
+  }
+
+  String _payloadSignature(Map<String, dynamic> payload) {
+    final displayName = payload['display_name'] ?? payload['displayName'] ?? '';
+    final username = payload['username'] ?? payload['handle'] ?? '';
+    return '${displayName.toString().trim().toLowerCase()}|${username.toString().trim().toLowerCase()}';
+  }
+
+  DateTime _parseIso(Object? raw) {
+    if (raw is String) {
+      return DateTime.tryParse(raw) ?? DateTime.fromMillisecondsSinceEpoch(0);
+    }
+    return DateTime.fromMillisecondsSinceEpoch(0);
   }
 
   String? _readFirstString(Map<String, dynamic> response, List<String> keys) {
@@ -165,16 +259,5 @@ class ProfileSyncService {
     }
 
     return null;
-  }
-
-  String _generateUsernameFromDisplayName(String displayName) {
-    final normalized = displayName
-        .toLowerCase()
-        .trim()
-        .replaceAll(RegExp(r'\s+'), '_')
-        .replaceAll(RegExp(r'[^a-z0-9_]'), '');
-
-    if (normalized.isEmpty) return 'player';
-    return normalized;
   }
 }
