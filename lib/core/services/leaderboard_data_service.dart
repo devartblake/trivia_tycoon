@@ -93,7 +93,7 @@ class LeaderboardDataService extends ChangeNotifier {
 
     // 3. Try API as fallback
     try {
-      final remote = await LeaderboardService(apiService: apiService).fetchLeaderboard();
+      final remote = await LeaderboardService(apiService: apiService).fetchLeaderboard(limit: 100);
       await appCache.cacheLeaderboard(remote);
       await _updateLastRefresh();
 
@@ -307,7 +307,7 @@ class LeaderboardDataService extends ChangeNotifier {
 
       // Fetch fresh data from API
       final leaderboardService = LeaderboardService(apiService: apiService);
-      final freshData = await leaderboardService.fetchLeaderboard();
+      final freshData = await leaderboardService.fetchLeaderboard(limit: 100);
 
       if (freshData.isNotEmpty) {
         // Cache the fresh data
