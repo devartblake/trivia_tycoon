@@ -375,6 +375,36 @@ class MultiProfileService {
         }
       }
 
+      var mergedPreferences = preferences;
+      var resolvedName = name;
+
+      if (_profileSyncService != null && activeProfileId == profileId) {
+        await _profileSyncService!.retryQueuedUpdates();
+
+        final requestedUsername = (preferences?['username'] as String?)?.trim();
+        final candidateDisplayName = (name ?? currentProfile.name).trim();
+
+        if (requestedUsername != null && requestedUsername.isNotEmpty) {
+          final syncResult = await _profileSyncService!.syncProfileUpdate(
+            displayName: candidateDisplayName,
+            username: requestedUsername,
+          );
+
+          if (syncResult.confirmedDisplayName != null &&
+              syncResult.confirmedDisplayName!.isNotEmpty) {
+            resolvedName = syncResult.confirmedDisplayName;
+          }
+
+          if (syncResult.confirmedUsername != null &&
+              syncResult.confirmedUsername!.isNotEmpty) {
+            mergedPreferences = {
+              ...(preferences ?? currentProfile.preferences),
+              'username': syncResult.confirmedUsername,
+            };
+          }
+        }
+      }
+
       final updatedProfile = currentProfile.copyWith(
         name: resolvedName,
         avatar: avatar,
@@ -549,6 +579,8 @@ class MultiProfileService {
   /// Initialize service and migrate existing single profile if needed
   Future<void> initializeAndMigrate(PlayerProfileService legacyService) async {
     try {
+      await retryQueuedProfileSyncUpdates();
+
       final profiles = await getAllProfiles();
 
       // If no profiles exist, migrate from legacy service
@@ -568,6 +600,17 @@ class MultiProfileService {
       }
     } catch (e) {
       LogManager.debug('[MultiProfile] Error during initialization/migration: $e');
+    }
+  }
+
+  /// Retries pending backend profile sync updates, if sync service is enabled.
+  Future<void> retryQueuedProfileSyncUpdates() async {
+    if (_profileSyncService == null) return;
+
+    try {
+      await _profileSyncService!.retryQueuedUpdates();
+    } catch (e) {
+      debugPrint('[MultiProfile] Failed to retry queued profile sync updates: $e');
     }
   }
 

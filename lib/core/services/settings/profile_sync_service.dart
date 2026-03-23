@@ -146,7 +146,7 @@ class ProfileSyncService {
 
     for (final endpoint in endpoints) {
       try {
-        final response = await _apiService.patch(endpoint, body: payload);
+        final response = await _apiService.patch(endpoint, body: payload, headers: _authHeaders());
         return response;
       } catch (e) {
         LogManager.debug('[ProfileSync] endpoint failed ($endpoint): $e');
@@ -154,6 +154,15 @@ class ProfileSyncService {
     }
 
     return null;
+  }
+
+  Map<String, String>? _authHeaders() {
+    if (!Hive.isBoxOpen('auth_tokens')) return null;
+    final box = Hive.box('auth_tokens');
+    final token = box.get('auth_access_token')?.toString().trim();
+    if (token == null || token.isEmpty) return null;
+
+    return {'Authorization': 'Bearer $token'};
   }
 
   Future<void> _enqueueRetry(Map<String, dynamic> payload) async {

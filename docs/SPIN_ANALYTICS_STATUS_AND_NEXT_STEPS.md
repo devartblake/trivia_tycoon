@@ -81,17 +81,18 @@ This document tracks progress on live Spin & Earn analytics, identity reliabilit
 - ✅ Ensure edit flow-generated usernames propagate into global identity consumers (done).
 
 ### Phase 2 (next)
-- Add backend profile sync hook for display name/username updates (if endpoint exists):
-  - update backend profile,
-  - on success, persist backend-confirmed values locally,
-  - on failure, keep local optimistic value and enqueue retry.
+- ✅ Added backend profile sync hook for display name/username updates:
+  - attempts backend profile update against supported endpoint variants,
+  - persists backend-confirmed values locally when response includes them,
+  - keeps local optimistic values and enqueues retry on sync failure,
+  - retries queued profile sync updates during multi-profile initialization.
 - Validate promotion telemetry in staging dashboards and define alert thresholds.
 
 ### Phase 3
-- Add tests:
-  - resolver source priority and backfill,
-  - fallback ID generation and persistence,
-  - transition from local fallback ID to backend user ID.
+- ✅ Added resolver tests for source priority/backfill, fallback generation/persistence,
+  fallback-to-canonical promotion, and source callback coverage.
+- ✅ Added profile sync tests for auth header usage, queue-on-failure, and
+  queued retry success path.
 
 ### Phase 4
 - Add observability counters/events:
