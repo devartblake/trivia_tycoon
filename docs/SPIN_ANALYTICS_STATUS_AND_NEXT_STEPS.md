@@ -95,10 +95,18 @@ This document tracks progress on live Spin & Earn analytics, identity reliabilit
   queued retry success path.
 
 ### Phase 4
+<<<<<<< codex/find-spin-analytics-implementation-0sbply
+- ✅ Added identity source/fallback/promotion observability events:
+  - `identity_user_id_resolved` with normalized `identity_source`
+    (`profile|secure|token_store|generated_local`),
+  - `identity_user_id_generated_local` to count fallback generations,
+  - `identity_user_id_promoted` to count fallback-to-backend promotions.
+=======
 - Add observability counters/events:
   - `identity_source: profile|secure|token_store|generated_local`,
   - count unknown/fallback generations,
   - count fallback-to-backend promotions.
+>>>>>>> main
 
 ---
 

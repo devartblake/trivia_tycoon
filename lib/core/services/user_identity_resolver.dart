@@ -48,6 +48,7 @@ class UserIdentityResolver {
           await serviceManager.analyticsService.trackEvent(
             'identity_user_id_resolved',
             {
+              'identity_source': source,
               'user_id_source': source,
               'user_id': userId,
               'timestamp': DateTime.now().toIso8601String(),
@@ -134,7 +135,7 @@ class UserIdentityResolver {
     final existingGenerated = await getSecureSecret(_generatedLocalUserIdKey);
     if (existingGenerated != null && existingGenerated.isNotEmpty) {
       await saveProfileUserId(existingGenerated);
-      await onResolutionSource?.call('generated_local_existing', existingGenerated);
+      await onResolutionSource?.call('generated_local', existingGenerated);
       return existingGenerated;
     }
 
@@ -147,7 +148,7 @@ class UserIdentityResolver {
     await setSecureSecret(_generatedLocalUserIdKey, generatedLocalUserId);
     await saveProfileUserId(generatedLocalUserId);
     await onGeneratedFallback?.call(generatedLocalUserId);
-    await onResolutionSource?.call('generated_local_new', generatedLocalUserId);
+    await onResolutionSource?.call('generated_local', generatedLocalUserId);
 
     if (!_hasLoggedUnknownUserWarning) {
       _hasLoggedUnknownUserWarning = true;
@@ -193,17 +194,17 @@ class UserIdentityResolver {
     if (tokenStoreUserId == canonical && !_isGeneratedLocalId(tokenStoreUserId)) {
       return 'token_store';
     }
-    return 'canonical_unknown';
+    return 'token_store';
   }
 
   static String _existingLocalSource(String? profileUserId, String? secureUserId) {
     if (profileUserId != null && profileUserId.isNotEmpty) {
-      return 'profile_existing';
+      return 'profile';
     }
     if (secureUserId != null && secureUserId.isNotEmpty) {
-      return 'secure_existing';
+      return 'secure';
     }
-    return 'existing_unknown';
+    return 'generated_local';
   }
 
   static Future<String> resolveUserName(ServiceManager serviceManager) async {

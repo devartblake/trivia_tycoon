@@ -2,18 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
 import 'package:trivia_tycoon/core/services/api_service.dart';
-import 'package:trivia_tycoon/game/analytics/services/analytics_service.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class ProfileSyncResult {
-  final bool success;
   final bool synced;
   final bool queuedForRetry;
   final String? confirmedDisplayName;
   final String? confirmedUsername;
 
   const ProfileSyncResult({
-    required this.success,
     required this.synced,
     required this.queuedForRetry,
     this.confirmedDisplayName,
@@ -25,39 +21,14 @@ class ProfileSyncService {
   static const String _queueBoxName = 'profile_sync_queue';
 
   final ApiService _apiService;
-  final AnalyticsService _analyticsService;
+  final Future<void> Function(String event, Map<String, dynamic> data) _trackEvent;
 
   ProfileSyncService({
     required ApiService apiService,
-    required AnalyticsService analyticsService,
+    required Future<void> Function(String event, Map<String, dynamic> data)
+        trackEvent,
   })  : _apiService = apiService,
-        _analyticsService = analyticsService;
-
-  /// Sync profile data with optional username generation
-  Future<ProfileSyncResult> syncProfileData({
-    required String displayName,
-    String? existingUsername,
-  }) async {
-    // Generate username from display name if none exists
-    final username = existingUsername != null && existingUsername.trim().isNotEmpty
-        ? existingUsername.trim().toLowerCase()
-        : _generateUsernameFromDisplayName(displayName);
-
-    // Call the existing sync method
-    final result = await syncProfileUpdate(
-      displayName: displayName,
-      username: username,
-    );
-
-    // Return result with success field
-    return ProfileSyncResult(
-      success: result.synced,
-      synced: result.synced,
-      queuedForRetry: result.queuedForRetry,
-      confirmedDisplayName: result.confirmedDisplayName,
-      confirmedUsername: result.confirmedUsername,
-    );
-  }
+        _trackEvent = trackEvent;
 
   Future<ProfileSyncResult> syncProfileUpdate({
     required String displayName,
@@ -82,14 +53,13 @@ class ProfileSyncService {
         'handle',
       ]);
 
-      await _analyticsService.trackEvent('profile_sync_success', {
+      await _trackEvent('profile_sync_success', {
         'has_confirmed_display_name': confirmedDisplayName != null,
         'has_confirmed_username': confirmedUsername != null,
         'timestamp': DateTime.now().toIso8601String(),
       });
 
       return ProfileSyncResult(
-        success: true,
         synced: true,
         queuedForRetry: false,
         confirmedDisplayName: confirmedDisplayName,
@@ -98,15 +68,11 @@ class ProfileSyncService {
     }
 
     await _enqueueRetry(payload);
-    await _analyticsService.trackEvent('profile_sync_queued_for_retry', {
+    await _trackEvent('profile_sync_queued_for_retry', {
       'timestamp': DateTime.now().toIso8601String(),
     });
 
-    return const ProfileSyncResult(
-      success: false,
-      synced: false,
-      queuedForRetry: true,
-    );
+    return const ProfileSyncResult(synced: false, queuedForRetry: true);
   }
 
   Future<void> retryQueuedUpdates() async {

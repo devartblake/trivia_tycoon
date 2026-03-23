@@ -6,6 +6,7 @@ import 'package:trivia_tycoon/core/services/theme/theme_notifier.dart';
 import 'package:trivia_tycoon/core/services/user_identity_resolver.dart';
 import 'package:trivia_tycoon/game/analytics/models/spin_live_summary.dart';
 import 'package:trivia_tycoon/game/analytics/providers/analytics_providers.dart';
+import 'package:trivia_tycoon/game/providers/multi_profile_providers.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart' as providers;
 import 'package:go_router/go_router.dart';
 import '../../game/providers/auth_providers.dart';
@@ -43,6 +44,7 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
     _initRouter();
     _trackAppLaunch();
     _listenToLiveSpinSummary();
+    _retryQueuedProfileSyncUpdates();
   }
 
   @override
@@ -115,6 +117,15 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
 
   // ============ LIFECYCLE TRACKING ============
 
+  Future<void> _retryQueuedProfileSyncUpdates() async {
+    try {
+      final multiProfileService = ref.read(multiProfileServiceProvider);
+      await multiProfileService.retryQueuedProfileSyncUpdates();
+    } catch (e) {
+      debugPrint('[AppLauncher] Failed retrying queued profile sync updates: $e');
+    }
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // Use the existing initialData pattern to avoid breaking changes
@@ -125,6 +136,7 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
       // This is now safe because we made trackAppLifecycle robust in app_init.dart
         AppInit.trackAppLifecycle(serviceManager, 'app_resumed');
         _checkSpinStatusOnResume();
+        _retryQueuedProfileSyncUpdates();
 
         // Reconnect WebSocket
         AppInit.reconnectWebSocket();
@@ -173,8 +185,23 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
       // 1. Track the launch (This is safe/silent if analytics aren't ready)
       await AppInit.trackAppLifecycle(serviceManager, 'app_launched');
 
-      // Spin analytics summary is logged by _listenToLiveSpinSummary on first
-      // local_cache emission — no duplicate call needed here.
+      // 2. Show debug info
+      if (!const bool.fromEnvironment('dart.vm.product')) {
+        // Small delay to ensure Hive boxes are opened by the background loader
+        await Future.delayed(const Duration(milliseconds: 500));
+
+        final summary = await AppInit.getSpinAnalyticsSummary();
+
+        final enrichedSummary = {
+          ...summary,
+          'user_name': await UserIdentityResolver.resolveUserName(serviceManager),
+          'user_id': await _resolveUserId(),
+          'snapshot_at': DateTime.now().toIso8601String(),
+          'source': 'app_launch',
+        };
+
+        _printSpinAnalyticsSummary(enrichedSummary);
+      }
     } catch (e) {
       LogManager.debug('[AppLauncher] Failed to track app launch: $e');
     }
