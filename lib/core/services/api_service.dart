@@ -147,10 +147,13 @@ class ApiService {
     });
   }
 
-  Future<List<Map<String, dynamic>>> fetchLeaderboard() async {
+  Future<List<Map<String, dynamic>>> fetchLeaderboard({int limit = 100}) async {
     return _handleRequest(() async {
       final response = await _dio.get(
         '/leaderboard',
+        queryParameters: {
+          'limit': limit,
+        },
         options: _cacheOptions.toOptions(),
       );
       return List<Map<String, dynamic>>.from(response.data);
