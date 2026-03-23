@@ -12,6 +12,7 @@ import 'steps/country_step.dart';
 import 'steps/categories_step.dart';
 import 'steps/avatar_step.dart';
 import 'steps/completion_step.dart';
+import '../../game/providers/onboarding_providers.dart';
 import '../../game/providers/riverpod_providers.dart';
 
 // Confetti particle class
@@ -94,7 +95,7 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 }
 
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late final ModernOnboardingController _controller;
   late final PageController _pageController;
   late final AnimationController _progressAnimationController;
@@ -237,35 +238,47 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     }
 
     // Save all user data
-    await onboardingService.setOnboardingCompleted(true);
-    await _persistProgressSnapshot(completed: true, hasCompletedProfile: true);
-
     if (username.isNotEmpty) {
       await profileService.savePlayerName(username);
     }
-    if (ageGroup != null) {
-      await profileService.saveAgeGroup(ageGroup);
-    }
+    await profileService.saveAgeGroup(ageGroup);
     if (country != null) {
       await profileService.saveCountry(country);
     }
-    if (categories != null) {
-      await profileService.savePreferredCategories(categories);
-    }
+    await profileService.savePreferredCategories(categories);
     if (avatar != null) {
       await profileService.saveAvatar(avatar);
     }
 
+    // Mark onboarding complete in persistence + provider before navigating
+    // so the router's redirect sees the new state immediately.
+    await onboardingService.setOnboardingCompleted(true);
+    await _persistProgressSnapshot(completed: true, hasCompletedProfile: true);
+    await ref
+        .read(onboardingProgressProvider.notifier)
+        .markOnboardingCompleted(true);
+
+    // Apply the selected age group theme for this session
+    ref.read(userAgeGroupProvider.notifier).state = ageGroup;
+
     if (mounted) {
-      context.go('/');
+      context.go('/home');
     }
   }
 
   Future<void> _handleSkip() async {
-    await _persistProgressSnapshot(completed: false, hasCompletedProfile: false);
+    final serviceManager = ref.read(serviceManagerProvider);
+    final onboardingService = serviceManager.onboardingSettingsService;
+
+    // Mark complete so the gate doesn't redirect back on next launch.
+    await onboardingService.setOnboardingCompleted(true);
+    await _persistProgressSnapshot(completed: true, hasCompletedProfile: true);
+    await ref
+        .read(onboardingProgressProvider.notifier)
+        .markOnboardingCompleted(true);
 
     if (mounted) {
-      context.go('/');
+      context.go('/home');
     }
   }
 

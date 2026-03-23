@@ -399,7 +399,7 @@ class EventQueueService {
         });
       } catch (e) {
         // Don't let analytics failure affect queue operations
-        debugPrint('[EventQueueService] Analytics notification failed: $e');
+        LogManager.debug('[EventQueueService] Analytics notification failed: $e');
       }
     }
   }

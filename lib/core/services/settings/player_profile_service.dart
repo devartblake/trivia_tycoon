@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// PlayerProfileService handles saving and retrieving
 /// player-specific information like name and role.
@@ -203,9 +204,9 @@ class PlayerProfileService {
       await box.put(_sessionDataKey, sessionData);
       await box.put(_lastActiveKey, DateTime.now().toIso8601String());
 
-      debugPrint('[PlayerProfile] Current session saved');
+      LogManager.debug('[PlayerProfile] Current session saved');
     } catch (e) {
-      debugPrint('[PlayerProfile] Error saving current session: $e');
+      LogManager.debug('[PlayerProfile] Error saving current session: $e');
     }
   }
 
@@ -215,7 +216,7 @@ class PlayerProfileService {
       final box = await _getBox();
       await box.put(_lastActiveKey, DateTime.now().toIso8601String());
     } catch (e) {
-      debugPrint('[PlayerProfile] Error updating last active: $e');
+      LogManager.debug('[PlayerProfile] Error updating last active: $e');
     }
   }
 
@@ -229,7 +230,7 @@ class PlayerProfileService {
       }
       return null;
     } catch (e) {
-      debugPrint('[PlayerProfile] Error getting last active time: $e');
+      LogManager.debug('[PlayerProfile] Error getting last active time: $e');
       return null;
     }
   }
@@ -251,7 +252,7 @@ class PlayerProfileService {
         'last_active': await getLastActiveTime(),
       };
     } catch (e) {
-      debugPrint('[PlayerProfile] Error loading complete profile: $e');
+      LogManager.debug('[PlayerProfile] Error loading complete profile: $e');
       return {};
     }
   }
@@ -290,9 +291,9 @@ class PlayerProfileService {
       }
 
       await updateLastActive();
-      debugPrint('[PlayerProfile] Profile batch update completed');
+      LogManager.debug('[PlayerProfile] Profile batch update completed');
     } catch (e) {
-      debugPrint('[PlayerProfile] Error in profile batch update: $e');
+      LogManager.debug('[PlayerProfile] Error in profile batch update: $e');
     }
   }
 
@@ -330,7 +331,7 @@ class PlayerProfileService {
         'has_age_group': (await getAgeGroup()) != null,
       };
     } catch (e) {
-      debugPrint('[PlayerProfile] Error validating profile: $e');
+      LogManager.debug('[PlayerProfile] Error validating profile: $e');
       return {};
     }
   }
@@ -371,7 +372,7 @@ class PlayerProfileService {
         'userId': box.get(_userIdKey), // ← UPDATED: Include in profile
       };
     } catch (e) {
-      debugPrint('[PlayerProfile] Error getting profile: $e');
+      LogManager.debug('[PlayerProfile] Error getting profile: $e');
       return {
         'name': 'Player',
         'username': null,
@@ -439,7 +440,7 @@ class PlayerProfileService {
         'xpGained': xpToAdd,
       };
     } catch (e) {
-      debugPrint('[PlayerProfile] Error adding XP: $e');
+      LogManager.debug('[PlayerProfile] Error adding XP: $e');
       return {'leveledUp': false, 'error': e.toString()};
     }
   }

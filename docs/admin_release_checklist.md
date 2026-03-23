@@ -31,6 +31,21 @@ Tooling required in the runner:
 
 ---
 
+<<<<<<< codex/analyze-admin-directory-for-backend-integration
+
+## 0) CI automation
+
+A GitHub Actions workflow is available at:
+
+- `.github/workflows/admin-release-checks.yml`
+
+It runs the quality gates (format/analyze/tests) plus smoke-script dry-run on admin-relevant PRs.
+A manual `workflow_dispatch` can also run live smoke checks when secrets are configured.
+
+---
+
+=======
+>>>>>>> main
 ## 1) Preflight checks
 
 Run from repo root:

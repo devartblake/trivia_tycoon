@@ -6,6 +6,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import '../../game/models/referral_models.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class InviteScreen extends ConsumerStatefulWidget {
   const InviteScreen({super.key});
@@ -30,7 +31,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
         'screen_class': 'InviteScreen',
       });
     } catch (e) {
-      debugPrint('Analytics error: $e');
+      LogManager.debug('Analytics error: $e');
     }
   }
 

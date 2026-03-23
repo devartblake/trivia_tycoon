@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import '../../../../core/services/settings/app_settings.dart';
 import '../../models/spin_system_models.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Enhanced reward probability engine with advanced algorithms
 class EnhancedRewardProbability {
@@ -446,7 +447,7 @@ class EnhancedRewardService {
         analysis: probabilityEngine.analyzeSpinProbabilities(),
       );
     } catch (e) {
-      debugPrint('Failed to generate reward: $e');
+      LogManager.debug('Failed to generate reward: $e');
       // Fallback to common reward
       return RewardResult(
         segment: _selectRewardFromPool(RewardType.common),

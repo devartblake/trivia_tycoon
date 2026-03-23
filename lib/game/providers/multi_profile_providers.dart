@@ -12,7 +12,7 @@ final multiProfileServiceProvider = Provider<MultiProfileService>((ref) {
     return MultiProfileService(
       profileSyncService: ProfileSyncService(
         apiService: ServiceManager.instance.apiService,
-        trackEvent: ServiceManager.instance.analyticsService.trackEvent,
+        analyticsService: ServiceManager.instance.analyticsService,
       ),
     );
   } catch (_) {

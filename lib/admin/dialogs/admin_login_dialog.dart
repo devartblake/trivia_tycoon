@@ -139,7 +139,7 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
         resolvedRoles = rolesRaw.map((r) => r.toString()).toList();
       } else if (admin['role'] is String) {
         primaryRole = admin['role'] as String;
-        resolvedRoles = [primaryRole!];
+        resolvedRoles = [primaryRole];
       }
 
       final perms = admin['permissions'];
