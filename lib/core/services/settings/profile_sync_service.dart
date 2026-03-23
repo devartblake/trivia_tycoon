@@ -18,6 +18,18 @@ class ProfileSyncResult {
   });
 }
 
+class ProfileSyncDataResult {
+  final bool success;
+  final String? confirmedDisplayName;
+  final String? confirmedUsername;
+
+  const ProfileSyncDataResult({
+    required this.success,
+    this.confirmedDisplayName,
+    this.confirmedUsername,
+  });
+}
+
 class ProfileSyncService {
   static const String _queueBoxName = 'profile_sync_queue';
   static const int _maxQueueSize = 100;
@@ -76,6 +88,26 @@ class ProfileSyncService {
     });
 
     return const ProfileSyncResult(synced: false, queuedForRetry: true);
+  }
+
+  Future<ProfileSyncDataResult> syncProfileData({
+    required String displayName,
+    String? existingUsername,
+  }) async {
+    final normalizedDisplayName = displayName.trim();
+    final normalizedUsername =
+        _normalizeUsername(existingUsername) ?? _usernameFromDisplayName(normalizedDisplayName);
+
+    final result = await syncProfileUpdate(
+      displayName: normalizedDisplayName,
+      username: normalizedUsername,
+    );
+
+    return ProfileSyncDataResult(
+      success: result.synced,
+      confirmedDisplayName: result.confirmedDisplayName,
+      confirmedUsername: result.confirmedUsername,
+    );
   }
 
   Future<void> retryQueuedUpdates() async {
@@ -276,6 +308,22 @@ class ProfileSyncService {
       return DateTime.tryParse(raw) ?? DateTime.fromMillisecondsSinceEpoch(0);
     }
     return DateTime.fromMillisecondsSinceEpoch(0);
+  }
+
+  String? _normalizeUsername(String? raw) {
+    if (raw == null) return null;
+    final normalized = raw
+        .toLowerCase()
+        .trim()
+        .replaceAll(RegExp(r'\s+'), '_')
+        .replaceAll(RegExp(r'[^a-z0-9_]'), '');
+    if (normalized.isEmpty) return null;
+    return normalized;
+  }
+
+  String _usernameFromDisplayName(String displayName) {
+    final generated = _normalizeUsername(displayName);
+    return generated ?? 'player';
   }
 
   String? _readFirstString(Map<String, dynamic> response, List<String> keys) {

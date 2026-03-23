@@ -316,4 +316,47 @@ void main() {
     expect(diagnostics['oldest_created_at'], isNotNull);
     expect(diagnostics['newest_created_at'], isNotNull);
   });
+
+  test('syncProfileData generates username when existingUsername is missing',
+      () async {
+    final dio = Dio(BaseOptions(baseUrl: 'https://example.test'));
+
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          final body = options.data as Map<String, dynamic>;
+          expect(body['username'], 'display_name');
+          handler.resolve(
+            Response(
+              requestOptions: options,
+              statusCode: 200,
+              data: {
+                'display_name': 'Display Name',
+                'username': 'display_name',
+              },
+            ),
+          );
+        },
+      ),
+    );
+
+    final apiService = ApiService(
+      baseUrl: 'https://example.test',
+      dio: dio,
+      initializeCache: false,
+    );
+
+    final service = ProfileSyncService(
+      apiService: apiService,
+      trackEvent: (_, __) async {},
+    );
+
+    final result = await service.syncProfileData(
+      displayName: 'Display Name',
+      existingUsername: null,
+    );
+
+    expect(result.success, isTrue);
+    expect(result.confirmedUsername, 'display_name');
+  });
 }

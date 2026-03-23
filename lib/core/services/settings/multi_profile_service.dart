@@ -363,32 +363,36 @@ class MultiProfileService {
         }
       }
 
-      var mergedPreferences = preferences;
-      var resolvedName = name;
+      String resolvedName = name ?? currentProfile.name;
+      Map<String, dynamic> mergedPreferences =
+          Map<String, dynamic>.from(preferences ?? currentProfile.preferences);
 
       if (_profileSyncService != null && activeProfileId == profileId) {
         await _profileSyncService!.retryQueuedUpdates();
 
-        final requestedUsername = (preferences?['username'] as String?)?.trim();
-        final candidateDisplayName = (name ?? currentProfile.name).trim();
+        final hasNameChange = name != null && name != currentProfile.name;
+        final requestedUsername = (mergedPreferences['username'] as String?)?.trim();
+        final hasUsername = requestedUsername != null && requestedUsername.isNotEmpty;
 
-        if (requestedUsername != null && requestedUsername.isNotEmpty) {
-          final syncResult = await _profileSyncService!.syncProfileUpdate(
-            displayName: candidateDisplayName,
-            username: requestedUsername,
+        if (hasNameChange || hasUsername) {
+          final syncResult = await _profileSyncService!.syncProfileData(
+            displayName: resolvedName,
+            existingUsername: requestedUsername,
           );
 
-          if (syncResult.confirmedDisplayName != null &&
-              syncResult.confirmedDisplayName!.isNotEmpty) {
-            resolvedName = syncResult.confirmedDisplayName;
-          }
+          if (syncResult.success) {
+            if (syncResult.confirmedDisplayName != null &&
+                syncResult.confirmedDisplayName!.isNotEmpty) {
+              resolvedName = syncResult.confirmedDisplayName!;
+            }
 
-          if (syncResult.confirmedUsername != null &&
-              syncResult.confirmedUsername!.isNotEmpty) {
-            mergedPreferences = {
-              ...(preferences ?? currentProfile.preferences),
-              'username': syncResult.confirmedUsername,
-            };
+            if (syncResult.confirmedUsername != null &&
+                syncResult.confirmedUsername!.isNotEmpty) {
+              mergedPreferences = {
+                ...mergedPreferences,
+                'username': syncResult.confirmedUsername,
+              };
+            }
           }
         }
       }
