@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:trivia_tycoon/core/services/settings/player_profile_service.dart';
+import 'package:trivia_tycoon/core/services/settings/profile_sync_service.dart';
 import 'package:uuid/uuid.dart';
 
 /// ProfileData model for individual profiles
@@ -133,6 +134,51 @@ class MultiProfileService {
   static const _maxProfiles = 5; // Netflix-style limit
 
   final Uuid _uuid = const Uuid();
+  final ProfileSyncService? _profileSyncService;
+
+  MultiProfileService({ProfileSyncService? profileSyncService})
+      : _profileSyncService = profileSyncService;
+
+  String _generateUsernameFromDisplayName(String displayName) {
+    final normalized = displayName
+        .toLowerCase()
+        .trim()
+        .replaceAll(RegExp(r'\s+'), '_')
+        .replaceAll(RegExp(r'[^a-z0-9_]'), '');
+
+    if (normalized.isEmpty) return 'player';
+    return normalized;
+  }
+
+  Future<void> _syncActiveProfileToLegacySettings(ProfileData profile) async {
+    try {
+      final legacyService = PlayerProfileService();
+      final existingUsername = (profile.preferences['username'] as String?)?.trim();
+      final generatedUsername = _generateUsernameFromDisplayName(profile.name);
+
+      await legacyService.savePlayerName(profile.name);
+      await legacyService.saveUsername(
+        (existingUsername != null && existingUsername.isNotEmpty)
+            ? existingUsername.toLowerCase()
+            : generatedUsername,
+      );
+
+      await legacyService.saveProfileBatch({
+        'player_name': profile.name,
+        'username': (existingUsername != null && existingUsername.isNotEmpty)
+            ? existingUsername.toLowerCase()
+            : generatedUsername,
+        'country': profile.country,
+        'age_group': profile.ageGroup,
+        'user_role': profile.userRole,
+        'user_roles': profile.userRoles,
+        'is_premium': profile.isPremium,
+        'avatar': profile.avatar,
+      });
+    } catch (e) {
+      debugPrint('[MultiProfile] Failed syncing active profile to legacy settings: $e');
+    }
+  }
 
   /// Gets the profiles box, opening it if necessary
   Future<Box> _getBox() async {
@@ -199,6 +245,8 @@ class MultiProfileService {
       final updatedProfile = profileData.copyWith(lastActive: DateTime.now());
       profilesMap[profileId] = updatedProfile.toJson();
       await box.put(_profilesKey, profilesMap);
+
+      await _syncActiveProfileToLegacySettings(updatedProfile);
 
       debugPrint('[MultiProfile] Active profile set to: ${updatedProfile.name}');
       return true;
@@ -294,6 +342,7 @@ class MultiProfileService {
       }
 
       final currentProfile = ProfileData.fromJson(Map<String, dynamic>.from(profilesMap[profileId]));
+      final activeProfileId = box.get(_activeProfileKey);
 
       // Check for duplicate names if name is being changed
       if (name != null && name != currentProfile.name) {
@@ -304,8 +353,38 @@ class MultiProfileService {
         }
       }
 
+      var mergedPreferences = preferences;
+      var resolvedName = name;
+
+      if (_profileSyncService != null && activeProfileId == profileId) {
+        await _profileSyncService!.retryQueuedUpdates();
+
+        final requestedUsername = (preferences?['username'] as String?)?.trim();
+        final candidateDisplayName = (name ?? currentProfile.name).trim();
+
+        if (requestedUsername != null && requestedUsername.isNotEmpty) {
+          final syncResult = await _profileSyncService!.syncProfileUpdate(
+            displayName: candidateDisplayName,
+            username: requestedUsername,
+          );
+
+          if (syncResult.confirmedDisplayName != null &&
+              syncResult.confirmedDisplayName!.isNotEmpty) {
+            resolvedName = syncResult.confirmedDisplayName;
+          }
+
+          if (syncResult.confirmedUsername != null &&
+              syncResult.confirmedUsername!.isNotEmpty) {
+            mergedPreferences = {
+              ...(preferences ?? currentProfile.preferences),
+              'username': syncResult.confirmedUsername,
+            };
+          }
+        }
+      }
+
       final updatedProfile = currentProfile.copyWith(
-        name: name,
+        name: resolvedName,
         avatar: avatar,
         country: country,
         ageGroup: ageGroup,
@@ -317,11 +396,15 @@ class MultiProfileService {
         maxXP: maxXP,
         lastActive: DateTime.now(),
         gameStats: gameStats,
-        preferences: preferences,
+        preferences: mergedPreferences,
       );
 
       profilesMap[profileId] = updatedProfile.toJson();
       await box.put(_profilesKey, profilesMap);
+
+      if (activeProfileId == profileId) {
+        await _syncActiveProfileToLegacySettings(updatedProfile);
+      }
 
       debugPrint('[MultiProfile] Updated profile: ${updatedProfile.name}');
       return true;
@@ -474,6 +557,8 @@ class MultiProfileService {
   /// Initialize service and migrate existing single profile if needed
   Future<void> initializeAndMigrate(PlayerProfileService legacyService) async {
     try {
+      await retryQueuedProfileSyncUpdates();
+
       final profiles = await getAllProfiles();
 
       // If no profiles exist, migrate from legacy service
@@ -493,6 +578,17 @@ class MultiProfileService {
       }
     } catch (e) {
       debugPrint('[MultiProfile] Error during initialization/migration: $e');
+    }
+  }
+
+  /// Retries pending backend profile sync updates, if sync service is enabled.
+  Future<void> retryQueuedProfileSyncUpdates() async {
+    if (_profileSyncService == null) return;
+
+    try {
+      await _profileSyncService!.retryQueuedUpdates();
+    } catch (e) {
+      debugPrint('[MultiProfile] Failed to retry queued profile sync updates: $e');
     }
   }
 

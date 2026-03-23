@@ -443,6 +443,23 @@ class AppInit {
       final profile = rawProfile != null ? Map<String, dynamic>.from(rawProfile as Map) : {};
 
       if (profile.isNotEmpty) {
+        final rawUserId = profile['id'] ?? profile['user_id'];
+        final parsedUserId = rawUserId?.toString();
+        if (parsedUserId != null && parsedUserId.isNotEmpty) {
+          await serviceManager.playerProfileService.saveUserId(parsedUserId);
+        }
+
+        final rawDisplayName = profile['name'] ?? profile['display_name'];
+        final parsedDisplayName = rawDisplayName?.toString();
+        if (parsedDisplayName != null && parsedDisplayName.isNotEmpty) {
+          await serviceManager.playerProfileService.savePlayerName(parsedDisplayName);
+        }
+
+        final rawUsername = profile['username'] ?? profile['handle'];
+        final parsedUsername = rawUsername?.toString().toLowerCase();
+        if (parsedUsername != null && parsedUsername.isNotEmpty) {
+          await serviceManager.playerProfileService.saveUsername(parsedUsername);
+        }
         debugPrint('[AppInit] Profile loaded for: ${profile['name']}');
       }
     } catch (e) {

@@ -1,0 +1,171 @@
+import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
+
+import 'package:trivia_tycoon/core/services/api_service.dart';
+
+class ProfileSyncResult {
+  final bool synced;
+  final bool queuedForRetry;
+  final String? confirmedDisplayName;
+  final String? confirmedUsername;
+
+  const ProfileSyncResult({
+    required this.synced,
+    required this.queuedForRetry,
+    this.confirmedDisplayName,
+    this.confirmedUsername,
+  });
+}
+
+class ProfileSyncService {
+  static const String _queueBoxName = 'profile_sync_queue';
+
+  final ApiService _apiService;
+  final Future<void> Function(String event, Map<String, dynamic> data) _trackEvent;
+
+  ProfileSyncService({
+    required ApiService apiService,
+    required Future<void> Function(String event, Map<String, dynamic> data)
+        trackEvent,
+  })  : _apiService = apiService,
+        _trackEvent = trackEvent;
+
+  Future<ProfileSyncResult> syncProfileUpdate({
+    required String displayName,
+    required String username,
+  }) async {
+    final payload = <String, dynamic>{
+      'display_name': displayName,
+      'displayName': displayName,
+      'username': username,
+      'handle': username,
+    };
+
+    final response = await _trySync(payload);
+    if (response != null) {
+      final confirmedDisplayName = _readFirstString(response, const [
+        'display_name',
+        'displayName',
+        'name',
+      ]);
+      final confirmedUsername = _readFirstString(response, const [
+        'username',
+        'handle',
+      ]);
+
+      await _trackEvent('profile_sync_success', {
+        'has_confirmed_display_name': confirmedDisplayName != null,
+        'has_confirmed_username': confirmedUsername != null,
+        'timestamp': DateTime.now().toIso8601String(),
+      });
+
+      return ProfileSyncResult(
+        synced: true,
+        queuedForRetry: false,
+        confirmedDisplayName: confirmedDisplayName,
+        confirmedUsername: confirmedUsername,
+      );
+    }
+
+    await _enqueueRetry(payload);
+    await _trackEvent('profile_sync_queued_for_retry', {
+      'timestamp': DateTime.now().toIso8601String(),
+    });
+
+    return const ProfileSyncResult(synced: false, queuedForRetry: true);
+  }
+
+  Future<void> retryQueuedUpdates() async {
+    final box = await Hive.openBox(_queueBoxName);
+    final keys = box.keys.toList();
+
+    for (final key in keys) {
+      final data = box.get(key);
+      if (data is! Map) continue;
+
+      final payload = Map<String, dynamic>.from(data['payload'] as Map? ?? const {});
+      if (payload.isEmpty) {
+        await box.delete(key);
+        continue;
+      }
+
+      final synced = await _trySync(payload);
+      if (synced != null) {
+        await box.delete(key);
+      } else {
+        final retryCount = (data['retry_count'] as int? ?? 0) + 1;
+        await box.put(key, {
+          ...data,
+          'retry_count': retryCount,
+          'last_retry': DateTime.now().toIso8601String(),
+        });
+      }
+    }
+  }
+
+  Future<Map<String, dynamic>?> _trySync(Map<String, dynamic> payload) async {
+    const endpoints = <String>[
+      '/profile',
+      '/user/profile',
+      '/auth/profile',
+    ];
+
+    for (final endpoint in endpoints) {
+      try {
+        final response = await _apiService.patch(
+          endpoint,
+          body: payload,
+          headers: _authHeaders(),
+        );
+        return response;
+      } catch (e) {
+        debugPrint('[ProfileSync] endpoint failed ($endpoint): $e');
+      }
+    }
+
+    return null;
+  }
+
+  Map<String, String>? _authHeaders() {
+    if (!Hive.isBoxOpen('auth_tokens')) return null;
+    final box = Hive.box('auth_tokens');
+    final token = box.get('auth_access_token')?.toString().trim();
+    if (token == null || token.isEmpty) return null;
+
+    return {'Authorization': 'Bearer $token'};
+  }
+
+  Future<void> _enqueueRetry(Map<String, dynamic> payload) async {
+    final box = await Hive.openBox(_queueBoxName);
+    final id = DateTime.now().millisecondsSinceEpoch.toString();
+
+    await box.put(id, {
+      'payload': payload,
+      'retry_count': 0,
+      'created_at': DateTime.now().toIso8601String(),
+      'last_retry': null,
+    });
+  }
+
+  String? _readFirstString(Map<String, dynamic> response, List<String> keys) {
+    for (final key in keys) {
+      final value = response[key];
+      if (value is String && value.trim().isNotEmpty) {
+        return value.trim();
+      }
+    }
+
+    final user = response['user'];
+    if (user is Map) {
+      final nested = Map<String, dynamic>.from(user);
+      for (final key in keys) {
+        final value = nested[key];
+        if (value is String && value.trim().isNotEmpty) {
+          return value.trim();
+        }
+      }
+    }
+
+    return null;
+  }
+}
