@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../decoder/galois_field.dart';
 import '../decoder/gf_poly.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Reed-Solomon encoder for QR codes
 /// This REUSES your existing GaloisField and GFPoly classes!
@@ -17,9 +18,9 @@ class ReedSolomonEncoder {
   /// // Result: [196, 35, 39, 119, 235, 215, 231, 226, 93, 23]
   /// ```
   List<int> encode(List<int> dataCodewords, int numEcCodewords) {
-    debugPrint('🔵 ReedSolomonEncoder.encode()');
-    debugPrint('   Data codewords: ${dataCodewords.length}');
-    debugPrint('   EC codewords needed: $numEcCodewords');
+    LogManager.debug('🔵 ReedSolomonEncoder.encode()');
+    LogManager.debug('   Data codewords: ${dataCodewords.length}');
+    LogManager.debug('   EC codewords needed: $numEcCodewords');
 
     // Step 1: Create message polynomial
     // Pad with zeros for error correction codewords
@@ -28,18 +29,18 @@ class ReedSolomonEncoder {
       ...List.filled(numEcCodewords, 0),
     ];
 
-    debugPrint('   Message polynomial degree: ${messageCoeffs.length - 1}');
+    LogManager.debug('   Message polynomial degree: ${messageCoeffs.length - 1}');
 
     // Step 2: Build generator polynomial g(x)
     final generatorPoly = _buildGenerator(numEcCodewords);
-    debugPrint('   Generator polynomial degree: ${generatorPoly.degree}');
+    LogManager.debug('   Generator polynomial degree: ${generatorPoly.degree}');
 
     // Step 3: Create message polynomial m(x)
     final messagePoly = GFPoly(field, messageCoeffs);
 
     // Step 4: Divide m(x) by g(x) to get remainder (EC codewords)
     // This is polynomial long division
-    debugPrint('   Performing polynomial division...');
+    LogManager.debug('   Performing polynomial division...');
     final quotient = messagePoly.divide(generatorPoly);
 
     // Step 5: Get remainder by subtraction
@@ -47,7 +48,7 @@ class ReedSolomonEncoder {
     final product = quotient.multiply(generatorPoly);
     final remainder = messagePoly.addOrSubtract(product);
 
-    debugPrint('   Remainder polynomial degree: ${remainder.degree}');
+    LogManager.debug('   Remainder polynomial degree: ${remainder.degree}');
 
     // Step 6: Extract EC codewords from remainder coefficients
     final ecCodewords = <int>[];
@@ -55,8 +56,8 @@ class ReedSolomonEncoder {
       ecCodewords.add(remainder.getCoefficient(i));
     }
 
-    debugPrint('   EC codewords generated: $ecCodewords');
-    debugPrint('🔵 Encoding complete\n');
+    LogManager.debug('   EC codewords generated: $ecCodewords');
+    LogManager.debug('🔵 Encoding complete\n');
 
     return ecCodewords;
   }

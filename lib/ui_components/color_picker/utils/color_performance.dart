@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class ColorPerformance {
   static final ColorPerformance _instance = ColorPerformance._internal();
@@ -113,12 +114,12 @@ class ColorPerformance {
     final duration = DateTime.now().difference(_trackingStartTime!);
     final dropRate = _totalFrames > 0 ? (_droppedFrames / _totalFrames) * 100 : 0.0;
 
-    debugPrint('Color Picker Performance Summary:');
-    debugPrint('  Duration: ${duration.inSeconds}s');
-    debugPrint('  Total Frames: $_totalFrames');
-    debugPrint('  Dropped Frames: $_droppedFrames (${dropRate.toStringAsFixed(1)}%)');
-    debugPrint('  Average FPS: ${_averageFps.toStringAsFixed(1)}');
-    debugPrint('  Final FPS: ${_fps.toStringAsFixed(1)}');
+    LogManager.debug('Color Picker Performance Summary:');
+    LogManager.debug('  Duration: ${duration.inSeconds}s');
+    LogManager.debug('  Total Frames: $_totalFrames');
+    LogManager.debug('  Dropped Frames: $_droppedFrames (${dropRate.toStringAsFixed(1)}%)');
+    LogManager.debug('  Average FPS: ${_averageFps.toStringAsFixed(1)}');
+    LogManager.debug('  Final FPS: ${_fps.toStringAsFixed(1)}');
   }
 
   /// Get current FPS

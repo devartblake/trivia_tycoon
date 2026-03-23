@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Service to manage purchased items and inventory (e.g. store items, power-ups)
 class PurchaseSettingsService {
@@ -183,9 +184,9 @@ class PurchaseSettingsService {
       // Update last save timestamp
       await setLastSyncTime(DateTime.now());
 
-      debugPrint('✅ Purchase state saved successfully');
+      LogManager.debug('✅ Purchase state saved successfully');
     } catch (e) {
-      debugPrint('❌ Failed to save purchase state: $e');
+      LogManager.debug('❌ Failed to save purchase state: $e');
       rethrow;
     }
   }
@@ -206,12 +207,12 @@ class PurchaseSettingsService {
       if (validPurchases.length != purchasedItems.length ||
           validInventory.length != inventory.length) {
         await _saveCorrectedData(validPurchases, validInventory);
-        debugPrint('🔧 Purchase data integrity restored');
+        LogManager.debug('🔧 Purchase data integrity restored');
       }
 
-      debugPrint('✅ Purchase integrity validation completed');
+      LogManager.debug('✅ Purchase integrity validation completed');
     } catch (e) {
-      debugPrint('❌ Purchase integrity validation failed: $e');
+      LogManager.debug('❌ Purchase integrity validation failed: $e');
     }
   }
 
@@ -278,9 +279,9 @@ class PurchaseSettingsService {
         await Hive.box(_storeDataBox).close();
       }
       _invalidateCache();
-      debugPrint('✅ Purchase service disposed successfully');
+      LogManager.debug('✅ Purchase service disposed successfully');
     } catch (e) {
-      debugPrint('❌ Error disposing purchase service: $e');
+      LogManager.debug('❌ Error disposing purchase service: $e');
     }
   }
 }

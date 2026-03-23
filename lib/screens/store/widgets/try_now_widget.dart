@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../ui_components/depth_card_3d/depth_card.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class TryNowWidget extends StatefulWidget {
   final String modelPath;
@@ -58,8 +59,8 @@ class _TryNowWidgetState extends State<TryNowWidget>
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('Building TryNowWidget...');
-    debugPrint('Model path received: ${widget.modelPath}');
+    LogManager.debug('Building TryNowWidget...');
+    LogManager.debug('Model path received: ${widget.modelPath}');
 
     return FadeTransition(
       opacity: _fadeAnimation,
@@ -389,7 +390,7 @@ class _TryNowWidgetState extends State<TryNowWidget>
 
   void _handleInteraction() {
     HapticFeedback.lightImpact();
-    debugPrint("${widget.title} pressed");
+    LogManager.debug("${widget.title} pressed");
 
     // Show interaction feedback
     ScaffoldMessenger.of(context).showSnackBar(

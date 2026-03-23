@@ -5,6 +5,7 @@ import '../../../core/networking/ws_protocol.dart';
 import '../../../core/bootstrap/app_init.dart';
 import '../../../game/models/user_presence_models.dart';
 import 'rich_presence_service.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Adapts WebSocket messages to RichPresenceService
 class PresenceWebSocketAdapter {
@@ -20,14 +21,14 @@ class PresenceWebSocketAdapter {
   void initialize() {
     final wsClient = AppInit.wsClient;
     if (wsClient == null) {
-      debugPrint('[PresenceWS] WebSocket not available');
+      LogManager.debug('[PresenceWS] WebSocket not available');
       return;
     }
 
     // Listen to all WebSocket messages
     _messageSubscription = wsClient.messageStream.listen(_handleMessage);
 
-    debugPrint('[PresenceWS] Initialized');
+    LogManager.debug('[PresenceWS] Initialized');
   }
 
   /// Handle incoming WebSocket messages
@@ -50,7 +51,7 @@ class PresenceWebSocketAdapter {
 
   /// Handle server hello - subscribe to initial presence
   void _handleHello(Map<String, dynamic>? data) {
-    debugPrint('[PresenceWS] Server connected');
+    LogManager.debug('[PresenceWS] Server connected');
 
     // Send our current presence to server
     updateMyPresence(_presenceService.currentUserPresence);
@@ -98,9 +99,9 @@ class PresenceWebSocketAdapter {
       // Update presence service
       _presenceService.updateFriendPresence(userId, presence);
 
-      debugPrint('[PresenceWS] Updated: $userId → $status');
+      LogManager.debug('[PresenceWS] Updated: $userId → $status');
     } catch (e) {
-      debugPrint('[PresenceWS] Error parsing presence: $e');
+      LogManager.debug('[PresenceWS] Error parsing presence: $e');
     }
   }
 
@@ -115,9 +116,9 @@ class PresenceWebSocketAdapter {
         _handlePresenceUpdate(presenceData as Map<String, dynamic>);
       }
 
-      debugPrint('[PresenceWS] Loaded ${presences.length} presences');
+      LogManager.debug('[PresenceWS] Loaded ${presences.length} presences');
     } catch (e) {
-      debugPrint('[PresenceWS] Error parsing bulk presence: $e');
+      LogManager.debug('[PresenceWS] Error parsing bulk presence: $e');
     }
   }
 
@@ -127,7 +128,7 @@ class PresenceWebSocketAdapter {
 
     final wsClient = AppInit.wsClient;
     if (wsClient == null || !AppInit.isWebSocketConnected) {
-      debugPrint('[PresenceWS] Not connected, cannot subscribe');
+      LogManager.debug('[PresenceWS] Not connected, cannot subscribe');
       return;
     }
 
@@ -144,7 +145,7 @@ class PresenceWebSocketAdapter {
     ));
 
     _subscribedUserIds.addAll(newUserIds);
-    debugPrint('[PresenceWS] Subscribed to ${newUserIds.length} users');
+    LogManager.debug('[PresenceWS] Subscribed to ${newUserIds.length} users');
   }
 
   /// Unsubscribe from presence updates
@@ -163,7 +164,7 @@ class PresenceWebSocketAdapter {
     ));
 
     _subscribedUserIds.removeAll(userIds);
-    debugPrint('[PresenceWS] Unsubscribed from ${userIds.length} users');
+    LogManager.debug('[PresenceWS] Unsubscribed from ${userIds.length} users');
   }
 
   /// Update my own presence
@@ -205,7 +206,7 @@ class PresenceWebSocketAdapter {
       data: data,
     ));
 
-    debugPrint('[PresenceWS] Sent presence update: ${presence.status}');
+    LogManager.debug('[PresenceWS] Sent presence update: ${presence.status}');
   }
 
   /// Helper: Parse presence status from string
@@ -249,6 +250,6 @@ class PresenceWebSocketAdapter {
   void dispose() {
     _messageSubscription?.cancel();
     _subscribedUserIds.clear();
-    debugPrint('[PresenceWS] Disposed');
+    LogManager.debug('[PresenceWS] Disposed');
   }
 }

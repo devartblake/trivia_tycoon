@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_3d_controller/flutter_3d_controller.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Enhanced 3D controller with performance optimizations and proper resource management
 class DepthCardController extends ChangeNotifier {
@@ -51,7 +52,7 @@ class DepthCardController extends ChangeNotifier {
   /// Attach the 3D controller with error handling
   bool attach(Flutter3DController controller) {
     if (_isDisposed) {
-      debugPrint('DepthCardController: Cannot attach to disposed controller');
+      LogManager.debug('DepthCardController: Cannot attach to disposed controller');
       return false;
     }
 
@@ -61,10 +62,10 @@ class DepthCardController extends ChangeNotifier {
       _startPerformanceTracking();
       notifyListeners();
 
-      debugPrint('DepthCardController: Successfully attached to 3D controller');
+      LogManager.debug('DepthCardController: Successfully attached to 3D controller');
       return true;
     } catch (e) {
-      debugPrint('DepthCardController: Error attaching controller: $e');
+      LogManager.debug('DepthCardController: Error attaching controller: $e');
       _isAttached = false;
       return false;
     }
@@ -81,18 +82,18 @@ class DepthCardController extends ChangeNotifier {
     _currentModelPath = null;
 
     notifyListeners();
-    debugPrint('DepthCardController: Detached from 3D controller');
+    LogManager.debug('DepthCardController: Detached from 3D controller');
   }
 
   /// Load 3D model with comprehensive error handling and performance optimization
   Future<bool> loadModelFromAsset(String assetPath, {BuildContext? context}) async {
     if (!_isAttached || _isDisposed) {
-      debugPrint('DepthCardController: Cannot load model - controller not attached');
+      LogManager.debug('DepthCardController: Cannot load model - controller not attached');
       return false;
     }
 
     if (_currentModelPath == assetPath && _isModelLoaded) {
-      debugPrint('DepthCardController: Model already loaded: $assetPath');
+      LogManager.debug('DepthCardController: Model already loaded: $assetPath');
       return true;
     }
 
@@ -117,11 +118,11 @@ class DepthCardController extends ChangeNotifier {
 
       notifyListeners();
 
-      debugPrint('DepthCardController: Model loaded successfully: $assetPath (${loadTime}ms)');
+      LogManager.debug('DepthCardController: Model loaded successfully: $assetPath (${loadTime}ms)');
       return true;
 
     } catch (e) {
-      debugPrint('DepthCardController: Error loading model $assetPath: $e');
+      LogManager.debug('DepthCardController: Error loading model $assetPath: $e');
       _isModelLoaded = false;
       _currentModelPath = null;
       notifyListeners();
@@ -341,7 +342,7 @@ class DepthCardController extends ChangeNotifier {
   /// Refresh/reload the current model
   Future<bool> refreshModel() async {
     if (!_isModelLoaded || _currentModelPath == null) {
-      debugPrint('DepthCardController: No model to refresh');
+      LogManager.debug('DepthCardController: No model to refresh');
       return false;
     }
 

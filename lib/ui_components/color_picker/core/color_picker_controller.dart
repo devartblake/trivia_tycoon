@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../utils/color_storage.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class ColorPickerController extends ChangeNotifier {
   Color _selectedColor = Colors.blue;
@@ -43,7 +44,7 @@ class ColorPickerController extends ChangeNotifier {
         notifyListeners();
       }
     } catch (e) {
-      debugPrint('Error loading color picker settings: $e');
+      LogManager.debug('Error loading color picker settings: $e');
       // Use defaults if loading fails
       if (!_isDisposed) {
         notifyListeners();
@@ -71,7 +72,7 @@ class ColorPickerController extends ChangeNotifier {
       await ColorStorage.saveColor(color);
       _lastSavedColor = color;
     } catch (e) {
-      debugPrint('Error saving color: $e');
+      LogManager.debug('Error saving color: $e');
     }
   }
 
@@ -107,7 +108,7 @@ class ColorPickerController extends ChangeNotifier {
     try {
       await ColorStorage.saveCustomPalette(_customPalette);
     } catch (e) {
-      debugPrint('Error saving custom palette: $e');
+      LogManager.debug('Error saving custom palette: $e');
     }
   }
 
@@ -150,7 +151,7 @@ class ColorPickerController extends ChangeNotifier {
       await ColorStorage.saveColor(_selectedColor);
       await ColorStorage.saveCustomPalette([]);
     } catch (e) {
-      debugPrint('Error resetting color picker: $e');
+      LogManager.debug('Error resetting color picker: $e');
     }
   }
 }

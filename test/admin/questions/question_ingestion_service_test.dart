@@ -90,11 +90,11 @@ void main() {
     final api = _FakeApiService();
     final service = QuestionIngestionService(apiService: api);
 
-    await service.publishDataset('phase3_pack');
-    expect(api.lastPath, '/admin/questions/datasets/phase3_pack/publish');
+    await service.publishDataset('phase3 pack/v1');
+    expect(api.lastPath, '/admin/questions/datasets/phase3%20pack%2Fv1/publish');
 
-    await service.unpublishDataset('phase3_pack');
-    expect(api.lastPath, '/admin/questions/datasets/phase3_pack/unpublish');
+    await service.unpublishDataset('phase3 pack/v1');
+    expect(api.lastPath, '/admin/questions/datasets/phase3%20pack%2Fv1/unpublish');
   });
 
   test('getDatasetStatuses maps dataset list response', () async {

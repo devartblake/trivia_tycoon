@@ -216,6 +216,34 @@ Win32Window::MessageHandler(HWND hwnd,
     case WM_DWMCOLORIZATIONCOLORCHANGED:
       UpdateTheme(hwnd);
       return 0;
+
+    case WM_SETTINGCHANGE:
+      // Refresh the window theme when the user changes the system light/dark
+      // mode preference (the relevant setting name is "ImmersiveColorSet").
+      // When lparam is non-null, Windows guarantees it points to a valid
+      // null-terminated string for the lifetime of the message.
+      if (lparam != 0 &&
+          ::CompareStringOrdinal(
+              reinterpret_cast<LPCWCH>(lparam), -1,
+              L"ImmersiveColorSet", -1, TRUE) == CSTR_EQUAL) {
+        UpdateTheme(hwnd);
+      }
+      return 0;
+
+    case WM_KEYDOWN:
+      // F1: open the help overlay (posts a custom application message that
+      // the Flutter layer can listen for via a platform channel).
+      if (wparam == VK_F1) {
+        ::PostMessage(hwnd, WM_APP, 0, 0);
+        return 0;
+      }
+      break;
+
+    case WM_GETOBJECT:
+      // Basic accessibility: allow UI Automation / screen-readers to discover
+      // this window.  Returning 0 defers to the default implementation which
+      // provides the standard UIA root element.
+      break;
   }
 
   return DefWindowProc(window_handle_, message, wparam, lparam);

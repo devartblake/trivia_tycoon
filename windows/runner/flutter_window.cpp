@@ -4,6 +4,12 @@
 
 #include "flutter/generated_plugin_registrant.h"
 
+// Minimum and maximum window dimensions (in logical pixels).
+static constexpr int kMinWidth  = 800;
+static constexpr int kMinHeight = 600;
+static constexpr int kMaxWidth  = 3840;
+static constexpr int kMaxHeight = 2160;
+
 FlutterWindow::FlutterWindow(const flutter::DartProject& project)
     : project_(project) {}
 
@@ -65,6 +71,31 @@ FlutterWindow::MessageHandler(HWND hwnd, UINT const message,
     case WM_FONTCHANGE:
       flutter_controller_->engine()->ReloadSystemFonts();
       break;
+
+    case WM_GETMINMAXINFO: {
+      // Enforce minimum and maximum window dimensions.
+      UINT dpi = FlutterDesktopGetDpiForHWND(hwnd);
+      double scale = dpi / 96.0;
+      auto* info = reinterpret_cast<MINMAXINFO*>(lparam);
+      info->ptMinTrackSize.x = static_cast<LONG>(kMinWidth  * scale);
+      info->ptMinTrackSize.y = static_cast<LONG>(kMinHeight * scale);
+      info->ptMaxTrackSize.x = static_cast<LONG>(kMaxWidth  * scale);
+      info->ptMaxTrackSize.y = static_cast<LONG>(kMaxHeight * scale);
+      return 0;
+    }
+
+    case WM_APP:
+      // WM_APP is posted by Win32Window when the user presses F1.
+      // Send a platform message to Flutter so the Dart layer can show Help.
+      if (flutter_controller_) {
+        static constexpr char kHelpPayload[] = "help";
+        flutter_controller_->engine()->SendPlatformMessage(
+            "com.theoreticalmindstech/shortcuts",
+            reinterpret_cast<const uint8_t*>(kHelpPayload),
+            sizeof(kHelpPayload) - 1,
+            nullptr, nullptr);
+      }
+      return 0;
   }
 
   return Win32Window::MessageHandler(hwnd, message, wparam, lparam);

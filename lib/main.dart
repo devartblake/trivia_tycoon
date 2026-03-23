@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/core/bootstrap/app_init.dart';
 import 'package:trivia_tycoon/core/bootstrap/app_launcher.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import '/offline_fallback_screen.dart';
 import 'package:trivia_tycoon/screens/splash_variants/main_splash.dart';
 import 'package:trivia_tycoon/widgets/app_logo.dart';
@@ -9,7 +10,6 @@ import 'core/env.dart';
 import 'core/manager/service_manager.dart';
 import 'core/services/theme/theme_notifier.dart';
 import 'game/providers/auth_providers.dart';
-import 'game/providers/onboarding_providers.dart';
 import 'game/providers/riverpod_providers.dart' hide themeNotifierProvider;
 
 Future<void> main() async {
@@ -22,19 +22,27 @@ Future<void> main() async {
     // Initialize services first
     final (manager, theme) = await AppInit.initialize();
 
-    // Initialize auth state from services
-    await _initializeAuthState(manager);
+    // Load auth state and user preferences before the first frame
+    final isLoggedIn = await manager.authService.isLoggedIn();
+    final savedAgeGroup = await manager.playerProfileService.getAgeGroup() ?? 'teens';
+
+    LogManager.info(
+      'Session loaded: isLoggedIn=$isLoggedIn, ageGroup=$savedAgeGroup',
+      source: 'main',
+    );
 
     runApp(
       ProviderScope(
         overrides: [
           serviceManagerProvider.overrideWithValue(manager),
+          isLoggedInSyncProvider.overrideWith((ref) => isLoggedIn),
+          userAgeGroupProvider.overrideWith((ref) => savedAgeGroup),
         ],
         child: TriviaTycoonApp(initialData: (manager, theme)),
       ),
     );
   } catch (e) {
-    debugPrint('App initialization failed: $e');
+    LogManager.error('App initialization failed: $e', source: 'main');
 
     // Fallback - run app without pre-initialized state
     runApp(
@@ -45,50 +53,16 @@ Future<void> main() async {
   }
 }
 
-/// Initialize auth state and sync with River-pod providers
-Future<void> _initializeAuthState(ServiceManager serviceManager) async {
-  try {
-    // Create a temporary container to update providers
-    final container = ProviderContainer(
-      overrides: [
-        serviceManagerProvider.overrideWithValue(serviceManager),
-      ],
-    );
-
-    // Load auth state from services
-    final isLoggedIn = await serviceManager.authService.isLoggedIn();
-    final hasOnboarded = await serviceManager.onboardingSettingsService.hasCompletedOnboarding();
-
-    debugPrint('Session loaded: isLoggedIn=$isLoggedIn, hasOnboarded=$hasOnboarded');
-
-    // Sync with River-pod providers
-    container.read(isLoggedInSyncProvider.notifier).state = isLoggedIn;
-
-    // Update onboarding state based on completion status
-    if (hasOnboarded) {
-      await container.read(onboardingProgressProvider.notifier).markOnboardingCompleted(true);
-    }
-
-    // Dispose the temporary container
-    container.dispose();
-
-    debugPrint('River-pod providers synchronized with service state');
-  } catch (e) {
-    debugPrint('Auth state initialization failed: $e');
-    // Continue with default state - app should still work
-  }
-}
-
-class TriviaTycoonApp extends StatefulWidget {
+class TriviaTycoonApp extends ConsumerStatefulWidget {
   final (ServiceManager, ThemeNotifier)? initialData;
 
   const TriviaTycoonApp({super.key, this.initialData});
 
   @override
-  State<TriviaTycoonApp> createState() => _TriviaTycoonAppState();
+  ConsumerState<TriviaTycoonApp> createState() => _TriviaTycoonAppState();
 }
 
-class _TriviaTycoonAppState extends State<TriviaTycoonApp> {
+class _TriviaTycoonAppState extends ConsumerState<TriviaTycoonApp> {
   (ServiceManager, ThemeNotifier)? _initialData;
   bool _initialized = false;
   bool _splashFinished = false;
@@ -151,7 +125,7 @@ class _TriviaTycoonAppState extends State<TriviaTycoonApp> {
         setState(() => _recoveryChecked = true);
       }
     } catch (e) {
-      debugPrint('[Recovery] Check failed: $e');
+      LogManager.error('[Recovery] Check failed: $e', source: '_TriviaTycoonAppState');
       setState(() => _recoveryChecked = true);
     }
   }
@@ -256,19 +230,28 @@ class _TriviaTycoonAppState extends State<TriviaTycoonApp> {
       final userSession = await persistenceService.getUserSession();
       final pendingActions = await persistenceService.getPendingActions();
 
-      debugPrint('[Recovery] Restoring session...');
-      debugPrint('[Recovery] Game state: ${gameState != null ? 'YES' : 'NO'}');
-      debugPrint('[Recovery] User session: ${userSession != null ? 'YES' : 'NO'}');
-      debugPrint('[Recovery] Pending actions: ${pendingActions.length}');
+      LogManager.info('[Recovery] Restoring session...', source: '_TriviaTycoonAppState');
+      LogManager.debug('[Recovery] Game state: ${gameState != null ? 'YES' : 'NO'}', source: '_TriviaTycoonAppState');
+      LogManager.debug('[Recovery] User session: ${userSession != null ? 'YES' : 'NO'}', source: '_TriviaTycoonAppState');
+      LogManager.debug('[Recovery] Pending actions: ${pendingActions.length}', source: '_TriviaTycoonAppState');
 
-      // TODO: Actually restore the data to your app state
-      // Example:
-      // if (gameState != null) {
-      //   ref.read(quizStateProvider.notifier).restore(gameState);
-      // }
-      // if (pendingActions.isNotEmpty) {
-      //   ref.read(pendingActionsProvider.notifier).addAll(pendingActions);
-      // }
+      // Restore auth state from saved user session
+      if (userSession != null) {
+        final wasLoggedIn = userSession['is_logged_in'] as bool? ?? false;
+        if (wasLoggedIn) {
+          ref.read(isLoggedInSyncProvider.notifier).state = true;
+          LogManager.info('[Recovery] Auth state restored: logged in', source: '_TriviaTycoonAppState');
+        }
+      }
+
+      // Pending actions are left in the persistence service and will be
+      // retried by the background task service on next sync cycle.
+      if (pendingActions.isNotEmpty) {
+        LogManager.info(
+          '[Recovery] ${pendingActions.length} pending action(s) queued for retry',
+          source: '_TriviaTycoonAppState',
+        );
+      }
 
       // Show success message
       if (mounted) {
@@ -281,9 +264,9 @@ class _TriviaTycoonAppState extends State<TriviaTycoonApp> {
         );
       }
 
-      debugPrint('[Recovery] ✅ Session restored successfully');
+      LogManager.info('[Recovery] Session restored successfully', source: '_TriviaTycoonAppState');
     } catch (e) {
-      debugPrint('[Recovery] ❌ Restore failed: $e');
+      LogManager.error('[Recovery] Restore failed: $e', source: '_TriviaTycoonAppState');
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
