@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import 'package:trivia_tycoon/core/services/settings/player_profile_service.dart';
+import 'package:trivia_tycoon/core/services/settings/profile_sync_service.dart';
 import 'package:uuid/uuid.dart';
 
 /// ProfileData model for individual profiles
@@ -133,6 +135,51 @@ class MultiProfileService {
   static const _maxProfiles = 5; // Netflix-style limit
 
   final Uuid _uuid = const Uuid();
+  final ProfileSyncService? _profileSyncService;
+
+  MultiProfileService({ProfileSyncService? profileSyncService})
+      : _profileSyncService = profileSyncService;
+
+  String _generateUsernameFromDisplayName(String displayName) {
+    final normalized = displayName
+        .toLowerCase()
+        .trim()
+        .replaceAll(RegExp(r'\s+'), '_')
+        .replaceAll(RegExp(r'[^a-z0-9_]'), '');
+
+    if (normalized.isEmpty) return 'player';
+    return normalized;
+  }
+
+  Future<void> _syncActiveProfileToLegacySettings(ProfileData profile) async {
+    try {
+      final legacyService = PlayerProfileService();
+      final existingUsername = (profile.preferences['username'] as String?)?.trim();
+      final generatedUsername = _generateUsernameFromDisplayName(profile.name);
+
+      await legacyService.savePlayerName(profile.name);
+      await legacyService.saveUsername(
+        (existingUsername != null && existingUsername.isNotEmpty)
+            ? existingUsername.toLowerCase()
+            : generatedUsername,
+      );
+
+      await legacyService.saveProfileBatch({
+        'player_name': profile.name,
+        'username': (existingUsername != null && existingUsername.isNotEmpty)
+            ? existingUsername.toLowerCase()
+            : generatedUsername,
+        'country': profile.country,
+        'age_group': profile.ageGroup,
+        'user_role': profile.userRole,
+        'user_roles': profile.userRoles,
+        'is_premium': profile.isPremium,
+        'avatar': profile.avatar,
+      });
+    } catch (e) {
+      LogManager.info('[MultiProfile] Failed syncing active profile to legacy settings: $e', source: 'MultiProfileService');
+    }
+  }
 
   /// Gets the profiles box, opening it if necessary
   Future<Box> _getBox() async {
@@ -155,7 +202,7 @@ class MultiProfileService {
           .toList()
         ..sort((a, b) => b.lastActive.compareTo(a.lastActive)); // Most recent first
     } catch (e) {
-      debugPrint('[MultiProfile] Error getting all profiles: $e');
+      LogManager.info('[MultiProfile] Error getting all profiles: $e', source: 'MultiProfileService');
       return [];
     }
   }
@@ -175,7 +222,7 @@ class MultiProfileService {
 
       return ProfileData.fromJson(Map<String, dynamic>.from(profilesMap[activeProfileId]));
     } catch (e) {
-      debugPrint('[MultiProfile] Error getting active profile: $e');
+      LogManager.info('[MultiProfile] Error getting active profile: $e', source: 'MultiProfileService');
       return null;
     }
   }
@@ -188,7 +235,7 @@ class MultiProfileService {
       final Map<String, dynamic> profilesMap = Map<String, dynamic>.from(profilesData);
 
       if (!profilesMap.containsKey(profileId)) {
-        debugPrint('[MultiProfile] Profile $profileId not found');
+        LogManager.info('[MultiProfile] Profile $profileId not found', source: 'MultiProfileService');
         return false;
       }
 
@@ -200,10 +247,12 @@ class MultiProfileService {
       profilesMap[profileId] = updatedProfile.toJson();
       await box.put(_profilesKey, profilesMap);
 
-      debugPrint('[MultiProfile] Active profile set to: ${updatedProfile.name}');
+      await _syncActiveProfileToLegacySettings(updatedProfile);
+
+      LogManager.info('[MultiProfile] Active profile set to: ${updatedProfile.name}', source: 'MultiProfileService');
       return true;
     } catch (e) {
-      debugPrint('[MultiProfile] Error setting active profile: $e');
+      LogManager.info('[MultiProfile] Error setting active profile: $e', source: 'MultiProfileService');
       return false;
     }
   }
@@ -222,13 +271,13 @@ class MultiProfileService {
       final profiles = await getAllProfiles();
 
       if (profiles.length >= _maxProfiles) {
-        debugPrint('[MultiProfile] Maximum profiles reached ($_maxProfiles)');
+        LogManager.info('[MultiProfile] Maximum profiles reached ($_maxProfiles)', source: 'MultiProfileService');
         return null;
       }
 
       // Check for duplicate names
       if (profiles.any((p) => p.name.toLowerCase() == name.toLowerCase())) {
-        debugPrint('[MultiProfile] Profile name already exists: $name');
+        LogManager.info('[MultiProfile] Profile name already exists: $name', source: 'MultiProfileService');
         return null;
       }
 
@@ -260,10 +309,10 @@ class MultiProfileService {
         await box.put(_activeProfileKey, profileId);
       }
 
-      debugPrint('[MultiProfile] Created new profile: ${newProfile.name}');
+      LogManager.info('[MultiProfile] Created new profile: ${newProfile.name}', source: 'MultiProfileService');
       return newProfile;
     } catch (e) {
-      debugPrint('[MultiProfile] Error creating profile: $e');
+      LogManager.info('[MultiProfile] Error creating profile: $e', source: 'MultiProfileService');
       return null;
     }
   }
@@ -289,23 +338,54 @@ class MultiProfileService {
       final Map<String, dynamic> profilesMap = Map<String, dynamic>.from(profilesData);
 
       if (!profilesMap.containsKey(profileId)) {
-        debugPrint('[MultiProfile] Profile $profileId not found for update');
+        LogManager.info('[MultiProfile] Profile $profileId not found for update', source: 'MultiProfileService');
         return false;
       }
 
       final currentProfile = ProfileData.fromJson(Map<String, dynamic>.from(profilesMap[profileId]));
+      final activeProfileId = box.get(_activeProfileKey);
 
       // Check for duplicate names if name is being changed
       if (name != null && name != currentProfile.name) {
         final allProfiles = await getAllProfiles();
         if (allProfiles.any((p) => p.id != profileId && p.name.toLowerCase() == name.toLowerCase())) {
-          debugPrint('[MultiProfile] Profile name already exists: $name');
+          LogManager.info('[MultiProfile] Profile name already exists: $name', source: 'MultiProfileService');
           return false;
         }
       }
 
+      var mergedPreferences = preferences;
+      var resolvedName = name;
+
+      if (_profileSyncService != null && activeProfileId == profileId) {
+        await _profileSyncService!.retryQueuedUpdates();
+
+        final requestedUsername = (preferences?['username'] as String?)?.trim();
+        final candidateDisplayName = (name ?? currentProfile.name).trim();
+
+        if (requestedUsername != null && requestedUsername.isNotEmpty) {
+          final syncResult = await _profileSyncService!.syncProfileUpdate(
+            displayName: candidateDisplayName,
+            username: requestedUsername,
+          );
+
+          if (syncResult.confirmedDisplayName != null &&
+              syncResult.confirmedDisplayName!.isNotEmpty) {
+            resolvedName = syncResult.confirmedDisplayName;
+          }
+
+          if (syncResult.confirmedUsername != null &&
+              syncResult.confirmedUsername!.isNotEmpty) {
+            mergedPreferences = {
+              ...(preferences ?? currentProfile.preferences),
+              'username': syncResult.confirmedUsername,
+            };
+          }
+        }
+      }
+
       final updatedProfile = currentProfile.copyWith(
-        name: name,
+        name: resolvedName,
         avatar: avatar,
         country: country,
         ageGroup: ageGroup,
@@ -317,16 +397,20 @@ class MultiProfileService {
         maxXP: maxXP,
         lastActive: DateTime.now(),
         gameStats: gameStats,
-        preferences: preferences,
+        preferences: mergedPreferences,
       );
 
       profilesMap[profileId] = updatedProfile.toJson();
       await box.put(_profilesKey, profilesMap);
 
-      debugPrint('[MultiProfile] Updated profile: ${updatedProfile.name}');
+      if (activeProfileId == profileId) {
+        await _syncActiveProfileToLegacySettings(updatedProfile);
+      }
+
+      LogManager.info('[MultiProfile] Updated profile: ${updatedProfile.name}', source: 'MultiProfileService');
       return true;
     } catch (e) {
-      debugPrint('[MultiProfile] Error updating profile: $e');
+      LogManager.info('[MultiProfile] Error updating profile: $e', source: 'MultiProfileService');
       return false;
     }
   }
@@ -337,7 +421,7 @@ class MultiProfileService {
       final profiles = await getAllProfiles();
 
       if (profiles.length <= 1) {
-        debugPrint('[MultiProfile] Cannot delete the last remaining profile');
+        LogManager.info('[MultiProfile] Cannot delete the last remaining profile', source: 'MultiProfileService');
         return false;
       }
 
@@ -346,7 +430,7 @@ class MultiProfileService {
       final Map<String, dynamic> profilesMap = Map<String, dynamic>.from(profilesData);
 
       if (!profilesMap.containsKey(profileId)) {
-        debugPrint('[MultiProfile] Profile $profileId not found for deletion');
+        LogManager.info('[MultiProfile] Profile $profileId not found for deletion', source: 'MultiProfileService');
         return false;
       }
 
@@ -363,10 +447,10 @@ class MultiProfileService {
         }
       }
 
-      debugPrint('[MultiProfile] Deleted profile: ${profileToDelete.name}');
+      LogManager.info('[MultiProfile] Deleted profile: ${profileToDelete.name}', source: 'MultiProfileService');
       return true;
     } catch (e) {
-      debugPrint('[MultiProfile] Error deleting profile: $e');
+      LogManager.info('[MultiProfile] Error deleting profile: $e', source: 'MultiProfileService');
       return false;
     }
   }
@@ -426,7 +510,7 @@ class MultiProfileService {
         'profile': updatedProfile,
       };
     } catch (e) {
-      debugPrint('[MultiProfile] Error adding XP to profile: $e');
+      LogManager.info('[MultiProfile] Error adding XP to profile: $e', source: 'MultiProfileService');
       return {'error': e.toString()};
     }
   }
@@ -456,7 +540,7 @@ class MultiProfileService {
       final box = await _getBox();
       return Map<String, dynamic>.from(box.get(_accountDataKey, defaultValue: {}));
     } catch (e) {
-      debugPrint('[MultiProfile] Error getting account data: $e');
+      LogManager.info('[MultiProfile] Error getting account data: $e', source: 'MultiProfileService');
       return {};
     }
   }
@@ -467,13 +551,15 @@ class MultiProfileService {
       final box = await _getBox();
       await box.put(_accountDataKey, accountData);
     } catch (e) {
-      debugPrint('[MultiProfile] Error saving account data: $e');
+      LogManager.info('[MultiProfile] Error saving account data: $e', source: 'MultiProfileService');
     }
   }
 
   /// Initialize service and migrate existing single profile if needed
   Future<void> initializeAndMigrate(PlayerProfileService legacyService) async {
     try {
+      await retryQueuedProfileSyncUpdates();
+
       final profiles = await getAllProfiles();
 
       // If no profiles exist, migrate from legacy service
@@ -489,10 +575,47 @@ class MultiProfileService {
           isPremium: legacyProfile['isPremium'] ?? false,
         );
 
-        debugPrint('[MultiProfile] Migrated legacy profile to multi-profile system');
+        LogManager.info('[MultiProfile] Migrated legacy profile to multi-profile system', source: 'MultiProfileService');
       }
     } catch (e) {
-      debugPrint('[MultiProfile] Error during initialization/migration: $e');
+      LogManager.info('[MultiProfile] Error during initialization/migration: $e', source: 'MultiProfileService');
+    }
+  }
+
+  /// Retries pending backend profile sync updates, if sync service is enabled.
+  Future<void> retryQueuedProfileSyncUpdates() async {
+    if (_profileSyncService == null) return;
+
+    try {
+      await _profileSyncService!.retryQueuedUpdates();
+    } catch (e) {
+      LogManager.info('[MultiProfile] Failed to retry queued profile sync updates: $e', source: 'MultiProfileService');
+    }
+  }
+
+  Future<Map<String, dynamic>> getProfileSyncDiagnostics() async {
+    if (_profileSyncService == null) {
+      return {
+        'enabled': false,
+        'queue_length': 0,
+      };
+    }
+
+    try {
+      final diagnostics = await _profileSyncService!.getQueueDiagnostics();
+      return {
+        'enabled': true,
+        ...diagnostics,
+      };
+    } catch (e) {
+      LogManager.info(
+        '[MultiProfile] Failed to read profile sync diagnostics: $e',
+        source: 'MultiProfileService',
+      );
+      return {
+        'enabled': true,
+        'error': e.toString(),
+      };
     }
   }
 
@@ -523,9 +646,9 @@ class MultiProfileService {
     try {
       final box = await _getBox();
       await box.clear();
-      debugPrint('[MultiProfile] All profile data cleared');
+      LogManager.info('[MultiProfile] All profile data cleared', source: 'MultiProfileService');
     } catch (e) {
-      debugPrint('[MultiProfile] Error clearing profiles: $e');
+      LogManager.info('[MultiProfile] Error clearing profiles: $e', source: 'MultiProfileService');
     }
   }
 }

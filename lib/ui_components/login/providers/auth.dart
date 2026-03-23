@@ -142,6 +142,11 @@ class AuthService {
 
     // 🌟 Persist profile details
     await playerProfileService.savePlayerName(email.split('@').first);
+    await playerProfileService.saveUsername(email.split('@').first.toLowerCase());
+    if (userId.isNotEmpty && userId != 'guest') {
+      await playerProfileService.saveUserId(userId);
+      await secureStorage.setSecret('user_id', userId);
+    }
     await playerProfileService.saveUserRole(roles.first); // Simplified
     await playerProfileService.setPremiumStatus(isPremiumUser);
   }
