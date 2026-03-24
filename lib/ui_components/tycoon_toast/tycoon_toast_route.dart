@@ -5,6 +5,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'tycoon_toast.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 // Static list to track active toasts for stacking
 class _ToastManager {
@@ -173,7 +174,7 @@ class TycoonToastRoute<T> extends OverlayRoute<T> {
       await player.play();
     } catch (e) {
       // Silently handle audio errors
-      debugPrint('Toast audio error: $e');
+      LogManager.debug('Toast audio error: $e');
     } finally {
       player.dispose();
     }

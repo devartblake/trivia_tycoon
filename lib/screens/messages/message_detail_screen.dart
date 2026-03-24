@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/screens/messages/widgets/message_reactions_widget.dart';
 import '../../game/models/message_models.dart';
 import '../../game/providers/message_providers.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class MessageDetailScreen extends ConsumerStatefulWidget {
   final String conversationId;
@@ -101,7 +102,7 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
   void _broadcastTypingStatus(bool isTyping) {
     // TODO: Implement this in your repository
     // This should send typing status to the backend/other users
-    debugPrint('Broadcasting typing status: $isTyping for conversation: ${widget
+    LogManager.debug('Broadcasting typing status: $isTyping for conversation: ${widget
         .conversationId}');
 
     // Example implementation:
@@ -760,7 +761,7 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
               children: reactions.map((emoji) => GestureDetector(
                 onTap: () {
                   // TODO: Update message reactions in repository
-                  debugPrint('Add reaction $emoji to message ${message.id}');
+                  LogManager.debug('Add reaction $emoji to message ${message.id}');
                   Navigator.pop(context);
                 },
                 child: Text(emoji, style: const TextStyle(fontSize: 32)),

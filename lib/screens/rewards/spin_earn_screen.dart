@@ -8,6 +8,7 @@ import '../../game/analytics/services/analytics_service.dart';
 import '../../game/models/reward_step_models.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../ui_components/spin_wheel/ui/toasts/spin_ready_premium_toast.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class SpinEarnScreen extends ConsumerStatefulWidget {
   const SpinEarnScreen({super.key});
@@ -128,7 +129,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
         await _trackDataLoaded();
       }
     } catch (e) {
-      debugPrint('Failed to load spin data: $e');
+      LogManager.debug('Failed to load spin data: $e');
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -223,7 +224,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
       _analytics ??= ref.read(analyticsServiceProvider);
       await _analytics?.trackEvent(eventName, data);
     } catch (e) {
-      debugPrint('Analytics tracking failed: $e');
+      LogManager.debug('Analytics tracking failed: $e');
     }
   }
 
@@ -237,7 +238,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
         properties: properties,
       );
     } catch (e) {
-      debugPrint('Engagement tracking failed: $e');
+      LogManager.debug('Engagement tracking failed: $e');
     }
   }
 

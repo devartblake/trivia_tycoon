@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../ui_components/qr_code/services/qr_history_service.dart';
 import '../services/notification_service.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Background task service to handle mission reminders and notifications
 class BackgroundTaskService {
@@ -39,9 +40,9 @@ class BackgroundTaskService {
       _startPeriodicTasks();
       _scheduleDailyReminders();
 
-      debugPrint('[BackgroundTaskService] Initialized for user: $userId');
+      LogManager.debug('[BackgroundTaskService] Initialized for user: $userId');
     } catch (e) {
-      debugPrint('[BackgroundTaskService] Failed to initialize: $e');
+      LogManager.debug('[BackgroundTaskService] Failed to initialize: $e');
     }
   }
 
@@ -49,7 +50,7 @@ class BackgroundTaskService {
   void dispose() {
     _periodicTimer?.cancel();
     _dailyTimer?.cancel();
-    debugPrint('[BackgroundTaskService] Disposed');
+    LogManager.debug('[BackgroundTaskService] Disposed');
   }
 
   /// Get or open the background tasks box
@@ -66,14 +67,14 @@ class BackgroundTaskService {
       }
       return _backgroundBox!;
     } catch (e) {
-      debugPrint('[BackgroundTaskService] Failed to open box: $e');
+      LogManager.debug('[BackgroundTaskService] Failed to open box: $e');
       // Try to delete and recreate the box if corrupted
       try {
         await Hive.deleteBoxFromDisk(_backgroundTasksBox);
         _backgroundBox = await Hive.openBox(_backgroundTasksBox);
         return _backgroundBox!;
       } catch (e2) {
-        debugPrint('[BackgroundTaskService] Failed to recreate box: $e2');
+        LogManager.debug('[BackgroundTaskService] Failed to recreate box: $e2');
         rethrow;
       }
     }
@@ -111,7 +112,7 @@ class BackgroundTaskService {
       _scheduleDailyReminders();
     });
 
-    debugPrint('[BackgroundTaskService] Next daily reminder at: $nextReminderTime');
+    LogManager.debug('[BackgroundTaskService] Next daily reminder at: $nextReminderTime');
   }
 
   /// Perform background mission checks
@@ -131,9 +132,9 @@ class BackgroundTaskService {
 
       await box.put(_lastCheckKey, now);
 
-      debugPrint('[BackgroundTaskService] Background check completed');
+      LogManager.debug('[BackgroundTaskService] Background check completed');
     } catch (e) {
-      debugPrint('[BackgroundTaskService] Background check failed: $e');
+      LogManager.debug('[BackgroundTaskService] Background check failed: $e');
     }
   }
 
@@ -162,7 +163,7 @@ class BackgroundTaskService {
         );
       }
     } catch (e) {
-      debugPrint('[BackgroundTaskService] Failed to check expiring missions: $e');
+      LogManager.debug('[BackgroundTaskService] Failed to check expiring missions: $e');
     }
   }
 
@@ -197,7 +198,7 @@ class BackgroundTaskService {
         await box.put(_lastInactivityReminderKey, now);
       }
     } catch (e) {
-      debugPrint('[BackgroundTaskService] Failed to check inactive missions: $e');
+      LogManager.debug('[BackgroundTaskService] Failed to check inactive missions: $e');
     }
   }
 
@@ -227,9 +228,9 @@ class BackgroundTaskService {
       // Mark as sent for today
       await box.put(todayKey, true);
 
-      debugPrint('[BackgroundTaskService] Daily reminder sent');
+      LogManager.debug('[BackgroundTaskService] Daily reminder sent');
     } catch (e) {
-      debugPrint('[BackgroundTaskService] Failed to send daily reminder: $e');
+      LogManager.debug('[BackgroundTaskService] Failed to send daily reminder: $e');
     }
   }
 
@@ -262,11 +263,11 @@ class BackgroundTaskService {
   /// 🧠 Auto-sync QR scan history if due
   static Future<void> runDailyQrSyncTask({required String userId}) async {
     try {
-      debugPrint('[BG Task] Checking QR sync...');
+      LogManager.debug('[BG Task] Checking QR sync...');
       await QrHistoryService.instance.autoSyncIfDue(userId: userId, retentionDays: 14);
-      debugPrint('[BG Task] QR sync (if due) completed.');
+      LogManager.debug('[BG Task] QR sync (if due) completed.');
     } catch (e, st) {
-      debugPrint('[BG Task] QR sync failed: $e');
+      LogManager.debug('[BG Task] QR sync failed: $e');
     }
   }
 
@@ -276,7 +277,7 @@ class BackgroundTaskService {
       final box = await _getBackgroundBox();
       await box.put(_lastActivityKey, DateTime.now().millisecondsSinceEpoch);
     } catch (e) {
-      debugPrint('[BackgroundTaskService] Failed to record activity: $e');
+      LogManager.debug('[BackgroundTaskService] Failed to record activity: $e');
     }
   }
 
@@ -332,7 +333,7 @@ class BackgroundTaskService {
 
       await box.put(statisticKey, statistic);
     } catch (e) {
-      debugPrint('[BackgroundTaskService] Failed to store statistic: $e');
+      LogManager.debug('[BackgroundTaskService] Failed to store statistic: $e');
     }
   }
 
@@ -369,7 +370,7 @@ class BackgroundTaskService {
       statistics.sort((a, b) => (b['timestamp'] as int).compareTo(a['timestamp'] as int));
       return statistics;
     } catch (e) {
-      debugPrint('[BackgroundTaskService] Failed to get statistics: $e');
+      LogManager.debug('[BackgroundTaskService] Failed to get statistics: $e');
       return [];
     }
   }
@@ -397,9 +398,9 @@ class BackgroundTaskService {
         await box.delete(key);
       }
 
-      debugPrint('[BackgroundTaskService] Cleaned up ${keysToDelete.length} old statistics');
+      LogManager.debug('[BackgroundTaskService] Cleaned up ${keysToDelete.length} old statistics');
     } catch (e) {
-      debugPrint('[BackgroundTaskService] Failed to cleanup statistics: $e');
+      LogManager.debug('[BackgroundTaskService] Failed to cleanup statistics: $e');
     }
   }
 
@@ -409,7 +410,7 @@ class BackgroundTaskService {
       final box = await _getBackgroundBox();
       await box.put(_userIdKey, userId);
     } catch (e) {
-      debugPrint('[BackgroundTaskService] Failed to save user ID: $e');
+      LogManager.debug('[BackgroundTaskService] Failed to save user ID: $e');
     }
   }
 
@@ -418,7 +419,7 @@ class BackgroundTaskService {
       final box = await _getBackgroundBox();
       return box.get(_userIdKey) as String?;
     } catch (e) {
-      debugPrint('[BackgroundTaskService] Failed to load user ID: $e');
+      LogManager.debug('[BackgroundTaskService] Failed to load user ID: $e');
       return null;
     }
   }
@@ -480,7 +481,7 @@ class BackgroundTaskService {
         'daily_reminders_active': _dailyTimer?.isActive ?? false,
       };
     } catch (e) {
-      debugPrint('[BackgroundTaskService] Failed to get analytics: $e');
+      LogManager.debug('[BackgroundTaskService] Failed to get analytics: $e');
       return {'error': e.toString()};
     }
   }

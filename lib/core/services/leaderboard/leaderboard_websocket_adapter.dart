@@ -4,6 +4,7 @@ import '../../../core/networking/ws_client.dart';
 import '../../../core/networking/ws_protocol.dart';
 import '../../../core/bootstrap/app_init.dart';
 import '../../../game/models/leaderboard_entry.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Adapts WebSocket messages to Leaderboard updates
 class LeaderboardWebSocketAdapter {
@@ -27,14 +28,14 @@ class LeaderboardWebSocketAdapter {
   void initialize() {
     final wsClient = AppInit.wsClient;
     if (wsClient == null) {
-      debugPrint('[LeaderboardWS] WebSocket not available');
+      LogManager.debug('[LeaderboardWS] WebSocket not available');
       return;
     }
 
     // Listen to all WebSocket messages
     _messageSubscription = wsClient.messageStream.listen(_handleMessage);
 
-    debugPrint('[LeaderboardWS] Initialized');
+    LogManager.debug('[LeaderboardWS] Initialized');
   }
 
   /// Handle incoming WebSocket messages
@@ -74,9 +75,9 @@ class LeaderboardWebSocketAdapter {
       // Call callback
       onRankChange?.call(update);
 
-      debugPrint('[LeaderboardWS] Rank update: ${update.username} → #${update.rank} (score: ${update.score})');
+      LogManager.debug('[LeaderboardWS] Rank update: ${update.username} → #${update.rank} (score: ${update.score})');
     } catch (e) {
-      debugPrint('[LeaderboardWS] Error parsing rank update: $e');
+      LogManager.debug('[LeaderboardWS] Error parsing rank update: $e');
     }
   }
 
@@ -94,9 +95,9 @@ class LeaderboardWebSocketAdapter {
       // Call callback
       onSnapshot?.call(entries);
 
-      debugPrint('[LeaderboardWS] Loaded ${entries.length} leaderboard entries');
+      LogManager.debug('[LeaderboardWS] Loaded ${entries.length} leaderboard entries');
     } catch (e) {
-      debugPrint('[LeaderboardWS] Error parsing snapshot: $e');
+      LogManager.debug('[LeaderboardWS] Error parsing snapshot: $e');
     }
   }
 
@@ -113,9 +114,9 @@ class LeaderboardWebSocketAdapter {
       // Call callback
       onPlayerPassedYou?.call(userId, newRank, yourRank);
 
-      debugPrint('[LeaderboardWS] Player passed you: $username (#$newRank)');
+      LogManager.debug('[LeaderboardWS] Player passed you: $username (#$newRank)');
     } catch (e) {
-      debugPrint('[LeaderboardWS] Error parsing player passed: $e');
+      LogManager.debug('[LeaderboardWS] Error parsing player passed: $e');
     }
   }
 
@@ -124,7 +125,7 @@ class LeaderboardWebSocketAdapter {
   void subscribe({String type = 'global', int? tier, String? category}) {
     final wsClient = AppInit.wsClient;
     if (wsClient == null || !AppInit.isWebSocketConnected) {
-      debugPrint('[LeaderboardWS] Not connected, cannot subscribe');
+      LogManager.debug('[LeaderboardWS] Not connected, cannot subscribe');
       return;
     }
 
@@ -147,7 +148,7 @@ class LeaderboardWebSocketAdapter {
 
     _isSubscribed = true;
     _currentSubscription = type;
-    debugPrint('[LeaderboardWS] Subscribed to $type leaderboard');
+    LogManager.debug('[LeaderboardWS] Subscribed to $type leaderboard');
   }
 
   /// Unsubscribe from current leaderboard
@@ -167,7 +168,7 @@ class LeaderboardWebSocketAdapter {
 
     _isSubscribed = false;
     _currentSubscription = null;
-    debugPrint('[LeaderboardWS] Unsubscribed from leaderboard');
+    LogManager.debug('[LeaderboardWS] Unsubscribed from leaderboard');
   }
 
   /// Helper: Parse leaderboard entry from WebSocket data
@@ -219,7 +220,7 @@ class LeaderboardWebSocketAdapter {
         engagementScore: (data['engagementScore'] as num?)?.toDouble() ?? 0.0,
       );
     } catch (e) {
-      debugPrint('[LeaderboardWS] Error parsing entry: $e');
+      LogManager.debug('[LeaderboardWS] Error parsing entry: $e');
       return null;
     }
   }
@@ -230,7 +231,7 @@ class LeaderboardWebSocketAdapter {
     if (_isSubscribed) {
       unsubscribe();
     }
-    debugPrint('[LeaderboardWS] Disposed');
+    LogManager.debug('[LeaderboardWS] Disposed');
   }
 }
 

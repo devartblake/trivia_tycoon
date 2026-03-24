@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Handles audio and music preferences (on/off)
 class AudioSettingsService {
@@ -60,9 +61,9 @@ class AudioSettingsService {
       // Pause music and sounds
       // Note: In a real app, you'd interface with your audio player here
       // For now, we just save the state
-      debugPrint('[AudioService] All audio paused, wasPlaying: $wasPlaying');
+      LogManager.debug('[AudioService] All audio paused, wasPlaying: $wasPlaying');
     } catch (e) {
-      debugPrint('[AudioService] Error pausing audio: $e');
+      LogManager.debug('[AudioService] Error pausing audio: $e');
     }
   }
 
@@ -74,13 +75,13 @@ class AudioSettingsService {
       if (wasPlaying && getMusicOn() && getAudioOn()) {
         // Resume music if it was playing before
         // Note: In a real app, you'd interface with your audio player here
-        debugPrint('[AudioService] Resuming audio playback');
+        LogManager.debug('[AudioService] Resuming audio playback');
       }
 
       // Clear the pause state
       await _box.delete(_wasPlayingKey);
     } catch (e) {
-      debugPrint('[AudioService] Error resuming audio: $e');
+      LogManager.debug('[AudioService] Error resuming audio: $e');
     }
   }
 
@@ -94,9 +95,9 @@ class AudioSettingsService {
       await setMusicVolume(currentMusicVolume * 0.5);
       await setSoundVolume(currentSoundVolume * 0.5);
 
-      debugPrint('[AudioService] Volume reduced for background');
+      LogManager.debug('[AudioService] Volume reduced for background');
     } catch (e) {
-      debugPrint('[AudioService] Error reducing volume: $e');
+      LogManager.debug('[AudioService] Error reducing volume: $e');
     }
   }
 
@@ -107,9 +108,9 @@ class AudioSettingsService {
       await setMusicVolume(getMusicVolume() / 0.5);
       await setSoundVolume(getSoundVolume() / 0.5);
 
-      debugPrint('[AudioService] Volume restored to normal');
+      LogManager.debug('[AudioService] Volume restored to normal');
     } catch (e) {
-      debugPrint('[AudioService] Error restoring volume: $e');
+      LogManager.debug('[AudioService] Error restoring volume: $e');
     }
   }
 
