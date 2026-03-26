@@ -123,7 +123,7 @@ class _FakeApiClient extends TycoonApiClient {
   final List<dynamic> _reportWinResponses = [];
   final List<dynamic> _matchResponses = [];
 
-  _FakeApiClient(super.httpClient);
+  _FakeApiClient(HttpClient httpClient) : super(httpClient: httpClient);
 
   dynamic _next(List<dynamic> list, int idx) {
     if (list.isEmpty) throw StateError('No response configured for call $idx');

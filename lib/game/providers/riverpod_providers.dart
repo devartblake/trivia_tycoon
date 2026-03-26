@@ -116,6 +116,7 @@ import '../models/currency_type.dart';
 import '../models/badge.dart';
 import '../state/tier_progression_state.dart';
 import '../state/tier_update_result.dart';
+import 'core_providers.dart';
 import 'message_providers.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 

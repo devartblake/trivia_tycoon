@@ -15,6 +15,7 @@ import '../../core/animations/animation_manager.dart';
 import '../../core/helpers/responsive_layout.dart';
 import '../../core/services/theme/seasonal_theme_service.dart';
 import '../../core/theme/themes.dart';
+import '../../game/providers/economy_providers.dart';
 import '../../game/utils/gradient_themes.dart';
 import '../../game/utils/greeting_utils.dart';
 import '../../ui_components/tycoon_toast/tycoon_toast.dart';
