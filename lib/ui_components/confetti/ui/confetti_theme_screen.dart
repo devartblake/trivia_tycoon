@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/controllers/coin_balance_notifier.dart';
+import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import 'package:trivia_tycoon/ui_components/confetti/confetti.dart';
 import 'package:trivia_tycoon/ui_components/confetti/utils/confetti_settings_storage.dart';
 import '../../../core/services/theme/seasonal_theme_service.dart';
