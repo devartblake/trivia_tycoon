@@ -295,6 +295,11 @@ class MultiProfileService {
       final profileId = _uuid.v4();
       final now = DateTime.now();
 
+      final box = await _getBox();
+      final Map<String, dynamic> profilesMap = Map.from(
+        box.get(_profilesKey, defaultValue: <String, dynamic>{}) as Map,
+      );
+
       final newProfile = ProfileData(
         id: _uuid.v4(),
         name: name,

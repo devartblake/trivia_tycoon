@@ -367,9 +367,9 @@ final energyProvider = StateNotifierProvider<EnergyNotifier, EnergyState>((ref) 
 });
 
 // Lives System
-final livesProvider = StateNotifierProvider<LivesNotifier, LivesState>((ref) {
+final livesProvider = StateNotifierProvider<ChallengeLivesNotifier, ChallengeLivesState>((ref) {
   final storage = ref.read(generalKeyValueStorageProvider);
-  return LivesNotifier(storage);
+  return ChallengeLivesNotifier(storage);
 });
 
 // Recent Quizzes Provider (for MainMenuScreen)
