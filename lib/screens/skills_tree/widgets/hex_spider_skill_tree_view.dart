@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/ui_components/hex_grid/index.dart';
-import '../../../game/controllers/skill_tree_controller.dart';
-import 'package:trivia_tycoon/game/providers/skill_tree_provider.dart';
 import '../../../game/models/skill_tree_category_colors.dart';
 import '../../../game/models/skill_tree_graph.dart';
 import '../../../game/providers/skill_cooldown_service_provider.dart';
