@@ -1,11 +1,22 @@
 class XPService {
+  static const _xpKey = 'playerXP';
+
+  final GeneralKeyValueStorageService? _storage;
   int _playerXP = 0;
   double _xpMultiplier = 1.0;
   DateTime? _boostExpiry;
 
-  XPService({int startingPlayerXP = 0})
+  XPService({int startingPlayerXP = 0, GeneralKeyValueStorageService? storage})
       : _playerXP = startingPlayerXP,
-        _xpMultiplier = 1.0;
+        _xpMultiplier = 1.0,
+        _storage = storage {
+    if (storage != null) _loadFromStorage();
+  }
+
+  Future<void> _loadFromStorage() async {
+    final stored = await _storage!.getInt(_xpKey);
+    if (stored > 0) _playerXP = stored;
+  }
 
   // ---- Core getters ----
   int get playerXP => _playerXP;
@@ -25,11 +36,12 @@ class XPService {
   void addXP(int baseAmount, {bool applyMultiplier = true}) {
     final effectiveAmount = applyMultiplier ? (baseAmount * _xpMultiplier).round() : baseAmount;
     _playerXP += effectiveAmount;
-    // Optional: notify listeners or persist XP here
+    _storage?.setInt(_xpKey, _playerXP);
   }
 
   void deductXP(int xpCost) {
     _playerXP = (_playerXP - xpCost).clamp(0, 1 << 30);
+    _storage?.setInt(_xpKey, _playerXP);
   }
 
   // ---- Boost operations ----
@@ -49,6 +61,7 @@ class XPService {
     _playerXP = 0;
     _xpMultiplier = 1.0;
     _boostExpiry = null;
+    _storage?.setInt(_xpKey, _playerXP);
   }
 
   /// Optional: call from a timer/tick to clear expired boost.

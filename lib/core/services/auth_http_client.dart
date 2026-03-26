@@ -14,7 +14,7 @@ import 'package:trivia_tycoon/core/manager/log_manager.dart';
 /// ```
 class AuthHttpClient extends http.BaseClient {
   final http.Client _inner;
-  final AuthService _authService;
+  final BackendAuthService _authService;
   final AuthTokenStore _tokenStore;
 
   /// Whether to automatically refresh expired tokens

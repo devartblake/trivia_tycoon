@@ -312,6 +312,144 @@ class QuizProgressService {
     return '${months[date.month - 1]} ${date.day}';
   }
 
+  // ─────────────────────────────────────────────────────────────────────────
+  // Daily quiz tracking (synchronous — settings box is always open at startup)
+  // ─────────────────────────────────────────────────────────────────────────
+
+  static const _dailyQuizLastDateKey = 'daily_quiz_last_date';
+  static const _dailyQuizStreakKey = 'daily_quiz_streak';
+
+  /// Returns the date the daily quiz was last completed, or null.
+  DateTime? getDailyQuizLastCompletedDateSync() {
+    try {
+      final box = Hive.box(_settingsBox);
+      final dateStr = box.get(_dailyQuizLastDateKey) as String?;
+      if (dateStr == null) return null;
+      return DateTime.tryParse(dateStr);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Returns the current daily quiz completion streak.
+  int getDailyQuizStreakSync() {
+    try {
+      final box = Hive.box(_settingsBox);
+      return (box.get(_dailyQuizStreakKey, defaultValue: 0) as num).toInt();
+    } catch (_) {
+      return 0;
+    }
+  }
+
+  /// Marks today's daily quiz as completed and updates the streak.
+  Future<void> markDailyQuizCompleted() async {
+    try {
+      final box = Hive.box(_settingsBox);
+      final now = DateTime.now();
+      final lastCompleted = getDailyQuizLastCompletedDateSync();
+      final yesterday = now.subtract(const Duration(days: 1));
+
+      int newStreak;
+      if (lastCompleted == null) {
+        newStreak = 1;
+      } else if (_isSameDayStatic(lastCompleted, yesterday)) {
+        // Continued streak
+        newStreak = getDailyQuizStreakSync() + 1;
+      } else if (_isSameDayStatic(lastCompleted, now)) {
+        // Already completed today — keep streak unchanged
+        return;
+      } else {
+        // Streak broken
+        newStreak = 1;
+      }
+
+      await box.put(_dailyQuizLastDateKey, now.toIso8601String());
+      await box.put(_dailyQuizStreakKey, newStreak);
+      LogManager.debug('[QuizProgress] Daily quiz completed — streak: $newStreak');
+    } catch (e) {
+      LogManager.debug('[QuizProgress] Error marking daily quiz completed: $e');
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Monthly quiz tracking
+  // ─────────────────────────────────────────────────────────────────────────
+
+  String _monthlyKey(int year, int month) =>
+      'monthly_quiz_completed_${year}_$month';
+
+  String _monthlyRateKey(int year, int month) =>
+      'monthly_quiz_rate_${year}_$month';
+
+  /// Returns whether the monthly quiz for [year]/[month] has been completed.
+  bool getMonthlyQuizCompletedSync(int year, int month) {
+    try {
+      final box = Hive.box(_settingsBox);
+      return box.get(_monthlyKey(year, month), defaultValue: false) as bool;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// Returns the completion rate (0.0–1.0) for the monthly quiz.
+  double getMonthlyQuizCompletionRateSync(int year, int month) {
+    try {
+      final box = Hive.box(_settingsBox);
+      return (box.get(_monthlyRateKey(year, month), defaultValue: 0.0) as num)
+          .toDouble();
+    } catch (_) {
+      return 0.0;
+    }
+  }
+
+  /// Records progress on the monthly quiz (questionsCompleted / totalQuestions).
+  Future<void> markMonthlyQuizProgress({
+    required int year,
+    required int month,
+    required int questionsCompleted,
+    required int totalQuestions,
+  }) async {
+    try {
+      final box = Hive.box(_settingsBox);
+      final rate = totalQuestions > 0
+          ? questionsCompleted / totalQuestions
+          : 0.0;
+      final completed = questionsCompleted >= totalQuestions;
+      await box.put(_monthlyKey(year, month), completed);
+      await box.put(_monthlyRateKey(year, month), rate);
+      LogManager.debug(
+        '[QuizProgress] Monthly quiz progress: $questionsCompleted/$totalQuestions',
+      );
+    } catch (e) {
+      LogManager.debug('[QuizProgress] Error saving monthly quiz progress: $e');
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Featured challenge unlock
+  // ─────────────────────────────────────────────────────────────────────────
+
+  /// Returns true once the player has completed at least 3 quizzes,
+  /// unlocking the featured challenge.
+  bool isFeaturedChallengeUnlocked() {
+    try {
+      final box = Hive.box(_settingsBox);
+      final progress =
+      Map<String, dynamic>.from(box.get(_playerProgressKey, defaultValue: {}));
+      final totalQuizzes = (progress['total_quizzes'] ?? 0 as num).toInt();
+      return totalQuizzes >= 3;
+    } catch (_) {
+      return true; // Fail-open so new players aren't blocked
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Helpers
+  // ─────────────────────────────────────────────────────────────────────────
+
+  static bool _isSameDayStatic(DateTime a, DateTime b) =>
+      a.year == b.year && a.month == b.month && a.day == b.day;
+
   /// Get quiz performance statistics
   Map<String, dynamic> getQuizStats() {
     try {
