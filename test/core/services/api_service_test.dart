@@ -9,15 +9,23 @@ void main() {
   late Directory tempDir;
   late Box authBox;
 
-  setUp(() async {
+  setUpAll(() async {
     tempDir = await Directory.systemTemp.createTemp('api_service_test');
     Hive.init(tempDir.path);
+  });
+
+  setUp(() async {
     authBox = await Hive.openBox('auth_tokens');
   });
 
   tearDown(() async {
+    await authBox.clear();
     await authBox.close();
     await Hive.deleteBoxFromDisk('auth_tokens');
+  });
+
+  tearDownAll(() async {
+    await Hive.close();
     await tempDir.delete(recursive: true);
   });
 
@@ -248,5 +256,78 @@ void main() {
     expect(envelope.pageSize, 2);
     expect(envelope.total, 6);
     expect(envelope.totalPages, 3);
+  });
+
+  test('treats /profile as protected and retries after refresh', () async {
+    await authBox.put('auth_access_token', 'expired-token');
+    await authBox.put('auth_refresh_token', 'refresh-token');
+
+    final dio = Dio(BaseOptions(baseUrl: 'https://example.test'));
+    var profileAttempts = 0;
+
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          if (options.path == '/profile') {
+            profileAttempts++;
+
+            if (profileAttempts == 1) {
+              expect(options.headers['Authorization'], 'Bearer expired-token');
+              handler.reject(
+                DioException(
+                  requestOptions: options,
+                  response: Response(
+                    requestOptions: options,
+                    statusCode: 401,
+                    data: {'message': 'expired'},
+                  ),
+                  type: DioExceptionType.badResponse,
+                ),
+              );
+              return;
+            }
+
+            expect(options.headers['Authorization'], 'Bearer profile-new-token');
+            handler.resolve(
+              Response(
+                requestOptions: options,
+                statusCode: 200,
+                data: {'ok': true},
+              ),
+            );
+            return;
+          }
+
+          if (options.path == '/admin/auth/refresh') {
+            handler.resolve(
+              Response(
+                requestOptions: options,
+                statusCode: 200,
+                data: {
+                  'accessToken': 'profile-new-token',
+                  'refreshToken': 'profile-new-refresh',
+                },
+              ),
+            );
+            return;
+          }
+
+          handler.next(options);
+        },
+      ),
+    );
+
+    final service = ApiService(
+      baseUrl: 'https://example.test',
+      dio: dio,
+      initializeCache: false,
+    );
+
+    final response = await service.get('/profile');
+
+    expect(response['ok'], isTrue);
+    expect(profileAttempts, 2);
+    expect(authBox.get('auth_access_token'), 'profile-new-token');
+    expect(authBox.get('auth_refresh_token'), 'profile-new-refresh');
   });
 }

@@ -10,7 +10,6 @@ import 'core/env.dart';
 import 'core/manager/service_manager.dart';
 import 'core/services/theme/theme_notifier.dart';
 import 'game/providers/auth_providers.dart';
-import 'game/providers/onboarding_providers.dart';
 import 'game/providers/riverpod_providers.dart' hide themeNotifierProvider;
 
 Future<void> main() async {
@@ -23,13 +22,21 @@ Future<void> main() async {
     // Initialize services first
     final (manager, theme) = await AppInit.initialize();
 
-    // Initialize auth state from services
-    await _initializeAuthState(manager);
+    // Load auth state and user preferences before the first frame
+    final isLoggedIn = await manager.authService.isLoggedIn();
+    final savedAgeGroup = await manager.playerProfileService.getAgeGroup() ?? 'teens';
+
+    LogManager.info(
+      'Session loaded: isLoggedIn=$isLoggedIn, ageGroup=$savedAgeGroup',
+      source: 'main',
+    );
 
     runApp(
       ProviderScope(
         overrides: [
           serviceManagerProvider.overrideWithValue(manager),
+          isLoggedInSyncProvider.overrideWith((ref) => isLoggedIn),
+          userAgeGroupProvider.overrideWith((ref) => savedAgeGroup),
         ],
         child: TriviaTycoonApp(initialData: (manager, theme)),
       ),
@@ -43,40 +50,6 @@ Future<void> main() async {
         child: const TriviaTycoonApp(),
       ),
     );
-  }
-}
-
-/// Initialize auth state and sync with River-pod providers
-Future<void> _initializeAuthState(ServiceManager serviceManager) async {
-  try {
-    // Create a temporary container to update providers
-    final container = ProviderContainer(
-      overrides: [
-        serviceManagerProvider.overrideWithValue(serviceManager),
-      ],
-    );
-
-    // Load auth state from services
-    final isLoggedIn = await serviceManager.authService.isLoggedIn();
-    final hasOnboarded = await serviceManager.onboardingSettingsService.hasCompletedOnboarding();
-
-    LogManager.info('Session loaded: isLoggedIn=$isLoggedIn, hasOnboarded=$hasOnboarded', source: 'main');
-
-    // Sync with River-pod providers
-    container.read(isLoggedInSyncProvider.notifier).state = isLoggedIn;
-
-    // Update onboarding state based on completion status
-    if (hasOnboarded) {
-      await container.read(onboardingProgressProvider.notifier).markOnboardingCompleted(true);
-    }
-
-    // Dispose the temporary container
-    container.dispose();
-
-    LogManager.info('River-pod providers synchronized with service state', source: 'main');
-  } catch (e) {
-    LogManager.error('Auth state initialization failed: $e', source: 'main');
-    // Continue with default state - app should still work
   }
 }
 

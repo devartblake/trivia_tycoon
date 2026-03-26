@@ -5,6 +5,7 @@ import 'package:trivia_tycoon/game/services/skill_cooldown_service.dart';
 import '../../core/manager/tier_manager.dart';
 import '../providers/multi_profile_providers.dart';
 import '../providers/riverpod_providers.dart';
+import '../providers/skill_cooldown_service_provider.dart';
 import '../state/tier_update_result.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 

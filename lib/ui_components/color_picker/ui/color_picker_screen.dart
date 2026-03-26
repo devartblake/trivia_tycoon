@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:trivia_tycoon/ui_components/color_picker/core/color_picker_theme.dart';
 import 'package:trivia_tycoon/ui_components/color_picker/ui/color_debug_overlay.dart';
+import '../../../core/manager/log_manager.dart';
 import '../../color_picker/utils/color_log_manager.dart';
 import '../../color_picker/utils/color_performance.dart';
 import '../../color_picker/utils/color_storage.dart';

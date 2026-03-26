@@ -6,6 +6,7 @@ import 'package:trivia_tycoon/game/providers/skill_tree_provider.dart';
 import '../../../game/models/skill_tree_category_colors.dart';
 import '../../../game/models/skill_tree_graph.dart';
 import '../../../game/providers/skill_cooldown_service_provider.dart';
+import '../../../game/providers/skill_tree_provider.dart';
 import '../../../ui_components/hex_grid/hex_interactive.dart';
 import '../widgets/skill_node_widget.dart';
 

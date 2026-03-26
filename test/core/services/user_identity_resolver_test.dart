@@ -118,7 +118,7 @@ void main() {
       expect(resolved.startsWith('local_'), isTrue);
       expect(secure['generated_local_user_id'], resolved);
       expect(profileUserId, resolved);
-      expect(source, 'generated_local_new');
+      expect(source, 'generated_local');
       expect(generated, resolved);
     });
 

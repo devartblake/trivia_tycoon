@@ -2,22 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../game/providers/question_providers.dart' as question_data;
+import '../../../../game/providers/game_providers.dart';
 import '../../../../game/models/question_model.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 // Provider for daily quiz data
 final dailyQuizProvider = FutureProvider<DailyQuizData>((ref) async {
   final repository = ref.watch(question_data.questionRepositoryProvider);
+  final quizService = ref.read(quizProgressServiceProvider);
 
   try {
     final questions = await repository.getDailyQuestions(count: 5);
+    final lastCompleted = quizService.getDailyQuizLastCompletedDateSync();
+    final isCompleted =
+        lastCompleted != null && _isSameDay(DateTime.now(), lastCompleted);
 
     return DailyQuizData(
       questions: questions,
       totalQuestions: questions.length,
-      totalXPReward: questions.length * 15, // 15 XP per question
-      isCompleted: false, // TODO: Check completion status in persistent storage
-      lastCompletedDate: null, // TODO: Get from user progress
+      totalXPReward: questions.length * 15,
+      isCompleted: isCompleted,
+      lastCompletedDate: lastCompleted,
     );
   } catch (e) {
     LogManager.debug('Error loading daily quiz: $e');
@@ -27,17 +32,18 @@ final dailyQuizProvider = FutureProvider<DailyQuizData>((ref) async {
 
 // Provider for checking if daily quiz is available
 final dailyQuizStatusProvider = Provider<DailyQuizStatus>((ref) {
+  final quizService = ref.read(quizProgressServiceProvider);
   final now = DateTime.now();
-  final lastCompleted = DateTime(2024, 1, 1); // TODO: Get from user progress
+  final lastCompleted = quizService.getDailyQuizLastCompletedDateSync();
+  final streak = quizService.getDailyQuizStreakSync();
 
-  final isNewDay = !_isSameDay(now, lastCompleted);
-  final timeUntilReset = _getTimeUntilMidnight();
+  final isNewDay = lastCompleted == null || !_isSameDay(now, lastCompleted);
 
   return DailyQuizStatus(
     isAvailable: isNewDay,
-    timeUntilReset: timeUntilReset,
+    timeUntilReset: _getTimeUntilMidnight(),
     canPlay: isNewDay,
-    completionStreak: 0, // TODO: Get from user progress
+    completionStreak: streak,
   );
 });
 

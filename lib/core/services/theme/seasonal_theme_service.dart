@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../game/models/seasonal_theme_models.dart';
+import '../../../game/providers/core_providers.dart';
 import '../../theme/themes.dart';
 import '../settings/general_key_value_storage_service.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
@@ -158,12 +159,6 @@ class SeasonalThemeService {
     ];
   }
 }
-
-/// Riverpod provider for GeneralKeyValueStorageService
-/// ADD THIS to your riverpod_providers.dart if not already present
-final generalKeyValueStorageProvider = Provider<GeneralKeyValueStorageService>((ref) {
-  return GeneralKeyValueStorageService();
-});
 
 /// Riverpod provider for SeasonalThemeService
 final seasonalThemeServiceProvider = Provider<SeasonalThemeService>((ref) {

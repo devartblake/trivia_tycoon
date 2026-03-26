@@ -12,6 +12,7 @@ import '../../../game/models/skill_tree_graph.dart';
 import '../../../game/controllers/skill_tree_controller.dart';
 import 'package:trivia_tycoon/game/providers/skill_tree_provider.dart';
 import '../../game/planning/skill_branch_path_planner.dart';
+import '../../game/providers/skill_tree_provider.dart';
 import '../../ui_components/hex_grid/math/hex_orientation.dart';
 import '../../ui_components/hex_grid/paint/branch_path_overlay_painter.dart';
 

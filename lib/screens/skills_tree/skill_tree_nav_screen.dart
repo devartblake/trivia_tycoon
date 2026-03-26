@@ -7,6 +7,7 @@ import '../../../ui_components/hex_grid/widgets/hex_nav_button.dart';
 import '../../../ui_components/hex_grid/math/hex_orientation.dart';
 import '../../game/models/skill_tree_nav_models.dart';
 import '../../game/providers/skill_tree_nav_providers.dart';
+import '../../game/providers/skill_tree_provider.dart';
 import '../../ui_components/hex_grid/widgets/mini_hex_preview.dart';
 
 class SkillTreeNavScreen extends ConsumerStatefulWidget {
