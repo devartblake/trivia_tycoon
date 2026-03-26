@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/hex_spider_theme.dart';
 import '../../../game/controllers/skill_tree_controller.dart';
-import '../../../game/providers/skill_tree_provider.dart';
 import '../../../game/models/skill_tree_graph.dart';
 import '../../../game/models/skill_tree_nav_models.dart';
 import '../../../game/providers/hex_theme_providers.dart';
