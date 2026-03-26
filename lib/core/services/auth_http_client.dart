@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'auth_token_store.dart';
-import 'auth_service.dart';
+import 'auth_service.dart' show BackendAuthService;
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// HTTP client that automatically adds auth headers and refreshes expired tokens
@@ -14,7 +14,7 @@ import 'package:trivia_tycoon/core/manager/log_manager.dart';
 /// ```
 class AuthHttpClient extends http.BaseClient {
   final http.Client _inner;
-  final AuthService _authService;
+  final BackendAuthService _authService;
   final AuthTokenStore _tokenStore;
 
   /// Whether to automatically refresh expired tokens
