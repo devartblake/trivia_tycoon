@@ -18,9 +18,7 @@ import 'package:trivia_tycoon/core/services/settings/splash_settings_service.dar
 import 'package:trivia_tycoon/core/services/settings/theme_settings_service.dart';
 import 'package:trivia_tycoon/core/services/storage/config_storage_service.dart';
 import 'package:trivia_tycoon/core/services/theme/theme_notifier.dart';
-// FIX: removed legacy AuthService import from ui_components/login/providers/auth.dart
-// for the purpose of building AuthHttpClient — we now use BackendAuthService instead.
-import 'package:trivia_tycoon/ui_components/login/providers/auth.dart'; // kept for authService field type
+import 'package:trivia_tycoon/ui_components/login/providers/auth.dart';
 import 'package:trivia_tycoon/ui_components/qr_code/services/qr_history_service.dart';
 import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
 import 'package:trivia_tycoon/core/services/question/question_service.dart';
@@ -50,8 +48,6 @@ import '../services/auth_http_client.dart';
 import '../networking/signalr/notification_hub.dart';
 import '../networking/tycoon_api_client.dart';
 import '../repositories/mission_repository.dart';
-// FIX: added imports required to construct BackendAuthService + AuthTokenStore
-// so that AuthHttpClient receives the correct types.
 import '../services/auth_service.dart' as core_auth;
 import '../services/auth_token_store.dart';
 import '../services/auth_api_client.dart';
@@ -262,14 +258,10 @@ class ServiceManager {
       profileService: playerProfile,
       purchaseService: purchaseService,
     );
-
-    // Legacy AuthService (used for authService field, splash, etc.)
+    // Legacy LocalAuthService (used for authService field, splash, etc.)
     final auth = LocalAuthService(secureStorage: secureStorage, generalKey: generalKey, playerProfileService: playerProfile);
 
-    // FIX: AuthHttpClient requires BackendAuthService + AuthTokenStore.
-    // The legacy `auth` above is AuthService (ui_components) which has neither
-    // a tokenStore getter nor is assignable to BackendAuthService.
-    // Build a BackendAuthService locally just for the HTTP client chain.
+    // Build BackendAuthService + AuthHttpClient for API calls
     final authBox = Hive.isBoxOpen('auth_tokens')
         ? Hive.box('auth_tokens')
         : await Hive.openBox('auth_tokens');
@@ -285,8 +277,7 @@ class ServiceManager {
       tokenStore: tokenStore,
       api: authApiClient,
     );
-    final authHttpClient = AuthHttpClient(coreAuth, tokenStore); // FIX: was AuthHttpClient(auth, auth.tokenStore)
-
+    final authHttpClient = AuthHttpClient(coreAuth, tokenStore);
     final history = QrHistoryService(cache: cache, settings: qrSettings);
     final httpClient = HttpClient(
       authClient: authHttpClient,

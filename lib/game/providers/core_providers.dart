@@ -34,7 +34,7 @@ import '../../core/services/storage/secure_storage.dart';
 // ---------------------------------------------------------------------------
 
 final configServiceProvider =
-Provider<ConfigService>((ref) => ConfigService.instance);
+    Provider<ConfigService>((ref) => ConfigService.instance);
 
 /// Must be overridden in ProviderScope after [AppInit] completes.
 final serviceManagerProvider = Provider<ServiceManager>((ref) {
@@ -69,7 +69,7 @@ final secureStorageProvider = Provider<SecureStorage>((ref) {
 });
 
 final generalKeyValueStorageProvider =
-Provider<GeneralKeyValueStorageService>((ref) {
+    Provider<GeneralKeyValueStorageService>((ref) {
   return GeneralKeyValueStorageService();
 });
 
@@ -107,8 +107,6 @@ final authApiClientProvider = Provider<AuthApiClient>((ref) {
   );
 });
 
-// FIX: was Provider<core_auth.AuthService> / core_auth.AuthService(...)
-// The class in core/services/auth_service.dart is BackendAuthService, not AuthService.
 final coreAuthServiceProvider = Provider<core_auth.BackendAuthService>((ref) {
   return core_auth.BackendAuthService(
     deviceId: ref.watch(deviceIdServiceProvider),
