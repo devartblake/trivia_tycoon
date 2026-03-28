@@ -11,6 +11,8 @@ import 'core/manager/service_manager.dart';
 import 'core/services/theme/theme_notifier.dart';
 import 'game/providers/auth_providers.dart';
 import 'game/providers/riverpod_providers.dart' hide themeNotifierProvider;
+import 'synaptix/mode/synaptix_mode_notifier.dart';
+import 'synaptix/mode/synaptix_mode_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,9 +27,10 @@ Future<void> main() async {
     // Load auth state and user preferences before the first frame
     final isLoggedIn = await manager.authService.isLoggedIn();
     final savedAgeGroup = await manager.playerProfileService.getAgeGroup() ?? 'teens';
+    final initialMode = SynaptixModeNotifier.mapAgeGroupToMode(savedAgeGroup);
 
     LogManager.info(
-      'Session loaded: isLoggedIn=$isLoggedIn, ageGroup=$savedAgeGroup',
+      'Session loaded: isLoggedIn=$isLoggedIn, ageGroup=$savedAgeGroup, synaptixMode=${initialMode.name}',
       source: 'main',
     );
 
@@ -37,6 +40,11 @@ Future<void> main() async {
           serviceManagerProvider.overrideWithValue(manager),
           isLoggedInSyncProvider.overrideWith((ref) => isLoggedIn),
           userAgeGroupProvider.overrideWith((ref) => savedAgeGroup),
+          synaptixModeProvider.overrideWith((ref) {
+            final notifier = SynaptixModeNotifier(manager.playerProfileService);
+            notifier.deriveFromAgeGroup(savedAgeGroup);
+            return notifier;
+          }),
         ],
         child: TriviaTycoonApp(initialData: (manager, theme)),
       ),
