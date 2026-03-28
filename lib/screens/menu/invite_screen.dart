@@ -158,7 +158,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
   // --- Logic Methods ---
 
   void _shareInvite(String code, String link) async {
-    final String shareMessage = 'Join Trivia Tycoon and compete with me!\n\n'
+    final String shareMessage = 'Join Synaptix and compete with me!\n\n'
         'Use my referral code: $code\n\n'
         'Or sign up directly:\n$link\n\n'
         'We both get bonus rewards when you join!';
@@ -167,7 +167,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
       // Correct share_plus 10.1.0 syntax
       final result = await Share.share(
         shareMessage,
-        subject: 'Join me on Trivia Tycoon!',
+        subject: 'Join me on Synaptix!',
       );
 
       if (!mounted) return;

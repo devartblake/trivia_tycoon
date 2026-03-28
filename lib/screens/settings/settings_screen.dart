@@ -318,7 +318,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
             'Notifications are currently enabled. To disable them:\n\n'
                 '1. Go to your device Settings\n'
                 '2. Find "Apps" or "Application Manager"\n'
-                '3. Select "Trivia Tycoon"\n'
+                '3. Select "Synaptix"\n'
                 '4. Tap "Notifications"\n'
                 '5. Turn off notifications',
             style: TextStyle(color: Color(0xFF64748B)),

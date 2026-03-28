@@ -106,7 +106,7 @@ class ChallengeMessageBridge {
       id: _generateMessageId(),
       conversationId: conversationId,
       senderId: 'system',
-      senderName: 'Trivia Tycoon',
+      senderName: 'Synaptix',
       content: _getChallengeResultContent(challenge, winnerId, coinsWon),
       type: MessageType.challengeResult,
       status: MessageStatus.delivered,

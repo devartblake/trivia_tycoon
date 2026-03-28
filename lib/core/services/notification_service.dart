@@ -52,7 +52,7 @@ class NotificationService {
           channelGroupKey: _groupKey,
           channelKey: basicChannelKey,
           channelName: 'Basic Notifications',
-          channelDescription: 'Basic notifications for Trivia Tycoon',
+          channelDescription: 'Basic notifications for Synaptix',
           defaultColor: const Color(0xFF6C5CE7),
           ledColor: Colors.white,
           importance: NotificationImportance.High,
@@ -127,7 +127,7 @@ class NotificationService {
         channelGroups: [
           NotificationChannelGroup(
             channelGroupKey: _groupKey,
-            channelGroupName: 'Trivia Tycoon',
+            channelGroupName: 'Synaptix',
           ),
         ],
       );
