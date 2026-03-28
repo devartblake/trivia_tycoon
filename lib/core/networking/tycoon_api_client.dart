@@ -10,7 +10,7 @@ import '../dto/territory_dto.dart';
 import '../dto/vote_dto.dart';
 import '../dto/economy_dto.dart';
 
-/// API client for Trivia Tycoon backend
+/// API client for Synaptix backend
 ///
 /// Provides high-level methods for common API operations with
 /// automatic authentication and error handling.

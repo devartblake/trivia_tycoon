@@ -53,6 +53,7 @@ Future<void> main() async {
   }
 }
 
+// TODO(Synaptix Phase 8): Rename TriviaTycoonApp -> SynaptixApp
 class TriviaTycoonApp extends ConsumerStatefulWidget {
   final (ServiceManager, ThemeNotifier)? initialData;
 
@@ -141,7 +142,7 @@ class _TriviaTycoonAppState extends ConsumerState<TriviaTycoonApp> {
           children: [
             Icon(Icons.info_outline, color: Theme.of(context).primaryColor),
             const SizedBox(width: 12),
-            const Text('Welcome Back!'),
+            const Text('Welcome back to Synaptix'),
           ],
         ),
         content: Column(

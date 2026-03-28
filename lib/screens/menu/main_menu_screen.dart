@@ -200,7 +200,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     final ageGroup = ref.watch(userAgeGroupProvider);
 
     return StandardAppBar(
-      title: 'Trivia Tycoon',
+      title: 'Synaptix',
       ageGroup: ageGroup,
       showSearch: true,
       showChat: true,
