@@ -8,7 +8,7 @@ class AllActionsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final actions = [
       {'title': 'History', 'icon': Icons.history, 'route': '/history'},
-      {'title': 'Leaderboard', 'icon': Icons.trending_up, 'route': '/leaderboard'},
+      {'title': 'Arena', 'icon': Icons.trending_up, 'route': '/leaderboard'},
       {'title': 'Favorites', 'icon': Icons.star, 'route': '/favorites'},
       {'title': 'Multiplayer', 'icon': Icons.group, 'route': '/multiplayer'},
       {'title': 'Settings', 'icon': Icons.settings, 'route': '/settings'},

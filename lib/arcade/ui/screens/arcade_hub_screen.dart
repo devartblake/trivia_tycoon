@@ -310,7 +310,7 @@ class ArcadeHubScreen extends ConsumerWidget {
                 child: _buildActionCard(
                   context,
                   ref,
-                  title: 'Daily Bonus',
+                  title: 'Daily Signal',
                   subtitle: claimed ? 'Claimed' : 'Available',
                   icon: Icons.card_giftcard_rounded,
                   gradient: claimed

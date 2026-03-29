@@ -163,7 +163,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/admin',
         builder: (context, state) {
           return const AdminRouteWrapper(
-            routeName: 'Admin Dashboard',
+            routeName: 'Synaptix Command',
             child: AdminDashboardScreen(),
           );
         },

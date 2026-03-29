@@ -646,9 +646,9 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
           fontSize: 13,
         ),
         tabs: const [
-          Tab(text: 'Stats'),
+          Tab(text: 'Performance'),
           Tab(text: 'Activity'),
-          Tab(text: 'Achievements'),
+          Tab(text: 'Milestones'),
           Tab(text: 'Collection'),
         ],
       ),

@@ -287,7 +287,7 @@ class _LocalArcadeLeaderboardScreenState
                       Row(
                         children: [
                           const Text(
-                            'Daily Bonus',
+                            'Daily Signal',
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w900,

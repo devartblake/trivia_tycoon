@@ -34,7 +34,7 @@ enum TransactionType {
       case TransactionType.achievementReward:
         return 'Achievement Reward';
       case TransactionType.dailyBonus:
-        return 'Daily Bonus';
+        return 'Daily Signal';
     }
   }
 
