@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,7 +21,6 @@ import '../../game/utils/gradient_themes.dart';
 import '../../game/utils/greeting_utils.dart';
 import '../../ui_components/tycoon_toast/tycoon_toast.dart';
 import '../../game/providers/riverpod_providers.dart';
-import '../../core/animations/animation_manager.dart';
 
 /// Modern, modular main menu screen
 ///
@@ -41,6 +42,7 @@ class MainMenuScreen extends ConsumerStatefulWidget {
 class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     with TickerProviderStateMixin {
   AnimationController? _animationController;
+  AnimationController? _pulseController;
   late List<AnimationController> _cardAnimationControllers;
   TycoonToast? _greetingToast;
 
@@ -53,6 +55,11 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
       vsync: this,
       duration: const Duration(milliseconds: 1200),
     );
+
+    _pulseController = AnimationManager.createController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1800),
+    )..repeat(reverse: true);
 
     // Card stagger animations
     _cardAnimationControllers = AnimationManager.createStaggeredControllers(
@@ -139,6 +146,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
   @override
   void dispose() {
     _animationController?.dispose();
+    _pulseController?.dispose();
     AnimationManager.disposeControllers(_cardAnimationControllers);
     super.dispose();
   }
@@ -168,7 +176,12 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
         appBar: _buildAppBar(),
         body: FadeTransition(
           opacity: AnimationManager.fadeIn(_animationController!),
-          child: _buildResponsiveBody(),
+          child: Stack(
+            children: [
+              const Positioned.fill(child: _WorldGridBackdrop()),
+              _buildResponsiveBody(),
+            ],
+          ),
         ),
       ),
     );
@@ -214,13 +227,22 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.all(32),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final isExtraWide = constraints.maxWidth > 1200;
-              return isExtraWide
-                  ? _buildThreeColumnLayout()
-                  : _buildTwoColumnLayout();
-            },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildLiveTickerBar(),
+              const SizedBox(height: 16),
+              _buildFeaturedModeCard(),
+              const SizedBox(height: 24),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final isExtraWide = constraints.maxWidth > 1200;
+                  return isExtraWide
+                      ? _buildThreeColumnLayout()
+                      : _buildTwoColumnLayout();
+                },
+              ),
+            ],
           ),
         ),
       ),
@@ -323,6 +345,10 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
 
   List<Widget> _buildAllComponents() {
     return [
+      _buildLiveTickerBar(),
+      const SizedBox(height: 16),
+      _buildFeaturedModeCard(),
+      const SizedBox(height: 20),
       _animatedComponent(0, _buildRewardsWidget()),
       const SizedBox(height: 20),
       _animatedComponent(1, _buildCurrencyWidget()),
@@ -338,6 +364,127 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
       _buildMatchesSection(),
       const SizedBox(height: 100),
     ];
+  }
+
+  Widget _buildLiveTickerBar() {
+    final ageGroup = ref.watch(userAgeGroupProvider);
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        gradient: LinearGradient(
+          colors: [
+            ageGroup.primaryColor.withValues(alpha: 0.24),
+            Colors.white.withValues(alpha: 0.06),
+          ],
+        ),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.show_chart_rounded, color: ageGroup.primaryColor, size: 18),
+          const SizedBox(width: 10),
+          const Expanded(
+            child: Text(
+              'LIVE: Weekend Trivia Rush is active • 2x XP for party matches',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFeaturedModeCard() {
+    final ageGroup = ref.watch(userAgeGroupProvider);
+    final pulse = Tween<double>(begin: 1, end: 1.06).animate(
+      CurvedAnimation(
+        parent: _pulseController!,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(24),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                ageGroup.primaryColor.withValues(alpha: 0.30),
+                Colors.white.withValues(alpha: 0.08),
+              ],
+            ),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.22)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.2),
+                blurRadius: 24,
+                offset: const Offset(0, 14),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'FEATURED MODE',
+                style: TextStyle(
+                  fontSize: 12,
+                  letterSpacing: 1.2,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Gemini Clash Arena',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Fast 60-second rounds with reactive bonuses and global leaderboard spikes.',
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.9),
+                  height: 1.35,
+                ),
+              ),
+              const SizedBox(height: 16),
+              AnimatedBuilder(
+                animation: pulse,
+                builder: (context, child) => Transform.scale(
+                  scale: pulse.value,
+                  alignment: Alignment.centerLeft,
+                  child: child,
+                ),
+                child: ElevatedButton.icon(
+                  onPressed: () => context.push('/play'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: ageGroup.primaryColor,
+                    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                  icon: const Icon(Icons.flash_on_rounded),
+                  label: const Text('Play Featured'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   // COMPONENT BUILDERS
@@ -559,4 +706,80 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
     return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
   }
+}
+
+class _WorldGridBackdrop extends StatelessWidget {
+  const _WorldGridBackdrop();
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      child: Stack(
+        children: [
+          Positioned(
+            top: -120,
+            right: -90,
+            child: Container(
+              width: 320,
+              height: 320,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    const Color(0xFF67C9FF).withValues(alpha: 0.16),
+                    Colors.transparent,
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: -100,
+            left: -80,
+            child: Container(
+              width: 260,
+              height: 260,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    const Color(0xFF9B72FF).withValues(alpha: 0.15),
+                    Colors.transparent,
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Positioned.fill(
+            child: Opacity(
+              opacity: 0.09,
+              child: CustomPaint(
+                painter: _SubtleGridPainter(),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SubtleGridPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    const spacing = 28.0;
+    final paint = Paint()
+      ..color = Colors.white
+      ..strokeWidth = 1;
+
+    for (double x = 0; x <= size.width; x += spacing) {
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
+    }
+    for (double y = 0; y <= size.height; y += spacing) {
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
