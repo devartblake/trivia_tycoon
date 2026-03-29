@@ -391,6 +391,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
 
   Widget _buildLiveTickerBar() {
     final ageGroup = ref.watch(userAgeGroupProvider);
+    final primaryAccent = GradientThemes.getAgeGroupColors(ageGroup).first;
 
     return Container(
       width: double.infinity,
@@ -399,7 +400,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
         borderRadius: BorderRadius.circular(16),
         gradient: LinearGradient(
           colors: [
-            ageGroup.primaryColor.withValues(alpha: 0.24),
+            primaryAccent.withValues(alpha: 0.24),
             Colors.white.withValues(alpha: 0.06),
           ],
         ),
@@ -407,7 +408,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
       ),
       child: Row(
         children: [
-          Icon(Icons.show_chart_rounded, color: ageGroup.primaryColor, size: 18),
+          Icon(Icons.show_chart_rounded, color: primaryAccent, size: 18),
           const SizedBox(width: 10),
           const Expanded(
             child: Text(
@@ -424,6 +425,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
 
   Widget _buildFeaturedModeCard() {
     final ageGroup = ref.watch(userAgeGroupProvider);
+    final primaryAccent = GradientThemes.getAgeGroupColors(ageGroup).first;
     final pulse = Tween<double>(begin: 1, end: 1.06).animate(
       CurvedAnimation(
         parent: _pulseController!,
@@ -444,7 +446,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                ageGroup.primaryColor.withValues(alpha: 0.30),
+                primaryAccent.withValues(alpha: 0.30),
                 Colors.white.withValues(alpha: 0.08),
               ],
             ),
@@ -493,7 +495,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
                   onPressed: () => context.push('/play'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    foregroundColor: ageGroup.primaryColor,
+                    foregroundColor: primaryAccent,
                     padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
