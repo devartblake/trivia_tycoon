@@ -17,7 +17,7 @@ class SkillTreeScreen extends ConsumerStatefulWidget {
 
 class _SkillTreeScreenState extends ConsumerState<SkillTreeScreen> {
   String? _selectedGroupId;
-  String _groupTitle = 'Skill Tree';
+  String _groupTitle = 'Pathways';
   SkillNodeFilterMode _filterMode = SkillNodeFilterMode.all;
 
   @override
@@ -75,7 +75,7 @@ class _SkillTreeScreenState extends ConsumerState<SkillTreeScreen> {
         return 'General Skills';
 
       default:
-        return 'Skill Tree';
+        return 'Pathways';
     }
   }
 

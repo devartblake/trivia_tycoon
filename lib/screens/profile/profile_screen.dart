@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../game/providers/multi_profile_providers.dart';
 import '../../game/providers/riverpod_providers.dart';
+import '../../synaptix/mode/synaptix_mode_provider.dart';
 import '../../screens/profile/widgets/profile_game_card.dart';
 import '../../screens/profile/widgets/profile_header_bar.dart';
 import '../../screens/profile/widgets/profile_tab_bar.dart';
@@ -40,6 +41,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
     );
     _fadeController.forward();
     _loadAdminStatus();
+
+    // Synaptix analytics — Journey surface opened
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final mode = ref.read(synaptixModeProvider);
+      ref.read(analyticsServiceProvider).trackEvent('synaptix_surface_opened', {
+        'surface': 'journey',
+        'synaptix_mode': mode.name,
+        'entry_point': 'navigation',
+        'audience_segment': mode.name,
+      });
+    });
   }
 
   @override

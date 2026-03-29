@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../game/analytics/providers/analytics_providers.dart';
 import '../../../game/controllers/skill_tree_controller.dart';
+import '../../../synaptix/mode/synaptix_mode_provider.dart';
 import '../../../ui_components/hex_grid/widgets/hex_nav_button.dart';
 import '../../../ui_components/hex_grid/math/hex_orientation.dart';
 import '../../game/models/skill_tree_nav_models.dart';
@@ -24,6 +26,17 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
+
+    // Synaptix analytics — Pathways surface opened
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final mode = ref.read(synaptixModeProvider);
+      ref.read(analyticsServiceProvider).trackEvent('synaptix_surface_opened', {
+        'surface': 'pathways',
+        'synaptix_mode': mode.name,
+        'entry_point': 'navigation',
+        'audience_segment': mode.name,
+      });
+    });
   }
 
   @override
@@ -76,7 +89,7 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
       backgroundColor: const Color(0xFF15183A),
       elevation: 0,
       title: const Text(
-        'Skill Trees',
+        'Pathways',
         style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
       ),
       actions: [

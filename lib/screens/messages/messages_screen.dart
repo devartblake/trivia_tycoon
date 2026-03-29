@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../game/analytics/providers/analytics_providers.dart';
 import '../../game/models/conversation_models.dart';
 import '../../game/providers/message_providers.dart';
+import '../../synaptix/mode/synaptix_mode_provider.dart';
 import '../profile/dialogs/add_friend_dialog.dart';
 import '../search/dialogs/search_dialog.dart';
 import 'dialogs/create_dm_dialog.dart';
@@ -23,6 +25,21 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
 
   // TODO: Replace with actual user ID from auth service
   final String _currentUserId = 'current_user_id';
+
+  @override
+  void initState() {
+    super.initState();
+    // Synaptix analytics — Circles surface opened
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final mode = ref.read(synaptixModeProvider);
+      ref.read(analyticsServiceProvider).trackEvent('synaptix_surface_opened', {
+        'surface': 'circles',
+        'synaptix_mode': mode.name,
+        'entry_point': 'navigation',
+        'audience_segment': mode.name,
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -19,7 +19,7 @@ class SkillTreeNavTestScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Skill Trees'),
+        title: const Text('Pathways'),
         actions: const [],
       ),
       body: groupsAsync.when(

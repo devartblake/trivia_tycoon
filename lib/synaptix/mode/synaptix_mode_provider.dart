@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:trivia_tycoon/game/analytics/providers/analytics_providers.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import 'synaptix_mode.dart';
 import 'synaptix_mode_notifier.dart';
@@ -10,5 +11,11 @@ import 'synaptix_mode_notifier.dart';
 final synaptixModeProvider =
     StateNotifierProvider<SynaptixModeNotifier, SynaptixMode>((ref) {
   final profileService = ref.read(playerProfileServiceProvider);
-  return SynaptixModeNotifier(profileService);
+  final notifier = SynaptixModeNotifier(profileService);
+  try {
+    notifier.setAnalyticsService(ref.read(analyticsServiceProvider));
+  } catch (_) {
+    // Analytics may not be available during early bootstrap
+  }
+  return notifier;
 });
