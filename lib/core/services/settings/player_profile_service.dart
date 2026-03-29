@@ -19,6 +19,12 @@ class PlayerProfileService {
   static const _lastActiveKey = 'lastActive';
   static const _userProfileKey = 'preferredCategories';
 
+  // Synaptix Phase 2: additive mode/preference keys
+  static const _synaptixModeKey = 'synaptixMode';
+  static const _preferredHomeSurfaceKey = 'preferredHomeSurface';
+  static const _reducedMotionKey = 'reducedMotion';
+  static const _tonePreferenceKey = 'tonePreference';
+
   /// Gets the settings box, opening it if necessary
   Future<Box> _getBox() async {
     if (Hive.isBoxOpen(_boxName)) {
@@ -51,6 +57,56 @@ class PlayerProfileService {
   Future<String?> getUserId() async {
     final box = await _getBox();
     return box.get(_userIdKey);
+  }
+
+  // -------------------- SYNAPTIX MODE METHODS -----------------
+
+  /// Saves the Synaptix mode (kids, teen, adult).
+  Future<void> saveSynaptixMode(String mode) async {
+    final box = await _getBox();
+    await box.put(_synaptixModeKey, mode);
+  }
+
+  /// Retrieves the saved Synaptix mode.
+  Future<String?> getSynaptixMode() async {
+    final box = await _getBox();
+    return box.get(_synaptixModeKey);
+  }
+
+  /// Saves the preferred home surface.
+  Future<void> savePreferredHomeSurface(String surface) async {
+    final box = await _getBox();
+    await box.put(_preferredHomeSurfaceKey, surface);
+  }
+
+  /// Retrieves the preferred home surface.
+  Future<String?> getPreferredHomeSurface() async {
+    final box = await _getBox();
+    return box.get(_preferredHomeSurfaceKey);
+  }
+
+  /// Saves the reduced motion preference.
+  Future<void> saveReducedMotion(bool value) async {
+    final box = await _getBox();
+    await box.put(_reducedMotionKey, value);
+  }
+
+  /// Retrieves the reduced motion preference.
+  Future<bool> getReducedMotion() async {
+    final box = await _getBox();
+    return box.get(_reducedMotionKey, defaultValue: false);
+  }
+
+  /// Saves the tone preference.
+  Future<void> saveTonePreference(String tone) async {
+    final box = await _getBox();
+    await box.put(_tonePreferenceKey, tone);
+  }
+
+  /// Retrieves the tone preference.
+  Future<String?> getTonePreference() async {
+    final box = await _getBox();
+    return box.get(_tonePreferenceKey);
   }
 
   // ------------------------- EXISTING METHODS ----------------
@@ -180,6 +236,10 @@ class PlayerProfileService {
     await box.delete(_avatarKey);
     await box.delete(_sessionDataKey);
     await box.delete(_lastActiveKey);
+    await box.delete(_synaptixModeKey);
+    await box.delete(_preferredHomeSurfaceKey);
+    await box.delete(_reducedMotionKey);
+    await box.delete(_tonePreferenceKey);
   }
 
   // ------------------------- LIFECYCLE METHODS ---------------
@@ -250,6 +310,10 @@ class PlayerProfileService {
         'avatar': await getAvatar(),
         'is_admin': await isAdminUser(),
         'last_active': await getLastActiveTime(),
+        'synaptix_mode': await getSynaptixMode(),
+        'preferred_home_surface': await getPreferredHomeSurface(),
+        'reduced_motion': await getReducedMotion(),
+        'tone_preference': await getTonePreference(),
       };
     } catch (e) {
       LogManager.debug('[PlayerProfile] Error loading complete profile: $e');
@@ -288,6 +352,18 @@ class PlayerProfileService {
       }
       if (profileData.containsKey('avatar')) {
         await box.put(_avatarKey, profileData['avatar']);
+      }
+      if (profileData.containsKey('synaptix_mode')) {
+        await box.put(_synaptixModeKey, profileData['synaptix_mode']);
+      }
+      if (profileData.containsKey('preferred_home_surface')) {
+        await box.put(_preferredHomeSurfaceKey, profileData['preferred_home_surface']);
+      }
+      if (profileData.containsKey('reduced_motion')) {
+        await box.put(_reducedMotionKey, profileData['reduced_motion']);
+      }
+      if (profileData.containsKey('tone_preference')) {
+        await box.put(_tonePreferenceKey, profileData['tone_preference']);
       }
 
       await updateLastActive();
@@ -353,6 +429,7 @@ class PlayerProfileService {
           'ageGroup': 'teens',
           'avatar': null,
           'userId': null, // ← UPDATED: Include in profile
+          'synaptixMode': null,
         };
       }
 
@@ -369,7 +446,8 @@ class PlayerProfileService {
         'country': box.get(_countryKey),
         'ageGroup': box.get(_ageGroupKey, defaultValue: 'teens'),
         'avatar': box.get(_avatarKey),
-        'userId': box.get(_userIdKey), // ← UPDATED: Include in profile
+        'userId': box.get(_userIdKey),
+        'synaptixMode': box.get(_synaptixModeKey),
       };
     } catch (e) {
       LogManager.debug('[PlayerProfile] Error getting profile: $e');
@@ -386,6 +464,7 @@ class PlayerProfileService {
         'ageGroup': 'teens',
         'avatar': null,
         'userId': null,
+        'synaptixMode': null,
       };
     }
   }
