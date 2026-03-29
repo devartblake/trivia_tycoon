@@ -15,7 +15,7 @@ class NotFoundScreen extends StatelessWidget {
         backgroundColor: Colors.transparent, // Makes app bar blend with body
         elevation: 0,
         title: const Text(
-          'Trivia Tycoon',
+          'Synaptix',
           style: TextStyle(
             fontFamily: 'Montserrat', // Example font, adjust as needed
             fontWeight: FontWeight.bold,

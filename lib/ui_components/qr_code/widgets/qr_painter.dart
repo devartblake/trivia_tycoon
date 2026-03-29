@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/qr_matrix.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class QrPainter extends CustomPainter {
   final QrMatrix matrix;
@@ -16,33 +17,33 @@ class QrPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    debugPrint('=== QrPainter Debug ===');
-    debugPrint('Canvas size: ${size.width}x${size.height}');
-    debugPrint('Matrix size: ${matrix.size}');
-    debugPrint('Dot color: $dotColor');
-    debugPrint('Background color: $backgroundColor');
-    debugPrint('Gap: $gap');
+    LogManager.debug('=== QrPainter Debug ===');
+    LogManager.debug('Canvas size: ${size.width}x${size.height}');
+    LogManager.debug('Matrix size: ${matrix.size}');
+    LogManager.debug('Dot color: $dotColor');
+    LogManager.debug('Background color: $backgroundColor');
+    LogManager.debug('Gap: $gap');
 
     final paint = Paint()..color = dotColor;
     final backgroundPaint = Paint()..color = backgroundColor;
 
     // Fill background
     canvas.drawRect(Offset.zero & size, backgroundPaint);
-    debugPrint('Background drawn');
+    LogManager.debug('Background drawn');
 
     // Check if size is valid
     if (size.width <= 0 || size.height <= 0) {
-      debugPrint('ERROR: Invalid canvas size!');
+      LogManager.debug('ERROR: Invalid canvas size!');
       return;
     }
 
     if (matrix.size <= 0) {
-      debugPrint('ERROR: Invalid matrix size!');
+      LogManager.debug('ERROR: Invalid matrix size!');
       return;
     }
 
     final moduleSize = size.width / matrix.size;
-    debugPrint('Module size: $moduleSize');
+    LogManager.debug('Module size: $moduleSize');
 
     int dotsDrawn = 0;
     int totalModules = 0;
@@ -63,13 +64,13 @@ class QrPainter extends CustomPainter {
           dotsDrawn++;
         }
       } catch (e) {
-        debugPrint('ERROR at position ($x, $y): $e');
+        LogManager.debug('ERROR at position ($x, $y): $e');
         }
       }
     }
 
-    debugPrint('Drew $dotsDrawn dots out of $totalModules modules');
-    debugPrint('======================');
+    LogManager.debug('Drew $dotsDrawn dots out of $totalModules modules');
+    LogManager.debug('======================');
   }
 
   @override
@@ -80,7 +81,7 @@ class QrPainter extends CustomPainter {
         oldDelegate.gap != gap;
 
     if (shouldRepaint) {
-      debugPrint('QrPainter: Should repaint = true');
+      LogManager.debug('QrPainter: Should repaint = true');
     }
 
     return shouldRepaint;

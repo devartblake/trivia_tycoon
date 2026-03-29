@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'demo_data.dart';
 import '../../screens/app_shell/app_shell.dart';
 import '../../ui_components/swipe_notifications/swipe_item.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 // Content for the list items.
 class EmailCard extends StatelessWidget {
@@ -64,7 +65,7 @@ class EmailCard extends StatelessWidget {
                 backgroundColor: Colors.grey[300], // Fallback color
                 foregroundImage: getProfileImage(email.profileImageUrl),
                 onForegroundImageError: (exception, stackTrace) {
-                  debugPrint("Image load error: $exception");
+                  LogManager.debug("Image load error: $exception");
                 },
                 child: email.profileImageUrl == null
                     ? Text(

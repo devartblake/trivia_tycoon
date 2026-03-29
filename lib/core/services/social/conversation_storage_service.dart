@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import '../../../game/models/conversation_models.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Simple storage service for conversations - no business logic
 class ConversationStorageService {
@@ -17,7 +18,7 @@ class ConversationStorageService {
       _userConversations[participantId]!.add(conversation.id);
     }
 
-    debugPrint('Conversation saved: ${conversation.id}');
+    LogManager.debug('Conversation saved: ${conversation.id}');
     return conversation;
   }
 
@@ -71,7 +72,7 @@ class ConversationStorageService {
     if (!_conversations.containsKey(conversationId)) return null;
 
     _conversations[conversationId] = updatedConversation;
-    debugPrint('Conversation updated: $conversationId');
+    LogManager.debug('Conversation updated: $conversationId');
     return updatedConversation;
   }
 
@@ -119,7 +120,7 @@ class ConversationStorageService {
       for (final participantId in conversation.participantIds) {
         _userConversations[participantId]?.remove(conversationId);
       }
-      debugPrint('Conversation deleted: $conversationId');
+      LogManager.debug('Conversation deleted: $conversationId');
       return true;
     }
     return false;
@@ -143,7 +144,7 @@ class ConversationStorageService {
   void clear() {
     _conversations.clear();
     _userConversations.clear();
-    debugPrint('Conversation storage cleared');
+    LogManager.debug('Conversation storage cleared');
   }
 
   Map<String, dynamic> getStats() {

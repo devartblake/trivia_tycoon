@@ -15,11 +15,14 @@ import '../../core/animations/animation_manager.dart';
 import '../../core/helpers/responsive_layout.dart';
 import '../../core/services/theme/seasonal_theme_service.dart';
 import '../../core/theme/themes.dart';
+import '../../game/providers/economy_providers.dart';
 import '../../game/utils/gradient_themes.dart';
 import '../../game/utils/greeting_utils.dart';
 import '../../ui_components/tycoon_toast/tycoon_toast.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../core/animations/animation_manager.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'widgets/economy_hud_widget.dart';
 
 /// Modern, modular main menu screen
 ///
@@ -43,6 +46,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
   AnimationController? _animationController;
   late List<AnimationController> _cardAnimationControllers;
   TycoonToast? _greetingToast;
+  AppLifecycleListener? _lifecycleListener;
 
   @override
   void initState() {
@@ -75,6 +79,12 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     Future.delayed(const Duration(milliseconds: 800), () {
       if (mounted) _showGreetingToast();
     });
+
+    // Fetch economy state on first load and on app resume
+    _fetchEconomy();
+    _lifecycleListener = AppLifecycleListener(
+      onResume: _fetchEconomy,
+    );
 
     // Remind users to complete onboarding when needed.
     Future.delayed(const Duration(milliseconds: 1100), () {
@@ -136,8 +146,20 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     }
   }
 
+  Future<void> _fetchEconomy() async {
+    if (!mounted) return;
+    try {
+      final playerId = await ref.read(currentUserIdProvider.future);
+      if (!mounted) return;
+      ref.read(economyProvider.notifier).fetchState(playerId);
+    } catch (_) {
+      // Economy state is non-blocking — the HUD will show cached values.
+    }
+  }
+
   @override
   void dispose() {
+    _lifecycleListener?.dispose();
     _animationController?.dispose();
     AnimationManager.disposeControllers(_cardAnimationControllers);
     super.dispose();
@@ -151,7 +173,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
       data: (themeType) => _buildScaffold(themeType),
       loading: () => _buildScaffold(AppTheme.defaultTheme),
       error: (error, stack) {
-        debugPrint('[Theme] Error loading theme: $error');
+        LogManager.debug('[Theme] Error loading theme: $error');
         return _buildScaffold(AppTheme.defaultTheme);
       },
     );
@@ -178,7 +200,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     final ageGroup = ref.watch(userAgeGroupProvider);
 
     return StandardAppBar(
-      title: 'Trivia Tycoon',
+      title: 'Synaptix',
       ageGroup: ageGroup,
       showSearch: true,
       showChat: true,
@@ -366,17 +388,24 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
         final livesState = ref.watch(livesProvider);
         final ageGroup = ref.watch(userAgeGroupProvider);
 
-        return CurrencyDisplay(
-          ageGroup: ageGroup,
-          coins: coins,
-          gems: diamonds,
-          currentEnergy: energyState.current,
-          maxEnergy: energyState.max,
-          currentLives: livesState.current,
-          maxLives: livesState.max,
-          ref: ref,
-          showEnergyInfo: (cur, max) => _showEnergyInfo(context, cur, max),
-          showLivesInfo: (cur, max) => _showLivesInfo(context, cur, max),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CurrencyDisplay(
+              ageGroup: ageGroup,
+              coins: coins,
+              gems: diamonds,
+              currentEnergy: energyState.current,
+              maxEnergy: energyState.max,
+              currentLives: livesState.current,
+              maxLives: livesState.max,
+              ref: ref,
+              showEnergyInfo: (cur, max) => _showEnergyInfo(context, cur, max),
+              showLivesInfo: (cur, max) => _showLivesInfo(context, cur, max),
+            ),
+            const SizedBox(height: 10),
+            const EconomyHudWidget(),
+          ],
         );
       },
     );
@@ -513,24 +542,33 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
   }
 
   void _showLivesInfo(BuildContext context, int currentLives, int maxLives) {
-    final livesRefillTime = ref.read(livesRefillTimeProvider);
+    final livesState = ref.read(livesProvider);
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Lives System'),
+        title: const Text('Challenge Lives'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Current Lives: $currentLives/$maxLives'),
+            Text('Lives per run: $maxLives'),
             const SizedBox(height: 8),
-            if (currentLives < maxLives)
-              Text('Next life in: ${_formatDuration(livesRefillTime)}'),
+            if (livesState.isRunActive) ...[
+              Text('Current run lives: $currentLives/$maxLives'),
+              const SizedBox(height: 4),
+              Text(
+                livesState.canRevive
+                    ? 'Premium revive available (1 per run)'
+                    : 'No revives remaining for this run',
+              ),
+            ],
             const SizedBox(height: 16),
             const Text(
-              'Lives are lost when you fail a quiz. They refill automatically or you can ask friends for help.',
+              'Lives are used only in Challenge mode — 3 lives per run. '
+              'They do not refill over time. Start a new run to restore lives. '
+              'One premium revive is available per run.',
               style: TextStyle(fontSize: 14, color: Colors.grey),
             ),
           ],
@@ -540,14 +578,6 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
             onPressed: () => Navigator.of(context).pop(),
             child: const Text('OK'),
           ),
-          if (currentLives < maxLives)
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                context.push('/ask-friends-lives');
-              },
-              child: const Text('Ask Friends'),
-            ),
         ],
       ),
     );

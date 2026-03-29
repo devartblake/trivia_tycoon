@@ -12,7 +12,7 @@ class TriviaSplashOverlay extends StatelessWidget {
           const FlutterLogo(size: 120),
           const SizedBox(height: 20),
           Text(
-            "Trivia Tycoon",
+            "Synaptix",
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.bold,

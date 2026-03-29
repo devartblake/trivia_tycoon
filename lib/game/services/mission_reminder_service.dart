@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/services/notification_service.dart';
 import 'mission_service.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class MissionReminderService {
   final NotificationService _notificationService = NotificationService();
@@ -28,7 +29,7 @@ class MissionReminderService {
         );
       }
     } catch (e) {
-      debugPrint('Failed to send expiring mission reminders: $e');
+      LogManager.debug('Failed to send expiring mission reminders: $e');
     }
   }
 

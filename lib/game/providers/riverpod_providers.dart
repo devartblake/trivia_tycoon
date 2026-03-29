@@ -116,147 +116,13 @@ import '../models/currency_type.dart';
 import '../models/badge.dart';
 import '../state/tier_progression_state.dart';
 import '../state/tier_update_result.dart';
+import 'core_providers.dart';
 import 'message_providers.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
-// --- 🌍 Global Services ---
-final configServiceProvider =
-    Provider<ConfigService>((ref) => ConfigService.instance);
-
-/// Holds the [ServiceManager] after initialization
-///
-/// Must be overridden in `AppLauncher` after [AppInit] completes.
-final serviceManagerProvider = Provider<ServiceManager>((ref) {
-  throw UnimplementedError(
-    "serviceManagerProvider must be overridden in ProviderScope in AppLauncher",
-  );
-});
-
-/// Provides the GoRouter instance reactively
-final routerProvider = FutureProvider<GoRouter>((ref) async {
-  return await AppRouter.router();
-});
-
-final apiServiceProvider = Provider<ApiService>((ref) {
-  final config = ref.watch(configServiceProvider);
-  return ApiService(baseUrl: config.apiBaseUrl);
-});
-
-/// Global WebSocket client provider
-final globalWsClientProvider = Provider<WsClient?>((ref) {
-  return AppInit.wsClient;
-});
-
-/// WebSocket connection status provider
-final wsConnectionStatusProvider = StateProvider<bool>((ref) {
-  return AppInit.isWebSocketConnected;
-});
-
-// --- 🔐 Core Auth Providers ---
-
-/// Provides the Hive box for auth tokens
-final authTokenBoxProvider = Provider<Box>((ref) {
-  if (!Hive.isBoxOpen('auth_tokens')) {
-    throw StateError('auth_tokens box must be opened in app_init.dart before creating providers');
-  }
-  return Hive.box('auth_tokens');
-});
-
-/// Provides the AuthTokenStore
-final authTokenStoreProvider = Provider<AuthTokenStore>((ref) {
-  final box = ref.watch(authTokenBoxProvider);
-  return AuthTokenStore(box);
-});
-
-/// Provides the DeviceIdService
-final deviceIdServiceProvider = Provider<DeviceIdService>((ref) {
-  final secureStorage = ref.watch(secureStorageProvider);
-  return DeviceIdService(secureStorage);
-});
-
-/// Provides the AuthApiClient
-final authApiClientProvider = Provider<AuthApiClient>((ref) {
-  return AuthApiClient(
-    http.Client(),
-    apiBaseUrl: EnvConfig.apiBaseUrl, deviceId: ref.watch(deviceIdServiceProvider),
-  );
-});
-
-/// Provides the core AuthService (backend token management)
-final coreAuthServiceProvider = Provider<core_auth.AuthService>((ref) {
-  return core_auth.AuthService(
-    deviceId: ref.watch(deviceIdServiceProvider),
-    tokenStore: ref.watch(authTokenStoreProvider),
-    api: ref.watch(authApiClientProvider),
-  );
-});
-
-/// Provides authenticated HTTP client with auto-refresh
-final authHttpClientProvider = Provider<AuthHttpClient>((ref) {
-  return AuthHttpClient(
-    ref.watch(coreAuthServiceProvider),
-    ref.watch(authTokenStoreProvider),
-    autoRefresh: true,
-    onTokenRefreshed: () {
-      debugPrint('[Auth] ✅ Token auto-refreshed');
-    },
-    onRefreshFailed: (error) {
-      debugPrint('[Auth] ❌ Refresh failed: $error');
-      // Optional: Navigate to login or show notification
-    },
-  );
-});
-
-/// Provides HttpClient wrapper
-final httpClientProvider = Provider<HttpClient>((ref) {
-  return HttpClient(
-    authClient: ref.watch(authHttpClientProvider),
-    baseUrl: EnvConfig.apiBaseUrl,
-  );
-});
-
-/// Provides TycoonApiClient
-final tycoonApiClientProvider = Provider<TycoonApiClient>((ref) {
-  return TycoonApiClient(
-    httpClient: ref.watch(httpClientProvider),
-  );
-});
-
-/// Provides WebSocket client
-final wsClientProvider = Provider<WsClient>((ref) {
-  return WsClient(
-    url: EnvConfig.apiWsBaseUrl,
-    onMessage: (message) {
-      debugPrint('[WS] Message: ${message.op}');
-    },
-    onStateChange: (state) {
-      debugPrint('[WS] State: $state');
-    },
-    onError: (error) {
-      debugPrint('[WS] Error: $error');
-    },
-  );
-});
-
-/// Provides SecureStorage
-final secureStorageProvider = Provider<SecureStorage>((ref) {
-  return SecureStorage();
-});
-
-// --- 🔑 UPDATED: LoginManager Provider ---
-
-/// Provides the LoginManager with all required dependencies
-final loginManagerProvider = Provider<LoginManager>((ref) {
-  final serviceManager = ref.read(serviceManagerProvider);
-
-  return LoginManager(
-    authService: ref.watch(coreAuthServiceProvider),      // ← UPDATED: Core auth service
-    tokenStore: ref.watch(authTokenStoreProvider),        // ← NEW: Token store
-    deviceIdService: ref.watch(deviceIdServiceProvider),  // ← NEW: Device ID service
-    profileService: serviceManager.playerProfileService,
-    onboardingService: serviceManager.onboardingSettingsService,
-    secureStorage: ref.watch(secureStorageProvider),      // ← UPDATED: Use provider
-  );
-});
+// Infrastructure providers (auth chain, storage, networking, router).
+// Re-exported so all existing imports of riverpod_providers.dart continue to work.
+export 'core_providers.dart';
 
 // --- 🧠 Game Logic ---
 /// Provides the SettingsController for theme/audio/etc
@@ -301,12 +167,7 @@ final customThemeServiceProvider = Provider<CustomThemeService>((ref) {
   return manager.customThemeService;
 });
 
-final generalKeyValueStorageProvider =
-    Provider<GeneralKeyValueStorageService>((ref) {
-  return GeneralKeyValueStorageService();
-});
-
-final authServiceProvider = Provider<AuthService>((ref) {
+final authServiceProvider = Provider<LocalAuthService>((ref) {
   final manager = ref.watch(serviceManagerProvider);
   return manager.authService;
 });
@@ -427,9 +288,6 @@ final confettiControllerProvider =
 });
 
 // --- 💽 Local Storage Services ---
-final appCacheServiceProvider = Provider<AppCacheService>((ref) {
-  return ref.read(serviceManagerProvider).appCacheService;
-});
 
 final qrSettingsServiceProvider = Provider<QrSettingsService>((ref) {
   return QrSettingsService();
@@ -510,9 +368,9 @@ final energyProvider = StateNotifierProvider<EnergyNotifier, EnergyState>((ref) 
 });
 
 // Lives System
-final livesProvider = StateNotifierProvider<LivesNotifier, LivesState>((ref) {
+final livesProvider = StateNotifierProvider<ChallengeLivesNotifier, ChallengeLivesState>((ref) {
   final storage = ref.read(generalKeyValueStorageProvider);
-  return LivesNotifier(storage);
+  return ChallengeLivesNotifier(storage);
 });
 
 // Recent Quizzes Provider (for MainMenuScreen)

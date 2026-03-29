@@ -6,7 +6,7 @@ class TypingTriviaLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const text = "Trivia Tycoon";
+    const text = "Synaptix";
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: text.characters.map((char) {

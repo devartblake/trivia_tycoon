@@ -19,6 +19,7 @@ import '../theme/app_scroll_behavior.dart';
 import '../theme/themes.dart';
 import '../services/theme/seasonal_theme_service.dart';
 import 'app_init.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// AppLauncher handles config + service initialization and launches the app
 class AppLauncher extends ConsumerStatefulWidget {
@@ -331,7 +332,7 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
 
     return AppLifecycleObserver(
       child: MaterialApp.router(
-        title: 'Trivia Tycoon',
+        title: 'Synaptix',
         showPerformanceOverlay: false,
         debugShowCheckedModeBanner: false,
         scrollBehavior: AppScrollBehavior(),

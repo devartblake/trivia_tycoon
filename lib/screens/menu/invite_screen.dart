@@ -6,6 +6,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import '../../game/models/referral_models.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class InviteScreen extends ConsumerStatefulWidget {
   const InviteScreen({super.key});
@@ -30,7 +31,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
         'screen_class': 'InviteScreen',
       });
     } catch (e) {
-      debugPrint('Analytics error: $e');
+      LogManager.debug('Analytics error: $e');
     }
   }
 
@@ -157,7 +158,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
   // --- Logic Methods ---
 
   void _shareInvite(String code, String link) async {
-    final String shareMessage = 'Join Trivia Tycoon and compete with me!\n\n'
+    final String shareMessage = 'Join Synaptix and compete with me!\n\n'
         'Use my referral code: $code\n\n'
         'Or sign up directly:\n$link\n\n'
         'We both get bonus rewards when you join!';
@@ -166,7 +167,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
       // Correct share_plus 10.1.0 syntax
       final result = await Share.share(
         shareMessage,
-        subject: 'Join me on Trivia Tycoon!',
+        subject: 'Join me on Synaptix!',
       );
 
       if (!mounted) return;
