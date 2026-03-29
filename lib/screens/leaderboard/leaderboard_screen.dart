@@ -8,6 +8,7 @@ import '../../core/animations/animation_manager.dart';
 import '../../game/models/leaderboard_entry.dart';
 import '../../game/models/seasonal_competition_model.dart';
 import '../../game/providers/riverpod_providers.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class LeaderboardScreen extends ConsumerStatefulWidget {
   const LeaderboardScreen({super.key});
@@ -71,9 +72,9 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
         });
       }
 
-      debugPrint('[LeaderboardScreen] Loaded ${_entries.length} entries');
+      LogManager.debug('[LeaderboardScreen] Loaded ${_entries.length} entries');
     } catch (e) {
-      debugPrint('[LeaderboardScreen] Init error: $e');
+      LogManager.debug('[LeaderboardScreen] Init error: $e');
       if (mounted) {
         setState(() => _isLoadingLeaderboard = false);
       }
@@ -97,9 +98,9 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
         _entries = leaderboardService.currentLeaderboard;
       });
 
-      debugPrint('[LeaderboardScreen] Updated - ${_entries.length} entries');
+      LogManager.debug('[LeaderboardScreen] Updated - ${_entries.length} entries');
     } catch (e) {
-      debugPrint('[LeaderboardScreen] Update error: $e');
+      LogManager.debug('[LeaderboardScreen] Update error: $e');
     }
   }
 
@@ -111,7 +112,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
       leaderboardService.removeListener(_onLeaderboardUpdate);
       leaderboardService.unsubscribe();
     } catch (e) {
-      debugPrint('[LeaderboardScreen] Cleanup error: $e');
+      LogManager.debug('[LeaderboardScreen] Cleanup error: $e');
     }
   }
 

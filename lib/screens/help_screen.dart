@@ -329,7 +329,7 @@ class HelpScreen extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'Trivia Tycoon',
+                      'Synaptix',
                       style: TextStyle(
                         fontSize: 13,
                         color: Colors.grey[600],

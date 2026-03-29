@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:math';
 
 import '../dialogs/game_result_dialog.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class Game2048Screen extends StatefulWidget {
   const Game2048Screen({super.key});
@@ -66,10 +67,10 @@ class _Game2048ScreenState extends State<Game2048Screen> {
         gameIcon: Icons.apps,
       ),
       onShare: () {
-        debugPrint('Share tapped');
+        LogManager.debug('Share tapped');
       },
       onClose: () {
-        debugPrint('Close tapped');
+        LogManager.debug('Close tapped');
       },
       onPlayAgain: () {
         _gameController.reset();

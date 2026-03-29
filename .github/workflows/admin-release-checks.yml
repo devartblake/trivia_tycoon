@@ -1,0 +1,95 @@
+name: Admin Release Checks
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_live_smoke:
+        description: "Run live backend smoke checks (requires secrets)"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+  pull_request:
+    paths:
+      - 'lib/admin/**'
+      - 'lib/core/services/**'
+      - 'lib/core/state/admin_provider.dart'
+      - 'lib/game/providers/notification_providers.dart'
+      - 'scripts/admin_backend_smoke_checks.sh'
+      - 'test/**'
+      - 'docs/admin_backend_smoke_checks.md'
+      - 'docs/admin_release_checklist.md'
+      - '.github/workflows/admin-release-checks.yml'
+
+jobs:
+  quality-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Show tool versions
+        run: |
+          dart --version
+          flutter --version
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Validate smoke script syntax
+        run: bash -n scripts/admin_backend_smoke_checks.sh
+
+      - name: Run smoke script dry-run
+        env:
+          ADMIN_API_BASE_URL: https://staging-api.example.com/api/v1
+          DRY_RUN: "1"
+        run: ./scripts/admin_backend_smoke_checks.sh
+
+      - name: Dart format check
+        run: dart format --set-exit-if-changed lib test docs
+
+      - name: Flutter analyze
+        run: flutter analyze
+
+      - name: Focused Step 5 tests
+        run: |
+          flutter test test/core/services/api_service_test.dart
+          flutter test test/admin/providers/admin_auth_providers_test.dart
+
+      - name: Full test suite
+        run: flutter test --coverage
+
+  live-smoke:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_live_smoke == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: quality-gates
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run live backend smoke checks
+        env:
+          ADMIN_API_BASE_URL: ${{ secrets.ADMIN_API_BASE_URL }}
+          ADMIN_ACCESS_TOKEN: ${{ secrets.ADMIN_ACCESS_TOKEN }}
+          ADMIN_REFRESH_TOKEN: ${{ secrets.ADMIN_REFRESH_TOKEN }}
+          ADMIN_LOGIN_EMAIL: ${{ secrets.ADMIN_LOGIN_EMAIL }}
+          ADMIN_LOGIN_PASSWORD: ${{ secrets.ADMIN_LOGIN_PASSWORD }}
+          ADMIN_OTP_CODE: ${{ secrets.ADMIN_OTP_CODE }}
+        run: |
+          if [[ -z "${ADMIN_API_BASE_URL}" ]]; then
+            echo "Missing secret ADMIN_API_BASE_URL"
+            exit 1
+          fi
+          ./scripts/admin_backend_smoke_checks.sh

@@ -1,4 +1,4 @@
-/// Model for collectible items in Trivia Tycoon
+/// Model for collectible items in Synaptix
 /// These items are earned by mastering different trivia categories
 class CollectionItem {
   final String id;

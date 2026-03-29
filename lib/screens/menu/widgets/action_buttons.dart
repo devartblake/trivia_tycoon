@@ -138,6 +138,14 @@ class ActionButtons extends StatelessWidget {
 
     return [
       {
+        'label': 'Hub',
+        'icon': Icons.hub_rounded,
+        'gradient': gradients[0],
+        'route': '/game',
+        'description': 'Synaptix Hub',
+        'badge': null,
+      },
+      {
         'label': 'Invite',
         'icon': Icons.person_add_rounded,
         'gradient': gradients[0],

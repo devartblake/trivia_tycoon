@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../core/utils/color_utils.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
+// Synaptix Phase 2: The SynaptixTheme (lib/synaptix/theme/) is a parallel
+// ThemeExtension layered on top of this system — it does NOT replace AppTheme
+// or ThemeType. Both systems coexist: AppTheme controls color/font presets,
+// SynaptixTheme controls mode-aware surface/motion behavior.
 enum ThemeType { main, allStar, competition }
 
 class AppTheme {
@@ -56,7 +61,7 @@ class AppTheme {
     return ThemeType.values.firstWhere(
           (e) => e.name == themeName,
       orElse: () {
-        debugPrint("Invalid theme type found ($themeName), using default.");
+        LogManager.debug("Invalid theme type found ($themeName), using default.");
         return defaultTheme;
       },
     );

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class PlayerState {
   final String id;
@@ -118,7 +119,7 @@ class SpectateStreamingService extends ChangeNotifier {
 
   void initialize() {
     _startGameUpdates();
-    debugPrint('SpectateStreamingService initialized');
+    LogManager.debug('SpectateStreamingService initialized');
   }
 
   void dispose() {
@@ -159,7 +160,7 @@ class SpectateStreamingService extends ChangeNotifier {
       _broadcastGameUpdate(gameId);
     }
 
-    debugPrint('$spectatorName joined spectate mode for game $gameId');
+    LogManager.debug('$spectatorName joined spectate mode for game $gameId');
   }
 
   // Leave spectate mode
@@ -189,7 +190,7 @@ class SpectateStreamingService extends ChangeNotifier {
       _broadcastGameUpdate(gameId);
     }
 
-    debugPrint('Spectator $spectatorId left game $gameId');
+    LogManager.debug('Spectator $spectatorId left game $gameId');
   }
 
   // Watch a specific game
@@ -226,7 +227,7 @@ class SpectateStreamingService extends ChangeNotifier {
     required String reaction,
   }) {
     // In a real app, this would broadcast the reaction to other spectators
-    debugPrint('Spectator $spectatorId sent reaction $reaction to game $gameId');
+    LogManager.debug('Spectator $spectatorId sent reaction $reaction to game $gameId');
   }
 
   // Simulate game updates

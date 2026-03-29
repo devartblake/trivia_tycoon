@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
 import 'package:trivia_tycoon/screens/rewards/widgets/weekly_rewards_widget.dart';
 import '../../ui_components/spin_wheel/services/spin_tracker.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Enhanced rewards screen with modern design and performance optimizations
 class RewardsScreen extends ConsumerStatefulWidget {
@@ -90,7 +91,7 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
         });
       }
     } catch (e) {
-      debugPrint('Failed to load reward data: $e');
+      LogManager.debug('Failed to load reward data: $e');
       if (mounted) {
         setState(() {
           _isLoading = false;

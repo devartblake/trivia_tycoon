@@ -55,12 +55,8 @@ class MultiplayerService {
     );
   }
 
-  Future<void> submitAnswer(String matchId, String questionId, String answerId) async {
-    // TODO: implement server call via wsClient.send
-  }
+  Future<void> submitAnswer(String matchId, String questionId, String answerId) =>
+      _repo.submitAnswer(matchId, questionId, answerId);
 
-  Future<List<Map<String, dynamic>>> listRooms() async {
-    // TODO: implement server call via wsClient.send
-    return [];
-  }
+  Future<List<Map<String, dynamic>>> listRooms() => _repo.listRooms();
 }
