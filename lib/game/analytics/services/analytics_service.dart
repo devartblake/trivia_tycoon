@@ -21,9 +21,12 @@ class AnalyticsService {
   // Offline persistence boxes
   Box? _offlineEventsBox;
   Box? _sessionDataBox; // Added for enhanced session tracking
+  Future<void>? _boxInitFuture;
+  bool _offlineStorageWarningLogged = false;
 
   // Connectivity monitoring
   late final StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
+  bool _connectivityInitialized = false;
   bool _isOnline = false;
   String? _currentSessionId;
 
@@ -41,10 +44,8 @@ class AnalyticsService {
         level: LogLevel.info, source: 'AnalyticsService');
 
     try {
-      // Initialize Hive box for offline events
-      _offlineEventsBox = await Hive.openBox('offline_analytics_events');
-      _sessionDataBox = await Hive.openBox('analytics_session_data'); // Enhanced session storage
-      LogManager.log('Offline events box opened successfully', level: LogLevel.debug, source: 'AnalyticsService');
+      // Initialize Hive boxes for offline/session events
+      await _ensureStorageBoxesInitialized();
 
       // Set up connectivity monitoring
       await _initializeConnectivity();
@@ -72,6 +73,21 @@ class AnalyticsService {
           level: LogLevel.error, source: 'AnalyticsService');
       rethrow;
     }
+  }
+
+  Future<void> _ensureStorageBoxesInitialized() async {
+    if (_offlineEventsBox != null && _sessionDataBox != null) {
+      return;
+    }
+
+    _boxInitFuture ??= () async {
+      _offlineEventsBox = await Hive.openBox('offline_analytics_events');
+      _sessionDataBox = await Hive.openBox('analytics_session_data');
+      LogManager.log('Offline/session analytics boxes opened successfully',
+          level: LogLevel.debug, source: 'AnalyticsService');
+    }();
+
+    await _boxInitFuture;
   }
 
   /// Start a new analytics session with enhanced tracking
@@ -120,6 +136,7 @@ class AnalyticsService {
                   level: LogLevel.warning, source: 'AnalyticsService');
             }
           });
+      _connectivityInitialized = true;
     } catch (e) {
       LogManager.log('Failed to initialize connectivity monitoring: $e',
           level: LogLevel.error, source: 'AnalyticsService');
@@ -178,12 +195,17 @@ class AnalyticsService {
   /// Store event for offline sync
   Future<void> _storeOfflineEvent(String eventName, Map<String, dynamic> data) async {
     try {
-      // Check if box is initialized
+      // Ensure storage is initialized (handles early calls before initialize completes)
+      await _ensureStorageBoxesInitialized();
+
       if (_offlineEventsBox == null) {
-        LogManager.log(
-            'Offline events box not initialized yet - skipping offline storage',
-            level: LogLevel.warning,
-            source: 'AnalyticsService');
+        if (!_offlineStorageWarningLogged) {
+          _offlineStorageWarningLogged = true;
+          LogManager.log(
+              'Offline events box not initialized yet - skipping offline storage',
+              level: LogLevel.warning,
+              source: 'AnalyticsService');
+        }
         return;
       }
 
@@ -206,9 +228,9 @@ class AnalyticsService {
   /// Sync offline events when network is restored
   Future<void> _syncOfflineEvents() async {
     try {
+      await _ensureStorageBoxesInitialized();
+
       if (_offlineEventsBox == null) {
-        LogManager.log('Offline events box not initialized - skipping sync',
-            level: LogLevel.warning, source: 'AnalyticsService');
         return;
       }
 
@@ -434,7 +456,9 @@ class AnalyticsService {
   /// Clean up resources
   void dispose() {
     _retryTimer?.cancel();
-    _connectivitySubscription.cancel();
+    if (_connectivityInitialized) {
+      _connectivitySubscription.cancel();
+    }
     LogManager.log('AnalyticsService disposed',
         level: LogLevel.info, source: 'AnalyticsService');
   }
