@@ -211,7 +211,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const EncryptedFilePreview(),
       ),*/
 
-      // --- NEW ADMIN SHELL ROUTE ---
+      // --- ADMIN SHELL ROUTE → "Synaptix Command" ---
       // This single ShellRoute handles all '/admin/*' paths.
       // The guard is applied once to the shell, protecting all child routes.
       ShellRoute(
@@ -300,39 +300,48 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
 
       /// 🧭 Shell Route with MainNavBar (applies only to these screens)
+      /// Synaptix Phase 3 display label mapping:
+      ///   /game        → "Synaptix Hub"
+      ///   /leaderboard → "Arena"
+      ///   /arcade      → "Labs"
+      ///   /skills      → "Pathways"
+      ///   /profile     → "Journey"
+      ///   /messages    → "Circles"
+      ///   /admin       → "Command"
+      /// Route paths are intentionally unchanged.
       ShellRoute(
           builder: (context, state, child) => MainNavBar(child: child),
           routes: [
             GoRoute(
-              path: '/game',
+              path: '/game', // Synaptix Hub
               builder: (context, state) => const GameMenuScreen(),
               redirect: onboardingGuard,
             ),
             GoRoute(
-              path: '/store',
+              path: '/store', // Exchange / Store
               builder: (context, state) => const StoreScreen(),
               redirect: onboardingGuard,
             ),
             GoRoute(
-              path: '/profile',
+              path: '/profile', // Journey
               builder: (context, state) => const ProfileScreen(),
               redirect: onboardingGuard,
             ),
             GoRoute(
-              path: '/leaderboard',
+              path: '/leaderboard', // Arena
               builder: (context, state) => const LeaderboardScreen(),
               redirect: onboardingGuard,
             ),
             GoRoute(
-              path: '/rewards',
+              path: '/rewards', // Rewards / Unlocks
               builder: (context, state) => const RewardsScreen(),
               redirect: onboardingGuard,
             ),
           ]),
 
-      /// Arcade Hub
+      /// Arcade Hub → "Labs"
       GoRoute(
-        path: '/arcade',
+        path: '/arcade', // Labs
         builder: (context, state) => const ArcadeHubScreen(),
       ),
       GoRoute(
@@ -677,7 +686,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         redirect: onboardingGuard,
       ),
       GoRoute(
-       path: '/messages',
+       path: '/messages', // Circles
        name: 'Messages',
        builder: (context, state) => const MessagesScreen(),
        redirect: onboardingGuard,
@@ -797,9 +806,9 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const QrScanSettingsScreen(),
       ),
 
-      /// Skills Tree
+      /// Skills Tree → "Pathways" / "Neural Pathways"
       GoRoute(
-        path: '/skills',
+        path: '/skills', // Pathways
         builder: (context, state) => const SkillTreeNavScreen(),
       ),
       GoRoute(
