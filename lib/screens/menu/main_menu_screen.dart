@@ -45,8 +45,8 @@ class MainMenuScreen extends ConsumerStatefulWidget {
 
 class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     with TickerProviderStateMixin {
-  AnimationController? _animationController;
-  AnimationController? _pulseController;
+  late final AnimationController _animationController;
+  late final AnimationController _pulseController;
   late List<AnimationController> _cardAnimationControllers;
   TycoonToast? _greetingToast;
   AppLifecycleListener? _lifecycleListener;
@@ -75,7 +75,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     );
 
     // Start animations
-    _animationController!.forward();
+    _animationController.forward();
     AnimationManager.startStaggered(
       controllers: _cardAnimationControllers,
       baseDelayMs: 0,
@@ -168,8 +168,8 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
   @override
   void dispose() {
     _lifecycleListener?.dispose();
-    _animationController?.dispose();
-    _pulseController?.dispose();
+    _animationController.dispose();
+    _pulseController.dispose();
     AnimationManager.disposeControllers(_cardAnimationControllers);
     super.dispose();
   }
@@ -198,7 +198,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
         drawer: const AppDrawer(),
         appBar: _buildAppBar(),
         body: FadeTransition(
-          opacity: AnimationManager.fadeIn(_animationController!),
+          opacity: AnimationManager.fadeIn(_animationController),
           child: Stack(
             children: [
               const Positioned.fill(child: _WorldGridBackdrop()),
@@ -428,7 +428,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     final primaryAccent = GradientThemes.getAgeGroupColors(ageGroup).first;
     final pulse = Tween<double>(begin: 1, end: 1.06).animate(
       CurvedAnimation(
-        parent: _pulseController!,
+        parent: _pulseController,
         curve: Curves.easeInOut,
       ),
     );
