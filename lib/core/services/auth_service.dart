@@ -2,9 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'auth_api_client.dart';
 import 'auth_token_store.dart';
 import 'device_id_service.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
-/// Core authentication service that manages tokens and communicates with backend.
-class AuthService {
+/// Named BackendAuthService to avoid collision with the local-storage AuthService
+/// in lib/ui_components/login/providers/auth.dart.
+class BackendAuthService {
   final DeviceIdService _deviceId;
   final AuthTokenStore _store;
   final AuthApiClient _api;
@@ -12,7 +14,7 @@ class AuthService {
   /// Exposes token storage for callers that still rely on direct access.
   AuthTokenStore get tokenStore => _store;
 
-  AuthService({
+  BackendAuthService({
     required DeviceIdService deviceId,
     required AuthTokenStore tokenStore,
     required AuthApiClient api,
@@ -93,7 +95,7 @@ class AuthService {
       );
     } catch (e) {
       if (kDebugMode) {
-        debugPrint('[AuthService] Logout request failed, proceeding with local clear: $e');
+        LogManager.debug('[AuthService] Logout request failed, proceeding with local clear: $e');
       }
     } finally {
       // Always clear local tokens, even if backend call fails

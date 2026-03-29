@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../core/qr_encoder.dart';
 import 'qr_painter.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class QrCodeWidget extends StatelessWidget {
   final String data;
@@ -25,40 +26,40 @@ class QrCodeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // DEBUG: Log input data
-    debugPrint('=== QrCodeWidget Debug ===');
-    debugPrint('Data: $data');
-    debugPrint('Data length: ${data.length}');
-    debugPrint('Size: $size');
-    debugPrint('Padding: $padding');
+    LogManager.debug('=== QrCodeWidget Debug ===');
+    LogManager.debug('Data: $data');
+    LogManager.debug('Data length: ${data.length}');
+    LogManager.debug('Size: $size');
+    LogManager.debug('Padding: $padding');
 
     // Validate input
     if (data.isEmpty) {
-      debugPrint('ERROR: Empty QR data!');
+      LogManager.debug('ERROR: Empty QR data!');
       return _buildErrorWidget('No data provided');
     }
 
     try {
       final encoder = QrEncoder();
-      debugPrint('Encoder created');
+      LogManager.debug('Encoder created');
 
       final matrix = encoder.encode(data);
-      debugPrint('Matrix encoded');
+      LogManager.debug('Matrix encoded');
 
       // Check if matrix is null
       if (matrix == null) {
-        debugPrint('ERROR: Matrix is null!');
+        LogManager.debug('ERROR: Matrix is null!');
         return _buildErrorWidget('Encoding failed: null matrix');
       }
 
       // Check matrix size
-      debugPrint('Matrix size: ${matrix.size}');
+      LogManager.debug('Matrix size: ${matrix.size}');
       if (matrix.size == 0) {
-        debugPrint('ERROR: Matrix size is 0!');
+        LogManager.debug('ERROR: Matrix size is 0!');
         return _buildErrorWidget('Encoding failed: empty matrix');
       }
 
-      debugPrint('QR Code ready to paint');
-      debugPrint('========================');
+      LogManager.debug('QR Code ready to paint');
+      LogManager.debug('========================');
 
       return SizedBox(
         width: size,
@@ -76,8 +77,8 @@ class QrCodeWidget extends StatelessWidget {
         ),
       );
     } catch (e, stackTrace) {
-      debugPrint('ERROR: Exception in QrCodeWidget: $e');
-      debugPrint('Stack trace: $stackTrace');
+      LogManager.debug('ERROR: Exception in QrCodeWidget: $e');
+      LogManager.debug('Stack trace: $stackTrace');
       return _buildErrorWidget('Error: ${e.toString()}');
     }
   }

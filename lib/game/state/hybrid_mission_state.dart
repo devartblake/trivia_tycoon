@@ -6,6 +6,7 @@ import '../../core/repositories/mission_repository.dart';
 import '../data/mission_data_loader.dart';
 import '../providers/riverpod_providers.dart';
 import '../services/mission_service.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 // Hybrid mission system that combines JSON missions with Supabase persistence
 class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
@@ -34,7 +35,7 @@ class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
       try {
         await _loadFromBackend();
       } catch (e) {
-        debugPrint('Backend unavailable, falling back to JSON-only mode: $e');
+        LogManager.debug('Backend unavailable, falling back to JSON-only mode: $e');
         _isBackendMode = false;
         await _generateLocalMissions();
       }
@@ -114,7 +115,7 @@ class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
           return;
         }
       } catch (e) {
-        debugPrint('Backend mission generation failed, falling back to local: $e');
+        LogManager.debug('Backend mission generation failed, falling back to local: $e');
         _isBackendMode = false;
       }
     }
@@ -169,7 +170,7 @@ class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
           return;
         }
       } catch (e) {
-        debugPrint('Backend swap failed, falling back to local: $e');
+        LogManager.debug('Backend swap failed, falling back to local: $e');
         _isBackendMode = false;
       }
     }
@@ -223,7 +224,7 @@ class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
           return;
         }
       } catch (e) {
-        debugPrint('Backend update failed, falling back to local: $e');
+        LogManager.debug('Backend update failed, falling back to local: $e');
         _isBackendMode = false;
       }
     }
@@ -256,7 +257,7 @@ class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
     if (_isBackendMode) {
       // Try backend tracking (async, don't wait)
       _missionService!.trackUserAction(_userId!, actionType, metadata).catchError((e) {
-        debugPrint('Backend tracking failed: $e');
+        LogManager.debug('Backend tracking failed: $e');
       });
     }
 

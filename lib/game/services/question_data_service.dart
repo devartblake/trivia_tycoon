@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import '../../core/constants/question_paths.dart';
 import '../models/question_model.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Enhanced question loading with fallback strategies and dynamic path discovery
 Future<List<QuestionModel>> loadQuestionsFromAsset(
@@ -18,7 +19,7 @@ Future<List<QuestionModel>> loadQuestionsFromAsset(
       final List<dynamic> data = json.decode(jsonStr) as List<dynamic>;
       return data.map((e) => QuestionModel.fromJson(e)).toList();
     } catch (e) {
-      debugPrint('Failed to load from exact path $exactPath: $e');
+      LogManager.debug('Failed to load from exact path $exactPath: $e');
       // Fall through to dynamic path resolution
     }
   }
@@ -484,11 +485,11 @@ Future<List<QuestionModel>> _loadWithDynamicPaths(
     try {
       final jsonStr = await rootBundle.loadString(path);
       final List<dynamic> data = json.decode(jsonStr) as List<dynamic>;
-      debugPrint('Successfully loaded questions from: $path');
+      LogManager.debug('Successfully loaded questions from: $path');
       return data.map((e) => QuestionModel.fromJson(e)).toList();
     } catch (e) {
       lastErr = e;
-      debugPrint('loadQuestionsFromAsset: miss on $path ($e)');
+      LogManager.debug('loadQuestionsFromAsset: miss on $path ($e)');
     }
   }
 
@@ -552,10 +553,10 @@ Future<List<QuestionModel>> loadQuestionsFromMultipleCategories(List<String> cat
     try {
       final questions = await loadQuestionsByCategory(category);
       allQuestions.addAll(questions);
-      debugPrint('Successfully loaded ${questions.length} questions from $category');
+      LogManager.debug('Successfully loaded ${questions.length} questions from $category');
     } catch (e) {
       failedCategories.add(category);
-      debugPrint('Warning: Failed to load questions for category $category: $e');
+      LogManager.debug('Warning: Failed to load questions for category $category: $e');
     }
   }
 
@@ -564,7 +565,7 @@ Future<List<QuestionModel>> loadQuestionsFromMultipleCategories(List<String> cat
     try {
       final generalQuestions = await loadQuestionsByCategory('general');
       allQuestions.addAll(generalQuestions);
-      debugPrint('Loaded ${generalQuestions.length} questions from general fallback');
+      LogManager.debug('Loaded ${generalQuestions.length} questions from general fallback');
     } catch (e) {
       throw FlutterError('All categories failed to load: $failedCategories. General fallback also failed: $e');
     }
@@ -603,7 +604,7 @@ Future<int> getQuestionCount(String category) async {
     final questions = await loadQuestionsByCategory(category);
     return questions.length;
   } catch (e) {
-    debugPrint('Error getting question count for $category: $e');
+    LogManager.debug('Error getting question count for $category: $e');
     return 0;
   }
 }
@@ -614,14 +615,14 @@ bool validateQuestionData(Map<String, dynamic> questionJson) {
 
   for (final field in requiredFields) {
     if (!questionJson.containsKey(field) || questionJson[field] == null) {
-      debugPrint('Missing required field: $field');
+      LogManager.debug('Missing required field: $field');
       return false;
     }
   }
 
   // Validate answers structure
   if (questionJson['answers'] is! List || (questionJson['answers'] as List).isEmpty) {
-    debugPrint('Invalid answers structure');
+    LogManager.debug('Invalid answers structure');
     return false;
   }
 
@@ -641,12 +642,12 @@ Future<List<QuestionModel>> loadQuestionsWithValidation(String category) async {
     ).toList();
 
     if (validQuestions.length != questions.length) {
-      debugPrint('Filtered out ${questions.length - validQuestions.length} invalid questions from $category');
+      LogManager.debug('Filtered out ${questions.length - validQuestions.length} invalid questions from $category');
     }
 
     return validQuestions;
   } catch (e) {
-    debugPrint('Error loading questions with validation for $category: $e');
+    LogManager.debug('Error loading questions with validation for $category: $e');
     rethrow;
   }
 }

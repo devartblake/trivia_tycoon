@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Enhanced spin tracker with performance optimizations and better state management
 class EnhancedSpinTracker {
@@ -38,7 +39,7 @@ class EnhancedSpinTracker {
         return validatedState;
       }
     } catch (e) {
-      debugPrint('Failed to load spin tracker state: $e');
+      LogManager.debug('Failed to load spin tracker state: $e');
     }
 
     // Return default state
@@ -94,7 +95,7 @@ class EnhancedSpinTracker {
         final stateJson = jsonEncode(state.toJson());
         await AppSettings.setString(_stateKey, stateJson);
       } catch (e) {
-        debugPrint('Failed to save spin tracker state: $e');
+        LogManager.debug('Failed to save spin tracker state: $e');
       }
     });
   }

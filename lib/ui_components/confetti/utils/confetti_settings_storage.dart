@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import '../../../core/services/settings/general_key_value_storage_service.dart';
 import '../models/confetti_settings.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Handles saving, loading, and managing confetti themes using instance-based key-value storage.
 class ConfettiSettingsStorage {
@@ -38,7 +39,7 @@ class ConfettiSettingsStorage {
       final migrated = _migrate(map, version);
       return ConfettiSettings.fromMap(migrated);
     } catch (e) {
-      debugPrint("Failed to load theme '$name': $e");
+      LogManager.debug("Failed to load theme '$name': $e");
       return null;
     }
   }

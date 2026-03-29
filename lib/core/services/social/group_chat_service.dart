@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 enum GroupType {
   privateGroup,
@@ -251,7 +252,7 @@ class GroupChatService extends ChangeNotifier {
 
   void initialize() {
     _startPresenceUpdates();
-    debugPrint('GroupChatService initialized');
+    LogManager.debug('GroupChatService initialized');
   }
 
   void dispose() {
@@ -322,7 +323,7 @@ class GroupChatService extends ChangeNotifier {
 
     _groups[groupId] = group;
 
-    debugPrint('Created group "$name" with ${members.length} members');
+    LogManager.debug('Created group "$name" with ${members.length} members');
     notifyListeners();
     _broadcastGroupUpdate(groupId);
 
@@ -360,7 +361,7 @@ class GroupChatService extends ChangeNotifier {
       lastActivity: DateTime.now(),
     );
 
-    debugPrint('User $displayName joined group ${group.name}');
+    LogManager.debug('User $displayName joined group ${group.name}');
     notifyListeners();
     _broadcastGroupUpdate(groupId);
     _broadcastMemberUpdate(groupId);
@@ -407,7 +408,7 @@ class GroupChatService extends ChangeNotifier {
       );
     }
 
-    debugPrint('User $userId left group ${group.name}');
+    LogManager.debug('User $userId left group ${group.name}');
     notifyListeners();
     _broadcastGroupUpdate(groupId);
     _broadcastMemberUpdate(groupId);
@@ -428,7 +429,7 @@ class GroupChatService extends ChangeNotifier {
     _groupStreams.remove(groupId);
     _memberStreams.remove(groupId);
 
-    debugPrint('Deleted group ${group.name}');
+    LogManager.debug('Deleted group ${group.name}');
     notifyListeners();
 
     return true;
@@ -463,7 +464,7 @@ class GroupChatService extends ChangeNotifier {
       lastActivity: DateTime.now(),
     );
 
-    debugPrint('Updated ${targetMember.displayName} role to ${newRole.displayName}');
+    LogManager.debug('Updated ${targetMember.displayName} role to ${newRole.displayName}');
     notifyListeners();
     _broadcastGroupUpdate(groupId);
     _broadcastMemberUpdate(groupId);
@@ -550,7 +551,7 @@ class GroupChatService extends ChangeNotifier {
     }
 
     if (toRemove.isNotEmpty) {
-      debugPrint('Cleaned up ${toRemove.length} inactive groups');
+      LogManager.debug('Cleaned up ${toRemove.length} inactive groups');
       notifyListeners();
     }
   }
@@ -650,7 +651,7 @@ class GroupChatService extends ChangeNotifier {
       lastActivity: DateTime.now(),
     );
 
-    debugPrint('Updated group settings for ${group.name}');
+    LogManager.debug('Updated group settings for ${group.name}');
     notifyListeners();
     _broadcastGroupUpdate(groupId);
 
@@ -675,7 +676,7 @@ class GroupChatService extends ChangeNotifier {
     if (inviter == null || !inviter.role.canManageMembers) return false;
 
     // In a real app, this would create an invitation that the user can accept/decline
-    debugPrint('Invitation sent to $targetUserId for group ${group.name}');
+    LogManager.debug('Invitation sent to $targetUserId for group ${group.name}');
     return true;
   }
 

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import '../../../game/models/pvp_challenge_models.dart';
 import 'challenge_message_bridge.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class ChallengeCoordinationService extends ChangeNotifier {
   static final ChallengeCoordinationService _instance =
@@ -29,7 +30,7 @@ class ChallengeCoordinationService extends ChangeNotifier {
   void initialize() {
     _startExpirationTimer();
     _loadMockBalances();
-    debugPrint('ChallengeCoordinationService initialized');
+    LogManager.debug('ChallengeCoordinationService initialized');
   }
 
   @override
@@ -58,12 +59,12 @@ class ChallengeCoordinationService extends ChangeNotifier {
     if (wager > 0) {
       final balance = getCoinBalance(challengerId);
       if (balance < wager) {
-        debugPrint('Insufficient coins for wager');
+        LogManager.debug('Insufficient coins for wager');
         return null;
       }
 
       if (wager < _minWager || wager > _maxWager) {
-        debugPrint('Invalid wager amount');
+        LogManager.debug('Invalid wager amount');
         return null;
       }
     }
@@ -71,7 +72,7 @@ class ChallengeCoordinationService extends ChangeNotifier {
     // Check active challenge limit
     final activeChallenges = getActiveChallenges(challengerId);
     if (activeChallenges.length >= _maxActiveChallenges) {
-      debugPrint('Maximum active challenges reached');
+      LogManager.debug('Maximum active challenges reached');
       return null;
     }
 
@@ -96,7 +97,7 @@ class ChallengeCoordinationService extends ChangeNotifier {
       _deductCoins(challengerId, wager);
     }
 
-    debugPrint('Challenge created: ${challenge.id}');
+    LogManager.debug('Challenge created: ${challenge.id}');
     _broadcastChallengeUpdate(challengerId);
     _broadcastChallengeUpdate(opponentId);
     notifyListeners();
@@ -119,7 +120,7 @@ class ChallengeCoordinationService extends ChangeNotifier {
     }
 
     if (!challenge.status.isPending) {
-      debugPrint('Challenge is not pending');
+      LogManager.debug('Challenge is not pending');
       return false;
     }
 
@@ -132,7 +133,7 @@ class ChallengeCoordinationService extends ChangeNotifier {
     if (challenge.wager > 0) {
       final balance = getCoinBalance(userId);
       if (balance < challenge.wager) {
-        debugPrint('Insufficient coins for wager');
+        LogManager.debug('Insufficient coins for wager');
         return false;
       }
       _deductCoins(userId, challenge.wager);
@@ -143,7 +144,7 @@ class ChallengeCoordinationService extends ChangeNotifier {
       acceptedAt: DateTime.now(),
     );
 
-    debugPrint('Challenge accepted: $challengeId');
+    LogManager.debug('Challenge accepted: $challengeId');
     _broadcastChallengeUpdate(challenge.challengerId);
     _broadcastChallengeUpdate(challenge.opponentId);
     notifyListeners();
@@ -171,7 +172,7 @@ class ChallengeCoordinationService extends ChangeNotifier {
       _addCoins(challenge.challengerId, challenge.wager);
     }
 
-    debugPrint('Challenge declined: $challengeId');
+    LogManager.debug('Challenge declined: $challengeId');
     _broadcastChallengeUpdate(challenge.challengerId);
     _broadcastChallengeUpdate(challenge.opponentId);
     notifyListeners();
@@ -186,7 +187,7 @@ class ChallengeCoordinationService extends ChangeNotifier {
     }
 
     if (!challenge.status.isPending) {
-      debugPrint('Can only cancel pending challenges');
+      LogManager.debug('Can only cancel pending challenges');
       return false;
     }
 
@@ -200,7 +201,7 @@ class ChallengeCoordinationService extends ChangeNotifier {
       _addCoins(challenge.challengerId, challenge.wager);
     }
 
-    debugPrint('Challenge cancelled: $challengeId');
+    LogManager.debug('Challenge cancelled: $challengeId');
     _broadcastChallengeUpdate(challenge.challengerId);
     _broadcastChallengeUpdate(challenge.opponentId);
     notifyListeners();
@@ -251,7 +252,7 @@ class ChallengeCoordinationService extends ChangeNotifier {
       winnerId: winnerId,
     );
 
-    debugPrint('Challenge completed: $challengeId, Winner: $winnerId');
+    LogManager.debug('Challenge completed: $challengeId, Winner: $winnerId');
     _broadcastChallengeUpdate(challenge.challengerId);
     _broadcastChallengeUpdate(challenge.opponentId);
     notifyListeners();
@@ -313,19 +314,19 @@ class ChallengeCoordinationService extends ChangeNotifier {
 
   void _addCoins(String userId, int amount) {
     _userCoinBalances[userId] = getCoinBalance(userId) + amount;
-    debugPrint('Added $amount coins to $userId. New balance: ${_userCoinBalances[userId]}');
+    LogManager.debug('Added $amount coins to $userId. New balance: ${_userCoinBalances[userId]}');
   }
 
   void _deductCoins(String userId, int amount) {
     _userCoinBalances[userId] = getCoinBalance(userId) - amount;
-    debugPrint('Deducted $amount coins from $userId. New balance: ${_userCoinBalances[userId]}');
+    LogManager.debug('Deducted $amount coins from $userId. New balance: ${_userCoinBalances[userId]}');
   }
 
   Future<bool> addCoins(String userId, int amount, {String? reason}) async {
     if (amount <= 0) return false;
 
     _addCoins(userId, amount);
-    debugPrint('Coins added: $amount to $userId. Reason: ${reason ?? "N/A"}');
+    LogManager.debug('Coins added: $amount to $userId. Reason: ${reason ?? "N/A"}');
     notifyListeners();
     return true;
   }
@@ -439,7 +440,7 @@ class ChallengeCoordinationService extends ChangeNotifier {
     }
 
     if (expiredIds.isNotEmpty) {
-      debugPrint('Expired ${expiredIds.length} challenges');
+      LogManager.debug('Expired ${expiredIds.length} challenges');
       notifyListeners();
     }
   }
@@ -458,7 +459,7 @@ class ChallengeCoordinationService extends ChangeNotifier {
       _addCoins(challenge.challengerId, challenge.wager);
     }
 
-    debugPrint('Challenge expired: $challengeId');
+    LogManager.debug('Challenge expired: $challengeId');
     _broadcastChallengeUpdate(challenge.challengerId);
     _broadcastChallengeUpdate(challenge.opponentId);
   }
@@ -510,7 +511,7 @@ class ChallengeCoordinationService extends ChangeNotifier {
     _minWager = minWager ?? _minWager;
     _maxWager = maxWager ?? _maxWager;
 
-    debugPrint('Challenge settings updated');
+    LogManager.debug('Challenge settings updated');
     notifyListeners();
   }
 

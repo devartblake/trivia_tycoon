@@ -2,13 +2,13 @@ import 'package:trivia_tycoon/core/services/settings/onboarding_settings_service
 import 'package:trivia_tycoon/core/services/settings/splash_settings_service.dart';
 import 'package:trivia_tycoon/game/analytics/services/analytics_service.dart';
 import '../../core/services/navigation/splash_type.dart';
-import '../../ui_components/login/providers/auth.dart';
+import '../../ui_components/login/providers/auth.dart' show LocalAuthService;
 
 class SplashController {
   final OnboardingSettingsService onboardingService;
   final SplashSettingsService splashSettingsService;
   final AnalyticsService analyticsService;
-  final AuthService authService;
+  final LocalAuthService authService;
 
   SplashController({
     required this.onboardingService,
