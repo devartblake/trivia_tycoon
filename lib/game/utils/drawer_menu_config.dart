@@ -31,7 +31,7 @@ class DrawerMenuConfig {
     ),
     const GradientMenuItem(
       icon: Icons.games_rounded,
-      title: 'Mini Games',
+      title: 'Labs Challenges',
       route: '/mini-games',
       gradient: LinearGradient(
         colors: [Color(0xFFFF6B6B), Color(0xFFFF8E53)],
@@ -39,7 +39,7 @@ class DrawerMenuConfig {
     ),
     const GradientMenuItem(
       icon: Icons.psychology_rounded,
-      title: 'Skills',
+      title: 'Pathways',
       route: '/skills',
       gradient: LinearGradient(
         colors: [Color(0xFFF59E0B), Color(0xFFD97706)],
@@ -55,7 +55,7 @@ class DrawerMenuConfig {
     ),
     const GradientMenuItem(
       icon: Icons.leaderboard_rounded,
-      title: 'Leaderboard',
+      title: 'Arena',
       route: '/leaderboard',
       gradient: LinearGradient(
         colors: [Color(0xFF06B6D4), Color(0xFF0891B2)],

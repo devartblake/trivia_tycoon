@@ -123,7 +123,7 @@ class DailyBonusScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Daily Bonus',
+                              'Daily Signal',
                               style: TextStyle(
                                 fontSize: 36,
                                 fontWeight: FontWeight.bold,

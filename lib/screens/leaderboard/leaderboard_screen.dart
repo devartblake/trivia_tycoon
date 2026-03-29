@@ -227,7 +227,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
       ],
       flexibleSpace: FlexibleSpaceBar(
         title: const Text(
-          'Leaderboard',
+          'Arena',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,

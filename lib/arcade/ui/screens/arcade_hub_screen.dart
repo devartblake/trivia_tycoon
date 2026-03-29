@@ -140,7 +140,7 @@ class ArcadeHubScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Arcade',
+                              'Labs',
                               style: TextStyle(
                                 fontSize: 36,
                                 fontWeight: FontWeight.bold,
@@ -150,7 +150,7 @@ class ArcadeHubScreen extends ConsumerWidget {
                             ),
                             SizedBox(height: 4),
                             Text(
-                              'Classic games, epic rewards',
+                              'Games, challenges, rewards',
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.white70,

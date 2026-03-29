@@ -250,7 +250,7 @@ class MiniGamesHubScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'Mini Games',
+                    'Labs Challenges',
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
@@ -260,7 +260,7 @@ class MiniGamesHubScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Challenge your brain with fun puzzles',
+                    'Training modules and brain puzzles',
                     style: TextStyle(
                       fontSize: 15,
                       color: Colors.white.withValues(alpha: 0.9),

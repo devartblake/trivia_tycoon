@@ -76,7 +76,7 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
       backgroundColor: const Color(0xFF15183A),
       elevation: 0,
       title: const Text(
-        'Skill Trees',
+        'Pathways',
         style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
       ),
       actions: [

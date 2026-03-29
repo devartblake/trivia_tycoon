@@ -36,7 +36,7 @@ class _RankedLeaderboardScreenState extends State<RankedLeaderboardScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ranked Leaderboard'),
+        title: const Text('Arena — Ranked'),
       ),
       body: Column(
         children: [

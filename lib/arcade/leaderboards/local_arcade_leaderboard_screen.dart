@@ -151,7 +151,7 @@ class _LocalArcadeLeaderboardScreenState
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Leaderboards',
+                                'Labs Leaderboard',
                                 style: TextStyle(
                                   fontSize: 32,
                                   fontWeight: FontWeight.w900,

@@ -46,11 +46,11 @@ class ProfileTabBar extends StatelessWidget {
             ),
             Tab(
               icon: Icon(Icons.bar_chart_rounded, size: 22),
-              text: 'Stats',
+              text: 'Performance',
             ),
             Tab(
               icon: Icon(Icons.emoji_events_rounded, size: 22),
-              text: 'Awards',
+              text: 'Milestones',
             ),
             Tab(
               icon: Icon(Icons.create_rounded, size: 22),
