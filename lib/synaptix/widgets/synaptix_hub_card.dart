@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../game/analytics/providers/analytics_providers.dart';
+import '../mode/synaptix_mode.dart';
+import '../mode/synaptix_mode_provider.dart';
 import '../theme/synaptix_theme_extension.dart';
 
 /// Reusable quick-launch card for the Synaptix Hub grid.
-class SynaptixHubCard extends StatelessWidget {
+class SynaptixHubCard extends ConsumerWidget {
   final String label;
   final String subtitle;
   final IconData icon;
   final LinearGradient gradient;
   final String route;
+  final String surface;
 
   const SynaptixHubCard({
     super.key,
@@ -18,16 +23,24 @@ class SynaptixHubCard extends StatelessWidget {
     required this.icon,
     required this.gradient,
     required this.route,
+    required this.surface,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final synaptix = Theme.of(context).extension<SynaptixTheme>();
     final radius = synaptix?.cardRadius ?? 16.0;
 
     return GestureDetector(
       onTap: () {
         HapticFeedback.lightImpact();
+        final mode = ref.read(synaptixModeProvider);
+        ref.read(analyticsServiceProvider).trackEvent('synaptix_hub_card_tapped', {
+          'surface': surface,
+          'synaptix_mode': mode.name,
+          'entry_point': 'hub_card',
+          'audience_segment': mode.name,
+        });
         context.push(route);
       },
       child: Container(

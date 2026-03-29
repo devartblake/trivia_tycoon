@@ -87,6 +87,7 @@ class GameMenuScreen extends ConsumerWidget {
           icon: card['icon'] as IconData,
           gradient: card['gradient'] as LinearGradient,
           route: card['route'] as String,
+          surface: card['surface'] as String,
         );
       },
     );
@@ -103,6 +104,7 @@ class GameMenuScreen extends ConsumerWidget {
         colors: [Color(0xFFF59E0B), Color(0xFFD97706)],
       ),
       'route': '/leaderboard',
+      'surface': 'arena',
     };
 
     final labs = {
@@ -113,6 +115,7 @@ class GameMenuScreen extends ConsumerWidget {
         colors: [Color(0xFF06B6D4), Color(0xFF0891B2)],
       ),
       'route': '/arcade',
+      'surface': 'labs',
     };
 
     final pathways = {
@@ -123,6 +126,7 @@ class GameMenuScreen extends ConsumerWidget {
         colors: [Color(0xFF8B5CF6), Color(0xFF7C3AED)],
       ),
       'route': '/skills',
+      'surface': 'pathways',
     };
 
     final journey = {
@@ -133,6 +137,7 @@ class GameMenuScreen extends ConsumerWidget {
         colors: [Color(0xFF10B981), Color(0xFF059669)],
       ),
       'route': '/profile',
+      'surface': 'journey',
     };
 
     final circles = {
@@ -143,6 +148,7 @@ class GameMenuScreen extends ConsumerWidget {
         colors: [Color(0xFFEC4899), Color(0xFFDB2777)],
       ),
       'route': '/messages',
+      'surface': 'circles',
     };
 
     final rewards = {
@@ -153,6 +159,7 @@ class GameMenuScreen extends ConsumerWidget {
         colors: [Color(0xFFEF4444), Color(0xFFDC2626)],
       ),
       'route': '/rewards',
+      'surface': 'rewards',
     };
 
     // Mode-aware emphasis ordering

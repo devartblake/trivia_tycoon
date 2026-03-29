@@ -8,6 +8,7 @@ import '../../core/animations/animation_manager.dart';
 import '../../game/models/leaderboard_entry.dart';
 import '../../game/models/seasonal_competition_model.dart';
 import '../../game/providers/riverpod_providers.dart';
+import '../../synaptix/mode/synaptix_mode_provider.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class LeaderboardScreen extends ConsumerStatefulWidget {
@@ -35,6 +36,15 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
       duration: const Duration(milliseconds: 800),
     );
     _animationController!.forward();
+
+    // Synaptix analytics — Arena surface opened
+    final mode = ref.read(synaptixModeProvider);
+    ref.read(analyticsServiceProvider).trackEvent('synaptix_surface_opened', {
+      'surface': 'arena',
+      'synaptix_mode': mode.name,
+      'entry_point': 'navigation',
+      'audience_segment': mode.name,
+    });
 
     // Initialize leaderboard
     _initializeLeaderboard();
