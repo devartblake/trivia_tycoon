@@ -5,6 +5,7 @@ import '../../../game/controllers/settings_controller.dart';
 import '../../core/services/notification_service.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../game/providers/auth_providers.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 final settingsControllerProvider = Provider<SettingsController>((ref) {
   final manager = ref.read(serviceManagerProvider);
@@ -79,7 +80,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
         });
       }
     } catch (e) {
-      debugPrint('Failed to check notification status: $e');
+      LogManager.debug('Failed to check notification status: $e');
       if (mounted) {
         setState(() {
           _notificationsEnabled = false;
@@ -232,7 +233,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
           _showNotificationSuccessDialog();
         }
       } catch (e) {
-        debugPrint('Error requesting notification permissions: $e');
+        LogManager.debug('Error requesting notification permissions: $e');
         if (mounted) {
           setState(() {
             _isCheckingNotifications = false;
@@ -317,7 +318,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
             'Notifications are currently enabled. To disable them:\n\n'
                 '1. Go to your device Settings\n'
                 '2. Find "Apps" or "Application Manager"\n'
-                '3. Select "Trivia Tycoon"\n'
+                '3. Select "Synaptix"\n'
                 '4. Tap "Notifications"\n'
                 '5. Turn off notifications',
             style: TextStyle(color: Color(0xFF64748B)),

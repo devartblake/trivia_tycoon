@@ -109,12 +109,12 @@ class Auth extends ChangeNotifier {
   }
 }
 
-class AuthService {
+class LocalAuthService {
   final SecureStorage secureStorage;
   final GeneralKeyValueStorageService generalKey;
   final PlayerProfileService playerProfileService;
 
-  AuthService({
+  LocalAuthService({
     required this.secureStorage,
     required this.generalKey,
     required this.playerProfileService,

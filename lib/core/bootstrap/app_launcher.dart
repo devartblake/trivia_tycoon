@@ -9,6 +9,8 @@ import 'package:trivia_tycoon/game/analytics/models/spin_live_summary.dart';
 import 'package:trivia_tycoon/game/analytics/providers/analytics_providers.dart';
 import 'package:trivia_tycoon/game/providers/multi_profile_providers.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart' as providers;
+import 'package:trivia_tycoon/synaptix/mode/synaptix_mode_provider.dart';
+import 'package:trivia_tycoon/synaptix/theme/synaptix_theme_extension.dart';
 import 'package:go_router/go_router.dart';
 import '../../game/providers/auth_providers.dart';
 import '../../game/providers/onboarding_providers.dart';
@@ -19,6 +21,7 @@ import '../theme/app_scroll_behavior.dart';
 import '../theme/themes.dart';
 import '../services/theme/seasonal_theme_service.dart';
 import 'app_init.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// AppLauncher handles config + service initialization and launches the app
 class AppLauncher extends ConsumerStatefulWidget {
@@ -328,17 +331,23 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
   Widget _buildApp(ThemeType themeType) {
     final themeNotifier = ref.watch(providers.themeNotifierProvider);
     final appTheme = AppTheme.fromType(themeType, ThemeMode.light);
+    final synaptixMode = ref.watch(synaptixModeProvider);
+    final synaptixTheme = SynaptixTheme.fromMode(synaptixMode);
 
     return AppLifecycleObserver(
       child: MaterialApp.router(
-        title: 'Trivia Tycoon',
+        title: 'Synaptix',
         showPerformanceOverlay: false,
         debugShowCheckedModeBanner: false,
         scrollBehavior: AppScrollBehavior(),
 
-        // Use active theme instead of hardcoded allStar
-        theme: appTheme.themeData,
-        darkTheme: AppTheme.fromType(themeType, ThemeMode.dark).themeData,
+        // Use active theme with Synaptix mode extension
+        theme: appTheme.themeData.copyWith(
+          extensions: [synaptixTheme],
+        ),
+        darkTheme: AppTheme.fromType(themeType, ThemeMode.dark).themeData.copyWith(
+          extensions: [synaptixTheme],
+        ),
         themeMode: themeNotifier.themeMode,
 
         // Use the new provider-based router

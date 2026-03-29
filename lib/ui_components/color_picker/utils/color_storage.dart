@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import '../core/color_picker_settings.dart';
 import '../core/color_picker_theme.dart';
 import '../models/color_palette.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class ColorStorage {
   // Box names
@@ -88,7 +89,7 @@ class ColorStorage {
       _setCache('selectedColor', color.value);
       return true;
     } catch (e) {
-      debugPrint('Error saving color: $e');
+      LogManager.debug('Error saving color: $e');
       return false;
     }
   }
@@ -112,7 +113,7 @@ class ColorStorage {
 
       return null;
     } catch (e) {
-      debugPrint('Error getting saved color: $e');
+      LogManager.debug('Error getting saved color: $e');
       return null;
     }
   }
@@ -122,7 +123,7 @@ class ColorStorage {
     try {
       // Validate palette
       if (palette.length > 50) {
-        debugPrint('Warning: Palette too large, truncating to 50 colors');
+        LogManager.debug('Warning: Palette too large, truncating to 50 colors');
         palette = palette.take(50).toList();
       }
 
@@ -132,7 +133,7 @@ class ColorStorage {
       _setCache('customPalette', colorValues);
       return true;
     } catch (e) {
-      debugPrint('Error saving custom palette: $e');
+      LogManager.debug('Error saving custom palette: $e');
       return false;
     }
   }
@@ -157,7 +158,7 @@ class ColorStorage {
 
       return [];
     } catch (e) {
-      debugPrint('Error getting custom palette: $e');
+      LogManager.debug('Error getting custom palette: $e');
       return [];
     }
   }
@@ -205,7 +206,7 @@ class ColorStorage {
       _setCache(cacheKey, savedColors);
       return savedColors;
     } catch (e) {
-      debugPrint('Error loading saved colors: $e');
+      LogManager.debug('Error loading saved colors: $e');
       return _getDefaultColors();
     }
   }
@@ -235,7 +236,7 @@ class ColorStorage {
       _setCache('pickerSettings', settingsMap);
       return true;
     } catch (e) {
-      debugPrint('Error saving picker settings: $e');
+      LogManager.debug('Error saving picker settings: $e');
       return false;
     }
   }
@@ -262,7 +263,7 @@ class ColorStorage {
 
       return null;
     } catch (e) {
-      debugPrint('Error getting picker settings: $e');
+      LogManager.debug('Error getting picker settings: $e');
       return null;
     }
   }
@@ -276,7 +277,7 @@ class ColorStorage {
       _setCache('pickerTheme', themeMap);
       return true;
     } catch (e) {
-      debugPrint('Error saving picker theme: $e');
+      LogManager.debug('Error saving picker theme: $e');
       return false;
     }
   }
@@ -299,7 +300,7 @@ class ColorStorage {
 
       return themeMap;
     } catch (e) {
-      debugPrint('Error getting picker theme: $e');
+      LogManager.debug('Error getting picker theme: $e');
       return null;
     }
   }
@@ -309,7 +310,7 @@ class ColorStorage {
     try {
       // Validate palette name
       if (palette.name.trim().isEmpty) {
-        debugPrint('Error: Palette name cannot be empty');
+        LogManager.debug('Error: Palette name cannot be empty');
         return false;
       }
 
@@ -323,7 +324,7 @@ class ColorStorage {
 
       return true;
     } catch (e) {
-      debugPrint('Error saving palette: $e');
+      LogManager.debug('Error saving palette: $e');
       return false;
     }
   }
@@ -349,7 +350,7 @@ class ColorStorage {
 
       return null;
     } catch (e) {
-      debugPrint('Error getting palette: $e');
+      LogManager.debug('Error getting palette: $e');
       return null;
     }
   }
@@ -375,7 +376,7 @@ class ColorStorage {
       _setCache(cacheKey, names);
       return names;
     } catch (e) {
-      debugPrint('Error getting palette names: $e');
+      LogManager.debug('Error getting palette names: $e');
       return [];
     }
   }
@@ -397,7 +398,7 @@ class ColorStorage {
 
       return true;
     } catch (e) {
-      debugPrint('Error deleting palette: $e');
+      LogManager.debug('Error deleting palette: $e');
       return false;
     }
   }
@@ -442,7 +443,7 @@ class ColorStorage {
         getAllPaletteNames(),
       ]);
     } catch (e) {
-      debugPrint('Error preloading cache: $e');
+      LogManager.debug('Error preloading cache: $e');
     }
   }
 
@@ -464,7 +465,7 @@ class ColorStorage {
         _cacheTimestamps.remove(key);
       }
     } catch (e) {
-      debugPrint('Error compacting storage: $e');
+      LogManager.debug('Error compacting storage: $e');
     }
   }
 }
