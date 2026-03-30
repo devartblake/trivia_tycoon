@@ -20,7 +20,7 @@ class LeaderboardScreen extends ConsumerStatefulWidget {
 
 class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
     with SingleTickerProviderStateMixin {
-  int playerXP = 1200; // Mocked value; replace with actual user XP
+  late int playerXP;
   AnimationController? _animationController;
 
   // Leaderboard state
@@ -31,6 +31,12 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
   @override
   void initState() {
     super.initState();
+
+    // Load real XP from player profile
+    final profileService = ref.read(playerProfileServiceProvider);
+    final profile = profileService.getProfile();
+    playerXP = profile['currentXP'] ?? 0;
+
     _animationController = AnimationManager.createController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
