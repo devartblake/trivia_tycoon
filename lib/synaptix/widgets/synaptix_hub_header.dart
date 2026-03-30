@@ -6,14 +6,26 @@ import '../mode/synaptix_mode_provider.dart';
 /// Mode-aware greeting header for the Synaptix Hub.
 class SynaptixHubHeader extends ConsumerWidget {
   final String playerName;
+  final bool isDarkBackground;
 
-  const SynaptixHubHeader({super.key, required this.playerName});
+  const SynaptixHubHeader({
+    super.key,
+    required this.playerName,
+    this.isDarkBackground = false,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final mode = ref.watch(synaptixModeProvider);
     final greeting = _greeting(mode);
     final theme = Theme.of(context);
+
+    final titleColor = isDarkBackground
+        ? Colors.white
+        : theme.colorScheme.onSurface;
+    final subtitleColor = isDarkBackground
+        ? Colors.white70
+        : theme.colorScheme.onSurface.withValues(alpha: 0.6);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
@@ -24,14 +36,14 @@ class SynaptixHubHeader extends ConsumerWidget {
             greeting,
             style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
-              color: theme.colorScheme.onSurface,
+              color: titleColor,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             _subtitle(mode),
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+              color: subtitleColor,
             ),
           ),
         ],

@@ -145,7 +145,7 @@ class _JourneyProgressState extends State<JourneyProgress>
         ),
         const SizedBox(width: 14),
         const Text(
-          'Trivia Journey',
+          'Synaptix Journey',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,

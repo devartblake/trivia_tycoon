@@ -5,7 +5,9 @@ import '../theme/synaptix_theme_extension.dart';
 
 /// Compact XP/level progress snapshot for the Synaptix Hub.
 class SynaptixProgressSnapshot extends ConsumerWidget {
-  const SynaptixProgressSnapshot({super.key});
+  final bool isDarkBackground;
+
+  const SynaptixProgressSnapshot({super.key, this.isDarkBackground = false});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,10 +21,23 @@ class SynaptixProgressSnapshot extends ConsumerWidget {
     final radius = synaptix?.cardRadius ?? 14.0;
     final accent = synaptix?.accentGlow ?? const Color(0xFF6366F1);
 
+    final containerColor = isDarkBackground
+        ? const Color(0x22FFFFFF)
+        : Theme.of(context).colorScheme.surfaceContainerHighest;
+    final titleColor = isDarkBackground
+        ? Colors.white
+        : Theme.of(context).colorScheme.onSurface;
+    final captionColor = isDarkBackground
+        ? Colors.white70
+        : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5);
+    final progressBg = isDarkBackground
+        ? const Color(0x1AFFFFFF)
+        : accent.withValues(alpha: 0.1);
+
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        color: containerColor,
         borderRadius: BorderRadius.circular(radius),
         border: Border.all(
           color: accent.withValues(alpha: 0.2),
@@ -39,7 +54,7 @@ class SynaptixProgressSnapshot extends ConsumerWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.onSurface,
+                  color: titleColor,
                 ),
               ),
               Container(
@@ -65,7 +80,7 @@ class SynaptixProgressSnapshot extends ConsumerWidget {
             child: LinearProgressIndicator(
               value: maxXP > 0 ? (currentXP / maxXP).clamp(0.0, 1.0) : 0,
               minHeight: 8,
-              backgroundColor: accent.withValues(alpha: 0.1),
+              backgroundColor: progressBg,
               valueColor: AlwaysStoppedAnimation<Color>(accent),
             ),
           ),
@@ -74,7 +89,7 @@ class SynaptixProgressSnapshot extends ConsumerWidget {
             '$currentXP / $maxXP XP',
             style: TextStyle(
               fontSize: 12,
-              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
+              color: captionColor,
             ),
           ),
         ],
