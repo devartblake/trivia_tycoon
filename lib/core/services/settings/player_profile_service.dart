@@ -454,9 +454,9 @@ class PlayerProfileService {
       return {
         'name': 'Player',
         'username': null,
-        'rank': 'Trivia Master',
-        'level': 12,
-        'currentXP': 340,
+        'rank': 'Novice',
+        'level': 0,
+        'currentXP': 0,
         'maxXP': 500,
         'role': null,
         'isPremium': false,
@@ -492,9 +492,9 @@ class PlayerProfileService {
   Future<Map<String, dynamic>> addXP(int xpToAdd) async {
     try {
       final box = await _getBox();
-      final currentXP = box.get('currentXP', defaultValue: 340);
+      final currentXP = box.get('currentXP', defaultValue: 0);
       final maxXP = box.get('maxXP', defaultValue: 500);
-      final currentLevel = box.get('level', defaultValue: 12);
+      final currentLevel = box.get('level', defaultValue: 0);
 
       int newXP = currentXP + xpToAdd;
       int newLevel = currentLevel;

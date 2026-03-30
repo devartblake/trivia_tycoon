@@ -80,6 +80,7 @@ class _GameMenuScreenState extends ConsumerState<GameMenuScreen>
         ],
       ),
       body: Stack(
+        fit: StackFit.expand,
         children: [
           // Layer 0: Background image
           Positioned.fill(

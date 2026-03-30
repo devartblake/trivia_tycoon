@@ -9,6 +9,7 @@ import 'package:trivia_tycoon/game/analytics/models/spin_live_summary.dart';
 import 'package:trivia_tycoon/game/analytics/providers/analytics_providers.dart';
 import 'package:trivia_tycoon/game/providers/multi_profile_providers.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart' as providers;
+import 'package:trivia_tycoon/game/providers/wallet_providers.dart';
 import 'package:trivia_tycoon/synaptix/mode/synaptix_mode_provider.dart';
 import 'package:trivia_tycoon/synaptix/theme/synaptix_theme_extension.dart';
 import 'package:go_router/go_router.dart';
@@ -277,6 +278,9 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
       setState(() {
         _authStateInitialized = true;
       });
+
+      // Initialize wallet persistence
+      await ref.read(walletServiceProvider).init();
 
       LogManager.info('Auth state initialized: isLoggedIn=$isLoggedIn, hasOnboarded=$hasOnboarded', source: 'AppLauncher');
     } catch (e) {
