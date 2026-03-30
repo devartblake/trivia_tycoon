@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
 import '../../core/services/api_service.dart';
 import '../../game/models/achievement.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class AchievementService {
   final ApiService apiService;
@@ -23,9 +24,9 @@ class AchievementService {
   Future<void> initialize() async {
     try {
       await Hive.openBox(_achievementBoxName);
-      debugPrint('AchievementService initialized');
+      LogManager.debug('AchievementService initialized');
     } catch (e) {
-      debugPrint('Failed to initialize AchievementService: $e');
+      LogManager.debug('Failed to initialize AchievementService: $e');
     }
   }
 
@@ -56,9 +57,9 @@ class AchievementService {
       _cachedAchievements = achievements;
       _lastCacheUpdate = DateTime.now();
 
-      debugPrint('Achievements saved: ${achievements.length} items');
+      LogManager.debug('Achievements saved: ${achievements.length} items');
     } catch (e) {
-      debugPrint('Failed to save achievements: $e');
+      LogManager.debug('Failed to save achievements: $e');
       rethrow;
     }
   }
@@ -93,7 +94,7 @@ class AchievementService {
       _lastCacheUpdate = DateTime.now();
       return achievements;
     } catch (e) {
-      debugPrint('Failed to get unlocked achievements: $e');
+      LogManager.debug('Failed to get unlocked achievements: $e');
       return [];
     }
   }
@@ -115,12 +116,12 @@ class AchievementService {
         try {
           await apiService.unlockAchievement(playerName, achievement.id);
         } catch (e) {
-          debugPrint('Failed to sync achievement unlock to server: $e');
+          LogManager.debug('Failed to sync achievement unlock to server: $e');
           // Achievement is still saved locally
         }
       }
     } catch (e) {
-      debugPrint('Failed to unlock achievement: $e');
+      LogManager.debug('Failed to unlock achievement: $e');
       rethrow;
     }
   }
@@ -140,11 +141,11 @@ class AchievementService {
       await saveAchievements(achievements);
       await _updateLastSync();
 
-      debugPrint('Achievements synced successfully');
+      LogManager.debug('Achievements synced successfully');
     } catch (e) {
-      debugPrint('Error syncing achievements: $e');
+      LogManager.debug('Error syncing achievements: $e');
       if (kDebugMode) {
-        debugPrint('Error syncing achievements: $e');
+        LogManager.debug('Error syncing achievements: $e');
       }
     }
   }
@@ -170,9 +171,9 @@ class AchievementService {
 
       await box.put('achievement_snapshot', snapshot);
 
-      debugPrint('Achievement data saved successfully');
+      LogManager.debug('Achievement data saved successfully');
     } catch (e) {
-      debugPrint('Failed to save achievement data: $e');
+      LogManager.debug('Failed to save achievement data: $e');
       rethrow;
     }
   }
@@ -186,7 +187,7 @@ class AchievementService {
 
       // Check if sync is needed
       if (await _needsSync()) {
-        debugPrint('Achievement sync needed (will require playerName in actual implementation)');
+        LogManager.debug('Achievement sync needed (will require playerName in actual implementation)');
         // Note: In real implementation, you'd need to get playerName from user service
         // await syncAchievements(playerName);
       }
@@ -194,9 +195,9 @@ class AchievementService {
       // Update cache timestamp
       _lastCacheUpdate = DateTime.now();
 
-      debugPrint('Achievement check completed');
+      LogManager.debug('Achievement check completed');
     } catch (e) {
-      debugPrint('Achievement check failed: $e');
+      LogManager.debug('Achievement check failed: $e');
     }
   }
 
@@ -213,7 +214,7 @@ class AchievementService {
 
       await box.put(_achievementStatsKey, stats);
     } catch (e) {
-      debugPrint('Failed to record achievement unlock: $e');
+      LogManager.debug('Failed to record achievement unlock: $e');
     }
   }
 
@@ -248,10 +249,10 @@ class AchievementService {
       }
 
       if (needsRepair) {
-        debugPrint('Achievement data integrity restored');
+        LogManager.debug('Achievement data integrity restored');
       }
     } catch (e) {
-      debugPrint('Achievement integrity validation failed: $e');
+      LogManager.debug('Achievement integrity validation failed: $e');
       await _resetAchievementData();
     }
   }
@@ -262,9 +263,9 @@ class AchievementService {
       final box = await Hive.openBox(_achievementBoxName);
       await box.clear();
       _invalidateCache();
-      debugPrint('Achievement data reset to defaults');
+      LogManager.debug('Achievement data reset to defaults');
     } catch (e) {
-      debugPrint('Failed to reset achievement data: $e');
+      LogManager.debug('Failed to reset achievement data: $e');
     }
   }
 
@@ -274,7 +275,7 @@ class AchievementService {
       final box = await Hive.openBox(_achievementBoxName);
       await box.put(_lastSyncKey, DateTime.now().toIso8601String());
     } catch (e) {
-      debugPrint('Failed to update last sync: $e');
+      LogManager.debug('Failed to update last sync: $e');
     }
   }
 
@@ -311,6 +312,6 @@ class AchievementService {
     final box = await Hive.openBox(_achievementBoxName);
     await box.clear();
     _invalidateCache();
-    debugPrint('All achievement data cleared');
+    LogManager.debug('All achievement data cleared');
   }
 }

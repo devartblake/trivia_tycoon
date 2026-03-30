@@ -30,7 +30,7 @@ class AppShell extends ConsumerWidget {
       key: ValueKey("${primaryColor.value}-${brightness.name}"),
       debugShowCheckedModeBanner: false,
       scrollBehavior: AppScrollBehavior(),
-      title: 'Trivia Tycoon',
+      title: 'Synaptix',
       theme: ThemeData(
         brightness: brightness,
         primaryColor: primaryColor,

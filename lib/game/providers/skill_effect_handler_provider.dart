@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:trivia_tycoon/game/providers/xp_provider.dart';
 import '../logic/skill_effect_handler.dart';
-import '../services/xp_service.dart';
 import 'game_session_provider.dart';
 
 /// Provider that builds the handler from the session

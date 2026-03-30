@@ -13,6 +13,7 @@ import '../services/rewards/reward_probability.dart';
 import '../ui/dialogs/result_dialog.dart';
 import '../services/spin_tracker.dart';
 import '../services/prize_log_provider.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Enhanced spinning controller with modern architecture and performance optimizations
 final spinningControllerProvider = ChangeNotifierProvider<EnhancedSpinningController>((ref) {
@@ -189,7 +190,7 @@ class EnhancedSpinningController extends ChangeNotifier {
         _updateState(validatedState);
       }
     } catch (e) {
-      debugPrint('Failed to load spinning state: $e');
+      LogManager.debug('Failed to load spinning state: $e');
       await _resetState();
     }
   }
@@ -223,7 +224,7 @@ class EnhancedSpinningController extends ChangeNotifier {
       final stateJson = jsonEncode(_state.toJson());
       await AppSettings.setString(_stateKey, stateJson);
     } catch (e) {
-      debugPrint('Failed to save spinning state: $e');
+      LogManager.debug('Failed to save spinning state: $e');
     }
   }
 
@@ -256,7 +257,7 @@ class EnhancedSpinningController extends ChangeNotifier {
         await _saveState();
       }
     } catch (e) {
-      debugPrint('State validation failed: $e');
+      LogManager.debug('State validation failed: $e');
     }
   }
 
@@ -305,7 +306,7 @@ class EnhancedSpinningController extends ChangeNotifier {
 
       return spinResult;
     } catch (e) {
-      debugPrint('Spin failed: $e');
+      LogManager.debug('Spin failed: $e');
       _updateState(_state.copyWith(isSpinning: false));
       _showErrorMessage(context, 'Spin failed. Please try again.');
       return null;
@@ -347,7 +348,7 @@ class EnhancedSpinningController extends ChangeNotifier {
       }
 
     } catch (e) {
-      debugPrint('Failed to handle spin completion: $e');
+      LogManager.debug('Failed to handle spin completion: $e');
       _updateState(_state.copyWith(isSpinning: false));
     }
   }
@@ -383,7 +384,7 @@ class EnhancedSpinningController extends ChangeNotifier {
         isRare: [RewardType.rare, RewardType.jackpot].contains(rewardResult.rewardType),
       );
     } catch (e) {
-      debugPrint('Failed to calculate enhanced reward: $e');
+      LogManager.debug('Failed to calculate enhanced reward: $e');
       return baseResult;
     }
   }
@@ -425,7 +426,7 @@ class EnhancedSpinningController extends ChangeNotifier {
       }
 
     } catch (e) {
-      debugPrint('Failed to process reward: $e');
+      LogManager.debug('Failed to process reward: $e');
     }
   }
 
@@ -560,9 +561,9 @@ class EnhancedSpinningController extends ChangeNotifier {
       _updateState(validatedState);
       await _saveState();
 
-      debugPrint('Data imported successfully');
+      LogManager.debug('Data imported successfully');
     } catch (e) {
-      debugPrint('Failed to import data: $e');
+      LogManager.debug('Failed to import data: $e');
       throw Exception('Invalid data format');
     }
   }

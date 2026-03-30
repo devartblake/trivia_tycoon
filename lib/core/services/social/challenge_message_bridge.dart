@@ -4,6 +4,7 @@ import '../../../game/models/message_models.dart';
 import '../../../game/models/pvp_challenge_models.dart';
 import '../storage/message_storage_service.dart';
 import 'conversation_storage_service.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Lightweight bridge between Challenge system and Message system
 /// Listens to challenge events and creates appropriate messages
@@ -56,7 +57,7 @@ class ChallengeMessageBridge {
       message.timestamp,
     );
 
-    debugPrint('Challenge message created for challenge: ${challenge.id}');
+    LogManager.debug('Challenge message created for challenge: ${challenge.id}');
   }
 
   /// Called when a challenge is accepted
@@ -105,7 +106,7 @@ class ChallengeMessageBridge {
       id: _generateMessageId(),
       conversationId: conversationId,
       senderId: 'system',
-      senderName: 'Trivia Tycoon',
+      senderName: 'Synaptix',
       content: _getChallengeResultContent(challenge, winnerId, coinsWon),
       type: MessageType.challengeResult,
       status: MessageStatus.delivered,

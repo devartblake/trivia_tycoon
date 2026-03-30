@@ -102,7 +102,7 @@ class _WelcomeStepState extends State<WelcomeStep>
           FadeTransition(
             opacity: _fadeAnimation,
             child: Text(
-              'Welcome to\nTrivia Tycoon!',
+              'Welcome to\nSynaptix!',
               textAlign: TextAlign.center,
               style: theme.textTheme.displaySmall?.copyWith(
                 fontWeight: FontWeight.bold,
