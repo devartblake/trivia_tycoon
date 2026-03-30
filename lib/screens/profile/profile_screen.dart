@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../game/analytics/providers/analytics_providers.dart';
 import '../../game/providers/multi_profile_providers.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../synaptix/mode/synaptix_mode_provider.dart';

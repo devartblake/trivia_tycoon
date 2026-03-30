@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:trivia_tycoon/ui_components/spin_wheel/ui/widgets/floating_spin_cta.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import '../../../../game/analytics/providers/analytics_providers.dart';
 import '../../../../game/providers/riverpod_providers.dart';
 import '../../../../core/services/settings/app_settings.dart';
 import '../../models/spin_system_models.dart';
