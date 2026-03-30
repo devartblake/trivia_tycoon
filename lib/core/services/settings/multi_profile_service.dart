@@ -4,6 +4,7 @@ import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import 'package:trivia_tycoon/core/services/settings/player_profile_service.dart';
 import 'package:trivia_tycoon/core/services/settings/profile_sync_service.dart';
 import 'package:uuid/uuid.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// ProfileData model for individual profiles
 class ProfileData {
@@ -207,18 +208,28 @@ class MultiProfileService {
     }
   }
 
-  /// Get current active profile
+  /// Get the currently active profile
   Future<ProfileData?> getActiveProfile() async {
     try {
       final box = await _getBox();
       final activeProfileId = box.get(_activeProfileKey);
 
-      if (activeProfileId == null) return null;
+      if (activeProfileId == null) {
+        // If no active profile set, return the first profile
+        final profiles = await getAllProfiles();
+        if (profiles.isNotEmpty) {
+          await box.put(_activeProfileKey, profiles.first.id);
+          return profiles.first;
+        }
+        return null;
+      }
 
       final profilesData = box.get(_profilesKey, defaultValue: <String, dynamic>{});
       final Map<String, dynamic> profilesMap = Map<String, dynamic>.from(profilesData);
 
-      if (!profilesMap.containsKey(activeProfileId)) return null;
+      if (!profilesMap.containsKey(activeProfileId)) {
+        return null;
+      }
 
       return ProfileData.fromJson(Map<String, dynamic>.from(profilesMap[activeProfileId]));
     } catch (e) {
@@ -227,7 +238,7 @@ class MultiProfileService {
     }
   }
 
-  /// Set active profile
+  /// Set the active profile
   Future<bool> setActiveProfile(String profileId) async {
     try {
       final box = await _getBox();
@@ -241,9 +252,9 @@ class MultiProfileService {
 
       await box.put(_activeProfileKey, profileId);
 
-      // Update last active time for the profile
-      final profileData = ProfileData.fromJson(Map<String, dynamic>.from(profilesMap[profileId]));
-      final updatedProfile = profileData.copyWith(lastActive: DateTime.now());
+      // Update last active timestamp
+      final profile = ProfileData.fromJson(Map<String, dynamic>.from(profilesMap[profileId]));
+      final updatedProfile = profile.copyWith(lastActive: DateTime.now());
       profilesMap[profileId] = updatedProfile.toJson();
       await box.put(_profilesKey, profilesMap);
 
@@ -284,8 +295,13 @@ class MultiProfileService {
       final profileId = _uuid.v4();
       final now = DateTime.now();
 
+      final box = await _getBox();
+      final Map<String, dynamic> profilesMap = Map.from(
+        box.get(_profilesKey, defaultValue: <String, dynamic>{}) as Map,
+      );
+
       final newProfile = ProfileData(
-        id: profileId,
+        id: _uuid.v4(),
         name: name,
         avatar: avatar,
         country: country,
@@ -293,20 +309,17 @@ class MultiProfileService {
         userRole: userRole,
         userRoles: userRoles ?? [],
         isPremium: isPremium,
-        createdAt: now,
-        lastActive: now,
+        createdAt: DateTime.now(),
+        lastActive: DateTime.now(),
       );
 
-      final box = await _getBox();
-      final profilesData = box.get(_profilesKey, defaultValue: <String, dynamic>{});
-      final Map<String, dynamic> profilesMap = Map<String, dynamic>.from(profilesData);
-
-      profilesMap[profileId] = newProfile.toJson();
+      profilesMap[newProfile.id] = newProfile.toJson();
       await box.put(_profilesKey, profilesMap);
 
       // If this is the first profile, make it active
       if (profiles.isEmpty) {
-        await box.put(_activeProfileKey, profileId);
+        await box.put(_activeProfileKey, newProfile.id);
+        await _syncActiveProfileToLegacySettings(newProfile);
       }
 
       LogManager.info('[MultiProfile] Created new profile: ${newProfile.name}', source: 'MultiProfileService');
@@ -318,20 +331,21 @@ class MultiProfileService {
   }
 
   /// Update an existing profile
-  Future<bool> updateProfile(String profileId, {
-    String? name,
-    String? avatar,
-    String? country,
-    String? ageGroup,
-    String? userRole,
-    List<String>? userRoles,
-    bool? isPremium,
-    int? level,
-    int? currentXP,
-    int? maxXP,
-    Map<String, dynamic>? gameStats,
-    Map<String, dynamic>? preferences,
-  }) async {
+  Future<bool> updateProfile(
+      String profileId, {
+        String? name,
+        String? avatar,
+        String? country,
+        String? ageGroup,
+        String? userRole,
+        List<String>? userRoles,
+        bool? isPremium,
+        int? level,
+        int? currentXP,
+        int? maxXP,
+        Map<String, dynamic>? gameStats,
+        Map<String, dynamic>? preferences,
+      }) async {
     try {
       final box = await _getBox();
       final profilesData = box.get(_profilesKey, defaultValue: <String, dynamic>{});

@@ -17,10 +17,14 @@ import '../../core/animations/animation_manager.dart';
 import '../../core/helpers/responsive_layout.dart';
 import '../../core/services/theme/seasonal_theme_service.dart';
 import '../../core/theme/themes.dart';
+import '../../game/providers/economy_providers.dart';
 import '../../game/utils/gradient_themes.dart';
 import '../../game/utils/greeting_utils.dart';
 import '../../ui_components/tycoon_toast/tycoon_toast.dart';
 import '../../game/providers/riverpod_providers.dart';
+import '../../core/animations/animation_manager.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'widgets/economy_hud_widget.dart';
 
 /// Modern, modular main menu screen
 ///
@@ -45,6 +49,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
   late final AnimationController _pulseController;
   late List<AnimationController> _cardAnimationControllers;
   TycoonToast? _greetingToast;
+  AppLifecycleListener? _lifecycleListener;
 
   @override
   void initState() {
@@ -82,6 +87,12 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     Future.delayed(const Duration(milliseconds: 800), () {
       if (mounted) _showGreetingToast();
     });
+
+    // Fetch economy state on first load and on app resume
+    _fetchEconomy();
+    _lifecycleListener = AppLifecycleListener(
+      onResume: _fetchEconomy,
+    );
 
     // Remind users to complete onboarding when needed.
     Future.delayed(const Duration(milliseconds: 1100), () {
@@ -143,6 +154,17 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     }
   }
 
+  Future<void> _fetchEconomy() async {
+    if (!mounted) return;
+    try {
+      final playerId = await ref.read(currentUserIdProvider.future);
+      if (!mounted) return;
+      ref.read(economyProvider.notifier).fetchState(playerId);
+    } catch (_) {
+      // Economy state is non-blocking — the HUD will show cached values.
+    }
+  }
+
   @override
   void dispose() {
     _animationController.dispose();
@@ -159,7 +181,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
       data: (themeType) => _buildScaffold(themeType),
       loading: () => _buildScaffold(AppTheme.defaultTheme),
       error: (error, stack) {
-        debugPrint('[Theme] Error loading theme: $error');
+        LogManager.debug('[Theme] Error loading theme: $error');
         return _buildScaffold(AppTheme.defaultTheme);
       },
     );
@@ -202,7 +224,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     final ageGroup = ref.watch(userAgeGroupProvider);
 
     return StandardAppBar(
-      title: 'Trivia Tycoon',
+      title: 'Synaptix',
       ageGroup: ageGroup,
       showSearch: true,
       showChat: true,
@@ -512,6 +534,129 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     );
   }
 
+  Widget _buildLiveTickerBar() {
+    final ageGroup = ref.watch(userAgeGroupProvider);
+    final primaryAccent = GradientThemes.getAgeGroupColors(ageGroup).first;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        gradient: LinearGradient(
+          colors: [
+            primaryAccent.withValues(alpha: 0.24),
+            Colors.white.withValues(alpha: 0.06),
+          ],
+        ),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.show_chart_rounded, color: primaryAccent, size: 18),
+          const SizedBox(width: 10),
+          const Expanded(
+            child: Text(
+              'LIVE: Weekend Trivia Rush is active • 2x XP for party matches',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFeaturedModeCard() {
+    final ageGroup = ref.watch(userAgeGroupProvider);
+    final primaryAccent = GradientThemes.getAgeGroupColors(ageGroup).first;
+    final pulse = Tween<double>(begin: 1, end: 1.06).animate(
+      CurvedAnimation(
+        parent: _pulseController,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(24),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                primaryAccent.withValues(alpha: 0.30),
+                Colors.white.withValues(alpha: 0.08),
+              ],
+            ),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.22)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.2),
+                blurRadius: 24,
+                offset: const Offset(0, 14),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'FEATURED MODE',
+                style: TextStyle(
+                  fontSize: 12,
+                  letterSpacing: 1.2,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Gemini Clash Arena',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Fast 60-second rounds with reactive bonuses and global leaderboard spikes.',
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.9),
+                  height: 1.35,
+                ),
+              ),
+              const SizedBox(height: 16),
+              AnimatedBuilder(
+                animation: pulse,
+                builder: (context, child) => Transform.scale(
+                  scale: pulse.value,
+                  alignment: Alignment.centerLeft,
+                  child: child,
+                ),
+                child: ElevatedButton.icon(
+                  onPressed: () => context.push('/play'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: primaryAccent,
+                    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                  icon: const Icon(Icons.flash_on_rounded),
+                  label: const Text('Play Featured'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   // COMPONENT BUILDERS
   // All components now use the modular widgets
 
@@ -538,17 +683,24 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
         final livesState = ref.watch(livesProvider);
         final ageGroup = ref.watch(userAgeGroupProvider);
 
-        return CurrencyDisplay(
-          ageGroup: ageGroup,
-          coins: coins,
-          gems: diamonds,
-          currentEnergy: energyState.current,
-          maxEnergy: energyState.max,
-          currentLives: livesState.current,
-          maxLives: livesState.max,
-          ref: ref,
-          showEnergyInfo: (cur, max) => _showEnergyInfo(context, cur, max),
-          showLivesInfo: (cur, max) => _showLivesInfo(context, cur, max),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CurrencyDisplay(
+              ageGroup: ageGroup,
+              coins: coins,
+              gems: diamonds,
+              currentEnergy: energyState.current,
+              maxEnergy: energyState.max,
+              currentLives: livesState.current,
+              maxLives: livesState.max,
+              ref: ref,
+              showEnergyInfo: (cur, max) => _showEnergyInfo(context, cur, max),
+              showLivesInfo: (cur, max) => _showLivesInfo(context, cur, max),
+            ),
+            const SizedBox(height: 10),
+            const EconomyHudWidget(),
+          ],
         );
       },
     );
@@ -685,24 +837,33 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
   }
 
   void _showLivesInfo(BuildContext context, int currentLives, int maxLives) {
-    final livesRefillTime = ref.read(livesRefillTimeProvider);
+    final livesState = ref.read(livesProvider);
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Lives System'),
+        title: const Text('Challenge Lives'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Current Lives: $currentLives/$maxLives'),
+            Text('Lives per run: $maxLives'),
             const SizedBox(height: 8),
-            if (currentLives < maxLives)
-              Text('Next life in: ${_formatDuration(livesRefillTime)}'),
+            if (livesState.isRunActive) ...[
+              Text('Current run lives: $currentLives/$maxLives'),
+              const SizedBox(height: 4),
+              Text(
+                livesState.canRevive
+                    ? 'Premium revive available (1 per run)'
+                    : 'No revives remaining for this run',
+              ),
+            ],
             const SizedBox(height: 16),
             const Text(
-              'Lives are lost when you fail a quiz. They refill automatically or you can ask friends for help.',
+              'Lives are used only in Challenge mode — 3 lives per run. '
+              'They do not refill over time. Start a new run to restore lives. '
+              'One premium revive is available per run.',
               style: TextStyle(fontSize: 14, color: Colors.grey),
             ),
           ],
@@ -712,14 +873,6 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
             onPressed: () => Navigator.of(context).pop(),
             child: const Text('OK'),
           ),
-          if (currentLives < maxLives)
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                context.push('/ask-friends-lives');
-              },
-              child: const Text('Ask Friends'),
-            ),
         ],
       ),
     );

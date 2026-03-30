@@ -6,6 +6,7 @@ import 'dialogs/add_friend_dialog.dart';
 import '../../core/services/presence/rich_presence_service.dart';
 import '../../game/models/user_presence_models.dart';
 import '../../ui_components/presence/presence_status_widget.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class FriendsScreen extends ConsumerStatefulWidget {
   const FriendsScreen({super.key});
@@ -117,7 +118,7 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
     // Subscribe to their presence updates via WebSocket
     _presenceService.subscribeToUsers(friendIds);
 
-    debugPrint('[Friends] Subscribed to ${friendIds.length} friends');
+    LogManager.debug('[Friends] Subscribed to ${friendIds.length} friends');
   }
 
   // ✅ ADD THIS - Handle presence changes
@@ -158,7 +159,7 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
       },
     );
 
-    debugPrint('[Friends] Started quiz - presence updated');
+    LogManager.debug('[Friends] Started quiz - presence updated');
 
     // Navigate to quiz screen
     // Navigator.of(context).push(...);
@@ -177,7 +178,7 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
       },
     );
 
-    debugPrint('[Friends] Joined match $matchId - presence updated');
+    LogManager.debug('[Friends] Joined match $matchId - presence updated');
 
     // Navigate to match screen
     // Navigator.of(context).push(...);
@@ -809,7 +810,7 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
 
   void _showFriendProfile(Friend friend) {
     // Navigate to friend profile screen
-    debugPrint('[Friends] Showing profile for ${friend.name}');
+    LogManager.debug('[Friends] Showing profile for ${friend.name}');
   }
 
   void _showAddFriendDialog() {

@@ -18,28 +18,28 @@ class _AgeGroupStepState extends State<AgeGroupStep> {
 
   final List<AgeGroupOption> _ageGroups = [
     AgeGroupOption(
-      id: 'under_13',
+      id: 'kids',
       label: 'Under 13',
       emoji: '🧒',
       description: 'Fun & educational quizzes',
       color: Colors.pink,
     ),
     AgeGroupOption(
-      id: '13_17',
+      id: 'teens',
       label: '13-17',
       emoji: '🎓',
       description: 'Challenging teen questions',
       color: Colors.purple,
     ),
     AgeGroupOption(
-      id: '18_24',
+      id: 'adults',
       label: '18-24',
       emoji: '🎯',
       description: 'Young adult knowledge',
       color: Colors.blue,
     ),
     AgeGroupOption(
-      id: '25_plus',
+      id: 'general',
       label: '25+',
       emoji: '🏆',
       description: 'Expert-level trivia',

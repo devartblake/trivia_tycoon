@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 @immutable
 class ColorPickerTheme {
@@ -273,7 +274,7 @@ class ColorPickerTheme {
         useMaterial3: map['useMaterial3'] ?? true,
       );
     } catch (e) {
-      debugPrint('Error parsing ColorPickerTheme: $e');
+      LogManager.debug('Error parsing ColorPickerTheme: $e');
       return ColorPickerTheme.light; // Fallback to default
     }
   }

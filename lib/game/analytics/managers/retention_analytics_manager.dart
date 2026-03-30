@@ -3,7 +3,7 @@ import 'package:trivia_tycoon/game/analytics/models/retention_entry.dart';
 import 'package:trivia_tycoon/game/analytics/services/analytics_aggregation_service.dart';
 import 'package:trivia_tycoon/game/providers/timeline_filter_provider.dart';
 
-import '../../providers/riverpod_providers.dart';
+import '../../../screens/rewards/spin_earn_screen.dart';
 
 final retentionAnalyticsManagerProvider =
 AsyncNotifierProvider<RetentionAnalyticsManager, List<RetentionEntry>>(

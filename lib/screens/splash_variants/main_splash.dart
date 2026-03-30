@@ -118,7 +118,7 @@ class _SimpleSplashScreenState extends State<SimpleSplashScreen>
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      'Loading your experience...',
+                      'Loading your Synaptix experience...',
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.9),
                         fontSize: 15,

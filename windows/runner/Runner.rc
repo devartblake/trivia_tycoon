@@ -89,8 +89,8 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.theoreticalmindstech" "\0"
-            VALUE "FileDescription", "trivia_tycoon" "\0"
+            VALUE "CompanyName", "Theoretical Minds Technologies" "\0"
+            VALUE "FileDescription", "Trivia Tycoon - Interactive Trivia Game" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "trivia_tycoon" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2025 Theoretical Minds Technologies. All rights reserved." "\0"

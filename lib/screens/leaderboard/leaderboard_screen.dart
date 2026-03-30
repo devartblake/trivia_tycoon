@@ -5,9 +5,12 @@ import 'package:trivia_tycoon/screens/leaderboard/widgets/live_countdown_timer_w
 import 'package:trivia_tycoon/ui_components/mission/mission_panel.dart';
 import 'package:trivia_tycoon/ui_components/seasonal/seasonal_events_widget.dart';
 import '../../core/animations/animation_manager.dart';
+import '../../game/analytics/providers/analytics_providers.dart';
 import '../../game/models/leaderboard_entry.dart';
 import '../../game/models/seasonal_competition_model.dart';
 import '../../game/providers/riverpod_providers.dart';
+import '../../synaptix/mode/synaptix_mode_provider.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class LeaderboardScreen extends ConsumerStatefulWidget {
   const LeaderboardScreen({super.key});
@@ -34,6 +37,15 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
       duration: const Duration(milliseconds: 800),
     );
     _animationController!.forward();
+
+    // Synaptix analytics — Arena surface opened
+    final mode = ref.read(synaptixModeProvider);
+    ref.read(analyticsServiceProvider).trackEvent('synaptix_surface_opened', {
+      'surface': 'arena',
+      'synaptix_mode': mode.name,
+      'entry_point': 'navigation',
+      'audience_segment': mode.name,
+    });
 
     // Initialize leaderboard
     _initializeLeaderboard();
@@ -71,9 +83,9 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
         });
       }
 
-      debugPrint('[LeaderboardScreen] Loaded ${_entries.length} entries');
+      LogManager.debug('[LeaderboardScreen] Loaded ${_entries.length} entries');
     } catch (e) {
-      debugPrint('[LeaderboardScreen] Init error: $e');
+      LogManager.debug('[LeaderboardScreen] Init error: $e');
       if (mounted) {
         setState(() => _isLoadingLeaderboard = false);
       }
@@ -97,9 +109,9 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
         _entries = leaderboardService.currentLeaderboard;
       });
 
-      debugPrint('[LeaderboardScreen] Updated - ${_entries.length} entries');
+      LogManager.debug('[LeaderboardScreen] Updated - ${_entries.length} entries');
     } catch (e) {
-      debugPrint('[LeaderboardScreen] Update error: $e');
+      LogManager.debug('[LeaderboardScreen] Update error: $e');
     }
   }
 
@@ -111,7 +123,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
       leaderboardService.removeListener(_onLeaderboardUpdate);
       leaderboardService.unsubscribe();
     } catch (e) {
-      debugPrint('[LeaderboardScreen] Cleanup error: $e');
+      LogManager.debug('[LeaderboardScreen] Cleanup error: $e');
     }
   }
 
@@ -226,7 +238,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
       ],
       flexibleSpace: FlexibleSpaceBar(
         title: const Text(
-          'Leaderboard',
+          'Arena',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,

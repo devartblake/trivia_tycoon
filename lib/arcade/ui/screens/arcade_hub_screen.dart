@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/arcade/ui/screens/widgets/wallet_counters_row.dart';
 import '../../../game/providers/wallet_providers.dart';
+import '../../../game/analytics/providers/analytics_providers.dart';
+import '../../../synaptix/mode/synaptix_mode_provider.dart';
 import '../../domain/arcade_difficulty.dart';
 import '../../domain/arcade_game_definition.dart';
 import '../../providers/arcade_providers.dart';
@@ -13,6 +15,15 @@ class ArcadeHubScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Synaptix analytics — Labs surface opened
+    final mode = ref.read(synaptixModeProvider);
+    ref.read(analyticsServiceProvider).trackEvent('synaptix_surface_opened', {
+      'surface': 'labs',
+      'synaptix_mode': mode.name,
+      'entry_point': 'navigation',
+      'audience_segment': mode.name,
+    });
+
     final registry = ref.watch(arcadeRegistryProvider);
     final games = registry.games;
 
@@ -140,7 +151,7 @@ class ArcadeHubScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Arcade',
+                              'Labs',
                               style: TextStyle(
                                 fontSize: 36,
                                 fontWeight: FontWeight.bold,
@@ -150,7 +161,7 @@ class ArcadeHubScreen extends ConsumerWidget {
                             ),
                             SizedBox(height: 4),
                             Text(
-                              'Classic games, epic rewards',
+                              'Games, challenges, rewards',
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.white70,
@@ -299,7 +310,7 @@ class ArcadeHubScreen extends ConsumerWidget {
                 child: _buildActionCard(
                   context,
                   ref,
-                  title: 'Daily Bonus',
+                  title: 'Daily Signal',
                   subtitle: claimed ? 'Claimed' : 'Available',
                   icon: Icons.card_giftcard_rounded,
                   gradient: claimed

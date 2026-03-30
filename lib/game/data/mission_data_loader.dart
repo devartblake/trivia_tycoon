@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/riverpod_providers.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 // Age group enum
 enum AgeGroup { children, adolescence, adults }
@@ -37,7 +38,7 @@ class MissionDataLoader {
       _cachedMissions[ageGroup] = missions;
       return missions;
     } catch (e) {
-      debugPrint('Error loading missions for $ageGroup: $e');
+      LogManager.debug('Error loading missions for $ageGroup: $e');
       return _getFallbackMissions(ageGroup);
     }
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../game/logic/quiz_completion_handler.dart';
 import '../../game/services/educational_stats_service.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class EducationalStatsInitializer {
   /// Initialize educational statistics service when app starts
@@ -11,9 +12,9 @@ class EducationalStatsInitializer {
       final educationalStatsService = ref.read(educationalStatsServiceProvider);
       await educationalStatsService.initialize();
 
-      debugPrint('Educational statistics service initialized successfully');
+      LogManager.debug('Educational statistics service initialized successfully');
     } catch (e) {
-      debugPrint('Failed to initialize educational statistics service: $e');
+      LogManager.debug('Failed to initialize educational statistics service: $e');
       // Don't throw - app should continue even if stats fail to initialize
     }
   }
@@ -24,9 +25,9 @@ class EducationalStatsInitializer {
       final educationalStatsService = container.read(educationalStatsServiceProvider);
       await educationalStatsService.initialize();
 
-      debugPrint('Educational statistics service initialized successfully');
+      LogManager.debug('Educational statistics service initialized successfully');
     } catch (e) {
-      debugPrint('Failed to initialize educational statistics service: $e');
+      LogManager.debug('Failed to initialize educational statistics service: $e');
       // Don't throw - app should continue even if stats fail to initialize
     }
   }
@@ -82,9 +83,9 @@ class EducationalStatsInitializer {
   //       await Future.delayed(const Duration(milliseconds: 100));
   //     }
   //
-  //     debugPrint('Sample quiz data added successfully');
+  //     LogManager.debug('Sample quiz data added successfully');
   //   } catch (e) {
-  //     debugPrint('Failed to add sample quiz data: $e');
+  //     LogManager.debug('Failed to add sample quiz data: $e');
   //   }
   // }
 }

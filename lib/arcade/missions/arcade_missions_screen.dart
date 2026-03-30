@@ -315,7 +315,7 @@ class ArcadeMissionsScreen extends ConsumerWidget {
                       Row(
                         children: [
                           Text(
-                            'Daily Bonus',
+                            'Daily Signal',
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 20,

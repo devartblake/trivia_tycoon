@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../screens/rewards/spin_earn_screen.dart';
 import '../../providers/mission_filters_provider.dart';
 import '../../providers/timeline_filter_provider.dart';
 import '../../../game/analytics/services/analytics_aggregation_service.dart';
-import '../../providers/riverpod_providers.dart';
 import '../models/mission_analytics_entry.dart';
 
 final missionAnalyticsManagerProvider = AsyncNotifierProvider<MissionAnalyticsManager, List<MissionAnalyticsEntry>>(() => MissionAnalyticsManager());

@@ -77,7 +77,7 @@ class AdminDashboardScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         const Text(
-                          'Admin Dashboard',
+                          'Synaptix Command',
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,

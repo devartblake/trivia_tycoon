@@ -5,6 +5,7 @@ import '../providers/quiz_results_provider.dart';
 import '../providers/xp_provider.dart';
 import '../controllers/achievement_controller.dart';
 import '../services/profile_service.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 // Educational Statistics Model
 class EducationalStats {
@@ -135,7 +136,7 @@ class EducationalStatsService {
     try {
       await Hive.openBox(_statsBoxName);
     } catch (e) {
-      debugPrint('Failed to initialize EducationalStatsService: $e');
+      LogManager.debug('Failed to initialize EducationalStatsService: $e');
     }
   }
 
@@ -173,10 +174,10 @@ class EducationalStatsService {
       // Update subject stats
       await _updateSubjectStats(result);
 
-      debugPrint('Quiz completion processed successfully');
+      LogManager.debug('Quiz completion processed successfully');
 
     } catch (e) {
-      debugPrint('Failed to record quiz result: $e');
+      LogManager.debug('Failed to record quiz result: $e');
     }
   }
 
@@ -233,7 +234,7 @@ class EducationalStatsService {
         lastQuizDate = DateTime.tryParse(lastQuizData['date'] as String? ?? '');
       }
 
-      debugPrint('Educational data updated successfully for quiz completion');
+      LogManager.debug('Educational data updated successfully for quiz completion');
 
       return EducationalStats(
         totalQuizzes: totalQuizzes,
@@ -247,7 +248,7 @@ class EducationalStatsService {
       );
 
     } catch (e) {
-      debugPrint('Failed to get educational stats: $e');
+      LogManager.debug('Failed to get educational stats: $e');
       return EducationalStats();
     }
   }
@@ -300,7 +301,7 @@ class EducationalStatsService {
       await box.put(_streakDataKey, updatedStreakData);
 
     } catch (e) {
-      debugPrint('Failed to update streak: $e');
+      LogManager.debug('Failed to update streak: $e');
     }
   }
 
@@ -342,7 +343,7 @@ class EducationalStatsService {
       await box.put(_subjectStatsKey, allSubjectData);
 
     } catch (e) {
-      debugPrint('Failed to update subject stats: $e');
+      LogManager.debug('Failed to update subject stats: $e');
     }
   }
 
@@ -369,7 +370,7 @@ class EducationalStatsService {
 
       return subjectStats;
     } catch (e) {
-      debugPrint('Failed to get subject stats: $e');
+      LogManager.debug('Failed to get subject stats: $e');
       return {};
     }
   }
@@ -418,7 +419,7 @@ class EducationalStatsService {
 
       return weeklyData;
     } catch (e) {
-      debugPrint('Failed to get weekly activity: $e');
+      LogManager.debug('Failed to get weekly activity: $e');
       return [];
     }
   }
@@ -466,7 +467,7 @@ class QuizCompletionNotifier {
       ref.invalidate(weeklyActivityProvider);
 
     } catch (e) {
-      debugPrint('Failed to process quiz completion: $e');
+      LogManager.debug('Failed to process quiz completion: $e');
     }
   }
 
@@ -478,17 +479,17 @@ class QuizCompletionNotifier {
       // Example achievement checks
       if (stats.totalQuizzes == 1) {
         // First quiz achievement
-        debugPrint('Achievement unlocked: First Steps!');
+        LogManager.debug('Achievement unlocked: First Steps!');
       }
 
       if (stats.currentStreak == 7) {
         // Week streak achievement
-        debugPrint('Achievement unlocked: Weekly Warrior!');
+        LogManager.debug('Achievement unlocked: Weekly Warrior!');
       }
 
       if (stats.totalQuizzes == 25 && result.category == 'Mathematics') {
         // Math wizard achievement
-        debugPrint('Achievement unlocked: Math Wizard!');
+        LogManager.debug('Achievement unlocked: Math Wizard!');
       }
 
       // Perfect week check
@@ -497,12 +498,12 @@ class QuizCompletionNotifier {
       if (thisWeekQuizzes.length >= 7) {
         final allScores90Plus = thisWeekQuizzes.every((day) => day['score'] >= 90);
         if (allScores90Plus) {
-          debugPrint('Achievement unlocked: Perfect Week!');
+          LogManager.debug('Achievement unlocked: Perfect Week!');
         }
       }
 
     } catch (e) {
-      debugPrint('Failed to check achievements: $e');
+      LogManager.debug('Failed to check achievements: $e');
     }
   }
 }
