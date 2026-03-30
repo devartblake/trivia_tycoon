@@ -8,7 +8,7 @@ import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
-import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
+import 'package:http_cache_hive_store/http_cache_hive_store.dart';
 import '../../game/models/seasonal_competition_model.dart';
 import 'analytics/config_service.dart';
 
@@ -147,10 +147,13 @@ class ApiService {
     });
   }
 
-  Future<List<Map<String, dynamic>>> fetchLeaderboard() async {
+  Future<List<Map<String, dynamic>>> fetchLeaderboard({int limit = 100}) async {
     return _handleRequest(() async {
       final response = await _dio.get(
         '/leaderboard',
+        queryParameters: {
+          'limit': limit,
+        },
         options: _cacheOptions.toOptions(),
       );
       return List<Map<String, dynamic>>.from(response.data);
@@ -482,8 +485,16 @@ class ApiService {
   }
 
   // Compatibility helpers for branches that still reference these methods.
-  bool _isProtectedPath(String path) =>
-      path == '/admin' || path.startsWith('/admin/');
+  bool _isProtectedPath(String path) {
+    if (path == '/admin' || path.startsWith('/admin/')) return true;
+
+    // User-scoped/profile endpoints also require auth headers and token refresh handling.
+    if (path == '/profile' || path.startsWith('/profile/')) return true;
+    if (path == '/auth/profile' || path.startsWith('/auth/profile/')) return true;
+    if (path == '/user/profile' || path.startsWith('/user/profile/')) return true;
+
+    return false;
+  }
 
   Map<String, dynamic> _extractErrorEnvelope(Object? responseData) {
     if (responseData is Map) {
