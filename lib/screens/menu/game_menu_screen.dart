@@ -4,6 +4,10 @@ import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import 'package:trivia_tycoon/synaptix/mode/synaptix_mode.dart';
 import 'package:trivia_tycoon/synaptix/mode/synaptix_mode_provider.dart';
 import 'package:trivia_tycoon/synaptix/theme/synaptix_theme_extension.dart';
+import 'package:trivia_tycoon/synaptix/widgets/hub_daily_quest.dart';
+import 'package:trivia_tycoon/synaptix/widgets/hub_featured_match.dart';
+import 'package:trivia_tycoon/synaptix/widgets/hub_live_ticker.dart';
+import 'package:trivia_tycoon/synaptix/widgets/hub_metallic_buttons.dart';
 import 'package:trivia_tycoon/synaptix/widgets/synaptix_hub_card.dart';
 import 'package:trivia_tycoon/synaptix/widgets/synaptix_hub_header.dart';
 import 'package:trivia_tycoon/synaptix/widgets/synaptix_mode_banner.dart';
@@ -11,23 +15,63 @@ import 'package:trivia_tycoon/synaptix/widgets/synaptix_progress_snapshot.dart';
 
 /// Synaptix Hub — the central launch surface for all product areas.
 ///
+/// Premium dark-themed design with glassmorphic elements, live ticker,
+/// featured match centerpiece, metallic action buttons, and daily quest.
+///
 /// Mode-aware card emphasis:
 /// - Kids: Play + Labs + Journey + Rewards
 /// - Teen: Arena + Pathways + Labs + Circles
 /// - Adult: Arena + Journey + Pathways + Labs
-class GameMenuScreen extends ConsumerWidget {
+class GameMenuScreen extends ConsumerStatefulWidget {
   const GameMenuScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<GameMenuScreen> createState() => _GameMenuScreenState();
+}
+
+class _GameMenuScreenState extends ConsumerState<GameMenuScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _pulseController;
+  late Animation<double> _pulseAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulseController = AnimationController(
+      duration: const Duration(milliseconds: 2000),
+      vsync: this,
+    );
+    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.05).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
+    _pulseController.repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _pulseController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final mode = ref.watch(synaptixModeProvider);
     final profileService = ref.watch(playerProfileServiceProvider);
     final userProfile = profileService.getProfile();
     final playerName = userProfile['name'] ?? 'Player';
 
     return Scaffold(
+      backgroundColor: const Color(0xFF0F0F23),
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text('Synaptix Hub'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        title: const Text(
+          'Synaptix Hub',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 12),
@@ -35,31 +79,74 @@ class GameMenuScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Welcome header
-            SynaptixHubHeader(playerName: playerName),
-
-            // Progress snapshot
-            const SynaptixProgressSnapshot(),
-            const SizedBox(height: 24),
-
-            // Quick-launch grid
-            Text(
-              'Explore',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+      body: Stack(
+        children: [
+          // Layer 0: Background image
+          Positioned.fill(
+            child: Opacity(
+              opacity: 0.15,
+              child: Image.asset(
+                'assets/images/backgrounds/geometry_background.jpg',
+                fit: BoxFit.cover,
+              ),
             ),
-            const SizedBox(height: 12),
-            _buildQuickLaunchGrid(context, mode),
+          ),
 
-            const SizedBox(height: 80),
-          ],
-        ),
+          // Layer 1: Scrollable content
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 8),
+
+                  // Welcome header
+                  SynaptixHubHeader(
+                    playerName: playerName,
+                    isDarkBackground: true,
+                  ),
+
+                  // Progress snapshot
+                  const SynaptixProgressSnapshot(isDarkBackground: true),
+                  const SizedBox(height: 16),
+
+                  // Live win ticker
+                  const HubLiveTicker(),
+                  const SizedBox(height: 20),
+
+                  // Featured match centerpiece
+                  HubFeaturedMatch(pulseAnimation: _pulseAnimation),
+                  const SizedBox(height: 16),
+
+                  // Metallic action buttons
+                  const HubMetallicButtons(),
+                  const SizedBox(height: 16),
+
+                  // Daily quest
+                  const HubDailyQuest(),
+                  const SizedBox(height: 24),
+
+                  // Quick-launch grid section
+                  const Text(
+                    'Explore',
+                    style: TextStyle(
+                      fontFamily: 'OpenSans',
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.3,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  _buildQuickLaunchGrid(context, mode),
+
+                  const SizedBox(height: 80),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
