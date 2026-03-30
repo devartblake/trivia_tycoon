@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../game/models/message_reaction.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class MessageReactionService extends ChangeNotifier {
   static final MessageReactionService _instance = MessageReactionService._internal();
@@ -30,7 +31,7 @@ class MessageReactionService extends ChangeNotifier {
   Map<String, MessageReactionSummary> get allReactionSummaries => Map.unmodifiable(_reactionSummaries);
 
   void initialize() {
-    debugPrint('MessageReactionService initialized');
+    LogManager.debug('MessageReactionService initialized');
   }
 
   // Settings management
@@ -47,7 +48,7 @@ class MessageReactionService extends ChangeNotifier {
       _quickReactions = List.from(quickReactions);
     }
 
-    debugPrint('MessageReactionService settings updated');
+    LogManager.debug('MessageReactionService settings updated');
     notifyListeners();
   }
 
@@ -82,7 +83,7 @@ class MessageReactionService extends ChangeNotifier {
 
     // Check max reactions limit
     if (_messageReactions[messageId]!.length >= _maxReactionsPerMessage) {
-      debugPrint('Max reactions limit reached for message $messageId');
+      LogManager.debug('Max reactions limit reached for message $messageId');
       return false;
     }
 
@@ -91,7 +92,7 @@ class MessageReactionService extends ChangeNotifier {
     // Update summary
     _updateReactionSummary(messageId);
 
-    debugPrint('Added reaction ${type.emoji} to message $messageId by $userDisplayName');
+    LogManager.debug('Added reaction ${type.emoji} to message $messageId by $userDisplayName');
     notifyListeners();
     return true;
   }
@@ -107,7 +108,7 @@ class MessageReactionService extends ChangeNotifier {
         final removedReaction = reactions.removeAt(reactionIndex);
         _updateReactionSummary(messageId);
 
-        debugPrint('Removed reaction ${removedReaction.type.emoji} from message $messageId');
+        LogManager.debug('Removed reaction ${removedReaction.type.emoji} from message $messageId');
         notifyListeners();
         return true;
       }
@@ -126,7 +127,7 @@ class MessageReactionService extends ChangeNotifier {
 
     if (reactions.length != initialLength) {
       _updateReactionSummary(messageId);
-      debugPrint('Removed user reactions from message $messageId for user $userId');
+      LogManager.debug('Removed user reactions from message $messageId for user $userId');
       notifyListeners();
       return true;
     }
@@ -203,7 +204,7 @@ class MessageReactionService extends ChangeNotifier {
   Future<void> loadReactionsForMessages(List<String> messageIds) async {
     // This would typically fetch from backend
     // For now, simulate some reactions for demo
-    debugPrint('Loading reactions for ${messageIds.length} messages');
+    LogManager.debug('Loading reactions for ${messageIds.length} messages');
 
     // Simulate loading delay
     await Future.delayed(const Duration(milliseconds: 100));
@@ -214,7 +215,7 @@ class MessageReactionService extends ChangeNotifier {
     _messageReactions.remove(messageId);
     _reactionSummaries.remove(messageId);
 
-    debugPrint('Cleared all reactions for message $messageId');
+    LogManager.debug('Cleared all reactions for message $messageId');
     notifyListeners();
   }
 

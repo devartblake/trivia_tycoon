@@ -14,6 +14,7 @@ import '../../game/providers/question_providers.dart';
 import '../question/widgets/main_sections/top_menu_section.dart';
 import '../question/widgets/main_sections/grid_menu_section.dart';
 import '../question/widgets/main_sections/cta_widget.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class QuestionScreen extends ConsumerStatefulWidget {
   const QuestionScreen({super.key});
@@ -39,7 +40,7 @@ class _QuestionScreenState extends ConsumerState<QuestionScreen> {
       await repository.getAvailableCategories();
     } catch (e) {
       // Handle silently for now
-      debugPrint('Preload warning: $e');
+      LogManager.debug('Preload warning: $e');
     }
   }
 

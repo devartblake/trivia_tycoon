@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Service to manage quiz session data, onboarding flags, and player metadata.
 class QuizProgressService {
@@ -81,9 +82,9 @@ class QuizProgressService {
       currentData['save_reason'] = 'lifecycle_pause';
 
       await saveQuizProgress(currentData);
-      debugPrint('[QuizProgress] Current progress saved for lifecycle event');
+      LogManager.debug('[QuizProgress] Current progress saved for lifecycle event');
     } catch (e) {
-      debugPrint('[QuizProgress] Error saving current progress: $e');
+      LogManager.debug('[QuizProgress] Error saving current progress: $e');
     }
   }
 
@@ -97,9 +98,9 @@ class QuizProgressService {
       };
 
       await _box.put(_autoSaveKey, autoSaveData);
-      debugPrint('[QuizProgress] Auto-save completed');
+      LogManager.debug('[QuizProgress] Auto-save completed');
     } catch (e) {
-      debugPrint('[QuizProgress] Auto-save failed: $e');
+      LogManager.debug('[QuizProgress] Auto-save failed: $e');
     }
   }
 
@@ -113,9 +114,9 @@ class QuizProgressService {
       // For now, we just update the last sync timestamp
       await _box.put(_lastSyncKey, DateTime.now().toIso8601String());
 
-      debugPrint('[QuizProgress] Progress synced to server');
+      LogManager.debug('[QuizProgress] Progress synced to server');
     } catch (e) {
-      debugPrint('[QuizProgress] Sync failed: $e');
+      LogManager.debug('[QuizProgress] Sync failed: $e');
     }
   }
 
@@ -128,7 +129,7 @@ class QuizProgressService {
       }
       return null;
     } catch (e) {
-      debugPrint('[QuizProgress] Error restoring from auto-save: $e');
+      LogManager.debug('[QuizProgress] Error restoring from auto-save: $e');
       return null;
     }
   }
@@ -142,7 +143,7 @@ class QuizProgressService {
       }
       return null;
     } catch (e) {
-      debugPrint('[QuizProgress] Error getting last sync time: $e');
+      LogManager.debug('[QuizProgress] Error getting last sync time: $e');
       return null;
     }
   }
@@ -178,7 +179,7 @@ class QuizProgressService {
       currentProgress['last_updated'] = DateTime.now().toIso8601String();
       await savePlayerProgress(currentProgress);
     } catch (e) {
-      debugPrint('[QuizProgress] Error updating quiz stats: $e');
+      LogManager.debug('[QuizProgress] Error updating quiz stats: $e');
     }
   }
 
@@ -190,9 +191,9 @@ class QuizProgressService {
       await _box.delete(_autoSaveKey);
       await _box.delete(_lastSyncKey);
 
-      debugPrint('[QuizProgress] All progress data cleared');
+      LogManager.debug('[QuizProgress] All progress data cleared');
     } catch (e) {
-      debugPrint('[QuizProgress] Error clearing progress: $e');
+      LogManager.debug('[QuizProgress] Error clearing progress: $e');
     }
   }
 
@@ -235,7 +236,7 @@ class QuizProgressService {
 
       return _getDefaultRecentQuizzes();
     } catch (e) {
-      debugPrint('[QuizProgress] Error getting recent quizzes: $e');
+      LogManager.debug('[QuizProgress] Error getting recent quizzes: $e');
       return _getDefaultRecentQuizzes();
     }
   }
@@ -296,9 +297,9 @@ class QuizProgressService {
       }
 
       await box.put('recent_quizzes', recentQuizzes);
-      debugPrint('[QuizProgress] Saved completed quiz: $title');
+      LogManager.debug('[QuizProgress] Saved completed quiz: $title');
     } catch (e) {
-      debugPrint('[QuizProgress] Error saving completed quiz: $e');
+      LogManager.debug('[QuizProgress] Error saving completed quiz: $e');
     }
   }
 
@@ -310,6 +311,144 @@ class QuizProgressService {
     ];
     return '${months[date.month - 1]} ${date.day}';
   }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Daily quiz tracking (synchronous — settings box is always open at startup)
+  // ─────────────────────────────────────────────────────────────────────────
+
+  static const _dailyQuizLastDateKey = 'daily_quiz_last_date';
+  static const _dailyQuizStreakKey = 'daily_quiz_streak';
+
+  /// Returns the date the daily quiz was last completed, or null.
+  DateTime? getDailyQuizLastCompletedDateSync() {
+    try {
+      final box = Hive.box(_settingsBox);
+      final dateStr = box.get(_dailyQuizLastDateKey) as String?;
+      if (dateStr == null) return null;
+      return DateTime.tryParse(dateStr);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Returns the current daily quiz completion streak.
+  int getDailyQuizStreakSync() {
+    try {
+      final box = Hive.box(_settingsBox);
+      return (box.get(_dailyQuizStreakKey, defaultValue: 0) as num).toInt();
+    } catch (_) {
+      return 0;
+    }
+  }
+
+  /// Marks today's daily quiz as completed and updates the streak.
+  Future<void> markDailyQuizCompleted() async {
+    try {
+      final box = Hive.box(_settingsBox);
+      final now = DateTime.now();
+      final lastCompleted = getDailyQuizLastCompletedDateSync();
+      final yesterday = now.subtract(const Duration(days: 1));
+
+      int newStreak;
+      if (lastCompleted == null) {
+        newStreak = 1;
+      } else if (_isSameDayStatic(lastCompleted, yesterday)) {
+        // Continued streak
+        newStreak = getDailyQuizStreakSync() + 1;
+      } else if (_isSameDayStatic(lastCompleted, now)) {
+        // Already completed today — keep streak unchanged
+        return;
+      } else {
+        // Streak broken
+        newStreak = 1;
+      }
+
+      await box.put(_dailyQuizLastDateKey, now.toIso8601String());
+      await box.put(_dailyQuizStreakKey, newStreak);
+      LogManager.debug('[QuizProgress] Daily quiz completed — streak: $newStreak');
+    } catch (e) {
+      LogManager.debug('[QuizProgress] Error marking daily quiz completed: $e');
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Monthly quiz tracking
+  // ─────────────────────────────────────────────────────────────────────────
+
+  String _monthlyKey(int year, int month) =>
+      'monthly_quiz_completed_${year}_$month';
+
+  String _monthlyRateKey(int year, int month) =>
+      'monthly_quiz_rate_${year}_$month';
+
+  /// Returns whether the monthly quiz for [year]/[month] has been completed.
+  bool getMonthlyQuizCompletedSync(int year, int month) {
+    try {
+      final box = Hive.box(_settingsBox);
+      return box.get(_monthlyKey(year, month), defaultValue: false) as bool;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// Returns the completion rate (0.0–1.0) for the monthly quiz.
+  double getMonthlyQuizCompletionRateSync(int year, int month) {
+    try {
+      final box = Hive.box(_settingsBox);
+      return (box.get(_monthlyRateKey(year, month), defaultValue: 0.0) as num)
+          .toDouble();
+    } catch (_) {
+      return 0.0;
+    }
+  }
+
+  /// Records progress on the monthly quiz (questionsCompleted / totalQuestions).
+  Future<void> markMonthlyQuizProgress({
+    required int year,
+    required int month,
+    required int questionsCompleted,
+    required int totalQuestions,
+  }) async {
+    try {
+      final box = Hive.box(_settingsBox);
+      final rate = totalQuestions > 0
+          ? questionsCompleted / totalQuestions
+          : 0.0;
+      final completed = questionsCompleted >= totalQuestions;
+      await box.put(_monthlyKey(year, month), completed);
+      await box.put(_monthlyRateKey(year, month), rate);
+      LogManager.debug(
+        '[QuizProgress] Monthly quiz progress: $questionsCompleted/$totalQuestions',
+      );
+    } catch (e) {
+      LogManager.debug('[QuizProgress] Error saving monthly quiz progress: $e');
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Featured challenge unlock
+  // ─────────────────────────────────────────────────────────────────────────
+
+  /// Returns true once the player has completed at least 3 quizzes,
+  /// unlocking the featured challenge.
+  bool isFeaturedChallengeUnlocked() {
+    try {
+      final box = Hive.box(_settingsBox);
+      final progress =
+      Map<String, dynamic>.from(box.get(_playerProgressKey, defaultValue: {}));
+      final totalQuizzes = (progress['total_quizzes'] ?? 0 as num).toInt();
+      return totalQuizzes >= 3;
+    } catch (_) {
+      return true; // Fail-open so new players aren't blocked
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Helpers
+  // ─────────────────────────────────────────────────────────────────────────
+
+  static bool _isSameDayStatic(DateTime a, DateTime b) =>
+      a.year == b.year && a.month == b.month && a.day == b.day;
 
   /// Get quiz performance statistics
   Map<String, dynamic> getQuizStats() {
@@ -327,7 +466,7 @@ class QuizProgressService {
         'accuracyPercentage': _calculateAccuracy(playerProgress),
       };
     } catch (e) {
-      debugPrint('[QuizProgress] Error getting quiz stats: $e');
+      LogManager.debug('[QuizProgress] Error getting quiz stats: $e');
       return {};
     }
   }
@@ -390,9 +529,9 @@ class QuizProgressService {
       currentProgress['last_quiz_date'] = DateTime.now().toIso8601String();
 
       await savePlayerProgress(currentProgress);
-      debugPrint('[QuizProgress] Updated quiz completion stats');
+      LogManager.debug('[QuizProgress] Updated quiz completion stats');
     } catch (e) {
-      debugPrint('[QuizProgress] Error updating quiz completion: $e');
+      LogManager.debug('[QuizProgress] Error updating quiz completion: $e');
     }
   }
 }

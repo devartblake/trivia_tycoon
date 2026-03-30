@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:trivia_tycoon/ui_components/spin_wheel/ui/widgets/floating_spin_cta.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import '../../../../game/analytics/providers/analytics_providers.dart';
 import '../../../../game/providers/riverpod_providers.dart';
 import '../../../../core/services/settings/app_settings.dart';
 import '../../models/spin_system_models.dart';
@@ -20,6 +21,7 @@ import '../widgets/spin_cooldown_widget.dart';
 import '../../../confetti/ui/confetti_debug_overlay.dart';
 import '../../../confetti/ui/confetti_settings.dart';
 import '../../services/spin_tracker.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class WheelScreen extends ConsumerStatefulWidget {
   const WheelScreen({super.key});
@@ -105,7 +107,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
         'segments_count': _segments.length,
       });
     } catch (e) {
-      debugPrint('Analytics tracking failed: $e');
+      LogManager.debug('Analytics tracking failed: $e');
     }
   }
 
@@ -124,7 +126,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
         'final_can_spin': _canSpin,
       });
     } catch (e) {
-      debugPrint('Analytics tracking failed: $e');
+      LogManager.debug('Analytics tracking failed: $e');
     }
   }
 
@@ -143,7 +145,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
         },
       );
     } catch (e) {
-      debugPrint('Analytics tracking failed: $e');
+      LogManager.debug('Analytics tracking failed: $e');
     }
   }
 
@@ -193,7 +195,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
       await AppSettings.addSpinRewardPoints(result.reward.toDouble());
 
     } catch (e) {
-      debugPrint('Failed to track spin completion: $e');
+      LogManager.debug('Failed to track spin completion: $e');
     }
   }
 
@@ -604,7 +606,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                                     segments: _segments,
                                                     rotationAngle: _currentAngle,
                                                     activeIndex: _activeIndex,
-                                                    onSegmentTap: (index) => debugPrint('Tapped segment $index'),
+                                                    onSegmentTap: (index) => LogManager.debug('Tapped segment $index'),
                                                     onGestureSpin: _handleGestureSpin,
                                                   ),
                                                 ),

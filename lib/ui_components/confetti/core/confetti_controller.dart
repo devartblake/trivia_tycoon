@@ -6,6 +6,7 @@ import '../../confetti/confetti.dart';
 import '../../confetti/core/presets/confetti_presets.dart';
 import '../../confetti/utils/confetti_performance.dart';
 import 'confetti_theme.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class ConfettiController extends ChangeNotifier with DiagnosticableTreeMixin {
   double speed = 1.0;
@@ -50,7 +51,7 @@ class ConfettiController extends ChangeNotifier with DiagnosticableTreeMixin {
       _applyDensitySettings();
       notifyListeners();
     } catch (e) {
-      debugPrint('Failed to load confetti settings: $e');
+      LogManager.debug('Failed to load confetti settings: $e');
     }
   }
 
@@ -204,9 +205,9 @@ class ConfettiController extends ChangeNotifier with DiagnosticableTreeMixin {
       await AppSettings.setString('confetti_state_snapshot', stateSnapshot.toString());
       _lastSaveTime = DateTime.now();
 
-      debugPrint('Confetti state saved successfully');
+      LogManager.debug('Confetti state saved successfully');
     } catch (e) {
-      debugPrint('Failed to save confetti state: $e');
+      LogManager.debug('Failed to save confetti state: $e');
     }
   }
 
@@ -223,9 +224,9 @@ class ConfettiController extends ChangeNotifier with DiagnosticableTreeMixin {
       // Resume normal operation
       _isPaused = false;
 
-      debugPrint('Confetti settings validation completed');
+      LogManager.debug('Confetti settings validation completed');
     } catch (e) {
-      debugPrint('Confetti settings validation failed: $e');
+      LogManager.debug('Confetti settings validation failed: $e');
       await _resetToDefaults();
     }
   }
@@ -261,10 +262,10 @@ class ConfettiController extends ChangeNotifier with DiagnosticableTreeMixin {
 
       if (needsRepair) {
         await _saveValidatedSettings();
-        debugPrint('Confetti settings integrity restored');
+        LogManager.debug('Confetti settings integrity restored');
       }
     } catch (e) {
-      debugPrint('Failed to validate confetti settings: $e');
+      LogManager.debug('Failed to validate confetti settings: $e');
     }
   }
 
@@ -288,7 +289,7 @@ class ConfettiController extends ChangeNotifier with DiagnosticableTreeMixin {
         await ConfettiStorage.saveSettings(_settings);
       }
     } catch (e) {
-      debugPrint('Performance optimization failed: $e');
+      LogManager.debug('Performance optimization failed: $e');
     }
   }
 
@@ -320,10 +321,10 @@ class ConfettiController extends ChangeNotifier with DiagnosticableTreeMixin {
       _settings = ConfettiSettings();
       await ConfettiStorage.saveSettings(_settings);
 
-      debugPrint('Confetti settings reset to defaults');
+      LogManager.debug('Confetti settings reset to defaults');
       notifyListeners();
     } catch (e) {
-      debugPrint('Failed to reset confetti settings: $e');
+      LogManager.debug('Failed to reset confetti settings: $e');
     }
   }
 
@@ -399,9 +400,9 @@ class ConfettiController extends ChangeNotifier with DiagnosticableTreeMixin {
       await _saveValidatedSettings();
       notifyListeners();
 
-      debugPrint('Confetti settings imported successfully');
+      LogManager.debug('Confetti settings imported successfully');
     } catch (e) {
-      debugPrint('Failed to import confetti settings: $e');
+      LogManager.debug('Failed to import confetti settings: $e');
       rethrow;
     }
   }

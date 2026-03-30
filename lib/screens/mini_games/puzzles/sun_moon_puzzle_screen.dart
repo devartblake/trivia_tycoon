@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:math';
 
 import '../dialogs/game_result_dialog.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 enum CellState { empty, sun, moon, locked }
 
@@ -303,10 +304,10 @@ class _SunMoonPuzzleScreenState extends State<SunMoonPuzzleScreen> {
         gameIcon: Icons.wb_sunny,
       ),
       onShare: () {
-        debugPrint('Share tapped');
+        LogManager.debug('Share tapped');
       },
       onClose: () {
-        debugPrint('Close tapped');
+        LogManager.debug('Close tapped');
       },
       onPlayAgain: () {
         resetPuzzle();

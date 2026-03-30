@@ -2,9 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:hive/hive.dart';
-import 'package:http/http.dart' as http;
 import 'package:trivia_tycoon/core/services/settings/admin_settings_service.dart';
 import 'package:trivia_tycoon/core/services/settings/onboarding_settings_service.dart';
 import 'package:trivia_tycoon/core/services/settings/player_profile_service.dart';
@@ -12,27 +9,20 @@ import 'package:trivia_tycoon/core/services/settings/prize_log_service.dart';
 import 'package:trivia_tycoon/core/services/settings/purchase_settings_service.dart';
 import 'package:trivia_tycoon/core/services/settings/splash_settings_service.dart';
 import 'package:trivia_tycoon/game/controllers/settings_controller.dart';
-import 'package:trivia_tycoon/game/models/pvp_challenge_models.dart';
 
 // 🔧 Core Services & Config
 import '../../admin/controllers/admin_filter_controller.dart';
 import '../../admin/states/admin_filter_state.dart';
 import '../../arcade/leaderboards/local_arcade_leaderboard_service.dart';
 import '../../arcade/missions/arcade_mission_service.dart';
-import '../../arcade/services/arcade_daily_bonus_service.dart';
 import '../../arcade/services/arcade_mission_claim_service.dart';
-import '../../arcade/services/arcade_personal_best_service.dart';
-import '../../core/bootstrap/app_init.dart';
-import '../../core/manager/login_manager.dart';
 import '../../core/manager/tier_manager.dart';
-import '../../core/repositories/message_repository.dart';
 import '../../core/services/encryption/encryption_service.dart';
 import '../../core/services/encryption/fernet_service.dart';
 import '../../core/services/event_queue_service.dart';
 import '../../core/services/settings/audio_settings_service.dart';
 import '../../core/services/settings/confetti_settings_service.dart';
 import '../../core/services/settings/custom_theme_service.dart';
-import '../../core/services/settings/general_key_value_storage_service.dart';
 import '../../core/services/settings/qr_settings_service.dart';
 import '../../core/services/settings/quiz_progress_service.dart';
 import '../../core/services/settings/reward_settings_service.dart';
@@ -43,30 +33,14 @@ import '../../core/state/flow_connect_state_notifier.dart';
 import '../../ui_components/login/providers/auth.dart';
 import '../../ui_components/qr_code/models/qr_settings_model.dart';
 import '../../ui_components/qr_code/services/qr_history_service.dart';
-import '../../core/manager/service_manager.dart';
-import '../../core/navigation/app_router.dart';
-import '../../core/services/api_service.dart';
-import '../../core/services/analytics/config_service.dart';
 import '../../core/services/leaderboard_data_service.dart';
 import '../../core/services/question/question_service.dart';
-import '../../core/services/storage/secure_storage.dart';
-import '../../core/services/storage/app_cache_service.dart';
 import '../../core/services/theme/swatch_service.dart';
 
 // Core auth imports
-import '../../core/services/auth_service.dart' as core_auth;
-import '../../core/services/auth_http_client.dart';
-import '../../core/services/auth_api_client.dart';
-import '../../core/services/auth_token_store.dart';
-import '../../core/services/device_id_service.dart';
-import '../../core/networking/http_client.dart';
-import '../../core/networking/ws_client.dart';
-import '../../core/networking/tycoon_api_client.dart';
-import '../../core/env.dart';
 
 // 📦 Store & Inventory
 import '../../core/services/theme/theme_notifier.dart';
-import '../analytics/services/analytics_service.dart';
 import '../controllers/coin_balance_notifier.dart';
 import '../controllers/energy_lives_notifier.dart';
 import '../controllers/fernet_controller.dart';
@@ -74,7 +48,6 @@ import '../controllers/power_up_controller.dart';
 import '../controllers/splash_controller.dart';
 import '../data/mission_data_loader.dart';
 import '../data/referral_repository.dart';
-import '../models/conversation_models.dart';
 import '../models/leaderboard_entry.dart';
 import '../models/power_up.dart';
 import '../models/referral_models.dart';
@@ -116,147 +89,11 @@ import '../models/currency_type.dart';
 import '../models/badge.dart';
 import '../state/tier_progression_state.dart';
 import '../state/tier_update_result.dart';
-import 'message_providers.dart';
+import 'core_providers.dart';
 
-// --- 🌍 Global Services ---
-final configServiceProvider =
-    Provider<ConfigService>((ref) => ConfigService.instance);
-
-/// Holds the [ServiceManager] after initialization
-///
-/// Must be overridden in `AppLauncher` after [AppInit] completes.
-final serviceManagerProvider = Provider<ServiceManager>((ref) {
-  throw UnimplementedError(
-    "serviceManagerProvider must be overridden in ProviderScope in AppLauncher",
-  );
-});
-
-/// Provides the GoRouter instance reactively
-final routerProvider = FutureProvider<GoRouter>((ref) async {
-  return await AppRouter.router();
-});
-
-final apiServiceProvider = Provider<ApiService>((ref) {
-  final config = ref.watch(configServiceProvider);
-  return ApiService(baseUrl: config.apiBaseUrl);
-});
-
-/// Global WebSocket client provider
-final globalWsClientProvider = Provider<WsClient?>((ref) {
-  return AppInit.wsClient;
-});
-
-/// WebSocket connection status provider
-final wsConnectionStatusProvider = StateProvider<bool>((ref) {
-  return AppInit.isWebSocketConnected;
-});
-
-// --- 🔐 Core Auth Providers ---
-
-/// Provides the Hive box for auth tokens
-final authTokenBoxProvider = Provider<Box>((ref) {
-  if (!Hive.isBoxOpen('auth_tokens')) {
-    throw StateError('auth_tokens box must be opened in app_init.dart before creating providers');
-  }
-  return Hive.box('auth_tokens');
-});
-
-/// Provides the AuthTokenStore
-final authTokenStoreProvider = Provider<AuthTokenStore>((ref) {
-  final box = ref.watch(authTokenBoxProvider);
-  return AuthTokenStore(box);
-});
-
-/// Provides the DeviceIdService
-final deviceIdServiceProvider = Provider<DeviceIdService>((ref) {
-  final secureStorage = ref.watch(secureStorageProvider);
-  return DeviceIdService(secureStorage);
-});
-
-/// Provides the AuthApiClient
-final authApiClientProvider = Provider<AuthApiClient>((ref) {
-  return AuthApiClient(
-    http.Client(),
-    apiBaseUrl: EnvConfig.apiBaseUrl, deviceId: ref.watch(deviceIdServiceProvider),
-  );
-});
-
-/// Provides the core AuthService (backend token management)
-final coreAuthServiceProvider = Provider<core_auth.AuthService>((ref) {
-  return core_auth.AuthService(
-    deviceId: ref.watch(deviceIdServiceProvider),
-    tokenStore: ref.watch(authTokenStoreProvider),
-    api: ref.watch(authApiClientProvider),
-  );
-});
-
-/// Provides authenticated HTTP client with auto-refresh
-final authHttpClientProvider = Provider<AuthHttpClient>((ref) {
-  return AuthHttpClient(
-    ref.watch(coreAuthServiceProvider),
-    ref.watch(authTokenStoreProvider),
-    autoRefresh: true,
-    onTokenRefreshed: () {
-      debugPrint('[Auth] ✅ Token auto-refreshed');
-    },
-    onRefreshFailed: (error) {
-      debugPrint('[Auth] ❌ Refresh failed: $error');
-      // Optional: Navigate to login or show notification
-    },
-  );
-});
-
-/// Provides HttpClient wrapper
-final httpClientProvider = Provider<HttpClient>((ref) {
-  return HttpClient(
-    authClient: ref.watch(authHttpClientProvider),
-    baseUrl: EnvConfig.apiBaseUrl,
-  );
-});
-
-/// Provides TycoonApiClient
-final tycoonApiClientProvider = Provider<TycoonApiClient>((ref) {
-  return TycoonApiClient(
-    httpClient: ref.watch(httpClientProvider),
-  );
-});
-
-/// Provides WebSocket client
-final wsClientProvider = Provider<WsClient>((ref) {
-  return WsClient(
-    url: EnvConfig.apiWsBaseUrl,
-    onMessage: (message) {
-      debugPrint('[WS] Message: ${message.op}');
-    },
-    onStateChange: (state) {
-      debugPrint('[WS] State: $state');
-    },
-    onError: (error) {
-      debugPrint('[WS] Error: $error');
-    },
-  );
-});
-
-/// Provides SecureStorage
-final secureStorageProvider = Provider<SecureStorage>((ref) {
-  return SecureStorage();
-});
-
-// --- 🔑 UPDATED: LoginManager Provider ---
-
-/// Provides the LoginManager with all required dependencies
-final loginManagerProvider = Provider<LoginManager>((ref) {
-  final serviceManager = ref.read(serviceManagerProvider);
-
-  return LoginManager(
-    authService: ref.watch(coreAuthServiceProvider),      // ← UPDATED: Core auth service
-    tokenStore: ref.watch(authTokenStoreProvider),        // ← NEW: Token store
-    deviceIdService: ref.watch(deviceIdServiceProvider),  // ← NEW: Device ID service
-    profileService: serviceManager.playerProfileService,
-    onboardingService: serviceManager.onboardingSettingsService,
-    secureStorage: ref.watch(secureStorageProvider),      // ← UPDATED: Use provider
-  );
-});
+// Infrastructure providers (auth chain, storage, networking, router).
+// Re-exported so all existing imports of riverpod_providers.dart continue to work.
+export 'core_providers.dart';
 
 // --- 🧠 Game Logic ---
 /// Provides the SettingsController for theme/audio/etc
@@ -301,12 +138,7 @@ final customThemeServiceProvider = Provider<CustomThemeService>((ref) {
   return manager.customThemeService;
 });
 
-final generalKeyValueStorageProvider =
-    Provider<GeneralKeyValueStorageService>((ref) {
-  return GeneralKeyValueStorageService();
-});
-
-final authServiceProvider = Provider<AuthService>((ref) {
+final authServiceProvider = Provider<LocalAuthService>((ref) {
   final manager = ref.watch(serviceManagerProvider);
   return manager.authService;
 });
@@ -427,9 +259,6 @@ final confettiControllerProvider =
 });
 
 // --- 💽 Local Storage Services ---
-final appCacheServiceProvider = Provider<AppCacheService>((ref) {
-  return ref.read(serviceManagerProvider).appCacheService;
-});
 
 final qrSettingsServiceProvider = Provider<QrSettingsService>((ref) {
   return QrSettingsService();
@@ -510,9 +339,9 @@ final energyProvider = StateNotifierProvider<EnergyNotifier, EnergyState>((ref) 
 });
 
 // Lives System
-final livesProvider = StateNotifierProvider<LivesNotifier, LivesState>((ref) {
+final livesProvider = StateNotifierProvider<ChallengeLivesNotifier, ChallengeLivesState>((ref) {
   final storage = ref.read(generalKeyValueStorageProvider);
-  return LivesNotifier(storage);
+  return ChallengeLivesNotifier(storage);
 });
 
 // Recent Quizzes Provider (for MainMenuScreen)
@@ -827,11 +656,6 @@ final missionActionsProvider = Provider<MissionActions>((ref) {
 
 /// --- 📈 Analytics ---
 /// Access to AnalyticsService from the ServiceManager
-final analyticsServiceProvider = Provider<AnalyticsService>((ref) {
-  final api = ref.watch(apiServiceProvider);
-  final queue = ref.watch(eventQueueServiceProvider);
-  return AnalyticsService(api, queue);
-});
 
 final eventQueueServiceProvider = Provider<EventQueueService>((ref) {
   return EventQueueService();

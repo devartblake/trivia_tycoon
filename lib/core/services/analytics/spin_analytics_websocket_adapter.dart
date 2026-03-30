@@ -6,6 +6,7 @@ import '../../bootstrap/app_init.dart';
 import '../../networking/ws_client.dart';
 import '../../networking/ws_protocol.dart';
 import '../../../game/analytics/models/spin_live_summary.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class SpinAnalyticsWebSocketAdapter {
   StreamSubscription<WsEnvelope>? _messageSubscription;
@@ -30,7 +31,7 @@ class SpinAnalyticsWebSocketAdapter {
 
     final wsClient = AppInit.wsClient;
     if (wsClient == null || !AppInit.isWebSocketConnected) {
-      debugPrint('[SpinWS] WebSocket not connected - live spin summary disabled');
+      LogManager.debug('[SpinWS] WebSocket not connected - live spin summary disabled');
       return;
     }
 
@@ -47,7 +48,7 @@ class SpinAnalyticsWebSocketAdapter {
     _subscribe(wsClient: wsClient, userId: userId);
     requestLatestSummary();
 
-    debugPrint('[SpinWS] Subscribed to live spin analytics for user $userId');
+    LogManager.debug('[SpinWS] Subscribed to live spin analytics for user $userId');
   }
 
   void requestLatestSummary() {

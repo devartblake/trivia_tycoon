@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../game/models/question_model.dart';
 import '../../../core/utils/encryption_utils.dart';
 import '../../../core/services/api_service.dart';
+import 'question_ingestion_review.dart';
 import 'question_ingestion_service.dart';
 
 class FileImportExportScreen extends ConsumerStatefulWidget {
@@ -22,8 +23,8 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
   bool _isProcessing = false;
   final TextEditingController _datasetNameController = TextEditingController(text: 'community_pack');
   bool _publishAfterImport = false;
-  List<String> _validationErrors = const [];
-  List<String> _validationWarnings = const [];
+  List<QuestionValidationIssue> _validationErrors = const [];
+  List<QuestionValidationIssue> _validationWarnings = const [];
   List<Map<String, dynamic>> _datasetStatuses = const [];
 
   Future<void> _importFromFile() async {
@@ -152,25 +153,6 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
     }
   }
 
-
-  List<String> _formatValidationIssues(dynamic value) {
-    if (value is! List) return const [];
-
-    return value.map((issue) {
-      if (issue is String) return issue;
-      if (issue is Map) {
-        final map = Map<String, dynamic>.from(issue);
-        final field = map['field']?.toString();
-        final message = map['message']?.toString() ?? map['error']?.toString() ?? issue.toString();
-        if (field != null && field.isNotEmpty) {
-          return '$field: $message';
-        }
-        return message;
-      }
-      return issue.toString();
-    }).toList();
-  }
-
   Future<void> _refreshDatasetStatuses() async {
     setState(() {
       _isProcessing = true;
@@ -234,14 +216,14 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
         datasetName: datasetName,
       );
 
-      final errors = _formatValidationIssues(validation['errors']);
-      final warnings = _formatValidationIssues(validation['warnings']);
+      final errors = parseQuestionValidationIssues(validation['errors']);
+      final warnings = parseQuestionValidationIssues(validation['warnings']);
       if (errors.isNotEmpty) {
         setState(() {
           _isProcessing = false;
           _validationErrors = errors;
           _validationWarnings = warnings;
-          _status = 'Validation failed: ${errors.length} issue(s) found.';
+          _status = 'Validation failed: ${errors.length} issue(s) found (${summarizeValidationIssues(errors).duplicateLike} duplicate-like).';
         });
         return;
       }
@@ -317,6 +299,39 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
         _status = 'Dataset action failed: $e';
       });
     }
+  }
+
+  Future<void> _runDatasetPublishAction({
+    required String datasetName,
+    required bool publish,
+  }) async {
+    _datasetNameController.text = datasetName;
+    await _publishDataset(publish);
+    await _refreshDatasetStatuses();
+  }
+
+  Widget _buildValidationSummary(
+    String label,
+    QuestionValidationSummary summary, {
+    required Color color,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Text(label, style: TextStyle(fontWeight: FontWeight.w600, color: color)),
+          const Spacer(),
+          Text(
+            'total ${summary.total} · duplicate-like ${summary.duplicateLike} · field ${summary.fieldScoped}',
+            style: TextStyle(color: color, fontSize: 12),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -682,11 +697,13 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
                   ),
                   if (_validationErrors.isNotEmpty) ...[
                     const SizedBox(height: 12),
-                    const Text(
+                    _buildValidationSummary(
                       'Errors (must fix)',
-                      style: TextStyle(color: Color(0xFFEF4444), fontWeight: FontWeight.w600),
+                      summarizeValidationIssues(_validationErrors),
+                      color: const Color(0xFFEF4444),
                     ),
                     const SizedBox(height: 8),
+
                     for (final issue in _validationErrors)
                       Padding(
                         padding: const EdgeInsets.only(bottom: 6),
@@ -698,18 +715,20 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
                               child: Icon(Icons.error_outline, size: 16, color: Color(0xFFEF4444)),
                             ),
                             const SizedBox(width: 8),
-                            Expanded(child: Text(issue)),
+                            Expanded(child: Text(issue.displayText)),
                           ],
                         ),
                       ),
                   ],
                   if (_validationWarnings.isNotEmpty) ...[
                     const SizedBox(height: 12),
-                    const Text(
+                    _buildValidationSummary(
                       'Warnings (review)',
-                      style: TextStyle(color: Color(0xFFF59E0B), fontWeight: FontWeight.w600),
+                      summarizeValidationIssues(_validationWarnings),
+                      color: const Color(0xFFF59E0B),
                     ),
                     const SizedBox(height: 8),
+
                     for (final issue in _validationWarnings)
                       Padding(
                         padding: const EdgeInsets.only(bottom: 6),
@@ -721,7 +740,7 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
                               child: Icon(Icons.warning_amber_rounded, size: 16, color: Color(0xFFF59E0B)),
                             ),
                             const SizedBox(width: 8),
-                            Expanded(child: Text(issue)),
+                            Expanded(child: Text(issue.displayText)),
                           ],
                         ),
                       ),
@@ -769,6 +788,20 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
                                   ? const Color(0xFF10B981)
                                   : const Color(0xFFF59E0B),
                               fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          TextButton(
+                            onPressed: _isProcessing
+                                ? null
+                                : () => _runDatasetPublishAction(
+                                      datasetName: (dataset['name'] ?? dataset['datasetName'] ?? '').toString(),
+                                      publish: !(dataset['published'] == true || dataset['status'] == 'published'),
+                                    ),
+                            child: Text(
+                              (dataset['published'] == true || dataset['status'] == 'published')
+                                  ? 'Unpublish'
+                                  : 'Publish',
                             ),
                           ),
                         ],

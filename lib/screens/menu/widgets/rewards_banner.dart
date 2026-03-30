@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../game/providers/riverpod_providers.dart';
 import '../../../game/utils/gradient_themes.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Modern rewards banner with animations and glass morphism
 class RewardsBanner extends ConsumerStatefulWidget {
@@ -184,6 +185,6 @@ class _RewardsBannerState extends ConsumerState<RewardsBanner>
 
   void _claimRewards() {
     ref.read(dailyRewardsAvailableProvider.notifier).state = false;
-    debugPrint('Daily rewards claimed - banner will be hidden');
+    LogManager.debug('Daily rewards claimed - banner will be hidden');
   }
 }

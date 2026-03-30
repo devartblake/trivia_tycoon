@@ -46,7 +46,7 @@ class TriviaTransitionScreen extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
                   Text(
-                    'Trivia Tycoon',
+                    'Synaptix',
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
