@@ -256,18 +256,9 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
           const SizedBox(height: 16),
           _animatedComponent(2, _buildRewardsWidget()),
           const SizedBox(height: 20),
-          GridView.count(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 2,
-            mainAxisSpacing: 14,
-            crossAxisSpacing: 14,
-            childAspectRatio: 0.92,
-            children: [
-              _animatedComponent(3, _buildRankCard()),
-              _animatedComponent(4, _buildJourneyProgress()),
-            ],
-          ),
+          _animatedComponent(3, _buildRankCard()),
+          const SizedBox(height: 16),
+          _animatedComponent(4, _buildJourneyProgress()),
           const SizedBox(height: 20),
           _animatedComponent(5, _buildRecentlyPlayed()),
           const SizedBox(height: 20),
@@ -502,129 +493,6 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
                 'Fast 60-second rounds with reactive bonuses and global leaderboard spikes.',
                 style: TextStyle(
                   color: const Color(0xFF2B3A5C),
-                  height: 1.35,
-                ),
-              ),
-              const SizedBox(height: 16),
-              AnimatedBuilder(
-                animation: pulse,
-                builder: (context, child) => Transform.scale(
-                  scale: pulse.value,
-                  alignment: Alignment.centerLeft,
-                  child: child,
-                ),
-                child: ElevatedButton.icon(
-                  onPressed: () => context.push('/play'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: primaryAccent,
-                    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                  ),
-                  icon: const Icon(Icons.flash_on_rounded),
-                  label: const Text('Play Featured'),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLiveTickerBar() {
-    final ageGroup = ref.watch(userAgeGroupProvider);
-    final primaryAccent = GradientThemes.getAgeGroupColors(ageGroup).first;
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        gradient: LinearGradient(
-          colors: [
-            primaryAccent.withValues(alpha: 0.24),
-            Colors.white.withValues(alpha: 0.06),
-          ],
-        ),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.show_chart_rounded, color: primaryAccent, size: 18),
-          const SizedBox(width: 10),
-          const Expanded(
-            child: Text(
-              'LIVE: Weekend Trivia Rush is active • 2x XP for party matches',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFeaturedModeCard() {
-    final ageGroup = ref.watch(userAgeGroupProvider);
-    final primaryAccent = GradientThemes.getAgeGroupColors(ageGroup).first;
-    final pulse = Tween<double>(begin: 1, end: 1.06).animate(
-      CurvedAnimation(
-        parent: _pulseController,
-        curve: Curves.easeInOut,
-      ),
-    );
-
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(24),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24),
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                primaryAccent.withValues(alpha: 0.30),
-                Colors.white.withValues(alpha: 0.08),
-              ],
-            ),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.22)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.2),
-                blurRadius: 24,
-                offset: const Offset(0, 14),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'FEATURED MODE',
-                style: TextStyle(
-                  fontSize: 12,
-                  letterSpacing: 1.2,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Gemini Clash Arena',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                'Fast 60-second rounds with reactive bonuses and global leaderboard spikes.',
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.9),
                   height: 1.35,
                 ),
               ),
