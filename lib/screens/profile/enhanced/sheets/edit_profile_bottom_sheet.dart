@@ -103,6 +103,20 @@ class _EditProfileBottomSheetState
     }
   }
 
+  String _normalizeUsername(String raw) {
+    final normalized = raw
+        .toLowerCase()
+        .trim()
+        .replaceAll(RegExp(r'\s+'), '_')
+        .replaceAll(RegExp(r'[^a-z0-9_]'), '');
+    return normalized;
+  }
+
+  String _usernameFromDisplayName(String displayName) {
+    final generated = _normalizeUsername(displayName);
+    return generated.isEmpty ? 'player' : generated;
+  }
+
   Future<void> _saveProfile() async {
     if (!_formKey.currentState!.validate()) return;
     if (_isLoading) return;
@@ -111,10 +125,15 @@ class _EditProfileBottomSheetState
 
     try {
       final multiProfileService = ref.read(multiProfileServiceProvider);
+      final displayName = _nameController.text.trim();
+      final manualUsername = _normalizeUsername(_usernameController.text);
+      final finalUsername = manualUsername.isNotEmpty
+          ? manualUsername
+          : _usernameFromDisplayName(displayName);
 
       final success = await multiProfileService.updateProfile(
         widget.profile.id,
-        name: _nameController.text.trim(),
+        name: displayName,
         country: _locationController.text.trim().isNotEmpty
             ? _locationController.text.trim()
             : null,
@@ -123,7 +142,7 @@ class _EditProfileBottomSheetState
             : null,
         preferences: {
           ...widget.profile.preferences,
-          'username': _usernameController.text.trim(),
+          'username': finalUsername,
           'bio': _bioController.text.trim(),
           'teamName': _teamController.text.trim(),
           'favoriteSubject': _favoriteSubjectController.text.trim(),

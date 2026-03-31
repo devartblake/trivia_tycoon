@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,7 +21,6 @@ import '../../game/utils/gradient_themes.dart';
 import '../../game/utils/greeting_utils.dart';
 import '../../ui_components/tycoon_toast/tycoon_toast.dart';
 import '../../game/providers/riverpod_providers.dart';
-import '../../core/animations/animation_manager.dart';
 
 /// Modern, modular main menu screen
 ///
@@ -40,7 +41,8 @@ class MainMenuScreen extends ConsumerStatefulWidget {
 
 class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     with TickerProviderStateMixin {
-  AnimationController? _animationController;
+  late final AnimationController _animationController;
+  late final AnimationController _pulseController;
   late List<AnimationController> _cardAnimationControllers;
   TycoonToast? _greetingToast;
 
@@ -54,6 +56,11 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
       duration: const Duration(milliseconds: 1200),
     );
 
+    _pulseController = AnimationManager.createController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1800),
+    )..repeat(reverse: true);
+
     // Card stagger animations
     _cardAnimationControllers = AnimationManager.createStaggeredControllers(
       vsync: this,
@@ -63,7 +70,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     );
 
     // Start animations
-    _animationController!.forward();
+    _animationController.forward();
     AnimationManager.startStaggered(
       controllers: _cardAnimationControllers,
       baseDelayMs: 0,
@@ -138,7 +145,8 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
 
   @override
   void dispose() {
-    _animationController?.dispose();
+    _animationController.dispose();
+    _pulseController.dispose();
     AnimationManager.disposeControllers(_cardAnimationControllers);
     super.dispose();
   }
@@ -159,22 +167,38 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
 
   Widget _buildScaffold(ThemeType themeType) {
     final appTheme = AppTheme.fromType(themeType, ThemeMode.light);
+    final isDesktop = ResponsiveLayout.isDesktop(context);
 
     return Theme(
       data: appTheme.themeData,
       child: Scaffold(
+        extendBodyBehindAppBar: true,
         backgroundColor: appTheme.bg2,
         drawer: const AppDrawer(),
-        appBar: _buildAppBar(),
-        body: FadeTransition(
-          opacity: AnimationManager.fadeIn(_animationController!),
-          child: _buildResponsiveBody(),
+        appBar: _buildModernAppBar(),
+        body: Stack(
+          children: [
+            const Positioned.fill(child: _AnimatedMeshBackdrop()),
+            SafeArea(
+              child: FadeTransition(
+                opacity: AnimationManager.fadeIn(_animationController),
+                child: _buildResponsiveBody(),
+              ),
+            ),
+            if (!isDesktop)
+              const Positioned(
+                left: 16,
+                right: 16,
+                bottom: 14,
+                child: _FloatingBottomNav(),
+              ),
+          ],
         ),
       ),
     );
   }
 
-  PreferredSizeWidget _buildAppBar() {
+  PreferredSizeWidget _buildModernAppBar() {
     final ageGroup = ref.watch(userAgeGroupProvider);
 
     return StandardAppBar(
@@ -198,10 +222,29 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
   Widget _buildMobileLayout() {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: _buildAllComponents(),
+        children: [
+          const SizedBox(height: 10),
+          _buildLiveTickerBar(),
+          const SizedBox(height: 14),
+          _animatedComponent(0, _buildFeaturedModeCard()),
+          const SizedBox(height: 20),
+          _animatedComponent(1, _buildCurrencyWidget()),
+          const SizedBox(height: 16),
+          _animatedComponent(2, _buildRewardsWidget()),
+          const SizedBox(height: 16),
+          _animatedComponent(3, _buildActionButtons()),
+          const SizedBox(height: 20),
+          _animatedComponent(4, _buildRankCard()),
+          const SizedBox(height: 16),
+          _animatedComponent(5, _buildJourneyProgress()),
+          const SizedBox(height: 20),
+          _buildRecentlyPlayed(),
+          const SizedBox(height: 20),
+          _buildMatchesSection(),
+          const SizedBox(height: 120),
+        ],
       ),
     );
   }
@@ -214,13 +257,22 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.all(32),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final isExtraWide = constraints.maxWidth > 1200;
-              return isExtraWide
-                  ? _buildThreeColumnLayout()
-                  : _buildTwoColumnLayout();
-            },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildLiveTickerBar(),
+              const SizedBox(height: 16),
+              _buildFeaturedModeCard(),
+              const SizedBox(height: 24),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final isExtraWide = constraints.maxWidth > 1200;
+                  return isExtraWide
+                      ? _buildThreeColumnLayout()
+                      : _buildTwoColumnLayout();
+                },
+              ),
+            ],
           ),
         ),
       ),
@@ -321,23 +373,136 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     );
   }
 
-  List<Widget> _buildAllComponents() {
-    return [
-      _animatedComponent(0, _buildRewardsWidget()),
-      const SizedBox(height: 20),
-      _animatedComponent(1, _buildCurrencyWidget()),
-      const SizedBox(height: 24),
-      _animatedComponent(2, _buildRankCard()),
-      const SizedBox(height: 24),
-      _animatedComponent(3, _buildActionButtons()),
-      const SizedBox(height: 24),
-      _animatedComponent(4, _buildJourneyProgress()),
-      const SizedBox(height: 24),
-      _animatedComponent(5, _buildRecentlyPlayed()),
-      const SizedBox(height: 24),
-      _buildMatchesSection(),
-      const SizedBox(height: 100),
-    ];
+  Widget _buildLiveTickerBar() {
+    final ageGroup = ref.watch(userAgeGroupProvider);
+    final primaryAccent = GradientThemes.getAgeGroupColors(ageGroup).first;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        gradient: LinearGradient(
+          colors: [
+            primaryAccent.withValues(alpha: 0.16),
+            Colors.white.withValues(alpha: 0.72),
+          ],
+        ),
+        border: Border.all(color: primaryAccent.withValues(alpha: 0.24)),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.show_chart_rounded, color: primaryAccent, size: 18),
+          const SizedBox(width: 10),
+          const Expanded(
+            child: Text(
+              'LIVE: Weekend Trivia Rush is active • 2x XP for party matches',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF2D3D63),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFeaturedModeCard() {
+    final ageGroup = ref.watch(userAgeGroupProvider);
+    final primaryAccent = GradientThemes.getAgeGroupColors(ageGroup).first;
+    final pulse = Tween<double>(begin: 1, end: 1.06).animate(
+      CurvedAnimation(
+        parent: _pulseController,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(24),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                primaryAccent.withValues(alpha: 0.16),
+                Colors.white.withValues(alpha: 0.78),
+              ],
+            ),
+            border: Border.all(color: primaryAccent.withValues(alpha: 0.2)),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF5470C1).withValues(alpha: 0.12),
+                blurRadius: 20,
+                offset: const Offset(0, 10),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'FEATURED MODE',
+                style: TextStyle(
+                  fontSize: 12,
+                  letterSpacing: 1.2,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF3D4A69),
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Gemini Clash Arena',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w800,
+                  color: Color(0xFF1D2A49),
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Fast 60-second rounds with reactive bonuses and global leaderboard spikes.',
+                style: TextStyle(
+                  color: const Color(0xFF2B3A5C),
+                  height: 1.35,
+                ),
+              ),
+              const SizedBox(height: 16),
+              AnimatedBuilder(
+                animation: pulse,
+                builder: (context, child) => Transform.scale(
+                  scale: pulse.value,
+                  alignment: Alignment.centerLeft,
+                  child: child,
+                ),
+                child: ElevatedButton.icon(
+                  onPressed: () => context.push('/play'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: primaryAccent,
+                    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                  icon: const Icon(Icons.flash_on_rounded),
+                  label: const Text('Play Featured'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   // COMPONENT BUILDERS
@@ -558,5 +723,182 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
     String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
     return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+  }
+}
+
+class _WorldGridBackdrop extends StatelessWidget {
+  const _WorldGridBackdrop();
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      child: Opacity(
+        opacity: 0.12,
+        child: CustomPaint(
+          painter: _SubtleGridPainter(),
+        ),
+      ),
+    );
+  }
+}
+
+class _SubtleGridPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    const spacing = 28.0;
+    final paint = Paint()
+      ..color = const Color(0xFF5B6B8A)
+      ..strokeWidth = 1;
+
+    for (double x = 0; x <= size.width; x += spacing) {
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
+    }
+    for (double y = 0; y <= size.height; y += spacing) {
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class _AnimatedMeshBackdrop extends StatelessWidget {
+  const _AnimatedMeshBackdrop();
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      child: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Color(0xFFF8FBFF), Color(0xFFF3F7FF), Color(0xFFEEF4FF)],
+              ),
+            ),
+          ),
+          Positioned(
+            top: -160,
+            left: -70,
+            child: _MeshSphere(
+              color: const Color(0xFF8EC5FF).withValues(alpha: 0.25),
+              size: 360,
+            ),
+          ),
+          Positioned(
+            bottom: -130,
+            right: -70,
+            child: _MeshSphere(
+              color: const Color(0xFFCDC1FF).withValues(alpha: 0.22),
+              size: 340,
+            ),
+          ),
+          const Positioned.fill(child: _WorldGridBackdrop()),
+        ],
+      ),
+    );
+  }
+}
+
+class _MeshSphere extends StatelessWidget {
+  final Color color;
+  final double size;
+
+  const _MeshSphere({required this.color, required this.size});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: RadialGradient(
+          colors: [color, Colors.transparent],
+        ),
+      ),
+    );
+  }
+}
+
+class _FloatingBottomNav extends StatelessWidget {
+  const _FloatingBottomNav();
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(36),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+        child: Container(
+          height: 66,
+          padding: const EdgeInsets.symmetric(horizontal: 18),
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.75),
+            borderRadius: BorderRadius.circular(36),
+            border: Border.all(color: const Color(0xFFD6E3FF)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.08),
+                blurRadius: 16,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const _NavIcon(icon: Icons.home_filled, isSelected: true),
+              const _NavIcon(icon: Icons.emoji_events_outlined),
+              GestureDetector(
+                onTap: () => context.push('/play'),
+                child: Container(
+                  width: 48,
+                  height: 48,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      colors: [Color(0xFF5AA9FF), Color(0xFF6C8DFF)],
+                    ),
+                  ),
+                  child: const Icon(Icons.play_arrow_rounded, color: Colors.white, size: 30),
+                ),
+              ),
+              const _NavIcon(icon: Icons.leaderboard_outlined),
+              const _NavIcon(icon: Icons.settings_outlined),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _NavIcon extends StatelessWidget {
+  final IconData icon;
+  final bool isSelected;
+
+  const _NavIcon({
+    required this.icon,
+    this.isSelected = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 260),
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: isSelected ? const Color(0xFFE8F1FF) : Colors.transparent,
+        shape: BoxShape.circle,
+      ),
+      child: Icon(
+        icon,
+        color: isSelected ? const Color(0xFF3766D6) : const Color(0xFF7382A3),
+        size: isSelected ? 25 : 23,
+      ),
+    );
   }
 }
