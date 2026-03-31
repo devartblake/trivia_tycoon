@@ -58,7 +58,7 @@ dependencies:
   flutter_3d_controller: ^2.1.0
   flutter_secure_storage: ^10.0.0
   font_awesome_flutter: ^10.8.0
-  dio_cache_interceptor: ^3.5.1
+  dio_cache_interceptor: ^4.0.3
   phone_numbers_parser: ^9.0.3
   intl_phone_number_input: ^0.7.4
   another_transformer_page_view: ^2.0.1

@@ -72,7 +72,7 @@ class ApiService {
   final Dio _refreshDio;
   final String baseUrl;
   late CacheOptions _cacheOptions;
-  late final HiveCacheStore _cacheStore;
+  late final CacheStore _cacheStore;
   late DioCacheInterceptor _cacheInterceptor;
   final ConfigService _configService;
 
