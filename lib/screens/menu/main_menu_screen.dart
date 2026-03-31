@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/screens/menu/sections/matches_section.dart';
@@ -14,6 +13,7 @@ import 'package:trivia_tycoon/screens/menu/widgets/recently_played_widget.dart';
 import 'package:trivia_tycoon/screens/menu/widgets/rewards_banner.dart';
 import 'package:trivia_tycoon/screens/menu/widgets/standard_appbar.dart';
 import '../../core/animations/animation_manager.dart';
+import '../../core/constants/app_constants.dart';
 import '../../core/helpers/responsive_layout.dart';
 import '../../core/services/theme/seasonal_theme_service.dart';
 import '../../core/theme/themes.dart';
@@ -22,7 +22,6 @@ import '../../game/utils/gradient_themes.dart';
 import '../../game/utils/greeting_utils.dart';
 import '../../ui_components/tycoon_toast/tycoon_toast.dart';
 import '../../game/providers/riverpod_providers.dart';
-import '../../core/animations/animation_manager.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import 'widgets/economy_hud_widget.dart';
 
@@ -224,7 +223,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     final ageGroup = ref.watch(userAgeGroupProvider);
 
     return StandardAppBar(
-      title: 'Synaptix',
+      title: appTitle,
       ageGroup: ageGroup,
       showSearch: true,
       showChat: true,

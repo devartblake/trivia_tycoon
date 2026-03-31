@@ -72,7 +72,6 @@ class _GameMenuScreenState extends ConsumerState<GameMenuScreen>
                 onPressed: () => Navigator.of(context).maybePop(),
               )
             : null,
-        title: const Text('Trivia Game'),
         backgroundColor: Colors.transparent,
         elevation: 0,
         surfaceTintColor: Colors.transparent,
