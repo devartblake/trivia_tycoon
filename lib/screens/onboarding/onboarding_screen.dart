@@ -10,12 +10,17 @@ import '../../game/controllers/onboarding_controller.dart';
 import 'steps/welcome_step.dart';
 import 'steps/username_step.dart';
 import 'steps/age_group_step.dart';
+import 'steps/intent_step.dart';
+import 'steps/play_style_step.dart';
 import 'steps/country_step.dart';
 import 'steps/categories_step.dart';
 import 'steps/avatar_step.dart';
+import 'steps/first_session_challenge_step.dart';
+import 'steps/reward_reveal_step.dart';
 import 'steps/completion_step.dart';
 import '../../game/providers/onboarding_providers.dart';
 import '../../game/providers/riverpod_providers.dart';
+import '../../game/providers/wallet_providers.dart';
 
 // Confetti particle class
 class Confetti {
@@ -107,7 +112,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
   @override
   void initState() {
     super.initState();
-    _controller = ModernOnboardingController(totalSteps: 7); // Updated to 7 steps (includes avatar)
+    _controller = ModernOnboardingController(totalSteps: 11);
     _pageController = PageController();
     _progressAnimationController = AnimationController(
       vsync: this,
@@ -170,6 +175,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
       if (progress.ageGroup != null) 'ageGroup': progress.ageGroup,
       if (progress.country != null) 'country': progress.country,
       if (progress.categories.isNotEmpty) 'categories': progress.categories,
+      if (progress.intent != null) 'intent': progress.intent,
+      if (progress.playStyle != null) 'playStyle': progress.playStyle,
+      if (progress.synaptixMode != null) 'synaptixMode': progress.synaptixMode,
+      if (progress.hasCompletedFirstChallenge) 'firstChallengeCompleted': true,
+      if (progress.hasSeenRewardReveal) 'hasSeenRewardReveal': true,
     });
 
     if (restoredStep > 0) {
@@ -195,6 +205,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
       categories: (_controller.userData['categories'] as List<dynamic>?)
           ?.map((e) => e.toString())
           .toList(),
+      intent: _controller.intent,
+      playStyle: _controller.playStyle,
+      synaptixMode: _controller.synaptixMode,
+      hasCompletedFirstChallenge:
+          _controller.userData['firstChallengeCompleted'] == true,
+      hasSeenRewardReveal:
+          _controller.userData['hasSeenRewardReveal'] == true,
     );
   }
 
@@ -281,13 +298,38 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     if (ageGroup != null) {
       await profileService.saveAgeGroup(ageGroup);
     }
-    await profileService.saveAgeGroup(ageGroup);
     if (country != null) {
       await profileService.saveCountry(country);
     }
     await profileService.savePreferredCategories(categories);
     if (avatar != null) {
       await profileService.saveAvatar(avatar);
+    }
+
+    // Save Synaptix-specific preferences
+    final synaptixMode = _controller.synaptixMode;
+    final intent = _controller.intent;
+
+    if (synaptixMode != null) {
+      await profileService.saveSynaptixMode(synaptixMode);
+    }
+
+    if (intent != null) {
+      final preferredSurface = switch (intent) {
+        'compete' => 'arena',
+        'train' => 'pathways',
+        'play' => 'labs',
+        _ => 'home',
+      };
+      await profileService.savePreferredHomeSurface(preferredSurface);
+    }
+
+    // Seed starter economy rewards
+    try {
+      ref.read(walletServiceProvider).addCoins(250);
+      await profileService.addXP(100);
+    } catch (e) {
+      LogManager.debug('[Onboarding] Starter reward seeding failed: $e');
     }
 
     // Mark onboarding complete in persistence + provider before navigating
@@ -364,13 +406,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                     controller: _pageController,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
-                      WelcomeStep(controller: _controller),
-                      UsernameStep(controller: _controller),
-                      AgeGroupStep(controller: _controller),
-                      CountryStep(controller: _controller),
-                      CategoriesStep(controller: _controller),
-                      AvatarStep(controller: _controller),
-                      CompletionStep(
+                      WelcomeStep(controller: _controller),         // 0
+                      UsernameStep(controller: _controller),        // 1
+                      AgeGroupStep(controller: _controller),        // 2
+                      IntentStep(controller: _controller),          // 3
+                      PlayStyleStep(controller: _controller),       // 4
+                      CountryStep(controller: _controller),         // 5
+                      CategoriesStep(controller: _controller),      // 6
+                      AvatarStep(controller: _controller),          // 7
+                      FirstSessionChallengeStep(controller: _controller), // 8
+                      RewardRevealStep(controller: _controller),    // 9
+                      CompletionStep(                               // 10
                         controller: _controller,
                         onComplete: _handleCompletion,
                       ),

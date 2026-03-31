@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../game/controllers/onboarding_controller.dart';
+import '../../../synaptix/mode/synaptix_mode_notifier.dart';
 
 class AgeGroupStep extends StatefulWidget {
   final ModernOnboardingController controller;
@@ -64,8 +65,10 @@ class _AgeGroupStepState extends State<AgeGroupStep> {
 
   void _continue() {
     if (_selectedAgeGroup != null) {
+      final mode = SynaptixModeNotifier.mapAgeGroupToMode(_selectedAgeGroup!);
       widget.controller.updateUserData({
         'ageGroup': _selectedAgeGroup,
+        'synaptixMode': mode.name,
       });
       widget.controller.nextStep();
     }
