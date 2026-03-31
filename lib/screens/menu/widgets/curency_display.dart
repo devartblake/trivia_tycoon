@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Modern currency display with animated counters and glass morphism
@@ -32,7 +33,7 @@ class CurrencyDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currencies = _getCurrencies();
+    final currencies = _getCurrencies(context);
 
     return Container(
       padding: const EdgeInsets.all(22),
@@ -103,7 +104,7 @@ class CurrencyDisplay extends StatelessWidget {
     );
   }
 
-  List<Map<String, dynamic>> _getCurrencies() {
+  List<Map<String, dynamic>> _getCurrencies(BuildContext context) {
     return [
       {
         'name': 'Coins',
@@ -111,7 +112,7 @@ class CurrencyDisplay extends StatelessWidget {
         'icon': Icons.monetization_on_rounded,
         'color': const Color(0xFFFFD700),
         'bgColor': const Color(0xFFFFF8DC),
-        'onTap': () => _showCoinStore(),
+        'onTap': () => _showCoinStore(context),
         'isLow': coins < 100,
       },
       {
@@ -120,7 +121,7 @@ class CurrencyDisplay extends StatelessWidget {
         'icon': Icons.diamond_rounded,
         'color': const Color(0xFF6366F1),
         'bgColor': const Color(0xFFF0F0FF),
-        'onTap': () => _showGemStore(),
+        'onTap': () => _showGemStore(context),
         'isLow': gems < 10,
       },
       {
@@ -154,14 +155,12 @@ class CurrencyDisplay extends StatelessWidget {
         RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},');
   }
 
-  void _showCoinStore() {
-    // TODO: Navigate to coin store
-    LogManager.debug('Show coin store');
+  void _showCoinStore(BuildContext context) {
+    context.push('/store');
   }
 
-  void _showGemStore() {
-    // TODO: Navigate to gem store
-    LogManager.debug('Show gem store');
+  void _showGemStore(BuildContext context) {
+    context.push('/store');
   }
 }
 

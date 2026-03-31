@@ -113,8 +113,7 @@ class HubFeaturedMatch extends ConsumerWidget {
                     'audience_segment': mode.name,
                   },
                 );
-                // TODO: Route to the actual recommended match
-                context.push('/arcade');
+                context.push('/quiz/start/classic');
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),

@@ -9,6 +9,11 @@ class OnboardingProgress {
   final String? ageGroup;
   final String? country;
   final List<String> categories;
+  final String? intent;
+  final String? playStyle;
+  final String? synaptixMode;
+  final bool hasCompletedFirstChallenge;
+  final bool hasSeenRewardReveal;
   final DateTime? lastUpdatedAt;
 
   const OnboardingProgress({
@@ -20,6 +25,11 @@ class OnboardingProgress {
     this.ageGroup,
     this.country,
     this.categories = const <String>[],
+    this.intent,
+    this.playStyle,
+    this.synaptixMode,
+    this.hasCompletedFirstChallenge = false,
+    this.hasSeenRewardReveal = false,
     this.lastUpdatedAt,
   });
 
@@ -32,6 +42,11 @@ class OnboardingProgress {
     String? ageGroup,
     String? country,
     List<String>? categories,
+    String? intent,
+    String? playStyle,
+    String? synaptixMode,
+    bool? hasCompletedFirstChallenge,
+    bool? hasSeenRewardReveal,
     DateTime? lastUpdatedAt,
   }) {
     return OnboardingProgress(
@@ -43,6 +58,11 @@ class OnboardingProgress {
       ageGroup: ageGroup ?? this.ageGroup,
       country: country ?? this.country,
       categories: categories ?? this.categories,
+      intent: intent ?? this.intent,
+      playStyle: playStyle ?? this.playStyle,
+      synaptixMode: synaptixMode ?? this.synaptixMode,
+      hasCompletedFirstChallenge: hasCompletedFirstChallenge ?? this.hasCompletedFirstChallenge,
+      hasSeenRewardReveal: hasSeenRewardReveal ?? this.hasSeenRewardReveal,
       lastUpdatedAt: lastUpdatedAt ?? this.lastUpdatedAt,
     );
   }
@@ -57,6 +77,11 @@ class OnboardingProgress {
       'age_group': ageGroup,
       'country': country,
       'categories': categories,
+      'intent': intent,
+      'play_style': playStyle,
+      'synaptix_mode': synaptixMode,
+      'has_completed_first_challenge': hasCompletedFirstChallenge,
+      'has_seen_reward_reveal': hasSeenRewardReveal,
       'last_updated_at': lastUpdatedAt?.toIso8601String(),
     };
   }
@@ -71,6 +96,11 @@ class OnboardingProgress {
       ageGroup: map['age_group'] as String?,
       country: map['country'] as String?,
       categories: List<String>.from(map['categories'] ?? const <String>[]),
+      intent: map['intent'] as String?,
+      playStyle: map['play_style'] as String?,
+      synaptixMode: map['synaptix_mode'] as String?,
+      hasCompletedFirstChallenge: map['has_completed_first_challenge'] as bool? ?? false,
+      hasSeenRewardReveal: map['has_seen_reward_reveal'] as bool? ?? false,
       lastUpdatedAt: map['last_updated_at'] != null
           ? DateTime.tryParse(map['last_updated_at'] as String)
           : null,
@@ -117,7 +147,7 @@ class OnboardingSettingsService {
       completed: completed,
       hasSeenIntro: completed,
       hasCompletedProfile: completed,
-      currentStep: completed ? 5 : 0,
+      currentStep: completed ? 10 : 0,
       lastUpdatedAt: DateTime.now(),
     );
     await box.put(_progressKey, migrated.toMap());
@@ -142,6 +172,11 @@ class OnboardingSettingsService {
     String? ageGroup,
     String? country,
     List<String>? categories,
+    String? intent,
+    String? playStyle,
+    String? synaptixMode,
+    bool? hasCompletedFirstChallenge,
+    bool? hasSeenRewardReveal,
   }) async {
     final current = await getOnboardingProgress();
     await saveOnboardingProgress(
@@ -154,6 +189,11 @@ class OnboardingSettingsService {
         ageGroup: ageGroup,
         country: country,
         categories: categories,
+        intent: intent,
+        playStyle: playStyle,
+        synaptixMode: synaptixMode,
+        hasCompletedFirstChallenge: hasCompletedFirstChallenge,
+        hasSeenRewardReveal: hasSeenRewardReveal,
       ),
     );
   }
@@ -166,7 +206,7 @@ class OnboardingSettingsService {
         completed: value,
         hasSeenIntro: value ? true : current.hasSeenIntro,
         hasCompletedProfile: value ? true : current.hasCompletedProfile,
-        currentStep: value ? 5 : current.currentStep,
+        currentStep: value ? 10 : current.currentStep,
       ),
     );
   }
