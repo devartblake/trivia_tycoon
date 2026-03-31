@@ -119,7 +119,7 @@ class _ReportScreenState extends State<ReportScreen> {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'Your feedback helps us make Trivia Tycoon better',
+                    'Your feedback helps us make Synaptix better',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14,

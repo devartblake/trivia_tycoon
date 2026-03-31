@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
@@ -74,7 +75,7 @@ class AppInit {
     // Initialize persistence service early
     _persistenceService = StatePersistenceService();
     await _persistenceService!.initialize();
-    debugPrint(' StatePersistence ready');
+    LogManager.debug(' StatePersistence ready');
 
     // 2. Network & Backend
     // Create SecureStorage instance (don't cast the box!)
@@ -84,7 +85,7 @@ class AppInit {
     final deviceIdService = DeviceIdService(secureStorage); // ← FIXED: Pass SecureStorage, not Box
     final deviceId = await deviceIdService.getOrCreate();
     final deviceType = deviceIdService.getDeviceType();
-    debugPrint('✅ Device identity ready: id=$deviceId, type=$deviceType');
+    LogManager.debug('✅ Device identity ready: id=$deviceId, type=$deviceType');
 
     // Create AuthTokenStore with dedicated auth tokens box
     final tokenStore = AuthTokenStore(authTokenBox);
@@ -95,7 +96,7 @@ class AppInit {
     final httpClient = http.Client();
     final authApi = AuthApiClient(httpClient, apiBaseUrl: EnvConfig.apiBaseUrl, deviceId: deviceIdService);
 
-    final authService = AuthService(
+    final authService = BackendAuthService(
       deviceId: deviceIdService,
       tokenStore: tokenStore,
       api: authApi,
@@ -111,16 +112,16 @@ class AppInit {
     // ✅ NEW - Initialize lifecycle manager with save callbacks
     _lifecycleManager = AppLifecycleManager(
       onAppPaused: () {
-        debugPrint('[Lifecycle] 📱 App PAUSED - saving state...');
+        LogManager.debug('[Lifecycle] 📱 App PAUSED - saving state...');
       },
       onAppResumed: () {
-        debugPrint('[Lifecycle] 📱 App RESUMED');
+        LogManager.debug('[Lifecycle] 📱 App RESUMED');
       },
       onAppDetached: () {
-        debugPrint('[Lifecycle] 📱 App DETACHED - final save...');
+        LogManager.debug('[Lifecycle] 📱 App DETACHED - final save...');
       },
       onAppInactive: () {
-        debugPrint('[Lifecycle] 📱 App INACTIVE - quick save...');
+        LogManager.debug('[Lifecycle] 📱 App INACTIVE - quick save...');
       },
       onSaveState: () async {
         await _saveAppState();
@@ -130,20 +131,20 @@ class AppInit {
       },
     );
     _lifecycleManager!.initialize();
-    debugPrint('✅ AppLifecycleManager initialized');
+    LogManager.debug('✅ AppLifecycleManager initialized');
 
     // Check session & load profile using safe casting
     await _initializeUserSession(serviceManager, container);
     await _initializeMultiProfileSystem(serviceManager, container);
 
-    debugPrint('[AppInit] Critical initialization complete');
+    LogManager.debug('[AppInit] Critical initialization complete');
     return (serviceManager, serviceManager.themeNotifier);
   }
 
   // Save all app state
   static Future<void> _saveAppState() async {
     if (_serviceManager == null || _persistenceService == null) {
-      debugPrint('[AppInit] ⚠️ Services not ready, skipping save');
+      LogManager.debug('[AppInit] ⚠️ Services not ready, skipping save');
       return;
     }
 
@@ -168,34 +169,36 @@ class AppInit {
         pendingActions: pendingActions,
       );
 
-      debugPrint('[AppInit] ✅ App state saved successfully');
+      LogManager.debug('[AppInit] ✅ App state saved successfully');
     } catch (e, stack) {
-      debugPrint('[AppInit] ❌ App state save failed: $e');
-      debugPrint('[AppInit] Stack: $stack');
+      LogManager.debug('[AppInit] ❌ App state save failed: $e');
+      LogManager.debug('[AppInit] Stack: $stack');
     }
   }
 
-  // Get current game state
+  // Get current game state from QuizProgressService
   static Future<Map<String, dynamic>?> _getCurrentGameState() async {
     try {
-      // TODO: Get actual game state from your game providers/services
-      // For now, return null if no active game
+      if (_serviceManager == null) return null;
 
-      // Example if you're in a quiz:
-      // final quizBox = await Hive.openBox('current_quiz');
-      // if (quizBox.isEmpty) return null;
-      // return {
-      //   'quiz_id': quizBox.get('quiz_id'),
-      //   'current_question': quizBox.get('current_question'),
-      //   'score': quizBox.get('score'),
-      //   'lives': quizBox.get('lives'),
-      //   'answers': quizBox.get('answers'),
-      //   'time_started': DateTime.now().toIso8601String(),
-      // };
+      final quizProgress =
+          await _serviceManager!.quizProgressService.getQuizProgress();
+      final playerProgress =
+          await _serviceManager!.quizProgressService.getPlayerProgress();
 
-      return null; // No active game state to save
+      // Only snapshot state when there is an active in-progress quiz.
+      final hasActiveQuiz = quizProgress.isNotEmpty &&
+          quizProgress.containsKey('quiz_id');
+
+      if (!hasActiveQuiz) return null;
+
+      return {
+        'quiz_progress': quizProgress,
+        'player_progress': playerProgress,
+        'snapshot_time': DateTime.now().toIso8601String(),
+      };
     } catch (e) {
-      debugPrint('[AppInit] ⚠️ Get game state error: $e');
+      LogManager.debug('[AppInit] ⚠️ Get game state error: $e');
       return null;
     }
   }
@@ -223,7 +226,7 @@ class AppInit {
         'session_start': DateTime.now().toIso8601String(),
       };
     } catch (e) {
-      debugPrint('[AppInit] ⚠️ Get user session error: $e');
+      LogManager.debug('[AppInit] ⚠️ Get user session error: $e');
       return null;
     }
   }
@@ -239,22 +242,21 @@ class AppInit {
         'last_connection': DateTime.now().toIso8601String(),
       };
     } catch (e) {
-      debugPrint('[AppInit] ⚠️ Get WebSocket state error: $e');
+      LogManager.debug('[AppInit] ⚠️ Get WebSocket state error: $e');
       return null;
     }
   }
 
-  // Get pending actions (failed requests)
+  // Get pending actions from the StatePersistenceService retry queue
   static Future<List<Map<String, dynamic>>> _getPendingActions() async {
     try {
-      // TODO: Get from your queue/retry system
-      // Example:
-      // final pendingBox = await Hive.openBox('pending_requests');
-      // return pendingBox.values.toList();
-
-      return []; // No pending actions
+      if (_persistenceService == null) return [];
+      // Carry forward any pending actions already stored from the last session
+      // so they survive across restarts until the background task service
+      // successfully processes them.
+      return await _persistenceService!.getPendingActions();
     } catch (e) {
-      debugPrint('[AppInit] ⚠️ Get pending actions error: $e');
+      LogManager.debug('[AppInit] ⚠️ Get pending actions error: $e');
       return [];
     }
   }
@@ -263,18 +265,18 @@ class AppInit {
   /// Should be called after user login
   static Future<void> initializeWebSocket() async {
     try {
-      debugPrint('[AppInit] Initializing WebSocket...');
+      LogManager.debug('[AppInit] Initializing WebSocket...');
 
       // ✅ CHANGED - Use stored tokenStore
       if (_tokenStore == null) {
-        debugPrint('[AppInit] TokenStore not initialized');
+        LogManager.debug('[AppInit] TokenStore not initialized');
         return;
       }
 
       // Get auth token
       final session = _tokenStore!.load();
       if (!session.hasTokens) {
-        debugPrint('[AppInit] No auth token, skipping WebSocket');
+        LogManager.debug('[AppInit] No auth token, skipping WebSocket');
         return;
       }
 
@@ -285,33 +287,33 @@ class AppInit {
       _wsClient = WsClient(
         url: wsUrl,
         onMessage: (message) {
-          debugPrint('[WS] ← ${message.op}');
+          LogManager.debug('[WS] ← ${message.op}');
         },
         onStateChange: (state) {
-          debugPrint('[WS] State: $state');
+          LogManager.debug('[WS] State: $state');
           _wsConnected = (state == WsState.connected);
 
           // Save WebSocket state on connection change
           _saveAppState();
         },
         onError: (error) {
-          debugPrint('[WS] Error: $error');
+          LogManager.debug('[WS] Error: $error');
         },
       );
 
       // Connect
       await _wsClient!.connect();
-      debugPrint('[AppInit] WebSocket initialized');
+      LogManager.debug('[AppInit] WebSocket initialized');
 
     } catch (e) {
-      debugPrint('[AppInit] WebSocket initialization failed: $e');
+      LogManager.debug('[AppInit] WebSocket initialization failed: $e');
     }
   }
 
   /// Disconnect WebSocket
   static Future<void> disconnectWebSocket() async {
     if (_wsClient != null) {
-      debugPrint('[AppInit] Disconnecting WebSocket...');
+      LogManager.debug('[AppInit] Disconnecting WebSocket...');
       await _wsClient!.disconnect();
       _wsClient = null;
       _wsConnected = false;
@@ -324,7 +326,7 @@ class AppInit {
   /// Reconnect WebSocket (for app resume)
   static Future<void> reconnectWebSocket() async {
     if (_wsClient != null && !_wsConnected) {
-      debugPrint('[AppInit] Reconnecting WebSocket...');
+      LogManager.debug('[AppInit] Reconnecting WebSocket...');
       await _wsClient!.reconnect();
     }
   }
@@ -336,7 +338,7 @@ class AppInit {
   static Future<void> initializeBackgroundServices(ServiceManager serviceManager, ProviderContainer? container) async {
     // Wait a short moment to let the UI finish rendering
     await Future.delayed(const Duration(seconds: 1));
-    debugPrint('[AppInit] Starting deferred background services...');
+    LogManager.debug('[AppInit] Starting deferred background services...');
 
     try {
       // 1. Open secondary storage
@@ -360,9 +362,9 @@ class AppInit {
       }
 
       _backgroundServicesReady = true;
-      debugPrint('[AppInit] Background services ready');
+      LogManager.debug('[AppInit] Background services ready');
     } catch (e) {
-      debugPrint('[AppInit] Background initialization error: $e');
+      LogManager.debug('[AppInit] Background initialization error: $e');
     }
   }
 
@@ -380,7 +382,7 @@ class AppInit {
       );
     } catch (e) {
       // Use silent logging here to keep console clean
-      debugPrint('[AppInit] Lifecycle track skipped: service not ready or error');
+      LogManager.debug('[AppInit] Lifecycle track skipped: service not ready or error');
     }
   }
 
@@ -412,7 +414,7 @@ class AppInit {
         'reward_points': await AppSettings.getSpinRewardPoints(),
       };
     } catch (e) {
-      debugPrint('[AppInit] Error fetching spin summary: $e');
+      LogManager.debug('[AppInit] Error fetching spin summary: $e');
       return {};
     }
   }
@@ -432,7 +434,7 @@ class AppInit {
         RichPresenceService().initialize(useWebSocket: true);
       }
     } catch (e) {
-      debugPrint('[AppInit] Session check failed: $e');
+      LogManager.debug('[AppInit] Session check failed: $e');
     }
   }
 
@@ -460,10 +462,10 @@ class AppInit {
         if (parsedUsername != null && parsedUsername.isNotEmpty) {
           await serviceManager.playerProfileService.saveUsername(parsedUsername);
         }
-        debugPrint('[AppInit] Profile loaded for: ${profile['name']}');
+        LogManager.debug('[AppInit] Profile loaded for: ${profile['name']}');
       }
     } catch (e) {
-      debugPrint('[AppInit] Profile cast failed: $e');
+      LogManager.debug('[AppInit] Profile cast failed: $e');
     }
   }
 
@@ -476,7 +478,7 @@ class AppInit {
         container.read(activeProfileStateProvider.notifier).state = activeProfile;
       }
     } catch (e) {
-      debugPrint('[AppInit] Multi-profile error: $e');
+      LogManager.debug('[AppInit] Multi-profile error: $e');
     }
   }
 
@@ -495,7 +497,7 @@ class AppInit {
   // Cleanup on app shutdown
   static Future<void> dispose() async {
     try {
-      debugPrint('[AppInit] 👋 Disposing services...');
+      LogManager.debug('[AppInit] 👋 Disposing services...');
 
       // Disconnect WebSocket
       await disconnectWebSocket();
@@ -506,9 +508,9 @@ class AppInit {
       // Dispose lifecycle manager
       _lifecycleManager?.dispose();
 
-      debugPrint('[AppInit] ✅ Cleanup complete');
+      LogManager.debug('[AppInit] ✅ Cleanup complete');
     } catch (e) {
-      debugPrint('[AppInit] ❌ Dispose error: $e');
+      LogManager.debug('[AppInit] ❌ Dispose error: $e');
     }
   }
 }

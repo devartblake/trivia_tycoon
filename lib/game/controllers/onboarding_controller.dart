@@ -39,6 +39,19 @@ class ModernOnboardingController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Set a single field and notify listeners.
+  void setField(String key, dynamic value) {
+    userData[key] = value;
+    notifyListeners();
+  }
+
+  // Typed getters for Synaptix onboarding fields
+  String? get username => userData['username'] as String?;
+  String? get ageGroup => userData['ageGroup'] as String?;
+  String? get intent => userData['intent'] as String?;
+  String? get playStyle => userData['playStyle'] as String?;
+  String? get synaptixMode => userData['synaptixMode'] as String?;
+
   void reset() {
     _currentStep = 0;
     userData.clear();

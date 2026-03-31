@@ -138,6 +138,14 @@ class ActionButtons extends StatelessWidget {
 
     return [
       {
+        'label': 'Hub',
+        'icon': Icons.hub_rounded,
+        'gradient': gradients[0],
+        'route': '/game',
+        'description': 'Synaptix Hub',
+        'badge': null,
+      },
+      {
         'label': 'Invite',
         'icon': Icons.person_add_rounded,
         'gradient': gradients[0],
@@ -154,19 +162,19 @@ class ActionButtons extends StatelessWidget {
         'badge': dailyRewardsAvailable ? 1 : null,
       },
       {
-        'label': 'Arcade',
-        'icon': Icons.games_rounded,
+        'label': 'Labs',
+        'icon': Icons.science_rounded,
         'gradient': gradients[5],
         'route': '/arcade',
-        'description': 'Arcade games',
+        'description': 'Games & challenges',
         'badge': null,
       },
       {
-        'label': 'Leaderboard',
-        'icon': Icons.trending_up_rounded,
+        'label': 'Arena',
+        'icon': Icons.emoji_events_rounded,
         'gradient': gradients[3],
         'route': '/leaderboard',
-        'description': 'Global leaderboard',
+        'description': 'Rankings & tiers',
         'badge': null,
       },
       {

@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../../core/helpers/mission_notification_helper.dart';
 import '../models/mission_model.dart';
 import '../services/mission_service.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class MissionProvider extends ChangeNotifier {
   final MissionNotificationHelper _notificationHelper = MissionNotificationHelper();
@@ -161,7 +162,7 @@ class MissionProvider extends ChangeNotifier {
       // The real-time listener will automatically update the UI when progress changes
     } catch (e) {
       // Don't show error to user for tracking failures
-      debugPrint('Failed to track user action: $e');
+      LogManager.debug('Failed to track user action: $e');
     }
   }
 
@@ -222,7 +223,7 @@ class MissionProvider extends ChangeNotifier {
 
   void _onMissionCompleted(UserMission mission) {
     // Handle mission completion (you can add UI feedback here)
-    debugPrint('Mission completed: ${mission.mission.title} (+${mission.mission.rewardXp} rewards)');
+    LogManager.debug('Mission completed: ${mission.mission.title} (+${mission.mission.rewardXp} rewards)');
 
     // You could show a snack bar, play a sound, etc.
     // Send notification safely

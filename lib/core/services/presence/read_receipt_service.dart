@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 enum ReadStatus {
   sent,
@@ -137,7 +138,7 @@ class ReadReceiptService extends ChangeNotifier {
 
   void initialize() {
     _startCleanupTimer();
-    debugPrint('ReadReceiptService initialized');
+    LogManager.debug('ReadReceiptService initialized');
   }
 
   void dispose() {
@@ -161,7 +162,7 @@ class ReadReceiptService extends ChangeNotifier {
     _receiptTimeout = receiptTimeout ?? _receiptTimeout;
     _maxStoredReceipts = maxStoredReceipts ?? _maxStoredReceipts;
 
-    debugPrint('ReadReceiptService settings updated');
+    LogManager.debug('ReadReceiptService settings updated');
     notifyListeners();
   }
 
@@ -191,7 +192,7 @@ class ReadReceiptService extends ChangeNotifier {
       lastUpdated: now,
     );
 
-    debugPrint('Tracking message $messageId for ${recipientIds.length} recipients');
+    LogManager.debug('Tracking message $messageId for ${recipientIds.length} recipients');
     notifyListeners();
     _broadcastStatusUpdate(messageId);
   }
@@ -226,7 +227,7 @@ class ReadReceiptService extends ChangeNotifier {
       lastUpdated: DateTime.now(),
     );
 
-    debugPrint('Updated $messageId status for $userId: ${status.name}');
+    LogManager.debug('Updated $messageId status for $userId: ${status.name}');
     notifyListeners();
     _broadcastReceiptUpdate(updatedReceipt);
     _broadcastStatusUpdate(messageId);
@@ -265,7 +266,7 @@ class ReadReceiptService extends ChangeNotifier {
     }
 
     if (hasUpdates) {
-      debugPrint('Batch updated ${updates.length} receipt statuses');
+      LogManager.debug('Batch updated ${updates.length} receipt statuses');
       notifyListeners();
     }
   }
@@ -371,7 +372,7 @@ class ReadReceiptService extends ChangeNotifier {
     }
 
     if (toRemove.isNotEmpty) {
-      debugPrint('Cleaned up ${toRemove.length} old message statuses');
+      LogManager.debug('Cleaned up ${toRemove.length} old message statuses');
     }
   }
 
@@ -384,7 +385,7 @@ class ReadReceiptService extends ChangeNotifier {
 
   void _broadcastStatusUpdate(String messageId) {
     // This could broadcast to a general message status stream if needed
-    debugPrint('Broadcasting status update for message $messageId');
+    LogManager.debug('Broadcasting status update for message $messageId');
   }
 
   // Helper methods for UI

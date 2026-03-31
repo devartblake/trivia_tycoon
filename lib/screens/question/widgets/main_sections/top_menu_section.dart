@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../game/providers/game_providers.dart';
+import '../../../../game/providers/profile_providers.dart';
 
-class TopMenuSection extends StatelessWidget {
+class TopMenuSection extends ConsumerWidget {
   const TopMenuSection({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profile = ref.watch(userProfileProvider);
+    final coinBalance = ref.watch(coinBalanceProvider);
+
+    final displayName = (profile['username'] as String?)?.trim().isNotEmpty == true
+        ? profile['username'] as String
+        : (profile['name'] as String?) ?? 'Player';
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -61,9 +71,9 @@ class TopMenuSection extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 2),
-                      const Text(
-                        "Username", // TODO: Connect to user provider in Phase 2
-                        style: TextStyle(
+                      Text(
+                        displayName,
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.black87,
@@ -75,7 +85,7 @@ class TopMenuSection extends StatelessWidget {
               ),
               // Diamond/Points Display - Tappable to show details
               GestureDetector(
-                onTap: () => _showPointsDialog(context),
+                onTap: () => _showPointsDialog(context, coinBalance),
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
@@ -96,7 +106,7 @@ class TopMenuSection extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        "12,000", // TODO: Connect to user points provider in Phase 2
+                        _formatBalance(coinBalance),
                         style: TextStyle(
                           color: Colors.purple.shade700,
                           fontWeight: FontWeight.bold,
@@ -206,25 +216,18 @@ class TopMenuSection extends StatelessWidget {
     );
   }
 
-  // Enhanced navigation handlers with custom logic
   void _handlePlayQuizTap(BuildContext context) {
-    // TODO: Add analytics tracking in Phase 2
-    // TODO: Check if user has completed onboarding in Phase 2
     context.push('/quiz/play');
   }
 
   void _handleCreateQuizTap(BuildContext context) {
-    // TODO: Check if user has premium access in Phase 2
-    // TODO: Add analytics tracking in Phase 2
     context.push('/quiz/create');
   }
 
   void _handleAchievementsTap(BuildContext context) {
-    // TODO: Add analytics tracking in Phase 2
     context.push('/achievements');
   }
 
-  // Dynamic greeting based on time of day
   String _getGreeting() {
     final hour = DateTime.now().hour;
     if (hour < 12) {
@@ -236,8 +239,16 @@ class TopMenuSection extends StatelessWidget {
     }
   }
 
-  // Points dialog for showing point breakdown
-  void _showPointsDialog(BuildContext context) {
+  String _formatBalance(int balance) {
+    if (balance >= 1000000) {
+      return '${(balance / 1000000).toStringAsFixed(1)}M';
+    } else if (balance >= 1000) {
+      return '${(balance / 1000).toStringAsFixed(1)}K';
+    }
+    return balance.toString();
+  }
+
+  void _showPointsDialog(BuildContext context, int coinBalance) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -252,11 +263,7 @@ class TopMenuSection extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildPointRow('Quiz Points', '8,500'),
-            _buildPointRow('Daily Bonus', '2,000'),
-            _buildPointRow('Achievements', '1,500'),
-            const Divider(),
-            _buildPointRow('Total', '12,000', isTotal: true),
+            _buildPointRow('Coin Balance', _formatBalance(coinBalance), isTotal: true),
           ],
         ),
         actions: [

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class WordSearchDataLoader {
   static Future<List<String>> loadWords(String assetPath, {String? difficulty}) async {
@@ -38,7 +39,7 @@ class WordSearchDataLoader {
 
       return words;
     } catch (e) {
-      debugPrint('Error loading words: $e');
+      LogManager.debug('Error loading words: $e');
       // Fallback words if file not found
       return [
         'FLUTTER',

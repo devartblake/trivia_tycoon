@@ -117,7 +117,7 @@ class NavigationSearchProvider implements SearchProvider {
         'icon': Icons.person,
       },
       {
-        'title': 'Leaderboard',
+        'title': 'Arena',
         'description': 'View rankings and scores',
         'route': '/leaderboard',
         'icon': Icons.leaderboard,

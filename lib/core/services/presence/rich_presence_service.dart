@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:trivia_tycoon/core/services/presence/presence_websocket_adapter.dart';
 import '../../../game/models/user_presence_models.dart';
 import '../../utils/input_validator.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class RichPresenceService extends ChangeNotifier {
   static final RichPresenceService _instance = RichPresenceService._internal();
@@ -38,11 +39,11 @@ class RichPresenceService extends ChangeNotifier {
       // Use WebSocket for real-time updates
       _wsAdapter = PresenceWebSocketAdapter(this);
       _wsAdapter!.initialize();
-      debugPrint('[Presence] Using WebSocket mode');
+      LogManager.debug('[Presence] Using WebSocket mode');
     } else {
       // Legacy mode - polling with timers
       _startHeartbeat();
-      debugPrint('[Presence] Using legacy polling mode');
+      LogManager.debug('[Presence] Using legacy polling mode');
     }
 
     _setCurrentUserPresence(UserPresence.createDefault());
@@ -249,7 +250,7 @@ class RichPresenceService extends ChangeNotifier {
     // TODO: Implement network broadcast to friends
     // This would typically send the presence update to a server
     // or directly to connected friends via WebSocket/Firebase
-    debugPrint('Broadcasting presence update: ${presence.activity}');
+    LogManager.debug('Broadcasting presence update: ${presence.activity}');
   }
 
   void _startHeartbeat() {

@@ -6,6 +6,7 @@ import 'dart:math';
 
 import '../dialogs/crossword_settings_dialog.dart';
 import '../dialogs/game_result_dialog.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class CrosswordScreen extends StatefulWidget {
   const CrosswordScreen({super.key});
@@ -57,10 +58,10 @@ class _CrosswordScreenState extends State<CrosswordScreen> {
         gameIcon: Icons.grid_on,
       ),
       onShare: () {
-        debugPrint('Share tapped');
+        LogManager.debug('Share tapped');
       },
       onClose: () {
-        debugPrint('Close tapped');
+        LogManager.debug('Close tapped');
       },
       onPlayAgain: () {
         setState(() {
@@ -415,7 +416,7 @@ class CrosswordDataLoader {
 
       return CrosswordData.fromJson(randomPuzzle);
     } catch (e) {
-      debugPrint('Error loading crossword: $e');
+      LogManager.debug('Error loading crossword: $e');
       // Fallback data for testing if a file is missing or empty
       return CrosswordData(
         gridSize: 8,

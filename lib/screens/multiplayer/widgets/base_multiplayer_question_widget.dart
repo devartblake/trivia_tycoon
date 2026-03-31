@@ -18,22 +18,21 @@ abstract class BaseMultiplayerQuestionWidget extends StatelessWidget {
     this.isMultiplayer = false,
   });
 
-  // Common styling for multiplayer mode
-  Color get primaryColor => isMultiplayer
+  // Common styling for multiplayer mode.
+  // Takes BuildContext explicitly because StatelessWidget has no stored context.
+  Color primaryColor(BuildContext ctx) => isMultiplayer
       ? const Color(0xFF6366F1)
-      : Theme.of(context).primaryColor;
+      : Theme.of(ctx).primaryColor;
 
-  Color get accentColor => isMultiplayer
+  Color accentColor(BuildContext ctx) => isMultiplayer
       ? const Color(0xFF8B5CF6)
-      : Theme.of(context).colorScheme.secondary;
+      : Theme.of(ctx).colorScheme.secondary;
 
   EdgeInsets get questionPadding => isMultiplayer
       ? const EdgeInsets.all(20)
       : const EdgeInsets.all(16);
 
   double get optionSpacing => isMultiplayer ? 16 : 12;
-
-  BuildContext get context;
 }
 
 // Multiple Choice Question Widget for Multiplayer
@@ -61,15 +60,15 @@ class MultipleChoiceQuestionWidget extends BaseMultiplayerQuestionWidget {
               gradient: isMultiplayer
                   ? LinearGradient(
                 colors: [
-                  primaryColor.withValues(alpha: 0.1),
-                  accentColor.withValues(alpha: 0.1),
+                  primaryColor(context).withValues(alpha: 0.1),
+                  accentColor(context).withValues(alpha: 0.1),
                 ],
               )
                   : null,
               color: isMultiplayer ? null : Colors.grey.shade50,
               borderRadius: BorderRadius.circular(20),
               border: isMultiplayer
-                  ? Border.all(color: primaryColor.withValues(alpha: 0.3))
+                  ? Border.all(color: primaryColor(context).withValues(alpha: 0.3))
                   : null,
             ),
             child: Column(
@@ -81,7 +80,7 @@ class MultipleChoiceQuestionWidget extends BaseMultiplayerQuestionWidget {
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: [primaryColor, accentColor]),
+                          gradient: LinearGradient(colors: [primaryColor(context), accentColor(context)]),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Icon(
@@ -96,7 +95,7 @@ class MultipleChoiceQuestionWidget extends BaseMultiplayerQuestionWidget {
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
-                          color: primaryColor,
+                          color: primaryColor(context),
                           letterSpacing: 0.5,
                         ),
                       ),
@@ -131,6 +130,7 @@ class MultipleChoiceQuestionWidget extends BaseMultiplayerQuestionWidget {
             return Padding(
               padding: EdgeInsets.only(bottom: optionSpacing),
               child: _buildOptionCard(
+                context,
                 optionLabel,
                 option,
                 isSelected,
@@ -145,6 +145,7 @@ class MultipleChoiceQuestionWidget extends BaseMultiplayerQuestionWidget {
   }
 
   Widget _buildOptionCard(
+      BuildContext context,
       String label,
       String option,
       bool isSelected,
@@ -170,9 +171,9 @@ class MultipleChoiceQuestionWidget extends BaseMultiplayerQuestionWidget {
       }
     } else if (isSelected) {
       if (isMultiplayer) {
-        cardColor = primaryColor.withValues(alpha: 0.1);
-        borderColor = primaryColor;
-        textColor = primaryColor;
+        cardColor = primaryColor(context).withValues(alpha: 0.1);
+        borderColor = primaryColor(context);
+        textColor = primaryColor(context);
       } else {
         cardColor = Colors.blue.shade50;
         borderColor = Colors.blue;
@@ -265,8 +266,6 @@ class MultipleChoiceQuestionWidget extends BaseMultiplayerQuestionWidget {
     );
   }
 
-  @override
-  BuildContext get context => throw UnimplementedError();
 }
 
 // True/False Question Widget for Multiplayer
@@ -294,15 +293,15 @@ class TrueFalseQuestionWidget extends BaseMultiplayerQuestionWidget {
               gradient: isMultiplayer
                   ? LinearGradient(
                 colors: [
-                  primaryColor.withValues(alpha: 0.1),
-                  accentColor.withValues(alpha: 0.1),
+                  primaryColor(context).withValues(alpha: 0.1),
+                  accentColor(context).withValues(alpha: 0.1),
                 ],
               )
                   : null,
               color: isMultiplayer ? null : Colors.grey.shade50,
               borderRadius: BorderRadius.circular(20),
               border: isMultiplayer
-                  ? Border.all(color: primaryColor.withValues(alpha: 0.3))
+                  ? Border.all(color: primaryColor(context).withValues(alpha: 0.3))
                   : null,
             ),
             child: Column(
@@ -314,7 +313,7 @@ class TrueFalseQuestionWidget extends BaseMultiplayerQuestionWidget {
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: [primaryColor, accentColor]),
+                          gradient: LinearGradient(colors: [primaryColor(context), accentColor(context)]),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Icon(
@@ -329,7 +328,7 @@ class TrueFalseQuestionWidget extends BaseMultiplayerQuestionWidget {
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
-                          color: primaryColor,
+                          color: primaryColor(context),
                           letterSpacing: 0.5,
                         ),
                       ),
@@ -356,11 +355,11 @@ class TrueFalseQuestionWidget extends BaseMultiplayerQuestionWidget {
           Row(
             children: [
               Expanded(
-                child: _buildTrueFalseOption('True', true),
+                child: _buildTrueFalseOption(context, 'True', true),
               ),
               SizedBox(width: optionSpacing),
               Expanded(
-                child: _buildTrueFalseOption('False', false),
+                child: _buildTrueFalseOption(context, 'False', false),
               ),
             ],
           ),
@@ -369,7 +368,7 @@ class TrueFalseQuestionWidget extends BaseMultiplayerQuestionWidget {
     );
   }
 
-  Widget _buildTrueFalseOption(String label, bool isTrue) {
+  Widget _buildTrueFalseOption(BuildContext context, String label, bool isTrue) {
     final optionValue = isTrue ? 'True' : 'False';
     final isSelected = selectedAnswer == optionValue;
     final isCorrect = showFeedback && optionValue == question.correctAnswer;
@@ -392,9 +391,9 @@ class TrueFalseQuestionWidget extends BaseMultiplayerQuestionWidget {
       }
     } else if (isSelected) {
       if (isMultiplayer) {
-        cardColor = primaryColor.withValues(alpha: 0.1);
-        borderColor = primaryColor;
-        textColor = primaryColor;
+        cardColor = primaryColor(context).withValues(alpha: 0.1);
+        borderColor = primaryColor(context);
+        textColor = primaryColor(context);
       } else {
         cardColor = Colors.blue.shade50;
         borderColor = Colors.blue;
@@ -459,8 +458,6 @@ class TrueFalseQuestionWidget extends BaseMultiplayerQuestionWidget {
     );
   }
 
-  @override
-  BuildContext get context => throw UnimplementedError();
 }
 
 // Fill in the Blank Question Widget for Multiplayer
@@ -492,15 +489,15 @@ class FillBlankQuestionWidget extends BaseMultiplayerQuestionWidget {
               gradient: isMultiplayer
                   ? LinearGradient(
                 colors: [
-                  primaryColor.withValues(alpha: 0.1),
-                  accentColor.withValues(alpha: 0.1),
+                  primaryColor(context).withValues(alpha: 0.1),
+                  accentColor(context).withValues(alpha: 0.1),
                 ],
               )
                   : null,
               color: isMultiplayer ? null : Colors.grey.shade50,
               borderRadius: BorderRadius.circular(20),
               border: isMultiplayer
-                  ? Border.all(color: primaryColor.withValues(alpha: 0.3))
+                  ? Border.all(color: primaryColor(context).withValues(alpha: 0.3))
                   : null,
             ),
             child: Column(
@@ -512,7 +509,7 @@ class FillBlankQuestionWidget extends BaseMultiplayerQuestionWidget {
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: [primaryColor, accentColor]),
+                          gradient: LinearGradient(colors: [primaryColor(context), accentColor(context)]),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Icon(
@@ -527,7 +524,7 @@ class FillBlankQuestionWidget extends BaseMultiplayerQuestionWidget {
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
-                          color: primaryColor,
+                          color: primaryColor(context),
                           letterSpacing: 0.5,
                         ),
                       ),
@@ -560,7 +557,7 @@ class FillBlankQuestionWidget extends BaseMultiplayerQuestionWidget {
                     ? (selectedAnswer == question.correctAnswer
                     ? Colors.green
                     : Colors.red)
-                    : (isMultiplayer ? primaryColor : Colors.grey.shade300),
+                    : (isMultiplayer ? primaryColor(context) : Colors.grey.shade300),
                 width: 2,
               ),
               boxShadow: [
@@ -592,7 +589,7 @@ class FillBlankQuestionWidget extends BaseMultiplayerQuestionWidget {
                   },
                   icon: Icon(
                     Icons.send,
-                    color: isMultiplayer ? primaryColor : Colors.blue,
+                    color: isMultiplayer ? primaryColor(context) : Colors.blue,
                   ),
                 )
                     : null,
@@ -653,6 +650,4 @@ class FillBlankQuestionWidget extends BaseMultiplayerQuestionWidget {
     );
   }
 
-  @override
-  BuildContext get context => throw UnimplementedError();
 }
