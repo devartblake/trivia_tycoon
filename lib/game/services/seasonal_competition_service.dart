@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/services/api_service.dart';
 import '../../core/services/settings/general_key_value_storage_service.dart';
 import '../models/seasonal_competition_model.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class SeasonalCompetitionService {
   final GeneralKeyValueStorageService _storage;
@@ -62,7 +63,7 @@ class SeasonalCompetitionService {
     // Reset player points for new season
     await _storage.setInt(_playerPointsKey, 0);
 
-    debugPrint('New season started: $seasonId, ends: $endTime');
+    LogManager.debug('New season started: $seasonId, ends: $endTime');
   }
 
   /// End current season and process results
@@ -81,7 +82,7 @@ class SeasonalCompetitionService {
 
       return result;
     } catch (e) {
-      debugPrint('Error ending season: $e');
+      LogManager.debug('Error ending season: $e');
       return SeasonEndResult.error(e.toString());
     }
   }
@@ -147,6 +148,6 @@ class SeasonalCompetitionService {
   /// Notify player of tiebreaker requirement
   Future<void> _notifyPlayerOfTiebreaker(SeasonPlayer player, DateTime time) async {
     // Implementation would send push notification or in-app notification
-    debugPrint('Tiebreaker scheduled for ${player.playerName} at $time');
+    LogManager.debug('Tiebreaker scheduled for ${player.playerName} at $time');
   }
 }

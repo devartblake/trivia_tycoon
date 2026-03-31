@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import '../../core/constants/question_paths.dart';
 import 'quiz_category.dart';
 import '../models/question_model.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class QuestionDataset {
   final String name;
@@ -523,7 +524,7 @@ class AdaptedQuestionLoaderService {
         q.category.toLowerCase() == category.datasetName.toLowerCase()
         ).toList();
       } catch (e) {
-        debugPrint('Failed to load dedicated dataset for ${category.displayName}: $e');
+        LogManager.debug('Failed to load dedicated dataset for ${category.displayName}: $e');
       }
     }
 
@@ -674,7 +675,7 @@ class AdaptedQuestionLoaderService {
       final questions = await getQuestionsByQuizCategory(category);
       return questions.length;
     } catch (e) {
-      debugPrint('Error getting question count for ${category.displayName}: $e');
+      LogManager.debug('Error getting question count for ${category.displayName}: $e');
       return 0;
     }
   }
@@ -711,7 +712,7 @@ class AdaptedQuestionLoaderService {
 
       return 'mixed';
     } catch (e) {
-      debugPrint('Error getting difficulty for ${category.displayName}: $e');
+      LogManager.debug('Error getting difficulty for ${category.displayName}: $e');
       return 'mixed';
     }
   }
@@ -739,7 +740,7 @@ class AdaptedQuestionLoaderService {
         return classQuestions.take(questionCount).toList();
       }
     } catch (e) {
-      debugPrint('Class dataset not available, generating from general content');
+      LogManager.debug('Class dataset not available, generating from general content');
     }
 
     // Fallback: Generate appropriate questions based on class level
@@ -895,7 +896,7 @@ class AdaptedQuestionLoaderService {
 
       return questions;
     } catch (e) {
-      debugPrint('Failed to load dataset $datasetName from path ${dataset.path}: $e');
+      LogManager.debug('Failed to load dataset $datasetName from path ${dataset.path}: $e');
       _datasetAvailability[datasetName] = false;
 
       // Try fallback loading using the data service
@@ -917,13 +918,13 @@ class AdaptedQuestionLoaderService {
       throw Exception('No valid questions found in dataset $datasetName');
     }
 
-    debugPrint('Successfully loaded ${questions.length} questions from $datasetName');
+    LogManager.debug('Successfully loaded ${questions.length} questions from $datasetName');
     return questions;
   }
 
   /// Handle unavailable dataset by trying alternatives
   Future<List<QuestionModel>> _handleUnavailableDataset(String datasetName) async {
-    debugPrint('Dataset $datasetName is marked as unavailable, trying alternatives');
+    LogManager.debug('Dataset $datasetName is marked as unavailable, trying alternatives');
 
     // Try to find similar datasets based on categories
     final targetDataset = availableDatasets.firstWhere(
@@ -939,7 +940,7 @@ class AdaptedQuestionLoaderService {
 
     if (alternatives.isNotEmpty) {
       final alternative = alternatives.first;
-      debugPrint('Using alternative dataset: ${alternative.name}');
+      LogManager.debug('Using alternative dataset: ${alternative.name}');
       return loadDataset(alternative.name);
     }
 
@@ -953,14 +954,14 @@ class AdaptedQuestionLoaderService {
 
   /// Handle dataset fallback using the data service
   Future<List<QuestionModel>> _handleDatasetFallback(String datasetName, QuestionDataset dataset) async {
-    debugPrint('Attempting fallback loading for $datasetName using data service');
+    LogManager.debug('Attempting fallback loading for $datasetName using data service');
 
     // Try loading using category-based approach
     for (final category in dataset.categories) {
       try {
         final questions = await getQuestionsByQuizCategory(category);
         if (questions.isNotEmpty) {
-          debugPrint('Fallback successful: loaded ${questions.length} questions for category ${category.displayName}');
+          LogManager.debug('Fallback successful: loaded ${questions.length} questions for category ${category.displayName}');
 
           // Cache the successful result
           _cachedDatasets[datasetName] = questions;
@@ -970,13 +971,13 @@ class AdaptedQuestionLoaderService {
           return questions;
         }
       } catch (e) {
-        debugPrint('Fallback failed for category ${category.displayName}: $e');
+        LogManager.debug('Fallback failed for category ${category.displayName}: $e');
       }
     }
 
     // If specific dataset fails and it's not the fallback, try general knowledge
     if (datasetName != 'General Knowledge') {
-      debugPrint('All fallbacks failed, using General Knowledge');
+      LogManager.debug('All fallbacks failed, using General Knowledge');
       return loadDataset('General Knowledge');
     }
 
@@ -994,7 +995,7 @@ class AdaptedQuestionLoaderService {
         allQuestions.addAll(questions);
       } catch (e) {
         failedDatasets.add(dataset.name);
-        debugPrint('Warning: Failed to load ${dataset.name}: $e');
+        LogManager.debug('Warning: Failed to load ${dataset.name}: $e');
       }
     }
 
@@ -1002,7 +1003,7 @@ class AdaptedQuestionLoaderService {
       throw Exception('Failed to load any questions. Failed datasets: $failedDatasets');
     }
 
-    debugPrint('Loaded ${allQuestions.length} total questions from ${availableDatasets.length - failedDatasets.length} datasets');
+    LogManager.debug('Loaded ${allQuestions.length} total questions from ${availableDatasets.length - failedDatasets.length} datasets');
     return allQuestions;
   }
 
@@ -1017,7 +1018,7 @@ class AdaptedQuestionLoaderService {
         allQuestions.addAll(questions);
       } catch (e) {
         failedDatasets.add(datasetName);
-        debugPrint('Warning: Failed to load $datasetName: $e');
+        LogManager.debug('Warning: Failed to load $datasetName: $e');
       }
     }
 
@@ -1027,7 +1028,7 @@ class AdaptedQuestionLoaderService {
         try {
           final questions = await loadDataset(coreDataset.name);
           allQuestions.addAll(questions);
-          debugPrint('Fallback successful using ${coreDataset.name}');
+          LogManager.debug('Fallback successful using ${coreDataset.name}');
           break;
         } catch (e) {
           continue;
@@ -1132,8 +1133,8 @@ class AdaptedQuestionLoaderService {
 
       return QuestionModel.fromJson(normalizedJson);
     } catch (e) {
-      debugPrint('Error parsing question from $sourceDataset: $e');
-      debugPrint('Problematic JSON: $json');
+      LogManager.debug('Error parsing question from $sourceDataset: $e');
+      LogManager.debug('Problematic JSON: $json');
       rethrow;
     }
   }
@@ -1255,7 +1256,7 @@ class AdaptedQuestionLoaderService {
           .where((q) => q.category.toLowerCase() == categoryId.toLowerCase())
           .length;
     } catch (e) {
-      debugPrint('Error getting category question count for $categoryId: $e');
+      LogManager.debug('Error getting category question count for $categoryId: $e');
       return 0;
     }
   }
@@ -1302,7 +1303,7 @@ class AdaptedQuestionLoaderService {
 
       return 'mixed';
     } catch (e) {
-      debugPrint('Error getting category difficulty for $categoryId: $e');
+      LogManager.debug('Error getting category difficulty for $categoryId: $e');
       return 'mixed';
     }
   }
@@ -1441,7 +1442,7 @@ class AdaptedQuestionLoaderService {
       final appropriateQuestions = _filterQuestionsForClass(allQuestions, classId);
       return appropriateQuestions.length;
     } catch (e) {
-      debugPrint('Error getting class question count for $classId: $e');
+      LogManager.debug('Error getting class question count for $classId: $e');
       return 0;
     }
   }
@@ -1460,7 +1461,7 @@ class AdaptedQuestionLoaderService {
       // Fallback: return expected subject count based on class level
       return _getExpectedSubjectCount(classId);
     } catch (e) {
-      debugPrint('Error getting class subject count for $classId: $e');
+      LogManager.debug('Error getting class subject count for $classId: $e');
       return 4; // Default fallback
     }
   }
@@ -1683,14 +1684,14 @@ class AdaptedQuestionLoaderService {
 
   /// Comprehensive test with QuizCategory integration
   Future<void> runComprehensiveTest() async {
-    debugPrint('=== Comprehensive Dataset Test with QuizCategory Integration ===');
+    LogManager.debug('=== Comprehensive Dataset Test with QuizCategory Integration ===');
 
     final testResults = <String, Map<String, dynamic>>{};
     int totalQuestions = 0;
     int successfulDatasets = 0;
 
     for (final dataset in availableDatasets) {
-      debugPrint('Testing ${dataset.name}...');
+      LogManager.debug('Testing ${dataset.name}...');
 
       try {
         final startTime = DateTime.now();
@@ -1711,23 +1712,23 @@ class AdaptedQuestionLoaderService {
         totalQuestions += questions.length;
         successfulDatasets++;
 
-        debugPrint('✅ ${dataset.name}: ${questions.length} questions (${loadTime.inMilliseconds}ms)');
+        LogManager.debug('✅ ${dataset.name}: ${questions.length} questions (${loadTime.inMilliseconds}ms)');
       } catch (e) {
         testResults[dataset.name] = {
           'status': 'failed',
           'error': e.toString(),
         };
-        debugPrint('❌ ${dataset.name}: Failed - $e');
+        LogManager.debug('❌ ${dataset.name}: Failed - $e');
       }
     }
 
-    debugPrint('=== Test Summary ===');
-    debugPrint('Successful datasets: $successfulDatasets/${availableDatasets.length}');
-    debugPrint('Total questions loaded: $totalQuestions');
-    debugPrint('Cache entries: ${_cachedDatasets.length}');
+    LogManager.debug('=== Test Summary ===');
+    LogManager.debug('Successful datasets: $successfulDatasets/${availableDatasets.length}');
+    LogManager.debug('Total questions loaded: $totalQuestions');
+    LogManager.debug('Cache entries: ${_cachedDatasets.length}');
 
     // Test QuizCategory functionality
-    debugPrint('\n=== QuizCategory Integration Test ===');
+    LogManager.debug('\n=== QuizCategory Integration Test ===');
     final testCategories = [
       QuizCategory.science,
       QuizCategory.mathematics,
@@ -1741,12 +1742,12 @@ class AdaptedQuestionLoaderService {
       try {
         final count = await getQuizCategoryQuestionCount(category);
         final difficulty = await getQuizCategoryDifficulty(category);
-        debugPrint('✅ ${category.displayName}: $count questions, difficulty: $difficulty');
+        LogManager.debug('✅ ${category.displayName}: $count questions, difficulty: $difficulty');
       } catch (e) {
-        debugPrint('❌ ${category.displayName}: Failed - $e');
+        LogManager.debug('❌ ${category.displayName}: Failed - $e');
       }
     }
 
-    debugPrint('=== End Comprehensive Test ===');
+    LogManager.debug('=== End Comprehensive Test ===');
   }
 }

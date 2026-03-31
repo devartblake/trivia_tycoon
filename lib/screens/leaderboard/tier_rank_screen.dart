@@ -149,7 +149,7 @@ class _TierRankScreenState extends ConsumerState<TierRankScreen>
                       ),
                       const SizedBox(height: 12),
                       const Text(
-                        'Leaderboard',
+                        'Arena',
                         style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,

@@ -117,7 +117,7 @@ class _FortuneWheelSplashState extends State<FortuneWheelSplash> with SingleTick
                   baseColor: Colors.amber,
                   highlightColor: Colors.blueGrey,
                   child: const Text(
-                    "Trivia Tycoon",
+                    "Synaptix",
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,

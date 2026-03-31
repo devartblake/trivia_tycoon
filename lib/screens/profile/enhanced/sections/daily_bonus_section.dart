@@ -82,7 +82,7 @@ class DailyBonusSection extends StatelessWidget {
           ),
           const SizedBox(width: 14),
           const Text(
-            'Daily Bonus',
+            'Daily Signal',
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,

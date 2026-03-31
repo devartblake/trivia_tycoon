@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/settings/app_settings.dart';
 import '../models/spin_system_models.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Enhanced spin history provider with caching and analytics
 final spinHistoryProvider = AsyncNotifierProvider<EnhancedSpinHistoryNotifier, SpinHistoryState>(
@@ -270,7 +271,7 @@ class EnhancedSpinHistoryNotifier extends AsyncNotifier<SpinHistoryState> {
 
       return validatedState;
     } catch (e) {
-      debugPrint('Failed to load spin history: $e');
+      LogManager.debug('Failed to load spin history: $e');
       final fallbackState = SpinHistoryState(lastUpdated: DateTime.now());
       _updateCache(fallbackState);
       return fallbackState;
@@ -331,7 +332,7 @@ class EnhancedSpinHistoryNotifier extends AsyncNotifier<SpinHistoryState> {
       // Schedule batched save
       _scheduleSave(newState);
     } catch (e) {
-      debugPrint('Failed to add spin result: $e');
+      LogManager.debug('Failed to add spin result: $e');
       state = AsyncError(e, StackTrace.current);
     }
   }
@@ -350,7 +351,7 @@ class EnhancedSpinHistoryNotifier extends AsyncNotifier<SpinHistoryState> {
       final stateJson = jsonEncode(stateToSave.toJson());
       await AppSettings.setString(_historyKey, stateJson);
     } catch (e) {
-      debugPrint('Failed to save spin history: $e');
+      LogManager.debug('Failed to save spin history: $e');
     }
   }
 
@@ -378,7 +379,7 @@ class EnhancedSpinHistoryNotifier extends AsyncNotifier<SpinHistoryState> {
       _updateCache(newState);
       _scheduleSave(newState);
     } catch (e) {
-      debugPrint('Failed to add multiple results: $e');
+      LogManager.debug('Failed to add multiple results: $e');
       state = AsyncError(e, StackTrace.current);
     }
   }
@@ -393,7 +394,7 @@ class EnhancedSpinHistoryNotifier extends AsyncNotifier<SpinHistoryState> {
       await AppSettings.remove(_historyKey);
       await AppSettings.remove(_analyticsKey);
     } catch (e) {
-      debugPrint('Failed to clear spin history: $e');
+      LogManager.debug('Failed to clear spin history: $e');
       state = AsyncError(e, StackTrace.current);
     }
   }
@@ -466,7 +467,7 @@ class EnhancedSpinHistoryNotifier extends AsyncNotifier<SpinHistoryState> {
       _updateCache(validatedState);
       await _saveState(validatedState);
     } catch (e) {
-      debugPrint('Failed to import history data: $e');
+      LogManager.debug('Failed to import history data: $e');
       throw Exception('Invalid history data format');
     }
   }

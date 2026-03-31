@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'ws_protocol.dart';
 import 'ws_reliability.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// WebSocket client with automatic reconnection and message reliability
 ///
@@ -65,7 +66,7 @@ class WsClient {
   /// Connect to WebSocket server
   Future<void> connect() async {
     if (_state == WsState.connected || _state == WsState.connecting) {
-      debugPrint('[WsClient] Already connected or connecting');
+      LogManager.debug('[WsClient] Already connected or connecting');
       return;
     }
 
@@ -77,14 +78,14 @@ class WsClient {
   /// Internal connection logic
   Future<void> _doConnect() async {
     try {
-      debugPrint('[WsClient] Connecting to $url...');
+      LogManager.debug('[WsClient] Connecting to $url...');
 
       _channel = WebSocketChannel.connect(Uri.parse(url));
 
       // Wait for connection to be established
       await _channel!.ready;
 
-      debugPrint('[WsClient] ✅ Connected');
+      LogManager.debug('[WsClient] ✅ Connected');
       _setState(WsState.connected);
       _reconnectAttempts = 0;
 
@@ -107,14 +108,14 @@ class WsClient {
       ));
 
     } catch (e) {
-      debugPrint('[WsClient] Connection error: $e');
+      LogManager.debug('[WsClient] Connection error: $e');
       _handleError(e);
     }
   }
 
   /// Disconnect from server
   Future<void> disconnect() async {
-    debugPrint('[WsClient] Disconnecting...');
+    LogManager.debug('[WsClient] Disconnecting...');
 
     _reconnectTimer?.cancel();
     _heartbeatTimer?.cancel();
@@ -142,7 +143,7 @@ class WsClient {
   /// Send a message to the server
   void send(WsEnvelope message, {bool requireAck = false}) {
     if (!isConnected) {
-      debugPrint('[WsClient] Cannot send - not connected');
+      LogManager.debug('[WsClient] Cannot send - not connected');
       onError?.call('Not connected');
       return;
     }
@@ -154,7 +155,7 @@ class WsClient {
         _sendRaw(message);
       }
     } catch (e) {
-      debugPrint('[WsClient] Send error: $e');
+      LogManager.debug('[WsClient] Send error: $e');
       onError?.call('Send failed: $e');
     }
   }
@@ -164,7 +165,7 @@ class WsClient {
     final json = message.toJson();
     final text = jsonEncode(json);
     _channel?.sink.add(text);
-    debugPrint('[WsClient] → Sent: ${message.op}');
+    LogManager.debug('[WsClient] → Sent: ${message.op}');
   }
 
   // ========================================
@@ -177,7 +178,7 @@ class WsClient {
       final json = jsonDecode(data as String) as Map<String, dynamic>;
       final envelope = WsEnvelope.fromJson(json);
 
-      debugPrint('[WsClient] ← Received: ${envelope.op}');
+      LogManager.debug('[WsClient] ← Received: ${envelope.op}');
 
       // Handle system messages
       if (envelope.op == 'pong') {
@@ -207,7 +208,7 @@ class WsClient {
       onMessage?.call(envelope);
 
     } catch (e) {
-      debugPrint('[WsClient] Message parse error: $e');
+      LogManager.debug('[WsClient] Message parse error: $e');
       onError?.call('Invalid message: $e');
     }
   }
@@ -227,7 +228,7 @@ class WsClient {
 
   /// Handle connection error
   void _handleError(dynamic error) {
-    debugPrint('[WsClient] Error: $error');
+    LogManager.debug('[WsClient] Error: $error');
     onError?.call(error.toString());
 
     if (_state == WsState.connected) {
@@ -237,7 +238,7 @@ class WsClient {
 
   /// Handle disconnection
   void _handleDisconnect() {
-    debugPrint('[WsClient] Disconnected');
+    LogManager.debug('[WsClient] Disconnected');
 
     if (_state != WsState.disconnected) {
       _setState(WsState.reconnecting);
@@ -251,7 +252,7 @@ class WsClient {
     _heartbeatTimer?.cancel();
 
     if (_reconnectAttempts >= _maxReconnectAttempts) {
-      debugPrint('[WsClient] Max reconnect attempts reached');
+      LogManager.debug('[WsClient] Max reconnect attempts reached');
       _setState(WsState.disconnected);
       onError?.call('Failed to reconnect after $_maxReconnectAttempts attempts');
       return;
@@ -259,7 +260,7 @@ class WsClient {
 
     // Exponential backoff
     final delay = _getReconnectDelay();
-    debugPrint('[WsClient] Reconnecting in ${delay.inSeconds}s (attempt ${_reconnectAttempts + 1})');
+    LogManager.debug('[WsClient] Reconnecting in ${delay.inSeconds}s (attempt ${_reconnectAttempts + 1})');
 
     _reconnectTimer = Timer(delay, () {
       _reconnectAttempts++;
@@ -307,7 +308,7 @@ class WsClient {
     final oldState = _state;
     _state = newState;
 
-    debugPrint('[WsClient] State: $oldState → $newState');
+    LogManager.debug('[WsClient] State: $oldState → $newState');
 
     _stateController.add(newState);
     onStateChange?.call(newState);

@@ -12,7 +12,7 @@ class MainNavBar extends StatelessWidget {
   static const List<_NavItem> _navItems = [
     _NavItem(label: 'Home', icon: Icons.home, route: '/store'),
     _NavItem(label: 'Quiz', icon: Icons.quiz, route: '/quiz'),
-    _NavItem(label: 'Leaderboard', icon: Icons.leaderboard, route: '/leaderboard'),
+    _NavItem(label: 'Arena', icon: Icons.leaderboard, route: '/leaderboard'),
     _NavItem(label: 'Profile', icon: Icons.person, route: '/profile'),
     _NavItem(label: 'Settings', icon: Icons.settings, route: '/settings'),
   ];

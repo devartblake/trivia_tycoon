@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/core/services/settings/player_profile_service.dart';
-import '../../ui_components/login/providers/auth.dart';
+import '../../ui_components/login/providers/auth.dart' show LocalAuthService;
 import '../providers/riverpod_providers.dart';
 
 // Updated registration logic with support for player name, role, and premium flag
@@ -15,7 +15,7 @@ final registrationControllerProvider = Provider((ref) {
 
 class RegistrationController {
   final PlayerProfileService profileService;
-  final AuthService authService;
+  final LocalAuthService authService;
 
   RegistrationController({
     required this.profileService,

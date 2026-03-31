@@ -8,6 +8,7 @@ import '../../../game/services/flow_connect_level_generator.dart';
 import '../../../game/state/flow_connect_game_state.dart';
 import '../dialogs/flow_connect_settings_dialog.dart';
 import '../dialogs/game_result_dialog.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class FlowConnectPuzzleScreen extends ConsumerStatefulWidget {
   const FlowConnectPuzzleScreen({super.key});
@@ -133,7 +134,7 @@ class _FlowConnectPuzzleScreenState extends ConsumerState<FlowConnectPuzzleScree
         gameIcon: Icons.timeline,
       ),
       onShare: () {
-        debugPrint('Share tapped');
+        LogManager.debug('Share tapped');
       },
       onClose: () {
         _dialogShown = false;
