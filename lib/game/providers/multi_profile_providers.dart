@@ -1,12 +1,23 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/game/providers/quiz_results_provider.dart';
+import 'package:trivia_tycoon/core/manager/service_manager.dart';
 import '../../core/services/settings/multi_profile_service.dart';
 import '../../core/services/settings/player_profile_service.dart';
+import '../../core/services/settings/profile_sync_service.dart';
 import '../services/profile_service.dart';
 
 // Provider for the multi-profile service
 final multiProfileServiceProvider = Provider<MultiProfileService>((ref) {
-  return MultiProfileService();
+  try {
+    return MultiProfileService(
+      profileSyncService: ProfileSyncService(
+        apiService: ServiceManager.instance.apiService,
+        trackEvent: ServiceManager.instance.analyticsService.trackEvent,
+      ),
+    );
+  } catch (_) {
+    return MultiProfileService();
+  }
 });
 
 // Provider for all profiles

@@ -216,7 +216,7 @@ class ServiceManager {
     final history = QrHistoryService(cache: cache, settings: qrSettings);
 
     // Save it globally here
-    return ServiceManager(
+    final manager = ServiceManager(
       apiService: api,
       authService: auth,
       analyticsService: analytics,
@@ -260,5 +260,8 @@ class ServiceManager {
       referralApiService: referralApi,
       referralService: referralServiceTemp,
     );
+
+    instance = manager;
+    return manager;
   }
 }
