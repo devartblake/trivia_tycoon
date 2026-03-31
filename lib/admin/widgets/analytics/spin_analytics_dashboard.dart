@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../../game/analytics/providers/analytics_providers.dart';
+import '../../../game/analytics/models/spin_live_summary.dart';
 
 class SpinAnalyticsDashboard extends ConsumerWidget {
   const SpinAnalyticsDashboard({super.key});
@@ -11,6 +12,7 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
     final summaryAsync = ref.watch(spinAnalyticsSummaryProvider);
     final trendDataAsync = ref.watch(spinTrendDataProvider);
     final recentSpinsAsync = ref.watch(recentSpinsProvider);
+    final liveSummaryAsync = ref.watch(spinLiveSummaryProvider);
 
     return summaryAsync.when(
       data: (summary) {
@@ -54,7 +56,7 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
             const SizedBox(height: 16),
 
             // Daily Metrics Card
-            _buildDailyMetricsCard(context, dailyMetrics),
+            _buildDailyMetricsCard(context, dailyMetrics, liveSummaryAsync.valueOrNull),
             const SizedBox(height: 16),
 
             // Reward Distribution
@@ -204,7 +206,11 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
     );
   }
 
-  Widget _buildDailyMetricsCard(BuildContext context, Map<String, dynamic> metrics) {
+  Widget _buildDailyMetricsCard(
+    BuildContext context,
+    Map<String, dynamic> metrics,
+    SpinLiveSummary? liveSummary,
+  ) {
     final utilizationRate = (metrics['utilizationRate'] as num).toDouble();
     final spinsRemaining = metrics['spinsRemaining'] as int;
     final todayCount = metrics['todayCount'] as int;
@@ -260,6 +266,19 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
                 ),
               ],
             ),
+            if (liveSummary != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                'Live: ${liveSummary.userName} (${liveSummary.userId}) • ${liveSummary.snapshotAt.toLocal()}',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 11,
+                  color: Color(0xFF6B7280),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
             const SizedBox(height: 16),
             Row(
               children: [
