@@ -123,7 +123,6 @@ class ApiService {
       store: _cacheStore,
       policy: CachePolicy.request,
       maxStale: const Duration(days: 7),
-      hitCacheOnErrorExcept: [],
       priority: CachePriority.high,
     );
     _cacheInterceptor = DioCacheInterceptor(options: _cacheOptions);
