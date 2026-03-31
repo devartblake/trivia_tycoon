@@ -2,6 +2,18 @@
 
 _Date: 2026-03-31_
 
+## 0) ProfileSyncService 404/backoff root cause (resolved)
+
+- The app was attempting profile sync against fallback endpoints:
+  - `/profile`
+  - `/user/profile`
+  - `/auth/profile`
+- Those were returning `404`, which correctly triggered `ProfileSyncService` endpoint backoff logs.
+- The repository API contract includes user profile updates on `/users/me` (`PATCH /users/me`).
+- Resolution applied:
+  - Added `/users/me` as the first profile-sync endpoint candidate.
+  - Added `/users/me` to `ApiService` protected-path detection so 401 refresh handling applies consistently.
+
 ## 1) TODO/FIXME inventory
 
 - `lib/` currently contains **46** TODO/FIXME comments (Dart files).
