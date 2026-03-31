@@ -124,7 +124,7 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Admin Panel',
+                                  'Synaptix Command',
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -555,7 +555,7 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
                   ),
                   const SizedBox(height: 16),
                   const Text(
-                    'Admin Panel',
+                    'Synaptix Command',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,
@@ -921,7 +921,7 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
       case 4:
         return 'Settings';
       default:
-        return 'Admin Panel';
+        return 'Synaptix Command';
     }
   }
 }

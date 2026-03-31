@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import '../../../game/models/message_models.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Simple storage service for messages - no business logic
 /// Just CRUD operations
@@ -19,7 +20,7 @@ class MessageStorageService {
       _conversationMessages[message.conversationId]!.add(message.id);
     }
 
-    debugPrint('Message saved: ${message.id}');
+    LogManager.debug('Message saved: ${message.id}');
     return message;
   }
 
@@ -63,7 +64,7 @@ class MessageStorageService {
     if (!_messages.containsKey(messageId)) return null;
 
     _messages[messageId] = updatedMessage;
-    debugPrint('Message updated: $messageId');
+    LogManager.debug('Message updated: $messageId');
     return updatedMessage;
   }
 
@@ -106,7 +107,7 @@ class MessageStorageService {
     if (message != null) {
       // Remove from conversation index
       _conversationMessages[message.conversationId]?.remove(messageId);
-      debugPrint('Message deleted: $messageId');
+      LogManager.debug('Message deleted: $messageId');
       return true;
     }
     return false;
@@ -144,7 +145,7 @@ class MessageStorageService {
   void clear() {
     _messages.clear();
     _conversationMessages.clear();
-    debugPrint('Message storage cleared');
+    LogManager.debug('Message storage cleared');
   }
 
   Map<String, dynamic> getStats() {

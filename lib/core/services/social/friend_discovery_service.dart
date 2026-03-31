@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 enum FriendshipStatus {
   notFriends,
@@ -221,7 +222,7 @@ class FriendDiscoveryService extends ChangeNotifier {
 
   void initialize() {
     _loadMockData();
-    debugPrint('FriendDiscoveryService initialized');
+    LogManager.debug('FriendDiscoveryService initialized');
   }
 
   @override
@@ -247,7 +248,7 @@ class FriendDiscoveryService extends ChangeNotifier {
   }) async {
     // Check if already friends
     if (areFriends(senderId, recipientId)) {
-      debugPrint('Already friends');
+      LogManager.debug('Already friends');
       return false;
     }
 
@@ -264,13 +265,13 @@ class FriendDiscoveryService extends ChangeNotifier {
     );
 
     if (existingRequest.id.isNotEmpty) {
-      debugPrint('Request already sent');
+      LogManager.debug('Request already sent');
       return false;
     }
 
     // Check if blocked
     if (isBlocked(senderId, recipientId) || isBlocked(recipientId, senderId)) {
-      debugPrint('User is blocked');
+      LogManager.debug('User is blocked');
       return false;
     }
 
@@ -285,7 +286,7 @@ class FriendDiscoveryService extends ChangeNotifier {
 
     _pendingRequests[request.id] = request;
 
-    debugPrint('Friend request sent from $senderName to $recipientId');
+    LogManager.debug('Friend request sent from $senderName to $recipientId');
     _broadcastRequestUpdate(recipientId);
     notifyListeners();
 
@@ -309,7 +310,7 @@ class FriendDiscoveryService extends ChangeNotifier {
     _friendships[friendship.id] = friendship;
     _pendingRequests.remove(requestId);
 
-    debugPrint('Friend request accepted: ${request.senderName} and $currentUserId');
+    LogManager.debug('Friend request accepted: ${request.senderName} and $currentUserId');
 
     _broadcastFriendListUpdate(request.senderId);
     _broadcastFriendListUpdate(request.recipientId);
@@ -327,7 +328,7 @@ class FriendDiscoveryService extends ChangeNotifier {
 
     _pendingRequests.remove(requestId);
 
-    debugPrint('Friend request declined');
+    LogManager.debug('Friend request declined');
     _broadcastRequestUpdate(currentUserId);
     notifyListeners();
 
@@ -342,7 +343,7 @@ class FriendDiscoveryService extends ChangeNotifier {
 
     _pendingRequests.remove(requestId);
 
-    debugPrint('Friend request cancelled');
+    LogManager.debug('Friend request cancelled');
     notifyListeners();
 
     return true;
@@ -368,7 +369,7 @@ class FriendDiscoveryService extends ChangeNotifier {
 
     _friendships.remove(friendship.id);
 
-    debugPrint('Friendship removed between $userId1 and $userId2');
+    LogManager.debug('Friendship removed between $userId1 and $userId2');
 
     _broadcastFriendListUpdate(userId1);
     _broadcastFriendListUpdate(userId2);
@@ -387,7 +388,7 @@ class FriendDiscoveryService extends ChangeNotifier {
 
     _friendships[friendship.id] = friendship.copyWith(nickname: nickname);
 
-    debugPrint('Nickname set for friend $friendId: $nickname');
+    LogManager.debug('Nickname set for friend $friendId: $nickname');
     notifyListeners();
 
     return true;
@@ -404,7 +405,7 @@ class FriendDiscoveryService extends ChangeNotifier {
       isFavorite: !friendship.isFavorite,
     );
 
-    debugPrint('Favorite toggled for friend $friendId');
+    LogManager.debug('Favorite toggled for friend $friendId');
     _broadcastFriendListUpdate(currentUserId);
     notifyListeners();
 
@@ -432,7 +433,7 @@ class FriendDiscoveryService extends ChangeNotifier {
       _pendingRequests.remove(requestId);
     }
 
-    debugPrint('User $targetUserId blocked by $userId');
+    LogManager.debug('User $targetUserId blocked by $userId');
     notifyListeners();
 
     return true;
@@ -444,7 +445,7 @@ class FriendDiscoveryService extends ChangeNotifier {
 
     blocked.remove(targetUserId);
 
-    debugPrint('User $targetUserId unblocked by $userId');
+    LogManager.debug('User $targetUserId unblocked by $userId');
     notifyListeners();
 
     return true;
@@ -726,7 +727,7 @@ class FriendDiscoveryService extends ChangeNotifier {
       _userProfiles[user.id] = user;
     }
 
-    debugPrint('Loaded ${mockUsers.length} mock user profiles');
+    LogManager.debug('Loaded ${mockUsers.length} mock user profiles');
   }
 
   // ============ Analytics ============

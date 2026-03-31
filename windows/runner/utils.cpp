@@ -6,19 +6,45 @@
 #include <windows.h>
 
 #include <iostream>
+#include <sstream>
 
 void CreateAndAttachConsole() {
   if (::AllocConsole()) {
     FILE *unused;
-    if (freopen_s(&unused, "CONOUT$", "w", stdout)) {
+    if (freopen_s(&unused, "CONOUT$", "w", stdout) != 0) {
+      // Verbose error: failed to redirect stdout.
+      ::OutputDebugStringA("[trivia_tycoon] WARNING: Failed to redirect stdout to console.\n");
+    } else {
       _dup2(_fileno(stdout), 1);
     }
-    if (freopen_s(&unused, "CONOUT$", "w", stderr)) {
+    if (freopen_s(&unused, "CONOUT$", "w", stderr) != 0) {
+      // Verbose error: failed to redirect stderr.
+      ::OutputDebugStringA("[trivia_tycoon] WARNING: Failed to redirect stderr to console.\n");
+    } else {
       _dup2(_fileno(stdout), 2);
     }
     std::ios::sync_with_stdio();
     FlutterDesktopResyncOutputStreams();
+    ::OutputDebugStringA("[trivia_tycoon] Console attached successfully.\n");
+  } else {
+    DWORD err = ::GetLastError();
+    std::ostringstream msg;
+    msg << "[trivia_tycoon] ERROR: AllocConsole failed with error code: " << err << "\n";
+    ::OutputDebugStringA(msg.str().c_str());
   }
+}
+
+void LogMessage(LogLevel level, const std::string& message) {
+  std::string prefix;
+  switch (level) {
+    case LogLevel::kInfo:    prefix = "[INFO]    "; break;
+    case LogLevel::kWarning: prefix = "[WARNING] "; break;
+    case LogLevel::kError:   prefix = "[ERROR]   "; break;
+    case LogLevel::kVerbose: prefix = "[VERBOSE] "; break;
+  }
+  std::string full_message = "[trivia_tycoon] " + prefix + message + "\n";
+  ::OutputDebugStringA(full_message.c_str());
+  std::cout << full_message;
 }
 
 std::vector<std::string> GetCommandLineArguments() {
@@ -26,6 +52,7 @@ std::vector<std::string> GetCommandLineArguments() {
   int argc;
   wchar_t** argv = ::CommandLineToArgvW(::GetCommandLineW(), &argc);
   if (argv == nullptr) {
+    ::OutputDebugStringA("[trivia_tycoon] ERROR: CommandLineToArgvW returned nullptr.\n");
     return std::vector<std::string>();
   }
 
@@ -39,6 +66,29 @@ std::vector<std::string> GetCommandLineArguments() {
   ::LocalFree(argv);
 
   return command_line_arguments;
+}
+
+bool HasCommandLineFlag(const std::vector<std::string>& arguments,
+                        const std::string& flag) {
+  for (const auto& arg : arguments) {
+    if (arg == flag) {
+      return true;
+    }
+  }
+  return false;
+}
+
+std::string GetCommandLineFlagValue(const std::vector<std::string>& arguments,
+                                    const std::string& key,
+                                    const std::string& default_value) {
+  const std::string prefix = key + "=";
+  for (const auto& arg : arguments) {
+    if (arg.size() > prefix.size() &&
+        arg.substr(0, prefix.size()) == prefix) {
+      return arg.substr(prefix.size());
+    }
+  }
+  return default_value;
 }
 
 std::string Utf8FromUtf16(const wchar_t* utf16_string) {

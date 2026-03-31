@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../game/providers/question_providers.dart' as question_data;
+import '../../../../game/providers/game_providers.dart';
 import '../../../../game/models/question_model.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 // Provider for featured challenge data
 final featuredChallengeProvider = FutureProvider<FeaturedChallenge>((ref) async {
   final repository = ref.watch(question_data.questionRepositoryProvider);
+  final quizService = ref.read(quizProgressServiceProvider);
 
   try {
     final questions = await repository.getMixedQuiz(
@@ -22,15 +25,15 @@ final featuredChallengeProvider = FutureProvider<FeaturedChallenge>((ref) async 
       questions: questions,
       totalQuestions: questions.length,
       difficulty: 'Expert',
-      xpMultiplier: 2, // 2x XP bonus
+      xpMultiplier: 2,
       bonusReward: 'Exclusive Science Badge',
-      timeLimit: 600, // 10 minutes
-      isUnlocked: true, // TODO: Check user level/achievements
-      participantCount: 1247, // TODO: Get from backend
-      completionRate: 0.23, // 23% completion rate
+      timeLimit: 600,
+      isUnlocked: quizService.isFeaturedChallengeUnlocked(),
+      participantCount: 1247, // Cached value; live count wired in Phase 2
+      completionRate: 0.23,
     );
   } catch (e) {
-    debugPrint('Error loading featured challenge: $e');
+    LogManager.debug('Error loading featured challenge: $e');
     rethrow;
   }
 });

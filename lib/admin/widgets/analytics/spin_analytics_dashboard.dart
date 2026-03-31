@@ -264,6 +264,20 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
                     ),
                   ),
                 ),
+                if (liveSummary != null)
+                  Flexible(
+                    child: Text(
+                      'Live: ${liveSummary.userName} • ${liveSummary.snapshotAt.toLocal()}',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: Color(0xFF6B7280),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
               ],
             ),
             if (liveSummary != null) ...[

@@ -117,8 +117,8 @@ class TierManager {
     ),
     TierModel(
       id: 9,
-      name: 'Trivia Tycoon',
-      description: 'The ultimate trivia tycoon',
+      name: 'Synaptix Tycoon',
+      description: 'The ultimate Synaptix master',
       icon: Icons.monetization_on_outlined,
       primaryColor: const Color(0xFF008B8B),
       secondaryColor: const Color(0xFF20B2AA),

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// A class to manage and provide environment variables from a .env file.
 /// This ensures that sensitive keys and configuration-specific URLs are not
@@ -101,8 +102,8 @@ class EnvConfig {
           .replaceFirst('http://', 'ws://')
           .replaceFirst('https://', 'wss://')}/ws';
 
-      debugPrint('[EnvConfig] API Base: $apiBaseUrl');
-      debugPrint('[EnvConfig] WebSocket: $apiWsBaseUrl');
+      LogManager.debug('[EnvConfig] API Base: $apiBaseUrl');
+      LogManager.debug('[EnvConfig] WebSocket: $apiWsBaseUrl');
 
       _matchHubUrl = dotenv.env['API_MATCH_HUB_URL'] ??
           (_apiWsBaseUrl == null ? null : _joinWsPath(_apiWsBaseUrl!, '/ws/match'));
@@ -117,7 +118,7 @@ class EnvConfig {
           _matchHubUrl == null ||
           _presenceHubUrl == null ||
           _notifyHubUrl == null) {
-        debugPrint('''
+        LogManager.debug('''
         --------------------------------------------------------------------
         ERROR: One or more environment variables not found in .env file.
         Please ensure your .env file is in the root of your project.
@@ -132,7 +133,7 @@ class EnvConfig {
         throw Exception('Required environment variables are missing.');
       }
     } catch (e) {
-      debugPrint('Error loading .env file: $e');
+      LogManager.debug('Error loading .env file: $e');
       rethrow;
     }
   }

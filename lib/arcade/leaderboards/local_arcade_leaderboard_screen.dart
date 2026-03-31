@@ -151,7 +151,7 @@ class _LocalArcadeLeaderboardScreenState
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Leaderboards',
+                                'Labs Leaderboard',
                                 style: TextStyle(
                                   fontSize: 32,
                                   fontWeight: FontWeight.w900,
@@ -287,7 +287,7 @@ class _LocalArcadeLeaderboardScreenState
                       Row(
                         children: [
                           const Text(
-                            'Daily Bonus',
+                            'Daily Signal',
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w900,

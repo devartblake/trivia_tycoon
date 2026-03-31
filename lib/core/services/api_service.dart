@@ -11,6 +11,7 @@ import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:http_cache_hive_store/http_cache_hive_store.dart';
 import '../../game/models/seasonal_competition_model.dart';
 import 'analytics/config_service.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class ApiRequestException implements Exception {
   final String message;
@@ -84,6 +85,7 @@ class ApiService {
   })  : _dio = dio ??
       Dio(BaseOptions(
         baseUrl: baseUrl,
+        // Shorter timeouts for development to fail fast
         connectTimeout: const Duration(seconds: 3),
         receiveTimeout: const Duration(seconds: 3),
         sendTimeout: const Duration(seconds: 3),
@@ -104,7 +106,7 @@ class ApiService {
         responseHeader: false,
         responseBody: false,
         error: true,
-        logPrint: (log) => debugPrint("[API Log]: $log"),
+        logPrint: (log) => LogManager.debug("[API Log]: $log"),
       ));
     }
 
@@ -218,7 +220,7 @@ class ApiService {
       // Preserve silent timeout/offline behavior while keeping exception type consistent.
       if (isTimeoutLike) {
         if (ConfigService.enableLogging && kDebugMode) {
-          debugPrint(
+          LogManager.debug(
               "[API Timeout]: ${e.requestOptions.path} - No backend available");
         }
 
@@ -250,7 +252,7 @@ class ApiService {
 
       // Log other Dio errors normally
       if (ConfigService.enableLogging) {
-        debugPrint("API Error [Dio]: $normalizedMessage");
+        LogManager.debug("API Error [Dio]: $normalizedMessage");
       }
 
       throw ApiRequestException(
@@ -263,7 +265,7 @@ class ApiService {
       );
     } catch (e) {
       if (ConfigService.enableLogging) {
-        debugPrint("API Error: $e");
+        LogManager.debug("API Error: $e");
       }
       if (e is ApiRequestException) rethrow;
       throw Exception("Unexpected Error: $e");
