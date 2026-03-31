@@ -349,10 +349,10 @@ packages:
     dependency: "direct main"
     description:
       name: dio_cache_interceptor
-      sha256: "1346705a2057c265014d7696e3e2318b560bfb00b484dac7f9b01e2ceaebb07d"
+      sha256: "3644ce3e0c9ba21885cbb0578b3d2ffe022c8badc6f6f4042cb56ecdbe90a7ad"
       url: "https://pub.dev"
     source: hosted
-    version: "3.5.1"
+    version: "4.0.6"
   dio_web_adapter:
     dependency: transitive
     description:
