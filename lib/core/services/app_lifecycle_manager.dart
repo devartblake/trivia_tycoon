@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Manages app lifecycle events and graceful shutdown
 ///
@@ -43,7 +44,7 @@ class AppLifecycleManager with WidgetsBindingObserver {
     _startAutoSave();
     _isInitialized = true;
 
-    debugPrint('[Lifecycle] Initialized - graceful shutdown enabled');
+    LogManager.debug('[Lifecycle] Initialized - graceful shutdown enabled');
   }
 
   /// Dispose and cleanup
@@ -52,12 +53,12 @@ class AppLifecycleManager with WidgetsBindingObserver {
     _autoSaveTimer?.cancel();
     _isInitialized = false;
 
-    debugPrint('[Lifecycle] Disposed');
+    LogManager.debug('[Lifecycle] Disposed');
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    debugPrint('[Lifecycle] State changed: $state');
+    LogManager.debug('[Lifecycle] State changed: $state');
 
     switch (state) {
       case AppLifecycleState.resumed:
@@ -84,7 +85,7 @@ class AppLifecycleManager with WidgetsBindingObserver {
 
   /// App resumed (came back to foreground)
   void _handleAppResumed() async {
-    debugPrint('[Lifecycle] App RESUMED - User returned');
+    LogManager.debug('[Lifecycle] App RESUMED - User returned');
     onAppResumed?.call();
 
     // Restart auto-save if it was stopped
@@ -95,7 +96,7 @@ class AppLifecycleManager with WidgetsBindingObserver {
 
   /// App inactive (transitioning, overlays, etc.)
   void _handleAppInactive() async {
-    debugPrint('[Lifecycle] App INACTIVE - Quick save triggered');
+    LogManager.debug('[Lifecycle] App INACTIVE - Quick save triggered');
     onAppInactive?.call();
 
     // Quick save on inactive (user might be closing app)
@@ -104,7 +105,7 @@ class AppLifecycleManager with WidgetsBindingObserver {
 
   /// App paused (went to background)
   void _handleAppPaused() async {
-    debugPrint('[Lifecycle] App PAUSED - Saving state...');
+    LogManager.debug('[Lifecycle] App PAUSED - Saving state...');
     onAppPaused?.call();
 
     // Save everything when app goes to background
@@ -116,7 +117,7 @@ class AppLifecycleManager with WidgetsBindingObserver {
 
   /// App detached (app closing)
   void _handleAppDetached() async {
-    debugPrint('[Lifecycle] App DETACHED - Final save before shutdown...');
+    LogManager.debug('[Lifecycle] App DETACHED - Final save before shutdown...');
     onAppDetached?.call();
 
     // Final save before app closes
@@ -125,12 +126,12 @@ class AppLifecycleManager with WidgetsBindingObserver {
     // Clear temporary data
     await _clearTemporaryData();
 
-    debugPrint('[Lifecycle] Graceful shutdown complete');
+    LogManager.debug('[Lifecycle] Graceful shutdown complete');
   }
 
   /// App hidden (another app in foreground)
   void _handleAppHidden() async {
-    debugPrint('[Lifecycle] App HIDDEN - Quick save');
+    LogManager.debug('[Lifecycle] App HIDDEN - Quick save');
     await _performSave(reason: 'hidden');
   }
 
@@ -138,7 +139,7 @@ class AppLifecycleManager with WidgetsBindingObserver {
   void _setupCrashHandling() {
     // Catch Flutter framework errors
     FlutterError.onError = (FlutterErrorDetails details) async {
-      debugPrint('[Lifecycle] Flutter Error Caught: ${details.exception}');
+      LogManager.debug('[Lifecycle] Flutter Error Caught: ${details.exception}');
 
       // Save state before crash
       await _performSave(reason: 'crash');
@@ -152,7 +153,7 @@ class AppLifecycleManager with WidgetsBindingObserver {
 
     // Catch async errors outside Flutter
     PlatformDispatcher.instance.onError = (error, stack) {
-      debugPrint('[Lifecycle] Async Error Caught: $error');
+      LogManager.debug('[Lifecycle] Async Error Caught: $error');
 
       // Save state before crash
       _performSave(reason: 'async_crash');
@@ -170,13 +171,13 @@ class AppLifecycleManager with WidgetsBindingObserver {
     if (_lastSaveTime != null) {
       final timeSinceLastSave = DateTime.now().difference(_lastSaveTime!);
       if (timeSinceLastSave < _minSaveInterval) {
-        debugPrint('[Lifecycle] Save throttled (too soon since last save)');
+        LogManager.debug('[Lifecycle] Save throttled (too soon since last save)');
         return;
       }
     }
 
     try {
-      debugPrint('[Lifecycle] Saving state (reason: $reason)...');
+      LogManager.debug('[Lifecycle] Saving state (reason: $reason)...');
       final startTime = DateTime.now();
 
       await onSaveState?.call();
@@ -184,10 +185,10 @@ class AppLifecycleManager with WidgetsBindingObserver {
       _lastSaveTime = DateTime.now();
       final duration = _lastSaveTime!.difference(startTime);
 
-      debugPrint('[Lifecycle] Save complete in ${duration.inMilliseconds}ms');
+      LogManager.debug('[Lifecycle] Save complete in ${duration.inMilliseconds}ms');
     } catch (e, stack) {
-      debugPrint('[Lifecycle] Save failed: $e');
-      debugPrint('[Lifecycle] Stack: $stack');
+      LogManager.debug('[Lifecycle] Save failed: $e');
+      LogManager.debug('[Lifecycle] Stack: $stack');
     }
   }
 
@@ -197,30 +198,30 @@ class AppLifecycleManager with WidgetsBindingObserver {
 
     // Auto-save every 30 seconds during active gameplay
     _autoSaveTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
-      debugPrint('[Lifecycle] Auto-save triggered');
+      LogManager.debug('[Lifecycle] Auto-save triggered');
       _performSave(reason: 'auto');
     });
 
-    debugPrint('[Lifecycle] Auto-save started (every 30s)');
+    LogManager.debug('[Lifecycle] Auto-save started (every 30s)');
   }
 
   /// Clear temporary data on shutdown
   Future<void> _clearTemporaryData() async {
     try {
-      debugPrint('[Lifecycle] Clearing temporary data...');
+      LogManager.debug('[Lifecycle] Clearing temporary data...');
       await onClearTempData?.call();
-      debugPrint('[Lifecycle] Temporary data cleared');
+      LogManager.debug('[Lifecycle] Temporary data cleared');
     } catch (e) {
-      debugPrint('[Lifecycle] Failed to clear temp data: $e');
+      LogManager.debug('[Lifecycle] Failed to clear temp data: $e');
     }
   }
 
   /// Log crash for analytics/debugging
   void _logCrash(Object error, StackTrace? stack) {
     // In production, send to Firebase Crashlytics, Sentry, etc.
-    debugPrint('[Lifecycle] CRASH LOGGED:');
-    debugPrint('  Error: $error');
-    debugPrint('  Stack: $stack');
+    LogManager.debug('[Lifecycle] CRASH LOGGED:');
+    LogManager.debug('  Error: $error');
+    LogManager.debug('  Stack: $stack');
 
     // TODO: Send to your analytics service
     // FirebaseCrashlytics.instance.recordError(error, stack);
@@ -228,7 +229,7 @@ class AppLifecycleManager with WidgetsBindingObserver {
 
   /// Force save (call this before critical operations)
   Future<void> forceSave() async {
-    debugPrint('[Lifecycle] Force save requested');
+    LogManager.debug('[Lifecycle] Force save requested');
     _lastSaveTime = null; // Reset throttle
     await _performSave(reason: 'manual');
   }

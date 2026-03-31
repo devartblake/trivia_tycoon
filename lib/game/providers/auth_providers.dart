@@ -5,6 +5,7 @@ import '../../core/services/storage/secure_storage.dart';
 import '../../ui_components/login/models/signup_data.dart';
 import '../providers/riverpod_providers.dart';
 import 'onboarding_providers.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Main auth provider - initialized by AppInit, used by router
 final isLoggedInSyncProvider = StateProvider<bool>((ref) => false);
@@ -24,7 +25,8 @@ class AuthOperations {
     final authService = ref.read(authServiceProvider);
     final secureStorage = ref.read(secureStorageProvider);
 
-    // Perform login through services
+    // FIX: legacy AuthService.login takes a single positional String argument,
+    // not the named email:/password: params that belong to BackendAuthService.
     await authService.login(email);
     await secureStorage.setLoggedIn(true);
 
@@ -55,10 +57,10 @@ class AuthOperations {
 
   /// Signup user via backend (uses LoginManager)
   Future<void> signup(
-    String email,
-    String password, {
-    Map<String, dynamic>? extra,
-  }) async {
+      String email,
+      String password, {
+        Map<String, dynamic>? extra,
+      }) async {
     try {
       final loginManager = ref.read(loginManagerProvider);
       final secureStorage = ref.read(secureStorageProvider);
@@ -110,7 +112,7 @@ class AuthOperations {
       final isPremium = await profileService.isPremiumUser();
       await secureStorage.setSecret('is_premium', isPremium.toString());
     } catch (e) {
-      debugPrint('[AuthOperations] Error updating role/premium: $e');
+      LogManager.debug('[AuthOperations] Error updating role/premium: $e');
       // Set defaults on error
       await secureStorage.setSecret('user_role', 'player');
       await secureStorage.setSecret('is_premium', 'false');
@@ -137,7 +139,7 @@ class AuthOperations {
         await profileService.clearProfile();
       }
     } catch (e) {
-      debugPrint('Logout failed: $e');
+      LogManager.debug('Logout failed: $e');
     }
 
     // Update Riverpod state immediately
@@ -150,7 +152,7 @@ class AuthOperations {
 
 /// Legacy providers for backward compatibility if needed
 final authStateProvider =
-    StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
+StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
   return AuthStateNotifier();
 });
 

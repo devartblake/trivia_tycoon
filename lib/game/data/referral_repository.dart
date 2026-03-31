@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import 'package:trivia_tycoon/core/services/api_service.dart';
 import '../../core/services/storage/app_cache_service.dart';
 import '../models/referral_models.dart';
@@ -33,13 +33,14 @@ class ReferralRepository {
       // FIX: Use the simplified `setJson` method for reliable caching.
       await cache.setJson('cache.referral.currentCode', code.toJson());
       return code;
-    } on DioException catch (e) {
-      // FIX: Be more specific about the errors to catch for the offline fallback.
-      // This prevents other programming errors from being incorrectly treated as offline mode.
-      print('API Error generating referral code: ${e.message}. Falling back to local generation.');
+    } on ApiRequestException catch (e) {
+      // ApiService wraps all network/HTTP errors into ApiRequestException before surfacing
+      // them — catching DioException here would never fire. Use ApiRequestException for
+      // the offline fallback so the intent is clear and the import on dio is not needed.
+      LogManager.debug('API error generating referral code: $e. Falling back to local generation.');
       return _generateLocalCode(ownerUserId);
     } catch (e) {
-      print('Unexpected error generating referral code: $e. Falling back to local generation.');
+      LogManager.debug('Unexpected error generating referral code: $e. Falling back to local generation.');
       return _generateLocalCode(ownerUserId);
     }
   }

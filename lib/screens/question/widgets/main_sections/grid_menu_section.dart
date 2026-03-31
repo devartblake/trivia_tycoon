@@ -16,7 +16,7 @@ class GridMenuSection extends StatelessWidget {
       },
       {
         "icon": Icons.trending_up_outlined,
-        "label": "Leaderboard",
+        "label": "Arena",
         "color": Colors.green,
         "route": "/leaderboard",
         "description": "Top performers"

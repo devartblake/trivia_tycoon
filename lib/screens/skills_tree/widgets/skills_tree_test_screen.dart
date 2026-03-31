@@ -6,6 +6,7 @@ import '../../../game/models/skill_tree_graph.dart';
 import '../../../game/models/skill_tree_nav_models.dart';
 import '../../../game/providers/hex_theme_providers.dart';
 import '../../../game/providers/skill_tree_nav_providers.dart';
+import '../../../game/providers/skill_tree_provider.dart';
 import 'skill_tree_view.dart';
 
 class SkillTreeNavTestScreen extends ConsumerWidget {
@@ -18,7 +19,7 @@ class SkillTreeNavTestScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Skill Trees'),
+        title: const Text('Pathways'),
         actions: const [],
       ),
       body: groupsAsync.when(

@@ -1,7 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/xp_service.dart';
+import 'core_providers.dart';
 
-final xpServiceProvider = Provider<XPService>((ref) => XPService());
+final xpServiceProvider = Provider<XPService>((ref) {
+  final storage = ref.read(generalKeyValueStorageProvider);
+  return XPService(storage: storage);
+});
 
 final playerXPProvider = StateProvider<int>((ref) {
   final xpService = ref.read(xpServiceProvider);

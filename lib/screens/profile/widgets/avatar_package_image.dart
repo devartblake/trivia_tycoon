@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Widget specifically for displaying avatar package images
 ///
@@ -37,8 +38,8 @@ class AvatarPackageImage extends StatelessWidget {
         height: height,
         fit: fit,
         errorBuilder: (context, error, stackTrace) {
-          debugPrint('[AvatarPackageImage] Error loading file: $imagePath');
-          debugPrint('[AvatarPackageImage] Error: $error');
+          LogManager.debug('[AvatarPackageImage] Error loading file: $imagePath');
+          LogManager.debug('[AvatarPackageImage] Error: $error');
           return _buildErrorWidget();
         },
       );
@@ -50,8 +51,8 @@ class AvatarPackageImage extends StatelessWidget {
         height: height,
         fit: fit,
         errorBuilder: (context, error, stackTrace) {
-          debugPrint('[AvatarPackageImage] Error loading asset: $imagePath');
-          debugPrint('[AvatarPackageImage] Error: $error');
+          LogManager.debug('[AvatarPackageImage] Error loading asset: $imagePath');
+          LogManager.debug('[AvatarPackageImage] Error: $error');
           return _buildErrorWidget();
         },
       );

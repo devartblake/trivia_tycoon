@@ -1,30 +1,31 @@
 import 'package:flutter/cupertino.dart';
 import '../models/qr_matrix.dart';
 import 'dart:math';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class QrEncoder {
   static const int version = 1; // 21x21
   static const int moduleCount = 21;
 
   QrMatrix encode(String data) {
-    debugPrint('🔵 QrEncoder.encode() called');
-    debugPrint('   Data: $data');
-    debugPrint('   Data length: ${data.length}');
+    LogManager.debug('🔵 QrEncoder.encode() called');
+    LogManager.debug('   Data: $data');
+    LogManager.debug('   Data length: ${data.length}');
 
     final matrix = QrMatrix(moduleCount);
-    debugPrint('   Matrix created: ${matrix.size}x${matrix.size}');
+    LogManager.debug('   Matrix created: ${matrix.size}x${matrix.size}');
 
     _addFinderPatterns(matrix);
-    debugPrint('   Finder patterns added');
+    LogManager.debug('   Finder patterns added');
 
     _addTimingPatterns(matrix);
-    debugPrint('   Timing patterns added');
+    LogManager.debug('   Timing patterns added');
 
     final dataBits = _mockDataBits(data);
-    debugPrint('   Data bits generated: ${dataBits.length} bits');
+    LogManager.debug('   Data bits generated: ${dataBits.length} bits');
 
     _addDataBits(matrix, dataBits);
-    debugPrint('   Data bits added to matrix');
+    LogManager.debug('   Data bits added to matrix');
 
     // Add some debug info
     int setCount = 0;
@@ -33,8 +34,8 @@ class QrEncoder {
         if (matrix.get(x, y)) setCount++;
       }
     }
-    debugPrint('   Total modules set: $setCount out of ${matrix.size * matrix.size}');
-    debugPrint('🔵 Encoding complete\n');
+    LogManager.debug('   Total modules set: $setCount out of ${matrix.size * matrix.size}');
+    LogManager.debug('🔵 Encoding complete\n');
 
     return matrix;
   }
@@ -107,7 +108,7 @@ class QrEncoder {
       }
     }
 
-    debugPrint('   Placed $bitIndex data bits');
+    LogManager.debug('   Placed $bitIndex data bits');
   }
 
   bool _isReserved(QrMatrix matrix, int x, int y) {
@@ -166,7 +167,7 @@ class QrEncoder {
       bits.removeRange(152, bits.length);
     }
 
-    debugPrint('Generated ${bits.length} data bits from ${data.length} chars');
+    LogManager.debug('Generated ${bits.length} data bits from ${data.length} chars');
 
     return bits;
   }

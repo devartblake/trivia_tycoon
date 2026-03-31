@@ -1,6 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
 import 'package:trivia_tycoon/ui_components/depth_card_3d/depth_card.dart';
 import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
@@ -37,35 +40,54 @@ class ProfileAvatarController extends ChangeNotifier {
   File? get avatarFile => _avatarFile;
   String? get avatarPath => _avatarPath;
 
-  // 🎯 Load image from gallery or camera (with cropping)
+  // 🎯 Load image from gallery or camera with square crop applied
   Future<void> pickImage(ImageSource source) async {
     final picked = await _picker.pickImage(source: source);
     if (picked == null) return;
 
-    // final cropped = await ImageCropper().cropImage(
-    //   sourcePath: picked.path,
-    //   aspectRatio: const CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
-    //   uiSettings: [
-    //     AndroidUiSettings(
-    //       toolbarTitle: 'Crop Profile Picture',
-    //       toolbarColor: Colors.blueAccent,
-    //       toolbarWidgetColor: Colors.white,
-    //       lockAspectRatio: true,
-    //     ),
-    //     IOSUiSettings(title: 'Crop Profile Picture'),
-    //   ],
-    // );
+    try {
+      final cropped = await _cropToSquare(picked.path);
+      final savePath = cropped ?? picked.path;
+      _imageFile = File(savePath);
+      await keyValueStorage.setString(_profileImageKey, savePath);
+      notifyListeners();
+    } catch (e) {
+      LogManager.error('Avatar crop failed, using original: $e',
+          source: 'ProfileAvatarController');
+      _imageFile = File(picked.path);
+      await keyValueStorage.setString(_profileImageKey, picked.path);
+      notifyListeners();
+    }
+  }
 
-    // if (cropped != null) {
-    //   _imageFile = File(cropped.path);
-    //   await AppSettings.setString(_profileImageKey, cropped.path);
-    //   notifyListeners();
-    // }
+  /// Crops [sourcePath] to a centred square using the `image` package.
+  /// Returns the path of the cropped file, or null if cropping failed.
+  Future<String?> _cropToSquare(String sourcePath) async {
+    final bytes = await File(sourcePath).readAsBytes();
 
-    // TODO: Temporary fix until cropping image is fixed
-    _imageFile = File(picked.path);
-    await keyValueStorage.setString(_profileImageKey, picked.path);
-    notifyListeners();
+    final decoded = img.decodeImage(bytes);
+    if (decoded == null) return null;
+
+    final w = decoded.width;
+    final h = decoded.height;
+    final side = w < h ? w : h;
+    final offsetX = (w - side) ~/ 2;
+    final offsetY = (h - side) ~/ 2;
+
+    final cropped = img.copyCrop(
+      decoded,
+      x: offsetX,
+      y: offsetY,
+      width: side,
+      height: side,
+    );
+
+    final result = img.encodeJpg(cropped, quality: 90);
+    final dir = await getTemporaryDirectory();
+    final outPath =
+        '${dir.path}/avatar_${DateTime.now().millisecondsSinceEpoch}.jpg';
+    await File(outPath).writeAsBytes(result);
+    return outPath;
   }
 
   // 🧠 Load saved image path from Hive

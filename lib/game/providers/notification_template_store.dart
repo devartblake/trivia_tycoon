@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
 
-/// Minimal persistence facade.
-/// Replace the in-memory map with your AppSettings/AppCacheService calls.
 class NotificationTemplate {
   final String id; // slug
   final String title;
@@ -38,6 +37,9 @@ class NotificationTemplateStore {
   NotificationTemplateStore._();
   static final NotificationTemplateStore instance = NotificationTemplateStore._();
 
+  static const String _indexKey = 'notif.template.__index';
+  static String _templateKey(String id) => 'notif.template.$id';
+
   final _controller = StreamController<List<NotificationTemplate>>.broadcast();
   final Map<String, NotificationTemplate> _templates = {};
 
@@ -50,25 +52,56 @@ class NotificationTemplateStore {
 
   Future<void> save(NotificationTemplate t) async {
     _templates[t.id] = t;
-    // TODO: persist: await AppSettings().setString('notif.template.${t.id}', jsonEncode(t.toJson()));
+    await AppSettings.setString(_templateKey(t.id), jsonEncode(t.toJson()));
+    await _persistIndex();
     _emit();
   }
 
   Future<void> delete(String id) async {
     _templates.remove(id);
-    // TODO: remove from AppSettings
+    // Remove the stored JSON for this template
+    await AppSettings.setString(_templateKey(id), '');
+    await _persistIndex();
     _emit();
   }
 
+  /// Load all persisted templates from AppSettings into memory.
+  /// Call once during app startup (e.g. from AppInit or a provider initializer).
   Future<void> loadAllFromSettings() async {
-    // TODO: read keys from AppSettings cache and populate _templates
+    _templates.clear();
+    final indexRaw = await AppSettings.getString(_indexKey);
+    if (indexRaw == null || indexRaw.isEmpty) {
+      _emit();
+      return;
+    }
+    final ids = List<String>.from(jsonDecode(indexRaw) as List);
+    for (final id in ids) {
+      final raw = await AppSettings.getString(_templateKey(id));
+      if (raw == null || raw.isEmpty) continue;
+      try {
+        final t = NotificationTemplate.fromJson(
+            Map<String, dynamic>.from(jsonDecode(raw) as Map));
+        _templates[t.id] = t;
+      } catch (_) {
+        // Skip malformed entries
+      }
+    }
     _emit();
   }
 
   NotificationTemplate? getById(String id) => _templates[id];
 
-  // Convenience for quick save by raw fields
-  Future<void> saveRaw(String id, String title, String body, Map<String, String>? payload) {
-    return save(NotificationTemplate(id: id, title: title, body: body, payload: payload));
+  /// Convenience for quick save by raw fields.
+  Future<void> saveRaw(
+      String id, String title, String body, Map<String, String>? payload) {
+    return save(
+        NotificationTemplate(id: id, title: title, body: body, payload: payload));
+  }
+
+  // ---------- helpers ----------
+
+  Future<void> _persistIndex() async {
+    final ids = _templates.keys.toList();
+    await AppSettings.setString(_indexKey, jsonEncode(ids));
   }
 }

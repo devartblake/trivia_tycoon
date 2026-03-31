@@ -77,7 +77,7 @@ class AppLogo extends StatelessWidget {
         if (showText) ...[
           SizedBox(height: size * 0.15),
           Text(
-            'Trivia Tycoon',
+            'Synaptix',
             style: textStyle ?? TextStyle(
               fontSize: size * 0.24,
               fontWeight: FontWeight.bold,
@@ -87,7 +87,7 @@ class AppLogo extends StatelessWidget {
           ),
           SizedBox(height: size * 0.05),
           Text(
-            'Challenge Your Mind',
+            'Train. Compete. Grow.',
             style: TextStyle(
               fontSize: size * 0.12,
               color: defaultTextColor.withValues(alpha: 0.7),
@@ -209,7 +209,7 @@ class AppLogoCompact extends StatelessWidget {
         ),
         const SizedBox(width: 12),
         Text(
-          'Trivia Tycoon',
+          'Synaptix',
           style: TextStyle(
             fontSize: height * 0.5,
             fontWeight: FontWeight.bold,

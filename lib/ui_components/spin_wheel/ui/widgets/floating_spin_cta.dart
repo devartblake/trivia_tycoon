@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../services/spin_tracker.dart';
 import 'dart:math' as math;
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Enhanced Floating CTA button with modern design and smart behavior
 class FloatingSpinCTA extends ConsumerStatefulWidget {
@@ -145,7 +146,7 @@ class _FloatingSpinCTAState extends ConsumerState<FloatingSpinCTA>
       }
     } catch (e) {
       // Handle error silently - don't show CTA if check fails
-      debugPrint('Spin check failed: $e');
+      LogManager.debug('Spin check failed: $e');
     }
   }
 
