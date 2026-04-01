@@ -296,7 +296,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
   }
 
   Widget _buildContentFallback(BuildContext context, ThemeData theme, ReferralCode referralCode) {
-    final link = 'https://triviatycoon.com/invite?code=${referralCode.code}';
+    final link = 'https://synaptix.app/invite?code=${referralCode.code}';
     return _buildContent(context, theme, referralCode, link, link);
   }
 
