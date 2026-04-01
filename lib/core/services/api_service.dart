@@ -8,7 +8,7 @@ import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
-import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
+import 'package:http_cache_hive_store/http_cache_hive_store.dart';
 import '../../game/models/seasonal_competition_model.dart';
 import 'analytics/config_service.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
@@ -72,7 +72,7 @@ class ApiService {
   final Dio _refreshDio;
   final String baseUrl;
   late CacheOptions _cacheOptions;
-  late final HiveCacheStore _cacheStore;
+  late final CacheStore _cacheStore;
   late DioCacheInterceptor _cacheInterceptor;
   final ConfigService _configService;
 
@@ -123,7 +123,6 @@ class ApiService {
       store: _cacheStore,
       policy: CachePolicy.request,
       maxStale: const Duration(days: 7),
-      hitCacheOnErrorExcept: [],
       priority: CachePriority.high,
     );
     _cacheInterceptor = DioCacheInterceptor(options: _cacheOptions);
@@ -491,6 +490,7 @@ class ApiService {
     if (path == '/admin' || path.startsWith('/admin/')) return true;
 
     // User-scoped/profile endpoints also require auth headers and token refresh handling.
+    if (path == '/users/me' || path.startsWith('/users/me/')) return true;
     if (path == '/profile' || path.startsWith('/profile/')) return true;
     if (path == '/auth/profile' || path.startsWith('/auth/profile/')) return true;
     if (path == '/user/profile' || path.startsWith('/user/profile/')) return true;

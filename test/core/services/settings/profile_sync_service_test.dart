@@ -15,6 +15,7 @@ void main() {
   });
 
   setUp(() async {
+    ProfileSyncService.resetEndpointBackoffForTests();
     await Hive.openBox('auth_tokens');
   });
 
@@ -46,7 +47,7 @@ void main() {
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) {
-          expect(options.path, '/profile');
+          expect(options.path, '/users/me');
           expect(options.headers['Authorization'], 'Bearer token-abc');
           handler.resolve(
             Response(
@@ -138,7 +139,7 @@ void main() {
       InterceptorsWrapper(
         onRequest: (options, handler) {
           attemptCount++;
-          if (attemptCount <= 3) {
+          if (attemptCount <= 4) {
             handler.reject(
               DioException(
                 requestOptions: options,
@@ -358,5 +359,51 @@ void main() {
 
     expect(result.success, isTrue);
     expect(result.confirmedUsername, 'display_name');
+  });
+
+  test('404 marks endpoints in backoff to avoid repeated retry noise', () async {
+    var requestCount = 0;
+    final dio = Dio(BaseOptions(baseUrl: 'https://example.test'));
+
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          requestCount++;
+          handler.reject(
+            DioException(
+              requestOptions: options,
+              response: Response(
+                requestOptions: options,
+                statusCode: 404,
+                data: {'message': 'not found'},
+              ),
+              type: DioExceptionType.badResponse,
+            ),
+          );
+        },
+      ),
+    );
+
+    final events = <String>[];
+    final apiService = ApiService(
+      baseUrl: 'https://example.test',
+      dio: dio,
+      initializeCache: false,
+    );
+
+    final service = ProfileSyncService(
+      apiService: apiService,
+      trackEvent: (event, _) async => events.add(event),
+    );
+
+    await service.syncProfileUpdate(displayName: 'Name', username: 'name');
+    final firstCount = requestCount;
+
+    await service.syncProfileUpdate(displayName: 'Name', username: 'name');
+    final secondCount = requestCount;
+
+    expect(firstCount, 4); // /users/me, /profile, /user/profile, /auth/profile
+    expect(secondCount, firstCount); // skipped due backoff
+    expect(events, contains('profile_sync_endpoint_unavailable'));
   });
 }

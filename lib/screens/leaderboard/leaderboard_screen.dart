@@ -5,6 +5,7 @@ import 'package:trivia_tycoon/screens/leaderboard/widgets/live_countdown_timer_w
 import 'package:trivia_tycoon/ui_components/mission/mission_panel.dart';
 import 'package:trivia_tycoon/ui_components/seasonal/seasonal_events_widget.dart';
 import '../../core/animations/animation_manager.dart';
+import '../../game/analytics/providers/analytics_providers.dart';
 import '../../game/models/leaderboard_entry.dart';
 import '../../game/models/seasonal_competition_model.dart';
 import '../../game/providers/riverpod_providers.dart';

@@ -34,6 +34,14 @@ class ProfileSyncService {
   static const String _queueBoxName = 'profile_sync_queue';
   static const int _maxQueueSize = 100;
   static const int _maxRetryCount = 10;
+  static const Duration _missingEndpointBackoff = Duration(minutes: 30);
+
+  static final Map<String, DateTime> _endpointBackoffUntil = <String, DateTime>{};
+
+  @visibleForTesting
+  static void resetEndpointBackoffForTests() {
+    _endpointBackoffUntil.clear();
+  }
 
   final ApiService _apiService;
   final Future<void> Function(String event, Map<String, dynamic> data) _trackEvent;
@@ -201,19 +209,45 @@ class ProfileSyncService {
 
   Future<Map<String, dynamic>?> _trySync(Map<String, dynamic> payload) async {
     const endpoints = <String>[
+      '/users/me',
       '/profile',
       '/user/profile',
       '/auth/profile',
     ];
 
     for (final endpoint in endpoints) {
+      if (_isEndpointInBackoff(endpoint)) {
+        continue;
+      }
+
       try {
         final response = await _apiService.patch(
           endpoint,
           body: payload,
           headers: _authHeaders(),
         );
+        _clearEndpointBackoff(endpoint);
         return response;
+      } on ApiRequestException catch (e) {
+        if (e.statusCode == 404) {
+          _markEndpointInBackoff(endpoint);
+          await _trackEvent('profile_sync_endpoint_unavailable', {
+            'endpoint': endpoint,
+            'status_code': 404,
+            'backoff_seconds': _missingEndpointBackoff.inSeconds,
+            'timestamp': DateTime.now().toIso8601String(),
+          });
+          LogManager.info(
+            'Endpoint unavailable (404). Backing off endpoint $endpoint for ${_missingEndpointBackoff.inMinutes}m',
+            source: 'ProfileSyncService',
+          );
+          continue;
+        }
+
+        LogManager.warning(
+          'Endpoint failed ($endpoint): $e',
+          source: 'ProfileSyncService',
+        );
       } catch (e) {
         LogManager.warning(
           'Endpoint failed ($endpoint): $e',
@@ -223,6 +257,26 @@ class ProfileSyncService {
     }
 
     return null;
+  }
+
+  bool _isEndpointInBackoff(String endpoint) {
+    final until = _endpointBackoffUntil[endpoint];
+    if (until == null) return false;
+
+    final now = DateTime.now();
+    if (now.isAfter(until)) {
+      _endpointBackoffUntil.remove(endpoint);
+      return false;
+    }
+    return true;
+  }
+
+  void _markEndpointInBackoff(String endpoint) {
+    _endpointBackoffUntil[endpoint] = DateTime.now().add(_missingEndpointBackoff);
+  }
+
+  void _clearEndpointBackoff(String endpoint) {
+    _endpointBackoffUntil.remove(endpoint);
   }
 
   Map<String, String>? _authHeaders() {
