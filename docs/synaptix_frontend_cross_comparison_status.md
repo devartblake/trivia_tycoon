@@ -144,10 +144,10 @@ The backend docs say the backend side is ready, but a final cross-layer pass is 
 These items can be completed entirely in Flutter.
 
 ### 5.1 Retention hook after first session
-Not yet implemented:
-- bonus challenge prompt
-- streak system
-- session-end return trigger
+✅ **Implemented** (commit `65b9f4d`):
+- bonus challenge prompt — `HubRetentionBanner` with daily quiz CTA
+- streak system — daily bonus streak display + claim CTA via `ArcadeDailyBonusService`
+- session-end return trigger — banner auto-hides when daily tasks are complete
 
 ### 5.2 Sound cue layer
 UI polish is only partially complete because:
@@ -164,10 +164,14 @@ Still useful before beta:
 - stronger release-level QA on all core screens
 
 ### 5.4 Optional Packet E frontend cleanup
-Deferred:
-- `TriviaTycoonApp` -> `SynaptixApp`
-- `package:trivia_tycoon/...` rename
-- internal symbol cleanup
+Partially complete (commit `65b9f4d`):
+- ✅ `TriviaTycoonApp` -> `SynaptixApp` — renamed in `main.dart`
+- ✅ All user-visible "Trivia Tycoon" strings updated to Synaptix
+- ✅ Android label + iOS CFBundleDisplayName → "Synaptix"
+- ✅ Help screen URLs/emails → synaptix.app domain
+- ✅ Profile, invite, admin email updated
+- Deferred: `package:trivia_tycoon/...` internal import rename
+- Deferred: internal symbol cleanup
 
 ---
 
@@ -211,12 +215,18 @@ The frontend plan shows the Synaptix rebrand is complete at UI level, but backen
 ## 7. Practical frontend priority order from here
 
 ### Highest-value remaining frontend items
-1. retention hook after onboarding (bonus challenge + streak)
+1. ~~retention hook after onboarding (bonus challenge + streak)~~ ✅ Done
 2. sound cue layer
 3. real runtime QA of onboarding restore/handoff
-4. cross-stack label verification with backend
+4. ~~cross-stack label verification with backend~~ ✅ Branding updated
 5. economy UI integration against live backend state
 6. crypto UX only after the backend economy layer exists
+
+### Additional completed work (commit `65b9f4d`)
+- Hub widgets wired to real providers (daily quest, featured match, live ticker)
+- Featured match now picks from player's preferred categories
+- Live ticker reads from upcoming game events when available
+- Daily quest shows real progress, streak, and XP from providers
 
 ---
 
@@ -229,8 +239,9 @@ The frontend product-layer migration is largely complete.
 Preferences and analytics alignment appear ready, pending final verification.
 
 ### Still open
-The biggest unfinished frontend-adjacent work is not naming or shell work anymore — it is:
-- retention
+The biggest unfinished frontend-adjacent work is:
+- ~~retention~~ ✅ basic retention hooks implemented
 - real backend economy integration
 - crypto UX
 - final QA hardening
+- sound cue layer

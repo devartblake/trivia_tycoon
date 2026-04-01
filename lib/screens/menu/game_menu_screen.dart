@@ -5,6 +5,7 @@ import 'package:trivia_tycoon/synaptix/mode/synaptix_mode.dart';
 import 'package:trivia_tycoon/synaptix/mode/synaptix_mode_provider.dart';
 import 'package:trivia_tycoon/synaptix/theme/synaptix_theme_extension.dart';
 import 'package:trivia_tycoon/synaptix/widgets/hub_daily_quest.dart';
+import 'package:trivia_tycoon/synaptix/widgets/hub_retention_banner.dart';
 import 'package:trivia_tycoon/synaptix/widgets/hub_featured_match.dart';
 import 'package:trivia_tycoon/synaptix/widgets/hub_live_ticker.dart';
 import 'package:trivia_tycoon/synaptix/widgets/hub_metallic_buttons.dart';
@@ -119,6 +120,9 @@ class _GameMenuScreenState extends ConsumerState<GameMenuScreen>
                   // Progress snapshot
                   const SynaptixProgressSnapshot(isDarkBackground: true),
                   const SizedBox(height: 16),
+
+                  // Retention banner (daily bonus + bonus challenge)
+                  const HubRetentionBanner(),
 
                   // Live win ticker
                   const HubLiveTicker(),
