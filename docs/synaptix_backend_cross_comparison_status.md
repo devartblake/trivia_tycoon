@@ -237,3 +237,39 @@ Preferences persistence and analytics-dimension support are already in place.
 
 ### Still open
 The biggest unfinished backend work is not the Synaptix rename itself — it is the actual gameplay/economy service layer needed to support the frontend beyond local/demo behavior.
+
+---
+
+## 9. Backend execution checklist (Alpha)
+
+### A. Build and migration verification
+- [ ] `dotnet build` passes on the full solution.
+- [ ] `PlayerPreferences` migration generates successfully.
+- [ ] Migration applies successfully in a dev database.
+- [ ] No namespace/build regressions observed after migration run.
+
+### B. Core alpha gameplay APIs
+- [ ] Auth path implemented and validated for alpha backend.
+- [ ] Profile sync endpoint(s) include Synaptix-specific fields.
+- [ ] Quiz question bank + submit scoring endpoints live.
+- [ ] Leaderboard endpoints live.
+- [ ] Economy state endpoints live.
+- [ ] Achievements endpoints live.
+- [ ] Store endpoints live.
+
+### C. Economy authority
+- [ ] Remote wallet state is authoritative.
+- [ ] Economy session start contract implemented.
+- [ ] Reward reconciliation implemented.
+- [ ] Purchase settlement implemented.
+
+### D. Crypto (if in Alpha scope)
+- [ ] Crypto ledger implemented.
+- [ ] Wallet linking flow implemented.
+- [ ] Crypto history/balance endpoints implemented.
+- [ ] Withdrawal/prize pool flows implemented or explicitly deferred.
+
+### E. Cross-stack validation
+- [ ] Preferences read/write contract validated with frontend.
+- [ ] Analytics payload contract validated with frontend.
+- [ ] Vocabulary consistency verified across frontend + operator dashboards/docs.

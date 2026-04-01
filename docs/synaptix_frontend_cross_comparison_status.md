@@ -245,3 +245,31 @@ The biggest unfinished frontend-adjacent work is:
 - crypto UX
 - final QA hardening
 - sound cue layer
+
+---
+
+## 9. Frontend execution checklist (Alpha)
+
+### A. Runtime validation
+- [ ] Onboarding restore validated end-to-end (cold start + resume).
+- [ ] First challenge -> reward reveal -> `/home` handoff validated.
+- [ ] Kids mode visual/layout/copy QA complete.
+- [ ] Teen mode visual/layout/copy QA complete.
+- [ ] Adult mode visual/layout/copy QA complete.
+
+### B. Product polish
+- [ ] Sound cue layer implemented for key UI interactions.
+- [ ] Final empty-state copy sweep completed.
+- [ ] Mode-specific accessibility pass completed.
+- [ ] Release QA sweep completed for all core surfaces.
+
+### C. Cross-stack readiness
+- [ ] Frontend labels verified against backend dashboards/docs.
+- [ ] Frontend preferences payloads verified against backend expectations.
+- [ ] Frontend analytics payloads verified against backend ingestion contract.
+
+### D. Backend-dependent integration
+- [ ] Economy UI integrated against authoritative backend economy state.
+- [ ] Reward reconciliation flow validated.
+- [ ] Store outcomes validated against backend settlement behavior.
+- [ ] Crypto UX deferred or implemented based on backend readiness decision.
