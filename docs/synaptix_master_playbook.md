@@ -21,93 +21,91 @@ Core pillars:
 
 ---
 
-# 2. ONBOARDING + FIRST SESSION FLOW
+# 2. ONBOARDING + FIRST SESSION FLOW ✅ IMPLEMENTED (`0a60048`)
 
-## Stage 1: Identity Hook
-- “Welcome to Synaptix”
+## Stage 1: Identity Hook ✅
+- “Welcome to Synaptix” — `welcome_step.dart`
 - CTA: Begin
 
-## Stage 2: Intent Selection
-- Train Mind → Adult bias
-- Compete → Teen bias
-- Play → Kids bias
+## Stage 2: Intent Selection ✅
+- Train Mind / Compete / Play — `intent_step.dart`
+- Maps to preferred home surface
 
-## Stage 3: Mode Assignment
-- Kids / Teen / Adult
-- Drives UI + difficulty
+## Stage 3: Mode Assignment ✅
+- Kids / Teen / Adult — `age_group_step.dart`
+- Drives UI + difficulty via SynaptixModeNotifier
 
-## Stage 4: Cognitive Profile
-- Category preference
-- Play style
+## Stage 4: Cognitive Profile ✅
+- Category preference — `categories_step.dart`
+- Play style — `play_style_step.dart`
 
-## Stage 5: First Challenge
-- 3–5 adaptive questions
+## Stage 5: First Challenge ✅
+- 3 local questions — `first_session_challenge_step.dart`
 
-## Stage 6: Reward Injection
-- XP
-- Coins
-- Rank seed
+## Stage 6: Reward Injection ✅
+- 100 XP + 250 Coins — `reward_reveal_step.dart`
+- Pathway unlocked (Cognition)
 
-## Stage 7: Hub Landing
-- Synaptix Hub
-- Arena / Labs / Pathways
+## Stage 7: Hub Landing ✅
+- Synaptix Hub — `game_menu_screen.dart`
+- Arena / Labs / Pathways via hub cards
 
 ## Stage 8: Retention Hook
-- Bonus challenge
-- Streak system
+- Bonus challenge — not yet implemented
+- Streak system — not yet implemented
 
 ### Core Loop
 Play → Reward → Unlock → Progress → Repeat
 
 ---
 
-# 3. SYSTEM ARCHITECTURE (FRONTEND)
+# 3. SYSTEM ARCHITECTURE (FRONTEND) ✅ IMPLEMENTED
 
-## Key Providers
-- synaptixModeProvider
-- onboardingStateProvider
-- playerProfileProvider
+## Key Providers ✅
+- synaptixModeProvider — `lib/synaptix/mode/synaptix_mode_provider.dart`
+- onboardingProgressProvider — `lib/game/providers/onboarding_providers.dart`
+- playerProfileServiceProvider — `lib/game/providers/riverpod_providers.dart`
 
-## Screens
-- SplashScreen
-- IntentSelectionScreen
-- ModeSelectionScreen
-- ProfileSetupScreen
-- FirstChallengeScreen
-- RewardScreen
-- HubScreen
+## Screens ✅
+- SplashScreen — existing `main_splash.dart` (rebranded to Synaptix)
+- IntentSelectionScreen — `intent_step.dart` (onboarding step 3)
+- ModeSelectionScreen — `age_group_step.dart` (onboarding step 2, auto-maps mode)
+- ProfileSetupScreen — `username_step.dart` + `avatar_step.dart`
+- FirstChallengeScreen — `first_session_challenge_step.dart` (onboarding step 8)
+- RewardScreen — `reward_reveal_step.dart` (onboarding step 9)
+- HubScreen — `game_menu_screen.dart` (Synaptix Hub)
 
-## Routing
-- GoRouter with onboarding guard
-- onboarding_complete flag
+## Routing ✅
+- GoRouter with onboarding guard — `app_router.dart`
+- onboarding_complete flag — `onboarding_settings_service.dart`
 
 ---
 
-# 4. CORE FEATURES (REBRAND SYSTEM)
+# 4. CORE FEATURES (REBRAND SYSTEM) ✅ IMPLEMENTED (`d41391e`)
 
-| System | Function |
-|------|--------|
-| Arena | Leaderboards & competition |
-| Labs | Practice & mini-games |
-| Pathways | Skill progression |
-| Journey | Player identity |
-| Circles | Social system |
-| Command | Admin dashboard |
+| System | Function | Status |
+|------|--------|--------|
+| Arena | Leaderboards & competition | ✅ Rebranded |
+| Labs | Practice & mini-games | ✅ Rebranded |
+| Pathways | Skill progression | ✅ Rebranded |
+| Journey | Player identity | ✅ Rebranded |
+| Circles | Social system | ✅ Rebranded |
+| Command | Admin dashboard | ✅ Rebranded |
 
 ---
 
 # 5. MONETIZATION ECONOMY
 
-## USD Layer
-- Coins → gameplay currency
-- Gems → premium boosts
+## USD Layer — Partially Implemented
+- Coins → gameplay currency ✅ (WalletService with Hive persistence)
+- Gems → premium boosts ✅ (WalletService with Hive persistence)
 
-## Crypto Layer
+## Crypto Layer — Not Started
 - Micro rewards (engagement)
 - Weekly prize pools
 - Optional staking (future)
 
-## Backend (FastAPI)
+## Backend (FastAPI) — Not Started
 - Wallet service
 - Reward engine
 - Transaction ledger
@@ -133,37 +131,39 @@ Play → Reward → Unlock → Progress → Repeat
 
 ---
 
-# 7. ANALYTICS SYSTEM
+# 7. ANALYTICS SYSTEM ✅ IMPLEMENTED (`6485ad9`)
 
-## Event Structure
+## Event Structure ✅
 - synaptix_mode
 - surface
 - entry_point
 
-## Key Events
-- hub_opened
-- arena_entered
-- labs_played
-- pathway_progress
+## Key Events ✅
+- hub_opened → `synaptix_hub_card_tapped`
+- arena_entered → `synaptix_surface_opened` (arena)
+- labs_played → `synaptix_surface_opened` (labs)
+- pathway_progress → `synaptix_surface_opened` (pathways)
+- `synaptix_mode_changed`, `synaptix_mode_mapped`
+- `synaptix_hub_featured_match_tapped`, `synaptix_hub_action_tapped`
 
 ---
 
-# 8. UI POLISH SYSTEM
+# 8. UI POLISH SYSTEM — Partially Implemented
 
-## Design Language
-- Neon glass UI
-- Frosted cards
-- Glow accents
+## Design Language ✅
+- Neon glass UI ✅ (GlassCard pattern in Hub)
+- Frosted cards ✅ (glassmorphic featured match, daily quest)
+- Glow accents ✅ (emerald glow on buttons, progress bars)
 
-## Motion
-- Micro animations
-- Transitions
-- Progress feedback
+## Motion ✅
+- Micro animations ✅ (pulse on featured match, ticker scroll)
+- Transitions ✅ (onboarding page transitions, fade/slide)
+- Progress feedback ✅ (progress bar animations, XP counters)
 
-## Feedback
-- Haptics
-- Sound cues
-- Visual pulses
+## Feedback — Partially Implemented
+- Haptics ✅ (metallic buttons: `HapticFeedback.lightImpact()`)
+- Sound cues — not yet implemented
+- Visual pulses ✅ (pulse animation on play button)
 
 ---
 
@@ -173,27 +173,27 @@ Play → Reward → Unlock → Progress → Repeat
 Synaptix v0.9.0-internal
 
 ## Validation
-- Onboarding works
-- Hub works
-- All surfaces load
-- Analytics firing
+- Onboarding works ✅ (11-step flow with persistence)
+- Hub works ✅ (premium dark design with all widgets)
+- All surfaces load ✅ (Arena, Labs, Pathways, Journey, Circles, Command)
+- Analytics firing ✅ (surface opened, mode changed, hub interactions)
 
 ## Acceptance Criteria
-- No major bugs
-- Clear branding
-- Stable navigation
+- No major bugs ✅ (Phase 7 data integrity fixes applied)
+- Clear branding ✅ (FE-D2 stabilization pass complete)
+- Stable navigation ✅ (all routes wired, guards in place)
 
 ---
 
 # 10. PACKET SYSTEM SUMMARY
 
-| Packet | Purpose |
-|------|--------|
-| A | Branding |
-| B | Mode + Hub |
-| C | Feature surfaces |
-| D | Analytics + Stability |
-| E | Optional technical rename |
+| Packet | Purpose | Status |
+|------|--------|--------|
+| A | Branding | ✅ Complete |
+| B | Mode + Hub | ✅ Complete |
+| C | Feature surfaces | ✅ Complete |
+| D | Analytics + Stability | ✅ Complete |
+| E | Optional technical rename | Deferred |
 
 ---
 
@@ -217,11 +217,11 @@ Discover → Onboard → Play → Progress → Compete → Earn → Share → Re
 
 # 13. NEXT EXECUTION PATH
 
-1. Implement Flutter onboarding system (full code)
-2. Build monetization backend (FastAPI)
-3. Implement UI polish system (animations + design system)
-4. Prepare beta launch
-5. Scale growth engine
+1. ✅ Implement Flutter onboarding system (full code) — `0a60048`
+2. Build monetization backend (FastAPI) — not started
+3. ✅ Implement UI polish system (animations + design system) — `3f4c65b` (partial — sound cues remaining)
+4. Prepare beta launch — in progress (alpha demo phase)
+5. Scale growth engine — not started
 
 ---
 
