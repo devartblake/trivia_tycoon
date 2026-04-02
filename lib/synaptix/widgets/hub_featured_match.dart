@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../game/analytics/providers/analytics_providers.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../mode/synaptix_mode_provider.dart';
+import '../providers/hub_content_providers.dart';
 import '../theme/synaptix_theme_extension.dart';
 import '../utils/hub_feedback.dart';
 
@@ -22,6 +23,7 @@ class HubFeaturedMatch extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final synaptix = Theme.of(context).extension<SynaptixTheme>();
+    final featured = ref.watch(featuredMatchProvider);
     final radius = synaptix?.cardRadius ?? 20.0;
     final match = ref.watch(featuredMatchProvider);
 
@@ -71,7 +73,7 @@ class HubFeaturedMatch extends ConsumerWidget {
 
           // Topic name
           Text(
-            match.title,
+            featured.title,
             style: const TextStyle(
               fontFamily: 'OpenSans',
               color: Colors.white,
@@ -90,7 +92,7 @@ class HubFeaturedMatch extends ConsumerWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
-              match.difficulty,
+              featured.difficulty,
               style: TextStyle(
                 color: match.iconColor,
                 fontSize: 12,

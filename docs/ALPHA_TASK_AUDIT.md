@@ -27,6 +27,7 @@ _Date: 2026-03-31_
 - ✅ All user-visible "Trivia Tycoon" strings updated to Synaptix
 - ✅ Android/iOS display names → "Synaptix"
 - ✅ `HubRetentionBanner` added (daily bonus + bonus challenge + streak)
+- Replace static ticker text with provider/stream live data.
 
 ## 2) Synaptix markdown docs: outstanding work
 

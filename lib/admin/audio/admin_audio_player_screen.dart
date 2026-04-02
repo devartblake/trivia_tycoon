@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_soloud/flutter_soloud.dart' as soloud;
 import 'package:just_audio/just_audio.dart' as just_audio;
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
@@ -11,27 +14,22 @@ class AdminAudioPlayerScreen extends StatefulWidget {
 }
 
 class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
-  static const List<String> _musicTracks = [
-    'assets/songs/around_the_world.mp3',
-    'assets/songs/autumn_days_lofi.mp3',
-    'assets/songs/breezing.mp3',
-    'assets/songs/new_starts_beat.mp3',
-    'assets/songs/patience.mp3',
-  ];
-
-  static const String _previewSfxAsset = 'assets/sounds/cha_ching.mp3';
+  static const String _defaultSfxAsset = 'assets/sounds/cha_ching.mp3';
 
   final just_audio.AudioPlayer _musicPlayer = just_audio.AudioPlayer();
   soloud.SoLoud? _soLoud;
   soloud.AudioSource? _previewSfx;
 
+  List<String> _musicTracks = const ['assets/songs/around_the_world.mp3'];
+  List<String> _sfxAssets = const [_defaultSfxAsset];
   bool _loading = true;
   bool _musicOn = true;
   bool _soundsOn = true;
   bool _isPlaying = false;
   double _musicVolume = 0.7;
   double _sfxVolume = 0.8;
-  String _selectedTrack = _musicTracks.first;
+  String _selectedTrack = 'assets/songs/around_the_world.mp3';
+  String _selectedSfx = _defaultSfxAsset;
   String? _status;
 
   @override
@@ -42,6 +40,7 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
 
   Future<void> _initialize() async {
     try {
+      await _loadCatalogsFromIndex();
       final musicOn = await AppSettings.getMusicOn(defaultValue: true);
       final soundsOn = await AppSettings.getSoundsOn(defaultValue: true);
 
@@ -58,7 +57,7 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
       _soLoud = soloud.SoLoud.instance;
       await _soLoud!.init();
       _soLoud!.setGlobalVolume(_sfxVolume);
-      _previewSfx = await _soLoud!.loadAsset(_previewSfxAsset);
+      _previewSfx = await _soLoud!.loadAsset(_selectedSfx);
 
       setState(() {
         _status = 'Audio engine ready';
@@ -71,6 +70,36 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
       if (mounted) {
         setState(() => _loading = false);
       }
+    }
+  }
+
+  Future<void> _loadCatalogsFromIndex() async {
+    final songsJson = await rootBundle.loadString('assets/songs/index.json');
+    final soundsJson = await rootBundle.loadString('assets/sounds/index.json');
+
+    final songMap = jsonDecode(songsJson) as Map<String, dynamic>;
+    final sfxMap = jsonDecode(soundsJson) as Map<String, dynamic>;
+
+    final songFiles = (songMap['files'] as List<dynamic>? ?? const [])
+        .map((e) => (e as Map<String, dynamic>)['path']?.toString() ?? '')
+        .where((p) => p.isNotEmpty)
+        .map((p) => 'assets/songs/$p')
+        .toList();
+
+    final sfxFiles = (sfxMap['files'] as List<dynamic>? ?? const [])
+        .map((e) => (e as Map<String, dynamic>)['path']?.toString() ?? '')
+        .where((p) => p.isNotEmpty)
+        .map((p) => 'assets/sounds/$p')
+        .toList();
+
+    if (songFiles.isNotEmpty) {
+      _musicTracks = songFiles;
+      _selectedTrack = songFiles.first;
+    }
+
+    if (sfxFiles.isNotEmpty) {
+      _sfxAssets = sfxFiles;
+      _selectedSfx = sfxFiles.first;
     }
   }
 
@@ -124,6 +153,19 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
       setState(() => _status = 'SFX preview played');
     } catch (e) {
       setState(() => _status = 'SFX error: $e');
+    }
+  }
+
+  Future<void> _selectSfx(String asset) async {
+    if (_soLoud == null) return;
+    try {
+      final source = await _soLoud!.loadAsset(asset);
+      setState(() {
+        _selectedSfx = asset;
+        _previewSfx = source;
+      });
+    } catch (e) {
+      setState(() => _status = 'SFX load error: $e');
     }
   }
 
@@ -251,6 +293,29 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700)),
                         const SizedBox(height: 10),
+                        DropdownButtonFormField<String>(
+                          value: _selectedSfx,
+                          decoration: const InputDecoration(
+                            filled: true,
+                            fillColor: Color(0x22000000),
+                            labelText: 'SFX Asset',
+                          ),
+                          dropdownColor: const Color(0xFF1A2341),
+                          items: _sfxAssets
+                              .map((asset) => DropdownMenuItem(
+                                    value: asset,
+                                    child: Text(
+                                      asset.split('/').last,
+                                      style: const TextStyle(color: Colors.white),
+                                    ),
+                                  ))
+                              .toList(),
+                          onChanged: (value) {
+                            if (value == null) return;
+                            _selectSfx(value);
+                          },
+                        ),
+                        const SizedBox(height: 12),
                         Text('SFX Volume ${(100 * _sfxVolume).round()}%',
                             style: const TextStyle(color: Colors.white70)),
                         Slider(
