@@ -150,12 +150,11 @@ These items can be completed entirely in Flutter.
 - session-end return trigger — banner auto-hides when daily tasks are complete
 
 ### 5.2 Sound cue layer
-UI polish is partially complete:
+UI polish is only partially complete because:
 - haptics are present
 - motion is present
 - visual pulses are present
-- baseline sound cues now wired for core Synaptix Hub tap interactions
-- broader surface-wide sound cue coverage is still missing
+- sound cues are still missing
 
 ### 5.3 Additional polish / release hardening
 Still useful before beta:
