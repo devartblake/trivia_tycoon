@@ -181,7 +181,7 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
-          : Padding(
+          : SingleChildScrollView(
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
