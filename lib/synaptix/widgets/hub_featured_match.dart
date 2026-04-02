@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../game/analytics/providers/analytics_providers.dart';
 import '../mode/synaptix_mode_provider.dart';
 import '../theme/synaptix_theme_extension.dart';
+import '../utils/hub_feedback.dart';
 
 /// Glassmorphic "Recommended Match" centerpiece card for the Synaptix Hub.
 ///
@@ -103,6 +104,7 @@ class HubFeaturedMatch extends ConsumerWidget {
             child: GestureDetector(
               onTap: () {
                 HapticFeedback.mediumImpact();
+                playHubTapSound(ref);
                 final mode = ref.read(synaptixModeProvider);
                 ref.read(analyticsServiceProvider).trackEvent(
                   'synaptix_hub_featured_match_tapped',
