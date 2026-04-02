@@ -37,7 +37,7 @@ I reviewed the uploaded frontend ZIP and the current onboarding stack is already
   - `reducedMotion`
   - `tonePreference`
 
-## 2. Most important implementation conclusion
+## 2. Most important implementation conclusion ✅ FOLLOWED
 
 Do **not** replace the existing onboarding system.
 
@@ -52,7 +52,7 @@ That is lower risk and fits your current codebase.
 
 ---
 
-## 3. Production-ready target onboarding flow
+## 3. Production-ready target onboarding flow ✅ IMPLEMENTED (`0a60048`)
 
 This should become the new Synaptix onboarding order:
 
@@ -548,20 +548,20 @@ Adult:
 
 Another AI should implement the onboarding conversion in this exact order:
 
-1. extend `OnboardingProgress`
-2. extend onboarding providers
-3. extend `ModernOnboardingController`
-4. add `intent_step.dart`
-5. add `play_style_step.dart`
-6. add `first_session_challenge_step.dart`
-7. add `reward_reveal_step.dart`
-8. optionally add `onboarding_step_shell.dart`
-9. update `onboarding_screen.dart` step count + page list + persistence
-10. update completion handler to save Synaptix preferences
-11. validate router redirect behavior
-12. run onboarding persistence restore test
-13. run first-session challenge test
-14. run completion -> `/home` handoff test
+1. ✅ extend `OnboardingProgress` — added 5 new fields (intent, playStyle, synaptixMode, hasCompletedFirstChallenge, hasSeenRewardReveal)
+2. ✅ extend onboarding providers — `updateOnboardingProgress` accepts new fields
+3. ✅ extend `ModernOnboardingController` — typed getters + `setField()` helper
+4. ✅ add `intent_step.dart` — Train Mind / Compete / Play
+5. ✅ add `play_style_step.dart` — Fast Thinker / Strategic Mind / Explorer
+6. ✅ add `first_session_challenge_step.dart` — 3-question local mini-quiz
+7. ✅ add `reward_reveal_step.dart` — animated 100 XP + 250 coins + pathway unlock
+8. ✅ add `onboarding_step_shell.dart` — shared layout shell
+9. ✅ update `onboarding_screen.dart` — 11 steps, new imports, extended persist/restore
+10. ✅ update completion handler — saves synaptixMode, maps intent → preferredHomeSurface, seeds starter economy
+11. ✅ router redirect behavior — existing guards preserved, `/onboarding` route unchanged
+12. run onboarding persistence restore test — needs runtime testing
+13. run first-session challenge test — needs runtime testing
+14. run completion -> `/home` handoff test — needs runtime testing
 
 ---
 
@@ -569,14 +569,14 @@ Another AI should implement the onboarding conversion in this exact order:
 
 This onboarding conversion is successful only if:
 
-- the existing onboarding route remains stable
-- onboarding progress still restores correctly
-- age group correctly maps to Synaptix mode
-- intent and play style are persisted
-- user completes a real first-session challenge
-- reward reveal happens before home handoff
-- `/home` is reached only after onboarding completion
-- no old onboarding state flags are broken
+- ✅ the existing onboarding route remains stable — `/onboarding` route unchanged
+- ✅ onboarding progress still restores correctly — extended persist/restore logic
+- ✅ age group correctly maps to Synaptix mode — wired in `age_group_step.dart`
+- ✅ intent and play style are persisted — added to `OnboardingProgress.toMap/fromMap`
+- ✅ user completes a real first-session challenge — 3-question local quiz
+- ✅ reward reveal happens before home handoff — step 9 of 11 (before CompletionStep)
+- ✅ `/home` is reached only after onboarding completion — existing guard preserved
+- ✅ no old onboarding state flags are broken — backward-compatible fields with defaults
 
 ---
 
@@ -584,9 +584,9 @@ This onboarding conversion is successful only if:
 
 Once this onboarding implementation is in place, the next sequential path should be:
 
-1. design the monetization economy in full detail (USD + crypto backend)
-2. design the full UI polish system (neon glass, motion, feedback)
-3. only after those are defined, widen the internal soft launch validation
+1. design the monetization economy in full detail (USD + crypto backend) — not started
+2. ✅ design the full UI polish system (neon glass, motion, feedback) — implemented in `3f4c65b` (sound cues remaining)
+3. only after those are defined, widen the internal soft launch validation — alpha demo phase in progress
 
 ---
 

@@ -677,7 +677,7 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
                           ),
                         ),
                         Text(
-                          'admin@triviatycoon.app',
+                          'admin@synaptix.app',
                           style: TextStyle(
                             fontSize: 12,
                             color: Color(0xFF6B7280),

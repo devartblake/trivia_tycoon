@@ -19,6 +19,7 @@ _Date: 2026-03-31_
 - `lib/` currently contains **46** TODO/FIXME comments (Dart files).
 - The full repository currently contains **71** TODO/FIXME comments.
 
+<<<<<<< codex/review-todo-tasks-for-alpha-release-ujxys1
 ### Synaptix-branded frontend TODOs still open
 - `lib/main.dart`
   - `TODO(Synaptix Phase 8): Rename TriviaTycoonApp -> SynaptixApp`
@@ -28,6 +29,17 @@ _Date: 2026-03-31_
   - Replace static featured match with data-driven recommendations.
 - `lib/synaptix/widgets/hub_live_ticker.dart`
   - Replace static ticker text with provider/stream live data.
+=======
+### Synaptix-branded frontend TODOs — resolved (commit `65b9f4d`)
+- ✅ `lib/main.dart` — `TriviaTycoonApp` renamed to `SynaptixApp`
+- ✅ `lib/synaptix/widgets/hub_daily_quest.dart` — wired to `dailyQuizStatusProvider`/`dailyQuizProvider`
+- ✅ `lib/synaptix/widgets/hub_featured_match.dart` — wired to `featuredMatchProvider` (category-aware)
+- ✅ `lib/synaptix/widgets/hub_live_ticker.dart` — wired to `upcomingGameEventsProvider` with fallback
+- ✅ All user-visible "Trivia Tycoon" strings updated to Synaptix
+- ✅ Android/iOS display names → "Synaptix"
+- ✅ `HubRetentionBanner` added (daily bonus + bonus challenge + streak)
+- Replace static ticker text with provider/stream live data.
+>>>>>>> main
 
 ## 2) Synaptix markdown docs: outstanding work
 
@@ -60,7 +72,14 @@ This file presents strategic sequencing; it still lists the next execution path 
 
 For Synaptix **Alpha (mobile + web)**, treat the following as the minimum outstanding execution set:
 
+<<<<<<< codex/review-todo-tasks-for-alpha-release-ujxys1
 1. Close high-visibility Synaptix TODOs in hub widgets and app naming.
 2. Complete Phase 7 QA checklist in `synaptix_frontend_plan.md` and mark completed items.
 3. Run onboarding acceptance criteria from `synaptix_onboarding_production_implementation.md` as explicit test cases.
 4. Decide whether Phase 8 technical rename (`TriviaTycoonApp` -> `SynaptixApp`) is in Alpha scope or deferred.
+=======
+1. ~~Close high-visibility Synaptix TODOs in hub widgets and app naming.~~ ✅ Done
+2. Complete Phase 7 QA checklist in `synaptix_frontend_plan.md` and mark completed items.
+3. Run onboarding acceptance criteria from `synaptix_onboarding_production_implementation.md` as explicit test cases.
+4. ~~Decide whether Phase 8 technical rename (`TriviaTycoonApp` -> `SynaptixApp`) is in Alpha scope or deferred.~~ ✅ Done — renamed
+>>>>>>> main
