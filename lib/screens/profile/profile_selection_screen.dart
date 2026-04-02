@@ -107,7 +107,7 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
               ),
               const SizedBox(width: 12),
               const Text(
-                'TRIVIA TYCOON',
+                'SYNAPTIX',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,

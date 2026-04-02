@@ -351,7 +351,7 @@ class UserProfileScreen extends StatelessWidget {
 
   // Bottom sheet for QR/share
   Widget _buildShareModal(BuildContext context) {
-    final shareUrl = 'https://trivia-tycoon.com/user/${entry.userId}';
+    final shareUrl = 'https://synaptix.app/user/${entry.userId}';
 
     return Padding(
       padding: const EdgeInsets.all(24),

@@ -1,8 +1,10 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../game/analytics/providers/analytics_providers.dart';
+import '../../game/providers/riverpod_providers.dart';
 import '../mode/synaptix_mode_provider.dart';
 import '../theme/synaptix_theme_extension.dart';
 import '../utils/hub_feedback.dart';
@@ -21,6 +23,7 @@ class HubFeaturedMatch extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final synaptix = Theme.of(context).extension<SynaptixTheme>();
     final radius = synaptix?.cardRadius ?? 20.0;
+    final match = ref.watch(featuredMatchProvider);
 
     return Container(
       padding: const EdgeInsets.all(24),
@@ -58,19 +61,18 @@ class HubFeaturedMatch extends ConsumerWidget {
               color: const Color(0x1AFFFFFF),
               borderRadius: BorderRadius.circular(20),
             ),
-            child: const Icon(
-              Icons.public,
+            child: Icon(
+              match.icon,
               size: 52,
-              color: Colors.purpleAccent,
+              color: match.iconColor,
             ),
           ),
           const SizedBox(height: 16),
 
           // Topic name
-          const Text(
-            // TODO: Replace with data-driven recommended match
-            'Global Science Showdown',
-            style: TextStyle(
+          Text(
+            match.title,
+            style: const TextStyle(
               fontFamily: 'OpenSans',
               color: Colors.white,
               fontSize: 20,
@@ -84,13 +86,13 @@ class HubFeaturedMatch extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
-              color: Colors.purpleAccent.withValues(alpha: 0.2),
+              color: match.iconColor.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Text(
-              'Medium',
+            child: Text(
+              match.difficulty,
               style: TextStyle(
-                color: Colors.purpleAccent,
+                color: match.iconColor,
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
               ),
@@ -113,12 +115,14 @@ class HubFeaturedMatch extends ConsumerWidget {
                     'synaptix_mode': mode.name,
                     'entry_point': 'featured_card',
                     'audience_segment': mode.name,
+                    'match_title': match.title,
                   },
                 );
                 context.push('/quiz/start/classic');
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [Color(0xFF50C878), Color(0xFF3DA55C)],
@@ -135,7 +139,8 @@ class HubFeaturedMatch extends ConsumerWidget {
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.play_arrow_rounded, color: Colors.white, size: 22),
+                    Icon(Icons.play_arrow_rounded,
+                        color: Colors.white, size: 22),
                     SizedBox(width: 8),
                     Text(
                       'PLAY NOW',
