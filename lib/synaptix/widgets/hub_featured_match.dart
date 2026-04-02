@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../game/analytics/providers/analytics_providers.dart';
 import '../mode/synaptix_mode_provider.dart';
+import '../providers/hub_content_providers.dart';
 import '../theme/synaptix_theme_extension.dart';
+import '../utils/hub_feedback.dart';
 
 /// Glassmorphic "Recommended Match" centerpiece card for the Synaptix Hub.
 ///
@@ -19,6 +21,7 @@ class HubFeaturedMatch extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final synaptix = Theme.of(context).extension<SynaptixTheme>();
+    final featured = ref.watch(featuredMatchProvider);
     final radius = synaptix?.cardRadius ?? 20.0;
 
     return Container(
@@ -66,10 +69,9 @@ class HubFeaturedMatch extends ConsumerWidget {
           const SizedBox(height: 16),
 
           // Topic name
-          const Text(
-            // TODO: Replace with data-driven recommended match
-            'Global Science Showdown',
-            style: TextStyle(
+          Text(
+            featured.title,
+            style: const TextStyle(
               fontFamily: 'OpenSans',
               color: Colors.white,
               fontSize: 20,
@@ -86,8 +88,8 @@ class HubFeaturedMatch extends ConsumerWidget {
               color: Colors.purpleAccent.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Text(
-              'Medium',
+            child: Text(
+              featured.difficulty,
               style: TextStyle(
                 color: Colors.purpleAccent,
                 fontSize: 12,
@@ -103,6 +105,7 @@ class HubFeaturedMatch extends ConsumerWidget {
             child: GestureDetector(
               onTap: () {
                 HapticFeedback.mediumImpact();
+                playHubTapSound(ref);
                 final mode = ref.read(synaptixModeProvider);
                 ref.read(analyticsServiceProvider).trackEvent(
                   'synaptix_hub_featured_match_tapped',

@@ -1,0 +1,36 @@
+name: PR Test Artifacts
+
+on:
+  pull_request:
+
+jobs:
+  tracked_tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run tracked tests
+        run: ./scripts/run_tests_with_tracking.sh
+
+      - name: Upload tracked test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: flutter-test-tracking
+          if-no-files-found: warn
+          path: |
+            artifacts/test_reports/flutter_test_machine.log
+            artifacts/test_reports/flutter_test_summary.json

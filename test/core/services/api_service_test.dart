@@ -330,4 +330,77 @@ void main() {
     expect(authBox.get('auth_access_token'), 'profile-new-token');
     expect(authBox.get('auth_refresh_token'), 'profile-new-refresh');
   });
+
+  test('treats /users/me as protected and retries after refresh', () async {
+    await authBox.put('auth_access_token', 'expired-token');
+    await authBox.put('auth_refresh_token', 'refresh-token');
+
+    final dio = Dio(BaseOptions(baseUrl: 'https://example.test'));
+    var profileAttempts = 0;
+
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          if (options.path == '/users/me') {
+            profileAttempts++;
+
+            if (profileAttempts == 1) {
+              expect(options.headers['Authorization'], 'Bearer expired-token');
+              handler.reject(
+                DioException(
+                  requestOptions: options,
+                  response: Response(
+                    requestOptions: options,
+                    statusCode: 401,
+                    data: {'message': 'expired'},
+                  ),
+                  type: DioExceptionType.badResponse,
+                ),
+              );
+              return;
+            }
+
+            expect(options.headers['Authorization'], 'Bearer users-me-new-token');
+            handler.resolve(
+              Response(
+                requestOptions: options,
+                statusCode: 200,
+                data: {'ok': true},
+              ),
+            );
+            return;
+          }
+
+          if (options.path == '/admin/auth/refresh') {
+            handler.resolve(
+              Response(
+                requestOptions: options,
+                statusCode: 200,
+                data: {
+                  'accessToken': 'users-me-new-token',
+                  'refreshToken': 'users-me-new-refresh',
+                },
+              ),
+            );
+            return;
+          }
+
+          handler.next(options);
+        },
+      ),
+    );
+
+    final service = ApiService(
+      baseUrl: 'https://example.test',
+      dio: dio,
+      initializeCache: false,
+    );
+
+    final response = await service.get('/users/me');
+
+    expect(response['ok'], isTrue);
+    expect(profileAttempts, 2);
+    expect(authBox.get('auth_access_token'), 'users-me-new-token');
+    expect(authBox.get('auth_refresh_token'), 'users-me-new-refresh');
+  });
 }
