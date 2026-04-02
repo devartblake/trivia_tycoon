@@ -26,9 +26,11 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
   bool _musicOn = true;
   bool _soundsOn = true;
   bool _isPlaying = false;
+  bool _trackLoaded = false;
   double _musicVolume = 0.7;
   double _sfxVolume = 0.8;
   String _selectedTrack = 'assets/songs/around_the_world.mp3';
+  String? _loadedTrack;
   String _selectedSfx = _defaultSfxAsset;
   String? _status;
 
@@ -126,9 +128,16 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
   }
 
   Future<void> _playTrack() async {
-    if (!_musicOn) return;
+    if (!_musicOn) {
+      setState(() => _status = 'Enable Music to play tracks');
+      return;
+    }
     try {
-      await _musicPlayer.setAsset(_selectedTrack);
+      if (!_trackLoaded || _loadedTrack != _selectedTrack) {
+        await _musicPlayer.setAsset(_selectedTrack);
+        _trackLoaded = true;
+        _loadedTrack = _selectedTrack;
+      }
       await _musicPlayer.play();
       setState(() => _status = 'Playing ${_selectedTrack.split('/').last}');
     } catch (e) {
@@ -138,12 +147,18 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
 
   Future<void> _pauseTrack() async {
     await _musicPlayer.pause();
-    setState(() => _status = 'Music paused');
+    setState(() {
+      _isPlaying = false;
+      _status = 'Music paused';
+    });
   }
 
   Future<void> _stopTrack() async {
     await _musicPlayer.stop();
-    setState(() => _status = 'Music stopped');
+    setState(() {
+      _isPlaying = false;
+      _status = 'Music stopped';
+    });
   }
 
   Future<void> _playPreviewSfx() async {
@@ -242,7 +257,10 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
                               .toList(),
                           onChanged: (value) {
                             if (value == null) return;
-                            setState(() => _selectedTrack = value);
+                            setState(() {
+                              _selectedTrack = value;
+                              _trackLoaded = false;
+                            });
                           },
                         ),
                         const SizedBox(height: 12),
@@ -261,19 +279,16 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
                         Row(
                           children: [
                             FilledButton.icon(
-                              onPressed: _playTrack,
-                              icon: const Icon(Icons.play_arrow_rounded),
-                              label: const Text('Play'),
+                              onPressed:
+                                  _musicOn ? (_isPlaying ? _pauseTrack : _playTrack) : null,
+                              icon: Icon(_isPlaying
+                                  ? Icons.pause_rounded
+                                  : Icons.play_arrow_rounded),
+                              label: Text(_isPlaying ? 'Pause' : 'Play'),
                             ),
                             const SizedBox(width: 8),
                             OutlinedButton.icon(
-                              onPressed: _pauseTrack,
-                              icon: const Icon(Icons.pause_rounded),
-                              label: const Text('Pause'),
-                            ),
-                            const SizedBox(width: 8),
-                            OutlinedButton.icon(
-                              onPressed: _stopTrack,
+                              onPressed: (_isPlaying || _trackLoaded) ? _stopTrack : null,
                               icon: const Icon(Icons.stop_rounded),
                               label: const Text('Stop'),
                             ),
@@ -329,7 +344,10 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
                         ),
                         const SizedBox(height: 8),
                         FilledButton.icon(
-                          onPressed: _playPreviewSfx,
+                          onPressed:
+                              (_soundsOn && _soLoud != null && _previewSfx != null)
+                                  ? _playPreviewSfx
+                                  : null,
                           icon: const Icon(Icons.music_note_rounded),
                           label: const Text('Play Preview SFX'),
                         ),
