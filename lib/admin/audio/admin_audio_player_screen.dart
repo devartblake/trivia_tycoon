@@ -34,6 +34,7 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
   String? _loadedTrack;
   String _selectedSfx = _defaultSfxAsset;
   String? _status;
+  bool _invalidSfxAsset = false;
 
   @override
   void initState() {
@@ -90,11 +91,19 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
         .map((p) => 'assets/songs/$p')
         .toList();
 
-    final sfxFiles = (sfxMap['files'] as List<dynamic>? ?? const [])
+    var sfxFiles = (sfxMap['files'] as List<dynamic>? ?? const [])
         .map((e) => (e as Map<String, dynamic>)['path']?.toString() ?? '')
         .where((p) => p.isNotEmpty)
         .map((p) => 'assets/sounds/$p')
         .toList();
+
+    final validatedSfxFiles = <String>[];
+    for (final asset in sfxFiles) {
+      if (await _isSupportedAudioAsset(asset)) {
+        validatedSfxFiles.add(asset);
+      }
+    }
+    sfxFiles = validatedSfxFiles;
 
     if (songFiles.isNotEmpty) {
       _musicTracks = songFiles;
@@ -104,6 +113,31 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
     if (sfxFiles.isNotEmpty) {
       _sfxAssets = sfxFiles;
       _selectedSfx = sfxFiles.first;
+    }
+  }
+
+  Future<bool> _isSupportedAudioAsset(String assetPath) async {
+    try {
+      final data = await rootBundle.load(assetPath);
+      final bytes = data.buffer.asUint8List();
+      if (bytes.length < 4) return false;
+
+      // MP3 (ID3 tag or MPEG frame sync), WAV (RIFF), OGG (OggS), M4A/MP4 (ftyp).
+      final hasId3 = bytes[0] == 0x49 && bytes[1] == 0x44 && bytes[2] == 0x33;
+      final hasMp3FrameSync = bytes[0] == 0xFF && (bytes[1] & 0xE0) == 0xE0;
+      final hasRiff =
+          bytes[0] == 0x52 && bytes[1] == 0x49 && bytes[2] == 0x46 && bytes[3] == 0x46;
+      final hasOgg =
+          bytes[0] == 0x4F && bytes[1] == 0x67 && bytes[2] == 0x67 && bytes[3] == 0x53;
+      final hasFtyp = bytes.length > 8 &&
+          bytes[4] == 0x66 &&
+          bytes[5] == 0x74 &&
+          bytes[6] == 0x79 &&
+          bytes[7] == 0x70;
+
+      return hasId3 || hasMp3FrameSync || hasRiff || hasOgg || hasFtyp;
+    } catch (_) {
+      return false;
     }
   }
 
@@ -170,6 +204,15 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
       return;
     }
     try {
+      if (!await _isSupportedAudioAsset(_selectedSfx)) {
+        await SystemSound.play(SystemSoundType.click);
+        setState(() {
+          _invalidSfxAsset = true;
+          _status = 'SFX asset is not a valid audio file. Played system click fallback.';
+        });
+        return;
+      }
+
       if (_soLoud != null) {
         _previewSfx ??= await _soLoud!.loadAsset(_selectedSfx);
         await _soLoud!.play(_previewSfx!, volume: _sfxVolume);
@@ -192,8 +235,22 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
   }
 
   Future<void> _selectSfx(String asset) async {
+    final isValid = await _isSupportedAudioAsset(asset);
+    if (!isValid) {
+      setState(() {
+        _selectedSfx = asset;
+        _previewSfx = null;
+        _invalidSfxAsset = true;
+        _status = 'Selected SFX is not a supported audio file.';
+      });
+      return;
+    }
+
     if (_soLoud == null) {
-      setState(() => _selectedSfx = asset);
+      setState(() {
+        _selectedSfx = asset;
+        _invalidSfxAsset = false;
+      });
       return;
     }
     try {
@@ -201,6 +258,7 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
       setState(() {
         _selectedSfx = asset;
         _previewSfx = source;
+        _invalidSfxAsset = false;
       });
     } catch (e) {
       setState(() {
@@ -376,6 +434,14 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
                           icon: const Icon(Icons.music_note_rounded),
                           label: const Text('Play Preview SFX'),
                         ),
+                        if (_invalidSfxAsset)
+                          const Padding(
+                            padding: EdgeInsets.only(top: 8),
+                            child: Text(
+                              'Current SFX file is invalid/corrupted for Android decoders.',
+                              style: TextStyle(color: Colors.amberAccent),
+                            ),
+                          ),
                       ],
                     ),
                   ),
