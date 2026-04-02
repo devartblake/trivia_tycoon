@@ -64,9 +64,9 @@ class HubFeaturedMatch extends ConsumerWidget {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Icon(
-              match.icon,
+              featured.icon,
               size: 52,
-              color: match.iconColor,
+              color: featured.iconColor,
             ),
           ),
           const SizedBox(height: 16),
@@ -88,13 +88,13 @@ class HubFeaturedMatch extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
-              color: match.iconColor.withValues(alpha: 0.2),
+              color: featured.iconColor.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
               featured.difficulty,
               style: TextStyle(
-                color: match.iconColor,
+                color: featured.iconColor,
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
               ),
