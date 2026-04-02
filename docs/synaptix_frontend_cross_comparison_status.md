@@ -265,6 +265,18 @@ The biggest unfinished frontend-adjacent work is:
 - [ ] Mode-specific accessibility pass completed.
 - [ ] Release QA sweep completed for all core surfaces.
 
+#### Sound cue completion checklist (detailed)
+- [ ] Define SFX taxonomy (tap, success, error, reward, unlock, warning, ambient transitions).
+- [ ] Standardize cue mapping for core actions per surface (Hub, Arena, Labs, Pathways, Journey, Circles, Command).
+- [ ] Route all key tap handlers through a shared cue helper/service (avoid one-off direct calls).
+- [ ] Add per-event volume profile and avoid overlap/clipping in rapid interactions.
+- [ ] Respect settings toggles globally (`audioOn`, `soundsOn`) across every entry point.
+- [ ] Add fallback behavior when assets fail to load (silent fail + debug log).
+- [ ] Add analytics for cue-triggered events where UX signal quality matters (optional).
+- [ ] Add automated tests for cue-gating logic (enabled/disabled states).
+- [ ] Run manual QA on low-end Android + iOS hardware for latency and repetition fatigue.
+- [ ] Accessibility pass: ensure critical actions are never sound-only (paired visual/haptic feedback).
+
 ### C. Cross-stack readiness
 - [ ] Frontend labels verified against backend dashboards/docs.
 - [ ] Frontend preferences payloads verified against backend expectations.
