@@ -7,6 +7,7 @@ import '../../game/analytics/providers/analytics_providers.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../mode/synaptix_mode_provider.dart';
 import '../theme/synaptix_theme_extension.dart';
+import '../utils/hub_feedback.dart';
 
 /// A recommended match definition for the Hub.
 class _FeaturedMatchData {
@@ -191,6 +192,7 @@ class HubFeaturedMatch extends ConsumerWidget {
             child: GestureDetector(
               onTap: () {
                 HapticFeedback.mediumImpact();
+                playHubTapSound(ref);
                 final mode = ref.read(synaptixModeProvider);
                 ref.read(analyticsServiceProvider).trackEvent(
                   'synaptix_hub_featured_match_tapped',
