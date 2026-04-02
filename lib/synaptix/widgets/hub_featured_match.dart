@@ -1,8 +1,10 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../game/analytics/providers/analytics_providers.dart';
+import '../../game/providers/riverpod_providers.dart';
 import '../mode/synaptix_mode_provider.dart';
 import '../providers/hub_content_providers.dart';
 import '../theme/synaptix_theme_extension.dart';
@@ -23,6 +25,7 @@ class HubFeaturedMatch extends ConsumerWidget {
     final synaptix = Theme.of(context).extension<SynaptixTheme>();
     final featured = ref.watch(featuredMatchProvider);
     final radius = synaptix?.cardRadius ?? 20.0;
+    final match = ref.watch(featuredMatchProvider);
 
     return Container(
       padding: const EdgeInsets.all(24),
@@ -60,10 +63,10 @@ class HubFeaturedMatch extends ConsumerWidget {
               color: const Color(0x1AFFFFFF),
               borderRadius: BorderRadius.circular(20),
             ),
-            child: const Icon(
-              Icons.public,
+            child: Icon(
+              match.icon,
               size: 52,
-              color: Colors.purpleAccent,
+              color: match.iconColor,
             ),
           ),
           const SizedBox(height: 16),
@@ -85,13 +88,13 @@ class HubFeaturedMatch extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
-              color: Colors.purpleAccent.withValues(alpha: 0.2),
+              color: match.iconColor.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
               featured.difficulty,
               style: TextStyle(
-                color: Colors.purpleAccent,
+                color: match.iconColor,
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
               ),
@@ -114,12 +117,14 @@ class HubFeaturedMatch extends ConsumerWidget {
                     'synaptix_mode': mode.name,
                     'entry_point': 'featured_card',
                     'audience_segment': mode.name,
+                    'match_title': match.title,
                   },
                 );
                 context.push('/quiz/start/classic');
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [Color(0xFF50C878), Color(0xFF3DA55C)],
@@ -136,7 +141,8 @@ class HubFeaturedMatch extends ConsumerWidget {
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.play_arrow_rounded, color: Colors.white, size: 22),
+                    Icon(Icons.play_arrow_rounded,
+                        color: Colors.white, size: 22),
                     SizedBox(width: 8),
                     Text(
                       'PLAY NOW',
