@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trivia_tycoon/admin/leaderboard/leaderboard_filter_screen.dart';
 import 'package:trivia_tycoon/admin/questions/question_list_screen.dart';
 import 'package:trivia_tycoon/admin/splash_screen/splash_selector_screen.dart';
+import 'package:trivia_tycoon/admin/audio/admin_audio_player_screen.dart';
 import '../screens/widgets/slimy_card_preview_screen.dart';
 import 'analytics/analytics_screen.dart';
 import 'audit/admin_audit_log_screen.dart';
@@ -475,6 +476,16 @@ class AdminDashboardScreen extends StatelessWidget {
               context,
               MaterialPageRoute(builder: (_) => const QuestionListScreen()),
             ),
+      ),
+      _AdminAction(
+        title: 'Audio Studio',
+        subtitle: 'Manage music + SFX playback',
+        icon: Icons.graphic_eq_rounded,
+        color: Colors.deepOrange,
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const AdminAudioPlayerScreen()),
+        ),
       ),
       _AdminAction(
         title: 'Question Editor',
