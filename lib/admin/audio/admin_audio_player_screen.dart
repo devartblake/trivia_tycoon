@@ -17,6 +17,7 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
   static const String _defaultSfxAsset = 'assets/sounds/cha_ching.mp3';
 
   final just_audio.AudioPlayer _musicPlayer = just_audio.AudioPlayer();
+  final just_audio.AudioPlayer _sfxPlayer = just_audio.AudioPlayer();
   soloud.SoLoud? _soLoud;
   soloud.AudioSource? _previewSfx;
 
@@ -50,6 +51,7 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
       _soundsOn = soundsOn;
       await _musicPlayer.setVolume(_musicVolume);
       await _musicPlayer.setLoopMode(just_audio.LoopMode.one);
+      await _sfxPlayer.setVolume(_sfxVolume);
 
       _musicPlayer.playerStateStream.listen((state) {
         if (!mounted) return;
@@ -108,6 +110,7 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
   @override
   void dispose() {
     _musicPlayer.dispose();
+    _sfxPlayer.dispose();
     try {
       _soLoud?.deinit();
     } catch (_) {}
@@ -162,17 +165,37 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
   }
 
   Future<void> _playPreviewSfx() async {
-    if (!_soundsOn || _soLoud == null || _previewSfx == null) return;
+    if (!_soundsOn) {
+      setState(() => _status = 'Enable SFX to preview sounds');
+      return;
+    }
     try {
-      await _soLoud!.play(_previewSfx!, volume: _sfxVolume);
+      if (_soLoud != null) {
+        _previewSfx ??= await _soLoud!.loadAsset(_selectedSfx);
+        await _soLoud!.play(_previewSfx!, volume: _sfxVolume);
+      } else {
+        await _sfxPlayer.setAsset(_selectedSfx);
+        await _sfxPlayer.seek(Duration.zero);
+        await _sfxPlayer.play();
+      }
       setState(() => _status = 'SFX preview played');
     } catch (e) {
-      setState(() => _status = 'SFX error: $e');
+      try {
+        await _sfxPlayer.setAsset(_selectedSfx);
+        await _sfxPlayer.seek(Duration.zero);
+        await _sfxPlayer.play();
+        setState(() => _status = 'SFX preview played (fallback)');
+      } catch (fallbackError) {
+        setState(() => _status = 'SFX error: $e | Fallback error: $fallbackError');
+      }
     }
   }
 
   Future<void> _selectSfx(String asset) async {
-    if (_soLoud == null) return;
+    if (_soLoud == null) {
+      setState(() => _selectedSfx = asset);
+      return;
+    }
     try {
       final source = await _soLoud!.loadAsset(asset);
       setState(() {
@@ -180,7 +203,11 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
         _previewSfx = source;
       });
     } catch (e) {
-      setState(() => _status = 'SFX load error: $e');
+      setState(() {
+        _selectedSfx = asset;
+        _previewSfx = null;
+        _status = 'SFX load warning: $e (fallback available)';
+      });
     }
   }
 
@@ -337,17 +364,15 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
                           value: _sfxVolume,
                           min: 0,
                           max: 1,
-                          onChanged: (v) {
+                          onChanged: (v) async {
                             setState(() => _sfxVolume = v);
                             _soLoud?.setGlobalVolume(v);
+                            await _sfxPlayer.setVolume(v);
                           },
                         ),
                         const SizedBox(height: 8),
                         FilledButton.icon(
-                          onPressed:
-                              (_soundsOn && _soLoud != null && _previewSfx != null)
-                                  ? _playPreviewSfx
-                                  : null,
+                          onPressed: _soundsOn ? _playPreviewSfx : null,
                           icon: const Icon(Icons.music_note_rounded),
                           label: const Text('Play Preview SFX'),
                         ),
