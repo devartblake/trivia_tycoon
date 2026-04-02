@@ -6,6 +6,7 @@ import '../../game/analytics/providers/analytics_providers.dart';
 import '../mode/synaptix_mode.dart';
 import '../mode/synaptix_mode_provider.dart';
 import '../theme/synaptix_theme_extension.dart';
+import '../utils/hub_feedback.dart';
 
 /// Reusable quick-launch card for the Synaptix Hub grid.
 class SynaptixHubCard extends ConsumerWidget {
@@ -34,6 +35,7 @@ class SynaptixHubCard extends ConsumerWidget {
     return GestureDetector(
       onTap: () {
         HapticFeedback.lightImpact();
+        playHubTapSound(ref);
         final mode = ref.read(synaptixModeProvider);
         ref.read(analyticsServiceProvider).trackEvent('synaptix_hub_card_tapped', {
           'surface': surface,
