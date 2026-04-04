@@ -93,7 +93,7 @@ Reference plan: `docs/frontend_priority_execution_plan_2026-04-04.md`
 - [x] Admin smoke-check runbook executed and outcome documented (live run currently blocked in this environment: `curl: CONNECT tunnel failed, response 403`).
 
 ### Stretch (P1)
-- [ ] Audio studio resilience cleanup verified (invalid asset behavior).
+- [~] Audio studio resilience cleanup verified (invalid asset behavior + retry suppression cache added; UX messaging polish pending).
 - [ ] `/users/me` profile-sync regression check run.
 - [ ] Hub featured-match fallback policy implemented and validated.
 

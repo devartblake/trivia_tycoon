@@ -45,7 +45,7 @@ Progress score model:
   - ✅ P0.2 Admin contract/error-envelope mapping verification (implemented for Admin Users, Question Bank, Admin User Detail, activity-log flows, question dataset-status ingestion, and admin config sync handling; only tiny legacy surfaces may remain).
   - ✅ P0.3 Real backend smoke run attempted; outcome logged as blocker (network/backend access unavailable in this environment).
 
-Current weighted completion estimate: **97%** (P0 tracks completed with blocker logged; P0.2 mapping now includes config sync error/status handling in addition to major admin list/detail pathways).
+Current weighted completion estimate: **98%** (P0 tracks completed with blocker logged; P0.2 nearly saturated and P1.1 audio resilience optimization started).
 
 ---
 
@@ -101,9 +101,9 @@ Done when:
 
 ### P1.1 Admin audio studio resilience cleanup (10%)
 Tasks:
-1. Keep SFX preview usable if asset is invalid (already partially guarded).
-2. Add one banner/toast pointing to invalid asset replacement path.
-3. Ensure no repeated noisy retries for known-invalid file.
+1. [x] Keep SFX preview usable if asset is invalid (guard + fallback in place).
+2. [~] Add one banner/toast pointing to invalid asset replacement path (warning text exists; richer UX copy can be improved).
+3. [x] Ensure no repeated noisy retries for known-invalid file (asset validity cache added).
 
 ### P1.2 `/users/me` profile sync verification pass (10%)
 Tasks:
