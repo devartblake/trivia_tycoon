@@ -42,10 +42,10 @@ Progress score model:
   - ✅ QA/Audit docs updated with tonight sprint tracking.
 - Remaining for tonight:
   - ✅ P0.1 Admin auth/role gate hardening implementation.
-  - ✅ P0.2 Admin contract/error-envelope mapping verification (implemented for Admin Users, Question Bank, and Admin User Detail pathways; propagate pattern to remaining admin list screens).
+  - ✅ P0.2 Admin contract/error-envelope mapping verification (implemented for Admin Users, Question Bank, Admin User Detail, and activity-log flows; propagate pattern to remaining admin list screens).
   - ✅ P0.3 Real backend smoke run attempted; outcome logged as blocker (network/backend access unavailable in this environment).
 
-Current weighted completion estimate: **85%** (P0 tracks completed with blocker logged; P0.2 mapping now covers Admin Users, Question Bank, and Admin User Detail pathways).
+Current weighted completion estimate: **90%** (P0 tracks completed with blocker logged; P0.2 mapping now also covers activity-log flows in Admin Users and Admin User Detail).
 
 ---
 
@@ -71,11 +71,11 @@ Done when:
 **Why first:** Backend endpoints require consistent envelope and pagination fields.
 
 Tasks:
-1. [x] Add/verify frontend model mapping for (implemented for Admin Users + Question Bank + Admin User Detail pathways):
+1. [x] Add/verify frontend model mapping for (implemented for Admin Users + Question Bank + Admin User Detail + activity-log pathways):
    - `items/page/pageSize/totalItems/totalPages`
    - `error.code/error.message/error.details`
-2. [x] Normalize admin API errors into one frontend error type (applied across Admin Users + Question Bank + Admin User Detail server list/activity loading).
-3. [~] Add null-safe mapping + defensive defaults for all list screens (done for Admin Users + Question Bank + Admin User Detail flows; remaining screens pending).
+2. [x] Normalize admin API errors into one frontend error type (applied across Admin Users + Question Bank + Admin User Detail, including activity-log loads).
+3. [~] Add null-safe mapping + defensive defaults for all list screens (done for Admin Users + Question Bank + Admin User Detail + activity-log flows; remaining screens pending).
 
 Done when:
 - Admin lists render with server pagination metadata.

@@ -686,15 +686,18 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
       final sm = ref.read(serviceManagerProvider);
       final response =
           await sm.apiService.get('/admin/users/${user.id}/activity');
-      final items = response['items'];
-      final logs = items is List
-          ? items
-          .whereType<Map>()
-          .map((e) => Map<String, dynamic>.from(e))
-          .toList()
-          : <Map<String, dynamic>>[];
+      final envelope = sm.apiService
+          .parsePageEnvelope<Map<String, dynamic>>(response, (json) => json);
+      final logs = envelope.items;
       if (!mounted) return;
       _showActivityLogDialog(user, logs);
+    } on ApiRequestException catch (e) {
+      if (!mounted) return;
+      final errorCode = e.errorCode != null ? ' [${e.errorCode}]' : '';
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Failed to load activity log$errorCode: ${e.message}'),
+        behavior: SnackBarBehavior.floating,
+      ));
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

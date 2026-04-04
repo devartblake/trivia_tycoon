@@ -77,5 +77,5 @@ Backend handoff note:
 - The requested files `frontend_admin_security_rollout_plan` and `frontend_backend_handoff_alpha_2026-04-04` were not present in this repo when planning; this plan uses existing admin contract/smoke docs as source of truth until those files are added.
 
 Progress update (execution in progress):
-- Completed: planning doc created, priority breakdown finalized, smoke script dry-run validated, admin dashboard role-gate hardening implemented, known-good smoke response checklist documented, contract/error mapping pass implemented for Admin Users + Question Bank + Admin User Detail pathways, and non-dry-run smoke check outcome logged (current blocker: network/backend access).
+- Completed: planning doc created, priority breakdown finalized, smoke script dry-run validated, admin dashboard role-gate hardening implemented, known-good smoke response checklist documented, contract/error mapping pass implemented for Admin Users + Question Bank + Admin User Detail + activity-log pathways, and non-dry-run smoke check outcome logged (current blocker: network/backend access).
 - Remaining next: propagate P0.2 mapping pattern to remaining admin list screens and continue P1 stretch items.
