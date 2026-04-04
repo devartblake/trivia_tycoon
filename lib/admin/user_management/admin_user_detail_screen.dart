@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:trivia_tycoon/core/services/api_service.dart';
 import '../../game/models/admin_user_model.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../screens/widgets/custom_alert_dialog.dart';
@@ -46,11 +47,11 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
   Future<AdminUserModel?> _loadUserFromListEndpoint(String userId) async {
     try {
       final serviceManager = ref.read(serviceManagerProvider);
-      final response = await serviceManager.apiService.get('/admin/users');
-      final items = response['items'];
-      if (items is! List) return null;
-      for (final item in items.whereType<Map>()) {
-        final map = Map<String, dynamic>.from(item);
+      final response =
+          await serviceManager.apiService.get('/admin/users?page=1&pageSize=100');
+      final envelope = serviceManager.apiService
+          .parsePageEnvelope<Map<String, dynamic>>(response, (json) => json);
+      for (final map in envelope.items) {
         if (map['id']?.toString() == userId) {
           return AdminUserModel.fromJson(map);
         }
@@ -1424,10 +1425,9 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
     try {
       final serviceManager = ref.read(serviceManagerProvider);
       final response = await serviceManager.apiService.get('/admin/users/${user.id}/activity');
-      final items = response['items'];
-      final logs = items is List
-          ? items.whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList()
-          : <Map<String, dynamic>>[];
+      final envelope = serviceManager.apiService
+          .parsePageEnvelope<Map<String, dynamic>>(response, (json) => json);
+      final logs = envelope.items;
       if (!mounted) return;
       showDialog(
         context: context,
