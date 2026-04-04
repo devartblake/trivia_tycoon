@@ -42,10 +42,10 @@ Progress score model:
   - ✅ QA/Audit docs updated with tonight sprint tracking.
 - Remaining for tonight:
   - ✅ P0.1 Admin auth/role gate hardening implementation.
-  - ✅ P0.2 Admin contract/error-envelope mapping verification (implemented for Admin Users screen; apply same pattern to remaining admin list screens).
+  - ✅ P0.2 Admin contract/error-envelope mapping verification (implemented for Admin Users and Question Bank screens; propagate pattern to remaining admin list screens).
   - ⏳ P0.3 Real backend smoke run (non-DRY-RUN) with valid env tokens and URL (task 3 only).
 
-Current weighted completion estimate: **60%** (P0.1 complete, P0.3 checklist/docs mostly complete, and P0.2 implementation started on admin users contract/error mapping).
+Current weighted completion estimate: **70%** (P0.1 complete, P0.2 implemented on Admin Users + Question Bank screens, P0.3 docs/checklists complete except live run logging).
 
 ---
 
@@ -71,11 +71,11 @@ Done when:
 **Why first:** Backend endpoints require consistent envelope and pagination fields.
 
 Tasks:
-1. [x] Add/verify frontend model mapping for (implemented for Admin Users screen):
+1. [x] Add/verify frontend model mapping for (implemented for Admin Users + Question Bank screens):
    - `items/page/pageSize/totalItems/totalPages`
    - `error.code/error.message/error.details`
-2. [x] Normalize admin API errors into one frontend error type (Admin Users now surfaces `ApiRequestException` status+errorCode+message).
-3. [~] Add null-safe mapping + defensive defaults for all list screens (done for Admin Users; remaining screens pending).
+2. [x] Normalize admin API errors into one frontend error type (Admin Users + Question Bank now surface `ApiRequestException` status+errorCode+message).
+3. [~] Add null-safe mapping + defensive defaults for all list screens (done for Admin Users + Question Bank; remaining screens pending).
 
 Done when:
 - Admin lists render with server pagination metadata.
