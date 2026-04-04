@@ -77,3 +77,22 @@ Current test tree review indicates:
 Recommendation:
 - Keep both if intentionally testing different layers, but include full path in CI reporting output.
 - If duplicates are accidental, de-duplicate or rename to reduce confusion.
+
+---
+
+## Tonight Implementation Sprint (2026-04-04)
+
+Reference plan: `docs/frontend_priority_execution_plan_2026-04-04.md`
+
+### Completion goal
+- [ ] Reach >=55% weighted completion (all P0 + at least 2 P1 tasks).
+
+### Must-complete tonight (P0)
+- [ ] Admin auth/role gate hardening verified in UI (401/403 states).
+- [ ] Admin API pagination/error-envelope mapping verified against contract.
+- [ ] Admin smoke-check runbook executed and outcome documented.
+
+### Stretch (P1)
+- [ ] Audio studio resilience cleanup verified (invalid asset behavior).
+- [ ] `/users/me` profile-sync regression check run.
+- [ ] Hub featured-match fallback policy implemented and validated.
