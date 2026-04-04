@@ -42,10 +42,10 @@ Progress score model:
   - ✅ QA/Audit docs updated with tonight sprint tracking.
 - Remaining for tonight:
   - ✅ P0.1 Admin auth/role gate hardening implementation.
-  - ✅ P0.2 Admin contract/error-envelope mapping verification (implemented for Admin Users, Question Bank, Admin User Detail, activity-log flows, and question dataset-status ingestion pathway; only minor legacy surfaces may remain).
+  - ✅ P0.2 Admin contract/error-envelope mapping verification (implemented for Admin Users, Question Bank, Admin User Detail, activity-log flows, question dataset-status ingestion, and admin config sync handling; only tiny legacy surfaces may remain).
   - ✅ P0.3 Real backend smoke run attempted; outcome logged as blocker (network/backend access unavailable in this environment).
 
-Current weighted completion estimate: **95%** (P0 tracks completed with blocker logged; P0.2 mapping now covers core admin list/detail + dataset-status ingestion pathways).
+Current weighted completion estimate: **98%** (P0 tracks completed with blocker logged; P0.2 nearly saturated and P1.1 audio resilience optimization started).
 
 ---
 
@@ -71,11 +71,11 @@ Done when:
 **Why first:** Backend endpoints require consistent envelope and pagination fields.
 
 Tasks:
-1. [x] Add/verify frontend model mapping for (implemented for Admin Users + Question Bank + Admin User Detail + activity-log + dataset-status pathways):
+1. [x] Add/verify frontend model mapping for (implemented for Admin Users + Question Bank + Admin User Detail + activity-log + dataset-status + config-sync pathways):
    - `items/page/pageSize/totalItems/totalPages`
    - `error.code/error.message/error.details`
-2. [x] Normalize admin API errors into one frontend error type (applied across Admin Users + Question Bank + Admin User Detail, including activity-log and dataset-status loads).
-3. [~] Add null-safe mapping + defensive defaults for all list screens (done for Admin Users + Question Bank + Admin User Detail + activity-log + dataset-status flows; remaining minor surfaces pending).
+2. [x] Normalize admin API errors into one frontend error type (applied across Admin Users + Question Bank + Admin User Detail, including activity-log, dataset-status, and config-sync loads).
+3. [~] Add null-safe mapping + defensive defaults for all list screens (done for Admin Users + Question Bank + Admin User Detail + activity-log + dataset-status + config-sync flows; remaining tiny surfaces pending).
 
 Done when:
 - Admin lists render with server pagination metadata.
@@ -101,9 +101,9 @@ Done when:
 
 ### P1.1 Admin audio studio resilience cleanup (10%)
 Tasks:
-1. Keep SFX preview usable if asset is invalid (already partially guarded).
-2. Add one banner/toast pointing to invalid asset replacement path.
-3. Ensure no repeated noisy retries for known-invalid file.
+1. [x] Keep SFX preview usable if asset is invalid (guard + fallback in place).
+2. [~] Add one banner/toast pointing to invalid asset replacement path (warning text exists; richer UX copy can be improved).
+3. [x] Ensure no repeated noisy retries for known-invalid file (asset validity cache added).
 
 ### P1.2 `/users/me` profile sync verification pass (10%)
 Tasks:

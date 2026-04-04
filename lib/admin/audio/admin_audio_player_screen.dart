@@ -35,6 +35,7 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
   String _selectedSfx = _defaultSfxAsset;
   String? _status;
   bool _invalidSfxAsset = false;
+  final Map<String, bool> _assetValidityCache = <String, bool>{};
 
   @override
   void initState() {
@@ -117,10 +118,16 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
   }
 
   Future<bool> _isSupportedAudioAsset(String assetPath) async {
+    final cached = _assetValidityCache[assetPath];
+    if (cached != null) return cached;
+
     try {
       final data = await rootBundle.load(assetPath);
       final bytes = data.buffer.asUint8List();
-      if (bytes.length < 4) return false;
+      if (bytes.length < 4) {
+        _assetValidityCache[assetPath] = false;
+        return false;
+      }
 
       // MP3 (ID3 tag or MPEG frame sync), WAV (RIFF), OGG (OggS), M4A/MP4 (ftyp).
       final hasId3 = bytes[0] == 0x49 && bytes[1] == 0x44 && bytes[2] == 0x33;
@@ -135,8 +142,11 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
           bytes[6] == 0x79 &&
           bytes[7] == 0x70;
 
-      return hasId3 || hasMp3FrameSync || hasRiff || hasOgg || hasFtyp;
+      final isSupported = hasId3 || hasMp3FrameSync || hasRiff || hasOgg || hasFtyp;
+      _assetValidityCache[assetPath] = isSupported;
+      return isSupported;
     } catch (_) {
+      _assetValidityCache[assetPath] = false;
       return false;
     }
   }
