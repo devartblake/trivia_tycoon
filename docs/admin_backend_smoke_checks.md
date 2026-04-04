@@ -46,3 +46,31 @@ ADMIN_REFRESH_TOKEN="<refresh>" \
 
 - This is intentionally a smoke-level script (contract/access/response check), not a full integration suite.
 - The script exits non-zero on HTTP >= 400 for any executed request.
+
+
+## Known-good response checklist (for frontend verification)
+
+Use this checklist after running smoke checks against a real backend.
+
+### 1) `GET /admin/auth/me`
+- [ ] HTTP status is `200`.
+- [ ] Response includes admin identity fields (`id`, `email` or `displayName`).
+- [ ] Response includes either `roles` (array) or `role` (string).
+- [ ] At least one role resolves to `admin` for admin test account.
+
+### 2) `GET /admin/users?page=1&pageSize=1`
+- [ ] HTTP status is `200`.
+- [ ] Envelope has `items` (array), `page`, `pageSize`, `totalItems`, `totalPages`.
+- [ ] `items[0]` (if present) includes key user fields (`id`, `username`/`email`, role/status fields).
+
+### 3) `GET /admin/questions?page=1&pageSize=1`
+- [ ] HTTP status is `200`.
+- [ ] Envelope has `items` (array), `page`, `pageSize`, `totalItems`, `totalPages`.
+- [ ] `items[0]` (if present) includes stable question identity (e.g. `id`) and readable prompt field.
+
+### Error envelope spot-check (all endpoints)
+- [ ] For intentional auth failure, response uses shape:
+  - `error.code`
+  - `error.message`
+  - optional `error.details`
+- [ ] 401/403 paths render correct frontend state (session-expired vs forbidden).
