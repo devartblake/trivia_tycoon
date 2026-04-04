@@ -107,3 +107,22 @@ Reference plan: `docs/frontend_priority_execution_plan_2026-04-04.md`
 Live run attempt evidence (2026-04-04):
 - Command: `ADMIN_API_BASE_URL="https://example.invalid/api/v1" ./scripts/admin_backend_smoke_checks.sh`
 - Result: **blocker** at first endpoint (`GET /admin/auth/me`) due network tunnel/connect failure (`curl: (56) CONNECT tunnel failed, response 403`).
+
+
+## `/users/me` profile-sync regression troubleshooting
+
+Use this when profile-sync starts logging repeated 404/backoff entries again.
+
+- Symptom: repeated 404s on `/profile`, `/user/profile`, or `/auth/profile` and delayed profile hydration.
+- Expected path order: `/users/me` should be attempted first.
+- Verify protected-path behavior: `/users/me` must trigger auth refresh/retry on 401.
+
+Quick checks:
+1. Confirm endpoint order in `ProfileSyncService` puts `/users/me` first.
+2. Confirm `_isProtectedPath` includes `/users/me`.
+3. Run test subset for:
+   - `test/core/services/api_service_test.dart`
+   - `test/core/services/settings/profile_sync_service_test.dart`
+4. If Flutter SDK is unavailable, record blocker and run tests in CI or a Flutter-enabled environment.
+
+- Latest local attempt: `./scripts/run_tests_with_tracking.sh` -> blocker: `flutter not found on PATH; cannot execute test run.`

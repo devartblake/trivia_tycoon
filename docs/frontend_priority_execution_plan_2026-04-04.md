@@ -45,7 +45,7 @@ Progress score model:
   - ✅ P0.2 Admin contract/error-envelope mapping verification (implemented for Admin Users, Question Bank, Admin User Detail, activity-log flows, question dataset-status ingestion, and admin config sync handling; only tiny legacy surfaces may remain).
   - ✅ P0.3 Real backend smoke run attempted; outcome logged as blocker (network/backend access unavailable in this environment).
 
-Current weighted completion estimate: **98%** (P0 tracks completed with blocker logged; P0.2 nearly saturated and P1.1 audio resilience optimization started).
+Current weighted completion estimate: **99%** (P0 tracks completed with blocker logged; P0.2 nearly saturated; P1.1 mostly done and P1.2 troubleshooting guide completed, with test-run execution blocked by missing Flutter SDK in this environment).
 
 ---
 
@@ -107,8 +107,8 @@ Tasks:
 
 ### P1.2 `/users/me` profile sync verification pass (10%)
 Tasks:
-1. Re-run unit test subset for profile sync/service auth.
-2. Add a short troubleshooting section for 404/backoff regression symptoms.
+1. [~] Re-run unit test subset for profile sync/service auth (attempted via `scripts/run_tests_with_tracking.sh`; blocked here because Flutter SDK is unavailable in this container).
+2. [x] Add a short troubleshooting section for 404/backoff regression symptoms.
 
 ### P1.3 Hub featured-match production data fallback policy (10%)
 Tasks:
