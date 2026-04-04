@@ -41,11 +41,11 @@ Progress score model:
   - ✅ Smoke-check script reviewed and dry-run executed successfully.
   - ✅ QA/Audit docs updated with tonight sprint tracking.
 - Remaining for tonight:
-  - ⏳ P0.1 Admin auth/role gate hardening implementation.
+  - ✅ P0.1 Admin auth/role gate hardening implementation.
   - ⏳ P0.2 Admin contract/error-envelope mapping verification.
   - ⏳ P0.3 Real backend smoke run (non-DRY-RUN) with valid env tokens and URL.
 
-Current weighted completion estimate: **20%** (planning + dry-run setup done, implementation still pending).
+Current weighted completion estimate: **35%** (planning + smoke dry-run + P0.1 admin UI role-gate implementation complete).
 
 ---
 
@@ -57,9 +57,9 @@ Current weighted completion estimate: **20%** (planning + dry-run setup done, im
 **Why first:** Backend contract states admin endpoints are protected and role-enforced; UI must fail closed.
 
 Tasks:
-1. Ensure admin routes/screens check role claims before rendering privileged actions.
-2. Add unified 401/403 handling UI state (`session expired` vs `insufficient permissions`).
-3. Add a visible fallback state for unauthorized admin dashboard access.
+1. [x] Ensure admin routes/screens check role claims before rendering privileged actions.
+2. [x] Add unified 401/403 handling UI state (`session expired` vs `insufficient permissions`) for admin dashboard access checks.
+3. [x] Add a visible fallback state for unauthorized admin dashboard access.
 
 Done when:
 - Manual check confirms non-admin user cannot access admin action controls.
