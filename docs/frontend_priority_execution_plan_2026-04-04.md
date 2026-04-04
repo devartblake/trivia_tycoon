@@ -33,6 +33,22 @@ Progress score model:
 
 ---
 
+
+## 1.1) Live status (updated 2026-04-04)
+
+- Completed this session:
+  - ✅ Input-check for requested backend handoff files (both missing in repo).
+  - ✅ Smoke-check script reviewed and dry-run executed successfully.
+  - ✅ QA/Audit docs updated with tonight sprint tracking.
+- Remaining for tonight:
+  - ⏳ P0.1 Admin auth/role gate hardening implementation.
+  - ⏳ P0.2 Admin contract/error-envelope mapping verification.
+  - ⏳ P0.3 Real backend smoke run (non-DRY-RUN) with valid env tokens and URL.
+
+Current weighted completion estimate: **20%** (planning + dry-run setup done, implementation still pending).
+
+---
+
 ## 2) Priority backlog (actionable)
 
 ## P0 (Do first - block Alpha confidence)
@@ -71,9 +87,9 @@ Done when:
 **Why first:** Fastest end-to-end signal of contract compatibility before deeper refactors.
 
 Tasks:
-1. Add a frontend runbook section documenting exact env vars + commands for `scripts/admin_backend_smoke_checks.sh`.
-2. Create one "known-good" response checklist for `/admin/auth/me`, `/admin/users`, `/admin/questions`.
-3. Record tonight run outcome in docs (`pass/fail/blocker`).
+1. [x] Add a frontend runbook section documenting exact env vars + commands for `scripts/admin_backend_smoke_checks.sh` (covered by existing `docs/admin_backend_smoke_checks.md` + this plan linkage).
+2. [ ] Create one "known-good" response checklist for `/admin/auth/me`, `/admin/users`, `/admin/questions`.
+3. [ ] Record tonight run outcome in docs (`pass/fail/blocker`).
 
 Done when:
 - Engineer can execute smoke checks in <10 minutes with copy/paste commands.

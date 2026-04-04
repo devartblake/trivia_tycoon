@@ -90,9 +90,14 @@ Reference plan: `docs/frontend_priority_execution_plan_2026-04-04.md`
 ### Must-complete tonight (P0)
 - [ ] Admin auth/role gate hardening verified in UI (401/403 states).
 - [ ] Admin API pagination/error-envelope mapping verified against contract.
-- [ ] Admin smoke-check runbook executed and outcome documented.
+- [~] Admin smoke-check runbook dry-run executed; live run outcome still pending (needs real backend URL/tokens).
 
 ### Stretch (P1)
 - [ ] Audio studio resilience cleanup verified (invalid asset behavior).
 - [ ] `/users/me` profile-sync regression check run.
 - [ ] Hub featured-match fallback policy implemented and validated.
+
+
+### Session status update (2026-04-04)
+- ✅ Ran `scripts/admin_backend_smoke_checks.sh` in `DRY_RUN=1` mode to validate command wiring.
+- ⏳ Pending: non-dry-run execution against real backend environment and recording pass/fail outcomes.
