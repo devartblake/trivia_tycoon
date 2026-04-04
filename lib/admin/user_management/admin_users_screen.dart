@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:trivia_tycoon/core/services/api_service.dart';
 
 import '../../game/models/admin_user_model.dart';
 import '../../game/providers/riverpod_providers.dart';
@@ -27,6 +28,10 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
   List<AdminUserModel> _users = [];
   bool _isLoadingUsers = false;
   String? _usersError;
+  int _page = 1;
+  int _pageSize = 25;
+  int _totalItems = 0;
+  int _totalPages = 1;
 
   @override
   void initState() {
@@ -48,20 +53,32 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
 
     try {
       final serviceManager = ref.read(serviceManagerProvider);
-      final response = await serviceManager.apiService.get('/admin/users');
-      final items = response['items'];
-      if (items is List) {
-        _users = items
-            .whereType<Map>()
-            .map((e) => Map<String, dynamic>.from(e))
-            .map(AdminUserModel.fromJson)
-            .toList();
-      } else {
-        _users = [];
-      }
+      final response =
+          await serviceManager.apiService.get('/admin/users?page=1&pageSize=100');
+      final envelope = serviceManager.apiService
+          .parsePageEnvelope<Map<String, dynamic>>(response, (json) => json);
+
+      _users = envelope.items.map(AdminUserModel.fromJson).toList();
+      _page = envelope.page;
+      _pageSize = envelope.pageSize;
+      _totalItems = envelope.total;
+      _totalPages = envelope.totalPages;
+    } on ApiRequestException catch (e) {
+      final errorCode = e.errorCode != null ? ' [${e.errorCode}]' : '';
+      final statusCode = e.statusCode != null ? ' (${e.statusCode})' : '';
+      _usersError = 'Using local sample users$statusCode$errorCode: ${e.message}';
+      _users = getMockUsers();
+      _page = 1;
+      _pageSize = _users.length;
+      _totalItems = _users.length;
+      _totalPages = 1;
     } catch (e) {
       _usersError = 'Using local sample users (backend unavailable): $e';
       _users = getMockUsers();
+      _page = 1;
+      _pageSize = _users.length;
+      _totalItems = _users.length;
+      _totalPages = 1;
     } finally {
       if (mounted) setState(() => _isLoadingUsers = false);
     }
@@ -132,6 +149,7 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
               ),
             ),
           _buildFilters(),
+          _buildContractSummary(users.length),
           Expanded(
             child: users.isEmpty
                 ? _buildEmptyState()
@@ -151,6 +169,43 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
   // ---------------------------------------------------------------------------
   // Filter bar
   // ---------------------------------------------------------------------------
+
+  Widget _buildContractSummary(int visibleUsers) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 8, 24, 10),
+      color: const Color(0xFFF8F9FA),
+      child: Wrap(
+        spacing: 12,
+        runSpacing: 6,
+        children: [
+          _metaChip('Page', '$_page/$_totalPages'),
+          _metaChip('Page Size', '$_pageSize'),
+          _metaChip('Total Items', '$_totalItems'),
+          _metaChip('Visible', '$visibleUsers'),
+        ],
+      ),
+    );
+  }
+
+  Widget _metaChip(String label, String value) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: const Color(0xFFE5E7EB)),
+      ),
+      child: Text(
+        '$label: $value',
+        style: const TextStyle(
+          fontSize: 12,
+          color: Color(0xFF4B5563),
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
 
   Widget _buildFilters() {
     return Container(
