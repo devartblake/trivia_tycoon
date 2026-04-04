@@ -43,9 +43,9 @@ Progress score model:
 - Remaining for tonight:
   - ✅ P0.1 Admin auth/role gate hardening implementation.
   - ⏳ P0.2 Admin contract/error-envelope mapping verification.
-  - ⏳ P0.3 Real backend smoke run (non-DRY-RUN) with valid env tokens and URL.
+  - ⏳ P0.3 Real backend smoke run (non-DRY-RUN) with valid env tokens and URL (task 3 only).
 
-Current weighted completion estimate: **35%** (planning + smoke dry-run + P0.1 admin UI role-gate implementation complete).
+Current weighted completion estimate: **45%** (planning + smoke dry-run + P0.1 complete + P0.3 known-good checklist documented).
 
 ---
 
@@ -88,7 +88,7 @@ Done when:
 
 Tasks:
 1. [x] Add a frontend runbook section documenting exact env vars + commands for `scripts/admin_backend_smoke_checks.sh` (covered by existing `docs/admin_backend_smoke_checks.md` + this plan linkage).
-2. [ ] Create one "known-good" response checklist for `/admin/auth/me`, `/admin/users`, `/admin/questions`.
+2. [x] Create one "known-good" response checklist for `/admin/auth/me`, `/admin/users`, `/admin/questions` (documented in `docs/admin_backend_smoke_checks.md`).
 3. [ ] Record tonight run outcome in docs (`pass/fail/blocker`).
 
 Done when:

@@ -77,5 +77,5 @@ Backend handoff note:
 - The requested files `frontend_admin_security_rollout_plan` and `frontend_backend_handoff_alpha_2026-04-04` were not present in this repo when planning; this plan uses existing admin contract/smoke docs as source of truth until those files are added.
 
 Progress update (execution in progress):
-- Completed: planning doc created, priority breakdown finalized, smoke script dry-run validated, and admin dashboard role-gate hardening implemented.
-- Remaining next: complete P0.2 contract/error-envelope verification, then execute live smoke run and log results.
+- Completed: planning doc created, priority breakdown finalized, smoke script dry-run validated, admin dashboard role-gate hardening implemented, and known-good smoke response checklist documented.
+- Remaining next: complete P0.2 contract/error-envelope verification and run non-dry-run smoke checks against live backend env.

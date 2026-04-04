@@ -100,4 +100,5 @@ Reference plan: `docs/frontend_priority_execution_plan_2026-04-04.md`
 
 ### Session status update (2026-04-04)
 - ✅ Ran `scripts/admin_backend_smoke_checks.sh` in `DRY_RUN=1` mode to validate command wiring.
+- ✅ Known-good smoke response checklist documented (`/admin/auth/me`, `/admin/users`, `/admin/questions`).
 - ⏳ Pending: non-dry-run execution against real backend environment and recording pass/fail outcomes.
