@@ -89,7 +89,7 @@ Reference plan: `docs/frontend_priority_execution_plan_2026-04-04.md`
 
 ### Must-complete tonight (P0)
 - [x] Admin auth/role gate hardening verified in UI (401/403 states).
-- [ ] Admin API pagination/error-envelope mapping verified against contract.
+- [~] Admin API pagination/error-envelope mapping verified against contract (completed on Admin Users screen; remaining admin lists pending).
 - [~] Admin smoke-check runbook dry-run executed; live run outcome still pending (needs real backend URL/tokens).
 
 ### Stretch (P1)
