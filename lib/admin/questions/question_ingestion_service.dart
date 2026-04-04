@@ -48,15 +48,26 @@ class QuestionIngestionService {
   Future<List<Map<String, dynamic>>> getDatasetStatuses() async {
     final response = await _apiService.get('/admin/questions/datasets');
 
-    final rawItems = response['items'] ?? response['datasets'] ?? response['data'];
-    if (rawItems is! List) {
-      return const <Map<String, dynamic>>[];
-    }
+    try {
+      final envelope = _apiService.parsePageEnvelope<Map<String, dynamic>>(
+        response,
+        (json) => json,
+      );
+      return envelope.items;
+    } on ApiRequestException {
+      rethrow;
+    } catch (_) {
+      // Fallback for legacy payloads that are not page-envelope shaped.
+      final rawItems = response['items'] ?? response['datasets'] ?? response['data'];
+      if (rawItems is! List) {
+        return const <Map<String, dynamic>>[];
+      }
 
-    return rawItems
-        .whereType<Map>()
-        .map((item) => Map<String, dynamic>.from(item))
-        .toList();
+      return rawItems
+          .whereType<Map>()
+          .map((item) => Map<String, dynamic>.from(item))
+          .toList();
+    }
   }
 
   Future<Map<String, dynamic>> publishDataset(String datasetName) {
