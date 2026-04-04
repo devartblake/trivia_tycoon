@@ -74,3 +74,14 @@ Use this checklist after running smoke checks against a real backend.
   - `error.message`
   - optional `error.details`
 - [ ] 401/403 paths render correct frontend state (session-expired vs forbidden).
+
+## Latest execution status (2026-04-04)
+
+- Dry-run: ✅ Completed.
+- Live run: ⚠️ Blocked in current environment.
+  - Command used: `ADMIN_API_BASE_URL="https://example.invalid/api/v1" ./scripts/admin_backend_smoke_checks.sh`
+  - First failing step: `GET /admin/auth/me`
+  - Error: `curl: (56) CONNECT tunnel failed, response 403`
+
+Next action:
+- Re-run against reachable backend URL + valid admin token/refresh token from target environment.
