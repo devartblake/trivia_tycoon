@@ -5,6 +5,7 @@ import 'package:trivia_tycoon/synaptix/mode/synaptix_mode.dart';
 import 'package:trivia_tycoon/synaptix/mode/synaptix_mode_provider.dart';
 import 'package:trivia_tycoon/synaptix/theme/synaptix_theme_extension.dart';
 import 'package:trivia_tycoon/synaptix/widgets/hub_daily_quest.dart';
+import 'package:trivia_tycoon/synaptix/widgets/hub_retention_banner.dart';
 import 'package:trivia_tycoon/synaptix/widgets/hub_featured_match.dart';
 import 'package:trivia_tycoon/synaptix/widgets/hub_live_ticker.dart';
 import 'package:trivia_tycoon/synaptix/widgets/hub_metallic_buttons.dart';
@@ -55,6 +56,7 @@ class _GameMenuScreenState extends ConsumerState<GameMenuScreen>
 
   @override
   Widget build(BuildContext context) {
+    final canPop = Navigator.of(context).canPop();
     final mode = ref.watch(synaptixModeProvider);
     final profileService = ref.watch(playerProfileServiceProvider);
     final userProfile = profileService.getProfile();
@@ -64,6 +66,13 @@ class _GameMenuScreenState extends ConsumerState<GameMenuScreen>
       backgroundColor: const Color(0xFF0F0F23),
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        automaticallyImplyLeading: canPop,
+        leading: canPop
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                onPressed: () => Navigator.of(context).maybePop(),
+              )
+            : null,
         backgroundColor: Colors.transparent,
         elevation: 0,
         surfaceTintColor: Colors.transparent,
@@ -111,6 +120,9 @@ class _GameMenuScreenState extends ConsumerState<GameMenuScreen>
                   // Progress snapshot
                   const SynaptixProgressSnapshot(isDarkBackground: true),
                   const SizedBox(height: 16),
+
+                  // Retention banner (daily bonus + bonus challenge)
+                  const HubRetentionBanner(),
 
                   // Live win ticker
                   const HubLiveTicker(),

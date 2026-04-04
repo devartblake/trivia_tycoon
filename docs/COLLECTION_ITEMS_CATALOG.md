@@ -278,7 +278,7 @@ Based on your question categories, here are **50 unique collection items** repre
 **Description for AI:** Bronze medallion embossed with panda, tiger, and whale images. "PROTECTED SPECIES" text around rim. Verdigris patina showing age. Conservation organization seal on reverse. Natural forest background. Wildlife conservation aesthetic.
 
 ### 47. **Recycling Symbol Trophy**
-**Category:** Environment  
+**Category:** Environment
 **Rarity:** Uncommon  
 **Description for AI:** Green glass sculpture of recycling arrows forming triangle. Sustainable materials aesthetic. Sunlight passing through creating green glow. Earth day celebration background. Eco-friendly presentation. Photorealistic glass material.
 

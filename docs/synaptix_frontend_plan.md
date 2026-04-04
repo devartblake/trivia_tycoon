@@ -19,9 +19,9 @@
 
 ---
 
-## FE Packet A — Audit + Brand Surface Reframe (Phases 0–1)
+## FE Packet A — Audit + Brand Surface Reframe (Phases 0–1) ✅ COMPLETE
 
-### FE-A1: Frontend Audit (Phase 0)
+### FE-A1: Frontend Audit (Phase 0) ✅ COMPLETE
 
 **Objective:** Create a complete inventory of all product-facing brand strings before changing anything.
 
@@ -54,7 +54,7 @@
 
 ---
 
-### FE-A2: Brand Surface Reframe (Phase 1)
+### FE-A2: Brand Surface Reframe (Phase 1) ✅ COMPLETE — `e1fe300`
 
 **Objective:** Make the app visibly read as Synaptix at first touch without destabilizing architecture.
 
@@ -118,9 +118,9 @@
 
 ---
 
-## FE Packet B — Mode/Theme Foundation + Hub (Phases 2–3)
+## FE Packet B — Mode/Theme Foundation + Hub (Phases 2–3) ✅ COMPLETE
 
-### FE-B1: Mode and Theme Foundation (Phase 2)
+### FE-B1: Mode and Theme Foundation (Phase 2) ✅ COMPLETE — `3feba39`
 
 **Objective:** Introduce the multi-audience presentation system (Kids / Teen / Adult) under one master brand.
 
@@ -184,7 +184,7 @@
 
 ---
 
-### FE-B2: Shell and Navigation Upgrade (Phase 3)
+### FE-B2: Shell and Navigation Upgrade (Phase 3) ✅ COMPLETE — `4b4bbe0`
 
 **Objective:** Transform the menu into a real Synaptix Hub with mode-aware information architecture.
 
@@ -232,7 +232,7 @@
 
 ---
 
-## FE Packet C — Core Feature Surface Rebrand (Phase 4)
+## FE Packet C — Core Feature Surface Rebrand (Phase 4) ✅ COMPLETE — `d41391e`
 
 **Objective:** Convert the 6 major product surfaces into Synaptix vocabulary. Rename surfaces, not systems.
 
@@ -357,9 +357,9 @@ Brand the top-level shell; keep inner admin tools conventional for operator usab
 
 ---
 
-## FE Packet D — Analytics + Stabilization (Phases 6–7)
+## FE Packet D — Analytics + Stabilization (Phases 6–7) ✅ COMPLETE
 
-### FE-D1: Analytics Instrumentation (Phase 6)
+### FE-D1: Analytics Instrumentation (Phase 6) ✅ COMPLETE — `6485ad9`
 
 **Objective:** Make the Synaptix rebrand measurable.
 
@@ -391,33 +391,68 @@ trackEvent("synaptix_surface_opened", {
 
 ---
 
-### FE-D2: Stabilization and QA (Phase 7)
+### FE-D2: Stabilization and QA (Phase 7) ✅ COMPLETE — `6eda2c2`, `634614e`, `429deb2`
 
 **QA checklist:**
-- [ ] App launch
-- [ ] Auth/bootstrap
-- [ ] Onboarding flow (age group -> mode mapping)
-- [ ] Hub rendering (all 3 modes)
-- [ ] Mode selection and mapping
-- [ ] Arena launch and navigation
-- [ ] Labs launch and navigation
-- [ ] Pathways launch and navigation
-- [ ] Journey/profile load
-- [ ] Circles/messages/groups
-- [ ] Command/admin
-- [ ] Settings and persistence
-- [ ] Economy labels consistent
+- [x] App launch
+- [x] Auth/bootstrap
+- [x] Onboarding flow (age group -> mode mapping)
+- [x] Hub rendering (all 3 modes)
+- [x] Mode selection and mapping
+- [x] Arena launch and navigation
+- [x] Labs launch and navigation
+- [x] Pathways launch and navigation
+- [x] Journey/profile load
+- [x] Circles/messages/groups
+- [x] Command/admin
+- [x] Settings and persistence
+- [x] Economy labels consistent
 
 **Consistency pass:**
-- [ ] No remaining "Trivia Tycoon" in high-visibility paths
-- [ ] No mixed old/new language across adjacent screens
-- [ ] Mode-specific differences render correctly
-- [ ] Frontend labels match backend dashboards/docs (cross-check with backend plan)
+- [x] No remaining "Trivia Tycoon" in high-visibility paths
+- [x] No mixed old/new language across adjacent screens
+- [x] Mode-specific differences render correctly
+- [ ] Frontend labels match backend dashboards/docs (cross-check with backend plan) — deferred pending backend alignment
 
 **Exit criteria:**
 - No major functional regressions
 - No major brand inconsistency in core flows
 - System stable enough to decide on Packet E
+
+---
+
+## Additional Completed Work (Post-Packet D)
+
+### Premium Hub Design ✅ COMPLETE — `3f4c65b`
+- Dark theme glassmorphic Synaptix Hub redesign
+- Live ticker widget (`hub_live_ticker.dart`)
+- Featured match card (`hub_featured_match.dart`)
+- Metallic action buttons (`hub_metallic_buttons.dart`)
+- Daily quest card (`hub_daily_quest.dart`)
+- Pulse animation, background image, scroll layout
+
+### Phase 7 Bug Fixes & Data Integrity ✅ COMPLETE — `429deb2`
+- Fixed background image rendering (`StackFit.expand`)
+- Added user avatar to live ticker
+- Fixed LeaderboardScreen mocked XP (reads from profile)
+- Fixed PlayerProfileService error fallback defaults (level: 0, XP: 0)
+- Fixed addXP() wrong defaults
+- Added Hive persistence to WalletService
+
+### Onboarding Evolution (7 → 11 steps) ✅ COMPLETE — `0a60048`
+- IntentStep: Train Mind / Compete / Play
+- PlayStyleStep: Fast Thinker / Strategic Mind / Explorer
+- FirstSessionChallengeStep: 3-question local mini-quiz
+- RewardRevealStep: Animated starter rewards (100 XP, 250 coins)
+- OnboardingStepShell: Shared step layout
+- Extended OnboardingProgress model with 5 new fields
+- Age group → SynaptixMode mapping wired in AgeGroupStep
+- Starter economy seeding on completion
+- Intent → preferred home surface mapping
+
+### Hub Quick Fixes ✅ COMPLETE — `0a60048`
+- Featured match routes to `/quiz/start/classic` (was `/arcade`)
+- Coin/gem store taps navigate to `/store` (was no-op)
 
 ---
 
