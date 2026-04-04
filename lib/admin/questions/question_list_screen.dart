@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:trivia_tycoon/admin/questions/question_editor_screen.dart';
+import 'package:trivia_tycoon/core/services/api_service.dart';
 import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
 import 'package:trivia_tycoon/game/models/question_model.dart';
 import '../../game/providers/riverpod_providers.dart';
@@ -29,6 +30,7 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
   final int _pageSize = 10;
   int _currentPage = 0;
   bool _bulkMode = false;
+  String? _serverSyncStatus;
 
   @override
   void initState() {
@@ -268,22 +270,33 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
   }
 
   Future<void> _syncFromServer() async {
-    final serviceManager = ref.read(serviceManagerProvider);
-    final response = await serviceManager.apiService.get('/admin/questions');
-    final items = response['items'];
-    final fetched = items is List
-        ? items
-            .whereType<Map>()
-            .map((e) => Map<String, dynamic>.from(e))
-            .map(QuestionModel.fromJson)
-            .toList()
-        : <QuestionModel>[];
-    if (!mounted) return;
-    setState(() {
-      _questions = fetched;
-      _applyFilters();
-    });
-    await appCache.saveQuestions(fetched);
+    try {
+      final serviceManager = ref.read(serviceManagerProvider);
+      final response =
+          await serviceManager.apiService.get('/admin/questions?page=1&pageSize=500');
+      final envelope = serviceManager.apiService
+          .parsePageEnvelope<Map<String, dynamic>>(response, (json) => json);
+      final fetched = envelope.items.map(QuestionModel.fromJson).toList();
+      if (!mounted) return;
+      setState(() {
+        _questions = fetched;
+        _serverSyncStatus =
+            'Server sync OK • page ${envelope.page}/${envelope.totalPages} • total ${envelope.total}';
+        _applyFilters();
+      });
+      await appCache.saveQuestions(fetched);
+    } on ApiRequestException catch (e) {
+      if (!mounted) return;
+      final errorCode = e.errorCode != null ? ' [${e.errorCode}]' : '';
+      setState(() {
+        _serverSyncStatus = 'Server sync failed$errorCode: ${e.message}';
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _serverSyncStatus = 'Server sync failed: $e';
+      });
+    }
   }
 
   Future<void> _syncToServer() async {
@@ -349,6 +362,24 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
       ),
       body: Column(
         children: [
+          if (_serverSyncStatus != null)
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: const Color(0xFFEFF6FF),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: const Color(0xFFBFDBFE)),
+              ),
+              child: Text(
+                _serverSyncStatus!,
+                style: const TextStyle(
+                  color: Color(0xFF1D4ED8),
+                  fontSize: 12,
+                ),
+              ),
+            ),
           const SizedBox(height: 16),
 
           // Stats Card
