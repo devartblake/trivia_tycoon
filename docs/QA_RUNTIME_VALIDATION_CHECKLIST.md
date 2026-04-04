@@ -89,7 +89,7 @@ Reference plan: `docs/frontend_priority_execution_plan_2026-04-04.md`
 
 ### Must-complete tonight (P0)
 - [x] Admin auth/role gate hardening verified in UI (401/403 states).
-- [~] Admin API pagination/error-envelope mapping verified against contract (completed on Admin Users + Question Bank + Admin User Detail + activity-log flows; remaining admin lists pending).
+- [~] Admin API pagination/error-envelope mapping verified against contract (completed on Admin Users + Question Bank + Admin User Detail + activity-log + dataset-status flows; remaining minor admin surfaces pending).
 - [x] Admin smoke-check runbook executed and outcome documented (live run currently blocked in this environment: `curl: CONNECT tunnel failed, response 403`).
 
 ### Stretch (P1)
