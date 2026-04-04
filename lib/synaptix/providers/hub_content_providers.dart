@@ -8,6 +8,8 @@ class FeaturedMatchData {
   final String category;
   final IconData icon;
   final Color iconColor;
+  final bool isFallback;
+  final String? fallbackReason;
 
   const FeaturedMatchData({
     required this.title,
@@ -15,34 +17,57 @@ class FeaturedMatchData {
     required this.category,
     required this.icon,
     required this.iconColor,
+    this.isFallback = false,
+    this.fallbackReason,
   });
 }
 
 /// Data-driven featured match provider for Synaptix Hub.
 final featuredMatchProvider = Provider<FeaturedMatchData>((ref) {
-  final profileService = ref.watch(playerProfileServiceProvider);
-  final profile = profileService.getProfile();
-  final categories =
-      (profile['preferredCategories'] as List<dynamic>?)?.cast<String>() ??
-          const <String>[];
+  FeaturedMatchData fallback({String? reason}) => FeaturedMatchData(
+        title: 'Global Science Showdown',
+        difficulty: 'Medium',
+        category: 'Science',
+        icon: Icons.science_rounded,
+        iconColor: Colors.purpleAccent,
+        isFallback: true,
+        fallbackReason: reason,
+      );
 
-  final category = categories.isNotEmpty ? categories.first : 'Science';
-  final title = 'Global $category Showdown';
-  final lower = category.toLowerCase();
+  try {
+    final profileService = ref.watch(playerProfileServiceProvider);
+    final profile = profileService.getProfile();
+    final categories =
+        (profile['preferredCategories'] as List<dynamic>?)?.cast<String>() ??
+            const <String>[];
 
-  final (IconData, Color) visual = switch (lower) {
-    final c when c.contains('science') => (Icons.science_rounded, Colors.purpleAccent),
-    final c when c.contains('history') => (Icons.history_edu_rounded, Colors.amberAccent),
-    final c when c.contains('geography') => (Icons.public_rounded, Colors.lightBlueAccent),
-    final c when c.contains('math') => (Icons.calculate_rounded, Colors.greenAccent),
-    _ => (Icons.public_rounded, Colors.purpleAccent),
-  };
+    final selectedCategory = categories
+        .map((c) => c.trim())
+        .firstWhere((c) => c.isNotEmpty, orElse: () => '');
+    if (selectedCategory.isEmpty) {
+      return fallback(reason: 'no_preferred_categories');
+    }
 
-  return FeaturedMatchData(
-    title: title,
-    difficulty: 'Medium',
-    category: category,
-    icon: visual.$1,
-    iconColor: visual.$2,
-  );
+    final category = selectedCategory;
+    final title = 'Global $category Showdown';
+    final lower = category.toLowerCase();
+
+    final (IconData, Color) visual = switch (lower) {
+      final c when c.contains('science') => (Icons.science_rounded, Colors.purpleAccent),
+      final c when c.contains('history') => (Icons.history_edu_rounded, Colors.amberAccent),
+      final c when c.contains('geography') => (Icons.public_rounded, Colors.lightBlueAccent),
+      final c when c.contains('math') => (Icons.calculate_rounded, Colors.greenAccent),
+      _ => (Icons.public_rounded, Colors.purpleAccent),
+    };
+
+    return FeaturedMatchData(
+      title: title,
+      difficulty: 'Medium',
+      category: category,
+      icon: visual.$1,
+      iconColor: visual.$2,
+    );
+  } catch (_) {
+    return fallback(reason: 'provider_exception');
+  }
 });

@@ -117,7 +117,9 @@ class HubFeaturedMatch extends ConsumerWidget {
                     'synaptix_mode': mode.name,
                     'entry_point': 'featured_card',
                     'audience_segment': mode.name,
-                    'match_title': match.title,
+                    'fallback_used': featured.isFallback,
+                    if (featured.fallbackReason != null)
+                      'fallback_reason': featured.fallbackReason,
                   },
                 );
                 context.push('/quiz/start/classic');
@@ -159,6 +161,18 @@ class HubFeaturedMatch extends ConsumerWidget {
               ),
             ),
           ),
+          if (featured.isFallback)
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Text(
+                'Using recommended default matchup.',
+                style: TextStyle(
+                  color: featured.iconColor.withValues(alpha: 0.9),
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
         ],
       ),
     );

@@ -95,7 +95,7 @@ Reference plan: `docs/frontend_priority_execution_plan_2026-04-04.md`
 ### Stretch (P1)
 - [~] Audio studio resilience cleanup verified (invalid asset behavior + retry suppression cache added; UX messaging polish pending).
 - [ ] `/users/me` profile-sync regression check run.
-- [ ] Hub featured-match fallback policy implemented and validated.
+- [~] Hub featured-match fallback policy implemented (provider fallback + UI hint + analytics flag); validation test pending in Flutter-enabled environment.
 
 
 ### Session status update (2026-04-04)
