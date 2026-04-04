@@ -201,6 +201,7 @@ flutter:
    - assets/questions/world_literature/
    - assets/splash_previews/
    - assets/songs/
+   - assets/sounds/
    - assets/zip/
 
   # An image asset can refer to one or more resolution-specific "variants", see
