@@ -209,6 +209,7 @@ class ProfileSyncService {
 
   Future<Map<String, dynamic>?> _trySync(Map<String, dynamic> payload) async {
     const endpoints = <String>[
+      '/users/me',
       '/profile',
       '/user/profile',
       '/auth/profile',
