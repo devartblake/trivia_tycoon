@@ -47,7 +47,7 @@ void main() {
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) {
-          expect(options.path, '/profile');
+          expect(options.path, '/users/me');
           expect(options.headers['Authorization'], 'Bearer token-abc');
           handler.resolve(
             Response(
@@ -139,7 +139,7 @@ void main() {
       InterceptorsWrapper(
         onRequest: (options, handler) {
           attemptCount++;
-          if (attemptCount <= 3) {
+          if (attemptCount <= 4) {
             handler.reject(
               DioException(
                 requestOptions: options,
@@ -402,7 +402,7 @@ void main() {
     await service.syncProfileUpdate(displayName: 'Name', username: 'name');
     final secondCount = requestCount;
 
-    expect(firstCount, 3); // /profile, /user/profile, /auth/profile
+    expect(firstCount, 4); // /users/me, /profile, /user/profile, /auth/profile
     expect(secondCount, firstCount); // skipped due backoff
     expect(events, contains('profile_sync_endpoint_unavailable'));
   });
