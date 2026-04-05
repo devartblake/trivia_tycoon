@@ -430,6 +430,7 @@ class PlayerProfileService {
           'avatar': null,
           'userId': null, // ← UPDATED: Include in profile
           'synaptixMode': null,
+          'preferredCategories': <String>[],
         };
       }
 
@@ -448,6 +449,8 @@ class PlayerProfileService {
         'avatar': box.get(_avatarKey),
         'userId': box.get(_userIdKey),
         'synaptixMode': box.get(_synaptixModeKey),
+        'preferredCategories':
+            List<String>.from(box.get(_userProfileKey, defaultValue: <String>[])),
       };
     } catch (e) {
       LogManager.debug('[PlayerProfile] Error getting profile: $e');
@@ -465,6 +468,7 @@ class PlayerProfileService {
         'avatar': null,
         'userId': null,
         'synaptixMode': null,
+        'preferredCategories': <String>[],
       };
     }
   }
