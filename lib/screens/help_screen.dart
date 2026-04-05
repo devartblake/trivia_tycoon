@@ -153,7 +153,7 @@ class HelpScreen extends StatelessWidget {
                 _buildContactOption(
                   Icons.email,
                   'Email Support',
-                  'support@triviatycoon.com',
+                  'support@synaptix.app',
                   const Color(0xFF10B981),
                       () => _launchEmail(),
                 ),
@@ -161,9 +161,9 @@ class HelpScreen extends StatelessWidget {
                 _buildContactOption(
                   Icons.language,
                   'Visit Website',
-                  'www.triviatycoon.com',
+                  'www.synaptix.app',
                   const Color(0xFF3B82F6),
-                      () => _launchURL('https://www.triviatycoon.com'),
+                      () => _launchURL('https://www.synaptix.app'),
                 ),
                 const SizedBox(height: 16),
                 _buildContactOption(
@@ -171,7 +171,7 @@ class HelpScreen extends StatelessWidget {
                   'Community Forum',
                   'Join the discussion',
                   const Color(0xFF6366F1),
-                      () => _launchURL('https://forum.triviatycoon.com'),
+                      () => _launchURL('https://forum.synaptix.app'),
                 ),
               ],
             ),
@@ -542,7 +542,7 @@ class HelpScreen extends StatelessWidget {
   Future<void> _launchEmail() async {
     final Uri emailUri = Uri(
       scheme: 'mailto',
-      path: 'support@triviatycoon.com',
+      path: 'support@synaptix.app',
       query: 'subject=Support Request',
     );
     if (await canLaunchUrl(emailUri)) {
