@@ -45,7 +45,7 @@ Progress score model:
   - ✅ P0.2 Admin contract/error-envelope mapping verification (implemented for Admin Users, Question Bank, Admin User Detail, activity-log flows, question dataset-status ingestion, and admin config sync handling; only tiny legacy surfaces may remain).
   - ✅ P0.3 Real backend smoke run attempted; outcome logged as blocker (network/backend access unavailable in this environment).
 
-Current weighted completion estimate: **99%** (P0 tracks completed with blocker logged; P1.1 mostly done; P1.2 troubleshooting complete; P1.3 fallback policy implemented with test follow-up pending).
+Current weighted completion estimate: **99%** (P0 tracks completed with blocker logged; P1.1 mostly done; P1.2 troubleshooting complete; P1.3 fallback policy implemented and profile preferred-category feed fixed, with test follow-up pending).
 
 ---
 
@@ -112,7 +112,7 @@ Tasks:
 
 ### P1.3 Hub featured-match production data fallback policy (10%)
 Tasks:
-1. [x] Define UI fallback if provider returns empty/error (provider-level fallback + UI hint implemented).
+1. [x] Define UI fallback if provider returns empty/error (provider-level fallback + UI hint implemented, and profile now exposes preferred categories for normal-path selection).
 2. [~] Add one test case for fallback rendering (pending Flutter-enabled environment).
 
 ---

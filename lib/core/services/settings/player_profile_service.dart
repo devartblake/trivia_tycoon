@@ -17,7 +17,7 @@ class PlayerProfileService {
   static const _avatarKey = 'avatar';
   static const _sessionDataKey = 'currentSession';
   static const _lastActiveKey = 'lastActive';
-  static const _userProfileKey = 'preferredCategories';
+  static const _preferredCategoriesKey = 'preferredCategories';
 
   // Synaptix Phase 2: additive mode/preference keys
   static const _synaptixModeKey = 'synaptixMode';
@@ -38,12 +38,12 @@ class PlayerProfileService {
   /// Saves the preferred categories
   Future<void> savePreferredCategories(List<String> categories) async {
     final box = await _getBox();
-    await box.put(_userProfileKey, categories);
+    await box.put(_preferredCategoriesKey, categories);
   }
 
   Future<List<String>> getPreferredCategories() async {
     final box = await _getBox();
-    final categories = box.get(_userProfileKey, defaultValue: <String>[]);
+    final categories = box.get(_preferredCategoriesKey, defaultValue: <String>[]);
     return List<String>.from(categories);
   }
 
@@ -230,12 +230,14 @@ class PlayerProfileService {
     await box.delete(_usernameKey);
     await box.delete(_userIdKey); // ← UPDATED: Also clear user ID
     await box.delete(_userRoleKey);
+    await box.delete(_userRolesKey);
     await box.delete(_isPremiumKey);
     await box.delete(_countryKey);
     await box.delete(_ageGroupKey);
     await box.delete(_avatarKey);
     await box.delete(_sessionDataKey);
     await box.delete(_lastActiveKey);
+    await box.delete(_preferredCategoriesKey);
     await box.delete(_synaptixModeKey);
     await box.delete(_preferredHomeSurfaceKey);
     await box.delete(_reducedMotionKey);
@@ -381,7 +383,8 @@ class PlayerProfileService {
       final lastActive = box.get(_lastActiveKey);
 
       return {
-        'has_profile_data': getPlayerName() != 'Player',
+        'has_profile_data':
+            box.get(_playerNameKey, defaultValue: 'Player') != 'Player',
         'has_session_data': sessionData != null,
         'last_active': lastActive,
         'total_profile_keys': box.keys.where((key) => [
@@ -430,6 +433,7 @@ class PlayerProfileService {
           'avatar': null,
           'userId': null, // ← UPDATED: Include in profile
           'synaptixMode': null,
+          'preferredCategories': <String>[],
         };
       }
 
@@ -448,6 +452,9 @@ class PlayerProfileService {
         'avatar': box.get(_avatarKey),
         'userId': box.get(_userIdKey),
         'synaptixMode': box.get(_synaptixModeKey),
+        'preferredCategories':
+            List<String>.from(
+                box.get(_preferredCategoriesKey, defaultValue: <String>[])),
       };
     } catch (e) {
       LogManager.debug('[PlayerProfile] Error getting profile: $e');
@@ -465,6 +472,7 @@ class PlayerProfileService {
         'avatar': null,
         'userId': null,
         'synaptixMode': null,
+        'preferredCategories': <String>[],
       };
     }
   }
