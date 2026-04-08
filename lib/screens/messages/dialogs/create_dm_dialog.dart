@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/social/friend_discovery_service.dart';
-import '../../../game/providers/message_providers.dart';
+import '../../../game/providers/message_providers.dart'; // includes currentUserIdProvider
 import '../../profile/dialogs/add_friend_dialog.dart';
 import '../message_detail_screen.dart';
 
@@ -10,11 +10,7 @@ final friendDiscoveryServiceProvider = Provider<FriendDiscoveryService>((ref) {
   return FriendDiscoveryService();
 });
 
-// Provider for current user ID (you can replace this with your auth provider)
-final currentUserIdProvider = Provider<String>((ref) {
-  // TODO: Replace with actual auth provider
-  return 'current_user_id';
-});
+// currentUserIdProvider is defined in lib/game/providers/message_providers.dart
 
 class CreateDMDialog extends ConsumerStatefulWidget {
   const CreateDMDialog({super.key});

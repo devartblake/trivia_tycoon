@@ -5,6 +5,7 @@ import '../providers/quiz_results_provider.dart';
 import '../providers/xp_provider.dart';
 import '../controllers/achievement_controller.dart';
 import '../services/profile_service.dart';
+import '../providers/profile_service_provider.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 // Educational Statistics Model

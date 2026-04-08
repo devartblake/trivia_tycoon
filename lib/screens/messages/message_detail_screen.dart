@@ -31,8 +31,7 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
-  // TODO: Replace with actual user ID from auth service
-  final String _currentUserId = 'current_user_id';
+  String get _currentUserId => ref.read(currentUserIdProvider);
 
   // Typing indicator state
   bool _isOtherUserTyping = false;

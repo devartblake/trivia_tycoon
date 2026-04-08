@@ -23,8 +23,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
   final String _searchQuery = '';
   int _messageRequests = 5;
 
-  // TODO: Replace with actual user ID from auth service
-  final String _currentUserId = 'current_user_id';
+  String get _currentUserId => ref.read(currentUserIdProvider);
 
   @override
   void initState() {
