@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hive/hive.dart';
 import '../../../core/services/social/friend_discovery_service.dart';
 import '../../../game/providers/message_providers.dart';
+import '../../messages/dialogs/create_dm_dialog.dart' show friendDiscoveryServiceProvider;
 
 class AddFriendByUsernameScreen extends ConsumerStatefulWidget {
   const AddFriendByUsernameScreen({super.key});
