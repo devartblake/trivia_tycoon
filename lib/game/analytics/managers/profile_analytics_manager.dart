@@ -162,8 +162,7 @@ class ProfileAnalyticsManager extends AsyncNotifier<List<ProfileAnalyticsEvent>>
         source: 'ProfileAnalyticsManager',
       );
 
-      // TODO: Integrate with analytics service when ServiceManager is properly initialized
-      // For now, keep the events queued for future processing
+      // Events remain queued; wire up analytics service here when backend is available
 
     } catch (e) {
       LogManager.logProfileError('pending_analytics_retry', e.toString());

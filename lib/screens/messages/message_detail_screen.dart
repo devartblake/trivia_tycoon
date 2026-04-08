@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:trivia_tycoon/screens/messages/widgets/message_reactions_widget.dart';
+import '../../core/services/storage/message_storage_service.dart';
 import '../../game/models/message_models.dart';
 import '../../game/providers/message_providers.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
@@ -32,6 +36,14 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
   final ScrollController _scrollController = ScrollController();
 
   String get _currentUserId => ref.read(currentUserIdProvider);
+  String get _currentUsername {
+    if (Hive.isBoxOpen('settings')) {
+      final box = Hive.box('settings');
+      final name = box.get('username') as String? ?? box.get('playerName') as String?;
+      if (name != null && name.isNotEmpty) return name;
+    }
+    return 'Guest';
+  }
 
   // Typing indicator state
   bool _isOtherUserTyping = false;
@@ -50,9 +62,7 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
     // Listen for text changes to detect typing
     _messageController.addListener(_onTextChanged);
 
-    // TODO: Listen for other user's typing status
-    // You'll need to implement this in your repository
-    // _listenForTypingStatus();
+    // Typing status is observed via conversationTypingStatusProvider in build()
   }
 
   void _onTextChanged() {
@@ -99,17 +109,14 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
   }
 
   void _broadcastTypingStatus(bool isTyping) {
-    // TODO: Implement this in your repository
-    // This should send typing status to the backend/other users
-    LogManager.debug('Broadcasting typing status: $isTyping for conversation: ${widget
-        .conversationId}');
-
-    // Example implementation:
-    // ref.read(messageRepositoryProvider).sendTypingStatus(
-    //   conversationId: widget.conversationId,
-    //   userId: _currentUserId,
-    //   isTyping: isTyping,
-    // );
+    sendTypingStatus(
+      ref,
+      conversationId: widget.conversationId,
+      userId: _currentUserId,
+      userName: _currentUsername,
+      isTyping: isTyping,
+    );
+    LogManager.debug('[Chat] Typing broadcast: $isTyping for ${widget.conversationId}');
   }
 
   @override
@@ -128,11 +135,11 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
     final messages = ref.watch(
         conversationMessagesProvider(widget.conversationId));
 
-    // TODO: Watch typing status from provider
-    // final typingStatus = ref.watch(conversationTypingStatusProvider(widget.conversationId));
-    // _isOtherUserTyping = typingStatus.any((status) =>
-    //   status.userId != _currentUserId && status.isTyping
-    // );
+    final typingStatus = ref.watch(conversationTypingStatusProvider(widget.conversationId));
+    _isOtherUserTyping = typingStatus.maybeWhen(
+      data: (statuses) => statuses.any((s) => s.userId != _currentUserId && s.isTyping),
+      orElse: () => false,
+    );
 
     return Scaffold(
       backgroundColor: const Color(0xFF36393F),
@@ -759,8 +766,11 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
               runSpacing: 12,
               children: reactions.map((emoji) => GestureDetector(
                 onTap: () {
-                  // TODO: Update message reactions in repository
-                  LogManager.debug('Add reaction $emoji to message ${message.id}');
+                  final storage = ref.read(messageStorageServiceProvider);
+                  final updated = [...message.reactions];
+                  if (!updated.contains(emoji)) updated.add(emoji);
+                  storage.updateMessage(message.id, message.copyWith(reactions: updated));
+                  LogManager.debug('[Chat] Reaction $emoji added to ${message.id}');
                   Navigator.pop(context);
                 },
                 child: Text(emoji, style: const TextStyle(fontSize: 32)),
@@ -769,6 +779,52 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
           ),
         );
       },
+    );
+  }
+
+  void _showAttachmentOptions() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color(0xFF2F3136),
+      builder: (ctx) => SafeArea(
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.photo_library, color: Colors.white70),
+              title: const Text('Photo & Video Library', style: TextStyle(color: Colors.white)),
+              onTap: () async {
+                Navigator.pop(ctx);
+                final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
+                if (picked != null) {
+                  LogManager.debug('[Chat] Attachment selected: ${picked.path}');
+                }
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.camera_alt, color: Colors.white70),
+              title: const Text('Camera', style: TextStyle(color: Colors.white)),
+              onTap: () async {
+                Navigator.pop(ctx);
+                final picked = await ImagePicker().pickImage(source: ImageSource.camera);
+                if (picked != null) {
+                  LogManager.debug('[Chat] Camera photo: ${picked.path}');
+                }
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.attach_file, color: Colors.white70),
+              title: const Text('File', style: TextStyle(color: Colors.white)),
+              onTap: () async {
+                Navigator.pop(ctx);
+                final result = await FilePicker.platform.pickFiles();
+                if (result != null && result.files.isNotEmpty) {
+                  LogManager.debug('[Chat] File selected: ${result.files.first.name}');
+                }
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -834,9 +890,7 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
           children: [
             IconButton(
               icon: const Icon(Icons.add, color: Colors.white70),
-              onPressed: () {
-                // TODO: Implement attachment picker
-              },
+              onPressed: _showAttachmentOptions,
             ),
             Expanded(
               child: Container(

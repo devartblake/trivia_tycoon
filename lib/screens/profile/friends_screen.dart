@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
 
 import 'dialogs/add_friend_dialog.dart';
 import '../../core/services/presence/rich_presence_service.dart';
+import '../../core/services/social/friend_discovery_service.dart';
 import '../../game/models/user_presence_models.dart';
+import '../../game/providers/message_providers.dart';
 import '../../ui_components/presence/presence_status_widget.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import '../messages/dialogs/create_dm_dialog.dart' show friendDiscoveryServiceProvider;
+import '../messages/message_detail_screen.dart';
 
 class FriendsScreen extends ConsumerStatefulWidget {
   const FriendsScreen({super.key});
@@ -26,10 +30,22 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
   // ✅ ADD THIS - Presence service
   final _presenceService = RichPresenceService();
 
-  // ✅ ADD THIS - Friend data (replace with your actual friend service)
+  // Friend data backed by FriendDiscoveryService
   List<Friend> _friends = [];
   List<Friend> _onlineFriends = [];
+  List<FriendRequest> _pendingRequests = [];
+  List<FriendSuggestion> _suggestions = [];
   bool _isLoadingFriends = true;
+
+  String get _currentUserId => ref.read(currentUserIdProvider);
+  String get _currentUsername {
+    if (Hive.isBoxOpen('settings')) {
+      final box = Hive.box('settings');
+      final name = box.get('username') as String? ?? box.get('playerName') as String?;
+      if (name != null && name.isNotEmpty) return name;
+    }
+    return 'Guest';
+  }
 
   @override
   void initState() {
@@ -61,52 +77,50 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
     super.dispose();
   }
 
-  // ✅ ADD THIS - Initialize friends and subscribe to presence
   Future<void> _initializeFriends() async {
-    // Load friends from your friend service
-    await _loadFriends();
-
-    // Subscribe to friend presence updates
+    await Future.wait([
+      _loadFriends(),
+      _loadRequests(),
+      _loadSuggestions(),
+    ]);
     _subscribeToFriends();
-
     setState(() {
       _isLoadingFriends = false;
     });
   }
 
-  // ✅ ADD THIS - Load friends (replace with your actual friend service)
   Future<void> _loadFriends() async {
-    // TODO: Replace with actual friend service call
-    // Example: final friendsData = await ref.read(friendServiceProvider).getFriends();
-
-    // Mock data for now - replace with real data
-    _friends = [
-      Friend(
-        id: 'user_1',
-        name: 'David Wilson',
-        username: '@davidw',
-        avatar: 'assets/images/avatars/avatar-2.png',
-      ),
-      Friend(
-        id: 'user_2',
-        name: 'Sarah Johnson',
-        username: '@sarahj',
-        avatar: 'assets/images/avatars/avatar-3.png',
-      ),
-      Friend(
-        id: 'user_3',
-        name: 'Mike Chen',
-        username: '@mikec',
-        avatar: 'assets/images/avatars/avatar-4.png',
-      ),
-      Friend(
-        id: 'user_4',
-        name: 'Emma Roberts',
-        username: '@emmar',
-        avatar: 'assets/images/avatars/avatar-5.png',
-      ),
-    ];
+    final friendService = ref.read(friendDiscoveryServiceProvider);
+    final profiles = friendService.getFriends(_currentUserId);
+    _friends = profiles.map(_friendFromProfile).toList();
   }
+
+  Future<void> _loadRequests() async {
+    final friendService = ref.read(friendDiscoveryServiceProvider);
+    _pendingRequests = friendService.getPendingRequests(_currentUserId);
+  }
+
+  Future<void> _loadSuggestions() async {
+    final friendService = ref.read(friendDiscoveryServiceProvider);
+    _suggestions = friendService.getFriendSuggestions(_currentUserId);
+  }
+
+  Friend _friendFromProfile(UserProfile profile) => Friend(
+    id: profile.id,
+    name: profile.displayName,
+    username: profile.username ?? profile.displayName,
+    avatar: profile.avatar,
+  );
+
+  Friend _friendFromRequest(FriendRequest request) => Friend(
+    id: request.senderId,
+    name: request.senderName,
+    username: request.senderName,
+    avatar: request.senderAvatar,
+  );
+
+  Friend _friendFromSuggestion(FriendSuggestion suggestion) =>
+      _friendFromProfile(suggestion.user);
 
   // ✅ ADD THIS - Subscribe to friends' presence
   void _subscribeToFriends() {
@@ -750,11 +764,9 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
   List<Friend> _getFriendsForTab() {
     switch (_selectedTab) {
       case 'Requests':
-      // TODO: Return actual friend requests
-        return [];
+        return _pendingRequests.map(_friendFromRequest).toList();
       case 'Suggested':
-      // TODO: Return suggested friends
-        return [];
+        return _suggestions.map(_friendFromSuggestion).toList();
       default:
         return _friends;
     }
@@ -821,29 +833,68 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
     );
   }
 
-  void _acceptFriendRequest(Friend friend) {
-    _showSuccessMessage('${friend.name} is now your friend!');
-    // TODO: Call friend service to accept request
+  Future<void> _acceptFriendRequest(Friend friend) async {
+    final request = _pendingRequests.firstWhere(
+      (r) => r.senderId == friend.id,
+      orElse: () => FriendRequest(id: '', senderId: '', senderName: '', recipientId: '', createdAt: DateTime.now()),
+    );
+    if (request.id.isEmpty) return;
+    final friendService = ref.read(friendDiscoveryServiceProvider);
+    final success = await friendService.acceptFriendRequest(request.id, _currentUserId);
+    if (success && mounted) {
+      await Future.wait([_loadFriends(), _loadRequests()]);
+      setState(() {});
+      _showSuccessMessage('${friend.name} is now your friend!');
+    }
   }
 
-  void _declineFriendRequest(Friend friend) {
-    _showSuccessMessage('Friend request declined');
-    // TODO: Call friend service to decline request
+  Future<void> _declineFriendRequest(Friend friend) async {
+    final request = _pendingRequests.firstWhere(
+      (r) => r.senderId == friend.id,
+      orElse: () => FriendRequest(id: '', senderId: '', senderName: '', recipientId: '', createdAt: DateTime.now()),
+    );
+    if (request.id.isEmpty) return;
+    final friendService = ref.read(friendDiscoveryServiceProvider);
+    final success = await friendService.declineFriendRequest(request.id, _currentUserId);
+    if (success && mounted) {
+      await _loadRequests();
+      setState(() {});
+      _showSuccessMessage('Friend request declined');
+    }
   }
 
-  void _sendFriendRequest(Friend friend) {
-    _showSuccessMessage('Friend request sent to ${friend.name}');
-    // TODO: Call friend service to send request
+  Future<void> _sendFriendRequest(Friend friend) async {
+    final friendService = ref.read(friendDiscoveryServiceProvider);
+    final success = await friendService.sendFriendRequest(
+      senderId: _currentUserId,
+      senderName: _currentUsername,
+      recipientId: friend.id,
+    );
+    if (mounted) {
+      _showSuccessMessage(success
+          ? 'Friend request sent to ${friend.name}'
+          : 'Could not send request to ${friend.name}');
+    }
   }
 
   void _handleFriendAction(Friend friend, String action) {
     switch (action) {
       case 'message':
-        _showSuccessMessage('Opening chat with ${friend.name}');
-        // TODO: Navigate to chat
+        final conversation = findOrCreateDirectConversation(ref, _currentUserId, friend.id);
+        if (conversation != null) {
+          final presence = _presenceService.getUserPresence(friend.id);
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => MessageDetailScreen(
+              conversationId: conversation.id,
+              contactName: friend.name,
+              contactAvatar: friend.avatar,
+              isOnline: presence?.status == PresenceStatus.online || presence?.status == PresenceStatus.inGame,
+              currentActivity: presence != null ? _presenceService.getFormattedPresence(friend.id) : null,
+            ),
+          ));
+        }
         break;
       case 'challenge':
-      // ✅ Use _joinMatch method
         _joinMatch(
           'match_${DateTime.now().millisecondsSinceEpoch}',
           opponentId: friend.id,
@@ -852,7 +903,6 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
         _showSuccessMessage('Challenge sent to ${friend.name}');
         break;
       case 'quiz':
-      // ✅ Use _startQuiz method
         _startQuiz(difficulty: 'Medium', category: 'General');
         _showSuccessMessage('Starting quiz with ${friend.name}');
         break;
@@ -860,9 +910,18 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
         _showFriendProfile(friend);
         break;
       case 'remove':
-        _showSuccessMessage('${friend.name} removed from friends');
-        // TODO: Call friend service to remove friend
+        _removeFriend(friend);
         break;
+    }
+  }
+
+  Future<void> _removeFriend(Friend friend) async {
+    final friendService = ref.read(friendDiscoveryServiceProvider);
+    final success = await friendService.removeFriend(_currentUserId, friend.id);
+    if (success && mounted) {
+      await _loadFriends();
+      setState(() {});
+      _showSuccessMessage('${friend.name} removed from friends');
     }
   }
 

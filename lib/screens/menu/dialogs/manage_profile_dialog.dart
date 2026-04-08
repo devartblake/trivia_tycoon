@@ -191,7 +191,7 @@ class ProfileManagementTile extends ConsumerWidget {
             onSelected: (value) async {
               switch (value) {
                 case 'edit':
-                // TODO: Implement edit profile functionality
+                  await _editProfile(context, ref, profile);
                   break;
                 case 'delete':
                   await _deleteProfile(context, ref, profile, isActive);
@@ -225,6 +225,53 @@ class ProfileManagementTile extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _editProfile(BuildContext context, WidgetRef ref, ProfileData profile) async {
+    final nameController = TextEditingController(text: profile.name);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: const Color(0xFF1A1B3D),
+        title: const Text('Edit Profile', style: TextStyle(color: Colors.white)),
+        content: TextField(
+          controller: nameController,
+          style: const TextStyle(color: Colors.white),
+          autofocus: true,
+          decoration: const InputDecoration(
+            labelText: 'Name',
+            labelStyle: TextStyle(color: Colors.white70),
+            enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white30)),
+            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF6366F1))),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancel', style: TextStyle(color: Colors.white70)),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF6366F1)),
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+    final newName = nameController.text.trim();
+    nameController.dispose();
+    if (confirmed != true || newName.isEmpty) return;
+    final service = ref.read(multiProfileServiceProvider);
+    final success = await service.updateProfile(profile.id, name: newName);
+    if (success && context.mounted) {
+      ref.invalidate(profilesProvider);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Profile updated to "$newName"'),
+          backgroundColor: const Color(0xFF6366F1),
+        ),
+      );
+    }
   }
 
   Future<void> _switchProfile(BuildContext context, WidgetRef ref, ProfileData profile) async {
