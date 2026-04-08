@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import '../../../core/bootstrap/app_init.dart';
+import '../../../core/networking/ws_protocol.dart';
 import '../../utils/input_validator.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
@@ -196,19 +198,20 @@ class TypingIndicatorService extends ChangeNotifier {
   // Private methods
 
   Future<void> _broadcastTypingStatus(String conversationId, bool isTyping) async {
-    // TODO: Implement network broadcast
-    // This would typically send typing status to server or other users
-    LogManager.debug('Broadcasting typing status: $conversationId - $isTyping');
+    final wsClient = AppInit.wsClient;
+    if (wsClient == null || !AppInit.isWebSocketConnected) {
+      LogManager.debug('[Typing] WebSocket unavailable; typing broadcast deferred: $conversationId');
+      return;
+    }
 
-    // Example implementation would be:
-    // await _chatService.sendTypingStatus(conversationId, isTyping);
-    // or
-    // _websocketService.emit('typing', {
-    //   'conversationId': conversationId,
-    //   'isTyping': isTyping,
-    //   'userId': currentUserId,
-    //   'userName': currentUserName,
-    // });
+    wsClient.send(WsEnvelope(
+      op: 'chat.typing',
+      ts: DateTime.now().millisecondsSinceEpoch,
+      data: {
+        'conversationId': conversationId,
+        'isTyping': isTyping,
+      },
+    ));
   }
 }
 
