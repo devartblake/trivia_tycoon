@@ -19,6 +19,9 @@ import 'sheets/edit_profile_bottom_sheet.dart';
 import 'widgets/game_stats_widget.dart';
 import 'widgets/profile_header.dart';
 import 'mutual_friends_screen.dart';
+import '../../../arcade/leaderboards/local_arcade_leaderboard_screen.dart';
+import '../../../arcade/missions/arcade_missions_screen.dart';
+import '../../../arcade/ui/screens/daily_bonus_screen.dart';
 
 enum EnhancedProfileAction {
   message,
@@ -1116,23 +1119,20 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
   }
 
   void _navigateToArcadeScores() {
-    // TODO: Navigate to arcade scores screen
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Navigating to arcade scores...')),
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const LocalArcadeLeaderboardScreen()),
     );
   }
 
   void _navigateToMissions() {
-    // TODO: Navigate to missions screen
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Navigating to missions...')),
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const ArcadeMissionsScreen()),
     );
   }
 
   void _claimDailyBonus() {
-    // TODO: Implement daily bonus claim
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Daily bonus claimed!')),
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const DailyBonusScreen()),
     );
   }
 

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:just_audio/just_audio.dart' as just_audio;
 import '../../core/services/settings/purchase_settings_service.dart';
 import '../../audio/models/songs.dart';
+import '../../core/manager/log_manager.dart';
 import '../../game/providers/riverpod_providers.dart';
 
 enum MusicFilter { all, purchased, exclusive }
@@ -27,6 +29,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
 
   MusicFilter _selectedFilter = MusicFilter.all;
   List<String> _purchasedSongs = [];
+  final just_audio.AudioPlayer _audioPlayer = just_audio.AudioPlayer();
+  Song? _currentSong;
 
   @override
   void initState() {
@@ -68,11 +72,39 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
 
   @override
   void dispose() {
+    _audioPlayer.dispose();
     _animationController?.dispose();
     for (final controller in _itemControllers) {
       controller.dispose();
     }
     super.dispose();
+  }
+
+  Future<void> _playSong(Song song) async {
+    try {
+      if (_currentSong == song) {
+        // Toggle play/pause for the current song
+        if (_audioPlayer.playing) {
+          await _audioPlayer.pause();
+        } else {
+          await _audioPlayer.play();
+        }
+        setState(() {});
+        return;
+      }
+      await _audioPlayer.stop();
+      await _audioPlayer.setAsset('assets/songs/${song.filename}');
+      await _audioPlayer.play();
+      setState(() => _currentSong = song);
+      LogManager.debug('[Music] Now playing: ${song.name}');
+    } catch (e) {
+      LogManager.debug('[Music] Playback error for ${song.filename}: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not play ${song.name}')),
+        );
+      }
+    }
   }
 
   Future<void> _loadPurchasedSongs() async {
@@ -586,17 +618,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
             ),
           ),
         ),
-        onTap: isPurchased
-            ? () {
-          // TODO: Implement playback
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Playing ${song.name}...'),
-              duration: const Duration(seconds: 2),
-            ),
-          );
-        }
-            : null,
+        onTap: isPurchased ? () => _playSong(song) : null,
       ),
     );
   }

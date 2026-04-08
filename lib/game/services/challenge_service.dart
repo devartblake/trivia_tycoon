@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/challenge_models.dart';
 
-/// Service for managing challenges
-/// TODO: Replace with actual API calls or repository pattern
+/// Service for managing challenges.
+/// Currently uses in-memory mock data; replace with API/repository calls when backend is ready.
 class ChallengeService {
   // Cache to avoid rebuilding data on every call
   static final Map<ChallengeType, ChallengeBundle> _cache = {};
@@ -139,8 +139,7 @@ class ChallengeService {
     ];
   }
 
-  /// Update challenge progress
-  /// TODO: Replace with actual API call
+  /// Update challenge progress (mocked; replace with API call when backend is ready)
   static Future<Challenge> updateProgress(Challenge challenge, double newProgress) async {
     await Future.delayed(const Duration(milliseconds: 300)); // Simulate API call
     clearCache(); // Invalidate cache when data changes

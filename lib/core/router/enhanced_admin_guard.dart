@@ -214,8 +214,8 @@ class _AdminAccessPromptState extends ConsumerState<_AdminAccessPrompt> {
       ref.read(adminNavigationAttemptsProvider.notifier).state = 0;
       ref.read(lockIconClicksProvider.notifier).state = 0;
 
-      // TODO: Update admin provider state
-      // ref.read(adminAccessProvider.notifier).grantTemporaryAccess();
+      // Persist admin mode and refresh provider state
+      await ref.read(adminStateProvider.notifier).enableAdminMode();
     } else {
       // User cancelled - don't reset counters, they can try again
       if (mounted) {
