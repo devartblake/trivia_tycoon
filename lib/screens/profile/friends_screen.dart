@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 
-import 'dialogs/add_friend_dialog.dart';
+import 'dialogs/add_friend_dialog.dart' hide FriendRequest;
 import '../../core/services/presence/rich_presence_service.dart';
 import '../../core/services/social/friend_discovery_service.dart';
 import '../../game/models/user_presence_models.dart';
