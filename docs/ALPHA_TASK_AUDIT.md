@@ -124,5 +124,30 @@ Progress update (2026-04-04 execution — complete):
   - `ArcadeMissionService` (progress, claim anti-abuse, mergeById/preferLocal policies,
     serialization, `ArcadeMissionCatalog` validation)
   - `QuickMathController` (scoring, streaks, bounds, math correctness, toResult)
-- Remaining coverage gaps: auth edge cases, widget tree tests, MemoryFlip/PatternSprint
-  controllers, presence services.
+
+**Remaining coverage gaps** (tracked in [`docs/REMAINING_TASKS.md`](REMAINING_TASKS.md)):
+
+| Gap | File(s) | Key methods to cover |
+|-----|---------|----------------------|
+| `MemoryFlipController` | `lib/arcade/games/memory_flip/memory_flip_controller.dart` | `flip()`, `start()`, `allMatched`, `toResult()` |
+| `PatternSprintController` | `lib/arcade/games/pattern_sprint/pattern_sprint_controller.dart` | `answer()`, streak multiplier, `toResult()`, pattern correctness |
+| `RichPresenceService` | `lib/core/services/presence/rich_presence_service.dart` | `initialize()`, `updateCurrentUserPresence()`, `setGameActivity()`, `canUserJoinGame()`, `watchUserPresence()` |
+| `TypingIndicatorService` | `lib/core/services/presence/typing_indicator_service.dart` | `startTyping()`, `stopTyping()`, `handleTextInput()`, `handleMessageSent()` |
+| Auth edge cases | `lib/core/services/auth_service.dart` | Social login, concurrent 401 refresh, offline login, logout clears tokens |
+| Widget tree tests | Various screens | `ArcadeGameShell`, `DailyBonusScreen`, `ArcadeMissionsScreen` |
+| `ArcadeSessionService` | `lib/arcade/services/arcade_session_service.dart` | Session start/end, score aggregation |
+| `ArcadeRegistry` | `lib/arcade/services/arcade_registry.dart` | Game definition lookup, valid game IDs |
+| `LocalArcadeLeaderboardService` | `lib/arcade/leaderboards/local_arcade_leaderboard_service.dart` | Insert score, top-N retrieval, sort order |
+
+## 6) Outstanding work — full backlog
+
+See **[`docs/REMAINING_TASKS.md`](REMAINING_TASKS.md)** for the prioritized, detailed backlog
+covering all remaining work across:
+
+- Phase 2 crash recovery stubs (3 items + 2 UnimplementedErrors)
+- Phase 3 test coverage gaps (9 specific classes/scenarios)
+- Phase 4 dependency audit (outdated packages, unused transitive deps)
+- Sprint 1 auth integration verification
+- Sprint 2 networking layer (not started)
+- Synaptix runtime validation (device-blocked)
+- Backend Packet E (deferred)

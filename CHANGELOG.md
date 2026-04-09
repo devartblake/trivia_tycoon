@@ -8,6 +8,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added – Remaining Tasks tracking document (2026-04-09)
+
+- `docs/REMAINING_TASKS.md` — new canonical backlog file. Lists every remaining
+  task with file paths, specific methods, and priority. Covers: Phase 2 crash recovery
+  stubs, Phase 3 test coverage gaps (9 specific classes), Phase 4 dependency audit,
+  Sprint 1/2 networking, Synaptix runtime validation, Backend Packet E.
+
 ### Added – Phase 3: Test Coverage (2026-04-09)
 
 8 new test files covering previously untested subsystems. Test file count increased
