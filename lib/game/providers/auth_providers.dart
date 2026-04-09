@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/services/auth_error_messages.dart';
 import '../../core/services/storage/secure_storage.dart';
 import '../../ui_components/login/models/signup_data.dart';
-import '../providers/riverpod_providers.dart';
+import 'core_providers.dart';
+import 'game_providers.dart';
 import 'onboarding_providers.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
