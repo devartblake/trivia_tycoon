@@ -4,7 +4,7 @@ import '../repositories/question_repository_impl.dart';
 import '../services/question_hub_service.dart';
 import 'question_provider_contracts.dart';
 import '../services/quiz_category.dart';
-import 'riverpod_providers.dart';
+import 'core_providers.dart';
 
 final questionHubServiceProvider = Provider<QuestionHubService>((ref) {
   final serviceManager = ref.watch(serviceManagerProvider);

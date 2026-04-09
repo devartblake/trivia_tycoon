@@ -6,7 +6,7 @@ import '../../core/dto/game_event_dto.dart';
 import '../../core/dto/guardian_dto.dart';
 import '../../core/dto/territory_dto.dart';
 import '../../core/dto/vote_dto.dart';
-import 'riverpod_providers.dart';
+import 'core_providers.dart';
 
 // ── Hub instances ────────────────────────────────────────────────────────────
 
