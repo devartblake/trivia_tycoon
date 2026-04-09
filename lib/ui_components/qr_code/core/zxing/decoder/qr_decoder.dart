@@ -31,8 +31,11 @@ class QrDecoder {
     // Step 4: Read codewords from matrix (basic snake pattern)
     final codewords = _readCodewords(matrix);
 
-    // Step 5: Create DataBlock (no error correction decoding for now)
-    final corrected = _correctErrors(codewords);
+    // Step 5: Apply Reed-Solomon error correction using the version-specific
+    // EC codeword count from the QR standard (ISO/IEC 18004 Table 9).
+    // Note: multi-block interleaving is not yet implemented — each block must
+    // be processed independently for versions with >1 block per level.
+    final corrected = _correctErrors(codewords, version, formatInfo.ecLevel);
     if (corrected == null) {
       if (kDebugMode) print('Error correction failed.');
       return null;
@@ -52,7 +55,6 @@ class QrDecoder {
   List<int> _readCodewords(BitMatrix matrix) {
     final result = <int>[];
     final size = matrix.getWidth();
-    int row = size - 1;
     int col = size - 1;
     bool upward = true;
     int bitBuffer = 0, bitCount = 0;
@@ -84,10 +86,10 @@ class QrDecoder {
     return result;
   }
 
-  /// Applies Reed-Solomon correction to codewords (stubbed EC length)
-  List<int>? _correctErrors(List<int> codewords) {
-    // TODO: Use version info to get EC length dynamically
-    const int ecCodewords = 10; // Temporary placeholder
+  /// Applies Reed-Solomon correction using the correct per-block EC codeword
+  /// count for [version] and [ecLevel] from ISO/IEC 18004:2015 Table 9.
+  List<int>? _correctErrors(List<int> codewords, Version version, String ecLevel) {
+    final int ecCodewords = version.ecCodewordsPerBlockFor(ecLevel);
     final copy = List<int>.from(codewords);
     final success = _ecc.decode(copy, ecCodewords);
     return success ? copy : null;

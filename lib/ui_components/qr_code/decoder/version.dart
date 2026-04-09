@@ -61,4 +61,65 @@ class Version {
     0x149A6: 20,
     // ... up to version 40
   };
+
+  // -------------------------------------------------------------------------
+  // EC codewords per block — ISO/IEC 18004:2015 Table 9
+  //
+  // Key   = version number (1–40)
+  // Value = { ecLevel ('L'|'M'|'Q'|'H') → EC codewords per block }
+  //
+  // All blocks within a given (version, level) share the same EC codeword
+  // count. For single-block versions this equals the total EC codewords in
+  // the symbol. For multi-block versions the decoder must process each block
+  // independently using this per-block count.
+  // -------------------------------------------------------------------------
+  static const Map<int, Map<String, int>> _ecCodewordsPerBlock = {
+    1:  {'L':  7, 'M': 10, 'Q': 13, 'H': 17},
+    2:  {'L': 10, 'M': 16, 'Q': 22, 'H': 28},
+    3:  {'L': 15, 'M': 26, 'Q': 18, 'H': 22},
+    4:  {'L': 20, 'M': 18, 'Q': 26, 'H': 16},
+    5:  {'L': 26, 'M': 24, 'Q': 18, 'H': 22},
+    6:  {'L': 18, 'M': 16, 'Q': 24, 'H': 28},
+    7:  {'L': 20, 'M': 18, 'Q': 18, 'H': 26},
+    8:  {'L': 24, 'M': 22, 'Q': 22, 'H': 26},
+    9:  {'L': 30, 'M': 22, 'Q': 20, 'H': 24},
+    10: {'L': 18, 'M': 26, 'Q': 24, 'H': 28},
+    11: {'L': 20, 'M': 30, 'Q': 28, 'H': 24},
+    12: {'L': 24, 'M': 22, 'Q': 26, 'H': 28},
+    13: {'L': 26, 'M': 22, 'Q': 24, 'H': 22},
+    14: {'L': 30, 'M': 24, 'Q': 20, 'H': 24},
+    15: {'L': 22, 'M': 24, 'Q': 30, 'H': 24},
+    16: {'L': 24, 'M': 28, 'Q': 24, 'H': 30},
+    17: {'L': 28, 'M': 28, 'Q': 28, 'H': 28},
+    18: {'L': 30, 'M': 26, 'Q': 28, 'H': 28},
+    19: {'L': 28, 'M': 26, 'Q': 26, 'H': 26},
+    20: {'L': 28, 'M': 26, 'Q': 30, 'H': 28},
+    21: {'L': 28, 'M': 26, 'Q': 28, 'H': 30},
+    22: {'L': 28, 'M': 28, 'Q': 30, 'H': 24},
+    23: {'L': 30, 'M': 28, 'Q': 30, 'H': 30},
+    24: {'L': 30, 'M': 28, 'Q': 30, 'H': 30},
+    25: {'L': 26, 'M': 28, 'Q': 30, 'H': 30},
+    26: {'L': 28, 'M': 28, 'Q': 28, 'H': 30},
+    27: {'L': 30, 'M': 28, 'Q': 30, 'H': 30},
+    28: {'L': 30, 'M': 28, 'Q': 30, 'H': 30},
+    29: {'L': 30, 'M': 28, 'Q': 30, 'H': 30},
+    30: {'L': 30, 'M': 28, 'Q': 30, 'H': 30},
+    31: {'L': 30, 'M': 28, 'Q': 30, 'H': 30},
+    32: {'L': 30, 'M': 28, 'Q': 30, 'H': 30},
+    33: {'L': 30, 'M': 28, 'Q': 30, 'H': 30},
+    34: {'L': 30, 'M': 28, 'Q': 30, 'H': 30},
+    35: {'L': 30, 'M': 28, 'Q': 30, 'H': 30},
+    36: {'L': 30, 'M': 28, 'Q': 30, 'H': 30},
+    37: {'L': 30, 'M': 28, 'Q': 30, 'H': 30},
+    38: {'L': 30, 'M': 28, 'Q': 30, 'H': 30},
+    39: {'L': 30, 'M': 28, 'Q': 30, 'H': 30},
+    40: {'L': 30, 'M': 28, 'Q': 30, 'H': 30},
+  };
+
+  /// Returns the number of EC codewords per block for this version and
+  /// [ecLevel] ('L', 'M', 'Q', or 'H'). Falls back to 10 (version 1–M) if
+  /// the combination is not found in the table.
+  int ecCodewordsPerBlockFor(String ecLevel) {
+    return _ecCodewordsPerBlock[versionNumber]?[ecLevel] ?? 10;
+  }
 }
