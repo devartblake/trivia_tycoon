@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/services/settings/onboarding_settings_service.dart';
-import 'riverpod_providers.dart';
+import 'game_providers.dart';
 
 final onboardingProgressProvider =
 StateNotifierProvider<OnboardingProgressNotifier, OnboardingProgressState>((

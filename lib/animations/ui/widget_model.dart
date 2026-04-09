@@ -42,17 +42,16 @@ class OBJViewer extends StatefulWidget {
 }
 
 class OBJViewerState extends State<OBJViewer> {
-  late VertexMesh _mesh;
-  late VertexMeshInstance _meshInstance;
+  /// One instance per sub-object (keyed by sub-object name).
+  Map<String, VertexMeshInstance> _instances = {};
   late vec32.Quaternion _rotation;
 
   OBJViewerState() : _rotation = vec32.Quaternion.identity();
 
   @override
   void initState() {
-    _loadMesh();
-
     super.initState();
+    _loadMesh();
   }
 
   @override
@@ -60,33 +59,48 @@ class OBJViewerState extends State<OBJViewer> {
     return GestureDetector(
       onPanUpdate: _handleDragUpdate,
       child: CustomPaint(
-        painter: MeshCustomPainter(_meshInstance),
+        // Render all sub-objects with the same shared transform.
+        painter: MultiMeshCustomPainter(_instances.values.toList()),
       ),
     );
   }
 
   Future<void> _loadMesh() async {
-    _mesh = await loadVertexMeshFromOBJAsset(context, 'assets', 'thing.obj');
+    // Example: load with a scale of 1.0 (pass a different value to resize).
+    final meshes = await loadVertexMeshFromOBJAsset(
+      context,
+      'assets',
+      'thing.obj',
+      scale: 1.0,
+    );
+    _instances = meshes.map((name, mesh) => MapEntry(name, VertexMeshInstance(mesh)));
     _updateTransform();
   }
 
-  void _handleDragUpdate(DragUpdateDetails dragUpdateDetails) {
-    _rotation *= vec32.Quaternion.axisAngle(vec32.Vector3(0.0, 1.0, 0.0), dragUpdateDetails.delta.dx / 100);
-    _rotation *= vec32.Quaternion.axisAngle(vec32.Vector3(1.0, 0.0, 0.0), dragUpdateDetails.delta.dy / 100);
+  void _handleDragUpdate(DragUpdateDetails details) {
+    _rotation *= vec32.Quaternion.axisAngle(
+        vec32.Vector3(0.0, 1.0, 0.0), details.delta.dx / 100);
+    _rotation *= vec32.Quaternion.axisAngle(
+        vec32.Vector3(1.0, 0.0, 0.0), details.delta.dy / 100);
     _rotation.normalize();
     _updateTransform();
   }
 
   void _updateTransform() {
-    final modelMatrix = vec32.Matrix4.compose(vec32.Vector3.zero(), _rotation, vec32.Vector3.all(1.0));
-
-    final viewMatrix =
-    vec32.makeViewMatrix(vec32.Vector3(0.0, 0.0, 4.0), vec32.Vector3(0.0, 0.0, 0.0), vec32.Vector3(0.0, 1.0, 0.0));
-
-    final projMatrix = vec32.makePerspectiveMatrix(math.pi / 2.0, 320.0 / 480.0, 0.01, 100.0);
+    final modelMatrix = vec32.Matrix4.compose(
+        vec32.Vector3.zero(), _rotation, vec32.Vector3.all(1.0));
+    final viewMatrix = vec32.makeViewMatrix(
+        vec32.Vector3(0.0, 0.0, 4.0),
+        vec32.Vector3(0.0, 0.0, 0.0),
+        vec32.Vector3(0.0, 1.0, 0.0));
+    final projMatrix =
+        vec32.makePerspectiveMatrix(math.pi / 2.0, 320.0 / 480.0, 0.01, 100.0);
+    final transform = viewMatrix * modelMatrix;
 
     setState(() {
-      _meshInstance = VertexMeshInstance(_mesh)..setTransform(viewMatrix * modelMatrix, projMatrix);
+      for (final instance in _instances.values) {
+        instance.setTransform(transform, projMatrix);
+      }
     });
   }
 }
@@ -106,6 +120,11 @@ class OBJLoaderFace {
   final List<vec32.Vector2> _uvs;
   String? materialName;
 
+  /// Shading group from the `s` OBJ directive.
+  /// 0  → flat shading (s off / s 0)
+  /// >0 → smooth shading group ID (faces in the same group share averaged normals)
+  int shadingGroup = 0;
+
   OBJLoaderFace()
       : _positions = List<vec32.Vector3>.filled(3, vec32.Vector3.zero()),
         _normals = List<vec32.Vector3>.filled(3, vec32.Vector3.zero()),
@@ -118,60 +137,144 @@ class OBJLoaderFace {
   List<vec32.Vector2> get uvs => _uvs;
 }
 
+// ---------------------------------------------------------------------------
+// Texture-atlas helpers
+// ---------------------------------------------------------------------------
+
+/// UV sub-region within the atlas for a single material's texture.
+/// All values are in normalised atlas coordinates [0, 1].
+class _AtlasRegion {
+  final double uOffset;
+  final double vOffset;
+  final double uScale;
+  final double vScale;
+
+  const _AtlasRegion({
+    required this.uOffset,
+    required this.vOffset,
+    required this.uScale,
+    required this.vScale,
+  });
+
+  /// Remap a face UV coordinate into atlas space.
+  ui.Offset remap(double u, double v) =>
+      ui.Offset(uOffset + u * uScale, vOffset + v * vScale);
+}
+
+/// Result of a texture-atlas build: the combined image and per-material regions.
+class _AtlasResult {
+  final ui.Image image;
+  final Map<String, _AtlasRegion> regions;
+
+  _AtlasResult({required this.image, required this.regions});
+}
+
+// ---------------------------------------------------------------------------
+
 class OBJLoader {
   final AssetBundle _bundle;
   final String _basePath;
   final String _objPath;
-  String? _mtlPath;
 
+  /// Uniform scale applied to all vertex positions at load time.
+  final double _scale;
+
+  String? _mtlPath;
   String? _objSource;
   String? _mtlSource;
 
-  final List<OBJLoaderFace> _faces;
+  /// Faces grouped by sub-object name (from `o` directives).
+  final Map<String, List<OBJLoaderFace>> _objectFaces;
+
+  /// The sub-object name currently being parsed.
+  String _currentObjectName;
+
   final Map<String, OBJLoaderMaterial> _materials;
 
-  OBJLoader(this._bundle, this._basePath, this._objPath)
-      : _faces = <OBJLoaderFace>[],
+  /// Maximum size (px) to which individual textures are clamped before
+  /// being placed in the atlas.  Keeps atlas memory in check on low-end GPUs.
+  static const int _maxTextureSize = 512;
+
+  /// Maximum atlas dimension.  Guaranteed to fit in OpenGL ES 2.0 (min 2048).
+  static const int _maxAtlasDim = 2048;
+
+  OBJLoader(this._bundle, this._basePath, this._objPath, {double scale = 1.0})
+      : _scale = scale,
+        _objectFaces = <String, List<OBJLoaderFace>>{},
+        _currentObjectName = 'default',
         _materials = <String, OBJLoaderMaterial>{};
 
-  Future<VertexMesh> parse() async {
+  /// Parse the OBJ (and its MTL) and return one [VertexMesh] per sub-object.
+  ///
+  /// Models without `o` lines are returned under the key `'default'`.
+  Future<Map<String, VertexMesh>> parse() async {
     String p = path.join(_basePath, _objPath);
     _objSource = await _bundle.loadString(p);
     _parseOBJFile();
-    p = path.join(_basePath, _mtlPath);
-    _mtlSource = await _bundle.loadString(p);
-    _parseMTLFile();
-    await _loadMTLTextures();
 
-    return _buildVertexMesh();
+    if (_mtlPath != null) {
+      p = path.join(_basePath, _mtlPath!);
+      try {
+        _mtlSource = await _bundle.loadString(p);
+        _parseMTLFile();
+        await _loadMTLTextures();
+      } catch (_) {
+        // MTL may be absent or fail to load — continue with colour-only rendering.
+      }
+    }
+
+    final atlas = await _buildTextureAtlas();
+
+    final result = <String, VertexMesh>{};
+    for (final entry in _objectFaces.entries) {
+      if (entry.value.isNotEmpty) {
+        result[entry.key] = _buildVertexMeshForObject(entry.value, atlas);
+      }
+    }
+    return result;
   }
 
   void _parseOBJFile() {
-    List<vec32.Vector3> positions = <vec32.Vector3>[];
-    List<vec32.Vector3> normals = <vec32.Vector3>[];
-    List<vec32.Vector2> uvs = <vec32.Vector2>[];
+    final List<vec32.Vector3> positions = <vec32.Vector3>[];
+    final List<vec32.Vector3> normals = <vec32.Vector3>[];
+    final List<vec32.Vector2> uvs = <vec32.Vector2>[];
     String? currentMaterialName;
+    int currentShadingGroup = 0;
+
+    // Initialise the default sub-object bucket.
+    _objectFaces.putIfAbsent(_currentObjectName, () => <OBJLoaderFace>[]);
 
     final objLines = _objSource?.split('\n') ?? [];
     for (var line in objLines) {
-      line = line.replaceAll("\r", "");
+      line = line.replaceAll('\r', '').trim();
+
       if (line.startsWith('v ')) {
         final args = line.split(' ');
-        // args[0] = 'v' args[1..3] = position coords
-        positions.add(vec32.Vector3(double.parse(args[1]), double.parse(args[2]), double.parse(args[3])));
+        positions.add(vec32.Vector3(
+          double.parse(args[1]) * _scale,
+          double.parse(args[2]) * _scale,
+          double.parse(args[3]) * _scale,
+        ));
       } else if (line.startsWith('vn ')) {
         final args = line.split(' ');
-        // args[0] = 'vn' args[1..3] = normal coords
-        normals.add(vec32.Vector3(double.parse(args[1]), double.parse(args[2]), double.parse(args[3])));
+        normals.add(vec32.Vector3(
+          double.parse(args[1]),
+          double.parse(args[2]),
+          double.parse(args[3]),
+        ));
       } else if (line.startsWith('vt ')) {
         final args = line.split(' ');
-        // args[0] = 'vt' args[1..2] = texture coords
         uvs.add(vec32.Vector2(double.parse(args[1]), double.parse(args[2])));
+
+      } else if (line.startsWith('o ')) {
+        // Begin a new named sub-object.
+        _currentObjectName = line.substring(2).trim();
+        _objectFaces.putIfAbsent(_currentObjectName, () => <OBJLoaderFace>[]);
+
       } else if (line.startsWith('f ')) {
         final args = line.split(' ');
-
-        // We only support loading meshes with triangulated faces
-        assert(args.length == 4);
+        // Only triangulated faces (3 vertices) are supported.
+        if (args.length != 4) continue;
 
         final v0 = args[1].split('/');
         final v1 = args[2].split('/');
@@ -183,15 +286,18 @@ class OBJLoader {
         face.positions[1] = positions[int.parse(v1[0]) - 1];
         face.positions[2] = positions[int.parse(v2[0]) - 1];
 
-        if (normals.isNotEmpty) {
+        // Vertex normals (vn index is the third '/'-separated component).
+        if (normals.isNotEmpty && v0.length > 2 && v0[2].isNotEmpty) {
           face.normals[0] = normals[int.parse(v0[2]) - 1];
           face.normals[1] = normals[int.parse(v1[2]) - 1];
           face.normals[2] = normals[int.parse(v2[2]) - 1];
         } else {
+          // No stored normals — will be computed geometrically during mesh build.
           face.normals[0] = face.normals[1] = face.normals[2] = vec32.Vector3.zero();
         }
 
-        if (uvs.isNotEmpty) {
+        // UV coordinates (vt index is the second component).
+        if (uvs.isNotEmpty && v0.length > 1 && v0[1].isNotEmpty) {
           face.uvs[0] = uvs[int.parse(v0[1]) - 1];
           face.uvs[1] = uvs[int.parse(v1[1]) - 1];
           face.uvs[2] = uvs[int.parse(v2[1]) - 1];
@@ -200,15 +306,21 @@ class OBJLoader {
         }
 
         face.materialName = currentMaterialName;
-        _faces.add(face);
-      } else if (line.startsWith('o ')) {
-        // TODO: Load multiple objects
+        face.shadingGroup = currentShadingGroup;
+        _objectFaces[_currentObjectName]!.add(face);
+
       } else if (line.startsWith('mtllib ')) {
         _mtlPath = line.split(' ')[1];
+
       } else if (line.startsWith('usemtl ')) {
-        currentMaterialName = line.split(' ')[1];
+        currentMaterialName = line.split(' ').skip(1).join(' ');
+
       } else if (line.startsWith('s ')) {
-        // TODO: Set scale value
+        // `s 1` / `s <n>` → smooth shading group N.
+        // `s off` / `s 0` → flat shading.
+        final arg = line.split(' ').skip(1).join(' ').trim();
+        currentShadingGroup =
+            (arg == 'off' || arg == '0') ? 0 : (int.tryParse(arg) ?? 1);
       }
     }
   }
@@ -263,63 +375,242 @@ class OBJLoader {
     await Future.wait(imageFutures);
   }
 
-  VertexMesh _buildVertexMesh() {
-    // TODO: Improve mesh building algorithm by deduplicating vertices
-    Float32List positions = Float32List(_faces.length * 3 * 3);
-    Float32List normals = Float32List(_faces.length * 3 * 3);
-    Float32List uvs = Float32List(_faces.length * 3 * 2);
-    Int32List colors = Int32List(_faces.length * 3);
-    Uint16List indices = Uint16List(_faces.length * 3);
+  // ---------------------------------------------------------------------------
+  // Smooth-shading normal computation
+  // ---------------------------------------------------------------------------
 
-    // TODO: Combine multiple material textures into one and offset uv's accordingly
-    ui.Image? texture = _materials.values.first.texture;
+  /// For every face that belongs to a non-zero shading group, compute the
+  /// geometric face normal and accumulate it at each vertex position within
+  /// that shading group.  After accumulation the normals are normalised.
+  ///
+  /// Returns a map keyed by `'<group>|<x>,<y>,<z>'` → averaged normal.
+  Map<String, vec32.Vector3> _computeSmoothNormals(List<OBJLoaderFace> faces) {
+    final accumulator = <String, vec32.Vector3>{};
 
-    for (int i = 0; i < _faces.length; ++i) {
-      positions[i * 9 + 0] = _faces[i].positions[0].x;
-      positions[i * 9 + 1] = _faces[i].positions[0].y;
-      positions[i * 9 + 2] = _faces[i].positions[0].z;
-      positions[i * 9 + 3] = _faces[i].positions[1].x;
-      positions[i * 9 + 4] = _faces[i].positions[1].y;
-      positions[i * 9 + 5] = _faces[i].positions[1].z;
-      positions[i * 9 + 6] = _faces[i].positions[2].x;
-      positions[i * 9 + 7] = _faces[i].positions[2].y;
-      positions[i * 9 + 8] = _faces[i].positions[2].z;
+    for (final face in faces) {
+      if (face.shadingGroup == 0) continue;
 
-      normals[i * 9 + 0] = _faces[i].normals[0].x;
-      normals[i * 9 + 1] = _faces[i].normals[0].y;
-      normals[i * 9 + 2] = _faces[i].normals[0].z;
-      normals[i * 9 + 3] = _faces[i].normals[1].x;
-      normals[i * 9 + 4] = _faces[i].normals[1].y;
-      normals[i * 9 + 5] = _faces[i].normals[1].z;
-      normals[i * 9 + 6] = _faces[i].normals[2].x;
-      normals[i * 9 + 7] = _faces[i].normals[2].y;
-      normals[i * 9 + 8] = _faces[i].normals[2].z;
+      // Geometric face normal (cross product of two edges).
+      final p0 = face.positions[0];
+      final p1 = face.positions[1];
+      final p2 = face.positions[2];
+      final edge1 = p1 - p0;
+      final edge2 = p2 - p0;
+      final faceNormal = edge1.cross(edge2);
+      if (faceNormal.length < 1e-8) continue; // degenerate face
 
-      uvs[i * 6 + 0] = _faces[i].uvs[0].x;
-      uvs[i * 6 + 1] = _faces[i].uvs[0].y;
-      uvs[i * 6 + 2] = _faces[i].uvs[1].x;
-      uvs[i * 6 + 3] = _faces[i].uvs[1].y;
-      uvs[i * 6 + 4] = _faces[i].uvs[2].x;
-      uvs[i * 6 + 5] = _faces[i].uvs[2].y;
+      faceNormal.normalize();
 
-      colors[i * 3 + 0] = _materials[_faces[i].materialName]!.diffuseColor!.value;
-      colors[i * 3 + 1] = _materials[_faces[i].materialName]!.diffuseColor!.value;
-      colors[i * 3 + 2] = _materials[_faces[i].materialName]!.diffuseColor!.value;
+      for (int j = 0; j < 3; j++) {
+        final p = face.positions[j];
+        final key = '${face.shadingGroup}|${p.x},${p.y},${p.z}';
+        accumulator.update(
+          key,
+          (existing) => existing + faceNormal,
+          ifAbsent: () => faceNormal.clone(),
+        );
+      }
+    }
 
-      indices[i * 3 + 0] = i * 3 + 0;
-      indices[i * 3 + 1] = i * 3 + 1;
-      indices[i * 3 + 2] = i * 3 + 2;
+    // Normalise accumulated normals.
+    for (final n in accumulator.values) {
+      if (n.length > 1e-8) n.normalize();
+    }
+
+    return accumulator;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Per-sub-object vertex mesh builder
+  // ---------------------------------------------------------------------------
+
+  VertexMesh _buildVertexMeshForObject(
+      List<OBJLoaderFace> faces, _AtlasResult? atlas) {
+    final smoothNormals = _computeSmoothNormals(faces);
+
+    final Map<String, int> vertexMap = {};
+    final List<double> uniquePositions = [];
+    final List<double> uniqueNormals = [];
+    final List<double> uniqueUVs = [];
+    final List<int> uniqueColors = [];
+    final List<int> indexList = [];
+
+    // Texture to use: atlas image if available, otherwise the first single
+    // material texture.
+    final ui.Image? texture = atlas?.image ??
+        (_materials.values
+            .firstWhere((m) => m.texture != null,
+                orElse: () => OBJLoaderMaterial())
+            .texture);
+
+    for (final face in faces) {
+      final matColor =
+          _materials[face.materialName]?.diffuseColor?.value ?? 0xFFFFFFFF;
+      final atlasRegion = atlas?.regions[face.materialName];
+
+      for (int j = 0; j < 3; j++) {
+        final p = face.positions[j];
+        final uv = face.uvs[j];
+
+        // Resolve normal: smooth-shaded → averaged geometric normal;
+        // flat-shaded → stored per-vertex normal (or zero if absent).
+        final vec32.Vector3 n;
+        if (face.shadingGroup != 0) {
+          final key = '${face.shadingGroup}|${p.x},${p.y},${p.z}';
+          n = smoothNormals[key] ?? face.normals[j];
+        } else {
+          n = face.normals[j];
+        }
+
+        // Remap UV into atlas space when applicable.
+        final double atlasU;
+        final double atlasV;
+        if (atlasRegion != null) {
+          final remapped = atlasRegion.remap(uv.x, uv.y);
+          atlasU = remapped.dx;
+          atlasV = remapped.dy;
+        } else {
+          atlasU = uv.x;
+          atlasV = uv.y;
+        }
+
+        // Vertex deduplication key.
+        // Smooth-shaded vertices are keyed by position+uv+material (the normal
+        // is the same for all faces sharing the position in the same group).
+        // Flat-shaded vertices include the stored normal in the key so that
+        // hard-edge corners are preserved.
+        final String key;
+        if (face.shadingGroup != 0) {
+          key = '${p.x},${p.y},${p.z}|${atlasU},${atlasV}|${face.materialName}';
+        } else {
+          key = '${p.x},${p.y},${p.z}|${n.x},${n.y},${n.z}|${atlasU},${atlasV}|${face.materialName}';
+        }
+
+        if (!vertexMap.containsKey(key)) {
+          vertexMap[key] = vertexMap.length;
+          uniquePositions.addAll([p.x, p.y, p.z]);
+          uniqueNormals.addAll([n.x, n.y, n.z]);
+          uniqueUVs.addAll([atlasU, atlasV]);
+          uniqueColors.add(matColor);
+        }
+        indexList.add(vertexMap[key]!);
+      }
     }
 
     return VertexMesh(
-        positions: positions, normals: normals, uvs: uvs, colors: colors, indices: indices, texture: texture);
+      positions: Float32List.fromList(uniquePositions),
+      normals: Float32List.fromList(uniqueNormals),
+      uvs: Float32List.fromList(uniqueUVs),
+      colors: Int32List.fromList(uniqueColors),
+      indices: Uint16List.fromList(indexList),
+      texture: texture,
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Texture atlas builder
+  // ---------------------------------------------------------------------------
+
+  /// Builds a texture atlas from all materials that have a loaded texture.
+  ///
+  /// Atlas layout: textures are arranged in a square grid, each cell clamped
+  /// to [_maxTextureSize] × [_maxTextureSize].  Returns `null` when no
+  /// textured materials exist.  A single-texture model bypasses the atlas path
+  /// for efficiency.
+  ///
+  /// GPU memory note: the atlas is capped at [_maxAtlasDim] × [_maxAtlasDim]
+  /// (2048 × 2048), which fits within the OpenGL ES 2.0 minimum guarantee.
+  Future<_AtlasResult?> _buildTextureAtlas() async {
+    final textured =
+        _materials.values.where((m) => m.texture != null).toList();
+
+    if (textured.isEmpty) return null;
+
+    // Single texture — wrap it without building a full atlas.
+    if (textured.length == 1) {
+      final mat = textured.first;
+      return _AtlasResult(
+        image: mat.texture!,
+        regions: {
+          mat.name!: const _AtlasRegion(
+              uOffset: 0, vOffset: 0, uScale: 1, vScale: 1),
+        },
+      );
+    }
+
+    // Determine grid dimensions (ceil(sqrt(N)) × ceil(N / cols)).
+    final n = textured.length;
+    final cols = math.sqrt(n).ceil();
+    final rows = (n / cols).ceil();
+
+    // Cell size: smallest power-of-two that fits all textures, capped.
+    int cellSize = _maxTextureSize;
+    for (final m in textured) {
+      final w = m.texture!.width;
+      final h = m.texture!.height;
+      cellSize = math.max(cellSize, math.max(w, h));
+    }
+    cellSize = math.min(cellSize, _maxTextureSize);
+
+    final atlasW = cols * cellSize;
+    final atlasH = rows * cellSize;
+
+    if (atlasW > _maxAtlasDim || atlasH > _maxAtlasDim) {
+      log('[OBJLoader] Warning: texture atlas ${atlasW}×${atlasH} exceeds '
+          '$_maxAtlasDim×$_maxAtlasDim. Consider reducing texture count or '
+          'resolution for low-end GPU compatibility.');
+    }
+
+    // Render each texture into a grid cell on a single canvas.
+    final recorder = ui.PictureRecorder();
+    final canvas = ui.Canvas(recorder);
+    final regions = <String, _AtlasRegion>{};
+
+    for (int i = 0; i < textured.length; i++) {
+      final mat = textured[i];
+      final col = i % cols;
+      final row = i ~/ cols;
+
+      final destX = (col * cellSize).toDouble();
+      final destY = (row * cellSize).toDouble();
+
+      // Draw texture into its atlas cell, scaling to fit cellSize.
+      final src = ui.Rect.fromLTWH(
+          0, 0, mat.texture!.width.toDouble(), mat.texture!.height.toDouble());
+      final dst =
+          ui.Rect.fromLTWH(destX, destY, cellSize.toDouble(), cellSize.toDouble());
+      canvas.drawImageRect(mat.texture!, src, dst, ui.Paint());
+
+      regions[mat.name!] = _AtlasRegion(
+        uOffset: destX / atlasW,
+        vOffset: destY / atlasH,
+        uScale: cellSize / atlasW,
+        vScale: cellSize / atlasH,
+      );
+    }
+
+    final picture = recorder.endRecording();
+    final image = await picture.toImage(atlasW, atlasH);
+    picture.dispose();
+
+    return _AtlasResult(image: image, regions: regions);
   }
 }
 
-Future<VertexMesh> loadVertexMeshFromOBJAsset(BuildContext context, String basePath, String path) async {
+/// Load an OBJ asset and return a named map of [VertexMesh] objects, one per
+/// sub-object defined by `o` directives in the file.  Models without explicit
+/// `o` lines are returned under the key `'default'`.
+///
+/// [scale] is a uniform scale applied to all vertex positions at load time.
+/// Use it to resize a model without modifying the asset file.
+Future<Map<String, VertexMesh>> loadVertexMeshFromOBJAsset(
+  BuildContext context,
+  String basePath,
+  String objPath, {
+  double scale = 1.0,
+}) async {
   final bundle = DefaultAssetBundle.of(context);
-
-  final loader = OBJLoader(bundle, basePath, path);
+  final loader = OBJLoader(bundle, basePath, objPath, scale: scale);
   return loader.parse();
 }
 
@@ -382,6 +673,9 @@ class VertexMeshInstance {
   late vec32.Matrix4 _projection;
 
   bool _vertexCacheInvalid;
+
+  /// True when the mesh transform has changed and a repaint is needed.
+  bool get isDirty => _vertexCacheInvalid;
 
   VertexMeshInstance(this._mesh) : _vertexCacheInvalid = true;
 
@@ -475,6 +769,49 @@ class VertexMeshInstance {
   }
 }
 
+/// Painter that renders a list of [VertexMeshInstance] objects (i.e. multiple
+/// sub-objects) in a single [CustomPaint] pass, sharing the same canvas
+/// transform.  Each sub-object retains its own texture/colour state.
+class MultiMeshCustomPainter extends CustomPainter {
+  final List<VertexMeshInstance> _instances;
+
+  MultiMeshCustomPainter(this._instances);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.scale(size.width * 0.5, size.height * 0.5);
+    canvas.translate(1.0, 1.0);
+    canvas.scale(1, -1); // flip Y from NDC to screen space
+
+    for (final instance in _instances) {
+      final paint = Paint();
+      if (instance.texture != null) {
+        paint.shader = ImageShader(
+          instance.texture!,
+          TileMode.clamp,
+          TileMode.clamp,
+          Matrix4.identity()
+              .scaled(1 / instance.texture!.width,
+                  1 / instance.texture!.height, 1.0)
+              .storage,
+        );
+      }
+      canvas.drawVertices(instance.vertices, BlendMode.multiply, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(MultiMeshCustomPainter old) {
+    if (_instances.length != old._instances.length) return true;
+    for (int i = 0; i < _instances.length; i++) {
+      if (_instances[i] != old._instances[i] || _instances[i].isDirty) {
+        return true;
+      }
+    }
+    return false;
+  }
+}
+
 class MeshCustomPainter extends CustomPainter {
   final VertexMeshInstance? _meshInstance;
 
@@ -506,8 +843,11 @@ class MeshCustomPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(MeshCustomPainter oldDelegate) {
-    // TODO: Do an actual state diff to check for repaint
-    return true;
+    // Repaint when the mesh instance changes identity, or when the existing
+    // instance has pending transform updates (isDirty is set by setModelView /
+    // setProjection and cleared inside _cacheVertices after each paint).
+    return _meshInstance != oldDelegate._meshInstance ||
+        (_meshInstance?.isDirty ?? false);
   }
 }
 

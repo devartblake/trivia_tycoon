@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/game/services/profile_service.dart';
+import 'package:trivia_tycoon/game/providers/profile_service_provider.dart';
 import 'package:trivia_tycoon/game/services/skill_cooldown_service.dart';
 import '../../core/manager/tier_manager.dart';
 import '../providers/multi_profile_providers.dart';

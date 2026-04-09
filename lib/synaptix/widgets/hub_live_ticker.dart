@@ -5,19 +5,61 @@ import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import 'package:trivia_tycoon/ui_components/shimmer_avatar/shimmer_avatar.dart';
 import '../mode/synaptix_mode.dart';
 import '../mode/synaptix_mode_provider.dart';
+import '../../game/providers/hub_providers.dart';
+
+/// Provider that builds ticker items from live notification events,
+/// falling back to a seeded rotation when no live data is available.
+final tickerItemsProvider = Provider<List<String>>((ref) {
+  final mode = ref.watch(synaptixModeProvider);
+  final prefix = mode == SynaptixMode.kids;
+
+  // Try to pull from game event stream (non-blocking)
+  final eventsAsync = ref.watch(upcomingGameEventsProvider);
+
+  final liveItems = eventsAsync.maybeWhen(
+    data: (events) {
+      if (events.isEmpty) return <String>[];
+      return events.take(5).map((e) {
+        final label = e.name;
+        return '${prefix ? "🎯 " : ""}$label starting soon';
+      }).toList();
+    },
+    orElse: () => <String>[],
+  );
+
+  if (liveItems.isNotEmpty) return liveItems;
+
+  // Fallback: seeded items (rotate daily for freshness)
+  final allItems = [
+    '${prefix ? "🏆 " : ""}User_882 won 500 Coins in Science',
+    '${prefix ? "🔥 " : ""}PlayerX secured a 10-streak in Tech',
+    '${prefix ? "⭐ " : ""}LizK reached Arena Rank 5',
+    '${prefix ? "🎯 " : ""}NovaMind completed Daily Signal',
+    '${prefix ? "💎 " : ""}QuizPro unlocked Diamond tier',
+    '${prefix ? "🏆 " : ""}MindWarp won the History Championship',
+    '${prefix ? "🔥 " : ""}SynapseX hit a 25-streak in Geography',
+    '${prefix ? "⭐ " : ""}BrainWave earned Neural Master badge',
+  ];
+
+  // Rotate starting position by day
+  final dayOffset = DateTime.now().day % allItems.length;
+  return [
+    ...allItems.sublist(dayOffset),
+    ...allItems.sublist(0, dayOffset),
+  ];
+});
 
 /// Horizontal auto-scrolling ticker showing live player events.
 ///
 /// Displays the user's avatar alongside a scrolling text banner.
-/// Follows the [TickerTapeWidget] pattern using flutter_animate's
-/// `.slideX()` with `controller.repeat()` for continuous scrolling.
+/// Reads from [tickerItemsProvider] which prefers live event data
+/// and falls back to seeded rotation items.
 class HubLiveTicker extends ConsumerWidget {
   const HubLiveTicker({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final mode = ref.watch(synaptixModeProvider);
-    final items = _tickerItems(mode);
+    final items = ref.watch(tickerItemsProvider);
     final text = items.join('   •   ');
 
     // Get user avatar from profile
@@ -83,17 +125,5 @@ class HubLiveTicker extends ConsumerWidget {
         ],
       ),
     );
-  }
-
-  // TODO: Replace with live data from a provider/stream
-  List<String> _tickerItems(SynaptixMode mode) {
-    final prefix = mode == SynaptixMode.kids;
-    return [
-      '${prefix ? '🏆 ' : ''}User_882 won 500 Coins in Science',
-      '${prefix ? '🔥 ' : ''}PlayerX secured a 10-streak in Tech',
-      '${prefix ? '⭐ ' : ''}LizK reached Arena Rank 5',
-      '${prefix ? '🎯 ' : ''}NovaMind completed Daily Signal',
-      '${prefix ? '💎 ' : ''}QuizPro unlocked Diamond tier',
-    ];
   }
 }

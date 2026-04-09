@@ -24,5 +24,11 @@ linter:
     avoid_print: true  # Enforces LogManager over bare print/debugPrint
     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
 
+analyzer:
+  errors:
+    # Treat any remaining raw debugPrint calls outside of LogManager as warnings.
+    # LogManager itself calls debugPrint intentionally; all other code should use LogManager.
+    avoid_print: warning
+
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

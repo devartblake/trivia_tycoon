@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
+import 'ui_state_providers.dart';
 
 /// Provider for power-up countdown timer
 final powerUpTimeProvider = StateNotifierProvider<PowerUpTimeNotifier, int?>((ref) {

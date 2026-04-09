@@ -37,6 +37,11 @@ final configServiceProvider =
     Provider<ConfigService>((ref) => ConfigService.instance);
 
 /// Must be overridden in ProviderScope after [AppInit] completes.
+///
+/// The throw below is intentional — it is a design-time safety net that fires
+/// only if the provider is accessed before the override is installed in the
+/// root ProviderScope. The app launcher installs the override at startup, so
+/// this throw is never reached in production.
 final serviceManagerProvider = Provider<ServiceManager>((ref) {
   throw UnimplementedError(
     'serviceManagerProvider must be overridden in ProviderScope in AppLauncher',

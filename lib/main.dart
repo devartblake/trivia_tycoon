@@ -46,7 +46,7 @@ Future<void> main() async {
             return notifier;
           }),
         ],
-        child: TriviaTycoonApp(initialData: (manager, theme)),
+        child: SynaptixApp(initialData: (manager, theme)),
       ),
     );
   } catch (e) {
@@ -55,23 +55,22 @@ Future<void> main() async {
     // Fallback - run app without pre-initialized state
     runApp(
       ProviderScope(
-        child: const TriviaTycoonApp(),
+        child: const SynaptixApp(),
       ),
     );
   }
 }
 
-// TODO(Synaptix Phase 8): Rename TriviaTycoonApp -> SynaptixApp
-class TriviaTycoonApp extends ConsumerStatefulWidget {
+class SynaptixApp extends ConsumerStatefulWidget {
   final (ServiceManager, ThemeNotifier)? initialData;
 
-  const TriviaTycoonApp({super.key, this.initialData});
+  const SynaptixApp({super.key, this.initialData});
 
   @override
-  ConsumerState<TriviaTycoonApp> createState() => _TriviaTycoonAppState();
+  ConsumerState<SynaptixApp> createState() => _SynaptixAppState();
 }
 
-class _TriviaTycoonAppState extends ConsumerState<TriviaTycoonApp> {
+class _SynaptixAppState extends ConsumerState<SynaptixApp> {
   (ServiceManager, ThemeNotifier)? _initialData;
   bool _initialized = false;
   bool _splashFinished = false;
@@ -134,7 +133,7 @@ class _TriviaTycoonAppState extends ConsumerState<TriviaTycoonApp> {
         setState(() => _recoveryChecked = true);
       }
     } catch (e) {
-      LogManager.error('[Recovery] Check failed: $e', source: '_TriviaTycoonAppState');
+      LogManager.error('[Recovery] Check failed: $e', source: '_SynaptixAppState');
       setState(() => _recoveryChecked = true);
     }
   }
@@ -239,17 +238,17 @@ class _TriviaTycoonAppState extends ConsumerState<TriviaTycoonApp> {
       final userSession = await persistenceService.getUserSession();
       final pendingActions = await persistenceService.getPendingActions();
 
-      LogManager.info('[Recovery] Restoring session...', source: '_TriviaTycoonAppState');
-      LogManager.debug('[Recovery] Game state: ${gameState != null ? 'YES' : 'NO'}', source: '_TriviaTycoonAppState');
-      LogManager.debug('[Recovery] User session: ${userSession != null ? 'YES' : 'NO'}', source: '_TriviaTycoonAppState');
-      LogManager.debug('[Recovery] Pending actions: ${pendingActions.length}', source: '_TriviaTycoonAppState');
+      LogManager.info('[Recovery] Restoring session...', source: '_SynaptixAppState');
+      LogManager.debug('[Recovery] Game state: ${gameState != null ? 'YES' : 'NO'}', source: '_SynaptixAppState');
+      LogManager.debug('[Recovery] User session: ${userSession != null ? 'YES' : 'NO'}', source: '_SynaptixAppState');
+      LogManager.debug('[Recovery] Pending actions: ${pendingActions.length}', source: '_SynaptixAppState');
 
       // Restore auth state from saved user session
       if (userSession != null) {
         final wasLoggedIn = userSession['is_logged_in'] as bool? ?? false;
         if (wasLoggedIn) {
           ref.read(isLoggedInSyncProvider.notifier).state = true;
-          LogManager.info('[Recovery] Auth state restored: logged in', source: '_TriviaTycoonAppState');
+          LogManager.info('[Recovery] Auth state restored: logged in', source: '_SynaptixAppState');
         }
       }
 
@@ -258,7 +257,7 @@ class _TriviaTycoonAppState extends ConsumerState<TriviaTycoonApp> {
       if (pendingActions.isNotEmpty) {
         LogManager.info(
           '[Recovery] ${pendingActions.length} pending action(s) queued for retry',
-          source: '_TriviaTycoonAppState',
+          source: '_SynaptixAppState',
         );
       }
 
@@ -273,9 +272,9 @@ class _TriviaTycoonAppState extends ConsumerState<TriviaTycoonApp> {
         );
       }
 
-      LogManager.info('[Recovery] Session restored successfully', source: '_TriviaTycoonAppState');
+      LogManager.info('[Recovery] Session restored successfully', source: '_SynaptixAppState');
     } catch (e) {
-      LogManager.error('[Recovery] Restore failed: $e', source: '_TriviaTycoonAppState');
+      LogManager.error('[Recovery] Restore failed: $e', source: '_SynaptixAppState');
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

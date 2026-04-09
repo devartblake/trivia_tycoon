@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
 import '../../../core/repositories/message_repository.dart';
 import '../../../core/services/storage/message_storage_service.dart';
 import '../../core/services/social/challenge_message_bridge.dart';
@@ -7,6 +8,18 @@ import '../../core/services/social/friend_message_bridge.dart';
 import '../models/conversation_models.dart';
 import '../models/message_models.dart';
 import '../models/typing_status_model.dart';
+
+// ============ Auth Identity ============
+
+/// Provides the current user's ID from the Hive settings box (opened by AppInit).
+/// Falls back to 'local-guest' when no user is authenticated.
+final currentUserIdProvider = Provider<String>((ref) {
+  if (Hive.isBoxOpen('settings')) {
+    final id = Hive.box('settings').get('userId') as String?;
+    if (id != null && id.isNotEmpty) return id;
+  }
+  return 'local-guest';
+});
 
 // ============ Storage Services ============
 

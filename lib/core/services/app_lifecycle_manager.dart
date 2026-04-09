@@ -223,8 +223,12 @@ class AppLifecycleManager with WidgetsBindingObserver {
     LogManager.debug('  Error: $error');
     LogManager.debug('  Stack: $stack');
 
-    // TODO: Send to your analytics service
-    // FirebaseCrashlytics.instance.recordError(error, stack);
+    LogManager.error(
+      '[Lifecycle] Crash recorded',
+      source: 'AppLifecycleManager',
+      error: error,
+      stackTrace: stack,
+    );
   }
 
   /// Force save (call this before critical operations)

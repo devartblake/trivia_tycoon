@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
+import 'package:trivia_tycoon/game/providers/riverpod_providers.dart' hide analyticsServiceProvider;
 import '../../game/analytics/providers/analytics_providers.dart';
 import '../../game/models/referral_models.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
@@ -297,7 +297,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
   }
 
   Widget _buildContentFallback(BuildContext context, ThemeData theme, ReferralCode referralCode) {
-    final link = 'https://triviatycoon.com/invite?code=${referralCode.code}';
+    final link = 'https://synaptix.app/invite?code=${referralCode.code}';
     return _buildContent(context, theme, referralCode, link, link);
   }
 
