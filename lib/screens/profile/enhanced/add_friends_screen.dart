@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive/hive.dart';
 import '../../../core/services/social/friend_discovery_service.dart';
-import '../../messages/dialogs/create_dm_dialog.dart';
+import '../../../game/providers/message_providers.dart';
+import '../../messages/dialogs/create_dm_dialog.dart' show friendDiscoveryServiceProvider;
 
 class AddFriendByUsernameScreen extends ConsumerStatefulWidget {
   const AddFriendByUsernameScreen({super.key});
@@ -19,9 +21,14 @@ class _AddFriendByUsernameScreenState
   String? _resultMessage;
   bool _isSuccess = false;
 
-  // TODO: Replace with actual user data
-  final String _currentUserId = 'current_user_id';
-  final String _currentUsername = 'lmx_blade';
+  String get _currentUserId => ref.read(currentUserIdProvider);
+  String get _currentUsername {
+    if (Hive.isBoxOpen('settings')) {
+      final name = Hive.box('settings').get('username') as String?;
+      if (name != null && name.isNotEmpty) return name;
+    }
+    return 'guest';
+  }
 
   @override
   void dispose() {

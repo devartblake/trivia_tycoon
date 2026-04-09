@@ -2,10 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/core_providers.dart';
 import '../providers/xp_provider.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/core_providers.dart';
-import '../providers/xp_provider.dart';
 import '../providers/game_bonus_providers.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
@@ -97,8 +93,4 @@ class ProfileService {
       'cats=$unlockedCategories, prefs=$preferences)';
 }
 
-// River-pod provider
-final profileServiceProvider = Provider<ProfileService>((ref) {
-  // In a real app, pull from storage/auth
-  return ProfileService(ref, playerId: 'player-1', displayName: 'Player One');
-});
+// profileServiceProvider is defined in lib/game/providers/profile_service_provider.dart

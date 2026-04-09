@@ -5,7 +5,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
-import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:http_cache_hive_store/http_cache_hive_store.dart';
@@ -196,9 +195,11 @@ class ApiService {
 
   Future<dynamic> getRequest(String endpoint) async {
     return _handleRequest(() async {
-      final response = await http.get(Uri.parse('$baseUrl/$endpoint'));
+      final response = await _dio.get('$baseUrl/$endpoint');
       if (response.statusCode == 200) {
-        return jsonDecode(response.body);
+        return response.data is String
+            ? jsonDecode(response.data as String)
+            : response.data;
       } else {
         throw Exception("Error: ${response.statusCode}");
       }

@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
+import 'core_providers.dart';
 import '../models/avatar_package_models.dart';
 import '../services/avatar_package_service.dart';
 

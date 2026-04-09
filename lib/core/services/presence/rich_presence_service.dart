@@ -247,10 +247,11 @@ class RichPresenceService extends ChangeNotifier {
   }
 
   Future<void> _broadcastPresenceUpdate(UserPresence presence) async {
-    // TODO: Implement network broadcast to friends
-    // This would typically send the presence update to a server
-    // or directly to connected friends via WebSocket/Firebase
-    LogManager.debug('Broadcasting presence update: ${presence.activity}');
+    if (_wsAdapter != null && _useWebSocket) {
+      _wsAdapter!.updateMyPresence(presence);
+    } else {
+      LogManager.debug('[Presence] WebSocket unavailable; broadcast deferred: ${presence.activity}');
+    }
   }
 
   void _startHeartbeat() {

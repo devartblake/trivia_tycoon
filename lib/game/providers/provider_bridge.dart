@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
+import 'game_providers.dart';
 import 'auth_providers.dart';
 import 'onboarding_providers.dart';
 

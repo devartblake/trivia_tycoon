@@ -5,7 +5,7 @@ import '../../admin/providers/admin_auth_providers.dart';
 import '../services/channel_prefs.dart';
 import 'notification_history_store.dart';
 import 'notification_template_store.dart';
-import 'riverpod_providers.dart';
+import 'core_providers.dart';
 
 /// Permission status
 final permissionAllowedProvider = FutureProvider<bool>((ref) async {
