@@ -112,7 +112,7 @@ Progress update (2026-04-04 execution — complete):
 - `lib/core/services/api_service.dart` removed unused `http` import; `getRequest()`
   now uses the already-present `Dio` client consistently.
 
-### Phase 3 — Test Coverage ✅ SUBSTANTIALLY COMPLETE
+### Phase 3 — Test Coverage ✅ SUBSTANTIALLY COMPLETE (Pass 1)
 - 8 new test files added; total test file count: 31 → **39**.
 - New areas covered:
   - `PowerUpController` (activate, clear, expiry, restore, equipById)
@@ -125,26 +125,35 @@ Progress update (2026-04-04 execution — complete):
     serialization, `ArcadeMissionCatalog` validation)
   - `QuickMathController` (scoring, streaks, bounds, math correctness, toResult)
 
+### Phase 3 — Test Coverage Pass 2 ✅ COMPLETE
+- 6 more test files added; total test file count: 39 → **45**.
+- New areas covered:
+  - `MemoryFlipController` (deck structure, flip/match/miss/ignored, allMatched→isOver, toResult)
+  - `PatternSprintController` (answer correct/wrong/lock, streak, all-difficulty question generation, toResult)
+  - `ArcadeSessionService` (startSession, endSession, attachDuration)
+  - `TypingIndicatorService` (startTyping, stopTyping, peer typing, handleTextInput, handleMessageSent, clearConversationTyping)
+  - `ArcadeRegistry` (all 3 game definitions, IDs, difficulties, ArcadeGameId completeness)
+  - `LocalArcadeLeaderboardService` (recordRun, top sort order/limit, best, wouldBeNewBest, clearBoard, clearAll, persistence, topForGame)
+
 **Remaining coverage gaps** (tracked in [`docs/REMAINING_TASKS.md`](REMAINING_TASKS.md)):
 
 | Gap | File(s) | Key methods to cover |
 |-----|---------|----------------------|
-| `MemoryFlipController` | `lib/arcade/games/memory_flip/memory_flip_controller.dart` | `flip()`, `start()`, `allMatched`, `toResult()` |
-| `PatternSprintController` | `lib/arcade/games/pattern_sprint/pattern_sprint_controller.dart` | `answer()`, streak multiplier, `toResult()`, pattern correctness |
 | `RichPresenceService` | `lib/core/services/presence/rich_presence_service.dart` | `initialize()`, `updateCurrentUserPresence()`, `setGameActivity()`, `canUserJoinGame()`, `watchUserPresence()` |
-| `TypingIndicatorService` | `lib/core/services/presence/typing_indicator_service.dart` | `startTyping()`, `stopTyping()`, `handleTextInput()`, `handleMessageSent()` |
 | Auth edge cases | `lib/core/services/auth_service.dart` | Social login, concurrent 401 refresh, offline login, logout clears tokens |
 | Widget tree tests | Various screens | `ArcadeGameShell`, `DailyBonusScreen`, `ArcadeMissionsScreen` |
-| `ArcadeSessionService` | `lib/arcade/services/arcade_session_service.dart` | Session start/end, score aggregation |
-| `ArcadeRegistry` | `lib/arcade/services/arcade_registry.dart` | Game definition lookup, valid game IDs |
-| `LocalArcadeLeaderboardService` | `lib/arcade/leaderboards/local_arcade_leaderboard_service.dart` | Insert score, top-N retrieval, sort order |
+
+### Phase 2 — UnimplementedError stubs ✅ RESOLVED
+- `core_providers.dart` (`serviceManagerProvider`) — documented as intentional design-time guard
+- `app_lifecycle.dart` (`appLifecycleProvider`) — documented as intentional design-time guard
+- `spin_earn_screen.dart` — removed stale comment referencing a replaced `UnimplementedError`
 
 ## 6) Outstanding work — full backlog
 
 See **[`docs/REMAINING_TASKS.md`](REMAINING_TASKS.md)** for the prioritized, detailed backlog
 covering all remaining work across:
 
-- Phase 2 crash recovery stubs (3 items + 2 UnimplementedErrors)
+- Phase 2 crash recovery stubs (3 items — §1d UnimplementedErrors resolved)
 - Phase 3 test coverage gaps (9 specific classes/scenarios)
 - Phase 4 dependency audit (outdated packages, unused transitive deps)
 - Sprint 1 auth integration verification

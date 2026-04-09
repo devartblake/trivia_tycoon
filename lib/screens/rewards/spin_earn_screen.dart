@@ -1089,8 +1089,6 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
   }
 }
 
-// Provider for AnalyticsService (add this to your providers file)
-// Replace the UnimplementedError provider with this:
 final analyticsServiceProvider = Provider<AnalyticsService>((ref) {
   return ref.watch(serviceManagerProvider).analyticsService;
 });

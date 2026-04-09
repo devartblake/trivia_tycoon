@@ -1,6 +1,6 @@
 # Remaining Tasks & Work Backlog
 
-_Last updated: 2026-04-09_
+_Last updated: 2026-04-09 (updated pass 2)_
 
 > This file is the canonical "what is left to do" reference.
 > For completed work, see [`docs/ALPHA_TASK_AUDIT.md`](ALPHA_TASK_AUDIT.md).
@@ -12,8 +12,8 @@ _Last updated: 2026-04-09_
 
 | Area | Priority | Status | Blocked? |
 |------|----------|--------|----------|
-| Phase 2 — Crash recovery stubs | 🔴 High | ~70% complete | No |
-| Phase 3 — Test coverage (remaining gaps) | 🟡 Medium | ~3.6% → 40% target | No |
+| Phase 2 — Crash recovery stubs | 🔴 High | ~80% complete (§1d resolved) | No |
+| Phase 3 — Test coverage (remaining gaps) | 🟡 Medium | ~4.1% → 40% target | No |
 | Phase 4 — Dependency audit | 🟡 Medium | Partial | No |
 | Sprint 1 — Auth integration verification | 🟡 Medium | Unknown | No |
 | Sprint 2 — Networking layer | 🔴 High | Not started | No |
@@ -42,40 +42,26 @@ _Last updated: 2026-04-09_
   flow (using an image cropper plugin) is not implemented.
 - **Action:** Integrate a crop widget; replace temp fix with the proper crop → upload pipeline.
 
-### 1d. Remaining UnimplementedError throws
+### 1d. Remaining UnimplementedError throws ✅ RESOLVED
 
-| File | Line | Detail |
-|------|------|--------|
-| `lib/game/providers/core_providers.dart` | 41 | Provider stub — throws at runtime if reached |
-| `lib/core/services/analytics/app_lifecycle.dart` | 18 | Analytics lifecycle hook stub |
-| `lib/screens/rewards/spin_earn_screen.dart` | — | Comment only (no actual throw); verify and remove comment |
+| File | Line | Detail | Resolution |
+|------|------|--------|------------|
+| `lib/game/providers/core_providers.dart` | 41 | Provider stub | Intentional design-time guard; doc comment added clarifying it is overridden at startup |
+| `lib/core/services/analytics/app_lifecycle.dart` | 18 | Lifecycle provider stub | Intentional design-time guard; doc comment added clarifying override via `AppLifecycleObserver` |
+| `lib/screens/rewards/spin_earn_screen.dart` | — | Stale comment referencing a replaced UnimplementedError | Stale comment removed |
 
 ---
 
 ## 2. Phase 3 — Test Coverage Remaining Gaps
 
-**Current:** 39 test files / 1,088 source files ≈ **3.6%** (target: **40%** on `lib/game/` and `lib/core/`)
+**Current:** 45 test files / 1,088 source files ≈ **4.1%** (target: **40%** on `lib/game/` and `lib/core/`)
 
-### 2a. Arcade game controllers (not yet tested)
+### 2a. Arcade game controllers ✅ COMPLETE
 
-#### `MemoryFlipController` (`lib/arcade/games/memory_flip/memory_flip_controller.dart`, 251 lines)
-| Method / scenario | What to test |
+| File added | Coverage |
 |---|---|
-| `start()` | Timer ticks decrement `remaining`; `isOver` set when time runs out |
-| `flip(index)` | Returns `'match'`/`'miss'`; matched pairs stay face-up; `inputLocked` during resolution |
-| `flip` — all pairs matched | `allMatched` → `isOver` before timer expires |
-| `toResult()` | `gameId == memoryFlip`; metadata contains `matches`, `moves`, `misses`, `accuracy` |
-| `dispose()` | No throw |
-
-#### `PatternSprintController` (`lib/arcade/games/pattern_sprint/pattern_sprint_controller.dart`, 356 lines)
-| Method / scenario | What to test |
-|---|---|
-| Initial state | `score == 0`, `streak == 0`, `isOver == false`, question options contain answer |
-| `answer(correct)` | Score increases; `correct` count increments; streak increments |
-| `answer(wrong)` | Score decreases (not below 0); `wrong` count increments; streak resets |
-| `answer` — streak multiplier | Score scales up with consecutive correct answers |
-| `toResult()` | `gameId == patternSprint`; metadata contains `correct`, `wrong`, `maxStreak`, `accuracy` |
-| Pattern generation | Answer is always present in `options`; options have no duplicates |
+| `test/arcade/games/memory_flip_controller_test.dart` | `MemoryFlipController` — initial state, deck structure, `flip()` (first/match/miss/ignored), `allMatched→isOver`, `toResult()`, `dispose()` |
+| `test/arcade/games/pattern_sprint_controller_test.dart` | `PatternSprintController` — initial state, `answer()` (correct/wrong/lock), streak multiplier, question generation across all difficulties, `toResult()`, `dispose()` |
 
 ### 2b. Presence services (not yet tested)
 
@@ -93,16 +79,11 @@ _Last updated: 2026-04-09_
 | `watchUserPresence(userId)` | Stream emits when `updateFriendPresence` is called |
 | `dispose()` | No throw; timers cancelled |
 
-#### `TypingIndicatorService` (`lib/core/services/presence/typing_indicator_service.dart`, 268 lines)
-| Method / scenario | What to test |
-|---|---|
-| `isAnyoneTyping(conversationId)` | `false` before any typing |
-| `startTyping(conversationId)` | `isCurrentUserTyping` → `true` |
-| `stopTyping(conversationId)` | `isCurrentUserTyping` → `false` |
-| `isAnyoneTyping` after peer update | `true` after `updateUserTypingStatus` for another user |
-| `handleTextInput` — non-empty | Calls `startTyping` |
-| `handleMessageSent` | Calls `stopTyping` |
-| `clearConversationTyping` | All typing states cleared for that conversation |
+#### `TypingIndicatorService` ✅ COMPLETE
+- `test/core/services/presence/typing_indicator_service_test.dart` added
+- Coverage: `isAnyoneTyping`, `isCurrentUserTyping`, `startTyping`, `stopTyping`,
+  `updateUserTypingStatus`, `handleTextInput`, `handleMessageSent`, `clearConversationTyping`,
+  `getTypingText`, `getTypingStats`
 
 ### 2c. Auth flow edge cases (not yet tested)
 - Social login flows (OAuth token injection, account linking)
@@ -118,10 +99,13 @@ _Last updated: 2026-04-09_
 - `DailyBonusScreen` renders correct coins/gems/streak values from `ArcadeDailyBonusService`
 - `ArcadeMissionsScreen` renders claimed vs. unclaimed missions correctly
 
-### 2e. Other service gaps
-- `ArcadeSessionService` — session start/end tracking, score aggregation
-- `ArcadeRegistry` — game definition lookup, valid `ArcadeGameId` for each definition
-- `LocalArcadeLeaderboardService` — insert score, retrieve top-N, sorted order
+### 2e. Other service gaps ✅ COMPLETE
+
+| File added | Coverage |
+|---|---|
+| `test/arcade/services/arcade_session_service_test.dart` | `startSession()`, `endSession()`, `attachDuration()` |
+| `test/arcade/services/arcade_registry_test.dart` | All 3 game definitions, IDs, titles, difficulties, `ArcadeGameId` completeness |
+| `test/arcade/leaderboards/local_arcade_leaderboard_service_test.dart` | `recordRun()`, `top()` (sort order, limit), `best()`, `wouldBeNewBest()`, `clearBoard()`, `clearAll()`, persistence, `topForGame()` |
 
 ---
 
@@ -193,9 +177,9 @@ Intentionally deferred to after Alpha launch. No urgency.
 | Item | Status |
 |------|--------|
 | Zero `debugPrint` in production business logic | ✅ Done |
-| Zero `UnimplementedError` in user-facing paths | ❌ 2 remain (see §1d) |
+| Zero `UnimplementedError` in user-facing paths | ✅ §1d resolved — intentional design-time guards documented |
 | Crash recovery tested on iOS and Android | ❌ Not implemented |
-| Test coverage ≥ 40% on `lib/game/` and `lib/core/` | ❌ ~3.6% currently |
+| Test coverage ≥ 40% on `lib/game/` and `lib/core/` | ❌ ~4.1% currently (45 test files) |
 | No critical CVEs in dependency tree | ⏳ Needs `flutter pub outdated` run |
 | No single Dart file exceeds 1,700 lines | ✅ Done |
 | CI pipeline enforces coverage + lint + no raw prints | ❌ Not configured |
