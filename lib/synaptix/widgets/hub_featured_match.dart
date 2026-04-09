@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../game/analytics/providers/analytics_providers.dart';
-import '../../game/providers/riverpod_providers.dart';
+import '../../game/providers/riverpod_providers.dart' hide analyticsServiceProvider;
 import '../mode/synaptix_mode_provider.dart';
 import '../providers/hub_content_providers.dart';
 import '../theme/synaptix_theme_extension.dart';

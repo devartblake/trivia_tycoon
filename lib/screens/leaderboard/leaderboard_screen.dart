@@ -8,7 +8,7 @@ import '../../core/animations/animation_manager.dart';
 import '../../game/analytics/providers/analytics_providers.dart';
 import '../../game/models/leaderboard_entry.dart';
 import '../../game/models/seasonal_competition_model.dart';
-import '../../game/providers/riverpod_providers.dart';
+import '../../game/providers/riverpod_providers.dart' hide analyticsServiceProvider;
 import '../../synaptix/mode/synaptix_mode_provider.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 

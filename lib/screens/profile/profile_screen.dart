@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../game/analytics/providers/analytics_providers.dart';
 import '../../game/providers/multi_profile_providers.dart';
-import '../../game/providers/riverpod_providers.dart';
+import '../../game/providers/riverpod_providers.dart' hide analyticsServiceProvider;
 import '../../synaptix/mode/synaptix_mode_provider.dart';
 import '../../screens/profile/widgets/profile_game_card.dart';
 import '../../screens/profile/widgets/profile_header_bar.dart';
