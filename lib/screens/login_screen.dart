@@ -230,12 +230,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       }
 
       if (ConfigService.useBackendAuth) {
-        if (_isSignUpMode) {
-          await authOps.signup(email, password);
-        } else {
-          await authOps.loginWithPassword(email, password);
-        }
-
         await AppInit.initializeWebSocket();
 
         // ✅ ADD THIS - Initialize WebSocket after successful login
@@ -262,6 +256,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       _showErrorSnackBar(errorMessage);
       setState(() => _isLoading = false);
     }
+  }
+
+  Future<void> _handleEnterKeySubmit([String? _]) async {
+    if (_isLoading) return;
+    await _handleLogin();
   }
 
   Future<void> _handleSocialLogin(String provider) async {
@@ -436,6 +435,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                           label: 'Email address',
                           prefixIcon: Icons.email_rounded,
                           keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Email is required';
@@ -454,6 +454,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                           label: 'Password',
                           prefixIcon: Icons.lock_rounded,
                           obscureText: _obscurePassword,
+                          textInputAction: TextInputAction.done,
+                          onFieldSubmitted: _handleEnterKeySubmit,
                           suffixIcon: IconButton(
                             icon: Icon(
                               _obscurePassword
@@ -794,12 +796,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     bool obscureText = false,
     Widget? suffixIcon,
     TextInputType? keyboardType,
+    TextInputAction? textInputAction,
+    ValueChanged<String>? onFieldSubmitted,
     String? Function(String?)? validator,
   }) {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
       keyboardType: keyboardType,
+      textInputAction: textInputAction,
+      onFieldSubmitted: onFieldSubmitted,
       validator: validator,
       style: const TextStyle(color: Colors.white, fontSize: 15),
       decoration: InputDecoration(

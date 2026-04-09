@@ -86,6 +86,25 @@ class EnvConfig {
     return baseUri.replace(pathSegments: mergedSegments, fragment: '').toString();
   }
 
+  static String _normalizeApiBaseUrlForRuntime(String rawUrl) {
+    final trimmed = rawUrl.trim();
+    if (trimmed.isEmpty) return trimmed;
+
+    final parsed = Uri.parse(trimmed);
+
+    // 10.0.2.2 is Android-emulator host loopback, but Edge/Chrome web runs
+    // should use localhost (or another reachable LAN/remote host).
+    if (kIsWeb && parsed.host == '10.0.2.2') {
+      final normalized = parsed.replace(host: 'localhost').toString();
+      LogManager.debug(
+        '[EnvConfig] Rewriting API host for web runtime: $trimmed -> $normalized',
+      );
+      return normalized;
+    }
+
+    return parsed.toString();
+  }
+
   /// Loads all environment variables from the .env file into memory.
   /// This must be called once during app initialization before any services
   /// that rely on these variables are created.
@@ -94,7 +113,9 @@ class EnvConfig {
       await dotenv.load(fileName: ".env");
 
       // Load variables from the environment
-      _apiBaseUrl = dotenv.get('API_BASE_URL', fallback: 'http://localhost:5000');
+      final rawApiBaseUrl =
+          dotenv.get('API_BASE_URL', fallback: 'http://localhost:5000');
+      _apiBaseUrl = _normalizeApiBaseUrlForRuntime(rawApiBaseUrl);
 
       // Derive WebSocket URL from HTTP URL
       // Convert http:// to ws:// and https:// to wss://

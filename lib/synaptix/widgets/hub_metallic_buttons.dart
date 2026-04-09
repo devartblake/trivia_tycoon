@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../game/analytics/providers/analytics_providers.dart';
 import '../mode/synaptix_mode_provider.dart';
 import '../theme/synaptix_theme_extension.dart';
+import '../utils/hub_feedback.dart';
 
 /// Row of two metallic-style action buttons for the Synaptix Hub.
 ///
@@ -64,6 +65,7 @@ class _MetallicButton extends ConsumerWidget {
     return GestureDetector(
       onTap: () {
         HapticFeedback.lightImpact();
+        playHubTapSound(ref);
         final mode = ref.read(synaptixModeProvider);
         ref.read(analyticsServiceProvider).trackEvent('synaptix_hub_action_tapped', {
           'surface': surface,
