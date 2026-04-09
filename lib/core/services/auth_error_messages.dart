@@ -1,16 +1,18 @@
-import 'dart:io';
 import 'package:http/http.dart' as http;
 
 /// User-friendly error messages for common API errors
 class AuthErrorMessages {
   /// Convert exception to user-friendly message
   static String getUserFriendlyMessage(dynamic error) {
-    // Network/Connection errors
-    if (error is SocketException) {
+    // Network/Connection errors — checked by type name to stay dart:io-free on web.
+    final typeName = error.runtimeType.toString();
+    if (typeName == 'SocketException' ||
+        error.toString().startsWith('SocketException:')) {
       return 'Cannot connect to server. Please check your internet connection.';
     }
 
-    if (error is HttpException) {
+    if (typeName == 'HttpException' ||
+        error.toString().startsWith('HttpException:')) {
       return 'Network error occurred. Please try again.';
     }
 

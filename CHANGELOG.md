@@ -8,6 +8,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Fixed – Flutter web / Edge browser startup failure (2026-04-09)
+
+Root cause: `lib/core/services/api_service.dart` unconditionally imported `dart:io`
+and `package:path_provider/path_provider.dart`. On Flutter web (DDC), this caused a
+module-cascade failure at startup: `service_manager.dart` → `app_init.dart` failed to
+initialize, producing the misleading DDC error
+`"Library not defined: …/referral_invite_adapter.dart"`.
+A secondary cascade from `auth_error_messages.dart` (`import 'dart:io'` for
+`SocketException`/`HttpException`) also caused `auth_providers.dart` → `main.dart`
+to fail. Both failures affected all web browsers equally (Chrome, Edge, etc.).
+
+**Changes:**
+- `lib/core/services/_api_cache_store.dart` — new web stub: returns `MemCacheStore()`
+- `lib/core/services/_api_cache_store_io.dart` — new native helper: returns
+  `HiveCacheStore(tempDir.path)` (keeps Hive-backed persistence on iOS/Android/desktop)
+- `lib/core/services/api_service.dart` — removed `import 'dart:io'`,
+  `import 'package:path_provider/…'`, `import 'package:http_cache_hive_store/…'`;
+  added `import '_api_cache_store.dart' if (dart.library.io) '_api_cache_store_io.dart'`;
+  `_initializeCache()` now calls `await createCacheStore()`.
+- `lib/core/services/auth_error_messages.dart` — removed `import 'dart:io'`;
+  `SocketException`/`HttpException` type checks replaced with `runtimeType.toString()`
+  and `toString().startsWith(…)` guards, which work identically on all platforms.
+- `web/index.html` — title and `apple-mobile-web-app-title` updated from
+  `trivia_tycoon` → `Synaptix`.
+- `web/manifest.json` — `name`, `short_name`, and `description` updated to Synaptix
+  branding.
+
 ### Added – Phase 3: Test Coverage Pass 2 (2026-04-09)
 
 6 new test files covering the remaining untested arcade controllers and services.
