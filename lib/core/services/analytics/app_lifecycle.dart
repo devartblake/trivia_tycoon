@@ -13,7 +13,12 @@ typedef LifecycleCallback = void Function(AppLifecycleState state);
 /// Riverpod stream controller for broadcasting lifecycle changes
 final StreamController<AppLifecycleState> lifecycleStreamController = StreamController<AppLifecycleState>.broadcast();
 
-/// Riverpod provider for lifecycle value
+/// Riverpod provider for lifecycle value.
+///
+/// The throw below is intentional — it is overridden by [AppLifecycleObserver]
+/// via `ProviderScope.overrides` in its `build()` method. Accessing this
+/// provider outside of an [AppLifecycleObserver] ancestor would be a widget
+/// tree error, so the throw surfaces the misconfiguration immediately.
 final appLifecycleProvider = Provider<AppLifecycleStateNotifier>((ref) {
   throw UnimplementedError('AppLifecycleObserver must be mounted before accessing the lifecycle provider.');
 });

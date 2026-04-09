@@ -8,6 +8,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added – Phase 3: Test Coverage Pass 2 (2026-04-09)
+
+6 new test files covering the remaining untested arcade controllers and services.
+Test file count increased from 39 → **45** files.
+
+#### New test files
+
+| File | Coverage |
+|------|----------|
+| `test/arcade/games/memory_flip_controller_test.dart` | `MemoryFlipController` — deck structure (gridSize per difficulty, pair ids, card indices), `flip()` (first/match/miss/ignored), `allMatched→isOver`, score bounds, `toResult()` metadata, `dispose()` |
+| `test/arcade/games/pattern_sprint_controller_test.dart` | `PatternSprintController` — initial state, `answer()` correct/wrong/lock, streak multiplier, `maxStreak`, question generation correctness across all difficulties (answer in options, no duplicates, `'?'` in sequence), `toResult()` accuracy, `dispose()` |
+| `test/arcade/services/arcade_session_service_test.dart` | `ArcadeSessionService` — `startSession()` timestamp bounds, `endSession()` duration bounds, `attachDuration()` field copy fidelity |
+| `test/core/services/presence/typing_indicator_service_test.dart` | `TypingIndicatorService` — `isAnyoneTyping`, `isCurrentUserTyping`, `startTyping`, `stopTyping`, peer typing via `updateUserTypingStatus`, `handleTextInput`, `handleMessageSent`, `clearConversationTyping`, `getTypingText`, `getTypingStats` |
+| `test/arcade/services/arcade_registry_test.dart` | `ArcadeRegistry` — 3 game definitions, IDs, titles, subtitles, `supportedDifficulties`, builder non-null, all `ArcadeGameId` values represented |
+| `test/arcade/leaderboards/local_arcade_leaderboard_service_test.dart` | `LocalArcadeLeaderboardService` — `recordRun()`, `top()` sort order (score DESC / duration ASC), limit, `best()`, `wouldBeNewBest()`, `clearBoard()`, `clearAll()`, `topForGame()`, persistence across re-creation |
+
+### Fixed – Phase 2: UnimplementedError documentation (2026-04-09)
+
+- `lib/game/providers/core_providers.dart` (`serviceManagerProvider`) — added doc
+  comment clarifying that the `UnimplementedError` is an intentional design-time guard
+  overridden at app startup; not a production bug.
+- `lib/core/services/analytics/app_lifecycle.dart` (`appLifecycleProvider`) — same
+  treatment; doc comment clarifies override via `AppLifecycleObserver`.
+- `lib/screens/rewards/spin_earn_screen.dart` — removed stale comment that referenced
+  a replaced `UnimplementedError` (the actual implementation was already in place).
+
 ### Added – Remaining Tasks tracking document (2026-04-09)
 
 - `docs/REMAINING_TASKS.md` — new canonical backlog file. Lists every remaining
