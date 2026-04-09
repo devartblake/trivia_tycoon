@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:trivia_tycoon/core/services/api_service.dart';
 
 import '../../core/services/settings/app_settings.dart';
 import '../../game/providers/riverpod_providers.dart';
@@ -16,6 +17,7 @@ class _ConfigSettingsScreenState extends ConsumerState<ConfigSettingsScreen> {
   bool _isLoggingEnabled = false;
   bool _isSaving = false;
   bool _isLoadingRemote = false;
+  String? _remoteSyncStatus;
 
   String _lastSyncedApiUrl = '';
   bool _lastSyncedLogging = false;
@@ -55,12 +57,26 @@ class _ConfigSettingsScreenState extends ConsumerState<ConfigSettingsScreen> {
         _isLoggingEnabled = remoteLogging;
         _lastSyncedApiUrl = remoteApiUrl;
         _lastSyncedLogging = remoteLogging;
+        _remoteSyncStatus = 'Loaded remote config successfully.';
       });
 
       await AppSettings.setString('api_url', remoteApiUrl);
       await AppSettings.setBool('enable_logging', remoteLogging);
+    } on ApiRequestException catch (e) {
+      final errorCode = e.errorCode != null ? ' [${e.errorCode}]' : '';
+      if (mounted) {
+        setState(() {
+          _remoteSyncStatus =
+              'Remote config unavailable$errorCode: ${e.message}. Using local fallback.';
+        });
+      }
     } catch (_) {
       // keep local fallback silently for unsupported/offline environments.
+      if (mounted) {
+        setState(() {
+          _remoteSyncStatus = 'Remote config unavailable. Using local fallback.';
+        });
+      }
     } finally {
       if (mounted) {
         setState(() => _isLoadingRemote = false);
@@ -92,6 +108,7 @@ class _ConfigSettingsScreenState extends ConsumerState<ConfigSettingsScreen> {
       _lastSyncedLogging = optimisticLogging;
 
       if (!mounted) return;
+      setState(() => _remoteSyncStatus = 'Config synced to backend.');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Row(
@@ -108,7 +125,7 @@ class _ConfigSettingsScreenState extends ConsumerState<ConfigSettingsScreen> {
           ),
         ),
       );
-    } catch (e) {
+    } on ApiRequestException catch (e) {
       // Rollback local values when backend update fails.
       _apiUrlController.text = _lastSyncedApiUrl;
       _isLoggingEnabled = _lastSyncedLogging;
@@ -116,7 +133,23 @@ class _ConfigSettingsScreenState extends ConsumerState<ConfigSettingsScreen> {
       await AppSettings.setBool('enable_logging', _lastSyncedLogging);
 
       if (!mounted) return;
-      setState(() {});
+      final errorCode = e.errorCode != null ? ' [${e.errorCode}]' : '';
+      setState(() => _remoteSyncStatus = 'Config sync failed$errorCode: ${e.message}');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to sync config. Reverted changes$errorCode: ${e.message}'),
+          backgroundColor: const Color(0xFFEF4444),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } catch (e) {
+      _apiUrlController.text = _lastSyncedApiUrl;
+      _isLoggingEnabled = _lastSyncedLogging;
+      await AppSettings.setString('api_url', _lastSyncedApiUrl);
+      await AppSettings.setBool('enable_logging', _lastSyncedLogging);
+
+      if (!mounted) return;
+      setState(() => _remoteSyncStatus = 'Config sync failed: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Failed to sync config. Reverted changes: $e'),
@@ -155,6 +188,26 @@ class _ConfigSettingsScreenState extends ConsumerState<ConfigSettingsScreen> {
             const Padding(
               padding: EdgeInsets.only(bottom: 12),
               child: LinearProgressIndicator(minHeight: 2),
+            ),
+          if (_remoteSyncStatus != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEFF6FF),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: const Color(0xFFBFDBFE)),
+                ),
+                child: Text(
+                  _remoteSyncStatus!,
+                  style: const TextStyle(
+                    color: Color(0xFF1D4ED8),
+                    fontSize: 12,
+                  ),
+                ),
+              ),
             ),
           // Header Section
           Container(
