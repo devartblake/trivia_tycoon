@@ -111,3 +111,18 @@ Progress update (2026-04-04 execution — complete):
 ### API service dual-import ✅ FIXED
 - `lib/core/services/api_service.dart` removed unused `http` import; `getRequest()`
   now uses the already-present `Dio` client consistently.
+
+### Phase 3 — Test Coverage ✅ SUBSTANTIALLY COMPLETE
+- 8 new test files added; total test file count: 31 → **39**.
+- New areas covered:
+  - `PowerUpController` (activate, clear, expiry, restore, equipById)
+  - `ChallengeService` (caching, refresh times, updateProgress)
+  - `ArcadeRewardsService` (bounds, difficulty, time bonus, per-game tuning)
+  - `ArcadeDailyBonusService` (claim, streak continuity, reward schedule)
+  - `ArcadeMissionClaimService` (daily claim tracking, clearToday, persistence)
+  - `ArcadePersonalBestService` (best score, per-game/difficulty isolation, persistence)
+  - `ArcadeMissionService` (progress, claim anti-abuse, mergeById/preferLocal policies,
+    serialization, `ArcadeMissionCatalog` validation)
+  - `QuickMathController` (scoring, streaks, bounds, math correctness, toResult)
+- Remaining coverage gaps: auth edge cases, widget tree tests, MemoryFlip/PatternSprint
+  controllers, presence services.
