@@ -264,55 +264,55 @@ class OBJLoader {
   }
 
   VertexMesh _buildVertexMesh() {
-    // TODO: Improve mesh building algorithm by deduplicating vertices
-    Float32List positions = Float32List(_faces.length * 3 * 3);
-    Float32List normals = Float32List(_faces.length * 3 * 3);
-    Float32List uvs = Float32List(_faces.length * 3 * 2);
-    Int32List colors = Int32List(_faces.length * 3);
-    Uint16List indices = Uint16List(_faces.length * 3);
+    // Deduplicate vertices: map unique (pos, normal, uv, material) tuples to
+    // a single index. This reduces vertex count from faces×3 to the actual
+    // number of unique corners, which cuts GPU memory and improves cache hits.
+    // Multi-material texture atlas support is deferred — see docs/3d_renderer_improvement_plan.md.
+    final Map<String, int> vertexMap = {};
+    final List<double> uniquePositions = [];
+    final List<double> uniqueNormals = [];
+    final List<double> uniqueUVs = [];
+    final List<int> uniqueColors = [];
+    final List<int> indexList = [];
 
-    // TODO: Combine multiple material textures into one and offset uv's accordingly
-    ui.Image? texture = _materials.values.first.texture;
+    // Use first available texture (single-texture path; atlas deferred).
+    final ui.Image? texture =
+        _materials.isNotEmpty ? _materials.values.first.texture : null;
 
-    for (int i = 0; i < _faces.length; ++i) {
-      positions[i * 9 + 0] = _faces[i].positions[0].x;
-      positions[i * 9 + 1] = _faces[i].positions[0].y;
-      positions[i * 9 + 2] = _faces[i].positions[0].z;
-      positions[i * 9 + 3] = _faces[i].positions[1].x;
-      positions[i * 9 + 4] = _faces[i].positions[1].y;
-      positions[i * 9 + 5] = _faces[i].positions[1].z;
-      positions[i * 9 + 6] = _faces[i].positions[2].x;
-      positions[i * 9 + 7] = _faces[i].positions[2].y;
-      positions[i * 9 + 8] = _faces[i].positions[2].z;
+    for (final face in _faces) {
+      final matColor = _materials[face.materialName]?.diffuseColor?.value
+          ?? 0xFFFFFFFF;
 
-      normals[i * 9 + 0] = _faces[i].normals[0].x;
-      normals[i * 9 + 1] = _faces[i].normals[0].y;
-      normals[i * 9 + 2] = _faces[i].normals[0].z;
-      normals[i * 9 + 3] = _faces[i].normals[1].x;
-      normals[i * 9 + 4] = _faces[i].normals[1].y;
-      normals[i * 9 + 5] = _faces[i].normals[1].z;
-      normals[i * 9 + 6] = _faces[i].normals[2].x;
-      normals[i * 9 + 7] = _faces[i].normals[2].y;
-      normals[i * 9 + 8] = _faces[i].normals[2].z;
+      for (int j = 0; j < 3; j++) {
+        final p = face.positions[j];
+        final n = face.normals[j];
+        final uv = face.uvs[j];
 
-      uvs[i * 6 + 0] = _faces[i].uvs[0].x;
-      uvs[i * 6 + 1] = _faces[i].uvs[0].y;
-      uvs[i * 6 + 2] = _faces[i].uvs[1].x;
-      uvs[i * 6 + 3] = _faces[i].uvs[1].y;
-      uvs[i * 6 + 4] = _faces[i].uvs[2].x;
-      uvs[i * 6 + 5] = _faces[i].uvs[2].y;
+        // Build a string key from all attributes that define vertex uniqueness.
+        // Float values come from the same parsed source lists so bit-equality
+        // is safe here.
+        final key =
+            '${p.x},${p.y},${p.z}|${n.x},${n.y},${n.z}|${uv.x},${uv.y}|${face.materialName}';
 
-      colors[i * 3 + 0] = _materials[_faces[i].materialName]!.diffuseColor!.value;
-      colors[i * 3 + 1] = _materials[_faces[i].materialName]!.diffuseColor!.value;
-      colors[i * 3 + 2] = _materials[_faces[i].materialName]!.diffuseColor!.value;
-
-      indices[i * 3 + 0] = i * 3 + 0;
-      indices[i * 3 + 1] = i * 3 + 1;
-      indices[i * 3 + 2] = i * 3 + 2;
+        if (!vertexMap.containsKey(key)) {
+          vertexMap[key] = vertexMap.length;
+          uniquePositions.addAll([p.x, p.y, p.z]);
+          uniqueNormals.addAll([n.x, n.y, n.z]);
+          uniqueUVs.addAll([uv.x, uv.y]);
+          uniqueColors.add(matColor);
+        }
+        indexList.add(vertexMap[key]!);
+      }
     }
 
     return VertexMesh(
-        positions: positions, normals: normals, uvs: uvs, colors: colors, indices: indices, texture: texture);
+      positions: Float32List.fromList(uniquePositions),
+      normals: Float32List.fromList(uniqueNormals),
+      uvs: Float32List.fromList(uniqueUVs),
+      colors: Int32List.fromList(uniqueColors),
+      indices: Uint16List.fromList(indexList),
+      texture: texture,
+    );
   }
 }
 
@@ -382,6 +382,9 @@ class VertexMeshInstance {
   late vec32.Matrix4 _projection;
 
   bool _vertexCacheInvalid;
+
+  /// True when the mesh transform has changed and a repaint is needed.
+  bool get isDirty => _vertexCacheInvalid;
 
   VertexMeshInstance(this._mesh) : _vertexCacheInvalid = true;
 
@@ -506,8 +509,11 @@ class MeshCustomPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(MeshCustomPainter oldDelegate) {
-    // TODO: Do an actual state diff to check for repaint
-    return true;
+    // Repaint when the mesh instance changes identity, or when the existing
+    // instance has pending transform updates (isDirty is set by setModelView /
+    // setProjection and cleared inside _cacheVertices after each paint).
+    return _meshInstance != oldDelegate._meshInstance ||
+        (_meshInstance?.isDirty ?? false);
   }
 }
 

@@ -68,11 +68,6 @@ final energyRefillTimeProvider = StateProvider<Duration>((ref) {
   return kEnergyRefillInterval;
 });
 
-/// Challenge lives do not refill over time — they reset when a new run starts.
-/// Returns [Duration.zero] for UI compatibility with [main_menu_screen.dart].
-/// TODO: Remove once the lives info dialog no longer references a refill time.
-final livesRefillTimeProvider = StateProvider<Duration>((ref) => Duration.zero);
-
 // ---------------------------------------------------------------------------
 // User profile data
 // ---------------------------------------------------------------------------
