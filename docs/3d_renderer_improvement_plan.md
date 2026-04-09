@@ -2,7 +2,7 @@
 
 **File under review:** `lib/animations/ui/widget_model.dart`
 **Author:** Claude Code
-**Status:** Awaiting design direction on 3 open questions
+**Status:** ✅ COMPLETE — all items implemented
 
 ---
 
@@ -19,142 +19,113 @@ and renders rotating 3D models.
 | `assets/models/flutter_dash.obj` | **8** | 7 (in `.mtl`) | No — color only | Yes (`s 1`) |
 | `assets/models/cartoon_character.obj` | 1 | Unknown | Unknown | Yes (`s 1`) |
 
-This is relevant because the three TODOs below directly affect these specific assets.
+---
+
+## TODO #1 — Multi-Object Support (`o` directive) ✅ IMPLEMENTED
+
+**Decision:** Option B — named map of meshes (full sub-object control).
+
+### What changed
+- `OBJLoader` now maintains a `Map<String, List<OBJLoaderFace>> _objectFaces` keyed by sub-object name.
+- Each `o <name>` line in the OBJ file starts a new entry in that map; subsequent faces are accumulated under that key.
+- `parse()` returns `Map<String, VertexMesh>` (was: single `VertexMesh`).
+- `loadVertexMeshFromOBJAsset()` returns `Map<String, VertexMesh>`.
+- `OBJViewerState` stores `Map<String, VertexMeshInstance>` and renders via `MultiMeshCustomPainter`.
+- Sub-objects with no faces (empty `o` sections) are silently skipped.
+
+### New public API
+```dart
+Future<Map<String, VertexMesh>> loadVertexMeshFromOBJAsset(
+  BuildContext context, String basePath, String objPath, {double scale = 1.0});
+```
 
 ---
 
-## TODO #1 — Multi-Object Support (`o` directive)
+## TODO #2 — Smooth Shading Groups (`s` directive) ✅ IMPLEMENTED
 
-### Current behaviour
-The OBJ parser silently **ignores** `o` lines. All faces from all 8 sub-objects in
-`flutter_dash.obj` are accumulated into one flat list and rendered as a single
-undifferentiated mesh. Sub-object names (e.g. `o Body`, `o Wings`) are discarded.
+**Decision:** Smooth shading is required. `s` is parsed as a shading-group directive per
+the OBJ spec, NOT as scale (a separate `scale` load-time parameter was added instead).
 
-### What works / what breaks today
-- **Works:** The model still renders — all faces from all sub-objects are drawn.
-- **Breaks:** You cannot address individual sub-objects (e.g. animate the wings
-  separately from the body, hide/show parts, apply different transforms to
-  different pieces).
+### What changed
+- `OBJLoaderFace` now carries an `int shadingGroup` field (`0` = flat, `>0` = smooth group ID).
+- During OBJ parsing, `s off` / `s 0` sets `currentShadingGroup = 0`; `s N` sets it to `N`.
+- New `_computeSmoothNormals()` method runs a two-pass average:
+  1. Accumulates geometric face normals (cross product of edges) per unique vertex position + shading group.
+  2. Normalises each accumulated normal.
+- In `_buildVertexMeshForObject()`, smooth-shaded vertices use the averaged normal from the above map.
+  The vertex deduplication key for smooth-shaded vertices **excludes** the normal component so that
+  adjacent faces sharing the same position are merged into one vertex entry.
+- Flat-shaded faces (`shadingGroup == 0`) keep per-face geometric normals and use the full
+  `position|normal|uv|material` dedup key (preserving hard edges).
+- Normal averaging runs once at load time — zero per-frame cost.
 
-### Two implementation paths
-
-#### Option A — Merge all sub-objects into one mesh (simple)
-Finalise the current face list at each `o` line, then continue appending to the
-same master list. Result: single `VertexMesh` as today, but the parser no longer
-silently skips objects (all faces are still included, and ordering is preserved).
-
-- **Effort:** ~10 lines
-- **Trade-off:** No independent sub-object control; visually identical to current behaviour
-- **Best if:** You only need the full model rendered as-is
-
-#### Option B — Return a named map of meshes (full support)
-Store each sub-object as a separate `VertexMesh` keyed by its name. The caller
-(`loadVertexMeshFromOBJAsset`) returns `Map<String, VertexMesh>` instead of a
-single `VertexMesh`.
-
-- **Effort:** Medium — requires changing the public API and all call sites
-- **Trade-off:** Full sub-object control; enables per-part animation/visibility
-- **Best if:** You want to animate `flutter_dash` parts independently
-
-### Questions for you
-1. Do you need to animate or manipulate individual parts of `flutter_dash` separately
-   (e.g. wing flapping, beak moving)? If yes → Option B. If no → Option A.
-2. Are there planned future 3D assets that will require part-level control?
+### Load-time scale parameter (also added here)
+```dart
+OBJLoader(bundle, basePath, objPath, scale: 1.0)
+// All parsed vertex positions are multiplied by scale at parse time.
+```
 
 ---
 
-## TODO #2 — Smooth Shading Groups (`s` directive)
+## TODO #3 — Vertex Deduplication ✅ IMPLEMENTED (prerequisite for #2)
 
-### Current behaviour
-The `s` lines in both OBJ files are silently ignored. Every face is rendered with
-**flat shading** — each triangle has its own hard-edged normal, causing visible
-faceting on curved surfaces (spheres, rounded shapes).
-
-Both current assets use `s 1` (smooth shading ON) throughout, so both are
-currently rendering with unintended flat shading.
-
-> **Clarification:** The `s` directive in OBJ format controls **smooth shading
-> groups**, not scale. The current code comment "Set scale value" is incorrect.
-> If actual scale support is needed, that requires a separate mechanism (a load-time
-> parameter or a custom OBJ extension).
-
-### What smooth shading requires
-When `s 1`, vertex normals at shared positions are **averaged** across all faces
-that share that vertex. This produces a smooth appearance on curved surfaces.
-When `s off`, each face keeps its own flat normal.
-
-**Prerequisite:** This depends on vertex deduplication (TODO #3, being implemented
-now). Smooth shading requires knowing which vertices are geometrically shared
-between adjacent faces — which vertex dedup establishes.
-
-### Implementation plan (once TODO #3 is done)
-1. Track the current smooth shading group during OBJ parsing (parse `s 1` / `s off`).
-2. Tag each face with its shading group.
-3. In `_buildVertexMesh()`, after deduplication, for each unique vertex that belongs
-   to a smooth-shaded group, sum the normals of all faces sharing that vertex and
-   normalise the result.
-4. Flat-shaded vertices keep their face normal unchanged.
-
-### Performance impact
-Normal averaging runs once at load time, not per frame. Zero runtime cost.
-The resulting mesh has the same vertex count as the deduped mesh.
-
-### Questions for you
-1. Is the current flat-shaded look acceptable for the production app, or is smooth
-   shading required for visual quality?
-2. Were you aware that `s` controls shading, not scale? If you need actual scale
-   support (e.g. `s 2.0` to double a model's size), let me know and I'll design
-   a separate load-time scale parameter instead.
+### What changed
+- `_buildVertexMeshForObject()` maintains a `Map<String, int> indexMap` keyed by a
+  canonical vertex string.
+- For flat-shaded vertices: key = `"x,y,z|nx,ny,nz|u,v|material"`.
+- For smooth-shaded vertices: key = `"x,y,z|u,v|material"` (normal excluded; looked up from smooth-normal map).
+- Duplicate vertices reuse the existing index rather than appending a new entry.
+- Resulting meshes have significantly fewer vertices than the pre-dedup face-list form.
 
 ---
 
-## TODO #4 — Multi-Material Texture Atlas
+## TODO #4 — Multi-Material Texture Atlas ✅ IMPLEMENTED
 
-### Current state (not currently broken)
-The `.mtl` files for both models use **colour-only materials** (`Kd` diffuse colour
-values). There are **no texture image files** referenced (`map_Kd` is absent).
-Because of this, the current code — which grabs only `_materials.values.first.texture`
-and skips the rest — doesn't cause any visual bug today: all textures are `null`,
-colours are applied correctly per-face via the vertex colour array.
+**Decision:** Texture-mapped models are planned. GPU memory limits for low-end devices
+must be considered.
 
-### When this becomes relevant
-If you add 3D assets that include **texture maps** (`.png`/`.jpg` image files
-referenced in the `.mtl` via `map_Kd`), the renderer will only apply the first
-material's texture to the entire model, ignoring the rest.
+### What changed
+- `_buildTextureAtlas()` collects all non-null `ui.Image` textures from loaded materials.
+- **Single-texture fast path:** if only one material has a texture, the atlas is bypassed
+  and that image is used directly — no atlas overhead.
+- **Multi-texture path:** textures are arranged in a square grid
+  (`ceil(√N) × ceil(N/cols)` layout). Each cell is capped at **512×512 px** to
+  stay within OpenGL ES 2.0 minimums on low-end devices. If the resulting atlas
+  would exceed **2048×2048 px** (the OpenGL ES 2.0 guaranteed maximum texture size),
+  a warning is logged via `dart:developer` `log()`.
+- `_AtlasRegion` records `(uOffset, vOffset, uScale, vScale)` per material so that
+  UV coordinates are remapped into the correct sub-region before vertex deduplication.
+- UV remapping happens **before** deduplication so the dedup key uses atlas-space UVs.
+- The single atlas `ui.Image` is stored on `VertexMesh.texture`.
 
-### Implementation plan (when texture-mapped models are introduced)
-1. At load time, collect all `ui.Image` textures from materials.
-2. Build a texture atlas using `dart:ui`'s `Canvas` + `PictureRecorder`:
-   - Arrange each texture into a grid on a single composite image.
-   - Record each material's sub-region (offset + size) in the atlas.
-3. Remap each face's UV coordinates to point into the correct sub-region.
-4. Pass the single atlas image to `VertexMesh.texture`.
-
-### Performance impact
-- Atlas build: once at load time, not per frame.
-- Atlas memory: proportional to total texture area. Keep individual textures
-  small (e.g. ≤ 512×512 per material) to avoid excessive atlas size.
-
-### Questions for you
-1. Are texture-mapped 3D models planned for the app (i.e. models with image files
-   referenced in `.mtl`)?
-2. If yes: what is the expected maximum texture count per model, and typical
-   texture resolution? This determines atlas size and whether GPU memory limits
-   need to be considered on low-end devices.
-
----
-
-## Summary of decisions needed
-
-| TODO | Decision | Options |
+### GPU memory guidance
+| Atlas size | Memory (RGBA8) | Status |
 |---|---|---|
-| #1 Multi-object | Do you need per-part control? | A (merge all) or B (named map) |
-| #2 Smooth shading | Is flat shading acceptable? Is `s` for shading or scale? | Priority call |
-| #4 Texture atlas | Are texture-mapped models planned? What sizes? | Timing + spec |
+| 512 × 512 | 1 MB | Safe on all devices |
+| 1024 × 1024 | 4 MB | Safe |
+| 2048 × 2048 | 16 MB | Boundary — warn |
+| 4096 × 4096 | 64 MB | Exceeds many low-end GPUs |
 
 ---
 
-## No backend integration needed
+## TODO #5 — `shouldRepaint` State Diff ✅ IMPLEMENTED
 
-All three improvements are **client-side only**. The OBJ/MTL files are static
-assets loaded from the app bundle. No API calls, no server changes.
+### What changed
+- `MultiMeshCustomPainter.shouldRepaint()` compares `_instances` list length and
+  per-instance identity / `isDirty` flag rather than always returning `true`.
+- `VertexMeshInstance.isDirty` is set when the transform matrix changes and cleared
+  after each paint cycle, preventing unnecessary repaints when nothing has changed.
+
+---
+
+## Summary
+
+| TODO | Decision | Status |
+|---|---|---|
+| #1 Multi-object (`o`) | Option B — named map of meshes | ✅ Done |
+| #2 Smooth shading (`s`) | Smooth required; `s` = shading group (not scale); scale = separate param | ✅ Done |
+| #3 Vertex deduplication | Canonical key per vertex; dedup before mesh build | ✅ Done |
+| #4 Texture atlas | GPU-aware square-grid atlas; 512 px/cell cap; 2048 atlas warn | ✅ Done |
+| #5 `shouldRepaint` diff | Per-instance dirty flag + length check | ✅ Done |
+
+All improvements are client-side only — no backend changes required.
