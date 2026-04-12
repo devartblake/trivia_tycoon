@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/presence/rich_presence_service.dart';
 import '../../../game/models/user_presence_models.dart';
 import '../../../game/providers/multi_profile_providers.dart';
+import '../../../game/providers/profile_providers.dart';
 import '../../../ui_components/depth_card_3d/core/depth_card_3d.dart';
 import '../../../ui_components/depth_card_3d/models/depth_card_config.dart';
 import '../../../ui_components/depth_card_3d/models/depth_card_slots.dart';
@@ -124,6 +125,7 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
       curve: Curves.easeInOut,
     );
     _fadeController.forward();
+    _loadBackendProfileData();
   }
 
   @override
@@ -131,6 +133,117 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
     _tabController.dispose();
     _fadeController.dispose();
     super.dispose();
+  }
+
+  Future<void> _loadBackendProfileData() async {
+    final backendService = ref.read(backendProfileSocialServiceProvider);
+
+    try {
+      final summary = await backendService.getCareerSummary(widget.userId);
+      if (!mounted) return;
+
+      setState(() {
+        _mergeCareerSummary(summary);
+      });
+    } catch (_) {
+      // Keep the local fallback values when backend summary is unavailable.
+    }
+
+    if (!widget.isOwnProfile) {
+      return;
+    }
+
+    try {
+      final loadout = await backendService.getLoadout();
+      if (!mounted) return;
+
+      setState(() {
+        _mergeLoadout(loadout);
+      });
+    } catch (_) {
+      // Local profile data stays authoritative until backend preferences load.
+    }
+  }
+
+  void _mergeCareerSummary(Map<String, dynamic> summary) {
+    final stats = _asMap(summary['stats']);
+    final progress = _asMap(summary['progress']);
+    final achievements = _asMap(summary['achievements']);
+
+    _userData.addAll({
+      if (_readInt(summary, ['level'], fallbackMap: progress) != null)
+        'level': _readInt(summary, ['level'], fallbackMap: progress),
+      if (_readInt(summary, ['totalPoints', 'points'], fallbackMap: stats) != null)
+        'totalPoints':
+            _readInt(summary, ['totalPoints', 'points'], fallbackMap: stats),
+      if (_readInt(summary, ['friendCount', 'friends'], fallbackMap: stats) != null)
+        'friendCount':
+            _readInt(summary, ['friendCount', 'friends'], fallbackMap: stats),
+      if (_readInt(summary, ['rank'], fallbackMap: stats) != null)
+        'rank': _readInt(summary, ['rank'], fallbackMap: stats),
+      if (_readInt(summary, ['achievementCount'], fallbackMap: achievements) != null)
+        'achievements':
+            _readInt(summary, ['achievementCount'], fallbackMap: achievements),
+    });
+  }
+
+  void _mergeLoadout(Map<String, dynamic> loadout) {
+    final payload = _asMap(loadout['loadout']).isNotEmpty
+        ? _asMap(loadout['loadout'])
+        : loadout;
+
+    _userData.addAll({
+      if (_readString(payload, const ['displayName', 'name']) != null)
+        'displayName': _readString(payload, const ['displayName', 'name']),
+      if (_readString(payload, const ['username', 'handle']) != null)
+        'username':
+            '@${_normalizeHandle(_readString(payload, const ['username', 'handle'])!)}',
+      if (_readString(payload, const ['bio']) != null)
+        'bio': _readString(payload, const ['bio']),
+      if (_readString(payload, const ['favoriteSubject']) != null)
+        'favoriteSubject': _readString(payload, const ['favoriteSubject']),
+    });
+  }
+
+  Map<String, dynamic> _asMap(Object? value) {
+    if (value is Map<String, dynamic>) {
+      return value;
+    }
+    if (value is Map) {
+      return value.map((key, entry) => MapEntry(key.toString(), entry));
+    }
+    return <String, dynamic>{};
+  }
+
+  int? _readInt(
+    Map<String, dynamic> source,
+    List<String> keys, {
+    Map<String, dynamic>? fallbackMap,
+  }) {
+    for (final key in keys) {
+      final value = source[key] ?? fallbackMap?[key];
+      if (value is int) return value;
+      if (value is num) return value.toInt();
+      if (value is String) {
+        final parsed = int.tryParse(value);
+        if (parsed != null) return parsed;
+      }
+    }
+    return null;
+  }
+
+  String? _readString(Map<String, dynamic> source, List<String> keys) {
+    for (final key in keys) {
+      final value = source[key]?.toString().trim();
+      if (value != null && value.isNotEmpty) {
+        return value;
+      }
+    }
+    return null;
+  }
+
+  String _normalizeHandle(String value) {
+    return value.startsWith('@') ? value.substring(1) : value;
   }
 
   @override

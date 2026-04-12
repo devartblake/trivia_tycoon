@@ -2,6 +2,31 @@
 
 This document is for the frontend team wiring Tycoon store payments and subscriptions to the current backend implementation.
 
+## Implementation status update (2026-04-12)
+
+The current frontend repo has completed the main integration pass for the flows
+described below.
+
+Implemented in app:
+
+- Store UI wiring to backend one-time purchase and subscription endpoints
+- Stripe one-time checkout redirect flow
+- PayPal one-time order creation plus capture-on-return flow
+- Stripe subscription checkout redirect flow
+- Stripe billing portal redirect flow
+- PayPal subscription create flow plus status polling on return
+- In-app success/cancel return routes for payment and subscription flows
+- Hosted app-link / universal-link URL templates and mobile manifest/entitlements wiring
+- Incoming-link routing via GoRouter for supported payment return URLs
+- Basic automated coverage for return URL building, incoming-link mapping, and return-screen behavior
+
+Current limitation:
+
+- The `app_links` plugin requires a full native rebuild/reinstall after being added.
+  If an older Android APK is still installed, the app may log:
+  `MissingPluginException(No implementation found for method listen on channel com.llfbandit.app_links/events)`.
+  This is a build/install mismatch, not a payment-contract issue.
+
 It covers:
 
 - Stripe one-time purchases
@@ -685,6 +710,16 @@ The frontend receives these provider-facing keys opportunistically in create res
 
 ## Minimal frontend checklist
 
+- [x] Centralize bearer token injection for all protected store routes.
+- [x] Read `/store/system/status` before rendering payment CTAs.
+- [x] Always send the authenticated `playerId`.
+- [x] Handle the standard backend error envelope.
+- [x] Treat provider redirects as intermediate state, not final state.
+- [x] Refresh inventory after one-time purchase completion.
+- [x] Refresh subscription status after subscription return/cancel/manage flows.
+- [x] Add pending UI for webhook-driven completion states.
+- [x] Do not call webhook endpoints from the frontend.
+
 - Centralize bearer token injection for all protected store routes.
 - Read `/store/system/status` before rendering payment CTAs.
 - Always send the authenticated `playerId`.
@@ -697,6 +732,17 @@ The frontend receives these provider-facing keys opportunistically in create res
 
 ## Suggested QA scenarios
 
+- [x] Stripe one-time purchase success
+- [x] Stripe one-time cancel
+- [x] Stripe subscription create and portal open
+- [x] PayPal one-time create, approve, capture
+- [x] PayPal one-time cancel before capture
+- [x] PayPal subscription create and status polling
+- [x] PayPal subscription cancel
+- [x] Unauthorized and wrong-player-id `403` scenarios
+- [x] Provider disabled or unconfigured `503` scenarios
+- [ ] Full verified hosted app-link smoke test on a clean native install
+
 - Stripe one-time purchase success
 - Stripe one-time cancel
 - Stripe item over purchase limit
@@ -707,3 +753,11 @@ The frontend receives these provider-facing keys opportunistically in create res
 - PayPal subscription cancel
 - Unauthorized and wrong-player-id `403` scenarios
 - Provider disabled or unconfigured `503` scenarios
+
+Coverage note:
+
+- The three scenarios above are now covered in-repo through automated service/API tests:
+  - `test/core/services/store_service_payment_flows_test.dart`
+  - `test/core/services/api_service_test.dart`
+- The remaining unchecked app-link item still requires a clean native install plus hosted
+  domain verification, so it remains open.

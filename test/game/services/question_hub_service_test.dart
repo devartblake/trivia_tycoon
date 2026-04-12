@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:trivia_tycoon/core/models/question_validation_models.dart';
 import 'package:trivia_tycoon/core/services/api_service.dart';
 import 'package:trivia_tycoon/game/models/question_model.dart';
 import 'package:trivia_tycoon/game/services/question_hub_service.dart';
@@ -15,6 +16,8 @@ class _FakeApiService extends ApiService {
   List<Map<String, dynamic>> fetchQuestionsResult = const [];
   Object? fetchQuestionsError;
   final Map<String, Map<String, dynamic>> getResponses = {};
+  final Map<String, Map<String, dynamic>> postResponses = {};
+  Object? postError;
 
   @override
   Future<List<Map<String, dynamic>>> fetchQuestions({
@@ -35,6 +38,18 @@ class _FakeApiService extends ApiService {
     Map<String, dynamic>? queryParameters,
   }) async {
     return getResponses[path] ?? <String, dynamic>{};
+  }
+
+  @override
+  Future<Map<String, dynamic>> post(
+    String path, {
+    required Map<String, dynamic> body,
+    Map<String, String>? headers,
+  }) async {
+    if (postError != null) {
+      throw postError!;
+    }
+    return postResponses[path] ?? <String, dynamic>{};
   }
 }
 
@@ -103,9 +118,9 @@ Map<String, dynamic> _questionJson({required String id, required int difficulty}
 void main() {
   test('getQuestionsForCategory returns backend questions when available', () async {
     final api = _FakeApiService()
-      ..fetchQuestionsResult = [
-        _questionJson(id: '1', difficulty: 1),
-      ];
+      ..getResponses['/questions/set'] = {
+        'items': [_questionJson(id: '1', difficulty: 1)],
+      };
     final loader = _FakeLoaderService()
       ..categoryQuestions = [QuestionModel.fromJson(_questionJson(id: 'fallback', difficulty: 2))];
 
@@ -197,5 +212,69 @@ void main() {
     expect(stats['source'], 'local_fallback');
     expect(stats['questionCount'], 1);
     expect(stats['category'], 'science');
+  });
+
+  test('checkAnswer returns backend validation result when available', () async {
+    final api = _FakeApiService()
+      ..postResponses['/questions/check'] = {
+        'questionId': '1',
+        'isCorrect': true,
+        'correctAnswer': 'A',
+        'source': 'deployed-model',
+      };
+    final loader = _FakeLoaderService();
+    final service = QuestionHubService(apiService: api, localLoader: loader);
+    final question = QuestionModel.fromJson(_questionJson(id: '1', difficulty: 1));
+
+    final result = await service.checkAnswer(
+      question: question,
+      selectedAnswer: 'A',
+    );
+
+    expect(result.isCorrect, isTrue);
+    expect(result.correctAnswer, 'A');
+    expect(result.source, 'deployed-model');
+  });
+
+  test('checkAnswer falls back to local validation when backend fails', () async {
+    final api = _FakeApiService()
+      ..postError = ApiRequestException('offline', path: '/questions/check');
+    final service = QuestionHubService(
+      apiService: api,
+      localLoader: _FakeLoaderService(),
+    );
+    final question = QuestionModel.fromJson(_questionJson(id: '1', difficulty: 1));
+
+    final result = await service.checkAnswer(
+      question: question,
+      selectedAnswer: 'B',
+    );
+
+    expect(result.isCorrect, isFalse);
+    expect(result.source, 'local_fallback');
+  });
+
+  test('checkAnswerBatch falls back to local validation when payload is invalid', () async {
+    final api = _FakeApiService()
+      ..postResponses['/questions/check-batch'] = {
+        'items': [
+          {'unexpected': true},
+        ],
+      };
+    final service = QuestionHubService(
+      apiService: api,
+      localLoader: _FakeLoaderService(),
+    );
+    final question = QuestionModel.fromJson(_questionJson(id: '1', difficulty: 1));
+
+    final result = await service.checkAnswerBatch(
+      submissions: [
+        QuestionAnswerSubmission(question: question, selectedAnswer: 'A'),
+      ],
+    );
+
+    expect(result, hasLength(1));
+    expect(result.first.isCorrect, isTrue);
+    expect(result.first.source, 'local_fallback');
   });
 }

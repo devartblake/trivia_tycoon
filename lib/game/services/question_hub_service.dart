@@ -1,4 +1,5 @@
 import '../../core/services/api_service.dart';
+import '../../core/models/question_validation_models.dart';
 import '../models/question_model.dart';
 import 'question_loader_service.dart';
 import 'question_response_contract.dart';
@@ -19,6 +20,30 @@ class QuestionHubService {
     int amount = 10,
     int? difficulty,
   }) async {
+    try {
+      final response = await _apiService.get(
+        '/questions/set',
+        queryParameters: {
+          'category': category,
+          'count': amount,
+          if (difficulty != null) 'difficulty': difficulty,
+        },
+      );
+      final questions = _parseQuestionListResponse(
+        response,
+        endpoint: '/questions/set',
+      );
+      if (questions.isNotEmpty) {
+        return questions;
+      }
+    } on ApiRequestException {
+      // fallback below
+    } on QuestionContractException {
+      // fallback below
+    } catch (_) {
+      // fallback below
+    }
+
     try {
       final response = await _apiService.fetchQuestions(
         amount: amount,
@@ -45,6 +70,110 @@ class QuestionHubService {
     }
 
     return filtered.take(amount).toList();
+  }
+
+  Future<QuestionAnswerCheckResult> checkAnswer({
+    required QuestionModel question,
+    required String selectedAnswer,
+  }) async {
+    try {
+      final response = await _apiService.post(
+        '/questions/check',
+        body: {
+          'questionId': question.id,
+          'answer': selectedAnswer,
+          'selectedAnswer': selectedAnswer,
+        },
+      );
+      return _parseAnswerCheckResult(
+        response,
+        question: question,
+        selectedAnswer: selectedAnswer,
+      );
+    } on ApiRequestException {
+      return _fallbackAnswerCheck(question, selectedAnswer);
+    } on QuestionContractException {
+      return _fallbackAnswerCheck(question, selectedAnswer);
+    } catch (_) {
+      return _fallbackAnswerCheck(question, selectedAnswer);
+    }
+  }
+
+  Future<List<QuestionAnswerCheckResult>> checkAnswerBatch({
+    required List<QuestionAnswerSubmission> submissions,
+  }) async {
+    if (submissions.isEmpty) {
+      return const <QuestionAnswerCheckResult>[];
+    }
+
+    try {
+      final response = await _apiService.post(
+        '/questions/check-batch',
+        body: {
+          'answers': submissions
+              .map((submission) => {
+                    'questionId': submission.question.id,
+                    'answer': submission.selectedAnswer,
+                    'selectedAnswer': submission.selectedAnswer,
+                  })
+              .toList(growable: false),
+        },
+      );
+
+      final rawItems = response['items'] ??
+          response['results'] ??
+          response['answers'] ??
+          response['data'] ??
+          const <dynamic>[];
+
+      if (rawItems is! List) {
+        throw QuestionContractException(
+          'Invalid batch answer response from /questions/check-batch',
+        );
+      }
+
+      final submissionsById = {
+        for (final submission in submissions) submission.question.id: submission,
+      };
+
+      final results = rawItems
+          .whereType<Map>()
+          .map((item) => Map<String, dynamic>.from(item))
+          .map((item) {
+            final questionId = item['questionId']?.toString() ??
+                item['id']?.toString() ??
+                '';
+            final submission = submissionsById[questionId];
+            if (submission == null) {
+              throw QuestionContractException(
+                'Unknown question id returned by /questions/check-batch: $questionId',
+              );
+            }
+            return _parseAnswerCheckResult(
+              item,
+              question: submission.question,
+              selectedAnswer: submission.selectedAnswer,
+            );
+          })
+          .toList(growable: false);
+
+      if (results.isNotEmpty) {
+        return results;
+      }
+    } on ApiRequestException {
+      // fallback below
+    } on QuestionContractException {
+      // fallback below
+    } catch (_) {
+      // fallback below
+    }
+
+    return submissions
+        .map((submission) => _fallbackAnswerCheck(
+              submission.question,
+              submission.selectedAnswer,
+            ))
+        .toList(growable: false);
   }
 
   Future<List<QuizCategory>> getAvailableCategories() async {
@@ -192,6 +321,28 @@ class QuestionHubService {
     List<String>? difficulties,
     bool balanceDifficulties = false,
   }) async {
+    try {
+      final response = await _apiService.get(
+        '/questions/set',
+        queryParameters: {
+          'count': questionCount,
+          if (categories != null && categories.length == 1) 'category': categories.first,
+          if (difficulties != null && difficulties.length == 1) 'difficulty': difficulties.first,
+        },
+      );
+      final questions = _parseQuestionListResponse(
+        response,
+        endpoint: '/questions/set',
+      );
+      if (questions.isNotEmpty) {
+        return questions;
+      }
+    } on ApiRequestException {
+      // try legacy/fallback endpoints below
+    } on QuestionContractException {
+      // try legacy/fallback endpoints below
+    }
+
     for (final endpoint in const ['/quiz/mixed', '/questions/mixed']) {
       try {
         final response = await _apiService.get(
@@ -240,6 +391,24 @@ class QuestionHubService {
   Future<List<QuestionModel>> getDailyQuiz({int questionCount = 5}) async {
     try {
       final response = await _apiService.get(
+        '/questions/set',
+        queryParameters: {'count': questionCount},
+      );
+      final questions = _parseQuestionListResponse(
+        response,
+        endpoint: '/questions/set',
+      );
+      if (questions.isNotEmpty) {
+        return questions;
+      }
+    } on ApiRequestException {
+      // fallback below
+    } on QuestionContractException {
+      // fallback below
+    }
+
+    try {
+      final response = await _apiService.get(
         '/quiz/daily',
         queryParameters: {'count': questionCount},
       );
@@ -282,5 +451,76 @@ class QuestionHubService {
     }
 
     return null;
+  }
+
+  List<QuestionModel> _parseQuestionListResponse(
+    Object? response, {
+    required String endpoint,
+  }) {
+    final rawItems = response is List
+        ? response
+        : (response as Map<String, dynamic>)['items'] ??
+            response['questions'] ??
+            response['data'] ??
+            const <dynamic>[];
+
+    if (rawItems is! List) {
+      throw QuestionContractException(
+        'Invalid question collection returned from $endpoint',
+      );
+    }
+
+    return rawItems
+        .whereType<Map>()
+        .map((item) => Map<String, dynamic>.from(item))
+        .map(QuestionModel.fromJson)
+        .toList(growable: false);
+  }
+
+  QuestionAnswerCheckResult _parseAnswerCheckResult(
+    Map<String, dynamic> response, {
+    required QuestionModel question,
+    required String selectedAnswer,
+  }) {
+    final isCorrect = response['isCorrect'] ??
+        response['correct'] ??
+        response['is_valid'] ??
+        response['valid'];
+
+    if (isCorrect is! bool) {
+      throw QuestionContractException(
+        'Invalid answer check response for question ${question.id}',
+      );
+    }
+
+    final correctAnswer = response['correctAnswer']?.toString() ??
+        response['expectedAnswer']?.toString() ??
+        question.correctAnswer;
+    final questionId = response['questionId']?.toString() ??
+        response['id']?.toString() ??
+        question.id;
+    final source = response['source']?.toString() ?? 'backend';
+
+    return QuestionAnswerCheckResult(
+      questionId: questionId,
+      selectedAnswer: selectedAnswer,
+      isCorrect: isCorrect,
+      correctAnswer: correctAnswer,
+      source: source,
+      metadata: response,
+    );
+  }
+
+  QuestionAnswerCheckResult _fallbackAnswerCheck(
+    QuestionModel question,
+    String selectedAnswer,
+  ) {
+    return QuestionAnswerCheckResult(
+      questionId: question.id,
+      selectedAnswer: selectedAnswer,
+      isCorrect: question.isCorrectAnswer(selectedAnswer),
+      correctAnswer: question.correctAnswer,
+      source: 'local_fallback',
+    );
   }
 }

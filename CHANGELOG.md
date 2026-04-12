@@ -8,6 +8,137 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added - Alpha handoff partial frontend/backend wiring completion (2026-04-12)
+
+Closed the remaining alpha handoff items that were already partly underway on
+the frontend store/profile surfaces.
+
+**Changes:**
+- `lib/core/services/store/store_service.dart` - added `POST /store/iap/validate`
+  client support.
+- `lib/core/services/social/backend_profile_social_service.dart` - new backend-facing
+  profile/social client for user search, career summary, loadout, and unfriend flows.
+- `lib/game/providers/profile_providers.dart` - added Riverpod providers for the new
+  backend profile/social service plus loadout/career-summary fetches.
+- `lib/screens/profile/enhanced/add_friends_screen.dart` - "add by username" now
+  searches through `GET /users/search?handle=`.
+- `lib/screens/profile/friends_screen.dart` - remove-friend action now calls
+  `DELETE /friends`.
+- `lib/screens/profile/enhanced/enhanced_profile_screen.dart` - enhanced profile now
+  hydrates from backend career-summary and loadout endpoints when available.
+- `lib/screens/profile/enhanced/sheets/edit_profile_bottom_sheet.dart` - profile edits
+  now push backend loadout updates.
+- `test/core/services/backend_profile_social_service_test.dart` - added request-contract
+  coverage for search, career summary, loadout save, and unfriend routes.
+- `test/core/services/store_service_payment_flows_test.dart` - added IAP validation
+  request-path coverage.
+
+### Added - Question gameplay backend contract migration (2026-04-12)
+
+Moved quiz gameplay onto the alpha question contracts for retrieval and
+authoritative answer validation while keeping legacy/local fallback behavior.
+
+**Changes:**
+- `lib/core/models/question_validation_models.dart` - added shared submission/result
+  models for backend answer validation.
+- `lib/game/services/question_hub_service.dart` - quiz retrieval now prefers
+  `GET /questions/set`; answer validation and reconciliation now use
+  `/questions/check` and `/questions/check-batch`.
+- `lib/core/repositories/question_repository.dart` and
+  `lib/game/repositories/question_repository_impl.dart` - added repository methods
+  for per-answer and batched validation.
+- `lib/game/state/quiz_state.dart` - adapted quiz flow now validates answers through
+  the repository and stores submissions for end-of-quiz reconciliation.
+- `lib/game/controllers/question_controller.dart` and
+  `lib/game/controllers/game_controller.dart` - answer resolution now uses backend
+  validation instead of local-only `correctAnswer` checks.
+- `lib/screens/question/question_view_screen.dart` and
+  `lib/screens/question/adapted_question_screen.dart` - feedback/result flows now
+  consume authoritative validation results.
+- `test/game/services/question_hub_service_test.dart` and
+  `test/game/repositories/question_repository_impl_test.dart` - extended coverage
+  for backend validation and repository delegation.
+
+### Added - Store payments return routing and app-link wiring (2026-04-12)
+
+Implemented the frontend-side completion path for external store payments and
+subscriptions so Stripe and PayPal returns can finish inside the app instead of
+ending at a dead browser redirect.
+
+**Changes:**
+- `lib/core/services/store/store_service.dart` - expanded store/payment endpoint coverage
+  for one-time purchases, subscriptions, status refresh, PayPal capture, and Stripe portal flows.
+- `lib/screens/store/store_screen.dart` and `lib/screens/store/offers_screen.dart` - wired
+  store UI actions to backend payment/subscription endpoints and refresh flows.
+- `lib/screens/store/store_payment_return_screen.dart` - added a dedicated in-app return
+  screen for provider success/cancel/pending handling.
+- `lib/core/navigation/app_router.dart` - added `/store/payment-return` and
+  `/store/subscription-return` routes.
+- `lib/core/services/store/store_return_url_builder.dart` - centralized return/cancel
+  URL generation from environment config.
+- `lib/core/env.dart` and `.env.example` - added `APP_REDIRECT_BASE_URL` support.
+
+### Added - Android/iOS hosted app-link artifacts and runtime routing (2026-04-12)
+
+Prepared the minimal hosted-domain and mobile configuration needed for verified
+App Links / Universal Links on the production payment-return domain.
+
+**Changes:**
+- `android/app/src/main/AndroidManifest.xml` - added verified intent filters for
+  `/store/payment-return` and `/store/subscription-return`.
+- `ios/Runner/Runner.entitlements` and `ios/Runner.xcodeproj/project.pbxproj` - added
+  associated-domains support and entitlements wiring.
+- `docs/app-links/assetlinks.json` and `docs/app-links/apple-app-site-association` -
+  added hosted verification templates.
+- `docs/app-links/README.md` - added deployment checklist for hosted verification.
+- `pubspec.yaml` / `pubspec.lock` - added `app_links`.
+- `lib/core/services/store/store_link_router.dart` - added URI-to-route mapping for
+  supported payment/subscription return URLs.
+- `lib/core/bootstrap/app_launcher.dart` - added initial-link handling, foreground
+  link-stream handling, deferred routing until GoRouter is ready, and fallback
+  guards for `MissingPluginException` / `PlatformException`.
+
+**Operational note:**
+- After adding `app_links`, Android requires a full native rebuild/reinstall.
+  Hot reload or hot restart against an older APK can produce:
+  `MissingPluginException(No implementation found for method listen on channel com.llfbandit.app_links/events)`.
+
+### Added - Payment/app-link tests (2026-04-12)
+
+- `test/core/services/store_return_url_builder_test.dart` - verifies payment/subscription
+  return URL generation.
+- `test/core/services/store_link_router_test.dart` - verifies incoming-link mapping to app routes.
+- `test/screens/store/store_payment_return_screen_test.dart` - verifies return-screen flow handling.
+- `test/core/services/store_service_payment_flows_test.dart` - verifies the PayPal
+  subscription cancel request path and payload.
+- `test/core/services/api_service_test.dart` - adds protected store-route coverage for:
+  - wrong-player ownership `403 FORBIDDEN` envelopes
+  - provider-disabled / unavailable `503 Service Unavailable` envelopes
+
+### Added - Phase 2 crash recovery completion pass (2026-04-12)
+
+Completed the remaining code-side recovery and notification persistence work that
+was still open in the backlog.
+
+**Changes:**
+- `lib/core/services/crash_recovery_service.dart` - new focused restore service for
+  persisted quiz/player/profile session recovery.
+- `lib/main.dart` - recovery flow now restores real persisted state instead of only logging.
+- `lib/core/services/state_persistence_service.dart` - recovery summary now includes
+  user-session data; crash flag is cleared after successful restore handling.
+- `lib/core/bootstrap/app_init.dart` - startup now loads persisted notification stores.
+- `lib/game/providers/notification_history_store.dart` - notification history is now persisted and reloadable.
+- `test/core/services/crash_recovery_service_test.dart` - verifies persisted recovery restore behavior.
+- `test/game/providers/notification_history_store_test.dart` - verifies notification history/template reload behavior.
+
+### Updated - Phase 2 backlog status and implementation notes (2026-04-12)
+
+- `docs/REMAINING_TASKS.md` - updated Phase 2 from partial to code-complete, with
+  device validation still pending.
+- Avatar-cropping backlog item reclassified as complete after verifying the active
+  centered square crop + JPEG re-encode flow in
+  `lib/game/controllers/profile_avatar_controller.dart`.
+
 ### Fixed – Flutter web / Edge browser startup failure (2026-04-09)
 
 Root cause: `lib/core/services/api_service.dart` unconditionally imported `dart:io`

@@ -7,6 +7,7 @@ import '../../core/services/presence/rich_presence_service.dart';
 import '../../core/services/social/friend_discovery_service.dart';
 import '../../game/models/user_presence_models.dart';
 import '../../game/providers/message_providers.dart';
+import '../../game/providers/profile_providers.dart' hide currentUserIdProvider;
 import '../../ui_components/presence/presence_status_widget.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import '../messages/dialogs/create_dm_dialog.dart' show friendDiscoveryServiceProvider;
@@ -916,12 +917,35 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
   }
 
   Future<void> _removeFriend(Friend friend) async {
-    final friendService = ref.read(friendDiscoveryServiceProvider);
-    final success = await friendService.removeFriend(_currentUserId, friend.id);
-    if (success && mounted) {
-      await _loadFriends();
-      setState(() {});
-      _showSuccessMessage('${friend.name} removed from friends');
+    try {
+      final backendService = ref.read(backendProfileSocialServiceProvider);
+      final friendService = ref.read(friendDiscoveryServiceProvider);
+      final backendResponse = await backendService.removeFriend(friend.id);
+      final backendSucceeded = backendResponse['removed'] == true ||
+          backendResponse['success'] == true ||
+          backendResponse.isEmpty;
+      final localSucceeded =
+          await friendService.removeFriend(_currentUserId, friend.id);
+
+      final success = backendSucceeded || localSucceeded;
+      if (success && mounted) {
+        await _loadFriends();
+        _updateOnlineFriends();
+        setState(() {});
+        _showSuccessMessage('${friend.name} removed from friends');
+      }
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Could not remove ${friend.name} right now'),
+          backgroundColor: const Color(0xFFEF4444),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      );
     }
   }
 

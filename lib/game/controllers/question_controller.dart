@@ -114,9 +114,16 @@ class QuestionController extends StateNotifier<QuestionState> {
   Future<void> _evaluateAnswer() async {
     _timer?.cancel();
 
-    bool correct =
-        state.currentQuestion?.isCorrectAnswer(state.selectedAnswer ?? '') ??
-            false;
+    final currentQuestion = state.currentQuestion;
+    if (currentQuestion == null) {
+      return;
+    }
+
+    final evaluation = await _questionRepository.checkAnswer(
+      question: currentQuestion,
+      selectedAnswer: state.selectedAnswer ?? '',
+    );
+    bool correct = evaluation.isCorrect;
     bool shieldUsed = false;
 
     // ── autoCorrectChance ──────────────────────────────────────────────────

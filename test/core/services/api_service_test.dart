@@ -403,4 +403,148 @@ void main() {
     expect(authBox.get('auth_access_token'), 'users-me-new-token');
     expect(authBox.get('auth_refresh_token'), 'users-me-new-refresh');
   });
+
+  test('preserves ownership 403 envelope details for protected store routes', () async {
+    await authBox.put('auth_access_token', 'store-token');
+
+    final dio = Dio(BaseOptions(baseUrl: 'https://example.test'));
+
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          if (options.path == '/store/subscription/paypal/cancel') {
+            expect(options.headers['Authorization'], 'Bearer store-token');
+            handler.reject(
+              DioException(
+                requestOptions: options,
+                response: Response(
+                  requestOptions: options,
+                  statusCode: 403,
+                  data: {
+                    'error': {
+                      'code': 'FORBIDDEN',
+                      'message': 'playerId does not match authenticated user',
+                      'details': {
+                        'playerId': 'other-player',
+                        'authPlayerId': 'player-123',
+                      },
+                    },
+                  },
+                ),
+                type: DioExceptionType.badResponse,
+              ),
+            );
+            return;
+          }
+
+          handler.next(options);
+        },
+      ),
+    );
+
+    final service = ApiService(
+      baseUrl: 'https://example.test',
+      dio: dio,
+      initializeCache: false,
+    );
+
+    expect(
+      () => service.post(
+        '/store/subscription/paypal/cancel',
+        body: {
+          'playerId': 'other-player',
+          'subscriptionId': 'I-BW452GLLEP1G',
+          'reason': 'Canceled by customer',
+        },
+      ),
+      throwsA(
+        isA<ApiRequestException>()
+            .having((e) => e.statusCode, 'statusCode', 403)
+            .having((e) => e.errorCode, 'errorCode', 'FORBIDDEN')
+            .having(
+              (e) => e.message,
+              'message',
+              'playerId does not match authenticated user',
+            )
+            .having(
+              (e) => e.details?['authPlayerId'],
+              'authPlayerId',
+              'player-123',
+            ),
+      ),
+    );
+  });
+
+  test('preserves provider-disabled 503 envelope details for store routes', () async {
+    await authBox.put('auth_access_token', 'store-token');
+
+    final dio = Dio(BaseOptions(baseUrl: 'https://example.test'));
+
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          if (options.path == '/store/payments/checkout/session') {
+            expect(options.headers['Authorization'], 'Bearer store-token');
+            handler.reject(
+              DioException(
+                requestOptions: options,
+                response: Response(
+                  requestOptions: options,
+                  statusCode: 503,
+                  data: {
+                    'error': {
+                      'code': 'PAYPAL_DISABLED',
+                      'message': 'PayPal payments are currently unavailable.',
+                      'details': {
+                        'storeEnabled': true,
+                        'paymentsEnabled': true,
+                        'stripeEnabled': true,
+                        'payPalEnabled': false,
+                      },
+                    },
+                  },
+                ),
+                type: DioExceptionType.badResponse,
+              ),
+            );
+            return;
+          }
+
+          handler.next(options);
+        },
+      ),
+    );
+
+    final service = ApiService(
+      baseUrl: 'https://example.test',
+      dio: dio,
+      initializeCache: false,
+    );
+
+    expect(
+      () => service.post(
+        '/store/payments/checkout/session',
+        body: {
+          'playerId': 'player-123',
+          'sku': 'powerup:skip',
+          'quantity': 1,
+        },
+      ),
+      throwsA(
+        isA<ApiRequestException>()
+            .having((e) => e.statusCode, 'statusCode', 503)
+            .having((e) => e.errorCode, 'errorCode', 'PAYPAL_DISABLED')
+            .having(
+              (e) => e.message,
+              'message',
+              'PayPal payments are currently unavailable.',
+            )
+            .having(
+              (e) => e.details?['payPalEnabled'],
+              'payPalEnabled',
+              false,
+            ),
+      ),
+    );
+  });
 }

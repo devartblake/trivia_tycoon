@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive/hive.dart';
 import '../../../core/services/social/friend_discovery_service.dart';
+import '../../../game/providers/profile_providers.dart' hide currentUserIdProvider;
 import '../../../game/providers/message_providers.dart';
 import '../../messages/dialogs/create_dm_dialog.dart' show friendDiscoveryServiceProvider;
 
@@ -34,6 +35,29 @@ class _AddFriendByUsernameScreenState
   void dispose() {
     _usernameController.dispose();
     super.dispose();
+  }
+
+  String _normalizeHandle(String value) {
+    final trimmed = value.trim();
+    if (trimmed.startsWith('@')) {
+      return trimmed.substring(1);
+    }
+    return trimmed;
+  }
+
+  String _userHandle(Map<String, dynamic> user) {
+    return _normalizeHandle(
+      user['handle']?.toString() ??
+          user['username']?.toString() ??
+          user['userName']?.toString() ??
+          '',
+    );
+  }
+
+  String _userDisplayName(Map<String, dynamic> user) {
+    return user['displayName']?.toString() ??
+        user['name']?.toString() ??
+        _userHandle(user);
   }
 
   @override
@@ -279,7 +303,7 @@ class _AddFriendByUsernameScreenState
   }
 
   Future<void> _sendFriendRequest() async {
-    final username = _usernameController.text.trim();
+    final username = _normalizeHandle(_usernameController.text);
 
     if (username.isEmpty) {
       setState(() {
@@ -303,13 +327,17 @@ class _AddFriendByUsernameScreenState
     });
 
     try {
+      final backendProfileService =
+          ref.read(backendProfileSocialServiceProvider);
       final friendService = ref.read(friendDiscoveryServiceProvider);
 
-      // Search for user by username
-      final users = friendService.searchUsers(username);
-      final targetUser = users.where((u) => u.username == username).firstOrNull;
+      final users = await backendProfileService.searchUsers(username);
+      final targetUser = users.firstWhere(
+        (user) => _userHandle(user).toLowerCase() == username.toLowerCase(),
+        orElse: () => const <String, dynamic>{},
+      );
 
-      if (targetUser == null) {
+      if (targetUser.isEmpty) {
         setState(() {
           _resultMessage = "User '$username' not found";
           _isSuccess = false;
@@ -318,13 +346,28 @@ class _AddFriendByUsernameScreenState
         return;
       }
 
+      final targetUserId = targetUser['id']?.toString() ??
+          targetUser['userId']?.toString() ??
+          '';
+      final targetDisplayName = _userDisplayName(targetUser);
+
+      if (targetUserId.isEmpty) {
+        setState(() {
+          _resultMessage = 'User search returned an invalid record';
+          _isSuccess = false;
+          _isSending = false;
+        });
+        return;
+      }
+
       // Check friendship status
-      final status = friendService.getFriendshipStatus(_currentUserId, targetUser.id);
+      final status =
+          friendService.getFriendshipStatus(_currentUserId, targetUserId);
 
       switch (status) {
         case FriendshipStatus.friends:
           setState(() {
-            _resultMessage = 'You are already friends with ${targetUser.displayName}';
+            _resultMessage = 'You are already friends with $targetDisplayName';
             _isSuccess = false;
             _isSending = false;
           });
@@ -332,7 +375,8 @@ class _AddFriendByUsernameScreenState
 
         case FriendshipStatus.requestSent:
           setState(() {
-            _resultMessage = 'Friend request already sent to ${targetUser.displayName}';
+            _resultMessage =
+                'Friend request already sent to $targetDisplayName';
             _isSuccess = false;
             _isSending = false;
           });
@@ -340,7 +384,8 @@ class _AddFriendByUsernameScreenState
 
         case FriendshipStatus.requestReceived:
           setState(() {
-            _resultMessage = '${targetUser.displayName} already sent you a friend request. Check your pending requests!';
+            _resultMessage =
+                '$targetDisplayName already sent you a friend request. Check your pending requests!';
             _isSuccess = false;
             _isSending = false;
           });
@@ -359,12 +404,12 @@ class _AddFriendByUsernameScreenState
           final success = await friendService.sendFriendRequest(
             senderId: _currentUserId,
             senderName: _currentUsername,
-            recipientId: targetUser.id,
+            recipientId: targetUserId,
           );
 
           if (success) {
             setState(() {
-              _resultMessage = 'Friend request sent to ${targetUser.displayName}!';
+              _resultMessage = 'Friend request sent to $targetDisplayName!';
               _isSuccess = true;
               _isSending = false;
             });

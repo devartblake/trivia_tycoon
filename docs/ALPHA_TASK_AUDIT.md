@@ -1,6 +1,6 @@
 # Synaptix Alpha Outstanding Task Audit
 
-_Date: 2026-03-31 | Last updated: 2026-04-09_
+_Date: 2026-03-31 | Last updated: 2026-04-12_
 
 ## 0) ProfileSyncService 404/backoff root cause (resolved) ✅
 
@@ -171,6 +171,79 @@ Progress update (2026-04-04 execution — complete):
 
 > **Result:** Web and Edge startup cascade failure eliminated. App can now load on web
 > in both debug (DDC) and release (dart2js) modes.
+
+## 7) 2026-04-12 additional completions
+
+### Store payments integration ✅ IMPLEMENTED
+- Frontend store/payment wiring is now in place for:
+  - Stripe one-time checkout
+  - PayPal one-time create + capture
+  - Stripe subscriptions
+  - Stripe billing portal redirection
+  - PayPal subscriptions with post-return status polling
+- In-app return routing has been added for:
+  - `/store/payment-return`
+  - `/store/subscription-return`
+- Supporting implementation includes route registration, environment-driven return
+  URL generation, and provider-specific post-return refresh handling.
+
+### Hosted app-link / universal-link setup ✅ IMPLEMENTED IN REPO
+- Android manifest intent filters added for the hosted Synaptix return domain.
+- iOS associated-domains entitlements added and wired into the Runner target.
+- Hosted verification templates added under `docs/app-links/`.
+- `APP_REDIRECT_BASE_URL` added as the frontend return URL base input.
+
+### App-link runtime routing ✅ IMPLEMENTED
+- Runtime incoming-link handling added via `app_links`:
+  - initial-link handling
+  - foreground-stream handling
+  - deferred routing until GoRouter is ready
+- Guard rails added so builds that do not yet contain the native plugin do not
+  crash the app at startup.
+
+### Phase 2 crash recovery + notification persistence ✅ CODE COMPLETE
+- Crash recovery now restores persisted quiz/player/profile state instead of only logging.
+- Notification history is now persisted and restored on startup.
+- Notification template state is restored during bootstrap.
+- Backlog updated in `docs/REMAINING_TASKS.md` to reflect code completion.
+
+### Tests added ✅
+- Payment/app-link tests:
+  - `test/core/services/store_return_url_builder_test.dart`
+  - `test/core/services/store_link_router_test.dart`
+  - `test/screens/store/store_payment_return_screen_test.dart`
+  - `test/core/services/store_service_payment_flows_test.dart`
+  - `test/core/services/backend_profile_social_service_test.dart`
+  - `test/core/services/api_service_test.dart` (store `403`/`503` error-path coverage)
+- Recovery/notification tests:
+  - `test/core/services/crash_recovery_service_test.dart`
+  - `test/game/providers/notification_history_store_test.dart`
+
+### Backend handoff partials âœ… CLOSED
+- The alpha handoff partials for store/profile integration are now implemented:
+  - `POST /store/iap/validate` client support added in `StoreService`
+  - backend user search wired for add-friend-by-username
+  - backend career-summary fetch wired into the enhanced profile screen
+  - backend loadout `GET`/`PUT` wiring added for enhanced profile data + profile edit save
+  - backend `DELETE /friends` wiring added for unfriend
+- Question gameplay handoff wiring is now implemented:
+  - quiz retrieval prefers `GET /questions/set`
+  - per-question validation uses `POST /questions/check`
+  - end-of-quiz reconciliation uses `POST /questions/check-batch`
+- This closes the previously partial store/profile slices from
+  `docs/frontend_backend_handoff_alpha_2026-04-04.md`.
+- The larger handoff items for crypto surfaces and ML UX usage
+  remain separate work items.
+
+### Remaining operational validation
+- Hosted-domain verification still requires production deployment of:
+  - `assetlinks.json`
+  - `apple-app-site-association`
+- Clean native rebuild/reinstall still required after adding `app_links` to avoid
+  stale-build `MissingPluginException` on Android.
+- Payment handoff QA scenarios for PayPal subscription cancel plus store `403` and `503`
+  responses are now covered by automated tests and no longer remain open in the
+  handoff document.
 
 ## 8) Outstanding work — full backlog
 

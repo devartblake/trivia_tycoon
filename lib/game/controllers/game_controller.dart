@@ -118,10 +118,17 @@ class GameController extends ChangeNotifier {
   }
 
   /// Submits an answer and checks correctness.
-  void submitAnswer(String answer) {
+  Future<void> submitAnswer(String answer) async {
     if (_gameState != GameState.playing) return;
 
-    final correct = currentQuestion?.isCorrectAnswer(answer) ?? false;
+    final question = currentQuestion;
+    if (question == null) return;
+
+    final evaluation = await questionRepository.checkAnswer(
+      question: question,
+      selectedAnswer: answer,
+    );
+    final correct = evaluation.isCorrect;
     if (correct) {
       _score += 10;
       _streak++;

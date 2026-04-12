@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+import '../../core/models/question_validation_models.dart';
 import '../services/quiz_category.dart';
 import '../models/question_model.dart';
 import '../../core/repositories/question_repository.dart';
@@ -34,6 +35,7 @@ class AdaptedQuizState {
   final DateTime? quizStartTime;
   final DateTime? quizEndTime;
   final Stopwatch? stopwatch;
+  final List<QuestionAnswerSubmission> answerSubmissions;
 
   const AdaptedQuizState({
     this.questions = const [],
@@ -62,6 +64,7 @@ class AdaptedQuizState {
     this.quizStartTime,
     this.quizEndTime,
     this.stopwatch,
+    this.answerSubmissions = const [],
   });
 
   AdaptedQuizState copyWith({
@@ -91,6 +94,7 @@ class AdaptedQuizState {
     DateTime? quizStartTime,
     DateTime? quizEndTime,
     Stopwatch? stopwatch,
+    List<QuestionAnswerSubmission>? answerSubmissions,
   }) {
     return AdaptedQuizState(
       questions: questions ?? this.questions,
@@ -119,6 +123,7 @@ class AdaptedQuizState {
       quizStartTime: quizStartTime ?? this.quizStartTime,
       quizEndTime: quizEndTime ?? this.quizEndTime,
       stopwatch: stopwatch ?? this.stopwatch,
+      answerSubmissions: answerSubmissions ?? this.answerSubmissions,
     );
   }
 
@@ -232,6 +237,7 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
         timeRemaining: _getTimeLimitForClass(classLevel),
         categoryScores: categoryScores,
         achievements: <String>[],
+        answerSubmissions: const <QuestionAnswerSubmission>[],
       );
 
       _startTimer();
@@ -297,14 +303,25 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
   }
 
   /// Answer a question
-  void answerQuestion(String answer) {
+  Future<QuestionAnswerCheckResult> answerQuestion(String answer) async {
     final currentQuestion = state.currentQuestion;
-    if (currentQuestion == null) return;
+    if (currentQuestion == null) {
+      throw StateError('No current question available');
+    }
 
     _stopTimer();
 
-    final isCorrect = currentQuestion.isCorrectAnswer(answer);
+    final evaluation = await _repository.checkAnswer(
+      question: currentQuestion,
+      selectedAnswer: answer,
+    );
+    final isCorrect = evaluation.isCorrect;
     final isTimeout = answer.isEmpty;
+    final reconciledQuestion = currentQuestion.copyWith(
+      correctAnswer: evaluation.correctAnswer ?? currentQuestion.correctAnswer,
+    );
+    final updatedQuestions = [...state.questions];
+    updatedQuestions[state.currentIndex] = reconciledQuestion;
 
     int newScore = state.score;
     int xpGained = 0;
@@ -338,6 +355,7 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
     }
 
     state = state.copyWith(
+      questions: updatedQuestions,
       score: newScore,
       totalXP: state.totalXP + xpGained,
       coins: (state.coins ?? 0) + coinsGained,
@@ -345,7 +363,16 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
       stars: (state.stars ?? 0) + starsGained,
       selectedAnswer: answer,
       showFeedback: true,
+      answerSubmissions: [
+        ...state.answerSubmissions,
+        QuestionAnswerSubmission(
+          question: reconciledQuestion,
+          selectedAnswer: answer,
+        ),
+      ],
     );
+
+    return evaluation;
   }
 
   /// Move to next question
@@ -382,6 +409,48 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
       quizEndTime: endTime,
       achievements: achievements,
     );
+  }
+
+  Future<AdaptedQuizState> reconcileAuthoritativeResults() async {
+    if (state.answerSubmissions.isEmpty) {
+      return state;
+    }
+
+    try {
+      final results = await _repository.checkAnswerBatch(
+        submissions: state.answerSubmissions,
+      );
+      if (results.isEmpty) {
+        return state;
+      }
+
+      final submissionsById = {
+        for (final submission in state.answerSubmissions)
+          submission.question.id: submission,
+      };
+      final categoryScores = <String, int>{};
+      var authoritativeScore = 0;
+
+      for (final result in results) {
+        final submission = submissionsById[result.questionId];
+        if (submission == null || !result.isCorrect) {
+          continue;
+        }
+
+        authoritativeScore++;
+        categoryScores[submission.question.category] =
+            (categoryScores[submission.question.category] ?? 0) + 1;
+      }
+
+      state = state.copyWith(
+        score: authoritativeScore,
+        categoryScores: categoryScores,
+      );
+    } catch (_) {
+      // Keep the per-question authoritative/fallback results already in state.
+    }
+
+    return state;
   }
 
   /// Calculate achievements based on quiz performance
@@ -460,7 +529,7 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
         timer.cancel();
         state = state.copyWith(isTimerExpired: true);
         // Auto-answer with empty string (timeout)
-        answerQuestion('');
+        unawaited(answerQuestion(''));
       } else if (!state.isPaused) {
         state = state.copyWith(timeRemaining: state.timeRemaining - 1);
       }

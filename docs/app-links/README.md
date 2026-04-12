@@ -2,6 +2,30 @@
 
 These files are the hosted-domain artifacts for the Synaptix payment return flow.
 
+## Status update (2026-04-12)
+
+Completed in the app codebase:
+
+- Android manifest intent filters added for hosted payment/subscription return URLs
+- iOS associated-domains entitlements wired into the Runner target
+- `APP_REDIRECT_BASE_URL` environment support added for return URL generation
+- Incoming-link handling added in app startup via `app_links`
+- GoRouter payment/subscription return routes added
+
+Still required outside the app repo:
+
+- Host the `assetlinks.json` file on the production domain
+- Host the `apple-app-site-association` file on the production domain
+- Replace placeholder signing/team identifiers with production values
+- Perform a clean native rebuild/reinstall after adding the plugin
+
+Known issue:
+
+- If Android is launched from an old installed APK that predates the `app_links`
+  dependency, the app can log:
+  `MissingPluginException(No implementation found for method listen on channel com.llfbandit.app_links/events)`.
+  Fix by uninstalling the app and doing a full rebuild/reinstall rather than hot restart.
+
 ## Domain
 
 This repo is currently wired to:
@@ -42,3 +66,6 @@ The app currently expects this environment variable:
 ```env
 APP_REDIRECT_BASE_URL=https://app.synaptixgame.com
 ```
+
+This value is now consumed by the frontend return URL builder and should stay in
+sync with the hosted verification domain above.

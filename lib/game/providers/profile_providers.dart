@@ -18,6 +18,7 @@ import '../../game/services/referral_invite_service.dart';
 import '../../game/services/referral_invite_storage_service.dart';
 import '../../game/services/referral_service.dart';
 import '../../game/services/referral_storage_service.dart';
+import '../../core/services/social/backend_profile_social_service.dart';
 import 'core_providers.dart';
 import 'game_providers.dart';
 
@@ -81,6 +82,23 @@ FutureProvider<List<Map<String, String>>>((ref) async {
 final userProfileProvider = Provider<Map<String, dynamic>>((ref) {
   final profileService = ref.watch(playerProfileServiceProvider);
   return profileService.getProfile();
+});
+
+final backendProfileSocialServiceProvider =
+    Provider<BackendProfileSocialService>((ref) {
+  final apiService = ref.watch(apiServiceProvider);
+  return BackendProfileSocialService(apiService);
+});
+
+final profileLoadoutProvider = FutureProvider<Map<String, dynamic>>((ref) async {
+  final service = ref.watch(backendProfileSocialServiceProvider);
+  return service.getLoadout();
+});
+
+final careerSummaryProvider =
+    FutureProvider.family<Map<String, dynamic>, String>((ref, userId) async {
+  final service = ref.watch(backendProfileSocialServiceProvider);
+  return service.getCareerSummary(userId);
 });
 
 // ---------------------------------------------------------------------------

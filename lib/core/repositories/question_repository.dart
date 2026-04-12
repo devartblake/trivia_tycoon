@@ -1,3 +1,4 @@
+import '../models/question_validation_models.dart';
 import '../../game/models/question_model.dart';
 import '../../game/models/game_mode.dart';
 import '../../game/services/quiz_category.dart';
@@ -38,5 +39,14 @@ abstract class QuestionRepository {
   Future<List<QuestionModel>> getMultiplayerQuestions({
     int amount = 10,
     String? category,
+  });
+
+  Future<QuestionAnswerCheckResult> checkAnswer({
+    required QuestionModel question,
+    required String selectedAnswer,
+  });
+
+  Future<List<QuestionAnswerCheckResult>> checkAnswerBatch({
+    required List<QuestionAnswerSubmission> submissions,
   });
 }

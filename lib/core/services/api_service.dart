@@ -379,10 +379,12 @@ class ApiService {
 
   /// **🔹 Generic DELETE Request**
   Future<Map<String, dynamic>> delete(String path,
-      {Map<String, String>? headers}) async {
+      {Map<String, dynamic>? body,
+        Map<String, String>? headers}) async {
     return _handleRequest(() async {
       final response = await _dio.delete(
         path,
+        data: body,
         options: Options(headers: _buildJsonHeaders(path, headers)),
       );
       return _asJsonMap(response.data);

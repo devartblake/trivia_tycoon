@@ -1,3 +1,4 @@
+import 'package:trivia_tycoon/core/models/question_validation_models.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trivia_tycoon/core/services/api_service.dart';
 import 'package:trivia_tycoon/game/models/game_mode.dart';
@@ -22,6 +23,9 @@ class _FakeQuestionHubService extends QuestionHubService {
   int? lastMixedCount;
   List<String>? lastMixedCategories;
   bool? lastBalanceDifficulties;
+  QuestionModel? lastCheckedQuestion;
+  String? lastSelectedAnswer;
+  List<QuestionAnswerSubmission>? lastBatchSubmissions;
 
   @override
   Future<List<QuestionModel>> getQuestionsForCategory({
@@ -68,6 +72,36 @@ class _FakeQuestionHubService extends QuestionHubService {
 
   @override
   Future<Map<String, dynamic>> getClassStats(String classId) async => const {};
+
+  @override
+  Future<QuestionAnswerCheckResult> checkAnswer({
+    required QuestionModel question,
+    required String selectedAnswer,
+  }) async {
+    lastCheckedQuestion = question;
+    lastSelectedAnswer = selectedAnswer;
+    return QuestionAnswerCheckResult(
+      questionId: question.id,
+      selectedAnswer: selectedAnswer,
+      isCorrect: true,
+    );
+  }
+
+  @override
+  Future<List<QuestionAnswerCheckResult>> checkAnswerBatch({
+    required List<QuestionAnswerSubmission> submissions,
+  }) async {
+    lastBatchSubmissions = submissions;
+    return submissions
+        .map(
+          (submission) => QuestionAnswerCheckResult(
+            questionId: submission.question.id,
+            selectedAnswer: submission.selectedAnswer,
+            isCorrect: true,
+          ),
+        )
+        .toList();
+  }
 }
 
 void main() {
@@ -109,5 +143,27 @@ void main() {
     expect(hub.lastMixedCount, 8);
     expect(hub.lastMixedCategories, ['history']);
     expect(hub.lastBalanceDifficulties, isTrue);
+  });
+
+  test('checkAnswer delegates validation to hub service', () async {
+    final hub = _FakeQuestionHubService();
+    final repo = QuestionRepositoryImpl(questionHubService: hub);
+    final question = QuestionModel.fromJson({
+      'id': 'q-1',
+      'category': 'science',
+      'question': 'Q1',
+      'type': 'multiple_choice',
+      'difficulty': 1,
+      'correctAnswer': 'A',
+      'answers': const [
+        {'text': 'A', 'isCorrect': true},
+        {'text': 'B', 'isCorrect': false},
+      ],
+    });
+
+    await repo.checkAnswer(question: question, selectedAnswer: 'A');
+
+    expect(hub.lastCheckedQuestion?.id, 'q-1');
+    expect(hub.lastSelectedAnswer, 'A');
   });
 }

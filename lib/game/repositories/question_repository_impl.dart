@@ -1,3 +1,4 @@
+import '../../core/models/question_validation_models.dart';
 import '../../core/repositories/question_repository.dart';
 import '../models/game_mode.dart';
 import '../models/question_model.dart';
@@ -108,5 +109,23 @@ class QuestionRepositoryImpl implements QuestionRepository {
       categories: categories,
       balanceDifficulties: true,
     );
+  }
+
+  @override
+  Future<QuestionAnswerCheckResult> checkAnswer({
+    required QuestionModel question,
+    required String selectedAnswer,
+  }) {
+    return _questionHubService.checkAnswer(
+      question: question,
+      selectedAnswer: selectedAnswer,
+    );
+  }
+
+  @override
+  Future<List<QuestionAnswerCheckResult>> checkAnswerBatch({
+    required List<QuestionAnswerSubmission> submissions,
+  }) {
+    return _questionHubService.checkAnswerBatch(submissions: submissions);
   }
 }

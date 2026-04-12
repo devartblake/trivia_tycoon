@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/services/settings/multi_profile_service.dart';
+import '../../../../game/providers/profile_providers.dart';
 import '../../../../game/providers/multi_profile_providers.dart';
 
 /// Modern Edit Profile Bottom Sheet with Material 3 Design
@@ -151,11 +152,30 @@ class _EditProfileBottomSheetState
 
       if (mounted) {
         if (success) {
+          var loadoutSynced = true;
+          try {
+            await ref.read(backendProfileSocialServiceProvider).saveLoadout({
+              'username': finalUsername,
+              'bio': _bioController.text.trim(),
+              'teamName': _teamController.text.trim(),
+              'favoriteSubject': _favoriteSubjectController.text.trim(),
+            });
+            ref.invalidate(profileLoadoutProvider);
+          } catch (_) {
+            loadoutSynced = false;
+          }
+
           // Refresh the profile data
           ref.read(profileManagerProvider.notifier).refreshProfiles();
 
           // Show success message
-          _showSuccessSnackBar('Profile updated successfully!');
+          if (loadoutSynced) {
+            _showSuccessSnackBar('Profile updated successfully!');
+          } else {
+            _showWarningSnackBar(
+              'Profile updated locally. Backend loadout sync is still pending.',
+            );
+          }
 
           // Close the bottom sheet with success result
           Navigator.of(context).pop(true);
@@ -202,6 +222,24 @@ class _EditProfileBottomSheetState
           ],
         ),
         backgroundColor: const Color(0xFFEF4444),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        margin: const EdgeInsets.all(16),
+      ),
+    );
+  }
+
+  void _showWarningSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(Icons.warning_amber_rounded, color: Colors.white),
+            const SizedBox(width: 12),
+            Expanded(child: Text(message)),
+          ],
+        ),
+        backgroundColor: const Color(0xFFF59E0B),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         margin: const EdgeInsets.all(16),

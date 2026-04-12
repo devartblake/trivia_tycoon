@@ -95,6 +95,27 @@ class StoreService {
     );
   }
 
+  Future<Map<String, dynamic>> validateIap({
+    required String playerId,
+    required String provider,
+    required String productId,
+    required String purchaseToken,
+    String? transactionId,
+    Map<String, dynamic>? metadata,
+  }) {
+    return apiService.post(
+      '/store/iap/validate',
+      body: {
+        'playerId': playerId,
+        'provider': provider,
+        'productId': productId,
+        'purchaseToken': purchaseToken,
+        if (transactionId != null) 'transactionId': transactionId,
+        if (metadata != null) 'metadata': metadata,
+      },
+    );
+  }
+
   Future<Map<String, dynamic>> createStripeCheckoutSession({
     required String playerId,
     required String sku,

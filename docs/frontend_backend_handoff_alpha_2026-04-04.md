@@ -3,6 +3,23 @@
 ## Purpose
 This handoff summarizes what backend contracts are now available for frontend integration and what is still pending to reach full production behavior.
 
+## Frontend status update (2026-04-12)
+
+The previously partial frontend work for this handoff is now closed in two
+alpha-scoped areas:
+
+- Store:
+  - `POST /store/iap/validate` client support is now implemented
+- Users / profile / social:
+  - backend search is wired for add-by-username
+  - backend career-summary fetch is wired into the enhanced profile screen
+  - backend loadout `GET`/`PUT` wiring is in place for profile hydration/edit save
+  - backend `DELETE /friends` wiring is in place for unfriend
+
+Still not completed from this handoff:
+- crypto economy player surfaces
+- ML endpoint consumption in frontend UX/telemetry
+
 ---
 
 ## Backend capabilities confirmed for frontend use
@@ -15,6 +32,11 @@ This handoff summarizes what backend contracts are now available for frontend in
 
 **Frontend action:** wire gameplay question loops to these endpoints as authoritative sources.
 
+**Status (2026-04-12):** repository-backed quiz flows now prefer
+`GET /questions/set` for retrieval and use `POST /questions/check` plus
+`POST /questions/check-batch` for authoritative answer validation/reconciliation,
+with legacy/local fallback preserved for resilience.
+
 ## 2) Store / IAP / inventory / subscription
 - `GET /store/catalog`
 - `POST /store/purchase`
@@ -24,6 +46,10 @@ This handoff summarizes what backend contracts are now available for frontend in
 - `POST /store/subscription/activate`
 
 **Frontend action:** use backend catalog/pricing as source of truth; consume purchase and IAP validation result payloads directly.
+
+**Status (2026-04-12):** frontend wiring now includes purchase flows, external
+payment/subscription return handling, reconciliation refresh, and
+`POST /store/iap/validate`.
 
 ## 3) Crypto economy
 - `POST /crypto/link-wallet`
@@ -51,6 +77,11 @@ This handoff summarizes what backend contracts are now available for frontend in
 
 **Frontend action:** wire profile/search/loadout/friend removal directly against backend endpoints.
 
+**Status (2026-04-12):** backend search, career-summary, loadout fetch/save, and
+friend removal are now wired on the frontend. Friend request create/accept still
+use local placeholder flows and can be backendized later if that contract enters
+alpha scope.
+
 ## 5) ML scoring endpoints (new baseline)
 - `POST /ml/churn-risk`
 - `POST /ml/match-quality`
@@ -77,10 +108,8 @@ This handoff summarizes what backend contracts are now available for frontend in
 ## Recommended frontend sequencing (next sprint)
 
 1. Finalize wallet sync + purchase reconciliation against backend economy/store transactions.
-2. Ship profile/loadout/search/career-summary integration.
-3. Integrate question set/check/check-batch as the only gameplay grading source.
-4. Stage crypto wallet/history/staking screens behind feature flag.
-5. Keep ML-driven UX flags optional until churn/quality backend models are promoted.
+2. Stage crypto wallet/history/staking screens behind feature flag.
+3. Keep ML-driven UX flags optional until churn/quality backend models are promoted.
 
 ---
 

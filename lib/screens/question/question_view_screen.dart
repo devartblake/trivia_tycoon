@@ -138,6 +138,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
   Future<void> _showEnhancedFeedbackDialog({
     required bool isCorrect,
     required QuestionModel question,
+    required String correctAnswer,
     required int xpGained,
     required bool hasTimeBonus,
     required bool isTimeout,
@@ -232,7 +233,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
-                          question.correctAnswer,
+                          correctAnswer,
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 16,
@@ -383,11 +384,11 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
     final currentQuestion = state.currentQuestion;
     if (currentQuestion == null) return;
 
-    final isCorrect = currentQuestion.isCorrectAnswer(answer);
     final isTimeout = answer.isEmpty; // Empty string indicates timeout
     final previousXP = state.totalXP;
 
-    notifier.answerQuestion(answer);
+    final evaluation = await notifier.answerQuestion(answer);
+    final isCorrect = evaluation.isCorrect;
 
     // Get updated state to calculate XP gained
     final updatedState = ref.read(adaptedQuizProvider);
@@ -398,13 +399,17 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
     await _showEnhancedFeedbackDialog(
       isCorrect: isCorrect,
       question: currentQuestion,
+      correctAnswer: evaluation.correctAnswer ?? currentQuestion.correctAnswer,
       xpGained: xpGained,
       hasTimeBonus: hasTimeBonus,
       isTimeout: isTimeout,
-      onNext: () {
+      onNext: () async {
         final currentState = ref.read(adaptedQuizProvider);
 
         if (currentState.isLastQuestion) {
+          final reconciledState =
+              await ref.read(adaptedQuizProvider.notifier).reconcileAuthoritativeResults();
+
           // STOP THE STOPWATCH HERE BEFORE NAVIGATION
           ref.read(adaptedQuizProvider.notifier).completeQuiz();
 
@@ -413,7 +418,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
 
           // Create quiz results with all required fields and safe typing
           final quizResults = QuizResults(
-            score: finalState.score,
+            score: reconciledState.score,
             totalQuestions: finalState.totalQuestions,
             totalXP: finalState.totalXP,
             coins: finalState.coins ?? 0,
@@ -421,7 +426,9 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
             stars: finalState.stars ?? 0,
             classLevel: finalState.classLevel,
             category: _getCategoryDisplayName(), // Use resolved category display name
-            categoryScores: Map<String, int>.from(finalState.categoryScores ?? {}),
+            categoryScores: Map<String, int>.from(
+              reconciledState.categoryScores ?? {},
+            ),
             achievements: List<String>.from(finalState.achievements ?? []),
             quizDuration: finalState.quizDuration,
           );
@@ -430,6 +437,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
           ref.read(quizResultsProvider.notifier).state = quizResults;
 
           // Navigate to score summary (processing will happen there)
+          if (!mounted) return;
           context.go('/score-summary');
         } else {
           ref.read(adaptedQuizProvider.notifier).nextQuestion();
