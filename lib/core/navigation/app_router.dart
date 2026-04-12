@@ -70,6 +70,7 @@ import '../../screens/rewards/spin_earn_screen.dart';
 import '../../screens/social/multiplayer_screen.dart';
 import '../../screens/store/gifts_screen.dart';
 import '../../screens/store/offers_screen.dart';
+import '../../screens/store/store_payment_return_screen.dart';
 import '../../screens/store/store_hub_screen.dart';
 import '../../screens/store/premium_store.dart';
 import '../../screens/users/achievements_screen.dart';
@@ -416,6 +417,22 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/store',
         name: 'Store',
         builder: (context, state) => StoreScreen()
+      ),
+      GoRoute(
+        path: '/store/payment-return',
+        name: 'Store Payment Return',
+        builder: (context, state) => StorePaymentReturnScreen(
+          mode: StoreReturnMode.purchase,
+          queryParameters: state.uri.queryParameters,
+        ),
+      ),
+      GoRoute(
+        path: '/store/subscription-return',
+        name: 'Store Subscription Return',
+        builder: (context, state) => StorePaymentReturnScreen(
+          mode: StoreReturnMode.subscription,
+          queryParameters: state.uri.queryParameters,
+        ),
       ),
       GoRoute(
         path: '/store-premium',

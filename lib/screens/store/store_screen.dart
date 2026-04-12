@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import 'package:trivia_tycoon/ui_components/power_ups/power_up_inventory_widget.dart';
+import '../../core/services/api_service.dart';
+import '../../core/services/store/store_return_url_builder.dart';
 import '../../core/services/settings/app_settings.dart';
+import '../../game/models/store_item_model.dart';
 import 'widgets/currency_display_bar.dart';
 import 'widgets/store_category_tab.dart';
 import 'widgets/store_item_card.dart';
@@ -58,12 +62,15 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
       setState(() {
         _selectedCategory = 'All';
       });
+      ref.invalidate(storeItemsProvider);
+      ref.invalidate(storeSystemStatusProvider);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final asyncItems = ref.watch(storeItemsProvider);
+    final systemStatus = ref.watch(storeSystemStatusProvider);
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFF),
@@ -71,7 +78,8 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
       body: FadeTransition(
         opacity: _fadeAnimation,
         child: asyncItems.when(
-          data: (items) => _buildStoreContent(items),
+          data: (items) =>
+              _buildStoreContent(items, systemStatus.valueOrNull ?? const {}),
           loading: () => _buildLoadingState(),
           error: (err, _) => _buildErrorState(err),
         ),
@@ -181,7 +189,8 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
     );
   }
 
-  Widget _buildStoreContent(List<dynamic> items) {
+  Widget _buildStoreContent(
+      List<StoreItemModel> items, Map<String, dynamic> status) {
     final categories = <String>['All', ...{for (var item in items) item.category as String}];
     final storeItems = items.where((item) =>
     _selectedCategory == 'All' || item.category == _selectedCategory).toList();
@@ -228,6 +237,14 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
             },
           ),
         ),
+
+        if (status.isNotEmpty)
+          SliverToBoxAdapter(
+            child: Container(
+              margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+              child: _buildSystemStatusBanner(status),
+            ),
+          ),
 
         // Category Tabs
         SliverToBoxAdapter(
@@ -361,7 +378,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
                             name: item.name,
                             description: item.description,
                             iconPath: item.iconPath,
-                            price: item.price.toString(),
+                            price: item.displayPriceLabel ?? item.price.toString(),
                             onBuy: () => _handlePurchase(item),
                           ),
                         ),
@@ -569,12 +586,110 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
     );
   }
 
-  Future<void> _handlePurchase(dynamic item) async {
+  Widget _buildSystemStatusBanner(Map<String, dynamic> status) {
+    final storeEnabled = status['storeEnabled'] != false;
+    final paymentsEnabled = status['paymentsEnabled'] != false;
+    final stripeEnabled = status['stripeEnabled'] == true;
+    final payPalEnabled = status['payPalEnabled'] == true;
+    final message = status['message']?.toString() ??
+        'Store availability is being loaded.';
+
+    final accent = !storeEnabled || !paymentsEnabled
+        ? const Color(0xFFB91C1C)
+        : const Color(0xFF0F766E);
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: accent.withValues(alpha: 0.2)),
+        boxShadow: [
+          BoxShadow(
+            color: accent.withValues(alpha: 0.08),
+            blurRadius: 18,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                !storeEnabled || !paymentsEnabled
+                    ? Icons.info_outline
+                    : Icons.verified_outlined,
+                color: accent,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  message,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF1E293B),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              _buildStatusChip(
+                label: storeEnabled ? 'Store Live' : 'Store Offline',
+                active: storeEnabled,
+              ),
+              _buildStatusChip(
+                label: stripeEnabled ? 'Stripe Ready' : 'Stripe Off',
+                active: stripeEnabled,
+              ),
+              _buildStatusChip(
+                label: payPalEnabled ? 'PayPal Ready' : 'PayPal Off',
+                active: payPalEnabled,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatusChip({required String label, required bool active}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: active
+            ? const Color(0xFFDCFCE7)
+            : const Color(0xFFFEE2E2),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: active ? const Color(0xFF166534) : const Color(0xFF991B1B),
+          fontWeight: FontWeight.w600,
+          fontSize: 12,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _handlePurchase(StoreItemModel item) async {
     HapticFeedback.mediumImpact();
+
+    if (item.requiresExternalCheckout || item.currency.toLowerCase() == 'usd') {
+      await _handleExternalPurchase(item);
+      return;
+    }
 
     final coins = ref.read(coinBalanceProvider);
     if (coins >= item.price) {
-      // Show loading state
       showDialog(
         context: context,
         barrierDismissible: false,
@@ -588,48 +703,19 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
         await AppSettings.addPurchasedItem(item.id);
 
         if (!mounted) return;
-        Navigator.of(context).pop(); // Dismiss loading
+        Navigator.of(context).pop();
 
-        // Show success message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Row(
-              children: [
-                const Icon(Icons.check_circle, color: Colors.white),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text("Successfully purchased ${item.name}!"),
-                ),
-              ],
-            ),
-            backgroundColor: const Color(0xFF10B981),
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
+        _showSnack(
+          "Successfully purchased ${item.name}!",
+          const Color(0xFF10B981),
         );
       } catch (e) {
         if (!mounted) return;
-        Navigator.of(context).pop(); // Dismiss loading
+        Navigator.of(context).pop();
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Row(
-              children: [
-                const Icon(Icons.error, color: Colors.white),
-                const SizedBox(width: 12),
-                const Expanded(
-                  child: Text("Purchase failed. Please try again."),
-                ),
-              ],
-            ),
-            backgroundColor: const Color(0xFFEF4444),
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
+        _showSnack(
+          'Purchase failed. Please try again.',
+          const Color(0xFFEF4444),
         );
       }
     } else {
@@ -653,12 +739,263 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
             label: 'Get Coins',
             textColor: Colors.white,
             onPressed: () {
-              // Navigate to coin store
               Navigator.of(context).pushNamed('/coin-store');
             },
           ),
         ),
       );
     }
+  }
+
+  Future<void> _handleExternalPurchase(StoreItemModel item) async {
+    if (item.sku == null || item.sku!.isEmpty) {
+      _showSnack(
+        'This item is not wired to a backend SKU yet.',
+        const Color(0xFFEF4444),
+      );
+      return;
+    }
+
+    final status = await ref.read(storeSystemStatusProvider.future);
+    if (status['storeEnabled'] == false || status['paymentsEnabled'] == false) {
+      _showSnack(
+        status['message']?.toString() ?? 'Payments are currently unavailable.',
+        const Color(0xFFEF4444),
+      );
+      return;
+    }
+
+    final useStripe = await _choosePaymentProvider(
+      stripeEnabled: status['stripeEnabled'] == true,
+      payPalEnabled: status['payPalEnabled'] == true,
+    );
+    if (useStripe == null) return;
+
+    final playerId = await ref.read(currentUserIdProvider.future);
+    final storeService = ref.read(storeServiceProvider);
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      final response = useStripe
+          ? await storeService.createStripeCheckoutSession(
+              playerId: playerId,
+              sku: item.sku!,
+              successUrl: StoreReturnUrlBuilder.checkoutSuccess(
+                provider: 'stripe',
+                sku: item.sku!,
+                quantity: 1,
+              ),
+              cancelUrl: StoreReturnUrlBuilder.checkoutCancel(
+                provider: 'stripe',
+                sku: item.sku!,
+              ),
+            )
+          : await storeService.createPayPalOrder(
+              playerId: playerId,
+              sku: item.sku!,
+              returnUrl: StoreReturnUrlBuilder.checkoutSuccess(
+                provider: 'paypal',
+                sku: item.sku!,
+                quantity: 1,
+              ),
+              cancelUrl: StoreReturnUrlBuilder.checkoutCancel(
+                provider: 'paypal',
+                sku: item.sku!,
+              ),
+            );
+
+      if (!mounted) return;
+      Navigator.of(context).pop();
+
+      final redirectUrl = (useStripe
+              ? response['checkoutUrl']
+              : response['approveUrl'])
+          ?.toString();
+      if (redirectUrl == null || redirectUrl.isEmpty) {
+        _showSnack(
+          'The payment provider did not return a redirect URL.',
+          const Color(0xFFEF4444),
+        );
+        return;
+      }
+
+      final uri = Uri.tryParse(redirectUrl);
+      if (uri == null || !await canLaunchUrl(uri)) {
+        _showSnack(
+          'Unable to open the checkout page on this device.',
+          const Color(0xFFEF4444),
+        );
+        return;
+      }
+
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+      _showSnack(
+        useStripe
+            ? 'Stripe checkout opened. Inventory will update after backend confirmation.'
+            : 'PayPal approval opened. One-time capture still needs a return flow after approval.',
+        const Color(0xFF0F766E),
+      );
+    } on ApiRequestException catch (e) {
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+      _showSnack(e.message, const Color(0xFFEF4444));
+      ref.invalidate(storeSystemStatusProvider);
+    } catch (e) {
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+      _showSnack(
+        'Checkout failed. Please try again.',
+        const Color(0xFFEF4444),
+      );
+    }
+  }
+
+  Future<bool?> _choosePaymentProvider({
+    required bool stripeEnabled,
+    required bool payPalEnabled,
+  }) async {
+    if (stripeEnabled && !payPalEnabled) return true;
+    if (!stripeEnabled && payPalEnabled) return false;
+    if (!stripeEnabled && !payPalEnabled) {
+      _showSnack(
+        'No payment providers are currently available.',
+        const Color(0xFFEF4444),
+      );
+      return null;
+    }
+
+    return showModalBottomSheet<bool>(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Choose payment method',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF1E293B),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Stripe is the smoother one-time purchase path today. PayPal order creation is wired too, but capture still needs a return handler.',
+                  style: TextStyle(
+                    color: Colors.grey.shade600,
+                    height: 1.4,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                _buildProviderTile(
+                  label: 'Stripe',
+                  subtitle: 'Hosted checkout with webhook-based completion',
+                  icon: Icons.credit_card,
+                  color: const Color(0xFF4F46E5),
+                  onTap: () => Navigator.of(context).pop(true),
+                ),
+                const SizedBox(height: 12),
+                _buildProviderTile(
+                  label: 'PayPal',
+                  subtitle: 'Approval flow available; capture return step still pending',
+                  icon: Icons.account_balance_wallet_outlined,
+                  color: const Color(0xFF0EA5E9),
+                  onTap: () => Navigator.of(context).pop(false),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildProviderTile({
+    required String label,
+    required String subtitle,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Ink(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: color.withValues(alpha: 0.2)),
+          color: color.withValues(alpha: 0.05),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: color),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Color(0xFF1E293B),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      color: Colors.grey.shade600,
+                      fontSize: 12,
+                      height: 1.35,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(Icons.arrow_forward_ios, size: 16, color: color),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showSnack(String message, Color color) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: color,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    );
   }
 }

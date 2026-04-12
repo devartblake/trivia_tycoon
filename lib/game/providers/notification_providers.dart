@@ -92,7 +92,7 @@ class NotificationAdminActions extends AutoDisposeAsyncNotifier<void> {
         payload: payload,
       );
       // No scheduled refresh needed for instant notifications
-      NotificationHistoryStore.instance.addNow(
+      await NotificationHistoryStore.instance.addNow(
         title: title,
         body: body,
         channelKey: channelKey,

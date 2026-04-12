@@ -91,6 +91,11 @@ final currentUserIdProvider = FutureProvider<String>((ref) async {
   final authService = ref.watch(authServiceProvider);
   final playerProfile = ref.watch(playerProfileServiceProvider);
 
+  final storedUserId = await playerProfile.getUserId();
+  if (storedUserId != null && storedUserId.isNotEmpty) {
+    return storedUserId;
+  }
+
   final email = await authService.getStoredEmail();
   if (email != null && email.isNotEmpty) {
     return email.split('@').first;

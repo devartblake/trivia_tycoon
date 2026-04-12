@@ -61,18 +61,22 @@ class _StoreItemCardState extends ConsumerState<StoreItemCard>
   Widget build(BuildContext context) {
     final currencyManager = ref.watch(currencyManagerProvider);
     final isDiamond = widget.item.currency == 'diamonds';
-    final balance = currencyManager.getBalance(widget.item.currencyType);
+    final isExternalCheckout =
+        widget.item.requiresExternalCheckout ||
+        widget.item.currency.toLowerCase() == 'usd';
+    final balance =
+        isExternalCheckout ? 0 : currencyManager.getBalance(widget.item.currencyType);
     final equipped = ref.watch(equippedPowerUpProvider);
 
     final isPowerUp = widget.item.category.toLowerCase() == 'power-up';
     final tag = widget.item.type?.toUpperCase() ?? '';
     final glowColor = _getGlowColor(widget.item.type);
-    final canAfford = balance >= widget.item.price;
+    final canAfford = isExternalCheckout || balance >= widget.item.price;
 
     return FutureBuilder(
       future: AppSettings.isInInventory(widget.item.id),
       builder: (context, snapshot) {
-        final isOwned = snapshot.data ?? false;
+        final isOwned = widget.item.owned || (snapshot.data ?? false);
         final isEquipped = equipped?.id == widget.item.id;
 
         return GestureDetector(
@@ -280,21 +284,29 @@ class _StoreItemCardState extends ConsumerState<StoreItemCard>
                             Row(
                               children: [
                                 Icon(
-                                  isDiamond ? Icons.diamond : Icons.monetization_on,
-                                  color: isDiamond
-                                      ? const Color(0xFF6366F1)
-                                      : const Color(0xFFF59E0B),
+                                  isExternalCheckout
+                                      ? Icons.open_in_new
+                                      : isDiamond
+                                          ? Icons.diamond
+                                          : Icons.monetization_on,
+                                  color: isExternalCheckout
+                                      ? const Color(0xFF0F766E)
+                                      : isDiamond
+                                          ? const Color(0xFF6366F1)
+                                          : const Color(0xFFF59E0B),
                                   size: 14,
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
-                                  widget.price,
+                                  widget.item.displayPriceLabel ?? widget.price,
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
-                                    color: isDiamond
-                                        ? const Color(0xFF6366F1)
-                                        : const Color(0xFFF59E0B),
+                                    color: isExternalCheckout
+                                        ? const Color(0xFF0F766E)
+                                        : isDiamond
+                                            ? const Color(0xFF6366F1)
+                                            : const Color(0xFFF59E0B),
                                   ),
                                 ),
                                 const Spacer(),
@@ -317,6 +329,7 @@ class _StoreItemCardState extends ConsumerState<StoreItemCard>
                                 canAfford: canAfford,
                                 isPowerUp: isPowerUp,
                                 glowColor: glowColor,
+                                isExternalCheckout: isExternalCheckout,
                               ),
                             ),
                           ],
@@ -339,6 +352,7 @@ class _StoreItemCardState extends ConsumerState<StoreItemCard>
     required bool canAfford,
     required bool isPowerUp,
     required Color glowColor,
+    required bool isExternalCheckout,
   }) {
     if (isOwned) {
       if (isPowerUp) {
@@ -399,7 +413,9 @@ class _StoreItemCardState extends ConsumerState<StoreItemCard>
       onPressed: canAfford ? _handlePurchase : null,
       style: ElevatedButton.styleFrom(
         backgroundColor: canAfford
-            ? (isPowerUp ? glowColor : const Color(0xFF6366F1))
+            ? (isExternalCheckout
+                ? const Color(0xFF0F766E)
+                : (isPowerUp ? glowColor : const Color(0xFF6366F1)))
             : Colors.grey.shade300,
         foregroundColor: canAfford ? Colors.white : Colors.grey.shade600,
         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -410,7 +426,11 @@ class _StoreItemCardState extends ConsumerState<StoreItemCard>
         minimumSize: Size.zero,
       ),
       child: Text(
-        canAfford ? 'Buy' : 'Need More',
+        isExternalCheckout
+            ? 'Checkout'
+            : canAfford
+                ? 'Buy'
+                : 'Need More',
         style: const TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.bold,
@@ -422,6 +442,12 @@ class _StoreItemCardState extends ConsumerState<StoreItemCard>
 
   void _handlePurchase() async {
     HapticFeedback.mediumImpact();
+
+    if (widget.item.requiresExternalCheckout ||
+        widget.item.currency.toLowerCase() == 'usd') {
+      widget.onBuy();
+      return;
+    }
 
     final currencyManager = ref.read(currencyManagerProvider);
     final balance = currencyManager.getBalance(widget.item.currencyType);

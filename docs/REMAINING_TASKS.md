@@ -1,6 +1,6 @@
 # Remaining Tasks & Work Backlog
 
-_Last updated: 2026-04-09 (updated: web startup fix)_
+_Last updated: 2026-04-12 (updated: Phase 2 completion pass)_
 
 > This file is the canonical "what is left to do" reference.
 > For completed work, see [`docs/ALPHA_TASK_AUDIT.md`](ALPHA_TASK_AUDIT.md).
@@ -12,7 +12,7 @@ _Last updated: 2026-04-09 (updated: web startup fix)_
 
 | Area | Priority | Status | Blocked? |
 |------|----------|--------|----------|
-| Phase 2 — Crash recovery stubs | 🔴 High | ~80% complete (§1d resolved) | No |
+| Phase 2 — Crash recovery stubs | 🔴 High | Code complete; device validation pending | No |
 | Phase 3 — Test coverage (remaining gaps) | 🟡 Medium | ~4.1% → 40% target | No |
 | Phase 4 — Dependency audit | 🟡 Medium | Partial | No |
 | Sprint 1 — Auth integration verification | 🟡 Medium | Unknown | No |
@@ -24,23 +24,26 @@ _Last updated: 2026-04-09 (updated: web startup fix)_
 
 ## 1. Phase 2 — Crash Recovery + Core Stubs
 
-### 1a. Crash recovery state restoration
-- **File:** `lib/main.dart:264`
-- **What's missing:** On crash/restart, the app does not restore in-progress game state. The
-  restoration hook is present but the body is a stub.
-- **Action:** Implement state snapshot on key game events; restore from snapshot in the
-  `main.dart` startup sequence.
+### 1a. Crash recovery state restoration ✅ COMPLETE
+- **Files:** `lib/main.dart`, `lib/core/services/crash_recovery_service.dart`,
+  `lib/core/services/state_persistence_service.dart`
+- **Completed:** Crash/restart recovery now rehydrates saved quiz progress, player progress,
+  and persisted profile/session metadata. Recovery acceptance also clears the crash flag so
+  the restore prompt does not loop on the next clean launch.
 
-### 1b. Notification persistence
-- **File:** Notification service (template storage)
-- **What's missing:** Push notification payloads are processed but not persisted to storage.
-  If the app restarts mid-session, queued notifications are lost.
-- **Action:** Store notification templates in Hive/AppCacheService; replay on restart.
+### 1b. Notification persistence ✅ COMPLETE
+- **Files:** `lib/core/bootstrap/app_init.dart`,
+  `lib/game/providers/notification_history_store.dart`,
+  `lib/game/providers/notification_template_store.dart`
+- **Completed:** Notification templates and notification history are now restored from
+  persistent storage during app bootstrap, so restart no longer drops the in-app notification
+  context/history used by the admin and notification surfaces.
 
-### 1c. Profile avatar cropping
-- **What's missing:** Current avatar upload uses a temporary workaround. Proper crop/resize
-  flow (using an image cropper plugin) is not implemented.
-- **Action:** Integrate a crop widget; replace temp fix with the proper crop → upload pipeline.
+### 1c. Profile avatar cropping ✅ COMPLETE
+- **Files:** `lib/game/controllers/profile_avatar_controller.dart`
+- **Completed:** The active avatar picker flow already performs a centered square crop and
+  JPEG re-encode before persisting the chosen avatar path. This backlog item was stale and has
+  been reclassified as complete.
 
 ### 1d. Remaining UnimplementedError throws ✅ RESOLVED
 

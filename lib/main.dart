@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/core/bootstrap/app_init.dart';
 import 'package:trivia_tycoon/core/bootstrap/app_launcher.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:trivia_tycoon/core/services/crash_recovery_service.dart';
 import 'offline_fallback_screen.dart';
 import 'screens/splash_variants/main_splash.dart';
 import 'package:trivia_tycoon/widgets/app_logo.dart';
@@ -234,29 +235,29 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
       if (persistenceService == null) return;
 
       // Get saved states
-      final gameState = await persistenceService.getGameState();
       final userSession = await persistenceService.getUserSession();
-      final pendingActions = await persistenceService.getPendingActions();
 
       LogManager.info('[Recovery] Restoring session...', source: '_SynaptixAppState');
-      LogManager.debug('[Recovery] Game state: ${gameState != null ? 'YES' : 'NO'}', source: '_SynaptixAppState');
       LogManager.debug('[Recovery] User session: ${userSession != null ? 'YES' : 'NO'}', source: '_SynaptixAppState');
-      LogManager.debug('[Recovery] Pending actions: ${pendingActions.length}', source: '_SynaptixAppState');
+
+      final serviceManager = ref.read(serviceManagerProvider);
+      final recoveryService = CrashRecoveryService(
+        quizProgressService: serviceManager.quizProgressService,
+        playerProfileService: serviceManager.playerProfileService,
+      );
+      final result = await recoveryService.restore(persistenceService);
 
       // Restore auth state from saved user session
-      if (userSession != null) {
-        final wasLoggedIn = userSession['is_logged_in'] as bool? ?? false;
-        if (wasLoggedIn) {
-          ref.read(isLoggedInSyncProvider.notifier).state = true;
-          LogManager.info('[Recovery] Auth state restored: logged in', source: '_SynaptixAppState');
-        }
+      if (result.restoredAuthState) {
+        ref.read(isLoggedInSyncProvider.notifier).state = true;
+        LogManager.info('[Recovery] Auth state restored: logged in', source: '_SynaptixAppState');
       }
 
       // Pending actions are left in the persistence service and will be
       // retried by the background task service on next sync cycle.
-      if (pendingActions.isNotEmpty) {
+      if (result.pendingActionCount > 0) {
         LogManager.info(
-          '[Recovery] ${pendingActions.length} pending action(s) queued for retry',
+          '[Recovery] ${result.pendingActionCount} pending action(s) queued for retry',
           source: '_SynaptixAppState',
         );
       }

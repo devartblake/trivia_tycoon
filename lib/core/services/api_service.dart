@@ -487,6 +487,8 @@ class ApiService {
   bool _isProtectedPath(String path) {
     if (path == '/admin' || path.startsWith('/admin/')) return true;
 
+    if (path == '/store' || path.startsWith('/store/')) return true;
+
     // User-scoped/profile endpoints also require auth headers and token refresh handling.
     if (path == '/users/me' || path.startsWith('/users/me/')) return true;
     if (path == '/profile' || path.startsWith('/profile/')) return true;

@@ -702,7 +702,7 @@ class NotificationService {
   // Listeners (optional)
   // ============================================================
   static Future<void> _onCreated(ReceivedNotification n) async {
-    NotificationHistoryStore.instance.add(NotificationHistoryEntry(
+    await NotificationHistoryStore.instance.add(NotificationHistoryEntry(
       timestamp: DateTime.now(),
       title: n.title ?? '',
       body: n.body ?? '',
@@ -713,7 +713,7 @@ class NotificationService {
   }
 
   static Future<void> _onDisplayed(ReceivedNotification n) async {
-    NotificationHistoryStore.instance.add(NotificationHistoryEntry(
+    await NotificationHistoryStore.instance.add(NotificationHistoryEntry(
       timestamp: DateTime.now(),
       title: n.title ?? '',
       body: n.body ?? '',
@@ -724,7 +724,7 @@ class NotificationService {
   }
 
   static Future<void> _onDismissed(ReceivedAction a) async {
-    NotificationHistoryStore.instance.add(NotificationHistoryEntry(
+    await NotificationHistoryStore.instance.add(NotificationHistoryEntry(
       timestamp: DateTime.now(),
       title: a.title ?? '',
       body: a.body ?? '',
@@ -735,7 +735,7 @@ class NotificationService {
   }
 
   static Future<void> _onActionReceived(ReceivedAction a) async {
-    NotificationHistoryStore.instance.add(NotificationHistoryEntry(
+    await NotificationHistoryStore.instance.add(NotificationHistoryEntry(
       timestamp: DateTime.now(),
       title: a.title ?? '',
       body: a.body ?? '',

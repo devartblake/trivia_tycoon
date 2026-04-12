@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 import '../../../game/services/store_data_service.dart';
 import '../../../game/models/store_item_model.dart';
 import '../api_service.dart';
+import '../../manager/log_manager.dart';
 
 class StoreService {
   final ApiService apiService;
@@ -43,8 +44,7 @@ class StoreService {
     }
 
     try {
-      // Load from StoreDataService (your original method)
-      final items = await StoreDataService.loadStoreItems();
+      final items = await _fetchCatalogItems();
 
       // Update cache
       _cachedItems = items;
@@ -66,6 +66,150 @@ class StoreService {
 
       return [];
     }
+  }
+
+  Future<Map<String, dynamic>> getSystemStatus() {
+    return apiService.get('/store/system/status');
+  }
+
+  Future<Map<String, dynamic>> getInventory(String playerId) {
+    return apiService.get('/store/inventory/$playerId');
+  }
+
+  Future<Map<String, dynamic>> getSubscriptionStatus(String playerId) {
+    return apiService.get('/store/subscription/status/$playerId');
+  }
+
+  Future<Map<String, dynamic>> purchaseWithCoinsOrDiamonds({
+    required String playerId,
+    required String sku,
+    int quantity = 1,
+  }) {
+    return apiService.post(
+      '/store/purchase',
+      body: {
+        'playerId': playerId,
+        'sku': sku,
+        'quantity': quantity,
+      },
+    );
+  }
+
+  Future<Map<String, dynamic>> createStripeCheckoutSession({
+    required String playerId,
+    required String sku,
+    int quantity = 1,
+    String? successUrl,
+    String? cancelUrl,
+  }) {
+    return apiService.post(
+      '/store/payments/checkout/session',
+      body: {
+        'playerId': playerId,
+        'sku': sku,
+        'quantity': quantity,
+        if (successUrl != null) 'successUrl': successUrl,
+        if (cancelUrl != null) 'cancelUrl': cancelUrl,
+      },
+    );
+  }
+
+  Future<Map<String, dynamic>> createPayPalOrder({
+    required String playerId,
+    required String sku,
+    int quantity = 1,
+    String? returnUrl,
+    String? cancelUrl,
+  }) {
+    return apiService.post(
+      '/store/payments/paypal/order',
+      body: {
+        'playerId': playerId,
+        'sku': sku,
+        'quantity': quantity,
+        if (returnUrl != null) 'returnUrl': returnUrl,
+        if (cancelUrl != null) 'cancelUrl': cancelUrl,
+      },
+    );
+  }
+
+  Future<Map<String, dynamic>> capturePayPalOrder({
+    required String playerId,
+    required String orderId,
+  }) {
+    return apiService.post(
+      '/store/payments/paypal/capture',
+      body: {
+        'playerId': playerId,
+        'orderId': orderId,
+      },
+    );
+  }
+
+  Future<Map<String, dynamic>> createStripeSubscriptionCheckout({
+    required String playerId,
+    required String tier,
+    required String billingPeriod,
+    String? successUrl,
+    String? cancelUrl,
+  }) {
+    return apiService.post(
+      '/store/subscription/checkout/session',
+      body: {
+        'playerId': playerId,
+        'tier': tier,
+        'billingPeriod': billingPeriod,
+        if (successUrl != null) 'successUrl': successUrl,
+        if (cancelUrl != null) 'cancelUrl': cancelUrl,
+      },
+    );
+  }
+
+  Future<Map<String, dynamic>> createStripePortalSession({
+    required String playerId,
+    String? returnUrl,
+  }) {
+    return apiService.post(
+      '/store/subscription/portal/session',
+      body: {
+        'playerId': playerId,
+        if (returnUrl != null) 'returnUrl': returnUrl,
+      },
+    );
+  }
+
+  Future<Map<String, dynamic>> createPayPalSubscription({
+    required String playerId,
+    required String tier,
+    required String billingPeriod,
+    String? returnUrl,
+    String? cancelUrl,
+  }) {
+    return apiService.post(
+      '/store/subscription/paypal/create',
+      body: {
+        'playerId': playerId,
+        'tier': tier,
+        'billingPeriod': billingPeriod,
+        if (returnUrl != null) 'returnUrl': returnUrl,
+        if (cancelUrl != null) 'cancelUrl': cancelUrl,
+      },
+    );
+  }
+
+  Future<Map<String, dynamic>> cancelPayPalSubscription({
+    required String playerId,
+    required String subscriptionId,
+    String reason = 'Canceled by customer',
+  }) {
+    return apiService.post(
+      '/store/subscription/paypal/cancel',
+      body: {
+        'playerId': playerId,
+        'subscriptionId': subscriptionId,
+        'reason': reason,
+      },
+    );
   }
 
   /// Filter for featured items
@@ -167,8 +311,7 @@ class StoreService {
       // Clear current cache to force reload
       _invalidateCache();
 
-      // Reload from StoreDataService (your original data source)
-      final items = await StoreDataService.loadStoreItems();
+      final items = await _fetchCatalogItems();
 
       // Update cache
       _cachedItems = items;
@@ -352,5 +495,65 @@ class StoreService {
       final price = 0.0; // Replace with actual price field: item.price ?? 0.0
       return price >= minPrice && price <= maxPrice;
     }).toList();
+  }
+
+  Future<List<StoreItemModel>> _fetchCatalogItems() async {
+    final remote = await apiService.get('/store/catalog');
+    final localItems = await StoreDataService.loadStoreItems();
+    final localById = {
+      for (final item in localItems) item.id.toLowerCase(): item,
+    };
+    final localByName = {
+      for (final item in localItems) item.name.toLowerCase(): item,
+    };
+
+    final inventorySkus = await _loadOwnedSkuSet();
+    final rawItems = (remote['items'] as List<dynamic>? ?? const <dynamic>[]);
+    final items = rawItems
+        .whereType<Map>()
+        .map((raw) => Map<String, dynamic>.from(raw))
+        .map((json) {
+          final sku = json['sku']?.toString().toLowerCase();
+          final id = json['id']?.toString().toLowerCase();
+          final name = json['name']?.toString().toLowerCase();
+          final display = localById[sku] ??
+              localById[id] ??
+              (name != null ? localByName[name] : null);
+          final owned = sku != null && inventorySkus.contains(sku);
+          return StoreItemModel.fromStoreCatalog(
+            json,
+            displayItem: display,
+            owned: owned,
+          );
+        })
+        .toList()
+      ..sort((a, b) => (a.sortOrder ?? 0).compareTo(b.sortOrder ?? 0));
+
+    LogManager.debug('[StoreService] Loaded ${items.length} catalog items');
+    return items;
+  }
+
+  Future<Set<String>> _loadOwnedSkuSet() async {
+    try {
+      final profileBox = await Hive.openBox('settings');
+      final playerId = profileBox.get('userId')?.toString();
+      if (playerId == null || playerId.isEmpty) {
+        return <String>{};
+      }
+
+      final inventory = await getInventory(playerId);
+      final rawItems = inventory['items'] as List<dynamic>? ??
+          inventory['inventory'] as List<dynamic>? ??
+          const <dynamic>[];
+
+      return rawItems
+          .whereType<Map>()
+          .map((raw) => Map<String, dynamic>.from(raw))
+          .map((item) => item['sku']?.toString().toLowerCase())
+          .whereType<String>()
+          .toSet();
+    } catch (_) {
+      return <String>{};
+    }
   }
 }

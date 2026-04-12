@@ -17,6 +17,7 @@ class EnvConfig {
   static String? _matchHubUrl;
   static String? _presenceHubUrl;
   static String? _notifyHubUrl;
+  static String? _appRedirectBaseUrl;
 
   /// Getter for the backend API Base URL.
   static String get apiBaseUrl {
@@ -47,6 +48,9 @@ class EnvConfig {
     assert(_notifyHubUrl != null, 'API_NOTIFY_HUB_URL is not loaded from .env');
     return _notifyHubUrl!;
   }
+
+  /// Optional frontend/app base URL for payment return routing.
+  static String? get appRedirectBaseUrl => _appRedirectBaseUrl;
 
   static String _normalizeWsUrl(String rawUrl) {
     final parsed = Uri.parse(rawUrl.trim());
@@ -132,6 +136,7 @@ class EnvConfig {
           (_apiWsBaseUrl == null ? null : _joinWsPath(_apiWsBaseUrl!, '/ws/presence'));
       _notifyHubUrl = dotenv.env['API_NOTIFY_HUB_URL'] ??
           (_apiWsBaseUrl == null ? null : _joinWsPath(_apiWsBaseUrl!, '/ws/notify'));
+      _appRedirectBaseUrl = _resolveAppRedirectBaseUrl();
 
       // Perform checks to ensure essential variables are present
       if (_apiBaseUrl == null ||
@@ -157,5 +162,29 @@ class EnvConfig {
       LogManager.debug('Error loading .env file: $e');
       rethrow;
     }
+  }
+
+  static String? _resolveAppRedirectBaseUrl() {
+    final configured = dotenv.env['APP_REDIRECT_BASE_URL']?.trim();
+    if (configured != null && configured.isNotEmpty) {
+      return configured;
+    }
+
+    if (!kIsWeb) {
+      return null;
+    }
+
+    try {
+      final base = Uri.base;
+      if (base.hasScheme &&
+          (base.scheme == 'http' || base.scheme == 'https') &&
+          base.host.isNotEmpty) {
+        return base.origin;
+      }
+    } catch (_) {
+      // Ignore Uri.base resolution failures and fall back to null.
+    }
+
+    return null;
   }
 }

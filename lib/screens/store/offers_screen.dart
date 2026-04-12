@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:trivia_tycoon/core/services/api_service.dart';
+import 'package:trivia_tycoon/core/services/store/store_return_url_builder.dart';
+import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 
 class OffersScreen extends ConsumerStatefulWidget {
   const OffersScreen({super.key});
@@ -688,16 +692,20 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
             'iconGradient': [Color(0xFF6366F1), Color(0xFF8B5CF6)],
             'buttonText': 'Subscribe',
             'isPopular': true,
+            'tier': 'premium',
+            'billingPeriod': 'monthly',
           },
           {
-            'title': 'Yearly Premium',
-            'description': 'Best value - save 60% with annual plan',
+            'title': 'Elite Season Pass',
+            'description': 'Best value seasonal plan with the highest tier perks',
             'price': '39.99',
             'originalPrice': '119.88',
             'discount': 67,
             'icon': Icons.diamond,
             'iconGradient': [Color(0xFF06B6D4), Color(0xFF0891B2)],
             'buttonText': 'Best Deal',
+            'tier': 'elite',
+            'billingPeriod': 'seasonal',
           },
         ];
       case 'Bundles':
@@ -772,6 +780,11 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
   }
 
   void _processPurchase(Map<String, dynamic> offer) {
+    if (offer.containsKey('tier') && offer.containsKey('billingPeriod')) {
+      _startSubscriptionCheckout(offer);
+      return;
+    }
+
     // Show loading
     showDialog(
       context: context,
@@ -805,5 +818,242 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
         ),
       );
     });
+  }
+
+  Future<void> _startSubscriptionCheckout(Map<String, dynamic> offer) async {
+    final status = await ref.read(storeSystemStatusProvider.future);
+    if (status['storeEnabled'] == false || status['paymentsEnabled'] == false) {
+      _showSnack(
+        status['message']?.toString() ?? 'Subscriptions are currently unavailable.',
+        const Color(0xFFEF4444),
+      );
+      return;
+    }
+
+    final useStripe = await _chooseProvider(
+      stripeEnabled: status['stripeEnabled'] == true,
+      payPalEnabled: status['payPalEnabled'] == true,
+    );
+    if (useStripe == null) return;
+
+    final playerId = await ref.read(currentUserIdProvider.future);
+    final storeService = ref.read(storeServiceProvider);
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      final response = useStripe
+          ? await storeService.createStripeSubscriptionCheckout(
+              playerId: playerId,
+              tier: offer['tier'] as String,
+              billingPeriod: offer['billingPeriod'] as String,
+              successUrl: StoreReturnUrlBuilder.subscriptionSuccess(
+                provider: 'stripe',
+                tier: offer['tier'] as String,
+                billingPeriod: offer['billingPeriod'] as String,
+              ),
+              cancelUrl: StoreReturnUrlBuilder.subscriptionCancel(
+                provider: 'stripe',
+                tier: offer['tier'] as String,
+                billingPeriod: offer['billingPeriod'] as String,
+              ),
+            )
+          : await storeService.createPayPalSubscription(
+              playerId: playerId,
+              tier: offer['tier'] as String,
+              billingPeriod: offer['billingPeriod'] as String,
+              returnUrl: StoreReturnUrlBuilder.subscriptionSuccess(
+                provider: 'paypal',
+                tier: offer['tier'] as String,
+                billingPeriod: offer['billingPeriod'] as String,
+              ),
+              cancelUrl: StoreReturnUrlBuilder.subscriptionCancel(
+                provider: 'paypal',
+                tier: offer['tier'] as String,
+                billingPeriod: offer['billingPeriod'] as String,
+              ),
+            );
+
+      if (!mounted) return;
+      Navigator.of(context).pop();
+
+      final redirectUrl =
+          (useStripe ? response['checkoutUrl'] : response['approveUrl'])
+              ?.toString();
+      if (redirectUrl == null || redirectUrl.isEmpty) {
+        _showSnack(
+          'The subscription provider did not return a redirect URL.',
+          const Color(0xFFEF4444),
+        );
+        return;
+      }
+
+      final uri = Uri.tryParse(redirectUrl);
+      if (uri == null || !await canLaunchUrl(uri)) {
+        _showSnack(
+          'Unable to open the subscription page on this device.',
+          const Color(0xFFEF4444),
+        );
+        return;
+      }
+
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+      _showSnack(
+        useStripe
+            ? 'Subscription checkout opened. We will trust backend status after you return.'
+            : 'PayPal approval opened. Subscription status will update after webhook confirmation.',
+        const Color(0xFF10B981),
+      );
+      ref.invalidate(storeSystemStatusProvider);
+      ref.invalidate(storeSubscriptionStatusProvider(playerId));
+    } on ApiRequestException catch (e) {
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+      _showSnack(e.message, const Color(0xFFEF4444));
+    } catch (_) {
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+      _showSnack(
+        'Subscription checkout failed. Please try again.',
+        const Color(0xFFEF4444),
+      );
+    }
+  }
+
+  Future<bool?> _chooseProvider({
+    required bool stripeEnabled,
+    required bool payPalEnabled,
+  }) async {
+    if (stripeEnabled && !payPalEnabled) return true;
+    if (!stripeEnabled && payPalEnabled) return false;
+    if (!stripeEnabled && !payPalEnabled) {
+      _showSnack(
+        'No payment providers are currently available.',
+        const Color(0xFFEF4444),
+      );
+      return null;
+    }
+
+    return showModalBottomSheet<bool>(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Choose subscription provider',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1E293B),
+                ),
+              ),
+              const SizedBox(height: 16),
+              _providerTile(
+                label: 'Stripe',
+                subtitle: 'Hosted checkout and billing portal support',
+                icon: Icons.credit_card,
+                color: const Color(0xFF4F46E5),
+                onTap: () => Navigator.of(context).pop(true),
+              ),
+              const SizedBox(height: 12),
+              _providerTile(
+                label: 'PayPal',
+                subtitle: 'Approval flow with webhook-driven status updates',
+                icon: Icons.account_balance_wallet_outlined,
+                color: const Color(0xFF0EA5E9),
+                onTap: () => Navigator.of(context).pop(false),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _providerTile({
+    required String label,
+    required String subtitle,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Ink(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: color.withValues(alpha: 0.2)),
+          color: color.withValues(alpha: 0.05),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: color),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Color(0xFF1E293B),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      color: Colors.grey.shade600,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(Icons.arrow_forward_ios, size: 16, color: color),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showSnack(String message, Color color) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: color,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    );
   }
 }

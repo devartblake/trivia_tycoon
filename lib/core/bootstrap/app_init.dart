@@ -11,6 +11,8 @@ import 'package:trivia_tycoon/core/manager/service_manager.dart';
 import '../../game/analytics/services/spin_analytics_tracker.dart';
 import '../../game/logic/referral_invite_adapter.dart';
 import '../../game/providers/multi_profile_providers.dart';
+import '../../game/providers/notification_history_store.dart';
+import '../../game/providers/notification_template_store.dart';
 import '../../game/services/referral_storage_service.dart';
 import '../env.dart';
 import '../networking/ws_client.dart';
@@ -76,6 +78,9 @@ class AppInit {
     _persistenceService = StatePersistenceService();
     await _persistenceService!.initialize();
     LogManager.debug(' StatePersistence ready');
+    await NotificationTemplateStore.instance.loadAllFromSettings();
+    await NotificationHistoryStore.instance.loadAllFromSettings();
+    LogManager.debug(' Notification stores restored');
 
     // 2. Network & Backend
     // Create SecureStorage instance (don't cast the box!)
@@ -214,14 +219,23 @@ class AppInit {
       // Get auth tokens
       final session = _tokenStore?.load();
 
-      // Get user profile
-      final rawProfile = await _serviceManager!.playerProfileService.getProfile();
-      final profile = rawProfile != null ? Map<String, dynamic>.from(rawProfile as Map) : {};
+      final profile = await _serviceManager!.playerProfileService.loadCompleteProfile();
 
       return {
         'is_logged_in': isLoggedIn,
-        'user_id': profile['id'],
-        'user_name': profile['name'],
+        'user_id': profile['user_id'],
+        'player_name': profile['player_name'],
+        'username': profile['username'],
+        'user_role': profile['user_role'],
+        'user_roles': profile['user_roles'],
+        'is_premium': profile['is_premium'],
+        'country': profile['country'],
+        'age_group': profile['age_group'],
+        'avatar': profile['avatar'],
+        'synaptix_mode': profile['synaptix_mode'],
+        'preferred_home_surface': profile['preferred_home_surface'],
+        'reduced_motion': profile['reduced_motion'],
+        'tone_preference': profile['tone_preference'],
         'has_tokens': session?.hasTokens ?? false,
         'session_start': DateTime.now().toIso8601String(),
       };

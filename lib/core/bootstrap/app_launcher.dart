@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:app_links/app_links.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import 'package:trivia_tycoon/core/services/analytics/app_lifecycle.dart';
 import 'package:trivia_tycoon/core/manager/service_manager.dart';
+import 'package:trivia_tycoon/core/services/store/store_link_router.dart';
 import 'package:trivia_tycoon/core/services/theme/theme_notifier.dart';
 import 'package:trivia_tycoon/core/services/user_identity_resolver.dart';
 import 'package:trivia_tycoon/game/analytics/models/spin_live_summary.dart';
@@ -36,6 +41,8 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
   GoRouter? _router;
   bool _authStateInitialized = false;
   ProviderSubscription<AsyncValue<SpinLiveSummary>>? _spinSummarySubscription;
+  StreamSubscription<Uri>? _appLinkSubscription;
+  Uri? _pendingIncomingUri;
   String? _lastSpinSummaryDedupeKey;
   bool _printedInitialLocalSummary = false;
 
@@ -48,6 +55,7 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
     _trackAppLaunch();
     _listenToLiveSpinSummary();
     _retryQueuedProfileSyncUpdates();
+    _initIncomingLinks();
   }
 
   @override
@@ -56,6 +64,7 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
 
     // Cleanup on dispose
     _spinSummarySubscription?.close();
+    _appLinkSubscription?.cancel();
     AppInit.dispose();
 
     super.dispose();
@@ -300,6 +309,80 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
     // Use the provider-based router
     final router = ref.read(goRouterProvider);
     setState(() => _router = router);
+    _flushPendingIncomingUri();
+  }
+
+  Future<void> _initIncomingLinks() async {
+    final appLinks = AppLinks();
+
+    try {
+      final initialUri = await appLinks.getInitialLink();
+      if (initialUri != null) {
+        _handleIncomingUri(initialUri);
+      }
+    } catch (e) {
+      LogManager.error(
+        'Failed to resolve initial app link',
+        source: 'AppLauncher',
+        error: e,
+      );
+    }
+
+    try {
+      _appLinkSubscription = appLinks.uriLinkStream.listen(
+        _handleIncomingUri,
+        onError: (Object error) {
+          LogManager.error(
+            'Failed while listening for incoming app links',
+            source: 'AppLauncher',
+            error: error,
+          );
+        },
+      );
+    } on MissingPluginException catch (e) {
+      LogManager.error(
+        'App links plugin is not available in this build. Falling back without deep-link listeners.',
+        source: 'AppLauncher',
+        error: e,
+      );
+    } on PlatformException catch (e) {
+      LogManager.error(
+        'App links platform channel failed to initialize. Falling back without deep-link listeners.',
+        source: 'AppLauncher',
+        error: e,
+      );
+    }
+  }
+
+  void _handleIncomingUri(Uri uri) {
+    final location = StoreLinkRouter.toAppLocation(uri);
+    if (location == null) {
+      LogManager.debug(
+        '[AppLauncher] Ignoring unsupported incoming link: $uri',
+      );
+      return;
+    }
+
+    if (_router == null) {
+      _pendingIncomingUri = uri;
+      LogManager.debug(
+        '[AppLauncher] Queued incoming link until router is ready: $uri',
+      );
+      return;
+    }
+
+    LogManager.info(
+      'Routing incoming payment link to $location',
+      source: 'AppLauncher',
+    );
+    _router!.go(location);
+  }
+
+  void _flushPendingIncomingUri() {
+    final pendingUri = _pendingIncomingUri;
+    if (pendingUri == null || _router == null) return;
+    _pendingIncomingUri = null;
+    _handleIncomingUri(pendingUri);
   }
 
   @override

@@ -245,10 +245,19 @@ final storeServiceProvider =
 Provider((ref) => ref.read(serviceManagerProvider).storeService);
 
 final storeItemsProvider = FutureProvider<List<StoreItemModel>>((ref) async {
-  final jsonString =
-  await rootBundle.loadString('assets/data/store_items.json');
-  final List<dynamic> jsonData = jsonDecode(jsonString);
-  return jsonData.map((e) => StoreItemModel.fromJson(e)).toList();
+  final storeService = ref.read(storeServiceProvider);
+  return storeService.getAllItems();
+});
+
+final storeSystemStatusProvider = FutureProvider<Map<String, dynamic>>((ref) async {
+  final storeService = ref.read(storeServiceProvider);
+  return storeService.getSystemStatus();
+});
+
+final storeSubscriptionStatusProvider =
+    FutureProvider.family<Map<String, dynamic>, String>((ref, playerId) async {
+  final storeService = ref.read(storeServiceProvider);
+  return storeService.getSubscriptionStatus(playerId);
 });
 
 final powerUpInventoryProvider =

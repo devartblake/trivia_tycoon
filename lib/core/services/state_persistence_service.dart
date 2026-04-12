@@ -228,9 +228,10 @@ class StatePersistenceService {
       if (!didCrash) return false;
 
       final gameState = await getGameState();
+      final userSession = await getUserSession();
       final pendingActions = await getPendingActions();
 
-      return gameState != null || pendingActions.isNotEmpty;
+      return gameState != null || userSession != null || pendingActions.isNotEmpty;
     } catch (e) {
       LogManager.debug('[StatePersistence] ❌ Check recoverable data failed: $e');
       return false;
@@ -241,12 +242,15 @@ class StatePersistenceService {
   Future<Map<String, dynamic>> getRecoverySummary() async {
     try {
       final gameState = await getGameState();
+      final userSession = await getUserSession();
       final pendingActions = await getPendingActions();
       final lastSave = getLastSaveTime();
 
       return {
         'has_game_state': gameState != null,
         'game_state': gameState,
+        'has_user_session': userSession != null,
+        'user_session': userSession,
         'pending_actions_count': pendingActions.length,
         'pending_actions': pendingActions,
         'last_save': lastSave?.toIso8601String(),
@@ -266,6 +270,19 @@ class StatePersistenceService {
       LogManager.debug('[StatePersistence] 👋 Disposed');
     } catch (e) {
       LogManager.debug('[StatePersistence] ❌ Dispose error: $e');
+    }
+  }
+
+  /// Clears the crash flag after the user accepts recovery so the prompt
+  /// does not repeat on the next normal launch.
+  Future<void> markRecoveryHandled() async {
+    if (!_isInitialized) return;
+
+    try {
+      await _markSaveComplete();
+      LogManager.debug('[StatePersistence] ✅ Recovery marked handled');
+    } catch (e) {
+      LogManager.debug('[StatePersistence] ❌ Mark recovery handled failed: $e');
     }
   }
 }

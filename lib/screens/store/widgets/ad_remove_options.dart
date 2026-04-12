@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 
 class AdRemoveOptions extends StatefulWidget {
   const AdRemoveOptions({super.key});
@@ -453,7 +454,7 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
           ElevatedButton(
             onPressed: () {
               Navigator.of(context).pop();
-              _showPurchaseSuccess(duration);
+              _redirectToStoreOffers(duration);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFEF4444),
@@ -466,22 +467,27 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
     );
   }
 
-  void _showPurchaseSuccess(String duration) {
+  void _redirectToStoreOffers(String duration) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Row(
           children: [
-            const Icon(Icons.check_circle, color: Colors.white),
+            const Icon(Icons.info_outline, color: Colors.white),
             const SizedBox(width: 12),
-            Text('$duration ad-free activated!'),
+            Expanded(
+              child: Text(
+                '$duration ad-free is now handled from Special Offers so checkout goes through the backend.',
+              ),
+            ),
           ],
         ),
-        backgroundColor: const Color(0xFF10B981),
+        backgroundColor: const Color(0xFF6366F1),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
       ),
     );
+    context.push('/offers');
   }
 }
