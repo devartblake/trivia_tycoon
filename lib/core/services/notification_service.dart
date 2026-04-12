@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
 
@@ -211,6 +212,10 @@ class NotificationService {
             await AwesomeNotifications().requestPermissionToSendNotifications();
         LogManager.debug(
             '[NotificationService] Permission request result: $_hasPermissions');
+      } on PlatformException catch (e) {
+        _markPermissionsDenied(e);
+        LogManager.debug(
+            '[NotificationService] Silent permission request blocked: ${e.code} ${e.message}');
       } catch (e) {
         LogManager.debug(
             '[NotificationService] Silent permission request failed: $e');
@@ -234,6 +239,19 @@ class NotificationService {
 
   /// New: direct permission helpers for admin UI (non-breaking additions)
   Future<bool> isAllowed() => AwesomeNotifications().isNotificationAllowed();
+  Future<bool> isAllowedSafe() async {
+    try {
+      return await AwesomeNotifications().isNotificationAllowed();
+    } on PlatformException catch (e) {
+      _markPermissionsDenied(e);
+      LogManager.debug(
+          '[NotificationService] Permission status unavailable: ${e.code} ${e.message}');
+      return false;
+    } catch (e) {
+      LogManager.debug('[NotificationService] Permission status unavailable: $e');
+      return false;
+    }
+  }
 
   Future<void> requestPermission() async {
     if (!_initialized) await initialize();
@@ -242,6 +260,10 @@ class NotificationService {
           await AwesomeNotifications().requestPermissionToSendNotifications();
       _hasPermissions = granted;
       _permissionsChecked = true;
+    } on PlatformException catch (e) {
+      _markPermissionsDenied(e);
+      LogManager.debug(
+          '[NotificationService] requestPermission() blocked: ${e.code} ${e.message}');
     } catch (e) {
       LogManager.debug('[NotificationService] requestPermission() failed: $e');
     }
@@ -290,6 +312,11 @@ class NotificationService {
       );
       LogManager.debug('[NotificationService] Basic notification sent: $title');
       return true;
+    } on PlatformException catch (e) {
+      _markPermissionsDenied(e);
+      LogManager.debug(
+          '[NotificationService] Basic notification skipped: ${e.code} ${e.message}');
+      return false;
     } catch (e) {
       LogManager.debug('[NotificationService] Failed to show basic notification: $e');
       return false;
@@ -326,6 +353,11 @@ class NotificationService {
 
       LogManager.debug('[NotificationService] Mission notification sent: $title');
       return true;
+    } on PlatformException catch (e) {
+      _markPermissionsDenied(e);
+      LogManager.debug(
+          '[NotificationService] Mission notification skipped: ${e.code} ${e.message}');
+      return false;
     } catch (e) {
       LogManager.debug(
           '[NotificationService] Failed to show mission notification: $e');
@@ -368,6 +400,11 @@ class NotificationService {
       LogManager.debug(
           '[NotificationService] Spin notification scheduled for: $readyTime');
       return true;
+    } on PlatformException catch (e) {
+      _markPermissionsDenied(e);
+      LogManager.debug(
+          '[NotificationService] Spin notification skipped: ${e.code} ${e.message}');
+      return false;
     } catch (e) {
       LogManager.debug(
           '[NotificationService] Failed to schedule spin notification: $e');
@@ -407,6 +444,11 @@ class NotificationService {
 
       LogManager.debug('[NotificationService] Reminder scheduled at: $scheduledDate');
       return true;
+    } on PlatformException catch (e) {
+      _markPermissionsDenied(e);
+      LogManager.debug(
+          '[NotificationService] Reminder skipped: ${e.code} ${e.message}');
+      return false;
     } catch (e) {
       LogManager.debug('[NotificationService] Failed to schedule reminder: $e');
       return false;
@@ -428,22 +470,33 @@ class NotificationService {
     NotificationLayout layout = NotificationLayout.Default,
     List<NotificationActionButton>? actionButtons,
   }) async {
-    await _ensurePermissions();
+    final hasPermission = await _ensurePermissions();
+    if (!hasPermission) {
+      LogManager.debug(
+          '[NotificationService] No notification permissions - skipping sendNow.');
+      return;
+    }
     if (!await _isChannelEnabled(channelKey)) {
       LogManager.debug('[NotificationService] Channel "$channelKey" is disabled. Skipping sendNow.');
       return;
     }
-    await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: id,
-        channelKey: channelKey,
-        title: title,
-        body: body,
-        payload: payload,
-        notificationLayout: layout,
-      ),
-      actionButtons: actionButtons,
-    );
+    try {
+      await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: id,
+          channelKey: channelKey,
+          title: title,
+          body: body,
+          payload: payload,
+          notificationLayout: layout,
+        ),
+        actionButtons: actionButtons,
+      );
+    } on PlatformException catch (e) {
+      _markPermissionsDenied(e);
+      LogManager.debug(
+          '[NotificationService] sendNow skipped: ${e.code} ${e.message}');
+    }
   }
 
   Future<void> scheduleAt({
@@ -456,26 +509,37 @@ class NotificationService {
     bool precise = true,
     List<NotificationActionButton>? actionButtons,
   }) async {
-    await _ensurePermissions();
+    final hasPermission = await _ensurePermissions();
+    if (!hasPermission) {
+      LogManager.debug(
+          '[NotificationService] No notification permissions - skipping scheduleAt.');
+      return;
+    }
     if (!await _isChannelEnabled(channelKey)) {
       LogManager.debug('[NotificationService] Channel "$channelKey" is disabled. Skipping sendNow.');
       return;
     }
-    await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: id,
-        channelKey: channelKey,
-        title: title,
-        body: body,
-        payload: payload,
-      ),
-      schedule: NotificationCalendar.fromDate(
-        date: scheduledAt,
-        preciseAlarm: precise,
-        allowWhileIdle: true,
-      ),
-      actionButtons: actionButtons,
-    );
+    try {
+      await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: id,
+          channelKey: channelKey,
+          title: title,
+          body: body,
+          payload: payload,
+        ),
+        schedule: NotificationCalendar.fromDate(
+          date: scheduledAt,
+          preciseAlarm: precise,
+          allowWhileIdle: true,
+        ),
+        actionButtons: actionButtons,
+      );
+    } on PlatformException catch (e) {
+      _markPermissionsDenied(e);
+      LogManager.debug(
+          '[NotificationService] scheduleAt skipped: ${e.code} ${e.message}');
+    }
   }
 
   Future<List<NotificationModel>> listScheduled() {
@@ -520,7 +584,7 @@ class NotificationService {
     if (!_initialized) await initialize();
 
     try {
-      final isAllowed = await AwesomeNotifications().isNotificationAllowed();
+      final isAllowed = await isAllowedSafe();
       if (isAllowed) {
         _hasPermissions = true;
         return true;
@@ -606,6 +670,11 @@ class NotificationService {
       }
 
       return false;
+    } on PlatformException catch (e) {
+      _markPermissionsDenied(e);
+      LogManager.debug(
+          '[NotificationService] Permission dialog blocked: ${e.code} ${e.message}');
+      return false;
     } catch (e) {
       LogManager.debug('[NotificationService] Permission dialog failed: $e');
       return false;
@@ -618,6 +687,15 @@ class NotificationService {
   Future<void> refreshPermissionStatus() async {
     _permissionsChecked = false;
     await _checkPermissions();
+  }
+
+  void _markPermissionsDenied([PlatformException? exception]) {
+    _hasPermissions = false;
+    _permissionsChecked = true;
+    if (exception != null) {
+      LogManager.debug(
+          '[NotificationService] Notifications unavailable: ${exception.code} ${exception.message}');
+    }
   }
 
   // ============================================================

@@ -1,8 +1,11 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:trivia_tycoon/core/services/notification_service.dart';
+
 import '../../services/spin_tracker.dart';
 
 class SpinButton extends ConsumerStatefulWidget {
@@ -126,7 +129,6 @@ class _SpinButtonState extends ConsumerState<SpinButton>
       _cooldownLeft = timeLeft;
     });
 
-    // Start pulse animation when spins become available
     if (canSpin && !wasCanSpin && !widget.isSpinning) {
       _pulseController.repeat(reverse: true);
       _showSpinAvailableNotification();
@@ -159,10 +161,8 @@ class _SpinButtonState extends ConsumerState<SpinButton>
   Future<void> _handleSpin() async {
     if (!_canSpin || widget.isSpinning) return;
 
-    // Haptic feedback
     HapticFeedback.mediumImpact();
 
-    // Button press animation
     await _buttonController.forward();
     _buttonController.reverse();
 
@@ -172,29 +172,16 @@ class _SpinButtonState extends ConsumerState<SpinButton>
     await _checkSpinEligibility();
   }
 
-  void _scheduleCooldownNotification() {
-    final readyTime = DateTime.now().add(SpinTracker.cooldown);
-    AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: 101,
-        channelKey: 'spin_channel',
-        title: '🎉 Your spin is ready!',
-        body: 'Come back and spin again!',
-        notificationLayout: NotificationLayout.Default,
-        wakeUpScreen: true,
-        category: NotificationCategory.Reminder,
-      ),
-      schedule: NotificationCalendar(
-        year: readyTime.year,
-        month: readyTime.month,
-        day: readyTime.day,
-        hour: readyTime.hour,
-        minute: readyTime.minute,
-        second: 0,
-        millisecond: 0,
-        allowWhileIdle: true,
-      ),
+  Future<void> _scheduleCooldownNotification() async {
+    await NotificationService().cancelSpinNotifications();
+    final scheduled = await NotificationService().scheduleSpinReadyNotification(
+      SpinTracker.cooldown,
     );
+    if (!scheduled) {
+      LogManager.debug(
+        '[SpinButton] Spin ready notification skipped - permissions unavailable',
+      );
+    }
   }
 
   @override

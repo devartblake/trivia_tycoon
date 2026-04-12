@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trivia_tycoon/ui_components/spin_wheel/ui/widgets/floating_spin_cta.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
 import '../../../../game/analytics/providers/analytics_providers.dart';
 import '../../../../game/providers/riverpod_providers.dart' hide analyticsServiceProvider;
 import '../../../../core/services/settings/app_settings.dart';
+import '../../../../core/services/notification_service.dart';
 import '../../models/spin_system_models.dart';
 import '../../physics/non_uniform_motion.dart';
 import '../../physics/updated_spin_handler.dart';
@@ -440,27 +440,17 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
     );
   }
 
-  void _scheduleCooldownNotification() {
-    final readyTime = DateTime.now().add(SpinTracker.cooldown);
-    AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: 101,
-        channelKey: 'spin_channel',
-        title: 'Your spin is ready!',
-        body: 'Come back and spin again for more rewards!',
-        notificationLayout: NotificationLayout.Default,
-      ),
-      schedule: NotificationCalendar(
-        year: readyTime.year,
-        month: readyTime.month,
-        day: readyTime.day,
-        hour: readyTime.hour,
-        minute: readyTime.minute,
-        second: 0,
-        millisecond: 0,
-        allowWhileIdle: true,
-      ),
+  Future<void> _scheduleCooldownNotification() async {
+    await NotificationService().cancelSpinNotifications();
+    final scheduled =
+        await NotificationService().scheduleSpinReadyNotification(
+      SpinTracker.cooldown,
     );
+    if (!scheduled) {
+      LogManager.debug(
+        '[WheelScreen] Spin ready notification skipped - permissions unavailable',
+      );
+    }
   }
 
   @override
