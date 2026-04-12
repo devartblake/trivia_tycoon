@@ -128,7 +128,8 @@ class QuestionHubService {
 
       if (rawItems is! List) {
         throw QuestionContractException(
-          'Invalid batch answer response from /questions/check-batch',
+          endpoint: '/questions/check-batch',
+          reason: 'Invalid batch answer response payload',
         );
       }
 
@@ -146,7 +147,8 @@ class QuestionHubService {
             final submission = submissionsById[questionId];
             if (submission == null) {
               throw QuestionContractException(
-                'Unknown question id returned by /questions/check-batch: $questionId',
+                endpoint: '/questions/check-batch',
+                reason: 'Unknown question id returned by backend: $questionId',
               );
             }
             return _parseAnswerCheckResult(
@@ -466,7 +468,8 @@ class QuestionHubService {
 
     if (rawItems is! List) {
       throw QuestionContractException(
-        'Invalid question collection returned from $endpoint',
+        endpoint: endpoint,
+        reason: 'Invalid question collection payload',
       );
     }
 
@@ -489,7 +492,8 @@ class QuestionHubService {
 
     if (isCorrect is! bool) {
       throw QuestionContractException(
-        'Invalid answer check response for question ${question.id}',
+        endpoint: '/questions/check',
+        reason: 'Invalid answer check response for question ${question.id}',
       );
     }
 

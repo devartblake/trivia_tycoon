@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:trivia_tycoon/core/models/question_validation_models.dart';
 import 'package:trivia_tycoon/core/repositories/question_repository.dart';
 import 'package:trivia_tycoon/game/models/game_mode.dart';
 import 'package:trivia_tycoon/game/models/question_model.dart';
@@ -59,6 +60,37 @@ class _FakeQuestionRepository implements QuestionRepository {
 
   @override
   Future<List<QuestionModel>> getMultiplayerQuestions({int amount = 10, String? category}) async => const [];
+
+  @override
+  Future<QuestionAnswerCheckResult> checkAnswer({
+    required QuestionModel question,
+    required String selectedAnswer,
+  }) async {
+    return QuestionAnswerCheckResult(
+      questionId: question.id,
+      selectedAnswer: selectedAnswer,
+      isCorrect: question.correctAnswer == selectedAnswer,
+      correctAnswer: question.correctAnswer,
+      source: 'test',
+    );
+  }
+
+  @override
+  Future<List<QuestionAnswerCheckResult>> checkAnswerBatch({
+    required List<QuestionAnswerSubmission> submissions,
+  }) async {
+    return submissions
+        .map(
+          (submission) => QuestionAnswerCheckResult(
+            questionId: submission.question.id,
+            selectedAnswer: submission.selectedAnswer,
+            isCorrect: submission.question.correctAnswer == submission.selectedAnswer,
+            correctAnswer: submission.question.correctAnswer,
+            source: 'test',
+          ),
+        )
+        .toList(growable: false);
+  }
 }
 
 Map<String, dynamic> _questionJson({required String id, required String category, int difficulty = 2}) {

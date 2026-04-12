@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:trivia_tycoon/core/models/question_validation_models.dart';
 import 'package:trivia_tycoon/core/repositories/question_repository.dart';
 import 'package:trivia_tycoon/game/models/game_mode.dart';
 import 'package:trivia_tycoon/game/models/question_model.dart';
@@ -79,6 +80,37 @@ class _FakeQuestionRepository implements QuestionRepository {
     String? category,
     int? difficulty,
   }) async => const [];
+
+  @override
+  Future<QuestionAnswerCheckResult> checkAnswer({
+    required QuestionModel question,
+    required String selectedAnswer,
+  }) async {
+    return QuestionAnswerCheckResult(
+      questionId: question.id,
+      selectedAnswer: selectedAnswer,
+      isCorrect: question.correctAnswer == selectedAnswer,
+      correctAnswer: question.correctAnswer,
+      source: 'test',
+    );
+  }
+
+  @override
+  Future<List<QuestionAnswerCheckResult>> checkAnswerBatch({
+    required List<QuestionAnswerSubmission> submissions,
+  }) async {
+    return submissions
+        .map(
+          (submission) => QuestionAnswerCheckResult(
+            questionId: submission.question.id,
+            selectedAnswer: submission.selectedAnswer,
+            isCorrect: submission.question.correctAnswer == submission.selectedAnswer,
+            correctAnswer: submission.question.correctAnswer,
+            source: 'test',
+          ),
+        )
+        .toList(growable: false);
+  }
 }
 
 void main() {

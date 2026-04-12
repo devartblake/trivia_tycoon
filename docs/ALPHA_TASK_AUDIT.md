@@ -234,6 +234,8 @@ Progress update (2026-04-04 execution — complete):
   `docs/frontend_backend_handoff_alpha_2026-04-04.md`.
 - The larger handoff items for crypto surfaces and ML UX usage
   remain separate work items.
+- The canonical remaining-work tracker for those open handoff items is now
+  `docs/REMAINING_TASKS.md`.
 
 ### Remaining operational validation
 - Hosted-domain verification still requires production deployment of:
@@ -250,7 +252,8 @@ Progress update (2026-04-04 execution — complete):
 See **[`docs/REMAINING_TASKS.md`](REMAINING_TASKS.md)** for the prioritized, detailed backlog
 covering all remaining work across:
 
-- Phase 2 crash recovery stubs (3 items — §1d UnimplementedErrors resolved)
+- Frontend/backend alpha handoff remaining work (crypto surfaces, ML UX consumption)
+- Phase 2 crash recovery stubs (3 items - §1d UnimplementedErrors resolved)
 - Phase 3 test coverage gaps (9 specific classes/scenarios)
 - Phase 4 dependency audit (outdated packages, unused transitive deps)
 - Sprint 1 auth integration verification
