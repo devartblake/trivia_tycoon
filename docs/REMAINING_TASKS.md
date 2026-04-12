@@ -1,6 +1,6 @@
 # Remaining Tasks & Work Backlog
 
-_Last updated: 2026-04-09 (updated pass 2)_
+_Last updated: 2026-04-09 (updated: web startup fix)_
 
 > This file is the canonical "what is left to do" reference.
 > For completed work, see [`docs/ALPHA_TASK_AUDIT.md`](ALPHA_TASK_AUDIT.md).
@@ -172,12 +172,48 @@ Intentionally deferred to after Alpha launch. No urgency.
 
 ---
 
+## 8. Web Platform — Remaining `dart:io` Screen Files
+
+**Startup fixed ✅** — `api_service.dart` and `auth_error_messages.dart` no longer import
+`dart:io`, eliminating the startup cascade failure on web.
+
+The following files still import `dart:io` unconditionally. They are **not** in the startup
+path so the app loads on web, but these screens/features will throw when visited on web:
+
+| File | Used in | Impact on web |
+|------|---------|---------------|
+| `lib/ui_components/spin_wheel/services/prize_log_export_service.dart` | Spin-wheel export | File export will fail |
+| `lib/ui_components/shimmer_avatar/widgets/avatar_content.dart` | Avatar display | Avatar widget will throw |
+| `lib/ui_components/shimmer_avatar/utils/avatar_helpers.dart` | Avatar helpers | Avatar feature will throw |
+| `lib/ui_components/profile_avatar/profile_image_picker.dart` | Avatar upload | File picker unavailable on web |
+| `lib/ui_components/depth_card_3d/core/depth_card_3d.dart` | 3D cards | May throw if `dart:io` class is instantiated |
+| `lib/ui_components/confetti/utils/confetti_log_manager.dart` | Confetti debug overlay | Debug-only; low impact |
+| `lib/ui_components/color_picker/utils/color_log_manager.dart` | Color picker | Debug-only; low impact |
+| `lib/screens/profile/widgets/profile_avatar_preview.dart` | Profile screen | Avatar preview will throw |
+| `lib/screens/profile/widgets/shimmer_avatar.dart` | Profile screen | Shimmer avatar will throw |
+| `lib/screens/profile/widgets/avatar_image_card.dart` | Profile screen | Avatar card will throw |
+| `lib/screens/profile/widgets/avatar_package_image.dart` | Profile screen | Avatar image will throw |
+| `lib/screens/profile/tabs/collection_tab.dart` | Profile → Collections tab | Collections tab will throw |
+| `lib/game/services/avatar_package_service.dart` | Avatar packages | Service will throw on web |
+| `lib/game/services/collection_items_loader.dart` | Collection items | Loader will throw on web |
+| `lib/game/controllers/profile_avatar_controller.dart` | Profile avatar | Controller will throw on web |
+| `lib/admin/widgets/encrypted_file_preview.dart` | Admin | Admin only; low web priority |
+| `lib/admin/widgets/question_editor_form.dart` | Admin | Admin only; low web priority |
+| `lib/admin/questions/question_list_screen.dart` | Admin | Admin only; low web priority |
+| `lib/admin/questions/file_import_export_screen.dart` | Admin | Admin only; low web priority |
+
+**Recommended action:** For each file, either add `kIsWeb` guards around file-system calls
+or use conditional imports to provide web-safe stubs.
+
+---
+
 ## Release Readiness Checklist
 
 | Item | Status |
 |------|--------|
 | Zero `debugPrint` in production business logic | ✅ Done |
 | Zero `UnimplementedError` in user-facing paths | ✅ §1d resolved — intentional design-time guards documented |
+| Web startup crash (`dart:io` cascade) | ✅ Fixed — `api_service.dart` + `auth_error_messages.dart` |
 | Crash recovery tested on iOS and Android | ❌ Not implemented |
 | Test coverage ≥ 40% on `lib/game/` and `lib/core/` | ❌ ~4.1% currently (45 test files) |
 | No critical CVEs in dependency tree | ⏳ Needs `flutter pub outdated` run |
@@ -186,3 +222,4 @@ Intentionally deferred to after Alpha launch. No urgency.
 | All source-code TODO/FIXME resolved | ✅ Done (0 remaining) |
 | Runtime validation of all Synaptix screens | ❌ Blocked (needs device) |
 | Sprint 2 networking layer | ❌ Not started |
+| Remaining `dart:io` in screen-level files (web) | ⏳ 19 files — app loads, affected screens throw |

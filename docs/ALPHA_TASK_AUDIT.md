@@ -148,7 +148,31 @@ Progress update (2026-04-04 execution — complete):
 - `app_lifecycle.dart` (`appLifecycleProvider`) — documented as intentional design-time guard
 - `spin_earn_screen.dart` — removed stale comment referencing a replaced `UnimplementedError`
 
-## 6) Outstanding work — full backlog
+## 6) 2026-04-09 web / Edge browser fix ✅ COMPLETE
+
+### Root cause — Flutter web startup cascade failure
+- `lib/core/services/api_service.dart` unconditionally imported `dart:io` and
+  `package:path_provider/path_provider.dart`. DDC (debug) / dart2js (release) cannot
+  use `dart:io` on web; this caused a module-cascade that reported as
+  `"Library not defined: …/referral_invite_adapter.dart. Failed to initialize."` at
+  runtime.
+- `lib/core/services/auth_error_messages.dart` also imported `dart:io` for
+  `SocketException`/`HttpException` type checks, cascading through `auth_providers.dart`
+  → `main.dart`.
+
+### Fix applied
+- Created `lib/core/services/_api_cache_store.dart` (web stub → `MemCacheStore()`) and
+  `lib/core/services/_api_cache_store_io.dart` (native → `HiveCacheStore(tempDir.path)`).
+- `api_service.dart`: removed `dart:io`, `path_provider`, `http_cache_hive_store`
+  imports; wired in conditional import; `_initializeCache()` calls `createCacheStore()`.
+- `auth_error_messages.dart`: removed `dart:io`; exception-type guards replaced with
+  `runtimeType.toString()` / `toString().startsWith()` checks.
+- `web/index.html` + `web/manifest.json`: branding updated (`trivia_tycoon` → `Synaptix`).
+
+> **Result:** Web and Edge startup cascade failure eliminated. App can now load on web
+> in both debug (DDC) and release (dart2js) modes.
+
+## 8) Outstanding work — full backlog
 
 See **[`docs/REMAINING_TASKS.md`](REMAINING_TASKS.md)** for the prioritized, detailed backlog
 covering all remaining work across:
