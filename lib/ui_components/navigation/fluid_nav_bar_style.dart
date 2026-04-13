@@ -10,8 +10,8 @@ import 'package:flutter/widgets.dart';
 /// ```dart
 /// FluidNavBar(
 ///   icons: [
-///     FluidNavBarIcon(iconPath: "assets/home.svg"),
-///     FluidNavBarIcon(iconPath: "assets/bookmark.svg"),
+///     FluidNavBarIcon(svgPath: "assets/home.svg"),
+///     FluidNavBarIcon(svgPath: "assets/bookmark.svg"),
 ///   ],
 ///   style: FluidNavBarStyle(
 ///     backgroundColor: Colors.red,

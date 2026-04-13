@@ -339,7 +339,7 @@ class MessageReactionBar extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           color: hasUserReacted
               ? Theme.of(context).colorScheme.primaryContainer
-              : Theme.of(context).colorScheme.surfaceVariant,
+              : Theme.of(context).colorScheme.surfaceContainerHighest,
           border: hasUserReacted
               ? Border.all(color: Theme.of(context).colorScheme.primary, width: 1)
               : null,
@@ -379,7 +379,7 @@ class MessageReactionBar extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: Theme.of(context).colorScheme.surfaceVariant,
+          color: Theme.of(context).colorScheme.surfaceContainerHighest,
         ),
         child: Text(
           '+$remainingCount',

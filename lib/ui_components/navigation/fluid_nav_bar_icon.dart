@@ -29,6 +29,10 @@ class FluidNavBarIcon {
     this.backgroundColor,
     this.tooltip, // Initialize tooltip
     this.extras,
-  })  : assert(iconPath == null || svgPath == null || icon == null, 'Cannot provide both an svgPath and an icon.'),
-        assert(iconPath != null || svgPath != null || icon != null, 'An svgPath or an icon must be provided.');
+  })  : assert(
+          [iconPath, svgPath, icon].where((x) => x != null).length <= 1,
+          'Provide at most one of iconPath, svgPath, or icon.',
+        ),
+        assert(iconPath != null || svgPath != null || icon != null,
+            'An svgPath or an icon must be provided.');
 }

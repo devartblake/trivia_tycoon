@@ -17,19 +17,6 @@ class TermOfService {
     checked = initialValue;
   }
 
-  @Deprecated('Please use [checked] instead of this setter.')
-  // ignore: use_setters_to_change_properties
-  void setStatus(
-      // ignore: avoid_positional_boolean_parameters
-      bool checked,
-      ) {
-    this.checked = checked;
-  }
-
-  @Deprecated('Please use [checked] instead of this getter.')
-  bool getStatus() {
-    return checked;
-  }
 }
 
 class TermOfServiceResult {

@@ -299,7 +299,7 @@ class ColorPickerTheme {
       borderColor: colorScheme.outline,
       borderWidth: 1.0,
       indicatorColor: colorScheme.onSurface,
-      sliderTrackColor: colorScheme.surfaceVariant,
+      sliderTrackColor: colorScheme.surfaceContainerHighest,
       presetButtonColor: colorScheme.primary,
       surfaceColor: colorScheme.surface,
       onSurfaceColor: colorScheme.onSurface,
