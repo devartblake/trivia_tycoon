@@ -199,10 +199,18 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
       hasSeenIntro: _controller.currentStep > 0,
       hasCompletedProfile: hasCompletedProfile,
       currentStep: _controller.currentStep,
-      username: _controller.userData['username'] as String?,
-      ageGroup: _controller.userData['ageGroup'] as String?,
-      country: _controller.userData['country'] as String?,
-      categories: (_controller.userData['categories'] as List<dynamic>?)
+      username: _controller.userData['username'] is String
+          ? _controller.userData['username'] as String
+          : null,
+      ageGroup: _controller.userData['ageGroup'] is String
+          ? _controller.userData['ageGroup'] as String
+          : null,
+      country: _controller.userData['country'] is String
+          ? _controller.userData['country'] as String
+          : null,
+      categories: (_controller.userData['categories'] is List
+              ? _controller.userData['categories'] as List<dynamic>
+              : null)
           ?.map((e) => e.toString())
           .toList(),
       intent: _controller.intent,
@@ -229,15 +237,25 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     final serviceManager = ref.read(serviceManagerProvider);
     final profileService = serviceManager.playerProfileService;
     final onboardingService = serviceManager.onboardingSettingsService;
-    final rawUsername = (_controller.userData['username'] as String?)?.trim();
+    final rawUsername = (_controller.userData['username'] is String
+            ? _controller.userData['username'] as String
+            : null)
+        ?.trim();
     final username = _resolveOnboardingUsername(rawUsername);
-    final ageGroup = _controller.userData['ageGroup'] as String?;
-    final country = _controller.userData['country'] as String?;
-    final categories =
-    (_controller.userData['categories'] as List<dynamic>?)
+    final ageGroup = _controller.userData['ageGroup'] is String
+        ? _controller.userData['ageGroup'] as String
+        : null;
+    final country = _controller.userData['country'] is String
+        ? _controller.userData['country'] as String
+        : null;
+    final categories = (_controller.userData['categories'] is List
+            ? _controller.userData['categories'] as List<dynamic>
+            : null)
         ?.map((e) => e.toString())
         .toList();
-    final avatar = _controller.userData['avatar'] as String?;
+    final avatar = _controller.userData['avatar'] is String
+        ? _controller.userData['avatar'] as String
+        : null;
 
     if (ageGroup == null ||
         country == null ||
