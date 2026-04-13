@@ -119,6 +119,8 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
   /// Legacy points-based unlock (kept). Consider migrating calls to 'unlockSkill'.
   void unlock(String id) {
     if (!canUnlock(id)) return;
+    final node = state.graph.byId[id];
+    if (node == null) return;
     final updated = state.graph.nodes.map((n) {
       if (n.id == id) return n.copyWith(unlocked: true);
       return n;
@@ -127,7 +129,7 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
     final newGraph = SkillTreeGraph(nodes: updated, edges: state.graph.edges);
     state = state.copyWith(
       graph: newGraph,
-      playerPoints: state.playerPoints - state.graph.byId[id]!.cost,
+      playerPoints: state.playerPoints - node.cost,
     );
     _persistProfile();
     _persistUnlock(id);
