@@ -334,7 +334,7 @@ class _SimpleGameCard extends StatelessWidget {
             // Sparkle effects
             Positioned(
               top: height * 0.2,
-              right: width != null ? width! * 0.3 : 60,
+              right: 60,
               child: Container(
                 width: 4,
                 height: 4,
@@ -346,7 +346,7 @@ class _SimpleGameCard extends StatelessWidget {
             ),
             Positioned(
               top: height * 0.6,
-              right: width != null ? width! * 0.2 : 40,
+              right: 40,
               child: Container(
                 width: 6,
                 height: 6,

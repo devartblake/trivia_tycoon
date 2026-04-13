@@ -42,10 +42,10 @@ class PowerUp {
       name: item.name,
       description: item.description,
       iconPath: item.iconPath,
-      duration: item.duration,
+      duration: item.duration ?? 0,
       price: item.price,
       currency: item.currency,
-      type: item.type,
+      type: item.type ?? '',
     );
   }
 
