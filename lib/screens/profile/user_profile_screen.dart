@@ -21,8 +21,7 @@ class UserProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final winRate = (entry.accuracy ?? 0.6).clamp(0.0, 1.0);
+    final winRate = entry.accuracy.clamp(0.0, 1.0);
     final lossRate = 1 - winRate;
 
     return Scaffold(

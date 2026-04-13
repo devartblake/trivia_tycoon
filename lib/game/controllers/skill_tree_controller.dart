@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -302,13 +303,16 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
           .getUserId()
           .then((userId) {
         if (userId == null || userId.isEmpty) return;
-        ref
-            .read(serviceManagerProvider)
-            .tycoonApiClient
-            .unlockSkillNode(playerId: userId, nodeId: nodeId)
-            .catchError((_) {
-          // Log only — local state is source of truth until next server sync
-        });
+        unawaited(() async {
+          try {
+            await ref
+                .read(serviceManagerProvider)
+                .tycoonApiClient
+                .unlockSkillNode(playerId: userId, nodeId: nodeId);
+          } catch (_) {
+            // Log only — local state is source of truth until next server sync
+          }
+        }());
       });
     } catch (_) {
       // Service unavailable (e.g., test environment) — skip server sync

@@ -327,12 +327,6 @@ class LeaderboardController extends ChangeNotifier {
         }
       }
 
-      // Validate filter settings
-      if (_selectedCategory == null) {
-        _selectedCategory = LeaderboardCategory.topXP;
-        needsRepair = true;
-      }
-
       // Validate sort field
       if (_sortBy.isEmpty) {
         _sortBy = 'score';

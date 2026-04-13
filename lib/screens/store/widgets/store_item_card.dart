@@ -33,7 +33,6 @@ class _StoreItemCardState extends ConsumerState<StoreItemCard>
     with SingleTickerProviderStateMixin {
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
-  bool _isPressed = false;
 
   @override
   void initState() {
@@ -81,15 +80,12 @@ class _StoreItemCardState extends ConsumerState<StoreItemCard>
 
         return GestureDetector(
           onTapDown: (_) {
-            setState(() => _isPressed = true);
             _pulseController.forward();
           },
           onTapUp: (_) {
-            setState(() => _isPressed = false);
             _pulseController.reverse();
           },
           onTapCancel: () {
-            setState(() => _isPressed = false);
             _pulseController.reverse();
           },
           child: AnimatedBuilder(
@@ -529,10 +525,6 @@ class _StoreItemCardState extends ConsumerState<StoreItemCard>
 
     try {
       final powerUpController = ref.read(equippedPowerUpProvider.notifier);
-
-      // You'll need to get the available power-ups list to pass to the controller
-      // This might come from your inventory or store items
-      final availablePowerUps = <PowerUp>[]; // Replace with actual power-ups list
 
       // Convert your item to a PowerUp model
       final powerUp = PowerUp(

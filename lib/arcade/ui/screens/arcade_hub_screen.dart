@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/arcade/ui/screens/widgets/wallet_counters_row.dart';
-import '../../../game/providers/wallet_providers.dart';
 import '../../../game/analytics/providers/analytics_providers.dart';
 import '../../../synaptix/mode/synaptix_mode_provider.dart';
 import '../../domain/arcade_difficulty.dart';

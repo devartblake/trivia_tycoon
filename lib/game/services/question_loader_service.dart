@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:math' as math;
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../core/constants/question_paths.dart';
 import 'quiz_category.dart';

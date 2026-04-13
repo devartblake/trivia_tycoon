@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import '../../../game/models/conversation_models.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
@@ -55,12 +54,13 @@ class ConversationStorageService {
 
   Conversation? findDirectConversation(String userId1, String userId2) {
     final conversations = getUserConversations(userId1);
-    return conversations.firstWhere(
-          (conv) =>
-      conv.type == ConversationType.direct &&
-          conv.participantIds.contains(userId2),
-      orElse: () => null as Conversation,
-    );
+    for (final conv in conversations) {
+      if (conv.type == ConversationType.direct &&
+          conv.participantIds.contains(userId2)) {
+        return conv;
+      }
+    }
+    return null;
   }
 
   // ============ UPDATE ============

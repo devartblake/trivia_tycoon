@@ -195,11 +195,11 @@ class ThemeSettingsService {
       await presetsBox.flush();
 
       if (kDebugMode) {
-        print('✅ Current theme saved successfully: ${_cachedThemeName}');
+        LogManager.debug('Current theme saved successfully: ${_cachedThemeName}');
       }
     } catch (e) {
       if (kDebugMode) {
-        print('❌ Failed to save current theme: $e');
+        LogManager.debug('Failed to save current theme: $e');
       }
       rethrow;
     }
@@ -250,7 +250,7 @@ class ThemeSettingsService {
       if (needsRepair) {
         await _updateLastModified();
         if (kDebugMode) {
-          print('🔧 Theme data integrity restored');
+          LogManager.debug('Theme data integrity restored');
         }
       }
 
@@ -259,11 +259,11 @@ class ThemeSettingsService {
 
       _lastCacheUpdate = DateTime.now();
       if (kDebugMode) {
-        print('✅ Theme integrity validation completed');
+        LogManager.debug('Theme integrity validation completed');
       }
     } catch (e) {
       if (kDebugMode) {
-        print('❌ Theme integrity validation failed: $e');
+        LogManager.debug('Theme integrity validation failed: $e');
       }
       // Fallback to defaults
       await _resetToDefaults();
@@ -286,11 +286,11 @@ class ThemeSettingsService {
 
       await _updateLastModified();
       if (kDebugMode) {
-        print('🔄 Theme reset to defaults');
+        LogManager.debug('Theme reset to defaults');
       }
     } catch (e) {
       if (kDebugMode) {
-        print('❌ Failed to reset theme to defaults: $e');
+        LogManager.debug('Failed to reset theme to defaults: $e');
       }
     }
   }
@@ -347,10 +347,6 @@ class ThemeSettingsService {
         DateTime.now().difference(_lastCacheUpdate!) < _cacheTimeout;
   }
 
-  void _invalidateCache() {
-    _lastCacheUpdate = null;
-  }
-
   /// Export current theme as JSON
   Future<Map<String, dynamic>> exportTheme() async {
     final current = await getCurrentTheme();
@@ -377,11 +373,11 @@ class ThemeSettingsService {
       await setThemeName(name);
 
       if (kDebugMode) {
-        print('✅ Theme imported successfully: $name');
+        LogManager.debug('Theme imported successfully: $name');
       }
     } catch (e) {
       if (kDebugMode) {
-        print('❌ Failed to import theme: $e');
+        LogManager.debug('Failed to import theme: $e');
       }
       rethrow;
     }

@@ -137,40 +137,6 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
     );
   }
 
-  void _deleteQuestion(String id) async {
-    final confirmed = await showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text("Delete Question?"),
-        content: const Text("This action cannot be undone."),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text("Cancel"),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            style: TextButton.styleFrom(foregroundColor: const Color(0xFFEF4444)),
-            child: const Text("Delete"),
-          ),
-        ],
-      ),
-    );
-
-    if (confirmed == true) {
-      try {
-        final serviceManager = ref.read(serviceManagerProvider);
-        await serviceManager.apiService.delete('/admin/questions/$id');
-      } catch (_) {
-        // Keep local delete behavior even if backend is unavailable.
-      }
-      setState(() => _questions.removeWhere((q) => q.id == id));
-      await appCache.saveQuestions(_questions);
-      _applyFilters();
-    }
-  }
-
   void _deleteSelected() async {
     final confirmed = await showDialog(
       context: context,

@@ -71,8 +71,8 @@ class AppInit {
 
     // Open critical boxes required for theme/auth immediately
     final authTokenBox = await Hive.openBox('auth_tokens'); // ← NEW: Dedicated box for auth tokens
-    final settingsBox = await Hive.openBox('settings');
-    final secretsBox = await Hive.openBox('secrets');
+    await Hive.openBox('settings');
+    await Hive.openBox('secrets');
 
     // Initialize persistence service early
     _persistenceService = StatePersistenceService();
@@ -456,7 +456,7 @@ class AppInit {
     try {
       final rawProfile = await serviceManager.playerProfileService.getProfile();
       // FIX: Safe Map casting to prevent _Map<dynamic, dynamic> errors
-      final profile = rawProfile != null ? Map<String, dynamic>.from(rawProfile as Map) : {};
+      final profile = Map<String, dynamic>.from(rawProfile as Map);
 
       if (profile.isNotEmpty) {
         final rawUserId = profile['id'] ?? profile['user_id'];

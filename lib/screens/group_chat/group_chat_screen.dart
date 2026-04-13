@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../core/services/social/group_chat_service.dart';
-import '../../core/services/presence/typing_indicator_service.dart';
-import '../../core/services/presence/rich_presence_service.dart';
 import '../../game/models/group_chat_models.dart';
 import '../../ui_components/presence/typing_indicator_widget.dart';
 import '../messages/widgets/enhanced_message_tile.dart';
@@ -30,7 +28,6 @@ class GroupChatScreen extends StatefulWidget {
 
 class _GroupChatScreenState extends State<GroupChatScreen> with TypingIndicatorMixin {
   final GroupChatService _groupService = GroupChatService();
-  final TypingIndicatorService _typingService = TypingIndicatorService();
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 

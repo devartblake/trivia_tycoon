@@ -52,29 +52,6 @@ class EnvConfig {
   /// Optional frontend/app base URL for payment return routing.
   static String? get appRedirectBaseUrl => _appRedirectBaseUrl;
 
-  static String _normalizeWsUrl(String rawUrl) {
-    final parsed = Uri.parse(rawUrl.trim());
-
-    final normalizedScheme = switch (parsed.scheme) {
-      'https' => 'wss',
-      'http' => 'ws',
-      _ => parsed.scheme,
-    };
-
-    var normalizedPath = parsed.path;
-    if (normalizedPath.endsWith('/')) {
-      normalizedPath = normalizedPath.substring(0, normalizedPath.length - 1);
-    }
-
-    return parsed
-        .replace(
-          scheme: normalizedScheme,
-          path: normalizedPath,
-          fragment: '',
-        )
-        .toString();
-  }
-
   static String _joinWsPath(String baseUrl, String suffixPath) {
     final baseUri = Uri.parse(baseUrl);
     final baseSegments = baseUri.pathSegments.where((s) => s.isNotEmpty).toList();

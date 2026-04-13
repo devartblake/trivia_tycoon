@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:collection';
-import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 import 'ws_protocol.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';

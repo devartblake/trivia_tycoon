@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trivia_tycoon/core/animations/animation_manager.dart';
 import '../../../game/models/leaderboard_entry.dart';
 import '../../leaderboard/widgets/shimmer_avatar.dart';
 import '../../profile/user_profile_screen.dart';
@@ -55,26 +56,15 @@ class _LeaderboardCardState extends State<LeaderboardCard> with SingleTickerProv
   Widget build(BuildContext context) {
     final entry = widget.entry;
     final xp = entry.xpProgress.clamp(0.0, 1.0);
-    final accuracy = ((entry.accuracy ?? 0.0) * 100).clamp(0, 100).toInt();
-    final ageLabel = entry.ageGroup ?? "Unknown";
+    final accuracy = (entry.accuracy * 100).clamp(0, 100).toInt();
+    final ageLabel = entry.ageGroup;
 
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
-          PageRouteBuilder(
-            pageBuilder: (_, __, ___) => UserProfileScreen(entry: entry),
-            transitionsBuilder: (_, animation, __, child) {
-              return SlideTransition(
-                position: Tween<Offset>(
-                  begin: const Offset(1, 0),
-                  end: Offset.zero,
-                ).animate(CurvedAnimation(
-                  parent: animation,
-                  curve: Curves.easeInOut,
-                )),
-                child: child,
-              );
-            },
+          AnimationManager.slideTransition(
+            page: UserProfileScreen(entry: entry),
+            direction: SlideDirection.right,
           ),
         );
       },
@@ -151,7 +141,7 @@ class _LeaderboardCardState extends State<LeaderboardCard> with SingleTickerProv
 
                   // Accuracy Percentage
                   LinearProgressIndicator(
-                    value: (entry.accuracy ?? 0.0).clamp(0.0, 1.0),
+                    value: entry.accuracy.clamp(0.0, 1.0),
                     minHeight: 5,
                     color: Colors.green,
                     backgroundColor: Colors.grey[300],

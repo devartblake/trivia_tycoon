@@ -10,7 +10,7 @@ class CoinBalanceNotifier extends StateNotifier<int> {
   }
 
   Future<void> _loadFromStorage() async {
-    final stored = await storage.getInt(_key) ?? 0;
+    final stored = await storage.getInt(_key);
     state = stored;
   }
 

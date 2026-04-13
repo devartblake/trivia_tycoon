@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/services.dart';
 
 import 'api_service.dart';
@@ -385,11 +384,6 @@ class LeaderboardDataService extends ChangeNotifier {
     } catch (e) {
       return null;
     }
-  }
-
-  /// Updates last force refresh timestamp
-  Future<void> _updateLastForceRefresh() async {
-    await appCache.set(_lastForceRefreshKey, DateTime.now().toIso8601String());
   }
 
   /// Gets last force refresh timestamp

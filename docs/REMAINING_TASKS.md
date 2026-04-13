@@ -274,6 +274,25 @@ or use conditional imports to provide web-safe stubs.
 
 ---
 
+## 10. Windows Build Prerequisite
+
+### 10a. NuGet required for `flutter_inappwebview_windows`
+- **Status:** prerequisite not satisfied on the current Windows environment
+- **Observed failure:** Windows build fails with `NUGET-NOTFOUND` / exit code `9009`
+  while resolving `flutter_inappwebview_windows` native dependencies.
+- **Required fix:** install `nuget.exe` and make sure it is available on `PATH`
+  before running `flutter build windows`.
+- **Recommended verification:**
+  - `nuget help`
+  - `flutter clean`
+  - `flutter pub get`
+  - `flutter build windows`
+- **Important note:** the CMake `CMP0175` warning from the plugin is noisy but was
+  not the primary blocker in the reported failure; missing NuGet was the actual
+  build-stopping condition.
+
+---
+
 ## Release Readiness Checklist
 
 | Item | Status |
@@ -291,3 +310,4 @@ or use conditional imports to provide web-safe stubs.
 | Runtime validation of all Synaptix screens | Blocked (needs device) |
 | Sprint 2 networking layer | Not started |
 | Remaining `dart:io` in screen-level files (web) | 19 files - app loads, affected screens throw |
+| Windows desktop prerequisite (`nuget.exe` for `flutter_inappwebview_windows`) | Pending on local machine |

@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 
 import '../settings/app_settings.dart';
-import '../../manager/service_manager.dart';
 import '../../../game/providers/riverpod_providers.dart';
 
 typedef AppLifecycleStateNotifier = ValueNotifier<AppLifecycleState>;
@@ -27,9 +26,6 @@ final appLifecycleProvider = Provider<AppLifecycleStateNotifier>((ref) {
 final lifecycleStreamProvider = StreamProvider<AppLifecycleState>((ref) {
   return lifecycleStreamController.stream;
 });
-
-/// Broadcast controller for global access
-final _lifecycleStreamController = StreamController<AppLifecycleState>.broadcast();
 
 class AppLifecycleObserver extends ConsumerStatefulWidget {
   final Widget child;

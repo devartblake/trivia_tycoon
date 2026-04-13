@@ -17,8 +17,7 @@ import 'sections/missions_preview_section.dart';
 import 'sections/daily_bonus_section.dart';
 import 'sections/profile_actions_section.dart';
 import 'sheets/edit_profile_bottom_sheet.dart';
-import 'widgets/game_stats_widget.dart';
-import 'widgets/profile_header.dart';
+import 'widgets/crypto_holdings_card.dart';
 import 'mutual_friends_screen.dart';
 import '../../../arcade/leaderboards/local_arcade_leaderboard_screen.dart';
 import '../../../arcade/missions/arcade_missions_screen.dart';
@@ -288,6 +287,15 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
 
               // XP Progress Bar
               SliverToBoxAdapter(child: _buildXPProgressCard()),
+
+              SliverToBoxAdapter(child: const SizedBox(height: 16)),
+
+              SliverToBoxAdapter(
+                child: CryptoHoldingsCard(
+                  userId: widget.userId,
+                  isOwnProfile: widget.isOwnProfile,
+                ),
+              ),
 
               SliverToBoxAdapter(child: const SizedBox(height: 16)),
 

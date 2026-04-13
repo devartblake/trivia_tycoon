@@ -49,7 +49,7 @@ class _TypingIndicatorWidgetState extends State<TypingIndicatorWidget>
       vsync: this,
     );
 
-    _fadeAnimation = AnimationManager.fadeIn(_fadeController);
+    _fadeAnimation = AnimationManager.fadeIn(animation: _fadeController);
 
     _slideAnimation = Tween<double>(
       begin: -10.0,
@@ -149,7 +149,9 @@ class _TypingIndicatorWidgetState extends State<TypingIndicatorWidget>
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(3, (index) {
-              final dotOpacities = AnimationManager.typingDots(_dotsController.value);
+              final dotOpacities = AnimationManager.typingDots(
+                value: _dotsController.value,
+              );
               final opacity = dotOpacities[index];
 
               return Container(

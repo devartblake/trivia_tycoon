@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
@@ -107,9 +106,6 @@ class QuizProgressService {
   /// Sync progress to server
   Future<void> syncProgress() async {
     try {
-      final progressData = await getQuizProgress();
-      final playerData = await getPlayerProgress();
-
       // In a real app, you'd send this to your backend
       // For now, we just update the last sync timestamp
       await _box.put(_lastSyncKey, DateTime.now().toIso8601String());

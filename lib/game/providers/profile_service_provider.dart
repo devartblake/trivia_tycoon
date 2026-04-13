@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import '../services/profile_service.dart';
 import 'auth_providers.dart';
-import 'core_providers.dart';
 
 /// Provides a [ProfileService] wired to the current authenticated user.
 ///

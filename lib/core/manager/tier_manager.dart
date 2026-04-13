@@ -8,7 +8,6 @@ class TierManager {
   final GeneralKeyValueStorageService _storage;
   final PlayerProfileService _profileService;
 
-  static const String _tierProgressKey = 'tier_progress';
   static const String _currentTierKey = 'current_tier';
   static const String _unlockedTiersKey = 'unlocked_tiers';
 
@@ -151,15 +150,7 @@ class TierManager {
 
   /// Get current tier ID
   Future<int> getCurrentTierId() async {
-    final stored = await _storage.getInt(_currentTierKey);
-    if (stored != null) return stored;
-
-    // Calculate based on XP/Level if not stored
-    final profile = _profileService.getProfile();
-    final currentXP = profile['currentXP'] ?? 0;
-    final currentLevel = profile['level'] ?? 1;
-
-    return _calculateCurrentTier(currentXP, currentLevel);
+    return _storage.getInt(_currentTierKey);
   }
 
   /// Calculate current tier based on XP and level

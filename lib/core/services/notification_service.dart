@@ -7,7 +7,6 @@ import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
 
 import '../../game/providers/notification_history_store.dart';
 import '../../game/services/channel_prefs.dart' show kNotifDraftsKey, kNotifEnabledPrefix;
-import '../../ui_components/spin_wheel/services/spin_tracker.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class NotificationService {
@@ -750,7 +749,7 @@ class NotificationService {
 class _NotificationFeatureRow extends StatelessWidget {
   final String text;
   final IconData icon;
-  const _NotificationFeatureRow(this.text, this.icon, {super.key});
+  const _NotificationFeatureRow(this.text, this.icon);
 
   @override
   Widget build(BuildContext context) {
@@ -764,14 +763,3 @@ class _NotificationFeatureRow extends StatelessWidget {
   }
 }
 
-// (Optional) Your previous example usage kept here for reference:
-//
- void _scheduleCooldownNotification() async {
-   await NotificationService().cancelSpinNotifications();
-   final success = await NotificationService().scheduleSpinReadyNotification(SpinTracker.cooldown);
-   if (!success) {
-     LogManager.debug('[WheelScreen] Notification not scheduled - permissions may be disabled');
-   } else {
-     LogManager.debug('[WheelScreen] Spin ready notification scheduled');
-   }
- }

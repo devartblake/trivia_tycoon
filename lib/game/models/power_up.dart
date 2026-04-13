@@ -40,12 +40,12 @@ class PowerUp {
     return PowerUp(
       id: item.id,
       name: item.name,
-      description: item.description ?? '',
+      description: item.description,
       iconPath: item.iconPath,
-      duration: item.duration ?? 60,
+      duration: item.duration,
       price: item.price,
-      currency: item.currency ?? 'coins',
-      type: item.type ?? 'boost',
+      currency: item.currency,
+      type: item.type,
     );
   }
 

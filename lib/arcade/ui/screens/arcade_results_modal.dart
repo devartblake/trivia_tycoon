@@ -24,7 +24,7 @@ class ArcadeResultsModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final meta = result.metadata ?? const <String, dynamic>{};
+    final meta = result.metadata;
     final bool isNewPb = meta['isNewPb'] == true;
     final int previousBest = (meta['previousBest'] as int?) ?? 0;
 

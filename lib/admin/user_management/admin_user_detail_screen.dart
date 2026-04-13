@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
 import '../../game/models/admin_user_model.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../screens/widgets/custom_alert_dialog.dart';

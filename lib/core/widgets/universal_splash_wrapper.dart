@@ -6,6 +6,7 @@ import 'package:trivia_tycoon/screens/splash_variants/hq_terminal_splash.dart';
 import 'package:trivia_tycoon/screens/splash_variants/mind_market_splash.dart';
 import 'package:trivia_tycoon/screens/splash_variants/vault_splash.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 final splashTypeProvider = FutureProvider<SplashType>((ref) {
   final splashSettingsService = ref.watch(serviceManagerProvider).splashSettingsService;
@@ -24,7 +25,7 @@ class UniversalSplashWrapper extends ConsumerWidget {
 
     return splashTypeAsyncValue.when(
       data: (splashType) {
-        final type = splashType ?? SplashType.mindMarket; // Handle potential null from provider if needed
+        final type = splashType;
         switch (type) {
           case SplashType.fortuneWheel:
             return FortuneWheelSplash(onStart: onSplashFinished);
@@ -44,7 +45,7 @@ class UniversalSplashWrapper extends ConsumerWidget {
       ),
       error: (error, stackTrace) {
         // Log the error
-        print("Error loading splash type from provider: $error");
+        LogManager.debug('Error loading splash type from provider: $error');
         // Show a fallback splash or an error message
         return MindMarketSplash(onStart: onSplashFinished);
         // Or an error widget

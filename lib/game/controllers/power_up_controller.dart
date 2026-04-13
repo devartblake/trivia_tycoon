@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/services/settings/general_key_value_storage_service.dart';
-import '../../core/services/theme/seasonal_theme_service.dart';
 import '../models/power_up.dart';
 import '../providers/core_providers.dart';
 
@@ -37,7 +36,7 @@ class PowerUpController extends StateNotifier<PowerUp?> {
 
     final startTime = DateTime.tryParse(timestamp);
     final isValid = startTime != null &&
-        DateTime.now().isBefore(startTime.add(Duration(seconds: match.duration ?? 0)));
+        DateTime.now().isBefore(startTime.add(Duration(seconds: match.duration)));
 
     if (match.id != PowerUp.none().id && isValid) {
       state = match;
@@ -104,19 +103,21 @@ class PowerUpController extends StateNotifier<PowerUp?> {
     final startTime = DateTime.tryParse(timestamp);
     if (startTime == null) return true;
 
-    final duration = Duration(seconds: state!.duration ?? 0);
+    final duration = Duration(seconds: state!.duration);
     return DateTime.now().isAfter(startTime.add(duration));
   }
 
   /// ✅ Return the remaining active time of the equipped power-up.
   Future<Duration> getRemainingTime() async {
+    if (state == null) return Duration.zero;
+
     final timestamp = await _storage.getString(_activationTimeKey);
     if (timestamp == null) return Duration.zero;
 
     final start = DateTime.tryParse(timestamp);
     if (start == null) return Duration.zero;
 
-    final end = start.add(Duration(seconds: state?.duration ?? 0));
+    final end = start.add(Duration(seconds: state!.duration));
     return end.difference(DateTime.now()).isNegative ? Duration.zero : end.difference(DateTime.now());
   }
 

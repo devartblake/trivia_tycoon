@@ -1,7 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/manager/log_manager.dart';
-import '../../../core/services/settings/multi_profile_service.dart';
-import '../../../game/providers/multi_profile_providers.dart';
 
 /// Model for profile analytics events
 class ProfileAnalyticsEvent {

@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:ffi';
-import 'dart:math';
-
 import 'package:flutter/widgets.dart';
 import 'package:logging/logging.dart';
 import 'package:flutter_soloud/flutter_soloud.dart';
@@ -22,8 +20,6 @@ class AudioController {
   Handle? _nextMusic;
 
   final Queue<Song> _playlist;
-  final Random _random = Random();
-
   SettingsController? _settings;
   ValueNotifier<AppLifecycleState>? _lifecycleNotifier;
 

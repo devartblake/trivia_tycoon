@@ -38,13 +38,6 @@ class _PlayQuizScreenState extends State<PlayQuizScreen> {
     });
   }
 
-  String _formatDuration(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, "0");
-    String hours = twoDigits(duration.inHours);
-    String minutes = twoDigits(duration.inMinutes.remainder(60));
-    return "${hours}d ${minutes}h";
-  }
-
   // Enhanced navigation method that handles multiplayer modes
   void _navigateToHowToPlay(BuildContext context, GameMode gameMode) {
     // Check if it's a multiplayer mode
@@ -229,48 +222,11 @@ class _PlayQuizScreenState extends State<PlayQuizScreen> {
   }
 }
 
-Widget _buildMultiplayerBadge() {
-  return Positioned(
-    top: 8,
-    left: 8,
-    child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-        ),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(
-            Icons.people,
-            color: Colors.white,
-            size: 12,
-          ),
-          const SizedBox(width: 4),
-          const Text(
-            'MULTIPLAYER',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 8,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 0.5,
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
 class _SimpleGameCard extends StatelessWidget {
   final String title;
   final Gradient gradient;
   final double height;
   final double titleSize;
-  final double? width;
   final VoidCallback onTap;
   final bool isMultiplayer;
 
@@ -279,7 +235,6 @@ class _SimpleGameCard extends StatelessWidget {
     required this.gradient,
     required this.height,
     required this.titleSize,
-    this.width,
     required this.onTap,
     this.isMultiplayer = false,
   });
@@ -289,7 +244,6 @@ class _SimpleGameCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: width,
         height: height,
         decoration: BoxDecoration(
           gradient: gradient,

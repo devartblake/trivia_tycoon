@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter/foundation.dart';
 import 'auth_token_store.dart';
 import 'auth_service.dart' show BackendAuthService;
 import 'package:trivia_tycoon/core/manager/log_manager.dart';

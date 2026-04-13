@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 /// Skill categories used for classification and styling
 enum SkillCategory {
   scholar,

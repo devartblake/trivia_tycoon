@@ -191,7 +191,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
 
   Widget _buildStoreContent(
       List<StoreItemModel> items, Map<String, dynamic> status) {
-    final categories = <String>['All', ...{for (var item in items) item.category as String}];
+    final categories = <String>['All', ...{for (var item in items) item.category}];
     final storeItems = items.where((item) =>
     _selectedCategory == 'All' || item.category == _selectedCategory).toList();
 

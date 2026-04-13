@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:hive/hive.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Authentication session containing tokens and user metadata
 class AuthSession {
@@ -167,7 +168,7 @@ class AuthTokenStore {
       try {
         metadata = jsonDecode(metadataJson) as Map<String, dynamic>;
       } catch (e) {
-        print('[AuthTokenStore] Error parsing metadata: $e');
+        LogManager.debug('[AuthTokenStore] Error parsing metadata: $e');
       }
     }
 
@@ -247,7 +248,7 @@ class AuthTokenStore {
         }
       }
     } catch (e) {
-      print('[AuthTokenStore] Error getting role: $e');
+      LogManager.debug('[AuthTokenStore] Error getting role: $e');
     }
 
     return null;
@@ -271,7 +272,7 @@ class AuthTokenStore {
         return metadata['premium'] == true;
       }
     } catch (e) {
-      print('[AuthTokenStore] Error getting premium status: $e');
+      LogManager.debug('[AuthTokenStore] Error getting premium status: $e');
     }
 
     return false;

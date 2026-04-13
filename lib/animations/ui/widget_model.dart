@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'dart:developer';
 import 'dart:ui' as ui;
 import 'dart:async';
@@ -658,7 +659,7 @@ class VertexMesh {
       var y2 = positions[indices[i + 2] * 3 + 1];
       var z2 = positions[indices[i + 2] * 3 + 2];
 
-      print('f: {${x0.toStringAsFixed(3)}, ${y0.toStringAsFixed(3)}, ${z0.toStringAsFixed(3)}}, {${x1.toStringAsFixed(3)}, ${y1.toStringAsFixed(3)}, ${z1.toStringAsFixed(3)}}, {${x2.toStringAsFixed(3)}, ${y2.toStringAsFixed(3)}, ${z2.toStringAsFixed(3)}}');
+      developer.log('f: {${x0.toStringAsFixed(3)}, ${y0.toStringAsFixed(3)}, ${z0.toStringAsFixed(3)}}, {${x1.toStringAsFixed(3)}, ${y1.toStringAsFixed(3)}, ${z1.toStringAsFixed(3)}}, {${x2.toStringAsFixed(3)}, ${y2.toStringAsFixed(3)}, ${z2.toStringAsFixed(3)}}');
     }
   }
 }
@@ -746,14 +747,7 @@ class VertexMeshInstance {
 
     // Basic light
     Int32List colors = Int32List(_mesh.vertexCount);
-    final normalTransform = _modelView.getNormalMatrix();
     for (int i = 0; i < colors.length; ++i) {
-      final xn = normalTransform.transform(vec32.Vector3(
-        _mesh.normals[i * 3 + 0],
-        _mesh.normals[i * 3 + 1],
-        _mesh.normals[i * 3 + 2],
-      ).normalized());
-
       final b = 1.0; //xn.dot(vec32.Vector3(0.5, 0.5, 1.0).normalized()).clamp(0.1, 1.0);
 
       colors[i] = 0xFF000000 |

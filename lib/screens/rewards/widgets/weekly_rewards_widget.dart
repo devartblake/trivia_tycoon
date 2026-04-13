@@ -124,7 +124,6 @@ class WeeklyRewardsWidget extends StatelessWidget {
   Widget _buildDayCard(int day, String rewardType, String amount, IconData icon, Color color, bool claimed) {
     // Determine if this card can be claimed (for demo purposes, days 1-3 are claimed, day 4 is claimable)
     bool canClaim = day == 4 && !claimed; // Day 4 is ready to claim
-    bool isLocked = day > 4; // Days 5+ are locked
 
     return Builder(
       builder: (BuildContext context) {

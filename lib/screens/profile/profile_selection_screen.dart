@@ -58,7 +58,7 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
   @override
   Widget build(BuildContext context) {
     final profilesAsync = ref.watch(profilesProvider);
-    final activeProfileAsync = ref.watch(activeProfileProvider);
+    ref.watch(activeProfileProvider);
 
     return Scaffold(
       backgroundColor: const Color(0xFF1A1B3D), // Dark Netflix-style background
@@ -461,7 +461,7 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
       context: context,
       builder: (context) => CreateProfileDialog(
         onProfileCreated: () {
-          ref.refresh(profilesProvider);
+          ref.invalidate(profilesProvider);
         },
       ),
     );
@@ -472,7 +472,7 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
       context: context,
       builder: (context) => ManageProfilesDialog(
         onProfilesChanged: () {
-          ref.refresh(profilesProvider);
+          ref.invalidate(profilesProvider);
         },
       ),
     );

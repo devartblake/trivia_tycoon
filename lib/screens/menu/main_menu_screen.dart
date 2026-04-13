@@ -166,6 +166,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
 
   @override
   void dispose() {
+    _lifecycleListener?.dispose();
     _animationController.dispose();
     _pulseController.dispose();
     AnimationManager.disposeControllers(_cardAnimationControllers);
@@ -202,7 +203,9 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
             const Positioned.fill(child: _AnimatedMeshBackdrop()),
             SafeArea(
               child: FadeTransition(
-                opacity: AnimationManager.fadeIn(_animationController),
+                opacity: AnimationManager.fadeIn(
+                  animation: _animationController,
+                ),
                 child: _buildResponsiveBody(),
               ),
             ),

@@ -86,7 +86,7 @@ class _AppDrawerState extends ConsumerState<AppDrawer>
   @override
   Widget build(BuildContext context) {
     // Watch providers for reactive updates
-    final controller = ref.watch(profileAvatarControllerProvider);
+    ref.watch(profileAvatarControllerProvider);
     final activeProfile = ref.watch(activeProfileStateProvider);
     _selectedRoute = GoRouterState.of(context).uri.toString();
 

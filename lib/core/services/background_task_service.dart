@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../ui_components/qr_code/services/qr_history_service.dart';
 import '../services/notification_service.dart';
@@ -266,7 +265,7 @@ class BackgroundTaskService {
       LogManager.debug('[BG Task] Checking QR sync...');
       await QrHistoryService.instance.autoSyncIfDue(userId: userId, retentionDays: 14);
       LogManager.debug('[BG Task] QR sync (if due) completed.');
-    } catch (e, st) {
+    } catch (e) {
       LogManager.debug('[BG Task] QR sync failed: $e');
     }
   }
@@ -411,16 +410,6 @@ class BackgroundTaskService {
       await box.put(_userIdKey, userId);
     } catch (e) {
       LogManager.debug('[BackgroundTaskService] Failed to save user ID: $e');
-    }
-  }
-
-  Future<String?> _loadUserId() async {
-    try {
-      final box = await _getBackgroundBox();
-      return box.get(_userIdKey) as String?;
-    } catch (e) {
-      LogManager.debug('[BackgroundTaskService] Failed to load user ID: $e');
-      return null;
     }
   }
 

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import '../models/collection_item.dart';
 
 /// Service to load and manage collection items with their images
@@ -30,7 +31,7 @@ class CollectionItemsLoader {
           .map((item) => CollectionItem.fromJson(item as Map<String, dynamic>))
           .toList();
     } catch (e) {
-      print('Error loading collection items from asset: $e');
+      LogManager.debug('Error loading collection items from asset: $e');
       return [];
     }
   }
@@ -55,7 +56,7 @@ class CollectionItemsLoader {
           .map((item) => CollectionItem.fromJson(item as Map<String, dynamic>))
           .toList();
     } catch (e) {
-      print('Error loading collection items from local file: $e');
+      LogManager.debug('Error loading collection items from local file: $e');
       return [];
     }
   }
@@ -79,7 +80,7 @@ class CollectionItemsLoader {
         const JsonEncoder.withIndent('  ').convert(jsonData),
       );
     } catch (e) {
-      print('Error saving collection items to local file: $e');
+      LogManager.debug('Error saving collection items to local file: $e');
     }
   }
 
@@ -144,7 +145,7 @@ class CollectionItemsLoader {
       final file = File(p.join(dir.path, '$itemId.$extension'));
       await file.writeAsBytes(imageBytes);
     } catch (e) {
-      print('Error saving collection item image: $e');
+      LogManager.debug('Error saving collection item image: $e');
     }
   }
 
@@ -157,10 +158,10 @@ class CollectionItemsLoader {
     try {
       // Note: In a real app, you would use http package to download
       // This is a placeholder implementation
-      print('Download image for $itemId from $imageUrl');
+      LogManager.debug('Download image for $itemId from $imageUrl');
       return false;
     } catch (e) {
-      print('Error downloading collection item image: $e');
+      LogManager.debug('Error downloading collection item image: $e');
       return false;
     }
   }

@@ -342,17 +342,6 @@ class MultiplayerQuizService {
     }
   }
 
-  String _getClassLevelForGameMode(String gameMode) {
-    switch (gameMode) {
-      case 'arena':
-        return '8'; // Middle school level for Treasure Mine
-      case 'teams':
-        return '10'; // High school level for Survival Arena
-      default:
-        return '6';
-    }
-  }
-
   List<Map<String, dynamic>> _getSampleQuestions(String category) {
     switch (category.toLowerCase()) {
       case 'science':

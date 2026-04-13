@@ -191,7 +191,7 @@ class ArcadeMission {
 
     final rewardRaw = (json['reward'] ?? const {});
     final rewardMap = rewardRaw is Map
-        ? Map<String, dynamic>.from(rewardRaw as Map)
+        ? Map<String, dynamic>.from(rewardRaw)
         : <String, dynamic>{};
 
     return ArcadeMission(

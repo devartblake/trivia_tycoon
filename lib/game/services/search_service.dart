@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import '../models/search.dart';
 import '../providers/skill_search_provider.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';

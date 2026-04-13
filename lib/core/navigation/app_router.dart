@@ -33,8 +33,6 @@ import '../../arcade/missions/arcade_missions_screen.dart';
 import '../../arcade/ui/screens/arcade_hub_screen.dart';
 import '../../arcade/ui/screens/daily_bonus_screen.dart';
 import '../../game/models/game_mode.dart';
-import '../../game/providers/onboarding_providers.dart';
-import '../../game/providers/auth_providers.dart';
 import '../../screens/challenge/challenge_screen.dart';
 import '../../screens/menu/invite_screen.dart';
 import '../../screens/messages/messages_screen.dart';
@@ -102,7 +100,7 @@ import '../../screens/users/quiz_history_screen.dart';
 import '../../screens/question/transitional/trivia_transition_screen.dart';
 import '../../screens/question/create_quiz_screen.dart';
 import '../../screens/question/join_quiz_screen.dart';
-import '../../screens/question/play_quiz_screen.dart' hide GameMode;
+import '../../screens/question/play_quiz_screen.dart';
 import '../../screens/rewards/reward_screen.dart';
 import '../../screens/util/search_screen.dart';
 import '../../screens/settings/music_screen.dart';
@@ -116,7 +114,7 @@ import 'navigation_redirect_service.dart';
 // Reactive router provider that rebuilds when navigation state changes
 final goRouterProvider = Provider<GoRouter>((ref) {
   // Watch navigation state to trigger rebuilds
-  final navigationState = ref.watch(navigationStateProvider);
+  ref.watch(navigationStateProvider);
   final redirectService = ref.read(navigationRedirectServiceProvider);
 
   // Create a new router instance when state changes

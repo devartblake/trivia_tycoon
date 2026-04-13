@@ -1,6 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../../core/repositories/mission_repository.dart';
@@ -59,12 +59,16 @@ class MissionService {
       final swappedMission = await _repository.swapMission(userMissionId);
 
       // Non-fatal analytics hook
-      _callFastAPI('/missions/mission-swapped', {
-        'user_mission_id': userMissionId,
-        'new_mission_id': swappedMission.mission.id,
-      }).catchError((e) {
-        LogManager.debug('Analytics call failed: $e');
-      });
+      unawaited(() async {
+        try {
+          await _callFastAPI('/missions/mission-swapped', {
+            'user_mission_id': userMissionId,
+            'new_mission_id': swappedMission.mission.id,
+          });
+        } catch (e) {
+          LogManager.debug('Analytics call failed: $e');
+        }
+      }());
 
       return swappedMission;
     } catch (e) {
@@ -109,13 +113,17 @@ class MissionService {
           },
         );
 
-        _callFastAPI('/missions/mission-completed', {
-          'user_mission_id': userMissionId,
-          'user_id': updatedMission.userId,
-          'reward_amount': updatedMission.mission.rewardXp,
-        }).catchError((e) {
-          LogManager.debug('Reward processing failed: $e');
-        });
+        unawaited(() async {
+          try {
+            await _callFastAPI('/missions/mission-completed', {
+              'user_mission_id': userMissionId,
+              'user_id': updatedMission.userId,
+              'reward_amount': updatedMission.mission.rewardXp,
+            });
+          } catch (e) {
+            LogManager.debug('Reward processing failed: $e');
+          }
+        }());
       }
 
       return updatedMission;

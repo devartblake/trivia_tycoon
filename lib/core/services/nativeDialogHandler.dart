@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class NativeDialogs {
   static const MethodChannel _channel = MethodChannel('trivia_native');
@@ -11,7 +12,7 @@ class NativeDialogs {
       });
       return response;
     } catch (e) {
-      print("Error showing input dialog: $e");
+      LogManager.debug('Error showing input dialog: $e');
       return null;
     }
   }

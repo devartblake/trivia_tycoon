@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../game/providers/game_providers.dart';
 import '../../../../game/providers/profile_providers.dart';
 
 class TopMenuSection extends ConsumerWidget {

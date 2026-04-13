@@ -34,8 +34,8 @@ class AdminFilterController extends StateNotifier<AdminFilterState> {
       final deviceTypes = await _storageService.getStringList(_keyDeviceTypes);
       final notificationMethod = await _storageService.getString(_keyNotification) ?? 'all';
       final dateRange = await _storageService.getString(_keyDateRange) ?? '7days';
-      final minScore = await _storageService.getInt(_keyMinScore) ?? 0;
-      final maxScore = await _storageService.getInt(_keyMaxScore) ?? 1000;
+      final minScore = await _storageService.getInt(_keyMinScore);
+      final maxScore = await _storageService.getInt(_keyMaxScore);
 
       state = state.copyWith(
         showVerified: showVerified,

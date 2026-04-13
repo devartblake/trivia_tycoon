@@ -291,7 +291,7 @@ class ArcadeMissionService {
 
   /// Call this from ArcadeGameShell.completeRun().
   void onArcadeRunCompleted(ArcadeResult result) {
-    final meta = result.metadata ?? const <String, dynamic>{};
+    final meta = result.metadata;
     final isNewPb = meta['isNewPb'] == true;
 
     for (final m in _missions) {

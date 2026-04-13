@@ -28,10 +28,10 @@ class StoreService {
       // Load store items, categories, avatars, etc. here
       final service = StoreService._(apiService);
 
-      print('StoreService initialized successfully');
+      LogManager.debug('StoreService initialized successfully');
       return service;
     } catch (e) {
-      print('Failed to initialize StoreService: $e');
+      LogManager.debug('Failed to initialize StoreService: $e');
       rethrow;
     }
   }
@@ -55,7 +55,7 @@ class StoreService {
 
       return items;
     } catch (e) {
-      print('Failed to load store items: $e');
+      LogManager.debug('Failed to load store items: $e');
 
       // Try to load from persistent cache as fallback
       final cachedItems = await _loadItemsFromStorage();
@@ -264,9 +264,9 @@ class StoreService {
     final items = await getAllItems();
     final lowerQuery = query.toLowerCase();
 
-    return items.where((item) {
+      return items.where((item) {
       return item.name.toLowerCase().contains(lowerQuery) ||
-          (item.description.toLowerCase().contains(lowerQuery) ?? false) ||
+          item.description.toLowerCase().contains(lowerQuery) ||
           item.category.toLowerCase().contains(lowerQuery);
     }).toList();
   }
@@ -290,9 +290,9 @@ class StoreService {
       await box.put('cached_items', itemsJson);
       await box.put(_cacheTimestampKey, DateTime.now().toIso8601String());
 
-      print('Store items cached: ${items.length} items');
+      LogManager.debug('Store items cached: ${items.length} items');
     } catch (e) {
-      print('Failed to cache items: $e');
+      LogManager.debug('Failed to cache items: $e');
     }
   }
 
@@ -308,7 +308,7 @@ class StoreService {
             .toList();
       }
     } catch (e) {
-      print('Failed to load cached items: $e');
+      LogManager.debug('Failed to load cached items: $e');
     }
 
     return [];
@@ -327,7 +327,7 @@ class StoreService {
   /// Called when app resumes or when data needs to be updated
   Future<void> refreshStoreData() async {
     try {
-      print('Refreshing store data...');
+      LogManager.debug('Refreshing store data...');
 
       // Clear current cache to force reload
       _invalidateCache();
@@ -344,9 +344,9 @@ class StoreService {
       // Update refresh timestamp
       await _updateLastRefresh();
 
-      print('Store data refreshed: ${items.length} items');
+      LogManager.debug('Store data refreshed: ${items.length} items');
     } catch (e) {
-      print('Failed to refresh store data: $e');
+      LogManager.debug('Failed to refresh store data: $e');
       rethrow;
     }
   }
@@ -362,9 +362,9 @@ class StoreService {
       // Refresh data
       await refreshStoreData();
 
-      print('Store data force refreshed');
+      LogManager.debug('Store data force refreshed');
     } catch (e) {
-      print('Failed to force refresh: $e');
+      LogManager.debug('Failed to force refresh: $e');
       rethrow;
     }
   }
@@ -389,12 +389,12 @@ class StoreService {
       }
 
       if (needsRepair) {
-        print('Store data integrity restored');
+        LogManager.debug('Store data integrity restored');
       }
 
-      print('Store data validation completed');
+      LogManager.debug('Store data validation completed');
     } catch (e) {
-      print('Store data validation failed: $e');
+      LogManager.debug('Store data validation failed: $e');
     }
   }
 
@@ -404,7 +404,7 @@ class StoreService {
       final box = await Hive.openBox(_storeBoxName);
       await box.put(_lastRefreshKey, DateTime.now().toIso8601String());
     } catch (e) {
-      print('Failed to update last refresh: $e');
+      LogManager.debug('Failed to update last refresh: $e');
     }
   }
 
@@ -487,9 +487,9 @@ class StoreService {
         await _updateLastRefresh();
       }
 
-      print('Store data imported successfully');
+      LogManager.debug('Store data imported successfully');
     } catch (e) {
-      print('Failed to import store data: $e');
+      LogManager.debug('Failed to import store data: $e');
       rethrow;
     }
   }
@@ -499,7 +499,7 @@ class StoreService {
     final box = await Hive.openBox(_storeBoxName);
     await box.clear();
     _invalidateCache();
-    print('Store cache cleared');
+    LogManager.debug('Store cache cleared');
   }
 
   /// Check if item is available

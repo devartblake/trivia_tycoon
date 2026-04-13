@@ -1,11 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import '../providers/quiz_results_provider.dart';
 import '../providers/xp_provider.dart';
-import '../controllers/achievement_controller.dart';
-import '../services/profile_service.dart';
-import '../providers/profile_service_provider.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 // Educational Statistics Model
@@ -475,8 +471,6 @@ class QuizCompletionNotifier {
   Future<void> _checkEducationalAchievements(QuizResults result) async {
     try {
       final stats = await ref.read(educationalStatsServiceProvider).getEducationalStats();
-      final profileService = ref.read(profileServiceProvider);
-
       // Example achievement checks
       if (stats.totalQuizzes == 1) {
         // First quiz achievement

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../game/providers/notification_history_store.dart';
 import '../../../game/providers/notification_providers.dart';
 import 'package:intl/intl.dart';
 
@@ -31,7 +30,7 @@ class HistoryList extends ConsumerWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (_, i) {
-              final e = entries[i] as NotificationHistoryEntry;
+              final e = entries[i];
               return ListTile(
                 leading: Icon(_iconForType(e.type)),
                 title: Text('${e.title} • ${e.channelKey}'),

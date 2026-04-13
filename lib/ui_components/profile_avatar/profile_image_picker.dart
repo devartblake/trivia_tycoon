@@ -48,7 +48,7 @@ class _ProfileImagePickerState extends State<ProfileImagePicker>
       duration: const Duration(milliseconds: 300),
     );
 
-    _fadeAnimation = AnimationManager.fadeIn(_animationController);
+    _fadeAnimation = AnimationManager.fadeIn(animation: _animationController);
 
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0, 0.1),

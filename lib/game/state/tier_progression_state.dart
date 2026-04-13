@@ -149,6 +149,13 @@ class TierProgressionNotifier extends StateNotifier<TierProgressionState> {
     }
   }
 
+  bool get isUpdatingState => state.isUpdating;
+  TierUpdateResult? get lastUpdateResult => state.lastUpdate;
+  bool get hasErrorState => state.error != null;
+  String? get errorMessageState => state.error;
+  bool get hadTierChangeState => state.lastUpdate?.tierChanged ?? false;
+  bool get hadNewUnlocksState => state.lastUpdate?.hasNewUnlocks ?? false;
+
   /// Private helper to invalidate tier-related providers
   void _invalidateTierProviders() {
     // Note: These provider names should match your actual provider names
@@ -166,26 +173,6 @@ class TierProgressionNotifier extends StateNotifier<TierProgressionState> {
 }
 
 /// Extension helper for easy tier operations
-extension TierProgressionNotifierExtensions on TierProgressionNotifier {
-  /// Quick check if currently updating
-  bool get isUpdating => state.isUpdating;
-
-  /// Quick access to last tier update result
-  TierUpdateResult? get lastUpdate => state.lastUpdate;
-
-  /// Quick check if there's an error
-  bool get hasError => state.error != null;
-
-  /// Quick access to error message
-  String? get errorMessage => state.error;
-
-  /// Check if last update resulted in tier change
-  bool get hadTierChange => state.lastUpdate?.tierChanged ?? false;
-
-  /// Check if last update had new unlocks
-  bool get hadNewUnlocks => state.lastUpdate?.hasNewUnlocks ?? false;
-}
-
 // Provider references (these will be defined in river-pod_providers.dart)
 // This is just for type checking - actual providers are defined elsewhere
 abstract class _ProviderReferences {

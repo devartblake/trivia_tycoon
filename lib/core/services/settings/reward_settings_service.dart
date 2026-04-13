@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
+import '../../manager/log_manager.dart';
+
 /// RewardSettingsService manages store purchases, power-up inventory,
 /// win streaks, jackpot times, and currency-related progress.
 class RewardSettingsService {
@@ -318,11 +320,11 @@ class RewardSettingsService {
       await storeBox.flush();
 
       if (kDebugMode) {
-        print('✅ Reward state saved successfully');
+        LogManager.debug('Reward state saved successfully');
       }
     } catch (e) {
       if (kDebugMode) {
-        print('❌ Failed to save reward state: $e');
+        LogManager.debug('Failed to save reward state: $e');
       }
       rethrow;
     }
@@ -394,17 +396,17 @@ class RewardSettingsService {
       if (needsRepair) {
         await _updateLastRewardUpdate();
         if (kDebugMode) {
-          print('🔧 Reward data integrity restored');
+          LogManager.debug('Reward data integrity restored');
         }
       }
 
       _lastCacheUpdate = DateTime.now();
       if (kDebugMode) {
-        print('✅ Reward integrity validation completed');
+        LogManager.debug('Reward integrity validation completed');
       }
     } catch (e) {
       if (kDebugMode) {
-        print('❌ Reward integrity validation failed: $e');
+        LogManager.debug('Reward integrity validation failed: $e');
       }
       await _resetRewardData();
     }
@@ -422,7 +424,7 @@ class RewardSettingsService {
       if (validInventory.length != inventory.length) {
         await box.put(_inventoryKey, validInventory);
         _cachedInventory = validInventory;
-        print('🔧 Inventory integrity restored');
+        LogManager.debug('Inventory integrity restored');
       }
 
       // Validate purchased items
@@ -433,13 +435,13 @@ class RewardSettingsService {
         if (key == null || key is! String || key.isEmpty) {
           await purchasedBox.delete(key);
           if (kDebugMode) {
-            print('🔧 Invalid purchased item removed: $key');
+            LogManager.debug('Invalid purchased item removed: $key');
           }
         }
       }
     } catch (e) {
       if (kDebugMode) {
-        print('❌ Inventory validation failed: $e');
+        LogManager.debug('Inventory validation failed: $e');
       }
     }
   }
@@ -460,9 +462,9 @@ class RewardSettingsService {
       _cachedJackpotTime = DateTime.fromMillisecondsSinceEpoch(0);
 
       await _updateLastRewardUpdate();
-      print('🔄 Reward data reset to defaults');
+      LogManager.debug('Reward data reset to defaults');
     } catch (e) {
-      print('❌ Failed to reset reward data: $e');
+      LogManager.debug('Failed to reset reward data: $e');
     }
   }
 
@@ -529,6 +531,6 @@ class RewardSettingsService {
     await storeBox.clear();
 
     _invalidateCache();
-    print('🗑️ All reward data cleared');
+    LogManager.debug('All reward data cleared');
   }
 }

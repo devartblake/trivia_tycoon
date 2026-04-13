@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/game/services/profile_service.dart';
 import 'package:trivia_tycoon/game/providers/profile_service_provider.dart';
@@ -36,16 +35,17 @@ class GameSession {
     try {
       // Get the coin balance notifier from Riverpod providers
       final coinNotifier = _profile.ref.read(coinBalanceProvider.notifier);
+      final currentCoins = _profile.ref.read(coinBalanceProvider);
       coinNotifier.add(amount);
 
       // Also update the active profile's game stats to persist coins
       final profileManager = _profile.ref.read(profileManagerProvider.notifier);
       profileManager.updateActiveProfileGameStats({
-        'coins': coinNotifier.state, // Update with new total
+        'coins': currentCoins + amount,
         'lastCoinUpdate': DateTime.now().toIso8601String(),
       });
 
-      LogManager.debug('GameSession: Successfully added $amount coins. New total: ${coinNotifier.state}');
+      LogManager.debug('GameSession: Successfully added $amount coins. New total: ${currentCoins + amount}');
     } catch (e) {
       LogManager.debug('GameSession: Error adding coins: $e');
     }
@@ -56,19 +56,20 @@ class GameSession {
 
     try {
       final coinNotifier = _profile.ref.read(coinBalanceProvider.notifier);
-      if (coinNotifier.state >= amount) {
+      final currentCoins = _profile.ref.read(coinBalanceProvider);
+      if (currentCoins >= amount) {
         coinNotifier.deduct(amount);
 
         // Update profile stats
         final profileManager = _profile.ref.read(profileManagerProvider.notifier);
         profileManager.updateActiveProfileGameStats({
-          'coins': coinNotifier.state,
+          'coins': currentCoins - amount,
           'lastCoinUpdate': DateTime.now().toIso8601String(),
         });
 
-        LogManager.debug('GameSession: Successfully deducted $amount coins. New total: ${coinNotifier.state}');
+        LogManager.debug('GameSession: Successfully deducted $amount coins. New total: ${currentCoins - amount}');
       } else {
-        LogManager.debug('GameSession: Insufficient coins. Required: $amount, Available: ${coinNotifier.state}');
+        LogManager.debug('GameSession: Insufficient coins. Required: $amount, Available: $currentCoins');
       }
     } catch (e) {
       LogManager.debug('GameSession: Error deducting coins: $e');
@@ -80,16 +81,17 @@ class GameSession {
 
     try {
       final gemNotifier = _profile.ref.read(diamondNotifierProvider);
+      final currentGems = _profile.ref.read(diamondBalanceProvider);
       gemNotifier.addValue(amount);
 
       // Update profile stats
       final profileManager = _profile.ref.read(profileManagerProvider.notifier);
       profileManager.updateActiveProfileGameStats({
-        'gems': gemNotifier.state, // Use 'state' instead of 'currentValue'
+        'gems': currentGems + amount,
         'lastGemUpdate': DateTime.now().toIso8601String(),
       });
 
-      LogManager.debug('GameSession: Successfully added $amount gems. New total: ${gemNotifier.state}');
+      LogManager.debug('GameSession: Successfully added $amount gems. New total: ${currentGems + amount}');
     } catch (e) {
       LogManager.debug('GameSession: Error adding gems: $e');
     }

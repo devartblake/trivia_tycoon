@@ -1,7 +1,4 @@
 import 'dart:async';
-
-import 'package:flutter/foundation.dart';
-
 import '../../bootstrap/app_init.dart';
 import '../../networking/ws_client.dart';
 import '../../networking/ws_protocol.dart';

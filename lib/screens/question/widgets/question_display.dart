@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../game/models/question_model.dart';
 
 class EnhancedQuestionDisplay extends StatelessWidget {
   final String question;

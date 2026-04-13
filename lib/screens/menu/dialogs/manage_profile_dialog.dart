@@ -85,9 +85,6 @@ class DrawerManageProfilesDialog extends ConsumerWidget {
       context: context,
       builder: (context) => CreateProfileDialog(
         onProfileCreated: () {
-          // Refresh the profiles provider to update the list
-          ref.refresh(profilesProvider);
-          // Force the dialog to rebuild by invalidating the provider
           ref.invalidate(profilesProvider);
         },
       ),
@@ -292,7 +289,7 @@ class ProfileManagementTile extends ConsumerWidget {
       );
 
       // Refresh the profiles to update the UI
-      ref.refresh(profilesProvider);
+      ref.invalidate(profilesProvider);
       ref.invalidate(activeProfileStateProvider);
 
       if (context.mounted) {
@@ -355,7 +352,6 @@ class ProfileManagementTile extends ConsumerWidget {
           );
 
           // Refresh the profiles list to reflect the deletion
-          ref.refresh(profilesProvider);
           ref.invalidate(profilesProvider);
 
           ScaffoldMessenger.of(context).showSnackBar(

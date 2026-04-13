@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'http_client.dart';
 import '../dto/player_dto.dart';
 import '../dto/season_dto.dart';

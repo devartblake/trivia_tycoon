@@ -8,8 +8,6 @@ import 'package:go_router/go_router.dart';
 import 'package:hive/hive.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 
-import '../../core/router/enhanced_admin_guard.dart';
-import '../../core/services/api_service.dart';
 
 class AdminEventQueueScreen extends ConsumerStatefulWidget {
   const AdminEventQueueScreen({super.key});
@@ -49,19 +47,6 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
 
   bool _isReprocessCoolingDown(dynamic key) {
     return _secondsRemaining(_reprocessCooldownUntil[key]) > 0;
-  }
-
-  void _startCooldownTimer() {
-    Future<void>.delayed(const Duration(seconds: 1), () {
-      if (!mounted) return;
-      final hasUploadCooldown = _isUploadCoolingDown;
-      final hasReprocessCooldown = _reprocessCooldownUntil.entries
-          .any((entry) => _secondsRemaining(entry.value) > 0);
-      if (hasUploadCooldown || hasReprocessCooldown) {
-        setState(() {});
-        _startCooldownTimer();
-      }
-    });
   }
 
   Future<void> _loadEventQueue() async {

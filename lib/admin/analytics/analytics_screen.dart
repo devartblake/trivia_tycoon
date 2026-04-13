@@ -6,7 +6,6 @@ import 'package:trivia_tycoon/core/manager/analytics/analytics_stream_manager.da
 import 'package:trivia_tycoon/game/providers/mission_filters_provider.dart';
 import '../../game/analytics/providers/analytics_providers.dart';
 import '../../ui_components/mission/mission_filters_segmented_tabs.dart';
-import '../../game/providers/timeline_filter_provider.dart';
 import '../widgets/analytics/timeline_filter_tabs.dart';
 import '../widgets/analytics/engagement/engagement_analytics_widget.dart';
 import '../widgets/analytics/retention/retention_analytics_widget.dart';
@@ -24,7 +23,7 @@ class AnalyticsScreen extends ConsumerStatefulWidget {
 
 class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
   Future<void> _onRefresh() async {
-    await ref.refresh(analyticsManagerProvider.future);
+    ref.invalidate(analyticsManagerProvider);
     // Also refresh spin analytics
     ref.invalidate(spinAnalyticsSummaryProvider);
     ref.invalidate(spinTrendDataProvider);

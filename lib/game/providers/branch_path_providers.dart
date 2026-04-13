@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/game/providers/skill_tree_provider.dart';
-import '../../game/controllers/skill_tree_controller.dart';
 import '../models/skill_tree_graph.dart';
 import '../planning/skill_branch_path_planner.dart';
 

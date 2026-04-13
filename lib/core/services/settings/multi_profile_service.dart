@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import 'package:trivia_tycoon/core/services/settings/player_profile_service.dart';
 import 'package:trivia_tycoon/core/services/settings/profile_sync_service.dart';
 import 'package:uuid/uuid.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// ProfileData model for individual profiles
 class ProfileData {
@@ -291,9 +289,6 @@ class MultiProfileService {
         LogManager.info('[MultiProfile] Profile name already exists: $name', source: 'MultiProfileService');
         return null;
       }
-
-      final profileId = _uuid.v4();
-      final now = DateTime.now();
 
       final box = await _getBox();
       final Map<String, dynamic> profilesMap = Map.from(

@@ -234,7 +234,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
         // ✅ ADD THIS - Initialize WebSocket after successful login
         final authService = ref.read(authServiceProvider);
-        if (authService.secureStorage != null) {
+        if (authService.secureStorage.isNotEmpty) {
           // Get token store from service manager or provider
           ref.read(serviceManagerProvider);
         }

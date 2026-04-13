@@ -6,9 +6,7 @@ import '../../../game/controllers/theme_settings_controller.dart';
 import '../../../ui_components/spin_wheel/models/spin_system_models.dart';
 
 class AppSettings {
-  final ConfigStorageService _config;
-
-  AppSettings(this._config);
+  AppSettings(ConfigStorageService config);
 
   static const _boxName = 'settings';
   static const String _qrAutoLaunchKey = 'qr_auto_launch';
@@ -957,7 +955,7 @@ class AppSettings {
 
   /// *** Retrieve exclusive based on currency **
   static Future<int> getExclusiveCurrency() async =>
-      await getInt("exclusiveCurrency") ?? 0;
+      await getInt("exclusiveCurrency");
 
   /// ** Retrieve total spins
   static Future<int> getTotalSpins() async {

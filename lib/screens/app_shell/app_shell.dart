@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/core/services/analytics/config_service.dart';
-import 'package:trivia_tycoon/core/utils/theme_mapper.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart' as providers;
 import '../../core/theme/app_scroll_behavior.dart';
 
@@ -18,13 +17,11 @@ class AppShell extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ageGroup = ref.watch(providers.userAgeGroupProvider);
+    ref.watch(providers.userAgeGroupProvider);
     final themeSettings = ref.watch(providers.themeSettingsProvider);
 
     final primaryColor = themeSettings.primaryColor;
     final brightness = themeSettings.brightness;
-
-    final appTheme = ThemeMapper.getThemeForAgeGroup(ageGroup);
 
     return MaterialApp.router(
       key: ValueKey("${primaryColor.value}-${brightness.name}"),

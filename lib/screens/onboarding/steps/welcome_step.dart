@@ -52,7 +52,6 @@ class _WelcomeStepState extends State<WelcomeStep>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final size = MediaQuery.of(context).size;
 
     return Container(
       padding: const EdgeInsets.all(24),

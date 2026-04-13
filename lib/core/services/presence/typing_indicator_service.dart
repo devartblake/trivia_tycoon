@@ -120,7 +120,6 @@ class TypingIndicatorService extends ChangeNotifier {
       }
 
       // Auto-clear this user's typing status after 5 seconds
-      final timerKey = '$safeConversationId:$safeUserId';
       Timer(const Duration(seconds: 5), () {
         _typingUsers[safeConversationId]?.remove(safeUserId);
         _typingUserNames[safeConversationId]?.remove(safeUserName);

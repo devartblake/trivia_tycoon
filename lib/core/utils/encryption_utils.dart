@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart' hide Fernet;
 import '../services/analytics/config_service.dart';
-import '../services/encryption/fernet_service.dart';
 
 class EncryptionUtils {
   /// AES Config from ConfigService (pad to 32 chars for AES-256)

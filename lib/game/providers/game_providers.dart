@@ -8,7 +8,6 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/services/auth_service.dart';
 import '../../core/services/leaderboard_data_service.dart';
 import '../../core/services/question/question_service.dart';
 import '../../core/services/settings/admin_settings_service.dart';

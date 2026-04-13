@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
-import '../../../core/networking/ws_client.dart';
 import '../../../core/networking/ws_protocol.dart';
 import '../../../core/bootstrap/app_init.dart';
 import '../../../game/models/leaderboard_entry.dart';

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/services/settings/app_settings.dart';
 import '../../ui_components/depth_card_3d/models/depth_card_theme.dart';
-import '../../ui_components/depth_card_3d/theme_editor/depth_card_theme_selector.dart';
 import 'tabs/avatar_images_tab.dart';
 import 'tabs/avatar_3d_tab.dart';
 import 'tabs/avatar_packages_tab.dart';

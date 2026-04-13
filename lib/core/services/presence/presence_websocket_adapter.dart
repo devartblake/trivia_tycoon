@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
-import '../../../core/networking/ws_client.dart';
 import '../../../core/networking/ws_protocol.dart';
 import '../../../core/bootstrap/app_init.dart';
 import '../../../game/models/user_presence_models.dart';
@@ -12,7 +10,6 @@ class PresenceWebSocketAdapter {
   final RichPresenceService _presenceService;
   StreamSubscription<WsEnvelope>? _messageSubscription;
 
-  bool _isSubscribed = false;
   final Set<String> _subscribedUserIds = {};
 
   PresenceWebSocketAdapter(this._presenceService);

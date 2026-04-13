@@ -101,7 +101,7 @@ class GameController extends ChangeNotifier {
     // 🧠 Restore previously equipped power-up
     final powerUpController = providers.refContainer.read(providers.equippedPowerUpProvider.notifier);
     await powerUpController.restoreFromStorage(availablePowerUps);
-    _equippedPowerUp = powerUpController.state;
+    _equippedPowerUp = providers.refContainer.read(providers.equippedPowerUpProvider);
 
     // 🚀 Begin game logic
     _gameState = GameState.playing;

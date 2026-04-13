@@ -554,131 +554,11 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
   }
 
   // ✅ ADD THIS - Leaderboard section
-  Widget _buildLeaderboardSection() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [
-            Color(0xFF1A1A2E),
-            Color(0xFF16213E),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.1),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF6366F1).withValues(alpha: 0.2),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Icon(
-                  Icons.leaderboard,
-                  color: Colors.white,
-                  size: 20,
-                ),
-              ),
-              const SizedBox(width: 12),
-              const Text(
-                'Global Rankings',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const Spacer(),
-              Text(
-                '${_entries.length} players',
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.6),
-                  fontSize: 12,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-
-          // Content
-          _isLoadingLeaderboard
-              ? const Center(
-            child: Padding(
-              padding: EdgeInsets.all(40.0),
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF6366F1)),
-              ),
-            ),
-          )
-              : _entries.isEmpty
-              ? Center(
-            child: Padding(
-              padding: const EdgeInsets.all(40.0),
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.emoji_events_outlined,
-                    size: 48,
-                    color: Colors.white.withValues(alpha: 0.3),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'No rankings yet',
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.6),
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Be the first to compete!',
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.4),
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          )
-              : Column(
-            children: _entries
-                .take(10) // Top 10
-                .map((entry) => _buildLeaderboardEntry(entry))
-                .toList(),
-          ),
-        ],
-      ),
-    );
-  }
-
   // ✅ ADD THIS - Individual entry
   Widget _buildLeaderboardEntry(LeaderboardEntry entry) {
     final previousRank = _previousRanks[entry.userId];
     final rankChanged = previousRank != null && previousRank != entry.rank;
     final rankImproved = rankChanged && entry.rank < previousRank;
-    final rankDeclined = rankChanged && entry.rank > previousRank;
-
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
@@ -795,6 +675,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
   // ✅ ADD THIS - Rank badge
   Widget _buildRankBadge(int rank, int? previousRank) {
     final rankChanged = previousRank != null && previousRank != rank;
+    final previous = previousRank;
 
     return Container(
       width: 50,
@@ -845,11 +726,11 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                 width: 14,
                 height: 14,
                 decoration: BoxDecoration(
-                  color: rank < previousRank! ? Colors.green : Colors.red,
+                  color: rank < previous! ? Colors.green : Colors.red,
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
-                  rank < previousRank ? Icons.arrow_upward : Icons.arrow_downward,
+                  rank < previous ? Icons.arrow_upward : Icons.arrow_downward,
                   color: Colors.white,
                   size: 10,
                 ),
@@ -1006,7 +887,6 @@ class _TierProgressionWidgetState extends State<TierProgressionWidget>
     with TickerProviderStateMixin {
   late List<AnimationController> _animationControllers;
   late List<Animation<double>> _scaleAnimations;
-  late List<Animation<double>> _pulseAnimations;
 
   @override
   void initState() {
@@ -1029,9 +909,6 @@ class _TierProgressionWidgetState extends State<TierProgressionWidget>
         CurvedAnimation(parent: controller, curve: Curves.elasticOut),
       );
     }).toList();
-
-    // Remove pulse animations - no longer needed
-    _pulseAnimations = [];
   }
 
   void _startAnimations() {

@@ -23,7 +23,6 @@ class _MutualFriendsScreenState extends State<MutualFriendsScreen>
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
   String _selectedFilter = 'All';
-  bool _isLoading = false;
 
   @override
   void initState() {
@@ -47,11 +46,7 @@ class _MutualFriendsScreenState extends State<MutualFriendsScreen>
   }
 
   Future<void> _handleRefresh() async {
-    setState(() => _isLoading = true);
     await Future.delayed(const Duration(seconds: 1));
-    if (mounted) {
-      setState(() => _isLoading = false);
-    }
   }
 
   @override

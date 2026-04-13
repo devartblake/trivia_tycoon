@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
 import '../../game/models/currency_type.dart';
@@ -267,7 +266,7 @@ class CurrencyNotifier extends StateNotifier<int> {
   }
 
   Future<void> _loadFromHive() async {
-    final stored = await AppSettings.getInt(hiveKey) ?? 0;
+    final stored = await AppSettings.getInt(hiveKey);
     state = stored;
   }
 

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
@@ -408,8 +407,6 @@ class EventQueueService {
   Future<Map<String, dynamic>> exportFailedEventsForUpload(String playerId) async {
     try {
       final box = await Hive.openBox(_boxName);
-      final metadataBox = await Hive.openBox(_metadataBoxName);
-
       final events = box.values.map((event) => {
         'endpoint': event['endpoint'],
         'payload': event['payload'],

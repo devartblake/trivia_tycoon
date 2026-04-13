@@ -44,11 +44,10 @@ class UserOverviewTab extends StatelessWidget {
               ),
             ),
           ),
-          if (entry.status != null)
-            Chip(
-              label: Text(entry.status!.toUpperCase()),
-              backgroundColor: Colors.blue.shade100,
-            ),
+          Chip(
+            label: Text(entry.status.toUpperCase()),
+            backgroundColor: Colors.blue.shade100,
+          ),
         ],
       ),
     );

@@ -526,7 +526,6 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
   Widget build(BuildContext context) {
     final quizState = ref.watch(adaptedQuizProvider);
     final categoryColor = _getCategoryColor();
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     if (quizState.isLoading) {
       return Scaffold(

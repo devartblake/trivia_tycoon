@@ -166,8 +166,7 @@ class _GameMenuScreenState extends ConsumerState<GameMenuScreen>
 
   Widget _buildQuickLaunchGrid(BuildContext context, SynaptixMode mode) {
     final cards = _cardsForMode(mode);
-    final synaptix = Theme.of(context).extension<SynaptixTheme>();
-    final highEnergy = synaptix?.useHighEnergyMotion ?? true;
+    Theme.of(context).extension<SynaptixTheme>();
 
     return GridView.builder(
       shrinkWrap: true,

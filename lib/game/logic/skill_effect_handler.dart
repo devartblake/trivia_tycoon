@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:math';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/game_bonus_providers.dart';
 import '../providers/xp_provider.dart';
@@ -330,11 +328,6 @@ class SkillEffectHandler {
           r.read(selectableCategoryProvider.notifier).state = true;
         }
         break;
-
-      case 'allCategoryBonus':
-      // Handled above — intentional fall-through guard.
-        break;
-
       case 'unlockCategoryName':
         gameSession.unlockCategory(value.toString());
         break;

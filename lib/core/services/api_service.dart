@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
@@ -71,8 +70,6 @@ class ApiService {
   late CacheOptions _cacheOptions;
   late final CacheStore _cacheStore;
   late DioCacheInterceptor _cacheInterceptor;
-  final ConfigService _configService;
-
   ApiService({
     required this.baseUrl,
     Dio? dio,
@@ -92,8 +89,7 @@ class ApiService {
               baseUrl: baseUrl,
               connectTimeout: const Duration(seconds: 5),
               receiveTimeout: const Duration(seconds: 5),
-            )),
-        _configService = configService ?? ConfigService.instance {
+            )) {
     // Disable or reduce logging in release mode
     if (ConfigService.enableLogging && kDebugMode) {
       _dio.interceptors.add(LogInterceptor(

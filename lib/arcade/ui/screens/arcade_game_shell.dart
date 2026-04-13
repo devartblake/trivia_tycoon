@@ -97,7 +97,7 @@ class _ArcadeGameShellState extends ConsumerState<ArcadeGameShell> {
       score: result.score,
       duration: result.duration,
       metadata: {
-        ...?result.metadata,
+        ...result.metadata,
         'isNewPb': isNewPb,
         'previousBest': previousBest,
       },

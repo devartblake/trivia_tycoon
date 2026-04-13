@@ -12,7 +12,6 @@ class CustomThemeService {
   static const String _secondaryColorKey = 'secondary_color';
   static const String _darkModeKey = 'dark_mode';
   static const String _ageGroupKey = 'user_age_group';
-  static const String _presetsKey = 'custom_presets';
 
   late final Box _settingsBox;
 

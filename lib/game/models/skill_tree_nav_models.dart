@@ -118,7 +118,6 @@ class SkillBranchVM {
     }
 
     // Assign tiers based on prerequisites (longest path)
-    final byId = {for (final n in nodes) n.id: n};
     final incoming = {for (final n in nodes) n.id: <String>[]};
     for (final e in edges) {
       incoming[e.toId]!.add(e.fromId);
@@ -128,17 +127,11 @@ class SkillBranchVM {
     int dfsTier(String id) {
       if (memo.containsKey(id)) return memo[id]!;
       final preds = incoming[id]!;
-      final t = preds.isEmpty ? 0 : (preds.map(dfsTier).fold<int>(0, (a, b) => a > b ? a : b) + 1);
-      memo[id] = t;
-      return t;
+      final tier = preds.isEmpty ? 0 : (preds.map(dfsTier).fold<int>(0, (a, b) => a > b ? a : b) + 1);
+      memo[id] = tier;
+      return tier;
     }
 
-    for (final n in nodes) {
-      final t = dfsTier(n.id);
-      final idx = nodes.indexWhere((x) => x.id == n.id);
-      nodes[idx] = n.copyWith(unlocked: n.unlocked).copyWith(unlocked: n.unlocked)
-        ..tier; // no-op to “use” getter; we’ll rebuild:
-    }
     // Rebuild with correct tier
     for (var i = 0; i < nodes.length; i++) {
       final n = nodes[i];

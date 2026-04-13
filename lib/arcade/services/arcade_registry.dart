@@ -5,8 +5,6 @@ import '../domain/arcade_game_id.dart';
 import '../games/memory_flip/memory_flip_screen.dart';
 import '../games/pattern_sprint/pattern_sprint_screen.dart';
 import '../games/quick_math/quick_math_screen.dart';
-import '../ui/screens/arcade_game_shell.dart';
-import '../ui/screens/arcade_stub_game_screen.dart';
 
 class ArcadeRegistry {
   const ArcadeRegistry();
@@ -50,9 +48,4 @@ class ArcadeRegistry {
       builder: (context, difficulty) => QuickMathRushScreen(difficulty: difficulty),
     ),
   ];
-
-  /// Temporary placeholder game screen used until we implement each game.
-  static Widget _buildStub(BuildContext context, ArcadeDifficulty difficulty) {
-    return const ArcadeStubGameScreen();
-  }
 }

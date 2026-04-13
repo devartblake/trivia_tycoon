@@ -239,7 +239,6 @@ class AdaptedMultipleChoiceWidget extends AdaptedQuestionWidget {
 
     Color? backgroundColor;
     Color? textColor;
-    Color? borderColor;
 
     if (showFeedback && isSelected) {
       backgroundColor = isCorrect ? Colors.green : Colors.red;
@@ -249,11 +248,9 @@ class AdaptedMultipleChoiceWidget extends AdaptedQuestionWidget {
       textColor = Colors.green.shade800;
     } else if (isSelected && isMultiplayer) {
       backgroundColor = const Color(0xFF6366F1).withValues(alpha: 0.1);
-      borderColor = const Color(0xFF6366F1);
       textColor = const Color(0xFF6366F1);
     } else if (isSelected) {
       backgroundColor = Colors.blue.shade50;
-      borderColor = Colors.blue;
       textColor = Colors.blue.shade800;
     }
 
@@ -478,14 +475,12 @@ class _VideoQuestionWidgetStateful extends StatefulWidget {
   final Function(String)? onAnswerSelected;
   final bool showFeedback;
   final String? selectedAnswer;
-  final bool isMultiplayer;
 
   const _VideoQuestionWidgetStateful({
     required this.question,
     required this.onAnswerSelected,
     this.showFeedback = false,
     this.selectedAnswer,
-    this.isMultiplayer = false,
   });
 
   @override
@@ -660,14 +655,12 @@ class _AudioQuestionWidgetStateful extends StatefulWidget {
   final Function(String)? onAnswerSelected;
   final bool showFeedback;
   final String? selectedAnswer;
-  final bool isMultiplayer;
 
   const _AudioQuestionWidgetStateful({
     required this.question,
     required this.onAnswerSelected,
     this.showFeedback = false,
     this.selectedAnswer,
-    this.isMultiplayer = false,
   });
 
   @override

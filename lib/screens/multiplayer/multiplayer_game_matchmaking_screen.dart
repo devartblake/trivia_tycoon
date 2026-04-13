@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/screens/multiplayer/room_lobby_screen.dart';
+import 'package:trivia_tycoon/core/animations/animation_manager.dart';
 import '../../game/multiplayer/providers/multiplayer_providers.dart';
-import '../../game/multiplayer/services/multiplayer_service.dart';
 import '../../game/services/multiplayer_quiz_service.dart';
 import '../../ui_components/multiplayer/versus/versus_screen.dart';
-import '../question/play_quiz_screen.dart';
-import '../question/question_view_screen.dart';
-import '../question/transitional/how_to_play_screen.dart';
-import 'matchmaking_screen.dart';
-import 'multiplayer_hub_screen.dart';
-import 'multiplayer_question_screen.dart';
 
 class MultiplayerGameMatchmakingScreen extends ConsumerStatefulWidget {
   final String gameMode;
@@ -102,8 +95,8 @@ class _MultiplayerGameMatchmakingScreenState
 
   Future<void> _showVersusScreen(MatchResult matchResult) async {
     await Navigator.of(context).push(
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => VersusScreen(
+      AnimationManager.fadeTransition(
+        page: VersusScreen(
           player1Name: 'You',
           player2Name: matchResult.opponentName,
           player1Avatar: matchResult.playerAvatar ?? '',
@@ -111,10 +104,7 @@ class _MultiplayerGameMatchmakingScreenState
           player1Color: _getGameModeColor(widget.gameMode),
           player2Color: _getOpponentColor(widget.gameMode),
         ),
-        transitionDuration: const Duration(milliseconds: 500),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: animation, child: child);
-        },
+        duration: const Duration(milliseconds: 500),
       ),
     );
   }

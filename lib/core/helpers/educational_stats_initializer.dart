@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../game/logic/quiz_completion_handler.dart';
 import '../../game/services/educational_stats_service.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 

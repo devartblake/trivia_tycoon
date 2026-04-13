@@ -399,7 +399,6 @@ class _TierRankScreenState extends ConsumerState<TierRankScreen>
                           padding: const EdgeInsets.only(bottom: 20),
                           itemCount: entries.length - 3,
                           itemBuilder: (_, index) {
-                            final rank = index + 4;
                             final entry = entries[index + 3];
                             return Container(
                               margin: const EdgeInsets.only(bottom: 12),
