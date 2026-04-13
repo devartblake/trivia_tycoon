@@ -68,7 +68,9 @@ class SkillTreeNavRepository {
     final branchId = (b['branch_id'] ?? b['id'] ?? 'unknown').toString();
     final title = (b['title'] ?? branchId).toString();
     final desc  = (b['description'] ?? '').toString();
-    final nodes = (b['nodes'] as List?)?.cast<Map>() ?? const <Map>[];
+    final nodes = b['nodes'] is List
+        ? (b['nodes'] as List).whereType<Map>().toList()
+        : const <Map>[];
     final nodeMaps = nodes.map<Map<String, dynamic>>((m) => Map<String, dynamic>.from(m)).toList();
 
     return SkillBranchVM(

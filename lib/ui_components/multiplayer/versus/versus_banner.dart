@@ -167,7 +167,7 @@ class _MemberStack extends StatelessWidget {
               right: alignEnd ? i * gap : null,
               child: CircleAvatar(
                 radius: avatarRadius,
-                backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+                backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
                 backgroundImage: children[i].avatarUrl != null
                     ? NetworkImage(children[i].avatarUrl!)
                     : null,

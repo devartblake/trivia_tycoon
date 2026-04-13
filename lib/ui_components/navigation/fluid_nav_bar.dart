@@ -18,8 +18,8 @@ typedef FluidNavBarItemBuilder = Widget Function(FluidNavBarIcon icon, FluidNavB
 /// ```dart
 /// FluidNavBar(
 ///   icons: [
-///     FluidNavBarIcon(iconPath: "assets/home.svg"),
-///     FluidNavBarIcon(iconPath: "assets/favorites.svg"),
+///     FluidNavBarIcon(svgPath: "assets/home.svg"),
+///     FluidNavBarIcon(svgPath: "assets/favorites.svg"),
 ///   ]
 /// )
 /// ```

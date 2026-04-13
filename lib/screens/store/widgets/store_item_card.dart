@@ -204,8 +204,8 @@ class _StoreItemCardState extends ConsumerState<StoreItemCard>
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
-                                  color: glowColor.withOpacity(
-                                      isEquipped ? 0.6 : 0.3),
+                                  color: glowColor.withValues(
+                                      alpha: isEquipped ? 0.6 : 0.3),
                                   blurRadius: isEquipped ? 15 : 8,
                                   spreadRadius: isEquipped ? 3 : 1,
                                 ),

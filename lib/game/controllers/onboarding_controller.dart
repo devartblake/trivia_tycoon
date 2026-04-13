@@ -46,11 +46,17 @@ class ModernOnboardingController extends ChangeNotifier {
   }
 
   // Typed getters for Synaptix onboarding fields
-  String? get username => userData['username'] as String?;
-  String? get ageGroup => userData['ageGroup'] as String?;
-  String? get intent => userData['intent'] as String?;
-  String? get playStyle => userData['playStyle'] as String?;
-  String? get synaptixMode => userData['synaptixMode'] as String?;
+  String? get username =>
+      userData['username'] is String ? userData['username'] as String : null;
+  String? get ageGroup =>
+      userData['ageGroup'] is String ? userData['ageGroup'] as String : null;
+  String? get intent =>
+      userData['intent'] is String ? userData['intent'] as String : null;
+  String? get playStyle =>
+      userData['playStyle'] is String ? userData['playStyle'] as String : null;
+  String? get synaptixMode => userData['synaptixMode'] is String
+      ? userData['synaptixMode'] as String
+      : null;
 
   void reset() {
     _currentStep = 0;

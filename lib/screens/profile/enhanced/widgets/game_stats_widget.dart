@@ -117,7 +117,7 @@ class GameStatsWidget extends StatelessWidget {
               const SizedBox(height: 4),
               LinearProgressIndicator(
                 value: category['percentage'] as double,
-                backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+                backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
                 valueColor: AlwaysStoppedAnimation<Color>(
                   Theme.of(context).colorScheme.primary,
                 ),

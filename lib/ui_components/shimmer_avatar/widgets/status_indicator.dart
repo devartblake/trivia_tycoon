@@ -112,8 +112,8 @@ class _AvatarStatusIndicatorState extends State<AvatarStatusIndicator>
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: gradientColors.first.withOpacity(
-                      0.5 * (1 - (_pulseAnimation.value - 1) / 0.3),
+                    color: gradientColors.first.withValues(
+                      alpha: 0.5 * (1 - (_pulseAnimation.value - 1) / 0.3),
                     ),
                     width: 2,
                   ),
