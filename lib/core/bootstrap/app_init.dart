@@ -25,6 +25,7 @@ import '../services/notification_service.dart';
 import '../../game/providers/auth_providers.dart';
 import '../helpers/educational_stats_initializer.dart';
 import '../services/presence/rich_presence_service.dart';
+import '../services/settings/profile_sync_service.dart';
 import '../services/settings/app_settings.dart';
 import '../services/settings/multi_profile_service.dart';
 import '../services/state_persistence_service.dart';
@@ -441,6 +442,15 @@ class AppInit {
       }
       if (isLoggedIn) {
         await _loadUserProfile(serviceManager, container);
+        try {
+          final profileSyncService = ProfileSyncService(
+            apiService: serviceManager.apiService,
+            trackEvent: serviceManager.analyticsService.trackEvent,
+          );
+          await profileSyncService.retryQueuedUpdates();
+        } catch (e) {
+          LogManager.debug('[AppInit] Profile sync retry skipped: $e');
+        }
 
         // No parameter needed now
         await initializeWebSocket();
@@ -454,18 +464,31 @@ class AppInit {
 
   static Future<void> _loadUserProfile(ServiceManager serviceManager, ProviderContainer? container) async {
     try {
-      final rawProfile = await serviceManager.playerProfileService.getProfile();
-      // FIX: Safe Map casting to prevent _Map<dynamic, dynamic> errors
-      final profile = Map<String, dynamic>.from(rawProfile as Map);
+      final profileSyncService = ProfileSyncService(
+        apiService: serviceManager.apiService,
+        trackEvent: serviceManager.analyticsService.trackEvent,
+      );
+      final remoteProfile = await profileSyncService.fetchRemoteProfile();
+      if (remoteProfile != null && remoteProfile.isNotEmpty) {
+        await serviceManager.playerProfileService.saveProfileBatch(remoteProfile);
+        LogManager.debug(
+          '[AppInit] Remote profile hydrated for: ${remoteProfile['player_name'] ?? remoteProfile['username']}',
+        );
+        return;
+      }
+
+      final rawProfile = serviceManager.playerProfileService.getProfile();
+      final profile = Map<String, dynamic>.from(rawProfile);
 
       if (profile.isNotEmpty) {
-        final rawUserId = profile['id'] ?? profile['user_id'];
+        final rawUserId = profile['id'] ?? profile['user_id'] ?? profile['userId'];
         final parsedUserId = rawUserId?.toString();
         if (parsedUserId != null && parsedUserId.isNotEmpty) {
           await serviceManager.playerProfileService.saveUserId(parsedUserId);
         }
 
-        final rawDisplayName = profile['name'] ?? profile['display_name'];
+        final rawDisplayName =
+            profile['name'] ?? profile['display_name'] ?? profile['player_name'];
         final parsedDisplayName = rawDisplayName?.toString();
         if (parsedDisplayName != null && parsedDisplayName.isNotEmpty) {
           await serviceManager.playerProfileService.savePlayerName(parsedDisplayName);

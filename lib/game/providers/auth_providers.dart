@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/services/auth_error_messages.dart';
+import '../../core/services/settings/profile_sync_service.dart';
 import '../../core/services/storage/secure_storage.dart';
 import '../../ui_components/login/models/signup_data.dart';
 import 'core_providers.dart';
@@ -43,6 +44,7 @@ class AuthOperations {
 
       // LoginManager handles everything: tokens, device ID, profile
       await loginManager.login(email, password);
+      await _hydrateProfileFromBackend();
 
       // Extract and store role/premium info from response if needed
       await _updateRoleAndPremiumStatus(secureStorage);
@@ -75,6 +77,7 @@ class AuthOperations {
 
       // LoginManager handles everything: tokens, device ID, profile
       await loginManager.signup(signupData);
+      await _hydrateProfileFromBackend();
 
       // Extract and store role/premium info from response if needed
       await _updateRoleAndPremiumStatus(secureStorage);
@@ -117,6 +120,23 @@ class AuthOperations {
       // Set defaults on error
       await secureStorage.setSecret('user_role', 'player');
       await secureStorage.setSecret('is_premium', 'false');
+    }
+  }
+
+  Future<void> _hydrateProfileFromBackend() async {
+    try {
+      final serviceManager = ref.read(serviceManagerProvider);
+      final profileSyncService = ProfileSyncService(
+        apiService: serviceManager.apiService,
+        trackEvent: serviceManager.analyticsService.trackEvent,
+      );
+
+      final remoteProfile = await profileSyncService.fetchRemoteProfile();
+      if (remoteProfile != null && remoteProfile.isNotEmpty) {
+        await serviceManager.playerProfileService.saveProfileBatch(remoteProfile);
+      }
+    } catch (e) {
+      LogManager.debug('[AuthOperations] Remote profile hydrate skipped: $e');
     }
   }
 

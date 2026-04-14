@@ -354,6 +354,12 @@ class PlayerProfileService {
       if (profileData.containsKey('avatar')) {
         await box.put(_avatarKey, profileData['avatar']);
       }
+      if (profileData.containsKey('preferred_categories')) {
+        await box.put(
+          _preferredCategoriesKey,
+          List<String>.from(profileData['preferred_categories'] as List? ?? const <String>[]),
+        );
+      }
       if (profileData.containsKey('synaptix_mode')) {
         await box.put(_synaptixModeKey, profileData['synaptix_mode']);
       }
