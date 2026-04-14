@@ -61,10 +61,6 @@ class _ColorPreviewState extends State<ColorPreview>
     final hslColor = HSLColor.fromColor(widget.selectedColor);
     final hslString = "HSL(${hslColor.hue.toInt()}°, ${(hslColor.saturation * 100).toInt()}%, ${(hslColor.lightness * 100).toInt()}%)";
 
-    // Calculate contrast color for text
-    final brightness = widget.selectedColor.computeLuminance();
-    final textColor = brightness > 0.5 ? Colors.black : Colors.white;
-
     return Column(
       children: [
         // Main color preview

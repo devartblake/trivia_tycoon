@@ -62,7 +62,7 @@ class OnboardingStepShell extends StatelessWidget {
           const SizedBox(height: 24),
 
           // Footer / CTA
-          if (footer != null) footer!,
+          if (footer case final footer?) footer,
 
           const SizedBox(height: 16),
         ],

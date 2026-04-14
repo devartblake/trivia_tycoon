@@ -1,7 +1,37 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'auth_token_store.dart';
 import 'device_id_service.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
+
+class AuthApiException implements Exception {
+  final String message;
+  final int? statusCode;
+  final String path;
+  final String method;
+  final String? responseBody;
+  final Object? innerError;
+
+  const AuthApiException({
+    required this.message,
+    required this.path,
+    required this.method,
+    this.statusCode,
+    this.responseBody,
+    this.innerError,
+  });
+
+  @override
+  String toString() {
+    final status = statusCode != null ? ' status=$statusCode' : '';
+    final body = responseBody != null && responseBody!.trim().isNotEmpty
+        ? ' body=${responseBody!.trim()}'
+        : '';
+    final inner = innerError != null ? ' inner=$innerError' : '';
+    return 'AuthApiException($method $path$status): $message$body$inner';
+  }
+}
 
 /// API client for authentication endpoints
 class AuthApiClient {
@@ -23,21 +53,51 @@ class AuthApiClient {
   static const String refreshPath = '/auth/refresh';
   static const String logoutPath = '/auth/logout';
 
+  void _logRequest(String method, String path, {Object? body}) {
+    if (!kDebugMode) return;
+    LogManager.debug('[AuthApiClient] $method ${_u(path)}');
+    if (body != null) {
+      LogManager.debug('[AuthApiClient] body=$body');
+    }
+  }
+
+  void _logResponse(String method, String path, http.Response response) {
+    if (!kDebugMode) return;
+    LogManager.debug(
+      '[AuthApiClient] $method ${_u(path)} -> ${response.statusCode} ${response.body}',
+    );
+  }
+
   Future<AuthSession> login({
     required String email,
     required String password,
   }) async {
     final deviceIdentity = await _deviceId.getDeviceIdentityPayload();
+    final payload = {
+      'email': email,
+      'password': password,
+      ...deviceIdentity,
+    };
 
-    final response = await _http.post(
-      _u(loginPath),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'email': email,
-        'password': password,
-        ...deviceIdentity,
-      }),
-    );
+    _logRequest('POST', loginPath, body: payload);
+
+    final http.Response response;
+    try {
+      response = await _http.post(
+        _u(loginPath),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(payload),
+      );
+    } catch (e) {
+      throw AuthApiException(
+        message: 'Login request failed before receiving a response.',
+        path: loginPath,
+        method: 'POST',
+        innerError: e,
+      );
+    }
+
+    _logResponse('POST', loginPath, response);
 
     if (response.statusCode == 200) {
       final data = _decodeBodyMap(response.body, context: 'login');
@@ -49,12 +109,25 @@ class AuthApiClient {
     }
 
     if (response.statusCode == 401) {
-      throw Exception(_extractErrorMessage(response,
-          fallback: 'Invalid credentials'));
+      throw AuthApiException(
+        message: _extractErrorMessage(response, fallback: 'Invalid credentials'),
+        statusCode: response.statusCode,
+        path: loginPath,
+        method: 'POST',
+        responseBody: response.body,
+      );
     }
 
-    throw Exception(_extractErrorMessage(response,
-        fallback: 'Login failed (HTTP ${response.statusCode})'));
+    throw AuthApiException(
+      message: _extractErrorMessage(
+        response,
+        fallback: 'Login failed (HTTP ${response.statusCode})',
+      ),
+      statusCode: response.statusCode,
+      path: loginPath,
+      method: 'POST',
+      responseBody: response.body,
+    );
   }
 
   /// Signup endpoint (register + auto-login)
@@ -65,19 +138,34 @@ class AuthApiClient {
     String? country,
   }) async {
     final deviceIdentity = await _deviceId.getDeviceIdentityPayload();
+    final payload = {
+      'email': email,
+      'password': password,
+      ...deviceIdentity,
+      if (username != null && username.isNotEmpty) 'username': username,
+      if (username != null && username.isNotEmpty) 'handle': username,
+      if (country != null && country.isNotEmpty) 'country': country,
+    };
 
-    final response = await _http.post(
-      _u(signupPath),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'email': email,
-        'password': password,
-        ...deviceIdentity,
-        if (username != null && username.isNotEmpty) 'username': username,
-        if (username != null && username.isNotEmpty) 'handle': username, // Backend might use 'handle'
-        if (country != null && country.isNotEmpty) 'country': country,
-      }),
-    );
+    _logRequest('POST', signupPath, body: payload);
+
+    final http.Response response;
+    try {
+      response = await _http.post(
+        _u(signupPath),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(payload),
+      );
+    } catch (e) {
+      throw AuthApiException(
+        message: 'Signup request failed before receiving a response.',
+        path: signupPath,
+        method: 'POST',
+        innerError: e,
+      );
+    }
+
+    _logResponse('POST', signupPath, response);
 
     if (response.statusCode == 200) {
       final data = _decodeBodyMap(response.body, context: 'signup');
@@ -89,17 +177,41 @@ class AuthApiClient {
     }
 
     if (response.statusCode == 409) {
-      throw Exception(_extractErrorMessage(response,
-          fallback: 'Email already registered'));
+      throw AuthApiException(
+        message: _extractErrorMessage(
+          response,
+          fallback: 'Email already registered',
+        ),
+        statusCode: response.statusCode,
+        path: signupPath,
+        method: 'POST',
+        responseBody: response.body,
+      );
     }
 
     if (response.statusCode == 400) {
-      throw Exception(_extractErrorMessage(response,
-          fallback: 'Invalid signup data'));
+      throw AuthApiException(
+        message: _extractErrorMessage(
+          response,
+          fallback: 'Invalid signup data',
+        ),
+        statusCode: response.statusCode,
+        path: signupPath,
+        method: 'POST',
+        responseBody: response.body,
+      );
     }
 
-    throw Exception(_extractErrorMessage(response,
-        fallback: 'Signup failed (HTTP ${response.statusCode})'));
+    throw AuthApiException(
+      message: _extractErrorMessage(
+        response,
+        fallback: 'Signup failed (HTTP ${response.statusCode})',
+      ),
+      statusCode: response.statusCode,
+      path: signupPath,
+      method: 'POST',
+      responseBody: response.body,
+    );
   }
 
   /// Extract metadata from backend response
@@ -145,23 +257,43 @@ class AuthApiClient {
     String? deviceType,
   }) async {
     final resolvedDeviceType = deviceType ?? _deviceId.getDeviceType();
+    final payload = {
+      'refresh_token': refreshToken,
+      'refreshToken': refreshToken,
+      'device_id': deviceId,
+      'deviceId': deviceId,
+      'device_type': resolvedDeviceType,
+      'deviceType': resolvedDeviceType,
+    };
 
-    final res = await _http.post(
-      _u(refreshPath),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        // Send both casing styles for backend compatibility
-        'refresh_token': refreshToken,
-        'refreshToken': refreshToken,
-        'device_id': deviceId,
-        'deviceId': deviceId,
-        'device_type': resolvedDeviceType,
-        'deviceType': resolvedDeviceType,
-      }),
-    );
+    _logRequest('POST', refreshPath, body: payload);
+
+    final http.Response res;
+    try {
+      res = await _http.post(
+        _u(refreshPath),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(payload),
+      );
+    } catch (e) {
+      throw AuthApiException(
+        message: 'Refresh request failed before receiving a response.',
+        path: refreshPath,
+        method: 'POST',
+        innerError: e,
+      );
+    }
+
+    _logResponse('POST', refreshPath, res);
 
     if (res.statusCode < 200 || res.statusCode >= 300) {
-      throw Exception('Refresh failed: ${res.statusCode} ${res.body}');
+      throw AuthApiException(
+        message: 'Refresh failed.',
+        statusCode: res.statusCode,
+        path: refreshPath,
+        method: 'POST',
+        responseBody: res.body,
+      );
     }
 
     final json = _decodeBodyMap(res.body, context: 'refresh');
@@ -182,19 +314,34 @@ class AuthApiClient {
       headers['Authorization'] = 'Bearer $accessToken';
     }
 
-    final res = await _http.post(
-      _u(logoutPath),
-      headers: headers,
-      body: jsonEncode({
-        // Send both casing styles for backend compatibility
-        'device_id': deviceId,
-        'deviceId': deviceId,
-        'device_type': deviceType ?? _deviceId.getDeviceType(),
-        'deviceType': deviceType ?? _deviceId.getDeviceType(),
-        if (userId != null) 'user_id': userId,
-        if (userId != null) 'userId': userId,
-      }),
-    );
+    final payload = {
+      'device_id': deviceId,
+      'deviceId': deviceId,
+      'device_type': deviceType ?? _deviceId.getDeviceType(),
+      'deviceType': deviceType ?? _deviceId.getDeviceType(),
+      if (userId != null) 'user_id': userId,
+      if (userId != null) 'userId': userId,
+    };
+
+    _logRequest('POST', logoutPath, body: payload);
+
+    final http.Response res;
+    try {
+      res = await _http.post(
+        _u(logoutPath),
+        headers: headers,
+        body: jsonEncode(payload),
+      );
+    } catch (e) {
+      throw AuthApiException(
+        message: 'Logout request failed before receiving a response.',
+        path: logoutPath,
+        method: 'POST',
+        innerError: e,
+      );
+    }
+
+    _logResponse('POST', logoutPath, res);
 
     // Best-effort logout: token may already be expired/revoked on server.
     if (res.statusCode == 401 || res.statusCode == 404) {
@@ -202,8 +349,58 @@ class AuthApiClient {
     }
 
     if (res.statusCode < 200 || res.statusCode >= 300) {
-      throw Exception('Logout failed: ${res.statusCode} ${res.body}');
+      throw AuthApiException(
+        message: 'Logout failed.',
+        statusCode: res.statusCode,
+        path: logoutPath,
+        method: 'POST',
+        responseBody: res.body,
+      );
     }
+  }
+
+  Future<String?> getOAuthUrl(String provider) async {
+    final path = '/auth/oauth/$provider';
+    _logRequest('GET', path);
+
+    final http.Response response;
+    try {
+      response = await _http.get(
+        _u(path),
+        headers: {'Content-Type': 'application/json'},
+      );
+    } catch (e) {
+      throw AuthApiException(
+        message: 'OAuth URL request failed before receiving a response.',
+        path: path,
+        method: 'GET',
+        innerError: e,
+      );
+    }
+
+    _logResponse('GET', path, response);
+
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw AuthApiException(
+        message: _extractErrorMessage(
+          response,
+          fallback: 'Failed to fetch OAuth URL for $provider.',
+        ),
+        statusCode: response.statusCode,
+        path: path,
+        method: 'GET',
+        responseBody: response.body,
+      );
+    }
+
+    final parsed = _tryDecodeBodyMap(response.body);
+    if (parsed != null) {
+      return (parsed['url'] ?? parsed['authUrl'] ?? parsed['redirectUrl'])
+          ?.toString();
+    }
+
+    final raw = response.body.trim();
+    return raw.isEmpty ? null : raw;
   }
 
 

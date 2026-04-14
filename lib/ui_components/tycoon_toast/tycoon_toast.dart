@@ -73,7 +73,6 @@ class TycoonToast<T> extends StatefulWidget {
     this.transitionType = TycoonToastTransition.slide,
     this.themeEvent = 'general',
     this.isDismissible = true,
-    this.toastRoute,
   })  : onStatusChanged = onStatusChanged ?? ((_) {}) {
     // Apply modern gradient with glassmorphism effect
     this.backgroundGradient ??= TycoonToastThemeManager.getGradientForEvent(themeEvent);
@@ -131,7 +130,8 @@ class TycoonToast<T> extends StatefulWidget {
   final String? soundEffect;
   final TycoonThemeEvent themeEvent;
 
-  route.TycoonToastRoute<T?>? toastRoute;
+  final ValueNotifier<route.TycoonToastRoute<T?>?> _toastRouteNotifier =
+      ValueNotifier<route.TycoonToastRoute<T?>?>(null);
 
   Future<T?> show(BuildContext context) async {
     onShow?.call();
@@ -141,34 +141,40 @@ class TycoonToast<T> extends StatefulWidget {
       unawaited(player.play());
     }
 
-    toastRoute = route.showTycoonToast<T>(
+    final toastRoute = route.showTycoonToast<T>(
       context: context,
       toast: this,
     );
+    _toastRouteNotifier.value = toastRoute;
 
     return await Navigator.of(context, rootNavigator: false)
         .push(toastRoute as Route<T>);
   }
 
   Future<T?> dismiss([T? result]) async {
+    final toastRoute = _toastRouteNotifier.value;
     if (toastRoute == null) return null;
 
     onDismiss?.call();
 
-    if (toastRoute!.isCurrent) {
-      toastRoute!.navigator!.pop(result);
-      return toastRoute!.completed;
-    } else if (toastRoute!.isActive) {
-      toastRoute!.navigator!.removeRoute(toastRoute!);
+    if (toastRoute.isCurrent) {
+      toastRoute.navigator!.pop(result);
+      return toastRoute.completed;
+    } else if (toastRoute.isActive) {
+      toastRoute.navigator!.removeRoute(toastRoute);
     }
 
     return null;
   }
 
-  bool isShowing() => toastRoute?.currentStatus == TycoonToastStatus.showing;
-  bool isDismissed() => toastRoute?.currentStatus == TycoonToastStatus.dismissed;
-  bool isAppearing() => toastRoute?.currentStatus == TycoonToastStatus.isAppearing;
-  bool isHiding() => toastRoute?.currentStatus == TycoonToastStatus.isHiding;
+  bool isShowing() =>
+      _toastRouteNotifier.value?.currentStatus == TycoonToastStatus.showing;
+  bool isDismissed() =>
+      _toastRouteNotifier.value?.currentStatus == TycoonToastStatus.dismissed;
+  bool isAppearing() =>
+      _toastRouteNotifier.value?.currentStatus == TycoonToastStatus.isAppearing;
+  bool isHiding() =>
+      _toastRouteNotifier.value?.currentStatus == TycoonToastStatus.isHiding;
 
   @override
   State<TycoonToast> createState() => _TycoonToastState<T?>();

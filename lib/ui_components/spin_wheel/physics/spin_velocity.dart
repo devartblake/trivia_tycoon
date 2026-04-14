@@ -1,10 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../game/providers/riverpod_providers.dart';
 import '../models/spin_system_models.dart';
-import '../services/spin_tracker.dart';
 
 /// Enhanced spin physics system with realistic motion and customization
 class EnhancedSpinPhysics {

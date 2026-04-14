@@ -539,7 +539,6 @@ class NotificationCard extends StatelessWidget {
           label: 'SYSTEM',
         );
       case InboxType.notification:
-      default:
         return NotificationConfig(
           color: const Color(0xFF5865F2),
           icon: Icons.notifications,

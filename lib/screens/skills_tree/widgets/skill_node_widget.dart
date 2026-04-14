@@ -100,7 +100,6 @@ class SkillNodeWidget extends StatelessWidget {
   };
 
   double get _effectiveRadius => radius ?? _sizeConfig[size]!['radius']!;
-  double get _baseFontSize => _sizeConfig[size]!['baseFontSize']!;
   double get _titleFontSize => _sizeConfig[size]!['titleFontSize']!;
   double get _subtitleFontSize => _sizeConfig[size]!['subtitleFontSize']!;
   double get _iconSize => _sizeConfig[size]!['iconSize']!;

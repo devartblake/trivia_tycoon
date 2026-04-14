@@ -154,25 +154,9 @@ class DepthCardController extends ChangeNotifier {
     try {
       // Use the actual flutter_3d_controller method
       // Note: Replace this with the actual API method when available
-      if (_controller!.onModelLoaded != null) {
-        // Some 3D controllers have callback-based loading
-        final completer = Completer<void>();
-
-        // Set up completion callback
-        void onLoadComplete() {
-          completer.complete();
-        }
-
-        // Trigger the load (replace with actual method)
-        // _controller!.loadModelFromAsset(assetPath);
-
-        // For now, simulate the loading
-        await _simulateModelLoading(assetPath);
-
-      } else {
-        // Direct loading approach
-        await _simulateModelLoading(assetPath);
-      }
+      // Trigger the load (replace with actual method)
+      // _controller!.loadModelFromAsset(assetPath);
+      await _simulateModelLoading(assetPath);
 
     } catch (e) {
       throw Exception('Failed to load 3D model: $e');

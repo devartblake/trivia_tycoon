@@ -9,7 +9,6 @@ class PerformanceUtils {
     // If you later add an extension, this remains safe.
     try {
       // ignore: invalid_use_of_protected_member
-      // ignore: unused_local_variable
       final dynamic dyn = controller;
       dyn.dispose?.call();
     } catch (_) {}

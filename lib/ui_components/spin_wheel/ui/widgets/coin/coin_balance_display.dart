@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../game/providers/riverpod_providers.dart';
-import 'dart:math' as math;
 
 /// Enhanced CoinBalanceDisplay with modern design and animations
 class CoinBalanceDisplay extends ConsumerStatefulWidget {

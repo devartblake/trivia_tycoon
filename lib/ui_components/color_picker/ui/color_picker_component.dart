@@ -311,18 +311,12 @@ class _ModernColorPickerDialogState extends State<_ModernColorPickerDialog>
     with TickerProviderStateMixin {
   late Color selectedColor;
   late TabController _tabController;
-  int _currentTab = 0;
 
   @override
   void initState() {
     super.initState();
     selectedColor = widget.initialColor;
     _tabController = TabController(length: 2, vsync: this);
-    _tabController.addListener(() {
-      setState(() {
-        _currentTab = _tabController.index;
-      });
-    });
   }
 
   @override

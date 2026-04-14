@@ -95,7 +95,7 @@ class ColorPickerController extends ChangeNotifier {
     if (_isDisposed) return;
 
     // Validate palette
-    final validPalette = palette.where((color) => color != null).toList();
+    final validPalette = palette.toList();
 
     if (_customPalette.length == validPalette.length &&
         _customPalette.every((color) => validPalette.contains(color))) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../ui_components/depth_card_3d/depth_card.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class TryNowWidget extends StatefulWidget {

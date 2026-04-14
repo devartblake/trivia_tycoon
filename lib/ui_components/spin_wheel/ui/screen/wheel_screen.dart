@@ -191,7 +191,6 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
       await AppSettings.incrementTotalLifetimeSpins();
 
       // Update reward points
-      final currentPoints = await AppSettings.getSpinRewardPoints();
       await AppSettings.addSpinRewardPoints(result.reward.toDouble());
 
     } catch (e) {

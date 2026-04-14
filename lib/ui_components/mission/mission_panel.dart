@@ -212,8 +212,7 @@ class _MissionPanelState extends ConsumerState<MissionPanel>
     final currentXP = ref.watch(playerXPProvider);
     final missionsAsync = ref.watch(liveMissionsProvider);
 
-    // Add null safety check for missionsAsync
-    final missions = missionsAsync ?? [];
+    final missions = missionsAsync;
 
     // Early return if missions are still loading
     if (missions.isEmpty) {

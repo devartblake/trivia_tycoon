@@ -266,8 +266,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     }
 
     try {
-      final apiService = ref.read(apiServiceProvider);
-      final authUrl = await apiService.getOAuthUrl(provider);
+      final authApiClient = ref.read(authApiClientProvider);
+      final authUrl = await authApiClient.getOAuthUrl(provider);
       if (authUrl == null || authUrl.isEmpty) {
         _showErrorSnackBar('No auth URL returned for $provider.');
         return;

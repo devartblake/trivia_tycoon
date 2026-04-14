@@ -1,4 +1,3 @@
-import 'dart:math';
 import '../core/zxing/common/bit_matrix.dart';
 
 class FinderPattern {
@@ -21,7 +20,6 @@ class FinderPatternFinder {
     final patterns = <FinderPattern>[];
 
     for (int y = 0; y < height; y++) {
-      int stateCount = 0;
       int currentState = 0;
 
       for (int x = 0; x < width; x++) {

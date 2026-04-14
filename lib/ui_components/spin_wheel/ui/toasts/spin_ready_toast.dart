@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/ui_components/tycoon_toast/tycoon_toast.dart';
-import '../../services/spin_tracker.dart';
 import 'dart:math' as math;
 
 class SpinReadyToast {

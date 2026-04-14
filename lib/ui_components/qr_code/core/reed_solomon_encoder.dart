@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import '../decoder/galois_field.dart';
 import '../decoder/gf_poly.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';

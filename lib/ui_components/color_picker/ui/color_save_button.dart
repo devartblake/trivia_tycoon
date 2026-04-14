@@ -121,8 +121,6 @@ class _ColorSaveButtonState extends State<ColorSaveButton>
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return AnimatedBuilder(
       animation: _animationController,
       builder: (context, child) {

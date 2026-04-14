@@ -707,7 +707,7 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
                 theme,
                 'Secondary Color',
                 Icons.circle_outlined,
-                customTheme.secondaryColor ?? customTheme.primaryColor,
+                customTheme.secondaryColor,
                 _isSecondaryExpanded,
                     () =>
                     setState(() => _isSecondaryExpanded = !_isSecondaryExpanded),

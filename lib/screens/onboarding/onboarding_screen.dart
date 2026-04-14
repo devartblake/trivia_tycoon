@@ -291,15 +291,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
         username: username,
       );
 
-      if (syncResult.confirmedDisplayName != null &&
-          syncResult.confirmedDisplayName!.trim().isNotEmpty) {
-        await profileService.savePlayerName(syncResult.confirmedDisplayName!.trim());
+      final confirmedDisplayName = syncResult.confirmedDisplayName?.trim();
+      if (confirmedDisplayName != null && confirmedDisplayName.isNotEmpty) {
+        await profileService.savePlayerName(confirmedDisplayName);
       }
 
-      if (syncResult.confirmedUsername != null &&
-          syncResult.confirmedUsername!.trim().isNotEmpty) {
+      final confirmedUsername = syncResult.confirmedUsername?.trim();
+      if (confirmedUsername != null && confirmedUsername.isNotEmpty) {
         await profileService.saveUsername(
-          _normalizeUsername(syncResult.confirmedUsername!),
+          _normalizeUsername(confirmedUsername),
         );
       }
     } catch (e) {
@@ -313,12 +313,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
         error: e,
       );
     }
-    if (ageGroup != null) {
-      await profileService.saveAgeGroup(ageGroup);
-    }
-    if (country != null) {
-      await profileService.saveCountry(country);
-    }
+    await profileService.saveAgeGroup(ageGroup);
+    await profileService.saveCountry(country);
     await profileService.savePreferredCategories(categories);
     if (avatar != null) {
       await profileService.saveAvatar(avatar);

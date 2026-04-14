@@ -1,8 +1,5 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/ui_components/spin_wheel/physics/spin_physics_handler.dart';
 import 'package:trivia_tycoon/ui_components/spin_wheel/physics/spin_velocity.dart';
 import '../../../game/providers/riverpod_providers.dart';
 import '../models/spin_system_models.dart';
@@ -13,10 +10,6 @@ class UpdatedSpinHandlers {
   // Initialize enhanced physics (you can make this configurable)
   static final _physics = EnhancedNonUniformMotion.realistic(resistance: 0.015);
   static final _velocityCalculator = EnhancedSpinVelocity(width: 400, height: 400);
-  static final _spinHandler = EnhancedSpinHandler(
-    physics: EnhancedSpinPhysics(resistance: 0.015),
-    velocityCalculator: _velocityCalculator,
-  );
 
   /// Updated handleSpinWithPhysics function
   static Future<void> handleSpinWithPhysics({
@@ -64,7 +57,6 @@ class UpdatedSpinHandlers {
     await controller.forward();
 
     // Calculate final result
-    final finalAngle = _physics.normalizeAngle(animation.value);
     final segmentIndex = _physics.predictLandingSegment(
       initialAngle: currentAngle,
       initialVelocity: velocity,

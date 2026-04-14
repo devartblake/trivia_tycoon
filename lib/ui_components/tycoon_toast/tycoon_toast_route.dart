@@ -7,31 +7,6 @@ import 'package:just_audio/just_audio.dart';
 import 'tycoon_toast.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
-// Static list to track active toasts for stacking
-class _ToastManager {
-  static final List<TycoonToastRoute> _activeToasts = [];
-
-  static void addToast(TycoonToastRoute route) {
-    _activeToasts.add(route);
-    _updateToastPositions();
-  }
-
-  static void removeToast(TycoonToastRoute route) {
-    _activeToasts.remove(route);
-    _updateToastPositions();
-  }
-
-  static void _updateToastPositions() {
-    for (int i = 0; i < _activeToasts.length; i++) {
-      _activeToasts[i]._updateStackPosition(i);
-    }
-  }
-
-  static int getToastIndex(TycoonToastRoute route) {
-    return _activeToasts.indexOf(route);
-  }
-}
-
 class TycoonToastRoute<T> extends OverlayRoute<T> {
   final TycoonToast tycoonToast;
   final Builder _builder;
@@ -51,8 +26,6 @@ class TycoonToastRoute<T> extends OverlayRoute<T> {
 
   // Stack positioning
   int _stackIndex = 0;
-  final double _toastHeight = 150.0; // Height including margins
-
   void _updateStackPosition(int index) {
     _stackIndex = index;
     // Reconfigure alignment when stack position changes
@@ -177,42 +150,6 @@ class TycoonToastRoute<T> extends OverlayRoute<T> {
       LogManager.debug('Toast audio error: $e');
     } finally {
       player.dispose();
-    }
-  }
-
-  Gradient? _resolveGradientByType(TycoonToastType type) {
-    switch (type) {
-      case TycoonToastType.success:
-        return LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Colors.green.shade600, Colors.green.shade400],
-        );
-      case TycoonToastType.error:
-        return LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Colors.red.shade600, Colors.red.shade400],
-        );
-      case TycoonToastType.info:
-        return LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Colors.blue.shade600, Colors.blue.shade400],
-        );
-      case TycoonToastType.reward:
-        return LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Colors.amber.shade600,
-            Colors.orange.shade500,
-            Colors.pink.shade400,
-          ],
-          stops: [0.0, 0.6, 1.0],
-        );
-      default:
-        return null;
     }
   }
 
