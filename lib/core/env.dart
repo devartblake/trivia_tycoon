@@ -71,14 +71,48 @@ class EnvConfig {
     final trimmed = rawUrl.trim();
     if (trimmed.isEmpty) return trimmed;
 
-    final parsed = Uri.parse(trimmed);
+    Uri parsed = Uri.parse(trimmed);
 
-    // 10.0.2.2 is Android-emulator host loopback, but Edge/Chrome web runs
-    // should use localhost (or another reachable LAN/remote host).
-    if (kIsWeb && parsed.host == '10.0.2.2') {
-      final normalized = parsed.replace(host: 'localhost').toString();
+    // ── 1. Downgrade https → http for well-known local dev addresses.
+    // Local dev backends almost never have valid SSL certs, so https:// to
+    // localhost / 10.0.2.2 / 127.0.0.1 fails with a handshake error on every
+    // platform. Convert silently so a .env typo doesn't block development.
+    const localHosts = {'localhost', '10.0.2.2', '127.0.0.1'};
+    if (parsed.scheme == 'https' && localHosts.contains(parsed.host)) {
       LogManager.debug(
-        '[EnvConfig] Rewriting API host for web runtime: $trimmed -> $normalized',
+        '[EnvConfig] Downgrading https→http for local dev address: $trimmed',
+      );
+      parsed = parsed.replace(scheme: 'http');
+    }
+
+    // ── 2. Platform-aware host rewriting for 10.0.2.2 (Android emulator loopback).
+    // • Web (Edge / Chrome): browsers cannot reach 10.0.2.2 — rewrite to localhost.
+    // • Android native emulator: 10.0.2.2 is exactly right — leave it alone.
+    // • iOS simulator / macOS / desktop: 10.0.2.2 is unreachable — rewrite to localhost.
+    if (parsed.host == '10.0.2.2') {
+      if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) {
+        final normalized = parsed.replace(host: 'localhost').toString();
+        LogManager.debug(
+          '[EnvConfig] Rewriting 10.0.2.2 → localhost '
+          '(${kIsWeb ? "web" : defaultTargetPlatform.name}): $trimmed -> $normalized',
+        );
+        return normalized;
+      }
+      // Android emulator: 10.0.2.2 is the correct host — no change needed.
+      return parsed.toString();
+    }
+
+    // ── 3. Android emulator reverse mapping (localhost → 10.0.2.2).
+    // On Android emulators, localhost / 127.0.0.1 resolves to the emulator
+    // itself, not the host machine running the dev server. Rewrite so a .env
+    // with API_BASE_URL=http://localhost:5000 still reaches the backend.
+    if (!kIsWeb &&
+        defaultTargetPlatform == TargetPlatform.android &&
+        (parsed.host == 'localhost' || parsed.host == '127.0.0.1')) {
+      final normalized = parsed.replace(host: '10.0.2.2').toString();
+      LogManager.debug(
+        '[EnvConfig] Rewriting localhost → 10.0.2.2 for Android emulator: '
+        '$trimmed -> $normalized',
       );
       return normalized;
     }

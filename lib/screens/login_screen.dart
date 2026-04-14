@@ -231,9 +231,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
       if (ConfigService.useBackendAuth) {
         await AppInit.initializeWebSocket();
-
-        // ✅ ADD THIS - Initialize WebSocket after successful login
-        ref.read(authServiceProvider);
       }
 
       setState(() => _isLoading = false);
@@ -243,13 +240,35 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         context.go(needsOnboarding ? '/profile-setup' : '/home');
       }
     } catch (e) {
-      final errorMessage = ConfigService.useBackendAuth
+      final baseMessage = ConfigService.useBackendAuth
           ? (_isSignUpMode
-          ? AuthErrorMessages.getSignupErrorMessage(e)
-          : AuthErrorMessages.getLoginErrorMessage(e))
+              ? AuthErrorMessages.getSignupErrorMessage(e)
+              : AuthErrorMessages.getLoginErrorMessage(e))
           : 'Login failed: ${e.toString()}';
 
-      _showErrorSnackBar(errorMessage);
+      // Append a platform-specific network hint for connection failures so
+      // developers can diagnose URL / CORS issues without opening the logs.
+      final errorStr = e.toString();
+      final isNetworkError = errorStr.contains('SocketException') ||
+          errorStr.contains('Connection refused') ||
+          errorStr.contains('Failed host lookup') ||
+          errorStr.contains('Network is unreachable') ||
+          errorStr.contains('Connection timed out');
+
+      String displayMessage = baseMessage;
+      if (isNetworkError && ConfigService.useBackendAuth) {
+        if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+          displayMessage =
+              '$baseMessage\n\nTip: on an Android emulator the dev server must be '
+              'reachable via 10.0.2.2, not localhost. Check API_BASE_URL in .env.';
+        } else if (kIsWeb) {
+          displayMessage =
+              '$baseMessage\n\nTip: verify the backend is running and has CORS '
+              'enabled for this origin (${Uri.base.origin}).';
+        }
+      }
+
+      _showErrorSnackBar(displayMessage);
       setState(() => _isLoading = false);
     }
   }
