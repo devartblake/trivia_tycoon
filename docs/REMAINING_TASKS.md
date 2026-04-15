@@ -1,6 +1,6 @@
 # Remaining Tasks & Work Backlog
 
-_Last updated: 2026-04-15 (updated: friends/presence backend migration and WebSocket playerId alignment)_
+_Last updated: 2026-04-15 (updated: social auth allowlist, main-menu wallet sync, and question source observability)_
 
 > This file is the canonical "what is left to do" reference.
 > For completed work, see [`docs/ALPHA_TASK_AUDIT.md`](ALPHA_TASK_AUDIT.md).
@@ -52,6 +52,8 @@ _Last updated: 2026-04-15 (updated: friends/presence backend migration and WebSo
   - `GET /users/me/friends/requests`
   - `GET /users/me/friends/requests/sent`
   - `GET /users/me/friends/suggestions`
+  - `GET /users/search?handle=...` with authenticated requests
+  - `DELETE /friends` with authenticated requests
 - Two-account/device validation for:
   - send request
   - accept request
@@ -188,14 +190,24 @@ _Last updated: 2026-04-15 (updated: friends/presence backend migration and WebSo
 - Per-question validation uses `POST /questions/check`.
 - End-of-quiz authoritative reconciliation uses `POST /questions/check-batch`.
 - Legacy/local fallback remains available where needed for resilience.
+- `QuestionScreen` now shows a visible backend-vs-local-fallback status banner.
+- `QuestionHubService` now logs explicit backend and fallback source decisions for
+  category loads, daily/mixed quiz loads, stats reads, and answer validation paths.
+- Still needed:
+  - live verification that normal gameplay stays on backend data in local/staging/prod environments
+  - decision on whether local fallback should remain in production once backend parity is proven
+  - deeper observability metrics beyond the new source banner/logging (success ratios, latency, coverage drift)
 
 ### 1d. Crypto economy player surfaces REMAINING
 - Still needed:
-- Player-facing wallet balance integration
+- Broader player-facing wallet balance integration beyond the main menu sync
 - Transaction/history integration
 - Wallet link / withdraw UX
 - Staking and unstaking UI
 - Feature-flag strategy for staged rollout
+- Newly completed:
+  - `main_menu_screen.dart` now syncs coin/gem display from backend player wallet data during economy refresh
+  - duplicate green energy strip under the menu currency display was removed
 - Backend endpoints available for consumption:
 - `POST /crypto/link-wallet`
 - `GET /crypto/balance/{playerId}`

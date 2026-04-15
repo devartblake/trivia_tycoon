@@ -33,6 +33,9 @@
     - `FriendsScreen`
     - `AddFriendByUsernameScreen`
     - `CreateDMDialog`
+  - frontend auth allowlist now covers:
+    - `/users/search`
+    - `/friends`
 
 ### Remaining
 
@@ -439,6 +442,8 @@ Suggested doc update targets:
   - `/users/me/friends/requests`
   - `/users/me/friends/requests/sent`
   - `/users/me/friends/suggestions`
+  - `/users/search?handle=...`
+  - `DELETE /friends`
 - [ ] Validate end-to-end friend request flow across two accounts/devices
 - [ ] Validate presence updates after login with the patched `?playerId=` WebSocket URL
 - [ ] Confirm offline/online transitions and `presence.bulk` behavior at runtime

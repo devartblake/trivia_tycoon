@@ -8,6 +8,37 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Updated - Social auth allowlist, menu wallet sync, and question source visibility (2026-04-15)
+
+Closed the next frontend follow-up gaps after the friends/presence migration by
+authorizing the remaining social routes, syncing the main menu wallet display
+from backend player data, and surfacing when question flows are using backend
+data versus local fallback content.
+
+**Changes:**
+- `lib/core/services/api_service.dart` - extended protected-route detection to
+  cover `/users/search` and `/friends` so authorized social search/unfriend
+  calls attach the expected auth headers.
+- `lib/screens/menu/main_menu_screen.dart` - main menu economy refresh now also
+  hydrates wallet balances from backend player data; removed the duplicate green
+  energy strip under `CurrencyDisplay`.
+- `lib/game/services/wallet_service.dart` - added direct wallet balance sync
+  support for backend-driven coin/gem updates.
+- `lib/game/services/question_hub_service.dart` - added explicit backend vs
+  local-fallback source reporting plus stronger question-source logging.
+- `lib/game/providers/question_providers.dart` - added question source status
+  tracking/providers so UI can expose the active data source.
+- `lib/screens/question/question_screen.dart` - added a visible backend/local
+  fallback indicator banner for question hub data.
+
+**Remaining for this workstream:**
+- live verification that `/users/search` and `DELETE /friends` now succeed with
+  authenticated requests against the backend
+- live verification that main menu coin/gem values match backend wallet values
+  after login/refresh/resume flows
+- runtime validation that question screens stay on backend responses in normal
+  environments and only show fallback status during actual API failure cases
+
 ### Added - Friends/social backend migration and presence playerId alignment (2026-04-15)
 
 Completed the main frontend migration from local mock social state to the live

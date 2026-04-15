@@ -93,6 +93,8 @@ Phase 2 completion record and post-phase follow-ups:
 
 ### Phase 4
 - Add observability:
+  - ✅ Added a visible backend-vs-local-fallback indicator on `QuestionScreen`
+  - ✅ Added service-level backend/local-fallback source logging and provider status reporting
   - request success/fallback ratio
   - endpoint latency
   - category coverage drift vs local fallback

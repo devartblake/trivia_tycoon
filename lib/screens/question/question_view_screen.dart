@@ -12,12 +12,16 @@ class AdaptedQuestionScreen extends ConsumerStatefulWidget {
   final String? classLevel;
   final String? category; // Keep as string for route compatibility
   final int? questionCount;
+  final List<QuestionModel>? initialQuestions;
+  final String? displayTitle;
 
   const AdaptedQuestionScreen({
     super.key,
     this.classLevel,
     this.category,
     this.questionCount,
+    this.initialQuestions,
+    this.displayTitle,
   });
 
   @override
@@ -44,11 +48,21 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
 
     // Start quiz when screen loads with educational parameters
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(adaptedQuizProvider.notifier).startQuizWithCategory(
-        questionCount: widget.questionCount ?? 10,
-        classLevel: widget.classLevel ?? '1',
-        category: _resolvedCategory,
-      );
+      final notifier = ref.read(adaptedQuizProvider.notifier);
+      final initialQuestions = widget.initialQuestions;
+      if (initialQuestions != null && initialQuestions.isNotEmpty) {
+        notifier.startQuizWithQuestions(
+          questions: initialQuestions,
+          classLevel: widget.classLevel ?? '1',
+          category: _resolvedCategory,
+        );
+      } else {
+        notifier.startQuizWithCategory(
+          questionCount: widget.questionCount ?? 10,
+          classLevel: widget.classLevel ?? '1',
+          category: _resolvedCategory,
+        );
+      }
     });
   }
 
@@ -121,6 +135,9 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
   }
 
   String _getCategoryDisplayName() {
+    if (widget.displayTitle != null && widget.displayTitle!.trim().isNotEmpty) {
+      return widget.displayTitle!;
+    }
     if (_resolvedCategory != null) {
       return _resolvedCategory!.displayName;
     }
@@ -505,11 +522,21 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
               const SizedBox(height: 24),
               ElevatedButton.icon(
                 onPressed: () {
-                  ref.read(adaptedQuizProvider.notifier).startQuizWithCategory(
-                    classLevel: widget.classLevel ?? '1',
-                    category: _resolvedCategory,
-                    questionCount: widget.questionCount ?? 10,
-                  );
+                  final notifier = ref.read(adaptedQuizProvider.notifier);
+                  final initialQuestions = widget.initialQuestions;
+                  if (initialQuestions != null && initialQuestions.isNotEmpty) {
+                    notifier.startQuizWithQuestions(
+                      questions: initialQuestions,
+                      classLevel: widget.classLevel ?? '1',
+                      category: _resolvedCategory,
+                    );
+                  } else {
+                    notifier.startQuizWithCategory(
+                      classLevel: widget.classLevel ?? '1',
+                      category: _resolvedCategory,
+                      questionCount: widget.questionCount ?? 10,
+                    );
+                  }
                 },
                 icon: const Icon(Icons.refresh),
                 label: const Text('Try Again'),

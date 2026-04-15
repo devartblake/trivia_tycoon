@@ -33,6 +33,7 @@ import '../../arcade/missions/arcade_missions_screen.dart';
 import '../../arcade/ui/screens/arcade_hub_screen.dart';
 import '../../arcade/ui/screens/daily_bonus_screen.dart';
 import '../../game/models/game_mode.dart';
+import '../../game/models/question_model.dart';
 import '../../screens/challenge/challenge_screen.dart';
 import '../../screens/menu/invite_screen.dart';
 import '../../screens/messages/messages_screen.dart';
@@ -513,7 +514,40 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/quiz/play',
-        builder: (context, state) => const PlayQuizScreen(),
+        builder: (context, state) {
+          final extra = state.extra;
+          if (extra is Map<String, dynamic>) {
+            final categories = extra['categories'] is List
+                ? List<String>.from(extra['categories'] as List)
+                : const <String>[];
+            final category = (extra['category'] as String?) ??
+                (extra['subject'] as String?) ??
+                (categories.isNotEmpty ? categories.first : null);
+            final questions = extra['questions'] is List
+                ? (extra['questions'] as List).whereType<QuestionModel>().toList()
+                : const <QuestionModel>[];
+            final classLevel = extra['classLevel']?.toString();
+            final questionCount = (extra['questionCount'] as num?)?.toInt();
+            final displayTitle = extra['displayTitle']?.toString() ??
+                extra['title']?.toString();
+
+            final hasLaunchPayload = questions.isNotEmpty ||
+                category != null ||
+                classLevel != null ||
+                questionCount != null;
+
+            if (hasLaunchPayload) {
+              return AdaptedQuestionScreen(
+                classLevel: classLevel,
+                category: category,
+                questionCount: questionCount,
+                initialQuestions: questions.isEmpty ? null : questions,
+                displayTitle: displayTitle,
+              );
+            }
+          }
+          return const PlayQuizScreen();
+        },
       ),
       GoRoute(
         path: '/favorites-quiz',

@@ -535,6 +535,8 @@ class ApiService {
 
     // User-scoped/profile endpoints also require auth headers and token refresh handling.
     if (path == '/users/me' || path.startsWith('/users/me/')) return true;
+    if (path == '/users/search' || path.startsWith('/users/search/')) return true;
+    if (path == '/friends' || path.startsWith('/friends/')) return true;
     if (path == '/profile' || path.startsWith('/profile/')) return true;
     if (path == '/auth/profile' || path.startsWith('/auth/profile/')) return true;
     if (path == '/user/profile' || path.startsWith('/user/profile/')) return true;

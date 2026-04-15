@@ -262,6 +262,63 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
     );
   }
 
+  Future<void> startQuizWithQuestions({
+    required List<QuestionModel> questions,
+    String classLevel = '1',
+    QuizCategory? category,
+  }) async {
+    try {
+      state = state.copyWith(
+        isLoading: true,
+        error: null,
+        classLevel: classLevel,
+        category: category,
+        quizStartTime: DateTime.now(),
+        stopwatch: Stopwatch()..start(),
+      );
+
+      if (questions.isEmpty) {
+        throw Exception('No questions available for the selected criteria');
+      }
+
+      final categoryScores = <String, int>{};
+      if (category != null) {
+        categoryScores[category.name] = 0;
+      } else {
+        for (final question in questions) {
+          categoryScores[question.category] = 0;
+        }
+      }
+
+      state = state.copyWith(
+        questions: questions,
+        currentIndex: 0,
+        score: 0,
+        totalXP: 0,
+        coins: 0,
+        diamonds: 0,
+        stars: 0,
+        isLoading: false,
+        timeRemaining: _getTimeLimitForClass(classLevel),
+        categoryScores: categoryScores,
+        achievements: <String>[],
+        answerSubmissions: const <QuestionAnswerSubmission>[],
+        selectedAnswer: null,
+        showFeedback: false,
+        isTimerExpired: false,
+        hasUsedPowerUp: false,
+        hasUsedExtraTime: false,
+      );
+
+      _startTimer();
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: e.toString(),
+      );
+    }
+  }
+
   /// Compatibility method for class-based quiz starting
   Future<void> startQuizByCategory({
     required String classLevel,

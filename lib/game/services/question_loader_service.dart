@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import '../../core/constants/question_paths.dart';
+import '../data/question_asset_index_loader.dart';
 import 'quiz_category.dart';
 import '../models/question_model.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
@@ -26,6 +27,12 @@ class QuestionDataset {
 }
 
 class AdaptedQuestionLoaderService {
+  AdaptedQuestionLoaderService({
+    QuestionAssetIndexLoader? indexLoader,
+  }) : _indexLoader = indexLoader ?? QuestionAssetIndexLoader();
+
+  final QuestionAssetIndexLoader _indexLoader;
+
   // Enhanced datasets using QuizCategory enum
   static const List<QuestionDataset> _coreDatasets = [
     QuestionDataset(
@@ -518,9 +525,13 @@ class AdaptedQuestionLoaderService {
     if (dedicatedDataset != null) {
       try {
         final questions = await loadDataset(dedicatedDataset.name);
-        return questions.where((q) =>
-        q.category.toLowerCase() == category.datasetName.toLowerCase()
-        ).toList();
+        return QuestionPresentationRandomizer.shuffleQuestions(
+          questions
+              .where((q) =>
+                  q.category.toLowerCase() ==
+                  category.datasetName.toLowerCase())
+              .toList(),
+        );
       } catch (e) {
         LogManager.debug('Failed to load dedicated dataset for ${category.displayName}: $e');
       }
@@ -528,9 +539,9 @@ class AdaptedQuestionLoaderService {
 
     // Fallback to searching across all datasets
     final allQuestions = await loadAllQuestions();
-    return allQuestions
-        .where((q) => _matchesCategory(q, category))
-        .toList();
+    return QuestionPresentationRandomizer.shuffleQuestions(
+      allQuestions.where((q) => _matchesCategory(q, category)).toList(),
+    );
   }
 
   /// Get datasets that contain questions for a specific QuizCategory
@@ -878,14 +889,22 @@ class AdaptedQuestionLoaderService {
     }
 
     // Find the dataset configuration
-    final dataset = availableDatasets.firstWhere(
-          (ds) => ds.name == datasetName,
-      orElse: () => _coreDatasets.first, // Fallback to first core dataset
-    );
+    final datasetMatches =
+        availableDatasets.where((ds) => ds.name == datasetName);
+    final dataset = datasetMatches.isNotEmpty ? datasetMatches.first : null;
+    final indexedPath = await _indexLoader.resolveAssetPath(datasetName);
+    final resolvedDataset = dataset ??
+        QuestionDataset(
+          name: datasetName,
+          path: indexedPath ?? _coreDatasets.first.path,
+          categories: const [QuizCategory.general],
+          primaryCategory: QuizCategory.general,
+        );
+    final primaryPath = indexedPath ?? resolvedDataset.path;
 
     try {
       // Try direct path loading first
-      final questions = await _loadFromPath(dataset.path, datasetName);
+      final questions = await _loadFromPath(primaryPath, datasetName);
 
       // Cache the loaded questions
       _cachedDatasets[datasetName] = questions;
@@ -894,11 +913,13 @@ class AdaptedQuestionLoaderService {
 
       return questions;
     } catch (e) {
-      LogManager.debug('Failed to load dataset $datasetName from path ${dataset.path}: $e');
+      LogManager.debug(
+        'Failed to load dataset $datasetName from path $primaryPath: $e',
+      );
       _datasetAvailability[datasetName] = false;
 
       // Try fallback loading using the data service
-      return _handleDatasetFallback(datasetName, dataset);
+      return _handleDatasetFallback(datasetName, resolvedDataset);
     }
   }
 
@@ -1045,11 +1066,19 @@ class AdaptedQuestionLoaderService {
       return getQuestionsByQuizCategory(quizCategory);
     }
 
+    final indexedPath = await _indexLoader.resolveAssetPath(category);
+    if (indexedPath != null) {
+      final indexedQuestions = await _loadFromPath(indexedPath, category);
+      return QuestionPresentationRandomizer.shuffleQuestions(indexedQuestions);
+    }
+
     // Fallback to original string-based search
     final allQuestions = await loadAllQuestions();
-    return allQuestions
-        .where((q) => q.category.toLowerCase() == category.toLowerCase())
-        .toList();
+    return QuestionPresentationRandomizer.shuffleQuestions(
+      allQuestions
+          .where((q) => q.category.toLowerCase() == category.toLowerCase())
+          .toList(),
+    );
   }
 
   /// Enhanced validation and parsing
@@ -1129,7 +1158,9 @@ class AdaptedQuestionLoaderService {
         'sourceDataset': sourceDataset,
       };
 
-      return QuestionModel.fromJson(normalizedJson);
+      return QuestionPresentationRandomizer.shuffleQuestionAnswers(
+        QuestionModel.fromJson(normalizedJson),
+      );
     } catch (e) {
       LogManager.debug('Error parsing question from $sourceDataset: $e');
       LogManager.debug('Problematic JSON: $json');
