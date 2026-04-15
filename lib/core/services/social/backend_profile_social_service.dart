@@ -8,11 +8,13 @@ class BackendProfileSocialService {
   BackendProfileSocialService(this._apiService);
 
   final ApiService _apiService;
+  static const Duration _socialTimeout = Duration(seconds: 10);
 
   Future<List<Map<String, dynamic>>> searchUsers(String handle) async {
     final response = await _apiService.get(
       '/users/search',
       queryParameters: {'handle': handle},
+      timeout: _socialTimeout,
     );
 
     final rawItems = response['items'] ??
@@ -32,15 +34,25 @@ class BackendProfileSocialService {
   }
 
   Future<Map<String, dynamic>> getCareerSummary(String userId) {
-    return _apiService.get('/users/$userId/career-summary');
+    return _apiService.get(
+      '/users/$userId/career-summary',
+      timeout: _socialTimeout,
+    );
   }
 
   Future<Map<String, dynamic>> getLoadout() {
-    return _apiService.get('/users/me/preferences/loadout');
+    return _apiService.get(
+      '/users/me/preferences/loadout',
+      timeout: _socialTimeout,
+    );
   }
 
   Future<Map<String, dynamic>> saveLoadout(Map<String, dynamic> loadout) {
-    return _apiService.put('/users/me/preferences/loadout', body: loadout);
+    return _apiService.put(
+      '/users/me/preferences/loadout',
+      body: loadout,
+      timeout: _socialTimeout,
+    );
   }
 
   Future<PaginatedSocialResponse<FriendListItemDto>> getFriends({
@@ -53,6 +65,7 @@ class BackendProfileSocialService {
         'page': page,
         'pageSize': pageSize,
       },
+      timeout: _socialTimeout,
     );
 
     final envelope = _apiService.parsePageEnvelope<FriendListItemDto>(
@@ -79,6 +92,7 @@ class BackendProfileSocialService {
         'page': page,
         'pageSize': pageSize,
       },
+      timeout: _socialTimeout,
     );
 
     final envelope = _apiService.parsePageEnvelope<FriendRequestDto>(
@@ -105,6 +119,7 @@ class BackendProfileSocialService {
         'page': page,
         'pageSize': pageSize,
       },
+      timeout: _socialTimeout,
     );
 
     final envelope = _apiService.parsePageEnvelope<FriendRequestDto>(
@@ -127,6 +142,7 @@ class BackendProfileSocialService {
       body: {
         'targetUserId': targetUserId,
       },
+      timeout: _socialTimeout,
     );
     return FriendRequestDto.fromJson(response);
   }
@@ -135,6 +151,7 @@ class BackendProfileSocialService {
     final response = await _apiService.post(
       '/users/me/friends/requests/$requestId/accept',
       body: const <String, dynamic>{},
+      timeout: _socialTimeout,
     );
     return FriendRequestDto.fromJson(response);
   }
@@ -143,12 +160,16 @@ class BackendProfileSocialService {
     final response = await _apiService.post(
       '/users/me/friends/requests/$requestId/decline',
       body: const <String, dynamic>{},
+      timeout: _socialTimeout,
     );
     return FriendRequestDto.fromJson(response);
   }
 
   Future<List<FriendSuggestionDto>> getFriendSuggestions() async {
-    final response = await _apiService.getList('/users/me/friends/suggestions');
+    final response = await _apiService.getList(
+      '/users/me/friends/suggestions',
+      timeout: _socialTimeout,
+    );
     return response
         .map(FriendSuggestionDto.fromJson)
         .toList(growable: false);
@@ -168,6 +189,7 @@ class BackendProfileSocialService {
         'targetUserId': friendId,
         'friendPlayerId': friendId,
       },
+      timeout: _socialTimeout,
     );
   }
 }

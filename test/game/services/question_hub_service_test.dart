@@ -36,6 +36,7 @@ class _FakeApiService extends ApiService {
     String path, {
     Map<String, String>? headers,
     Map<String, dynamic>? queryParameters,
+    Duration? timeout,
   }) async {
     return getResponses[path] ?? <String, dynamic>{};
   }
@@ -45,6 +46,7 @@ class _FakeApiService extends ApiService {
     String path, {
     required Map<String, dynamic> body,
     Map<String, String>? headers,
+    Duration? timeout,
   }) async {
     if (postError != null) {
       throw postError!;

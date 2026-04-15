@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'dialogs/add_friend_dialog.dart' hide FriendRequest;
+import 'dialogs/add_friend_dialog.dart';
 import '../../core/services/api_service.dart';
 import '../../core/models/social/friend_list_item_dto.dart';
 import '../../core/models/social/friend_request_dto.dart';

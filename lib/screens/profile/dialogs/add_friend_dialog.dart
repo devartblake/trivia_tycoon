@@ -1,31 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/utils/input_validator.dart';
-import '../../../core/utils/unicode_utils.dart';
+
+import '../../../core/models/social/friend_request_dto.dart';
+import '../../../core/services/api_service.dart';
+import '../../../game/providers/friends_providers.dart';
+import '../../../game/providers/profile_providers.dart' hide currentUserIdProvider;
 import '../../messages/widgets/safe_text.dart';
 
-class AddFriendDialog extends StatefulWidget {
+class AddFriendDialog extends ConsumerStatefulWidget {
   const AddFriendDialog({super.key});
 
   @override
-  State<AddFriendDialog> createState() => _AddFriendDialogState();
+  ConsumerState<AddFriendDialog> createState() => _AddFriendDialogState();
 }
 
-class _AddFriendDialogState extends State<AddFriendDialog> {
-  final List<FriendRequest> _friendRequests = [
-    FriendRequest(name: 'StarZone', username: 'clergyman0038', avatar: ''),
-    FriendRequest(name: 'Sofiya Yuki', username: 'sofiya_yuki1', avatar: ''),
-    FriendRequest(name: 'Annie', username: 'ruby0o0', tag: '🍑 TOF', avatar: ''),
-    FriendRequest(name: 'cameron_cancer99', username: 'cam1999', tag: '🟢 NFE', avatar: ''),
-    FriendRequest(name: 'Eleanor', username: 'eleanor1k', avatar: ''),
-    FriendRequest(name: 'EvelynRadiance', username: 'evelynradiance', tag: '💎 Game', avatar: ''),
-    FriendRequest(name: 'Sollow', username: 'wall83939', avatar: ''),
-    FriendRequest(name: 'Ingrid', username: 'ingrid_4khhg', avatar: ''),
-    FriendRequest(name: 'Jaxter', username: 'jaxterdb0985', avatar: ''),
-  ];
+class _AddFriendDialogState extends ConsumerState<AddFriendDialog> {
+  bool _isMutating = false;
 
   @override
   Widget build(BuildContext context) {
+    final incomingRequestsAsync = ref.watch(incomingFriendRequestsProvider);
+
     return Scaffold(
       backgroundColor: const Color(0xFF36393F),
       appBar: AppBar(
@@ -37,7 +33,11 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
         ),
         title: const SafeText(
           'Add Friends',
-          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         centerTitle: true,
       ),
@@ -45,7 +45,13 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
         children: [
           _buildShareOptions(),
           _buildQuickActions(),
-          _buildIncomingRequests(),
+          Expanded(
+            child: incomingRequestsAsync.when(
+              data: (page) => _buildIncomingRequests(page.items),
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, _) => _buildErrorState(error),
+            ),
+          ),
         ],
       ),
     );
@@ -148,35 +154,57 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
     );
   }
 
-  Widget _buildIncomingRequests() {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.all(16),
-            child: SafeText(
-              'Incoming Friend Requests',
-              style: TextStyle(color: Colors.white70, fontSize: 14, fontWeight: FontWeight.w500),
+  Widget _buildIncomingRequests(List<FriendRequestDto> requests) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(16),
+          child: SafeText(
+            'Incoming Friend Requests',
+            style: TextStyle(
+              color: Colors.white70,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
             ),
           ),
+        ),
+        if (requests.isEmpty)
+          const Expanded(
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.people_outline, color: Color(0xFF72767D), size: 48),
+                  SizedBox(height: 12),
+                  SafeText(
+                    'No incoming friend requests',
+                    style: TextStyle(color: Colors.white70, fontSize: 16),
+                  ),
+                ],
+              ),
+            ),
+          )
+        else
           Expanded(
             child: ListView.builder(
-              itemCount: _friendRequests.length,
+              itemCount: requests.length,
               itemBuilder: (context, index) {
-                final request = _friendRequests[index];
-                return _buildFriendRequestTile(request, index);
+                final request = requests[index];
+                return _buildFriendRequestTile(request);
               },
             ),
           ),
-        ],
-      ),
+      ],
     );
   }
 
-  Widget _buildFriendRequestTile(FriendRequest request, int index) {
-    // Get safe avatar character using UnicodeUtils
-    final avatarChar = request.safeAvatarChar;
+  Widget _buildFriendRequestTile(FriendRequestDto request) {
+    final displayName =
+        request.senderDisplayName ?? request.senderUsername ?? 'Unknown';
+    final username =
+        request.senderUsername ?? request.senderDisplayName ?? 'unknown';
+    final avatarChar = _avatarChar(displayName);
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -192,7 +220,10 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
             backgroundColor: const Color(0xFF5865F2),
             child: SafeText(
               avatarChar,
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           const SizedBox(width: 12),
@@ -200,33 +231,20 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Name and tag row with proper overflow handling
-                Wrap(
-                  spacing: 4,
-                  runSpacing: 2,
-                  children: [
-                    SafeText(
-                      request.name,
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-                    ),
-                    if (request.tag != null)
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF3BA55C).withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: SafeText(
-                          request.tag!,
-                          style: const TextStyle(color: Color(0xFF3BA55C), fontSize: 11),
-                        ),
-                      ),
-                  ],
+                SafeText(
+                  displayName,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 const SizedBox(height: 2),
                 SafeText(
-                  request.username,
-                  style: const TextStyle(color: Color(0xFFB9BBBE), fontSize: 12),
+                  username,
+                  style: const TextStyle(
+                    color: Color(0xFFB9BBBE),
+                    fontSize: 12,
+                  ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ],
@@ -235,14 +253,15 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
           Column(
             children: [
               IconButton(
-                onPressed: () => _declineRequest(index),
+                onPressed:
+                    _isMutating ? null : () => _declineRequest(request),
                 icon: const Icon(Icons.close, color: Color(0xFF72767D)),
                 tooltip: 'Decline request',
                 constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                 padding: const EdgeInsets.all(4),
               ),
               IconButton(
-                onPressed: () => _acceptRequest(index),
+                onPressed: _isMutating ? null : () => _acceptRequest(request),
                 icon: const Icon(Icons.check, color: Color(0xFF3BA55C)),
                 tooltip: 'Accept request',
                 constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
@@ -255,68 +274,120 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
     );
   }
 
-  void _acceptRequest(int index) {
-    if (index >= 0 && index < _friendRequests.length) {
-      setState(() {
-        _friendRequests.removeAt(index);
-      });
+  Widget _buildErrorState(Object error) {
+    final message = error is ApiRequestException
+        ? error.message
+        : 'Could not load friend requests right now.';
 
-      // Show feedback to user
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.cloud_off_rounded,
+                color: Color(0xFF72767D), size: 48),
+            const SizedBox(height: 12),
+            const SafeText(
+              'Friend requests are unavailable',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            SafeText(
+              message,
+              style: const TextStyle(color: Color(0xFFB9BBBE), fontSize: 13),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () => ref.invalidate(incomingFriendRequestsProvider),
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _acceptRequest(FriendRequestDto request) async {
+    await _mutateRequest(
+      action: () => ref
+          .read(backendProfileSocialServiceProvider)
+          .acceptFriendRequest(request.requestId),
+      successMessage: 'Friend request accepted!',
+      successColor: const Color(0xFF3BA55C),
+    );
+  }
+
+  Future<void> _declineRequest(FriendRequestDto request) async {
+    await _mutateRequest(
+      action: () => ref
+          .read(backendProfileSocialServiceProvider)
+          .declineFriendRequest(request.requestId),
+      successMessage: 'Friend request declined',
+      successColor: const Color(0xFF72767D),
+    );
+  }
+
+  Future<void> _mutateRequest({
+    required Future<void> Function() action,
+    required String successMessage,
+    required Color successColor,
+  }) async {
+    setState(() {
+      _isMutating = true;
+    });
+
+    try {
+      await action();
+      ref.invalidate(incomingFriendRequestsProvider);
+      ref.invalidate(friendsListProvider);
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: SafeText(successMessage),
+          backgroundColor: successColor,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    } on ApiRequestException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: SafeText(e.message),
+          backgroundColor: const Color(0xFFED4245),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    } catch (_) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: SafeText('Friend request accepted!'),
-          backgroundColor: Color(0xFF3BA55C),
+          content: SafeText('Something went wrong. Please try again.'),
+          backgroundColor: Color(0xFFED4245),
           duration: Duration(seconds: 2),
         ),
       );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isMutating = false;
+        });
+      }
     }
   }
 
-  void _declineRequest(int index) {
-    if (index >= 0 && index < _friendRequests.length) {
-      setState(() {
-        _friendRequests.removeAt(index);
-      });
-
-      // Show feedback to user
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: SafeText('Friend request declined'),
-          backgroundColor: Color(0xFF72767D),
-          duration: Duration(seconds: 2),
-        ),
-      );
+  String _avatarChar(String name) {
+    final trimmed = name.trim();
+    if (trimmed.isEmpty) {
+      return '?';
     }
-  }
-}
-
-class FriendRequest {
-  final String _name;
-  final String _username;
-  final String avatar;
-  final String? _tag;
-
-  FriendRequest({
-    required String name,
-    required String username,
-    required this.avatar,
-    String? tag,
-  }) : _name = InputValidator.safeString(name),
-        _username = InputValidator.safeString(username),
-        _tag = tag != null ? InputValidator.safeString(tag) : null;
-
-  String get name => _name;
-  String get username => _username;
-  String? get tag => _tag;
-
-  // Safe avatar character getter using UnicodeUtils
-  String get safeAvatarChar {
-    final safeName = UnicodeUtils.sanitizeString(_name);
-    if (safeName.isEmpty) return '?';
-
-    final firstChar = safeName.substring(0, 1).toUpperCase();
-    return UnicodeUtils.sanitizeString(firstChar).isNotEmpty
-        ? UnicodeUtils.sanitizeString(firstChar)
-        : '?';
+    return trimmed[0].toUpperCase();
   }
 }
