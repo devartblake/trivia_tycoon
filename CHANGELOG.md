@@ -8,6 +8,39 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added - Friends/social backend migration and presence playerId alignment (2026-04-15)
+
+Completed the main frontend migration from local mock social state to the live
+backend friends/presence contract, and patched the shared WebSocket connection
+paths to satisfy the backend `?playerId=` requirement for presence delivery.
+
+**Changes:**
+- `lib/core/models/social/friend_list_item_dto.dart`,
+  `lib/core/models/social/friend_request_dto.dart`,
+  `lib/core/models/social/friend_suggestion_dto.dart`, and
+  `lib/core/models/social/paginated_social_response.dart` - added typed social
+  DTOs and paginated response support.
+- `lib/core/services/social/backend_profile_social_service.dart` - expanded to
+  cover backend friends list, incoming requests, sent requests, request send,
+  accept, decline, and suggestions.
+- `lib/game/providers/friends_providers.dart` - added Riverpod providers for
+  backend-backed social data.
+- `lib/screens/profile/friends_screen.dart` - migrated friend list, request
+  inbox, suggestions, and request mutations to backend social endpoints.
+- `lib/screens/profile/enhanced/add_friends_screen.dart` - add-by-username flow
+  now checks backend friend/request state and sends backend-authored requests.
+- `lib/screens/messages/dialogs/create_dm_dialog.dart` - message recipient
+  picker now uses the backend friends roster instead of `FriendDiscoveryService`.
+- `lib/core/bootstrap/app_init.dart` - shared app WebSocket initialization now
+  appends `?playerId=<guid>` before connecting.
+- `lib/game/providers/core_providers.dart` - `wsClientProvider` now aligns with
+  the same `playerId` query-parameter requirement when a stored user id exists.
+
+**Remaining for this workstream:**
+- live runtime verification across two logged-in users/devices
+- final cleanup or deprecation decision for `FriendDiscoveryService`
+- formatter/analyzer/test pass in a Flutter-enabled environment
+
 ### Updated - Local web auth, onboarding profile restore, and persistence status (2026-04-14)
 
 Closed the latest frontend-side gaps around local web auth diagnostics,

@@ -295,8 +295,20 @@ class AppInit {
         return;
       }
 
-      // Determine WebSocket URL based on environment
-      final wsUrl = EnvConfig.apiWsBaseUrl;
+      final playerId = await _serviceManager?.playerProfileService.getUserId();
+      if (playerId == null || playerId.isEmpty) {
+        LogManager.debug('[AppInit] No playerId available, skipping WebSocket');
+        return;
+      }
+
+      final baseWsUrl = Uri.parse(EnvConfig.apiWsBaseUrl);
+      final wsUrl = baseWsUrl.replace(
+        queryParameters: {
+          ...baseWsUrl.queryParameters,
+          'playerId': playerId,
+        },
+      ).toString();
+      LogManager.debug('[AppInit] WebSocket URL prepared with playerId');
 
       // Create WebSocket client
       _wsClient = WsClient(

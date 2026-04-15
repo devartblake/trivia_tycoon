@@ -1,6 +1,6 @@
 # Remaining Tasks & Work Backlog
 
-_Last updated: 2026-04-14 (updated: profile persistence, local web auth, and avatar-storage follow-up)_
+_Last updated: 2026-04-15 (updated: friends/presence backend migration and WebSocket playerId alignment)_
 
 > This file is the canonical "what is left to do" reference.
 > For completed work, see [`docs/ALPHA_TASK_AUDIT.md`](ALPHA_TASK_AUDIT.md).
@@ -36,10 +36,33 @@ _Last updated: 2026-04-14 (updated: profile persistence, local web auth, and ava
 - Career-summary fetch is wired into the enhanced profile experience.
 - Loadout `GET` / `PUT` wiring is implemented for hydration and save.
 - `DELETE /friends` is wired for unfriend.
+- Friends list, incoming requests, sent requests, and suggestions are now wired to backend social endpoints.
+- Add-friend-by-username now reconciles against backend friend/request state instead of local placeholder friendship checks.
+- DM recipient picking now uses the backend friends roster.
+- Shared `/ws` connection paths now append `?playerId=<guid>` for presence compatibility.
 - Follow-up profile persistence patch:
   - onboarding now attempts broader backend profile sync
   - login/signup now attempt backend profile hydration
   - bootstrap now attempts backend profile hydration before falling back to Hive
+
+### 1b.ii Friends/social runtime verification REMAINING
+- Still needed:
+- Live verification of:
+  - `GET /users/me/friends`
+  - `GET /users/me/friends/requests`
+  - `GET /users/me/friends/requests/sent`
+  - `GET /users/me/friends/suggestions`
+- Two-account/device validation for:
+  - send request
+  - accept request
+  - decline request
+  - unfriend
+- Presence runtime validation for:
+  - initial `presence.bulk`
+  - `presence.update` on quiz/match activity
+  - offline transitions on disconnect
+- Final cleanup/deprecation decision for `FriendDiscoveryService`
+- Flutter-enabled formatter/analyzer/test pass
 
 ### 1b.i Portable avatar/object-storage persistence REMAINING
 - Still needed:

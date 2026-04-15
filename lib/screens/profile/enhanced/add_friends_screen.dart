@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive/hive.dart';
-import '../../../core/services/social/friend_discovery_service.dart';
+import '../../../core/services/api_service.dart';
+import '../../../game/providers/friends_providers.dart';
 import '../../../game/providers/profile_providers.dart' hide currentUserIdProvider;
-import '../../../game/providers/message_providers.dart';
-import '../../messages/dialogs/create_dm_dialog.dart' show friendDiscoveryServiceProvider;
 
 class AddFriendByUsernameScreen extends ConsumerStatefulWidget {
   const AddFriendByUsernameScreen({super.key});
@@ -21,8 +20,6 @@ class _AddFriendByUsernameScreenState
   bool _isSending = false;
   String? _resultMessage;
   bool _isSuccess = false;
-
-  String get _currentUserId => ref.read(currentUserIdProvider);
   String get _currentUsername {
     if (Hive.isBoxOpen('settings')) {
       final name = Hive.box('settings').get('username') as String?;
@@ -329,7 +326,6 @@ class _AddFriendByUsernameScreenState
     try {
       final backendProfileService =
           ref.read(backendProfileSocialServiceProvider);
-      final friendService = ref.read(friendDiscoveryServiceProvider);
 
       final users = await backendProfileService.searchUsers(username);
       final targetUser = users.firstWhere(
@@ -360,68 +356,91 @@ class _AddFriendByUsernameScreenState
         return;
       }
 
-      // Check friendship status
-      final status =
-          friendService.getFriendshipStatus(_currentUserId, targetUserId);
+      final friendsResponse = await ref.refresh(friendsListProvider.future);
+      final incomingResponse =
+          await ref.refresh(incomingFriendRequestsProvider.future);
+      final sentResponse = await ref.refresh(sentFriendRequestsProvider.future);
 
-      switch (status) {
-        case FriendshipStatus.friends:
-          setState(() {
-            _resultMessage = 'You are already friends with $targetDisplayName';
-            _isSuccess = false;
-            _isSending = false;
-          });
-          return;
-
-        case FriendshipStatus.requestSent:
-          setState(() {
-            _resultMessage =
-                'Friend request already sent to $targetDisplayName';
-            _isSuccess = false;
-            _isSending = false;
-          });
-          return;
-
-        case FriendshipStatus.requestReceived:
-          setState(() {
-            _resultMessage =
-                '$targetDisplayName already sent you a friend request. Check your pending requests!';
-            _isSuccess = false;
-            _isSending = false;
-          });
-          return;
-
-        case FriendshipStatus.blocked:
-          setState(() {
-            _resultMessage = 'Unable to send friend request';
-            _isSuccess = false;
-            _isSending = false;
-          });
-          return;
-
-        case FriendshipStatus.notFriends:
-        // Send friend request
-          final success = await friendService.sendFriendRequest(
-            senderId: _currentUserId,
-            senderName: _currentUsername,
-            recipientId: targetUserId,
-          );
-
-          if (success) {
-            setState(() {
-              _resultMessage = 'Friend request sent to $targetDisplayName!';
-              _isSuccess = true;
-              _isSending = false;
-            });
-            _usernameController.clear();
-          } else {
-            setState(() {
-              _resultMessage = 'Failed to send friend request';
-              _isSuccess = false;
-              _isSending = false;
-            });
-          }
+      final alreadyFriends = friendsResponse.items.any(
+        (friend) => friend.friendPlayerId == targetUserId,
+      );
+      if (alreadyFriends) {
+        setState(() {
+          _resultMessage = 'You are already friends with $targetDisplayName';
+          _isSuccess = false;
+          _isSending = false;
+        });
+        return;
       }
+
+      final hasIncomingPendingRequest = incomingResponse.items.any(
+        (request) =>
+            request.fromPlayerId == targetUserId && request.isPending,
+      );
+      if (hasIncomingPendingRequest) {
+        setState(() {
+          _resultMessage =
+              '$targetDisplayName already sent you a friend request. Check your pending requests!';
+          _isSuccess = false;
+          _isSending = false;
+        });
+        return;
+      }
+
+      final alreadySentPendingRequest = sentResponse.items.any(
+        (request) =>
+            request.toPlayerId == targetUserId &&
+            request.status.toLowerCase() == 'pending',
+      );
+      if (alreadySentPendingRequest) {
+        setState(() {
+          _resultMessage = 'Friend request already sent to $targetDisplayName';
+          _isSuccess = false;
+          _isSending = false;
+        });
+        return;
+      }
+
+      final response = await backendProfileService.sendFriendRequest(targetUserId);
+
+      ref.invalidate(friendsListProvider);
+      ref.invalidate(incomingFriendRequestsProvider);
+      ref.invalidate(sentFriendRequestsProvider);
+      ref.invalidate(friendSuggestionsProvider);
+
+      final normalizedStatus = response.status.toLowerCase();
+      if (normalizedStatus == 'accepted') {
+        setState(() {
+          _resultMessage = 'You are already connected with $targetDisplayName';
+          _isSuccess = true;
+          _isSending = false;
+        });
+        _usernameController.clear();
+        return;
+      }
+
+      if (normalizedStatus == 'pending') {
+        setState(() {
+          _resultMessage = 'Friend request sent to $targetDisplayName!';
+          _isSuccess = true;
+          _isSending = false;
+        });
+        _usernameController.clear();
+        return;
+      }
+
+      setState(() {
+        _resultMessage = 'Friend request updated for $targetDisplayName.';
+        _isSuccess = true;
+        _isSending = false;
+      });
+      _usernameController.clear();
+    } on ApiRequestException catch (e) {
+      setState(() {
+        _resultMessage = e.message;
+        _isSuccess = false;
+        _isSending = false;
+      });
     } catch (e) {
       setState(() {
         _resultMessage = 'An error occurred. Please try again.';

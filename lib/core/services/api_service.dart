@@ -387,6 +387,33 @@ class ApiService {
     });
   }
 
+  /// Generic GET request for endpoints that return a JSON array.
+  Future<List<Map<String, dynamic>>> getList(String path,
+      {Map<String, String>? headers,
+        Map<String, dynamic>? queryParameters}) async {
+    return _handleRequest(() async {
+      final response = await _dio.get(
+        path,
+        queryParameters: queryParameters,
+        options: Options(headers: _buildJsonHeaders(path, headers)),
+      );
+
+      final data = response.data;
+      if (data is List) {
+        return data
+            .whereType<Map>()
+            .map((item) => _asJsonMap(item))
+            .toList(growable: false);
+      }
+
+      throw ApiRequestException(
+        'Expected a JSON array response',
+        statusCode: response.statusCode,
+        path: path,
+      );
+    });
+  }
+
   /// **🔹 Generic PATCH Request**
   Future<Map<String, dynamic>> patch(String path,
       {required Map<String, dynamic> body,

@@ -3,7 +3,7 @@
 
 ## Purpose
 
-This document reflects the **current state of the Friends screen implementation in the repo** as of 2026-04-14.
+This document reflects the **current state of the Friends screen implementation in the repo** as of 2026-04-15.
 
 It replaces the older migration-oriented wording that assumed several tasks were still pending locally. In reality, most of the UI and presence plumbing is already implemented. The main remaining work is backend alignment for authoritative friend data.
 
@@ -24,12 +24,15 @@ It replaces the older migration-oriented wording that assumed several tasks were
 - Friend detail bottom sheet uses `DetailedPresenceCard`.
 - Friend removal has partial backend wiring through `DELETE /friends`.
 - Add-friend-by-username search is backend-backed.
+- Friends list, incoming requests, and suggestions are backend-backed.
+- `CreateDMDialog` now uses the backend friends roster instead of the local mock social service.
+- The shared `/ws` connection path now appends `?playerId=<guid>` for presence compatibility.
 
 ## Not yet complete end-to-end
 
-- The main Friends screen still loads friend list, pending requests, and suggestions from the local/mock `friendDiscoveryServiceProvider`.
-- Authoritative backend friend list and request-management endpoints are not fully confirmed in the current alpha handoff.
 - Runtime validation for the full friend/presence flow is still needed against a live backend/WebSocket environment.
+- `FriendDiscoveryService` still exists in the repo and needs a final deprecation/removal decision.
+- A Flutter-enabled formatter/analyzer/test pass is still needed.
 
 ---
 
@@ -96,48 +99,31 @@ Current implementation includes:
 
 ## Backend Status Summary
 
-## Confirmed backend-facing capabilities in current repo/handoffs
+Backend contracts are now confirmed in:
 
-- `GET /users/search?handle=`
-- `DELETE /friends`
-- planned client/doc support for:
-  - `GET /users/{id}/friends`
-  - `POST /users/{id}/friends/request`
-  - `POST /users/{id}/friends/accept`
+- [friends_presence_backend_integration_handoff_2026-04-15.md](/c:/Users/lmxbl/StudioProjects/trivia_tycoon/docs/friends_presence_backend_integration_handoff_2026-04-15.md:1)
 
-## Important limitation
+Confirmed and now wired on the frontend:
 
-The current alpha handoff does **not** clearly confirm that the full friend-flow endpoints are deployed and ready for frontend use.
-
-The current frontend handoff explicitly indicates:
-
-- add-by-username search is backendized
-- unfriend is backendized
-- friend request create/accept remained local placeholder flow at handoff time
-
-Because of that, the Friends screen cannot yet be marked fully backend-complete.
+- `GET /users/me/friends`
+- `GET /users/me/friends/requests`
+- `GET /users/me/friends/requests/sent`
+- `GET /users/me/friends/suggestions`
+- `POST /users/me/friends/request`
+- `POST /users/me/friends/requests/{requestId}/accept`
+- `POST /users/me/friends/requests/{requestId}/decline`
+- legacy `DELETE /friends`
 
 ---
 
 ## What Still Uses Local Placeholder Data
 
-The following Friends screen data still comes from local/mock state:
+The main Friends, add-friend, and DM picker production paths are no longer using the local mock social service.
 
-- friend list
-- incoming requests
-- suggestions
+The remaining placeholder concern is repository cleanup:
 
-Current source:
-
-- [lib/core/services/social/friend_discovery_service.dart](/c:/Users/lmxbl/StudioProjects/trivia_tycoon/lib/core/services/social/friend_discovery_service.dart:1)
-
-Important note:
-
-- this service still calls `_loadMockData()`
-- it still manages local in-memory friendships
-- it still provides local pending requests and suggestions
-
-That means presence rendering is real-time, but the underlying friend roster is not yet guaranteed to be backend-authoritative.
+- [lib/core/services/social/friend_discovery_service.dart](/c:/Users/lmxbl/StudioProjects/trivia_tycoon/lib/core/services/social/friend_discovery_service.dart:1) still exists
+- a final decision is still needed on whether to deprecate it, keep it as dev-only fallback, or remove it from production paths entirely
 
 ---
 
@@ -216,30 +202,11 @@ _presenceService.setGameActivity(
 
 ## Remaining Work
 
-## Backend confirmation or implementation needed
-
-To complete the Friends screen properly, the backend team still needs to confirm or provide:
-
-- `GET /users/{id}/friends`
-- `POST /users/{id}/friends/request`
-- `POST /users/{id}/friends/accept`
-- pending friend requests list endpoint
-- decline friend request endpoint
-- optional suggestions endpoint if suggestions remain in scope
-- final error-code contract for duplicate/self/already-friends cases
-- confirmation that WebSocket presence payloads match the frontend implementation
-
-Detailed backend handoff note:
-
-- [docs/friends_backend_handoff_2026-04-14.md](/c:/Users/lmxbl/StudioProjects/trivia_tycoon/docs/friends_backend_handoff_2026-04-14.md:1)
-
-## Frontend code changes still needed after backend confirms
-
-- replace `friendDiscoveryServiceProvider` usage in `FriendsScreen`
-- load friends from backend source of truth
-- load pending requests from backend
-- accept/decline requests against backend
-- decide whether suggestions should come from backend or be hidden for alpha
+- run live validation for friends, requests, suggestions, and presence
+- verify that `presence.bulk` and `presence.update` behave correctly across two logged-in users
+- confirm that the patched `?playerId=<guid>` WebSocket path works in all target runtimes
+- decide whether `FriendDiscoveryService` should be deprecated or removed
+- run formatter/analyzer/tests in a Flutter-enabled environment
 
 ---
 
@@ -252,15 +219,18 @@ Detailed backend handoff note:
 - [x] Presence WebSocket adapter exists
 - [x] Rich presence service exists
 - [x] App startup initializes presence service
+- [x] Shared `/ws` connection now includes `playerId`
 - [x] Friends screen uses `PresenceStatusIndicator`
 - [x] Friends screen uses `DetailedPresenceCard`
 - [x] Friends screen subscribes to friend presence
 - [x] Quiz/match activity updates current user presence
 - [x] Friend model exists in the screen implementation
+- [x] Friends screen loads backend friend data
+- [x] Add-friend flow uses backend request state
+- [x] Message recipient picker uses backend friends roster
 
 ## Still requires runtime verification
 
-- [ ] Friends screen loads real backend friend data
 - [ ] Online friends count matches backend/user reality
 - [ ] Friend status shows live activity from server events
 - [ ] Logs show successful presence subscriptions in a live session
@@ -286,6 +256,10 @@ This keeps the already-good presence implementation intact while avoiding a part
 
 ## Bottom Line
 
-The Friends screen is **mostly complete on the frontend from a UI and presence perspective**.
+The Friends screen and related social entry points are now **mostly complete and backend-wired at the code level**.
 
-It is **not yet fully complete as a product feature** because the main roster/request data path still depends on local placeholder data and the full backend friend contract is not yet confirmed in the current alpha handoff.
+The remaining work is no longer contract uncertainty. It is now primarily:
+
+- runtime verification
+- cleanup/deprecation of old local mock social infrastructure
+- final formatter/analyzer/test validation
