@@ -1,6 +1,6 @@
 # Synaptix Alpha Outstanding Task Audit
 
-_Date: 2026-03-31 | Last updated: 2026-04-12_
+_Date: 2026-03-31 | Last updated: 2026-04-14_
 
 ## 0) ProfileSyncService 404/backoff root cause (resolved) ✅
 
@@ -260,3 +260,40 @@ covering all remaining work across:
 - Sprint 2 networking layer (not started)
 - Synaptix runtime validation (device-blocked)
 - Backend Packet E (deferred)
+
+## 9) 2026-04-14 profile persistence and local web auth follow-up
+
+### Onboarding country-step overflow ✅ FIXED
+- `lib/screens/onboarding/steps/country_step.dart` was still using an older
+  fixed-height Column layout and could overflow on shorter devices by more than
+  100 px.
+- The step now uses the shared onboarding shell and a scroll-safe content area,
+  which removes the RenderFlex bottom overflow seen on emulator/device.
+
+### Local web auth diagnosis ✅ FRONTEND-SIDE CAUSE NARROWED
+- The earlier 2026-04-09 fix resolved Flutter web startup failure.
+- Follow-up tracing on 2026-04-14 showed a separate local auth/runtime mismatch:
+  some frontend config still pointed at `https://localhost:5000`, while the
+  locally reachable backend path was `http://localhost:5000`.
+- Frontend local defaults were aligned to HTTP for local browser testing.
+
+### Profile restore after emulator wipe ✅ FRONTEND HYDRATION PATCHED
+- Root cause:
+  - onboarding only synced `displayName` + `username` to backend
+  - startup profile load only re-read local Hive state
+  - after clearing emulator data, there was no local state to restore and no
+    backend profile fetch to repopulate it
+- Resolution applied:
+  - onboarding profile sync expanded to include country, age group, preferred
+    categories, Synaptix mode, and preferred home surface
+  - login/signup now attempt backend profile hydration immediately after auth
+  - bootstrap now attempts backend profile hydration for logged-in users before
+    falling back to local Hive
+  - queued profile sync retries are now triggered during bootstrap
+
+### Remaining profile-storage gap ⚠️ STILL OPEN
+- Picked avatar image files are still only local-device file paths unless they
+  already resolve to an asset path or backend-served URL.
+- Full portable avatar persistence requires an upload flow backed by object
+  storage (MinIO or equivalent), returning a stable object URL or object key
+  that can be stored in both backend profile data and Hive.

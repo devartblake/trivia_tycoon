@@ -15,6 +15,29 @@ Backend branch:
 Date:
 - `2026-04-12`
 
+## Status update (2026-04-14)
+
+The initial frontend crypto slice is no longer purely planned. The following are
+implemented in the app codebase:
+
+- shared crypto models and validation utilities
+- `CryptoService` service-layer wrapper
+- Riverpod provider wiring for wallet/profile consumption
+- a base wallet screen
+- transaction history section
+- withdraw action flow
+- pending-withdraw polling behavior
+- history pagination / "view all" path
+- profile-surface crypto summary/branding
+
+Still remaining for the crypto track:
+
+- final live backend/runtime verification in a Flutter-enabled environment
+- broader widget/integration test coverage for the crypto UI flows
+- any backend-confirmed gating for Phase 2 networks (`snx`, `shib`)
+- portable avatar/object-storage work is separate from crypto and remains tracked
+  in the main backlog
+
 ---
 
 ## 1. System Overview

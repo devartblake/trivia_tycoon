@@ -8,6 +8,45 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Updated - Local web auth, onboarding profile restore, and persistence status (2026-04-14)
+
+Closed the latest frontend-side gaps around local web auth diagnostics,
+onboarding layout stability, and backend profile rehydration after emulator/data
+wipes. This work also clarified the remaining backend/object-storage dependency
+for portable avatar images.
+
+**Changes:**
+- `lib/core/env.dart` - confirmed web runtime rewrites `10.0.2.2` to
+  `localhost` for browser-based API access.
+- `assets/config/config.json` - local web API defaults aligned to
+  `http://localhost:5000` instead of `https://localhost:5000`.
+- `lib/core/services/analytics/config_service.dart` - local fallback/default API
+  base URL aligned to `http://localhost:5000`.
+- `.env.example` - updated local example API URL to the HTTP local backend path.
+- `lib/screens/onboarding/steps/country_step.dart` - rebuilt onto the shared
+  onboarding step shell with a scroll-safe layout to eliminate bottom overflow
+  on shorter screens.
+- `lib/core/services/settings/profile_sync_service.dart` - expanded profile sync
+  from name/username-only to broader profile fields; added remote profile fetch
+  and normalization for startup/login hydration.
+- `lib/core/services/settings/player_profile_service.dart` - batch profile save
+  now persists backend-hydrated preferred categories.
+- `lib/screens/onboarding/onboarding_screen.dart` - onboarding completion now
+  syncs country, age group, categories, Synaptix mode, preferred surface, and
+  syncable avatar references to backend in addition to local Hive saves.
+- `lib/game/providers/auth_providers.dart` - login/signup now attempt remote
+  profile hydration after auth succeeds.
+- `lib/core/bootstrap/app_init.dart` - logged-in bootstrap now prefers backend
+  profile hydration and retries queued profile sync updates before falling back
+  to local Hive-only state.
+
+**Status note:**
+- Profile text/preferences now persist locally and are wired to persist to the
+  backend when the backend profile endpoint supports the normalized payload.
+- Portable avatar image persistence is still **not complete** for picked device
+  files; that requires a backend-backed upload flow (for example via MinIO) so
+  the frontend can store a stable object URL/key instead of a local file path.
+
 ### Added - Alpha handoff partial frontend/backend wiring completion (2026-04-12)
 
 Closed the remaining alpha handoff items that were already partly underway on
