@@ -261,14 +261,25 @@ class _GameMenuScreenState extends ConsumerState<GameMenuScreen>
       'surface': 'rewards',
     };
 
+    final learnHub = {
+      'label': 'Learn Hub',
+      'subtitle': 'Study & earn XP',
+      'icon': Icons.school_rounded,
+      'gradient': const LinearGradient(
+        colors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
+      ),
+      'route': '/learn-hub',
+      'surface': 'learn',
+    };
+
     // Mode-aware emphasis ordering
     switch (mode) {
       case SynaptixMode.kids:
-        return [labs, journey, rewards, arena, pathways, circles];
+        return [labs, journey, learnHub, rewards, arena, pathways, circles];
       case SynaptixMode.teen:
-        return [arena, pathways, labs, circles, journey, rewards];
+        return [arena, pathways, learnHub, labs, circles, journey, rewards];
       case SynaptixMode.adult:
-        return [arena, journey, pathways, labs, circles, rewards];
+        return [arena, journey, learnHub, pathways, labs, circles, rewards];
     }
   }
 }

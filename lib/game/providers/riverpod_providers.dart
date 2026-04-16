@@ -38,3 +38,4 @@ export 'question_providers.dart';
 export 'provider_bridge.dart';
 export 'power_up_timer_provider.dart';
 export 'notification_providers.dart';
+export 'learning_providers.dart';
