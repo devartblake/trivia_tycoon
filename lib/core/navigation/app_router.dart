@@ -90,6 +90,11 @@ import '../../ui_components/confetti/ui/confetti_settings.dart';
 import '../../ui_components/depth_card_3d/theme_editor/gradient_editor_screen.dart';
 import '../../ui_components/qr_code/screens/qr_scan_settings_screen.dart';
 import '../../ui_components/qr_code/screens/qr_scanner_screen.dart';
+import '../dto/learning_dto.dart';
+import '../../screens/learn_hub/learn_hub_screen.dart';
+import '../../screens/learn_hub/lesson_screen.dart';
+import '../../screens/learn_hub/module_complete_screen.dart';
+import '../../screens/learn_hub/module_detail_screen.dart';
 import '../../screens/login_screen.dart';
 import '../../screens/onboarding/onboarding_screen.dart';
 import '../../screens/profile/avatar_selection_screen.dart';
@@ -699,6 +704,41 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/crossword',
         name: 'crossword',
         builder: (context, state) => const CrosswordScreen(),
+        redirect: onboardingGuard,
+      ),
+
+      /// 📚 Learn Hub
+      GoRoute(
+        path: '/learn-hub',
+        name: 'learn-hub',
+        builder: (context, state) => const LearnHubScreen(),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/learn-hub/module/:moduleId',
+        name: 'module-detail',
+        builder: (context, state) => ModuleDetailScreen(
+          moduleId: state.pathParameters['moduleId']!,
+        ),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/learn-hub/module/:moduleId/lessons',
+        name: 'module-lessons',
+        builder: (context, state) => LessonScreen(
+          moduleId: state.pathParameters['moduleId']!,
+        ),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/learn-hub/module/:moduleId/complete',
+        name: 'module-complete',
+        builder: (context, state) => ModuleCompleteScreen(
+          moduleId: state.pathParameters['moduleId']!,
+          completionData: state.extra is ModuleCompleteResponseDto
+              ? state.extra as ModuleCompleteResponseDto
+              : null,
+        ),
         redirect: onboardingGuard,
       ),
 
