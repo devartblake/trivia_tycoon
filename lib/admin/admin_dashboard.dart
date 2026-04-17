@@ -3,10 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/admin/leaderboard/leaderboard_filter_screen.dart';
 import 'package:trivia_tycoon/admin/questions/question_list_screen.dart';
-import 'package:trivia_tycoon/admin/splash_screen/splash_selector_screen.dart';
-import 'package:trivia_tycoon/admin/audio/admin_audio_player_screen.dart';
 import 'package:trivia_tycoon/admin/providers/admin_auth_providers.dart';
-import '../screens/widgets/slimy_card_preview_screen.dart';
 import 'analytics/analytics_screen.dart';
 import 'audit/admin_audit_log_screen.dart';
 import 'config/config_settings_screen.dart';
@@ -378,22 +375,14 @@ class AdminDashboardScreen extends ConsumerWidget {
         subtitle: 'Demonstration of card options',
         icon: Icons.style_rounded,
         color: Colors.teal,
-        onTap: () =>
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const SlimyCardPreviewScreen()),
-            ),
+        onTap: () => context.push('/admin/card-demo'),
       ),
       _AdminAction(
         title: 'Splash Selector',
         subtitle: 'Choose and preview animated splash screens',
         icon: Icons.play_circle_rounded,
         color: Colors.orange,
-        onTap: () =>
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const SplashSelectorScreen()),
-            ),
+        onTap: () => context.push('/admin/splash-selector'),
       ),
       _AdminAction(
         title: 'Events Queue',
@@ -442,10 +431,7 @@ class AdminDashboardScreen extends ConsumerWidget {
         subtitle: 'Manage music + SFX playback',
         icon: Icons.graphic_eq_rounded,
         color: Colors.deepOrange,
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const AdminAudioPlayerScreen()),
-        ),
+        onTap: () => context.push('/admin/audio-studio'),
       ),
       _AdminAction(
         title: 'Question Editor',

@@ -41,7 +41,7 @@ class GameResultScreen extends StatelessWidget {
     this.onPlayAgain,
   });
 
-  /// Presents the result screen as a full-screen page.
+  /// Presents the result screen as a full-screen overlay.
   static Future<void> show({
     required BuildContext context,
     required GameResultConfig config,
@@ -49,15 +49,20 @@ class GameResultScreen extends StatelessWidget {
     VoidCallback? onClose,
     VoidCallback? onPlayAgain,
   }) {
-    return Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => GameResultScreen(
-          config: config,
-          onShare: onShare,
-          onClose: onClose,
-          onPlayAgain: onPlayAgain,
-        ),
+    return showGeneralDialog(
+      context: context,
+      pageBuilder: (context, animation, secondaryAnimation) => GameResultScreen(
+        config: config,
+        onShare: onShare,
+        onClose: onClose,
+        onPlayAgain: onPlayAgain,
       ),
+      transitionBuilder: (context, animation, secondaryAnimation, child) =>
+          FadeTransition(opacity: animation, child: child),
+      transitionDuration: const Duration(milliseconds: 250),
+      barrierDismissible: false,
+      barrierLabel: 'Game Result',
+      barrierColor: Colors.black54,
     );
   }
 

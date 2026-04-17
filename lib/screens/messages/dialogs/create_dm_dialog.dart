@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/models/social/friend_list_item_dto.dart';
 import '../../../game/providers/friends_providers.dart';
 import '../../../game/providers/message_providers.dart';
-import '../../profile/dialogs/add_friend_dialog.dart';
-import '../message_detail_screen.dart';
 
 class CreateDMDialog extends ConsumerStatefulWidget {
   const CreateDMDialog({super.key});
@@ -50,7 +49,7 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.close, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.pop(),
         ),
         title: const Text(
           'New Message',
@@ -283,12 +282,7 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
   }
 
   void _showAddFriendDialog() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const AddFriendDialog(),
-        fullscreenDialog: true,
-      ),
-    );
+    context.push('/messages/add-friend');
   }
 
   Widget _buildUsersList(List<FriendListItemDto> users) {
@@ -489,19 +483,13 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
         );
 
         if (conversation != null && mounted) {
-          Navigator.pop(context);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MessageDetailScreen(
-                conversationId: conversation.id,
-                contactName: otherUser.displayName,
-                contactAvatar: otherUser.avatarUrl,
-                isOnline: otherUser.isOnline,
-                currentActivity: null,
-              ),
-            ),
-          );
+          context.pop();
+          context.push('/messages/detail/${conversation.id}', extra: {
+            'contactName': otherUser.displayName,
+            'contactAvatar': otherUser.avatarUrl,
+            'isOnline': otherUser.isOnline,
+            'currentActivity': null,
+          });
         }
       } else {
         final selectedUsers = _selectedUserIds
@@ -517,7 +505,7 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
               backgroundColor: const Color(0xFF5865F2),
             ),
           );
-          Navigator.pop(context);
+          context.pop();
         }
       }
     } catch (e) {

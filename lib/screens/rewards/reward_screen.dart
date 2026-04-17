@@ -155,7 +155,7 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
 
   // Helper method to handle all back navigation with claim status
   void _handleBackNavigation() {
-    Navigator.of(context).pop(_claimedDuringThisSession);
+    context.pop(_claimedDuringThisSession);
   }
 
   @override

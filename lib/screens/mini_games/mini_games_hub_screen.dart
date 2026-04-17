@@ -221,7 +221,7 @@ class MiniGamesHubScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
           child: IconButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => context.pop(),
             icon: const Icon(
               Icons.arrow_back,
               color: Colors.white,
