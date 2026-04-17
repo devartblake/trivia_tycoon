@@ -4,6 +4,8 @@
 **Audience:** Frontend Team, Backend/API Team, Platform Team  
 **Purpose:** Define the supported architecture and contract boundary for question flows so the frontend can integrate against stable question APIs without depending on undocumented fallback behavior.
 
+> **Status update:** Training-oriented frontend work is now pivoting to learning modules. Use [LEARNING_MODULES_API_HANDOFF.md](/c:/Users/lmxbl/Documents/TycoonTycoon_Backend/docs/LEARNING_MODULES_API_HANDOFF.md) as the primary frontend handoff for guided study/training flows. This document remains relevant only for competitive `/questions/*` gameplay endpoints.
+
 ---
 
 ## 1. Purpose and Contract Status
@@ -40,9 +42,16 @@ Why this is the recommended model:
 | REST/API | `GET /questions/set` | `canonical` | Current supported question retrieval route |
 | REST/API | `POST /questions/check` | `canonical` | Current supported single-answer grading route |
 | REST/API | `POST /questions/check-batch` | `canonical` | Current supported batch grading route |
-| REST/API | `/quiz/*` question routes | `unsupported` | Not implemented today unless explicitly added later as API aliases |
-| REST/API | `/questions/*/stats`, `/questions/mixed`, `/questions/datasets/info` | `unsupported` | Frontend must not assume these exist today |
-| API compatibility | Alternate request/response shims for frontend stability | `planned` | Add only minimal additive shims where they reduce breakage |
+| REST/API | `/quiz/play` question route | `unsupported` | Not implemented today; do not assume legacy play fallback exists |
+| REST/API | `GET /quiz/daily` | `compatibility` | Implemented as a compatibility retrieval alias with `items/questions/data + meta` |
+| REST/API | `GET /quiz/mixed` | `compatibility` | Implemented as a compatibility retrieval alias with `items/questions/data + meta` |
+| REST/API | `GET /questions/mixed` | `compatibility` | Implemented as a compatibility retrieval alias with `items/questions/data + meta` |
+| REST/API | `GET /quiz/categories` | `compatibility` | Implemented as a compatibility discovery surface with `items/categories/data` |
+| REST/API | `GET /quiz/stats` and `GET /questions/stats` | `compatibility` | Implemented as lightweight global question stats |
+| REST/API | `GET /quiz/categories/{slug}/stats` and `GET /questions/categories/{slug}/stats` | `compatibility` | Implemented as lightweight category stats |
+| REST/API | `GET /quiz/datasets/info` and `GET /questions/datasets/info` | `compatibility` | Implemented as lightweight dataset metadata |
+| REST/API | `/quiz/classes/{classId}/stats`, `/questions/classes/{classId}/stats` | `unsupported` | Frontend must not assume class stats exist today |
+| API compatibility | Alternate grading request/response shims for frontend stability | `compatibility` | Text answer aliases are accepted in grading while option-ID remains canonical |
 | `Tycoon.Sidecar` | Mixed/daily curation helpers, normalization, inference | `planned` | Internal-only behind API if needed |
 | mobile gRPC | Live match/session streaming | `canonical` | Already the correct place for low-latency gameplay streaming |
 | mobile gRPC | Category browsing, daily discovery, dataset metadata | `unsupported` | Do not move repository/discovery flows here in this phase |
@@ -226,24 +235,52 @@ This section defines what the frontend can rely on immediately.
 The following are currently **unsupported** unless the API explicitly adds them later:
 
 - `GET /quiz/play`
-- `GET /quiz/mixed`
-- `GET /questions/mixed`
-- `GET /quiz/daily`
-- `GET /quiz/categories`
-- `GET /quiz/stats`
-- `GET /questions/stats`
-- `GET /quiz/categories/{slug}/stats`
-- `GET /questions/categories/{slug}/stats`
 - `GET /quiz/classes/{classId}/stats`
 - `GET /questions/classes/{classId}/stats`
-- `GET /quiz/datasets/info`
-- `GET /questions/datasets/info`
 
 Current disposition for these surfaces:
 
 - **stay frontend fallback only** until explicitly implemented in API
 - **do not** move them into sidecar as public endpoints
 - **do not** move them into mobile gRPC as discovery substitutes
+
+### Compatibility routes implemented in this phase
+
+The following compatibility routes are now available in the API:
+
+- `GET /quiz/daily`
+- `GET /quiz/mixed`
+- `GET /questions/mixed`
+- `GET /quiz/categories`
+- `GET /quiz/stats`
+- `GET /questions/stats`
+- `GET /quiz/categories/{slug}/stats`
+- `GET /questions/categories/{slug}/stats`
+- `GET /quiz/datasets/info`
+- `GET /questions/datasets/info`
+
+These routes return a compatibility collection envelope:
+
+```json
+{
+  "items": [ ... ],
+  "questions": [ ... ],
+  "data": [ ... ],
+  "meta": {
+    "source": "backend",
+    "count": 10
+  }
+}
+```
+
+These are compatibility surfaces, not the long-term canonical question contract.
+
+For discovery/object-style compatibility routes, the API now returns lightweight frontend-friendly objects:
+
+- `/quiz/categories` with `items`, `categories`, `data`
+- `/quiz/stats` and `/questions/stats` with `totalQuestions`, `questionCount`, `total`, category counts, and `source`
+- `/quiz/categories/{slug}/stats` and `/questions/categories/{slug}/stats` with `questionCount`, `totalQuestions`, `total`, `difficulty`, and `source`
+- `/quiz/datasets/info` and `/questions/datasets/info` with `name`, `datasetName`, `version`, question totals, and `source`
 
 ### Planned compatibility-only additions
 
@@ -258,6 +295,12 @@ Good examples:
 - accepting alternate grading field names temporarily
 - adding optional metadata fields without changing canonical fields
 - adding a small alias route that maps to canonical question retrieval if that reduces immediate frontend churn
+
+Implemented in this phase:
+
+- `POST /questions/check` accepts `selectedOptionId` as canonical and also tolerates `selectedAnswer` / `answer`
+- `POST /questions/check-batch` accepts the same per-answer compatibility fields
+- grading responses now include `correctAnswer` and `source` in addition to canonical option-ID fields
 
 Bad examples:
 
@@ -333,10 +376,7 @@ Temporary compatibility should:
 
 Until implemented in API, the frontend should continue to treat these as local-fallback-only concerns:
 
-- category discovery if no API route exists
 - class stats/category assumptions
-- daily or mixed discovery if no API route exists
-- dataset metadata
 - any parser assumptions based on legacy `/quiz/*` routes that do not exist in the backend
 
 ### Logging and banner guidance

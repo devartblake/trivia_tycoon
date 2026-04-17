@@ -8,6 +8,40 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Updated - Question launch categorization and backend handoff alignment (2026-04-17)
+
+Closed the next question-flow follow-up by repairing category/class/daily quiz
+launch behavior, routing curated question sets directly into gameplay, and
+capturing the full frontend/backend question contract surface in a dedicated
+handoff document.
+
+**Changes:**
+- `lib/core/navigation/app_router.dart` - `/quiz/play` now detects quiz launch
+  payloads and routes directly into `AdaptedQuestionScreen` when category,
+  class, daily, or explicit question-list context is provided.
+- `lib/game/state/quiz_state.dart` - added direct quiz startup from curated
+  `QuestionModel` lists via `startQuizWithQuestions(...)`.
+- `lib/screens/question/question_view_screen.dart` - gameplay screen now accepts
+  initial curated questions and display-title overrides.
+- `lib/screens/question/categories/category_quiz_screen.dart` - category quiz
+  launch now filters and launches the selected category question set directly.
+- `lib/screens/question/categories/class_quiz_screen.dart` - class quiz launch
+  now uses real `QuizCategory` subjects and launches curated subject question
+  sets directly.
+- `lib/screens/question/categories/daily_quiz_screen.dart` - daily quiz screen
+  now previews today’s question set and launches that exact curated daily set.
+- `docs/question_flow_frontend_backend_handoff_2026-04-15.md` - added a
+  backend-facing question flow contract/handoff document covering endpoints,
+  envelopes, fallback behavior, and remaining contract gaps.
+- `docs/TRIVIA_TYCOON_UPDATE_CHECKLIST.md` - replaced the stale auth-only
+  checklist with a current project status snapshot and actionable verification
+  checklist.
+
+**Remaining for this workstream:**
+- backend confirmation of canonical question endpoint and envelope contracts
+- live runtime validation of category/class/daily quiz flows in a Flutter-enabled environment
+- targeted analyze/test pass once Flutter tooling is available locally
+
 ### Updated - Social auth allowlist, menu wallet sync, and question source visibility (2026-04-15)
 
 Closed the next frontend follow-up gaps after the friends/presence migration by
