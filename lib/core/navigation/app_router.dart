@@ -117,6 +117,27 @@ import '../../screens/settings/user_settings_screen.dart';
 import 'main_nav_bar.dart';
 import 'navigation_redirect_service.dart';
 
+// ── Screens registered in this pass ─────────────────────────────────────────
+import '../../arcade/domain/arcade_difficulty.dart';
+import '../../arcade/domain/arcade_game_definition.dart';
+import '../../arcade/ui/screens/arcade_game_shell.dart';
+import '../../admin/audio/admin_audio_player_screen.dart';
+import '../../admin/splash_screen/splash_selector_screen.dart';
+import '../../game/models/leaderboard_entry.dart';
+import '../../screens/group_chat/group_settings_screen.dart';
+import '../../screens/messages/message_detail_screen.dart';
+import '../../screens/messages/dialogs/create_dm_dialog.dart';
+import '../../screens/messages/dialogs/message_request_dialog.dart';
+import '../../screens/notifications/notification_detail_screen.dart';
+import '../../screens/profile/dialogs/add_friend_dialog.dart';
+import '../../screens/profile/enhanced/enhanced_profile_screen.dart';
+import '../../screens/profile/user_profile_screen.dart';
+import '../../screens/search/dialogs/search_dialog.dart';
+import '../../screens/spectate/spectate_mode_screen.dart';
+import '../../screens/store/crypto_wallet_screen.dart';
+import '../../screens/widgets/slimy_card_preview_screen.dart';
+import '../../ui_components/spin_wheel/ui/screen/wheel_screen.dart';
+
 // Reactive router provider that rebuilds when navigation state changes
 final goRouterProvider = Provider<GoRouter>((ref) {
   // Watch navigation state to trigger rebuilds
@@ -301,6 +322,21 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               userId: state.uri.queryParameters['userId'],
             ),
           ),
+          GoRoute(
+            path: '/admin/card-demo',
+            name: 'admin-card-demo',
+            builder: (context, state) => const SlimyCardPreviewScreen(),
+          ),
+          GoRoute(
+            path: '/admin/splash-selector',
+            name: 'admin-splash-selector',
+            builder: (context, state) => const SplashSelectorScreen(),
+          ),
+          GoRoute(
+            path: '/admin/audio-studio',
+            name: 'admin-audio-studio',
+            builder: (context, state) => const AdminAudioPlayerScreen(),
+          ),
         ],
       ),
 
@@ -361,6 +397,18 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/arcade/local-leaderboards',
         builder: (context, state) => const LocalArcadeLeaderboardScreen(),
       ),
+      GoRoute(
+        path: '/arcade/play',
+        name: 'arcade-play',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          return ArcadeGameShell(
+            game: extra['game'] as ArcadeGameDefinition,
+            difficulty: extra['difficulty'] as ArcadeDifficulty,
+          );
+        },
+        redirect: onboardingGuard,
+      ),
 
       /// Leaderboard Routes
       GoRoute(
@@ -372,6 +420,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/spin-earn',
         builder: (context, state) => const SpinEarnScreen(),
+      ),
+      GoRoute(
+        path: '/spin-earn/wheel',
+        name: 'spin-wheel',
+        builder: (context, state) => const WheelScreen(),
+        redirect: onboardingGuard,
       ),
       GoRoute(
         path: '/missions',
@@ -421,6 +475,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/store',
         name: 'Store',
         builder: (context, state) => StoreScreen()
+      ),
+      GoRoute(
+        path: '/store/crypto-wallet',
+        name: 'crypto-wallet',
+        builder: (context, state) => const CryptoWalletScreen(),
+        redirect: onboardingGuard,
       ),
       GoRoute(
         path: '/store/payment-return',
@@ -764,6 +824,32 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const AddFriendByUsernameScreen(),
       ),
       GoRoute(
+        path: '/profile/enhanced/:userId',
+        name: 'enhanced-profile',
+        builder: (context, state) => EnhancedProfileScreen(
+          userId: state.pathParameters['userId']!,
+          currentUserId:
+              state.uri.queryParameters['currentUserId'] ?? '',
+          isOwnProfile:
+              state.uri.queryParameters['isOwnProfile'] == 'true',
+        ),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/spectate/:gameId',
+        name: 'spectate',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? {};
+          return SpectateModeScreen(
+            gameId: state.pathParameters['gameId']!,
+            currentUserId: extra['currentUserId'] as String? ?? '',
+            currentUserDisplayName:
+                extra['currentUserDisplayName'] as String? ?? '',
+          );
+        },
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
         path: '/avatar-selection',
         name: 'Avatar Selection',
         builder: (context, state) => const AvatarSelectionScreen(),
@@ -779,6 +865,74 @@ final goRouterProvider = Provider<GoRouter>((ref) {
        name: 'Messages',
        builder: (context, state) => const MessagesScreen(),
        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/messages/detail/:conversationId',
+        name: 'message-detail',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? {};
+          return MessageDetailScreen(
+            conversationId: state.pathParameters['conversationId']!,
+            contactName: extra['contactName'] as String? ?? 'Direct Message',
+            contactAvatar: extra['contactAvatar'] as String?,
+            isOnline: extra['isOnline'] as bool? ?? false,
+            currentActivity: extra['currentActivity'] as String?,
+          );
+        },
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/messages/search',
+        name: 'messages-search',
+        pageBuilder: (context, state) => const MaterialPage(
+          fullscreenDialog: true,
+          child: SearchDialog(),
+        ),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/messages/add-friend',
+        name: 'messages-add-friend',
+        pageBuilder: (context, state) => const MaterialPage(
+          fullscreenDialog: true,
+          child: AddFriendDialog(),
+        ),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/messages/requests',
+        name: 'messages-requests',
+        pageBuilder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? {};
+          return MaterialPage(
+            fullscreenDialog: true,
+            child: MessageRequestDialog(
+              requestCount: extra['requestCount'] as int? ?? 0,
+              onRequestHandled:
+                  extra['onRequestHandled'] as void Function(bool)? ??
+                      (_) {},
+            ),
+          );
+        },
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/messages/new',
+        name: 'messages-new',
+        pageBuilder: (context, state) => const MaterialPage(
+          fullscreenDialog: true,
+          child: CreateDMDialog(),
+        ),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/messages/group/:groupId/settings',
+        name: 'group-settings',
+        builder: (context, state) => GroupSettingsScreen(
+          groupId: state.pathParameters['groupId']!,
+          currentUserId: state.extra as String? ?? '',
+        ),
+        redirect: onboardingGuard,
       ),
 
       /// ⚡ Quick Actions Routes (Referenced in Enhanced GridMenuSection)
@@ -846,6 +1000,22 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/notifications',
         name: 'Notifications',
         builder: (context, state) => const NotificationsScreen(),
+      ),
+      GoRoute(
+        path: '/notifications/detail',
+        name: 'notification-detail',
+        builder: (context, state) => NotificationDetailScreen(
+          notification: state.extra as InboxItem,
+        ),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/leaderboard/player',
+        name: 'leaderboard-player',
+        builder: (context, state) => UserProfileScreen(
+          entry: state.extra as LeaderboardEntry,
+        ),
+        redirect: onboardingGuard,
       ),
       GoRoute(
         path: '/qr-scanner',

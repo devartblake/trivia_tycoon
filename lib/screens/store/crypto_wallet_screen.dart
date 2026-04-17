@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/models/crypto/crypto_api_error.dart';
 import '../../core/models/crypto/crypto_history_item.dart';
@@ -448,7 +449,7 @@ class _LinkWalletSheetState extends ConsumerState<_LinkWalletSheet> {
           );
 
       if (!mounted) return;
-      Navigator.of(context).pop();
+      context.pop();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Wallet linked successfully.'),
@@ -680,7 +681,7 @@ class _WithdrawSheetState extends ConsumerState<_WithdrawSheet> {
           );
 
       if (!mounted) return;
-      Navigator.of(context).pop();
+      context.pop();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Withdrawal requested. Status will remain pending until settled.'),

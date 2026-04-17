@@ -340,12 +340,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
       context.push(item.actionRoute!, extra: item.payload);
     }
     // Navigate to detail screen
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => NotificationDetailScreen(notification: item),
-      ),
-    );
+    context.push('/notifications/detail', extra: item);
   }
 
   void _dismissNotification(String id) {

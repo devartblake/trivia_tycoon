@@ -797,14 +797,7 @@ class ArcadeHubScreen extends ConsumerWidget {
     if (selected == null) return;
 
     // ignore: use_build_context_synchronously
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => ArcadeGameShell(
-          game: game,
-          difficulty: selected,
-        ),
-      ),
-    );
+    await context.push('/arcade/play', extra: {'game': game, 'difficulty': selected});
   }
 
   Widget _buildModernDifficultyPicker(ArcadeGameDefinition game) {

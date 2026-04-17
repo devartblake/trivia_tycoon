@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/core/animations/animation_manager.dart';
+import 'package:go_router/go_router.dart';
 import '../../../game/models/leaderboard_entry.dart';
 import '../../leaderboard/widgets/shimmer_avatar.dart';
-import '../../profile/user_profile_screen.dart';
 
 class LeaderboardCard extends StatefulWidget {
   final LeaderboardEntry entry;
@@ -61,12 +60,7 @@ class _LeaderboardCardState extends State<LeaderboardCard> with SingleTickerProv
 
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(
-          AnimationManager.slideTransition(
-            page: UserProfileScreen(entry: entry),
-            direction: SlideDirection.right,
-          ),
-        );
+        context.push('/leaderboard/player', extra: entry);
       },
 
       child: AnimatedContainer(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'dialogs/add_friend_dialog.dart';
 import '../../core/services/api_service.dart';
 import '../../core/models/social/friend_list_item_dto.dart';
@@ -335,7 +336,7 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
             size: 18,
           ),
         ),
-        onPressed: () => Navigator.of(context).pop(),
+        onPressed: () => context.pop(),
       ),
       title: Row(
         children: [
@@ -901,11 +902,7 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
   }
 
   void _showAddFriendDialog() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const AddFriendDialog(),
-      ),
-    );
+    context.push('/messages/add-friend');
   }
 
   Future<void> _acceptFriendRequest(Friend friend) async {
@@ -977,15 +974,12 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
         final conversation = findOrCreateDirectConversation(ref, _currentUserId, friend.id);
         if (conversation != null) {
           final presence = _presenceService.getUserPresence(friend.id);
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => MessageDetailScreen(
-              conversationId: conversation.id,
-              contactName: friend.name,
-              contactAvatar: friend.avatar,
-              isOnline: presence?.status == PresenceStatus.online || presence?.status == PresenceStatus.inGame,
-              currentActivity: presence != null ? _presenceService.getFormattedPresence(friend.id) : null,
-            ),
-          ));
+          context.push('/messages/detail/${conversation.id}', extra: {
+            'contactName': friend.name,
+            'contactAvatar': friend.avatar,
+            'isOnline': presence?.status == PresenceStatus.online || presence?.status == PresenceStatus.inGame,
+            'currentActivity': presence != null ? _presenceService.getFormattedPresence(friend.id) : null,
+          });
         }
         break;
       case 'challenge':

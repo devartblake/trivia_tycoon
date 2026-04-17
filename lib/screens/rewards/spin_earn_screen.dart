@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
 import 'package:trivia_tycoon/screens/rewards/widgets/reward_stepper_slider_widget.dart';
-import 'package:trivia_tycoon/ui_components/spin_wheel/ui/screen/wheel_screen.dart';
 import '../../game/analytics/services/analytics_service.dart';
 import '../../game/models/reward_step_models.dart';
 import '../../game/providers/riverpod_providers.dart';
@@ -364,8 +363,8 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
       leading: IconButton(
         onPressed: () async {
           await _trackUserAction('back_button_pressed');
-          if (Navigator.canPop(context)) {
-            Navigator.pop(context);
+          if (context.canPop()) {
+            context.pop();
           } else {
             context.go('/rewards');
           }
@@ -875,12 +874,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
       'reward_points': _currentSpinSliderValue,
     });
 
-    final result = await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const WheelScreen(),
-        fullscreenDialog: true,
-      ),
-    );
+    final result = await context.push('/spin-earn/wheel');
 
     // Track return from wheel
     await _trackUserAction('returned_from_wheel', additionalData: {
