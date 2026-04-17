@@ -739,7 +739,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
             label: 'Get Coins',
             textColor: Colors.white,
             onPressed: () {
-              Navigator.of(context).pushNamed('/coin-store');
+              context.push('/store-hub');
             },
           ),
         ),
