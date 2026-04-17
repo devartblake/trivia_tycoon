@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/services/presence/rich_presence_service.dart';
 import '../../../game/models/user_presence_models.dart';
 import '../../../game/providers/multi_profile_providers.dart';
@@ -1240,21 +1241,15 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
   }
 
   void _navigateToArcadeScores() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const LocalArcadeLeaderboardScreen()),
-    );
+    context.push('/arcade/local-leaderboards');
   }
 
   void _navigateToMissions() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const ArcadeMissionsScreen()),
-    );
+    context.push('/arcade/missions');
   }
 
   void _claimDailyBonus() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const DailyBonusScreen()),
-    );
+    context.push('/arcade/daily-bonus');
   }
 
   void _showMutualFriends() {

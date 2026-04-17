@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/admin/leaderboard/leaderboard_filter_screen.dart';
 import 'package:trivia_tycoon/admin/questions/question_list_screen.dart';
 import 'package:trivia_tycoon/admin/splash_screen/splash_selector_screen.dart';
@@ -356,33 +357,21 @@ class AdminDashboardScreen extends ConsumerWidget {
         subtitle: 'Update runtime and UI settings',
         icon: Icons.settings_rounded,
         color: Colors.blue,
-        onTap: () =>
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const ConfigSettingsScreen()),
-            ),
+        onTap: () => context.push('/admin/settings'),
       ),
       _AdminAction(
         title: 'Mission Analytics',
         subtitle: 'Mission engagement metrics',
         icon: Icons.analytics_rounded,
         color: Colors.purple,
-        onTap: () =>
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const AnalyticsScreen()),
-            ),
+        onTap: () => context.push('/admin/analytics'),
       ),
       _AdminAction(
         title: 'Notification',
         subtitle: 'Manage notifications',
         icon: Icons.style_rounded,
         color: Colors.teal,
-        onTap: () =>
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const AdminNotificationsScreen()),
-            ),
+        onTap: () => context.push('/admin/notifications'),
       ),
       _AdminAction(
         title: 'Card Demo',
@@ -411,68 +400,42 @@ class AdminDashboardScreen extends ConsumerWidget {
         subtitle: 'Manages the event queue',
         icon: Icons.event_busy_rounded,
         color: Colors.indigo,
-        onTap: () =>
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const AdminEventQueueScreen()),
-            ),
+        onTap: () => context.push('/admin/events'),
       ),
       _AdminAction(
         title: 'Audit Log',
         subtitle: 'User/question mutations and reprocess actions',
         icon: Icons.history_rounded,
         color: Colors.deepPurple,
-        onTap: () =>
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const AdminAuditLogScreen()),
-            ),
+        onTap: () => context.push('/admin/audit'),
       ),
       _AdminAction(
         title: 'Leaderboard Filters',
         subtitle: 'Advanced leaderboard filters',
         icon: Icons.filter_alt_rounded,
         color: Colors.indigo,
-        onTap: () =>
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => const AdminLeaderboardFilterScreen()),
-            ),
+        onTap: () => context.push('/admin/leaderboard-filters'),
       ),
       _AdminAction(
         title: 'Encryption Manager',
         subtitle: 'Manage encryption keys and settings',
         icon: Icons.lock_rounded,
         color: Colors.red,
-        onTap: () =>
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => const EncryptionManagerScreen()),
-            ),
+        onTap: () => context.push('/admin/encryption'),
       ),
       _AdminAction(
         title: 'File Import/Export',
         subtitle: 'Backup or restore quiz content',
         icon: Icons.upload_file_rounded,
         color: Colors.green,
-        onTap: () =>
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const FileImportExportScreen()),
-            ),
+        onTap: () => context.push('/admin/file-import-export'),
       ),
       _AdminAction(
         title: 'Questions List',
         subtitle: 'Browse and manage all questions',
         icon: Icons.list_alt_rounded,
         color: Colors.cyan,
-        onTap: () =>
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const QuestionListScreen()),
-            ),
+        onTap: () => context.push('/admin/question-list'),
       ),
       _AdminAction(
         title: 'Audio Studio',
@@ -489,11 +452,7 @@ class AdminDashboardScreen extends ConsumerWidget {
         subtitle: 'Add, edit, and delete questions',
         icon: Icons.edit_rounded,
         color: Colors.amber,
-        onTap: () =>
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const QuestionEditorScreen()),
-            ),
+        onTap: () => context.push('/admin/question-editor'),
       ),
     ];
   }
