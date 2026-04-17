@@ -1,6 +1,7 @@
 // Synaptix Phase 1: Route paths and GoRoute names are intentionally unchanged.
 // Display-facing label updates (e.g. "Arena", "Labs", "Pathways") are deferred
 // to FE-B2 (Phase 3). Do NOT rename route path constants here.
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/admin/admin_dashboard.dart';
