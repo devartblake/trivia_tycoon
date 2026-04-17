@@ -217,6 +217,17 @@ class _GameMenuScreenState extends ConsumerState<GameMenuScreen>
       'surface': 'labs',
     };
 
+    final learnHub = {
+      'label': 'Learn Hub',
+      'subtitle': 'Study & earn XP',
+      'icon': Icons.school_rounded,
+      'gradient': const LinearGradient(
+        colors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
+      ),
+      'route': '/learn-hub',
+      'surface': 'learn',
+    };
+
     final pathways = {
       'label': mode == SynaptixMode.teen ? 'Neural Pathways' : 'Pathways',
       'subtitle': 'Skills & progression',
@@ -259,17 +270,6 @@ class _GameMenuScreenState extends ConsumerState<GameMenuScreen>
       ),
       'route': '/rewards',
       'surface': 'rewards',
-    };
-
-    final learnHub = {
-      'label': 'Learn Hub',
-      'subtitle': 'Study & earn XP',
-      'icon': Icons.school_rounded,
-      'gradient': const LinearGradient(
-        colors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
-      ),
-      'route': '/learn-hub',
-      'surface': 'learn',
     };
 
     // Mode-aware emphasis ordering
