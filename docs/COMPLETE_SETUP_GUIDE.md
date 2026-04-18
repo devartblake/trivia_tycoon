@@ -15,7 +15,7 @@ Blake, I've analyzed your files and created custom solutions for your specific p
 
 ### 🔧 What Needs Fixing:
 1. **Login error handling** - 1 line change
-2. **TycoonApiClient** - Replace file (backward compatibility)
+2. **SynaptixApiClient** - Replace file (backward compatibility)
 
 **Total time:** 3 minutes ⏱️
 

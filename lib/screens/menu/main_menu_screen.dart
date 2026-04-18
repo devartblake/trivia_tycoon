@@ -174,7 +174,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     }
 
     try {
-      final player = await ref.read(tycoonApiClientProvider).getPlayer(playerId);
+      final player = await ref.read(synaptixApiClientProvider).getPlayer(playerId);
       final coins = player.wallet.coins;
       final gems = player.wallet.gems;
 

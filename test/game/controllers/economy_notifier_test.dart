@@ -6,7 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:trivia_tycoon/core/dto/economy_dto.dart';
 import 'package:trivia_tycoon/core/networking/http_client.dart';
-import 'package:trivia_tycoon/core/networking/tycoon_api_client.dart';
+import 'package:trivia_tycoon/core/networking/synaptix_api_client.dart';
 import 'package:trivia_tycoon/core/services/api_service.dart';
 import 'package:trivia_tycoon/core/services/auth_api_client.dart';
 import 'package:trivia_tycoon/core/services/auth_http_client.dart';
@@ -106,9 +106,9 @@ class _FakeAnalyticsService extends AnalyticsService {
   }
 }
 
-/// Programmable fake that overrides every economy method on [TycoonApiClient].
+/// Programmable fake that overrides every economy method on [SynaptixApiClient].
 /// The underlying [HttpClient] is never invoked since all methods are overridden.
-class _FakeApiClient extends TycoonApiClient {
+class _FakeApiClient extends SynaptixApiClient {
   int getEconomyStateCalls = 0;
   int sessionStartCalls = 0;
   int claimTicketCalls = 0;
@@ -215,9 +215,9 @@ EconomyStateDto _stateDto({
       modes: modes,
     );
 
-/// Builds a [TycoonApiClient] backed by a real HTTP stub — used to test the
+/// Builds a [SynaptixApiClient] backed by a real HTTP stub — used to test the
 /// full HTTP → DTO parsing pipeline (e.g. 409 mapping).
-TycoonApiClient _buildRealClient(_StubHttpClient stub, Box authBox) {
+SynaptixApiClient _buildRealClient(_StubHttpClient stub, Box authBox) {
   final store = AuthTokenStore(authBox);
   final deviceId = _FakeDeviceIdService();
   final authApi =
@@ -227,7 +227,7 @@ TycoonApiClient _buildRealClient(_StubHttpClient stub, Box authBox) {
   final authHttp =
       AuthHttpClient(auth, store, innerClient: stub, autoRefresh: false);
   final httpClient = HttpClient(authClient: authHttp, baseUrl: 'https://test');
-  return TycoonApiClient(httpClient: httpClient);
+  return SynaptixApiClient(httpClient: httpClient);
 }
 
 /// Builds a [_FakeApiClient] whose HTTP layer is never invoked (all economy
@@ -498,9 +498,9 @@ void main() {
     });
   });
 
-  // ── TycoonApiClient.startPolicyMatch (HTTP-layer integration) ───────────────
+  // ── SynaptixApiClient.startPolicyMatch (HTTP-layer integration) ───────────────
 
-  group('TycoonApiClient.startPolicyMatch', () {
+  group('SynaptixApiClient.startPolicyMatch', () {
     test('returns started=true with matchId on 200', () async {
       final stub = _StubHttpClient((_) => _jsonResp({'matchId': 'match-abc'}));
       final client = _buildRealClient(stub, authBox);

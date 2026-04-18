@@ -109,9 +109,9 @@ final httpClientProvider = Provider<HttpClient>((ref) {
   );
 });
 
-/// Provides TycoonApiClient
-final tycoonApiClientProvider = Provider<TycoonApiClient>((ref) {
-  return TycoonApiClient(
+/// Provides SynaptixApiClient
+final SynaptixApiClientProvider = Provider<SynaptixApiClient>((ref) {
+  return SynaptixApiClient(
     httpClient: ref.watch(httpClientProvider),
   );
 });
@@ -144,7 +144,7 @@ final wsClientProvider = Provider<WsClient>((ref) {
 class QuizScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final apiClient = ref.read(tycoonApiClientProvider);
+    final apiClient = ref.read(SynaptixApiClientProvider);
     
     return FutureBuilder(
       future: apiClient.getQuizQuestions(
@@ -233,11 +233,11 @@ void submitAnswer(String answer) {
 }
 ```
 
-### 3.3: Using TycoonApiClient
+### 3.3: Using SynaptixApiClient
 
 **Leaderboard:**
 ```dart
-final apiClient = ref.read(tycoonApiClientProvider);
+final apiClient = ref.read(SynaptixApiClientProvider);
 
 // Get global leaderboard
 final leaderboard = await apiClient.getLeaderboard(
@@ -278,7 +278,7 @@ If you have an existing ApiService using Dio, you can either:
 
 **Option A: Keep Both** (Recommended for gradual migration)
 - Old ApiService for existing code
-- New TycoonApiClient for new features
+- New SynaptixApiClient for new features
 
 **Option B: Replace Completely**
 
@@ -287,14 +287,14 @@ Find usages of old ApiService:
 grep -r "ApiService" lib/
 ```
 
-Replace with TycoonApiClient:
+Replace with SynaptixApiClient:
 ```dart
 // Before
 final apiService = ref.read(apiServiceProvider);
 final questions = await apiService.fetchQuestions(amount: 10);
 
 // After
-final apiClient = ref.read(tycoonApiClientProvider);
+final apiClient = ref.read(SynaptixApiClientProvider);
 final questions = await apiClient.getQuizQuestions(amount: 10);
 ```
 
@@ -308,7 +308,7 @@ final questions = await apiClient.getQuizQuestions(amount: 10);
 ```dart
 class MatchService {
   final WsClient wsClient;
-  final TycoonApiClient apiClient;
+  final SynaptixApiClient apiClient;
   
   MatchService(this.wsClient, this.apiClient);
   
@@ -407,7 +407,7 @@ void testWebSocket() async {
 
 ```dart
 void testApiClient() async {
-  final api = ref.read(tycoonApiClientProvider);
+  final api = ref.read(SynaptixApiClientProvider);
   
   try {
     // Health check

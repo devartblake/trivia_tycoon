@@ -31,9 +31,9 @@ The issues below should therefore be interpreted as cleanup and forward-migratio
 - Owner: frontend
 - Milestone: Quiz/Question/Learning Migration
 - Labels: migration, frontend, api-contract, legacy-cleanup
-- Summary: Remove direct legacy gameplay fetches from ApiService and TycoonApiClient so QuestionHubService becomes the canonical gameplay question transport.
+- Summary: Remove direct legacy gameplay fetches from ApiService and SynaptixApiClient so QuestionHubService becomes the canonical gameplay question transport.
 - Acceptance criteria:
-  - No new gameplay screen calls `/quiz/play` directly through ApiService or TycoonApiClient.
+  - No new gameplay screen calls `/quiz/play` directly through ApiService or SynaptixApiClient.
   - QuestionHubService remains the only approved gameplay question fetch path.
   - Any legacy fallback code is removed or explicitly marked for deletion.
   - Telemetry differentiates `/questions/set` success from local fallback or stale-route handling if still present.

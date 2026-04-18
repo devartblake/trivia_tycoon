@@ -2,7 +2,7 @@
 
 ## 🔴 Issues Found
 
-Your two screens are using the old TycoonApiClient API that doesn't exist in the new version:
+Your two screens are using the old SynaptixApiClient API that doesn't exist in the new version:
 
 ### Issue 1: `season_rewards_preview_screen.dart` (Line 18)
 ```dart
@@ -29,7 +29,7 @@ final json = await widget.api.getJson(  // ❌ Method doesn't exist
 
 ## ✅ Solution
 
-**Updated TycoonApiClient** with backward compatibility methods added.
+**Updated SynaptixApiClient** with backward compatibility methods added.
 
 I've created `tycoon_api_client_FIXED.dart` that includes:
 - ✅ `getJson()` method for backward compatibility
@@ -41,7 +41,7 @@ I've created `tycoon_api_client_FIXED.dart` that includes:
 
 ## 🔧 How to Fix
 
-### Step 1: Replace TycoonApiClient (1 minute)
+### Step 1: Replace SynaptixApiClient (1 minute)
 
 ```bash
 # Replace the file
@@ -65,11 +65,11 @@ Future<Map<String, dynamic>> getJson(
 
 ---
 
-## 📊 What Changed in TycoonApiClient
+## 📊 What Changed in SynaptixApiClient
 
 ### Before (your old version):
 ```dart
-class TycoonApiClient {
+class SynaptixApiClient {
   final String baseUrl;
   final http.Client _http;
   
@@ -83,7 +83,7 @@ class TycoonApiClient {
 
 ### After (new enhanced version):
 ```dart
-class TycoonApiClient {
+class SynaptixApiClient {
   final HttpClient _http;  // ← Now uses HttpClient (with auth!)
   
   // Backward compatibility
@@ -110,11 +110,11 @@ class TycoonApiClient {
 ## 🎯 Screens Are Now Fixed
 
 ### season_rewards_preview_screen.dart
-**Status:** ✅ Will work with new TycoonApiClient
+**Status:** ✅ Will work with new SynaptixApiClient
 **No changes needed** - it already uses `api.getJson()` which now exists!
 
 ### ranked_leaderboard_screen.dart  
-**Status:** ✅ Will work with new TycoonApiClient
+**Status:** ✅ Will work with new SynaptixApiClient
 **No changes needed** - it already uses `api.getJson()` which now exists!
 
 ---
@@ -182,7 +182,7 @@ final json = await api.getJson(
 );
 ```
 
-**After (when you add the method to TycoonApiClient):**
+**After (when you add the method to SynaptixApiClient):**
 ```dart
 final preview = await api.getSeasonRewardsPreview(
   playerId: playerId,
@@ -197,11 +197,11 @@ final preview = await api.getSeasonRewardsPreview(
 ## ✅ Summary
 
 **Problem:** 
-- TycoonApiClient didn't have `getJson()` method
+- SynaptixApiClient didn't have `getJson()` method
 - 2 screens were broken
 
 **Solution:**
-- Added `getJson()` and `postJson()` to TycoonApiClient
+- Added `getJson()` and `postJson()` to SynaptixApiClient
 - Screens now work without modification
 
 **Action Required:**
@@ -221,7 +221,7 @@ cp tycoon_api_client_FIXED.dart lib/core/networkting/tycoon_api_client.dart
 After this fix:
 ✅ season_rewards_preview_screen.dart works
 ✅ ranked_leaderboard_screen.dart works
-✅ All other TycoonApiClient features work
+✅ All other SynaptixApiClient features work
 ✅ Ready for Sprint 2!
 
 **No screen modifications needed!** 🎊

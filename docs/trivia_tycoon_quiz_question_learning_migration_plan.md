@@ -93,7 +93,7 @@ The frontend is only partially aligned with that backend shape.
 
 1. **Legacy contract assumptions still exist in the transport layer**
    - `ApiService.fetchQuestions()` may still call `/quiz/play`.
-   - `TycoonApiClient.getQuizQuestions()` may still call `/quiz/play`.
+   - `SynaptixApiClient.getQuizQuestions()` may still call `/quiz/play`.
    - `QuestionHubService` may still carry legacy fallback assumptions.
 
 2. **UI naming still says `quiz` even where it now means play**
@@ -455,7 +455,7 @@ Make one service the canonical gameplay question pipeline.
 ### Tasks
 - [ ] Refactor all gameplay question retrieval to go through `QuestionHubService`.
 - [ ] Update or deprecate `ApiService.fetchQuestions()`.
-- [ ] Update or deprecate `TycoonApiClient.getQuizQuestions()`.
+- [ ] Update or deprecate `SynaptixApiClient.getQuizQuestions()`.
 - [ ] Replace direct `/quiz/play` usage in category/class/daily/monthly launch flows.
 - [ ] Replace direct `/quiz/play` usage in multiplayer prefetch/launch flows.
 - [ ] Make fallback order explicit:
@@ -526,7 +526,7 @@ Finish the migration without reintroducing removed backend contracts.
 ### Tasks
 - [ ] verify no frontend/mobile flows call `/quiz/*` backend endpoints anymore
 - [ ] remove fallback in `QuestionHubService`
-- [ ] remove deprecated methods in `ApiService` and `TycoonApiClient`
+- [ ] remove deprecated methods in `ApiService` and `SynaptixApiClient`
 - [ ] update docs, tests, and route maps
 - [ ] reserve Study for any future rehearsal API instead of reviving quiz-first naming
 

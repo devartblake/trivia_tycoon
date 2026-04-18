@@ -41,9 +41,9 @@
         "legacy-cleanup"
       ],
       "milestone": "Quiz/Question/Learning Migration",
-      "summary": "Remove direct legacy gameplay fetches from ApiService and TycoonApiClient so QuestionHubService becomes the canonical gameplay question transport without any backend /quiz dependency.",
+      "summary": "Remove direct legacy gameplay fetches from ApiService and SynaptixApiClient so QuestionHubService becomes the canonical gameplay question transport without any backend /quiz dependency.",
       "acceptance_criteria": [
-        "No new gameplay screen calls /quiz/play directly through ApiService or TycoonApiClient.",
+        "No new gameplay screen calls /quiz/play directly through ApiService or SynaptixApiClient.",
         "QuestionHubService remains the only approved gameplay question fetch path.",
         "Any legacy fallback code is removed or explicitly marked for deletion.",
         "Telemetry differentiates /questions/set success from local fallback or stale-route handling if still present."
