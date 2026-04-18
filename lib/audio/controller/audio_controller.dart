@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:ffi';
 import 'package:flutter/widgets.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 import 'package:flutter_soloud/flutter_soloud.dart';
 
 import '../../core/services/analytics/app_lifecycle.dart';
+import '../../core/services/audio/audio_asset_service.dart';
 import '../../game/controllers/settings_controller.dart';
 import '../models/songs.dart';
 import '../models/sounds.dart';
@@ -19,11 +21,20 @@ class AudioController {
   Handle? _currentMusic;
   Handle? _nextMusic;
 
+  // just_audio player used for remote URL streaming (Option A/B).
+  AudioPlayer? _musicPlayer;
+
+  // Optional backend service that returns presigned MinIO URLs for songs.
+  // When set, music plays via just_audio from remote URLs instead of
+  // local SoLoud assets.
+  AudioAssetService? audioAssetService;
+
   final Queue<Song> _playlist;
   SettingsController? _settings;
   ValueNotifier<AppLifecycleState>? _lifecycleNotifier;
 
-  AudioController(this.soloud) : _playlist = Queue.of(List<Song>.of(songs)..shuffle());
+  AudioController(this.soloud, {this.audioAssetService})
+      : _playlist = Queue.of(List<Song>.of(songs)..shuffle());
 
   Future<void> initialize() async {
     await soloud!.init();
@@ -39,7 +50,24 @@ class AudioController {
   void dispose() {
     _lifecycleNotifier?.removeListener(_handleAppLifecycle);
     _stopAllSound();
+    _musicPlayer?.dispose();
+    _musicPlayer = null;
     soloud!.deinit();
+  }
+
+  /// Stream music from a remote URL (MinIO presigned URL or any HTTPS audio URL).
+  /// Call this to verify just_audio URL playback locally before wiring up
+  /// the full AudioAssetService backend integration.
+  Future<void> playRemoteMusic(String presignedUrl) async {
+    _log.info('Playing remote music: $presignedUrl');
+    _musicPlayer ??= AudioPlayer();
+    await _musicPlayer!.setAudioSource(AudioSource.uri(Uri.parse(presignedUrl)));
+    await _musicPlayer!.play();
+  }
+
+  /// Stop remote music playback without disposing the player.
+  Future<void> stopRemoteMusic() async {
+    await _musicPlayer?.stop();
   }
 
   Future<void> _preloadSfx() async {
@@ -120,8 +148,25 @@ class AudioController {
   }
 
   Future<void> _playCurrentSongInPlaylist() async {
-    _log.info('Playing ${_playlist.first.filename} now.');
-    _nextMusic = (await soloud!.loadFile('assets/music/${_playlist.first.filename}')) as Handle?;
+    final song = _playlist.first;
+    _log.info('Playing ${song.filename} now.');
+
+    if (audioAssetService != null) {
+      try {
+        final url = await audioAssetService!.getPresignedUrl(song.filename);
+        _musicPlayer ??= AudioPlayer();
+        await _musicPlayer!.setAudioSource(AudioSource.uri(Uri.parse(url)));
+        await _musicPlayer!.play();
+        // Advance playlist; SoLoud handles are not used for remote playback.
+        _playlist.add(_playlist.removeFirst());
+        return;
+      } catch (e) {
+        _log.warning('Remote audio failed for ${song.filename}, falling back to local: $e');
+      }
+    }
+
+    // Fallback: load from bundled assets via SoLoud.
+    _nextMusic = (await soloud!.loadFile('assets/songs/${song.filename}')) as Handle?;
     _crossfadeToNextSong();
   }
 
@@ -149,6 +194,14 @@ class AudioController {
   }
 
   void _startOrResumeMusic() {
+    if (audioAssetService != null) {
+      if (_musicPlayer == null || _musicPlayer!.playing == false) {
+        _playCurrentSongInPlaylist();
+      } else {
+        _musicPlayer!.play();
+      }
+      return;
+    }
     if (_currentMusic == null) {
       _playCurrentSongInPlaylist();
     } else {
@@ -157,6 +210,7 @@ class AudioController {
   }
 
   void _stopAllSound() {
+    _musicPlayer?.stop();
     soloud!.stopAll();
   }
 }
