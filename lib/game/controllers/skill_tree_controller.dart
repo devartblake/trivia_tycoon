@@ -309,7 +309,7 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
           try {
             await ref
                 .read(serviceManagerProvider)
-                .tycoonApiClient
+                .synaptixApiClient
                 .unlockSkillNode(playerId: userId, nodeId: nodeId);
           } catch (_) {
             // Log only — local state is source of truth until next server sync

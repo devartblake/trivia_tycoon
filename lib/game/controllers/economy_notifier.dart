@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/dto/economy_dto.dart';
-import '../../core/networking/tycoon_api_client.dart';
+import '../../core/networking/synaptix_api_client.dart';
 import '../../core/services/settings/general_key_value_storage_service.dart';
 import '../../game/analytics/services/analytics_service.dart';
 import 'energy_lives_notifier.dart';
@@ -63,7 +63,7 @@ class EconomyState {
 }
 
 class EconomyNotifier extends StateNotifier<EconomyState> {
-  final TycoonApiClient _api;
+  final SynaptixApiClient _api;
   final EnergyNotifier _energy;
   final AnalyticsService _analytics;
   final GeneralKeyValueStorageService _storage;

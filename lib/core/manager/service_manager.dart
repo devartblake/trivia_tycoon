@@ -46,7 +46,7 @@ import '../networking/http_client.dart';
 import '../networking/signalr/match_hub.dart';
 import '../services/auth_http_client.dart';
 import '../networking/signalr/notification_hub.dart';
-import '../networking/tycoon_api_client.dart';
+import '../networking/synaptix_api_client.dart';
 import '../repositories/mission_repository.dart';
 import '../services/auth_service.dart' as core_auth;
 import '../services/auth_token_store.dart';
@@ -97,7 +97,7 @@ class ServiceManager {
   final ArcadeDailyBonusService arcadeDailyBonusService;
   final ArcadeMissionService arcadeMissionService;
   final LocalArcadeLeaderboardService localArcadeLeaderboardService;
-  final TycoonApiClient tycoonApiClient;
+  final SynaptixApiClient synaptixApiClient;
   final NotificationHub notificationHub;
   final MatchHub matchHub;
 
@@ -143,7 +143,7 @@ class ServiceManager {
     required this.referralStorageService,
     required this.referralApiService,
     required this.referralService,
-    required this.tycoonApiClient,
+    required this.synaptixApiClient,
     required this.notificationHub,
     required this.matchHub,
   });
@@ -283,7 +283,7 @@ class ServiceManager {
       authClient: authHttpClient,
       baseUrl: '$baseUrl/api/v1',
     );
-    final tycoonApi = TycoonApiClient(httpClient: httpClient);
+    final synaptixApi = SynaptixApiClient(httpClient: httpClient);
     final notifyHub = NotificationHub();
     final mHub = MatchHub();
 
@@ -331,7 +331,7 @@ class ServiceManager {
       referralStorageService: referralStorage,
       referralApiService: referralApi,
       referralService: referralServiceTemp,
-      tycoonApiClient: tycoonApi,
+      synaptixApiClient: synaptixApi,
       notificationHub: notifyHub,
       matchHub: mHub,
     );

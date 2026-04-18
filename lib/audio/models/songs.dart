@@ -1,60 +1,37 @@
- class Song {
+class Song {
   final String filename;
   final String name;
   final String? artist;
   final String? genre;
   final String? duration; // Format: MM:SS
-  final String? albumArtUrl;  // URL for album art
+  final String? albumArtUrl;
   final bool isExclusive; // If true, song requires purchase
 
- const Song(
-     this.filename,
-     this.name, {
-     this.artist,
-     this.genre,
-     this.duration,
-     this.albumArtUrl,
-     this.isExclusive = false,
+  const Song(
+    this.filename,
+    this.name, {
+    this.artist,
+    this.genre,
+    this.duration,
+    this.albumArtUrl,
+    this.isExclusive = false,
   });
 
   @override
   String toString() => 'Song<$filename>';
- }
+}
 
- // List of available songs
- const Set<Song> songs = {
-   Song(
-     'Mr_Smith-Azurl.mp3',
-     'Azul',
-     artist: 'Mr smith',
-     genre: 'Chill',
-     duration: '03:45',
-     albumArtUrl: 'https://example.com/azul.jpg',
-   ),
-   Song(
-     'Mr_Smith-Sonorus.mp3',
-     'Azul',
-     artist: 'Mr smith',
-     genre: 'Ambient',
-     duration: '04:12',
-     albumArtUrl: 'https://example.com/sonorus.jpg',
-   ),
-   Song(
-     'Mr_Smith-Sunday_Solitude.mp3',
-     'Azul',
-     artist: 'Mr smith',
-     genre: 'Relaxing',
-     duration: '05:20',
-     albumArtUrl: 'https://example.com/sunday_solitude.jpg',
-     isExclusive: true, // This song requires a purchase
-   ),
-   Song(
-     'Mr_Smith-Starlit_Dreams.mp3',
-     'Starlit Dreams',
-     artist: 'Mr smith',
-     genre: 'Lo-Fi',
-     duration: '04:00',
-     albumArtUrl: 'https://example.com/starlit_dreams.jpg',
-     isExclusive: true, // This song requires a purchase
-   ),
- };
+const Set<Song> songs = {
+  Song('around_the_world.mp3', 'Around the World', genre: 'Lo-Fi'),
+  Song('autumn_days_lofi.mp3', 'Autumn Days', genre: 'Lo-Fi'),
+  Song('believing_in_goods_things.mp3', 'Believing in Good Things', genre: 'Chill'),
+  Song('breezing.mp3', 'Breezing', genre: 'Ambient'),
+  Song('end_game.mp3', 'End Game', genre: 'Game'),
+  Song('holding_hands.mp3', 'Holding Hands', genre: 'Chill'),
+  Song('moving_on.mp3', 'Moving On', genre: 'Lo-Fi'),
+  Song('new_starts_beat.mp3', 'New Starts Beat', genre: 'Upbeat'),
+  Song('patience.mp3', 'Patience', genre: 'Ambient'),
+  Song('pillow_days.mp3', 'Pillow Days', genre: 'Lo-Fi'),
+  Song('sweetheart_waltz.mp3', 'Sweetheart Waltz', genre: 'Chill'),
+  Song('what_it_feels_like.mp3', 'What It Feels Like', genre: 'Ambient'),
+};
