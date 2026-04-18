@@ -3,6 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/models/store/store_gift_model.dart';
+import '../../game/providers/game_providers.dart';
+
 class GiftsScreen extends ConsumerStatefulWidget {
   const GiftsScreen({super.key});
 
@@ -43,6 +46,13 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
 
   @override
   Widget build(BuildContext context) {
+    final giftsAsync = ref.watch(giftsDataProvider);
+    final giftsData = giftsAsync.when(
+      data: (d) => d,
+      loading: () => GiftsData.fallback,
+      error: (_, __) => GiftsData.fallback,
+    );
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFF),
       appBar: _buildAppBar(),
@@ -51,30 +61,15 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
         child: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
-            // Gift Stats Banner
-            SliverToBoxAdapter(
-              child: _buildStatsCard(),
-            ),
-
-            // Tab Bar
-            SliverToBoxAdapter(
-              child: _buildTabBar(),
-            ),
-
-            // Content based on selected tab
-            SliverToBoxAdapter(
-              child: _buildTabContent(),
-            ),
-
-            // Bottom padding
-            const SliverToBoxAdapter(
-              child: SizedBox(height: 32),
-            ),
+            SliverToBoxAdapter(child: _buildStatsCard(giftsData.stats)),
+            SliverToBoxAdapter(child: _buildTabBar()),
+            SliverToBoxAdapter(child: _buildTabContent(giftsData)),
+            const SliverToBoxAdapter(child: SizedBox(height: 32)),
           ],
         ),
       ),
       floatingActionButton:
-      _selectedTab == 'Send Gifts' ? null : _buildFloatingActionButton(),
+          _selectedTab == 'Send Gifts' ? null : _buildFloatingActionButton(),
     );
   }
 
@@ -144,7 +139,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
     );
   }
 
-  Widget _buildStatsCard() {
+  Widget _buildStatsCard(GiftStats stats) {
     return TweenAnimationBuilder<double>(
       duration: const Duration(milliseconds: 800),
       tween: Tween(begin: 0.0, end: 1.0),
@@ -178,7 +173,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
                       Expanded(
                         child: _buildStatItem(
                           'Gifts Received',
-                          '23',
+                          stats.received,
                           Icons.inbox,
                         ),
                       ),
@@ -190,7 +185,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
                       Expanded(
                         child: _buildStatItem(
                           'Gifts Sent',
-                          '15',
+                          stats.sent,
                           Icons.send,
                         ),
                       ),
@@ -202,7 +197,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
                       Expanded(
                         child: _buildStatItem(
                           'Pending',
-                          '3',
+                          stats.pending,
                           Icons.schedule,
                         ),
                       ),
@@ -341,7 +336,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
     );
   }
 
-  Widget _buildTabContent() {
+  Widget _buildTabContent(GiftsData giftsData) {
     return TweenAnimationBuilder<double>(
       duration: const Duration(milliseconds: 1000),
       tween: Tween(begin: 0.0, end: 1.0),
@@ -352,7 +347,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
             opacity: value,
             child: Padding(
               padding: const EdgeInsets.all(16),
-              child: _getContentForTab(_selectedTab),
+              child: _getContentForTab(_selectedTab, giftsData),
             ),
           ),
         );
@@ -360,58 +355,24 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
     );
   }
 
-  Widget _getContentForTab(String tab) {
+  Widget _getContentForTab(String tab, GiftsData giftsData) {
     switch (tab) {
       case 'Received':
-        return _buildReceivedGifts();
+        return _buildReceivedGifts(giftsData.received);
       case 'Send Gifts':
-        return _buildSendGifts();
+        return _buildSendGifts(giftsData.available);
       case 'History':
-        return _buildGiftHistory();
+        return _buildGiftHistory(giftsData.history);
       default:
         return Container();
     }
   }
 
-  Widget _buildReceivedGifts() {
-    final receivedGifts = [
-      {
-        'from': 'Alex Johnson',
-        'avatar': 'assets/images/avatars/avatar-1.png',
-        'gift': 'Energy Pack',
-        'icon': Icons.flash_on,
-        'color': const Color(0xFF10B981),
-        'time': '2 hours ago',
-        'message': 'Good luck on your next quiz!',
-        'claimed': false,
-      },
-      {
-        'from': 'Sarah Miller',
-        'avatar': 'assets/images/avatars/avatar-2.png',
-        'gift': '1000 Coins',
-        'icon': Icons.monetization_on,
-        'color': const Color(0xFFF59E0B),
-        'time': '1 day ago',
-        'message': 'Thanks for helping me yesterday!',
-        'claimed': true,
-      },
-      {
-        'from': 'Mike Chen',
-        'avatar': 'assets/images/avatars/avatar-3.png',
-        'gift': 'Extra Life',
-        'icon': Icons.favorite,
-        'color': const Color(0xFFEF4444),
-        'time': '2 days ago',
-        'message': 'Hope this helps in your games!',
-        'claimed': false,
-      },
-    ];
-
+  Widget _buildReceivedGifts(List<ReceivedGift> gifts) {
     return Column(
-      children: receivedGifts.asMap().entries.map((entry) {
+      children: gifts.asMap().entries.map((entry) {
         final index = entry.key;
         final gift = entry.value;
-
         return TweenAnimationBuilder<double>(
           duration: Duration(milliseconds: 1100 + (index * 100)),
           tween: Tween(begin: 0.0, end: 1.0),
@@ -422,7 +383,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
                 opacity: value,
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 16),
-                  child: _buildGiftCard(gift, isReceived: true),
+                  child: _buildGiftCard(gift),
                 ),
               ),
             );
@@ -432,37 +393,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
     );
   }
 
-  Widget _buildSendGifts() {
-    final availableGifts = [
-      {
-        'name': 'Energy Pack',
-        'description': '5 Energy Refills',
-        'icon': Icons.flash_on,
-        'color': const Color(0xFF10B981),
-        'cost': '50 Coins',
-      },
-      {
-        'name': 'Coin Gift',
-        'description': '1000 Coins',
-        'icon': Icons.monetization_on,
-        'color': const Color(0xFFF59E0B),
-        'cost': '100 Coins',
-      },
-      {
-        'name': 'Extra Life',
-        'description': '1 Life Refill',
-        'icon': Icons.favorite,
-        'color': const Color(0xFFEF4444),
-        'cost': '25 Coins',
-      },
-      {
-        'name': 'Power-up Bundle',
-        'description': '3 Random Power-ups',
-        'icon': Icons.auto_fix_high,
-        'color': const Color(0xFF8B5CF6),
-        'cost': '150 Coins',
-      },
-    ];
+  Widget _buildSendGifts(List<SendableGift> gifts) {
     return Column(
       children: [
         Container(
@@ -501,10 +432,9 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
           ),
         ),
         const SizedBox(height: 16),
-        ...availableGifts.asMap().entries.map((entry) {
+        ...gifts.asMap().entries.map((entry) {
           final index = entry.key;
           final gift = entry.value;
-
           return TweenAnimationBuilder<double>(
             duration: Duration(milliseconds: 1200 + (index * 100)),
             tween: Tween(begin: 0.0, end: 1.0),
@@ -526,45 +456,11 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
     );
   }
 
-  Widget _buildGiftHistory() {
-    final historyItems = [
-      {
-        'type': 'sent',
-        'to': 'Alex Johnson',
-        'from': 'You',
-        'gift': 'Energy Pack',
-        'icon': Icons.flash_on,
-        'color': const Color(0xFF10B981),
-        'time': '3 hours ago',
-        'status': 'Delivered',
-      },
-      {
-        'type': 'received',
-        'from': 'Sarah Miller',
-        'to': 'You',
-        'gift': '1000 Coins',
-        'icon': Icons.monetization_on,
-        'color': const Color(0xFFF59E0B),
-        'time': '1 day ago',
-        'status': 'Claimed',
-      },
-      {
-        'type': 'sent',
-        'to': 'Mike Chen',
-        'from': 'You',
-        'gift': 'Extra Life',
-        'icon': Icons.favorite,
-        'color': const Color(0xFFEF4444),
-        'time': '2 days ago',
-        'status': 'Pending',
-      },
-    ];
-
+  Widget _buildGiftHistory(List<GiftHistoryItem> history) {
     return Column(
-      children: historyItems.asMap().entries.map((entry) {
+      children: history.asMap().entries.map((entry) {
         final index = entry.key;
         final item = entry.value;
-
         return TweenAnimationBuilder<double>(
           duration: Duration(milliseconds: 1100 + (index * 100)),
           tween: Tween(begin: 0.0, end: 1.0),
@@ -585,18 +481,16 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
     );
   }
 
-  Widget _buildGiftCard(Map<String, dynamic> gift, {required bool isReceived}) {
-    final bool isClaimed = gift['claimed'] ?? false;
-
+  Widget _buildGiftCard(ReceivedGift gift) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: isClaimed
+          color: gift.claimed
               ? Colors.grey.shade300
-              : (gift['color'] as Color).withValues(alpha: 0.3),
+              : gift.color.withValues(alpha: 0.3),
         ),
         boxShadow: [
           BoxShadow(
@@ -628,7 +522,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'From ${gift['from']}',
+                      'From ${gift.from}',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -636,7 +530,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
                       ),
                     ),
                     Text(
-                      gift['time'] as String,
+                      gift.timeLabel,
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey.shade500,
@@ -648,12 +542,12 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: (gift['color'] as Color).withValues(alpha: 0.1),
+                  color: gift.color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
-                  gift['icon'] as IconData,
-                  color: gift['color'] as Color,
+                  gift.icon,
+                  color: gift.color,
                   size: 24,
                 ),
               ),
@@ -673,7 +567,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
                   children: [
                     Expanded(
                       child: Text(
-                        gift['gift'] as String,
+                        gift.giftName,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -681,7 +575,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
                         ),
                       ),
                     ),
-                    if (isClaimed)
+                    if (gift.claimed)
                       Container(
                         padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -702,7 +596,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  gift['message'] as String,
+                  gift.message ?? '',
                   style: TextStyle(
                     fontSize: 14,
                     color: Colors.grey.shade600,
@@ -712,7 +606,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
               ],
             ),
           ),
-          if (!isClaimed) ...[
+          if (!gift.claimed) ...[
             const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
@@ -722,7 +616,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
                   _claimGift(gift);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: gift['color'] as Color,
+                  backgroundColor: gift.color,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
@@ -745,7 +639,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
     );
   }
 
-  Widget _buildSendableGiftCard(Map<String, dynamic> gift) {
+  Widget _buildSendableGiftCard(SendableGift gift) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -768,12 +662,12 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              color: (gift['color'] as Color).withValues(alpha: 0.1),
+              color: gift.color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
-              gift['icon'] as IconData,
-              color: gift['color'] as Color,
+              gift.icon,
+              color: gift.color,
               size: 24,
             ),
           ),
@@ -783,7 +677,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  gift['name'] as String,
+                  gift.name,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -791,7 +685,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
                   ),
                 ),
                 Text(
-                  gift['description'] as String,
+                  gift.description,
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.grey.shade600,
@@ -799,11 +693,11 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  gift['cost'] as String,
+                  gift.cost,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: gift['color'] as Color,
+                    color: gift.color,
                   ),
                 ),
               ],
@@ -815,7 +709,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
               _selectFriendToSend(gift);
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: gift['color'] as Color,
+              backgroundColor: gift.color,
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               shape: RoundedRectangleBorder(
@@ -836,9 +730,9 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
     );
   }
 
-  Widget _buildHistoryCard(Map<String, dynamic> item) {
-    final bool isSent = item['type'] == 'sent';
-    final String statusText = item['status'] as String;
+  Widget _buildHistoryCard(GiftHistoryItem item) {
+    final bool isSent = item.type == 'sent';
+    final String statusText = item.status;
     Color statusColor = const Color(0xFF64748B);
 
     switch (statusText) {
@@ -873,12 +767,12 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: (item['color'] as Color).withValues(alpha: 0.1),
+              color: item.color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(
               isSent ? Icons.send : Icons.inbox,
-              color: item['color'] as Color,
+              color: item.color,
               size: 20,
             ),
           ),
@@ -889,8 +783,8 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
               children: [
                 Text(
                   isSent
-                      ? 'Sent ${item['gift']} to ${item['to']}'
-                      : 'Received ${item['gift']} from ${item['from']}',
+                      ? 'Sent ${item.giftName} to ${item.to}'
+                      : 'Received ${item.giftName} from ${item.from}',
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -899,7 +793,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  item['time'] as String,
+                  item.timeLabel,
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.grey.shade500,
@@ -944,7 +838,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
     );
   }
 
-  void _claimGift(Map<String, dynamic> gift) {
+  void _claimGift(ReceivedGift gift) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -959,18 +853,18 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
               width: 80,
               height: 80,
               decoration: BoxDecoration(
-                color: (gift['color'] as Color).withValues(alpha: 0.1),
+                color: gift.color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(40),
               ),
               child: Icon(
-                gift['icon'] as IconData,
-                color: gift['color'] as Color,
+                gift.icon,
+                color: gift.color,
                 size: 40,
               ),
             ),
             const SizedBox(height: 16),
             Text(
-              'You received: ${gift['gift']}',
+              'You received: ${gift.giftName}',
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -992,14 +886,14 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
     );
   }
 
-  void _selectFriendToSend(Map<String, dynamic> gift) {
+  void _selectFriendToSend(SendableGift gift) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        title: Text('Send ${gift['name']}'),
+        title: Text('Send ${gift.name}'),
         content: const Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -1020,7 +914,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
               // Send gift logic
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: gift['color'] as Color,
+              backgroundColor: gift.color,
               foregroundColor: Colors.white,
             ),
             child: const Text('Send'),

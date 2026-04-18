@@ -3,6 +3,9 @@ import '../../../game/services/store_data_service.dart';
 import '../../../game/models/store_item_model.dart';
 import '../api_service.dart';
 import '../../manager/log_manager.dart';
+import '../../models/store/store_hub_model.dart';
+import '../../models/store/store_offer_model.dart';
+import '../../models/store/store_gift_model.dart';
 
 class StoreService {
   final ApiService apiService;
@@ -65,6 +68,36 @@ class StoreService {
       }
 
       return [];
+    }
+  }
+
+  Future<StoreHubData> getHubData() async {
+    try {
+      final json = await apiService.get('/store/hub');
+      return StoreHubData.fromJson(json);
+    } catch (e) {
+      LogManager.debug('getHubData failed, using fallback: $e');
+      return StoreHubData.fallback;
+    }
+  }
+
+  Future<StoreOffersData> getOffers() async {
+    try {
+      final json = await apiService.get('/store/offers');
+      return StoreOffersData.fromJson(json);
+    } catch (e) {
+      LogManager.debug('getOffers failed, using fallback: $e');
+      return StoreOffersData.fallback;
+    }
+  }
+
+  Future<GiftsData> getGiftsData() async {
+    try {
+      final json = await apiService.get('/store/gifts');
+      return GiftsData.fromJson(json);
+    } catch (e) {
+      LogManager.debug('getGiftsData failed, using fallback: $e');
+      return GiftsData.fallback;
     }
   }
 
