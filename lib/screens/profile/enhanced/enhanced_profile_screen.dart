@@ -19,7 +19,6 @@ import 'sections/daily_bonus_section.dart';
 import 'sections/profile_actions_section.dart';
 import 'sheets/edit_profile_bottom_sheet.dart';
 import 'widgets/crypto_holdings_card.dart';
-import 'mutual_friends_screen.dart';
 import '../../../arcade/leaderboards/local_arcade_leaderboard_screen.dart';
 import '../../../arcade/missions/arcade_missions_screen.dart';
 import '../../../arcade/ui/screens/daily_bonus_screen.dart';
@@ -1253,15 +1252,7 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
   }
 
   void _showMutualFriends() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MutualFriendsScreen(
-          userId: widget.userId,
-          currentUserId: widget.currentUserId,
-        ),
-      ),
-    );
+    context.push('/profile/mutual-friends/${widget.userId}', extra: widget.currentUserId);
   }
 
   void _showOptionsMenu(BuildContext context) {

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:trivia_tycoon/admin/questions/question_editor_screen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/core/services/api_service.dart';
 import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
 import 'package:trivia_tycoon/game/models/question_model.dart';
@@ -60,10 +60,7 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
   }
 
   void _editQuestion(QuestionModel question, int index) async {
-    final updated = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => QuestionEditorScreen(initialQuestion: question)),
-    );
+    final updated = await context.push<QuestionModel>('/admin/question-editor', extra: question);
 
     if (updated != null && updated is QuestionModel) {
       final i = _questions.indexWhere((q) => q.id == question.id);
@@ -289,10 +286,7 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
   }
 
   void _handleAddQuestion() async {
-    final newQ = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const QuestionEditorScreen()),
-    );
+    final newQ = await context.push<QuestionModel>('/admin/question-editor');
     if (newQ != null && newQ is QuestionModel) {
       try {
         final serviceManager = ref.read(serviceManagerProvider);
