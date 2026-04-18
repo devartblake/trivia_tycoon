@@ -3,8 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:trivia_tycoon/core/models/store/store_offer_model.dart';
 import 'package:trivia_tycoon/core/services/api_service.dart';
 import 'package:trivia_tycoon/core/services/store/store_return_url_builder.dart';
+import 'package:trivia_tycoon/game/providers/game_providers.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 
 class OffersScreen extends ConsumerStatefulWidget {
@@ -19,8 +21,6 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
   String _selectedTab = 'Limited Time';
-
-  final List<String> _tabs = ['Limited Time', 'Daily Deals', 'Premium', 'Bundles'];
 
   @override
   void initState() {
@@ -47,6 +47,17 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
 
   @override
   Widget build(BuildContext context) {
+    final offersAsync = ref.watch(storeOffersProvider);
+    final offersData = offersAsync.when(
+      data: (d) => d,
+      loading: () => StoreOffersData.fallback,
+      error: (_, __) => StoreOffersData.fallback,
+    );
+    if (!offersData.tabs.contains(_selectedTab)) {
+      _selectedTab =
+          offersData.tabs.isNotEmpty ? offersData.tabs.first : _selectedTab;
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFF),
       appBar: _buildAppBar(),
@@ -55,22 +66,15 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
         child: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
-            // Featured Banner
             SliverToBoxAdapter(
-              child: _buildFeaturedBanner(),
+              child: _buildFeaturedBanner(offersData.featured),
             ),
-
-            // Tab Bar
             SliverToBoxAdapter(
-              child: _buildTabBar(),
+              child: _buildTabBar(offersData.tabs),
             ),
-
-            // Offers Content
             SliverToBoxAdapter(
-              child: _buildOffersContent(),
+              child: _buildOffersContent(offersData),
             ),
-
-            // Bottom padding
             const SliverToBoxAdapter(
               child: SizedBox(height: 32),
             ),
@@ -194,7 +198,8 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
     );
   }
 
-  Widget _buildFeaturedBanner() {
+  Widget _buildFeaturedBanner(FeaturedOffer? featured) {
+    if (featured == null) return const SizedBox.shrink();
     return TweenAnimationBuilder<double>(
       duration: const Duration(milliseconds: 800),
       tween: Tween(begin: 0.0, end: 1.0),
@@ -237,9 +242,9 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                                 color: Colors.white.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              child: const Text(
-                                'FLASH SALE',
-                                style: TextStyle(
+                              child: Text(
+                                featured.badgeText,
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
@@ -247,17 +252,17 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                               ),
                             ),
                             const SizedBox(height: 12),
-                            const Text(
-                              '80% OFF',
-                              style: TextStyle(
+                            Text(
+                              featured.headline,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 32,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const Text(
-                              'Premium Membership',
-                              style: TextStyle(
+                            Text(
+                              featured.subtitle,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
@@ -265,7 +270,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Limited time offer ends soon!',
+                              featured.description,
                               style: TextStyle(
                                 color: Colors.white.withValues(alpha: 0.9),
                                 fontSize: 14,
@@ -274,38 +279,32 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                           ],
                         ),
                       ),
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Column(
-                          children: [
-                            const Icon(
-                              Icons.timer,
-                              color: Colors.white,
-                              size: 24,
-                            ),
-                            const SizedBox(height: 8),
-                            const Text(
-                              '23:45:12',
-                              style: TextStyle(
+                      if (featured.countdownLabel.isNotEmpty)
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Column(
+                            children: [
+                              const Icon(
+                                Icons.timer,
                                 color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                                size: 24,
                               ),
-                            ),
-                            Text(
-                              'Left',
-                              style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.8),
-                                fontSize: 12,
+                              const SizedBox(height: 8),
+                              Text(
+                                featured.countdownLabel,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -314,7 +313,6 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                     child: ElevatedButton(
                       onPressed: () {
                         HapticFeedback.lightImpact();
-                        // Handle claim offer
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
@@ -324,9 +322,9 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: const Text(
-                        'Claim Offer',
-                        style: TextStyle(
+                      child: Text(
+                        featured.buttonText,
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
@@ -342,7 +340,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
     );
   }
 
-  Widget _buildTabBar() {
+  Widget _buildTabBar(List<String> tabs) {
     return TweenAnimationBuilder<double>(
       duration: const Duration(milliseconds: 900),
       tween: Tween(begin: 0.0, end: 1.0),
@@ -356,9 +354,9 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
               margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: _tabs.length,
+                itemCount: tabs.length,
                 itemBuilder: (context, index) {
-                  final tab = _tabs[index];
+                  final tab = tabs[index];
                   final isSelected = tab == _selectedTab;
 
                   return GestureDetector(
@@ -413,7 +411,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
     );
   }
 
-  Widget _buildOffersContent() {
+  Widget _buildOffersContent(StoreOffersData offersData) {
     return TweenAnimationBuilder<double>(
       duration: const Duration(milliseconds: 1000),
       tween: Tween(begin: 0.0, end: 1.0),
@@ -426,7 +424,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  _buildOffersList(),
+                  _buildOffersList(offersData.offersForTab(_selectedTab)),
                 ],
               ),
             ),
@@ -436,8 +434,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
     );
   }
 
-  Widget _buildOffersList() {
-    final offers = _getOffersForTab(_selectedTab);
+  Widget _buildOffersList(List<OfferItem> offers) {
 
     return Column(
       children: offers.asMap().entries.map((entry) {
@@ -464,21 +461,19 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
     );
   }
 
-  Widget _buildOfferCard(Map<String, dynamic> offer) {
-    final bool hasDiscount = offer['discount'] != null;
-    final bool isPopular = offer['isPopular'] ?? false;
-
+  Widget _buildOfferCard(OfferItem offer) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: isPopular
+        border: offer.isPopular
             ? Border.all(color: const Color(0xFF6366F1), width: 2)
-            : Border.all(color: const Color(0xFF64748B).withValues(alpha: 0.1)),
+            : Border.all(
+                color: const Color(0xFF64748B).withValues(alpha: 0.1)),
         boxShadow: [
           BoxShadow(
-            color: isPopular
+            color: offer.isPopular
                 ? const Color(0xFF6366F1).withValues(alpha: 0.15)
                 : const Color(0xFF64748B).withValues(alpha: 0.08),
             blurRadius: 20,
@@ -488,10 +483,11 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
       ),
       child: Column(
         children: [
-          if (isPopular)
+          if (offer.isPopular)
             Container(
               margin: const EdgeInsets.only(bottom: 16),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
@@ -513,16 +509,10 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                 width: 60,
                 height: 60,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: offer['iconGradient'] as List<Color>,
-                  ),
+                  gradient: offer.gradient,
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: Icon(
-                  offer['icon'] as IconData,
-                  color: Colors.white,
-                  size: 28,
-                ),
+                child: Icon(offer.icon, color: Colors.white, size: 28),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -530,7 +520,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      offer['title'] as String,
+                      offer.title,
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -539,19 +529,19 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      offer['description'] as String,
+                      offer.description,
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey.shade600,
                       ),
                     ),
-                    if (hasDiscount) ...[
+                    if (offer.discount != null) ...[
                       const SizedBox(height: 8),
                       Row(
                         children: [
-                          if (offer['originalPrice'] != null)
+                          if (offer.originalPrice != null)
                             Text(
-                              '\$${offer['originalPrice']}',
+                              '\$${offer.originalPrice}',
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.shade500,
@@ -560,7 +550,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                             ),
                           const SizedBox(width: 8),
                           Text(
-                            '\$${offer['price']}',
+                            '\$${offer.price}',
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -572,11 +562,12 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFEF4444).withValues(alpha: 0.1),
+                              color: const Color(0xFFEF4444)
+                                  .withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
-                              '${offer['discount']}% OFF',
+                              '${offer.discount}% OFF',
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
@@ -590,7 +581,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                       Padding(
                         padding: const EdgeInsets.only(top: 8),
                         child: Text(
-                          '\$${offer['price']}',
+                          '\$${offer.price}',
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -612,7 +603,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                 _handleOfferClaim(offer);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: isPopular
+                backgroundColor: offer.isPopular
                     ? const Color(0xFF6366F1)
                     : const Color(0xFF64748B),
                 foregroundColor: Colors.white,
@@ -623,7 +614,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                 elevation: 0,
               ),
               child: Text(
-                offer['buttonText'] as String,
+                offer.buttonText,
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -636,106 +627,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
     );
   }
 
-  List<Map<String, dynamic>> _getOffersForTab(String tab) {
-    switch (tab) {
-      case 'Limited Time':
-        return [
-          {
-            'title': 'Premium Upgrade',
-            'description':
-            'Unlock unlimited lives, double XP, and exclusive content',
-            'price': '4.99',
-            'originalPrice': '24.99',
-            'discount': 80,
-            'icon': Icons.star,
-            'iconGradient': [Color(0xFFEF4444), Color(0xFFDC2626)],
-            'buttonText': 'Upgrade Now',
-            'isPopular': true,
-          },
-          {
-            'title': 'Mega Coin Pack',
-            'description': '50,000 coins + 1,000 bonus coins',
-            'price': '9.99',
-            'originalPrice': '19.99',
-            'discount': 50,
-            'icon': Icons.monetization_on,
-            'iconGradient': [Color(0xFFF59E0B), Color(0xFFD97706)],
-            'buttonText': 'Buy Coins',
-          },
-        ];
-      case 'Daily Deals':
-        return [
-          {
-            'title': 'Energy Refill Bundle',
-            'description': '10 full energy refills for today only',
-            'price': '2.99',
-            'icon': Icons.flash_on,
-            'iconGradient': [Color(0xFF10B981), Color(0xFF059669)],
-            'buttonText': 'Get Energy',
-          },
-          {
-            'title': 'Double XP Boost',
-            'description': '24-hour double XP multiplier',
-            'price': '1.99',
-            'icon': Icons.trending_up,
-            'iconGradient': [Color(0xFF8B5CF6), Color(0xFF7C3AED)],
-            'buttonText': 'Activate Boost',
-          },
-        ];
-      case 'Premium':
-        return [
-          {
-            'title': 'Monthly Premium',
-            'description': 'All premium features for 30 days',
-            'price': '9.99',
-            'icon': Icons.workspace_premium,
-            'iconGradient': [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-            'buttonText': 'Subscribe',
-            'isPopular': true,
-            'tier': 'premium',
-            'billingPeriod': 'monthly',
-          },
-          {
-            'title': 'Elite Season Pass',
-            'description': 'Best value seasonal plan with the highest tier perks',
-            'price': '39.99',
-            'originalPrice': '119.88',
-            'discount': 67,
-            'icon': Icons.diamond,
-            'iconGradient': [Color(0xFF06B6D4), Color(0xFF0891B2)],
-            'buttonText': 'Best Deal',
-            'tier': 'elite',
-            'billingPeriod': 'seasonal',
-          },
-        ];
-      case 'Bundles':
-        return [
-          {
-            'title': 'Starter Pack',
-            'description': '10,000 coins + 5 lives + 3 power-ups',
-            'price': '4.99',
-            'icon': Icons.card_giftcard,
-            'iconGradient': [Color(0xFFEC4899), Color(0xFFDB2777)],
-            'buttonText': 'Get Bundle',
-          },
-          {
-            'title': 'Champion Bundle',
-            'description': 'Premium + 50k coins + exclusive avatar',
-            'price': '19.99',
-            'originalPrice': '34.97',
-            'discount': 43,
-            'icon': Icons.emoji_events,
-            'iconGradient': [Color(0xFFF59E0B), Color(0xFFD97706)],
-            'buttonText': 'Become Champion',
-            'isPopular': true,
-          },
-        ];
-      default:
-        return [];
-    }
-  }
-
-  void _handleOfferClaim(Map<String, dynamic> offer) {
+  void _handleOfferClaim(OfferItem offer) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -746,10 +638,10 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Are you sure you want to purchase "${offer['title']}"?'),
+            Text('Are you sure you want to purchase "${offer.title}"?'),
             const SizedBox(height: 16),
             Text(
-              '\$${offer['price']}',
+              '\$${offer.price}',
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -779,8 +671,8 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
     );
   }
 
-  void _processPurchase(Map<String, dynamic> offer) {
-    if (offer.containsKey('tier') && offer.containsKey('billingPeriod')) {
+  void _processPurchase(OfferItem offer) {
+    if (offer.tier != null && offer.billingPeriod != null) {
       _startSubscriptionCheckout(offer);
       return;
     }
@@ -806,7 +698,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
               const Icon(Icons.check_circle, color: Colors.white),
               const SizedBox(width: 12),
               Expanded(
-                child: Text('Successfully purchased ${offer['title']}!'),
+                child: Text('Successfully purchased ${offer.title}!'),
               ),
             ],
           ),
@@ -820,7 +712,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
     });
   }
 
-  Future<void> _startSubscriptionCheckout(Map<String, dynamic> offer) async {
+  Future<void> _startSubscriptionCheckout(OfferItem offer) async {
     final status = await ref.read(storeSystemStatusProvider.future);
     if (status['storeEnabled'] == false || status['paymentsEnabled'] == false) {
       _showSnack(
@@ -849,32 +741,32 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
       final response = useStripe
           ? await storeService.createStripeSubscriptionCheckout(
               playerId: playerId,
-              tier: offer['tier'] as String,
-              billingPeriod: offer['billingPeriod'] as String,
+              tier: offer.tier!,
+              billingPeriod: offer.billingPeriod!,
               successUrl: StoreReturnUrlBuilder.subscriptionSuccess(
                 provider: 'stripe',
-                tier: offer['tier'] as String,
-                billingPeriod: offer['billingPeriod'] as String,
+                tier: offer.tier!,
+                billingPeriod: offer.billingPeriod!,
               ),
               cancelUrl: StoreReturnUrlBuilder.subscriptionCancel(
                 provider: 'stripe',
-                tier: offer['tier'] as String,
-                billingPeriod: offer['billingPeriod'] as String,
+                tier: offer.tier!,
+                billingPeriod: offer.billingPeriod!,
               ),
             )
           : await storeService.createPayPalSubscription(
               playerId: playerId,
-              tier: offer['tier'] as String,
-              billingPeriod: offer['billingPeriod'] as String,
+              tier: offer.tier!,
+              billingPeriod: offer.billingPeriod!,
               returnUrl: StoreReturnUrlBuilder.subscriptionSuccess(
                 provider: 'paypal',
-                tier: offer['tier'] as String,
-                billingPeriod: offer['billingPeriod'] as String,
+                tier: offer.tier!,
+                billingPeriod: offer.billingPeriod!,
               ),
               cancelUrl: StoreReturnUrlBuilder.subscriptionCancel(
                 provider: 'paypal',
-                tier: offer['tier'] as String,
-                billingPeriod: offer['billingPeriod'] as String,
+                tier: offer.tier!,
+                billingPeriod: offer.billingPeriod!,
               ),
             );
 
