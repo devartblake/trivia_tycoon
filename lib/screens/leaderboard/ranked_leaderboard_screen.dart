@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../core/networking/tycoon_api_client.dart';
+import '../../core/networking/synaptix_api_client.dart';
 import '../../game/models/ranked_leaderboard_models.dart';
 
 class RankedLeaderboardScreen extends StatefulWidget {
-  final TycoonApiClient api;
+  final SynaptixApiClient api;
   final String? seasonId;
 
   const RankedLeaderboardScreen({super.key, required this.api, this.seasonId});

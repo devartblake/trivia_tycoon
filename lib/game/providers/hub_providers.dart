@@ -68,14 +68,14 @@ final matchUpdateStreamProvider = StreamProvider<MatchUpdateDto>((ref) {
 /// Upcoming game events from GET /game-events/upcoming.
 final upcomingGameEventsProvider =
 FutureProvider<List<GameEventDto>>((ref) async {
-  final api = ref.read(serviceManagerProvider).tycoonApiClient;
+  final api = ref.read(serviceManagerProvider).synaptixApiClient;
   return api.getUpcomingGameEvents();
 });
 
 /// Current active season from GET /seasons/active.
 final activeSeasonProvider =
 FutureProvider.autoDispose((ref) async {
-  final api = ref.read(serviceManagerProvider).tycoonApiClient;
+  final api = ref.read(serviceManagerProvider).synaptixApiClient;
   return api.getActiveSeason();
 });
 
@@ -83,7 +83,7 @@ FutureProvider.autoDispose((ref) async {
 final guardianListProvider = FutureProvider.autoDispose
     .family<List<GuardianDto>, (String, int)>((ref, args) async {
   final (seasonId, tierNumber) = args;
-  final api = ref.read(serviceManagerProvider).tycoonApiClient;
+  final api = ref.read(serviceManagerProvider).synaptixApiClient;
   return api.getGuardians(seasonId: seasonId, tierNumber: tierNumber);
 });
 
@@ -91,14 +91,14 @@ final guardianListProvider = FutureProvider.autoDispose
 final territoryBoardProvider = FutureProvider.autoDispose
     .family<TerritoryBoardDto, (String, int)>((ref, args) async {
   final (seasonId, tierNumber) = args;
-  final api = ref.read(serviceManagerProvider).tycoonApiClient;
+  final api = ref.read(serviceManagerProvider).synaptixApiClient;
   return api.getTerritoryBoard(seasonId: seasonId, tierNumber: tierNumber);
 });
 
 /// Vote results for a given topic.
 final voteResultsProvider =
 FutureProvider.autoDispose.family<VoteResultDto, String>((ref, topic) async {
-  final api = ref.read(serviceManagerProvider).tycoonApiClient;
+  final api = ref.read(serviceManagerProvider).synaptixApiClient;
   return api.getVoteResults(topic: topic);
 });
 

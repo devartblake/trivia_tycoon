@@ -1,5 +1,5 @@
 import 'package:logging/logging.dart';
-import 'package:trivia_tycoon/core/networking/tycoon_api_client.dart';
+import 'package:trivia_tycoon/core/networking/synaptix_api_client.dart';
 import 'audio_asset_response.dart';
 
 /// Fetches presigned MinIO URLs for audio assets from the backend.
@@ -9,7 +9,7 @@ import 'audio_asset_response.dart';
 class AudioAssetService {
   static final _log = Logger('AudioAssetService');
 
-  final TycoonApiClient _client;
+  final SynaptixApiClient _client;
   final Map<String, _CachedUrl> _cache = {};
 
   AudioAssetService(this._client);

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../core/networking/tycoon_api_client.dart';
+import '../../core/networking/synaptix_api_client.dart';
 import '../../game/models/season_reward_preview_models.dart';
 
 class SeasonRewardsPreviewScreen extends StatelessWidget {
-  final TycoonApiClient api;
+  final SynaptixApiClient api;
   final String playerId;
   final String? seasonId;
 

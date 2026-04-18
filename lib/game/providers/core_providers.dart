@@ -16,7 +16,7 @@ import '../../core/manager/login_manager.dart';
 import '../../core/manager/service_manager.dart';
 import '../../core/navigation/app_router.dart';
 import '../../core/networking/http_client.dart';
-import '../../core/networking/tycoon_api_client.dart';
+import '../../core/networking/synaptix_api_client.dart';
 import '../../core/networking/ws_client.dart';
 import '../../core/services/analytics/config_service.dart';
 import '../../core/services/api_service.dart';
@@ -142,8 +142,8 @@ final httpClientProvider = Provider<HttpClient>((ref) {
   );
 });
 
-final tycoonApiClientProvider = Provider<TycoonApiClient>((ref) {
-  return TycoonApiClient(
+final synaptixApiClientProvider = Provider<SynaptixApiClient>((ref) {
+  return SynaptixApiClient(
     httpClient: ref.watch(httpClientProvider),
   );
 });
@@ -164,7 +164,7 @@ final wsClientProvider = Provider<WsClient>((ref) {
 });
 
 final audioAssetServiceProvider = Provider<AudioAssetService>((ref) {
-  return AudioAssetService(ref.watch(tycoonApiClientProvider));
+  return AudioAssetService(ref.watch(synaptixApiClientProvider));
 });
 
 final loginManagerProvider = Provider<LoginManager>((ref) {

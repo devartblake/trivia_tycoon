@@ -50,7 +50,7 @@ class _ReviveSheetState extends ConsumerState<ReviveSheet> {
   Future<void> _loadQuote() async {
     try {
       final playerId = await ref.read(currentUserIdProvider.future);
-      final api = ref.read(tycoonApiClientProvider);
+      final api = ref.read(synaptixApiClientProvider);
       final q = await api.getReviveQuote(
         playerId: playerId,
         almostWin: widget.almostWin,

@@ -20,7 +20,7 @@ FutureProvider.autoDispose.family<SkillTreeDto?, String>((ref, playerId) async {
   try {
     return await ref
         .read(serviceManagerProvider)
-        .tycoonApiClient
+        .synaptixApiClient
         .getSkillTree(playerId: playerId);
   } catch (_) {
     return null; // offline / unauthenticated — fall back to local

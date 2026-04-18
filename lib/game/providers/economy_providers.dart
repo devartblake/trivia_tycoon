@@ -16,7 +16,7 @@ import 'profile_providers.dart';
 final economyProvider =
     StateNotifierProvider<EconomyNotifier, EconomyState>((ref) {
   return EconomyNotifier(
-    ref.read(tycoonApiClientProvider),
+    ref.read(synaptixApiClientProvider),
     ref.read(energyProvider.notifier),
     ref.read(analyticsServiceProvider),
     ref.read(generalKeyValueStorageProvider),

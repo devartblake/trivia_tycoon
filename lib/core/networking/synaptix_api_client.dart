@@ -12,10 +12,10 @@ import '../dto/economy_dto.dart';
 ///
 /// Provides high-level methods for common API operations with
 /// automatic authentication and error handling.
-class TycoonApiClient {
+class SynaptixApiClient {
   final HttpClient _http;
 
-  TycoonApiClient({required HttpClient httpClient}) : _http = httpClient;
+  SynaptixApiClient({required HttpClient httpClient}) : _http = httpClient;
 
   // ========================================
   // Low-Level Convenience Methods
