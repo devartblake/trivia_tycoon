@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:ffi';
 import 'package:flutter/widgets.dart';
-import 'package:just_audio/just_audio.dart';
+import 'package:just_audio/just_audio.dart' as ja;
 import 'package:logging/logging.dart';
 import 'package:flutter_soloud/flutter_soloud.dart';
 
@@ -22,7 +22,7 @@ class AudioController {
   Handle? _nextMusic;
 
   // just_audio player used for remote URL streaming (Option A/B).
-  AudioPlayer? _musicPlayer;
+  ja.AudioPlayer? _musicPlayer;
 
   // Optional backend service that returns presigned MinIO URLs for songs.
   // When set, music plays via just_audio from remote URLs instead of
@@ -60,8 +60,8 @@ class AudioController {
   /// the full AudioAssetService backend integration.
   Future<void> playRemoteMusic(String presignedUrl) async {
     _log.info('Playing remote music: $presignedUrl');
-    _musicPlayer ??= AudioPlayer();
-    await _musicPlayer!.setAudioSource(AudioSource.uri(Uri.parse(presignedUrl)));
+    _musicPlayer ??= ja.AudioPlayer();
+    await _musicPlayer!.setAudioSource(ja.AudioSource.uri(Uri.parse(presignedUrl)));
     await _musicPlayer!.play();
   }
 
@@ -154,8 +154,8 @@ class AudioController {
     if (audioAssetService != null) {
       try {
         final url = await audioAssetService!.getPresignedUrl(song.filename);
-        _musicPlayer ??= AudioPlayer();
-        await _musicPlayer!.setAudioSource(AudioSource.uri(Uri.parse(url)));
+        _musicPlayer ??= ja.AudioPlayer();
+        await _musicPlayer!.setAudioSource(ja.AudioSource.uri(Uri.parse(url)));
         await _musicPlayer!.play();
         // Advance playlist; SoLoud handles are not used for remote playback.
         _playlist.add(_playlist.removeFirst());
