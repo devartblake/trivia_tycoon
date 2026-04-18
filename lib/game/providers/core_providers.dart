@@ -25,6 +25,7 @@ import '../../core/services/auth_http_client.dart';
 import '../../core/services/auth_token_store.dart';
 import '../../core/services/auth_service.dart' as core_auth;
 import '../../core/services/device_id_service.dart';
+import '../../core/services/audio/audio_asset_service.dart';
 import '../../core/services/settings/general_key_value_storage_service.dart';
 import '../../core/services/storage/app_cache_service.dart';
 import '../../core/services/storage/secure_storage.dart';
@@ -160,6 +161,10 @@ final wsClientProvider = Provider<WsClient>((ref) {
       LogManager.debug('[WS] Error: $error');
     },
   );
+});
+
+final audioAssetServiceProvider = Provider<AudioAssetService>((ref) {
+  return AudioAssetService(ref.watch(tycoonApiClientProvider));
 });
 
 final loginManagerProvider = Provider<LoginManager>((ref) {
