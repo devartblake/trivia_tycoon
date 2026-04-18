@@ -132,6 +132,7 @@ import '../../screens/messages/dialogs/message_request_dialog.dart';
 import '../../screens/notifications/notification_detail_screen.dart';
 import '../../screens/profile/dialogs/add_friend_dialog.dart';
 import '../../screens/profile/enhanced/enhanced_profile_screen.dart';
+import '../../screens/profile/enhanced/mutual_friends_screen.dart';
 import '../../screens/profile/user_profile_screen.dart';
 import '../../screens/search/dialogs/search_dialog.dart';
 import '../../screens/spectate/spectate_mode_screen.dart';
@@ -230,7 +231,9 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       createAdminRoute(
         path: '/admin/question-editor',
         name: 'Question Editor',
-        builder: (context, state) => const QuestionEditorScreen(),
+        builder: (context, state) => QuestionEditorScreen(
+          initialQuestion: state.extra as QuestionModel?,
+        ),
       ),
       createAdminRoute(
         path: '/admin/encryption-preview',
@@ -304,7 +307,9 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/admin/question-editor',
             name: 'question-editor',
-            builder: (context, state) => const QuestionEditorScreen(),
+            builder: (context, state) => QuestionEditorScreen(
+          initialQuestion: state.extra as QuestionModel?,
+        ),
           ),
           GoRoute(
             path: '/admin/encryption-preview',
@@ -833,6 +838,15 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               state.uri.queryParameters['currentUserId'] ?? '',
           isOwnProfile:
               state.uri.queryParameters['isOwnProfile'] == 'true',
+        ),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/profile/mutual-friends/:userId',
+        name: 'mutual-friends',
+        builder: (context, state) => MutualFriendsScreen(
+          userId: state.pathParameters['userId']!,
+          currentUserId: state.extra as String? ?? '',
         ),
         redirect: onboardingGuard,
       ),

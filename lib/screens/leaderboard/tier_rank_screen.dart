@@ -6,7 +6,6 @@ import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import 'package:trivia_tycoon/game/controllers/leaderboard_controller.dart';
 import 'package:trivia_tycoon/screens/leaderboard/widgets/leaderboard_swipe_card.dart';
 import 'package:trivia_tycoon/screens/leaderboard/widgets/top_three_leaderboard.dart';
-import '../../admin/leaderboard/leaderboard_filter_screen.dart';
 
 enum SortField { score, level, wins, lastActive }
 
@@ -205,12 +204,7 @@ class _TierRankScreenState extends ConsumerState<TierRankScreen>
                           ],
                         ),
                         onPressed: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const AdminLeaderboardFilterScreen(),
-                            ),
-                          );
+                          await context.push('/admin/leaderboard-filters');
                           await ref.read(leaderboardControllerProvider).refreshFilters();
                         },
                       ),

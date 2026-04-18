@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/services/settings/multi_profile_service.dart';
 import '../../../game/providers/riverpod_providers.dart';
-import '../enhanced/enhanced_profile_screen.dart';
 import './profile_animated_stats.dart';
 import './profile_character_section.dart';
 import './profile_progress_section.dart';
@@ -347,16 +346,7 @@ class ProfileGameCard extends ConsumerWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const EnhancedProfileScreen(
-                    userId: 'current_user_id',
-                    currentUserId: 'current_user_id',
-                    isOwnProfile: true,
-                  ),
-                ),
-              );
+              context.push('/profile/enhanced/current_user_id?currentUserId=current_user_id&isOwnProfile=true');
             },
             borderRadius: BorderRadius.circular(16),
             child: Container(
