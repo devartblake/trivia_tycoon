@@ -231,12 +231,14 @@ class _HowToPlayScreenState extends State<HowToPlayScreen>
   };
 
   void _startPlaying() {
+    final gameModeName = widget.gameMode.name;
+
     if (widget.isMultiplayer) {
       // Navigate to multiplayer matchmaking
-      context.go('/multiplayer/matchmaking/${widget.gameMode}');
+      context.go('/multiplayer/matchmaking/$gameModeName');
     } else {
       // Navigate directly to single-player quiz
-      context.go('/quiz/start/${widget.gameMode}');
+      context.go('/quiz/start/$gameModeName');
     }
   }
 

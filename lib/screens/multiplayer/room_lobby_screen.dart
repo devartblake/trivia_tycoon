@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:trivia_tycoon/screens/multiplayer/multiplayer_palette.dart';
 import 'package:trivia_tycoon/screens/multiplayer/widgets/player_chip.dart';
 import '../../game/multiplayer/providers/multiplayer_providers.dart';
 import 'dialogs/exit_match_confirm.dart';
@@ -28,7 +29,7 @@ class RoomLobbyScreen extends ConsumerWidget {
       child: Scaffold(
         backgroundColor: isDark
             ? const Color(0xFF0A0A0F)
-            : const Color(0xFFF8F9FC),
+            : MultiplayerPalette.background,
         body: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
@@ -69,9 +70,9 @@ class RoomLobbyScreen extends ConsumerWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                const Color(0xFF6366F1),
-                const Color(0xFF8B5CF6),
-                const Color(0xFFEC4899),
+                MultiplayerPalette.primary,
+                MultiplayerPalette.secondary,
+                MultiplayerPalette.accent,
               ],
             ),
           ),
@@ -190,7 +191,7 @@ class RoomLobbyScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFF10B981), Color(0xFF059669)],
+                    colors: [MultiplayerPalette.success, Color(0xFF2E8E68)],
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -206,7 +207,7 @@ class RoomLobbyScreen extends ConsumerWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white : const Color(0xFF1E293B),
+                  color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
                 ),
               ),
             ],
@@ -249,14 +250,14 @@ class RoomLobbyScreen extends ConsumerWidget {
       decoration: BoxDecoration(
         color: isDark
             ? const Color(0xFF2A2A3E)
-            : const Color(0xFFF8F9FC),
+            : MultiplayerPalette.surfaceAlt,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         children: [
           Icon(
             icon,
-            color: const Color(0xFF8B5CF6),
+            color: MultiplayerPalette.primary,
             size: 20,
           ),
           const SizedBox(height: 8),
@@ -273,7 +274,7 @@ class RoomLobbyScreen extends ConsumerWidget {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: isDark ? Colors.white : const Color(0xFF1E293B),
+              color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
             ),
           ),
         ],
@@ -306,7 +307,7 @@ class RoomLobbyScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+                    colors: [MultiplayerPalette.primary, MultiplayerPalette.secondary],
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -322,17 +323,17 @@ class RoomLobbyScreen extends ConsumerWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white : const Color(0xFF1E293B),
+                  color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
                 ),
               ),
               const Spacer(),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF10B981).withValues(alpha: 0.1),
+                  color: MultiplayerPalette.success.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: const Color(0xFF10B981).withValues(alpha: 0.3),
+                    color: MultiplayerPalette.success.withValues(alpha: 0.3),
                   ),
                 ),
                 child: Text(
@@ -340,7 +341,7 @@ class RoomLobbyScreen extends ConsumerWidget {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFF10B981),
+                    color: MultiplayerPalette.success,
                   ),
                 ),
               ),
@@ -414,7 +415,7 @@ class RoomLobbyScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFFEF4444), Color(0xFFDC2626)],
+                    colors: [MultiplayerPalette.accent, MultiplayerPalette.danger],
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -430,7 +431,7 @@ class RoomLobbyScreen extends ConsumerWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white : const Color(0xFF1E293B),
+                  color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
                 ),
               ),
             ],
@@ -482,14 +483,14 @@ class RoomLobbyScreen extends ConsumerWidget {
       decoration: BoxDecoration(
         color: isDark
             ? const Color(0xFF2A2A3E)
-            : const Color(0xFFF8F9FC),
+            : MultiplayerPalette.surfaceAlt,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         children: [
           Icon(
             icon,
-            color: const Color(0xFFEF4444),
+            color: MultiplayerPalette.accent,
             size: 20,
           ),
           const SizedBox(height: 8),
@@ -506,7 +507,7 @@ class RoomLobbyScreen extends ConsumerWidget {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: isDark ? Colors.white : const Color(0xFF1E293B),
+              color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
             ),
           ),
         ],
@@ -521,7 +522,7 @@ class RoomLobbyScreen extends ConsumerWidget {
       decoration: BoxDecoration(
         gradient: state.isHost
             ? const LinearGradient(
-          colors: [Color(0xFF10B981), Color(0xFF059669)],
+          colors: [MultiplayerPalette.success, Color(0xFF2E8E68)],
         )
             : null,
         color: state.isHost ? null : Colors.grey.shade400,
@@ -529,7 +530,7 @@ class RoomLobbyScreen extends ConsumerWidget {
         boxShadow: state.isHost
             ? [
           BoxShadow(
-            color: const Color(0xFF10B981).withValues(alpha: 0.3),
+            color: MultiplayerPalette.success.withValues(alpha: 0.3),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),

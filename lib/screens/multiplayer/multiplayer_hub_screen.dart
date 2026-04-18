@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:trivia_tycoon/screens/multiplayer/multiplayer_palette.dart';
 import 'package:trivia_tycoon/screens/multiplayer/widgets/connection_banner.dart';
 import 'package:trivia_tycoon/screens/multiplayer/widgets/room_card.dart';
 import '../../game/multiplayer/providers/multiplayer_providers.dart';
@@ -61,7 +62,7 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
     return Scaffold(
       backgroundColor: isDark
           ? const Color(0xFF0A0A0F)
-          : const Color(0xFFF8F9FC),
+          : MultiplayerPalette.background,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
@@ -139,9 +140,9 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                const Color(0xFF6366F1),
-                const Color(0xFF8B5CF6),
-                const Color(0xFFEC4899),
+                MultiplayerPalette.primary,
+                MultiplayerPalette.secondary,
+                MultiplayerPalette.accent,
               ],
             ),
           ),
@@ -213,7 +214,7 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
           'Quick Actions',
           style: theme.textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.bold,
-            color: isDark ? Colors.white : const Color(0xFF1E293B),
+            color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
           ),
         ),
         const SizedBox(height: 16),
@@ -225,7 +226,7 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
                 title: 'Quick Match',
                 subtitle: 'Find opponents instantly',
                 gradient: const LinearGradient(
-                  colors: [Color(0xFFFF6B6B), Color(0xFFEE5A52)],
+                  colors: [MultiplayerPalette.accent, MultiplayerPalette.danger],
                 ),
                 onTap: () async {
                   final ok = await ref.read(multiplayerServiceProvider).quickMatch();
@@ -242,7 +243,7 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
                 title: 'Browse Rooms',
                 subtitle: 'Join existing games',
                 gradient: const LinearGradient(
-                  colors: [Color(0xFF4ECDC4), Color(0xFF44A08D)],
+                  colors: [MultiplayerPalette.primary, MultiplayerPalette.secondary],
                 ),
                 onTap: () => context.push('/multiplayer/find'),
               ),
@@ -331,7 +332,7 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
               'Active Rooms',
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: isDark ? Colors.white : const Color(0xFF1E293B),
+                color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
               ),
             ),
             TextButton.icon(
@@ -344,7 +345,7 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
         const SizedBox(height: 16),
         Container(
           decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1E1E2E) : Colors.white,
+            color: isDark ? const Color(0xFF1E1E2E) : MultiplayerPalette.surface,
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
@@ -380,13 +381,13 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF8B5CF6).withValues(alpha: 0.1),
+                  color: MultiplayerPalette.primary.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
                   Icons.groups_rounded,
                   size: 48,
-                  color: const Color(0xFF8B5CF6),
+                  color: MultiplayerPalette.primary,
                 ),
               ),
               const SizedBox(height: 16),
@@ -395,7 +396,7 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: isDark ? Colors.white : const Color(0xFF1E293B),
+                  color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
                 ),
               ),
               const SizedBox(height: 8),

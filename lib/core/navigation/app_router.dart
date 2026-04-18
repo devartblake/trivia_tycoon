@@ -687,7 +687,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/multiplayer/matchmaking/:gameMode',
         name: 'multiplayer-matchmaking',
         builder: (context, state) {
-          final gameMode = state.pathParameters['gameMode']!;
+          final gameMode =
+              normalizeGameModeName(state.pathParameters['gameMode']!);
           return MultiplayerGameMatchmakingScreen(gameMode: gameMode);
         },
       ),
@@ -696,7 +697,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/multiplayer/quiz/:gameMode',
         name: 'multiplayer-quiz',
         builder: (context, state) {
-          final gameMode = state.pathParameters['gameMode']!;
+          final gameMode =
+              normalizeGameModeName(state.pathParameters['gameMode']!);
           return MultiplayerQuestionScreen(gameMode: gameMode);
         },
       ),
@@ -705,7 +707,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/multiplayer/results/:gameMode',
         name: 'multiplayer-results',
         builder: (context, state) {
-          final gameMode = state.pathParameters['gameMode']!;
+          final gameMode =
+              normalizeGameModeName(state.pathParameters['gameMode']!);
           return MultiplayerResultsScreen(gameMode: gameMode);
         },
       ),

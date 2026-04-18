@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/core/animations/animation_manager.dart';
+import 'package:trivia_tycoon/screens/multiplayer/multiplayer_palette.dart';
 import '../../game/multiplayer/providers/multiplayer_providers.dart';
 import '../../game/services/multiplayer_quiz_service.dart';
 import '../../ui_components/multiplayer/versus/versus_screen.dart';
@@ -112,22 +113,22 @@ class _MultiplayerGameMatchmakingScreenState
   Color _getGameModeColor(String gameMode) {
     switch (gameMode) {
       case 'arena':
-        return const Color(0xFFEF5350);
+        return MultiplayerPalette.accent;
       case 'teams':
-        return const Color(0xFFAB47BC);
+        return MultiplayerPalette.primary;
       default:
-        return Colors.blue;
+        return MultiplayerPalette.primary;
     }
   }
 
   Color _getOpponentColor(String gameMode) {
     switch (gameMode) {
       case 'arena':
-        return const Color(0xFF4ECDC4);
+        return MultiplayerPalette.secondary;
       case 'teams':
-        return const Color(0xFF66BB6A);
+        return MultiplayerPalette.success;
       default:
-        return Colors.orange;
+        return MultiplayerPalette.secondary;
     }
   }
 
@@ -202,7 +203,7 @@ class _MultiplayerGameMatchmakingScreenState
         );
       },
       child: Scaffold(
-        backgroundColor: gameColor.withValues(alpha: 0.1),
+        backgroundColor: MultiplayerPalette.background,
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(24),
@@ -213,7 +214,7 @@ class _MultiplayerGameMatchmakingScreenState
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: gameColor.withValues(alpha: 0.1),
+                    color: MultiplayerPalette.surfaceAlt,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: gameColor.withValues(alpha: 0.3)),
                   ),
@@ -287,7 +288,7 @@ class _MultiplayerGameMatchmakingScreenState
                   Text(
                     'Looking for players ready to challenge in ${_getGameModeDisplayName()}',
                     style: theme.textTheme.bodyLarge?.copyWith(
-                      color: Colors.grey.shade600,
+                      color: MultiplayerPalette.textSecondary,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -353,8 +354,8 @@ class _MultiplayerGameMatchmakingScreenState
                     icon: const Icon(Icons.close),
                     label: const Text('Cancel Search'),
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.grey.shade600,
-                      side: BorderSide(color: Colors.grey.shade400),
+                      foregroundColor: MultiplayerPalette.textSecondary,
+                      side: BorderSide(color: MultiplayerPalette.textSecondary.withValues(alpha: 0.35)),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,
                         vertical: 12,

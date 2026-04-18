@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:trivia_tycoon/screens/multiplayer/multiplayer_palette.dart';
 import 'package:trivia_tycoon/screens/multiplayer/widgets/connection_banner.dart';
 import '../../game/multiplayer/providers/multiplayer_providers.dart';
 import 'dialogs/exit_match_confirm.dart';
@@ -63,7 +64,7 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
     child: Scaffold(
       backgroundColor: isDark
           ? const Color(0xFF0A0A0F)
-          : const Color(0xFFF8F9FC),
+          : MultiplayerPalette.background,
       appBar: AppBar(
         title: const Text('Find Match'),
         backgroundColor: Colors.transparent,
@@ -127,7 +128,7 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+                    colors: [MultiplayerPalette.primary, MultiplayerPalette.secondary],
                   ),
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -142,7 +143,7 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
                 'Find Your Match',
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white : const Color(0xFF1E293B),
+                  color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
                 ),
               ),
             ],
@@ -166,7 +167,7 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
           children: [
             Icon(
               Icons.add_circle_outline_rounded,
-              color: const Color(0xFF10B981),
+              color: MultiplayerPalette.success,
               size: 20,
             ),
             const SizedBox(width: 8),
@@ -174,7 +175,7 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
               'Create New Room',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                color: isDark ? Colors.white : const Color(0xFF1E293B),
+                color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
               ),
             ),
           ],
@@ -184,7 +185,7 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
           decoration: BoxDecoration(
             color: isDark
                 ? const Color(0xFF2A2A3E)
-                : const Color(0xFFF8F9FC),
+                : MultiplayerPalette.surfaceAlt,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: isDark
@@ -212,7 +213,7 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
             icon: const Icon(Icons.add_rounded),
             label: const Text('Create Room'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF10B981),
+              backgroundColor: MultiplayerPalette.success,
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 14),
               shape: RoundedRectangleBorder(
@@ -233,7 +234,7 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
           children: [
             Icon(
               Icons.explore_rounded,
-              color: const Color(0xFF8B5CF6),
+              color: MultiplayerPalette.primary,
               size: 20,
             ),
             const SizedBox(width: 8),
@@ -241,7 +242,7 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
               'Browse Existing Rooms',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                color: isDark ? Colors.white : const Color(0xFF1E293B),
+                color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
               ),
             ),
           ],
@@ -254,8 +255,8 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
             icon: const Icon(Icons.search_rounded),
             label: const Text('Browse Rooms'),
             style: OutlinedButton.styleFrom(
-              foregroundColor: const Color(0xFF8B5CF6),
-              side: const BorderSide(color: Color(0xFF8B5CF6)),
+              foregroundColor: MultiplayerPalette.primary,
+              side: const BorderSide(color: MultiplayerPalette.primary),
               padding: const EdgeInsets.symmetric(vertical: 14),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -277,12 +278,12 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
-                colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+                colors: [MultiplayerPalette.primary, MultiplayerPalette.secondary],
               ),
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF6366F1).withValues(alpha: 0.3),
+                  color: MultiplayerPalette.primary.withValues(alpha: 0.3),
                   blurRadius: 15,
                   offset: const Offset(0, 8),
                 ),
@@ -334,12 +335,12 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF10B981), Color(0xFF059669)],
+          colors: [MultiplayerPalette.success, Color(0xFF2E8E68)],
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF10B981).withValues(alpha: 0.3),
+            color: MultiplayerPalette.success.withValues(alpha: 0.3),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -390,7 +391,7 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
               label: const Text('Enter Lobby'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
-                foregroundColor: const Color(0xFF10B981),
+                foregroundColor: MultiplayerPalette.success,
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -409,10 +410,10 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
       decoration: BoxDecoration(
         color: isDark
             ? const Color(0xFF1E1E2E)
-            : const Color(0xFFF0F9FF),
+            : MultiplayerPalette.surfaceAlt,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: const Color(0xFF0EA5E9).withValues(alpha: 0.2),
+          color: MultiplayerPalette.primary.withValues(alpha: 0.2),
         ),
       ),
       child: Column(
@@ -422,7 +423,7 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
             children: [
               Icon(
                 Icons.lightbulb_outline_rounded,
-                color: const Color(0xFF0EA5E9),
+                color: MultiplayerPalette.primary,
                 size: 20,
               ),
               const SizedBox(width: 8),
@@ -430,7 +431,7 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
                 'Quick Tips',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: const Color(0xFF0EA5E9),
+                  color: MultiplayerPalette.primary,
                 ),
               ),
             ],
@@ -455,7 +456,7 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
             height: 6,
             margin: const EdgeInsets.only(top: 6, right: 8),
             decoration: BoxDecoration(
-              color: const Color(0xFF0EA5E9),
+              color: MultiplayerPalette.primary,
               shape: BoxShape.circle,
             ),
           ),
