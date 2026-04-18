@@ -3,6 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/models/store/store_hub_model.dart';
+import '../../game/providers/game_providers.dart';
+
 class StoreHubScreen extends ConsumerStatefulWidget {
   const StoreHubScreen({super.key});
 
@@ -40,41 +43,33 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
 
   @override
   Widget build(BuildContext context) {
+    final hubAsync = ref.watch(storeHubProvider);
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFF),
       appBar: _buildAppBar(),
       body: FadeTransition(
         opacity: _fadeAnimation,
-        child: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            // Hero Banner
-            SliverToBoxAdapter(
-              child: _buildHeroBanner(),
-            ),
-
-            // Quick Stats
-            SliverToBoxAdapter(
-              child: _buildQuickStats(),
-            ),
-
-            // Main Store Sections
-            SliverToBoxAdapter(
-              child: _buildStoreSections(),
-            ),
-
-            // Featured Content
-            SliverToBoxAdapter(
-              child: _buildFeaturedContent(),
-            ),
-
-            // Bottom padding
-            const SliverToBoxAdapter(
-              child: SizedBox(height: 32),
-            ),
-          ],
+        child: hubAsync.when(
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (_, __) => _buildBody(StoreHubData.fallback),
+          data: _buildBody,
         ),
       ),
+    );
+  }
+
+  Widget _buildBody(StoreHubData hub) {
+    return CustomScrollView(
+      physics: const BouncingScrollPhysics(),
+      slivers: [
+        SliverToBoxAdapter(child: _buildHeroBanner(hub.flashSaleMessage)),
+        SliverToBoxAdapter(child: _buildQuickStats(hub.stats)),
+        SliverToBoxAdapter(child: _buildStoreSections(hub.sections)),
+        if (hub.featured != null)
+          SliverToBoxAdapter(child: _buildFeaturedContent(hub.featured!)),
+        const SliverToBoxAdapter(child: SizedBox(height: 32)),
+      ],
     );
   }
 
@@ -183,16 +178,14 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
                 ],
               ),
             ),
-            onPressed: () {
-              // Handle notifications
-            },
+            onPressed: () {},
           ),
         ),
       ],
     );
   }
 
-  Widget _buildHeroBanner() {
+  Widget _buildHeroBanner(String? flashSaleMessage) {
     return TweenAnimationBuilder<double>(
       duration: const Duration(milliseconds: 800),
       tween: Tween(begin: 0.0, end: 1.0),
@@ -262,30 +255,33 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: const Row(
-                      children: [
-                        Icon(Icons.local_fire_department, color: Colors.white, size: 20),
-                        SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            'Flash Sale: Up to 70% off premium items!',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
+                  if (flashSaleMessage != null) ...[
+                    const SizedBox(height: 20),
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.local_fire_department,
+                              color: Colors.white, size: 20),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              flashSaleMessage,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
+                  ],
                 ],
               ),
             ),
@@ -295,7 +291,7 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
     );
   }
 
-  Widget _buildQuickStats() {
+  Widget _buildQuickStats(StoreHubStats stats) {
     return TweenAnimationBuilder<double>(
       duration: const Duration(milliseconds: 900),
       tween: Tween(begin: 0.0, end: 1.0),
@@ -305,14 +301,24 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
           child: Opacity(
             opacity: value,
             child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              margin:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
                 children: [
-                  Expanded(child: _buildStatCard('Total Items', '156', Icons.inventory, const Color(0xFF10B981))),
+                  Expanded(
+                    child: _buildStatCard(
+                        'Total Items', stats.totalItems, Icons.inventory,
+                        const Color(0xFF10B981))),
                   const SizedBox(width: 12),
-                  Expanded(child: _buildStatCard('Active Offers', '8', Icons.local_offer, const Color(0xFFEF4444))),
+                  Expanded(
+                    child: _buildStatCard(
+                        'Active Offers', stats.activeOffers, Icons.local_offer,
+                        const Color(0xFFEF4444))),
                   const SizedBox(width: 12),
-                  Expanded(child: _buildStatCard('New Today', '12', Icons.fiber_new, const Color(0xFF8B5CF6))),
+                  Expanded(
+                    child: _buildStatCard(
+                        'New Today', stats.newToday, Icons.fiber_new,
+                        const Color(0xFF8B5CF6))),
                 ],
               ),
             ),
@@ -322,7 +328,8 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
     );
   }
 
-  Widget _buildStatCard(String title, String value, IconData icon, Color color) {
+  Widget _buildStatCard(
+      String title, String value, IconData icon, Color color) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -369,50 +376,7 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
     );
   }
 
-  Widget _buildStoreSections() {
-    final sections = [
-      StoreSection(
-        title: 'Game Store',
-        subtitle: 'Power-ups, themes & more',
-        icon: Icons.store,
-        gradient: const LinearGradient(colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)]),
-        route: '/store',
-        itemCount: '50+ items',
-        badge: null,
-        preview: 'Latest power-ups and themes available',
-      ),
-      StoreSection(
-        title: 'Special Offers',
-        subtitle: 'Limited time deals',
-        icon: Icons.local_offer,
-        gradient: const LinearGradient(colors: [Color(0xFFEF4444), Color(0xFFDC2626)]),
-        route: '/offers',
-        itemCount: '8 deals',
-        badge: 'HOT',
-        preview: '80% off premium membership',
-      ),
-      StoreSection(
-        title: 'Gifts Center',
-        subtitle: 'Send & receive gifts',
-        icon: Icons.card_giftcard,
-        gradient: const LinearGradient(colors: [Color(0xFFEC4899), Color(0xFFDB2777)]),
-        route: '/gifts',
-        itemCount: '3 pending',
-        badge: 'NEW',
-        preview: 'Energy packs and coin gifts',
-      ),
-      StoreSection(
-        title: 'Premium Store',
-        subtitle: 'Exclusive content',
-        icon: Icons.workspace_premium,
-        gradient: const LinearGradient(colors: [Color(0xFFF59E0B), Color(0xFFD97706)]),
-        route: '/store-premium',
-        itemCount: 'VIP only',
-        badge: null,
-        preview: '3D avatars and ad-free experience',
-      ),
-    ];
-
+  Widget _buildStoreSections(List<StoreSectionData> sections) {
     return TweenAnimationBuilder<double>(
       duration: const Duration(milliseconds: 1000),
       tween: Tween(begin: 0.0, end: 1.0),
@@ -438,7 +402,8 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
                   GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       mainAxisSpacing: 16,
                       crossAxisSpacing: 16,
@@ -447,14 +412,16 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
                     itemCount: sections.length,
                     itemBuilder: (context, index) {
                       return TweenAnimationBuilder<double>(
-                        duration: Duration(milliseconds: 1100 + (index * 100)),
+                        duration:
+                            Duration(milliseconds: 1100 + (index * 100)),
                         tween: Tween(begin: 0.0, end: 1.0),
                         builder: (context, animValue, child) {
                           return Transform.scale(
                             scale: 0.8 + (0.2 * animValue),
                             child: Opacity(
                               opacity: animValue,
-                              child: _buildStoreSectionCard(sections[index]),
+                              child:
+                                  _buildStoreSectionCard(sections[index]),
                             ),
                           );
                         },
@@ -470,14 +437,14 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
     );
   }
 
-  Widget _buildStoreSectionCard(StoreSection section) {
+  Widget _buildStoreSectionCard(StoreSectionData section) {
     return GestureDetector(
       onTap: () {
         HapticFeedback.mediumImpact();
         context.push(section.route);
       },
       child: Container(
-        padding: const EdgeInsets.all(16), // Reduced from 20
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
@@ -494,14 +461,13 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min, // Important: prevent expansion
+          mainAxisSize: MainAxisSize.min,
           children: [
-            // Header with icon and badge
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(10), // Reduced from 12
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     gradient: section.gradient,
                     borderRadius: BorderRadius.circular(12),
@@ -509,12 +475,13 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
                   child: Icon(
                     section.icon,
                     color: Colors.white,
-                    size: 20, // Reduced from 24
+                    size: 20,
                   ),
                 ),
                 if (section.badge != null)
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3), // Reduced
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 6, vertical: 3),
                     decoration: BoxDecoration(
                       color: const Color(0xFFEF4444),
                       borderRadius: BorderRadius.circular(8),
@@ -523,40 +490,34 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
                       section.badge!,
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 9, // Reduced from 10
+                        fontSize: 9,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
               ],
             ),
-
-            const SizedBox(height: 12), // Reduced from 16
-
-            // Title and subtitle
+            const SizedBox(height: 12),
             Text(
               section.title,
               style: const TextStyle(
-                fontSize: 15, // Reduced from 16
+                fontSize: 15,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF1E293B),
               ),
             ),
-            const SizedBox(height: 3), // Reduced from 4
+            const SizedBox(height: 3),
             Text(
               section.subtitle,
               style: TextStyle(
-                fontSize: 11, // Reduced from 12
+                fontSize: 11,
                 color: Colors.grey.shade600,
               ),
             ),
-
-            const SizedBox(height: 8), // Reduced from 12
-
-            // Preview content
-            Flexible( // Use Flexible instead of fixed container
+            const SizedBox(height: 8),
+            Flexible(
               child: Container(
-                padding: const EdgeInsets.all(10), // Reduced from 12
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: const Color(0xFFF8FAFF),
                   borderRadius: BorderRadius.circular(8),
@@ -568,13 +529,13 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
                     Text(
                       section.preview,
                       style: const TextStyle(
-                        fontSize: 10, // Reduced from 11
+                        fontSize: 10,
                         color: Color(0xFF64748B),
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 6), // Reduced from 8
+                    const SizedBox(height: 6),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -582,7 +543,7 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
                           child: Text(
                             section.itemCount,
                             style: TextStyle(
-                              fontSize: 11, // Reduced from 12
+                              fontSize: 11,
                               fontWeight: FontWeight.w600,
                               color: section.gradient.colors.first,
                             ),
@@ -590,7 +551,7 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
                         ),
                         Icon(
                           Icons.arrow_forward_ios,
-                          size: 10, // Reduced from 12
+                          size: 10,
                           color: section.gradient.colors.first,
                         ),
                       ],
@@ -605,7 +566,7 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
     );
   }
 
-  Widget _buildFeaturedContent() {
+  Widget _buildFeaturedContent(FeaturedItemData featured) {
     return TweenAnimationBuilder<double>(
       duration: const Duration(milliseconds: 1200),
       tween: Tween(begin: 0.0, end: 1.0),
@@ -628,7 +589,7 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
                     ),
                   ),
                   const SizedBox(height: 16),
-                  _buildFeaturedCard(),
+                  _buildFeaturedCard(featured),
                 ],
               ),
             ),
@@ -638,19 +599,15 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
     );
   }
 
-  Widget _buildFeaturedCard() {
+  Widget _buildFeaturedCard(FeaturedItemData featured) {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF10B981), Color(0xFF059669)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        gradient: featured.gradient,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF10B981).withValues(alpha: 0.3),
+            color: featured.gradient.colors.first.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -667,28 +624,24 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
                   color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(
-                  Icons.auto_awesome,
-                  color: Colors.white,
-                  size: 20,
-                ),
+                child: Icon(featured.icon, color: Colors.white, size: 20),
               ),
               const SizedBox(width: 12),
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Weekly Power-up Bundle',
-                      style: TextStyle(
+                      featured.title,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      '5 premium power-ups for the price of 2',
-                      style: TextStyle(
+                      featured.subtitle,
+                      style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 12,
                       ),
@@ -701,65 +654,46 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
           const SizedBox(height: 16),
           Row(
             children: [
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      '2 days left',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
+              if (featured.countdownLabel.isNotEmpty)
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Center(
+                      child: Text(
+                        featured.countdownLabel,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Text(
-                  'Get Bundle',
-                  style: TextStyle(
-                    color: Color(0xFF10B981),
-                    fontWeight: FontWeight.bold,
+              if (featured.countdownLabel.isNotEmpty) const SizedBox(width: 12),
+              if (featured.buttonText != null)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 20, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    featured.buttonText!,
+                    style: TextStyle(
+                      color: featured.gradient.colors.first,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ],
       ),
     );
   }
-}
-
-class StoreSection {
-  final String title;
-  final String subtitle;
-  final IconData icon;
-  final LinearGradient gradient;
-  final String route;
-  final String itemCount;
-  final String? badge;
-  final String preview;
-
-  StoreSection({
-    required this.title,
-    required this.subtitle,
-    required this.icon,
-    required this.gradient,
-    required this.route,
-    required this.itemCount,
-    this.badge,
-    required this.preview,
-  });
 }

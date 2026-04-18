@@ -8,6 +8,9 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/models/store/store_hub_model.dart';
+import '../../core/models/store/store_offer_model.dart';
+import '../../core/models/store/store_gift_model.dart';
 import '../../core/services/leaderboard_data_service.dart';
 import '../../core/services/question/question_service.dart';
 import '../../core/services/settings/admin_settings_service.dart';
@@ -242,6 +245,18 @@ StateNotifierProvider<QrSettingsNotifier, QrSettingsModel>(
 
 final storeServiceProvider =
 Provider((ref) => ref.read(serviceManagerProvider).storeService);
+
+final storeHubProvider = FutureProvider<StoreHubData>((ref) async {
+  return ref.read(storeServiceProvider).getHubData();
+});
+
+final storeOffersProvider = FutureProvider<StoreOffersData>((ref) async {
+  return ref.read(storeServiceProvider).getOffers();
+});
+
+final giftsDataProvider = FutureProvider<GiftsData>((ref) async {
+  return ref.read(storeServiceProvider).getGiftsData();
+});
 
 final storeItemsProvider = FutureProvider<List<StoreItemModel>>((ref) async {
   final storeService = ref.read(storeServiceProvider);
