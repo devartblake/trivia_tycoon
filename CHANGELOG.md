@@ -8,6 +8,150 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added – MinIO audio integration: remote SFX support (2026-04-18)
+
+Extends the MinIO audio layer to cover **sound effects** in addition to
+background music. Both categories share the same presigned-URL cache and
+fallback-to-local behaviour.
+
+**Changes:**
+- `lib/core/services/audio/audio_asset_service.dart` — `getPresignedUrl()`
+  now accepts an optional `category` parameter (`'songs'` or `'sfx'`).
+  Cache key is scoped to `'$category/$filename'` so the two namespaces are
+  fully independent. Backend endpoint: `GET /v1/assets/audio/{category}/{filename}`.
+- `lib/audio/controller/audio_controller.dart` — added
+  `Map<SfxType, ja.AudioPlayer> _remoteSfxCache` field and
+  `_preloadRemoteSfx()` which fetches presigned SFX URLs on init.
+  `playSfx()` checks `_remoteSfxCache` first; falls back to the SoLoud local
+  cache for any type that failed to preload remotely.
+  `_stopAllSound()` and `dispose()` now clean up remote SFX players.
+  `initialize()` always preloads local SFX first, then overlays remote SFX
+  when `audioAssetService` is set.
+
+**Audio source priority (both music and SFX):**
+1. MinIO presigned URL via `AudioAssetService` + `just_audio` (remote)
+2. Bundled asset via SoLoud `loadFile()` (local fallback)
+
+### Refactored – Rename `TycoonApiClient` → `SynaptixApiClient` (2026-04-18)
+
+Aligns the API client name with the Synaptix product brand.
+
+**Changes (13 files):**
+- `lib/core/networking/tycoon_api_client.dart` → `lib/core/networking/synaptix_api_client.dart` (file rename)
+- Class: `TycoonApiClient` → `SynaptixApiClient`
+- Field: `tycoonApiClient` → `synaptixApiClient` (in `ServiceManager` and all referencing files)
+- Provider: `tycoonApiClientProvider` → `synaptixApiClientProvider` (in `core_providers.dart` and all consumers)
+- Updated files: `core_providers.dart`, `service_manager.dart`, `economy_notifier.dart`,
+  `hub_providers.dart`, `economy_providers.dart`, `skill_tree_provider.dart`,
+  `skill_tree_controller.dart`, `revive_sheet.dart`, `season_rewards_preview_screen.dart`,
+  `ranked_leaderboard_screen.dart`, `audio_asset_service.dart`
+
+### Added – MinIO audio integration: music streaming (2026-04-18)
+
+Connects the game audio layer (`AudioController`) to MinIO object storage
+(`tycoon-assets` bucket) for background music streaming.
+
+**Changes:**
+- `lib/core/services/audio/audio_asset_response.dart` — new model; parses
+  `{ presignedUrl, expiresAt, contentType?, cacheHints? }` from the backend response.
+- `lib/core/services/audio/audio_asset_service.dart` — new service; calls
+  `GET /v1/assets/audio/songs/{filename}`, caches presigned URLs until 2 min before
+  expiry to avoid duplicate requests.
+- `lib/game/providers/core_providers.dart` — registered `audioAssetServiceProvider`.
+- `lib/audio/controller/audio_controller.dart` — added `ja.AudioPlayer? _musicPlayer`
+  field and public `playRemoteMusic(String url)` / `stopRemoteMusic()` methods for
+  Option A local verification. `_playCurrentSongInPlaylist()` now fetches a presigned
+  URL and streams via `just_audio` when `audioAssetService` is set; SoLoud local
+  asset is the fallback. `_startOrResumeMusic()` and `_stopAllSound()` updated for
+  both playback paths. Import fixed: `just_audio` imported as `ja` prefix to resolve
+  `AudioSource` name collision with `flutter_soloud`.
+- `lib/audio/models/songs.dart` — replaced 4 placeholder `Mr_Smith-*.mp3` entries
+  with all 12 real filenames from the `tycoon-assets/songs/` bucket
+  (`around_the_world.mp3`, `autumn_days_lofi.mp3`, `believing_in_goods_things.mp3`,
+  `breezing.mp3`, `end_game.mp3`, `holding_hands.mp3`, `moving_on.mp3`,
+  `new_starts_beat.mp3`, `patience.mp3`, `pillow_days.mp3`, `sweetheart_waltz.mp3`,
+  `what_it_feels_like.mp3`).
+
+**Backend contract (endpoint not yet implemented server-side):**
+```
+GET /v1/assets/audio/{category}/{filename}
+→ { presignedUrl: "...", expiresAt: "...", contentType: "audio/mpeg", cacheHints: { maxAgeSeconds: N } }
+```
+
+### Fixed – Android emulator and Edge browser login failure (2026-04-18)
+
+Platform-aware URL normalization was added to `EnvConfig` so a single
+`.env` entry works correctly on all runtimes without manual changes.
+
+**Root cause:** `localhost` / `127.0.0.1` in `API_BASE_URL` is unreachable
+from an Android emulator (must be `10.0.2.2`), while `10.0.2.2` is
+unreachable from a web browser or non-Android desktop (must be `localhost`).
+A prior commit also introduced a `secureStorage.isNotEmpty` compile error in
+`login_screen.dart` that broke all-platform login.
+
+**Changes:**
+- `lib/core/env.dart` (`_normalizeApiBaseUrlForRuntime`) — three-step normalization:
+  1. Downgrade `https` → `http` for known local dev hosts.
+  2. Rewrite `10.0.2.2` → `localhost` on web and non-Android native.
+  3. Rewrite `localhost` / `127.0.0.1` → `10.0.2.2` on Android emulator.
+- `lib/screens/login_screen.dart` — removed dead `secureStorage.isNotEmpty` guard
+  (compile error introduced by prior refactor). Cleaned up dead no-op `useBackendAuth`
+  block. Added platform-specific error hint messages for network failures (Android
+  emulator shows `10.0.2.2` tip; web shows CORS/origin tip).
+
+### Fixed – Compiler errors in power_up.dart, login_screen.dart, play_quiz_screen.dart (2026-04-18)
+
+**Changes:**
+- `lib/game/models/power_up.dart` — `fromStoreItem`: `item.duration` (`int?`) →
+  `item.duration ?? 0`; `item.type` (`String?`) → `item.type ?? ''`.
+- `lib/screens/login_screen.dart` — removed reference to non-existent
+  `SecureStorage.isNotEmpty` getter (compile error from prior refactor commit).
+- `lib/screens/play_quiz_screen.dart` — replaced references to undefined local
+  variable `width` with constants `60` and `40`.
+
+### Fixed – Nullability and deprecation warnings: ui_components tail (2026-04-18)
+
+**Changes:**
+- `lib/ui_components/shimmer_avatar/widgets/status_indicator.dart` —
+  `gradientColors.first.withOpacity(…)` → `.withValues(alpha: …)`.
+- `lib/ui_components/color_picker/core/color_picker_theme.dart` —
+  `colorScheme.surfaceVariant` → `colorScheme.surfaceContainerHighest`.
+- `lib/ui_components/presence/message_reaction_picker.dart` — both
+  `surfaceVariant` → `surfaceContainerHighest`.
+- `lib/ui_components/multiplayer/versus/versus_banner.dart` —
+  `surfaceVariant` → `surfaceContainerHighest`.
+- `lib/ui_components/navigation/fluid_nav_bar_icon.dart` — fixed broken
+  assert (`||` chain that only fired when all three were non-null) with a
+  count-based `where((x) => x != null).length <= 1` guard.
+- `lib/ui_components/navigation/fluid_nav_bar.dart` and `fluid_nav_bar_style.dart`
+  — doc-comment examples updated from deprecated `iconPath:` to `svgPath:`.
+- `lib/ui_components/login/models/term_of_service.dart` — deleted
+  `setStatus()` and `getStatus()` (`@Deprecated`, zero callers).
+
+### Fixed – Nullability and deprecation warnings: skills-tree / store / profile (2026-04-18)
+
+**Changes:**
+- `lib/game/controllers/skill_tree_controller.dart` — replaced
+  `state.graph.byId[id]!.cost` with a guarded local variable; added early return
+  if `byId[id]` is `null`.
+- `lib/screens/skills_tree/repository/skill_tree_nav_repository.dart` —
+  `(b['nodes'] as List?)?.cast<Map>()` → `whereType<Map>().toList()`.
+- `lib/screens/store/widgets/store_item_card.dart` —
+  `glowColor.withOpacity(…)` → `glowColor.withValues(alpha: …)`.
+- `lib/screens/profile/enhanced/widgets/game_stats_widget.dart` —
+  `colorScheme.surfaceVariant` → `colorScheme.surfaceContainerHighest`.
+
+### Fixed – Nullability warnings: onboarding userData casts (2026-04-18)
+
+**Changes:**
+- `lib/game/controllers/onboarding_controller.dart` — all five typed getters
+  (`username`, `ageGroup`, `intent`, `playStyle`, `synaptixMode`) replaced bare
+  `as String?` casts with `is String ? … as String : null` type guards.
+- `lib/screens/onboarding/onboarding_screen.dart` — all `_controller.userData[…]`
+  lookups in `_persistProgressSnapshot` and `_handleCompletion` use the same
+  type-guard pattern. List field uses `is List` guard before casting to
+  `List<dynamic>`.
+
 ### Added - Alpha handoff partial frontend/backend wiring completion (2026-04-12)
 
 Closed the remaining alpha handoff items that were already partly underway on
