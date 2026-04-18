@@ -16,9 +16,6 @@ class SkillTreePainter extends CustomPainter {
   final String? focusedId;
   final double glowPulse;
 
-  // Cache static edge picture:
-  Size? _cachedSizeKey;
-
   SkillTreePainter({
     required this.graph,
     required this.positions,
@@ -43,11 +40,10 @@ class SkillTreePainter extends CustomPainter {
     for (final edge in graph.edges) {
       final from = positions[edge.fromId];
       final to = positions[edge.toId];
-      if (from == null || to == null) {
-        final fromScreen = _transformPoint(worldToScreen, from!);
-        final toScreen = _transformPoint(worldToScreen, to!);
-        canvas.drawLine(fromScreen, toScreen, edgePaint);
-      }
+      if (from == null || to == null) continue;
+      final fromScreen = _transformPoint(worldToScreen, from);
+      final toScreen = _transformPoint(worldToScreen, to);
+      canvas.drawLine(fromScreen, toScreen, edgePaint);
     }
 
 // Draw nodes using SkillNodeWidget as visual reference
@@ -58,7 +54,6 @@ class SkillTreePainter extends CustomPainter {
       final isUnlocked = unlocked.contains(node.id);
       final categoryColor = SkillTreeCategoryColors.getColor(node.category);
       final isSelected = selectedId == node.id;
-      final isFocused = focusedId == node.id;
 
       final painter = _SkillNodePainter(
         node: node,

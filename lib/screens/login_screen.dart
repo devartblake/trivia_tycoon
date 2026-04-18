@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -285,8 +286,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     }
 
     try {
-      final apiService = ref.read(apiServiceProvider);
-      final authUrl = await apiService.getOAuthUrl(provider);
+      final authApiClient = ref.read(authApiClientProvider);
+      final authUrl = await authApiClient.getOAuthUrl(provider);
       if (authUrl == null || authUrl.isEmpty) {
         _showErrorSnackBar('No auth URL returned for $provider.');
         return;

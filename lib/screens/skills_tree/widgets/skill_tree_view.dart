@@ -5,14 +5,12 @@ import 'package:vector_math/vector_math_64.dart' as vmath;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/game/models/skill_tree_graph.dart';
 import 'package:trivia_tycoon/ui_components/hex_grid/index.dart';
-import '../../../core/theme/hex_spider_theme.dart';
 import '../../../game/controllers/skill_tree_controller.dart';
 import '../../../game/models/skill_tree_category_colors.dart';
 import '../../../game/providers/hex_theme_providers.dart';
 import '../../../game/providers/skill_cooldown_service_provider.dart';
 import '../../../game/providers/skill_tree_provider.dart';
 import '../../../game/providers/xp_provider.dart';
-import '../../../ui_components/hex_grid/model/hex_free_item.dart';
 import 'skill_node_detail_sheet.dart';
 
 enum SkillNodeFilterMode { all, unlocked, available, locked }
@@ -201,31 +199,6 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
     }
   }
 
-  // Build sub-nodes for each parent based on outgoing edges.
-  List<HexSubItem> _buildSubItemsFor(SkillTreeState state, String parentId) {
-    final children = state.graph.edges
-        .where((e) => e.fromId == parentId)
-        .map((e) => e.toId)
-        .where((id) => state.graph.byId.containsKey(id))
-        .toList();
-
-    if (children.isEmpty) return const [];
-
-    final step = 360.0 / children.length;
-    const baseRadiusFactor = 0.9;
-    const baseScale = 0.55;
-
-    return [
-      for (var i = 0; i < children.length; i++)
-        HexSubItem(
-          id: children[i],
-          angleDeg: i * step,
-          radiusFactor: baseRadiusFactor,
-          scale: baseScale,
-        ),
-    ];
-  }
-
   double _currentScale() => _transform.value.storage[0];
 
   /// Apply the current [widget.filterMode] to a positions map.
@@ -252,8 +225,6 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
 
     final bgTheme = ref.watch(hexSpiderThemeProvider);
     final snapToNodes = ref.watch(hexSnapToNodesProvider);
-    final cooldowns = ref.read(skillCooldownServiceProvider);
-
     return Column(
       children: [
         _TopBar(
@@ -445,7 +416,6 @@ class _TopBar extends ConsumerWidget {
   final VoidCallback onResetZoom;
   final VoidCallback onToggleTree;
   final bool isTreeVisible;
-  final Color barColor;
 
   const _TopBar({
     required this.state,
@@ -455,7 +425,6 @@ class _TopBar extends ConsumerWidget {
     required this.onResetZoom,
     required this.onToggleTree,
     required this.isTreeVisible,
-    this.barColor = const Color(0xFF101828),
   });
 
   @override
@@ -465,7 +434,7 @@ class _TopBar extends ConsumerWidget {
     final totalCount = state.graph.nodes.length;
 
     return Material(
-      color: barColor,
+      color: const Color(0xFF101828),
       child: SizedBox(
         height: 56,
         child: Row(

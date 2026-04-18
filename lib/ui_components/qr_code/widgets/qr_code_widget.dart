@@ -45,12 +45,6 @@ class QrCodeWidget extends StatelessWidget {
       final matrix = encoder.encode(data);
       LogManager.debug('Matrix encoded');
 
-      // Check if matrix is null
-      if (matrix == null) {
-        LogManager.debug('ERROR: Matrix is null!');
-        return _buildErrorWidget('Encoding failed: null matrix');
-      }
-
       // Check matrix size
       LogManager.debug('Matrix size: ${matrix.size}');
       if (matrix.size == 0) {

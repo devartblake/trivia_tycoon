@@ -1,9 +1,22 @@
 import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart';
+import 'auth_api_client.dart';
 
 /// User-friendly error messages for common API errors
 class AuthErrorMessages {
   /// Convert exception to user-friendly message
   static String getUserFriendlyMessage(dynamic error) {
+    if (error is AuthApiException) {
+      if (kIsWeb) {
+        final status = error.statusCode != null ? ' [HTTP ${error.statusCode}]' : '';
+        final body = error.responseBody != null && error.responseBody!.trim().isNotEmpty
+            ? '\nBody: ${error.responseBody}'
+            : '';
+        return '${error.message}$status$body';
+      }
+      return error.message;
+    }
+
     // Network/Connection errors — checked by type name to stay dart:io-free on web.
     final typeName = error.runtimeType.toString();
     if (typeName == 'SocketException' ||
@@ -128,6 +141,14 @@ class AuthErrorMessages {
 
   /// Specific messages for auth operations
   static String getLoginErrorMessage(dynamic error) {
+    if (error is AuthApiException && kIsWeb) {
+      final status = error.statusCode != null ? ' [HTTP ${error.statusCode}]' : '';
+      final body = error.responseBody != null && error.responseBody!.trim().isNotEmpty
+          ? '\nBody: ${error.responseBody}'
+          : '';
+      return '${error.message}$status$body';
+    }
+
     final errorStr = error.toString();
 
     if (errorStr.contains('401') || errorStr.contains('Invalid credentials')) {
@@ -146,6 +167,14 @@ class AuthErrorMessages {
   }
 
   static String getSignupErrorMessage(dynamic error) {
+    if (error is AuthApiException && kIsWeb) {
+      final status = error.statusCode != null ? ' [HTTP ${error.statusCode}]' : '';
+      final body = error.responseBody != null && error.responseBody!.trim().isNotEmpty
+          ? '\nBody: ${error.responseBody}'
+          : '';
+      return '${error.message}$status$body';
+    }
+
     final errorStr = error.toString();
 
     if (errorStr.contains('409') ||

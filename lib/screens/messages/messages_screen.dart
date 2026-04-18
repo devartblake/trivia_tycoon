@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../game/analytics/providers/analytics_providers.dart';
 import '../../game/models/conversation_models.dart';
 import '../../game/providers/message_providers.dart';
@@ -86,7 +87,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
             borderRadius: BorderRadius.circular(12),
           ),
           child: IconButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => context.pop(),
             icon: const Icon(
               Icons.arrow_back,
               color: Colors.white,
@@ -458,61 +459,38 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
   }
 
   void _openConversationDetail(Conversation conversation) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => MessageDetailScreen(
-          conversationId: conversation.id,
-          contactName: conversation.name ?? 'Direct Message',
-          contactAvatar: conversation.avatar,
-          isOnline: true,
-          currentActivity: null,
-        ),
-        fullscreenDialog: false,
-      ),
+    context.push(
+      '/messages/detail/${conversation.id}',
+      extra: {
+        'contactName': conversation.name ?? 'Direct Message',
+        'contactAvatar': conversation.avatar,
+        'isOnline': true,
+        'currentActivity': null,
+      },
     );
   }
 
   void _showSearchDialog() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const SearchDialog(),
-        fullscreenDialog: true,
-      ),
-    );
+    context.push('/messages/search');
   }
 
   void _showAddFriendDialog() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const AddFriendDialog(),
-        fullscreenDialog: true,
-      ),
-    );
+    context.push('/messages/add-friend');
   }
 
   void _showMessageRequestDialog() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => MessageRequestDialog(
-          requestCount: _messageRequests,
-          onRequestHandled: (accepted) {
-            setState(() {
-              if (_messageRequests > 0) _messageRequests--;
-            });
-          },
-        ),
-        fullscreenDialog: true,
-      ),
-    );
+    context.push('/messages/requests', extra: {
+      'requestCount': _messageRequests,
+      'onRequestHandled': (bool accepted) {
+        setState(() {
+          if (_messageRequests > 0) _messageRequests--;
+        });
+      },
+    });
   }
 
   void _showCreateDMDialog() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const CreateDMDialog(),
-        fullscreenDialog: true,
-      ),
-    );
+    context.push('/messages/new');
   }
 
   @override

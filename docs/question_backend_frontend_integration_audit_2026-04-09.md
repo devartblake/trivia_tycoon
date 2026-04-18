@@ -27,6 +27,8 @@ This audit reviews question-related backend connectivity and frontend subsystem 
 - `QuestionRepositoryImpl` delegates to `QuestionHubService` for mode/category/daily/mixed access, centralizing question fetch behavior.
 - `QuestionHubService` calls backend endpoints (`/quiz/*`, fallback `/questions/*`) and falls back to local loaders on API/contract errors.
 - `QuestionService` still provides server+local fallback behavior for legacy paths.
+- `QuestionHubService` now records whether each operation resolved from backend or local fallback and emits explicit source logs.
+- `QuestionScreen` now surfaces a visible backend/local fallback status banner through provider-backed question source reporting.
 
 **Impact:** the app can keep serving question content even when backend endpoints partially fail.
 
@@ -39,11 +41,18 @@ This audit reviews question-related backend connectivity and frontend subsystem 
 
 ### A) Economy systems are mostly local-only today
 - `XPService` persists XP locally (storage key `playerXP`) and does not sync to backend.
-- `WalletService` persists coins/gems to Hive only and does not call backend balance/ledger endpoints.
+- `WalletService` still persists coins/gems locally, but the main menu now performs a backend player-wallet sync to hydrate displayed coin/gem balances on refresh.
 - `LivesState` and `EnergyState` are state models only with no backend refill/consume sync.
 - `QuestionController` applies score/money/diamonds and power-up effects in-memory/session logic, but no authoritative backend transaction write is performed during answer resolution.
 
 **Risk:** cross-device drift, exploit risk, and mismatch between client reward state and backend truth.
+
+### C) Observability is improved, but not yet complete
+- The frontend can now visibly distinguish backend-backed question data from local fallback on `QuestionScreen`.
+- Service-level logs now make fallback activation easier to spot during manual verification.
+- There is still no aggregated metric/reporting layer for fallback rate, endpoint latency, or dataset coverage drift.
+
+**Risk:** diagnosis is much better during manual QA, but long-running fallback regressions could still go unnoticed without broader telemetry.
 
 ### B) Legacy `QuestionApiService` had placeholder URL behavior
 - This file was configured with a placeholder URL (`https://your-api-url.com/api/questions`) and therefore was not safe if referenced.
@@ -58,7 +67,7 @@ This audit reviews question-related backend connectivity and frontend subsystem 
 | Daily/mixed/category quiz retrieval | Yes | Yes | Uses `QuestionRepositoryImpl` -> `QuestionHubService`. |
 | Power-up effects | Partial | Yes | Applied locally in `QuestionController`; no authoritative backend consume/audit write. |
 | XP progression | No (authoritative) | Yes | Local accumulation in `XPService`; needs server profile progression sync. |
-| Coins/gems economy | No (authoritative) | Yes | Local Hive balance in `WalletService`; no backend ledger sync. |
+| Coins/gems economy | No (authoritative) | Partial | Main menu display now syncs backend wallet balances, but ledger/transaction authority is still not backend-driven. |
 | Lives/energy stamina | No (authoritative) | Partial | Models exist; no backend refill/consume contract integration. |
 
 ## Recommended Backend Contracts (next step)

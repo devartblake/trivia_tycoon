@@ -164,7 +164,6 @@ class HexEdgePainter extends CustomPainter {
       if (highlightEdge != null && i != highlightEdge) continue;
       final m = metrics[i];
       // Draw each edge as a small extract of the path
-      final tangent = m.getTangentForOffset(0)!;
       canvas.drawPath(m.extractPath(0, m.length), paint);
     }
   }

@@ -1,5 +1,6 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:trivia_tycoon/admin/notifications/widgets/role_gate.dart';
@@ -216,7 +217,7 @@ class _AdminNotificationsScreenState
           ),
           child: const Icon(Icons.arrow_back, color: Colors.white),
         ),
-        onPressed: () => Navigator.of(context).pop(),
+        onPressed: () => context.pop(),
       ),
       actions: [
         IconButton(

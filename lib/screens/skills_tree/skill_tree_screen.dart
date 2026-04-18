@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'widgets/skill_tree_view.dart';
-import '../../game/controllers/skill_tree_controller.dart';
 import '../../game/providers/skill_tree_provider.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
@@ -104,17 +103,12 @@ class _SkillTreeScreenState extends ConsumerState<SkillTreeScreen> {
   }
 
   void _loadSkillsForGroup(String groupId) {
-    // Filter and load skills based on the group
-    final controller = ref.read(skillTreeProvider.notifier);
-
     // You can implement group-specific filtering logic here
     // For example, filter nodes by category or apply group-specific settings
     _filterSkillsByGroup(groupId);
   }
 
   void _filterSkillsByGroup(String groupId) {
-    final state = ref.read(skillTreeProvider);
-
     // Example filtering logic - you can customize this based on your needs
     switch (groupId) {
       case 'scholar':

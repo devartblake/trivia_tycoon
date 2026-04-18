@@ -9,12 +9,14 @@ class ProfileSyncResult {
   final bool queuedForRetry;
   final String? confirmedDisplayName;
   final String? confirmedUsername;
+  final Map<String, dynamic>? confirmedProfile;
 
   const ProfileSyncResult({
     required this.synced,
     required this.queuedForRetry,
     this.confirmedDisplayName,
     this.confirmedUsername,
+    this.confirmedProfile,
   });
 }
 
@@ -57,15 +59,59 @@ class ProfileSyncService {
     required String displayName,
     required String username,
   }) async {
+    return syncProfileFields(
+      displayName: displayName,
+      username: username,
+    );
+  }
+
+  Future<ProfileSyncResult> syncProfileFields({
+    String? displayName,
+    String? username,
+    String? country,
+    String? ageGroup,
+    List<String>? preferredCategories,
+    String? avatar,
+    String? synaptixMode,
+    String? preferredHomeSurface,
+    bool? reducedMotion,
+    String? tonePreference,
+  }) async {
     final payload = <String, dynamic>{
-      'display_name': displayName,
-      'displayName': displayName,
-      'username': username,
-      'handle': username,
+      if (displayName != null) 'display_name': displayName,
+      if (displayName != null) 'displayName': displayName,
+      if (displayName != null) 'name': displayName,
+      if (username != null) 'username': username,
+      if (username != null) 'handle': username,
+      if (country != null) 'country': country,
+      if (ageGroup != null) 'age_group': ageGroup,
+      if (ageGroup != null) 'ageGroup': ageGroup,
+      if (preferredCategories != null) 'preferred_categories': preferredCategories,
+      if (preferredCategories != null) 'preferredCategories': preferredCategories,
+      if (preferredCategories != null) 'categories': preferredCategories,
+      if (avatar != null) 'avatar': avatar,
+      if (synaptixMode != null) 'synaptix_mode': synaptixMode,
+      if (synaptixMode != null) 'synaptixMode': synaptixMode,
+      if (preferredHomeSurface != null)
+        'preferred_home_surface': preferredHomeSurface,
+      if (preferredHomeSurface != null)
+        'preferredHomeSurface': preferredHomeSurface,
+      if (reducedMotion != null) 'reduced_motion': reducedMotion,
+      if (reducedMotion != null) 'reducedMotion': reducedMotion,
+      if (tonePreference != null) 'tone_preference': tonePreference,
+      if (tonePreference != null) 'tonePreference': tonePreference,
     };
+
+    if (payload.isEmpty) {
+      return const ProfileSyncResult(
+        synced: false,
+        queuedForRetry: false,
+      );
+    }
 
     final response = await _trySync(payload);
     if (response != null) {
+      final normalizedProfile = normalizeProfileResponse(response);
       final confirmedDisplayName = _readFirstString(response, const [
         'display_name',
         'displayName',
@@ -87,6 +133,7 @@ class ProfileSyncService {
         queuedForRetry: false,
         confirmedDisplayName: confirmedDisplayName,
         confirmedUsername: confirmedUsername,
+        confirmedProfile: normalizedProfile.isEmpty ? null : normalizedProfile,
       );
     }
 
@@ -96,6 +143,134 @@ class ProfileSyncService {
     });
 
     return const ProfileSyncResult(synced: false, queuedForRetry: true);
+  }
+
+  Future<Map<String, dynamic>?> fetchRemoteProfile() async {
+    const endpoints = <String>[
+      '/users/me',
+      '/profile',
+      '/user/profile',
+      '/auth/profile',
+    ];
+
+    for (final endpoint in endpoints) {
+      if (_isEndpointInBackoff(endpoint)) {
+        continue;
+      }
+
+      try {
+        final response = await _apiService.get(
+          endpoint,
+          headers: _authHeaders(),
+        );
+        _clearEndpointBackoff(endpoint);
+        final normalized = normalizeProfileResponse(response);
+        if (normalized.isNotEmpty) {
+          return normalized;
+        }
+      } on ApiRequestException catch (e) {
+        if (e.statusCode == 404) {
+          _markEndpointInBackoff(endpoint);
+          continue;
+        }
+      } catch (_) {
+        // Try the next endpoint variant.
+      }
+    }
+
+    return null;
+  }
+
+  Map<String, dynamic> normalizeProfileResponse(Map<String, dynamic> response) {
+    final nestedUser = response['user'];
+    final user = nestedUser is Map
+        ? Map<String, dynamic>.from(nestedUser)
+        : <String, dynamic>{};
+
+    T? firstValue<T>(List<String> keys) {
+      for (final key in keys) {
+        final top = response[key];
+        if (top is T) return top;
+        final nested = user[key];
+        if (nested is T) return nested;
+      }
+      return null;
+    }
+
+    String? firstString(List<String> keys) {
+      for (final key in keys) {
+        final top = response[key];
+        if (top is String && top.trim().isNotEmpty) return top.trim();
+        final nested = user[key];
+        if (nested is String && nested.trim().isNotEmpty) return nested.trim();
+      }
+      return null;
+    }
+
+    List<String>? firstStringList(List<String> keys) {
+      for (final key in keys) {
+        final top = response[key];
+        if (top is List) {
+          return top.map((e) => e.toString()).toList(growable: false);
+        }
+        final nested = user[key];
+        if (nested is List) {
+          return nested.map((e) => e.toString()).toList(growable: false);
+        }
+      }
+      return null;
+    }
+
+    final normalized = <String, dynamic>{};
+    final userId = firstString(const ['id', 'user_id', 'userId']);
+    final displayName = firstString(
+      const ['display_name', 'displayName', 'name', 'player_name'],
+    );
+    final resolvedUsername = firstString(const ['username', 'handle']);
+    final role = firstString(const ['role', 'user_role']);
+    final roles = firstStringList(const ['roles', 'user_roles']);
+    final country = firstString(const ['country']);
+    final ageGroup = firstString(const ['age_group', 'ageGroup']);
+    final avatar = firstString(
+      const ['avatar', 'avatarUrl', 'profileImageUrl', 'profile_image_url'],
+    );
+    final synaptixMode = firstString(const ['synaptix_mode', 'synaptixMode']);
+    final preferredHomeSurface = firstString(
+      const ['preferred_home_surface', 'preferredHomeSurface'],
+    );
+    final tonePreference = firstString(
+      const ['tone_preference', 'tonePreference'],
+    );
+    final preferredCategories = firstStringList(
+      const ['preferred_categories', 'preferredCategories', 'categories'],
+    );
+    final isPremium = firstValue<bool>(
+      const ['is_premium', 'isPremium', 'premium'],
+    );
+    final reducedMotion = firstValue<bool>(
+      const ['reduced_motion', 'reducedMotion'],
+    );
+
+    if (userId != null) normalized['user_id'] = userId;
+    if (displayName != null) normalized['player_name'] = displayName;
+    if (resolvedUsername != null) normalized['username'] = resolvedUsername;
+    if (role != null) normalized['user_role'] = role;
+    if (roles != null) normalized['user_roles'] = roles;
+    if (isPremium != null) normalized['is_premium'] = isPremium;
+    if (country != null) normalized['country'] = country;
+    if (ageGroup != null) normalized['age_group'] = ageGroup;
+    if (avatar != null) normalized['avatar'] = avatar;
+    if (preferredCategories != null) {
+      normalized['preferred_categories'] = preferredCategories;
+    }
+    if (synaptixMode != null) normalized['synaptix_mode'] = synaptixMode;
+    if (preferredHomeSurface != null) {
+      normalized['preferred_home_surface'] = preferredHomeSurface;
+    }
+    if (reducedMotion != null) normalized['reduced_motion'] = reducedMotion;
+    if (tonePreference != null) normalized['tone_preference'] = tonePreference;
+
+    return normalized;
   }
 
   Future<ProfileSyncDataResult> syncProfileData({
@@ -354,7 +529,9 @@ class ProfileSyncService {
   String _payloadSignature(Map<String, dynamic> payload) {
     final displayName = payload['display_name'] ?? payload['displayName'] ?? '';
     final username = payload['username'] ?? payload['handle'] ?? '';
-    return '${displayName.toString().trim().toLowerCase()}|${username.toString().trim().toLowerCase()}';
+    final country = payload['country'] ?? '';
+    final ageGroup = payload['age_group'] ?? payload['ageGroup'] ?? '';
+    return '${displayName.toString().trim().toLowerCase()}|${username.toString().trim().toLowerCase()}|${country.toString().trim().toLowerCase()}|${ageGroup.toString().trim().toLowerCase()}';
   }
 
   DateTime _parseIso(Object? raw) {

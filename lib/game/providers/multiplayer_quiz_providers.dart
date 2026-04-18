@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
+import '../models/game_mode.dart';
 import '../models/question_model.dart';
 import '../services/multiplayer_quiz_service.dart';
 
@@ -26,6 +27,9 @@ class MultiplayerQuizState {
   final bool isPlayerCorrect;
   final bool isOpponentCorrect;
   final String? matchId;
+  final String? revealedCorrectAnswer;
+  final bool? _isRoundResolved;
+  bool get isRoundResolved => _isRoundResolved ?? false;
 
   const MultiplayerQuizState({
     this.isLoading = false,
@@ -49,7 +53,9 @@ class MultiplayerQuizState {
     this.isPlayerCorrect = false,
     this.isOpponentCorrect = false,
     this.matchId,
-  });
+    this.revealedCorrectAnswer,
+    bool? isRoundResolved = false,
+  }) : _isRoundResolved = isRoundResolved;
 
   MultiplayerQuizState copyWith({
     bool? isLoading,
@@ -73,6 +79,8 @@ class MultiplayerQuizState {
     bool? isPlayerCorrect,
     bool? isOpponentCorrect,
     String? matchId,
+    String? revealedCorrectAnswer,
+    bool? isRoundResolved,
   }) {
     return MultiplayerQuizState(
       isLoading: isLoading ?? this.isLoading,
@@ -96,6 +104,8 @@ class MultiplayerQuizState {
       isPlayerCorrect: isPlayerCorrect ?? this.isPlayerCorrect,
       isOpponentCorrect: isOpponentCorrect ?? this.isOpponentCorrect,
       matchId: matchId ?? this.matchId,
+      revealedCorrectAnswer: revealedCorrectAnswer ?? this.revealedCorrectAnswer,
+      isRoundResolved: isRoundResolved ?? this.isRoundResolved,
     );
   }
 }
@@ -109,14 +119,20 @@ class MultiplayerQuizNotifier extends StateNotifier<MultiplayerQuizState> {
   MultiplayerQuizNotifier(this._quizService) : super(const MultiplayerQuizState());
 
   Future<void> startMultiplayerQuiz(String gameMode) async {
-    state = state.copyWith(isLoading: true, error: null, gameMode: gameMode);
+    final normalizedGameMode = normalizeGameModeName(gameMode);
+    state = state.copyWith(
+      isLoading: true,
+      error: null,
+      gameMode: normalizedGameMode,
+    );
 
     try {
       // Initialize the multiplayer match
-      final matchData = await _quizService.initializeMatch(gameMode);
+      final matchData = await _quizService.initializeMatch(normalizedGameMode);
 
       // Get questions for the game mode
-      final questions = await _quizService.getQuestionsForGameMode(gameMode);
+      final questions =
+          await _quizService.getQuestionsForGameMode(normalizedGameMode);
 
       if (questions.isEmpty) {
         state = state.copyWith(
@@ -133,7 +149,11 @@ class MultiplayerQuizNotifier extends StateNotifier<MultiplayerQuizState> {
         totalQuestions: questions.length,
         opponentName: matchData.opponentName,
         matchId: matchData.matchId,
+        revealedCorrectAnswer: questions.first.correctAnswer,
+        isRoundResolved: false,
       );
+
+      _quizService.registerMatchQuestions(matchData.matchId, questions);
 
       // Start the timer for the first question
       _startTimer();
@@ -207,6 +227,8 @@ class MultiplayerQuizNotifier extends StateNotifier<MultiplayerQuizState> {
 
   Future<void> submitAnswer(String answer) async {
     if (state.hasPlayerAnswered || state.matchId == null) return;
+    final currentQuestion = state.currentQuestion;
+    if (currentQuestion == null) return;
 
     _timer?.cancel();
 
@@ -218,6 +240,25 @@ class MultiplayerQuizNotifier extends StateNotifier<MultiplayerQuizState> {
 
     try {
       await _quizService.submitAnswer(state.matchId!, answer, state.currentIndex);
+      final validation = await _quizService.validateAnswer(
+        question: currentQuestion,
+        selectedAnswer: answer,
+      );
+      final resolvedCorrectAnswer =
+          validation.correctAnswer ?? currentQuestion.correctAnswer;
+      final updatedQuestion = currentQuestion.copyWith(
+        correctAnswer: resolvedCorrectAnswer,
+        correctIndex: currentQuestion.options.indexOf(resolvedCorrectAnswer),
+      );
+      final updatedQuestions = List<QuestionModel>.from(state.questions);
+      updatedQuestions[state.currentIndex] = updatedQuestion;
+
+      state = state.copyWith(
+        currentQuestion: updatedQuestion,
+        questions: updatedQuestions,
+        isPlayerCorrect: validation.isCorrect,
+        revealedCorrectAnswer: resolvedCorrectAnswer,
+      );
 
       // If opponent has already answered, process results immediately
       if (state.hasOpponentAnswered) {
@@ -229,10 +270,14 @@ class MultiplayerQuizNotifier extends StateNotifier<MultiplayerQuizState> {
   }
 
   void _processRoundResults() {
-    if (state.currentQuestion == null) return;
+    if (state.currentQuestion == null || state.isRoundResolved) return;
 
-    final isPlayerCorrect = state.currentQuestion!.isCorrectAnswer(state.playerAnswer ?? '');
-    final isOpponentCorrect = state.currentQuestion!.isCorrectAnswer(state.opponentAnswer ?? '');
+    final correctAnswer =
+        state.revealedCorrectAnswer ?? state.currentQuestion!.correctAnswer;
+    final isPlayerCorrect =
+        state.playerAnswer != null && state.playerAnswer == correctAnswer;
+    final isOpponentCorrect =
+        state.opponentAnswer != null && state.opponentAnswer == correctAnswer;
 
     int newPlayerScore = state.playerScore;
     int newOpponentScore = state.opponentScore;
@@ -254,6 +299,8 @@ class MultiplayerQuizNotifier extends StateNotifier<MultiplayerQuizState> {
       opponentScore: newOpponentScore,
       isGameComplete: isLastQuestion,
       waitingForOpponent: false,
+      revealedCorrectAnswer: correctAnswer,
+      isRoundResolved: true,
     );
   }
 
@@ -282,6 +329,8 @@ class MultiplayerQuizNotifier extends StateNotifier<MultiplayerQuizState> {
         waitingForOpponent: false,
         isPlayerCorrect: false,
         isOpponentCorrect: false,
+        revealedCorrectAnswer: state.questions[nextIndex].correctAnswer,
+        isRoundResolved: false,
       );
 
       _startTimer();

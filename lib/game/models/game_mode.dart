@@ -10,6 +10,13 @@ enum GameMode {
   daily,
 }
 
+String normalizeGameModeName(String value) {
+  if (value.startsWith('GameMode.')) {
+    return value.substring('GameMode.'.length);
+  }
+  return value;
+}
+
 class GameModeInfo {
   final String title;
   final String description;

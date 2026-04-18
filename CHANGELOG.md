@@ -151,6 +151,142 @@ A prior commit also introduced a `secureStorage.isNotEmpty` compile error in
   lookups in `_persistProgressSnapshot` and `_handleCompletion` use the same
   type-guard pattern. List field uses `is List` guard before casting to
   `List<dynamic>`.
+### Updated - Question launch categorization and backend handoff alignment (2026-04-17)
+
+Closed the next question-flow follow-up by repairing category/class/daily quiz
+launch behavior, routing curated question sets directly into gameplay, and
+capturing the full frontend/backend question contract surface in a dedicated
+handoff document.
+
+**Changes:**
+- `lib/core/navigation/app_router.dart` - `/quiz/play` now detects quiz launch
+  payloads and routes directly into `AdaptedQuestionScreen` when category,
+  class, daily, or explicit question-list context is provided.
+- `lib/game/state/quiz_state.dart` - added direct quiz startup from curated
+  `QuestionModel` lists via `startQuizWithQuestions(...)`.
+- `lib/screens/question/question_view_screen.dart` - gameplay screen now accepts
+  initial curated questions and display-title overrides.
+- `lib/screens/question/categories/category_quiz_screen.dart` - category quiz
+  launch now filters and launches the selected category question set directly.
+- `lib/screens/question/categories/class_quiz_screen.dart` - class quiz launch
+  now uses real `QuizCategory` subjects and launches curated subject question
+  sets directly.
+- `lib/screens/question/categories/daily_quiz_screen.dart` - daily quiz screen
+  now previews today’s question set and launches that exact curated daily set.
+- `docs/question_flow_frontend_backend_handoff_2026-04-15.md` - added a
+  backend-facing question flow contract/handoff document covering endpoints,
+  envelopes, fallback behavior, and remaining contract gaps.
+- `docs/TRIVIA_TYCOON_UPDATE_CHECKLIST.md` - replaced the stale auth-only
+  checklist with a current project status snapshot and actionable verification
+  checklist.
+
+**Remaining for this workstream:**
+- backend confirmation of canonical question endpoint and envelope contracts
+- live runtime validation of category/class/daily quiz flows in a Flutter-enabled environment
+- targeted analyze/test pass once Flutter tooling is available locally
+
+### Updated - Social auth allowlist, menu wallet sync, and question source visibility (2026-04-15)
+
+Closed the next frontend follow-up gaps after the friends/presence migration by
+authorizing the remaining social routes, syncing the main menu wallet display
+from backend player data, and surfacing when question flows are using backend
+data versus local fallback content.
+
+**Changes:**
+- `lib/core/services/api_service.dart` - extended protected-route detection to
+  cover `/users/search` and `/friends` so authorized social search/unfriend
+  calls attach the expected auth headers.
+- `lib/screens/menu/main_menu_screen.dart` - main menu economy refresh now also
+  hydrates wallet balances from backend player data; removed the duplicate green
+  energy strip under `CurrencyDisplay`.
+- `lib/game/services/wallet_service.dart` - added direct wallet balance sync
+  support for backend-driven coin/gem updates.
+- `lib/game/services/question_hub_service.dart` - added explicit backend vs
+  local-fallback source reporting plus stronger question-source logging.
+- `lib/game/providers/question_providers.dart` - added question source status
+  tracking/providers so UI can expose the active data source.
+- `lib/screens/question/question_screen.dart` - added a visible backend/local
+  fallback indicator banner for question hub data.
+
+**Remaining for this workstream:**
+- live verification that `/users/search` and `DELETE /friends` now succeed with
+  authenticated requests against the backend
+- live verification that main menu coin/gem values match backend wallet values
+  after login/refresh/resume flows
+- runtime validation that question screens stay on backend responses in normal
+  environments and only show fallback status during actual API failure cases
+
+### Added - Friends/social backend migration and presence playerId alignment (2026-04-15)
+
+Completed the main frontend migration from local mock social state to the live
+backend friends/presence contract, and patched the shared WebSocket connection
+paths to satisfy the backend `?playerId=` requirement for presence delivery.
+
+**Changes:**
+- `lib/core/models/social/friend_list_item_dto.dart`,
+  `lib/core/models/social/friend_request_dto.dart`,
+  `lib/core/models/social/friend_suggestion_dto.dart`, and
+  `lib/core/models/social/paginated_social_response.dart` - added typed social
+  DTOs and paginated response support.
+- `lib/core/services/social/backend_profile_social_service.dart` - expanded to
+  cover backend friends list, incoming requests, sent requests, request send,
+  accept, decline, and suggestions.
+- `lib/game/providers/friends_providers.dart` - added Riverpod providers for
+  backend-backed social data.
+- `lib/screens/profile/friends_screen.dart` - migrated friend list, request
+  inbox, suggestions, and request mutations to backend social endpoints.
+- `lib/screens/profile/enhanced/add_friends_screen.dart` - add-by-username flow
+  now checks backend friend/request state and sends backend-authored requests.
+- `lib/screens/messages/dialogs/create_dm_dialog.dart` - message recipient
+  picker now uses the backend friends roster instead of `FriendDiscoveryService`.
+- `lib/core/bootstrap/app_init.dart` - shared app WebSocket initialization now
+  appends `?playerId=<guid>` before connecting.
+- `lib/game/providers/core_providers.dart` - `wsClientProvider` now aligns with
+  the same `playerId` query-parameter requirement when a stored user id exists.
+
+**Remaining for this workstream:**
+- live runtime verification across two logged-in users/devices
+- final cleanup or deprecation decision for `FriendDiscoveryService`
+- formatter/analyzer/test pass in a Flutter-enabled environment
+
+### Updated - Local web auth, onboarding profile restore, and persistence status (2026-04-14)
+
+Closed the latest frontend-side gaps around local web auth diagnostics,
+onboarding layout stability, and backend profile rehydration after emulator/data
+wipes. This work also clarified the remaining backend/object-storage dependency
+for portable avatar images.
+
+**Changes:**
+- `lib/core/env.dart` - confirmed web runtime rewrites `10.0.2.2` to
+  `localhost` for browser-based API access.
+- `assets/config/config.json` - local web API defaults aligned to
+  `http://localhost:5000` instead of `https://localhost:5000`.
+- `lib/core/services/analytics/config_service.dart` - local fallback/default API
+  base URL aligned to `http://localhost:5000`.
+- `.env.example` - updated local example API URL to the HTTP local backend path.
+- `lib/screens/onboarding/steps/country_step.dart` - rebuilt onto the shared
+  onboarding step shell with a scroll-safe layout to eliminate bottom overflow
+  on shorter screens.
+- `lib/core/services/settings/profile_sync_service.dart` - expanded profile sync
+  from name/username-only to broader profile fields; added remote profile fetch
+  and normalization for startup/login hydration.
+- `lib/core/services/settings/player_profile_service.dart` - batch profile save
+  now persists backend-hydrated preferred categories.
+- `lib/screens/onboarding/onboarding_screen.dart` - onboarding completion now
+  syncs country, age group, categories, Synaptix mode, preferred surface, and
+  syncable avatar references to backend in addition to local Hive saves.
+- `lib/game/providers/auth_providers.dart` - login/signup now attempt remote
+  profile hydration after auth succeeds.
+- `lib/core/bootstrap/app_init.dart` - logged-in bootstrap now prefers backend
+  profile hydration and retries queued profile sync updates before falling back
+  to local Hive-only state.
+
+**Status note:**
+- Profile text/preferences now persist locally and are wired to persist to the
+  backend when the backend profile endpoint supports the normalized payload.
+- Portable avatar image persistence is still **not complete** for picked device
+  files; that requires a backend-backed upload flow (for example via MinIO) so
+  the frontend can store a stable object URL/key instead of a local file path.
 
 ### Added - Alpha handoff partial frontend/backend wiring completion (2026-04-12)
 

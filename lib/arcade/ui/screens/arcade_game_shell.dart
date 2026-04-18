@@ -143,7 +143,7 @@ class _ArcadeGameShellState extends ConsumerState<ArcadeGameShell> {
     );
 
     if (!mounted) return;
-    Navigator.of(context).pop(); // back to hub
+    context.pop(); // back to hub
   }
 }
 

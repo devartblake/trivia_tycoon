@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:trivia_tycoon/screens/multiplayer/multiplayer_palette.dart';
 import 'package:trivia_tycoon/screens/multiplayer/widgets/answer_controls.dart';
 import 'package:trivia_tycoon/screens/multiplayer/widgets/countdown_timer.dart';
 import '../../game/multiplayer/application/state/match_state.dart';
@@ -80,7 +81,7 @@ class _LiveMatchScreenState extends ConsumerState<LiveMatchScreen>
       child: Scaffold(
         backgroundColor: isDark
             ? const Color(0xFF0A0A0F)
-            : const Color(0xFFF8F9FC),
+            : MultiplayerPalette.background,
         body: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
@@ -244,12 +245,12 @@ class _LiveMatchScreenState extends ConsumerState<LiveMatchScreen>
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
-                colors: [Color(0xFFEF4444), Color(0xFFDC2626)],
+                colors: [MultiplayerPalette.warning, MultiplayerPalette.accent],
               ),
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFFEF4444).withValues(alpha: 0.3),
+                  color: MultiplayerPalette.warning.withValues(alpha: 0.3),
                   blurRadius: 15,
                   offset: const Offset(0, 8),
                 ),
@@ -305,7 +306,7 @@ class _LiveMatchScreenState extends ConsumerState<LiveMatchScreen>
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+                    colors: [MultiplayerPalette.primary, MultiplayerPalette.secondary],
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -321,17 +322,17 @@ class _LiveMatchScreenState extends ConsumerState<LiveMatchScreen>
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white : const Color(0xFF1E293B),
+                  color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
                 ),
               ),
               const Spacer(),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF10B981).withValues(alpha: 0.1),
+                  color: MultiplayerPalette.success.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: const Color(0xFF10B981).withValues(alpha: 0.3),
+                    color: MultiplayerPalette.success.withValues(alpha: 0.3),
                   ),
                 ),
                 child: Text(
@@ -339,7 +340,7 @@ class _LiveMatchScreenState extends ConsumerState<LiveMatchScreen>
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFF10B981),
+                    color: MultiplayerPalette.success,
                   ),
                 ),
               ),
@@ -352,7 +353,7 @@ class _LiveMatchScreenState extends ConsumerState<LiveMatchScreen>
             decoration: BoxDecoration(
               color: isDark
                   ? const Color(0xFF2A2A3E)
-                  : const Color(0xFFF8F9FC),
+                  : MultiplayerPalette.surfaceAlt,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Text(
@@ -360,7 +361,7 @@ class _LiveMatchScreenState extends ConsumerState<LiveMatchScreen>
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
-                color: isDark ? Colors.white : const Color(0xFF1E293B),
+                color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
                 height: 1.4,
               ),
               textAlign: TextAlign.center,
@@ -401,7 +402,7 @@ class _LiveMatchScreenState extends ConsumerState<LiveMatchScreen>
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
-                        colors: [Color(0xFF8B5CF6), Color(0xFF7C3AED)],
+                        colors: [MultiplayerPalette.primary, MultiplayerPalette.secondary],
                       ),
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -417,7 +418,7 @@ class _LiveMatchScreenState extends ConsumerState<LiveMatchScreen>
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: isDark ? Colors.white : const Color(0xFF1E293B),
+                      color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
                     ),
                   ),
                 ],
@@ -476,7 +477,7 @@ class _LiveMatchScreenState extends ConsumerState<LiveMatchScreen>
                                 names[index],
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
-                                  color: isDark ? Colors.white : const Color(0xFF1E293B),
+                                  color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
                                 ),
                               ),
                               Text(
@@ -511,15 +512,15 @@ class _LiveMatchScreenState extends ConsumerState<LiveMatchScreen>
   List<Color> _getPhaseGradient(MatchPhase phase) {
     switch (phase) {
       case MatchPhase.question:
-        return [const Color(0xFF10B981), const Color(0xFF059669)];
+        return [MultiplayerPalette.success, const Color(0xFF2E8E68)];
       case MatchPhase.reveal:
         return [const Color(0xFFF59E0B), const Color(0xFFD97706)];
       case MatchPhase.results:
-        return [const Color(0xFF8B5CF6), const Color(0xFF7C3AED)];
+        return [MultiplayerPalette.primary, MultiplayerPalette.secondary];
       case MatchPhase.finished:
-        return [const Color(0xFF6366F1), const Color(0xFF4F46E5)];
+        return [MultiplayerPalette.primary, MultiplayerPalette.primaryDeep];
       case MatchPhase.error:
-        return [const Color(0xFFEF4444), const Color(0xFFDC2626)];
+        return [MultiplayerPalette.accent, MultiplayerPalette.danger];
       default:
         return [const Color(0xFF6B7280), const Color(0xFF4B5563)];
     }

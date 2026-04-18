@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import '../../core/services/social/group_chat_service.dart';
 import '../../game/models/group_chat_models.dart';
 import '../../ui_components/presence/typing_indicator_widget.dart';
 import '../messages/widgets/enhanced_message_tile.dart';
 import 'widgets/group_info_header.dart';
 import 'widgets/member_presence_grid.dart';
-import 'group_settings_screen.dart';
 
 class GroupChatScreen extends StatefulWidget {
   final String groupId;
@@ -483,15 +483,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> with TypingIndicatorM
   void _handleMenuAction(String action, GroupChat group) {
     switch (action) {
       case 'settings':
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => GroupSettingsScreen(
-              groupId: widget.groupId,
-              currentUserId: widget.currentUserId,
-            ),
-          ),
-        );
+        context.push('/messages/group/${widget.groupId}/settings', extra: widget.currentUserId);
         break;
       case 'members':
         _showFullMemberList(group);

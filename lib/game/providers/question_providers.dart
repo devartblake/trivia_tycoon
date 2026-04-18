@@ -6,10 +6,52 @@ import 'question_provider_contracts.dart';
 import '../services/quiz_category.dart';
 import 'core_providers.dart';
 
+class QuestionSourceStatusNotifier extends StateNotifier<QuestionSourceSnapshot>
+    implements QuestionSourceReporter {
+  QuestionSourceStatusNotifier() : super(QuestionSourceSnapshot.unknown());
+
+  @override
+  void recordBackend({
+    required String operation,
+    required String endpoint,
+    String? detail,
+  }) {
+    state = QuestionSourceSnapshot(
+      source: QuestionDataSource.backend,
+      operation: operation,
+      endpoint: endpoint,
+      detail: detail,
+      updatedAt: DateTime.now(),
+    );
+  }
+
+  @override
+  void recordFallback({
+    required String operation,
+    String? endpoint,
+    String? detail,
+  }) {
+    state = QuestionSourceSnapshot(
+      source: QuestionDataSource.localFallback,
+      operation: operation,
+      endpoint: endpoint,
+      detail: detail,
+      updatedAt: DateTime.now(),
+    );
+  }
+}
+
+final questionSourceStatusProvider =
+    StateNotifierProvider<QuestionSourceStatusNotifier, QuestionSourceSnapshot>(
+  (ref) => QuestionSourceStatusNotifier(),
+);
+
 final questionHubServiceProvider = Provider<QuestionHubService>((ref) {
   final serviceManager = ref.watch(serviceManagerProvider);
+  final reporter = ref.read(questionSourceStatusProvider.notifier);
   return QuestionHubService(
     apiService: serviceManager.apiService,
+    reporter: reporter,
   );
 });
 
@@ -69,4 +111,17 @@ final allClassesStatsProvider = FutureProvider<Map<String, dynamic>>((ref) async
   }
 
   return {'classStats': stats};
+});
+
+final serviceStatusProvider = Provider<Map<String, dynamic>>((ref) {
+  final sourceSnapshot = ref.watch(questionSourceStatusProvider);
+
+  return {
+    'isHealthy': sourceSnapshot.source != QuestionDataSource.localFallback,
+    'source': sourceSnapshot.source.name,
+    'operation': sourceSnapshot.operation,
+    'endpoint': sourceSnapshot.endpoint,
+    'detail': sourceSnapshot.detail,
+    'updatedAt': sourceSnapshot.updatedAt.toIso8601String(),
+  };
 });

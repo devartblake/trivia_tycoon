@@ -18,12 +18,13 @@ import '../../core/helpers/responsive_layout.dart';
 import '../../core/services/theme/seasonal_theme_service.dart';
 import '../../core/theme/themes.dart';
 import '../../game/providers/economy_providers.dart';
+import '../../game/providers/core_providers.dart';
 import '../../game/utils/gradient_themes.dart';
 import '../../game/utils/greeting_utils.dart';
 import '../../ui_components/tycoon_toast/tycoon_toast.dart';
 import '../../game/providers/riverpod_providers.dart';
+import '../../game/providers/wallet_providers.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import 'widgets/economy_hud_widget.dart';
 
 /// Modern, modular main menu screen
 ///
@@ -158,9 +159,35 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     try {
       final playerId = await ref.read(currentUserIdProvider.future);
       if (!mounted) return;
-      ref.read(economyProvider.notifier).fetchState(playerId);
+      await Future.wait([
+        ref.read(economyProvider.notifier).fetchState(playerId),
+        _syncWalletBalances(playerId),
+      ]);
     } catch (_) {
       // Economy state is non-blocking — the HUD will show cached values.
+    }
+  }
+
+  Future<void> _syncWalletBalances(String playerId) async {
+    if (playerId.isEmpty || playerId == 'guest') {
+      return;
+    }
+
+    try {
+      final player = await ref.read(synaptixApiClientProvider).getPlayer(playerId);
+      final coins = player.wallet.coins;
+      final gems = player.wallet.gems;
+
+      await Future.wait([
+        ref.read(coinBalanceProvider.notifier).set(coins),
+        ref.read(diamondNotifierProvider).set(gems),
+        ref.read(walletServiceProvider).setBalances(coins: coins, gems: gems),
+      ]);
+
+      ref.read(playerCoinsProvider.notifier).state = coins;
+      ref.read(playerGemsProvider.notifier).state = gems;
+    } catch (e) {
+      LogManager.debug('[MainMenu] Wallet sync skipped: $e');
     }
   }
 
@@ -570,8 +597,6 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
               showEnergyInfo: (cur, max) => _showEnergyInfo(context, cur, max),
               showLivesInfo: (cur, max) => _showLivesInfo(context, cur, max),
             ),
-            const SizedBox(height: 10),
-            const EconomyHudWidget(),
           ],
         );
       },

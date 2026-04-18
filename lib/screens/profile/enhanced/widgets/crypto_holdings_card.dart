@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/models/crypto/crypto_network.dart';
 import '../../../../core/utils/crypto_address_validator.dart';
 import '../../../../core/models/crypto/crypto_transaction_kind.dart';
 import '../../../../game/providers/crypto_providers.dart';
 import '../../../../core/models/crypto/crypto_history_item.dart';
-import '../../../store/crypto_wallet_screen.dart';
 
 class CryptoHoldingsCard extends ConsumerWidget {
   const CryptoHoldingsCard({
@@ -78,11 +78,7 @@ class CryptoHoldingsCard extends ConsumerWidget {
               if (isOwnProfile)
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => const CryptoWalletScreen(),
-                      ),
-                    );
+                    context.push('/store/crypto-wallet');
                   },
                   child: const Text('Open wallet'),
                 ),

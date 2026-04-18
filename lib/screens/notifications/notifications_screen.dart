@@ -340,12 +340,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
       context.push(item.actionRoute!, extra: item.payload);
     }
     // Navigate to detail screen
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => NotificationDetailScreen(notification: item),
-      ),
-    );
+    context.push('/notifications/detail', extra: item);
   }
 
   void _dismissNotification(String id) {
@@ -539,7 +534,6 @@ class NotificationCard extends StatelessWidget {
           label: 'SYSTEM',
         );
       case InboxType.notification:
-      default:
         return NotificationConfig(
           color: const Color(0xFF5865F2),
           icon: Icons.notifications,

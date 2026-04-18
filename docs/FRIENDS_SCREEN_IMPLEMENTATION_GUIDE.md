@@ -1,557 +1,265 @@
-# FRIENDS SCREEN - COMPLETE IMPLEMENTATION GUIDE
-## WebSocket Integration with YOUR Widgets
+# Friends Screen Implementation Guide
+## Current Status and Remaining Backend Work
+
+## Purpose
+
+This document reflects the **current state of the Friends screen implementation in the repo** as of 2026-04-15.
+
+It replaces the older migration-oriented wording that assumed several tasks were still pending locally. In reality, most of the UI and presence plumbing is already implemented. The main remaining work is backend alignment for authoritative friend data.
 
 ---
 
-## ✅ YOUR WIDGETS ARE BETTER!
+## Current Status
 
-Blake, your **PresenceStatusIndicator** is production-ready and way better than my basic example:
+## Completed in the frontend
 
-### Your PresenceStatusIndicator:
-- ✅ Beautiful pulse animation
-- ✅ Configurable size and border
-- ✅ SingleTickerProviderStateMixin for smooth animations
-- ✅ Handles status changes dynamically
-- ✅ Clean, polished code
+- `FriendsScreen` exists and is wired into app navigation.
+- `RichPresenceService` is implemented and initialized at app startup.
+- `PresenceWebSocketAdapter` is implemented.
+- `PresenceStatusIndicator` and `DetailedPresenceCard` are integrated into the Friends experience.
+- Friends list items render live presence text through `RichPresenceService`.
+- Online friends are derived from actual tracked presence state.
+- The screen subscribes to friend presence updates via WebSocket.
+- Current user presence can be updated for quiz/match activity.
+- Friend detail bottom sheet uses `DetailedPresenceCard`.
+- Friend removal has partial backend wiring through `DELETE /friends`.
+- Add-friend-by-username search is backend-backed.
+- Friends list, incoming requests, and suggestions are backend-backed.
+- `CreateDMDialog` now uses the backend friends roster instead of the local mock social service.
+- The shared `/ws` connection path now appends `?playerId=<guid>` for presence compatibility.
 
-### Your DetailedPresenceCard:
-- ✅ Complete user presence card
-- ✅ Game activity details
-- ✅ Last seen formatting
-- ✅ Material Design 3 styling
-- ✅ Responsive layout
+## Not yet complete end-to-end
 
-**Use YOUR widgets - they're perfect!** ✨
-
----
-
-## 📋 WHAT I CHANGED
-
-### ✅ Added Presence Service Integration
-
-**Before:**
-```dart
-class _FriendsScreenState extends ConsumerState<FriendsScreen>
-    with TickerProviderStateMixin {
-  // Only UI state
-  String _selectedTab = 'Friends';
-}
-```
-
-**After:**
-```dart
-class _FriendsScreenState extends ConsumerState<FriendsScreen>
-    with TickerProviderStateMixin {
-  String _selectedTab = 'Friends';
-  
-  // ✅ NEW - Presence service
-  final _presenceService = RichPresenceService();
-  
-  // ✅ NEW - Friend data
-  List<Friend> _friends = [];
-  List<Friend> _onlineFriends = [];
-  bool _isLoadingFriends = true;
-}
-```
+- Runtime validation for the full friend/presence flow is still needed against a live backend/WebSocket environment.
+- `FriendDiscoveryService` still exists in the repo and needs a final deprecation/removal decision.
+- A Flutter-enabled formatter/analyzer/test pass is still needed.
 
 ---
 
-### ✅ Added Friend Subscription (initState)
+## Implemented Files
 
-```dart
-@override
-void initState() {
-  super.initState();
-  _fadeController = AnimationController(...);
-  _fadeController.forward();
-  
-  // ✅ NEW - Initialize friends and presence
-  _initializeFriends();
-  
-  // ✅ NEW - Listen to presence changes
-  _presenceService.addListener(_onPresenceChanged);
-}
-```
+### Friends UI
+
+- [lib/screens/profile/friends_screen.dart](/c:/Users/lmxbl/StudioProjects/trivia_tycoon/lib/screens/profile/friends_screen.dart:1)
+
+Current implementation includes:
+
+- `RichPresenceService` integration
+- online friends section
+- real presence text rendering
+- `PresenceStatusIndicator`
+- `DetailedPresenceCard`
+- quiz/match activity updates
+- friend actions including remove
+
+### Presence widgets
+
+- [lib/ui_components/presence/presence_status_widget.dart](/c:/Users/lmxbl/StudioProjects/trivia_tycoon/lib/ui_components/presence/presence_status_widget.dart:1)
+
+Current implementation includes:
+
+- `PresenceStatusIndicator`
+- `DetailedPresenceCard`
+
+### Presence service
+
+- [lib/core/services/presence/rich_presence_service.dart](/c:/Users/lmxbl/StudioProjects/trivia_tycoon/lib/core/services/presence/rich_presence_service.dart:1)
+
+Current implementation includes:
+
+- presence caching
+- presence formatting
+- `subscribeToUsers(...)`
+- `unsubscribeFromUsers(...)`
+- `setGameActivity(...)`
+- stream watchers
+- WebSocket adapter integration
+
+### Presence WebSocket adapter
+
+- [lib/core/services/presence/presence_websocket_adapter.dart](/c:/Users/lmxbl/StudioProjects/trivia_tycoon/lib/core/services/presence/presence_websocket_adapter.dart:1)
+
+Current implementation includes:
+
+- `hello`
+- `presence.update`
+- `presence.bulk`
+- `presence.subscribe`
+- `presence.unsubscribe`
+
+### Startup initialization
+
+- [lib/core/bootstrap/app_init.dart](/c:/Users/lmxbl/StudioProjects/trivia_tycoon/lib/core/bootstrap/app_init.dart:458)
+
+Current implementation includes:
+
+- `RichPresenceService().initialize(useWebSocket: true)`
 
 ---
 
-### ✅ Added Cleanup (dispose)
+## Backend Status Summary
 
-```dart
-@override
-void dispose() {
-  _fadeController.dispose();
-  _presenceService.removeListener(_onPresenceChanged); // ✅ NEW
-  super.dispose();
-}
-```
+Backend contracts are now confirmed in:
+
+- [friends_presence_backend_integration_handoff_2026-04-15.md](/c:/Users/lmxbl/StudioProjects/trivia_tycoon/docs/friends_presence_backend_integration_handoff_2026-04-15.md:1)
+
+Confirmed and now wired on the frontend:
+
+- `GET /users/me/friends`
+- `GET /users/me/friends/requests`
+- `GET /users/me/friends/requests/sent`
+- `GET /users/me/friends/suggestions`
+- `POST /users/me/friends/request`
+- `POST /users/me/friends/requests/{requestId}/accept`
+- `POST /users/me/friends/requests/{requestId}/decline`
+- legacy `DELETE /friends`
 
 ---
 
-### ✅ Added Three New Methods
+## What Still Uses Local Placeholder Data
 
-#### 1. **_subscribeToFriends()**
+The main Friends, add-friend, and DM picker production paths are no longer using the local mock social service.
+
+The remaining placeholder concern is repository cleanup:
+
+- [lib/core/services/social/friend_discovery_service.dart](/c:/Users/lmxbl/StudioProjects/trivia_tycoon/lib/core/services/social/friend_discovery_service.dart:1) still exists
+- a final decision is still needed on whether to deprecate it, keep it as dev-only fallback, or remove it from production paths entirely
+
+---
+
+## What Is Working Today
+
+### Presence subscription
+
+The Friends screen subscribes to presence updates for loaded friends.
+
+Current pattern:
+
 ```dart
 void _subscribeToFriends() {
   if (_friends.isEmpty) return;
-  
-  // Get friend IDs
+
   final friendIds = _friends.map((f) => f.id).toList();
-  
-  // Subscribe to their presence updates via WebSocket
   _presenceService.subscribeToUsers(friendIds);
-  
-  debugPrint('[Friends] Subscribed to ${friendIds.length} friends');
 }
 ```
 
-**What it does:**
-- Gets all friend IDs
-- Subscribes to their presence via WebSocket
-- Now you get real-time updates when friends come online!
+### Presence-driven friend status
 
----
+The screen renders status text from the presence service.
 
-#### 2. **_startQuiz()**
-```dart
-void _startQuiz({
-  String difficulty = 'Easy',
-  String category = 'General',
-}) {
-  _presenceService.setGameActivity(
-    gameType: 'quiz',
-    gameMode: 'solo',
-    currentLevel: difficulty,
-    gameState: GameState.playing,
-    metadata: {
-      'category': category,
-      'startedAt': DateTime.now().toIso8601String(),
-    },
-  );
-  
-  debugPrint('[Friends] Started quiz - presence updated');
-  
-  // Navigate to quiz screen
-  // Navigator.of(context).push(...);
-}
-```
+Current pattern:
 
-**What it does:**
-- Updates YOUR presence to "Playing Quiz"
-- Friends see you're in a quiz instantly
-- Includes difficulty and category
-- Broadcasts via WebSocket
-
-**Usage:**
-```dart
-// Start an easy quiz
-_startQuiz(difficulty: 'Easy', category: 'Science');
-
-// Start a hard quiz
-_startQuiz(difficulty: 'Hard', category: 'History');
-```
-
----
-
-#### 3. **_joinMatch()**
-```dart
-void _joinMatch(String matchId, {String? opponentId, String? opponentName}) {
-  _presenceService.setGameActivity(
-    gameType: 'match',
-    gameMode: 'pvp',
-    gameState: GameState.lobby,
-    metadata: {
-      'matchId': matchId,
-      if (opponentId != null) 'opponentId': opponentId,
-      if (opponentName != null) 'opponentName': opponentName,
-    },
-  );
-  
-  debugPrint('[Friends] Joined match $matchId - presence updated');
-  
-  // Navigate to match screen
-  // Navigator.of(context).push(...);
-}
-```
-
-**What it does:**
-- Updates YOUR presence to "In Match"
-- Friends see who you're playing against
-- Includes match ID for tracking
-- Broadcasts via WebSocket
-
-**Usage:**
-```dart
-// Join a match
-_joinMatch(
-  'match_123',
-  opponentId: 'user_456',
-  opponentName: 'Sarah',
-);
-
-// Quick match (no opponent yet)
-_joinMatch('match_789');
-```
-
----
-
-### ✅ Updated UI to Use Real Presence
-
-#### Online Friends Section:
-**Before:** Mock data
-```dart
-final onlineFriends = [
-  {'name': 'David', 'avatar': '...', 'isOnline': true},
-  // ...
-];
-```
-
-**After:** Real presence data
-```dart
-Widget _buildOnlineFriendsSection() {
-  // ✅ Uses real _onlineFriends list
-  // ✅ Filtered by actual presence status
-  // ✅ Updates in real-time
-}
-```
-
----
-
-#### Friend List Items:
-**Before:** Mock status
-```dart
-Text(
-  friend['status'] ?? 'Playing Trivia Tycoon',
-  style: TextStyle(color: Colors.green),
-)
-```
-
-**After:** Real presence
 ```dart
 final presence = _presenceService.getUserPresence(friend.id);
 final presenceText = presence != null
     ? _presenceService.getFormattedPresence(friend.id)
     : 'Offline';
+```
 
-Text(
-  presenceText, // ✅ "Playing Quiz", "In Match", etc.
-  style: TextStyle(
-    color: presence?.status == PresenceStatus.online
-        ? const Color(0xFF10B981)
-        : const Color(0xFF64748B),
+### Detailed presence view
+
+Friend details are shown through `DetailedPresenceCard`.
+
+Current pattern:
+
+```dart
+showModalBottomSheet(
+  context: context,
+  builder: (context) => DetailedPresenceCard(
+    presence: presence,
+    userName: friend.name,
+    userAvatar: friend.avatar,
   ),
-)
+);
 ```
 
----
+### Current user activity updates
 
-#### Avatar with Presence Indicator:
-**Using YOUR widget:**
+The frontend already updates current user activity for quiz/match flows.
+
+Current pattern:
+
 ```dart
-Stack(
-  children: [
-    CircleAvatar(...),
-    if (presence != null)
-      Positioned(
-        bottom: 0,
-        right: 0,
-        child: PresenceStatusIndicator( // ✅ YOUR widget!
-          status: presence.status,
-          size: 12,
-          showBorder: true,
-          animated: true, // ✅ Beautiful pulse animation
-        ),
-      ),
-  ],
-)
+_presenceService.setGameActivity(
+  gameType: 'quiz',
+  gameMode: 'solo',
+  gameState: GameState.playing,
+);
 ```
 
----
+and
 
-### ✅ Added DetailedPresenceCard Integration
-
-**New method:**
 ```dart
-void _showFriendDetails(Friend friend) {
-  final presence = _presenceService.getUserPresence(friend.id);
-  
-  if (presence == null) {
-    _showFriendProfile(friend);
-    return;
-  }
-  
-  showModalBottomSheet(
-    context: context,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-    ),
-    builder: (context) => DetailedPresenceCard( // ✅ YOUR widget!
-      presence: presence,
-      userName: friend.name,
-      userAvatar: friend.avatar,
-    ),
-  );
-}
-```
-
-**Shows:**
-- Full presence details
-- Game activity (if playing)
-- Last seen time
-- Beautiful Material Design card
-
----
-
-## 🎯 KEY FEATURES ADDED
-
-### 1. Real-Time Presence Updates
-```dart
-void _onPresenceChanged() {
-  if (!mounted) return;
-  
-  // Update online friends list
-  _updateOnlineFriends();
-  
-  setState(() {
-    // Rebuild UI with new presence data
-  });
-}
-```
-
-**What happens:**
-- Friend comes online → List updates instantly
-- Friend starts playing → Status changes to "Playing Quiz"
-- Friend goes offline → Moves out of online section
-
----
-
-### 2. WebSocket Subscription
-```dart
-void _subscribeToFriends() {
-  final friendIds = _friends.map((f) => f.id).toList();
-  _presenceService.subscribeToUsers(friendIds);
-}
-```
-
-**What happens:**
-- Server sends presence updates via WebSocket
-- No polling = 99% less battery usage
-- Instant updates (<100ms)
-
----
-
-### 3. Context Actions with Presence
-```dart
-PopupMenuButton<String>(
-  itemBuilder: (context) => [
-    const PopupMenuItem(value: 'message', child: Text('Send Message')),
-    const PopupMenuItem(value: 'challenge', child: Text('Challenge to Match')),
-    const PopupMenuItem(value: 'quiz', child: Text('Start Quiz Together')), // ✅ NEW
-    const PopupMenuItem(value: 'profile', child: Text('View Profile')),
-  ],
-  onSelected: (action) {
-    if (action == 'challenge') {
-      _joinMatch('match_xyz', opponentId: friend.id);
-    } else if (action == 'quiz') {
-      _startQuiz();
-    }
-  },
-)
+_presenceService.setGameActivity(
+  gameType: 'match',
+  gameMode: 'pvp',
+  gameState: GameState.lobby,
+);
 ```
 
 ---
 
-## 📁 FILES YOU NEED
+## Remaining Work
 
-### ✅ Already Have (Keep as-is):
-1. `presence_status_widget.dart` - YOUR widgets are perfect!
-   - PresenceStatusIndicator
-   - DetailedPresenceCard
-
-### ✅ Need to Create:
-1. `presence_websocket_adapter.dart` - From PRESENCE_WEBSOCKET_GUIDE.md
-2. Update `rich_presence_service.dart` - From PRESENCE_WEBSOCKET_GUIDE.md
-
-### ✅ Need to Update:
-1. `friends_screen.dart` - Replace with friends_screen_COMPLETE.dart
+- run live validation for friends, requests, suggestions, and presence
+- verify that `presence.bulk` and `presence.update` behave correctly across two logged-in users
+- confirm that the patched `?playerId=<guid>` WebSocket path works in all target runtimes
+- decide whether `FriendDiscoveryService` should be deprecated or removed
+- run formatter/analyzer/tests in a Flutter-enabled environment
 
 ---
 
-## 🚀 IMPLEMENTATION STEPS
+## Verification Checklist
 
-### Step 1: Create WebSocket Adapter (30 min)
-Follow **PRESENCE_WEBSOCKET_GUIDE.md** Step 1:
-- Create `lib/core/services/presence/presence_websocket_adapter.dart`
+## Static/code-level status
 
-### Step 2: Update RichPresenceService (30 min)
-Follow **PRESENCE_WEBSOCKET_GUIDE.md** Step 2:
-- Update `lib/core/services/presence/rich_presence_service.dart`
-- Add WebSocket support
+- [x] Friends screen exists
+- [x] Presence widgets exist
+- [x] Presence WebSocket adapter exists
+- [x] Rich presence service exists
+- [x] App startup initializes presence service
+- [x] Shared `/ws` connection now includes `playerId`
+- [x] Friends screen uses `PresenceStatusIndicator`
+- [x] Friends screen uses `DetailedPresenceCard`
+- [x] Friends screen subscribes to friend presence
+- [x] Quiz/match activity updates current user presence
+- [x] Friend model exists in the screen implementation
+- [x] Friends screen loads backend friend data
+- [x] Add-friend flow uses backend request state
+- [x] Message recipient picker uses backend friends roster
 
-### Step 3: Replace FriendsScreen (5 min)
-- Copy `friends_screen_COMPLETE.dart` content
-- Replace your current `friends_screen.dart`
-- Update imports if needed
+## Still requires runtime verification
 
-### Step 4: Add Friend Model (5 min)
-If you don't have a Friend model, add this:
-```dart
-class Friend {
-  final String id;
-  final String name;
-  final String username;
-  final String? avatar;
-  
-  Friend({
-    required this.id,
-    required this.name,
-    required this.username,
-    this.avatar,
-  });
-}
-```
-
-### Step 5: Connect to Your Friend Service (10 min)
-Replace the mock `_loadFriends()` method with your actual friend service:
-```dart
-Future<void> _loadFriends() async {
-  // TODO: Replace with your actual friend service
-  final friendsData = await ref.read(friendServiceProvider).getFriends();
-  
-  _friends = friendsData.map((data) => Friend(
-    id: data['id'],
-    name: data['name'],
-    username: data['username'],
-    avatar: data['avatar'],
-  )).toList();
-}
-```
-
-### Step 6: Test (20 min)
-1. Run app
-2. Go to Friends screen
-3. Check logs: `[Friends] Subscribed to X friends`
-4. Start a quiz → Check logs: `[Friends] Started quiz - presence updated`
-5. Have a friend come online → See them appear instantly!
-
-**Total Time:** ~1.5 hours
+- [ ] Online friends count matches backend/user reality
+- [ ] Friend status shows live activity from server events
+- [ ] Logs show successful presence subscriptions in a live session
+- [ ] Logs show incoming `presence.update` messages in a live session
+- [ ] Add-friend, accept-request, and remove-friend flows all reconcile against backend truth
+- [ ] No runtime contract mismatches with backend payloads
 
 ---
 
-## ✅ VERIFICATION CHECKLIST
+## Recommended Next Step
 
-After implementation:
+Do not replace the local friend discovery path blindly.
 
-- [ ] Friends screen loads
-- [ ] See real online friends count
-- [ ] Online friends show with green pulse dot
-- [ ] Friend status shows: "Playing Quiz", "In Match", etc.
-- [ ] Tap friend → See DetailedPresenceCard
-- [ ] Start quiz → Presence updates
-- [ ] Join match → Presence updates
-- [ ] Logs show: `[Friends] Subscribed to X friends`
-- [ ] Logs show: `[PresenceWS] Updated: user123 → online`
-- [ ] No compilation errors
+First:
+
+1. get backend confirmation on the friend endpoints and payloads
+2. confirm whether pending requests and suggestions are in current alpha scope
+3. then swap `FriendsScreen` over to backend-backed friend data
+
+This keeps the already-good presence implementation intact while avoiding a partial migration onto uncertain backend contracts.
 
 ---
 
-## 🎯 WHAT YOU GET
+## Bottom Line
 
-### Before (Mock Data):
-- ❌ Hardcoded "24 friends online"
-- ❌ Mock avatars and names
-- ❌ Fake "Playing Trivia Tycoon" status
-- ❌ No real-time updates
+The Friends screen and related social entry points are now **mostly complete and backend-wired at the code level**.
 
-### After (Real-Time):
-- ✅ Actual online count
-- ✅ Real friend data
-- ✅ Live status: "Playing Quiz - Medium", "In Match vs Sarah"
-- ✅ Instant updates (<100ms)
-- ✅ Beautiful animations (YOUR widgets!)
-- ✅ WebSocket powered
-- ✅ 99% less battery usage
+The remaining work is no longer contract uncertainty. It is now primarily:
 
----
-
-## 💡 USAGE EXAMPLES
-
-### Example 1: Friend Comes Online
-```
-1. Friend logs in
-2. Server sends: {"op": "presence.update", "data": {"userId": "user123", "status": "online"}}
-3. _onPresenceChanged() called
-4. _updateOnlineFriends() runs
-5. setState() rebuilds UI
-6. Friend appears in "Online Now" section
-7. Pulse animation starts (YOUR widget!)
-```
-
-### Example 2: You Start Quiz
-```
-1. User taps "Start Quiz"
-2. _startQuiz(difficulty: 'Hard', category: 'Science')
-3. Presence updated locally
-4. WebSocket sends to server
-5. Server broadcasts to your friends
-6. Friends see: "Playing Quiz - Hard Science"
-```
-
-### Example 3: Friend Joins Match
-```
-1. Friend joins match
-2. Server sends: {"op": "presence.update", "data": {"gameActivity": {...}}}
-3. Your UI updates instantly
-4. Shows: "In Match vs Alice"
-5. DetailedPresenceCard shows full game details
-```
-
----
-
-## 🚨 TROUBLESHOOTING
-
-### Issue: "Friends not showing"
-**Check:**
-```dart
-// In _loadFriends()
-debugPrint('[Friends] Loaded ${_friends.length} friends');
-
-// In _subscribeToFriends()
-debugPrint('[Friends] Subscribed to ${friendIds.length} friends');
-```
-
-### Issue: "Presence not updating"
-**Check:**
-1. WebSocket connected: `[WS] State: WsState.connected`
-2. Subscribed: `[PresenceWS] Subscribed to X users`
-3. Receiving updates: `[PresenceWS] Updated: user123 → online`
-
-### Issue: "PresenceStatusIndicator not showing"
-**Check:**
-```dart
-// Make sure presence is not null
-if (presence != null) {
-  PresenceStatusIndicator(status: presence.status, ...)
-}
-```
-
----
-
-## 🎉 CONCLUSION
-
-Your **PresenceStatusIndicator** and **DetailedPresenceCard** widgets are production-ready and beautiful! The complete FriendsScreen implementation integrates them perfectly with WebSocket real-time updates.
-
-**What you have:**
-- ✅ Production-ready widgets (YOUR creation!)
-- ✅ Real-time WebSocket integration
-- ✅ Beautiful animations
-- ✅ Complete friend presence system
-- ✅ Ready to ship! 🚀
-
-**Next steps:**
-1. Implement presence WebSocket adapter (30 min)
-2. Update RichPresenceService (30 min)
-3. Replace FriendsScreen (5 min)
-4. Test and enjoy! (20 min)
-
-Total: ~1.5 hours to real-time friends! 💪✨
+- runtime verification
+- cleanup/deprecation of old local mock social infrastructure
+- final formatter/analyzer/test validation

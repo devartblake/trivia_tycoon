@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../game/providers/question_providers.dart' as question_data;
 import '../../../game/models/question_model.dart';
+import '../../../game/services/quiz_category.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 // Provider for category quiz data
@@ -37,6 +38,7 @@ final categoryQuizProvider = FutureProvider.family<CategoryQuizData, String>((re
           ? 1.0
           : categoryQuestions.map((q) => q.difficulty).reduce((a, b) => a + b) /
               categoryQuestions.length,
+      allQuestions: categoryQuestions,
     );
   } catch (e) {
     LogManager.debug('Error loading category quiz data: $e');
@@ -62,6 +64,7 @@ class _CategoryQuizScreenState extends ConsumerState<CategoryQuizScreen> {
   bool includeAudio = true;
   bool includeVideo = true;
   bool includeImages = true;
+  bool isStartingQuiz = false;
 
   int? _calculateSliderDivisions(int totalQuestions) {
     final maxValue = totalQuestions.clamp(5, 50);
@@ -77,7 +80,7 @@ class _CategoryQuizScreenState extends ConsumerState<CategoryQuizScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.category.toUpperCase()} Quiz'),
+        title: Text('${_getCategoryLabel()} Quiz'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
@@ -148,7 +151,7 @@ class _CategoryQuizScreenState extends ConsumerState<CategoryQuizScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.category.toUpperCase(),
+                            _getCategoryLabel(),
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 24,
@@ -444,7 +447,9 @@ class _CategoryQuizScreenState extends ConsumerState<CategoryQuizScreen> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: selectedDifficulties.isEmpty ? null : () => _startQuiz(categoryData),
+              onPressed: selectedDifficulties.isEmpty || isStartingQuiz
+                  ? null
+                  : () => _startQuiz(categoryData),
               style: ElevatedButton.styleFrom(
                 backgroundColor: _getCategoryColor(),
                 foregroundColor: Colors.white,
@@ -454,7 +459,9 @@ class _CategoryQuizScreenState extends ConsumerState<CategoryQuizScreen> {
                 ),
               ),
               child: Text(
-                'Start ${widget.category.toUpperCase()} Quiz',
+                isStartingQuiz
+                    ? 'Preparing Quiz...'
+                    : 'Start ${_getCategoryLabel()} Quiz',
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -478,61 +485,75 @@ class _CategoryQuizScreenState extends ConsumerState<CategoryQuizScreen> {
   }
 
   void _startQuiz(CategoryQuizData categoryData) {
-    // Navigate to enhanced quiz screen with category-specific questions
+    setState(() => isStartingQuiz = true);
+    final allowedDifficulties = selectedDifficulties
+        .map(_difficultyToInt)
+        .whereType<int>()
+        .toSet();
+    final filteredQuestions = categoryData.allQuestions.where((question) {
+      final difficultyMatch =
+          allowedDifficulties.isEmpty || allowedDifficulties.contains(question.difficulty);
+      final audioMatch = includeAudio || !question.hasAudio;
+      final videoMatch = includeVideo || !question.hasVideo;
+      final imageMatch = includeImages || !question.hasImage;
+      return difficultyMatch && audioMatch && videoMatch && imageMatch;
+    }).toList()
+      ..shuffle();
+
+    final selectedQuestions =
+        filteredQuestions.take(selectedQuestionCount).toList(growable: false);
+    if (selectedQuestions.isEmpty) {
+      setState(() => isStartingQuiz = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No questions match the selected filters.'),
+        ),
+      );
+      return;
+    }
+
+    final category = QuizCategoryManager.fromString(widget.category);
     context.push('/quiz/play', extra: {
-      'questionCount': selectedQuestionCount,
-      'categories': [widget.category],
-      'difficulties': selectedDifficulties,
-      'includeAudio': includeAudio,
-      'includeVideo': includeVideo,
-      'includeImages': includeImages,
-      'title': '${widget.category.toUpperCase()} Quiz',
+      'questions': selectedQuestions,
+      'questionCount': selectedQuestions.length,
+      'category': category?.name ?? widget.category,
+      'classLevel': '6',
+      'displayTitle': '${_getCategoryLabel()} Quiz',
     });
+    setState(() => isStartingQuiz = false);
+  }
+
+  int? _difficultyToInt(String difficulty) {
+    switch (difficulty.toLowerCase()) {
+      case 'easy':
+        return 1;
+      case 'medium':
+        return 2;
+      case 'hard':
+        return 3;
+      default:
+        return null;
+    }
+  }
+
+  String _getCategoryLabel() {
+    final category = QuizCategoryManager.fromString(widget.category);
+    return category?.displayName ?? widget.category.toUpperCase();
   }
 
   Color _getCategoryColor() {
-    switch (widget.category.toLowerCase()) {
-      case 'science': return Colors.blue;
-      case 'history': return Colors.brown;
-      case 'sports': return Colors.green;
-      case 'geography': return Colors.teal;
-      case 'technology': return Colors.purple;
-      case 'literature': return Colors.orange;
-      case 'mathematics': return Colors.indigo;
-      case 'entertainment': return Colors.pink;
-      case 'music': return Colors.deepPurple;
-      default: return Colors.grey;
-    }
+    final category = QuizCategoryManager.fromString(widget.category);
+    return category?.primaryColor ?? Colors.grey;
   }
 
   IconData _getCategoryIcon() {
-    switch (widget.category.toLowerCase()) {
-      case 'science': return Icons.science;
-      case 'history': return Icons.history_edu;
-      case 'sports': return Icons.sports_soccer;
-      case 'geography': return Icons.public;
-      case 'technology': return Icons.computer;
-      case 'literature': return Icons.menu_book;
-      case 'mathematics': return Icons.calculate;
-      case 'entertainment': return Icons.movie;
-      case 'music': return Icons.music_note;
-      default: return Icons.quiz;
-    }
+    final category = QuizCategoryManager.fromString(widget.category);
+    return category?.icon ?? Icons.quiz;
   }
 
   String _getCategoryDescription() {
-    switch (widget.category.toLowerCase()) {
-      case 'science': return 'Explore physics, chemistry, biology, and scientific discoveries';
-      case 'history': return 'Journey through historical events, civilizations, and important figures';
-      case 'sports': return 'Test your knowledge of athletics, teams, and sporting achievements';
-      case 'geography': return 'Discover countries, capitals, landmarks, and natural wonders';
-      case 'technology': return 'Challenge yourself with questions about innovation and computing';
-      case 'literature': return 'Dive into books, authors, poetry, and literary works';
-      case 'mathematics': return 'Solve problems and learn about mathematical concepts';
-      case 'entertainment': return 'Movies, TV shows, celebrities, and popular culture';
-      case 'music': return 'Artists, instruments, genres, and musical knowledge';
-      default: return 'Test your knowledge in this category';
-    }
+    final category = QuizCategoryManager.fromString(widget.category);
+    return category?.description ?? 'Test your knowledge in this category';
   }
 }
 
@@ -548,6 +569,7 @@ class CategoryQuizData {
   final int imageCount;
   final List<QuestionModel> sampleQuestions;
   final double averageDifficulty;
+  final List<QuestionModel> allQuestions;
 
   const CategoryQuizData({
     required this.category,
@@ -560,6 +582,7 @@ class CategoryQuizData {
     required this.imageCount,
     required this.sampleQuestions,
     required this.averageDifficulty,
+    required this.allQuestions,
   });
 }
 

@@ -39,8 +39,6 @@ class ChatThemesScreen extends StatefulWidget {
 }
 
 class _ChatThemesScreenState extends State<ChatThemesScreen> {
-  String? _selectedThemeId;
-
   final List<ChatTheme> _themes = [
     const ChatTheme(
       id: 'default',

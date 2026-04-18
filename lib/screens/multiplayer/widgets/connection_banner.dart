@@ -8,7 +8,6 @@ class ConnectionBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final (label, icon, color) = _info(state);
 
     return Container(

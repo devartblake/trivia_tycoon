@@ -211,12 +211,12 @@ class ConfigService extends ChangeNotifier {
   /// Default config fallback
   static const Map<String, dynamic> _defaultConfig = {
     "APP_ENV": "prod",
-    "API_BASE_URL_PROD": "https://localhost:5000",
+    "API_BASE_URL_PROD": "http://localhost:5000",
     "ENABLE_LOGGING": "false",
     "GALLERY_MODE": false,
     "USE_BACKEND_AUTH": true,
   };
 
   /// Default fallback URL
-  static const String _defaultBaseUrl = "https://localhost:5000";
+  static const String _defaultBaseUrl = "http://localhost:5000";
 }

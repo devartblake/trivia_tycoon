@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/screens/question/widgets/adapted_question_widgets.dart';
 import '../../core/helpers/quiz_helpers.dart';
+import '../../game/models/game_mode.dart';
 import '../../game/models/question_model.dart';
 import '../../game/models/versus_models.dart';
 import '../../game/providers/multiplayer_quiz_providers.dart';
@@ -25,10 +26,13 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
   late PageController _pageController;
   late AnimationController _answerAnimationController;
   late AnimationController _progressAnimationController;
+  bool _isFeedbackDialogOpen = false;
+  late final String _gameMode;
 
   @override
   void initState() {
     super.initState();
+    _gameMode = normalizeGameModeName(widget.gameMode);
     _pageController = PageController();
     _answerAnimationController = AnimationController(
       duration: const Duration(milliseconds: 300),
@@ -41,7 +45,7 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
 
     // Start the multiplayer quiz
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(multiplayerQuizProvider.notifier).startMultiplayerQuiz(widget.gameMode);
+      ref.read(multiplayerQuizProvider.notifier).startMultiplayerQuiz(_gameMode);
     });
   }
 
@@ -54,9 +58,9 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
   }
 
   Color _getGameModeColor() {
-    switch (widget.gameMode) {
+    switch (_gameMode) {
       case 'arena':
-        return const Color(0xFFEF5350);
+        return const Color(0xFFD96C63);
       case 'teams':
         return const Color(0xFFAB47BC);
       default:
@@ -64,19 +68,37 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
     }
   }
 
+  Color _getBackgroundColor() {
+    switch (_gameMode) {
+      case 'arena':
+        return const Color(0xFFFFF4F2);
+      default:
+        return _getGameModeColor().withValues(alpha: 0.1);
+    }
+  }
+
+  Color _getPrimaryTextColor() {
+    switch (_gameMode) {
+      case 'arena':
+        return const Color(0xFF7A312B);
+      default:
+        return _getGameModeColor();
+    }
+  }
+
   String _getGameModeDisplayName() {
-    switch (widget.gameMode) {
+    switch (_gameMode) {
       case 'arena':
         return 'Treasure Mine';
       case 'teams':
         return 'Survival Arena';
       default:
-        return widget.gameMode.toUpperCase();
+        return _gameMode.toUpperCase();
     }
   }
 
   IconData _getGameModeIcon() {
-    switch (widget.gameMode) {
+    switch (_gameMode) {
       case 'arena':
         return Icons.diamond;
       case 'teams':
@@ -86,22 +108,23 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
     }
   }
 
-  void _handleAnswer(String answer) async {
+  Future<void> _handleAnswer(String answer) async {
     final notifier = ref.read(multiplayerQuizProvider.notifier);
     final state = ref.read(multiplayerQuizProvider);
 
     if (state.waitingForOpponent || state.currentQuestion == null) return;
 
     // Submit answer and wait for opponent
-    notifier.submitAnswer(answer);
-
-    // Show feedback after both players have answered
-    _showMultiplayerFeedback();
+    await notifier.submitAnswer(answer);
   }
 
   void _showMultiplayerFeedback() {
+    if (_isFeedbackDialogOpen) return;
+
     final state = ref.read(multiplayerQuizProvider);
-    if (state.currentQuestion == null) return;
+    if (state.currentQuestion == null || !state.isRoundResolved) return;
+
+    _isFeedbackDialogOpen = true;
 
     showGeneralDialog(
       context: context,
@@ -110,7 +133,7 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
       transitionDuration: const Duration(milliseconds: 400),
       pageBuilder: (context, animation, secondaryAnimation) {
         return _MultiplayerFeedbackDialog(
-          gameMode: widget.gameMode,
+          gameMode: _gameMode,
           question: state.currentQuestion!,
           playerAnswer: state.playerAnswer,
           opponentAnswer: state.opponentAnswer,
@@ -132,21 +155,42 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
           },
         );
       },
-    );
+    ).then((_) {
+      if (mounted) {
+        _isFeedbackDialogOpen = false;
+      }
+    });
   }
 
   void _navigateToResults() {
-    context.go('/multiplayer/results/${widget.gameMode}');
+    context.go('/multiplayer/results/$_gameMode');
   }
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<MultiplayerQuizState>(multiplayerQuizProvider, (previous, next) {
+      if (!mounted) return;
+
+      final roundJustResolved =
+          (previous?.isRoundResolved ?? false) == false && next.isRoundResolved;
+
+      if (roundJustResolved) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            _showMultiplayerFeedback();
+          }
+        });
+      }
+    });
+
     final quizState = ref.watch(multiplayerQuizProvider);
     final gameColor = _getGameModeColor();
+    final backgroundColor = _getBackgroundColor();
+    final primaryTextColor = _getPrimaryTextColor();
 
     if (quizState.isLoading) {
       return Scaffold(
-        backgroundColor: gameColor.withValues(alpha: 0.1),
+        backgroundColor: backgroundColor,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -157,7 +201,7 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
                 'Synchronizing with opponent...',
                 style: TextStyle(
                   fontSize: 16,
-                  color: gameColor,
+                  color: primaryTextColor,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -169,7 +213,7 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
 
     if (quizState.error != null) {
       return Scaffold(
-        backgroundColor: gameColor.withValues(alpha: 0.1),
+        backgroundColor: backgroundColor,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -210,7 +254,7 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
                   ElevatedButton.icon(
                     onPressed: () {
                       ref.read(multiplayerQuizProvider.notifier)
-                          .startMultiplayerQuiz(widget.gameMode);
+                          .startMultiplayerQuiz(_gameMode);
                     },
                     icon: const Icon(Icons.refresh),
                     label: const Text('Retry'),
@@ -230,7 +274,7 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
     final currentQuestion = quizState.currentQuestion;
     if (currentQuestion == null) {
       return Scaffold(
-        backgroundColor: gameColor.withValues(alpha: 0.1),
+        backgroundColor: backgroundColor,
         body: const Center(
           child: Text('No questions available'),
         ),
@@ -265,7 +309,7 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
         );
       },
       child: Scaffold(
-        backgroundColor: gameColor.withValues(alpha: 0.1),
+        backgroundColor: backgroundColor,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Row(
@@ -274,11 +318,14 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
               const SizedBox(width: 8),
               Text(
                 _getGameModeDisplayName(),
-                style: TextStyle(color: gameColor, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: primaryTextColor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
-          backgroundColor: Colors.white,
+          backgroundColor: const Color(0xFFFFFBFA),
           elevation: 2,
           shadowColor: gameColor.withValues(alpha: 0.2),
           actions: [
@@ -297,7 +344,7 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: gameColor,
+                      color: primaryTextColor,
                     ),
                   ),
                 ),
@@ -310,7 +357,9 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
             // Versus Banner showing scores
             VersusBanner(
               config: VersusConfig(
-                mode: widget.gameMode == 'teams' ? VersusMode.teamVteam : VersusMode.oneVone,
+                mode: _gameMode == 'teams'
+                    ? VersusMode.teamVteam
+                    : VersusMode.oneVone,
                 left: Participant(
                   id: 'player_${DateTime.now().millisecondsSinceEpoch}',
                   displayName: 'You',
@@ -398,7 +447,9 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
                               'sec',
                               style: TextStyle(
                                 fontSize: 10,
-                                color: Colors.grey.shade600,
+                                color: _gameMode == 'arena'
+                                    ? const Color(0xFF9B5D57)
+                                    : Colors.grey.shade600,
                               ),
                             ),
                           ],
@@ -444,7 +495,9 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
                     Text(
                       'Waiting for opponent to answer...',
                       style: TextStyle(
-                        color: Colors.orange.shade700,
+                        color: _gameMode == 'arena'
+                            ? const Color(0xFF8E4A44)
+                            : Colors.orange.shade700,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

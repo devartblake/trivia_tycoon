@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/services/presence/rich_presence_service.dart';
 import '../../../game/models/user_presence_models.dart';
 import '../../../game/providers/multi_profile_providers.dart';
@@ -18,7 +19,6 @@ import 'sections/daily_bonus_section.dart';
 import 'sections/profile_actions_section.dart';
 import 'sheets/edit_profile_bottom_sheet.dart';
 import 'widgets/crypto_holdings_card.dart';
-import 'mutual_friends_screen.dart';
 import '../../../arcade/leaderboards/local_arcade_leaderboard_screen.dart';
 import '../../../arcade/missions/arcade_missions_screen.dart';
 import '../../../arcade/ui/screens/daily_bonus_screen.dart';
@@ -1240,33 +1240,19 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
   }
 
   void _navigateToArcadeScores() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const LocalArcadeLeaderboardScreen()),
-    );
+    context.push('/arcade/local-leaderboards');
   }
 
   void _navigateToMissions() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const ArcadeMissionsScreen()),
-    );
+    context.push('/arcade/missions');
   }
 
   void _claimDailyBonus() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const DailyBonusScreen()),
-    );
+    context.push('/arcade/daily-bonus');
   }
 
   void _showMutualFriends() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MutualFriendsScreen(
-          userId: widget.userId,
-          currentUserId: widget.currentUserId,
-        ),
-      ),
-    );
+    context.push('/profile/mutual-friends/${widget.userId}', extra: widget.currentUserId);
   }
 
   void _showOptionsMenu(BuildContext context) {
@@ -1609,35 +1595,4 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
       {'name': 'Food', 'icon': Icons.restaurant},
     ];
   }
-}
-
-class _GridPatternPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.05)
-      ..strokeWidth = 1
-      ..style = PaintingStyle.stroke;
-
-    const gridSize = 30.0;
-
-    for (double i = 0; i < size.width; i += gridSize) {
-      canvas.drawLine(
-        Offset(i, 0),
-        Offset(i, size.height),
-        paint,
-      );
-    }
-
-    for (double i = 0; i < size.height; i += gridSize) {
-      canvas.drawLine(
-        Offset(0, i),
-        Offset(size.width, i),
-        paint,
-      );
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

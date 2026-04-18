@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../core/color_picker_settings.dart';
@@ -10,8 +9,6 @@ import 'package:trivia_tycoon/core/manager/log_manager.dart';
 class ColorStorage {
   // Box names
   static const String _settingsBox = 'color_picker_settings';
-  static const String _themeBox = 'color_picker_theme';
-  static const String _cacheBox = 'color_picker_cache';
 
   // Cache for opened boxes to avoid repeated opening
   static final Map<String, Box> _boxCache = {};

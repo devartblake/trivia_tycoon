@@ -18,7 +18,7 @@ completes.
 ## Architecture
 
 ```
-TycoonApiClient          ← 7 economy HTTP methods
+SynaptixApiClient          ← 7 economy HTTP methods
         │
 EconomyNotifier          ← StateNotifier<EconomyState>
    ├── _hydrateCachedState()   cold-start Hive cache read
@@ -55,7 +55,7 @@ All values are server-driven. **Never hardcode economy constants on the client.*
 
 ### API Client (`lib/core/networking/tycoon_api_client.dart`)
 
-Seven methods added to `TycoonApiClient`:
+Seven methods added to `SynaptixApiClient`:
 
 ```dart
 getEconomyState({required String playerId})
@@ -233,7 +233,7 @@ Test groups:
 | `PityResponseDto parsing` | pityActive, lossCount |
 | `SessionStartDto parsing` | discountApplied, adjustedCosts |
 | `EconomyState computed properties` | isOffline scenarios, isEmpty scenarios |
-| `TycoonApiClient.startPolicyMatch` | 200 → started=true, 409 → started=false, 500/400 rethrow |
+| `SynaptixApiClient.startPolicyMatch` | 200 → started=true, 409 → started=false, 500/400 rethrow |
 | `EconomyNotifier.fetchState` | success, cache write, analytics, retry count, 4xx no-retry, isOffline |
 | `EconomyNotifier.claimTicket` | state update, zero-remaining, denied analytics |
 | `EconomyNotifier.reportLoss` | pityActive update, silent failure |

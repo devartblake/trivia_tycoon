@@ -3,7 +3,7 @@
 ## Purpose
 This handoff summarizes what backend contracts are now available for frontend integration and what is still pending to reach full production behavior.
 
-## Frontend status update (2026-04-12)
+## Frontend status update (2026-04-14)
 
 The previously partial frontend work for this handoff is now closed in two
 alpha-scoped areas:
@@ -15,10 +15,14 @@ alpha-scoped areas:
   - backend career-summary fetch is wired into the enhanced profile screen
   - backend loadout `GET`/`PUT` wiring is in place for profile hydration/edit save
   - backend `DELETE /friends` wiring is in place for unfriend
+  - onboarding/login/bootstrap profile flows now attempt backend profile
+    hydration instead of relying on Hive-only restore
 
 Still not completed from this handoff:
 - crypto economy player surfaces
 - ML endpoint consumption in frontend UX/telemetry
+- portable avatar upload/object-storage persistence (requires backend upload contract;
+  MinIO-backed flow is the expected next step)
 
 Canonical remaining-work tracker:
 - [`docs/REMAINING_TASKS.md`](REMAINING_TASKS.md)

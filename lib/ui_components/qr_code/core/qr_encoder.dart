@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import '../models/qr_matrix.dart';
 import 'dart:math';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';

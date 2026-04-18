@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import 'package:trivia_tycoon/synaptix/mode/synaptix_mode.dart';
 import 'package:trivia_tycoon/synaptix/mode/synaptix_mode_provider.dart';
@@ -56,7 +57,7 @@ class _GameMenuScreenState extends ConsumerState<GameMenuScreen>
 
   @override
   Widget build(BuildContext context) {
-    final canPop = Navigator.of(context).canPop();
+    final canPop = context.canPop();
     final mode = ref.watch(synaptixModeProvider);
     final profileService = ref.watch(playerProfileServiceProvider);
     final userProfile = profileService.getProfile();
@@ -70,7 +71,7 @@ class _GameMenuScreenState extends ConsumerState<GameMenuScreen>
         leading: canPop
             ? IconButton(
                 icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                onPressed: () => Navigator.of(context).maybePop(),
+                onPressed: () => context.pop(),
               )
             : null,
         backgroundColor: Colors.transparent,
@@ -217,6 +218,17 @@ class _GameMenuScreenState extends ConsumerState<GameMenuScreen>
       'surface': 'labs',
     };
 
+    final learnHub = {
+      'label': 'Learn Hub',
+      'subtitle': 'Study & earn XP',
+      'icon': Icons.school_rounded,
+      'gradient': const LinearGradient(
+        colors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
+      ),
+      'route': '/learn-hub',
+      'surface': 'learn',
+    };
+
     final pathways = {
       'label': mode == SynaptixMode.teen ? 'Neural Pathways' : 'Pathways',
       'subtitle': 'Skills & progression',
@@ -264,11 +276,11 @@ class _GameMenuScreenState extends ConsumerState<GameMenuScreen>
     // Mode-aware emphasis ordering
     switch (mode) {
       case SynaptixMode.kids:
-        return [labs, journey, rewards, arena, pathways, circles];
+        return [labs, journey, learnHub, rewards, arena, pathways, circles];
       case SynaptixMode.teen:
-        return [arena, pathways, labs, circles, journey, rewards];
+        return [arena, pathways, learnHub, labs, circles, journey, rewards];
       case SynaptixMode.adult:
-        return [arena, journey, pathways, labs, circles, rewards];
+        return [arena, journey, learnHub, pathways, labs, circles, rewards];
     }
   }
 }

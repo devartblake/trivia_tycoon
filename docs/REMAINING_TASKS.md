@@ -13,11 +13,11 @@ _Last updated: 2026-04-18 (updated: audio/MinIO integration, SynaptixApiClient r
 
 | Area | Priority | Status | Blocked? |
 |------|----------|--------|----------|
-| Frontend/backend alpha handoff | High | Store, profile/social, and question gameplay complete; crypto + ML remain | No |
+| Frontend/backend alpha handoff | High | Store, profile/social, question gameplay complete; crypto + ML remain | No |
 | Phase 2 - Crash recovery stubs | High | Code complete; device validation pending | No |
 | Phase 3 - Test coverage (remaining gaps) | Medium | ~4.1% -> 40% target | No |
 | Phase 4 - Dependency audit | Medium | Partial | No |
-| Sprint 1 - Auth integration verification | Medium | Unknown | No |
+| Sprint 1 - Auth/profile integration verification | Medium | Partially improved; live backend verification still needed | No |
 | Sprint 2 - Networking layer | High | Not started | No |
 | Synaptix runtime validation | Medium | Blocked | Yes, needs device + backend |
 | Audio / MinIO integration | Medium | Music + SFX remote streaming complete (frontend); backend endpoint pending | Yes, needs backend |
@@ -38,20 +38,178 @@ _Last updated: 2026-04-18 (updated: audio/MinIO integration, SynaptixApiClient r
 - Career-summary fetch is wired into the enhanced profile experience.
 - Loadout `GET` / `PUT` wiring is implemented for hydration and save.
 - `DELETE /friends` is wired for unfriend.
+- Friends list, incoming requests, sent requests, and suggestions are now wired to backend social endpoints.
+- Add-friend-by-username now reconciles against backend friend/request state instead of local placeholder friendship checks.
+- DM recipient picking now uses the backend friends roster.
+- Shared `/ws` connection paths now append `?playerId=<guid>` for presence compatibility.
+- Follow-up profile persistence patch:
+  - onboarding now attempts broader backend profile sync
+  - login/signup now attempt backend profile hydration
+  - bootstrap now attempts backend profile hydration before falling back to Hive
+
+### 1b.ii Friends/social runtime verification REMAINING
+- Still needed:
+- Live verification of:
+  - `GET /users/me/friends`
+  - `GET /users/me/friends/requests`
+  - `GET /users/me/friends/requests/sent`
+  - `GET /users/me/friends/suggestions`
+  - `GET /users/search?handle=...` with authenticated requests
+  - `DELETE /friends` with authenticated requests
+- Two-account/device validation for:
+  - send request
+  - accept request
+  - decline request
+  - unfriend
+- Presence runtime validation for:
+  - initial `presence.bulk`
+  - `presence.update` on quiz/match activity
+  - offline transitions on disconnect
+- Final cleanup/deprecation decision for `FriendDiscoveryService`
+- Flutter-enabled formatter/analyzer/test pass
+
+### 1b.i Portable avatar/object-storage persistence REMAINING
+- Still needed:
+- Backend-supported upload flow for picked avatar images
+- Stable backend profile field for object URL/key after upload
+- Frontend upload client for MinIO-backed avatar storage
+- Replace local-device avatar file-path persistence with backend-served object references
+- Recommended file targets:
+- `lib/game/controllers/profile_avatar_controller.dart`
+- `lib/core/services/settings/profile_sync_service.dart`
+- `lib/core/services/storage/` or `lib/core/services/profile/` upload client
+- `lib/screens/profile/` edit/avatar surfaces
+- `test/core/services/` upload/profile sync tests
+- Notes:
+- Asset-path avatars and backend-served URLs are already safe to sync.
+- Local emulator/device file paths are not portable across reinstalls and should
+  not be treated as authoritative backend profile values.
+
+#### MinIO avatar upload integration checklist
+
+##### Goal
+- Replace local-device avatar file path persistence with a backend-backed,
+  portable avatar reference that survives emulator wipes, reinstalls, and
+  multi-device login.
+
+##### Assumed backend contract
+- One of the following backend patterns should be provided:
+1. Presigned upload flow
+   - `POST /users/me/avatar/upload-url`
+   - Request body example:
+     ```json
+     {
+       "fileName": "avatar_1710000000.jpg",
+       "contentType": "image/jpeg",
+       "contentLength": 183421
+     }
+     ```
+   - Response example:
+     ```json
+     {
+       "uploadUrl": "https://minio.example.com/bucket/key?...signature...",
+       "objectKey": "avatars/user-123/avatar_1710000000.jpg",
+       "publicUrl": "https://cdn.example.com/avatars/user-123/avatar_1710000000.jpg"
+     }
+     ```
+   - Frontend uploads bytes directly to `uploadUrl`, then confirms profile save
+     using `publicUrl` or `objectKey`.
+2. Backend proxy upload flow
+   - `POST /users/me/avatar`
+   - Multipart upload accepted by backend, backend writes to MinIO, then returns:
+     ```json
+     {
+       "avatarUrl": "https://cdn.example.com/avatars/user-123/avatar_1710000000.jpg",
+       "objectKey": "avatars/user-123/avatar_1710000000.jpg"
+     }
+     ```
+
+##### Expected profile fields after upload
+- Backend should return at least one stable avatar field:
+  - `avatar`
+  - `avatarUrl`
+  - `profileImageUrl`
+- Frontend should treat the returned URL/key as authoritative.
+- Frontend should never persist raw local file paths to backend profile state.
+
+##### Sequenced implementation steps
+1. Confirm backend upload contract and response shape.
+   File targets:
+   - backend docs / API contract source
+   - `docs/frontend_backend_handoff_alpha_2026-04-04.md`
+2. Add a dedicated avatar upload service.
+   File targets:
+   - `lib/core/services/profile/profile_avatar_upload_service.dart` (new)
+   - or `lib/core/services/storage/minio_upload_service.dart` (new)
+3. Add typed upload models for request/response payloads.
+   File targets:
+   - `lib/core/models/profile/avatar_upload_ticket.dart` (new)
+   - `lib/core/models/profile/avatar_upload_result.dart` (new)
+4. Update `ProfileAvatarController` to:
+   - keep local crop/compress behavior
+   - upload cropped bytes when the user confirms avatar save
+   - replace local temp path with returned backend URL/key
+   File targets:
+   - `lib/game/controllers/profile_avatar_controller.dart`
+5. Update backend profile sync/hydration to treat uploaded avatar URLs as
+   authoritative profile values.
+   File targets:
+   - `lib/core/services/settings/profile_sync_service.dart`
+   - `lib/core/services/settings/player_profile_service.dart`
+6. Update profile edit/onboarding/avatar-picker surfaces to show upload progress,
+   error states, and retry messaging.
+   File targets:
+   - `lib/screens/profile/`
+   - `lib/ui_components/profile_avatar/`
+   - `lib/screens/onboarding/`
+7. Add tests for upload success/failure and persisted avatar hydration.
+   File targets:
+   - `test/core/services/profile/` (new)
+   - `test/game/controllers/profile_avatar_controller_test.dart`
+   - `test/screens/profile/` widget tests as needed
+
+##### Frontend implementation assumptions
+- Upload should happen only after the image has already been square-cropped and
+  compressed locally.
+- Prefer JPEG output for consistency with the existing crop pipeline unless the
+  backend requires another content type.
+- The frontend should support:
+  - optimistic preview from the local cropped file
+  - persisted final state from the returned backend URL/key
+  - retry without losing the local preview
+
+##### Acceptance criteria
+- User picks avatar on emulator/device.
+- Avatar is cropped/compressed locally.
+- Avatar uploads successfully to backend/MinIO flow.
+- Backend returns stable avatar URL/key.
+- Frontend stores that returned value in Hive.
+- After emulator data wipe and fresh login, the profile rehydrates from backend
+  and the avatar is shown again without depending on the old local file path.
 
 ### 1c. Questions gameplay COMPLETE
 - Question retrieval now prefers `GET /questions/set`.
 - Per-question validation uses `POST /questions/check`.
 - End-of-quiz authoritative reconciliation uses `POST /questions/check-batch`.
 - Legacy/local fallback remains available where needed for resilience.
+- `QuestionScreen` now shows a visible backend-vs-local-fallback status banner.
+- `QuestionHubService` now logs explicit backend and fallback source decisions for
+  category loads, daily/mixed quiz loads, stats reads, and answer validation paths.
+- Still needed:
+  - live verification that normal gameplay stays on backend data in local/staging/prod environments
+  - decision on whether local fallback should remain in production once backend parity is proven
+  - deeper observability metrics beyond the new source banner/logging (success ratios, latency, coverage drift)
 
 ### 1d. Crypto economy player surfaces REMAINING
 - Still needed:
-- Player-facing wallet balance integration
+- Broader player-facing wallet balance integration beyond the main menu sync
 - Transaction/history integration
 - Wallet link / withdraw UX
 - Staking and unstaking UI
 - Feature-flag strategy for staged rollout
+- Newly completed:
+  - `main_menu_screen.dart` now syncs coin/gem display from backend player wallet data during economy refresh
+  - duplicate green energy strip under the menu currency display was removed
 - Backend endpoints available for consumption:
 - `POST /crypto/link-wallet`
 - `GET /crypto/balance/{playerId}`
@@ -192,15 +350,27 @@ _Last updated: 2026-04-18 (updated: audio/MinIO integration, SynaptixApiClient r
 
 ---
 
-## 5. Sprint 1 - P2 Auth Integration Verification
+## 5. Sprint 1 - P2 Auth/Profile Integration Verification
 
-Status is unknown - may already be complete. Needs explicit verification:
+Status is improved but still requires explicit live verification:
 
 - [ ] `AuthHttpClient` provider is registered in the Riverpod provider graph (confirm in
   `lib/game/providers/core_providers.dart` or `auth_providers.dart`)
 - [ ] Login screen shows correct error messages for 401, 403, 422, network timeout
 - [ ] Signup screen validates and surfaces backend error codes
 - [ ] Auto-refresh (token renewal on 401) tested end-to-end with a live or stub backend
+- [ ] Backend profile hydration after login verified against a live backend endpoint
+- [ ] Backend profile hydration after emulator/data wipe verified end-to-end
+- [ ] Local web auth CORS/origin validation confirmed for Docker-hosted backend
+
+### 5a. Local web auth / Docker verification REMAINING
+- Frontend-side diagnosis is complete:
+  - browser auth should target `http://localhost:5000` for local host access
+  - stale `https://localhost:5000` local defaults were corrected in frontend config
+- Still needed:
+  - verify Docker publishes the backend port to the host machine
+  - verify backend CORS allows the Flutter web dev origin
+  - verify any social/OAuth local callback URLs use the same reachable origin/protocol
 
 ---
 

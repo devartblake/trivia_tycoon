@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/game/providers/favorites_providers.dart';
 import '../../../core/delegates/sliver_appbar_delegate.dart';
 import '../../../game/models/favorite_category_models.dart';
@@ -84,7 +85,7 @@ class _FavoritesQuizScreenEnhancedState
             borderRadius: BorderRadius.circular(12),
           ),
           child: IconButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => context.pop(),
             icon: const Icon(
               Icons.arrow_back,
               color: Colors.white,

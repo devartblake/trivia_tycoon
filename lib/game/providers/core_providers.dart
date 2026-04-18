@@ -149,8 +149,20 @@ final synaptixApiClientProvider = Provider<SynaptixApiClient>((ref) {
 });
 
 final wsClientProvider = Provider<WsClient>((ref) {
+  final settingsBox = Hive.isBoxOpen('settings') ? Hive.box('settings') : null;
+  final playerId = settingsBox?.get('userId')?.toString();
+  final baseWsUri = Uri.parse(EnvConfig.apiWsBaseUrl);
+  final resolvedWsUrl = (playerId != null && playerId.isNotEmpty)
+      ? baseWsUri.replace(
+          queryParameters: {
+            ...baseWsUri.queryParameters,
+            'playerId': playerId,
+          },
+        ).toString()
+      : EnvConfig.apiWsBaseUrl;
+
   return WsClient(
-    url: EnvConfig.apiWsBaseUrl,
+    url: resolvedWsUrl,
     onMessage: (message) {
       LogManager.debug('[WS] Message: ${message.op}');
     },

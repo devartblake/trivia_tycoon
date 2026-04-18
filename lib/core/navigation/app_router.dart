@@ -1,6 +1,7 @@
 // Synaptix Phase 1: Route paths and GoRoute names are intentionally unchanged.
 // Display-facing label updates (e.g. "Arena", "Labs", "Pathways") are deferred
 // to FE-B2 (Phase 3). Do NOT rename route path constants here.
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/admin/admin_dashboard.dart';
@@ -33,6 +34,7 @@ import '../../arcade/missions/arcade_missions_screen.dart';
 import '../../arcade/ui/screens/arcade_hub_screen.dart';
 import '../../arcade/ui/screens/daily_bonus_screen.dart';
 import '../../game/models/game_mode.dart';
+import '../../game/models/question_model.dart';
 import '../../screens/challenge/challenge_screen.dart';
 import '../../screens/menu/invite_screen.dart';
 import '../../screens/messages/messages_screen.dart';
@@ -89,6 +91,11 @@ import '../../ui_components/confetti/ui/confetti_settings.dart';
 import '../../ui_components/depth_card_3d/theme_editor/gradient_editor_screen.dart';
 import '../../ui_components/qr_code/screens/qr_scan_settings_screen.dart';
 import '../../ui_components/qr_code/screens/qr_scanner_screen.dart';
+import '../dto/learning_dto.dart';
+import '../../screens/learn_hub/learn_hub_screen.dart';
+import '../../screens/learn_hub/lesson_screen.dart';
+import '../../screens/learn_hub/module_complete_screen.dart';
+import '../../screens/learn_hub/module_detail_screen.dart';
 import '../../screens/login_screen.dart';
 import '../../screens/onboarding/onboarding_screen.dart';
 import '../../screens/profile/avatar_selection_screen.dart';
@@ -110,6 +117,28 @@ import '../../screens/settings/theme/theme_settings_screen.dart';
 import '../../screens/settings/user_settings_screen.dart';
 import 'main_nav_bar.dart';
 import 'navigation_redirect_service.dart';
+
+// ── Screens registered in this pass ─────────────────────────────────────────
+import '../../arcade/domain/arcade_difficulty.dart';
+import '../../arcade/domain/arcade_game_definition.dart';
+import '../../arcade/ui/screens/arcade_game_shell.dart';
+import '../../admin/audio/admin_audio_player_screen.dart';
+import '../../admin/splash_screen/splash_selector_screen.dart';
+import '../../game/models/leaderboard_entry.dart';
+import '../../screens/group_chat/group_settings_screen.dart';
+import '../../screens/messages/message_detail_screen.dart';
+import '../../screens/messages/dialogs/create_dm_dialog.dart';
+import '../../screens/messages/dialogs/message_request_dialog.dart';
+import '../../screens/notifications/notification_detail_screen.dart';
+import '../../screens/profile/dialogs/add_friend_dialog.dart';
+import '../../screens/profile/enhanced/enhanced_profile_screen.dart';
+import '../../screens/profile/enhanced/mutual_friends_screen.dart';
+import '../../screens/profile/user_profile_screen.dart';
+import '../../screens/search/dialogs/search_dialog.dart';
+import '../../screens/spectate/spectate_mode_screen.dart';
+import '../../screens/store/crypto_wallet_screen.dart';
+import '../../screens/widgets/slimy_card_preview_screen.dart';
+import '../../ui_components/spin_wheel/ui/screen/wheel_screen.dart';
 
 // Reactive router provider that rebuilds when navigation state changes
 final goRouterProvider = Provider<GoRouter>((ref) {
@@ -202,7 +231,9 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       createAdminRoute(
         path: '/admin/question-editor',
         name: 'Question Editor',
-        builder: (context, state) => const QuestionEditorScreen(),
+        builder: (context, state) => QuestionEditorScreen(
+          initialQuestion: state.extra as QuestionModel?,
+        ),
       ),
       createAdminRoute(
         path: '/admin/encryption-preview',
@@ -276,7 +307,9 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/admin/question-editor',
             name: 'question-editor',
-            builder: (context, state) => const QuestionEditorScreen(),
+            builder: (context, state) => QuestionEditorScreen(
+          initialQuestion: state.extra as QuestionModel?,
+        ),
           ),
           GoRoute(
             path: '/admin/encryption-preview',
@@ -294,6 +327,21 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => AdminAuditLogScreen(
               userId: state.uri.queryParameters['userId'],
             ),
+          ),
+          GoRoute(
+            path: '/admin/card-demo',
+            name: 'admin-card-demo',
+            builder: (context, state) => const SlimyCardPreviewScreen(),
+          ),
+          GoRoute(
+            path: '/admin/splash-selector',
+            name: 'admin-splash-selector',
+            builder: (context, state) => const SplashSelectorScreen(),
+          ),
+          GoRoute(
+            path: '/admin/audio-studio',
+            name: 'admin-audio-studio',
+            builder: (context, state) => const AdminAudioPlayerScreen(),
           ),
         ],
       ),
@@ -355,6 +403,18 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/arcade/local-leaderboards',
         builder: (context, state) => const LocalArcadeLeaderboardScreen(),
       ),
+      GoRoute(
+        path: '/arcade/play',
+        name: 'arcade-play',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          return ArcadeGameShell(
+            game: extra['game'] as ArcadeGameDefinition,
+            difficulty: extra['difficulty'] as ArcadeDifficulty,
+          );
+        },
+        redirect: onboardingGuard,
+      ),
 
       /// Leaderboard Routes
       GoRoute(
@@ -366,6 +426,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/spin-earn',
         builder: (context, state) => const SpinEarnScreen(),
+      ),
+      GoRoute(
+        path: '/spin-earn/wheel',
+        name: 'spin-wheel',
+        builder: (context, state) => const WheelScreen(),
+        redirect: onboardingGuard,
       ),
       GoRoute(
         path: '/missions',
@@ -415,6 +481,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/store',
         name: 'Store',
         builder: (context, state) => StoreScreen()
+      ),
+      GoRoute(
+        path: '/store/crypto-wallet',
+        name: 'crypto-wallet',
+        builder: (context, state) => const CryptoWalletScreen(),
+        redirect: onboardingGuard,
       ),
       GoRoute(
         path: '/store/payment-return',
@@ -513,7 +585,40 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/quiz/play',
-        builder: (context, state) => const PlayQuizScreen(),
+        builder: (context, state) {
+          final extra = state.extra;
+          if (extra is Map<String, dynamic>) {
+            final categories = extra['categories'] is List
+                ? List<String>.from(extra['categories'] as List)
+                : const <String>[];
+            final category = (extra['category'] as String?) ??
+                (extra['subject'] as String?) ??
+                (categories.isNotEmpty ? categories.first : null);
+            final questions = extra['questions'] is List
+                ? (extra['questions'] as List).whereType<QuestionModel>().toList()
+                : const <QuestionModel>[];
+            final classLevel = extra['classLevel']?.toString();
+            final questionCount = (extra['questionCount'] as num?)?.toInt();
+            final displayTitle = extra['displayTitle']?.toString() ??
+                extra['title']?.toString();
+
+            final hasLaunchPayload = questions.isNotEmpty ||
+                category != null ||
+                classLevel != null ||
+                questionCount != null;
+
+            if (hasLaunchPayload) {
+              return AdaptedQuestionScreen(
+                classLevel: classLevel,
+                category: category,
+                questionCount: questionCount,
+                initialQuestions: questions.isEmpty ? null : questions,
+                displayTitle: displayTitle,
+              );
+            }
+          }
+          return const PlayQuizScreen();
+        },
       ),
       GoRoute(
         path: '/favorites-quiz',
@@ -582,7 +687,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/multiplayer/matchmaking/:gameMode',
         name: 'multiplayer-matchmaking',
         builder: (context, state) {
-          final gameMode = state.pathParameters['gameMode']!;
+          final gameMode =
+              normalizeGameModeName(state.pathParameters['gameMode']!);
           return MultiplayerGameMatchmakingScreen(gameMode: gameMode);
         },
       ),
@@ -591,7 +697,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/multiplayer/quiz/:gameMode',
         name: 'multiplayer-quiz',
         builder: (context, state) {
-          final gameMode = state.pathParameters['gameMode']!;
+          final gameMode =
+              normalizeGameModeName(state.pathParameters['gameMode']!);
           return MultiplayerQuestionScreen(gameMode: gameMode);
         },
       ),
@@ -600,7 +707,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/multiplayer/results/:gameMode',
         name: 'multiplayer-results',
         builder: (context, state) {
-          final gameMode = state.pathParameters['gameMode']!;
+          final gameMode =
+              normalizeGameModeName(state.pathParameters['gameMode']!);
           return MultiplayerResultsScreen(gameMode: gameMode);
         },
       ),
@@ -668,6 +776,41 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         redirect: onboardingGuard,
       ),
 
+      /// 📚 Learn Hub
+      GoRoute(
+        path: '/learn-hub',
+        name: 'learn-hub',
+        builder: (context, state) => const LearnHubScreen(),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/learn-hub/module/:moduleId',
+        name: 'module-detail',
+        builder: (context, state) => ModuleDetailScreen(
+          moduleId: state.pathParameters['moduleId']!,
+        ),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/learn-hub/module/:moduleId/lessons',
+        name: 'module-lessons',
+        builder: (context, state) => LessonScreen(
+          moduleId: state.pathParameters['moduleId']!,
+        ),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/learn-hub/module/:moduleId/complete',
+        name: 'module-complete',
+        builder: (context, state) => ModuleCompleteScreen(
+          moduleId: state.pathParameters['moduleId']!,
+          completionData: state.extra is ModuleCompleteResponseDto
+              ? state.extra as ModuleCompleteResponseDto
+              : null,
+        ),
+        redirect: onboardingGuard,
+      ),
+
       /// 👤 USER PROFILE & SOCIAL
       GoRoute(
         path: '/preferences',
@@ -690,6 +833,41 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const AddFriendByUsernameScreen(),
       ),
       GoRoute(
+        path: '/profile/enhanced/:userId',
+        name: 'enhanced-profile',
+        builder: (context, state) => EnhancedProfileScreen(
+          userId: state.pathParameters['userId']!,
+          currentUserId:
+              state.uri.queryParameters['currentUserId'] ?? '',
+          isOwnProfile:
+              state.uri.queryParameters['isOwnProfile'] == 'true',
+        ),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/profile/mutual-friends/:userId',
+        name: 'mutual-friends',
+        builder: (context, state) => MutualFriendsScreen(
+          userId: state.pathParameters['userId']!,
+          currentUserId: state.extra as String? ?? '',
+        ),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/spectate/:gameId',
+        name: 'spectate',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? {};
+          return SpectateModeScreen(
+            gameId: state.pathParameters['gameId']!,
+            currentUserId: extra['currentUserId'] as String? ?? '',
+            currentUserDisplayName:
+                extra['currentUserDisplayName'] as String? ?? '',
+          );
+        },
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
         path: '/avatar-selection',
         name: 'Avatar Selection',
         builder: (context, state) => const AvatarSelectionScreen(),
@@ -705,6 +883,74 @@ final goRouterProvider = Provider<GoRouter>((ref) {
        name: 'Messages',
        builder: (context, state) => const MessagesScreen(),
        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/messages/detail/:conversationId',
+        name: 'message-detail',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? {};
+          return MessageDetailScreen(
+            conversationId: state.pathParameters['conversationId']!,
+            contactName: extra['contactName'] as String? ?? 'Direct Message',
+            contactAvatar: extra['contactAvatar'] as String?,
+            isOnline: extra['isOnline'] as bool? ?? false,
+            currentActivity: extra['currentActivity'] as String?,
+          );
+        },
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/messages/search',
+        name: 'messages-search',
+        pageBuilder: (context, state) => const MaterialPage(
+          fullscreenDialog: true,
+          child: SearchDialog(),
+        ),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/messages/add-friend',
+        name: 'messages-add-friend',
+        pageBuilder: (context, state) => const MaterialPage(
+          fullscreenDialog: true,
+          child: AddFriendDialog(),
+        ),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/messages/requests',
+        name: 'messages-requests',
+        pageBuilder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? {};
+          return MaterialPage(
+            fullscreenDialog: true,
+            child: MessageRequestDialog(
+              requestCount: extra['requestCount'] as int? ?? 0,
+              onRequestHandled:
+                  extra['onRequestHandled'] as void Function(bool)? ??
+                      (_) {},
+            ),
+          );
+        },
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/messages/new',
+        name: 'messages-new',
+        pageBuilder: (context, state) => const MaterialPage(
+          fullscreenDialog: true,
+          child: CreateDMDialog(),
+        ),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/messages/group/:groupId/settings',
+        name: 'group-settings',
+        builder: (context, state) => GroupSettingsScreen(
+          groupId: state.pathParameters['groupId']!,
+          currentUserId: state.extra as String? ?? '',
+        ),
+        redirect: onboardingGuard,
       ),
 
       /// ⚡ Quick Actions Routes (Referenced in Enhanced GridMenuSection)
@@ -772,6 +1018,22 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/notifications',
         name: 'Notifications',
         builder: (context, state) => const NotificationsScreen(),
+      ),
+      GoRoute(
+        path: '/notifications/detail',
+        name: 'notification-detail',
+        builder: (context, state) => NotificationDetailScreen(
+          notification: state.extra as InboxItem,
+        ),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/leaderboard/player',
+        name: 'leaderboard-player',
+        builder: (context, state) => UserProfileScreen(
+          entry: state.extra as LeaderboardEntry,
+        ),
+        redirect: onboardingGuard,
       ),
       GoRoute(
         path: '/qr-scanner',

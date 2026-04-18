@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/services/social/friend_discovery_service.dart';
-import '../../../game/providers/message_providers.dart'; // includes currentUserIdProvider
-import '../../profile/dialogs/add_friend_dialog.dart';
-import '../message_detail_screen.dart';
+import 'package:go_router/go_router.dart';
 
-// Provider for FriendDiscoveryService
-final friendDiscoveryServiceProvider = Provider<FriendDiscoveryService>((ref) {
-  return FriendDiscoveryService();
-});
-
-// currentUserIdProvider is defined in lib/game/providers/message_providers.dart
+import '../../../core/models/social/friend_list_item_dto.dart';
+import '../../../game/providers/friends_providers.dart';
+import '../../../game/providers/message_providers.dart';
 
 class CreateDMDialog extends ConsumerStatefulWidget {
   const CreateDMDialog({super.key});
@@ -23,39 +17,12 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
   final TextEditingController _searchController = TextEditingController();
   final List<String> _selectedUserIds = [];
 
-  List<UserProfile> _filteredUsers = [];
   bool _isCreating = false;
 
   @override
   void initState() {
     super.initState();
     _searchController.addListener(_onSearchChanged);
-  }
-
-  void _onSearchChanged() {
-    setState(() {
-      final query = _searchController.text;
-      final friendService = ref.read(friendDiscoveryServiceProvider);
-      final currentUserId = ref.read(currentUserIdProvider);
-
-      if (query.trim().isEmpty) {
-        // Show all friends when search is empty
-        _filteredUsers = friendService.getFriends(currentUserId);
-      } else {
-        // Search users
-        _filteredUsers = friendService.searchUsers(
-          query,
-          excludeUserId: currentUserId,
-        );
-
-        // Filter to only show friends and friend suggestions
-        final friendIds = friendService.getFriendIds(currentUserId).toSet();
-        _filteredUsers = _filteredUsers.where((user) {
-          return friendIds.contains(user.id) ||
-              friendService.getFriendshipStatus(currentUserId, user.id) != FriendshipStatus.blocked;
-        }).toList();
-      }
-    });
   }
 
   @override
@@ -65,15 +32,15 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
     super.dispose();
   }
 
+  void _onSearchChanged() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final friendService = ref.watch(friendDiscoveryServiceProvider);
-    final currentUserId = ref.watch(currentUserIdProvider);
-
-    // Load friends on first build
-    if (_filteredUsers.isEmpty && _searchController.text.isEmpty) {
-      _filteredUsers = friendService.getFriends(currentUserId);
-    }
+    final friendsAsync = ref.watch(friendsListProvider);
 
     return Scaffold(
       backgroundColor: const Color(0xFF36393F),
@@ -82,43 +49,84 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.close, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.pop(),
         ),
         title: const Text(
           'New Message',
-          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         centerTitle: true,
         actions: [
           if (_selectedUserIds.isNotEmpty)
             TextButton(
-              onPressed: _isCreating ? null : _createConversation,
+              onPressed: _isCreating ? null : () => _createConversation(),
               child: _isCreating
                   ? const SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: Colors.white,
-                ),
-              )
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    )
                   : Text(
-                _selectedUserIds.length > 1 ? 'Create Group' : 'Create',
-                style: const TextStyle(
-                  color: Color(0xFF5865F2),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+                      _selectedUserIds.length > 1 ? 'Create Group' : 'Create',
+                      style: const TextStyle(
+                        color: Color(0xFF5865F2),
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
             ),
         ],
       ),
-      body: Column(
-        children: [
-          _buildSearchField(),
-          if (_selectedUserIds.isNotEmpty) _buildSelectedUsers(),
-          _buildQuickActions(),
-          _buildUsersList(),
-        ],
+      body: friendsAsync.when(
+        data: (friendsPage) {
+          final users = _filteredFriends(friendsPage.items);
+          final userById = {
+            for (final user in friendsPage.items) user.friendPlayerId: user,
+          };
+
+          return Column(
+            children: [
+              _buildSearchField(),
+              if (_selectedUserIds.isNotEmpty) _buildSelectedUsers(userById),
+              _buildQuickActions(),
+              _buildUsersList(users),
+            ],
+          );
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, _) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.error_outline, color: Colors.white70, size: 40),
+                const SizedBox(height: 12),
+                const Text(
+                  'Could not load friends right now',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  error.toString(),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: Color(0xFFB9BBBE), fontSize: 13),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () => ref.invalidate(friendsListProvider),
+                  child: const Text('Retry'),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -161,9 +169,7 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
     );
   }
 
-  Widget _buildSelectedUsers() {
-    final friendService = ref.read(friendDiscoveryServiceProvider);
-
+  Widget _buildSelectedUsers(Map<String, FriendListItemDto> userById) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(8),
@@ -175,7 +181,7 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
         spacing: 8,
         runSpacing: 8,
         children: _selectedUserIds.map((userId) {
-          final user = friendService.getUserProfile(userId);
+          final user = userById[userId];
           if (user == null) return const SizedBox.shrink();
 
           return Chip(
@@ -183,14 +189,17 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
             deleteIconColor: Colors.white,
             avatar: CircleAvatar(
               backgroundColor: Colors.white,
-              child: Text(
-                user.displayName[0].toUpperCase(),
-                style: const TextStyle(
-                  color: Color(0xFF5865F2),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                ),
-              ),
+              backgroundImage: _avatarProvider(user.avatarUrl),
+              child: (user.avatarUrl == null || user.avatarUrl!.isEmpty)
+                  ? Text(
+                      _initial(user.displayName),
+                      style: const TextStyle(
+                        color: Color(0xFF5865F2),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    )
+                  : null,
             ),
             label: Text(
               user.displayName,
@@ -265,7 +274,7 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
               style: TextStyle(color: Color(0xFF72767D), fontSize: 12),
             ),
             trailing: const Icon(Icons.chevron_right, color: Colors.white70),
-            onTap: () => _showAddFriendDialog(),
+            onTap: _showAddFriendDialog,
           ),
         ],
       ),
@@ -273,16 +282,11 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
   }
 
   void _showAddFriendDialog() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const AddFriendDialog(),
-        fullscreenDialog: true,
-      ),
-    );
+    context.push('/messages/add-friend');
   }
 
-  Widget _buildUsersList() {
-    if (_filteredUsers.isEmpty) {
+  Widget _buildUsersList(List<FriendListItemDto> users) {
+    if (users.isEmpty) {
       return Expanded(
         child: Center(
           child: Column(
@@ -299,14 +303,14 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
               Text(
                 _searchController.text.isEmpty
                     ? 'No friends yet'
-                    : 'No users found',
+                    : 'No friends match your search',
                 style: const TextStyle(color: Colors.white70, fontSize: 16),
               ),
               const SizedBox(height: 8),
               Text(
                 _searchController.text.isEmpty
                     ? 'Add friends to start messaging'
-                    : 'Try a different search',
+                    : 'Try a different name or username',
                 style: const TextStyle(color: Color(0xFF72767D), fontSize: 14),
               ),
             ],
@@ -315,14 +319,12 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
       );
     }
 
-    // Group users by first letter
-    final groupedUsers = <String, List<UserProfile>>{};
-    for (final user in _filteredUsers) {
-      final firstLetter = user.displayName[0].toUpperCase();
+    final groupedUsers = <String, List<FriendListItemDto>>{};
+    for (final user in users) {
+      final firstLetter = _initial(user.displayName).toUpperCase();
       groupedUsers.putIfAbsent(firstLetter, () => []).add(user);
     }
 
-    // Sort groups alphabetically
     final sortedKeys = groupedUsers.keys.toList()..sort();
 
     return Expanded(
@@ -331,7 +333,7 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
         itemCount: sortedKeys.length,
         itemBuilder: (context, index) {
           final letter = sortedKeys[index];
-          final users = groupedUsers[letter]!;
+          final letterUsers = groupedUsers[letter]!;
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -347,7 +349,7 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
                   ),
                 ),
               ),
-              ...users.map((user) => _buildUserTile(user)).toList(),
+              ...letterUsers.map(_buildUserTile),
             ],
           );
         },
@@ -355,11 +357,8 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
     );
   }
 
-  Widget _buildUserTile(UserProfile user) {
-    final isSelected = _selectedUserIds.contains(user.id);
-    final currentUserId = ref.read(currentUserIdProvider);
-    final friendService = ref.read(friendDiscoveryServiceProvider);
-    final mutualCount = friendService.getMutualFriendCount(currentUserId, user.id);
+  Widget _buildUserTile(FriendListItemDto user) {
+    final isSelected = _selectedUserIds.contains(user.friendPlayerId);
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
@@ -375,15 +374,15 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
           children: [
             CircleAvatar(
               backgroundColor: const Color(0xFF5865F2),
-              backgroundImage: user.avatar != null ? AssetImage(user.avatar!) : null,
-              child: user.avatar == null
+              backgroundImage: _avatarProvider(user.avatarUrl),
+              child: (user.avatarUrl == null || user.avatarUrl!.isEmpty)
                   ? Text(
-                user.displayName[0].toUpperCase(),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              )
+                      _initial(user.displayName).toUpperCase(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
                   : null,
             ),
             if (user.isOnline)
@@ -437,20 +436,9 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
             ],
           ],
         ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (user.username != null)
-              Text(
-                '@${user.username}',
-                style: const TextStyle(color: Color(0xFF72767D), fontSize: 12),
-              ),
-            if (mutualCount > 0)
-              Text(
-                '$mutualCount mutual ${mutualCount == 1 ? "friend" : "friends"}',
-                style: const TextStyle(color: Color(0xFF72767D), fontSize: 11),
-              ),
-          ],
+        subtitle: Text(
+          '@${user.username}',
+          style: const TextStyle(color: Color(0xFF72767D), fontSize: 12),
         ),
         trailing: isSelected
             ? const Icon(Icons.check_circle, color: Color(0xFF5865F2))
@@ -458,9 +446,9 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
         onTap: () {
           setState(() {
             if (isSelected) {
-              _selectedUserIds.remove(user.id);
+              _selectedUserIds.remove(user.friendPlayerId);
             } else {
-              _selectedUserIds.add(user.id);
+              _selectedUserIds.add(user.friendPlayerId);
             }
           });
         },
@@ -474,19 +462,20 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
     setState(() => _isCreating = true);
 
     try {
+      final friendsPage = await ref.read(friendsListProvider.future);
       final currentUserId = ref.read(currentUserIdProvider);
-      final friendService = ref.read(friendDiscoveryServiceProvider);
+      final userById = {
+        for (final user in friendsPage.items) user.friendPlayerId: user,
+      };
 
       if (_selectedUserIds.length == 1) {
-        // Create direct message
         final otherUserId = _selectedUserIds.first;
-        final otherUser = friendService.getUserProfile(otherUserId);
+        final otherUser = userById[otherUserId];
 
         if (otherUser == null) {
-          throw Exception('User not found');
+          throw Exception('Friend not found');
         }
 
-        // Find or create direct conversation
         final conversation = findOrCreateDirectConversation(
           ref,
           currentUserId,
@@ -494,27 +483,19 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
         );
 
         if (conversation != null && mounted) {
-          Navigator.pop(context); // Close dialog
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MessageDetailScreen(
-                conversationId: conversation.id,
-                contactName: otherUser.displayName,
-                contactAvatar: otherUser.avatar,
-                isOnline: otherUser.isOnline,
-                currentActivity: null,
-              ),
-            ),
-          );
+          context.pop();
+          context.push('/messages/detail/${conversation.id}', extra: {
+            'contactName': otherUser.displayName,
+            'contactAvatar': otherUser.avatarUrl,
+            'isOnline': otherUser.isOnline,
+            'currentActivity': null,
+          });
         }
       } else {
-        // Create group conversation
         final selectedUsers = _selectedUserIds
-            .map((id) => friendService.getUserProfile(id))
-            .whereType<UserProfile>()
-            .toList();
-
+            .map((id) => userById[id])
+            .whereType<FriendListItemDto>()
+            .toList(growable: false);
         final names = selectedUsers.map((u) => u.displayName).join(', ');
 
         if (mounted) {
@@ -524,7 +505,7 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
               backgroundColor: const Color(0xFF5865F2),
             ),
           );
-          Navigator.pop(context);
+          context.pop();
         }
       }
     } catch (e) {
@@ -541,5 +522,36 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
         setState(() => _isCreating = false);
       }
     }
+  }
+
+  List<FriendListItemDto> _filteredFriends(List<FriendListItemDto> users) {
+    final query = _searchController.text.trim().toLowerCase();
+    if (query.isEmpty) {
+      return users;
+    }
+
+    return users.where((user) {
+      final displayName = user.displayName.toLowerCase();
+      final username = user.username.toLowerCase();
+      return displayName.contains(query) || username.contains(query);
+    }).toList(growable: false);
+  }
+
+  ImageProvider<Object>? _avatarProvider(String? avatarUrl) {
+    if (avatarUrl == null || avatarUrl.isEmpty) {
+      return null;
+    }
+    if (avatarUrl.startsWith('http://') || avatarUrl.startsWith('https://')) {
+      return NetworkImage(avatarUrl);
+    }
+    return AssetImage(avatarUrl);
+  }
+
+  String _initial(String value) {
+    final trimmed = value.trim();
+    if (trimmed.isEmpty) {
+      return '?';
+    }
+    return trimmed[0];
   }
 }

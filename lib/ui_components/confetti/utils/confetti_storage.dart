@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
 import '../models/confetti_settings.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';

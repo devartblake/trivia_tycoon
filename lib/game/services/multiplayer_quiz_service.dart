@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import '../../core/models/question_validation_models.dart';
 import '../../screens/multiplayer/widgets/base_multiplayer_question_widget.dart';
 import '../../screens/question/widgets/adapted_question_widgets.dart';
 import '../models/answer.dart';
@@ -18,6 +19,7 @@ class MultiplayerQuizService {
   final http.Client _client;
   final Map<String, StreamController<OpponentUpdate>> _updateStreams = {};
   final Map<String, List<QuestionModel>> _prefetchedQuestions = {};
+  final Map<String, List<QuestionModel>> _matchQuestions = {};
   final QuestionRepository? _questionRepository;
 
   MultiplayerQuizService({
@@ -29,14 +31,15 @@ class MultiplayerQuizService {
 
   // Initialize a multiplayer match
   Future<MatchData> initializeMatch(String gameMode) async {
+    final normalizedGameMode = normalizeGameModeName(gameMode);
     try {
       final response = await _client.post(
         Uri.parse('$baseUrl/api/multiplayer/matches'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'gameMode': gameMode,
-          'playerCount': _getPlayerCountForGameMode(gameMode),
-          'questionCount': _getQuestionCountForGameMode(gameMode),
+          'gameMode': normalizedGameMode,
+          'playerCount': _getPlayerCountForGameMode(normalizedGameMode),
+          'questionCount': _getQuestionCountForGameMode(normalizedGameMode),
         }),
       );
 
@@ -45,39 +48,40 @@ class MultiplayerQuizService {
         return MatchData.fromJson(data);
       } else if (response.statusCode == 404) {
         // No match found, create a mock match for demo
-        return _createMockMatch(gameMode);
+        return _createMockMatch(normalizedGameMode);
       } else {
         throw Exception('Failed to initialize match: ${response.statusCode}');
       }
     } catch (e) {
       // Fallback to mock match for development/demo
-      return _createMockMatch(gameMode);
+      return _createMockMatch(normalizedGameMode);
     }
   }
 
   // Get questions for a specific game mode
   Future<List<QuestionModel>> getQuestionsForGameMode(String gameMode) async {
-    final prefetched = _prefetchedQuestions.remove(gameMode);
+    final normalizedGameMode = normalizeGameModeName(gameMode);
+    final prefetched = _prefetchedQuestions.remove(normalizedGameMode);
     if (prefetched != null && prefetched.isNotEmpty) {
       return prefetched;
     }
 
-    final fromRepository = await _tryRepositoryQuestions(gameMode);
+    final fromRepository = await _tryRepositoryQuestions(normalizedGameMode);
     if (fromRepository.isNotEmpty) {
       return fromRepository;
     }
 
     try {
-      final category = _getCategoryForGameMode(gameMode);
-      final difficulty = _getDifficultyForGameMode(gameMode);
-      final count = _getQuestionCountForGameMode(gameMode);
+      final category = _getCategoryForGameMode(normalizedGameMode);
+      final difficulty = _getDifficultyForGameMode(normalizedGameMode);
+      final count = _getQuestionCountForGameMode(normalizedGameMode);
 
       final response = await _client.get(
         Uri.parse('$baseUrl/api/questions').replace(queryParameters: {
           'category': category,
           'difficulty': difficulty,
           'count': count.toString(),
-          'gameMode': gameMode,
+          'gameMode': normalizedGameMode,
         }),
       );
 
@@ -93,16 +97,17 @@ class MultiplayerQuizService {
       }
     } catch (e) {
       // Fallback to mock questions for development
-      return _generateMockQuestions(gameMode);
+      return _generateMockQuestions(normalizedGameMode);
     }
   }
 
   Future<void> prefetchQuestionsForGameMode(String gameMode) async {
-    if (_prefetchedQuestions.containsKey(gameMode)) return;
+    final normalizedGameMode = normalizeGameModeName(gameMode);
+    if (_prefetchedQuestions.containsKey(normalizedGameMode)) return;
 
-    final questions = await _tryRepositoryQuestions(gameMode);
+    final questions = await _tryRepositoryQuestions(normalizedGameMode);
     if (questions.isNotEmpty) {
-      _prefetchedQuestions[gameMode] = questions;
+      _prefetchedQuestions[normalizedGameMode] = questions;
     }
   }
 
@@ -156,6 +161,34 @@ class MultiplayerQuizService {
         _simulateOpponentAnswer(matchId, questionIndex);
       });
     }
+  }
+
+  Future<QuestionAnswerCheckResult> validateAnswer({
+    required QuestionModel question,
+    required String selectedAnswer,
+  }) async {
+    if (_questionRepository != null) {
+      try {
+        return await _questionRepository!.checkAnswer(
+          question: question,
+          selectedAnswer: selectedAnswer,
+        );
+      } catch (_) {
+        // Fall back to local validation below.
+      }
+    }
+
+    return QuestionAnswerCheckResult(
+      questionId: question.id,
+      selectedAnswer: selectedAnswer,
+      isCorrect: question.isCorrectAnswer(selectedAnswer),
+      correctAnswer: question.correctAnswer,
+      source: 'local_fallback',
+    );
+  }
+
+  void registerMatchQuestions(String matchId, List<QuestionModel> questions) {
+    _matchQuestions[matchId] = List<QuestionModel>.from(questions);
   }
 
   // Get real-time updates from opponent
@@ -451,12 +484,19 @@ class MultiplayerQuizService {
   void _simulateOpponentAnswer(String matchId, int questionIndex) {
     final controller = _updateStreams[matchId];
     if (controller != null && !controller.isClosed) {
+      final matchQuestions = _matchQuestions[matchId];
+      final question = matchQuestions != null &&
+              questionIndex >= 0 &&
+              questionIndex < matchQuestions.length
+          ? matchQuestions[questionIndex]
+          : null;
+
       // Simulate opponent answering (sometimes correct, sometimes not)
       final isCorrect = Random().nextDouble() < 0.6; // 60% accuracy
-      final answers = ['A', 'B', 'C', 'D'];
-      final selectedAnswer = isCorrect
-          ? answers[0] // Assume first option is correct for simplicity
-          : answers[Random().nextInt(answers.length)];
+      final options = question?.options ?? const ['A', 'B', 'C', 'D'];
+      final selectedAnswer = isCorrect && question != null
+          ? question.correctAnswer
+          : options[Random().nextInt(options.length)];
 
       controller.add(OpponentUpdate(
         type: OpponentUpdateType.answered,
@@ -471,6 +511,7 @@ class MultiplayerQuizService {
       controller.close();
       _updateStreams.remove(matchId);
     }
+    _matchQuestions.remove(matchId);
   }
 
   void dispose() {
@@ -479,6 +520,7 @@ class MultiplayerQuizService {
     }
     _updateStreams.clear();
     _prefetchedQuestions.clear();
+    _matchQuestions.clear();
     _client.close();
   }
 }

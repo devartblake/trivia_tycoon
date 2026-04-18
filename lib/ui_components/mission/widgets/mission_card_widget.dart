@@ -330,13 +330,6 @@ class _MissionCardState extends State<MissionCard> with TickerProviderStateMixin
     }
   }
 
-  void _triggerSwap() async {
-    await _controller!.forward();
-    await Future.delayed(const Duration(milliseconds: 150));
-    _controller!.reverse();
-    widget.onSwap();
-  }
-
   @override
   void dispose() {
     _controller?.dispose();

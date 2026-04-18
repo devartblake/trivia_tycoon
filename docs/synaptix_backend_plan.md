@@ -1,7 +1,7 @@
 # Synaptix Backend Implementation Plan
 ## FastAPI Backend for Alpha Release
 
-**Context:** The Flutter frontend (Packets A-D + onboarding evolution) is complete. This plan defines the backend work needed to support the alpha demo and subsequent releases. The frontend has a comprehensive API client (`TycoonApiClient`) with 50+ endpoints already defined — the backend must implement these contracts.
+**Context:** The Flutter frontend (Packets A-D + onboarding evolution) is complete. This plan defines the backend work needed to support the alpha demo and subsequent releases. The frontend has a comprehensive API client (`SynaptixApiClient`) with 50+ endpoints already defined — the backend must implement these contracts.
 
 **Stack:** FastAPI (Python) — selected for rapid development during alpha
 **Frontend Companion:** `docs/synaptix_frontend_plan.md` (Packets A-D complete)

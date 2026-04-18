@@ -82,6 +82,7 @@ class _QuestionScreenState extends ConsumerState<QuestionScreen> {
   Widget build(BuildContext context) {
     final statsAsync = ref.watch(questionStatsProvider);
     final categoriesAsync = ref.watch(quizCategoriesProvider);
+    final sourceStatus = ref.watch(serviceStatusProvider);
 
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
@@ -92,6 +93,10 @@ class _QuestionScreenState extends ConsumerState<QuestionScreen> {
             children: [
               // Top Menu Section with user info and main actions
               const TopMenuSection(),
+
+              const SizedBox(height: 16),
+
+              _buildQuestionSourceBanner(sourceStatus),
 
               const SizedBox(height: 24),
 
@@ -171,6 +176,81 @@ class _QuestionScreenState extends ConsumerState<QuestionScreen> {
         child: const Icon(Icons.add, color: Colors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
+  }
+
+  Widget _buildQuestionSourceBanner(Map<String, dynamic> status) {
+    final source = status['source']?.toString() ?? 'unknown';
+    final operation = status['operation']?.toString() ?? 'idle';
+    final endpoint = status['endpoint']?.toString();
+    final detail = status['detail']?.toString();
+
+    final isBackend = source == 'backend';
+    final isFallback = source == 'localFallback';
+
+    final backgroundColor = isBackend
+        ? const Color(0xFFECFDF5)
+        : isFallback
+            ? const Color(0xFFFFF7ED)
+            : const Color(0xFFF8FAFC);
+    final borderColor = isBackend
+        ? const Color(0xFF10B981)
+        : isFallback
+            ? const Color(0xFFF59E0B)
+            : const Color(0xFF94A3B8);
+    final icon = isBackend
+        ? Icons.cloud_done_rounded
+        : isFallback
+            ? Icons.warning_amber_rounded
+            : Icons.sync_problem_rounded;
+    final title = isBackend
+        ? 'Question API connected'
+        : isFallback
+            ? 'Using local question fallback'
+            : 'Question source not confirmed yet';
+    final subtitle = detail ??
+        (endpoint != null && endpoint.isNotEmpty
+            ? 'Last check: $operation via $endpoint'
+            : 'The quiz service has not reported a source yet.');
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: borderColor.withValues(alpha: 0.65)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: borderColor, size: 20),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: borderColor,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Color(0xFF475569),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 

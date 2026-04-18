@@ -23,8 +23,6 @@ extension CrosswordCategoryExtension on CrosswordCategory {
         return 'Literature';
       case CrosswordCategory.cultureMisc:
         return 'Culture';
-      default:
-        return '';
     }
   }
 }

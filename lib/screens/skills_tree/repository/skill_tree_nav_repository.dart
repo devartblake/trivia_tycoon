@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:flutter/material.dart';
 import '../../../game/models/skill_tree_nav_models.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 

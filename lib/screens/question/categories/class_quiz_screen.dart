@@ -27,6 +27,7 @@ class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
   String? selectedSubject;
   String selectedDifficulty = 'easy';
   int selectedQuestionCount = 10;
+  bool isStartingQuiz = false;
 
   @override
   void initState() {
@@ -47,7 +48,9 @@ class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
 
       final subjects = categories.isNotEmpty
           ? categories.map(_buildSubjectFromCategory).toList()
-          : _getSubjectsForClass(widget.classLevel);
+          : QuizCategoryManager.getCategoriesForClass(widget.classLevel)
+              .map(_buildSubjectFromCategory)
+              .toList();
 
       final counts = <String, int>{};
 
@@ -91,51 +94,6 @@ class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
     };
   }
 
-  List<Map<String, dynamic>> _getSubjectsForClass(String classLevel) {
-    // Age-appropriate subjects based on class level
-    switch (classLevel.toLowerCase()) {
-      case 'kindergarten':
-      case 'k':
-        return [
-          {'id': 'colors_shapes', 'name': 'Colors & Shapes', 'icon': Icons.palette, 'color': Colors.red},
-          {'id': 'numbers', 'name': 'Numbers 1-10', 'icon': Icons.looks_one, 'color': Colors.blue},
-          {'id': 'alphabet', 'name': 'Letters & Sounds', 'icon': Icons.abc, 'color': Colors.green},
-          {'id': 'animals', 'name': 'Animal Friends', 'icon': Icons.pets, 'color': Colors.orange},
-        ];
-      case '1':
-      case 'grade 1':
-        return [
-          {'id': 'math_basic', 'name': 'Addition & Subtraction', 'icon': Icons.calculate, 'color': Colors.blue},
-          {'id': 'reading', 'name': 'Reading Comprehension', 'icon': Icons.book, 'color': Colors.green},
-          {'id': 'science_nature', 'name': 'Plants & Animals', 'icon': Icons.eco, 'color': Colors.teal},
-          {'id': 'social_studies', 'name': 'Community Helpers', 'icon': Icons.group, 'color': Colors.purple},
-        ];
-      case '2':
-      case 'grade 2':
-        return [
-          {'id': 'math_intermediate', 'name': 'Multiplication Tables', 'icon': Icons.grid_view, 'color': Colors.blue},
-          {'id': 'language_arts', 'name': 'Grammar & Writing', 'icon': Icons.edit, 'color': Colors.green},
-          {'id': 'science_earth', 'name': 'Weather & Seasons', 'icon': Icons.wb_sunny, 'color': Colors.orange},
-          {'id': 'geography', 'name': 'Maps & Places', 'icon': Icons.map, 'color': Colors.red},
-        ];
-      case '3':
-      case 'grade 3':
-        return [
-          {'id': 'math_fractions', 'name': 'Fractions & Decimals', 'icon': Icons.pie_chart, 'color': Colors.blue},
-          {'id': 'science_body', 'name': 'Human Body', 'icon': Icons.accessibility, 'color': Colors.pink},
-          {'id': 'history', 'name': 'Local History', 'icon': Icons.account_balance, 'color': Colors.brown},
-          {'id': 'art_music', 'name': 'Arts & Music', 'icon': Icons.music_note, 'color': Colors.purple},
-        ];
-      default:
-        return [
-          {'id': 'mathematics', 'name': 'Mathematics', 'icon': Icons.calculate, 'color': Colors.blue},
-          {'id': 'science', 'name': 'Science', 'icon': Icons.science, 'color': Colors.green},
-          {'id': 'english', 'name': 'English', 'icon': Icons.book, 'color': Colors.red},
-          {'id': 'social_studies', 'name': 'Social Studies', 'icon': Icons.public, 'color': Colors.orange},
-        ];
-    }
-  }
-
   List<String> _getDifficultyOptionsForClass(String classLevel) {
     switch (classLevel.toLowerCase()) {
       case 'kindergarten':
@@ -150,7 +108,7 @@ class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
     }
   }
 
-  void _startQuiz() {
+  Future<void> _startQuiz() async {
     if (selectedSubject == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please select a subject first')),
@@ -158,14 +116,51 @@ class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
       return;
     }
 
-    // Navigate to quiz playing screen with parameters
-    context.push('/quiz/play', extra: {
-      'classLevel': widget.classLevel,
-      'subject': selectedSubject,
-      'difficulty': selectedDifficulty,
-      'questionCount': selectedQuestionCount,
-      'isClassBased': true,
-    });
+    final category = QuizCategoryManager.fromString(selectedSubject!);
+    if (category == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Unable to resolve the selected subject.')),
+      );
+      return;
+    }
+
+    setState(() => isStartingQuiz = true);
+    try {
+      final repository = ref.read(question_data.questionRepositoryProvider);
+      final difficulty = switch (selectedDifficulty) {
+        'easy' => 1,
+        'medium' => 2,
+        'hard' => 3,
+        _ => null,
+      };
+      final questions = await repository.getQuestionsForCategory(
+        category: category.name,
+        amount: (selectedQuestionCount * 4).clamp(20, 200),
+        difficulty: difficulty,
+      );
+      final curatedQuestions = questions.take(selectedQuestionCount).toList(growable: false);
+      if (curatedQuestions.isEmpty) {
+        throw Exception('No questions available for ${category.displayName}.');
+      }
+
+      if (!mounted) return;
+      context.push('/quiz/play', extra: {
+        'questions': curatedQuestions,
+        'classLevel': widget.classLevel,
+        'category': category.name,
+        'questionCount': curatedQuestions.length,
+        'displayTitle': '${category.displayName} Quiz',
+      });
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Unable to prepare quiz: $error')),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => isStartingQuiz = false);
+      }
+    }
   }
 
   @override
@@ -404,7 +399,7 @@ class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
       width: double.infinity,
       height: 56,
       child: ElevatedButton(
-        onPressed: _startQuiz,
+        onPressed: isStartingQuiz ? null : _startQuiz,
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.green,
           foregroundColor: Colors.white,
@@ -418,7 +413,9 @@ class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
             const Icon(Icons.play_arrow, size: 24),
             const SizedBox(width: 8),
             Text(
-              'Start ${selectedSubjectData['name']} Quiz',
+              isStartingQuiz
+                  ? 'Preparing Quiz...'
+                  : 'Start ${selectedSubjectData['name']} Quiz',
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ],

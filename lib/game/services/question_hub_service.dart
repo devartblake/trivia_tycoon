@@ -4,16 +4,66 @@ import '../models/question_model.dart';
 import 'question_loader_service.dart';
 import 'question_response_contract.dart';
 import 'quiz_category.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
+
+enum QuestionDataSource {
+  unknown,
+  backend,
+  localFallback,
+}
+
+class QuestionSourceSnapshot {
+  final QuestionDataSource source;
+  final String operation;
+  final String? endpoint;
+  final String? detail;
+  final DateTime updatedAt;
+
+  const QuestionSourceSnapshot({
+    required this.source,
+    required this.operation,
+    required this.updatedAt,
+    this.endpoint,
+    this.detail,
+  });
+
+  QuestionSourceSnapshot.unknown()
+      : source = QuestionDataSource.unknown,
+        operation = 'idle',
+        endpoint = null,
+        detail = null,
+        updatedAt = DateTime.fromMillisecondsSinceEpoch(0);
+
+  bool get isBackend => source == QuestionDataSource.backend;
+  bool get isFallback => source == QuestionDataSource.localFallback;
+}
+
+abstract class QuestionSourceReporter {
+  void recordBackend({
+    required String operation,
+    required String endpoint,
+    String? detail,
+  });
+
+  void recordFallback({
+    required String operation,
+    String? endpoint,
+    String? detail,
+  });
+}
 
 class QuestionHubService {
   QuestionHubService({
     required ApiService apiService,
     AdaptedQuestionLoaderService? localLoader,
+    QuestionSourceReporter? reporter,
   })  : _apiService = apiService,
-        _localLoader = localLoader ?? AdaptedQuestionLoaderService();
+        _localLoader = localLoader ?? AdaptedQuestionLoaderService(),
+        _reporter = reporter;
 
   final ApiService _apiService;
   final AdaptedQuestionLoaderService _localLoader;
+  final QuestionSourceReporter? _reporter;
 
   Future<List<QuestionModel>> getQuestionsForCategory({
     required String category,
@@ -34,6 +84,11 @@ class QuestionHubService {
         endpoint: '/questions/set',
       );
       if (questions.isNotEmpty) {
+        _recordBackend(
+          operation: 'category_questions',
+          endpoint: '/questions/set',
+          detail: 'Loaded ${questions.length} questions for $category',
+        );
         return questions;
       }
     } on ApiRequestException {
@@ -52,6 +107,11 @@ class QuestionHubService {
       );
       final questions = response.map(QuestionModel.fromJson).toList();
       if (questions.isNotEmpty) {
+        _recordBackend(
+          operation: 'category_questions',
+          endpoint: '/quiz/play',
+          detail: 'Loaded ${questions.length} legacy quiz questions for $category',
+        );
         return questions;
       }
     } on ApiRequestException {
@@ -64,6 +124,13 @@ class QuestionHubService {
     final filtered = difficulty == null
         ? localQuestions
         : localQuestions.where((q) => q.difficulty == difficulty).toList();
+    filtered.shuffle();
+
+    _recordFallback(
+      operation: 'category_questions',
+      endpoint: '/questions/set',
+      detail: 'Using local category questions for $category',
+    );
 
     if (filtered.length <= amount) {
       return filtered;
@@ -91,10 +158,25 @@ class QuestionHubService {
         selectedAnswer: selectedAnswer,
       );
     } on ApiRequestException {
+      _recordFallback(
+        operation: 'answer_check',
+        endpoint: '/questions/check',
+        detail: 'Falling back to local answer validation for ${question.id}',
+      );
       return _fallbackAnswerCheck(question, selectedAnswer);
     } on QuestionContractException {
+      _recordFallback(
+        operation: 'answer_check',
+        endpoint: '/questions/check',
+        detail: 'Invalid answer-check contract for ${question.id}',
+      );
       return _fallbackAnswerCheck(question, selectedAnswer);
     } catch (_) {
+      _recordFallback(
+        operation: 'answer_check',
+        endpoint: '/questions/check',
+        detail: 'Unexpected answer-check failure for ${question.id}',
+      );
       return _fallbackAnswerCheck(question, selectedAnswer);
     }
   }
@@ -160,6 +242,11 @@ class QuestionHubService {
           .toList(growable: false);
 
       if (results.isNotEmpty) {
+        _recordBackend(
+          operation: 'answer_check_batch',
+          endpoint: '/questions/check-batch',
+          detail: 'Validated ${results.length} answers via backend',
+        );
         return results;
       }
     } on ApiRequestException {
@@ -169,6 +256,12 @@ class QuestionHubService {
     } catch (_) {
       // fallback below
     }
+
+    _recordFallback(
+      operation: 'answer_check_batch',
+      endpoint: '/questions/check-batch',
+      detail: 'Using local batch answer validation',
+    );
 
     return submissions
         .map((submission) => _fallbackAnswerCheck(
@@ -189,6 +282,11 @@ class QuestionHubService {
 
       final categories = envelope.items.map(_parseCategory).whereType<QuizCategory>().toSet().toList();
       if (categories.isNotEmpty) {
+        _recordBackend(
+          operation: 'categories',
+          endpoint: '/quiz/categories',
+          detail: 'Loaded ${categories.length} categories from backend',
+        );
         return categories;
       }
     } on ApiRequestException {
@@ -197,6 +295,11 @@ class QuestionHubService {
       // invalid contract, fallback below
     }
 
+    _recordFallback(
+      operation: 'categories',
+      endpoint: '/quiz/categories',
+      detail: 'Using local category catalog',
+    );
     return _localLoader.getAvailableQuizCategories();
   }
 
@@ -210,6 +313,11 @@ class QuestionHubService {
           anyOfKeys: const ['totalQuestions', 'questionCount', 'total'],
         );
 
+        _recordBackend(
+          operation: 'question_stats',
+          endpoint: endpoint,
+          detail: 'Loaded question stats from backend',
+        );
         return envelope.data;
       } on ApiRequestException {
         // try next endpoint or fallback
@@ -218,6 +326,10 @@ class QuestionHubService {
       }
     }
 
+    _recordFallback(
+      operation: 'question_stats',
+      detail: 'Using local dataset stats',
+    );
     return _localLoader.getAllDatasetStats();
   }
 
@@ -235,6 +347,11 @@ class QuestionHubService {
           anyOfKeys: const ['questionCount', 'totalQuestions', 'total'],
         );
 
+        _recordBackend(
+          operation: 'category_stats',
+          endpoint: endpoint,
+          detail: 'Loaded stats for ${category.name}',
+        );
         return envelope.data;
       } on ApiRequestException {
         // try next endpoint or fallback
@@ -246,6 +363,11 @@ class QuestionHubService {
     final questionCount = await _localLoader.getQuizCategoryQuestionCount(category);
     final difficulty = await _localLoader.getQuizCategoryDifficulty(category);
 
+    _recordFallback(
+      operation: 'category_stats',
+      endpoint: '/questions/categories/${category.name}/stats',
+      detail: 'Using local stats for ${category.name}',
+    );
     return {
       'questionCount': questionCount,
       'difficulty': difficulty,
@@ -269,6 +391,11 @@ class QuestionHubService {
           );
           final categories = envelope.items.map(_parseCategory).whereType<QuizCategory>().toList();
 
+          _recordBackend(
+            operation: 'class_stats',
+            endpoint: endpoint,
+            detail: 'Loaded class stats for $classId',
+          );
           return {
             'questionCount': (response['questionCount'] as num?)?.toInt() ?? 0,
             'subjectCount': (response['subjectCount'] as num?)?.toInt() ?? categories.length,
@@ -288,6 +415,11 @@ class QuestionHubService {
     final subjectCount = await _localLoader.getClassSubjectCount(classId);
     final categories = QuizCategoryManager.getCategoriesForClass(classId);
 
+    _recordFallback(
+      operation: 'class_stats',
+      endpoint: '/questions/classes/$classId/stats',
+      detail: 'Using local class stats for $classId',
+    );
     return {
       'questionCount': questionCount,
       'subjectCount': subjectCount,
@@ -306,6 +438,11 @@ class QuestionHubService {
           anyOfKeys: const ['name', 'version', 'datasetName'],
         );
 
+        _recordBackend(
+          operation: 'dataset_info',
+          endpoint: endpoint,
+          detail: 'Loaded dataset info from backend',
+        );
         return envelope.data;
       } on ApiRequestException {
         // try next endpoint or fallback
@@ -314,6 +451,10 @@ class QuestionHubService {
       }
     }
 
+    _recordFallback(
+      operation: 'dataset_info',
+      detail: 'Using local dataset info',
+    );
     return _localLoader.getDatasetInfo();
   }
 
@@ -337,6 +478,11 @@ class QuestionHubService {
         endpoint: '/questions/set',
       );
       if (questions.isNotEmpty) {
+        _recordBackend(
+          operation: 'mixed_quiz',
+          endpoint: '/questions/set',
+          detail: 'Loaded ${questions.length} mixed questions',
+        );
         return questions;
       }
     } on ApiRequestException {
@@ -371,6 +517,11 @@ class QuestionHubService {
             .toList();
 
         if (questions.isNotEmpty) {
+          _recordBackend(
+            operation: 'mixed_quiz',
+            endpoint: endpoint,
+            detail: 'Loaded ${questions.length} mixed questions',
+          );
           return questions;
         }
       } on ApiRequestException {
@@ -382,6 +533,11 @@ class QuestionHubService {
 
     final quizCategories = categories?.map(QuizCategoryManager.fromString).whereType<QuizCategory>().toList() ?? const <QuizCategory>[];
 
+    _recordFallback(
+      operation: 'mixed_quiz',
+      endpoint: '/questions/mixed',
+      detail: 'Using local mixed-quiz questions',
+    );
     return _localLoader.getMixedQuizByCategories(
       questionCount: questionCount,
       categories: quizCategories.isEmpty ? null : quizCategories,
@@ -401,6 +557,11 @@ class QuestionHubService {
         endpoint: '/questions/set',
       );
       if (questions.isNotEmpty) {
+        _recordBackend(
+          operation: 'daily_quiz',
+          endpoint: '/questions/set',
+          detail: 'Loaded ${questions.length} daily questions',
+        );
         return questions;
       }
     } on ApiRequestException {
@@ -428,6 +589,11 @@ class QuestionHubService {
           .toList();
 
       if (questions.isNotEmpty) {
+        _recordBackend(
+          operation: 'daily_quiz',
+          endpoint: '/quiz/daily',
+          detail: 'Loaded ${questions.length} daily questions',
+        );
         return questions;
       }
     } on ApiRequestException {
@@ -436,7 +602,43 @@ class QuestionHubService {
       // invalid contract, fallback below
     }
 
+    _recordFallback(
+      operation: 'daily_quiz',
+      endpoint: '/quiz/daily',
+      detail: 'Using local daily quiz questions',
+    );
     return _localLoader.getDailyQuiz(questionCount: questionCount);
+  }
+
+  void _recordBackend({
+    required String operation,
+    required String endpoint,
+    String? detail,
+  }) {
+    _reporter?.recordBackend(
+      operation: operation,
+      endpoint: endpoint,
+      detail: detail,
+    );
+    LogManager.debug(
+      '[QuestionHub] BACKEND op=$operation endpoint=$endpoint${detail == null ? '' : ' detail=$detail'}',
+    );
+  }
+
+  void _recordFallback({
+    required String operation,
+    String? endpoint,
+    String? detail,
+  }) {
+    _reporter?.recordFallback(
+      operation: operation,
+      endpoint: endpoint,
+      detail: detail,
+    );
+    LogManager.warning(
+      '[QuestionHub] LOCAL_FALLBACK op=$operation${endpoint == null ? '' : ' endpoint=$endpoint'}${detail == null ? '' : ' detail=$detail'}',
+      source: 'QuestionHubService',
+    );
   }
 
   QuizCategory? _parseCategory(dynamic value) {

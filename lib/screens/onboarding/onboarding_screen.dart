@@ -256,6 +256,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     final avatar = _controller.userData['avatar'] is String
         ? _controller.userData['avatar'] as String
         : null;
+    final syncableAvatar = _normalizeSyncableAvatar(avatar);
 
     if (ageGroup == null ||
         country == null ||
@@ -273,12 +274,30 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
       return;
     }
 
-    // Save all user data
+    final synaptixMode = _controller.synaptixMode;
+    final intent = _controller.intent;
+    final preferredSurface = switch (intent) {
+      'compete' => 'arena',
+      'train' => 'pathways',
+      'play' => 'labs',
+      _ => 'home',
+    };
+
+    // Save all user data locally first.
     await onboardingService.setOnboardingCompleted(true);
     await _persistProgressSnapshot(completed: true, hasCompletedProfile: true);
-
     await profileService.savePlayerName(username);
     await profileService.saveUsername(username);
+    await profileService.saveAgeGroup(ageGroup);
+    await profileService.saveCountry(country);
+    await profileService.savePreferredCategories(categories);
+    if (avatar != null) {
+      await profileService.saveAvatar(avatar);
+    }
+    if (synaptixMode != null) {
+      await profileService.saveSynaptixMode(synaptixMode);
+    }
+    await profileService.savePreferredHomeSurface(preferredSurface);
 
     final profileSyncService = ProfileSyncService(
       apiService: serviceManager.apiService,
@@ -286,25 +305,36 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     );
 
     try {
-      final syncResult = await profileSyncService.syncProfileUpdate(
+      final syncResult = await profileSyncService.syncProfileFields(
         displayName: username,
         username: username,
+        country: country,
+        ageGroup: ageGroup,
+        preferredCategories: categories,
+        avatar: syncableAvatar,
+        synaptixMode: synaptixMode,
+        preferredHomeSurface: preferredSurface,
       );
 
-      if (syncResult.confirmedDisplayName != null &&
-          syncResult.confirmedDisplayName!.trim().isNotEmpty) {
-        await profileService.savePlayerName(syncResult.confirmedDisplayName!.trim());
-      }
+      final confirmedProfile = syncResult.confirmedProfile;
+      if (confirmedProfile != null && confirmedProfile.isNotEmpty) {
+        await profileService.saveProfileBatch(confirmedProfile);
+      } else {
+        final confirmedDisplayName = syncResult.confirmedDisplayName?.trim();
+        if (confirmedDisplayName != null && confirmedDisplayName.isNotEmpty) {
+          await profileService.savePlayerName(confirmedDisplayName);
+        }
 
-      if (syncResult.confirmedUsername != null &&
-          syncResult.confirmedUsername!.trim().isNotEmpty) {
-        await profileService.saveUsername(
-          _normalizeUsername(syncResult.confirmedUsername!),
-        );
+        final confirmedUsername = syncResult.confirmedUsername?.trim();
+        if (confirmedUsername != null && confirmedUsername.isNotEmpty) {
+          await profileService.saveUsername(
+            _normalizeUsername(confirmedUsername),
+          );
+        }
       }
     } catch (e) {
       LogManager.warning(
-        'Failed to sync onboarding username to backend. Local values were kept.',
+        'Failed to sync onboarding profile to backend. Local values were kept.',
         source: 'OnboardingScreen',
       );
       LogManager.error(
@@ -312,34 +342,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
         source: 'OnboardingScreen',
         error: e,
       );
-    }
-    if (ageGroup != null) {
-      await profileService.saveAgeGroup(ageGroup);
-    }
-    if (country != null) {
-      await profileService.saveCountry(country);
-    }
-    await profileService.savePreferredCategories(categories);
-    if (avatar != null) {
-      await profileService.saveAvatar(avatar);
-    }
-
-    // Save Synaptix-specific preferences
-    final synaptixMode = _controller.synaptixMode;
-    final intent = _controller.intent;
-
-    if (synaptixMode != null) {
-      await profileService.saveSynaptixMode(synaptixMode);
-    }
-
-    if (intent != null) {
-      final preferredSurface = switch (intent) {
-        'compete' => 'arena',
-        'train' => 'pathways',
-        'play' => 'labs',
-        _ => 'home',
-      };
-      await profileService.savePreferredHomeSurface(preferredSurface);
     }
 
     // Seed starter economy rewards
@@ -364,6 +366,22 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     if (mounted) {
       context.go('/home');
     }
+  }
+
+  String? _normalizeSyncableAvatar(String? avatar) {
+    if (avatar == null || avatar.trim().isEmpty) return null;
+    final trimmed = avatar.trim();
+
+    if (trimmed.startsWith('assets/') ||
+        trimmed.startsWith('http://') ||
+        trimmed.startsWith('https://')) {
+      return trimmed;
+    }
+
+    // Local device file paths are not portable across installs/devices and
+    // should be uploaded to object storage first (for example via MinIO)
+    // before we persist them to the backend profile.
+    return null;
   }
 
   String _normalizeUsername(String input) {

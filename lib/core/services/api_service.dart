@@ -186,6 +186,18 @@ class ApiService {
     await _cacheStore.clean();
   }
 
+  Options _buildJsonOptions(
+    String path,
+    Map<String, String>? headers, {
+    Duration? timeout,
+  }) {
+    return Options(
+      headers: _buildJsonHeaders(path, headers),
+      sendTimeout: timeout,
+      receiveTimeout: timeout,
+    );
+  }
+
   Future<dynamic> getRequest(String endpoint) async {
     return _handleRequest(() async {
       final response = await _dio.get('$baseUrl/$endpoint');
@@ -347,12 +359,13 @@ class ApiService {
   /// FIX: Returns a type-safe Map for predictable JSON responses.
   Future<Map<String, dynamic>> post(String path,
       {required Map<String, dynamic> body,
-        Map<String, String>? headers}) async {
+        Map<String, String>? headers,
+        Duration? timeout}) async {
     return _handleRequest(() async {
       final response = await _dio.post(
         path,
         data: body,
-        options: Options(headers: _buildJsonHeaders(path, headers)),
+        options: _buildJsonOptions(path, headers, timeout: timeout),
       );
       // Ensure the response data is a map, otherwise return an empty map.
       return _asJsonMap(response.data);
@@ -362,12 +375,13 @@ class ApiService {
   /// **🔹 Generic GET Request (JSON map response)**
   Future<Map<String, dynamic>> get(String path,
       {Map<String, String>? headers,
-        Map<String, dynamic>? queryParameters}) async {
+        Map<String, dynamic>? queryParameters,
+        Duration? timeout}) async {
     return _handleRequest(() async {
       final response = await _dio.get(
         path,
         queryParameters: queryParameters,
-        options: Options(headers: _buildJsonHeaders(path, headers)),
+        options: _buildJsonOptions(path, headers, timeout: timeout),
       );
       return _asJsonMap(response.data);
     });
@@ -376,26 +390,56 @@ class ApiService {
   /// **🔹 Generic DELETE Request**
   Future<Map<String, dynamic>> delete(String path,
       {Map<String, dynamic>? body,
-        Map<String, String>? headers}) async {
+        Map<String, String>? headers,
+        Duration? timeout}) async {
     return _handleRequest(() async {
       final response = await _dio.delete(
         path,
         data: body,
-        options: Options(headers: _buildJsonHeaders(path, headers)),
+        options: _buildJsonOptions(path, headers, timeout: timeout),
       );
       return _asJsonMap(response.data);
+    });
+  }
+
+  /// Generic GET request for endpoints that return a JSON array.
+  Future<List<Map<String, dynamic>>> getList(String path,
+      {Map<String, String>? headers,
+        Map<String, dynamic>? queryParameters,
+        Duration? timeout}) async {
+    return _handleRequest(() async {
+      final response = await _dio.get(
+        path,
+        queryParameters: queryParameters,
+        options: _buildJsonOptions(path, headers, timeout: timeout),
+      );
+
+      final data = response.data;
+      if (data is List) {
+        return data
+            .whereType<Map>()
+            .map((item) => _asJsonMap(item))
+            .toList(growable: false);
+      }
+
+      throw ApiRequestException(
+        'Expected a JSON array response',
+        statusCode: response.statusCode,
+        path: path,
+      );
     });
   }
 
   /// **🔹 Generic PATCH Request**
   Future<Map<String, dynamic>> patch(String path,
       {required Map<String, dynamic> body,
-        Map<String, String>? headers}) async {
+        Map<String, String>? headers,
+        Duration? timeout}) async {
     return _handleRequest(() async {
       final response = await _dio.patch(
         path,
         data: body,
-        options: Options(headers: _buildJsonHeaders(path, headers)),
+        options: _buildJsonOptions(path, headers, timeout: timeout),
       );
       return _asJsonMap(response.data);
     });
@@ -404,12 +448,13 @@ class ApiService {
   /// **🔹 Generic PUT Request**
   Future<Map<String, dynamic>> put(String path,
       {required Map<String, dynamic> body,
-        Map<String, String>? headers}) async {
+        Map<String, String>? headers,
+        Duration? timeout}) async {
     return _handleRequest(() async {
       final response = await _dio.put(
         path,
         data: body,
-        options: Options(headers: _buildJsonHeaders(path, headers)),
+        options: _buildJsonOptions(path, headers, timeout: timeout),
       );
       return _asJsonMap(response.data);
     });
@@ -490,6 +535,8 @@ class ApiService {
 
     // User-scoped/profile endpoints also require auth headers and token refresh handling.
     if (path == '/users/me' || path.startsWith('/users/me/')) return true;
+    if (path == '/users/search' || path.startsWith('/users/search/')) return true;
+    if (path == '/friends' || path.startsWith('/friends/')) return true;
     if (path == '/profile' || path.startsWith('/profile/')) return true;
     if (path == '/auth/profile' || path.startsWith('/auth/profile/')) return true;
     if (path == '/user/profile' || path.startsWith('/user/profile/')) return true;

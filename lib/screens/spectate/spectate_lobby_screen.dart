@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../core/services/advanced/spectate_streaming_service.dart';
-import 'spectate_mode_screen.dart';
 
 class SpectateLobbyScreen extends StatefulWidget {
   final String currentUserId;
@@ -375,16 +375,10 @@ class _SpectateLobbyScreenState extends State<SpectateLobbyScreen> with SingleTi
   }
 
   void _joinGame(String gameId) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SpectateModeScreen(
-          gameId: gameId,
-          currentUserId: widget.currentUserId,
-          currentUserDisplayName: widget.currentUserDisplayName,
-        ),
-      ),
-    );
+    context.push('/spectate/$gameId', extra: {
+      'currentUserId': widget.currentUserId,
+      'currentUserDisplayName': widget.currentUserDisplayName,
+    });
   }
 
   void _showQuickJoin() {

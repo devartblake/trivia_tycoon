@@ -40,6 +40,15 @@ class WalletService {
     _persist();
   }
 
+  Future<void> setBalances({
+    required int coins,
+    required int gems,
+  }) async {
+    _coins = coins < 0 ? 0 : coins;
+    _gems = gems < 0 ? 0 : gems;
+    await _persist();
+  }
+
   bool spendCoins(int amount) {
     if (amount <= 0) return true;
     if (_coins < amount) return false;

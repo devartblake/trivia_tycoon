@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class QuizHistoryScreen extends StatelessWidget {
   const QuizHistoryScreen({super.key});
