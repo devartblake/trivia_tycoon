@@ -21,12 +21,16 @@ class AudioController {
   Handle? _currentMusic;
   Handle? _nextMusic;
 
-  // just_audio player used for remote URL streaming (Option A/B).
+  // just_audio player for remote music URL streaming (Option A/B).
   ja.AudioPlayer? _musicPlayer;
 
-  // Optional backend service that returns presigned MinIO URLs for songs.
-  // When set, music plays via just_audio from remote URLs instead of
-  // local SoLoud assets.
+  // Per-type just_audio players for remote SFX streaming.
+  // Populated by _preloadRemoteSfx() when audioAssetService is set.
+  final Map<SfxType, ja.AudioPlayer> _remoteSfxCache = {};
+
+  // Optional backend service that returns presigned MinIO URLs for both
+  // songs and SFX. When set, audio is fetched from MinIO with local
+  // SoLoud assets as the fallback on any network error.
   AudioAssetService? audioAssetService;
 
   final Queue<Song> _playlist;
@@ -38,7 +42,12 @@ class AudioController {
 
   Future<void> initialize() async {
     await soloud!.init();
+    // Always preload local SFX so they're available as a fallback.
     await _preloadSfx();
+    // Overlay with remote SFX when the backend service is available.
+    if (audioAssetService != null) {
+      await _preloadRemoteSfx();
+    }
   }
 
   void attachDependencies(AppLifecycleStateNotifier lifecycleNotifier,
@@ -52,6 +61,10 @@ class AudioController {
     _stopAllSound();
     _musicPlayer?.dispose();
     _musicPlayer = null;
+    for (final player in _remoteSfxCache.values) {
+      player.dispose();
+    }
+    _remoteSfxCache.clear();
     soloud!.deinit();
   }
 
@@ -71,12 +84,33 @@ class AudioController {
   }
 
   Future<void> _preloadSfx() async {
-    _log.info('Preloading sound effects');
+    _log.info('Preloading local sound effects');
     for (var type in SfxType.values) {
       var paths = soundTypeToFilename(type);
       if (paths.isNotEmpty) {
         var sound = await soloud!.loadFile('assets/sfx/${paths.first}');
         _sfxCache[type] = sound as Handle;
+      }
+    }
+  }
+
+  /// Preload remote SFX from MinIO via presigned URLs.
+  /// Falls back gracefully — types that fail are played from the local SoLoud cache.
+  Future<void> _preloadRemoteSfx() async {
+    _log.info('Preloading remote sound effects');
+    for (final type in SfxType.values) {
+      final paths = soundTypeToFilename(type);
+      if (paths.isEmpty) continue;
+      try {
+        final url = await audioAssetService!.getPresignedUrl(
+          paths.first,
+          category: 'sfx',
+        );
+        final player = ja.AudioPlayer();
+        await player.setAudioSource(ja.AudioSource.uri(Uri.parse(url)));
+        _remoteSfxCache[type] = player;
+      } catch (e) {
+        _log.warning('Remote SFX preload failed for ${paths.first}, will use local: $e');
       }
     }
   }
@@ -87,6 +121,14 @@ class AudioController {
       return;
     }
 
+    // Remote SFX takes priority; seek to start then play for instant retrigger.
+    final remotePlayer = _remoteSfxCache[type];
+    if (remotePlayer != null) {
+      remotePlayer.seek(Duration.zero).then((_) => remotePlayer.play());
+      return;
+    }
+
+    // Fall back to SoLoud local cache.
     final sound = _sfxCache[type];
     if (sound != null) {
       soloud!.play(sound as AudioSource);
@@ -211,6 +253,9 @@ class AudioController {
 
   void _stopAllSound() {
     _musicPlayer?.stop();
+    for (final player in _remoteSfxCache.values) {
+      player.stop();
+    }
     soloud!.stopAll();
   }
 }

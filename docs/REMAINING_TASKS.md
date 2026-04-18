@@ -1,6 +1,6 @@
 # Remaining Tasks & Work Backlog
 
-_Last updated: 2026-04-15 (updated: social auth allowlist, main-menu wallet sync, and question source observability)_
+_Last updated: 2026-04-18 (updated: audio/MinIO integration, SynaptixApiClient rename, warning/compile-error fixes)_
 
 > This file is the canonical "what is left to do" reference.
 > For completed work, see [`docs/ALPHA_TASK_AUDIT.md`](ALPHA_TASK_AUDIT.md).
@@ -20,6 +20,8 @@ _Last updated: 2026-04-15 (updated: social auth allowlist, main-menu wallet sync
 | Sprint 1 - Auth/profile integration verification | Medium | Partially improved; live backend verification still needed | No |
 | Sprint 2 - Networking layer | High | Not started | No |
 | Synaptix runtime validation | Medium | Blocked | Yes, needs device + backend |
+| Audio / MinIO integration | Medium | Music + SFX remote streaming complete (frontend); backend endpoint pending | Yes, needs backend |
+| SynaptixApiClient rename | Low | Complete | No |
 | Backend Packet E | Deferred | Not started | Intentional deferral |
 
 ---
@@ -463,6 +465,100 @@ or use conditional imports to provide web-safe stubs.
 
 ---
 
+---
+
+## 11. Audio / MinIO Integration
+
+### 11a. Frontend – COMPLETE
+
+All frontend wiring for remote audio (music + SFX) is in place.
+
+**Music streaming:**
+- `lib/core/services/audio/audio_asset_response.dart` — response model
+- `lib/core/services/audio/audio_asset_service.dart` — presigned-URL service with
+  2-minute pre-expiry cache; supports `category` param (`'songs'` or `'sfx'`).
+  Backend endpoint: `GET /v1/assets/audio/{category}/{filename}`
+- `lib/game/providers/core_providers.dart` — `audioAssetServiceProvider` registered
+- `lib/audio/controller/audio_controller.dart` — `AudioAssetService?` injected;
+  `_playCurrentSongInPlaylist()` fetches presigned URL and streams via `just_audio`;
+  SoLoud local file is the fallback on any error
+- `lib/audio/models/songs.dart` — updated to all 12 real song filenames from
+  `tycoon-assets/songs/` bucket
+
+**SFX streaming:**
+- Same `AudioAssetService` (category: `'sfx'`) fetches SFX presigned URLs
+- `_preloadRemoteSfx()` pre-fetches all SFX types on init into per-type
+  `ja.AudioPlayer` instances
+- `playSfx()` checks `_remoteSfxCache` first; falls back to SoLoud local SFX
+- Local SFX always preloaded first so remote failure is always graceful
+
+**Option A verification path:**
+- `playRemoteMusic(String presignedUrl)` public method accepts a direct MinIO
+  presigned URL for local testing without needing the backend endpoint
+
+### 11b. Backend – PENDING
+
+The backend endpoint does not yet exist. Needs to be implemented server-side:
+
+```
+GET /v1/assets/audio/{category}/{filename}
+```
+- Validates user session / entitlement
+- `category` values: `songs`, `sfx`
+- Returns:
+  ```json
+  {
+    "presignedUrl": "http://...",
+    "expiresAt": "2026-04-18T12:00:00Z",
+    "contentType": "audio/mpeg",
+    "cacheHints": { "maxAgeSeconds": 3600 }
+  }
+  ```
+- MinIO bucket: `tycoon-assets` (API: `http://127.0.0.1:9000`, Console: `http://127.0.0.1:9001`)
+- Song objects: `songs/{filename}` (e.g. `songs/end_game.mp3`)
+- SFX objects: `sfx/{filename}` (e.g. `sfx/k1.mp3`)
+
+### 11c. SFX asset files – PENDING
+
+The bundled `assets/sfx/` directory does not contain the expected SFX files referenced in
+`lib/audio/models/sounds.dart`. Only `assets/sounds/cha_ching.mp3` is present.
+
+- [ ] Either add bundled SFX files to `assets/sfx/` for local fallback
+- [ ] Or rely entirely on MinIO-hosted SFX (requires backend endpoint from 11b)
+
+Expected local SFX files (from `sounds.dart`):
+`hash1-3.mp3`, `wssh1-2.mp3`, `dsht1.mp3`, `ws1.mp3`, `spsh1.mp3`, `hh1-2.mp3`,
+`kss1.mp3`, `k1-2.mp3`, `p1-2.mp3`, `yay1.mp3`, `wehee1.mp3`, `oo1.mp3`,
+`fwfwfwfwfw1.mp3`, `fwfwfwfw1.mp3`, `swishswish1.mp3`
+
+---
+
+## 12. Code Quality – Resolved (2026-04-18)
+
+### 12a. Nullability warnings – COMPLETE
+- Onboarding `userData` casts: all `as String?` replaced with `is` type guards
+  (`onboarding_controller.dart`, `onboarding_screen.dart`)
+- Skill-tree map lookup: `byId[id]!` replaced with guarded local variable
+  (`skill_tree_controller.dart`)
+- `cast<Map>()` replaced with `whereType<Map>()` (`skill_tree_nav_repository.dart`)
+- `withOpacity` → `withValues(alpha:)` (`store_item_card.dart`, `status_indicator.dart`)
+- `colorScheme.surfaceVariant` → `surfaceContainerHighest` (4 files)
+- Broken `assert` logic fixed in `fluid_nav_bar_icon.dart`
+- Dead `@Deprecated` methods deleted from `term_of_service.dart`
+
+### 12b. Compile errors – COMPLETE
+- `power_up.dart`: `int?`/`String?` type mismatches fixed with `?? 0` / `?? ''`
+- `login_screen.dart`: non-existent `SecureStorage.isNotEmpty` removed
+- `play_quiz_screen.dart`: undefined `width` replaced with constants `60`/`40`
+
+### 12c. API client rename – COMPLETE
+- `TycoonApiClient` → `SynaptixApiClient` across all 13 affected files
+- File: `tycoon_api_client.dart` → `synaptix_api_client.dart`
+- Provider: `tycoonApiClientProvider` → `synaptixApiClientProvider`
+- Field: `tycoonApiClient` → `synaptixApiClient`
+
+---
+
 ## Release Readiness Checklist
 
 | Item | Status |
@@ -471,6 +567,11 @@ or use conditional imports to provide web-safe stubs.
 | Zero `debugPrint` in production business logic | Done |
 | Zero `UnimplementedError` in user-facing paths | Done - intentional design-time guards documented |
 | Web startup crash (`dart:io` cascade) | Fixed - `api_service.dart` + `auth_error_messages.dart` |
+| Android emulator + Edge browser login | Fixed - `_normalizeApiBaseUrlForRuntime()` in `env.dart` |
+| Nullability / deprecation warnings | Fixed - 14 files patched across 3 passes |
+| Compile errors (power_up, login, play_quiz) | Fixed |
+| Audio / MinIO frontend integration | Complete - music + SFX remote streaming; backend endpoint pending |
+| SynaptixApiClient rename | Complete (was TycoonApiClient) |
 | Crash recovery tested on iOS and Android | Not yet validated on device |
 | Test coverage >= 40% on `lib/game/` and `lib/core/` | Not yet, ~4.1% currently (45 test files) |
 | No critical CVEs in dependency tree | Pending `flutter pub outdated` |
@@ -481,3 +582,5 @@ or use conditional imports to provide web-safe stubs.
 | Sprint 2 networking layer | Not started |
 | Remaining `dart:io` in screen-level files (web) | 19 files - app loads, affected screens throw |
 | Windows desktop prerequisite (`nuget.exe` for `flutter_inappwebview_windows`) | Pending on local machine |
+| SFX bundled asset files (`assets/sfx/`) | Missing - needs files or MinIO backend endpoint |
+| Backend audio endpoint (`GET /v1/assets/audio/{category}/{filename}`) | Not yet implemented server-side |
