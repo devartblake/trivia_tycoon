@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../../core/models/store/premium_store_model.dart';
 
 class RewardCenter extends StatefulWidget {
-  const RewardCenter({super.key});
+  final RewardCenterData data;
+
+  const RewardCenter({super.key, required this.data});
 
   @override
   State<RewardCenter> createState() => _RewardCenterState();
@@ -22,18 +25,13 @@ class _RewardCenterState extends State<RewardCenter>
       duration: const Duration(milliseconds: 600),
       vsync: this,
     );
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _fadeController,
-      curve: Curves.easeOut,
-    ));
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _fadeController, curve: Curves.easeOut),
+    );
 
-    // Initialize card animations
     _cardControllers = List.generate(
-      2,
-          (index) => AnimationController(
+      widget.data.cards.length,
+      (index) => AnimationController(
         duration: Duration(milliseconds: 800 + (index * 200)),
         vsync: this,
       ),
@@ -45,7 +43,6 @@ class _RewardCenterState extends State<RewardCenter>
       );
     }).toList();
 
-    // Start animations
     _fadeController.forward();
     for (int i = 0; i < _cardControllers.length; i++) {
       Future.delayed(Duration(milliseconds: 300 + (i * 150)), () {
@@ -65,6 +62,8 @@ class _RewardCenterState extends State<RewardCenter>
 
   @override
   Widget build(BuildContext context) {
+    final data = widget.data;
+
     return FadeTransition(
       opacity: _fadeAnimation,
       child: Container(
@@ -82,27 +81,22 @@ class _RewardCenterState extends State<RewardCenter>
           ],
           border: Border.all(
             color: const Color(0xFF6366F1).withValues(alpha: 0.1),
-            width: 1,
           ),
         ),
         child: Column(
           children: [
-            // Header section
+            // Header
             Row(
               children: [
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
-                      colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-                    ),
+                        colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)]),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(
-                    Icons.card_giftcard,
-                    color: Colors.white,
-                    size: 24,
-                  ),
+                  child: const Icon(Icons.card_giftcard,
+                      color: Colors.white, size: 24),
                 ),
                 const SizedBox(width: 16),
                 const Expanded(
@@ -120,30 +114,25 @@ class _RewardCenterState extends State<RewardCenter>
                       Text(
                         'Claim your daily rewards',
                         style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF64748B),
-                        ),
+                            fontSize: 14, color: Color(0xFF64748B)),
                       ),
                     ],
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: const Color(0xFF10B981).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                      color: const Color(0xFF10B981).withValues(alpha: 0.3),
-                    ),
+                        color: const Color(0xFF10B981).withValues(alpha: 0.3)),
                   ),
                   child: const Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
-                        Icons.auto_awesome,
-                        color: Color(0xFF10B981),
-                        size: 14,
-                      ),
+                      Icon(Icons.auto_awesome,
+                          color: Color(0xFF10B981), size: 14),
                       SizedBox(width: 4),
                       Text(
                         'NEW',
@@ -161,56 +150,23 @@ class _RewardCenterState extends State<RewardCenter>
 
             const SizedBox(height: 24),
 
-            // Reward options
+            // Reward cards
             Row(
               children: [
-                Expanded(
-                  child: AnimatedBuilder(
-                    animation: _cardAnimations[0],
-                    builder: (context, child) {
-                      return Transform.scale(
-                        scale: _cardAnimations[0].value,
-                        child: _buildRewardCard(
-                          title: 'Daily Check-in',
-                          subtitle: 'Day 3 of 7',
-                          imagePath: 'assets/images/reward-quiz.png',
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFF10B981), Color(0xFF059669)],
-                          ),
-                          reward: '500 Coins',
-                          progress: 0.43, // 3/7
-                          isAvailable: true,
-                          onTap: () => _handleRewardClaim('Daily Check-in', '500 Coins'),
-                        ),
-                      );
-                    },
+                for (int i = 0; i < data.cards.length; i++) ...[
+                  if (i > 0) const SizedBox(width: 16),
+                  Expanded(
+                    child: i < _cardAnimations.length
+                        ? AnimatedBuilder(
+                            animation: _cardAnimations[i],
+                            builder: (context, child) => Transform.scale(
+                              scale: _cardAnimations[i].value,
+                              child: _buildRewardCard(data.cards[i]),
+                            ),
+                          )
+                        : _buildRewardCard(data.cards[i]),
                   ),
-                ),
-
-                const SizedBox(width: 16),
-
-                Expanded(
-                  child: AnimatedBuilder(
-                    animation: _cardAnimations[1],
-                    builder: (context, child) {
-                      return Transform.scale(
-                        scale: _cardAnimations[1].value,
-                        child: _buildRewardCard(
-                          title: 'Watch Ad',
-                          subtitle: '2 available today',
-                          imagePath: 'assets/images/reward-quiz.png',
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFF8B5CF6), Color(0xFF7C3AED)],
-                          ),
-                          reward: '200 Coins',
-                          progress: null,
-                          isAvailable: true,
-                          onTap: () => _handleRewardClaim('Watch Ad', '200 Coins'),
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                ],
               ],
             ),
 
@@ -223,23 +179,19 @@ class _RewardCenterState extends State<RewardCenter>
                 color: const Color(0xFFF8FAFF),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: const Color(0xFF6366F1).withValues(alpha: 0.1),
-                ),
+                    color: const Color(0xFF6366F1).withValues(alpha: 0.1)),
               ),
               child: Row(
                 children: [
-                  const Icon(
-                    Icons.trending_up,
-                    color: Color(0xFF6366F1),
-                    size: 20,
-                  ),
+                  const Icon(Icons.trending_up,
+                      color: Color(0xFF6366F1), size: 20),
                   const SizedBox(width: 12),
                   const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Today\'s Progress',
+                          "Today's Progress",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -249,22 +201,21 @@ class _RewardCenterState extends State<RewardCenter>
                         Text(
                           'Complete all rewards for bonus points',
                           style: TextStyle(
-                            fontSize: 12,
-                            color: Color(0xFF64748B),
-                          ),
+                              fontSize: 12, color: Color(0xFF64748B)),
                         ),
                       ],
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: const Color(0xFF6366F1),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Text(
-                      '1/2',
-                      style: TextStyle(
+                    child: Text(
+                      '${data.completedCount}/${data.totalCount}',
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
@@ -280,29 +231,20 @@ class _RewardCenterState extends State<RewardCenter>
     );
   }
 
-  Widget _buildRewardCard({
-    required String title,
-    required String subtitle,
-    required String imagePath,
-    required LinearGradient gradient,
-    required String reward,
-    required double? progress,
-    required bool isAvailable,
-    required VoidCallback onTap,
-  }) {
+  Widget _buildRewardCard(RewardCard card) {
     return GestureDetector(
       onTap: () {
         HapticFeedback.lightImpact();
-        onTap();
+        _handleRewardClaim(card);
       },
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          gradient: gradient,
+          gradient: card.gradient,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: gradient.colors.first.withValues(alpha: 0.3),
+              color: card.gradient.colors.first.withValues(alpha: 0.3),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -311,7 +253,6 @@ class _RewardCenterState extends State<RewardCenter>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Icon/Image container
             Container(
               width: 60,
               height: 60,
@@ -319,30 +260,24 @@ class _RewardCenterState extends State<RewardCenter>
                 color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.3),
-                ),
+                    color: Colors.white.withValues(alpha: 0.3)),
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.asset(
-                  imagePath,
+                  'assets/images/reward-quiz.png',
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Icon(
-                      _getRewardIcon(title),
-                      color: Colors.white,
-                      size: 30,
-                    );
-                  },
+                  errorBuilder: (_, __, ___) => Icon(
+                    _getRewardIcon(card.title),
+                    color: Colors.white,
+                    size: 30,
+                  ),
                 ),
               ),
             ),
-
             const SizedBox(height: 16),
-
-            // Title and subtitle
             Text(
-              title,
+              card.title,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
@@ -352,18 +287,13 @@ class _RewardCenterState extends State<RewardCenter>
             ),
             const SizedBox(height: 4),
             Text(
-              subtitle,
+              card.subtitle,
               style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.8),
-                fontSize: 12,
-              ),
+                  color: Colors.white.withValues(alpha: 0.8), fontSize: 12),
               textAlign: TextAlign.center,
             ),
-
             const SizedBox(height: 12),
-
-            // Progress bar (if applicable)
-            if (progress != null) ...[
+            if (card.progress != null) ...[
               Container(
                 height: 6,
                 decoration: BoxDecoration(
@@ -372,7 +302,7 @@ class _RewardCenterState extends State<RewardCenter>
                 ),
                 child: FractionallySizedBox(
                   alignment: Alignment.centerLeft,
-                  widthFactor: progress,
+                  widthFactor: card.progress,
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -383,19 +313,17 @@ class _RewardCenterState extends State<RewardCenter>
               ),
               const SizedBox(height: 12),
             ],
-
-            // Reward amount
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.3),
-                ),
+                    color: Colors.white.withValues(alpha: 0.3)),
               ),
               child: Text(
-                reward,
+                card.reward,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 14,
@@ -403,29 +331,23 @@ class _RewardCenterState extends State<RewardCenter>
                 ),
               ),
             ),
-
             const SizedBox(height: 12),
-
-            // Action button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: isAvailable ? onTap : null,
+                onPressed: card.isAvailable ? () => _handleRewardClaim(card) : null,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
-                  foregroundColor: gradient.colors.first,
+                  foregroundColor: card.gradient.colors.first,
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                      borderRadius: BorderRadius.circular(8)),
                   elevation: 0,
                 ),
                 child: Text(
-                  isAvailable ? 'Claim' : 'Claimed',
+                  card.isAvailable ? 'Claim' : 'Claimed',
                   style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
+                      fontSize: 12, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -448,13 +370,11 @@ class _RewardCenterState extends State<RewardCenter>
     }
   }
 
-  void _handleRewardClaim(String rewardType, String amount) {
+  void _handleRewardClaim(RewardCard card) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Row(
           children: [
             Container(
@@ -463,11 +383,8 @@ class _RewardCenterState extends State<RewardCenter>
                 color: const Color(0xFF10B981).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Icon(
-                Icons.card_giftcard,
-                color: Color(0xFF10B981),
-                size: 24,
-              ),
+              child: const Icon(Icons.card_giftcard,
+                  color: Color(0xFF10B981), size: 24),
             ),
             const SizedBox(width: 12),
             const Text('Reward Claimed!'),
@@ -476,7 +393,7 @@ class _RewardCenterState extends State<RewardCenter>
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('You successfully claimed $amount from $rewardType!'),
+            Text('You successfully claimed ${card.reward} from ${card.title}!'),
             const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.all(16),
@@ -487,14 +404,11 @@ class _RewardCenterState extends State<RewardCenter>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
-                    Icons.monetization_on,
-                    color: Color(0xFF10B981),
-                    size: 20,
-                  ),
+                  const Icon(Icons.monetization_on,
+                      color: Color(0xFF10B981), size: 20),
                   const SizedBox(width: 8),
                   Text(
-                    amount,
+                    card.reward,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,

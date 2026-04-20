@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:trivia_tycoon/core/models/store/premium_store_model.dart';
 import 'package:trivia_tycoon/screens/store/widgets/ad_remove_options.dart';
 import 'package:trivia_tycoon/screens/store/widgets/reward_center.dart';
 import 'package:trivia_tycoon/screens/store/widgets/sale_info.dart';
 import 'package:trivia_tycoon/screens/store/widgets/try_now_widget.dart';
+import '../../game/providers/riverpod_providers.dart';
 
 class StoreSecondaryScreen extends ConsumerStatefulWidget {
   const StoreSecondaryScreen({super.key});
@@ -27,13 +29,9 @@ class _StoreSecondaryScreenState extends ConsumerState<StoreSecondaryScreen>
       duration: const Duration(milliseconds: 600),
       vsync: this,
     );
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _fadeController,
-      curve: Curves.easeOut,
-    ));
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _fadeController, curve: Curves.easeOut),
+    );
     _fadeController.forward();
   }
 
@@ -45,133 +43,141 @@ class _StoreSecondaryScreenState extends ConsumerState<StoreSecondaryScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFF),
-      appBar: _buildAppBar(),
-      body: FadeTransition(
-        opacity: _fadeAnimation,
-        child: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            // Premium Features Banner
-            SliverToBoxAdapter(
-              child: _buildPremiumBanner(),
-            ),
+    final storeAsync = ref.watch(premiumStoreProvider);
 
-            // Ad Remove Options Section
-            SliverToBoxAdapter(
-              child: TweenAnimationBuilder<double>(
-                duration: const Duration(milliseconds: 800),
-                tween: Tween(begin: 0.0, end: 1.0),
-                builder: (context, value, child) {
-                  return Transform.translate(
-                    offset: Offset(0, 30 * (1 - value)),
-                    child: Opacity(
-                      opacity: value,
-                      child: Container(
-                        margin: const EdgeInsets.all(16),
-                        child: _buildSectionCard(
-                          title: 'Remove Ads',
-                          subtitle: 'Enjoy uninterrupted gameplay',
-                          icon: Icons.block,
-                          child: const AdRemoveOptions(),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            // 3D Avatar Section
-            SliverToBoxAdapter(
-              child: TweenAnimationBuilder<double>(
-                duration: const Duration(milliseconds: 900),
-                tween: Tween(begin: 0.0, end: 1.0),
-                builder: (context, value, child) {
-                  return Transform.translate(
-                    offset: Offset(0, 30 * (1 - value)),
-                    child: Opacity(
-                      opacity: value,
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                        child: _buildSectionCard(
-                          title: '3D Avatar',
-                          subtitle: 'Customize your unique character',
-                          icon: Icons.face_retouching_natural,
-                          child: TryNowWidget(
-                            modelPath: 'assets/models/cartoon_character.obj',
-                            title: "Get your own 3D Avatar",
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            // Sale Info Section
-            SliverToBoxAdapter(
-              child: TweenAnimationBuilder<double>(
-                duration: const Duration(milliseconds: 1000),
-                tween: Tween(begin: 0.0, end: 1.0),
-                builder: (context, value, child) {
-                  return Transform.translate(
-                    offset: Offset(0, 30 * (1 - value)),
-                    child: Opacity(
-                      opacity: value,
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                        child: _buildSectionCard(
-                          title: 'Special Offers',
-                          subtitle: 'Limited time deals just for you',
-                          icon: Icons.local_offer,
-                          child: const SaleInfo(),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            // Reward Center Section
-            SliverToBoxAdapter(
-              child: TweenAnimationBuilder<double>(
-                duration: const Duration(milliseconds: 1100),
-                tween: Tween(begin: 0.0, end: 1.0),
-                builder: (context, value, child) {
-                  return Transform.translate(
-                    offset: Offset(0, 30 * (1 - value)),
-                    child: Opacity(
-                      opacity: value,
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                        child: _buildSectionCard(
-                          title: 'Reward Center',
-                          subtitle: 'Claim your daily rewards',
-                          icon: Icons.card_giftcard,
-                          child: const RewardCenter(),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            // Bottom padding
-            const SliverToBoxAdapter(
-              child: SizedBox(height: 32),
-            ),
-          ],
+    return storeAsync.when(
+      loading: () => Scaffold(
+        backgroundColor: const Color(0xFFF8FAFF),
+        appBar: _buildAppBar(),
+        body: const Center(child: CircularProgressIndicator()),
+      ),
+      error: (_, __) => Scaffold(
+        backgroundColor: const Color(0xFFF8FAFF),
+        appBar: _buildAppBar(),
+        body: _buildBody(PremiumStoreData.fallback),
+      ),
+      data: (data) => Scaffold(
+        backgroundColor: const Color(0xFFF8FAFF),
+        appBar: _buildAppBar(),
+        body: FadeTransition(
+          opacity: _fadeAnimation,
+          child: _buildBody(data),
         ),
       ),
     );
   }
 
+  Widget _buildBody(PremiumStoreData data) {
+    return CustomScrollView(
+      physics: const BouncingScrollPhysics(),
+      slivers: [
+        SliverToBoxAdapter(child: _buildPremiumBanner()),
+
+        // Remove Ads
+        SliverToBoxAdapter(
+          child: TweenAnimationBuilder<double>(
+            duration: const Duration(milliseconds: 800),
+            tween: Tween(begin: 0.0, end: 1.0),
+            builder: (context, value, child) => Transform.translate(
+              offset: Offset(0, 30 * (1 - value)),
+              child: Opacity(
+                opacity: value,
+                child: Container(
+                  margin: const EdgeInsets.all(16),
+                  child: _buildSectionCard(
+                    title: 'Remove Ads',
+                    subtitle: 'Enjoy uninterrupted gameplay',
+                    icon: Icons.block,
+                    child: AdRemoveOptions(config: data.adFree),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        // 3D Avatar
+        SliverToBoxAdapter(
+          child: TweenAnimationBuilder<double>(
+            duration: const Duration(milliseconds: 900),
+            tween: Tween(begin: 0.0, end: 1.0),
+            builder: (context, value, child) => Transform.translate(
+              offset: Offset(0, 30 * (1 - value)),
+              child: Opacity(
+                opacity: value,
+                child: Container(
+                  margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  child: _buildSectionCard(
+                    title: '3D Avatar',
+                    subtitle: 'Customize your unique character',
+                    icon: Icons.face_retouching_natural,
+                    child: TryNowWidget(
+                      modelPath: 'assets/models/cartoon_character.obj',
+                      title: 'Get your own 3D Avatar',
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        // Special Offers (only when saleInfo present)
+        if (data.saleInfo != null)
+          SliverToBoxAdapter(
+            child: TweenAnimationBuilder<double>(
+              duration: const Duration(milliseconds: 1000),
+              tween: Tween(begin: 0.0, end: 1.0),
+              builder: (context, value, child) => Transform.translate(
+                offset: Offset(0, 30 * (1 - value)),
+                child: Opacity(
+                  opacity: value,
+                  child: Container(
+                    margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    child: _buildSectionCard(
+                      title: 'Special Offers',
+                      subtitle: 'Limited time deals just for you',
+                      icon: Icons.local_offer,
+                      child: SaleInfo(data: data.saleInfo!),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+        // Reward Center
+        SliverToBoxAdapter(
+          child: TweenAnimationBuilder<double>(
+            duration: const Duration(milliseconds: 1100),
+            tween: Tween(begin: 0.0, end: 1.0),
+            builder: (context, value, child) => Transform.translate(
+              offset: Offset(0, 30 * (1 - value)),
+              child: Opacity(
+                opacity: value,
+                child: Container(
+                  margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  child: _buildSectionCard(
+                    title: 'Reward Center',
+                    subtitle: 'Claim your daily rewards',
+                    icon: Icons.card_giftcard,
+                    child: RewardCenter(data: data.rewardCenter),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        const SliverToBoxAdapter(child: SizedBox(height: 32)),
+      ],
+    );
+  }
+
   PreferredSizeWidget _buildAppBar() {
+    final coins = ref.watch(coinBalanceProvider);
+    final isPremium = ref.watch(premiumStatusProvider).isPremium;
+
     return AppBar(
       elevation: 0,
       backgroundColor: const Color(0xFF6366F1),
@@ -184,11 +190,8 @@ class _StoreSecondaryScreenState extends ConsumerState<StoreSecondaryScreen>
             color: Colors.white.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: const Icon(
-            Icons.arrow_back_ios_new,
-            color: Colors.white,
-            size: 18,
-          ),
+          child: const Icon(Icons.arrow_back_ios_new,
+              color: Colors.white, size: 18),
         ),
         onPressed: () {
           if (context.canPop()) {
@@ -200,7 +203,6 @@ class _StoreSecondaryScreenState extends ConsumerState<StoreSecondaryScreen>
       ),
       title: Row(
         children: [
-          // Profile Avatar
           Container(
             width: 40,
             height: 40,
@@ -221,23 +223,25 @@ class _StoreSecondaryScreenState extends ConsumerState<StoreSecondaryScreen>
               child: Image.asset(
                 'assets/images/avatars/default-avatar.png',
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return const Icon(
-                    Icons.person,
-                    color: Color(0xFF6366F1),
-                    size: 24,
-                  );
-                },
+                errorBuilder: (_, __, ___) => const Icon(Icons.person,
+                    color: Color(0xFF6366F1), size: 24),
               ),
             ),
           ),
           const Spacer(),
-          // Currency Display
           Row(
             children: [
-              _buildCurrencyItem(Icons.check_circle, '1', const Color(0xFF10B981)),
+              _buildCurrencyItem(
+                Icons.workspace_premium,
+                isPremium ? '1' : '0',
+                const Color(0xFF10B981),
+              ),
               const SizedBox(width: 16),
-              _buildCurrencyItem(Icons.monetization_on, '1440', const Color(0xFFF59E0B)),
+              _buildCurrencyItem(
+                Icons.monetization_on,
+                coins.toString(),
+                const Color(0xFFF59E0B),
+              ),
             ],
           ),
         ],
@@ -276,100 +280,92 @@ class _StoreSecondaryScreenState extends ConsumerState<StoreSecondaryScreen>
     return TweenAnimationBuilder<double>(
       duration: const Duration(milliseconds: 700),
       tween: Tween(begin: 0.0, end: 1.0),
-      builder: (context, value, child) {
-        return Transform.translate(
-          offset: Offset(0, 30 * (1 - value)),
-          child: Opacity(
-            opacity: value,
-            child: Container(
-              margin: const EdgeInsets.all(16),
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF6366F1).withValues(alpha: 0.3),
-                    blurRadius: 20,
-                    offset: const Offset(0, 8),
-                  ),
-                ],
+      builder: (context, value, child) => Transform.translate(
+        offset: Offset(0, 30 * (1 - value)),
+        child: Opacity(
+          opacity: value,
+          child: Container(
+            margin: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: const Icon(
-                          Icons.workspace_premium,
-                          color: Colors.white,
-                          size: 32,
-                        ),
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF6366F1).withValues(alpha: 0.3),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      const SizedBox(width: 16),
-                      const Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Premium Store',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
+                      child: const Icon(Icons.workspace_premium,
+                          color: Colors.white, size: 32),
+                    ),
+                    const SizedBox(width: 16),
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Premium Store',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
                             ),
-                            Text(
-                              'Exclusive content & features',
-                              style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
+                          ),
+                          Text(
+                            'Exclusive content & features',
+                            style: TextStyle(color: Colors.white70, fontSize: 14),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: const Row(
+                    children: [
+                      Icon(Icons.star, color: Colors.white, size: 20),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'Unlock premium features, exclusive content, and special offers',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: const Row(
-                      children: [
-                        Icon(Icons.star, color: Colors.white, size: 20),
-                        SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            'Unlock premium features, exclusive content, and special offers',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
@@ -391,21 +387,15 @@ class _StoreSecondaryScreenState extends ConsumerState<StoreSecondaryScreen>
           ),
         ],
         border: Border.all(
-          color: const Color(0xFF64748B).withValues(alpha: 0.1),
-        ),
+            color: const Color(0xFF64748B).withValues(alpha: 0.1)),
       ),
       child: Column(
         children: [
-          // Section Header
           Container(
             padding: const EdgeInsets.all(20),
             decoration: const BoxDecoration(
               border: Border(
-                bottom: BorderSide(
-                  color: Color(0xFFF1F5F9),
-                  width: 1,
-                ),
-              ),
+                  bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1)),
             ),
             child: Row(
               children: [
@@ -426,22 +416,16 @@ class _StoreSecondaryScreenState extends ConsumerState<StoreSecondaryScreen>
                       Text(
                         subtitle,
                         style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey.shade600,
-                        ),
+                            fontSize: 14, color: Colors.grey.shade600),
                       ),
                     ],
                   ),
                 ),
-                const Icon(
-                  Icons.arrow_forward_ios,
-                  color: Color(0xFF94A3B8),
-                  size: 16,
-                ),
+                const Icon(Icons.arrow_forward_ios,
+                    color: Color(0xFF94A3B8), size: 16),
               ],
             ),
           ),
-          // Section Content
           child,
         ],
       ),
