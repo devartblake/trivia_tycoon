@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/models/store/premium_store_model.dart';
+import '../../../core/services/api_service.dart';
+import '../../../game/providers/riverpod_providers.dart';
 
-class RewardCenter extends StatefulWidget {
+class RewardCenter extends ConsumerStatefulWidget {
   final RewardCenterData data;
+  final bool enableClaims;
 
-  const RewardCenter({super.key, required this.data});
+  const RewardCenter({
+    super.key,
+    required this.data,
+    this.enableClaims = true,
+  });
 
   @override
-  State<RewardCenter> createState() => _RewardCenterState();
+  ConsumerState<RewardCenter> createState() => _RewardCenterState();
 }
 
-class _RewardCenterState extends State<RewardCenter>
+class _RewardCenterState extends ConsumerState<RewardCenter>
     with TickerProviderStateMixin {
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
@@ -232,11 +240,15 @@ class _RewardCenterState extends State<RewardCenter>
   }
 
   Widget _buildRewardCard(RewardCard card) {
+    final canClaim = widget.enableClaims && card.isAvailable;
+
     return GestureDetector(
-      onTap: () {
+      onTap: canClaim
+          ? () {
         HapticFeedback.lightImpact();
         _handleRewardClaim(card);
-      },
+      }
+          : null,
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
@@ -335,7 +347,7 @@ class _RewardCenterState extends State<RewardCenter>
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: card.isAvailable ? () => _handleRewardClaim(card) : null,
+                onPressed: canClaim ? () => _handleRewardClaim(card) : null,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   foregroundColor: card.gradient.colors.first,
@@ -345,7 +357,11 @@ class _RewardCenterState extends State<RewardCenter>
                   elevation: 0,
                 ),
                 child: Text(
-                  card.isAvailable ? 'Claim' : 'Claimed',
+                  !widget.enableClaims
+                      ? 'Unavailable'
+                      : card.isAvailable
+                          ? 'Claim'
+                          : 'Claimed',
                   style: const TextStyle(
                       fontSize: 12, fontWeight: FontWeight.bold),
                 ),
@@ -370,7 +386,55 @@ class _RewardCenterState extends State<RewardCenter>
     }
   }
 
-  void _handleRewardClaim(RewardCard card) {
+  Future<void> _handleRewardClaim(RewardCard card) async {
+    if (!widget.enableClaims) {
+      _showSnack(
+        'Rewards are temporarily unavailable while we refresh your status.',
+        const Color(0xFFEF4444),
+      );
+      return;
+    }
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      final playerId = await ref.read(currentUserIdProvider.future);
+      final response = await ref.read(storeServiceProvider).claimPlayerReward(
+            playerId: playerId,
+            rewardId: card.id,
+          );
+
+      final newBalance = (response['newBalance'] as num?)?.toInt();
+      if (newBalance != null) {
+        await ref.read(coinBalanceProvider.notifier).set(newBalance);
+      }
+
+      ref.invalidate(playerRewardsProvider);
+
+      if (!mounted) return;
+      Navigator.of(context).pop();
+      _showClaimSuccess(card, response);
+    } on ApiRequestException catch (e) {
+      if (!mounted) return;
+      Navigator.of(context).pop();
+      _showSnack(e.message, const Color(0xFFEF4444));
+    } catch (_) {
+      if (!mounted) return;
+      Navigator.of(context).pop();
+      _showSnack(
+        'Reward claim failed. Please try again.',
+        const Color(0xFFEF4444),
+      );
+    }
+  }
+
+  void _showClaimSuccess(RewardCard card, Map<String, dynamic> response) {
+    final coinsAwarded = (response['coinsAwarded'] as num?)?.toInt();
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -383,8 +447,11 @@ class _RewardCenterState extends State<RewardCenter>
                 color: const Color(0xFF10B981).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Icon(Icons.card_giftcard,
-                  color: Color(0xFF10B981), size: 24),
+              child: const Icon(
+                Icons.card_giftcard,
+                color: Color(0xFF10B981),
+                size: 24,
+              ),
             ),
             const SizedBox(width: 12),
             const Text('Reward Claimed!'),
@@ -393,7 +460,7 @@ class _RewardCenterState extends State<RewardCenter>
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('You successfully claimed ${card.reward} from ${card.title}!'),
+            Text('You successfully claimed ${card.title}.'),
             const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.all(16),
@@ -404,11 +471,14 @@ class _RewardCenterState extends State<RewardCenter>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.monetization_on,
-                      color: Color(0xFF10B981), size: 20),
+                  const Icon(
+                    Icons.monetization_on,
+                    color: Color(0xFF10B981),
+                    size: 20,
+                  ),
                   const SizedBox(width: 8),
                   Text(
-                    card.reward,
+                    coinsAwarded != null ? '$coinsAwarded Coins' : card.reward,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -430,6 +500,17 @@ class _RewardCenterState extends State<RewardCenter>
             child: const Text('Awesome!'),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showSnack(String message, Color color) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: color,
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }

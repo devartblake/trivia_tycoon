@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/core/models/store/premium_store_model.dart';
+import 'package:trivia_tycoon/game/state/premium_profile_state.dart';
 import 'package:trivia_tycoon/screens/store/widgets/ad_remove_options.dart';
 import 'package:trivia_tycoon/screens/store/widgets/reward_center.dart';
 import 'package:trivia_tycoon/screens/store/widgets/sale_info.dart';
@@ -44,6 +45,7 @@ class _StoreSecondaryScreenState extends ConsumerState<StoreSecondaryScreen>
   @override
   Widget build(BuildContext context) {
     final storeAsync = ref.watch(premiumStoreProvider);
+    final rewardsAsync = ref.watch(playerRewardsProvider);
 
     return storeAsync.when(
       loading: () => Scaffold(
@@ -54,20 +56,35 @@ class _StoreSecondaryScreenState extends ConsumerState<StoreSecondaryScreen>
       error: (_, __) => Scaffold(
         backgroundColor: const Color(0xFFF8FAFF),
         appBar: _buildAppBar(),
-        body: _buildBody(PremiumStoreData.fallback),
+        body: _buildBody(
+          PremiumStoreData.fallback,
+          rewardData: PremiumStoreData.fallback.rewardCenter,
+          enableRewardClaims: false,
+        ),
       ),
       data: (data) => Scaffold(
         backgroundColor: const Color(0xFFF8FAFF),
         appBar: _buildAppBar(),
         body: FadeTransition(
           opacity: _fadeAnimation,
-          child: _buildBody(data),
+          child: _buildBody(
+            data,
+            rewardData: rewardsAsync.maybeWhen(
+              data: (rewardData) => rewardData,
+              orElse: () => data.rewardCenter,
+            ),
+            enableRewardClaims: rewardsAsync.hasValue,
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildBody(PremiumStoreData data) {
+  Widget _buildBody(
+    PremiumStoreData data, {
+    required RewardCenterData rewardData,
+    required bool enableRewardClaims,
+  }) {
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
@@ -135,11 +152,11 @@ class _StoreSecondaryScreenState extends ConsumerState<StoreSecondaryScreen>
                   child: Container(
                     margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                     child: _buildSectionCard(
-                      title: 'Special Offers',
-                      subtitle: 'Limited time deals just for you',
-                      icon: Icons.local_offer,
-                      child: SaleInfo(data: data.saleInfo!),
-                    ),
+                    title: 'Special Offers',
+                    subtitle: 'Limited time deals just for you',
+                    icon: Icons.local_offer,
+                    child: SaleInfo(data: data.saleInfo!),
+                  ),
                   ),
                 ),
               ),
@@ -161,7 +178,10 @@ class _StoreSecondaryScreenState extends ConsumerState<StoreSecondaryScreen>
                     title: 'Reward Center',
                     subtitle: 'Claim your daily rewards',
                     icon: Icons.card_giftcard,
-                    child: RewardCenter(data: data.rewardCenter),
+                    child: RewardCenter(
+                      data: rewardData,
+                      enableClaims: enableRewardClaims,
+                    ),
                   ),
                 ),
               ),
@@ -176,7 +196,11 @@ class _StoreSecondaryScreenState extends ConsumerState<StoreSecondaryScreen>
 
   PreferredSizeWidget _buildAppBar() {
     final coins = ref.watch(coinBalanceProvider);
-    final isPremium = ref.watch(premiumStatusProvider).isPremium;
+    final premiumStatus = ref.watch(premiumAccessStatusProvider).maybeWhen(
+          data: (status) => status,
+          orElse: () => PremiumStatus(isPremium: false, discountPercent: 0),
+        );
+    final isPremium = premiumStatus.isPremium;
 
     return AppBar(
       elevation: 0,

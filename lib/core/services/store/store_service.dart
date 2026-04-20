@@ -112,6 +112,21 @@ class StoreService {
     }
   }
 
+  Future<RewardCenterData> getPlayerRewards(String playerId) async {
+    final json = await apiService.get('/store/rewards/$playerId');
+    return RewardCenterData.fromJson(json);
+  }
+
+  Future<Map<String, dynamic>> claimPlayerReward({
+    required String playerId,
+    required String rewardId,
+  }) {
+    return apiService.post(
+      '/store/rewards/$playerId/claim/$rewardId',
+      body: const {},
+    );
+  }
+
   Future<Map<String, dynamic>> getSystemStatus() {
     return apiService.get('/store/system/status');
   }

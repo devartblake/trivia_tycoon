@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/models/store/premium_store_model.dart';
 
 class SaleInfo extends StatefulWidget {
@@ -15,6 +18,8 @@ class _SaleInfoState extends State<SaleInfo>
     with SingleTickerProviderStateMixin {
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
+  Timer? _countdownTimer;
+  Duration _timeRemaining = Duration.zero;
 
   @override
   void initState() {
@@ -26,10 +31,17 @@ class _SaleInfoState extends State<SaleInfo>
     _pulseAnimation = Tween<double>(begin: 1.0, end: 1.05).animate(
       CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
     );
+    _syncCountdown();
+    if (widget.data.expiresAt != null) {
+      _countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+        _syncCountdown();
+      });
+    }
   }
 
   @override
   void dispose() {
+    _countdownTimer?.cancel();
     _pulseController.dispose();
     super.dispose();
   }
@@ -182,6 +194,38 @@ class _SaleInfoState extends State<SaleInfo>
 
                 const SizedBox(height: 24),
 
+                if (data.expiresAt != null) ...[
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.3),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.timer, color: Colors.white, size: 18),
+                        const SizedBox(width: 8),
+                        Text(
+                          _buildCountdownLabel(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                ],
+
                 // Benefits
                 if (data.benefits.isNotEmpty)
                   Container(
@@ -320,40 +364,53 @@ class _SaleInfoState extends State<SaleInfo>
     );
   }
 
+  void _syncCountdown() {
+    final expiresAt = widget.data.expiresAt;
+    if (expiresAt == null) return;
+
+    final remaining = expiresAt.difference(DateTime.now());
+    if (!mounted) {
+      _timeRemaining = remaining.isNegative ? Duration.zero : remaining;
+      return;
+    }
+
+    setState(() {
+      _timeRemaining = remaining.isNegative ? Duration.zero : remaining;
+    });
+  }
+
+  String _buildCountdownLabel() {
+    if (_timeRemaining == Duration.zero) {
+      return 'Offer ended';
+    }
+
+    final hours = _timeRemaining.inHours.toString().padLeft(2, '0');
+    final minutes =
+        (_timeRemaining.inMinutes % 60).toString().padLeft(2, '0');
+    final seconds =
+        (_timeRemaining.inSeconds % 60).toString().padLeft(2, '0');
+    return 'Ends in $hours:$minutes:$seconds';
+  }
+
   void _handlePurchase() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text('Confirm Purchase'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Get ${widget.data.discount} off for just ${widget.data.salePrice}?',
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'This offer expires soon!',
-              style: TextStyle(
-                  color: Color(0xFFEF4444), fontWeight: FontWeight.bold),
-            ),
-          ],
+    if (_timeRemaining == Duration.zero && widget.data.expiresAt != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('This offer has expired.'),
+          behavior: SnackBarBehavior.floating,
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.of(context).pop(),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFEF4444),
-              foregroundColor: Colors.white,
-            ),
-            child: const Text('Purchase'),
-          ),
-        ],
+      );
+      return;
+    }
+
+    context.push('/offers');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          '${widget.data.buttonText} is handled in Special Offers checkout.',
+        ),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: const Color(0xFFEF4444),
       ),
     );
   }

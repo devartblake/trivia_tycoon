@@ -12,6 +12,7 @@ import '../../core/models/store/store_hub_model.dart';
 import '../../core/models/store/store_offer_model.dart';
 import '../../core/models/store/store_gift_model.dart';
 import '../../core/models/store/premium_store_model.dart';
+import '../../game/state/premium_profile_state.dart';
 import '../../core/services/leaderboard_data_service.dart';
 import '../../core/services/question/question_service.dart';
 import '../../core/services/settings/admin_settings_service.dart';
@@ -247,6 +248,28 @@ StateNotifierProvider<QrSettingsNotifier, QrSettingsModel>(
 final storeServiceProvider =
 Provider((ref) => ref.read(serviceManagerProvider).storeService);
 
+Future<String> _resolveCurrentStoreUserId(Ref ref) async {
+  final authService = ref.watch(authServiceProvider);
+  final playerProfile = ref.watch(playerProfileServiceProvider);
+
+  final storedUserId = await playerProfile.getUserId();
+  if (storedUserId != null && storedUserId.isNotEmpty) {
+    return storedUserId;
+  }
+
+  final email = await authService.getStoredEmail();
+  if (email != null && email.isNotEmpty) {
+    return email.split('@').first;
+  }
+
+  final playerName = await playerProfile.getPlayerName();
+  if (playerName != 'Player') {
+    return playerName;
+  }
+
+  return 'guest';
+}
+
 final storeHubProvider = FutureProvider<StoreHubData>((ref) async {
   return ref.read(storeServiceProvider).getHubData();
 });
@@ -263,6 +286,11 @@ final premiumStoreProvider = FutureProvider<PremiumStoreData>((ref) async {
   return ref.read(storeServiceProvider).getPremiumStoreData();
 });
 
+final playerRewardsProvider = FutureProvider<RewardCenterData>((ref) async {
+  final playerId = await _resolveCurrentStoreUserId(ref);
+  return ref.read(storeServiceProvider).getPlayerRewards(playerId);
+});
+
 final storeItemsProvider = FutureProvider<List<StoreItemModel>>((ref) async {
   final storeService = ref.read(storeServiceProvider);
   return storeService.getAllItems();
@@ -277,6 +305,27 @@ final storeSubscriptionStatusProvider =
     FutureProvider.family<Map<String, dynamic>, String>((ref, playerId) async {
   final storeService = ref.read(storeServiceProvider);
   return storeService.getSubscriptionStatus(playerId);
+});
+
+final premiumAccessStatusProvider = FutureProvider<PremiumStatus>((ref) async {
+  final playerId = await _resolveCurrentStoreUserId(ref);
+  final status = await ref.watch(storeSubscriptionStatusProvider(playerId).future);
+
+  final isPremium = status['isActive'] == true ||
+      status['hasPremiumAccess'] == true ||
+      status['premiumActive'] == true;
+  final discountPercent = (status['discountPercent'] as num?)?.toInt() ?? 0;
+  final expiryRaw = status['expiresAt'] ??
+      status['currentPeriodEnd'] ??
+      status['expirationDate'] ??
+      status['expiresAtUtc'];
+  final expiryDate = expiryRaw is String ? DateTime.tryParse(expiryRaw) : null;
+
+  return PremiumStatus(
+    isPremium: isPremium,
+    discountPercent: discountPercent,
+    expiryDate: expiryDate,
+  );
 });
 
 final powerUpInventoryProvider =
