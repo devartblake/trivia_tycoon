@@ -6,6 +6,7 @@ import '../../manager/log_manager.dart';
 import '../../models/store/store_hub_model.dart';
 import '../../models/store/store_offer_model.dart';
 import '../../models/store/store_gift_model.dart';
+import '../../models/store/premium_store_model.dart';
 
 class StoreService {
   final ApiService apiService;
@@ -98,6 +99,16 @@ class StoreService {
     } catch (e) {
       LogManager.debug('getGiftsData failed, using fallback: $e');
       return GiftsData.fallback;
+    }
+  }
+
+  Future<PremiumStoreData> getPremiumStoreData() async {
+    try {
+      final json = await apiService.get('/store/premium');
+      return PremiumStoreData.fromJson(json);
+    } catch (e) {
+      LogManager.debug('getPremiumStoreData failed, using fallback: $e');
+      return PremiumStoreData.fallback;
     }
   }
 

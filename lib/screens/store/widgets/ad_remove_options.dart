@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/models/store/premium_store_model.dart';
 
 class AdRemoveOptions extends StatefulWidget {
-  const AdRemoveOptions({super.key});
+  final AdFreeConfig config;
+
+  const AdRemoveOptions({super.key, required this.config});
 
   @override
   State<AdRemoveOptions> createState() => _AdRemoveOptionsState();
@@ -31,10 +34,9 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
       curve: Curves.easeOut,
     ));
 
-    // Initialize card animations
     _cardControllers = List.generate(
-      3,
-          (index) => AnimationController(
+      widget.config.plans.length,
+      (index) => AnimationController(
         duration: Duration(milliseconds: 800 + (index * 200)),
         vsync: this,
       ),
@@ -46,7 +48,6 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
       );
     }).toList();
 
-    // Start animations
     _fadeController.forward();
     for (int i = 0; i < _cardControllers.length; i++) {
       Future.delayed(Duration(milliseconds: 200 + (i * 150)), () {
@@ -66,12 +67,14 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
 
   @override
   Widget build(BuildContext context) {
+    final plans = widget.config.plans;
+
     return FadeTransition(
       opacity: _fadeAnimation,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Header section
+          // Header
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -93,11 +96,7 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
                         color: Colors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Icon(
-                        Icons.block,
-                        color: Colors.white,
-                        size: 24,
-                      ),
+                      child: const Icon(Icons.block, color: Colors.white, size: 24),
                     ),
                     const SizedBox(width: 12),
                     const Text(
@@ -134,78 +133,49 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
 
           const SizedBox(height: 24),
 
-          // Best value option (365 days)
-          AnimatedBuilder(
-            animation: _cardAnimations[0],
-            builder: (context, child) {
-              return Transform.scale(
+          // Best-value plan (first plan, full-width)
+          if (plans.isNotEmpty && _cardAnimations.isNotEmpty)
+            AnimatedBuilder(
+              animation: _cardAnimations[0],
+              builder: (context, child) => Transform.scale(
                 scale: _cardAnimations[0].value,
-                child: _buildAdRemoveOption(
-                  '365 DAYS',
-                  '\$5.99',
-                  'assets/images/cta_banner.png',
-                  true,
-                  'Best Value - Save 70%',
-                  const Color(0xFF10B981),
-                ),
-              );
-            },
-          ),
+                child: _buildAdRemoveOption(plans[0]),
+              ),
+            ),
 
           const SizedBox(height: 16),
 
-          // Row for 28 Days and 7 Days
-          Row(
-            children: [
-              Expanded(
-                child: AnimatedBuilder(
-                  animation: _cardAnimations[1],
-                  builder: (context, child) {
-                    return Transform.scale(
-                      scale: _cardAnimations[1].value,
-                      child: _buildAdRemoveOption(
-                        '28 DAYS',
-                        '\$3.99',
-                        'assets/images/cta_banner.png',
-                        false,
-                        'Popular Choice',
-                        const Color(0xFF6366F1),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: AnimatedBuilder(
-                  animation: _cardAnimations[2],
-                  builder: (context, child) {
-                    return Transform.scale(
-                      scale: _cardAnimations[2].value,
-                      child: _buildAdRemoveOption(
-                        '7 DAYS',
-                        '\$1.99',
-                        'assets/images/cta_banner.png',
-                        false,
-                        'Trial Period',
-                        const Color(0xFF8B5CF6),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
+          // Remaining plans in a row
+          if (plans.length > 1)
+            Row(
+              children: [
+                for (int i = 1; i < plans.length; i++) ...[
+                  if (i > 1) const SizedBox(width: 16),
+                  Expanded(
+                    child: i < _cardAnimations.length
+                        ? AnimatedBuilder(
+                            animation: _cardAnimations[i],
+                            builder: (context, child) => Transform.scale(
+                              scale: _cardAnimations[i].value,
+                              child: _buildAdRemoveOption(plans[i]),
+                            ),
+                          )
+                        : _buildAdRemoveOption(plans[i]),
+                  ),
+                ],
+              ],
+            ),
 
           const SizedBox(height: 20),
 
-          // Benefits section
+          // Benefits
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: const Color(0xFFF8FAFF),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFF6366F1).withValues(alpha: 0.2)),
+              border: Border.all(
+                  color: const Color(0xFF6366F1).withValues(alpha: 0.2)),
             ),
             child: Column(
               children: [
@@ -218,10 +188,9 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
                   ),
                 ),
                 const SizedBox(height: 12),
-                _buildBenefit(Icons.play_arrow, 'Uninterrupted gameplay'),
-                _buildBenefit(Icons.speed, 'Faster loading times'),
-                _buildBenefit(Icons.battery_charging_full, 'Less battery usage'),
-                _buildBenefit(Icons.star, 'Premium experience'),
+                ...widget.config.benefits.map(
+                  (b) => _buildBenefit(Icons.check_circle_outline, b),
+                ),
               ],
             ),
           ),
@@ -230,148 +199,89 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
     );
   }
 
-  Widget _buildAdRemoveOption(
-      String duration,
-      String price,
-      String imagePath,
-      bool isBestValue,
-      String badge,
-      Color accentColor,
-      ) {
+  Widget _buildAdRemoveOption(AdRemovePlan plan) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isBestValue ? const Color(0xFF10B981) : accentColor.withValues(alpha: 0.3),
-          width: isBestValue ? 3 : 1,
+          color: plan.isBestValue
+              ? const Color(0xFF10B981)
+              : plan.accentColor.withValues(alpha: 0.3),
+          width: plan.isBestValue ? 3 : 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: isBestValue
+            color: plan.isBestValue
                 ? const Color(0xFF10B981).withValues(alpha: 0.2)
-                : accentColor.withValues(alpha: 0.1),
-            blurRadius: isBestValue ? 15 : 10,
+                : plan.accentColor.withValues(alpha: 0.1),
+            blurRadius: plan.isBestValue ? 15 : 10,
             offset: const Offset(0, 6),
           ),
         ],
       ),
-      child: Stack(
+      child: Column(
         children: [
-          Column(
-            children: [
-              // Badge
-              if (isBestValue || badge.isNotEmpty)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: isBestValue ? const Color(0xFF10B981) : accentColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    badge,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-
-              const SizedBox(height: 16),
-
-              // Content row
-              Row(
-                children: [
-                  // Image/Icon
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: accentColor.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.asset(
-                        imagePath,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Icon(
-                            Icons.block,
-                            color: accentColor,
-                            size: 24,
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(width: 16),
-
-                  // Duration text
-                  Expanded(
-                    child: Text(
-                      duration,
-                      style: TextStyle(
-                        fontSize: isBestValue ? 20 : 16,
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0xFF1E293B),
-                      ),
-                    ),
-                  ),
-                ],
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: plan.isBestValue ? const Color(0xFF10B981) : plan.accentColor,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              plan.badge,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
               ),
-
-              const SizedBox(height: 20),
-
-              // Price button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => _handlePurchase(duration, price),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: isBestValue ? const Color(0xFF10B981) : accentColor,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        price,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      if (isBestValue) ...[
-                        const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Text(
-                            'SAVE 70%',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: plan.accentColor.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(Icons.block, color: plan.accentColor, size: 24),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  plan.durationLabel,
+                  style: TextStyle(
+                    fontSize: plan.isBestValue ? 20 : 16,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xFF1E293B),
                   ),
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () => _handlePurchase(plan),
+              style: ElevatedButton.styleFrom(
+                backgroundColor:
+                    plan.isBestValue ? const Color(0xFF10B981) : plan.accentColor,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+                elevation: 0,
+              ),
+              child: Text(
+                plan.price,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
           ),
         ],
       ),
@@ -383,33 +293,23 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
-          Icon(
-            icon,
-            color: const Color(0xFF10B981),
-            size: 16,
-          ),
+          Icon(icon, color: const Color(0xFF10B981), size: 16),
           const SizedBox(width: 8),
           Text(
             text,
-            style: const TextStyle(
-              fontSize: 12,
-              color: Color(0xFF64748B),
-            ),
+            style: const TextStyle(fontSize: 12, color: Color(0xFF64748B)),
           ),
         ],
       ),
     );
   }
 
-  void _handlePurchase(String duration, String price) {
+  void _handlePurchase(AdRemovePlan plan) {
     HapticFeedback.mediumImpact();
-
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Row(
           children: [
             Icon(Icons.block, color: Color(0xFFEF4444)),
@@ -420,7 +320,7 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Purchase $duration ad-free experience for $price?'),
+            Text('Purchase ${plan.durationLabel} ad-free for ${plan.price}?'),
             const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.all(12),
@@ -436,9 +336,7 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
                     child: Text(
                       'Enjoy uninterrupted gameplay!',
                       style: TextStyle(
-                        color: Color(0xFF10B981),
-                        fontWeight: FontWeight.w600,
-                      ),
+                          color: Color(0xFF10B981), fontWeight: FontWeight.w600),
                     ),
                   ),
                 ],
@@ -454,7 +352,7 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
           ElevatedButton(
             onPressed: () {
               Navigator.of(context).pop();
-              _redirectToStoreOffers(duration);
+              _redirectToStoreOffers(plan.durationLabel);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFEF4444),
@@ -467,7 +365,7 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
     );
   }
 
-  void _redirectToStoreOffers(String duration) {
+  void _redirectToStoreOffers(String durationLabel) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Row(
@@ -476,16 +374,14 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                '$duration ad-free is now handled from Special Offers so checkout goes through the backend.',
+                '$durationLabel ad-free is now handled from Special Offers so checkout goes through the backend.',
               ),
             ),
           ],
         ),
         backgroundColor: const Color(0xFF6366F1),
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
     context.push('/offers');

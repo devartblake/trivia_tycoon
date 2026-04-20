@@ -11,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/models/store/store_hub_model.dart';
 import '../../core/models/store/store_offer_model.dart';
 import '../../core/models/store/store_gift_model.dart';
+import '../../core/models/store/premium_store_model.dart';
 import '../../core/services/leaderboard_data_service.dart';
 import '../../core/services/question/question_service.dart';
 import '../../core/services/settings/admin_settings_service.dart';
@@ -256,6 +257,10 @@ final storeOffersProvider = FutureProvider<StoreOffersData>((ref) async {
 
 final giftsDataProvider = FutureProvider<GiftsData>((ref) async {
   return ref.read(storeServiceProvider).getGiftsData();
+});
+
+final premiumStoreProvider = FutureProvider<PremiumStoreData>((ref) async {
+  return ref.read(storeServiceProvider).getPremiumStoreData();
 });
 
 final storeItemsProvider = FutureProvider<List<StoreItemModel>>((ref) async {
