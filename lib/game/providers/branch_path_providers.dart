@@ -33,7 +33,17 @@ SkillCategory _categoryFromGroupId(String groupId) {
   switch (groupId.toLowerCase()) {
     case 'scholar': return SkillCategory.scholar;
     case 'strategist': return SkillCategory.strategist;
-    // ... keep the rest identical to your existing mapper ...
+    case 'combat': return SkillCategory.combat;
+    case 'xp': return SkillCategory.xp;
+    case 'timer': return SkillCategory.timer;
+    case 'combo': return SkillCategory.combo;
+    case 'risk': return SkillCategory.risk;
+    case 'luck': return SkillCategory.luck;
+    case 'stealth': return SkillCategory.stealth;
+    case 'knowledge': return SkillCategory.knowledge;
+    case 'elite': return SkillCategory.elite;
+    case 'wildcard': return SkillCategory.wildcard;
+    case 'general': return SkillCategory.general;
     default: return SkillCategory.unknown;
   }
 }
