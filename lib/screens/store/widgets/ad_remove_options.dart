@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/models/store/premium_store_model.dart';
+import 'premium_checkout_launcher.dart';
 
-class AdRemoveOptions extends StatefulWidget {
+class AdRemoveOptions extends ConsumerStatefulWidget {
   final AdFreeConfig config;
 
   const AdRemoveOptions({super.key, required this.config});
 
   @override
-  State<AdRemoveOptions> createState() => _AdRemoveOptionsState();
+  ConsumerState<AdRemoveOptions> createState() => _AdRemoveOptionsState();
 }
 
-class _AdRemoveOptionsState extends State<AdRemoveOptions>
+class _AdRemoveOptionsState extends ConsumerState<AdRemoveOptions>
     with TickerProviderStateMixin {
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
@@ -253,7 +254,7 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
               const SizedBox(width: 16),
               Expanded(
                 child: Text(
-                  plan.durationLabel,
+                  plan.displayTitle,
                   style: TextStyle(
                     fontSize: plan.isBestValue ? 20 : 16,
                     fontWeight: FontWeight.bold,
@@ -263,6 +264,17 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
               ),
             ],
           ),
+          if (plan.displaySubtitle.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Text(
+              plan.displaySubtitle,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 12,
+                color: Color(0xFF64748B),
+              ),
+            ),
+          ],
           const SizedBox(height: 20),
           SizedBox(
             width: double.infinity,
@@ -320,7 +332,7 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Purchase ${plan.durationLabel} ad-free for ${plan.price}?'),
+            Text('Purchase ${plan.displayTitle} for ${plan.price}?'),
             const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.all(12),
@@ -352,7 +364,7 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
           ElevatedButton(
             onPressed: () {
               Navigator.of(context).pop();
-              _redirectToStoreOffers(plan.durationLabel);
+              _startPremiumCheckout(plan);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFEF4444),
@@ -365,25 +377,28 @@ class _AdRemoveOptionsState extends State<AdRemoveOptions>
     );
   }
 
-  void _redirectToStoreOffers(String durationLabel) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.info_outline, color: Colors.white),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                '$durationLabel ad-free is now handled from Special Offers so checkout goes through the backend.',
-              ),
-            ),
-          ],
+  Future<void> _startPremiumCheckout(AdRemovePlan plan) async {
+    final tier = plan.tier;
+    final billingPeriod = plan.billingPeriod;
+    if (tier == null || billingPeriod == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'This premium plan is missing checkout mapping for ${plan.id}.',
+          ),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: const Color(0xFFEF4444),
         ),
-        backgroundColor: const Color(0xFF6366F1),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      ),
+      );
+      return;
+    }
+
+    await PremiumCheckoutLauncher.launchSubscriptionCheckout(
+      context: context,
+      ref: ref,
+      tier: tier,
+      billingPeriod: billingPeriod,
+      purchaseLabel: plan.displayTitle,
     );
-    context.push('/offers');
   }
 }

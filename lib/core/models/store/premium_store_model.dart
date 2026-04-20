@@ -13,6 +13,9 @@ class AdRemovePlan {
   final String badge;
   final Color accentColor;
   final bool isBestValue;
+  final String title;
+  final String subtitle;
+  final String sku;
 
   const AdRemovePlan({
     required this.id,
@@ -21,23 +24,68 @@ class AdRemovePlan {
     required this.badge,
     required this.accentColor,
     required this.isBestValue,
+    this.title = '',
+    this.subtitle = '',
+    this.sku = '',
   });
 
-  factory AdRemovePlan.fromJson(Map<String, dynamic> json) => AdRemovePlan(
-        id: json['id'] as String? ?? '',
-        durationLabel: json['durationLabel'] as String? ?? '',
-        price: json['price'] as String? ?? '',
-        badge: json['badge'] as String? ?? '',
-        accentColor: resolveColor(json['accentColor'] as String?),
-        isBestValue: json['isBestValue'] as bool? ?? false,
-      );
+  factory AdRemovePlan.fromJson(Map<String, dynamic> json) {
+    final title = json['title'] as String? ?? '';
+    final subtitle = json['subtitle'] as String? ?? '';
+    final price = json['price'] as String? ??
+        json['priceLabel'] as String? ??
+        '';
+    final durationLabel = json['durationLabel'] as String? ??
+        title;
+
+    return AdRemovePlan(
+      id: json['id'] as String? ?? '',
+      durationLabel: durationLabel,
+      price: price,
+      badge: json['badge'] as String? ?? '',
+      accentColor: resolveColor(json['accentColor'] as String?),
+      isBestValue: json['isBestValue'] as bool? ?? false,
+      title: title,
+      subtitle: subtitle,
+      sku: json['sku'] as String? ?? '',
+    );
+  }
+
+  String get displayTitle => title.isNotEmpty ? title : durationLabel;
+
+  String get displaySubtitle => subtitle;
+
+  String? get tier {
+    final normalized = '${id.toLowerCase()} ${sku.toLowerCase()}';
+    if (normalized.contains('elite')) return 'elite';
+    if (normalized.contains('premium')) return 'premium';
+    return null;
+  }
+
+  String? get billingPeriod {
+    final normalized = '${id.toLowerCase()} ${sku.toLowerCase()}';
+    if (normalized.contains('seasonal') || normalized.contains('season')) {
+      return 'seasonal';
+    }
+    if (normalized.contains('monthly') || normalized.contains('month')) {
+      return 'monthly';
+    }
+    return null;
+  }
 }
 
 class AdFreeConfig {
   final List<AdRemovePlan> plans;
   final List<String> benefits;
+  final String title;
+  final String subtitle;
 
-  const AdFreeConfig({required this.plans, required this.benefits});
+  const AdFreeConfig({
+    required this.plans,
+    required this.benefits,
+    this.title = '',
+    this.subtitle = '',
+  });
 
   factory AdFreeConfig.fromJson(Map<String, dynamic> json) {
     final rawPlans = json['plans'] as List? ?? [];
@@ -48,7 +96,17 @@ class AdFreeConfig {
           .map((p) => AdRemovePlan.fromJson(Map<String, dynamic>.from(p)))
           .toList(),
       benefits: rawBenefits.map((b) => b.toString()).toList(),
+      title: json['title'] as String? ?? '',
+      subtitle: json['subtitle'] as String? ?? '',
     );
+  }
+
+  AdRemovePlan? get defaultPurchasePlan {
+    if (plans.isEmpty) return null;
+    for (final plan in plans) {
+      if (plan.isBestValue) return plan;
+    }
+    return plans.first;
   }
 
   static const AdFreeConfig fallback = AdFreeConfig(
@@ -120,6 +178,9 @@ class SaleInfoData {
   final List<SaleBenefitItem> benefits;
   final DateTime? expiresAt;
   final String buttonText;
+  final String? sku;
+  final String? tier;
+  final String? billingPeriod;
 
   const SaleInfoData({
     required this.badgeText,
@@ -129,6 +190,9 @@ class SaleInfoData {
     required this.benefits,
     this.expiresAt,
     this.buttonText = 'Claim This Deal',
+    this.sku,
+    this.tier,
+    this.billingPeriod,
   });
 
   factory SaleInfoData.fromJson(Map<String, dynamic> json) {
@@ -146,6 +210,9 @@ class SaleInfoData {
           ? DateTime.tryParse(json['expiresAt'] as String)
           : null,
       buttonText: json['buttonText'] as String? ?? 'Claim This Deal',
+      sku: json['sku'] as String?,
+      tier: json['tier'] as String?,
+      billingPeriod: json['billingPeriod'] as String?,
     );
   }
 
@@ -201,13 +268,24 @@ class RewardCard {
   });
 
   factory RewardCard.fromJson(Map<String, dynamic> json) => RewardCard(
-        id: json['id'] as String? ?? '',
+        id: json['id'] as String? ?? json['rewardId'] as String? ?? '',
         title: json['title'] as String? ?? '',
         subtitle: json['subtitle'] as String? ?? '',
-        gradient: resolveGradient(json['gradient'] as List?),
-        reward: json['reward'] as String? ?? '',
+        gradient: json['gradient'] is List
+            ? resolveGradient(json['gradient'] as List?)
+            : resolveGradient(
+                [
+                  json['gradientStart'] ?? '#6366F1',
+                  json['gradientEnd'] ?? '#8B5CF6',
+                ],
+              ),
+        reward: json['reward'] as String? ??
+            json['rewardLabel'] as String? ??
+            '',
         progress: (json['progress'] as num?)?.toDouble(),
-        isAvailable: json['isAvailable'] as bool? ?? false,
+        isAvailable: json['isAvailable'] as bool? ??
+            json['isClaimAvailable'] as bool? ??
+            false,
       );
 }
 
@@ -224,13 +302,18 @@ class RewardCenterData {
 
   factory RewardCenterData.fromJson(Map<String, dynamic> json) {
     final rawCards = json['cards'] as List? ?? [];
+    final cards = rawCards
+        .whereType<Map>()
+        .map((c) => RewardCard.fromJson(Map<String, dynamic>.from(c)))
+        .toList();
+    final completedCount = json['completedCount'] as int? ??
+        cards.where((card) => !card.isAvailable).length;
+    final totalCount = json['totalCount'] as int? ?? cards.length;
+
     return RewardCenterData(
-      cards: rawCards
-          .whereType<Map>()
-          .map((c) => RewardCard.fromJson(Map<String, dynamic>.from(c)))
-          .toList(),
-      completedCount: json['completedCount'] as int? ?? 0,
-      totalCount: json['totalCount'] as int? ?? 0,
+      cards: cards,
+      completedCount: completedCount,
+      totalCount: totalCount,
     );
   }
 

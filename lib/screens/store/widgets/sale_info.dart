@@ -2,19 +2,25 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/models/store/premium_store_model.dart';
+import 'premium_checkout_launcher.dart';
 
-class SaleInfo extends StatefulWidget {
+class SaleInfo extends ConsumerStatefulWidget {
   final SaleInfoData data;
+  final AdRemovePlan? purchasePlan;
 
-  const SaleInfo({super.key, required this.data});
+  const SaleInfo({
+    super.key,
+    required this.data,
+    this.purchasePlan,
+  });
 
   @override
-  State<SaleInfo> createState() => _SaleInfoState();
+  ConsumerState<SaleInfo> createState() => _SaleInfoState();
 }
 
-class _SaleInfoState extends State<SaleInfo>
+class _SaleInfoState extends ConsumerState<SaleInfo>
     with SingleTickerProviderStateMixin {
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
@@ -403,15 +409,29 @@ class _SaleInfoState extends State<SaleInfo>
       return;
     }
 
-    context.push('/offers');
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          '${widget.data.buttonText} is handled in Special Offers checkout.',
+    final fallbackPlan = widget.purchasePlan;
+    final tier = widget.data.tier ?? fallbackPlan?.tier;
+    final billingPeriod = widget.data.billingPeriod ?? fallbackPlan?.billingPeriod;
+
+    if (tier == null || billingPeriod == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'This premium offer is missing checkout mapping.',
+          ),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Color(0xFFEF4444),
         ),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: const Color(0xFFEF4444),
-      ),
+      );
+      return;
+    }
+
+    PremiumCheckoutLauncher.launchSubscriptionCheckout(
+      context: context,
+      ref: ref,
+      tier: tier,
+      billingPeriod: billingPeriod,
+      purchaseLabel: widget.data.buttonText,
     );
   }
 }

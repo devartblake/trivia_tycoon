@@ -69,6 +69,67 @@ class _FakeRewardStoreService implements StoreService {
 }
 
 void main() {
+  test('premium store model parses current backend dto shape', () {
+    final data = PremiumStoreData.fromJson({
+      'adFree': {
+        'title': 'Ad-Free Plans',
+        'subtitle': 'Choose a lighter, uninterrupted Tycoon experience.',
+        'benefits': [
+          'Removes gameplay interstitial ads',
+        ],
+        'plans': [
+          {
+            'id': 'premium-monthly',
+            'title': 'Monthly Ad-Free',
+            'subtitle': 'Best for trying premium access',
+            'priceLabel': r'$4.99 / month',
+            'badge': 'Popular',
+            'accentColor': '#0F766E',
+            'isBestValue': false,
+            'sku': 'sub:premium:monthly',
+          },
+          {
+            'id': 'premium-seasonal',
+            'title': 'Seasonal Ad-Free',
+            'subtitle': 'Three months of uninterrupted play',
+            'priceLabel': r'$11.99 / season',
+            'badge': 'Best Value',
+            'accentColor': '#1D4ED8',
+            'isBestValue': true,
+            'sku': 'sub:premium:seasonal',
+          },
+        ],
+      },
+      'saleInfo': null,
+      'rewardCenter': {
+        'title': 'Reward Center',
+        'subtitle': 'Pick up daily bonuses and bonus coin drops.',
+        'cards': [
+          {
+            'rewardId': 'daily-checkin',
+            'title': 'Daily Check-In',
+            'subtitle': 'Claim once per UTC day.',
+            'rewardLabel': '+25 coins',
+            'gradientStart': '#0EA5E9',
+            'gradientEnd': '#2563EB',
+            'progress': 0.0,
+            'isClaimAvailable': true,
+          },
+        ],
+      },
+    });
+
+    expect(data.adFree.plans.first.displayTitle, 'Monthly Ad-Free');
+    expect(data.adFree.plans.first.price, r'$4.99 / month');
+    expect(data.adFree.plans.first.tier, 'premium');
+    expect(data.adFree.plans.first.billingPeriod, 'monthly');
+    expect(data.adFree.defaultPurchasePlan?.billingPeriod, 'seasonal');
+    expect(data.rewardCenter.cards.first.id, 'daily-checkin');
+    expect(data.rewardCenter.cards.first.reward, '+25 coins');
+    expect(data.rewardCenter.cards.first.isAvailable, isTrue);
+    expect(data.rewardCenter.totalCount, 1);
+  });
+
   testWidgets('premium store hides special offers when saleInfo is null',
       (tester) async {
     final storeData = PremiumStoreData(
@@ -246,5 +307,25 @@ void main() {
     await tester.pump(const Duration(milliseconds: 100));
 
     expect(find.text('Offer ended'), findsOneWidget);
+  });
+
+  test('premium plan mapping resolves checkout tier and billing period', () {
+    final monthly = AdRemovePlan.fromJson({
+      'id': 'premium-monthly',
+      'title': 'Monthly Ad-Free',
+      'priceLabel': r'$4.99 / month',
+      'sku': 'sub:premium:monthly',
+    });
+    final seasonal = AdRemovePlan.fromJson({
+      'id': 'premium-seasonal',
+      'title': 'Seasonal Ad-Free',
+      'priceLabel': r'$11.99 / season',
+      'sku': 'sub:premium:seasonal',
+    });
+
+    expect(monthly.tier, 'premium');
+    expect(monthly.billingPeriod, 'monthly');
+    expect(seasonal.tier, 'premium');
+    expect(seasonal.billingPeriod, 'seasonal');
   });
 }

@@ -155,7 +155,10 @@ class _StoreSecondaryScreenState extends ConsumerState<StoreSecondaryScreen>
                     title: 'Special Offers',
                     subtitle: 'Limited time deals just for you',
                     icon: Icons.local_offer,
-                    child: SaleInfo(data: data.saleInfo!),
+                    child: SaleInfo(
+                      data: data.saleInfo!,
+                      purchasePlan: data.adFree.defaultPurchasePlan,
+                    ),
                   ),
                   ),
                 ),
