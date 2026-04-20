@@ -83,9 +83,9 @@ class _RecentlyPlayedSectionState extends State<RecentlyPlayedSection>
   Widget _buildHeader(Map<String, dynamic> theme) {
     return _fadeAnimation != null
         ? FadeTransition(
-      opacity: _fadeAnimation!,
-      child: _headerContent(theme),
-    )
+            opacity: _fadeAnimation!,
+            child: _headerContent(theme),
+          )
         : _headerContent(theme);
   }
 
@@ -102,7 +102,8 @@ class _RecentlyPlayedSectionState extends State<RecentlyPlayedSection>
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: (theme['accentColor'] as Color).withValues(alpha: 0.3),
+                    color:
+                        (theme['accentColor'] as Color).withValues(alpha: 0.3),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   ),

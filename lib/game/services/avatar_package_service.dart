@@ -29,9 +29,9 @@ class AvatarPackageService {
   final AvatarPackageRemoteSource? _remote;
 
   AvatarPackageService(
-      this._cache, {
-        AvatarPackageRemoteSource? remote,
-      }) : _remote = remote;
+    this._cache, {
+    AvatarPackageRemoteSource? remote,
+  }) : _remote = remote;
 
   bool get hasRemoteSource => _remote != null;
 
@@ -108,7 +108,8 @@ class AvatarPackageService {
       if (cached == null) return const [];
       return cached
           .whereType<Map>()
-          .map((m) => AvatarPackageMetadata.fromJson(Map<String, dynamic>.from(m)))
+          .map((m) =>
+              AvatarPackageMetadata.fromJson(Map<String, dynamic>.from(m)))
           .toList();
     }
 
@@ -168,7 +169,8 @@ class AvatarPackageService {
         await _persistInstalledIndex(filtered);
       }
 
-      filtered.sort((a, b) => b.installedAtUtcIso.compareTo(a.installedAtUtcIso));
+      filtered
+          .sort((a, b) => b.installedAtUtcIso.compareTo(a.installedAtUtcIso));
       return filtered;
     }
 
@@ -197,7 +199,8 @@ class AvatarPackageService {
   /// 3) extract to install dir
   /// 4) write manifest.json (normalized)
   /// 5) update installed index
-  Future<AvatarPackageInstall> downloadAndInstall(AvatarPackageMetadata meta) async {
+  Future<AvatarPackageInstall> downloadAndInstall(
+      AvatarPackageMetadata meta) async {
     final url = meta.archiveUrl;
     if (url == null || url.isEmpty) {
       throw StateError('archiveUrl is missing for package ${meta.id}.');
@@ -278,7 +281,8 @@ class AvatarPackageService {
     // 2) Write to temp file (archive APIs are file/stream oriented).
     final tmpDir = await Directory.systemTemp.createTemp('avatar_pkg_asset_');
     final ext = _guessArchiveSuffix(assetArchivePath);
-    final archiveFile = File(p.join(tmpDir.path, '${meta.installFolderName}$ext'));
+    final archiveFile =
+        File(p.join(tmpDir.path, '${meta.installFolderName}$ext'));
     await archiveFile.writeAsBytes(bytes, flush: true);
 
     try {
@@ -429,7 +433,8 @@ class AvatarPackageService {
     return installs;
   }
 
-  Future<void> _persistInstalledIndex(List<AvatarPackageInstall> installs) async {
+  Future<void> _persistInstalledIndex(
+      List<AvatarPackageInstall> installs) async {
     final payload = <String, dynamic>{};
 
     // Key by package id (stable, simple)

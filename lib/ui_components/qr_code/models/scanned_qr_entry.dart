@@ -25,11 +25,11 @@ class ScannedQrEntry {
   }
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'text': text,
-    'type': type.name,
-    'timestamp': timestamp.toIso8601String(),
-  };
+        'id': id,
+        'text': text,
+        'type': type.name,
+        'timestamp': timestamp.toIso8601String(),
+      };
 
   factory ScannedQrEntry.fromJson(Map<String, dynamic> json) {
     return ScannedQrEntry(

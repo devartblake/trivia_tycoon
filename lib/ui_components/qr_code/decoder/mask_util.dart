@@ -29,15 +29,24 @@ class MaskUtil {
 
   static bool _maskBit(int pattern, int x, int y) {
     switch (pattern) {
-      case 0: return (x + y) % 2 == 0;
-      case 1: return y % 2 == 0;
-      case 2: return x % 3 == 0;
-      case 3: return (x + y) % 3 == 0;
-      case 4: return ((y ~/ 2) + (x ~/ 3)) % 2 == 0;
-      case 5: return ((x * y) % 2 + (x * y) % 3) == 0;
-      case 6: return (((x * y) % 2) + ((x * y) % 3)) % 2 == 0;
-      case 7: return (((x + y) % 2) + ((x * y) % 3)) % 2 == 0;
-      default: return false;
+      case 0:
+        return (x + y) % 2 == 0;
+      case 1:
+        return y % 2 == 0;
+      case 2:
+        return x % 3 == 0;
+      case 3:
+        return (x + y) % 3 == 0;
+      case 4:
+        return ((y ~/ 2) + (x ~/ 3)) % 2 == 0;
+      case 5:
+        return ((x * y) % 2 + (x * y) % 3) == 0;
+      case 6:
+        return (((x * y) % 2) + ((x * y) % 3)) % 2 == 0;
+      case 7:
+        return (((x + y) % 2) + ((x * y) % 3)) % 2 == 0;
+      default:
+        return false;
     }
   }
 }

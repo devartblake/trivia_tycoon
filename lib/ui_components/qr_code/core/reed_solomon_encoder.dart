@@ -8,7 +8,7 @@ class ReedSolomonEncoder {
   final GaloisField field = GaloisField.qrField;
 
   /// Encode data codewords with error correction
-  /// 
+  ///
   /// Example:
   /// ```dart
   /// final encoder = ReedSolomonEncoder();
@@ -28,7 +28,8 @@ class ReedSolomonEncoder {
       ...List.filled(numEcCodewords, 0),
     ];
 
-    LogManager.debug('   Message polynomial degree: ${messageCoeffs.length - 1}');
+    LogManager.debug(
+        '   Message polynomial degree: ${messageCoeffs.length - 1}');
 
     // Step 2: Build generator polynomial g(x)
     final generatorPoly = _buildGenerator(numEcCodewords);
@@ -62,10 +63,10 @@ class ReedSolomonEncoder {
   }
 
   /// Build generator polynomial for Reed-Solomon
-  /// 
+  ///
   /// Generator polynomial g(x) is:
   /// g(x) = (x - α^0)(x - α^1)(x - α^2)...(x - α^(degree-1))
-  /// 
+  ///
   /// Where α is the primitive element in GF(256)
   GFPoly _buildGenerator(int degree) {
     // Start with g(x) = 1
@@ -87,17 +88,22 @@ class ReedSolomonEncoder {
   }
 
   /// Get the number of error correction codewords for a given EC level and version
-  /// 
+  ///
   /// This is a simplified version - real QR codes have complex block structures
   static int getEcCodewordsCount(int version, String ecLevel) {
     // Simplified lookup table for Version 1
     if (version == 1) {
       switch (ecLevel) {
-        case 'L': return 7;   // Low: 7% error correction
-        case 'M': return 10;  // Medium: 15% error correction
-        case 'Q': return 13;  // Quartile: 25% error correction
-        case 'H': return 17;  // High: 30% error correction
-        default: return 10;
+        case 'L':
+          return 7; // Low: 7% error correction
+        case 'M':
+          return 10; // Medium: 15% error correction
+        case 'Q':
+          return 13; // Quartile: 25% error correction
+        case 'H':
+          return 17; // High: 30% error correction
+        default:
+          return 10;
       }
     }
 
@@ -111,11 +117,16 @@ class ReedSolomonEncoder {
     // Simplified for Version 1
     if (version == 1) {
       switch (ecLevel) {
-        case 'L': return 19;
-        case 'M': return 16;
-        case 'Q': return 13;
-        case 'H': return 9;
-        default: return 16;
+        case 'L':
+          return 19;
+        case 'M':
+          return 16;
+        case 'Q':
+          return 13;
+        case 'H':
+          return 9;
+        default:
+          return 16;
       }
     }
 

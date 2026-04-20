@@ -77,7 +77,9 @@ class _ConfettiShapePickerState extends State<ConfettiShapePicker> {
                   : const Color(0xFFF7FAFC),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: isSelected ? const Color(0xFF667EEA) : const Color(0xFFE2E8F0),
+                color: isSelected
+                    ? const Color(0xFF667EEA)
+                    : const Color(0xFFE2E8F0),
                 width: 2,
               ),
             ),
@@ -87,7 +89,9 @@ class _ConfettiShapePickerState extends State<ConfettiShapePicker> {
                 Icon(
                   shapeIcon,
                   size: 20,
-                  color: isSelected ? const Color(0xFF667EEA) : const Color(0xFF718096),
+                  color: isSelected
+                      ? const Color(0xFF667EEA)
+                      : const Color(0xFF718096),
                 ),
                 const SizedBox(width: 8),
                 Text(
@@ -95,7 +99,9 @@ class _ConfettiShapePickerState extends State<ConfettiShapePicker> {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: isSelected ? const Color(0xFF667EEA) : const Color(0xFF4A5568),
+                    color: isSelected
+                        ? const Color(0xFF667EEA)
+                        : const Color(0xFF4A5568),
                   ),
                 ),
               ],

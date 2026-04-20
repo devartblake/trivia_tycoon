@@ -82,7 +82,8 @@ void main() {
       expect(svc.isCurrentUserTyping(id), isFalse);
     });
 
-    test('stopTyping on a conversation not yet started does not throw', () async {
+    test('stopTyping on a conversation not yet started does not throw',
+        () async {
       final id = nextId();
       await expectLater(svc.stopTyping(id), completes);
     });

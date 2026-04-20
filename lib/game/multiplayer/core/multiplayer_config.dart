@@ -54,12 +54,20 @@ class MultiplayerConfig {
     required String Function(String key, {String fallback}) getString,
     required bool Function(String key, {bool fallback}) getBool,
   }) {
-    final http = Uri.parse(getString('mp.http_base', fallback: 'https://api.example.com'));
-    final ws = Uri.parse(getString('mp.ws_uri', fallback: 'wss://api.example.com/ws'));
+    final http = Uri.parse(
+        getString('mp.http_base', fallback: 'https://api.example.com'));
+    final ws =
+        Uri.parse(getString('mp.ws_uri', fallback: 'wss://api.example.com/ws'));
     final debug = getBool('mp.debug', fallback: false);
-    final httpTo = Duration(milliseconds: int.parse(getString('mp.http_timeout_ms', fallback: '10000')));
-    final hb = Duration(milliseconds: int.parse(getString('mp.heartbeat_ms', fallback: '15000')));
-    final conn = Duration(milliseconds: int.parse(getString('mp.connect_timeout_ms', fallback: '12000')));
+    final httpTo = Duration(
+        milliseconds:
+            int.parse(getString('mp.http_timeout_ms', fallback: '10000')));
+    final hb = Duration(
+        milliseconds:
+            int.parse(getString('mp.heartbeat_ms', fallback: '15000')));
+    final conn = Duration(
+        milliseconds:
+            int.parse(getString('mp.connect_timeout_ms', fallback: '12000')));
     return MultiplayerConfig(
       httpBase: http,
       wsUri: ws,

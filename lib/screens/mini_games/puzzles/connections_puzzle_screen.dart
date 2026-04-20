@@ -9,7 +9,8 @@ class ConnectionsPuzzleScreen extends StatefulWidget {
   const ConnectionsPuzzleScreen({super.key});
 
   @override
-  State<ConnectionsPuzzleScreen> createState() => _ConnectionsPuzzleScreenState();
+  State<ConnectionsPuzzleScreen> createState() =>
+      _ConnectionsPuzzleScreenState();
 }
 
 class _ConnectionsPuzzleScreenState extends State<ConnectionsPuzzleScreen> {
@@ -227,7 +228,8 @@ class _ConnectionsPuzzleScreenState extends State<ConnectionsPuzzleScreen> {
       _puzzleCompleted = true;
       _showFailureDialog();
     } else {
-      _showMessage('Not quite! $mistakesRemaining ${mistakesRemaining == 1 ? "attempt" : "attempts"} remaining');
+      _showMessage(
+          'Not quite! $mistakesRemaining ${mistakesRemaining == 1 ? "attempt" : "attempts"} remaining');
     }
   }
 
@@ -332,13 +334,13 @@ class _ConnectionsPuzzleScreenState extends State<ConnectionsPuzzleScreen> {
             ),
             const SizedBox(height: 8),
             ...currentPuzzle.map((category) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Text(
-                '${category.name}: ${category.words.join(", ")}',
-                style: const TextStyle(fontSize: 13),
-                textAlign: TextAlign.center,
-              ),
-            )),
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Text(
+                    '${category.name}: ${category.words.join(", ")}',
+                    style: const TextStyle(fontSize: 13),
+                    textAlign: TextAlign.center,
+                  ),
+                )),
           ],
         ),
         actions: [
@@ -417,11 +419,15 @@ class _ConnectionsPuzzleScreenState extends State<ConnectionsPuzzleScreen> {
               ],
             ),
             const SizedBox(height: 24),
-            _buildRule('Find groups of four words that share something in common.'),
-            _buildRule('Select four words and tap Submit to check if your guess is correct.'),
+            _buildRule(
+                'Find groups of four words that share something in common.'),
+            _buildRule(
+                'Select four words and tap Submit to check if your guess is correct.'),
             _buildRule('Each puzzle has exactly four groups to find.'),
-            _buildRule('You have 4 attempts to find all groups. Every wrong guess costs you an attempt.'),
-            _buildRule('The groups are color-coded by difficulty from easiest to hardest.'),
+            _buildRule(
+                'You have 4 attempts to find all groups. Every wrong guess costs you an attempt.'),
+            _buildRule(
+                'The groups are color-coded by difficulty from easiest to hardest.'),
             _buildRule('Complete the puzzle as fast as you can!'),
             const SizedBox(height: 24),
             SizedBox(
@@ -576,12 +582,15 @@ class _ConnectionsPuzzleScreenState extends State<ConnectionsPuzzleScreen> {
                       GestureDetector(
                         onTap: _showHowToPlay,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 10),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF6366F1).withValues(alpha: 0.1),
+                            color:
+                                const Color(0xFF6366F1).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: const Color(0xFF6366F1).withValues(alpha: 0.3),
+                              color: const Color(0xFF6366F1)
+                                  .withValues(alpha: 0.3),
                               width: 1,
                             ),
                           ),
@@ -610,7 +619,8 @@ class _ConnectionsPuzzleScreenState extends State<ConnectionsPuzzleScreen> {
                       const SizedBox(height: 20),
 
                       // Solved categories
-                      ...solvedCategories.map((category) => _buildSolvedCategory(category)),
+                      ...solvedCategories
+                          .map((category) => _buildSolvedCategory(category)),
 
                       // Available words grid
                       if (shuffledWords.isNotEmpty)
@@ -619,7 +629,8 @@ class _ConnectionsPuzzleScreenState extends State<ConnectionsPuzzleScreen> {
                           child: GridView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 4,
                               crossAxisSpacing: 8,
                               mainAxisSpacing: 8,
@@ -646,7 +657,8 @@ class _ConnectionsPuzzleScreenState extends State<ConnectionsPuzzleScreen> {
                                     ),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.black.withValues(alpha: 0.05),
+                                        color: Colors.black
+                                            .withValues(alpha: 0.05),
                                         blurRadius: 4,
                                         offset: const Offset(0, 2),
                                       ),
@@ -703,7 +715,8 @@ class _ConnectionsPuzzleScreenState extends State<ConnectionsPuzzleScreen> {
                         _buildControlButton(
                           'Deselect All',
                           Icons.clear,
-                          onPressed: selectedWords.isNotEmpty ? _deselectAll : null,
+                          onPressed:
+                              selectedWords.isNotEmpty ? _deselectAll : null,
                         ),
                       ],
                     ),
@@ -711,9 +724,10 @@ class _ConnectionsPuzzleScreenState extends State<ConnectionsPuzzleScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: selectedWords.length == 4 && !_puzzleCompleted
-                            ? _submitGuess
-                            : null,
+                        onPressed:
+                            selectedWords.length == 4 && !_puzzleCompleted
+                                ? _submitGuess
+                                : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF6366F1),
                           foregroundColor: Colors.white,
@@ -727,7 +741,8 @@ class _ConnectionsPuzzleScreenState extends State<ConnectionsPuzzleScreen> {
                         ),
                         child: const Text(
                           'Submit',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),
@@ -787,15 +802,21 @@ class _ConnectionsPuzzleScreenState extends State<ConnectionsPuzzleScreen> {
     );
   }
 
-  Widget _buildControlButton(String text, IconData icon, {VoidCallback? onPressed}) {
+  Widget _buildControlButton(String text, IconData icon,
+      {VoidCallback? onPressed}) {
     final isEnabled = onPressed != null;
     return ElevatedButton.icon(
       onPressed: onPressed,
       icon: Icon(icon, size: 18),
-      label: Text(text, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+      label: Text(text,
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
       style: ElevatedButton.styleFrom(
-        backgroundColor: isEnabled ? const Color(0xFFE0DDD9) : const Color(0xFFE0DDD9).withValues(alpha: 0.5),
-        foregroundColor: isEnabled ? const Color(0xFF4A4A4A) : const Color(0xFF4A4A4A).withValues(alpha: 0.5),
+        backgroundColor: isEnabled
+            ? const Color(0xFFE0DDD9)
+            : const Color(0xFFE0DDD9).withValues(alpha: 0.5),
+        foregroundColor: isEnabled
+            ? const Color(0xFF4A4A4A)
+            : const Color(0xFF4A4A4A).withValues(alpha: 0.5),
         elevation: isEnabled ? 2 : 0,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         shape: RoundedRectangleBorder(

@@ -100,7 +100,8 @@ void main() {
     expect(protectedAttempts, 2);
   });
 
-  test('falls back to /auth/refresh when /admin/auth/refresh is unavailable', () async {
+  test('falls back to /auth/refresh when /admin/auth/refresh is unavailable',
+      () async {
     await authBox.put('auth_access_token', 'expired-token');
     await authBox.put('auth_refresh_token', 'refresh-token');
 
@@ -238,7 +239,8 @@ void main() {
   });
 
   test('parsePageEnvelope supports alternate envelope shapes', () {
-    final service = ApiService(baseUrl: 'https://example.test', initializeCache: false);
+    final service =
+        ApiService(baseUrl: 'https://example.test', initializeCache: false);
 
     final envelope = service.parsePageEnvelope<String>(
       {
@@ -287,7 +289,8 @@ void main() {
               return;
             }
 
-            expect(options.headers['Authorization'], 'Bearer profile-new-token');
+            expect(
+                options.headers['Authorization'], 'Bearer profile-new-token');
             handler.resolve(
               Response(
                 requestOptions: options,
@@ -360,7 +363,8 @@ void main() {
               return;
             }
 
-            expect(options.headers['Authorization'], 'Bearer users-me-new-token');
+            expect(
+                options.headers['Authorization'], 'Bearer users-me-new-token');
             handler.resolve(
               Response(
                 requestOptions: options,
@@ -404,7 +408,8 @@ void main() {
     expect(authBox.get('auth_refresh_token'), 'users-me-new-refresh');
   });
 
-  test('preserves ownership 403 envelope details for protected store routes', () async {
+  test('preserves ownership 403 envelope details for protected store routes',
+      () async {
     await authBox.put('auth_access_token', 'store-token');
 
     final dio = Dio(BaseOptions(baseUrl: 'https://example.test'));
@@ -475,7 +480,8 @@ void main() {
     );
   });
 
-  test('preserves provider-disabled 503 envelope details for store routes', () async {
+  test('preserves provider-disabled 503 envelope details for store routes',
+      () async {
     await authBox.put('auth_access_token', 'store-token');
 
     final dio = Dio(BaseOptions(baseUrl: 'https://example.test'));

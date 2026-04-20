@@ -1,1 +1,3 @@
-class JitterBuffer { const JitterBuffer(); }
+class JitterBuffer {
+  const JitterBuffer();
+}

@@ -87,8 +87,9 @@ class CustomThemeService {
         themeName: raw['name'] ?? themeName,
         primaryColor: Color(raw['primary']),
         secondaryColor: Color(raw['secondary']),
-        brightness:
-        (raw['brightness'] ?? 'light') == 'dark' ? Brightness.dark : Brightness.light,
+        brightness: (raw['brightness'] ?? 'light') == 'dark'
+            ? Brightness.dark
+            : Brightness.light,
       );
     }
     return null;
@@ -103,7 +104,8 @@ class CustomThemeService {
         themeName: map['name'],
         primaryColor: Color(map['primary']),
         secondaryColor: Color(map['secondary']),
-        brightness: map['brightness'] == 'dark' ? Brightness.dark : Brightness.light,
+        brightness:
+            map['brightness'] == 'dark' ? Brightness.dark : Brightness.light,
       );
     }).toList();
   }

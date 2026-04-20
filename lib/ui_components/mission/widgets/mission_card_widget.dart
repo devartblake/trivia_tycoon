@@ -93,13 +93,13 @@ class MissionCardWithSwapButton extends StatelessWidget {
   }
 
   static void _showSwapModal(
-      BuildContext context, {
-        required String currentTitle,
-        required int currentProgress,
-        required int currentTotal,
-        required int currentReward,
-        required VoidCallback onSwap,
-      }) {
+    BuildContext context, {
+    required String currentTitle,
+    required int currentProgress,
+    required int currentTotal,
+    required int currentReward,
+    required VoidCallback onSwap,
+  }) {
     showModalBottomSheet(
       context: context,
       backgroundColor: const Color(0xFF1A1A2E),
@@ -213,7 +213,8 @@ class MissionCardWithSwapButton extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(width: 4),
-                            const Icon(Icons.star, color: Colors.amber, size: 16),
+                            const Icon(Icons.star,
+                                color: Colors.amber, size: 16),
                           ],
                         ),
                       ],
@@ -303,7 +304,8 @@ class MissionCard extends StatefulWidget {
   State<MissionCard> createState() => _MissionCardState();
 }
 
-class _MissionCardState extends State<MissionCard> with TickerProviderStateMixin {
+class _MissionCardState extends State<MissionCard>
+    with TickerProviderStateMixin {
   AnimationController? _controller;
   Animation<double>? _scaleAnimation;
   AnimationController? _glowController;
@@ -343,9 +345,9 @@ class _MissionCardState extends State<MissionCard> with TickerProviderStateMixin
 
     return _scaleAnimation != null
         ? ScaleTransition(
-      scale: _scaleAnimation!.drive(Tween(begin: 1.0, end: 1.05)),
-      child: _buildCard(isCompleted),
-    )
+            scale: _scaleAnimation!.drive(Tween(begin: 1.0, end: 1.05)),
+            child: _buildCard(isCompleted),
+          )
         : _buildCard(isCompleted);
   }
 
@@ -357,13 +359,13 @@ class _MissionCardState extends State<MissionCard> with TickerProviderStateMixin
         gradient: LinearGradient(
           colors: isCompleted
               ? [
-            const Color(0xFF1B4332).withValues(alpha: 0.92),
-            const Color(0xFF2D5A3D).withValues(alpha: 0.88),
-          ]
+                  const Color(0xFF1B4332).withValues(alpha: 0.92),
+                  const Color(0xFF2D5A3D).withValues(alpha: 0.88),
+                ]
               : [
-            const Color(0xFF2C2C54).withValues(alpha: 0.92),
-            const Color(0xFF1B1B2F).withValues(alpha: 0.88),
-          ],
+                  const Color(0xFF2C2C54).withValues(alpha: 0.92),
+                  const Color(0xFF1B1B2F).withValues(alpha: 0.88),
+                ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -565,7 +567,6 @@ class _MissionCardState extends State<MissionCard> with TickerProviderStateMixin
     );
   }
 
-
   Color _getBadgeColor() {
     switch (widget.badge.toLowerCase()) {
       case 'science':
@@ -619,7 +620,7 @@ class _ProgressBarWithText extends StatelessWidget {
         borderRadius: radius,
         linearProgressBarBorderRadius: innerRadius,
         colorLinearProgress:
-        isCompleted ? const Color(0xFF52B788) : const Color(0xFF6C5CE7),
+            isCompleted ? const Color(0xFF52B788) : const Color(0xFF6C5CE7),
         backgroundColor: Colors.white.withValues(alpha: 0.18),
         trailingXpIcon: Icon(
           isCompleted ? Icons.check_circle : Icons.flash_on_rounded,

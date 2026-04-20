@@ -14,5 +14,6 @@ class TierUpdateResult {
   });
 
   bool get hasNewUnlocks => newUnlocks.isNotEmpty;
-  TierModel? get newTier => tierChanged ? null : null; // You'd get this from manager
+  TierModel? get newTier =>
+      tierChanged ? null : null; // You'd get this from manager
 }

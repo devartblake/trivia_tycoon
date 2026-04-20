@@ -44,7 +44,7 @@ final segmentLoaderProvider = Provider<SegmentLoader>((ref) {
 });
 
 final spinningControllerProvider =
-ChangeNotifierProvider<EnhancedSpinningController>((ref) {
+    ChangeNotifierProvider<EnhancedSpinningController>((ref) {
   return EnhancedSpinningController(ref);
 });
 
@@ -54,7 +54,7 @@ ChangeNotifierProvider<EnhancedSpinningController>((ref) {
 
 final badgeProvider = FutureProvider<List<GameBadge>>((ref) async {
   final jsonString =
-  await rootBundle.loadString('assets/data/badges_icons.json');
+      await rootBundle.loadString('assets/data/badges_icons.json');
   final List<dynamic> jsonData = json.decode(jsonString);
   return jsonData.map((e) => GameBadge.fromJson(e)).toList();
 });
@@ -64,7 +64,7 @@ final badgeProvider = FutureProvider<List<GameBadge>>((ref) async {
 // ---------------------------------------------------------------------------
 
 final seasonalCompetitionServiceProvider =
-Provider<SeasonalCompetitionService>((ref) {
+    Provider<SeasonalCompetitionService>((ref) {
   final storage = ref.read(generalKeyValueStorageProvider);
   final apiService = ref.read(apiServiceProvider);
   return SeasonalCompetitionService(storage, apiService);
@@ -83,7 +83,7 @@ final timeRemainingProvider = StreamProvider<Duration>((ref) {
 });
 
 final seasonLeaderboardProvider =
-FutureProvider<List<SeasonPlayer>>((ref) async {
+    FutureProvider<List<SeasonPlayer>>((ref) async {
   final apiService = ref.read(apiServiceProvider);
   final seasonService = ref.read(seasonalCompetitionServiceProvider);
   final seasonId = await seasonService.getCurrentSeasonId();
@@ -94,18 +94,21 @@ FutureProvider<List<SeasonPlayer>>((ref) async {
 // Missions
 // ---------------------------------------------------------------------------
 
-final childrenMissionsProvider = StateNotifierProvider<LiveMissionsNotifier,
-    List<Map<String, dynamic>>>((ref) {
+final childrenMissionsProvider =
+    StateNotifierProvider<LiveMissionsNotifier, List<Map<String, dynamic>>>(
+        (ref) {
   return LiveMissionsNotifier(AgeGroup.children);
 });
 
-final adolescenceMissionsProvider = StateNotifierProvider<LiveMissionsNotifier,
-    List<Map<String, dynamic>>>((ref) {
+final adolescenceMissionsProvider =
+    StateNotifierProvider<LiveMissionsNotifier, List<Map<String, dynamic>>>(
+        (ref) {
   return LiveMissionsNotifier(AgeGroup.adolescence);
 });
 
-final adultsMissionsProvider = StateNotifierProvider<LiveMissionsNotifier,
-    List<Map<String, dynamic>>>((ref) {
+final adultsMissionsProvider =
+    StateNotifierProvider<LiveMissionsNotifier, List<Map<String, dynamic>>>(
+        (ref) {
   return LiveMissionsNotifier(AgeGroup.adults);
 });
 
@@ -113,8 +116,9 @@ final currentUserAgeGroupProvider = Provider<AgeGroup>((ref) {
   return AgeGroup.adolescence;
 });
 
-final liveMissionsProvider = StateNotifierProvider<LiveMissionsNotifier,
-    List<Map<String, dynamic>>>((ref) {
+final liveMissionsProvider =
+    StateNotifierProvider<LiveMissionsNotifier, List<Map<String, dynamic>>>(
+        (ref) {
   final ageGroup = ref.watch(currentUserAgeGroupProvider);
   switch (ageGroup) {
     case AgeGroup.children:
@@ -139,18 +143,18 @@ final arcadeMissionServiceProvider = Provider<ArcadeMissionService>((ref) {
 });
 
 final localArcadeLeaderboardServiceProvider =
-Provider<LocalArcadeLeaderboardService>((ref) {
+    Provider<LocalArcadeLeaderboardService>((ref) {
   return ref.read(serviceManagerProvider).localArcadeLeaderboardService;
 });
 
 final localArcadeLeaderboardProvider =
-Provider<LocalArcadeLeaderboardService>((ref) {
+    Provider<LocalArcadeLeaderboardService>((ref) {
   final cache = ref.read(appCacheServiceProvider);
   return LocalArcadeLeaderboardService(cache);
 });
 
 final arcadeMissionClaimServiceProvider =
-Provider<ArcadeMissionClaimService>((ref) {
+    Provider<ArcadeMissionClaimService>((ref) {
   final cache = ref.read(appCacheServiceProvider);
   return ArcadeMissionClaimService(cache);
 });
@@ -181,11 +185,10 @@ final currentTierIdProvider = FutureProvider<int>((ref) async {
 });
 
 final tierProgressionProvider =
-StateNotifierProvider<TierProgressionNotifier, TierProgressionState>(
-        (ref) {
-      final tierManager = ref.read(tierManagerProvider);
-      return TierProgressionNotifier(tierManager, ref);
-    });
+    StateNotifierProvider<TierProgressionNotifier, TierProgressionState>((ref) {
+  final tierManager = ref.read(tierManagerProvider);
+  return TierProgressionNotifier(tierManager, ref);
+});
 
 final nextTierProvider = FutureProvider<TierModel?>((ref) async {
   final currentTierId = await ref.watch(currentTierIdProvider.future);
@@ -268,12 +271,12 @@ class FlowSettingsNotifier extends StateNotifier<FlowSettings> {
 }
 
 final flowSettingsProvider =
-StateNotifierProvider<FlowSettingsNotifier, FlowSettings>((ref) {
+    StateNotifierProvider<FlowSettingsNotifier, FlowSettings>((ref) {
   return FlowSettingsNotifier();
 });
 
 final flowConnectStateProvider =
-ChangeNotifierProvider.autoDispose<FlowConnectStateNotifier>((ref) {
+    ChangeNotifierProvider.autoDispose<FlowConnectStateNotifier>((ref) {
   final settings = ref.watch(flowSettingsProvider);
   return FlowConnectStateNotifier(
     gridSize: settings.gridSize,

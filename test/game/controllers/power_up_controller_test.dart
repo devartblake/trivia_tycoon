@@ -86,8 +86,7 @@ void main() {
       final container = _buildContainer(storage);
       addTearDown(container.dispose);
 
-      final notifier =
-          container.read(equippedPowerUpProvider.notifier);
+      final notifier = container.read(equippedPowerUpProvider.notifier);
       final pu = _makePowerUp();
 
       await notifier.activate(pu);
@@ -234,7 +233,8 @@ void main() {
       expect(await notifier.isExpired(), isFalse);
     });
 
-    test('returns true when timestamp is in the past beyond duration', () async {
+    test('returns true when timestamp is in the past beyond duration',
+        () async {
       final storage = _FakeStorage();
       // Manually seed an old timestamp (1 hour ago) with a 60s duration
       final old =
@@ -247,7 +247,8 @@ void main() {
 
       // Restore the power-up into state
       final notifier = container.read(equippedPowerUpProvider.notifier);
-      await notifier.restoreFromStorage([_makePowerUp(id: 'xp_boost', duration: 60)]);
+      await notifier
+          .restoreFromStorage([_makePowerUp(id: 'xp_boost', duration: 60)]);
 
       // After restore, state should be null (expired) and isExpired returns true
       expect(container.read(equippedPowerUpProvider), isNull);
@@ -292,7 +293,8 @@ void main() {
       addTearDown(container.dispose);
 
       final notifier = container.read(equippedPowerUpProvider.notifier);
-      await notifier.restoreFromStorage([_makePowerUp(id: 'xp_boost', duration: 300)]);
+      await notifier
+          .restoreFromStorage([_makePowerUp(id: 'xp_boost', duration: 300)]);
 
       expect(container.read(equippedPowerUpProvider)?.id, 'xp_boost');
     });
@@ -308,7 +310,8 @@ void main() {
       addTearDown(container.dispose);
 
       final notifier = container.read(equippedPowerUpProvider.notifier);
-      await notifier.restoreFromStorage([_makePowerUp(id: 'xp_boost', duration: 60)]);
+      await notifier
+          .restoreFromStorage([_makePowerUp(id: 'xp_boost', duration: 60)]);
 
       expect(container.read(equippedPowerUpProvider), isNull);
     });

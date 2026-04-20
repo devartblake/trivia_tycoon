@@ -71,8 +71,10 @@ class WsClient {
 
       if (token != null && token.isNotEmpty) {
         headers['Authorization'] = 'Bearer $token';
-        if (uri.scheme.startsWith('ws') && (uri.queryParameters['token'] == null)) {
-          final qp = Map<String, String>.from(uri.queryParameters)..['token'] = token;
+        if (uri.scheme.startsWith('ws') &&
+            (uri.queryParameters['token'] == null)) {
+          final qp = Map<String, String>.from(uri.queryParameters)
+            ..['token'] = token;
           finalUri = uri.replace(queryParameters: qp);
         }
       }
@@ -119,9 +121,11 @@ class WsClient {
     try {
       final map = switch (frame) {
         final String s => jsonDecode(s) as Map<String, dynamic>,
-        final List<int> bytes => jsonDecode(utf8.decode(bytes)) as Map<String, dynamic>,
+        final List<int> bytes =>
+          jsonDecode(utf8.decode(bytes)) as Map<String, dynamic>,
         final Map<String, dynamic> m => m,
-        _ => throw StateError('Unsupported WS frame type: ${frame.runtimeType}'),
+        _ =>
+          throw StateError('Unsupported WS frame type: ${frame.runtimeType}'),
       };
 
       _rawCtrl.add(map);
@@ -143,7 +147,8 @@ class WsClient {
 
   void _startHeartbeat() {
     _heartbeat?.cancel();
-    _heartbeat = Timer.periodic(const Duration(seconds: 15), (_) => _sendPing());
+    _heartbeat =
+        Timer.periodic(const Duration(seconds: 15), (_) => _sendPing());
     _sendPing();
   }
 
@@ -171,7 +176,8 @@ class WsClient {
 
     _attempt += 1;
     if (!_policy.canAttempt(_attempt)) {
-      _emit(ServerNotice(code: 'reconnect_stopped', message: 'Max attempts reached'));
+      _emit(ServerNotice(
+          code: 'reconnect_stopped', message: 'Max attempts reached'));
       return;
     }
 

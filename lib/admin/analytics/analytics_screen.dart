@@ -79,7 +79,8 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF6366F1).withValues(alpha: 0.3),
+                            color:
+                                const Color(0xFF6366F1).withValues(alpha: 0.3),
                             blurRadius: 20,
                             offset: const Offset(0, 10),
                           ),
@@ -158,7 +159,8 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                         children: [
                           Row(
                             children: [
-                              Icon(Icons.filter_list, color: Color(0xFF6366F1), size: 20),
+                              Icon(Icons.filter_list,
+                                  color: Color(0xFF6366F1), size: 20),
                               SizedBox(width: 8),
                               Text(
                                 'Filters',
@@ -205,9 +207,12 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(16),
                         child: MissionAnalyticsWidget(
-                          totalCompleted: data.missions.fold(0, (sum, e) => sum + e.missionsCompleted),
-                          totalSwapped: data.missions.fold(0, (sum, e) => sum + e.missionsSwapped),
-                          xpEarned: data.missions.fold(0, (sum, e) => sum + e.xpEarned),
+                          totalCompleted: data.missions
+                              .fold(0, (sum, e) => sum + e.missionsCompleted),
+                          totalSwapped: data.missions
+                              .fold(0, (sum, e) => sum + e.missionsSwapped),
+                          xpEarned: data.missions
+                              .fold(0, (sum, e) => sum + e.xpEarned),
                         ),
                       ),
                     ),
@@ -267,7 +272,8 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                         children: [
                           const Row(
                             children: [
-                              Icon(Icons.radar, color: Color(0xFF10B981), size: 24),
+                              Icon(Icons.radar,
+                                  color: Color(0xFF10B981), size: 24),
                               SizedBox(width: 12),
                               Text(
                                 'Performance Overview',
@@ -284,15 +290,22 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                             AnimatedSwitcher(
                               duration: const Duration(milliseconds: 300),
                               child: MissionAnalyticsRadarChart(
-                                missionsCompleted: data.missions.map((e) => e.missionsCompleted).toList(),
-                                missionsSwapped: data.missions.map((e) => e.missionsSwapped).toList(),
-                                xpEarned: data.missions.map((e) => e.xpEarned).toList(),
+                                missionsCompleted: data.missions
+                                    .map((e) => e.missionsCompleted)
+                                    .toList(),
+                                missionsSwapped: data.missions
+                                    .map((e) => e.missionsSwapped)
+                                    .toList(),
+                                xpEarned: data.missions
+                                    .map((e) => e.xpEarned)
+                                    .toList(),
                                 labelMode: filters.timeframe,
                                 missions: [],
                               ),
                             )
                           else
-                            const AnalyticsEmptyState(message: "Not enough data for Radar Chart."),
+                            const AnalyticsEmptyState(
+                                message: "Not enough data for Radar Chart."),
                         ],
                       ),
                     ),
@@ -325,7 +338,8 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                         children: [
                           const Row(
                             children: [
-                              Icon(Icons.bar_chart, color: Color(0xFF3B82F6), size: 24),
+                              Icon(Icons.bar_chart,
+                                  color: Color(0xFF3B82F6), size: 24),
                               SizedBox(width: 12),
                               Text(
                                 'Daily Activity',
@@ -344,15 +358,24 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                               child: SizedBox(
                                 height: 300,
                                 child: MissionAnalyticsBarChart(
-                                  days: data.missions.map((e) => "${e.date.month}/${e.date.day}").toList(),
-                                  completedData: data.missions.map((e) => e.missionsCompleted).toList(),
-                                  swappedData: data.missions.map((e) => e.missionsSwapped).toList(),
+                                  days: data.missions
+                                      .map((e) =>
+                                          "${e.date.month}/${e.date.day}")
+                                      .toList(),
+                                  completedData: data.missions
+                                      .map((e) => e.missionsCompleted)
+                                      .toList(),
+                                  swappedData: data.missions
+                                      .map((e) => e.missionsSwapped)
+                                      .toList(),
                                   missions: [],
                                 ),
                               ),
                             )
                           else
-                            const AnalyticsEmptyState(message: "No mission data available for bar chart."),
+                            const AnalyticsEmptyState(
+                                message:
+                                    "No mission data available for bar chart."),
                         ],
                       ),
                     ),
@@ -419,7 +442,8 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                         children: [
                           const Row(
                             children: [
-                              Icon(Icons.people, color: Color(0xFFF59E0B), size: 24),
+                              Icon(Icons.people,
+                                  color: Color(0xFFF59E0B), size: 24),
                               SizedBox(width: 12),
                               Text(
                                 'Engagement Metrics',
@@ -435,7 +459,8 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                           if (data.engagements.isNotEmpty)
                             EngagementAnalyticsChart(entries: data.engagements)
                           else
-                            const AnalyticsEmptyState(message: "No engagement data."),
+                            const AnalyticsEmptyState(
+                                message: "No engagement data."),
                         ],
                       ),
                     ),
@@ -502,7 +527,8 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                         children: [
                           const Row(
                             children: [
-                              Icon(Icons.trending_up, color: Color(0xFFEF4444), size: 24),
+                              Icon(Icons.trending_up,
+                                  color: Color(0xFFEF4444), size: 24),
                               SizedBox(width: 12),
                               Text(
                                 'Retention Metrics',
@@ -518,7 +544,8 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                           if (data.retentions.isNotEmpty)
                             RetentionAnalyticsChart(entries: data.retentions)
                           else
-                            const AnalyticsEmptyState(message: "No retention data."),
+                            const AnalyticsEmptyState(
+                                message: "No retention data."),
                         ],
                       ),
                     ),
@@ -558,7 +585,8 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.error_outline, color: Color(0xFFEF4444), size: 48),
+                  const Icon(Icons.error_outline,
+                      color: Color(0xFFEF4444), size: 48),
                   const SizedBox(height: 16),
                   const Text(
                     'Error Loading Analytics',

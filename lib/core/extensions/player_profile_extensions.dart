@@ -3,7 +3,6 @@ import '../services/settings/player_profile_service.dart';
 /// Extension methods to add missing functionality to PlayerProfileService
 /// without modifying the original service file
 extension PlayerProfileServiceExtensions on PlayerProfileService {
-
   /// Loads user profile data (combination of existing methods)
   /// This provides the missing loadUserProfile() method that was referenced in TODOs
   Future<UserProfile> loadUserProfile() async {
@@ -87,7 +86,8 @@ class UserProfile {
   });
 
   /// Check if this is a default/empty profile
-  bool get isDefaultProfile => playerName == 'Player' && (avatar == null || avatar!.isEmpty);
+  bool get isDefaultProfile =>
+      playerName == 'Player' && (avatar == null || avatar!.isEmpty);
 
   /// Check if user has admin privileges
   bool get isAdmin => userRole == 'admin' || userRoles.contains('admin');

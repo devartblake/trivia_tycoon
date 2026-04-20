@@ -15,7 +15,7 @@ class ConfettiPresets {
       ConfettiShapeType.square,
       ConfettiShapeType.star,
     ],
-    images: [ ConfettiPresetImages.star],
+    images: [ConfettiPresetImages.star],
     useImages: true,
   );
 
@@ -54,7 +54,7 @@ class ConfettiPresets {
     speed: 2.0,
     density: 150,
     shapes: [ConfettiShapeType.square],
-    images:[ConfettiPresetImages.snowFlake ],
+    images: [ConfettiPresetImages.snowFlake],
     useImages: true,
   );
 
@@ -73,20 +73,21 @@ class ConfettiPresets {
   );
 
   static List<ConfettiTheme> get allPresets => [
-    celebration,
-    galaxy,
-    tropical,
-    snowstorm,
-    sunset,
-  ];
+        celebration,
+        galaxy,
+        tropical,
+        snowstorm,
+        sunset,
+      ];
 
   /// Returns a list of preset names.
-  static List<String> get allPresetNames => allPresets.map((t) => t.name).toList();
+  static List<String> get allPresetNames =>
+      allPresets.map((t) => t.name).toList();
 
   /// Returns a preset by name, defaulting to "Celebration" if not found.
   static ConfettiTheme getPresetByName(String name) {
     return allPresets.firstWhere(
-          (theme) => theme.name == name,
+      (theme) => theme.name == name,
       orElse: () => celebration,
     );
   }

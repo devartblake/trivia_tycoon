@@ -59,7 +59,8 @@ class EnhancedSpinPhysics {
     if (!useWeighting) {
       // Simple calculation
       final segmentAngle = anglePerSegment(segmentCount);
-      return ((normalizeAngle(finalAngle) / segmentAngle).floor()) % segmentCount;
+      return ((normalizeAngle(finalAngle) / segmentAngle).floor()) %
+          segmentCount;
     }
 
     // Weighted calculation based on segment probability
@@ -67,7 +68,8 @@ class EnhancedSpinPhysics {
     final segmentAngle = anglePerSegment(segmentCount);
 
     // Add slight randomness for fairness
-    final randomOffset = (math.Random().nextDouble() - 0.5) * segmentAngle * 0.1;
+    final randomOffset =
+        (math.Random().nextDouble() - 0.5) * segmentAngle * 0.1;
     final adjustedAngle = normalizeAngle(normalizedAngle + randomOffset);
 
     return (adjustedAngle / segmentAngle).floor() % segmentCount;
@@ -173,10 +175,10 @@ class EnhancedSpinVelocity {
 
   /// Calculate velocity from gesture with enhanced accuracy
   double getVelocityFromGesture(
-      Offset startPosition,
-      Offset velocity,
-      Duration gestureDuration,
-      ) {
+    Offset startPosition,
+    Offset velocity,
+    Duration gestureDuration,
+  ) {
     if (!enableGestureOptimization) {
       return _basicVelocityCalculation(startPosition, velocity);
     }
@@ -216,10 +218,10 @@ class EnhancedSpinVelocity {
 
   /// Calculate tangential velocity component
   double _calculateTangentialVelocity(
-      Offset position,
-      Offset center,
-      Offset velocity,
-      ) {
+    Offset position,
+    Offset center,
+    Offset velocity,
+  ) {
     // Vector from center to touch point
     final radialVector = position - center;
     final radialLength = radialVector.distance;
@@ -260,7 +262,7 @@ class EnhancedSpinVelocity {
     final isRight = position.dx > centerX;
     final isBottom = position.dy > centerY;
 
-    if (isRight && !isBottom) return const Offset(0.5, 0.5);   // Q1
+    if (isRight && !isBottom) return const Offset(0.5, 0.5); // Q1
     if (!isRight && !isBottom) return const Offset(-0.5, 0.5); // Q2
     if (!isRight && isBottom) return const Offset(-0.5, -0.5); // Q3
     return const Offset(0.5, -0.5); // Q4
@@ -285,13 +287,15 @@ class EnhancedSpinVelocity {
 
   /// Get spin quality based on gesture
   SpinQuality getSpinQuality(
-      Offset startPosition,
-      Offset velocity,
-      Duration duration,
-      ) {
-    final distanceFromCenter = (startPosition - Offset(centerX, centerY)).distance;
+    Offset startPosition,
+    Offset velocity,
+    Duration duration,
+  ) {
+    final distanceFromCenter =
+        (startPosition - Offset(centerX, centerY)).distance;
     final isGoodPosition = distanceFromCenter >= radius * 0.5;
-    final isGoodDuration = duration.inMilliseconds >= 150 && duration.inMilliseconds <= 600;
+    final isGoodDuration =
+        duration.inMilliseconds >= 150 && duration.inMilliseconds <= 600;
     final isGoodVelocity = velocity.distance >= 100;
 
     final score = [isGoodPosition, isGoodDuration, isGoodVelocity]

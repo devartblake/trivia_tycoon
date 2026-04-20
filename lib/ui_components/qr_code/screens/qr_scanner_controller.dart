@@ -21,8 +21,7 @@ class QrScannerController {
 
   bool get isInitialized => _cameraController?.value.isInitialized ?? false;
 
-  bool get isTorchOn =>
-      _cameraController?.value.flashMode == FlashMode.torch;
+  bool get isTorchOn => _cameraController?.value.flashMode == FlashMode.torch;
 
   bool get isPaused {
     final c = _cameraController;
@@ -38,7 +37,7 @@ class QrScannerController {
 
     final cameras = await availableCameras();
     final rearCamera = cameras.firstWhere(
-          (cam) => cam.lensDirection == CameraLensDirection.back,
+      (cam) => cam.lensDirection == CameraLensDirection.back,
       orElse: () => cameras.first,
     );
 

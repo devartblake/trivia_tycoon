@@ -9,7 +9,8 @@ class EncryptionService {
   EncryptionService({required this.fernetService});
 
   /// Initialize with dependencies
-  static Future<EncryptionService> initialize(SecureStorage secureStorage) async {
+  static Future<EncryptionService> initialize(
+      SecureStorage secureStorage) async {
     final fernet = await FernetService.initialize(secureStorage);
     return EncryptionService(fernetService: fernet);
   }
@@ -20,14 +21,18 @@ class EncryptionService {
   String decryptAES(String text) => EncryptionUtils.decryptAES(text);
 
   /// Encrypt/decrypt files
-  Uint8List encryptFile(Uint8List data) => EncryptionUtils.encryptFileBytes(data);
+  Uint8List encryptFile(Uint8List data) =>
+      EncryptionUtils.encryptFileBytes(data);
 
-  Uint8List decryptFile(Uint8List data) => EncryptionUtils.decryptFileBytes(data);
+  Uint8List decryptFile(Uint8List data) =>
+      EncryptionUtils.decryptFileBytes(data);
 
   /// Fernet support
-  Future<String> encryptFernet(String plain) async => await fernetService.encrypt(plain);
+  Future<String> encryptFernet(String plain) async =>
+      await fernetService.encrypt(plain);
 
-  Future<String> decryptFernet(String token) async => await fernetService.decrypt(token);
+  Future<String> decryptFernet(String token) async =>
+      await fernetService.decrypt(token);
 
   /// AES using passphrase-derived key
   String encryptWithPassphrase(String text, String passphrase, String salt) {
@@ -35,7 +40,8 @@ class EncryptionService {
     return EncryptionUtils.encryptAES(text, customKey: key);
   }
 
-  String decryptWithPassphrase(String encryptedText, String passphrase, String salt) {
+  String decryptWithPassphrase(
+      String encryptedText, String passphrase, String salt) {
     final key = EncryptionUtils.deriveKeyFromPassword(passphrase, salt);
     return EncryptionUtils.decryptAES(encryptedText, customKey: key);
   }

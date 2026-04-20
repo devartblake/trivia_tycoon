@@ -38,7 +38,8 @@ class AvatarPackageImage extends StatelessWidget {
         height: height,
         fit: fit,
         errorBuilder: (context, error, stackTrace) {
-          LogManager.debug('[AvatarPackageImage] Error loading file: $imagePath');
+          LogManager.debug(
+              '[AvatarPackageImage] Error loading file: $imagePath');
           LogManager.debug('[AvatarPackageImage] Error: $error');
           return _buildErrorWidget();
         },
@@ -51,7 +52,8 @@ class AvatarPackageImage extends StatelessWidget {
         height: height,
         fit: fit,
         errorBuilder: (context, error, stackTrace) {
-          LogManager.debug('[AvatarPackageImage] Error loading asset: $imagePath');
+          LogManager.debug(
+              '[AvatarPackageImage] Error loading asset: $imagePath');
           LogManager.debug('[AvatarPackageImage] Error: $error');
           return _buildErrorWidget();
         },
@@ -126,12 +128,12 @@ class AvatarPackageGridTile extends StatelessWidget {
           ),
           boxShadow: isSelected
               ? [
-            BoxShadow(
-              color: const Color(0xFF6366F1).withValues(alpha: 0.3),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ]
+                  BoxShadow(
+                    color: const Color(0xFF6366F1).withValues(alpha: 0.3),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
               : null,
         ),
         child: Column(

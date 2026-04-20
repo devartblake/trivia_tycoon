@@ -22,7 +22,8 @@ void main() {
   });
 
   test('normalizeCategoryStats fills category and defaults difficulty', () {
-    final normalized = normalizeCategoryStats({'questionCount': 5}, QuizCategory.science);
+    final normalized =
+        normalizeCategoryStats({'questionCount': 5}, QuizCategory.science);
 
     expect(normalized['category'], 'science');
     expect(normalized['difficulty'], 'mixed');

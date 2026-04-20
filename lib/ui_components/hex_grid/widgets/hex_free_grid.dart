@@ -63,7 +63,8 @@ class HexagonFreeGrid extends StatefulWidget {
     required this.hexSize,
     this.spacing = 0,
     this.orientation = HexOrientation.pointy,
-  }) : assert(!(coords != null && items != null), 'Provide either coords or items.');
+  }) : assert(!(coords != null && items != null),
+            'Provide either coords or items.');
 
   @override
   State<HexagonFreeGrid> createState() => _HexagonFreeGridState();
@@ -146,10 +147,14 @@ class _HexagonFreeGridState extends State<HexagonFreeGrid>
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final coordsUsable = widget.coords != null && (widget.coords!.isNotEmpty || widget.items == null);
-        final itemsUsable = widget.items != null && (widget.items!.isNotEmpty || widget.coords == null);
+        final coordsUsable = widget.coords != null &&
+            (widget.coords!.isNotEmpty || widget.items == null);
+        final itemsUsable = widget.items != null &&
+            (widget.items!.isNotEmpty || widget.coords == null);
 
-        final useCoords = coordsUsable && (widget.coords!.isNotEmpty || (widget.items == null || widget.items!.isEmpty));
+        final useCoords = coordsUsable &&
+            (widget.coords!.isNotEmpty ||
+                (widget.items == null || widget.items!.isEmpty));
         final useItems = !useCoords && itemsUsable;
 
         if (!useCoords && !useItems) return const SizedBox.shrink();
@@ -161,13 +166,17 @@ class _HexagonFreeGridState extends State<HexagonFreeGrid>
           return const SizedBox.shrink();
         }
 
-        final baseTileSize = HexMetrics.tileSize(widget.hexSize, widget.orientation);
+        final baseTileSize =
+            HexMetrics.tileSize(widget.hexSize, widget.orientation);
 
         final List<_Placement> placements = [];
         if (useCoords) {
           for (final c in widget.coords!) {
             final center = HexMetrics.axialToPixel(
-              c.q, c.r, widget.hexSize + widget.spacing, widget.orientation,
+              c.q,
+              c.r,
+              widget.hexSize + widget.spacing,
+              widget.orientation,
             );
             placements.add(_Placement.coord(c, center));
           }
@@ -198,17 +207,26 @@ class _HexagonFreeGridState extends State<HexagonFreeGrid>
           } else {
             final item = p.item!;
             final parentRadius = item.sizeOverride ?? widget.hexSize;
-            final parentSize = HexMetrics.tileSize(parentRadius, widget.orientation);
-            includeRect(Rect.fromCenter(center: p.center, width: parentSize.width, height: parentSize.height));
+            final parentSize =
+                HexMetrics.tileSize(parentRadius, widget.orientation);
+            includeRect(Rect.fromCenter(
+                center: p.center,
+                width: parentSize.width,
+                height: parentSize.height));
 
             // Include expanded sub-nodes in bounds
             if (item.subItems.isNotEmpty) {
               for (final sub in item.subItems) {
-                final offset = _polarOffset(sub.angleDeg, parentRadius * sub.radiusFactor);
+                final offset =
+                    _polarOffset(sub.angleDeg, parentRadius * sub.radiusFactor);
                 final subCenter = p.center + offset;
                 final subRadius = parentRadius * sub.scale;
-                final subSize = HexMetrics.tileSize(subRadius, widget.orientation);
-                includeRect(Rect.fromCenter(center: subCenter, width: subSize.width, height: subSize.height));
+                final subSize =
+                    HexMetrics.tileSize(subRadius, widget.orientation);
+                includeRect(Rect.fromCenter(
+                    center: subCenter,
+                    width: subSize.width,
+                    height: subSize.height));
               }
             }
           }
@@ -289,12 +307,14 @@ class _HexagonFreeGridState extends State<HexagonFreeGrid>
     // Wrap parent with interaction if it has sub-items
     final Widget interactiveParent = hasSubItems
         ? MouseRegion(
-      onEnter: widget.expandOnHover ? (_) => _toggleExpansion(item.id) : null,
-      child: GestureDetector(
-        onTap: widget.expandOnTap ? () => _toggleExpansion(item.id) : null,
-        child: parentWidget,
-      ),
-    )
+            onEnter:
+                widget.expandOnHover ? (_) => _toggleExpansion(item.id) : null,
+            child: GestureDetector(
+              onTap:
+                  widget.expandOnTap ? () => _toggleExpansion(item.id) : null,
+              child: parentWidget,
+            ),
+          )
         : parentWidget;
 
     results.add(Positioned(
@@ -351,13 +371,15 @@ class _HexagonFreeGridState extends State<HexagonFreeGrid>
       builder: (context, child) {
         // Calculate staggered animation values
         final delay = index * 0.1;
-        final adjustedProgress = ((controller.value - delay) / (1.0 - delay)).clamp(0.0, 1.0);
+        final adjustedProgress =
+            ((controller.value - delay) / (1.0 - delay)).clamp(0.0, 1.0);
 
         // Apply easing curve to the adjusted progress
         final easedProgress = widget.animationCurve.transform(adjustedProgress);
 
         // Calculate position with animation
-        final animatedRadius = parentRadius * subItem.radiusFactor * easedProgress;
+        final animatedRadius =
+            parentRadius * subItem.radiusFactor * easedProgress;
         final delta = _polarOffset(subItem.angleDeg, animatedRadius);
         final subCenter = parentCenter + delta;
 
@@ -369,7 +391,9 @@ class _HexagonFreeGridState extends State<HexagonFreeGrid>
 
         final Widget subBg = (widget.buildSubItem != null)
             ? widget.buildSubItem!(item.id, subItem.id)
-            : (widget.buildItem != null ? widget.buildItem!(subItem.id) : const SizedBox.shrink());
+            : (widget.buildItem != null
+                ? widget.buildItem!(subItem.id)
+                : const SizedBox.shrink());
         final Widget? subFg = widget.buildItemChild?.call(subItem.id);
 
         return Positioned(
@@ -400,7 +424,8 @@ class _HexagonFreeGridState extends State<HexagonFreeGrid>
     required Offset parentCenter,
     required double parentRadius,
   }) {
-    final delta = _polarOffset(subItem.angleDeg, parentRadius * subItem.radiusFactor);
+    final delta =
+        _polarOffset(subItem.angleDeg, parentRadius * subItem.radiusFactor);
     final subCenter = parentCenter + delta;
 
     final subRadius = parentRadius * subItem.scale;
@@ -411,7 +436,9 @@ class _HexagonFreeGridState extends State<HexagonFreeGrid>
 
     final Widget subBg = (widget.buildSubItem != null)
         ? widget.buildSubItem!(item.id, subItem.id)
-        : (widget.buildItem != null ? widget.buildItem!(subItem.id) : const SizedBox.shrink());
+        : (widget.buildItem != null
+            ? widget.buildItem!(subItem.id)
+            : const SizedBox.shrink());
     final Widget? subFg = widget.buildItemChild?.call(subItem.id);
 
     return Positioned(

@@ -50,7 +50,9 @@ List<QuestionValidationIssue> parseQuestionValidationIssues(dynamic value) {
       return QuestionValidationIssue(
         field: map['field']?.toString(),
         code: map['code']?.toString(),
-        message: map['message']?.toString() ?? map['error']?.toString() ?? issue.toString(),
+        message: map['message']?.toString() ??
+            map['error']?.toString() ??
+            issue.toString(),
       );
     }
 
@@ -58,10 +60,12 @@ List<QuestionValidationIssue> parseQuestionValidationIssues(dynamic value) {
   }).toList();
 }
 
-QuestionValidationSummary summarizeValidationIssues(List<QuestionValidationIssue> issues) {
+QuestionValidationSummary summarizeValidationIssues(
+    List<QuestionValidationIssue> issues) {
   return QuestionValidationSummary(
     total: issues.length,
     duplicateLike: issues.where((i) => i.isDuplicateLike).length,
-    fieldScoped: issues.where((i) => i.field != null && i.field!.isNotEmpty).length,
+    fieldScoped:
+        issues.where((i) => i.field != null && i.field!.isNotEmpty).length,
   );
 }

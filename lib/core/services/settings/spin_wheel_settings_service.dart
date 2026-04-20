@@ -19,7 +19,9 @@ class SpinWheelSettingsService {
   Future<DateTime> getJackpotTime() async {
     final box = await Hive.openBox(_boxName);
     final raw = box.get(_lastJackpotWinKey);
-    return raw != null ? DateTime.parse(raw) : DateTime.fromMillisecondsSinceEpoch(0);
+    return raw != null
+        ? DateTime.parse(raw)
+        : DateTime.fromMillisecondsSinceEpoch(0);
   }
 
   /// Saves the current win streak.

@@ -3,14 +3,16 @@ import '../../core/services/settings/app_settings.dart';
 import '../../ui_components/qr_code/models/qr_settings_model.dart';
 
 class QrSettingsNotifier extends StateNotifier<QrSettingsModel> {
-  QrSettingsNotifier() : super(QrSettingsModel(scanLimit: 50, autoLaunch: false)) {
+  QrSettingsNotifier()
+      : super(QrSettingsModel(scanLimit: 50, autoLaunch: false)) {
     _loadSettings();
   }
 
   Future<void> _loadSettings() async {
     final scanLimit = await AppSettings.getQrScanHistoryLimit();
     final autoLaunchEnabled = await AppSettings.getQrAutoLaunchEnabled();
-    state = QrSettingsModel(scanLimit: scanLimit, autoLaunch: autoLaunchEnabled);
+    state =
+        QrSettingsModel(scanLimit: scanLimit, autoLaunch: autoLaunchEnabled);
   }
 
   Future<void> updateScanLimit(int limit) async {

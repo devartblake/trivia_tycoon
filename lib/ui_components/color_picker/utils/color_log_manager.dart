@@ -16,7 +16,8 @@ class ColorLogManager {
   static DateTime? _sessionStart;
 
   /// Log color selection with structured data
-  static void logColorSelection(String hexColor, {
+  static void logColorSelection(
+    String hexColor, {
     String? source,
     Map<String, dynamic>? metadata,
   }) {
@@ -58,7 +59,6 @@ class ColorLogManager {
         level: LogLevel.info,
         source: "ColorPicker",
       );
-
     } catch (e) {
       LogManager.log(
         "Error logging color selection: $e",
@@ -69,7 +69,8 @@ class ColorLogManager {
   }
 
   /// Log color picker events
-  static void logEvent(ColorLogEventType type, {
+  static void logEvent(
+    ColorLogEventType type, {
     String? color,
     String? description,
     Map<String, dynamic>? data,
@@ -90,7 +91,6 @@ class ColorLogManager {
       while (_logEntries.length > _maxLogEntries) {
         _logEntries.removeFirst();
       }
-
     } catch (e) {
       debugPrint('Error logging color picker event: $e');
     }
@@ -132,19 +132,23 @@ class ColorLogManager {
   }) async {
     try {
       // Filter logs based on criteria
-      final filteredLogs = _logEntries.where((entry) {
-        if (startDate != null && entry.timestamp.isBefore(startDate)) {
-          return false;
-        }
-        if (endDate != null && entry.timestamp.isAfter(endDate)) {
-          return false;
-        }
-        if (eventTypes != null && entry.eventType != null &&
-            !eventTypes.contains(entry.eventType)) {
-          return false;
-        }
-        return true;
-      }).take(_maxExportEntries).toList();
+      final filteredLogs = _logEntries
+          .where((entry) {
+            if (startDate != null && entry.timestamp.isBefore(startDate)) {
+              return false;
+            }
+            if (endDate != null && entry.timestamp.isAfter(endDate)) {
+              return false;
+            }
+            if (eventTypes != null &&
+                entry.eventType != null &&
+                !eventTypes.contains(entry.eventType)) {
+              return false;
+            }
+            return true;
+          })
+          .take(_maxExportEntries)
+          .toList();
 
       // Generate filename with timestamp
       final timestamp = DateTime.now().toIso8601String().replaceAll(':', '-');
@@ -232,9 +236,9 @@ class ColorLogManager {
       ];
 
       // Escape commas and quotes
-      final escapedRow = row.map((field) =>
-      '"${field.toString().replaceAll('"', '""')}"'
-      ).join(',');
+      final escapedRow = row
+          .map((field) => '"${field.toString().replaceAll('"', '""')}"')
+          .join(',');
 
       buffer.writeln(escapedRow);
     }
@@ -255,7 +259,8 @@ class ColorLogManager {
 
     // Log entries
     for (final entry in logs) {
-      buffer.writeln('[${entry.timestamp}] ${entry.eventType?.name.toUpperCase() ?? 'COLOR_SELECTION'}');
+      buffer.writeln(
+          '[${entry.timestamp}] ${entry.eventType?.name.toUpperCase() ?? 'COLOR_SELECTION'}');
       if (entry.hexColor != null) {
         buffer.writeln('  Color: ${entry.hexColor}');
       }
@@ -291,11 +296,17 @@ class ColorLogManager {
     final sorted = _colorFrequency.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
 
-    return sorted.take(count).map((entry) => {
-      'color': entry.key,
-      'count': entry.value,
-      'percentage': (_totalSelections > 0 ? (entry.value / _totalSelections * 100) : 0).toStringAsFixed(1),
-    }).toList();
+    return sorted
+        .take(count)
+        .map((entry) => {
+              'color': entry.key,
+              'count': entry.value,
+              'percentage': (_totalSelections > 0
+                      ? (entry.value / _totalSelections * 100)
+                      : 0)
+                  .toStringAsFixed(1),
+            })
+        .toList();
   }
 
   /// Calculate average selections per minute
@@ -323,9 +334,10 @@ class ColorLogManager {
 
   /// Get logs for a specific time range
   static List<ColorLogEntry> getLogsInRange(DateTime start, DateTime end) {
-    return _logEntries.where((entry) =>
-    entry.timestamp.isAfter(start) && entry.timestamp.isBefore(end)
-    ).toList();
+    return _logEntries
+        .where((entry) =>
+            entry.timestamp.isAfter(start) && entry.timestamp.isBefore(end))
+        .toList();
   }
 }
 

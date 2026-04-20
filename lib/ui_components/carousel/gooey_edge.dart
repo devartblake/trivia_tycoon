@@ -94,7 +94,8 @@ class GooeyEdge extends ChangeNotifier {
       pt.velX -= pt.x * edgeTension * t;
       pt.velX += (1.0 - pt.x) * farEdgeTension * t;
       if (touchOffset != null) {
-        double ratio = max(0.0, 1.0 - (pt.y - touchOffset!.dy).abs() / maxTouchDistance);
+        double ratio =
+            max(0.0, 1.0 - (pt.y - touchOffset!.dy).abs() / maxTouchDistance);
         pt.velX += (touchOffset!.dx - pt.x) * touchTension * ratio * t;
       }
       if (i > 0) {

@@ -199,9 +199,12 @@ class _StickerPacksScreenState extends State<StickerPacksScreen> {
                             Expanded(
                               child: Text(
                                 pack.name,
-                                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                               ),
                             ),
                             if (pack.isPremium)
@@ -233,9 +236,12 @@ class _StickerPacksScreenState extends State<StickerPacksScreen> {
                         ),
                         Text(
                           pack.description,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
                         ),
                         const SizedBox(height: 4),
                         Text(
@@ -260,7 +266,8 @@ class _StickerPacksScreenState extends State<StickerPacksScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Center(
-                      child: Text(sticker, style: const TextStyle(fontSize: 20)),
+                      child:
+                          Text(sticker, style: const TextStyle(fontSize: 20)),
                     ),
                   );
                 }).toList(),
@@ -272,20 +279,23 @@ class _StickerPacksScreenState extends State<StickerPacksScreen> {
                   if (!pack.isOwned)
                     Row(
                       children: [
-                        const Icon(Icons.monetization_on, size: 20, color: Colors.amber),
+                        const Icon(Icons.monetization_on,
+                            size: 20, color: Colors.amber),
                         const SizedBox(width: 4),
                         Text(
                           '${pack.price} Coins',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.amber.shade700,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.amber.shade700,
+                                  ),
                         ),
                       ],
                     )
                   else
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
                         color: Colors.green.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(16),
@@ -293,7 +303,8 @@ class _StickerPacksScreenState extends State<StickerPacksScreen> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: const [
-                          Icon(Icons.check_circle, size: 16, color: Colors.green),
+                          Icon(Icons.check_circle,
+                              size: 16, color: Colors.green),
                           SizedBox(width: 4),
                           Text(
                             'Owned',
@@ -338,15 +349,21 @@ class _StickerPacksScreenState extends State<StickerPacksScreen> {
                       children: [
                         Text(
                           pack.name,
-                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall
+                              ?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                         Text(
                           pack.description,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
                         ),
                       ],
                     ),
@@ -463,7 +480,8 @@ class _StickerPacksScreenState extends State<StickerPacksScreen> {
                       style: const TextStyle(fontSize: 32),
                     ),
                     title: Text(ownedPacks[index].name),
-                    subtitle: Text('${ownedPacks[index].stickers.length} stickers'),
+                    subtitle:
+                        Text('${ownedPacks[index].stickers.length} stickers'),
                     onTap: () {
                       Navigator.pop(context);
                       _showPackPreview(ownedPacks[index]);

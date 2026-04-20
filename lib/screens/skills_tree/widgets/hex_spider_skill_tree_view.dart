@@ -8,7 +8,6 @@ import '../../../game/providers/skill_tree_provider.dart';
 import '../../../ui_components/hex_grid/hex_interactive.dart';
 import '../widgets/skill_node_widget.dart';
 
-
 class HexSpiderSkillTreeView extends ConsumerWidget {
   const HexSpiderSkillTreeView({super.key});
 
@@ -20,7 +19,9 @@ class HexSpiderSkillTreeView extends ConsumerWidget {
     // axial positions per node (tiered rows centered on q-axis)
     final Map<String, Coordinates> hexOf = {};
     final tiers = <int, List<SkillNode>>{};
-    for (final n in state.graph.nodes) { (tiers[n.tier] ??= []).add(n); }
+    for (final n in state.graph.nodes) {
+      (tiers[n.tier] ??= []).add(n);
+    }
     tiers.forEach((tier, list) {
       list.sort((a, b) => a.title.compareTo(b.title));
       final offset = -((list.length - 1) / 2.0).floor();
@@ -57,8 +58,10 @@ class HexSpiderSkillTreeView extends ConsumerWidget {
             spacing: hexSpacing,
             orientation: HexOrientation.pointy,
             buildChild: (axial) {
-              final entry = hexOf.entries.firstWhere((e) => e.value == axial, orElse: () => const MapEntry('', Coordinates.axial(0,0)));
-              final id = entry.key; if (id.isEmpty) return const SizedBox.shrink();
+              final entry = hexOf.entries.firstWhere((e) => e.value == axial,
+                  orElse: () => const MapEntry('', Coordinates.axial(0, 0)));
+              final id = entry.key;
+              if (id.isEmpty) return const SizedBox.shrink();
               final node = state.graph.byId[id]!;
               final cooldownService = ref.read(skillCooldownServiceProvider);
 
@@ -70,7 +73,9 @@ class HexSpiderSkillTreeView extends ConsumerWidget {
                   isUnlocked: node.unlocked,
                   isSelected: state.selectedId == node.id,
                   radius: hexSize, // <- use your hex radius, e.g. 52.0
-                  categoryColor: SkillTreeCategoryColors.categoryColors[node.category] ?? Colors.grey,
+                  categoryColor:
+                      SkillTreeCategoryColors.categoryColors[node.category] ??
+                          Colors.grey,
                   cooldownService: cooldownService,
                   onTap: () {
                     // single tap: select or trigger UI focus/tooltip

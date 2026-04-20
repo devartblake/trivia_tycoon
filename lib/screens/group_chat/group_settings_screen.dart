@@ -17,7 +17,8 @@ class GroupSettingsScreen extends StatefulWidget {
   State<GroupSettingsScreen> createState() => _GroupSettingsScreenState();
 }
 
-class _GroupSettingsScreenState extends State<GroupSettingsScreen> with SingleTickerProviderStateMixin {
+class _GroupSettingsScreenState extends State<GroupSettingsScreen>
+    with SingleTickerProviderStateMixin {
   final GroupChatService _groupService = GroupChatService();
   late TabController _tabController;
 
@@ -88,7 +89,8 @@ class _GroupSettingsScreenState extends State<GroupSettingsScreen> with SingleTi
     );
   }
 
-  PreferredSizeWidget _buildAppBar(BuildContext context, GroupChat group, bool canManage) {
+  PreferredSizeWidget _buildAppBar(
+      BuildContext context, GroupChat group, bool canManage) {
     return AppBar(
       title: Text(_isEditing ? 'Edit Group' : 'Group Settings'),
       actions: [
@@ -107,10 +109,10 @@ class _GroupSettingsScreenState extends State<GroupSettingsScreen> with SingleTi
             onPressed: _isSaving ? null : () => _saveChanges(group),
             child: _isSaving
                 ? const SizedBox(
-              width: 16,
-              height: 16,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            )
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
                 : const Text('Save'),
           ),
         ],
@@ -139,7 +141,8 @@ class _GroupSettingsScreenState extends State<GroupSettingsScreen> with SingleTi
     );
   }
 
-  Widget _buildGeneralTab(BuildContext context, GroupChat group, bool canManage) {
+  Widget _buildGeneralTab(
+      BuildContext context, GroupChat group, bool canManage) {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
@@ -154,7 +157,8 @@ class _GroupSettingsScreenState extends State<GroupSettingsScreen> with SingleTi
     );
   }
 
-  Widget _buildGroupAvatar(BuildContext context, GroupChat group, bool canManage) {
+  Widget _buildGroupAvatar(
+      BuildContext context, GroupChat group, bool canManage) {
     return Center(
       child: Stack(
         children: [
@@ -166,17 +170,17 @@ class _GroupSettingsScreenState extends State<GroupSettingsScreen> with SingleTi
               color: Theme.of(context).colorScheme.primaryContainer,
               image: group.avatar != null
                   ? DecorationImage(
-                image: NetworkImage(group.avatar!),
-                fit: BoxFit.cover,
-              )
+                      image: NetworkImage(group.avatar!),
+                      fit: BoxFit.cover,
+                    )
                   : null,
             ),
             child: group.avatar == null
                 ? Icon(
-              Icons.group,
-              size: 60,
-              color: Theme.of(context).colorScheme.onPrimaryContainer,
-            )
+                    Icons.group,
+                    size: 60,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  )
                 : null,
           ),
           if (canManage && _isEditing)
@@ -208,7 +212,8 @@ class _GroupSettingsScreenState extends State<GroupSettingsScreen> with SingleTi
     );
   }
 
-  Widget _buildInfoSection(BuildContext context, GroupChat group, bool canManage) {
+  Widget _buildInfoSection(
+      BuildContext context, GroupChat group, bool canManage) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -218,8 +223,8 @@ class _GroupSettingsScreenState extends State<GroupSettingsScreen> with SingleTi
             Text(
               'Group Information',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             const SizedBox(height: 16),
             TextField(
@@ -281,8 +286,8 @@ class _GroupSettingsScreenState extends State<GroupSettingsScreen> with SingleTi
             Text(
               'Group Statistics',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             const SizedBox(height: 16),
             Row(
@@ -315,12 +320,12 @@ class _GroupSettingsScreenState extends State<GroupSettingsScreen> with SingleTi
   }
 
   Widget _buildStatItem(
-      BuildContext context,
-      IconData icon,
-      String value,
-      String label, {
-        Color? color,
-      }) {
+    BuildContext context,
+    IconData icon,
+    String value,
+    String label, {
+    Color? color,
+  }) {
     return Expanded(
       child: Column(
         children: [
@@ -329,15 +334,15 @@ class _GroupSettingsScreenState extends State<GroupSettingsScreen> with SingleTi
           Text(
             value,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                ),
           ),
           Text(
             label,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
           ),
         ],
       ),
@@ -400,7 +405,8 @@ class _GroupSettingsScreenState extends State<GroupSettingsScreen> with SingleTi
     );
   }
 
-  Widget _buildMembersTab(BuildContext context, GroupChat group, bool canManage) {
+  Widget _buildMembersTab(
+      BuildContext context, GroupChat group, bool canManage) {
     return GroupMemberList(
       group: group,
       currentUserId: widget.currentUserId,
@@ -408,11 +414,14 @@ class _GroupSettingsScreenState extends State<GroupSettingsScreen> with SingleTi
         // Show member profile
       },
       onKickMember: canManage ? (member) => _kickMember(group, member) : null,
-      onChangeRole: canManage ? (member, newRole) => _changeRole(group, member, newRole) : null,
+      onChangeRole: canManage
+          ? (member, newRole) => _changeRole(group, member, newRole)
+          : null,
     );
   }
 
-  Widget _buildPrivacyTab(BuildContext context, GroupChat group, bool canManage) {
+  Widget _buildPrivacyTab(
+      BuildContext context, GroupChat group, bool canManage) {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
@@ -573,8 +582,8 @@ class _GroupSettingsScreenState extends State<GroupSettingsScreen> with SingleTi
               child: Text(
                 inviteLink,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontFamily: 'monospace',
-                ),
+                      fontFamily: 'monospace',
+                    ),
               ),
             ),
           ],
@@ -695,7 +704,8 @@ class _GroupSettingsScreenState extends State<GroupSettingsScreen> with SingleTi
     }
   }
 
-  Future<void> _changeRole(GroupChat group, GroupMember member, GroupRole newRole) async {
+  Future<void> _changeRole(
+      GroupChat group, GroupMember member, GroupRole newRole) async {
     final success = await _groupService.updateMemberRole(
       widget.groupId,
       member.userId,

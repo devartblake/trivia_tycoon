@@ -78,10 +78,11 @@ class _LiveCountdownTimerState extends State<ChallengeCountdownTimer>
 
     return Text(
       text,
-      style: widget.style ?? const TextStyle(
-        color: Color(0xFF212529),
-        fontWeight: FontWeight.w600,
-      ),
+      style: widget.style ??
+          const TextStyle(
+            color: Color(0xFF212529),
+            fontWeight: FontWeight.w600,
+          ),
     );
   }
 }

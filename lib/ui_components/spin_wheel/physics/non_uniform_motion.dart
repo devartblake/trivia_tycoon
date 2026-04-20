@@ -43,7 +43,8 @@ class EnhancedNonUniformMotion {
     if (!enableRealism) {
       // Simple duration mapping for performance
       final normalizedVelocity = velocity.clamp(1.0, 20.0);
-      return (normalizedVelocity / 20.0) * (maxDuration - minDuration) + minDuration;
+      return (normalizedVelocity / 20.0) * (maxDuration - minDuration) +
+          minDuration;
     }
 
     // Realistic physics: t = -v/a (when final velocity = 0)
@@ -87,7 +88,8 @@ class EnhancedNonUniformMotion {
   }
 
   /// Calculate work done by friction
-  double workDoneByFriction(double initialVelocity, double finalVelocity, {double mass = 1.0}) {
+  double workDoneByFriction(double initialVelocity, double finalVelocity,
+      {double mass = 1.0}) {
     final initialKE = kineticEnergy(initialVelocity, mass: mass);
     final finalKE = kineticEnergy(finalVelocity, mass: mass);
     return initialKE - finalKE;
@@ -109,7 +111,8 @@ class EnhancedNonUniformMotion {
 
     if (addRandomness && enableRealism) {
       // Add slight randomness for fairness (±5% of segment angle)
-      final randomOffset = (math.Random().nextDouble() - 0.5) * segmentAngle * 0.1;
+      final randomOffset =
+          (math.Random().nextDouble() - 0.5) * segmentAngle * 0.1;
       final adjustedAngle = normalizeAngle(finalAngle + randomOffset);
       baseSegment = (adjustedAngle / segmentAngle).floor();
     }
@@ -249,7 +252,8 @@ class MotionAnalysis {
   /// Get average velocity
   double get averageVelocity {
     if (samples.isEmpty) return 0.0;
-    final totalVelocity = samples.map((s) => s.velocity).reduce((a, b) => a + b);
+    final totalVelocity =
+        samples.map((s) => s.velocity).reduce((a, b) => a + b);
     return totalVelocity / samples.length;
   }
 
@@ -309,7 +313,8 @@ class PhysicsUtils {
   }
 
   /// Calculate angular acceleration from linear acceleration
-  static double linearToAngularAcceleration(double linearAcceleration, double radius) {
+  static double linearToAngularAcceleration(
+      double linearAcceleration, double radius) {
     return linearAcceleration / radius;
   }
 
@@ -324,7 +329,8 @@ class PhysicsUtils {
   }
 
   /// Calculate angular momentum
-  static double angularMomentum(double momentOfInertia, double angularVelocity) {
+  static double angularMomentum(
+      double momentOfInertia, double angularVelocity) {
     return momentOfInertia * angularVelocity;
   }
 
@@ -348,8 +354,11 @@ class PhysicsUtils {
   }
 
   /// Calculate energy loss due to friction
-  static double energyLoss(double initialVelocity, double finalVelocity, double mass) {
-    return 0.5 * mass * (initialVelocity * initialVelocity - finalVelocity * finalVelocity);
+  static double energyLoss(
+      double initialVelocity, double finalVelocity, double mass) {
+    return 0.5 *
+        mass *
+        (initialVelocity * initialVelocity - finalVelocity * finalVelocity);
   }
 
   /// Smooth step function for animations

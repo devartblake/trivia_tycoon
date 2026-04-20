@@ -41,5 +41,6 @@ abstract class MultiplayerRepository {
 
   /// Submits the player's answer for the current question.
   /// Expect [AnswerAccepted]/[AnswerRejected] events to follow.
-  Future<void> submitAnswer(String matchId, String questionId, String answerId) async {}
+  Future<void> submitAnswer(
+      String matchId, String questionId, String answerId) async {}
 }

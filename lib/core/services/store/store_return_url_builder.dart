@@ -80,10 +80,12 @@ class StoreReturnUrlBuilder {
       ...Uri.parse(path).pathSegments.where((segment) => segment.isNotEmpty),
     ];
 
-    return uri.replace(
-      pathSegments: segments,
-      queryParameters: queryParameters,
-      fragment: '',
-    ).toString();
+    return uri
+        .replace(
+          pathSegments: segments,
+          queryParameters: queryParameters,
+          fragment: '',
+        )
+        .toString();
   }
 }

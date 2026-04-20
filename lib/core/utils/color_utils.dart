@@ -32,7 +32,8 @@ class ColorUtils {
     return hslc.withLightness((hslc.lightness + amt).clamp(0.0, 1.0)).toColor();
   }
 
-  static Color parseHex(String value) => Color(int.parse(value.substring(1, 7), radix: 16) + 0xFF000000);
+  static Color parseHex(String value) =>
+      Color(int.parse(value.substring(1, 7), radix: 16) + 0xFF000000);
 
   static Color blend(Color dst, Color src, double opacity) {
     return Color.fromARGB(
@@ -46,12 +47,13 @@ class ColorUtils {
 
 MaterialColor getMaterialColor(Color color) {
   return Colors.primaries.firstWhere(
-        (c) => c.r == color.r && c.g == color.g && c.b == color.b,
+    (c) => c.r == color.r && c.g == color.g && c.b == color.b,
     orElse: () => MaterialColor(
       color.value,
       Map.fromEntries(
         shades.entries.map(
-              (entry) => MapEntry(entry.value, Color.fromRGBO(color.red, color.green, color.blue, 1)),
+          (entry) => MapEntry(entry.value,
+              Color.fromRGBO(color.red, color.green, color.blue, 1)),
         ),
       ),
     ),
@@ -71,17 +73,19 @@ Brightness estimateBrightnessForColor(Color color) {
 
 /// Gets the dark shades version of the given color.
 List<Color> getDarkShades(
-    Color color, [
-      ColorShade minShade = ColorShade.fifthLightest,
-    ]) {
-  final materialColor = color is MaterialColor ? color : getMaterialColor(color);
+  Color color, [
+  ColorShade minShade = ColorShade.fifthLightest,
+]) {
+  final materialColor =
+      color is MaterialColor ? color : getMaterialColor(color);
   final List<Color> darkShades = [];
 
   for (final shade in shades.values) {
     if (shade < shades[minShade]!) continue;
 
     final Color? colorShade = materialColor[shade];
-    if (colorShade != null && estimateBrightnessForColor(colorShade) == Brightness.dark) {
+    if (colorShade != null &&
+        estimateBrightnessForColor(colorShade) == Brightness.dark) {
       darkShades.add(colorShade);
     }
   }

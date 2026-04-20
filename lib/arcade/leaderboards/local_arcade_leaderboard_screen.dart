@@ -219,13 +219,13 @@ class _LocalArcadeLeaderboardScreenState
         gradient: LinearGradient(
           colors: claimed
               ? [
-            const Color(0xFF1F1F28),
-            const Color(0xFF2A2A35),
-          ]
+                  const Color(0xFF1F1F28),
+                  const Color(0xFF2A2A35),
+                ]
               : [
-            const Color(0xFFFBBF24).withValues(alpha: 0.2),
-            const Color(0xFFF59E0B).withValues(alpha: 0.15),
-          ],
+                  const Color(0xFFFBBF24).withValues(alpha: 0.2),
+                  const Color(0xFFF59E0B).withValues(alpha: 0.15),
+                ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -275,7 +275,9 @@ class _LocalArcadeLeaderboardScreenState
                   ),
                   child: Icon(
                     Icons.card_giftcard_rounded,
-                    color: claimed ? Colors.white.withValues(alpha: 0.4) : const Color(0xFFFBBF24),
+                    color: claimed
+                        ? Colors.white.withValues(alpha: 0.4)
+                        : const Color(0xFFFBBF24),
                     size: 32,
                   ),
                 ),
@@ -338,32 +340,35 @@ class _LocalArcadeLeaderboardScreenState
                       onPressed: claimed
                           ? null
                           : () {
-                        final didClaim = bonus.tryClaimToday();
-                        if (!didClaim) return;
+                              final didClaim = bonus.tryClaimToday();
+                              if (!didClaim) return;
 
-                        incrementCoins(ref, 250);
-                        incrementGems(ref, 2);
+                              incrementCoins(ref, 250);
+                              incrementGems(ref, 2);
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: const Text(
-                              'Daily bonus claimed: +250 coins, +2 gems',
-                            ),
-                            backgroundColor: const Color(0xFF10B981),
-                            behavior: SnackBarBehavior.floating,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                        );
-                      },
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: const Text(
+                                    'Daily bonus claimed: +250 coins, +2 gems',
+                                  ),
+                                  backgroundColor: const Color(0xFF10B981),
+                                  behavior: SnackBarBehavior.floating,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                              );
+                            },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: claimed
                             ? Colors.white.withValues(alpha: 0.1)
                             : const Color(0xFFFBBF24),
-                        foregroundColor: claimed ? Colors.white54 : const Color(0xFF0A0A0F),
+                        foregroundColor:
+                            claimed ? Colors.white54 : const Color(0xFF0A0A0F),
                         elevation: claimed ? 0 : 4,
-                        shadowColor: claimed ? Colors.transparent : const Color(0xFFFBBF24).withValues(alpha: 0.5),
+                        shadowColor: claimed
+                            ? Colors.transparent
+                            : const Color(0xFFFBBF24).withValues(alpha: 0.5),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),
                         ),
@@ -540,11 +545,11 @@ class _LocalArcadeLeaderboardScreenState
   }
 
   Widget _buildPodiumCard(
-      LocalArcadeScoreEntry entry,
-      int rank,
-      double height,
-      _GameData game,
-      ) {
+    LocalArcadeScoreEntry entry,
+    int rank,
+    double height,
+    _GameData game,
+  ) {
     final colors = _getPodiumColors(rank);
 
     return Column(
@@ -576,8 +581,8 @@ class _LocalArcadeLeaderboardScreenState
               rank == 1
                   ? Icons.workspace_premium_rounded
                   : rank == 2
-                  ? Icons.emoji_events_rounded
-                  : Icons.military_tech_rounded,
+                      ? Icons.emoji_events_rounded
+                      : Icons.military_tech_rounded,
               color: Colors.white,
               size: 36,
             ),
@@ -658,9 +663,9 @@ class _LocalArcadeLeaderboardScreenState
   }
 
   Widget _buildLeaderboardList(
-      List<LocalArcadeScoreEntry> scores,
-      _GameData game,
-      ) {
+    List<LocalArcadeScoreEntry> scores,
+    _GameData game,
+  ) {
     final displayScores = scores.skip(3).take(7).toList();
 
     if (displayScores.isEmpty) return const SizedBox.shrink();
@@ -770,10 +775,10 @@ class _LocalArcadeLeaderboardScreenState
   }
 
   void _showFullLeaderboard(
-      BuildContext context,
-      LocalArcadeLeaderboardService svc,
-      _GameData game,
-      ) {
+    BuildContext context,
+    LocalArcadeLeaderboardService svc,
+    _GameData game,
+  ) {
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: const Color(0xFF0E0E12),
@@ -844,26 +849,27 @@ class _LocalArcadeLeaderboardScreenState
                 Expanded(
                   child: all.isEmpty
                       ? Center(
-                    child: Text(
-                      'No scores recorded yet.',
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.6),
-                        fontSize: 15,
-                      ),
-                    ),
-                  )
+                          child: Text(
+                            'No scores recorded yet.',
+                            style: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.6),
+                              fontSize: 15,
+                            ),
+                          ),
+                        )
                       : ListView.separated(
-                    controller: controller,
-                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
-                    itemCount: all.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 8),
-                    itemBuilder: (_, i) => _ModernLeaderboardRow(
-                      rank: i + 1,
-                      entry: all[i],
-                      gradient: game.gradient,
-                      showBorder: true,
-                    ),
-                  ),
+                          controller: controller,
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+                          itemCount: all.length,
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(height: 8),
+                          itemBuilder: (_, i) => _ModernLeaderboardRow(
+                            rank: i + 1,
+                            entry: all[i],
+                            gradient: game.gradient,
+                            showBorder: true,
+                          ),
+                        ),
                 ),
               ],
             );
@@ -928,10 +934,10 @@ class _ModernLeaderboardRow extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         border: showBorder
             ? Border.all(
-          color: isTopThree
-              ? gradient[0].withValues(alpha: 0.3)
-              : Colors.white.withValues(alpha: 0.08),
-        )
+                color: isTopThree
+                    ? gradient[0].withValues(alpha: 0.3)
+                    : Colors.white.withValues(alpha: 0.08),
+              )
             : null,
       ),
       child: Row(
@@ -943,11 +949,11 @@ class _ModernLeaderboardRow extends StatelessWidget {
               gradient: isTopThree
                   ? LinearGradient(colors: gradient)
                   : LinearGradient(
-                colors: [
-                  Colors.white.withValues(alpha: 0.1),
-                  Colors.white.withValues(alpha: 0.05),
-                ],
-              ),
+                      colors: [
+                        Colors.white.withValues(alpha: 0.1),
+                        Colors.white.withValues(alpha: 0.05),
+                      ],
+                    ),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Center(
@@ -1020,8 +1026,8 @@ class _ModernLeaderboardRow extends StatelessWidget {
               rank == 1
                   ? Icons.workspace_premium_rounded
                   : rank == 2
-                  ? Icons.emoji_events_rounded
-                  : Icons.military_tech_rounded,
+                      ? Icons.emoji_events_rounded
+                      : Icons.military_tech_rounded,
               color: gradient[0],
               size: 28,
             ),

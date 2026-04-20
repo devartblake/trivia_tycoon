@@ -92,10 +92,10 @@ class _RecoverCardState extends ConsumerState<_RecoverCard>
   }
 
   Widget _buildRecoverNameField(
-      double width,
-      LoginMessages messages,
-      Auth auth,
-      ) {
+    double width,
+    LoginMessages messages,
+    Auth auth,
+  ) {
     return AnimatedTextFormField(
       controller: _nameController,
       loadingController: widget.loadingController,
@@ -122,20 +122,20 @@ class _RecoverCardState extends ConsumerState<_RecoverCard>
   }
 
   Widget _buildBackButton(
-      ThemeData theme,
-      LoginMessages messages,
-      LoginTheme? loginTheme,
-      ) {
+    ThemeData theme,
+    LoginMessages messages,
+    LoginTheme? loginTheme,
+  ) {
     final calculatedTextColor =
-    (theme.cardTheme.color!.computeLuminance() < 0.5)
-        ? Colors.white
-        : theme.primaryColor;
+        (theme.cardTheme.color!.computeLuminance() < 0.5)
+            ? Colors.white
+            : theme.primaryColor;
     return MaterialButton(
       onPressed: !_isSubmitting
           ? () {
-        _formRecoverKey.currentState!.save();
-        widget.onBack();
-      }
+              _formRecoverKey.currentState!.save();
+              widget.onBack();
+            }
           : null,
       padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,

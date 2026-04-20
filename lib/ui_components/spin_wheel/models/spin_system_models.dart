@@ -79,15 +79,15 @@ class PrizeEntry {
 
   /// Convert to JSON
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'prize': prize,
-    'timestamp': timestamp.toIso8601String(),
-    'description': description,
-    'category': category,
-    'metadata': metadata,
-    'isClaimed': isClaimed,
-    'claimedAt': claimedAt?.toIso8601String(),
-  };
+        'id': id,
+        'prize': prize,
+        'timestamp': timestamp.toIso8601String(),
+        'description': description,
+        'category': category,
+        'metadata': metadata,
+        'isClaimed': isClaimed,
+        'claimedAt': claimedAt?.toIso8601String(),
+      };
 
   /// Create from JSON with validation
   factory PrizeEntry.fromJson(Map<String, dynamic> json) {
@@ -131,13 +131,14 @@ class PrizeEntry {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is PrizeEntry && runtimeType == other.runtimeType && id == other.id;
+      other is PrizeEntry && runtimeType == other.runtimeType && id == other.id;
 
   @override
   int get hashCode => id.hashCode;
 
   @override
-  String toString() => 'PrizeEntry(id: $id, prize: $prize, timestamp: $timestamp)';
+  String toString() =>
+      'PrizeEntry(id: $id, prize: $prize, timestamp: $timestamp)';
 }
 
 /// Enhanced SpinResult with better validation and additional features
@@ -285,20 +286,20 @@ class SpinResult {
 
   /// Convert to JSON
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'label': label,
-    'imagePath': imagePath,
-    'reward': reward,
-    'rewardType': rewardType,
-    'description': description,
-    'timestamp': timestamp.toIso8601String(),
-    'spinDuration': spinDuration?.inMilliseconds,
-    'spinVelocity': spinVelocity,
-    'segmentIndex': segmentIndex,
-    'metadata': metadata,
-    'isJackpot': isJackpot,
-    'isRare': isRare,
-  };
+        'id': id,
+        'label': label,
+        'imagePath': imagePath,
+        'reward': reward,
+        'rewardType': rewardType,
+        'description': description,
+        'timestamp': timestamp.toIso8601String(),
+        'spinDuration': spinDuration?.inMilliseconds,
+        'spinVelocity': spinVelocity,
+        'segmentIndex': segmentIndex,
+        'metadata': metadata,
+        'isJackpot': isJackpot,
+        'isRare': isRare,
+      };
 
   /// Create from JSON with validation
   factory SpinResult.fromJson(Map<String, dynamic> json) {
@@ -347,7 +348,7 @@ class SpinResult {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is SpinResult && runtimeType == other.runtimeType && id == other.id;
+      other is SpinResult && runtimeType == other.runtimeType && id == other.id;
 
   @override
   int get hashCode => id.hashCode;
@@ -511,21 +512,21 @@ class WheelSegment {
 
   /// Convert to JSON
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'label': label,
-    'rewardType': rewardType,
-    'reward': reward,
-    'color': '#${color.value.toRadixString(16).padLeft(8, '0')}',
-    'imagePath': imagePath,
-    'isExclusive': isExclusive,
-    'requiredStreak': requiredStreak,
-    'requiredCurrency': requiredCurrency,
-    'description': description,
-    'probability': probability,
-    'metadata': metadata,
-    'isEnabled': isEnabled,
-    'enabledUntil': enabledUntil?.toIso8601String(),
-  };
+        'id': id,
+        'label': label,
+        'rewardType': rewardType,
+        'reward': reward,
+        'color': '#${color.value.toRadixString(16).padLeft(8, '0')}',
+        'imagePath': imagePath,
+        'isExclusive': isExclusive,
+        'requiredStreak': requiredStreak,
+        'requiredCurrency': requiredCurrency,
+        'description': description,
+        'probability': probability,
+        'metadata': metadata,
+        'isEnabled': isEnabled,
+        'enabledUntil': enabledUntil?.toIso8601String(),
+      };
 
   /// Create from JSON with validation
   factory WheelSegment.fromJson(Map<String, dynamic> json) {
@@ -590,7 +591,9 @@ class WheelSegment {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is WheelSegment && runtimeType == other.runtimeType && id == other.id;
+      other is WheelSegment &&
+          runtimeType == other.runtimeType &&
+          id == other.id;
 
   @override
   int get hashCode => id.hashCode;

@@ -23,7 +23,8 @@ class FeaturedCategoryChip extends ConsumerWidget {
         decoration: BoxDecoration(
           color: category.primaryColor.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: category.primaryColor.withValues(alpha: 0.3)),
+          border:
+              Border.all(color: category.primaryColor.withValues(alpha: 0.3)),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -22,31 +22,41 @@ class AudioSettingsService {
 
   // ------------------------- AUDIO ---------------------------
 
-  Future<void> setAudioOn(bool value) async => await _box.put(_audioOnKey, value);
+  Future<void> setAudioOn(bool value) async =>
+      await _box.put(_audioOnKey, value);
 
-  bool getAudioOn({bool defaultValue = true}) => _box.get(_audioOnKey, defaultValue: defaultValue);
+  bool getAudioOn({bool defaultValue = true}) =>
+      _box.get(_audioOnKey, defaultValue: defaultValue);
 
   // ------------------------- MUSIC ---------------------------
 
-  Future<void> setMusicOn(bool value) async => await _box.put(_musicOnKey, value);
+  Future<void> setMusicOn(bool value) async =>
+      await _box.put(_musicOnKey, value);
 
-  bool getMusicOn({bool defaultValue = true}) => _box.get(_musicOnKey, defaultValue: defaultValue);
+  bool getMusicOn({bool defaultValue = true}) =>
+      _box.get(_musicOnKey, defaultValue: defaultValue);
 
   // ------------------------- SOUND FX ------------------------
 
-  Future<void> setSoundsOn(bool value) async => await _box.put(_soundsOnKey, value);
+  Future<void> setSoundsOn(bool value) async =>
+      await _box.put(_soundsOnKey, value);
 
-  bool getSoundsOn({bool defaultValue = true}) => _box.get(_soundsOnKey, defaultValue: defaultValue);
+  bool getSoundsOn({bool defaultValue = true}) =>
+      _box.get(_soundsOnKey, defaultValue: defaultValue);
 
   // ------------------------- VOLUME CONTROLS -----------------
 
-  Future<void> setMusicVolume(double volume) async => await _box.put(_musicVolumeKey, volume.clamp(0.0, 1.0));
+  Future<void> setMusicVolume(double volume) async =>
+      await _box.put(_musicVolumeKey, volume.clamp(0.0, 1.0));
 
-  double getMusicVolume({double defaultValue = 0.7}) => _box.get(_musicVolumeKey, defaultValue: defaultValue);
+  double getMusicVolume({double defaultValue = 0.7}) =>
+      _box.get(_musicVolumeKey, defaultValue: defaultValue);
 
-  Future<void> setSoundVolume(double volume) async => await _box.put(_soundVolumeKey, volume.clamp(0.0, 1.0));
+  Future<void> setSoundVolume(double volume) async =>
+      await _box.put(_soundVolumeKey, volume.clamp(0.0, 1.0));
 
-  double getSoundVolume({double defaultValue = 0.8}) => _box.get(_soundVolumeKey, defaultValue: defaultValue);
+  double getSoundVolume({double defaultValue = 0.8}) =>
+      _box.get(_soundVolumeKey, defaultValue: defaultValue);
 
   // ------------------------- LIFECYCLE METHODS ---------------
 
@@ -60,7 +70,8 @@ class AudioSettingsService {
       // Pause music and sounds
       // Note: In a real app, you'd interface with your audio player here
       // For now, we just save the state
-      LogManager.debug('[AudioService] All audio paused, wasPlaying: $wasPlaying');
+      LogManager.debug(
+          '[AudioService] All audio paused, wasPlaying: $wasPlaying');
     } catch (e) {
       LogManager.debug('[AudioService] Error pausing audio: $e');
     }
@@ -124,23 +135,20 @@ class AudioSettingsService {
     await _box.delete(_wasPlayingKey);
   }
 
-  Future<void> toggleAudio() async =>
-      await setAudioOn(!getAudioOn());
+  Future<void> toggleAudio() async => await setAudioOn(!getAudioOn());
 
-  Future<void> toggleMusic() async =>
-      await setMusicOn(!getMusicOn());
+  Future<void> toggleMusic() async => await setMusicOn(!getMusicOn());
 
-  Future<void> toggleSounds() async =>
-      await setSoundsOn(!getSoundsOn());
+  Future<void> toggleSounds() async => await setSoundsOn(!getSoundsOn());
 
   Map<String, dynamic> debugDump() => {
-    'audioOn': getAudioOn(),
-    'musicOn': getMusicOn(),
-    'soundsOn': getSoundsOn(),
-    'musicVolume': getMusicVolume(),
-    'soundVolume': getSoundVolume(),
-    'wasPlayingBeforePause': _box.get(_wasPlayingKey, defaultValue: false),
-  };
+        'audioOn': getAudioOn(),
+        'musicOn': getMusicOn(),
+        'soundsOn': getSoundsOn(),
+        'musicVolume': getMusicVolume(),
+        'soundVolume': getSoundVolume(),
+        'wasPlayingBeforePause': _box.get(_wasPlayingKey, defaultValue: false),
+      };
 
   // Aliases for compatibility with SettingsController
   Future<void> saveAudioOn(bool value) async => await setAudioOn(value);

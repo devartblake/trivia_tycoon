@@ -10,22 +10,28 @@ class EducationalStatsInitializer {
       final educationalStatsService = ref.read(educationalStatsServiceProvider);
       await educationalStatsService.initialize();
 
-      LogManager.debug('Educational statistics service initialized successfully');
+      LogManager.debug(
+          'Educational statistics service initialized successfully');
     } catch (e) {
-      LogManager.debug('Failed to initialize educational statistics service: $e');
+      LogManager.debug(
+          'Failed to initialize educational statistics service: $e');
       // Don't throw - app should continue even if stats fail to initialize
     }
   }
 
   /// Initialize with ProviderContainer (for app startup)
-  static Future<void> initializeWithContainer(ProviderContainer container) async {
+  static Future<void> initializeWithContainer(
+      ProviderContainer container) async {
     try {
-      final educationalStatsService = container.read(educationalStatsServiceProvider);
+      final educationalStatsService =
+          container.read(educationalStatsServiceProvider);
       await educationalStatsService.initialize();
 
-      LogManager.debug('Educational statistics service initialized successfully');
+      LogManager.debug(
+          'Educational statistics service initialized successfully');
     } catch (e) {
-      LogManager.debug('Failed to initialize educational statistics service: $e');
+      LogManager.debug(
+          'Failed to initialize educational statistics service: $e');
       // Don't throw - app should continue even if stats fail to initialize
     }
   }

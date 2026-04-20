@@ -74,7 +74,8 @@ class OBJViewerState extends State<OBJViewer> {
       'thing.obj',
       scale: 1.0,
     );
-    _instances = meshes.map((name, mesh) => MapEntry(name, VertexMeshInstance(mesh)));
+    _instances =
+        meshes.map((name, mesh) => MapEntry(name, VertexMeshInstance(mesh)));
     _updateTransform();
   }
 
@@ -90,10 +91,8 @@ class OBJViewerState extends State<OBJViewer> {
   void _updateTransform() {
     final modelMatrix = vec32.Matrix4.compose(
         vec32.Vector3.zero(), _rotation, vec32.Vector3.all(1.0));
-    final viewMatrix = vec32.makeViewMatrix(
-        vec32.Vector3(0.0, 0.0, 4.0),
-        vec32.Vector3(0.0, 0.0, 0.0),
-        vec32.Vector3(0.0, 1.0, 0.0));
+    final viewMatrix = vec32.makeViewMatrix(vec32.Vector3(0.0, 0.0, 4.0),
+        vec32.Vector3(0.0, 0.0, 0.0), vec32.Vector3(0.0, 1.0, 0.0));
     final projMatrix =
         vec32.makePerspectiveMatrix(math.pi / 2.0, 320.0 / 480.0, 0.01, 100.0);
     final transform = viewMatrix * modelMatrix;
@@ -266,12 +265,10 @@ class OBJLoader {
       } else if (line.startsWith('vt ')) {
         final args = line.split(' ');
         uvs.add(vec32.Vector2(double.parse(args[1]), double.parse(args[2])));
-
       } else if (line.startsWith('o ')) {
         // Begin a new named sub-object.
         _currentObjectName = line.substring(2).trim();
         _objectFaces.putIfAbsent(_currentObjectName, () => <OBJLoaderFace>[]);
-
       } else if (line.startsWith('f ')) {
         final args = line.split(' ');
         // Only triangulated faces (3 vertices) are supported.
@@ -294,7 +291,8 @@ class OBJLoader {
           face.normals[2] = normals[int.parse(v2[2]) - 1];
         } else {
           // No stored normals — will be computed geometrically during mesh build.
-          face.normals[0] = face.normals[1] = face.normals[2] = vec32.Vector3.zero();
+          face.normals[0] =
+              face.normals[1] = face.normals[2] = vec32.Vector3.zero();
         }
 
         // UV coordinates (vt index is the second component).
@@ -309,13 +307,10 @@ class OBJLoader {
         face.materialName = currentMaterialName;
         face.shadingGroup = currentShadingGroup;
         _objectFaces[_currentObjectName]!.add(face);
-
       } else if (line.startsWith('mtllib ')) {
         _mtlPath = line.split(' ')[1];
-
       } else if (line.startsWith('usemtl ')) {
         currentMaterialName = line.split(' ').skip(1).join(' ');
-
       } else if (line.startsWith('s ')) {
         // `s 1` / `s <n>` → smooth shading group N.
         // `s off` / `s 0` → flat shading.
@@ -334,15 +329,19 @@ class OBJLoader {
     for (var line in mtlLines) {
       line = line.replaceAll("\r", "");
       if (line.startsWith('newmtl ')) {
-        if (currentMaterial != null) _materials[currentMaterial.name!] = currentMaterial;
+        if (currentMaterial != null)
+          _materials[currentMaterial.name!] = currentMaterial;
 
         currentMaterial = OBJLoaderMaterial();
         currentMaterial.name = line.split(' ')[1];
       } else if (line.startsWith('Kd ')) {
         if (currentMaterial != null) {
           final args = line.split(' ');
-          currentMaterial.diffuseColor = Color.fromARGB(255, (double.parse(args[1]) * 255).round(),
-              (double.parse(args[2]) * 255).round(), (double.parse(args[3]) * 255).round());
+          currentMaterial.diffuseColor = Color.fromARGB(
+              255,
+              (double.parse(args[1]) * 255).round(),
+              (double.parse(args[2]) * 255).round(),
+              (double.parse(args[3]) * 255).round());
         }
       } else if (line.startsWith('map_Kd ')) {
         if (currentMaterial != null) {
@@ -352,7 +351,8 @@ class OBJLoader {
       }
     }
 
-    if (currentMaterial != null) _materials[currentMaterial.name!] = currentMaterial;
+    if (currentMaterial != null)
+      _materials[currentMaterial.name!] = currentMaterial;
   }
 
   Future<void> _loadMTLTextures() async {
@@ -363,7 +363,9 @@ class OBJLoader {
         log('loading texture: ${mtl.texturePath}');
         final c = Completer<void>();
         imageFutures.add(c.future);
-        AssetImage(path.join(_basePath, mtl.texturePath), bundle: _bundle).resolve(ImageConfiguration()).addListener(
+        AssetImage(path.join(_basePath, mtl.texturePath), bundle: _bundle)
+            .resolve(ImageConfiguration())
+            .addListener(
           ImageStreamListener((ImageInfo info, bool _) {
             log('loaded texture: ${mtl.texturePath}');
             mtl.texture = info.image;
@@ -484,7 +486,8 @@ class OBJLoader {
         if (face.shadingGroup != 0) {
           key = '${p.x},${p.y},${p.z}|${atlasU},${atlasV}|${face.materialName}';
         } else {
-          key = '${p.x},${p.y},${p.z}|${n.x},${n.y},${n.z}|${atlasU},${atlasV}|${face.materialName}';
+          key =
+              '${p.x},${p.y},${p.z}|${n.x},${n.y},${n.z}|${atlasU},${atlasV}|${face.materialName}';
         }
 
         if (!vertexMap.containsKey(key)) {
@@ -522,8 +525,7 @@ class OBJLoader {
   /// GPU memory note: the atlas is capped at [_maxAtlasDim] × [_maxAtlasDim]
   /// (2048 × 2048), which fits within the OpenGL ES 2.0 minimum guarantee.
   Future<_AtlasResult?> _buildTextureAtlas() async {
-    final textured =
-        _materials.values.where((m) => m.texture != null).toList();
+    final textured = _materials.values.where((m) => m.texture != null).toList();
 
     if (textured.isEmpty) return null;
 
@@ -533,8 +535,8 @@ class OBJLoader {
       return _AtlasResult(
         image: mat.texture!,
         regions: {
-          mat.name!: const _AtlasRegion(
-              uOffset: 0, vOffset: 0, uScale: 1, vScale: 1),
+          mat.name!:
+              const _AtlasRegion(uOffset: 0, vOffset: 0, uScale: 1, vScale: 1),
         },
       );
     }
@@ -578,8 +580,8 @@ class OBJLoader {
       // Draw texture into its atlas cell, scaling to fit cellSize.
       final src = ui.Rect.fromLTWH(
           0, 0, mat.texture!.width.toDouble(), mat.texture!.height.toDouble());
-      final dst =
-          ui.Rect.fromLTWH(destX, destY, cellSize.toDouble(), cellSize.toDouble());
+      final dst = ui.Rect.fromLTWH(
+          destX, destY, cellSize.toDouble(), cellSize.toDouble());
       canvas.drawImageRect(mat.texture!, src, dst, ui.Paint());
 
       regions[mat.name!] = _AtlasRegion(
@@ -659,7 +661,8 @@ class VertexMesh {
       var y2 = positions[indices[i + 2] * 3 + 1];
       var z2 = positions[indices[i + 2] * 3 + 2];
 
-      developer.log('f: {${x0.toStringAsFixed(3)}, ${y0.toStringAsFixed(3)}, ${z0.toStringAsFixed(3)}}, {${x1.toStringAsFixed(3)}, ${y1.toStringAsFixed(3)}, ${z1.toStringAsFixed(3)}}, {${x2.toStringAsFixed(3)}, ${y2.toStringAsFixed(3)}, ${z2.toStringAsFixed(3)}}');
+      developer.log(
+          'f: {${x0.toStringAsFixed(3)}, ${y0.toStringAsFixed(3)}, ${z0.toStringAsFixed(3)}}, {${x1.toStringAsFixed(3)}, ${y1.toStringAsFixed(3)}, ${z1.toStringAsFixed(3)}}, {${x2.toStringAsFixed(3)}, ${y2.toStringAsFixed(3)}, ${z2.toStringAsFixed(3)}}');
     }
   }
 }
@@ -698,15 +701,16 @@ class VertexMeshInstance {
 
   void _cacheVertices() {
     // Create vertices from mesh data
-    List<vec32.Vector4> transformedPositions = List<vec32.Vector4>.filled(_mesh.vertexCount, vec32.Vector4.zero());
+    List<vec32.Vector4> transformedPositions =
+        List<vec32.Vector4>.filled(_mesh.vertexCount, vec32.Vector4.zero());
     List<int> culledIndices = <int>[];
 
     final transform = _projection * _modelView;
 
     // Transform vertices
     for (int i = 0; i < _mesh.vertexCount; ++i) {
-      vec32.Vector4 position =
-      vec32.Vector4(_mesh.positions[i * 3 + 0], _mesh.positions[i * 3 + 1], _mesh.positions[i * 3 + 2], 1.0);
+      vec32.Vector4 position = vec32.Vector4(_mesh.positions[i * 3 + 0],
+          _mesh.positions[i * 3 + 1], _mesh.positions[i * 3 + 2], 1.0);
       position = transform.transform(position);
       position.xyz /= position.w;
 
@@ -731,10 +735,11 @@ class VertexMeshInstance {
     }
 
     // Depth sort
-        {
+    {
       final tmpCulledIndices = List<int>.from(culledIndices);
       assert(tmpCulledIndices.length == culledIndices.length);
-      _triangleMergeSortSplit(transformedPositions, culledIndices, tmpCulledIndices, 0, culledIndices.length ~/ 3);
+      _triangleMergeSortSplit(transformedPositions, culledIndices,
+          tmpCulledIndices, 0, culledIndices.length ~/ 3);
     }
 
     // Build 2d positions array
@@ -748,16 +753,19 @@ class VertexMeshInstance {
     // Basic light
     Int32List colors = Int32List(_mesh.vertexCount);
     for (int i = 0; i < colors.length; ++i) {
-      final b = 1.0; //xn.dot(vec32.Vector3(0.5, 0.5, 1.0).normalized()).clamp(0.1, 1.0);
+      final b =
+          1.0; //xn.dot(vec32.Vector3(0.5, 0.5, 1.0).normalized()).clamp(0.1, 1.0);
 
       colors[i] = 0xFF000000 |
-      ((b * ((_mesh.colors[i] >> 16) & 0xFF)).floor() << 16) |
-      ((b * ((_mesh.colors[i] >> 8) & 0xFF)).floor() << 8) |
-      ((b * ((_mesh.colors[i] >> 0) & 0xFF)).floor() << 0);
+          ((b * ((_mesh.colors[i] >> 16) & 0xFF)).floor() << 16) |
+          ((b * ((_mesh.colors[i] >> 8) & 0xFF)).floor() << 8) |
+          ((b * ((_mesh.colors[i] >> 0) & 0xFF)).floor() << 0);
     }
 
     _vertices = ui.Vertices.raw(VertexMode.triangles, positions2D,
-        indices: Uint16List.fromList(culledIndices), textureCoordinates: _mesh.uvs, colors: colors);
+        indices: Uint16List.fromList(culledIndices),
+        textureCoordinates: _mesh.uvs,
+        colors: colors);
 
     _vertexCacheInvalid = false;
   }
@@ -785,8 +793,8 @@ class MultiMeshCustomPainter extends CustomPainter {
           TileMode.clamp,
           TileMode.clamp,
           Matrix4.identity()
-              .scaled(1 / instance.texture!.width,
-                  1 / instance.texture!.height, 1.0)
+              .scaled(1 / instance.texture!.width, 1 / instance.texture!.height,
+                  1.0)
               .storage,
         );
       }
@@ -827,7 +835,8 @@ class MeshCustomPainter extends CustomPainter {
             TileMode.clamp,
             TileMode.clamp,
             Matrix4.identity()
-                .scaled(1 / _meshInstance!.texture!.width, 1 / _meshInstance!.texture!.height, 1.0)
+                .scaled(1 / _meshInstance!.texture!.width,
+                    1 / _meshInstance!.texture!.height, 1.0)
                 .storage);
       }
 
@@ -845,7 +854,8 @@ class MeshCustomPainter extends CustomPainter {
   }
 }
 
-bool _compareDepth(List<vec32.Vector4> positions, List<int> src, int indexA, int indexB) {
+bool _compareDepth(
+    List<vec32.Vector4> positions, List<int> src, int indexA, int indexB) {
   double depthA, depthB;
   {
     final a = positions[src[indexA * 3 + 0]];
@@ -865,8 +875,8 @@ bool _compareDepth(List<vec32.Vector4> positions, List<int> src, int indexA, int
   return depthA > depthB;
 }
 
-void _triangleMergeSortMerge(
-    List<vec32.Vector4> positions, List<int> dst, List<int> src, int begin, int middle, int end) {
+void _triangleMergeSortMerge(List<vec32.Vector4> positions, List<int> dst,
+    List<int> src, int begin, int middle, int end) {
   assert(begin < middle && middle < end);
   int j = begin, k = middle;
   for (int i = begin; i < end; ++i) {
@@ -884,7 +894,8 @@ void _triangleMergeSortMerge(
   }
 }
 
-void _triangleMergeSortSplit(List<vec32.Vector4> positions, List<int> dst, List<int> src, int begin, int end) {
+void _triangleMergeSortSplit(List<vec32.Vector4> positions, List<int> dst,
+    List<int> src, int begin, int end) {
   final count = end - begin;
   final middle = begin + count ~/ 2;
   if (count > 2) {

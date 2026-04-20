@@ -14,10 +14,12 @@ class MessageRepository extends ChangeNotifier {
 
   // Streams for real-time updates
   final _messageStreamController = StreamController<Message>.broadcast();
-  final _conversationStreamController = StreamController<Conversation>.broadcast();
+  final _conversationStreamController =
+      StreamController<Conversation>.broadcast();
 
   Stream<Message> get messageStream => _messageStreamController.stream;
-  Stream<Conversation> get conversationStream => _conversationStreamController.stream;
+  Stream<Conversation> get conversationStream =>
+      _conversationStreamController.stream;
 
   MessageRepository({
     required MessageStorageService messageStorage,
@@ -62,7 +64,8 @@ class MessageRepository extends ChangeNotifier {
     );
 
     // Increment unread for other participants
-    final conversation = _conversationStorage.getConversationById(conversationId);
+    final conversation =
+        _conversationStorage.getConversationById(conversationId);
     if (conversation != null) {
       await _conversationStorage.incrementUnreadCount(conversationId);
       _conversationStreamController.add(conversation);
@@ -79,7 +82,8 @@ class MessageRepository extends ChangeNotifier {
 
   Future<void> _simulateDelivery(Message message) async {
     await Future.delayed(const Duration(seconds: 1));
-    await _messageStorage.updateMessageStatus(message.id, MessageStatus.delivered);
+    await _messageStorage.updateMessageStatus(
+        message.id, MessageStatus.delivered);
     notifyListeners();
   }
 
@@ -101,7 +105,7 @@ class MessageRepository extends ChangeNotifier {
   // Store typing statuses in memory
   final Map<String, List<TypingStatus>> _typingStatuses = {};
   final StreamController<Map<String, List<TypingStatus>>> _typingController =
-  StreamController<Map<String, List<TypingStatus>>>.broadcast();
+      StreamController<Map<String, List<TypingStatus>>>.broadcast();
 
 // Send typing status
   void sendTypingStatus({
@@ -132,9 +136,8 @@ class MessageRepository extends ChangeNotifier {
     Timer(const Duration(seconds: 5), () {
       final currentStatuses = _typingStatuses[conversationId] ?? [];
       currentStatuses.removeWhere((s) =>
-      s.userId == userId &&
-          DateTime.now().difference(s.timestamp).inSeconds >= 5
-      );
+          s.userId == userId &&
+          DateTime.now().difference(s.timestamp).inSeconds >= 5);
       _typingStatuses[conversationId] = currentStatuses;
       _typingController.add(_typingStatuses);
     });
@@ -142,9 +145,8 @@ class MessageRepository extends ChangeNotifier {
 
 // Watch typing statuses for a conversation
   Stream<List<TypingStatus>> watchTypingStatus(String conversationId) {
-    return _typingController.stream.map((statuses) =>
-    statuses[conversationId] ?? []
-    );
+    return _typingController.stream
+        .map((statuses) => statuses[conversationId] ?? []);
   }
 
   List<TypingStatus> getTypingStatus(String conversationId) {
@@ -171,7 +173,8 @@ class MessageRepository extends ChangeNotifier {
 
   Conversation? findOrCreateDirectConversation(String userId1, String userId2) {
     // Try to find existing conversation
-    var conversation = _conversationStorage.findDirectConversation(userId1, userId2);
+    var conversation =
+        _conversationStorage.findDirectConversation(userId1, userId2);
 
     // Create new conversation if none exists
     if (conversation == null) {
@@ -203,7 +206,8 @@ class MessageRepository extends ChangeNotifier {
     await _messageStorage.markConversationAsRead(conversationId);
     await _conversationStorage.resetUnreadCount(conversationId);
 
-    final conversation = _conversationStorage.getConversationById(conversationId);
+    final conversation =
+        _conversationStorage.getConversationById(conversationId);
     if (conversation != null) {
       _conversationStreamController.add(conversation);
     }
@@ -275,7 +279,7 @@ class MessageRepository extends ChangeNotifier {
     final conversations = getUserConversations(userId);
     final totalMessages = conversations.fold<int>(
       0,
-          (sum, conv) => sum + _messageStorage.getMessageCount(conv.id),
+      (sum, conv) => sum + _messageStorage.getMessageCount(conv.id),
     );
 
     return {

@@ -5,7 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/screens/store/store_payment_return_screen.dart';
 
 void main() {
-  Widget buildHarness(StoreReturnMode mode, Map<String, String> queryParameters) {
+  Widget buildHarness(
+      StoreReturnMode mode, Map<String, String> queryParameters) {
     final router = GoRouter(
       routes: [
         GoRoute(

@@ -85,12 +85,12 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               ),
               suffixIcon: query.isNotEmpty
                   ? IconButton(
-                icon: const Icon(Icons.clear, size: 20),
-                onPressed: () {
-                  _searchController.clear();
-                  ref.read(searchQueryProvider.notifier).state = '';
-                },
-              )
+                      icon: const Icon(Icons.clear, size: 20),
+                      onPressed: () {
+                        _searchController.clear();
+                        ref.read(searchQueryProvider.notifier).state = '';
+                      },
+                    )
                   : null,
               border: InputBorder.none,
               contentPadding: const EdgeInsets.symmetric(
@@ -181,7 +181,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               final isSelected = filter.categories.contains(category);
               return InkWell(
                 onTap: () {
-                  final newCategories = Set<SearchCategory>.from(filter.categories);
+                  final newCategories =
+                      Set<SearchCategory>.from(filter.categories);
                   if (isSelected) {
                     newCategories.remove(category);
                   } else {
@@ -212,7 +213,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      color: isSelected ? Colors.white : const Color(0xFF6B7280),
+                      color:
+                          isSelected ? Colors.white : const Color(0xFF6B7280),
                     ),
                   ),
                 ),
@@ -301,7 +303,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               onTap: () {
                 _searchController.text = suggestion['text'] as String;
                 ref.read(searchQueryProvider.notifier).state =
-                suggestion['text'] as String;
+                    suggestion['text'] as String;
               },
               borderRadius: BorderRadius.circular(12),
               child: Container(
@@ -584,7 +586,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 ),
                 const SizedBox(width: 8),
                 if (result.metadata?['unlocked'] == true)
-                  const Icon(Icons.check_circle, color: Color(0xFF10B981), size: 20)
+                  const Icon(Icons.check_circle,
+                      color: Color(0xFF10B981), size: 20)
                 else if (result.metadata?['cost'] != null)
                   Container(
                     padding: const EdgeInsets.symmetric(
@@ -605,7 +608,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                     ),
                   )
                 else
-                  Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey[400]),
+                  Icon(Icons.arrow_forward_ios,
+                      size: 16, color: Colors.grey[400]),
               ],
             ),
           ),

@@ -51,13 +51,11 @@ class _LearnHubScreenState extends ConsumerState<LearnHubScreen> {
         _DifficultyFilterBar(
           selected: _selectedDifficulty,
           difficulties: _difficulties,
-          onSelected: (value) =>
-              setState(() => _selectedDifficulty = value),
+          onSelected: (value) => setState(() => _selectedDifficulty = value),
         ),
         Expanded(
           child: modulesAsync.when(
-            loading: () =>
-                const Center(child: CircularProgressIndicator()),
+            loading: () => const Center(child: CircularProgressIndicator()),
             error: (error, _) => Center(
               child: Padding(
                 padding: const EdgeInsets.all(24),
@@ -73,8 +71,7 @@ class _LearnHubScreenState extends ConsumerState<LearnHubScreen> {
                     ),
                     const SizedBox(height: 8),
                     TextButton(
-                      onPressed: () => ref
-                          .refresh(modulesProvider(null)),
+                      onPressed: () => ref.refresh(modulesProvider(null)),
                       child: const Text('Retry'),
                     ),
                   ],
@@ -92,8 +89,8 @@ class _LearnHubScreenState extends ConsumerState<LearnHubScreen> {
                       final module = modules[index];
                       return ModuleCard(
                         module: module,
-                        onTap: () => context
-                            .push('/learn-hub/module/${module.id}'),
+                        onTap: () =>
+                            context.push('/learn-hub/module/${module.id}'),
                       );
                     },
                   ),
@@ -139,8 +136,7 @@ class _DifficultyFilterBar extends StatelessWidget {
                 label: d.label,
                 isSelected: selected == d.value,
                 color: color,
-                onTap: () => onSelected(
-                    selected == d.value ? null : d.value),
+                onTap: () => onSelected(selected == d.value ? null : d.value),
               ),
             );
           }),
@@ -160,8 +156,7 @@ class _DifficultyFilterBar extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
-        padding:
-            const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
         decoration: BoxDecoration(
           color: isSelected ? color : color.withOpacity(0.1),
           borderRadius: BorderRadius.circular(20),

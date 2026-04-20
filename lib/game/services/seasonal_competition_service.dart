@@ -49,7 +49,8 @@ class SeasonalCompetitionService {
   }
 
   /// Start new season
-  Future<void> startNewSeason({Duration duration = const Duration(days: 7)}) async {
+  Future<void> startNewSeason(
+      {Duration duration = const Duration(days: 7)}) async {
     final now = DateTime.now();
     final endTime = now.add(duration);
     final seasonId = 'season_${now.millisecondsSinceEpoch}';
@@ -86,7 +87,8 @@ class SeasonalCompetitionService {
   }
 
   /// Process season end logic
-  Future<SeasonEndResult> _processSeasonEnd(List<SeasonPlayer> leaderboard) async {
+  Future<SeasonEndResult> _processSeasonEnd(
+      List<SeasonPlayer> leaderboard) async {
     final promoted = <SeasonPlayer>[];
     final demoted = <SeasonPlayer>[];
     final tiebreakers = <List<SeasonPlayer>>[];
@@ -144,7 +146,8 @@ class SeasonalCompetitionService {
   }
 
   /// Notify player of tiebreaker requirement
-  Future<void> _notifyPlayerOfTiebreaker(SeasonPlayer player, DateTime time) async {
+  Future<void> _notifyPlayerOfTiebreaker(
+      SeasonPlayer player, DateTime time) async {
     // Implementation would send push notification or in-app notification
     LogManager.debug('Tiebreaker scheduled for ${player.playerName} at $time');
   }

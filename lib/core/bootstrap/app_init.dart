@@ -36,7 +36,8 @@ import '../services/state_persistence_service.dart';
 class AppInit {
   static bool _backgroundServicesReady = false;
   static SpinAnalyticsTracker? _spinAnalyticsTracker;
-  static SpinAnalyticsTracker? get spinAnalyticsTracker => _spinAnalyticsTracker;
+  static SpinAnalyticsTracker? get spinAnalyticsTracker =>
+      _spinAnalyticsTracker;
 
   // WebSocket management
   static WsClient? _wsClient;
@@ -58,7 +59,8 @@ class AppInit {
   static ServiceManager? _serviceManager;
 
   // --- CRITICAL INITIALIZATION (Required for first frame) ---
-  static Future<(ServiceManager, ThemeNotifier)> initialize({ProviderContainer? container}) async {
+  static Future<(ServiceManager, ThemeNotifier)> initialize(
+      {ProviderContainer? container}) async {
     await EnvConfig.load();
     // 1. Core Flutter & Storage Setup
     WidgetsFlutterBinding.ensureInitialized();
@@ -71,7 +73,8 @@ class AppInit {
     }
 
     // Open critical boxes required for theme/auth immediately
-    final authTokenBox = await Hive.openBox('auth_tokens'); // ← NEW: Dedicated box for auth tokens
+    final authTokenBox = await Hive.openBox(
+        'auth_tokens'); // ← NEW: Dedicated box for auth tokens
     await Hive.openBox('settings');
     await Hive.openBox('secrets');
 
@@ -88,7 +91,8 @@ class AppInit {
     final secureStorage = SecureStorage(); // ← FIXED: Create proper instance
 
     // Create DeviceIdService with SecureStorage
-    final deviceIdService = DeviceIdService(secureStorage); // ← FIXED: Pass SecureStorage, not Box
+    final deviceIdService =
+        DeviceIdService(secureStorage); // ← FIXED: Pass SecureStorage, not Box
     final deviceId = await deviceIdService.getOrCreate();
     final deviceType = deviceIdService.getDeviceType();
     LogManager.debug('✅ Device identity ready: id=$deviceId, type=$deviceType');
@@ -100,7 +104,8 @@ class AppInit {
     _tokenStore = tokenStore;
 
     final httpClient = http.Client();
-    final authApi = AuthApiClient(httpClient, apiBaseUrl: EnvConfig.apiBaseUrl, deviceId: deviceIdService);
+    final authApi = AuthApiClient(httpClient,
+        apiBaseUrl: EnvConfig.apiBaseUrl, deviceId: deviceIdService);
 
     final authService = BackendAuthService(
       deviceId: deviceIdService,
@@ -193,8 +198,8 @@ class AppInit {
           await _serviceManager!.quizProgressService.getPlayerProgress();
 
       // Only snapshot state when there is an active in-progress quiz.
-      final hasActiveQuiz = quizProgress.isNotEmpty &&
-          quizProgress.containsKey('quiz_id');
+      final hasActiveQuiz =
+          quizProgress.isNotEmpty && quizProgress.containsKey('quiz_id');
 
       if (!hasActiveQuiz) return null;
 
@@ -220,7 +225,8 @@ class AppInit {
       // Get auth tokens
       final session = _tokenStore?.load();
 
-      final profile = await _serviceManager!.playerProfileService.loadCompleteProfile();
+      final profile =
+          await _serviceManager!.playerProfileService.loadCompleteProfile();
 
       return {
         'is_logged_in': isLoggedIn,
@@ -331,7 +337,6 @@ class AppInit {
       // Connect
       await _wsClient!.connect();
       LogManager.debug('[AppInit] WebSocket initialized');
-
     } catch (e) {
       LogManager.debug('[AppInit] WebSocket initialization failed: $e');
     }
@@ -362,7 +367,8 @@ class AppInit {
   static bool get isWebSocketConnected => _wsConnected;
 
   // --- BACKGROUND INITIALIZATION (Deferred for performance) ---
-  static Future<void> initializeBackgroundServices(ServiceManager serviceManager, ProviderContainer? container) async {
+  static Future<void> initializeBackgroundServices(
+      ServiceManager serviceManager, ProviderContainer? container) async {
     // Wait a short moment to let the UI finish rendering
     await Future.delayed(const Duration(seconds: 1));
     LogManager.debug('[AppInit] Starting deferred background services...');
@@ -381,7 +387,8 @@ class AppInit {
       configService.initServices(serviceManager);
       await configService.loadConfig();
 
-      _spinAnalyticsTracker = SpinAnalyticsTracker(serviceManager.analyticsService);
+      _spinAnalyticsTracker =
+          SpinAnalyticsTracker(serviceManager.analyticsService);
       await serviceManager.analyticsService.trackStartup();
 
       if (container != null) {
@@ -396,7 +403,8 @@ class AppInit {
   }
 
   /// Refactored to be safe even if called before analytics are ready
-  static Future<void> trackAppLifecycle(ServiceManager serviceManager, String event) async {
+  static Future<void> trackAppLifecycle(
+      ServiceManager serviceManager, String event) async {
     // If background services aren't ready, we skip tracking to avoid console noise/errors
     if (!_backgroundServicesReady) return;
 
@@ -409,7 +417,8 @@ class AppInit {
       );
     } catch (e) {
       // Use silent logging here to keep console clean
-      LogManager.debug('[AppInit] Lifecycle track skipped: service not ready or error');
+      LogManager.debug(
+          '[AppInit] Lifecycle track skipped: service not ready or error');
     }
   }
 
@@ -446,7 +455,8 @@ class AppInit {
     }
   }
 
-  static Future<void> _initializeUserSession(ServiceManager serviceManager, ProviderContainer? container) async {
+  static Future<void> _initializeUserSession(
+      ServiceManager serviceManager, ProviderContainer? container) async {
     try {
       final isLoggedIn = await serviceManager.authService.isLoggedIn();
       if (container != null) {
@@ -474,7 +484,8 @@ class AppInit {
     }
   }
 
-  static Future<void> _loadUserProfile(ServiceManager serviceManager, ProviderContainer? container) async {
+  static Future<void> _loadUserProfile(
+      ServiceManager serviceManager, ProviderContainer? container) async {
     try {
       final profileSyncService = ProfileSyncService(
         apiService: serviceManager.apiService,
@@ -482,7 +493,8 @@ class AppInit {
       );
       final remoteProfile = await profileSyncService.fetchRemoteProfile();
       if (remoteProfile != null && remoteProfile.isNotEmpty) {
-        await serviceManager.playerProfileService.saveProfileBatch(remoteProfile);
+        await serviceManager.playerProfileService
+            .saveProfileBatch(remoteProfile);
         LogManager.debug(
           '[AppInit] Remote profile hydrated for: ${remoteProfile['player_name'] ?? remoteProfile['username']}',
         );
@@ -493,23 +505,27 @@ class AppInit {
       final profile = Map<String, dynamic>.from(rawProfile);
 
       if (profile.isNotEmpty) {
-        final rawUserId = profile['id'] ?? profile['user_id'] ?? profile['userId'];
+        final rawUserId =
+            profile['id'] ?? profile['user_id'] ?? profile['userId'];
         final parsedUserId = rawUserId?.toString();
         if (parsedUserId != null && parsedUserId.isNotEmpty) {
           await serviceManager.playerProfileService.saveUserId(parsedUserId);
         }
 
-        final rawDisplayName =
-            profile['name'] ?? profile['display_name'] ?? profile['player_name'];
+        final rawDisplayName = profile['name'] ??
+            profile['display_name'] ??
+            profile['player_name'];
         final parsedDisplayName = rawDisplayName?.toString();
         if (parsedDisplayName != null && parsedDisplayName.isNotEmpty) {
-          await serviceManager.playerProfileService.savePlayerName(parsedDisplayName);
+          await serviceManager.playerProfileService
+              .savePlayerName(parsedDisplayName);
         }
 
         final rawUsername = profile['username'] ?? profile['handle'];
         final parsedUsername = rawUsername?.toString().toLowerCase();
         if (parsedUsername != null && parsedUsername.isNotEmpty) {
-          await serviceManager.playerProfileService.saveUsername(parsedUsername);
+          await serviceManager.playerProfileService
+              .saveUsername(parsedUsername);
         }
         LogManager.debug('[AppInit] Profile loaded for: ${profile['name']}');
       }
@@ -518,13 +534,16 @@ class AppInit {
     }
   }
 
-  static Future<void> _initializeMultiProfileSystem(ServiceManager serviceManager, ProviderContainer? container) async {
+  static Future<void> _initializeMultiProfileSystem(
+      ServiceManager serviceManager, ProviderContainer? container) async {
     try {
       final multiProfileService = MultiProfileService();
-      await multiProfileService.initializeAndMigrate(serviceManager.playerProfileService);
+      await multiProfileService
+          .initializeAndMigrate(serviceManager.playerProfileService);
       final activeProfile = await multiProfileService.getActiveProfile();
       if (container != null && activeProfile != null) {
-        container.read(activeProfileStateProvider.notifier).state = activeProfile;
+        container.read(activeProfileStateProvider.notifier).state =
+            activeProfile;
       }
     } catch (e) {
       LogManager.debug('[AppInit] Multi-profile error: $e');

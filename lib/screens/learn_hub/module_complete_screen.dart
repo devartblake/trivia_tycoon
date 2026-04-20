@@ -141,8 +141,7 @@ class _RewardRow extends StatelessWidget {
         Icon(icon, color: iconColor, size: 20),
         const SizedBox(width: 10),
         Expanded(
-          child: Text(label,
-              style: Theme.of(context).textTheme.bodyMedium),
+          child: Text(label, style: Theme.of(context).textTheme.bodyMedium),
         ),
         Text(
           value,

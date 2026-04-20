@@ -27,14 +27,16 @@ class GFPoly {
       throw ArgumentError('Polynomials do not have same Galois field');
     }
 
-    final smaller = coefficients.length > other.coefficients.length ? other : this;
+    final smaller =
+        coefficients.length > other.coefficients.length ? other : this;
     final larger = this == smaller ? other : this;
 
     final sum = List<int>.from(larger.coefficients);
     final diff = larger.coefficients.length - smaller.coefficients.length;
 
     for (int i = 0; i < smaller.coefficients.length; i++) {
-      sum[i + diff] = field.addOrSubtract(smaller.coefficients[i], sum[i + diff]);
+      sum[i + diff] =
+          field.addOrSubtract(smaller.coefficients[i], sum[i + diff]);
     }
 
     return GFPoly(field, sum);
@@ -45,7 +47,8 @@ class GFPoly {
       throw ArgumentError('Polynomials do not have same Galois field');
     }
 
-    final result = List<int>.filled(coefficients.length + other.coefficients.length - 1, 0);
+    final result = List<int>.filled(
+        coefficients.length + other.coefficients.length - 1, 0);
 
     for (int i = 0; i < coefficients.length; i++) {
       int aCoeff = coefficients[i];
@@ -92,7 +95,8 @@ class GFPoly {
 
     while (remainder.degree >= other.degree && !remainder.isZero) {
       final degreeDiff = remainder.degree - other.degree;
-      final scale = field.multiply(remainder.getCoefficient(remainder.degree), inverseDenominatorLeadingTerm);
+      final scale = field.multiply(remainder.getCoefficient(remainder.degree),
+          inverseDenominatorLeadingTerm);
       final term = other.multiplyByMonomial(degreeDiff, scale);
       final iterationQuotient = GFPoly(
         field,
@@ -108,7 +112,8 @@ class GFPoly {
 
   List<int> evaluateAt(int a) {
     if (a == 0) return [coefficients.last];
-    if (a == 1) return [coefficients.reduce((a, b) => field.addOrSubtract(a, b))];
+    if (a == 1)
+      return [coefficients.reduce((a, b) => field.addOrSubtract(a, b))];
 
     int result = coefficients[0];
     for (int i = 1; i < coefficients.length; i++) {

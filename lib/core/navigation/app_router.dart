@@ -55,6 +55,7 @@ import '../../screens/multiplayer/multiplayer_question_screen.dart';
 import '../../screens/multiplayer/multiplayer_results_screen.dart';
 import '../../screens/multiplayer/room_lobby_screen.dart';
 import '../../screens/notifications/notifications_screen.dart';
+import '../../core/models/notifications/player_inbox_item.dart';
 import '../../screens/preferences_screen.dart';
 import '../../screens/profile/enhanced/add_friends_screen.dart';
 import '../../screens/profile/profile_selection_screen.dart';
@@ -69,7 +70,6 @@ import '../../screens/rewards/mission_screen.dart';
 import '../../screens/rewards/spin_earn_screen.dart';
 import '../../screens/social/multiplayer_screen.dart';
 import '../../screens/store/gifts_screen.dart';
-import '../../screens/store/offers_screen.dart';
 import '../../screens/store/store_payment_return_screen.dart';
 import '../../screens/store/store_hub_screen.dart';
 import '../../screens/store/premium_store.dart';
@@ -257,7 +257,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/admin/analytics',
             name: 'admin-analytics',
-            builder: (context, state) => const AnalyticsScreen(), // Your real Analytics screen
+            builder: (context, state) =>
+                const AnalyticsScreen(), // Your real Analytics screen
           ),
           GoRoute(
             path: '/admin/settings',
@@ -308,8 +309,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             path: '/admin/question-editor',
             name: 'question-editor',
             builder: (context, state) => QuestionEditorScreen(
-          initialQuestion: state.extra as QuestionModel?,
-        ),
+              initialQuestion: state.extra as QuestionModel?,
+            ),
           ),
           GoRoute(
             path: '/admin/encryption-preview',
@@ -443,19 +444,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         name: 'Challenge',
         builder: (context, state) => const ChallengeScreen(),
       ),
-      GoRoute(
-          path: '/invite',
-          builder: (context, state) => InviteScreen()
-      ),
+      GoRoute(path: '/invite', builder: (context, state) => InviteScreen()),
       // Add this route to test:
       GoRoute(
         path: '/invite-log',
         builder: (context, state) => const InviteLogScreen(),
       ),
-      GoRoute(
-          path: '/rewards',
-          builder: (context, state) => RewardsScreen()
-      ),
+      GoRoute(path: '/rewards', builder: (context, state) => RewardsScreen()),
       GoRoute(
           path: '/leaderboard',
           builder: (context, state) => LeaderboardScreen()),
@@ -463,25 +458,22 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
       /// Store Routes
       GoRoute(
-        path: '/store-hub',
-        name: 'Store Hub',
-        builder: (context, state) => StoreHubScreen()
-      ),
+          path: '/store-hub',
+          name: 'Store Hub',
+          builder: (context, state) => StoreHubScreen()),
       GoRoute(
         path: '/offers',
         name: 'Offers',
-        builder: (context, state) => OffersScreen()
+        redirect: (context, state) => '/store-premium',
       ),
       GoRoute(
-        path: '/gifts',
-        name: 'Gifts',
-        builder: (context, state) => GiftsScreen()
-      ),
+          path: '/gifts',
+          name: 'Gifts',
+          builder: (context, state) => GiftsScreen()),
       GoRoute(
-        path: '/store',
-        name: 'Store',
-        builder: (context, state) => StoreScreen()
-      ),
+          path: '/store',
+          name: 'Store',
+          builder: (context, state) => StoreScreen()),
       GoRoute(
         path: '/store/crypto-wallet',
         name: 'crypto-wallet',
@@ -505,10 +497,9 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         ),
       ),
       GoRoute(
-        path: '/store-premium',
-        name: 'Store Premium',
-        builder: (context, state) => const StoreSecondaryScreen()
-      ),
+          path: '/store-premium',
+          name: 'Store Premium',
+          builder: (context, state) => const StoreSecondaryScreen()),
 
       /// 🎯 Daily Quiz & Featured Content Routes (Referenced in CarouselSection)
       GoRoute(
@@ -595,12 +586,14 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                 (extra['subject'] as String?) ??
                 (categories.isNotEmpty ? categories.first : null);
             final questions = extra['questions'] is List
-                ? (extra['questions'] as List).whereType<QuestionModel>().toList()
+                ? (extra['questions'] as List)
+                    .whereType<QuestionModel>()
+                    .toList()
                 : const <QuestionModel>[];
             final classLevel = extra['classLevel']?.toString();
             final questionCount = (extra['questionCount'] as num?)?.toInt();
-            final displayTitle = extra['displayTitle']?.toString() ??
-                extra['title']?.toString();
+            final displayTitle =
+                extra['displayTitle']?.toString() ?? extra['title']?.toString();
 
             final hasLaunchPayload = questions.isNotEmpty ||
                 category != null ||
@@ -837,10 +830,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         name: 'enhanced-profile',
         builder: (context, state) => EnhancedProfileScreen(
           userId: state.pathParameters['userId']!,
-          currentUserId:
-              state.uri.queryParameters['currentUserId'] ?? '',
-          isOwnProfile:
-              state.uri.queryParameters['isOwnProfile'] == 'true',
+          currentUserId: state.uri.queryParameters['currentUserId'] ?? '',
+          isOwnProfile: state.uri.queryParameters['isOwnProfile'] == 'true',
         ),
         redirect: onboardingGuard,
       ),
@@ -879,10 +870,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         redirect: onboardingGuard,
       ),
       GoRoute(
-       path: '/messages', // Circles
-       name: 'Messages',
-       builder: (context, state) => const MessagesScreen(),
-       redirect: onboardingGuard,
+        path: '/messages', // Circles
+        name: 'Messages',
+        builder: (context, state) => const MessagesScreen(),
+        redirect: onboardingGuard,
       ),
       GoRoute(
         path: '/messages/detail/:conversationId',
@@ -927,8 +918,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             child: MessageRequestDialog(
               requestCount: extra['requestCount'] as int? ?? 0,
               onRequestHandled:
-                  extra['onRequestHandled'] as void Function(bool)? ??
-                      (_) {},
+                  extra['onRequestHandled'] as void Function(bool)? ?? (_) {},
             ),
           );
         },

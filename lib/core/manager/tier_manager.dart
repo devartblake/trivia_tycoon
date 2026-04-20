@@ -123,7 +123,12 @@ class TierManager {
       secondaryColor: const Color(0xFF20B2AA),
       requiredXP: 100000,
       requiredLevel: 150,
-      rewards: ['Tycoon Badge', '100000 Coins', '2000 Gems', 'Exclusive Avatar'],
+      rewards: [
+        'Tycoon Badge',
+        '100000 Coins',
+        '2000 Gems',
+        'Exclusive Avatar'
+      ],
     ),
   ];
 

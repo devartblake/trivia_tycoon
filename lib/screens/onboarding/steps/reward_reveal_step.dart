@@ -83,7 +83,8 @@ class _RewardRevealStepState extends State<RewardRevealStep>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final score = widget.controller.userData['firstChallengeScore'] as int? ?? 0;
+    final score =
+        widget.controller.userData['firstChallengeScore'] as int? ?? 0;
     final total =
         widget.controller.userData['firstChallengeTotal'] as int? ?? 3;
 

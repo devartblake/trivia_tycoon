@@ -19,11 +19,19 @@ import 'package:flutter/widgets.dart';
 /// ```
 /// {@end-tool}
 @immutable
-class FluidNavBarStyle with Diagnosticable {  
-  final Color? barBackgroundColor;  /// The navigation bar background color  
-  final Color? iconBackgroundColor; /// Icons background color  
-  final Color? iconSelectedForegroundColor; /// Icons color when activated  
-  final Color? iconUnselectedForegroundColor; /// Icons color when inactivated
+class FluidNavBarStyle with Diagnosticable {
+  final Color? barBackgroundColor;
+
+  /// The navigation bar background color
+  final Color? iconBackgroundColor;
+
+  /// Icons background color
+  final Color? iconSelectedForegroundColor;
+
+  /// Icons color when activated
+  final Color? iconUnselectedForegroundColor;
+
+  /// Icons color when inactivated
 
   // New properties
   final double? borderRadius;
@@ -35,7 +43,6 @@ class FluidNavBarStyle with Diagnosticable {
     this.iconSelectedForegroundColor,
     this.iconUnselectedForegroundColor,
     this.borderRadius, // Optional border radius
-    this.boxShadow,    // Optional shadows
+    this.boxShadow, // Optional shadows
   });
-
 }

@@ -18,8 +18,7 @@ class ParticleField with ChangeNotifier {
           vx: Random().nextDouble() * 5.0 - 5.0,
           vy: Random().nextDouble() * 3.0 - 2.5,
           life: Random().nextDouble() * 0.5 + 0.5,
-          color: Color(0xffcb4a65).withValues(alpha: i.isEven ? 0.8 : 0.3)
-      ));
+          color: Color(0xffcb4a65).withValues(alpha: i.isEven ? 0.8 : 0.3)));
     }
   }
 
@@ -34,8 +33,7 @@ class ParticleField with ChangeNotifier {
           vx: cos(rot) * vel,
           vy: sin(rot) * vel,
           life: Random().nextDouble() * 0.5 + 0.5,
-          color: Color(0xff54d8e6).withValues(alpha: i.isEven ? 0.8 : 0.3)
-      ));
+          color: Color(0xff54d8e6).withValues(alpha: i.isEven ? 0.8 : 0.3)));
     }
   }
 

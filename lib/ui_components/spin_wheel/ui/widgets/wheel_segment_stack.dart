@@ -96,19 +96,19 @@ class _WheelSegmentStackState extends State<WheelSegmentStack>
               shape: BoxShape.circle,
               boxShadow: widget.isSpinning
                   ? [
-                BoxShadow(
-                  color: Colors.blue.withValues(alpha: 0.3),
-                  blurRadius: 20,
-                  spreadRadius: 5,
-                ),
-              ]
+                      BoxShadow(
+                        color: Colors.blue.withValues(alpha: 0.3),
+                        blurRadius: 20,
+                        spreadRadius: 5,
+                      ),
+                    ]
                   : [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
             ),
             child: RepaintBoundary(
               child: Stack(
@@ -155,12 +155,8 @@ class _WheelSegmentStackState extends State<WheelSegmentStack>
       angle: widget.rotationAngle + angle,
       isActive: isActive,
       isLocked: isLocked,
-      onTap: widget.isSpinning
-          ? null
-          : () => widget.onSegmentTap?.call(index),
-      onGestureSpin: widget.isSpinning
-          ? null
-          : widget.onGestureSpin,
+      onTap: widget.isSpinning ? null : () => widget.onSegmentTap?.call(index),
+      onGestureSpin: widget.isSpinning ? null : widget.onGestureSpin,
     );
   }
 
@@ -194,9 +190,7 @@ class _WheelSegmentStackState extends State<WheelSegmentStack>
           height: 20,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: widget.isSpinning
-                ? Colors.blue
-                : Colors.grey.shade400,
+            color: widget.isSpinning ? Colors.blue : Colors.grey.shade400,
           ),
         ),
       ),

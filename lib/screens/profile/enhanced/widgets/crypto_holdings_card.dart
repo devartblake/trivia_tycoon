@@ -23,7 +23,8 @@ class CryptoHoldingsCard extends ConsumerWidget {
     final balanceAsync = ref.watch(cryptoBalanceProvider(userId));
     final stakingAsync = ref.watch(cryptoStakingProvider(userId));
     final historyAsync = ref.watch(
-      cryptoHistoryProvider((playerId: userId, query: const CryptoHistoryQuery())),
+      cryptoHistoryProvider(
+          (playerId: userId, query: const CryptoHistoryQuery())),
     );
 
     return Container(
@@ -112,7 +113,8 @@ class CryptoHoldingsCard extends ConsumerWidget {
                         width: 34,
                         height: 34,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF10B981).withValues(alpha: 0.18),
+                          color:
+                              const Color(0xFF10B981).withValues(alpha: 0.18),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: const Icon(

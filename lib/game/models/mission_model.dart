@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
 
-enum MissionType { daily, weekly, seasonal, oneTime, unknown, science, streak, explorer, wildcard }
+enum MissionType {
+  daily,
+  weekly,
+  seasonal,
+  oneTime,
+  unknown,
+  science,
+  streak,
+  explorer,
+  wildcard
+}
+
 enum MissionStatus { active, completed, expired, swapped }
 
 MissionType _parseMissionType(Object? v) {
@@ -68,15 +79,27 @@ class Mission {
       description: json['description'] as String?,
       progress: json['progress'] as int,
       total: json['total'] as int,
-      target: (json['target'] ?? json['goal'] ?? json['targetCount'] ?? 0) is num
+      target: (json['target'] ?? json['goal'] ?? json['targetCount'] ?? 0)
+              is num
           ? (json['target'] ?? json['goal'] ?? json['targetCount'] ?? 0).toInt()
-          : int.tryParse((json['target'] ?? json['goal'] ?? json['targetCount'] ?? '0').toString()) ?? 0,
-      rewardXp: (json['rewardXp'] ?? json['reward_xp'] ?? json['xpReward'] ?? 0) is num
-          ? (json['rewardXp'] ?? json['reward_xp'] ?? json['xpReward'] ?? 0).toInt()
-          : int.tryParse((json['rewardXp'] ?? json['reward_xp'] ?? json['xpReward'] ?? '0').toString()) ?? 0,
+          : int.tryParse(
+                  (json['target'] ?? json['goal'] ?? json['targetCount'] ?? '0')
+                      .toString()) ??
+              0,
+      rewardXp: (json['rewardXp'] ?? json['reward_xp'] ?? json['xpReward'] ?? 0)
+              is num
+          ? (json['rewardXp'] ?? json['reward_xp'] ?? json['xpReward'] ?? 0)
+              .toInt()
+          : int.tryParse((json['rewardXp'] ??
+                      json['reward_xp'] ??
+                      json['xpReward'] ??
+                      '0')
+                  .toString()) ??
+              0,
       icon: _iconFromString(json['icon_name'] as String),
       badge: json['badge'] as String,
-      type: _parseMissionType(json['type'] ?? json['timeframe'] ?? json['missionType']),
+      type: _parseMissionType(
+          json['type'] ?? json['timeframe'] ?? json['missionType']),
       status: MissionStatus.values.byName(json['status'] as String),
       createdAt: DateTime.parse(json['created_at'] as String),
       completedAt: json['completed_at'] != null
@@ -262,6 +285,8 @@ class UserMission {
   }
 
   bool get isCompleted => progress >= mission.total;
-  bool get canSwap => swapCount < 3 && status == MissionStatus.active; // Max 3 swaps per mission
+  bool get canSwap =>
+      swapCount < 3 &&
+      status == MissionStatus.active; // Max 3 swaps per mission
   double get progressPercentage => (progress / mission.total).clamp(0.0, 1.0);
 }

@@ -13,11 +13,10 @@ import 'package:web_socket_channel/web_socket_channel.dart'
 
 // Conditional imports select the right `socketConnect` implementation
 // at compile time.
-import 'ws_socket_html.dart'
-if (dart.library.io) 'ws_socket_io.dart' as impl;
+import 'ws_socket_html.dart' if (dart.library.io) 'ws_socket_io.dart' as impl;
 
 WebSocketChannel socketConnect(
-    Uri uri, {
-      Map<String, dynamic>? headers,
-    }) =>
+  Uri uri, {
+  Map<String, dynamic>? headers,
+}) =>
     impl.socketConnect(uri, headers: headers);

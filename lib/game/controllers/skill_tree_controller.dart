@@ -39,8 +39,10 @@ class SkillTreeState {
         playerPoints: playerPoints ?? this.playerPoints,
       );
 
-  static SkillTreeState empty() =>
-      SkillTreeState(graph: const SkillTreeGraph(nodes: [], edges: []), positions: const {}, playerPoints: 0);
+  static SkillTreeState empty() => SkillTreeState(
+      graph: const SkillTreeGraph(nodes: [], edges: []),
+      positions: const {},
+      playerPoints: 0);
 }
 
 class SkillTreeController extends StateNotifier<SkillTreeState> {
@@ -51,16 +53,16 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
   final Future<SkillTreeGraph?> Function()? loadProfile;
 
   SkillTreeController(
-      this.ref, {
-        required SkillTreeGraph initialGraph,
-        this.saveProfile,
-        this.loadProfile,
-        int startingPoints = 5,
-      }) : super(SkillTreeState(
-    graph: initialGraph,
-    positions: const {},
-    playerPoints: startingPoints, // example starting points
-  )) {
+    this.ref, {
+    required SkillTreeGraph initialGraph,
+    this.saveProfile,
+    this.loadProfile,
+    int startingPoints = 5,
+  }) : super(SkillTreeState(
+          graph: initialGraph,
+          positions: const {},
+          playerPoints: startingPoints, // example starting points
+        )) {
     _computeLayout();
     _restoreProfile();
   }
@@ -171,7 +173,8 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
       return n;
     }).toList();
 
-    final newGraph = SkillTreeGraph(nodes: updatedNodes, edges: state.graph.edges);
+    final newGraph =
+        SkillTreeGraph(nodes: updatedNodes, edges: state.graph.edges);
 
     // Update state (deduct points only if XP service failed)
     try {
@@ -243,11 +246,12 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
   // ----- Respec -----
   void respec() {
     final refunded = state.graph.nodes.where((n) => n.unlocked).fold<int>(
-      0,
+          0,
           (sum, n) => sum + (n.cost / 2).floor(),
-    );
+        );
     final reset = [
-      for (final n in state.graph.nodes) n.copyWith(unlocked: false, available: n.tier == 0),
+      for (final n in state.graph.nodes)
+        n.copyWith(unlocked: false, available: n.tier == 0),
     ];
 
     // Try to refund through XP service, fallback to points
@@ -300,10 +304,7 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
   /// the next app launch. All errors are swallowed — do not revert local state.
   void _persistUnlock(String nodeId) {
     try {
-      ref
-          .read(playerProfileServiceProvider)
-          .getUserId()
-          .then((userId) {
+      ref.read(playerProfileServiceProvider).getUserId().then((userId) {
         if (userId == null || userId.isEmpty) return;
         unawaited(() async {
           try {

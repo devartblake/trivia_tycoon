@@ -87,7 +87,12 @@ class QuickMathConfig {
           maxA: 60,
           minB: 2,
           maxB: 24,
-          ops: [QuickMathOp.add, QuickMathOp.sub, QuickMathOp.mul, QuickMathOp.div],
+          ops: [
+            QuickMathOp.add,
+            QuickMathOp.sub,
+            QuickMathOp.mul,
+            QuickMathOp.div
+          ],
           basePoints: 95,
           wrongPenalty: 14,
           streakMultiplierStep: 0.12,
@@ -101,7 +106,12 @@ class QuickMathConfig {
           maxA: 99,
           minB: 2,
           maxB: 30,
-          ops: [QuickMathOp.add, QuickMathOp.sub, QuickMathOp.mul, QuickMathOp.div],
+          ops: [
+            QuickMathOp.add,
+            QuickMathOp.sub,
+            QuickMathOp.mul,
+            QuickMathOp.div
+          ],
           basePoints: 120,
           wrongPenalty: 16,
           streakMultiplierStep: 0.14,

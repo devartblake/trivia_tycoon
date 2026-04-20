@@ -20,15 +20,18 @@ class _AnimatedQrSheet extends StatefulWidget {
   State<_AnimatedQrSheet> createState() => _AnimatedQrSheetState();
 }
 
-class _AnimatedQrSheetState extends State<_AnimatedQrSheet> with SingleTickerProviderStateMixin {
+class _AnimatedQrSheetState extends State<_AnimatedQrSheet>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnim;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(duration: const Duration(milliseconds: 300), vsync: this);
-    _scaleAnim = CurvedAnimation(parent: _controller, curve: Curves.easeOutBack);
+    _controller = AnimationController(
+        duration: const Duration(milliseconds: 300), vsync: this);
+    _scaleAnim =
+        CurvedAnimation(parent: _controller, curve: Curves.easeOutBack);
     _controller.forward();
   }
 
@@ -51,7 +54,9 @@ class _AnimatedQrSheetState extends State<_AnimatedQrSheet> with SingleTickerPro
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text("Share Profile", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                const Text("Share Profile",
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 16),
                 QrCodeWidget(
                   data: widget.data,

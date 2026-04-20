@@ -143,7 +143,8 @@ class EducationalStatsService {
 
       // Get existing quiz history with safe casting
       final dynamic historyData = box.get(_quizHistoryKey, defaultValue: []);
-      final List<Map<String, dynamic>> quizHistory = _safeCastMapList(historyData);
+      final List<Map<String, dynamic>> quizHistory =
+          _safeCastMapList(historyData);
 
       // Add new result with explicit typing
       final Map<String, dynamic> resultData = {
@@ -172,7 +173,6 @@ class EducationalStatsService {
       await _updateSubjectStats(result);
 
       LogManager.debug('Quiz completion processed successfully');
-
     } catch (e) {
       LogManager.debug('Failed to record quiz result: $e');
     }
@@ -184,7 +184,8 @@ class EducationalStatsService {
 
       // Get quiz history with safe casting
       final dynamic historyData = box.get(_quizHistoryKey, defaultValue: []);
-      final List<Map<String, dynamic>> quizHistory = _safeCastMapList(historyData);
+      final List<Map<String, dynamic>> quizHistory =
+          _safeCastMapList(historyData);
 
       // Calculate overall stats
       int totalQuizzes = quizHistory.length;
@@ -196,10 +197,12 @@ class EducationalStatsService {
         totalQuestions += (quiz['totalQuestions'] as num? ?? 0).toInt();
       }
 
-      double averageScore = totalQuestions > 0 ? (totalCorrect / totalQuestions) * 100 : 0.0;
+      double averageScore =
+          totalQuestions > 0 ? (totalCorrect / totalQuestions) * 100 : 0.0;
 
       // Get streak data with safe casting
-      final dynamic streakRaw = box.get(_streakDataKey, defaultValue: {'current': 0, 'max': 0});
+      final dynamic streakRaw =
+          box.get(_streakDataKey, defaultValue: {'current': 0, 'max': 0});
       final Map<String, dynamic> streakData = _safeCastMap(streakRaw);
       int currentStreak = (streakData['current'] as num? ?? 0).toInt();
       int maxStreak = (streakData['max'] as num? ?? 0).toInt();
@@ -215,7 +218,8 @@ class EducationalStatsService {
           category: data['category'] as String? ?? 'Mixed',
           classLevel: data['classLevel'] as String? ?? '1',
           totalXP: (data['xpEarned'] as num? ?? 0).toInt(),
-          quizDuration: Duration(seconds: (data['duration'] as num? ?? 300).toInt()),
+          quizDuration:
+              Duration(seconds: (data['duration'] as num? ?? 300).toInt()),
           // Add default values for other required fields
           coins: 0,
           diamonds: 0,
@@ -231,7 +235,8 @@ class EducationalStatsService {
         lastQuizDate = DateTime.tryParse(lastQuizData['date'] as String? ?? '');
       }
 
-      LogManager.debug('Educational data updated successfully for quiz completion');
+      LogManager.debug(
+          'Educational data updated successfully for quiz completion');
 
       return EducationalStats(
         totalQuizzes: totalQuizzes,
@@ -243,7 +248,6 @@ class EducationalStatsService {
         recentQuizzes: recentQuizzes,
         lastQuizDate: lastQuizDate,
       );
-
     } catch (e) {
       LogManager.debug('Failed to get educational stats: $e');
       return EducationalStats();
@@ -253,7 +257,8 @@ class EducationalStatsService {
   Future<void> _updateStreak(QuizResults result) async {
     try {
       final box = await Hive.openBox(_statsBoxName);
-      final dynamic streakRaw = box.get(_streakDataKey, defaultValue: {'current': 0, 'max': 0, 'lastDate': ''});
+      final dynamic streakRaw = box.get(_streakDataKey,
+          defaultValue: {'current': 0, 'max': 0, 'lastDate': ''});
       final Map<String, dynamic> streakData = _safeCastMap(streakRaw);
 
       final today = DateTime.now();
@@ -271,7 +276,9 @@ class EducationalStatsService {
         // First quiz ever
         currentStreak = 1;
       } else {
-        final daysDifference = today.difference(DateTime(lastDate.year, lastDate.month, lastDate.day)).inDays;
+        final daysDifference = today
+            .difference(DateTime(lastDate.year, lastDate.month, lastDate.day))
+            .inDays;
 
         if (daysDifference == 0) {
           // Same day, streak continues
@@ -292,11 +299,11 @@ class EducationalStatsService {
       final Map<String, dynamic> updatedStreakData = {
         'current': currentStreak,
         'max': maxStreak,
-        'lastDate': DateTime(today.year, today.month, today.day).toIso8601String(),
+        'lastDate':
+            DateTime(today.year, today.month, today.day).toIso8601String(),
       };
 
       await box.put(_streakDataKey, updatedStreakData);
-
     } catch (e) {
       LogManager.debug('Failed to update streak: $e');
     }
@@ -309,20 +316,29 @@ class EducationalStatsService {
       final Map<String, dynamic> allSubjectData = _safeCastMap(allSubjectRaw);
 
       final String subject = result.category;
-      final Map<String, dynamic> subjectData = _safeCastMap(allSubjectData[subject]);
+      final Map<String, dynamic> subjectData =
+          _safeCastMap(allSubjectData[subject]);
 
       // Update stats
-      int quizzesCompleted = (subjectData['quizzesCompleted'] as num? ?? 0).toInt() + 1;
-      int totalQuestions = (subjectData['totalQuestions'] as num? ?? 0).toInt() + result.totalQuestions;
-      int correctAnswers = (subjectData['correctAnswers'] as num? ?? 0).toInt() + result.score;
-      double averageScore = totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0.0;
+      int quizzesCompleted =
+          (subjectData['quizzesCompleted'] as num? ?? 0).toInt() + 1;
+      int totalQuestions =
+          (subjectData['totalQuestions'] as num? ?? 0).toInt() +
+              result.totalQuestions;
+      int correctAnswers =
+          (subjectData['correctAnswers'] as num? ?? 0).toInt() + result.score;
+      double averageScore =
+          totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0.0;
 
       // Calculate mastery level (1-5 stars based on performance)
       int masteryLevel = 1;
       if (quizzesCompleted >= 5) {
-        if (averageScore >= 95) masteryLevel = 5;
-        else if (averageScore >= 85) masteryLevel = 4;
-        else if (averageScore >= 75) masteryLevel = 3;
+        if (averageScore >= 95)
+          masteryLevel = 5;
+        else if (averageScore >= 85)
+          masteryLevel = 4;
+        else if (averageScore >= 75)
+          masteryLevel = 3;
         else if (averageScore >= 65) masteryLevel = 2;
       }
 
@@ -338,7 +354,6 @@ class EducationalStatsService {
 
       allSubjectData[subject] = updatedSubjectData;
       await box.put(_subjectStatsKey, allSubjectData);
-
     } catch (e) {
       LogManager.debug('Failed to update subject stats: $e');
     }
@@ -361,7 +376,9 @@ class EducationalStatsService {
           totalQuestions: (data['totalQuestions'] as num? ?? 0).toInt(),
           correctAnswers: (data['correctAnswers'] as num? ?? 0).toInt(),
           masteryLevel: (data['masteryLevel'] as num? ?? 1).toInt(),
-          lastQuizDate: data['lastQuizDate'] != null ? DateTime.tryParse(data['lastQuizDate']) : null,
+          lastQuizDate: data['lastQuizDate'] != null
+              ? DateTime.tryParse(data['lastQuizDate'])
+              : null,
         );
       }
 
@@ -376,7 +393,8 @@ class EducationalStatsService {
     try {
       final box = await Hive.openBox(_statsBoxName);
       final dynamic historyData = box.get(_quizHistoryKey, defaultValue: []);
-      final List<Map<String, dynamic>> quizHistory = _safeCastMapList(historyData);
+      final List<Map<String, dynamic>> quizHistory =
+          _safeCastMapList(historyData);
 
       final now = DateTime.now();
       final List<Map<String, dynamic>> weeklyData = [];
@@ -384,7 +402,8 @@ class EducationalStatsService {
       // Generate last 7 days
       for (int i = 6; i >= 0; i--) {
         final date = now.subtract(Duration(days: i));
-        final dayName = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][date.weekday - 1];
+        final dayName =
+            ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][date.weekday - 1];
 
         // Count quizzes for this day
         int quizCount = 0;
@@ -394,7 +413,8 @@ class EducationalStatsService {
         for (final quiz in quizHistory) {
           final quizDate = DateTime.tryParse(quiz['date'] as String? ?? '');
           if (quizDate != null) {
-            final quizDay = DateTime(quizDate.year, quizDate.month, quizDate.day);
+            final quizDay =
+                DateTime(quizDate.year, quizDate.month, quizDate.day);
             final targetDay = DateTime(date.year, date.month, date.day);
 
             if (quizDay.isAtSameMomentAs(targetDay)) {
@@ -405,7 +425,8 @@ class EducationalStatsService {
           }
         }
 
-        final averageScore = totalQuestions > 0 ? (totalScore / totalQuestions) * 100 : 0;
+        final averageScore =
+            totalQuestions > 0 ? (totalScore / totalQuestions) * 100 : 0;
 
         weeklyData.add({
           'day': dayName,
@@ -423,7 +444,8 @@ class EducationalStatsService {
 }
 
 // Providers
-final educationalStatsServiceProvider = Provider<EducationalStatsService>((ref) {
+final educationalStatsServiceProvider =
+    Provider<EducationalStatsService>((ref) {
   return EducationalStatsService();
 });
 
@@ -432,7 +454,8 @@ final educationalStatsProvider = FutureProvider<EducationalStats>((ref) async {
   return await service.getEducationalStats();
 });
 
-final weeklyActivityProvider = FutureProvider<List<Map<String, dynamic>>>((ref) async {
+final weeklyActivityProvider =
+    FutureProvider<List<Map<String, dynamic>>>((ref) async {
   final service = ref.read(educationalStatsServiceProvider);
   return await service.getWeeklyActivity();
 });
@@ -462,7 +485,6 @@ class QuizCompletionNotifier {
       // Refresh providers
       ref.invalidate(educationalStatsProvider);
       ref.invalidate(weeklyActivityProvider);
-
     } catch (e) {
       LogManager.debug('Failed to process quiz completion: $e');
     }
@@ -470,7 +492,8 @@ class QuizCompletionNotifier {
 
   Future<void> _checkEducationalAchievements(QuizResults result) async {
     try {
-      final stats = await ref.read(educationalStatsServiceProvider).getEducationalStats();
+      final stats =
+          await ref.read(educationalStatsServiceProvider).getEducationalStats();
       // Example achievement checks
       if (stats.totalQuizzes == 1) {
         // First quiz achievement
@@ -488,15 +511,17 @@ class QuizCompletionNotifier {
       }
 
       // Perfect week check
-      final weeklyData = await ref.read(educationalStatsServiceProvider).getWeeklyActivity();
-      final thisWeekQuizzes = weeklyData.where((day) => day['quizzes'] > 0).toList();
+      final weeklyData =
+          await ref.read(educationalStatsServiceProvider).getWeeklyActivity();
+      final thisWeekQuizzes =
+          weeklyData.where((day) => day['quizzes'] > 0).toList();
       if (thisWeekQuizzes.length >= 7) {
-        final allScores90Plus = thisWeekQuizzes.every((day) => day['score'] >= 90);
+        final allScores90Plus =
+            thisWeekQuizzes.every((day) => day['score'] >= 90);
         if (allScores90Plus) {
           LogManager.debug('Achievement unlocked: Perfect Week!');
         }
       }
-
     } catch (e) {
       LogManager.debug('Failed to check achievements: $e');
     }

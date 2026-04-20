@@ -86,7 +86,8 @@ QuestionModel _question({
 }
 
 void main() {
-  test('correct multiplayer answer resolves only after opponent update', () async {
+  test('correct multiplayer answer resolves only after opponent update',
+      () async {
     final service = _FakeMultiplayerQuizService(
       matchData: MatchData(
         matchId: 'match-1',

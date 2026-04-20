@@ -105,7 +105,8 @@ final activeProfileStatsProvider = Provider<Map<String, dynamic>>((ref) {
 });
 
 // Provider for XP that syncs with the active profile
-final profileAwareXPProvider = StateNotifierProvider<ProfileAwareXPNotifier, int>((ref) {
+final profileAwareXPProvider =
+    StateNotifierProvider<ProfileAwareXPNotifier, int>((ref) {
   return ProfileAwareXPNotifier(ref);
 });
 
@@ -149,7 +150,8 @@ class ProfileAwareXPNotifier extends StateNotifier<int> {
 }
 
 // Provider that manages profile initialization and switching
-final profileManagerProvider = StateNotifierProvider<ProfileManagerNotifier, ProfileManagerState>((ref) {
+final profileManagerProvider =
+    StateNotifierProvider<ProfileManagerNotifier, ProfileManagerState>((ref) {
   return ProfileManagerNotifier(ref);
 });
 
@@ -206,7 +208,8 @@ class ProfileManagerState {
       isLoading: isLoading ?? this.isLoading,
       error: error,
       profiles: profiles ?? this.profiles,
-      activeProfile: clearActiveProfile ? null : (activeProfile ?? this.activeProfile),
+      activeProfile:
+          clearActiveProfile ? null : (activeProfile ?? this.activeProfile),
     );
   }
 }
@@ -264,7 +267,9 @@ class ProfileManagerNotifier extends StateNotifier<ProfileManagerState> {
 
         // Update XP provider
         if (activeProfile != null) {
-          ref.read(profileAwareXPProvider.notifier).setXP(activeProfile.currentXP);
+          ref
+              .read(profileAwareXPProvider.notifier)
+              .setXP(activeProfile.currentXP);
         }
 
         state = state.copyWith(
@@ -302,7 +307,11 @@ class ProfileManagerNotifier extends StateNotifier<ProfileManagerState> {
     }
   }
 
-  Future<ProfileData?> createProfile({required String name, String? avatar, String? country, String? ageGroup}) async {
+  Future<ProfileData?> createProfile(
+      {required String name,
+      String? avatar,
+      String? country,
+      String? ageGroup}) async {
     try {
       final multiProfileService = ref.read(multiProfileServiceProvider);
       final newProfile = await multiProfileService.createProfile(

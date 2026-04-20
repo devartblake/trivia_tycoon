@@ -32,7 +32,7 @@ class UserPresence {
     return UserPresence(
       userId: InputValidator.safeString(json['userId'] ?? ''),
       status: PresenceStatus.values.firstWhere(
-            (e) => e.toString() == json['status'],
+        (e) => e.toString() == json['status'],
         orElse: () => PresenceStatus.offline,
       ),
       activity: json['activity'] != null
@@ -41,7 +41,8 @@ class UserPresence {
       gameActivity: json['gameActivity'] != null
           ? GameActivity.fromJson(json['gameActivity'])
           : null,
-      lastSeen: DateTime.parse(json['lastSeen'] ?? DateTime.now().toIso8601String()),
+      lastSeen:
+          DateTime.parse(json['lastSeen'] ?? DateTime.now().toIso8601String()),
       customData: Map<String, dynamic>.from(json['customData'] ?? {}),
     );
   }
@@ -78,10 +79,12 @@ class UserPresence {
   }
 
   /// Check if user is currently active (online or in-game)
-  bool get isActive => status == PresenceStatus.online || status == PresenceStatus.inGame;
+  bool get isActive =>
+      status == PresenceStatus.online || status == PresenceStatus.inGame;
 
   /// Check if user is available for interaction
-  bool get isAvailable => status != PresenceStatus.busy && status != PresenceStatus.offline;
+  bool get isAvailable =>
+      status != PresenceStatus.busy && status != PresenceStatus.offline;
 
   /// Get display text for the presence
   String get displayText {
@@ -135,12 +138,12 @@ class UserPresence {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is UserPresence &&
-              runtimeType == other.runtimeType &&
-              userId == other.userId &&
-              status == other.status &&
-              activity == other.activity &&
-              gameActivity == other.gameActivity;
+      other is UserPresence &&
+          runtimeType == other.runtimeType &&
+          userId == other.userId &&
+          status == other.status &&
+          activity == other.activity &&
+          gameActivity == other.gameActivity;
 
   @override
   int get hashCode =>
@@ -190,10 +193,11 @@ class GameActivity {
       score: json['score']?.toInt(),
       timeRemaining: json['timeRemaining']?.toInt(),
       gameState: GameState.values.firstWhere(
-            (e) => e.toString() == json['gameState'],
+        (e) => e.toString() == json['gameState'],
         orElse: () => GameState.playing,
       ),
-      startTime: DateTime.parse(json['startTime'] ?? DateTime.now().toIso8601String()),
+      startTime:
+          DateTime.parse(json['startTime'] ?? DateTime.now().toIso8601String()),
       metadata: Map<String, dynamic>.from(json['metadata'] ?? {}),
     );
   }
@@ -242,7 +246,8 @@ class GameActivity {
   bool get allowsSpectators => metadata['allowSpectators'] == true;
 
   /// Check if user can be invited to join
-  bool get canJoin => gameState == GameState.lobby || gameState == GameState.waiting;
+  bool get canJoin =>
+      gameState == GameState.lobby || gameState == GameState.waiting;
 
   /// Get formatted duration string
   String get formattedDuration {
@@ -257,13 +262,13 @@ class GameActivity {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is GameActivity &&
-              runtimeType == other.runtimeType &&
-              gameType == other.gameType &&
-              gameMode == other.gameMode &&
-              currentLevel == other.currentLevel &&
-              score == other.score &&
-              gameState == other.gameState;
+      other is GameActivity &&
+          runtimeType == other.runtimeType &&
+          gameType == other.gameType &&
+          gameMode == other.gameMode &&
+          currentLevel == other.currentLevel &&
+          score == other.score &&
+          gameState == other.gameState;
 
   @override
   int get hashCode =>
@@ -345,7 +350,8 @@ enum GameState {
   }
 
   /// Check if state allows joining
-  bool get allowsJoining => this == GameState.lobby || this == GameState.waiting;
+  bool get allowsJoining =>
+      this == GameState.lobby || this == GameState.waiting;
 
   /// Check if state allows spectating
   bool get allowsSpectating => this == GameState.playing;

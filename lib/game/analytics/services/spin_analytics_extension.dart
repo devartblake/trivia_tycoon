@@ -40,7 +40,8 @@ extension SpinAnalytics on AnalyticsService {
     stats['rewardCounts'] = rewardCounts;
 
     // Update total rewards earned
-    stats['totalRewardsEarned'] = (stats['totalRewardsEarned'] ?? 0) + rewardValue;
+    stats['totalRewardsEarned'] =
+        (stats['totalRewardsEarned'] ?? 0) + rewardValue;
 
     // Update best reward
     if (rewardValue > (stats['bestReward'] ?? 0)) {
@@ -245,7 +246,8 @@ extension SpinAnalytics on AnalyticsService {
     }
 
     stats['totalSpins'] = (stats['totalSpins'] ?? 0) + totalSpinsAdded;
-    stats['totalRewardsEarned'] = (stats['totalRewardsEarned'] ?? 0) + totalRewardsAdded;
+    stats['totalRewardsEarned'] =
+        (stats['totalRewardsEarned'] ?? 0) + totalRewardsAdded;
     stats['rewardCounts'] = rewardCounts;
     stats['bestReward'] = maxReward;
     if (bestRewardType != null) {

@@ -53,16 +53,16 @@ class MissionCardSpec {
   bool get isComplete => progress >= goal;
 
   Map<String, dynamic> toJson() => {
-    'missionId': missionId,
-    'title': title,
-    if (subtitle != null) 'subtitle': subtitle,
-    'progress': progress,
-    'goal': goal,
-    'rewardXp': rewardXp,
-    'rewardCoins': rewardCoins,
-    if (cardVisual != null) 'cardVisual': cardVisual!.toJson(),
-    'actions': actions.map((e) => e.toJson()).toList(),
-  };
+        'missionId': missionId,
+        'title': title,
+        if (subtitle != null) 'subtitle': subtitle,
+        'progress': progress,
+        'goal': goal,
+        'rewardXp': rewardXp,
+        'rewardCoins': rewardCoins,
+        if (cardVisual != null) 'cardVisual': cardVisual!.toJson(),
+        'actions': actions.map((e) => e.toJson()).toList(),
+      };
 
   String toPrettyJson() => const JsonEncoder.withIndent('  ').convert(toJson());
 
@@ -75,19 +75,23 @@ class MissionCardSpec {
       progress: (json['progress'] is int)
           ? json['progress'] as int
           : int.tryParse('${json['progress']}') ?? 0,
-      goal: (json['goal'] is int) ? json['goal'] as int : int.tryParse('${json['goal']}') ?? 0,
+      goal: (json['goal'] is int)
+          ? json['goal'] as int
+          : int.tryParse('${json['goal']}') ?? 0,
       rewardXp: (json['rewardXp'] is int)
           ? json['rewardXp'] as int
           : int.tryParse('${json['rewardXp']}') ?? 0,
       rewardCoins: _int(json['rewardCoins']) ?? 0,
       cardVisual: json['cardVisual'] is Map
-          ? DepthCardSpec.fromJson(Map<String, dynamic>.from(json['cardVisual'] as Map))
+          ? DepthCardSpec.fromJson(
+              Map<String, dynamic>.from(json['cardVisual'] as Map))
           : null,
       actions: actionsRaw is List
           ? actionsRaw
-          .whereType<Map>()
-          .map((m) => MissionActionSpec.fromJson(Map<String, dynamic>.from(m)))
-          .toList()
+              .whereType<Map>()
+              .map((m) =>
+                  MissionActionSpec.fromJson(Map<String, dynamic>.from(m)))
+              .toList()
           : const [],
     );
   }
@@ -115,11 +119,11 @@ class MissionActionSpec {
   });
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'label': label,
-    'intent': intent,
-    if (payload.isNotEmpty) 'payload': payload,
-  };
+        'id': id,
+        'label': label,
+        'intent': intent,
+        if (payload.isNotEmpty) 'payload': payload,
+      };
 
   factory MissionActionSpec.fromJson(Map<String, dynamic> json) {
     final rawPayload = json['payload'];
@@ -127,7 +131,8 @@ class MissionActionSpec {
       id: (json['id'] ?? '').toString(),
       label: (json['label'] ?? '').toString(),
       intent: (json['intent'] ?? '').toString(),
-      payload: rawPayload is Map ? Map<String, dynamic>.from(rawPayload) : const {},
+      payload:
+          rawPayload is Map ? Map<String, dynamic>.from(rawPayload) : const {},
     );
   }
 }

@@ -70,8 +70,7 @@ void main() {
     test('setDisplayName updates the name', () {
       final container = ProviderContainer();
       addTearDown(container.dispose);
-      final svc =
-          _makeSyncService(container: container, displayName: 'Alice');
+      final svc = _makeSyncService(container: container, displayName: 'Alice');
       svc.setDisplayName('Charlie');
       expect(svc.displayName, 'Charlie');
     });

@@ -10,8 +10,8 @@ import 'package:vector_math/vector_math_64.dart' as vmath;
 class BranchPathOverlayPainter extends CustomPainter {
   final Map<String, Offset> positionsWorld; // nodeId -> world/layout coords
   final vmath.Matrix4 worldToScreen;
-  final List<String> path;                  // ordered node ids
-  final int currentStep;                    // index inside `path` (0-based)
+  final List<String> path; // ordered node ids
+  final int currentStep; // index inside `path` (0-based)
   final double nodeRadius;
   final bool showStepNumbers;
 
@@ -21,9 +21,9 @@ class BranchPathOverlayPainter extends CustomPainter {
   final double strokeWidth;
 
   // Legacy support for your existing interface
-  final List<Offset>? centers;      // in screen-space order (legacy)
+  final List<Offset>? centers; // in screen-space order (legacy)
   final bool showPath;
-  final int? highlightIndex;       // if set, draws ring around this center (legacy)
+  final int? highlightIndex; // if set, draws ring around this center (legacy)
   final Color ringColor;
   final double thickness;
   final double arrowSize;
@@ -60,14 +60,14 @@ class BranchPathOverlayPainter extends CustomPainter {
     double thickness = 2.0,
     double arrowSize = 8.0,
   }) : this(
-    centers: centers,
-    showPath: showPath,
-    highlightIndex: highlightIndex,
-    pathColor: pathColor,
-    ringColor: ringColor,
-    thickness: thickness,
-    arrowSize: arrowSize,
-  );
+          centers: centers,
+          showPath: showPath,
+          highlightIndex: highlightIndex,
+          pathColor: pathColor,
+          ringColor: ringColor,
+          thickness: thickness,
+          arrowSize: arrowSize,
+        );
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -162,7 +162,8 @@ class BranchPathOverlayPainter extends CustomPainter {
   }
 
   void _paintHalo(Canvas canvas) {
-    if (currentStep < 0 || currentStep >= path.length || haloColor == null) return;
+    if (currentStep < 0 || currentStep >= path.length || haloColor == null)
+      return;
     final id = path[currentStep];
     final world = positionsWorld[id];
     if (world == null) return;
@@ -199,7 +200,8 @@ class BranchPathOverlayPainter extends CustomPainter {
         text: TextSpan(text: '${i + 1}', style: textStyle),
         textDirection: TextDirection.ltr,
       )..layout(minWidth: 0, maxWidth: 40);
-      final off = Offset(p.dx - tp.width / 2, p.dy - nodeRadius - 10 - tp.height);
+      final off =
+          Offset(p.dx - tp.width / 2, p.dy - nodeRadius - 10 - tp.height);
       tp.paint(canvas, off);
     }
   }
@@ -236,19 +238,19 @@ class BranchPathOverlayPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant BranchPathOverlayPainter old) =>
       old.positionsWorld != positionsWorld ||
-          old.worldToScreen != worldToScreen ||
-          old.path != path ||
-          old.currentStep != currentStep ||
-          old.nodeRadius != nodeRadius ||
-          old.pathColor != pathColor ||
-          old.pathGlowColor != pathGlowColor ||
-          old.haloColor != haloColor ||
-          old.strokeWidth != strokeWidth ||
-          old.showStepNumbers != showStepNumbers ||
-          old.centers != centers ||
-          old.showPath != showPath ||
-          old.highlightIndex != highlightIndex ||
-          old.ringColor != ringColor ||
-          old.thickness != thickness ||
-          old.arrowSize != arrowSize;
+      old.worldToScreen != worldToScreen ||
+      old.path != path ||
+      old.currentStep != currentStep ||
+      old.nodeRadius != nodeRadius ||
+      old.pathColor != pathColor ||
+      old.pathGlowColor != pathGlowColor ||
+      old.haloColor != haloColor ||
+      old.strokeWidth != strokeWidth ||
+      old.showStepNumbers != showStepNumbers ||
+      old.centers != centers ||
+      old.showPath != showPath ||
+      old.highlightIndex != highlightIndex ||
+      old.ringColor != ringColor ||
+      old.thickness != thickness ||
+      old.arrowSize != arrowSize;
 }

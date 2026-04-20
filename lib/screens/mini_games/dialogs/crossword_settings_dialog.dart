@@ -83,7 +83,7 @@ class _CrosswordSettingsDialogState extends State<CrosswordSettingsDialog> {
                 borderRadius: BorderRadius.circular(12),
               ),
               contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             ),
           ),
         ],

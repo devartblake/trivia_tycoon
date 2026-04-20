@@ -43,12 +43,12 @@ class GameTurn {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is GameTurn &&
-              runtimeType == other.runtimeType &&
-              questionId == other.questionId &&
-              startAt == other.startAt &&
-              endAt == other.endAt &&
-              remainingMs == other.remainingMs;
+      other is GameTurn &&
+          runtimeType == other.runtimeType &&
+          questionId == other.questionId &&
+          startAt == other.startAt &&
+          endAt == other.endAt &&
+          remainingMs == other.remainingMs;
 
   @override
   int get hashCode => Object.hash(questionId, startAt, endAt, remainingMs);

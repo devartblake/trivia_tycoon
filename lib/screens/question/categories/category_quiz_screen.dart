@@ -7,7 +7,8 @@ import '../../../game/services/quiz_category.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 // Provider for category quiz data
-final categoryQuizProvider = FutureProvider.family<CategoryQuizData, String>((ref, category) async {
+final categoryQuizProvider =
+    FutureProvider.family<CategoryQuizData, String>((ref, category) async {
   final repository = ref.watch(question_data.questionRepositoryProvider);
 
   try {
@@ -17,7 +18,8 @@ final categoryQuizProvider = FutureProvider.family<CategoryQuizData, String>((re
     );
 
     final easyCount = categoryQuestions.where((q) => q.difficulty == 1).length;
-    final mediumCount = categoryQuestions.where((q) => q.difficulty == 2).length;
+    final mediumCount =
+        categoryQuestions.where((q) => q.difficulty == 2).length;
     final hardCount = categoryQuestions.where((q) => q.difficulty == 3).length;
 
     final audioCount = categoryQuestions.where((q) => q.hasAudio).length;
@@ -106,7 +108,8 @@ class _CategoryQuizScreenState extends ConsumerState<CategoryQuizScreen> {
               Text('Error loading category: $error'),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: () => ref.refresh(categoryQuizProvider(widget.category)),
+                onPressed: () =>
+                    ref.refresh(categoryQuizProvider(widget.category)),
                 child: const Text('Retry'),
               ),
             ],
@@ -129,7 +132,10 @@ class _CategoryQuizScreenState extends ConsumerState<CategoryQuizScreen> {
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [_getCategoryColor().withValues(alpha: 0.8), _getCategoryColor()],
+                colors: [
+                  _getCategoryColor().withValues(alpha: 0.8),
+                  _getCategoryColor()
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -297,8 +303,10 @@ class _CategoryQuizScreenState extends ConsumerState<CategoryQuizScreen> {
                       child: Slider(
                         value: selectedQuestionCount.toDouble(),
                         min: 5,
-                        max: categoryData.totalQuestions.toDouble().clamp(5, 50),
-                        divisions: _calculateSliderDivisions(categoryData.totalQuestions),
+                        max:
+                            categoryData.totalQuestions.toDouble().clamp(5, 50),
+                        divisions: _calculateSliderDivisions(
+                            categoryData.totalQuestions),
                         label: selectedQuestionCount.toString(),
                         onChanged: (value) {
                           setState(() {
@@ -308,7 +316,8 @@ class _CategoryQuizScreenState extends ConsumerState<CategoryQuizScreen> {
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(
                         color: _getCategoryColor().withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
@@ -400,21 +409,27 @@ class _CategoryQuizScreenState extends ConsumerState<CategoryQuizScreen> {
                 ),
                 const SizedBox(height: 12),
                 CheckboxListTile(
-                  title: Text('Include Audio Questions (${categoryData.audioCount})'),
+                  title: Text(
+                      'Include Audio Questions (${categoryData.audioCount})'),
                   value: includeAudio,
-                  onChanged: (value) => setState(() => includeAudio = value ?? true),
+                  onChanged: (value) =>
+                      setState(() => includeAudio = value ?? true),
                   dense: true,
                 ),
                 CheckboxListTile(
-                  title: Text('Include Video Questions (${categoryData.videoCount})'),
+                  title: Text(
+                      'Include Video Questions (${categoryData.videoCount})'),
                   value: includeVideo,
-                  onChanged: (value) => setState(() => includeVideo = value ?? true),
+                  onChanged: (value) =>
+                      setState(() => includeVideo = value ?? true),
                   dense: true,
                 ),
                 CheckboxListTile(
-                  title: Text('Include Image Questions (${categoryData.imageCount})'),
+                  title: Text(
+                      'Include Image Questions (${categoryData.imageCount})'),
                   value: includeImages,
-                  onChanged: (value) => setState(() => includeImages = value ?? true),
+                  onChanged: (value) =>
+                      setState(() => includeImages = value ?? true),
                   dense: true,
                 ),
               ],
@@ -434,11 +449,10 @@ class _CategoryQuizScreenState extends ConsumerState<CategoryQuizScreen> {
               ),
             ),
             const SizedBox(height: 12),
-
             ...categoryData.sampleQuestions.map((question) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: _QuestionPreviewCard(question: question),
-            )),
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: _QuestionPreviewCard(question: question),
+                )),
           ],
 
           const SizedBox(height: 32),
@@ -486,13 +500,11 @@ class _CategoryQuizScreenState extends ConsumerState<CategoryQuizScreen> {
 
   void _startQuiz(CategoryQuizData categoryData) {
     setState(() => isStartingQuiz = true);
-    final allowedDifficulties = selectedDifficulties
-        .map(_difficultyToInt)
-        .whereType<int>()
-        .toSet();
+    final allowedDifficulties =
+        selectedDifficulties.map(_difficultyToInt).whereType<int>().toSet();
     final filteredQuestions = categoryData.allQuestions.where((question) {
-      final difficultyMatch =
-          allowedDifficulties.isEmpty || allowedDifficulties.contains(question.difficulty);
+      final difficultyMatch = allowedDifficulties.isEmpty ||
+          allowedDifficulties.contains(question.difficulty);
       final audioMatch = includeAudio || !question.hasAudio;
       final videoMatch = includeVideo || !question.hasVideo;
       final imageMatch = includeImages || !question.hasImage;
@@ -715,19 +727,27 @@ class _QuestionPreviewCard extends StatelessWidget {
 
   Color _getDifficultyColor() {
     switch (question.difficulty) {
-      case 1: return Colors.green;
-      case 2: return Colors.orange;
-      case 3: return Colors.red;
-      default: return Colors.grey;
+      case 1:
+        return Colors.green;
+      case 2:
+        return Colors.orange;
+      case 3:
+        return Colors.red;
+      default:
+        return Colors.grey;
     }
   }
 
   IconData _getDifficultyIcon() {
     switch (question.difficulty) {
-      case 1: return Icons.star_outline;
-      case 2: return Icons.star_half;
-      case 3: return Icons.star;
-      default: return Icons.help_outline;
+      case 1:
+        return Icons.star_outline;
+      case 2:
+        return Icons.star_half;
+      case 3:
+        return Icons.star;
+      default:
+        return Icons.help_outline;
     }
   }
 }

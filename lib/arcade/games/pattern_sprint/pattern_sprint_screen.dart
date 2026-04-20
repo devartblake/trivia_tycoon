@@ -235,7 +235,8 @@ class _PromptCard extends StatelessWidget {
             children: sequence.map((token) {
               final isMissing = token == '?';
               return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(14),
                   color: isMissing
@@ -293,7 +294,8 @@ class _OptionsGrid extends StatelessWidget {
               backgroundColor: Colors.white.withValues(alpha: 0.10),
               foregroundColor: Colors.white,
               elevation: 0,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18)),
               side: BorderSide(color: Colors.white.withValues(alpha: 0.12)),
               padding: const EdgeInsets.symmetric(vertical: 12),
             ),

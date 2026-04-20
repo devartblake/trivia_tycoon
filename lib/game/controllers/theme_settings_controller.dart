@@ -5,7 +5,7 @@ import '../../core/utils/theme_mapper.dart';
 import '../providers/riverpod_providers.dart';
 
 final themeSettingsProvider =
-StateNotifierProvider<ThemeSettingsController, ThemeSettings>((ref) {
+    StateNotifierProvider<ThemeSettingsController, ThemeSettings>((ref) {
   final themeService = ref.read(customThemeServiceProvider);
   return ThemeSettingsController(themeService);
 });
@@ -44,7 +44,8 @@ class ThemeSettings {
       secondaryColor: secondaryColor ?? this.secondaryColor,
       brightness: brightness ?? this.brightness,
       colorScheme: colorScheme ?? this.colorScheme,
-      scaffoldBackgroundColor: scaffoldBackgroundColor ?? this.scaffoldBackgroundColor,
+      scaffoldBackgroundColor:
+          scaffoldBackgroundColor ?? this.scaffoldBackgroundColor,
       textTheme: textTheme ?? this.textTheme,
     );
   }
@@ -158,7 +159,7 @@ class ThemeSettingsController extends StateNotifier<ThemeSettings> {
 
   Future<void> setCurrentAgeGroup(String currentAgeGroup) async {
     _currentAgeGroup = currentAgeGroup;
-    await themeService.setAgeGroup( currentAgeGroup);
+    await themeService.setAgeGroup(currentAgeGroup);
     state = ThemeMapper.getThemeForAgeGroup(currentAgeGroup);
   }
 

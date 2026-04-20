@@ -5,7 +5,8 @@ class ArcadeSessionService {
 
   DateTime startSession() => DateTime.now();
 
-  Duration endSession(DateTime startedAt) => DateTime.now().difference(startedAt);
+  Duration endSession(DateTime startedAt) =>
+      DateTime.now().difference(startedAt);
 
   ArcadeResult attachDuration(ArcadeResult result, Duration duration) {
     return ArcadeResult(

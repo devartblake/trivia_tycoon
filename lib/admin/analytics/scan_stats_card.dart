@@ -111,7 +111,8 @@ class _AdminScanStatsCardState extends State<AdminScanStatsCard> {
       grouped[s.type] = (grouped[s.type] ?? 0) + 1;
     }
 
-    final topType = grouped.entries.reduce((a, b) => a.value > b.value ? a : b).key;
+    final topType =
+        grouped.entries.reduce((a, b) => a.value > b.value ? a : b).key;
     final firstScan = _scans.last.timestamp;
     final lastScan = _scans.first.timestamp;
 
@@ -218,7 +219,8 @@ class _AdminScanStatsCardState extends State<AdminScanStatsCard> {
                   icon: Icons.category,
                   iconColor: const Color(0xFF3B82F6),
                   label: 'Most Common Type',
-                  value: QrFormatUtils.labelForType(QrFormatUtils.fromName(topType)),
+                  value: QrFormatUtils.labelForType(
+                      QrFormatUtils.fromName(topType)),
                   gradient: const LinearGradient(
                     colors: [Color(0xFF3B82F6), Color(0xFF60A5FA)],
                   ),

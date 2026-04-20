@@ -40,7 +40,7 @@ class LeaderboardController extends ChangeNotifier {
     required LeaderboardDataService dataService,
     required GeneralKeyValueStorageService storage,
     required Ref ref,
-  }) : _dataService = dataService,
+  })  : _dataService = dataService,
         _storage = storage,
         _ref = ref {
     _loadLeaderboardState();
@@ -49,7 +49,8 @@ class LeaderboardController extends ChangeNotifier {
   /// Load saved leaderboard state
   Future<void> _loadLeaderboardState() async {
     try {
-      final lastRefreshStr = await _storage.getString('last_leaderboard_refresh');
+      final lastRefreshStr =
+          await _storage.getString('last_leaderboard_refresh');
       if (lastRefreshStr != null && lastRefreshStr.isNotEmpty) {
         _lastRefreshTime = DateTime.parse(lastRefreshStr);
       }
@@ -74,7 +75,8 @@ class LeaderboardController extends ChangeNotifier {
       final cachedJson = await _storage.getString('leaderboard_cache');
       if (cachedJson != null && cachedJson.isNotEmpty) {
         final localData = jsonDecode(cachedJson) as List<dynamic>;
-        _allEntries = TierAssigner.assignTiers(localData.map((e) => LeaderboardEntry.fromJson(e)).toList());
+        _allEntries = TierAssigner.assignTiers(
+            localData.map((e) => LeaderboardEntry.fromJson(e)).toList());
         _applyFilters();
         _lastCacheTime = DateTime.now();
       }
@@ -85,14 +87,15 @@ class LeaderboardController extends ChangeNotifier {
       _applyFilters();
 
       // Save latest data to Hive
-      await _storage.setString('leaderboard_cache', jsonEncode(remote.map((e) => e.toJson()).toList()));
+      await _storage.setString('leaderboard_cache',
+          jsonEncode(remote.map((e) => e.toJson()).toList()));
 
       // Update statistics
       await _updateLeaderboardStats();
 
       _lastRefreshTime = DateTime.now();
-      await _storage.setString('last_leaderboard_refresh', _lastRefreshTime!.toIso8601String());
-
+      await _storage.setString(
+          'last_leaderboard_refresh', _lastRefreshTime!.toIso8601String());
     } catch (e) {
       if (kDebugMode) LogManager.debug("⚠️ Error fetching leaderboard: $e");
     }
@@ -119,7 +122,7 @@ class LeaderboardController extends ChangeNotifier {
     // Category filtering
     switch (_selectedCategory) {
       case LeaderboardCategory.topXP:
-      // No extra filtering needed
+        // No extra filtering needed
         break;
       case LeaderboardCategory.daily:
         filtered = filtered.where((e) => e.timeframe == 'daily').toList();
@@ -131,7 +134,7 @@ class LeaderboardController extends ChangeNotifier {
         filtered = filtered.where((e) => e.timeframe == 'global').toList();
         break;
       case LeaderboardCategory.mostWins:
-      // Simulated logic - if you don't have real "wins" data
+        // Simulated logic - if you don't have real "wins" data
         filtered.sort((a, b) => b.score.compareTo(a.score));
         break;
     }
@@ -143,19 +146,26 @@ class LeaderboardController extends ChangeNotifier {
       filtered = filtered.where((e) => e.emailVerified == true).toList();
     }
     if (filterState.showPremium) {
-      filtered = filtered.where((e) => e.subscriptionStatus == 'premium').toList();
+      filtered =
+          filtered.where((e) => e.subscriptionStatus == 'premium').toList();
     }
     if (filterState.showBots) {
       filtered = filtered.where((e) => e.isBot == true).toList();
     }
     if (filterState.showPowerUsers) {
-      filtered = filtered.where((e) => (e.powerUps?.isNotEmpty ?? false)).toList();
+      filtered =
+          filtered.where((e) => (e.powerUps?.isNotEmpty ?? false)).toList();
     }
     if (filterState.deviceTypes.isNotEmpty) {
-      filtered = filtered.where((e) => filterState.deviceTypes.contains(e.lastDeviceType)).toList();
+      filtered = filtered
+          .where((e) => filterState.deviceTypes.contains(e.lastDeviceType))
+          .toList();
     }
     if (filterState.notificationMethod != 'all') {
-      filtered = filtered.where((e) => e.preferredNotificationMethod == filterState.notificationMethod).toList();
+      filtered = filtered
+          .where((e) =>
+              e.preferredNotificationMethod == filterState.notificationMethod)
+          .toList();
     }
 
     // Sorting logic
@@ -167,7 +177,8 @@ class LeaderboardController extends ChangeNotifier {
         filtered.sort((a, b) => a.rank.compareTo(b.rank));
         break;
       case 'last_active':
-        filtered.sort((a, b) => b.lastActive.compareTo(a.lastActive),
+        filtered.sort(
+          (a, b) => b.lastActive.compareTo(a.lastActive),
         );
         break;
       default:
@@ -180,7 +191,8 @@ class LeaderboardController extends ChangeNotifier {
       final currentUser = _allEntries.firstWhere((e) => e.userId == userId);
       filtered = filtered.where((e) => e.tier == currentUser.tier).toList();
     } catch (e) {
-      if (kDebugMode) LogManager.debug("⚠️ Tier restriction skipped (no matching user): $e");
+      if (kDebugMode)
+        LogManager.debug("⚠️ Tier restriction skipped (no matching user): $e");
     }
 
     filteredEntries = filtered;
@@ -196,8 +208,12 @@ class LeaderboardController extends ChangeNotifier {
 
   bool get isFilterActive {
     final filters = _ref.read(adminFilterProvider);
-    return filters.showBots || filters.showPremium || filters.showVerified || filters.showPowerUsers ||
-        filters.deviceTypes.isNotEmpty || filters.notificationMethod != 'all';
+    return filters.showBots ||
+        filters.showPremium ||
+        filters.showVerified ||
+        filters.showPowerUsers ||
+        filters.deviceTypes.isNotEmpty ||
+        filters.notificationMethod != 'all';
   }
 
   Future<void> refreshFilters({bool reloadFromStorage = false}) async {
@@ -243,7 +259,8 @@ class LeaderboardController extends ChangeNotifier {
         'isFilterActive': isFilterActive,
       };
 
-      await _storage.setString('leaderboard_stats', jsonEncode(_leaderboardStats));
+      await _storage.setString(
+          'leaderboard_stats', jsonEncode(_leaderboardStats));
     } catch (e) {
       LogManager.debug('Failed to update leaderboard stats: $e');
     }
@@ -257,7 +274,8 @@ class LeaderboardController extends ChangeNotifier {
       _isLoading = false;
 
       // Save current filter settings
-      await _storage.setString('leaderboard_filters', jsonEncode(filterSettings.toJson()));
+      await _storage.setString(
+          'leaderboard_filters', jsonEncode(filterSettings.toJson()));
 
       // Save current state
       final stateSnapshot = {
@@ -270,7 +288,8 @@ class LeaderboardController extends ChangeNotifier {
         'timestamp': DateTime.now().toIso8601String(),
       };
 
-      await _storage.setString('leaderboard_state_snapshot', jsonEncode(stateSnapshot));
+      await _storage.setString(
+          'leaderboard_state_snapshot', jsonEncode(stateSnapshot));
 
       LogManager.debug('Leaderboard state saved successfully');
     } catch (e) {
@@ -322,7 +341,8 @@ class LeaderboardController extends ChangeNotifier {
         final cachedJson = await _storage.getString('leaderboard_cache');
         if (cachedJson != null && cachedJson.isNotEmpty) {
           final localData = jsonDecode(cachedJson) as List<dynamic>;
-          _allEntries = TierAssigner.assignTiers(localData.map((e) => LeaderboardEntry.fromJson(e)).toList());
+          _allEntries = TierAssigner.assignTiers(
+              localData.map((e) => LeaderboardEntry.fromJson(e)).toList());
           needsRepair = true;
         }
       }
@@ -410,12 +430,13 @@ class LeaderboardController extends ChangeNotifier {
       }
 
       if (data.containsKey('filterSettings')) {
-        filterSettings = LeaderboardFilterSettings.fromJson(data['filterSettings']);
+        filterSettings =
+            LeaderboardFilterSettings.fromJson(data['filterSettings']);
       }
 
       if (data.containsKey('selectedCategory')) {
         _selectedCategory = LeaderboardCategory.values.firstWhere(
-              (cat) => cat.name == data['selectedCategory'],
+          (cat) => cat.name == data['selectedCategory'],
           orElse: () => LeaderboardCategory.topXP,
         );
       }

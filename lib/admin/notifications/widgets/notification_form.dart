@@ -18,7 +18,8 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
   final _formKey = GlobalKey<FormState>();
   final _titleCtrl = TextEditingController();
   final _bodyCtrl = TextEditingController();
-  final _payloadCtrl = TextEditingController(text: '{"type":"admin","source":"panel"}');
+  final _payloadCtrl =
+      TextEditingController(text: '{"type":"admin","source":"panel"}');
   final _idCtrl = TextEditingController(text: '1001');
   final _templateIdCtrl = TextEditingController();
 
@@ -52,7 +53,8 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
     );
     if (time == null) return;
     setState(() {
-      _scheduleAt = DateTime(date.year, date.month, date.day, time.hour, time.minute);
+      _scheduleAt =
+          DateTime(date.year, date.month, date.day, time.hour, time.minute);
     });
   }
 
@@ -71,7 +73,8 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
     if (raw.isEmpty) return null;
     final decoded = json.decode(raw);
     if (decoded is Map) {
-      return decoded.map<String, String>((k, v) => MapEntry(k.toString(), v.toString()));
+      return decoded
+          .map<String, String>((k, v) => MapEntry(k.toString(), v.toString()));
     }
     return null;
   }
@@ -92,9 +95,11 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
       final err = ref.read(notificationAdminActionsProvider).error;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(err == null ? 'Notification sent immediately!' : 'Error: $err'),
+          content: Text(
+              err == null ? 'Notification sent immediately!' : 'Error: $err'),
           behavior: SnackBarBehavior.floating,
-          backgroundColor: err == null ? const Color(0xFF10B981) : const Color(0xFFEF4444),
+          backgroundColor:
+              err == null ? const Color(0xFF10B981) : const Color(0xFFEF4444),
         ),
       );
     }
@@ -129,9 +134,11 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
       final err = ref.read(notificationAdminActionsProvider).error;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(err == null ? 'Notification scheduled!' : 'Error: $err'),
+          content:
+              Text(err == null ? 'Notification scheduled!' : 'Error: $err'),
           behavior: SnackBarBehavior.floating,
-          backgroundColor: err == null ? const Color(0xFF10B981) : const Color(0xFFEF4444),
+          backgroundColor:
+              err == null ? const Color(0xFF10B981) : const Color(0xFFEF4444),
         ),
       );
       if (err == null) {
@@ -177,7 +184,8 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
       savedToServer = false;
     }
 
-    await store.saveRaw(id, _titleCtrl.text.trim(), _bodyCtrl.text.trim(), payload);
+    await store.saveRaw(
+        id, _titleCtrl.text.trim(), _bodyCtrl.text.trim(), payload);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -256,7 +264,9 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
                         label: 'ID',
                         hint: '1001',
                         keyboardType: TextInputType.number,
-                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -274,7 +284,8 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
                   label: 'Title *',
                   hint: 'System update at 2 PM',
                   icon: Icons.title,
-                  validator: (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
+                  validator: (v) =>
+                      (v == null || v.trim().isEmpty) ? 'Required' : null,
                 ),
                 const SizedBox(height: 16),
 
@@ -285,7 +296,8 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
                   hint: 'We will perform maintenance...',
                   icon: Icons.description,
                   maxLines: 3,
-                  validator: (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
+                  validator: (v) =>
+                      (v == null || v.trim().isEmpty) ? 'Required' : null,
                 ),
                 const SizedBox(height: 16),
 
@@ -318,7 +330,8 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
     );
   }
 
-  Widget _buildTemplatesSection(AsyncValue<List<NotificationTemplate>> templatesAsync) {
+  Widget _buildTemplatesSection(
+      AsyncValue<List<NotificationTemplate>> templatesAsync) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -368,8 +381,10 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
               ),
               decoration: const InputDecoration(
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                prefixIcon: Icon(Icons.folder_outlined, color: Color(0xFF8B5CF6), size: 20),
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                prefixIcon: Icon(Icons.folder_outlined,
+                    color: Color(0xFF8B5CF6), size: 20),
               ),
               items: [
                 const DropdownMenuItem<NotificationTemplate>(
@@ -380,27 +395,29 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
                   ),
                 ),
                 ...list.map((t) => DropdownMenuItem<NotificationTemplate>(
-                  value: t,
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF8B5CF6).withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          t.id,
-                          style: const TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF8B5CF6),
+                      value: t,
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF8B5CF6)
+                                  .withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Text(
+                              t.id,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xFF8B5CF6),
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
-                )),
+                    )),
               ],
               onChanged: (t) => t == null ? null : _loadTemplate(t),
               icon: const Icon(Icons.arrow_drop_down, color: Color(0xFF8B5CF6)),
@@ -446,7 +463,8 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
             ),
             child: Row(
               children: [
-                const Icon(Icons.error_outline, color: Color(0xFFEF4444), size: 16),
+                const Icon(Icons.error_outline,
+                    color: Color(0xFFEF4444), size: 16),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -488,11 +506,13 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: Color(0xFF8B5CF6), width: 2),
+                    borderSide:
+                        const BorderSide(color: Color(0xFF8B5CF6), width: 2),
                   ),
                   filled: true,
                   fillColor: const Color(0xFFF9FAFB),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 ),
                 style: const TextStyle(fontSize: 14),
               ),
@@ -504,7 +524,8 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
                 backgroundColor: const Color(0xFF8B5CF6),
                 foregroundColor: Colors.white,
                 elevation: 0,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -539,7 +560,8 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
-        prefixIcon: icon != null ? Icon(icon, color: const Color(0xFF6366F1)) : null,
+        prefixIcon:
+            icon != null ? Icon(icon, color: const Color(0xFF6366F1)) : null,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
@@ -554,7 +576,8 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
         ),
         filled: true,
         fillColor: const Color(0xFFF9FAFB),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         alignLabelWithHint: maxLines > 1,
       ),
       maxLines: maxLines,
@@ -570,13 +593,13 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
         // Build channel items
         final items = channels
             .map((c) => DropdownMenuItem<String>(
-          value: c.channelKey,
-          child: Text(
-            c.channelName ?? c.channelKey!,
-            style: const TextStyle(fontSize: 14),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ))
+                  value: c.channelKey,
+                  child: Text(
+                    c.channelName ?? c.channelKey!,
+                    style: const TextStyle(fontSize: 14),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ))
             .toList();
 
         // Ensure admin channels present
@@ -622,23 +645,26 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
             ),
             filled: true,
             fillColor: const Color(0xFFF9FAFB),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           ),
           items: items.isNotEmpty
               ? items
               : [
-            DropdownMenuItem(
-              value: _channelKey,
-              child: Text(_channelKey, style: const TextStyle(fontSize: 14)),
-            ),
-          ],
+                  DropdownMenuItem(
+                    value: _channelKey,
+                    child:
+                        Text(_channelKey, style: const TextStyle(fontSize: 14)),
+                  ),
+                ],
           onChanged: (v) => setState(() => _channelKey = v ?? _channelKey),
           isExpanded: true,
           icon: const Icon(Icons.arrow_drop_down, color: Color(0xFF6366F1)),
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Text('Error loading channels: $e', style: const TextStyle(color: Color(0xFFEF4444))),
+      error: (e, _) => Text('Error loading channels: $e',
+          style: const TextStyle(color: Color(0xFFEF4444))),
     );
   }
 
@@ -668,7 +694,8 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
               const Spacer(),
               if (_scheduleAt != null)
                 IconButton(
-                  icon: const Icon(Icons.clear, size: 18, color: Color(0xFF6B7280)),
+                  icon: const Icon(Icons.clear,
+                      size: 18, color: Color(0xFF6B7280)),
                   onPressed: () => setState(() => _scheduleAt = null),
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
@@ -681,33 +708,36 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
               Expanded(
                 child: _scheduleAt == null
                     ? const Text(
-                  'No schedule set',
-                  style: TextStyle(fontSize: 13, color: Color(0xFF9CA3AF)),
-                )
+                        'No schedule set',
+                        style:
+                            TextStyle(fontSize: 13, color: Color(0xFF9CA3AF)),
+                      )
                     : Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF6366F1).withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.event, size: 16, color: Color(0xFF6366F1)),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          _formatScheduleDate(_scheduleAt!),
-                          style: const TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF6366F1),
-                          ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF6366F1).withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.event,
+                                size: 16, color: Color(0xFF6366F1)),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                _formatScheduleDate(_scheduleAt!),
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFF6366F1),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
               ),
               const SizedBox(width: 12),
               ElevatedButton.icon(
@@ -716,13 +746,16 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
                   backgroundColor: const Color(0xFF6366F1),
                   foregroundColor: Colors.white,
                   elevation: 0,
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
                 icon: const Icon(Icons.event, size: 18),
-                label: const Text('Pick Time', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                label: const Text('Pick Time',
+                    style:
+                        TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
               ),
             ],
           ),
@@ -787,24 +820,35 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: DropdownButton<int?>(
                 value: _weeklyWeekday,
-                hint: const Text('Weekly (select weekday)', style: TextStyle(fontSize: 13)),
+                hint: const Text('Weekly (select weekday)',
+                    style: TextStyle(fontSize: 13)),
                 isExpanded: true,
                 underline: const SizedBox.shrink(),
                 items: [
-                  const DropdownMenuItem(value: null, child: Text('No weekly repeat')),
+                  const DropdownMenuItem(
+                      value: null, child: Text('No weekly repeat')),
                   ...List.generate(7, (i) {
                     final val = i + 1;
-                    final days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+                    final days = [
+                      'Monday',
+                      'Tuesday',
+                      'Wednesday',
+                      'Thursday',
+                      'Friday',
+                      'Saturday',
+                      'Sunday'
+                    ];
                     return DropdownMenuItem(
                       value: val,
-                      child: Text(days[i], style: const TextStyle(fontSize: 13)),
+                      child:
+                          Text(days[i], style: const TextStyle(fontSize: 13)),
                     );
                   }),
                 ],
-                onChanged: _repeats
-                    ? (v) => setState(() => _weeklyWeekday = v)
-                    : null,
-                icon: const Icon(Icons.arrow_drop_down, color: Color(0xFF6366F1)),
+                onChanged:
+                    _repeats ? (v) => setState(() => _weeklyWeekday = v) : null,
+                icon:
+                    const Icon(Icons.arrow_drop_down, color: Color(0xFF6366F1)),
               ),
             ),
           ),
@@ -832,15 +876,16 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
             ),
             icon: actionsState.isLoading
                 ? const SizedBox(
-              height: 18,
-              width: 18,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-              ),
-            )
+                    height: 18,
+                    width: 18,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  )
                 : const Icon(Icons.send_rounded, size: 20),
-            label: const Text('Send Now', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+            label: const Text('Send Now',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
           ),
         ),
         const SizedBox(width: 12),
@@ -858,15 +903,17 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
             ),
             icon: actionsState.isLoading
                 ? const SizedBox(
-              height: 18,
-              width: 18,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF6366F1)),
-              ),
-            )
+                    height: 18,
+                    width: 18,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(Color(0xFF6366F1)),
+                    ),
+                  )
                 : const Icon(Icons.schedule_send, size: 20),
-            label: const Text('Schedule', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+            label: const Text('Schedule',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
           ),
         ),
       ],

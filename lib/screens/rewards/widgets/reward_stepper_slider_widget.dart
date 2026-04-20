@@ -32,6 +32,7 @@ class RewardStepperSliderState extends State<RewardStepperSlider> {
       _tooltipKeys.add(GlobalKey<TooltipState>());
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -67,7 +68,8 @@ class RewardStepperSliderState extends State<RewardStepperSlider> {
   Widget _buildRewardIcon(RewardStep step, bool isUnlocked, int index) {
     return Tooltip(
       key: _tooltipKeys[index],
-      message: '${step.description}\n${step.quantity > 1 ? '${step.quantity} ' : ''}Unlocked at ${step.pointValue.toInt()} points',
+      message:
+          '${step.description}\n${step.quantity > 1 ? '${step.quantity} ' : ''}Unlocked at ${step.pointValue.toInt()} points',
       decoration: BoxDecoration(
         color: Colors.black87,
         borderRadius: BorderRadius.circular(8),
@@ -121,7 +123,8 @@ class RewardStepperSliderState extends State<RewardStepperSlider> {
                   right: -8,
                   top: -8,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),

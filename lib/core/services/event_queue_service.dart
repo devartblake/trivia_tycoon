@@ -54,7 +54,8 @@ class EventQueueService {
     try {
       final metadataBox = await Hive.openBox(_metadataBoxName);
 
-      _consecutiveFailures = metadataBox.get('consecutive_failures', defaultValue: 0);
+      _consecutiveFailures =
+          metadataBox.get('consecutive_failures', defaultValue: 0);
       final lastFailureStr = metadataBox.get('last_failure_time');
       final cooldownUntilStr = metadataBox.get('cooldown_until');
 
@@ -143,8 +144,10 @@ class EventQueueService {
       // Get all entries sorted by timestamp (oldest first)
       final entries = box.toMap().entries.toList();
       entries.sort((a, b) {
-        final aTime = DateTime.tryParse(a.value['timestamp'] ?? '') ?? DateTime.now();
-        final bTime = DateTime.tryParse(b.value['timestamp'] ?? '') ?? DateTime.now();
+        final aTime =
+            DateTime.tryParse(a.value['timestamp'] ?? '') ?? DateTime.now();
+        final bTime =
+            DateTime.tryParse(b.value['timestamp'] ?? '') ?? DateTime.now();
         return aTime.compareTo(bTime);
       });
 
@@ -175,7 +178,8 @@ class EventQueueService {
   }
 
   /// Enqueue a failed event for later retry
-  Future<void> enqueueEvent(String endpoint, Map<String, dynamic> payload) async {
+  Future<void> enqueueEvent(
+      String endpoint, Map<String, dynamic> payload) async {
     if (isInCooldown) {
       LogManager.logWithCustomColor(
         'Cannot enqueue - service in cooldown mode',
@@ -199,8 +203,10 @@ class EventQueueService {
         // Remove 10 oldest events
         final entries = box.toMap().entries.toList();
         entries.sort((a, b) {
-          final aTime = DateTime.tryParse(a.value['timestamp'] ?? '') ?? DateTime.now();
-          final bTime = DateTime.tryParse(b.value['timestamp'] ?? '') ?? DateTime.now();
+          final aTime =
+              DateTime.tryParse(a.value['timestamp'] ?? '') ?? DateTime.now();
+          final bTime =
+              DateTime.tryParse(b.value['timestamp'] ?? '') ?? DateTime.now();
           return aTime.compareTo(bTime);
         });
 
@@ -245,7 +251,9 @@ class EventQueueService {
   }
 
   /// Retry all pending events in the queue with failure tracking
-  Future<void> retryQueuedEvents( Future<void> Function(String endpoint, Map<String, dynamic> payload) handler) async {
+  Future<void> retryQueuedEvents(
+      Future<void> Function(String endpoint, Map<String, dynamic> payload)
+          handler) async {
     if (isInCooldown) {
       final remaining = _cooldownUntil!.difference(DateTime.now());
       LogManager.warning(
@@ -266,7 +274,9 @@ class EventQueueService {
 
     for (final key in keys) {
       final event = box.get(key);
-      if (event == null || event['endpoint'] == null || event['payload'] == null) {
+      if (event == null ||
+          event['endpoint'] == null ||
+          event['payload'] == null) {
         await box.delete(key);
         continue;
       }
@@ -281,7 +291,6 @@ class EventQueueService {
         await box.delete(key);
         successCount++;
         _consecutiveFailures = 0; // Reset on success
-
       } catch (e) {
         if (e is NonRetryableEventException) {
           await box.delete(key);
@@ -299,7 +308,6 @@ class EventQueueService {
           'last_retry': DateTime.now().toIso8601String(),
           'last_error': e.toString(),
         });
-
       }
     }
 
@@ -346,7 +354,7 @@ class EventQueueService {
 
     LogManager.critical(
       'ENTERING COOLDOWN MODE - Too many consecutive failures. '
-          'Retries paused for ${cooldownPeriod.inMinutes} minutes',
+      'Retries paused for ${cooldownPeriod.inMinutes} minutes',
       source: 'EventQueueService',
     );
 
@@ -361,20 +369,24 @@ class EventQueueService {
   }
 
   /// Report retry cycle results
-  void _reportRetryCycle(int successCount, int failureCount, int droppedCount, int remainingCount) {
+  void _reportRetryCycle(int successCount, int failureCount, int droppedCount,
+      int remainingCount) {
     if (successCount > 0 || failureCount > 0 || droppedCount > 0) {
       LogManager.divider(label: 'RETRY CYCLE COMPLETE');
-      LogManager.success('Succeeded: $successCount', source: 'EventQueueService');
+      LogManager.success('Succeeded: $successCount',
+          source: 'EventQueueService');
 
       if (failureCount > 0) {
         LogManager.error('Failed: $failureCount', source: 'EventQueueService');
       }
 
       if (droppedCount > 0) {
-        LogManager.warning('Dropped (non-retryable): $droppedCount', source: 'EventQueueService');
+        LogManager.warning('Dropped (non-retryable): $droppedCount',
+            source: 'EventQueueService');
       }
 
-      LogManager.info('Remaining in queue: $remainingCount', source: 'EventQueueService');
+      LogManager.info('Remaining in queue: $remainingCount',
+          source: 'EventQueueService');
       LogManager.divider();
     }
 
@@ -398,23 +410,27 @@ class EventQueueService {
         });
       } catch (e) {
         // Don't let analytics failure affect queue operations
-        LogManager.debug('[EventQueueService] Analytics notification failed: $e');
+        LogManager.debug(
+            '[EventQueueService] Analytics notification failed: $e');
       }
     }
   }
 
   /// Export failed events for server upload on app termination
-  Future<Map<String, dynamic>> exportFailedEventsForUpload(String playerId) async {
+  Future<Map<String, dynamic>> exportFailedEventsForUpload(
+      String playerId) async {
     try {
       final box = await Hive.openBox(_boxName);
-      final events = box.values.map((event) => {
-        'endpoint': event['endpoint'],
-        'payload': event['payload'],
-        'timestamp': event['timestamp'],
-        'retry_count': event['retry_count'] ?? 0,
-        'last_retry': event['last_retry'],
-        'last_error': event['last_error'],
-      }).toList();
+      final events = box.values
+          .map((event) => {
+                'endpoint': event['endpoint'],
+                'payload': event['payload'],
+                'timestamp': event['timestamp'],
+                'retry_count': event['retry_count'] ?? 0,
+                'last_retry': event['last_retry'],
+                'last_error': event['last_error'],
+              })
+          .toList();
 
       final exportData = {
         'player_id': playerId,
@@ -428,7 +444,8 @@ class EventQueueService {
           'total_events': events.length,
           'max_queue_size': maxQueueSize,
         },
-        'analytics_logs': LogManager.exportLogsAsJson(source: 'EventQueueService'),
+        'analytics_logs':
+            LogManager.exportLogsAsJson(source: 'EventQueueService'),
       };
 
       LogManager.highlight(

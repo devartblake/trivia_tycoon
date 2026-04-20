@@ -15,7 +15,8 @@ class QuestionService {
   static final Map<String, DateTime> _cacheTimestamps = {};
   static const Duration _cacheLifespan = Duration(minutes: 20);
 
-  QuestionService({required this.apiService, required this.quizProgressService});
+  QuestionService(
+      {required this.apiService, required this.quizProgressService});
 
   /// Attempts to fetch questions from the server, falling back to local if failed
   /// Combines cache + loader + server fallback
@@ -61,14 +62,18 @@ class QuestionService {
   }
 
   /// ✅ Fetches questions from the API (remote)
-  Future<List<QuestionModel>> fetchQuestionsFromServer(String category, {int amount = 10}) async {
-    final data = await apiService.fetchQuestions(amount: amount, category: category);
+  Future<List<QuestionModel>> fetchQuestionsFromServer(String category,
+      {int amount = 10}) async {
+    final data =
+        await apiService.fetchQuestions(amount: amount, category: category);
     return data.map((json) => QuestionModel.fromJson(json)).toList();
   }
 
   /// ✅ Loads fallback local questions (from assets with filtering, caching, and logging)
   Future<List<QuestionModel>> fetchLocalQuestions({
-    List<String> fallbackAssets = const ['assets/data/questions/questions.json'],
+    List<String> fallbackAssets = const [
+      'assets/data/questions/questions.json'
+    ],
     String? category,
     int? difficulty,
   }) async {
@@ -87,21 +92,22 @@ class QuestionService {
         final jsonString = await rootBundle.loadString(asset);
         final jsonData = json.decode(jsonString) as List;
 
-        final parsed = jsonData
-            .map((e) => QuestionModel.fromJson(e))
-            .where((q) {
-          final matchesCategory = category == null || q.category.toLowerCase() == category.toLowerCase();
-          final matchesDifficulty = difficulty == null || q.difficulty == difficulty;
+        final parsed =
+            jsonData.map((e) => QuestionModel.fromJson(e)).where((q) {
+          final matchesCategory = category == null ||
+              q.category.toLowerCase() == category.toLowerCase();
+          final matchesDifficulty =
+              difficulty == null || q.difficulty == difficulty;
           return matchesCategory && matchesDifficulty;
-        })
-            .toList();
+        }).toList();
 
         if (parsed.isNotEmpty) {
           _memoryCache[cacheKey] = parsed;
           _cacheTimestamps[cacheKey] = now;
 
           if (kDebugMode) {
-            print('✅ Loaded ${parsed.length} from $asset (category: $category, difficulty: $difficulty)');
+            print(
+                '✅ Loaded ${parsed.length} from $asset (category: $category, difficulty: $difficulty)');
           }
 
           return parsed;

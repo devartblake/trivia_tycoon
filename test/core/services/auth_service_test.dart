@@ -116,8 +116,8 @@ void main() {
     });
 
     test('throws on 401', () async {
-      final client = _StubHttpClient((_) =>
-          _jsonResp({'message': 'Invalid credentials'}, status: 401));
+      final client = _StubHttpClient(
+          (_) => _jsonResp({'message': 'Invalid credentials'}, status: 401));
 
       final svc = _makeAuthService(store: tokenStore, httpClient: client);
       await expectLater(

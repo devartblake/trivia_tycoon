@@ -73,26 +73,26 @@ class _MutualFriendsScreenState extends State<MutualFriendsScreen>
             ),
             mutualFriends.isEmpty
                 ? SliverFillRemaining(
-              child: _buildEmptyState(),
-            )
+                    child: _buildEmptyState(),
+                  )
                 : SliverPadding(
-              padding: const EdgeInsets.all(16),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                    return FadeTransition(
-                      opacity: _fadeAnimation,
-                      child: _buildModernFriendCard(
-                        context,
-                        mutualFriends[index],
-                        index,
+                    padding: const EdgeInsets.all(16),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          return FadeTransition(
+                            opacity: _fadeAnimation,
+                            child: _buildModernFriendCard(
+                              context,
+                              mutualFriends[index],
+                              index,
+                            ),
+                          );
+                        },
+                        childCount: mutualFriends.length,
                       ),
-                    );
-                  },
-                  childCount: mutualFriends.length,
-                ),
-              ),
-            ),
+                    ),
+                  ),
           ],
         ),
       ),
@@ -227,17 +227,17 @@ class _MutualFriendsScreenState extends State<MutualFriendsScreen>
                 ),
                 suffixIcon: _searchQuery.isNotEmpty
                     ? IconButton(
-                  icon: const Icon(
-                    Icons.clear_rounded,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _searchController.clear();
-                      _searchQuery = '';
-                    });
-                  },
-                )
+                        icon: const Icon(
+                          Icons.clear_rounded,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _searchController.clear();
+                            _searchQuery = '';
+                          });
+                        },
+                      )
                     : null,
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(
@@ -282,7 +282,9 @@ class _MutualFriendsScreenState extends State<MutualFriendsScreen>
               labelStyle: TextStyle(
                 fontSize: 14,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.7),
+                color: isSelected
+                    ? Colors.white
+                    : Colors.white.withValues(alpha: 0.7),
               ),
               side: BorderSide(
                 color: isSelected
@@ -360,10 +362,10 @@ class _MutualFriendsScreenState extends State<MutualFriendsScreen>
   }
 
   Widget _buildModernFriendCard(
-      BuildContext context,
-      Map<String, dynamic> friend,
-      int index,
-      ) {
+    BuildContext context,
+    Map<String, dynamic> friend,
+    int index,
+  ) {
     return TweenAnimationBuilder<double>(
       duration: Duration(milliseconds: 300 + (index * 50)),
       tween: Tween(begin: 0.0, end: 1.0),
@@ -414,7 +416,10 @@ class _MutualFriendsScreenState extends State<MutualFriendsScreen>
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: _getGradientForIndex(index).colors.first.withValues(alpha: 0.4),
+                          color: _getGradientForIndex(index)
+                              .colors
+                              .first
+                              .withValues(alpha: 0.4),
                           blurRadius: 12,
                           offset: const Offset(0, 4),
                         ),
@@ -508,8 +513,8 @@ class _MutualFriendsScreenState extends State<MutualFriendsScreen>
       decoration: BoxDecoration(
         gradient: isPrimary
             ? const LinearGradient(
-          colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-        )
+                colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+              )
             : null,
         color: isPrimary ? null : Colors.white.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),

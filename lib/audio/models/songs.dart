@@ -24,7 +24,8 @@ class Song {
 const Set<Song> songs = {
   Song('around_the_world.mp3', 'Around the World', genre: 'Lo-Fi'),
   Song('autumn_days_lofi.mp3', 'Autumn Days', genre: 'Lo-Fi'),
-  Song('believing_in_goods_things.mp3', 'Believing in Good Things', genre: 'Chill'),
+  Song('believing_in_goods_things.mp3', 'Believing in Good Things',
+      genre: 'Chill'),
   Song('breezing.mp3', 'Breezing', genre: 'Ambient'),
   Song('end_game.mp3', 'End Game', genre: 'Game'),
   Song('holding_hands.mp3', 'Holding Hands', genre: 'Chill'),

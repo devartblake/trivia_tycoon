@@ -78,18 +78,20 @@ class _LiveCountdownTimerState extends State<LiveCountdownTimer> {
         children: [
           Text(
             "Season ended",
-            style: widget.labelStyle ?? const TextStyle(
-              color: Colors.white70,
-              fontSize: 12,
-            ),
+            style: widget.labelStyle ??
+                const TextStyle(
+                  color: Colors.white70,
+                  fontSize: 12,
+                ),
           ),
           Text(
             "Calculating results...",
-            style: widget.timeStyle ?? const TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+            style: widget.timeStyle ??
+                const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
           ),
         ],
       );
@@ -100,18 +102,20 @@ class _LiveCountdownTimerState extends State<LiveCountdownTimer> {
       children: [
         Text(
           "Season ends in",
-          style: widget.labelStyle ?? const TextStyle(
-            color: Colors.white70,
-            fontSize: 12,
-          ),
+          style: widget.labelStyle ??
+              const TextStyle(
+                color: Colors.white70,
+                fontSize: 12,
+              ),
         ),
         Text(
           _formatDuration(_timeRemaining),
-          style: widget.timeStyle ?? const TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+          style: widget.timeStyle ??
+              const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
         ),
       ],
     );

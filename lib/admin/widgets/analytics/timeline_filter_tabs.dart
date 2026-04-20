@@ -49,24 +49,33 @@ class TimelineFilterTabs extends ConsumerWidget {
             segments: const [
               ButtonSegment(
                 value: TimelineRange.last7Days,
-                label: Text('7D', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                label: Text('7D',
+                    style:
+                        TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
               ),
               ButtonSegment(
                 value: TimelineRange.last14Days,
-                label: Text('14D', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                label: Text('14D',
+                    style:
+                        TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
               ),
               ButtonSegment(
                 value: TimelineRange.last30Days,
-                label: Text('30D', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                label: Text('30D',
+                    style:
+                        TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
               ),
               ButtonSegment(
                 value: TimelineRange.last90Days,
-                label: Text('90D', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                label: Text('90D',
+                    style:
+                        TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
               ),
             ],
             selected: {currentRange},
             onSelectionChanged: (newSelection) {
-              ref.read(timelineFilterProvider.notifier).state = newSelection.first;
+              ref.read(timelineFilterProvider.notifier).state =
+                  newSelection.first;
             },
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.resolveWith((states) {

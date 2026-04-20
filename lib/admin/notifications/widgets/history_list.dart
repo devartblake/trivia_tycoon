@@ -16,7 +16,8 @@ class HistoryList extends ConsumerWidget {
         if (entries.isEmpty) {
           return Card(
             elevation: 0,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
             child: const Padding(
               padding: EdgeInsets.all(16),
               child: Text('No history yet.'),
@@ -25,7 +26,8 @@ class HistoryList extends ConsumerWidget {
         }
         return Card(
           elevation: 0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
           child: ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),

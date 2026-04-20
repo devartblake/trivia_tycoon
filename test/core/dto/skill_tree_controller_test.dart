@@ -41,20 +41,20 @@ SkillTreeGraph _testGraph({bool rootUnlocked = false}) {
 /// Builds a [ProviderContainer] with [skillTreeProvider] backed by
 /// [graph] and [xpServiceProvider] seeded with [startingXP].
 ProviderContainer _makeContainer(
-    SkillTreeGraph graph, {
-      int startingXP = 100,
-      int startingPoints = 10,
-    }) {
+  SkillTreeGraph graph, {
+  int startingXP = 100,
+  int startingPoints = 10,
+}) {
   final xpService = XPService(startingPlayerXP: startingXP);
 
   return ProviderContainer(
     overrides: [
       xpServiceProvider.overrideWithValue(xpService),
       skillTreeProvider.overrideWith((ref) => SkillTreeController(
-        ref,
-        initialGraph: graph,
-        startingPoints: startingPoints,
-      )),
+            ref,
+            initialGraph: graph,
+            startingPoints: startingPoints,
+          )),
     ],
   );
 }
@@ -202,9 +202,9 @@ void main() {
         overrides: [
           xpServiceProvider.overrideWithValue(xpService),
           skillTreeProvider.overrideWith((ref) => SkillTreeController(
-            ref,
-            initialGraph: graph,
-          )),
+                ref,
+                initialGraph: graph,
+              )),
         ],
       );
       addTearDown(container.dispose);

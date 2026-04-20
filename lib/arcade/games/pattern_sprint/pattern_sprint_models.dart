@@ -26,13 +26,17 @@ class PatternSprintConfig {
   static PatternSprintConfig fromDifficulty(ArcadeDifficulty d) {
     switch (d) {
       case ArcadeDifficulty.easy:
-        return const PatternSprintConfig(timeLimit: Duration(seconds: 45), basePoints: 60);
+        return const PatternSprintConfig(
+            timeLimit: Duration(seconds: 45), basePoints: 60);
       case ArcadeDifficulty.normal:
-        return const PatternSprintConfig(timeLimit: Duration(seconds: 40), basePoints: 80);
+        return const PatternSprintConfig(
+            timeLimit: Duration(seconds: 40), basePoints: 80);
       case ArcadeDifficulty.hard:
-        return const PatternSprintConfig(timeLimit: Duration(seconds: 35), basePoints: 105);
+        return const PatternSprintConfig(
+            timeLimit: Duration(seconds: 35), basePoints: 105);
       case ArcadeDifficulty.insane:
-        return const PatternSprintConfig(timeLimit: Duration(seconds: 30), basePoints: 135);
+        return const PatternSprintConfig(
+            timeLimit: Duration(seconds: 30), basePoints: 135);
     }
   }
 }

@@ -61,9 +61,17 @@ class _ReviveSheetState extends ConsumerState<ReviveSheet> {
         'almostWin': widget.almostWin,
         'discounted': q.hasDiscount,
       });
-      if (mounted) setState(() { _quote = q; _loading = false; });
+      if (mounted)
+        setState(() {
+          _quote = q;
+          _loading = false;
+        });
     } catch (e) {
-      if (mounted) setState(() { _error = e.toString(); _loading = false; });
+      if (mounted)
+        setState(() {
+          _error = e.toString();
+          _loading = false;
+        });
     }
   }
 
@@ -123,8 +131,7 @@ class _ReviveSheetContent extends StatelessWidget {
     required this.onRevive,
   });
 
-  String _currencyIcon() =>
-      quote.costCurrency == 'gems' ? '💎' : '🪙';
+  String _currencyIcon() => quote.costCurrency == 'gems' ? '💎' : '🪙';
 
   @override
   Widget build(BuildContext context) {
@@ -142,13 +149,12 @@ class _ReviveSheetContent extends StatelessWidget {
         if (quote.almostWinApplied)
           Container(
             margin: const EdgeInsets.only(bottom: 8),
-            padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
               color: const Color(0xFF4CAF50).withOpacity(0.15),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                  color: const Color(0xFF4CAF50).withOpacity(0.5)),
+              border:
+                  Border.all(color: const Color(0xFF4CAF50).withOpacity(0.5)),
             ),
             child: const Text(
               'Almost-win discount applied!',
@@ -220,8 +226,7 @@ class _ReviveSheetContent extends StatelessWidget {
                 ),
                 child: const Text(
                   'Revive!',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w700, fontSize: 16),
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                 ),
               ),
             ),

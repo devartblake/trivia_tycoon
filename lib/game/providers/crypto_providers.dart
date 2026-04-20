@@ -97,8 +97,8 @@ final currentUserCryptoHistoryProvider =
       );
 });
 
-final cryptoHistoryProvider =
-    FutureProvider.family<CryptoHistoryResponse, ({String playerId, CryptoHistoryQuery query})>(
+final cryptoHistoryProvider = FutureProvider.family<CryptoHistoryResponse,
+    ({String playerId, CryptoHistoryQuery query})>(
   (ref, args) async {
     final service = ref.watch(cryptoServiceProvider);
     return service.getHistory(
@@ -165,7 +165,8 @@ final fundPrizePoolProvider = Provider<
     Future<CryptoFundPrizePoolResult> Function(CryptoFundPrizePoolRequest)>(
   (ref) {
     return (request) async {
-      final result = await ref.read(cryptoServiceProvider).fundPrizePool(request);
+      final result =
+          await ref.read(cryptoServiceProvider).fundPrizePool(request);
       _invalidatePlayerCryptoProviders(ref, request.playerId);
       final poolId = request.poolId == null || request.poolId!.isEmpty
           ? 'global'

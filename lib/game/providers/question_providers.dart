@@ -55,7 +55,6 @@ final questionHubServiceProvider = Provider<QuestionHubService>((ref) {
   );
 });
 
-
 final questionRepositoryProvider = Provider<QuestionRepository>((ref) {
   final hubService = ref.watch(questionHubServiceProvider);
 
@@ -85,23 +84,39 @@ final datasetInfoProvider = FutureProvider<Map<String, dynamic>>((ref) async {
 });
 
 // Provider for category stats
-final categoryStatsProvider = FutureProvider.family<Map<String, dynamic>, QuizCategory>((ref, category) async {
+final categoryStatsProvider =
+    FutureProvider.family<Map<String, dynamic>, QuizCategory>(
+        (ref, category) async {
   final repository = ref.watch(questionRepositoryProvider);
   final raw = await repository.getCategoryStats(category);
   return normalizeCategoryStats(raw, category);
 });
 
 const _defaultClassIds = [
-  'kindergarten', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
+  'kindergarten',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '10',
+  '11',
+  '12',
 ];
 
-final classStatsProvider = FutureProvider.family<Map<String, dynamic>, String>((ref, classId) async {
+final classStatsProvider =
+    FutureProvider.family<Map<String, dynamic>, String>((ref, classId) async {
   final repository = ref.watch(questionRepositoryProvider);
   final raw = await repository.getClassStats(classId);
   return normalizeClassStats(raw);
 });
 
-final allClassesStatsProvider = FutureProvider<Map<String, dynamic>>((ref) async {
+final allClassesStatsProvider =
+    FutureProvider<Map<String, dynamic>>((ref) async {
   final repository = ref.watch(questionRepositoryProvider);
   final stats = <String, Map<String, dynamic>>{};
 

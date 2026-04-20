@@ -395,9 +395,9 @@ class _ResultDialogState extends State<ResultDialog>
             child: Text(
               widget.result.label,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: _getRewardColor(),
-                fontWeight: FontWeight.bold,
-              ),
+                    color: _getRewardColor(),
+                    fontWeight: FontWeight.bold,
+                  ),
               textAlign: TextAlign.center,
             ),
           ),
@@ -409,8 +409,8 @@ class _ResultDialogState extends State<ResultDialog>
             Text(
               widget.result.description!,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.grey.shade600,
-              ),
+                    color: Colors.grey.shade600,
+                  ),
               textAlign: TextAlign.center,
             ),
         ],

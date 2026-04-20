@@ -23,7 +23,8 @@ Future<String?> adminGuard(BuildContext context, GoRouterState state) async {
 }
 
 /// Redirects users who haven't completed onboarding
-Future<String?> onboardingGuard(BuildContext context, GoRouterState state) async {
+Future<String?> onboardingGuard(
+    BuildContext context, GoRouterState state) async {
   final container = ProviderScope.containerOf(context);
   final onboardingService = container.read(onboardingSettingsServiceProvider);
 
@@ -41,11 +42,11 @@ Future<String?> premiumGuard(BuildContext context, GoRouterState state) async {
 }
 
 /// Enables routes based on roles like moderator, editor, tester or superAdmin
-Future<String?> roleGuard(BuildContext context, GoRouterState state, String requiredRole) async {
+Future<String?> roleGuard(
+    BuildContext context, GoRouterState state, String requiredRole) async {
   final container = ProviderScope.containerOf(context);
   final userProfile = container.read(playerProfileServiceProvider);
   final roles = await userProfile.getUserRoles();
 
   return roles.contains(requiredRole) ? null : '/unauthorized';
 }
-

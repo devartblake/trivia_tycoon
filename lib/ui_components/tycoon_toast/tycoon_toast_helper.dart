@@ -1,6 +1,6 @@
 import 'tycoon_toast.dart';
 import 'package:flutter/material.dart';
-import 'Toast_theme_manager.dart';
+import 'toast_theme_manager.dart';
 
 class TycoonToastHelper {
   /// Get a modern success notification toast
@@ -263,7 +263,8 @@ class TycoonToastHelper {
           ],
         ),
       ),
-      backgroundGradient: TycoonToastThemeManager.getGradientForEvent(rewardType.toLowerCase()),
+      backgroundGradient:
+          TycoonToastThemeManager.getGradientForEvent(rewardType.toLowerCase()),
       toastType: TycoonToastType.reward,
       duration: duration,
       shouldIconPulse: true,
@@ -338,7 +339,8 @@ class TycoonToastHelper {
       ),
       showProgressIndicator: true,
       progressIndicatorController: progressIndicatorController,
-      progressIndicatorBackgroundColor: progressIndicatorBackgroundColor ?? Colors.white.withValues(alpha: 0.2),
+      progressIndicatorBackgroundColor: progressIndicatorBackgroundColor ??
+          Colors.white.withValues(alpha: 0.2),
       backgroundGradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
@@ -388,9 +390,7 @@ class TycoonToastHelper {
   }) {
     return TycoonToast(
       message: message,
-      icon: icon != null
-          ? Icon(icon, color: Colors.white, size: 18)
-          : null,
+      icon: icon != null ? Icon(icon, color: Colors.white, size: 18) : null,
       backgroundGradient: LinearGradient(
         colors: [
           (color ?? Colors.grey).withValues(alpha: 0.9),

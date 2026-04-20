@@ -3,23 +3,40 @@ import 'package:flutter/material.dart';
 /// Resolves a backend icon name string to a Flutter IconData.
 IconData resolveIcon(String? name, {IconData fallback = Icons.store}) {
   switch (name) {
-    case 'store': return Icons.store;
-    case 'local_offer': return Icons.local_offer;
-    case 'card_giftcard': return Icons.card_giftcard;
-    case 'workspace_premium': return Icons.workspace_premium;
-    case 'star': return Icons.star;
-    case 'monetization_on': return Icons.monetization_on;
-    case 'flash_on': return Icons.flash_on;
-    case 'trending_up': return Icons.trending_up;
-    case 'diamond': return Icons.diamond;
-    case 'emoji_events': return Icons.emoji_events;
-    case 'auto_awesome': return Icons.auto_awesome;
-    case 'storefront': return Icons.storefront;
-    case 'favorite': return Icons.favorite;
-    case 'auto_fix_high': return Icons.auto_fix_high;
-    case 'bolt': return Icons.bolt;
-    case 'local_fire_department': return Icons.local_fire_department;
-    default: return fallback;
+    case 'store':
+      return Icons.store;
+    case 'local_offer':
+      return Icons.local_offer;
+    case 'card_giftcard':
+      return Icons.card_giftcard;
+    case 'workspace_premium':
+      return Icons.workspace_premium;
+    case 'star':
+      return Icons.star;
+    case 'monetization_on':
+      return Icons.monetization_on;
+    case 'flash_on':
+      return Icons.flash_on;
+    case 'trending_up':
+      return Icons.trending_up;
+    case 'diamond':
+      return Icons.diamond;
+    case 'emoji_events':
+      return Icons.emoji_events;
+    case 'auto_awesome':
+      return Icons.auto_awesome;
+    case 'storefront':
+      return Icons.storefront;
+    case 'favorite':
+      return Icons.favorite;
+    case 'auto_fix_high':
+      return Icons.auto_fix_high;
+    case 'bolt':
+      return Icons.bolt;
+    case 'local_fire_department':
+      return Icons.local_fire_department;
+    default:
+      return fallback;
   }
 }
 
@@ -183,7 +200,8 @@ class StoreHubData {
           .whereType<Map>()
           .map((s) => StoreSectionData.fromJson(Map<String, dynamic>.from(s)))
           .toList(),
-      featured: rawFeatured != null ? FeaturedItemData.fromJson(rawFeatured) : null,
+      featured:
+          rawFeatured != null ? FeaturedItemData.fromJson(rawFeatured) : null,
       stats: StoreHubStats.fromJson(rawStats),
       flashSaleMessage: json['flashSaleMessage'] as String?,
     );
@@ -197,7 +215,8 @@ class StoreHubData {
             title: 'Game Store',
             subtitle: 'Power-ups, themes & more',
             icon: Icons.store,
-            gradient: LinearGradient(colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)]),
+            gradient:
+                LinearGradient(colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)]),
             route: '/store',
             itemCount: '50+ items',
             badge: null,
@@ -208,8 +227,9 @@ class StoreHubData {
             title: 'Special Offers',
             subtitle: 'Limited time deals',
             icon: Icons.local_offer,
-            gradient: LinearGradient(colors: [Color(0xFFEF4444), Color(0xFFDC2626)]),
-            route: '/offers',
+            gradient:
+                LinearGradient(colors: [Color(0xFFEF4444), Color(0xFFDC2626)]),
+            route: '/store-premium',
             itemCount: '8 deals',
             badge: 'HOT',
             preview: '80% off premium membership',
@@ -219,7 +239,8 @@ class StoreHubData {
             title: 'Gifts Center',
             subtitle: 'Send & receive gifts',
             icon: Icons.card_giftcard,
-            gradient: LinearGradient(colors: [Color(0xFFEC4899), Color(0xFFDB2777)]),
+            gradient:
+                LinearGradient(colors: [Color(0xFFEC4899), Color(0xFFDB2777)]),
             route: '/gifts',
             itemCount: '3 pending',
             badge: 'NEW',
@@ -230,7 +251,8 @@ class StoreHubData {
             title: 'Premium Store',
             subtitle: 'Exclusive content',
             icon: Icons.workspace_premium,
-            gradient: LinearGradient(colors: [Color(0xFFF59E0B), Color(0xFFD97706)]),
+            gradient:
+                LinearGradient(colors: [Color(0xFFF59E0B), Color(0xFFD97706)]),
             route: '/store-premium',
             itemCount: 'VIP only',
             badge: null,

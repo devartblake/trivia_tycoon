@@ -35,10 +35,10 @@ class ArcadeMissionReward {
   });
 
   Map<String, dynamic> toJson() => {
-    'coins': coins,
-    'gems': gems,
-    'xp': xp,
-  };
+        'coins': coins,
+        'gems': gems,
+        'xp': xp,
+      };
 
   factory ArcadeMissionReward.fromJson(Map<String, dynamic> json) {
     return ArcadeMissionReward(
@@ -99,18 +99,18 @@ class ArcadeMission {
   });
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'tier': tier.name,
-    'type': type.name,
-    'title': title,
-    'subtitle': subtitle,
-    'target': target,
-    'reward': reward.toJson(),
-    'gameId': gameId?.name,
-    'difficulty': difficulty,
-    'minScore': minScore,
-    'seasonId': seasonId,
-  };
+        'id': id,
+        'tier': tier.name,
+        'type': type.name,
+        'title': title,
+        'subtitle': subtitle,
+        'target': target,
+        'reward': reward.toJson(),
+        'gameId': gameId?.name,
+        'difficulty': difficulty,
+        'minScore': minScore,
+        'seasonId': seasonId,
+      };
 
   // ---------
   // Parsing helpers (backend-tolerant)
@@ -126,7 +126,7 @@ class ArcadeMission {
         return ArcadeMissionTier.season;
       case 'daily':
       default:
-      // Also handles empty/unknown values safely.
+        // Also handles empty/unknown values safely.
         return ArcadeMissionTier.daily;
     }
   }
@@ -246,11 +246,11 @@ class ArcadeMissionProgress {
   }
 
   Map<String, dynamic> toJson() => {
-    'missionId': missionId,
-    'current': current,
-    'claimed': claimed,
-    'claimedAtUtcIso': claimedAtUtcIso,
-  };
+        'missionId': missionId,
+        'current': current,
+        'claimed': claimed,
+        'claimedAtUtcIso': claimedAtUtcIso,
+      };
 
   factory ArcadeMissionProgress.fromJson(Map<String, dynamic> json) {
     return ArcadeMissionProgress(

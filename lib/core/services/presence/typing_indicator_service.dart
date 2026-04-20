@@ -7,7 +7,8 @@ import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Service for managing typing indicators in chat conversations
 class TypingIndicatorService extends ChangeNotifier {
-  static final TypingIndicatorService _instance = TypingIndicatorService._internal();
+  static final TypingIndicatorService _instance =
+      TypingIndicatorService._internal();
   factory TypingIndicatorService() => _instance;
   TypingIndicatorService._internal();
 
@@ -172,8 +173,8 @@ class TypingIndicatorService extends ChangeNotifier {
   Map<String, dynamic> getTypingStats() {
     return {
       'activeConversations': _typingUsers.keys.length,
-      'totalTypingUsers': _typingUsers.values
-          .fold<int>(0, (sum, users) => sum + users.length),
+      'totalTypingUsers':
+          _typingUsers.values.fold<int>(0, (sum, users) => sum + users.length),
       'currentUserTypingIn': _currentUserTyping.entries
           .where((entry) => entry.value)
           .map((entry) => entry.key)
@@ -196,10 +197,12 @@ class TypingIndicatorService extends ChangeNotifier {
 
   // Private methods
 
-  Future<void> _broadcastTypingStatus(String conversationId, bool isTyping) async {
+  Future<void> _broadcastTypingStatus(
+      String conversationId, bool isTyping) async {
     final wsClient = AppInit.wsClient;
     if (wsClient == null || !AppInit.isWebSocketConnected) {
-      LogManager.debug('[Typing] WebSocket unavailable; typing broadcast deferred: $conversationId');
+      LogManager.debug(
+          '[Typing] WebSocket unavailable; typing broadcast deferred: $conversationId');
       return;
     }
 
@@ -243,9 +246,9 @@ class TypingIndicatorData {
 
   /// Create from service data
   factory TypingIndicatorData.fromService(
-      TypingIndicatorService service,
-      String conversationId,
-      ) {
+    TypingIndicatorService service,
+    String conversationId,
+  ) {
     final typingUsers = service.getTypingUsers(conversationId);
     final typingText = service.getTypingText(conversationId);
 

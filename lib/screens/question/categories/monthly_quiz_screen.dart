@@ -11,18 +11,18 @@ final monthlyQuizProvider = FutureProvider<List<QuestionModel>>((ref) async {
   // Get current month to determine theme
   final now = DateTime.now();
   final monthThemes = {
-    1: 'science',      // January - Science
-    2: 'history',      // February - History
-    3: 'literature',   // March - Literature
-    4: 'geography',    // April - Geography
-    5: 'music',        // May - Music
-    6: 'sports',       // June - Sports
-    7: 'technology',   // July - Technology
-    8: 'entertainment',// August - Entertainment
-    9: 'science',      // September - Science
-    10: 'history',     // October - History
-    11: 'world',       // November - World Affairs
-    12: 'general',     // December - Year Review
+    1: 'science', // January - Science
+    2: 'history', // February - History
+    3: 'literature', // March - Literature
+    4: 'geography', // April - Geography
+    5: 'music', // May - Music
+    6: 'sports', // June - Sports
+    7: 'technology', // July - Technology
+    8: 'entertainment', // August - Entertainment
+    9: 'science', // September - Science
+    10: 'history', // October - History
+    11: 'world', // November - World Affairs
+    12: 'general', // December - Year Review
   };
 
   final currentTheme = monthThemes[now.month] ?? 'general';
@@ -89,7 +89,10 @@ class MonthlyQuizScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [_getThemeColor().withValues(alpha: 0.8), _getThemeColor()],
+                    colors: [
+                      _getThemeColor().withValues(alpha: 0.8),
+                      _getThemeColor()
+                    ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -190,9 +193,9 @@ class MonthlyQuizScreen extends ConsumerWidget {
               const SizedBox(height: 12),
 
               ...questions.take(3).map((question) => Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: _QuestionPreviewCard(question: question),
-              )),
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: _QuestionPreviewCard(question: question),
+                  )),
 
               if (questions.length > 3)
                 Container(
@@ -252,35 +255,72 @@ class MonthlyQuizScreen extends ConsumerWidget {
 
   String _getCurrentMonthName() {
     final months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
     ];
     return months[DateTime.now().month - 1];
   }
 
   String _getCurrentMonthTheme() {
     final themes = {
-      1: 'Science', 2: 'History', 3: 'Literature', 4: 'Geography',
-      5: 'Music', 6: 'Sports', 7: 'Technology', 8: 'Entertainment',
-      9: 'Science', 10: 'History', 11: 'World Affairs', 12: 'General Knowledge'
+      1: 'Science',
+      2: 'History',
+      3: 'Literature',
+      4: 'Geography',
+      5: 'Music',
+      6: 'Sports',
+      7: 'Technology',
+      8: 'Entertainment',
+      9: 'Science',
+      10: 'History',
+      11: 'World Affairs',
+      12: 'General Knowledge'
     };
     return themes[DateTime.now().month] ?? 'General Knowledge';
   }
 
   Color _getThemeColor() {
     final colors = {
-      1: Colors.blue, 2: Colors.brown, 3: Colors.orange, 4: Colors.teal,
-      5: Colors.deepPurple, 6: Colors.green, 7: Colors.purple, 8: Colors.pink,
-      9: Colors.blue, 10: Colors.brown, 11: Colors.indigo, 12: Colors.grey,
+      1: Colors.blue,
+      2: Colors.brown,
+      3: Colors.orange,
+      4: Colors.teal,
+      5: Colors.deepPurple,
+      6: Colors.green,
+      7: Colors.purple,
+      8: Colors.pink,
+      9: Colors.blue,
+      10: Colors.brown,
+      11: Colors.indigo,
+      12: Colors.grey,
     };
     return colors[DateTime.now().month] ?? Colors.grey;
   }
 
   IconData _getThemeIcon() {
     final icons = {
-      1: Icons.science, 2: Icons.history_edu, 3: Icons.menu_book, 4: Icons.public,
-      5: Icons.music_note, 6: Icons.sports_soccer, 7: Icons.computer, 8: Icons.movie,
-      9: Icons.science, 10: Icons.history_edu, 11: Icons.language, 12: Icons.quiz,
+      1: Icons.science,
+      2: Icons.history_edu,
+      3: Icons.menu_book,
+      4: Icons.public,
+      5: Icons.music_note,
+      6: Icons.sports_soccer,
+      7: Icons.computer,
+      8: Icons.movie,
+      9: Icons.science,
+      10: Icons.history_edu,
+      11: Icons.language,
+      12: Icons.quiz,
     };
     return icons[DateTime.now().month] ?? Icons.quiz;
   }
@@ -300,7 +340,8 @@ class MonthlyQuizScreen extends ConsumerWidget {
       11: 'Current events and global affairs',
       12: 'Year-end mixed knowledge challenge',
     };
-    return descriptions[DateTime.now().month] ?? 'Test your knowledge across various topics';
+    return descriptions[DateTime.now().month] ??
+        'Test your knowledge across various topics';
   }
 }
 
@@ -395,19 +436,27 @@ class _QuestionPreviewCard extends StatelessWidget {
 
   Color _getDifficultyColor() {
     switch (question.difficulty) {
-      case 1: return Colors.green;
-      case 2: return Colors.orange;
-      case 3: return Colors.red;
-      default: return Colors.grey;
+      case 1:
+        return Colors.green;
+      case 2:
+        return Colors.orange;
+      case 3:
+        return Colors.red;
+      default:
+        return Colors.grey;
     }
   }
 
   IconData _getDifficultyIcon() {
     switch (question.difficulty) {
-      case 1: return Icons.star_outline;
-      case 2: return Icons.star_half;
-      case 3: return Icons.star;
-      default: return Icons.help_outline;
+      case 1:
+        return Icons.star_outline;
+      case 2:
+        return Icons.star_half;
+      case 3:
+        return Icons.star;
+      default:
+        return Icons.help_outline;
     }
   }
 }

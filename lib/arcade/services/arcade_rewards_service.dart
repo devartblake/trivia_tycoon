@@ -48,7 +48,10 @@ class ArcadeRewardTuning {
 }
 
 const Map<ArcadeGameId, ArcadeRewardTuning> kArcadeRewardTuning = {
-  ArcadeGameId.patternSprint: ArcadeRewardTuning(xpMult: 1.0, coinMult: 1.0, gemMult: 1.0),
-  ArcadeGameId.memoryFlip: ArcadeRewardTuning(xpMult: 1.05, coinMult: 1.0, gemMult: 1.0),
-  ArcadeGameId.quickMathRush: ArcadeRewardTuning(xpMult: 1.0, coinMult: 1.05, gemMult: 1.0),
+  ArcadeGameId.patternSprint:
+      ArcadeRewardTuning(xpMult: 1.0, coinMult: 1.0, gemMult: 1.0),
+  ArcadeGameId.memoryFlip:
+      ArcadeRewardTuning(xpMult: 1.05, coinMult: 1.0, gemMult: 1.0),
+  ArcadeGameId.quickMathRush:
+      ArcadeRewardTuning(xpMult: 1.0, coinMult: 1.05, gemMult: 1.0),
 };

@@ -6,7 +6,8 @@ import '../services/mission_service.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class MissionProvider extends ChangeNotifier {
-  final MissionNotificationHelper _notificationHelper = MissionNotificationHelper();
+  final MissionNotificationHelper _notificationHelper =
+      MissionNotificationHelper();
   final MissionService _missionService;
   final String _userId;
 
@@ -35,13 +36,12 @@ class MissionProvider extends ChangeNotifier {
 
   // Statistics
   int get totalCompletedMissions => completedMissions.length;
-  int get totalRewardsEarned => completedMissions
-      .fold(0, (sum, mission) => sum + mission.mission.rewardXp);
+  int get totalRewardsEarned => completedMissions.fold(
+      0, (sum, mission) => sum + mission.mission.rewardXp);
   double get overallProgress => _missions.isEmpty
       ? 0.0
-      : _missions
-      .map((m) => m.progressPercentage)
-      .reduce((a, b) => a + b) / _missions.length;
+      : _missions.map((m) => m.progressPercentage).reduce((a, b) => a + b) /
+          _missions.length;
 
   @override
   void dispose() {
@@ -73,7 +73,7 @@ class MissionProvider extends ChangeNotifier {
   void _startListening() {
     _missionSubscription?.cancel();
     _missionSubscription = _missionService.watchUserMissions(_userId).listen(
-          (missions) {
+      (missions) {
         _missions = missions;
         _clearError();
         notifyListeners();
@@ -112,11 +112,13 @@ class MissionProvider extends ChangeNotifier {
   }
 
   // Update mission progress
-  Future<void> updateMissionProgress(String userMissionId, int increment) async {
+  Future<void> updateMissionProgress(
+      String userMissionId, int increment) async {
     _clearError();
 
     try {
-      final updatedMission = await _missionService.updateProgress(userMissionId, increment, userId: _userId);
+      final updatedMission = await _missionService
+          .updateProgress(userMissionId, increment, userId: _userId);
 
       // Update local state
       final index = _missions.indexWhere((m) => m.id == userMissionId);
@@ -156,7 +158,8 @@ class MissionProvider extends ChangeNotifier {
   }
 
   // Track user action (this can be called from anywhere in the app)
-  Future<void> trackUserAction(String actionType, Map<String, dynamic> metadata) async {
+  Future<void> trackUserAction(
+      String actionType, Map<String, dynamic> metadata) async {
     try {
       await _missionService.trackUserAction(_userId, actionType, metadata);
       // The real-time listener will automatically update the UI when progress changes
@@ -191,11 +194,12 @@ class MissionProvider extends ChangeNotifier {
   // Get missions that expire today
   List<UserMission> get expiringSoonMissions {
     final tomorrow = DateTime.now().add(const Duration(days: 1));
-    return _missions.where((m) =>
-    m.mission.expiresAt != null &&
-        m.mission.expiresAt!.isBefore(tomorrow) &&
-        m.status == MissionStatus.active
-    ).toList();
+    return _missions
+        .where((m) =>
+            m.mission.expiresAt != null &&
+            m.mission.expiresAt!.isBefore(tomorrow) &&
+            m.status == MissionStatus.active)
+        .toList();
   }
 
   // Refresh missions (pull to refresh)
@@ -223,7 +227,8 @@ class MissionProvider extends ChangeNotifier {
 
   void _onMissionCompleted(UserMission mission) {
     // Handle mission completion (you can add UI feedback here)
-    LogManager.debug('Mission completed: ${mission.mission.title} (+${mission.mission.rewardXp} rewards)');
+    LogManager.debug(
+        'Mission completed: ${mission.mission.title} (+${mission.mission.rewardXp} rewards)');
 
     // You could show a snack bar, play a sound, etc.
     // Send notification safely
@@ -238,17 +243,20 @@ class MissionProvider extends ChangeNotifier {
 
 // Extension to make mission filtering easier
 extension MissionFilters on List<UserMission> {
-  List<UserMission> active() => where((m) => m.status == MissionStatus.active).toList();
-  List<UserMission> completed() => where((m) => m.status == MissionStatus.completed).toList();
-  List<UserMission> daily() => where((m) => m.mission.type == MissionType.daily).toList();
-  List<UserMission> weekly() => where((m) => m.mission.type == MissionType.weekly).toList();
+  List<UserMission> active() =>
+      where((m) => m.status == MissionStatus.active).toList();
+  List<UserMission> completed() =>
+      where((m) => m.status == MissionStatus.completed).toList();
+  List<UserMission> daily() =>
+      where((m) => m.mission.type == MissionType.daily).toList();
+  List<UserMission> weekly() =>
+      where((m) => m.mission.type == MissionType.weekly).toList();
   List<UserMission> canSwap() => where((m) => m.canSwap).toList();
   List<UserMission> expiringSoon() {
     final tomorrow = DateTime.now().add(const Duration(days: 1));
     return where((m) =>
-    m.mission.expiresAt != null &&
+        m.mission.expiresAt != null &&
         m.mission.expiresAt!.isBefore(tomorrow) &&
-        m.status == MissionStatus.active
-    ).toList();
+        m.status == MissionStatus.active).toList();
   }
 }

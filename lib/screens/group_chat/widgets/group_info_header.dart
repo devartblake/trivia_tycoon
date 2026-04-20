@@ -24,15 +24,15 @@ class GroupInfoHeader extends StatelessWidget {
             Text(
               group.name,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+                    fontWeight: FontWeight.bold,
+                  ),
               overflow: TextOverflow.ellipsis,
             ),
             Text(
               '${group.memberCount} members',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
             ),
           ],
         ),
@@ -54,16 +54,17 @@ class GroupInfoHeader extends StatelessWidget {
                   Text(
                     group.name,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                   if (group.description != null) ...[
                     const SizedBox(height: 4),
                     Text(
                       group.description!,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -94,8 +95,8 @@ class GroupInfoHeader extends StatelessWidget {
                       Text(
                         '${group.onlineMemberCount} online',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.green.shade700,
-                        ),
+                              color: Colors.green.shade700,
+                            ),
                       ),
                     ],
                   ),

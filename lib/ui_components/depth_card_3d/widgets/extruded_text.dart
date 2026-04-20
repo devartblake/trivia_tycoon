@@ -46,7 +46,8 @@ class ExtrudedText extends StatelessWidget {
     if (text.isEmpty) return const SizedBox.shrink();
 
     final themedFace = faceColor ?? style.color ?? Colors.white;
-    final themedSide = sideColor ?? HSLColor.fromColor(themedFace).withLightness(0.25).toColor();
+    final themedSide = sideColor ??
+        HSLColor.fromColor(themedFace).withLightness(0.25).toColor();
 
     final dx = tilt.dx * depth;
     final dy = tilt.dy * depth;

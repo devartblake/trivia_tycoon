@@ -26,7 +26,8 @@ class GroupChatScreen extends StatefulWidget {
   State<GroupChatScreen> createState() => _GroupChatScreenState();
 }
 
-class _GroupChatScreenState extends State<GroupChatScreen> with TypingIndicatorMixin {
+class _GroupChatScreenState extends State<GroupChatScreen>
+    with TypingIndicatorMixin {
   final GroupChatService _groupService = GroupChatService();
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
@@ -159,9 +160,9 @@ class _GroupChatScreenState extends State<GroupChatScreen> with TypingIndicatorM
                     Text(
                       '${group.onlineMemberCount}',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.green.shade700,
-                        fontWeight: FontWeight.bold,
-                      ),
+                            color: Colors.green.shade700,
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                   ],
                 ),
@@ -223,43 +224,46 @@ class _GroupChatScreenState extends State<GroupChatScreen> with TypingIndicatorM
       height: _showMemberList ? 120 : 0,
       child: _showMemberList
           ? Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceVariant,
-              border: Border(
-                bottom: BorderSide(
-                  color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
-                ),
-              ),
-            ),
-            child: Row(
               children: [
-                Text(
-                  'Members (${group.memberCount})',
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceVariant,
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .outline
+                            .withValues(alpha: 0.2),
+                      ),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Members (${group.memberCount})',
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      const Spacer(),
+                      TextButton.icon(
+                        onPressed: () => _showFullMemberList(group),
+                        icon: const Icon(Icons.fullscreen, size: 16),
+                        label: const Text('View All'),
+                      ),
+                    ],
                   ),
                 ),
-                const Spacer(),
-                TextButton.icon(
-                  onPressed: () => _showFullMemberList(group),
-                  icon: const Icon(Icons.fullscreen, size: 16),
-                  label: const Text('View All'),
+                Expanded(
+                  child: MemberPresenceGrid(
+                    group: group,
+                    compact: true,
+                    onMemberTap: (member) => _showMemberProfile(member),
+                  ),
                 ),
               ],
-            ),
-          ),
-          Expanded(
-            child: MemberPresenceGrid(
-              group: group,
-              compact: true,
-              onMemberTap: (member) => _showMemberProfile(member),
-            ),
-          ),
-        ],
-      )
+            )
           : null,
     );
   }
@@ -288,8 +292,8 @@ class _GroupChatScreenState extends State<GroupChatScreen> with TypingIndicatorM
             Text(
               'Start the conversation!',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
             ),
           ],
         ),
@@ -333,15 +337,18 @@ class _GroupChatScreenState extends State<GroupChatScreen> with TypingIndicatorM
         margin: const EdgeInsets.symmetric(vertical: 8),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceVariant.withValues(alpha: 0.5),
+          color: Theme.of(context)
+              .colorScheme
+              .surfaceVariant
+              .withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Text(
           message.content,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-            fontStyle: FontStyle.italic,
-          ),
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                fontStyle: FontStyle.italic,
+              ),
         ),
       ),
     );
@@ -358,7 +365,8 @@ class _GroupChatScreenState extends State<GroupChatScreen> with TypingIndicatorM
           color: Theme.of(context).colorScheme.surfaceVariant,
           border: Border(
             top: BorderSide(
-              color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+              color:
+                  Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
             ),
           ),
         ),
@@ -373,8 +381,8 @@ class _GroupChatScreenState extends State<GroupChatScreen> with TypingIndicatorM
             Text(
               'You can only view messages in this group',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.error,
-              ),
+                    color: Theme.of(context).colorScheme.error,
+                  ),
             ),
           ],
         ),
@@ -483,7 +491,8 @@ class _GroupChatScreenState extends State<GroupChatScreen> with TypingIndicatorM
   void _handleMenuAction(String action, GroupChat group) {
     switch (action) {
       case 'settings':
-        context.push('/messages/group/${widget.groupId}/settings', extra: widget.currentUserId);
+        context.push('/messages/group/${widget.groupId}/settings',
+            extra: widget.currentUserId);
         break;
       case 'members':
         _showFullMemberList(group);
@@ -605,7 +614,8 @@ class _GroupChatScreenState extends State<GroupChatScreen> with TypingIndicatorM
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Start Group Call'),
-        content: Text('Start a video call with ${group.onlineMemberCount} online members?'),
+        content: Text(
+            'Start a video call with ${group.onlineMemberCount} online members?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),

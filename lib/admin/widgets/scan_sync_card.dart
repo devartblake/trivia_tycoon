@@ -226,13 +226,18 @@ class _AdminScanSyncCardState extends ConsumerState<AdminScanSyncCard> {
                         decoration: BoxDecoration(
                           gradient: isSelected
                               ? const LinearGradient(
-                            colors: [Color(0xFF10B981), Color(0xFF059669)],
-                          )
+                                  colors: [
+                                    Color(0xFF10B981),
+                                    Color(0xFF059669)
+                                  ],
+                                )
                               : null,
                           color: isSelected ? null : const Color(0xFFF8FAFC),
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: isSelected ? const Color(0xFF10B981) : Colors.grey[300]!,
+                            color: isSelected
+                                ? const Color(0xFF10B981)
+                                : Colors.grey[300]!,
                             width: isSelected ? 2 : 1,
                           ),
                         ),
@@ -242,14 +247,20 @@ class _AdminScanSyncCardState extends ConsumerState<AdminScanSyncCard> {
                             Icon(
                               Icons.calendar_today,
                               size: 16,
-                              color: isSelected ? Colors.white : const Color(0xFF6B7280),
+                              color: isSelected
+                                  ? Colors.white
+                                  : const Color(0xFF6B7280),
                             ),
                             const SizedBox(width: 8),
                             Text(
                               '$days days',
                               style: TextStyle(
-                                fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                                color: isSelected ? Colors.white : const Color(0xFF6B7280),
+                                fontWeight: isSelected
+                                    ? FontWeight.bold
+                                    : FontWeight.w600,
+                                color: isSelected
+                                    ? Colors.white
+                                    : const Color(0xFF6B7280),
                               ),
                             ),
                           ],
@@ -287,28 +298,28 @@ class _AdminScanSyncCardState extends ConsumerState<AdminScanSyncCard> {
                         child: Center(
                           child: _isLoading
                               ? const SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2,
-                            ),
-                          )
+                                  width: 24,
+                                  height: 24,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
                               : const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.sync, color: Colors.white),
-                              SizedBox(width: 12),
-                              Text(
-                                'Sync Now',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.sync, color: Colors.white),
+                                    SizedBox(width: 12),
+                                    Text(
+                                      'Sync Now',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
                         ),
                       ),
                     ),

@@ -26,7 +26,8 @@ class RichPresenceService extends ChangeNotifier {
   UserPresence? get currentUserPresence => _currentUserPresence;
 
   // Get all tracked presences
-  Map<String, UserPresence> get allPresences => Map.unmodifiable(_userPresences);
+  Map<String, UserPresence> get allPresences =>
+      Map.unmodifiable(_userPresences);
 
   // Get specific user presence
   UserPresence? getUserPresence(String userId) => _userPresences[userId];
@@ -56,12 +57,15 @@ class RichPresenceService extends ChangeNotifier {
     GameActivity? gameActivity,
     Map<String, dynamic>? customData,
   }) async {
-    final currentPresence = _currentUserPresence ?? UserPresence.createDefault();
+    final currentPresence =
+        _currentUserPresence ?? UserPresence.createDefault();
 
     final updatedPresence = UserPresence(
       userId: currentPresence.userId,
       status: status ?? currentPresence.status,
-      activity: activity != null ? InputValidator.safeString(activity) : currentPresence.activity,
+      activity: activity != null
+          ? InputValidator.safeString(activity)
+          : currentPresence.activity,
       gameActivity: gameActivity ?? currentPresence.gameActivity,
       lastSeen: DateTime.now(),
       customData: customData ?? currentPresence.customData,
@@ -90,7 +94,8 @@ class RichPresenceService extends ChangeNotifier {
     final gameActivity = GameActivity(
       gameType: InputValidator.safeString(gameType),
       gameMode: gameMode != null ? InputValidator.safeString(gameMode) : null,
-      currentLevel: currentLevel != null ? InputValidator.safeString(currentLevel) : null,
+      currentLevel:
+          currentLevel != null ? InputValidator.safeString(currentLevel) : null,
       score: score,
       timeRemaining: timeRemaining,
       gameState: gameState ?? GameState.playing,
@@ -159,7 +164,9 @@ class RichPresenceService extends ChangeNotifier {
 
     switch (presence.status) {
       case PresenceStatus.online:
-        return presence.activity?.isNotEmpty == true ? presence.activity! : 'Online';
+        return presence.activity?.isNotEmpty == true
+            ? presence.activity!
+            : 'Online';
       case PresenceStatus.away:
         return 'Away';
       case PresenceStatus.busy:
@@ -187,8 +194,8 @@ class RichPresenceService extends ChangeNotifier {
   List<String> getSpectateableUsers() {
     return _userPresences.entries
         .where((entry) =>
-    entry.value.gameActivity?.gameState == GameState.playing &&
-        entry.value.gameActivity?.metadata['allowSpectators'] == true)
+            entry.value.gameActivity?.gameState == GameState.playing &&
+            entry.value.gameActivity?.metadata['allowSpectators'] == true)
         .map((entry) => entry.key)
         .toList();
   }
@@ -199,7 +206,8 @@ class RichPresenceService extends ChangeNotifier {
     final safeUserId = InputValidator.safeString(userId);
 
     // Create stream controller if it doesn't exist
-    _presenceStreams[safeUserId] ??= StreamController<UserPresence?>.broadcast();
+    _presenceStreams[safeUserId] ??=
+        StreamController<UserPresence?>.broadcast();
 
     // Send initial value
     Future.delayed(Duration.zero, () {
@@ -250,7 +258,8 @@ class RichPresenceService extends ChangeNotifier {
     if (_wsAdapter != null && _useWebSocket) {
       _wsAdapter!.updateMyPresence(presence);
     } else {
-      LogManager.debug('[Presence] WebSocket unavailable; broadcast deferred: ${presence.activity}');
+      LogManager.debug(
+          '[Presence] WebSocket unavailable; broadcast deferred: ${presence.activity}');
     }
   }
 
@@ -315,9 +324,10 @@ extension PresenceServiceExtension on RichPresenceService {
     await setGameActivity(
       gameType: 'Quiz',
       gameMode: category,
-      currentLevel: difficulty != null && questionNumber != null && totalQuestions != null
-          ? '$difficulty - Q$questionNumber/$totalQuestions'
-          : difficulty,
+      currentLevel:
+          difficulty != null && questionNumber != null && totalQuestions != null
+              ? '$difficulty - Q$questionNumber/$totalQuestions'
+              : difficulty,
       score: currentScore,
       metadata: {
         'category': category,

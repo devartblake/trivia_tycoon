@@ -81,10 +81,10 @@ class FriendMessageBridge {
   // ============ Helper Methods ============
 
   Future<void> _ensureConversationExists(
-      String conversationId,
-      String userId1,
-      String userId2,
-      ) async {
+    String conversationId,
+    String userId1,
+    String userId2,
+  ) async {
     var conversation = _conversationStorage.getConversationById(conversationId);
 
     if (conversation == null) {

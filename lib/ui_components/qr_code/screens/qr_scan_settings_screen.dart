@@ -11,35 +11,34 @@ class QrScanSettingsScreen extends ConsumerWidget {
     final notifier = ref.read(qrSettingsProvider.notifier);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('QR Scan Settings')),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          SwitchListTile(
-            title: const Text("Auto-Launch URLs"),
-            value: settings.autoLaunch,
-            onChanged: (value) => notifier.updateAutoLaunch(value)
-          ),
-          const Divider(),
-          ListTile(
-            title: const Text("Scan History Limit"),
-            subtitle: Text("Currently: ${settings.scanLimit} items"),
-            trailing: IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: () async {
-                final result = await showDialog<int>(
-                  context: context,
-                  builder: (_) => _EditLimitDialog(initial: settings.scanLimit),
-                );
-                if (result != null && result > 0) {
-                  await notifier.updateScanLimit(result);
-                }
-              },
+        appBar: AppBar(title: const Text('QR Scan Settings')),
+        body: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            SwitchListTile(
+                title: const Text("Auto-Launch URLs"),
+                value: settings.autoLaunch,
+                onChanged: (value) => notifier.updateAutoLaunch(value)),
+            const Divider(),
+            ListTile(
+              title: const Text("Scan History Limit"),
+              subtitle: Text("Currently: ${settings.scanLimit} items"),
+              trailing: IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () async {
+                  final result = await showDialog<int>(
+                    context: context,
+                    builder: (_) =>
+                        _EditLimitDialog(initial: settings.scanLimit),
+                  );
+                  if (result != null && result > 0) {
+                    await notifier.updateScanLimit(result);
+                  }
+                },
+              ),
             ),
-          ),
-        ],
-      )
-    );
+          ],
+        ));
   }
 }
 
@@ -70,8 +69,12 @@ class _EditLimitDialogState extends State<_EditLimitDialog> {
         onChanged: (v) => limit = int.tryParse(v) ?? widget.initial,
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
-        ElevatedButton(onPressed: () => Navigator.pop(context, limit), child: const Text("Save")),
+        TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancel")),
+        ElevatedButton(
+            onPressed: () => Navigator.pop(context, limit),
+            child: const Text("Save")),
       ],
     );
   }

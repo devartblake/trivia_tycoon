@@ -148,7 +148,7 @@ class MatchEnded extends GameEvent {
 
 /// Informational server notice (maintenance, countdown, etc.).
 class ServerNotice extends GameEvent {
-  final String code;    // e.g., "maintenance", "server_restart"
+  final String code; // e.g., "maintenance", "server_restart"
   final String message; // user-facing string
   const ServerNotice({required this.code, required this.message});
 

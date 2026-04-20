@@ -77,12 +77,12 @@ class _SegmentImageState extends State<SegmentImage>
                   borderRadius: BorderRadius.circular(8),
                   boxShadow: _isHovered && !widget.isLocked
                       ? [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.2),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    ),
-                  ]
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.2),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          ),
+                        ]
                       : null,
                 ),
                 child: ClipRRect(
@@ -127,9 +127,7 @@ class _SegmentImageState extends State<SegmentImage>
       child: Icon(
         Icons.card_giftcard,
         size: 24,
-        color: widget.isLocked
-            ? Colors.grey
-            : widget.segment.color,
+        color: widget.isLocked ? Colors.grey : widget.segment.color,
       ),
     );
   }

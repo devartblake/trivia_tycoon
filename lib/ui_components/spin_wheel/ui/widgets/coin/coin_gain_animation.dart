@@ -65,7 +65,8 @@ class _CoinGainAnimationState extends State<CoinGainAnimation>
     );
 
     _particleController = AnimationController(
-      duration: Duration(milliseconds: (widget.duration.inMilliseconds * 0.8).round()),
+      duration: Duration(
+          milliseconds: (widget.duration.inMilliseconds * 0.8).round()),
       vsync: this,
     );
 
@@ -83,17 +84,18 @@ class _CoinGainAnimationState extends State<CoinGainAnimation>
     ).animate(CurvedAnimation(
       parent: _mainController,
       curve: const Interval(0.0, 0.1, curve: Curves.easeIn),
-    ))..addListener(() {
-      if (_fadeAnimation.value >= 0.95) {
-        _fadeAnimation = Tween<double>(
-          begin: 1.0,
-          end: 0.0,
-        ).animate(CurvedAnimation(
-          parent: _mainController,
-          curve: const Interval(0.6, 1.0, curve: Curves.easeOut),
-        ));
-      }
-    });
+    ))
+      ..addListener(() {
+        if (_fadeAnimation.value >= 0.95) {
+          _fadeAnimation = Tween<double>(
+            begin: 1.0,
+            end: 0.0,
+          ).animate(CurvedAnimation(
+            parent: _mainController,
+            curve: const Interval(0.6, 1.0, curve: Curves.easeOut),
+          ));
+        }
+      });
 
     _scaleAnimation = Tween<double>(
       begin: 0.5,
@@ -209,7 +211,8 @@ class _CoinGainAnimationState extends State<CoinGainAnimation>
         borderRadius: BorderRadius.circular(widget.fontSize),
         boxShadow: [
           BoxShadow(
-            color: (_colorAnimation.value ?? Colors.amber).withValues(alpha: 0.3),
+            color:
+                (_colorAnimation.value ?? Colors.amber).withValues(alpha: 0.3),
             blurRadius: widget.fontSize * 0.8,
             spreadRadius: widget.fontSize * 0.2,
           ),
@@ -319,8 +322,7 @@ class CoinParticlePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..style = PaintingStyle.fill;
+    final paint = Paint()..style = PaintingStyle.fill;
 
     final center = size.center(Offset.zero);
     final maxRadius = size.width / 3;
@@ -397,7 +399,8 @@ class PremiumCoinGainAnimation extends StatefulWidget {
   });
 
   @override
-  State<PremiumCoinGainAnimation> createState() => _PremiumCoinGainAnimationState();
+  State<PremiumCoinGainAnimation> createState() =>
+      _PremiumCoinGainAnimationState();
 }
 
 class _PremiumCoinGainAnimationState extends State<PremiumCoinGainAnimation>
@@ -444,8 +447,10 @@ class _PremiumCoinGainAnimationState extends State<PremiumCoinGainAnimation>
             borderRadius: BorderRadius.circular(widget.fontSize),
             boxShadow: [
               BoxShadow(
-                color: Colors.yellow.withValues(alpha: 0.4 + (0.3 * _premiumGlowAnimation.value)),
-                blurRadius: widget.fontSize * (1.0 + _premiumGlowAnimation.value),
+                color: Colors.yellow.withValues(
+                    alpha: 0.4 + (0.3 * _premiumGlowAnimation.value)),
+                blurRadius:
+                    widget.fontSize * (1.0 + _premiumGlowAnimation.value),
                 spreadRadius: widget.fontSize * 0.3,
               ),
             ],

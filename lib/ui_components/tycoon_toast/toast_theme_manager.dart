@@ -448,12 +448,28 @@ class TycoonToastThemeManager {
   /// Gets available theme names for UI selection
   static List<String> getAvailableThemes() {
     return [
-      'spring', 'summer', 'autumn', 'winter',
-      'halloween', 'holiday', 'neon', 'sunset',
-      'ocean', 'forest', 'galaxy', 'fire',
-      'ice', 'royal', 'pastel', 'dark',
-      'rainbow', 'reward', 'success', 'error',
-      'warning', 'info'
+      'spring',
+      'summer',
+      'autumn',
+      'winter',
+      'halloween',
+      'holiday',
+      'neon',
+      'sunset',
+      'ocean',
+      'forest',
+      'galaxy',
+      'fire',
+      'ice',
+      'royal',
+      'pastel',
+      'dark',
+      'rainbow',
+      'reward',
+      'success',
+      'error',
+      'warning',
+      'info'
     ];
   }
 }

@@ -45,19 +45,22 @@ class TycoonToastRoute<T> extends OverlayRoute<T> {
   }
 
   void _configureAlignment(TycoonToastPosition position) {
-    final stackOffset = _stackIndex * 0.15; // Offset each toast by 15% of screen height
+    final stackOffset =
+        _stackIndex * 0.15; // Offset each toast by 15% of screen height
 
     switch (position) {
       case TycoonToastPosition.top:
         _initialAlignment = const Alignment(0.0, -2.0);
         _endAlignment = tycoonToast.endOffset != null
-            ? Alignment(0.0, -0.8 + stackOffset) + Alignment(tycoonToast.endOffset!.dx, tycoonToast.endOffset!.dy)
+            ? Alignment(0.0, -0.8 + stackOffset) +
+                Alignment(tycoonToast.endOffset!.dx, tycoonToast.endOffset!.dy)
             : Alignment(0.0, -0.8 + stackOffset);
         break;
       case TycoonToastPosition.bottom:
         _initialAlignment = const Alignment(0.0, 2.0);
         _endAlignment = tycoonToast.endOffset != null
-            ? Alignment(0.0, 0.8 - stackOffset) + Alignment(tycoonToast.endOffset!.dx, tycoonToast.endOffset!.dy)
+            ? Alignment(0.0, 0.8 - stackOffset) +
+                Alignment(tycoonToast.endOffset!.dx, tycoonToast.endOffset!.dy)
             : Alignment(0.0, 0.8 - stackOffset);
         break;
     }
@@ -71,14 +74,17 @@ class TycoonToastRoute<T> extends OverlayRoute<T> {
       overlays.add(
         OverlayEntry(
           builder: (context) => Listener(
-            onPointerDown: tycoonToast.isDismissible ? (_) => tycoonToast.dismiss() : null,
+            onPointerDown:
+                tycoonToast.isDismissible ? (_) => tycoonToast.dismiss() : null,
             child: _createBackgroundOverlay(),
           ),
         ),
       );
     }
 
-    Widget child = tycoonToast.isDismissible ? _getDismissibleToast(_builder) : _getToast();
+    Widget child = tycoonToast.isDismissible
+        ? _getDismissibleToast(_builder)
+        : _getToast();
     if (tycoonToast.safeArea) {
       child = SafeArea(child: child);
     }
@@ -122,7 +128,7 @@ class TycoonToastRoute<T> extends OverlayRoute<T> {
 
       case TycoonToastTransition.slide:
       default:
-      // Enhanced slide with slight rotation for reward toasts
+        // Enhanced slide with slight rotation for reward toasts
         if (tycoonToast.toastType == TycoonToastType.reward) {
           return AnimatedBuilder(
             animation: _rotationAnimation!,
@@ -173,11 +179,12 @@ class TycoonToastRoute<T> extends OverlayRoute<T> {
 
   Widget _getDismissibleToast(Widget child) {
     return Dismissible(
-      direction: tycoonToast.dismissDirection == TycoonToastDismissDirection.horizontal
-          ? DismissDirection.horizontal
-          : (tycoonToast.tycoonToastPosition == TycoonToastPosition.top
-          ? DismissDirection.up
-          : DismissDirection.down),
+      direction:
+          tycoonToast.dismissDirection == TycoonToastDismissDirection.horizontal
+              ? DismissDirection.horizontal
+              : (tycoonToast.tycoonToastPosition == TycoonToastPosition.top
+                  ? DismissDirection.up
+                  : DismissDirection.down),
       key: UniqueKey(),
       onDismissed: (_) {
         navigator?.removeRoute(this);
@@ -193,18 +200,18 @@ class TycoonToastRoute<T> extends OverlayRoute<T> {
   }
 
   Widget _getToast() => Container(
-    margin: tycoonToast.margin,
-    constraints: BoxConstraints(
-      maxHeight: 140, // Increased from 120 to 140 for more room
-      maxWidth: MediaQuery.of(navigator!.context).size.width * 0.9,
-    ),
-    child: _builder,
-  );
+        margin: tycoonToast.margin,
+        constraints: BoxConstraints(
+          maxHeight: 140, // Increased from 120 to 140 for more room
+          maxWidth: MediaQuery.of(navigator!.context).size.width * 0.9,
+        ),
+        child: _builder,
+      );
 
   AnimationController createAnimationController() => AnimationController(
-    duration: tycoonToast.animationDuration,
-    vsync: navigator!,
-  );
+        duration: tycoonToast.animationDuration,
+        vsync: navigator!,
+      );
 
   @override
   void install() {
@@ -275,23 +282,26 @@ class TycoonToastRoute<T> extends OverlayRoute<T> {
     );
   }
 
-  Animation<double>? createBlurFilterAnimation() => tycoonToast.routeBlur == null
-      ? null
-      : Tween<double>(begin: 0.0, end: tycoonToast.routeBlur).animate(
-    CurvedAnimation(
-      parent: _controller!,
-      curve: const Interval(0.0, 0.35, curve: Curves.easeInOut),
-    ),
-  );
+  Animation<double>? createBlurFilterAnimation() =>
+      tycoonToast.routeBlur == null
+          ? null
+          : Tween<double>(begin: 0.0, end: tycoonToast.routeBlur).animate(
+              CurvedAnimation(
+                parent: _controller!,
+                curve: const Interval(0.0, 0.35, curve: Curves.easeInOut),
+              ),
+            );
 
-  Animation<Color?>? createColorFilterAnimation() => tycoonToast.routeColor == null
-      ? null
-      : ColorTween(begin: Colors.transparent, end: tycoonToast.routeColor).animate(
-    CurvedAnimation(
-      parent: _controller!,
-      curve: const Interval(0.0, 0.35, curve: Curves.easeInOut),
-    ),
-  );
+  Animation<Color?>? createColorFilterAnimation() =>
+      tycoonToast.routeColor == null
+          ? null
+          : ColorTween(begin: Colors.transparent, end: tycoonToast.routeColor)
+              .animate(
+              CurvedAnimation(
+                parent: _controller!,
+                curve: const Interval(0.0, 0.35, curve: Curves.easeInOut),
+              ),
+            );
 
   @override
   TickerFuture didPush() {

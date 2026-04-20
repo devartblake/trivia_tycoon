@@ -66,16 +66,8 @@ class DepthCardThemes {
     glowEnabled: true,
   );
 
-  static List<DepthCardTheme> get all => [
-    light,
-    dark,
-    futuristic,
-    neon,
-    fantasy,
-    minimalist,
-    oceanic,
-    blueSteel
-  ];
+  static List<DepthCardTheme> get all =>
+      [light, dark, futuristic, neon, fantasy, minimalist, oceanic, blueSteel];
 
   static const DepthCardTheme indigo = futuristic;
   static const DepthCardTheme neonPink = neon;

@@ -24,10 +24,10 @@ class Ring extends StatelessWidget {
       child: thickness == 0
           ? null
           : CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation<Color?>(color),
-        strokeWidth: thickness,
-        value: value,
-      ),
+              valueColor: AlwaysStoppedAnimation<Color?>(color),
+              strokeWidth: thickness,
+              value: value,
+            ),
     );
   }
 }

@@ -9,7 +9,8 @@ import '../../game/providers/riverpod_providers.dart';
 
 enum MusicFilter { all, purchased, exclusive }
 
-final purchaseSettingsServiceProvider = Provider<PurchaseSettingsService>((ref) {
+final purchaseSettingsServiceProvider =
+    Provider<PurchaseSettingsService>((ref) {
   return ref.read(serviceManagerProvider).purchaseSettingsService;
 });
 
@@ -51,7 +52,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
 
     _itemControllers = List.generate(
       songs.length,
-          (index) => AnimationController(
+      (index) => AnimationController(
         duration: Duration(milliseconds: 400 + (index * 50)),
         vsync: this,
       ),
@@ -158,7 +159,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
   @override
   Widget build(BuildContext context) {
     final exclusiveSongs = songs.where((song) => song.isExclusive).toSet();
-    final purchasedSet = songs.where((song) => _purchasedSongs.contains(song.filename)).toSet();
+    final purchasedSet =
+        songs.where((song) => _purchasedSongs.contains(song.filename)).toSet();
 
     Set<Song> displayedSongs;
     switch (_selectedFilter) {
@@ -177,9 +179,9 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
       appBar: _buildAppBar(),
       body: _fadeAnimation != null
           ? FadeTransition(
-        opacity: _fadeAnimation!,
-        child: _buildBody(displayedSongs),
-      )
+              opacity: _fadeAnimation!,
+              child: _buildBody(displayedSongs),
+            )
           : _buildBody(displayedSongs),
     );
   }
@@ -311,13 +313,16 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
             Row(
               children: [
                 Expanded(
-                  child: _buildStatItem('Total Songs', totalSongs.toString(), Icons.music_note_rounded),
+                  child: _buildStatItem('Total Songs', totalSongs.toString(),
+                      Icons.music_note_rounded),
                 ),
                 Expanded(
-                  child: _buildStatItem('Purchased', purchasedCount.toString(), Icons.shopping_cart_rounded),
+                  child: _buildStatItem('Purchased', purchasedCount.toString(),
+                      Icons.shopping_cart_rounded),
                 ),
                 Expanded(
-                  child: _buildStatItem('Exclusive', exclusiveCount.toString(), Icons.star_rounded),
+                  child: _buildStatItem('Exclusive', exclusiveCount.toString(),
+                      Icons.star_rounded),
                 ),
               ],
             ),
@@ -415,13 +420,18 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                     },
                     child: Container(
                       margin: const EdgeInsets.symmetric(horizontal: 4),
-                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 16),
                       decoration: BoxDecoration(
-                        gradient: isSelected ? LinearGradient(colors: [color, color.withValues(alpha: 0.8)]) : null,
+                        gradient: isSelected
+                            ? LinearGradient(
+                                colors: [color, color.withValues(alpha: 0.8)])
+                            : null,
                         color: isSelected ? null : color.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: color.withValues(alpha: isSelected ? 0.3 : 0.2),
+                          color:
+                              color.withValues(alpha: isSelected ? 0.3 : 0.2),
                           width: 1,
                         ),
                       ),
@@ -491,7 +501,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
 
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-            (context, index) {
+        (context, index) {
           final song = displayedSongs.elementAt(index);
           final isPurchased = _purchasedSongs.contains(song.filename);
 
@@ -594,30 +604,31 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
         ),
         trailing: isPurchased
             ? Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: const Color(0xFF10B981).withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: const Icon(
-            Icons.play_arrow_rounded,
-            color: Color(0xFF10B981),
-            size: 20,
-          ),
-        )
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF10B981).withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(
+                  Icons.play_arrow_rounded,
+                  color: Color(0xFF10B981),
+                  size: 20,
+                ),
+              )
             : ElevatedButton.icon(
-          onPressed: () => _purchaseSong(song),
-          icon: const Icon(Icons.shopping_cart_rounded, size: 16),
-          label: const Text('Buy'),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF6366F1),
-            foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-        ),
+                onPressed: () => _purchaseSong(song),
+                icon: const Icon(Icons.shopping_cart_rounded, size: 16),
+                label: const Text('Buy'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF6366F1),
+                  foregroundColor: Colors.white,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
         onTap: isPurchased ? () => _playSong(song) : null,
       ),
     );

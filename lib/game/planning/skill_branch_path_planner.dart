@@ -15,22 +15,23 @@ class SkillBranchPathPlanner {
   /// New method: Returns SkillNode objects for a specific branch
   List<SkillNode> forBranch(String branchId) {
     final cat = _categoryFromGroupId(branchId);
-    final nodes = graph.nodes.where((n) =>
-    n.category == cat ||
-        n.branchId == branchId ||
-        n.id.startsWith(branchId)
-    ).toList();
+    final nodes = graph.nodes
+        .where((n) =>
+            n.category == cat ||
+            n.branchId == branchId ||
+            n.id.startsWith(branchId))
+        .toList();
 
     if (nodes.isEmpty) return const [];
 
-    final idSet = { for (final n in nodes) n.id };
+    final idSet = {for (final n in nodes) n.id};
     final edges = graph.edges
         .where((e) => idSet.contains(e.fromId) && idSet.contains(e.toId))
         .toList();
 
     // indegree / adjacency
-    final indeg = <String, int>{ for (final n in nodes) n.id: 0 };
-    final adj = <String, List<String>>{ for (final n in nodes) n.id: [] };
+    final indeg = <String, int>{for (final n in nodes) n.id: 0};
+    final adj = <String, List<String>>{for (final n in nodes) n.id: []};
     for (final e in edges) {
       indeg[e.toId] = (indeg[e.toId] ?? 0) + 1;
       adj[e.fromId]!.add(e.toId);
@@ -51,10 +52,11 @@ class SkillBranchPathPlanner {
       return -n.cost + xpBoost * 10 + timeBonus * 0.5 + streakMult * 2 + weight;
     }
 
-    final byId = { for (final n in nodes) n.id: n };
+    final byId = {for (final n in nodes) n.id: n};
     final ready = <SkillNode>[
-      for (final n in nodes) if ((indeg[n.id] ?? 0) == 0) n
-    ]..sort((a,b) => priority(b).compareTo(priority(a)));
+      for (final n in nodes)
+        if ((indeg[n.id] ?? 0) == 0) n
+    ]..sort((a, b) => priority(b).compareTo(priority(a)));
 
     final result = <SkillNode>[];
 
@@ -68,13 +70,15 @@ class SkillBranchPathPlanner {
           ready.add(byId[v]!);
         }
       }
-      ready.sort((a,b) => priority(b).compareTo(priority(a)));
+      ready.sort((a, b) => priority(b).compareTo(priority(a)));
     }
 
     if (result.length != nodes.length) {
       // Failsafe in case of cycles
-      final missing = nodes.where((n) => !result.any((x) => x.id == n.id)).toList()
-        ..sort((a,b) => priority(b).compareTo(priority(a)));
+      final missing = nodes
+          .where((n) => !result.any((x) => x.id == n.id))
+          .toList()
+        ..sort((a, b) => priority(b).compareTo(priority(a)));
       result.addAll(missing);
     }
     return result;
@@ -111,7 +115,8 @@ class SkillBranchPathPlanner {
     }
 
     for (final e in edges) {
-      if (!branchNodeIds.contains(e.fromId) || !branchNodeIds.contains(e.toId)) continue;
+      if (!branchNodeIds.contains(e.fromId) || !branchNodeIds.contains(e.toId))
+        continue;
       adj[e.fromId]!.add(e.toId);
       indeg[e.toId] = (indeg[e.toId] ?? 0) + 1;
     }
@@ -160,26 +165,41 @@ class SkillBranchPathPlanner {
 /// Keep this helper close so both screens share the same category mapping.
 SkillCategory _categoryFromGroupId(String groupId) {
   switch (groupId.toLowerCase()) {
-    case 'scholar': return SkillCategory.scholar;
-    case 'strategist': return SkillCategory.strategist;
-    case 'combat': return SkillCategory.combat;
-    case 'xp': return SkillCategory.xp;
-    case 'timer': return SkillCategory.timer;
-    case 'combo': return SkillCategory.combo;
-    case 'risk': return SkillCategory.risk;
-    case 'luck': return SkillCategory.luck;
-    case 'stealth': return SkillCategory.stealth;
-    case 'knowledge': return SkillCategory.knowledge;
-    case 'elite': return SkillCategory.elite;
-    case 'wildcard': return SkillCategory.wildcard;
-    case 'general': return SkillCategory.general;
-    default: return SkillCategory.unknown;
+    case 'scholar':
+      return SkillCategory.scholar;
+    case 'strategist':
+      return SkillCategory.strategist;
+    case 'combat':
+      return SkillCategory.combat;
+    case 'xp':
+      return SkillCategory.xp;
+    case 'timer':
+      return SkillCategory.timer;
+    case 'combo':
+      return SkillCategory.combo;
+    case 'risk':
+      return SkillCategory.risk;
+    case 'luck':
+      return SkillCategory.luck;
+    case 'stealth':
+      return SkillCategory.stealth;
+    case 'knowledge':
+      return SkillCategory.knowledge;
+    case 'elite':
+      return SkillCategory.elite;
+    case 'wildcard':
+      return SkillCategory.wildcard;
+    case 'general':
+      return SkillCategory.general;
+    default:
+      return SkillCategory.unknown;
   }
 }
 
 /// Static helper function for UI components to avoid circular dependencies
 /// This can be used by Nav screens and other UI components
-List<SkillNode> computeRecommendedOrderForBranch(SkillTreeGraph graph, String branchId) {
+List<SkillNode> computeRecommendedOrderForBranch(
+    SkillTreeGraph graph, String branchId) {
   final planner = SkillBranchPathPlanner.fromGraph(graph);
   return planner.forBranch(branchId);
 }

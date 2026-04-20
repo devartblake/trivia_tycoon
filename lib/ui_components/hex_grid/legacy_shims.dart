@@ -18,8 +18,10 @@ class HexClipper extends CustomClipper<Path> {
   HexClipper({required this.radius, this.orientation = HexOrientation.pointy});
 
   @override
-  Path getClip(Size size) =>
-      buildHexPath(center: size.center(Offset.zero), radius: radius, orientation: orientation);
+  Path getClip(Size size) => buildHexPath(
+      center: size.center(Offset.zero),
+      radius: radius,
+      orientation: orientation);
 
   @override
   bool shouldReclip(covariant HexClipper old) =>
@@ -127,9 +129,9 @@ class HexBorderPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant HexBorderPainter oldDelegate) =>
       oldDelegate.radius != radius ||
-          oldDelegate.orientation != orientation ||
-          oldDelegate.color != color ||
-          oldDelegate.strokeWidth != strokeWidth;
+      oldDelegate.orientation != orientation ||
+      oldDelegate.color != color ||
+      oldDelegate.strokeWidth != strokeWidth;
 }
 
 /// --- hex_edge_painter.dart (light shim) -----------------------------------
@@ -152,7 +154,8 @@ class HexEdgePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final center = size.center(Offset.zero);
-    final path = buildHexPath(center: center, radius: radius, orientation: orientation);
+    final path =
+        buildHexPath(center: center, radius: radius, orientation: orientation);
     final metrics = path.computeMetrics().toList();
     final paint = Paint()
       ..style = PaintingStyle.stroke
@@ -170,9 +173,11 @@ class HexEdgePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant HexEdgePainter old) =>
-      old.radius != radius || old.orientation != orientation ||
-          old.highlightEdge != highlightEdge || old.color != color ||
-          old.strokeWidth != strokeWidth;
+      old.radius != radius ||
+      old.orientation != orientation ||
+      old.highlightEdge != highlightEdge ||
+      old.color != color ||
+      old.strokeWidth != strokeWidth;
 }
 
 /// --- hex_offset_grid.dart (adapter helpers) -------------------------------
@@ -187,7 +192,7 @@ class OffsetCoord {
 
 Coordinates offsetToAxial(OffsetCoord o, OffsetLayout layout) {
   switch (layout) {
-    case OffsetLayout.oddR:  // rows shifted on odd rows
+    case OffsetLayout.oddR: // rows shifted on odd rows
       final q = o.col - ((o.row - (o.row & 1)) ~/ 2);
       final r = o.row;
       return Coordinates(q, r);
@@ -195,7 +200,7 @@ Coordinates offsetToAxial(OffsetCoord o, OffsetLayout layout) {
       final q = o.col - ((o.row + (o.row & 1)) ~/ 2);
       final r = o.row;
       return Coordinates(q, r);
-    case OffsetLayout.oddQ:  // cols shifted on odd columns
+    case OffsetLayout.oddQ: // cols shifted on odd columns
       final q = o.col;
       final r = o.row - ((o.col - (o.col & 1)) ~/ 2);
       return Coordinates(q, r);

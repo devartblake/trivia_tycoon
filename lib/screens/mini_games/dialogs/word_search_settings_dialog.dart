@@ -17,8 +17,7 @@ class WordSearchSettingsDialog extends StatefulWidget {
       _WordSearchSettingsDialogState();
 }
 
-class _WordSearchSettingsDialogState
-    extends State<WordSearchSettingsDialog> {
+class _WordSearchSettingsDialogState extends State<WordSearchSettingsDialog> {
   late WordSearchDifficulty _selectedDifficulty;
 
   @override

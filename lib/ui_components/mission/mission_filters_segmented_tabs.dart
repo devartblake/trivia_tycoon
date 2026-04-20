@@ -17,14 +17,16 @@ class MissionFiltersSegmentedTabs extends ConsumerWidget {
             label: "User Type",
             options: const ["All", "Admin", "Premium", "Guest"],
             selected: filter.userType,
-            onSelect: (val) => ref.read(missionFiltersProvider.notifier).updateUserType(val),
+            onSelect: (val) =>
+                ref.read(missionFiltersProvider.notifier).updateUserType(val),
           ),
           const SizedBox(height: 12),
           _buildTabRow(
             label: "Timeframe",
             options: const ["Daily", "Weekly", "Monthly"],
             selected: filter.timeframe,
-            onSelect: (val) => ref.read(missionFiltersProvider.notifier).updateTimeframe(val),
+            onSelect: (val) =>
+                ref.read(missionFiltersProvider.notifier).updateTimeframe(val),
           ),
         ],
       ),
@@ -43,7 +45,9 @@ class MissionFiltersSegmentedTabs extends ConsumerWidget {
         Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
         SegmentedButton<String>(
-          segments: options.map((e) => ButtonSegment(value: e, label: Text(e))).toList(),
+          segments: options
+              .map((e) => ButtonSegment(value: e, label: Text(e)))
+              .toList(),
           selected: {selected},
           onSelectionChanged: (values) => onSelect(values.first),
         ),

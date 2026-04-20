@@ -13,14 +13,19 @@ class SunAndMoon extends StatefulWidget {
   const SunAndMoon(
       {super.key,
       this.isDragComplete = false,
-      this.assetPaths = const [tSunYellowImage, tSunRedImage, tMoonCrescentImage],
+      this.assetPaths = const [
+        tSunYellowImage,
+        tSunRedImage,
+        tMoonCrescentImage
+      ],
       required this.index});
 
   @override
   State<StatefulWidget> createState() => _SunAndMoonState();
 }
 
-class _SunAndMoonState extends State<SunAndMoon> with SingleTickerProviderStateMixin {
+class _SunAndMoonState extends State<SunAndMoon>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _rotationAnimation;
   final int _rotationRadius = 300;
@@ -31,7 +36,8 @@ class _SunAndMoonState extends State<SunAndMoon> with SingleTickerProviderStateM
     super.initState();
     //Create unbounded controller so we can animate the rotation in positive or negative direction
     _animationController = AnimationController.unbounded(vsync: this);
-    _rotationAnimation = Tween<double>(begin: 1, end: 0).animate(_animationController);
+    _rotationAnimation =
+        Tween<double>(begin: 1, end: 0).animate(_animationController);
   }
 
   @override
@@ -47,7 +53,8 @@ class _SunAndMoonState extends State<SunAndMoon> with SingleTickerProviderStateM
     if (isDragComplete && widget.index != _currentIndex) {
       _currentIndex = widget.index;
       double nextAnimState = widget.index / 3;
-      _animationController.animateTo(nextAnimState, duration: Duration(milliseconds: 350), curve: Curves.easeOut);
+      _animationController.animateTo(nextAnimState,
+          duration: Duration(milliseconds: 350), curve: Curves.easeOut);
     }
     return SizedBox(
       width: double.infinity,
@@ -71,7 +78,8 @@ class _SunAndMoonState extends State<SunAndMoon> with SingleTickerProviderStateM
       child: RotationTransition(
         turns: _rotationAnimation,
         child: Transform.translate(
-          offset: Offset(_rotationRadius * cos(radianAngle), _rotationRadius * sin(radianAngle)),
+          offset: Offset(_rotationRadius * cos(radianAngle),
+              _rotationRadius * sin(radianAngle)),
           child: Image.asset(
             widget.assetPaths.elementAt(index),
             width: 60,

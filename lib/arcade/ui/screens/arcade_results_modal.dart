@@ -70,10 +70,13 @@ class ArcadeResultsModal extends StatelessWidget {
                         children: [
                           Text(
                             'Run Complete',
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w900,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900,
+                                ),
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 10),
@@ -81,10 +84,13 @@ class ArcadeResultsModal extends StatelessWidget {
                           // Score
                           Text(
                             '${result.score}',
-                            style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w900,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .displaySmall
+                                ?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900,
+                                ),
                           ),
 
                           const SizedBox(height: 8),
@@ -138,8 +144,10 @@ class ArcadeResultsModal extends StatelessWidget {
                           const SizedBox(height: 14),
                           const Divider(color: Colors.white12),
 
-                          _statRow(context, 'Difficulty', result.difficulty.label),
-                          _statRow(context, 'Duration', _formatDuration(result.duration)),
+                          _statRow(
+                              context, 'Difficulty', result.difficulty.label),
+                          _statRow(context, 'Duration',
+                              _formatDuration(result.duration)),
 
                           const SizedBox(height: 14),
                           const Divider(color: Colors.white12),
@@ -200,14 +208,13 @@ class ArcadeResultsModal extends StatelessWidget {
                 backgroundColor: const Color(0xFF6C5CE7),
                 foregroundColor: Colors.white,
                 elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14)),
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),
             ),
           ),
-
         if (hasPlayAgain) const SizedBox(height: 10),
-
         if (hasViewScores)
           SizedBox(
             width: double.infinity,
@@ -219,25 +226,26 @@ class ArcadeResultsModal extends StatelessWidget {
               icon: const Icon(Icons.leaderboard_rounded, color: Colors.white),
               label: const Text(
                 'View All Local Scores',
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
               ),
               style: OutlinedButton.styleFrom(
                 side: BorderSide(color: Colors.white.withValues(alpha: 0.22)),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14)),
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),
             ),
           ),
-
         if (hasViewScores) const SizedBox(height: 10),
-
         SizedBox(
           width: double.infinity,
           child: TextButton(
             onPressed: () => Navigator.of(context).pop(),
             style: TextButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 12),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14)),
             ),
             child: Text(
               'Continue',
@@ -302,9 +310,9 @@ class LocalLeaderboardPreview extends ConsumerWidget {
     final entries = service.top(gameId, difficulty, limit: 5);
 
     final titleStyle = Theme.of(context).textTheme.titleSmall?.copyWith(
-      color: Colors.white,
-      fontWeight: FontWeight.w900,
-    );
+          color: Colors.white,
+          fontWeight: FontWeight.w900,
+        );
 
     if (entries.isEmpty) {
       return Container(

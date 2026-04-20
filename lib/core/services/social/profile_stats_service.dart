@@ -50,9 +50,8 @@ class GameMatch {
     this.difficulty = 'Medium',
   });
 
-  double get accuracy => questionsAnswered > 0
-      ? (correctAnswers / questionsAnswered) * 100
-      : 0.0;
+  double get accuracy =>
+      questionsAnswered > 0 ? (correctAnswers / questionsAnswered) * 100 : 0.0;
 
   int get pointsEarned {
     switch (result) {
@@ -286,8 +285,7 @@ class UserStats {
 
   CategoryStats? getBestCategory() {
     if (categoryStats.isEmpty) return null;
-    return categoryStats.values.reduce((a, b) =>
-    a.winRate > b.winRate ? a : b);
+    return categoryStats.values.reduce((a, b) => a.winRate > b.winRate ? a : b);
   }
 }
 
@@ -333,7 +331,8 @@ class ProfileStatsService extends ChangeNotifier {
     // Check achievements
     await _checkAchievements(match.userId);
 
-    LogManager.debug('Match recorded for user ${match.userId}: ${match.result.displayName}');
+    LogManager.debug(
+        'Match recorded for user ${match.userId}: ${match.result.displayName}');
     _broadcastStatsUpdate(match.userId);
     notifyListeners();
   }
@@ -366,7 +365,8 @@ class ProfileStatsService extends ChangeNotifier {
     // Basic stats
     final totalGames = matches.length;
     final totalWins = matches.where((m) => m.result == GameResult.win).length;
-    final totalLosses = matches.where((m) => m.result == GameResult.loss).length;
+    final totalLosses =
+        matches.where((m) => m.result == GameResult.loss).length;
     final totalDraws = matches.where((m) => m.result == GameResult.draw).length;
     final totalPoints = matches.fold<int>(0, (sum, m) => sum + m.pointsEarned);
 
@@ -375,14 +375,22 @@ class ProfileStatsService extends ChangeNotifier {
     final categories = matches.map((m) => m.category).toSet();
 
     for (final category in categories) {
-      final categoryMatches = matches.where((m) => m.category == category).toList();
-      final wins = categoryMatches.where((m) => m.result == GameResult.win).length;
-      final losses = categoryMatches.where((m) => m.result == GameResult.loss).length;
-      final draws = categoryMatches.where((m) => m.result == GameResult.draw).length;
-      final totalScore = categoryMatches.fold<int>(0, (sum, m) => sum + m.score);
-      final highestScore = categoryMatches.fold<int>(0, (max, m) => m.score > max ? m.score : max);
-      final avgAccuracy = categoryMatches.isEmpty ? 0.0 :
-      categoryMatches.fold<double>(0, (sum, m) => sum + m.accuracy) / categoryMatches.length;
+      final categoryMatches =
+          matches.where((m) => m.category == category).toList();
+      final wins =
+          categoryMatches.where((m) => m.result == GameResult.win).length;
+      final losses =
+          categoryMatches.where((m) => m.result == GameResult.loss).length;
+      final draws =
+          categoryMatches.where((m) => m.result == GameResult.draw).length;
+      final totalScore =
+          categoryMatches.fold<int>(0, (sum, m) => sum + m.score);
+      final highestScore = categoryMatches.fold<int>(
+          0, (max, m) => m.score > max ? m.score : max);
+      final avgAccuracy = categoryMatches.isEmpty
+          ? 0.0
+          : categoryMatches.fold<double>(0, (sum, m) => sum + m.accuracy) /
+              categoryMatches.length;
 
       categoryStats[category] = CategoryStats(
         category: category,
@@ -404,7 +412,8 @@ class ProfileStatsService extends ChangeNotifier {
     final level = (xp / 1000).floor() + 1;
 
     // Get achievements
-    final achievements = _userAchievements[userId] ?? List.from(_achievementTemplates);
+    final achievements =
+        _userAchievements[userId] ?? List.from(_achievementTemplates);
 
     _userStats[userId] = UserStats(
       userId: userId,
@@ -458,7 +467,8 @@ class ProfileStatsService extends ChangeNotifier {
         }
       }
 
-      longestStreak = currentStreak > longestStreak ? currentStreak : longestStreak;
+      longestStreak =
+          currentStreak > longestStreak ? currentStreak : longestStreak;
 
       // Win streak
       if (match.result == GameResult.win) {
@@ -638,8 +648,9 @@ class ProfileStatsService extends ChangeNotifier {
           break;
         case 'speed_demon':
           progress = matches.any((m) =>
-          m.questionsAnswered >= 10 &&
-              m.timeTaken.inSeconds <= 30) ? 1 : 0;
+                  m.questionsAnswered >= 10 && m.timeTaken.inSeconds <= 30)
+              ? 1
+              : 0;
           break;
         case 'brain_box':
           progress = matches.any((m) => m.score >= 1000) ? 1 : 0;
@@ -648,19 +659,33 @@ class ProfileStatsService extends ChangeNotifier {
           progress = matches.map((m) => m.opponentId).toSet().length;
           break;
         case 'category_master_science':
-          progress = matches.where((m) =>
-          m.category == 'Science' && m.result == GameResult.win).length;
+          progress = matches
+              .where(
+                  (m) => m.category == 'Science' && m.result == GameResult.win)
+              .length;
           break;
         case 'category_master_history':
-          progress = matches.where((m) =>
-          m.category == 'History' && m.result == GameResult.win).length;
+          progress = matches
+              .where(
+                  (m) => m.category == 'History' && m.result == GameResult.win)
+              .length;
           break;
         case 'all_rounder':
-          final categories = ['Science', 'History', 'Sports', 'Movies', 'Music'];
+          final categories = [
+            'Science',
+            'History',
+            'Sports',
+            'Movies',
+            'Music'
+          ];
           progress = categories.every((cat) =>
-          matches.where((m) =>
-          m.category == cat &&
-              m.result == GameResult.win).length >= 5) ? 1 : 0;
+                  matches
+                      .where((m) =>
+                          m.category == cat && m.result == GameResult.win)
+                      .length >=
+                  5)
+              ? 1
+              : 0;
           break;
       }
 
@@ -688,10 +713,12 @@ class ProfileStatsService extends ChangeNotifier {
     final achievements = _userAchievements[userId] ?? [];
     final now = DateTime.now();
 
-    return achievements.where((a) =>
-    a.isUnlocked &&
-        a.unlockedAt != null &&
-        now.difference(a.unlockedAt!).inMinutes < 5).toList();
+    return achievements
+        .where((a) =>
+            a.isUnlocked &&
+            a.unlockedAt != null &&
+            now.difference(a.unlockedAt!).inMinutes < 5)
+        .toList();
   }
 
   // ============ Query Methods ============
@@ -738,9 +765,9 @@ class ProfileStatsService extends ChangeNotifier {
   }
 
   List<MapEntry<String, CategoryStats>> getCategoryLeaderboard(
-      String category, {
-        int limit = 100,
-      }) {
+    String category, {
+    int limit = 100,
+  }) {
     final entries = <MapEntry<String, CategoryStats>>[];
 
     for (final entry in _userStats.entries) {
@@ -800,7 +827,9 @@ class ProfileStatsService extends ChangeNotifier {
         userId: mockUserId,
         category: ['Science', 'History', 'Sports', 'Movies'][i % 4],
         score: 500 + (i * 20) + (i % 5) * 100,
-        result: i % 3 == 0 ? GameResult.win : (i % 3 == 1 ? GameResult.loss : GameResult.draw),
+        result: i % 3 == 0
+            ? GameResult.win
+            : (i % 3 == 1 ? GameResult.loss : GameResult.draw),
         questionsAnswered: 10,
         correctAnswers: 7 + (i % 4),
         timeTaken: Duration(seconds: 120 + i),
@@ -849,16 +878,19 @@ class ProfileStatsService extends ChangeNotifier {
         'progress': (stats.achievementCount / stats.achievements.length) * 100,
       },
       'categories': stats.categoryStats.map((key, value) => MapEntry(key, {
-        'games': value.gamesPlayed,
-        'winRate': value.winRate,
-        'avgScore': value.averageScore,
-      })),
-      'recentPerformance': matches.take(10).map((m) => {
-        'category': m.category,
-        'result': m.result.name,
-        'score': m.score,
-        'accuracy': m.accuracy,
-      }).toList(),
+            'games': value.gamesPlayed,
+            'winRate': value.winRate,
+            'avgScore': value.averageScore,
+          })),
+      'recentPerformance': matches
+          .take(10)
+          .map((m) => {
+                'category': m.category,
+                'result': m.result.name,
+                'score': m.score,
+                'accuracy': m.accuracy,
+              })
+          .toList(),
     };
   }
 }

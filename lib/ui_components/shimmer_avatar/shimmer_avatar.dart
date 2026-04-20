@@ -184,38 +184,38 @@ class _ShimmerAvatarState extends State<ShimmerAvatar>
     final List<BoxShadow> shadows = widget.customShadow != null
         ? [widget.customShadow!]
         : [
-      ...AvatarHelpers.getModernShadow(),
-      if (widget.useGlowEffect) ...AvatarHelpers.getGradientGlow(),
-    ];
+            ...AvatarHelpers.getModernShadow(),
+            if (widget.useGlowEffect) ...AvatarHelpers.getGradientGlow(),
+          ];
 
     // Determine border decoration
     final BoxDecoration borderDecoration = widget.borderColor != null
         ? BoxDecoration(
-      shape: BoxShape.circle,
-      border: Border.all(
-        color: widget.borderColor!,
-        width: widget.borderWidth,
-      ),
-      boxShadow: shadows,
-    )
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: widget.borderColor!,
+              width: widget.borderWidth,
+            ),
+            boxShadow: shadows,
+          )
         : widget.useGradientBorder
-        ? BoxDecoration(
-      shape: BoxShape.circle,
-      gradient: LinearGradient(
-        colors: AvatarHelpers.getGradientBorderColors(),
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      ),
-      boxShadow: shadows,
-    )
-        : BoxDecoration(
-      shape: BoxShape.circle,
-      border: Border.all(
-        color: Colors.white.withValues(alpha: 0.2),
-        width: widget.borderWidth,
-      ),
-      boxShadow: shadows,
-    );
+            ? BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  colors: AvatarHelpers.getGradientBorderColors(),
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                boxShadow: shadows,
+              )
+            : BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  width: widget.borderWidth,
+                ),
+                boxShadow: shadows,
+              );
 
     Widget avatarContent = Container(
       width: widget.radius * 2,
@@ -257,27 +257,27 @@ class _ShimmerAvatarState extends State<ShimmerAvatar>
       onLongPress: widget.onLongPress,
       onTapDown: widget.enableHoverEffect
           ? (_) {
-        if (mounted) {
-          setState(() => _isPressed = true);
-          _scaleController.forward();
-        }
-      }
+              if (mounted) {
+                setState(() => _isPressed = true);
+                _scaleController.forward();
+              }
+            }
           : null,
       onTapUp: widget.enableHoverEffect
           ? (_) {
-        if (mounted) {
-          setState(() => _isPressed = false);
-          _scaleController.reverse();
-        }
-      }
+              if (mounted) {
+                setState(() => _isPressed = false);
+                _scaleController.reverse();
+              }
+            }
           : null,
       onTapCancel: widget.enableHoverEffect
           ? () {
-        if (mounted) {
-          setState(() => _isPressed = false);
-          _scaleController.reverse();
-        }
-      }
+              if (mounted) {
+                setState(() => _isPressed = false);
+                _scaleController.reverse();
+              }
+            }
           : null,
       child: avatarContent,
     );

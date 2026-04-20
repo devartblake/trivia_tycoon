@@ -111,8 +111,7 @@ class StoreOffersData {
 
   factory StoreOffersData.fromJson(Map<String, dynamic> json) {
     final rawFeatured = json['featured'] as Map<String, dynamic>?;
-    final rawTabs =
-        (json['tabs'] as List?)?.map((e) => e.toString()).toList();
+    final rawTabs = (json['tabs'] as List?)?.map((e) => e.toString()).toList();
     final rawOffers = json['offers'] as List? ?? [];
 
     return StoreOffersData(
@@ -148,8 +147,8 @@ class StoreOffersData {
             originalPrice: '24.99',
             discount: 80,
             icon: Icons.star,
-            gradient: LinearGradient(
-                colors: [Color(0xFFEF4444), Color(0xFFDC2626)]),
+            gradient:
+                LinearGradient(colors: [Color(0xFFEF4444), Color(0xFFDC2626)]),
             buttonText: 'Upgrade Now',
             isPopular: true,
           ),
@@ -162,8 +161,8 @@ class StoreOffersData {
             originalPrice: '19.99',
             discount: 50,
             icon: Icons.monetization_on,
-            gradient: LinearGradient(
-                colors: [Color(0xFFF59E0B), Color(0xFFD97706)]),
+            gradient:
+                LinearGradient(colors: [Color(0xFFF59E0B), Color(0xFFD97706)]),
             buttonText: 'Buy Coins',
           ),
           OfferItem(
@@ -173,8 +172,8 @@ class StoreOffersData {
             description: '10 full energy refills for today only',
             price: '2.99',
             icon: Icons.flash_on,
-            gradient: LinearGradient(
-                colors: [Color(0xFF10B981), Color(0xFF059669)]),
+            gradient:
+                LinearGradient(colors: [Color(0xFF10B981), Color(0xFF059669)]),
             buttonText: 'Get Energy',
           ),
           OfferItem(
@@ -184,8 +183,8 @@ class StoreOffersData {
             description: '24-hour double XP multiplier',
             price: '1.99',
             icon: Icons.trending_up,
-            gradient: LinearGradient(
-                colors: [Color(0xFF8B5CF6), Color(0xFF7C3AED)]),
+            gradient:
+                LinearGradient(colors: [Color(0xFF8B5CF6), Color(0xFF7C3AED)]),
             buttonText: 'Activate Boost',
           ),
           OfferItem(
@@ -195,8 +194,8 @@ class StoreOffersData {
             description: 'All premium features for 30 days',
             price: '9.99',
             icon: Icons.workspace_premium,
-            gradient: LinearGradient(
-                colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)]),
+            gradient:
+                LinearGradient(colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)]),
             buttonText: 'Subscribe',
             isPopular: true,
             tier: 'premium',
@@ -211,8 +210,8 @@ class StoreOffersData {
             originalPrice: '119.88',
             discount: 67,
             icon: Icons.diamond,
-            gradient: LinearGradient(
-                colors: [Color(0xFF06B6D4), Color(0xFF0891B2)]),
+            gradient:
+                LinearGradient(colors: [Color(0xFF06B6D4), Color(0xFF0891B2)]),
             buttonText: 'Best Deal',
             tier: 'elite',
             billingPeriod: 'seasonal',
@@ -224,8 +223,8 @@ class StoreOffersData {
             description: '10,000 coins + 5 lives + 3 power-ups',
             price: '4.99',
             icon: Icons.card_giftcard,
-            gradient: LinearGradient(
-                colors: [Color(0xFFEC4899), Color(0xFFDB2777)]),
+            gradient:
+                LinearGradient(colors: [Color(0xFFEC4899), Color(0xFFDB2777)]),
             buttonText: 'Get Bundle',
           ),
           OfferItem(
@@ -237,8 +236,8 @@ class StoreOffersData {
             originalPrice: '34.97',
             discount: 43,
             icon: Icons.emoji_events,
-            gradient: LinearGradient(
-                colors: [Color(0xFFF59E0B), Color(0xFFD97706)]),
+            gradient:
+                LinearGradient(colors: [Color(0xFFF59E0B), Color(0xFFD97706)]),
             buttonText: 'Become Champion',
             isPopular: true,
           ),

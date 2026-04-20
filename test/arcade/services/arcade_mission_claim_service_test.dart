@@ -30,7 +30,8 @@ void main() {
       expect(svc.isClaimedToday('mission_1'), isFalse);
     });
 
-    test('returns false for a different mission id after claiming one', () async {
+    test('returns false for a different mission id after claiming one',
+        () async {
       final svc = ArcadeMissionClaimService(cache);
       await svc.markClaimedToday('mission_1');
       expect(svc.isClaimedToday('mission_2'), isFalse);

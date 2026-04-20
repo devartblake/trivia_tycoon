@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'notifications_screen.dart';
+import '../../core/models/notifications/player_inbox_item.dart';
+import '../../game/providers/player_notification_providers.dart';
 
 class NotificationDetailScreen extends ConsumerStatefulWidget {
   final InboxItem notification;
@@ -54,26 +55,11 @@ class _NotificationDetailScreenState
   }
 
   void _markAsRead() {
-    // Delay the provider modification until after the widget tree is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final items = ref.read(inboxProvider);
-      ref.read(inboxProvider.notifier).state = items.map((i) {
-        if (i.id == widget.notification.id) {
-          return InboxItem(
-            id: i.id,
-            type: i.type,
-            title: i.title,
-            body: i.body,
-            timestamp: i.timestamp,
-            actionRoute: i.actionRoute,
-            payload: i.payload,
-            unread: false,
-            icon: i.icon,
-            avatarUrl: i.avatarUrl,
-          );
-        }
-        return i;
-      }).toList();
+      if (!widget.notification.unread) return;
+      ref
+          .read(playerNotificationActionsProvider)
+          .markRead(widget.notification.id);
     });
   }
 
@@ -85,7 +71,7 @@ class _NotificationDetailScreenState
 
   @override
   Widget build(BuildContext context) {
-    final config = _getNotificationConfig(widget.notification.type);
+    final config = inboxTypeConfig(widget.notification.type);
 
     return Scaffold(
       backgroundColor: const Color(0xFF36393F),
@@ -386,7 +372,8 @@ class _NotificationDetailScreenState
         children: [
           Row(
             children: [
-              const Icon(Icons.emoji_events, color: Color(0xFFFAA61A), size: 24),
+              const Icon(Icons.emoji_events,
+                  color: Color(0xFFFAA61A), size: 24),
               const SizedBox(width: 12),
               const Expanded(
                 child: Text(
@@ -646,7 +633,7 @@ class _NotificationDetailScreenState
               'Accept Friend Request',
               config.color,
               Icons.person_add,
-                  () {
+              () {
                 // Handle accept friend request
                 _showSuccessSnackBar('Friend request accepted!');
                 context.pop();
@@ -657,7 +644,7 @@ class _NotificationDetailScreenState
               'Accept Challenge',
               config.color,
               Icons.emoji_events,
-                  () {
+              () {
                 // Handle accept challenge
                 context.go('/multiplayer/challenge/${widget.notification.id}');
               },
@@ -667,7 +654,7 @@ class _NotificationDetailScreenState
               'Update Now',
               config.color,
               Icons.download,
-                  () {
+              () {
                 // Handle update
                 _showSuccessSnackBar('Update started!');
               },
@@ -682,7 +669,7 @@ class _NotificationDetailScreenState
                 child: _buildSecondaryButton(
                   'Share',
                   Icons.share,
-                      () => _handleShare(),
+                  () => _handleShare(),
                 ),
               ),
               const SizedBox(width: 12),
@@ -690,7 +677,7 @@ class _NotificationDetailScreenState
                 child: _buildSecondaryButton(
                   'Delete',
                   Icons.delete_outline,
-                      () => _handleDelete(),
+                  () => _handleDelete(),
                 ),
               ),
             ],
@@ -701,11 +688,11 @@ class _NotificationDetailScreenState
   }
 
   Widget _buildPrimaryButton(
-      String label,
-      Color color,
-      IconData icon,
-      VoidCallback onTap,
-      ) {
+    String label,
+    Color color,
+    IconData icon,
+    VoidCallback onTap,
+  ) {
     return SizedBox(
       width: double.infinity,
       height: 50,
@@ -732,10 +719,10 @@ class _NotificationDetailScreenState
   }
 
   Widget _buildSecondaryButton(
-      String label,
-      IconData icon,
-      VoidCallback onTap,
-      ) {
+    String label,
+    IconData icon,
+    VoidCallback onTap,
+  ) {
     return SizedBox(
       height: 44,
       child: OutlinedButton.icon(
@@ -790,8 +777,10 @@ class _NotificationDetailScreenState
               },
             ),
             ListTile(
-              leading: const Icon(Icons.delete_outline, color: Color(0xFFED4245)),
-              title: const Text('Delete', style: TextStyle(color: Color(0xFFED4245))),
+              leading:
+                  const Icon(Icons.delete_outline, color: Color(0xFFED4245)),
+              title: const Text('Delete',
+                  style: TextStyle(color: Color(0xFFED4245))),
               onTap: () {
                 Navigator.pop(context);
                 _handleDelete();
@@ -809,10 +798,7 @@ class _NotificationDetailScreenState
   }
 
   void _handleDelete() {
-    final items = ref.read(inboxProvider);
-    ref.read(inboxProvider.notifier).state =
-        items.where((i) => i.id != widget.notification.id).toList();
-
+    ref.read(playerNotificationActionsProvider).dismiss(widget.notification.id);
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Notification deleted'),
@@ -820,7 +806,6 @@ class _NotificationDetailScreenState
         behavior: SnackBarBehavior.floating,
       ),
     );
-
     context.pop();
   }
 
@@ -832,47 +817,6 @@ class _NotificationDetailScreenState
         behavior: SnackBarBehavior.floating,
       ),
     );
-  }
-
-  NotificationConfig _getNotificationConfig(InboxType type) {
-    switch (type) {
-      case InboxType.alert:
-        return NotificationConfig(
-          color: const Color(0xFFED4245),
-          icon: Icons.warning_rounded,
-          label: 'ALERT',
-        );
-      case InboxType.friend:
-        return NotificationConfig(
-          color: const Color(0xFF3BA55C),
-          icon: Icons.people_rounded,
-          label: 'SOCIAL',
-        );
-      case InboxType.achievement:
-        return NotificationConfig(
-          color: const Color(0xFFFAA61A),
-          icon: Icons.military_tech,
-          label: 'ACHIEVEMENT',
-        );
-      case InboxType.challenge:
-        return NotificationConfig(
-          color: const Color(0xFFF26522),
-          icon: Icons.emoji_events,
-          label: 'CHALLENGE',
-        );
-      case InboxType.system:
-        return NotificationConfig(
-          color: const Color(0xFF8B5CF6),
-          icon: Icons.settings,
-          label: 'SYSTEM',
-        );
-      case InboxType.notification:
-        return NotificationConfig(
-          color: const Color(0xFF5865F2),
-          icon: Icons.notifications,
-          label: 'INFO',
-        );
-    }
   }
 
   String _formatFullTimestamp(DateTime timestamp) {

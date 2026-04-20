@@ -57,7 +57,6 @@ class WalletCountersRow extends ConsumerWidget {
   }
 }
 
-
 class _CounterChip extends StatelessWidget {
   final IconData icon;
   final String label;

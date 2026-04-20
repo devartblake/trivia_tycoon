@@ -161,7 +161,8 @@ class MiniGamesHubScreen extends StatelessWidget {
   }
 
   // Game grid for desktop layout
-  Widget _buildGameGrid(BuildContext context, List<Map<String, dynamic>> games) {
+  Widget _buildGameGrid(
+      BuildContext context, List<Map<String, dynamic>> games) {
     return LayoutBuilder(
       builder: (context, constraints) {
         // Calculate number of columns based on width
@@ -289,19 +290,19 @@ class MiniGamesHubScreen extends StatelessWidget {
       ),
       const SizedBox(height: 16),
       ..._getLogicPuzzleGames().map((game) => Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: _buildGameCard(
-          context,
-          title: game['title'],
-          subtitle: game['subtitle'],
-          description: game['description'],
-          icon: game['icon'],
-          gradient: game['gradient'],
-          route: game['route'],
-          difficulty: game['difficulty'],
-          comingSoon: game['comingSoon'] ?? false,
-        ),
-      )),
+            padding: const EdgeInsets.only(bottom: 12),
+            child: _buildGameCard(
+              context,
+              title: game['title'],
+              subtitle: game['subtitle'],
+              description: game['description'],
+              icon: game['icon'],
+              gradient: game['gradient'],
+              route: game['route'],
+              difficulty: game['difficulty'],
+              comingSoon: game['comingSoon'] ?? false,
+            ),
+          )),
     ];
   }
 
@@ -317,19 +318,19 @@ class MiniGamesHubScreen extends StatelessWidget {
       ),
       const SizedBox(height: 16),
       ..._getWordGames().map((game) => Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: _buildGameCard(
-          context,
-          title: game['title'],
-          subtitle: game['subtitle'],
-          description: game['description'],
-          icon: game['icon'],
-          gradient: game['gradient'],
-          route: game['route'],
-          difficulty: game['difficulty'],
-          comingSoon: game['comingSoon'] ?? false,
-        ),
-      )),
+            padding: const EdgeInsets.only(bottom: 12),
+            child: _buildGameCard(
+              context,
+              title: game['title'],
+              subtitle: game['subtitle'],
+              description: game['description'],
+              icon: game['icon'],
+              gradient: game['gradient'],
+              route: game['route'],
+              difficulty: game['difficulty'],
+              comingSoon: game['comingSoon'] ?? false,
+            ),
+          )),
     ];
   }
 
@@ -345,19 +346,19 @@ class MiniGamesHubScreen extends StatelessWidget {
       ),
       const SizedBox(height: 16),
       ..._getMemoryStrategyGames().map((game) => Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: _buildGameCard(
-          context,
-          title: game['title'],
-          subtitle: game['subtitle'],
-          description: game['description'],
-          icon: game['icon'],
-          gradient: game['gradient'],
-          route: game['route'],
-          difficulty: game['difficulty'],
-          comingSoon: game['comingSoon'] ?? false,
-        ),
-      )),
+            padding: const EdgeInsets.only(bottom: 12),
+            child: _buildGameCard(
+              context,
+              title: game['title'],
+              subtitle: game['subtitle'],
+              description: game['description'],
+              icon: game['icon'],
+              gradient: game['gradient'],
+              route: game['route'],
+              difficulty: game['difficulty'],
+              comingSoon: game['comingSoon'] ?? false,
+            ),
+          )),
     ];
   }
 
@@ -670,7 +671,8 @@ class MiniGamesHubScreen extends StatelessWidget {
                         children: [
                           _buildFeatureBadge(Icons.star_rounded, 'Premium'),
                           const SizedBox(width: 8),
-                          _buildFeatureBadge(Icons.trending_up_rounded, 'Popular'),
+                          _buildFeatureBadge(
+                              Icons.trending_up_rounded, 'Popular'),
                         ],
                       ),
                     ],
@@ -728,16 +730,16 @@ class MiniGamesHubScreen extends StatelessWidget {
   }
 
   Widget _buildGameCard(
-      BuildContext context, {
-        required String title,
-        required String subtitle,
-        required String description,
-        required IconData icon,
-        required LinearGradient gradient,
-        required String route,
-        required String difficulty,
-        bool comingSoon = false,
-      }) {
+    BuildContext context, {
+    required String title,
+    required String subtitle,
+    required String description,
+    required IconData icon,
+    required LinearGradient gradient,
+    required String route,
+    required String difficulty,
+    bool comingSoon = false,
+  }) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -814,10 +816,12 @@ class MiniGamesHubScreen extends StatelessWidget {
                                 vertical: 2,
                               ),
                               decoration: BoxDecoration(
-                                color: const Color(0xFFF59E0B).withValues(alpha: 0.1),
+                                color: const Color(0xFFF59E0B)
+                                    .withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(4),
                                 border: Border.all(
-                                  color: const Color(0xFFF59E0B).withValues(alpha: 0.3),
+                                  color: const Color(0xFFF59E0B)
+                                      .withValues(alpha: 0.3),
                                 ),
                               ),
                               child: const Text(
@@ -906,7 +910,8 @@ class MiniGamesHubScreen extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2), // Reduced from 6
+      padding: const EdgeInsets.symmetric(
+          horizontal: 5, vertical: 2), // Reduced from 6
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(4),

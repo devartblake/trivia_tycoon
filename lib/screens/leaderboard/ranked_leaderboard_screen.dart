@@ -9,7 +9,8 @@ class RankedLeaderboardScreen extends StatefulWidget {
   const RankedLeaderboardScreen({super.key, required this.api, this.seasonId});
 
   @override
-  State<RankedLeaderboardScreen> createState() => _RankedLeaderboardScreenState();
+  State<RankedLeaderboardScreen> createState() =>
+      _RankedLeaderboardScreenState();
 }
 
 class _RankedLeaderboardScreenState extends State<RankedLeaderboardScreen> {
@@ -82,12 +83,15 @@ class _RankedLeaderboardScreenState extends State<RankedLeaderboardScreen> {
                 return Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
                       child: Row(
                         children: [
-                          Text('Season: ${data.seasonId}', style: Theme.of(context).textTheme.bodySmall),
+                          Text('Season: ${data.seasonId}',
+                              style: Theme.of(context).textTheme.bodySmall),
                           const Spacer(),
-                          Text('Total: ${data.total}', style: Theme.of(context).textTheme.bodySmall),
+                          Text('Total: ${data.total}',
+                              style: Theme.of(context).textTheme.bodySmall),
                         ],
                       ),
                     ),
@@ -108,9 +112,8 @@ class _RankedLeaderboardScreenState extends State<RankedLeaderboardScreen> {
                       page: data.page,
                       pageSize: data.pageSize,
                       total: data.total,
-                      onPrev: data.page > 1
-                          ? () => setState(() => _page--)
-                          : null,
+                      onPrev:
+                          data.page > 1 ? () => setState(() => _page--) : null,
                       onNext: (data.page * data.pageSize) < data.total
                           ? () => setState(() => _page++)
                           : null,
@@ -142,8 +145,10 @@ class _RankCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('#${e.tierRank}', style: Theme.of(context).textTheme.titleMedium),
-                  Text('Tier ${e.tier}', style: Theme.of(context).textTheme.bodySmall),
+                  Text('#${e.tierRank}',
+                      style: Theme.of(context).textTheme.titleMedium),
+                  Text('Tier ${e.tier}',
+                      style: Theme.of(context).textTheme.bodySmall),
                 ],
               ),
             ),
@@ -212,7 +217,8 @@ class _Pager extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
       child: Row(
         children: [
-          Text('$from–$to of $total', style: Theme.of(context).textTheme.bodySmall),
+          Text('$from–$to of $total',
+              style: Theme.of(context).textTheme.bodySmall),
           const Spacer(),
           TextButton(onPressed: onPrev, child: const Text('Prev')),
           const SizedBox(width: 8),

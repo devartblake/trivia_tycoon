@@ -470,7 +470,8 @@ class PremiumFloatingSpinCTA extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<PremiumFloatingSpinCTA> createState() => _PremiumFloatingSpinCTAState();
+  ConsumerState<PremiumFloatingSpinCTA> createState() =>
+      _PremiumFloatingSpinCTAState();
 }
 
 class _PremiumFloatingSpinCTAState extends ConsumerState<PremiumFloatingSpinCTA>
@@ -546,8 +547,8 @@ class _PremiumFloatingSpinCTAState extends ConsumerState<PremiumFloatingSpinCTA>
                 borderRadius: BorderRadius.circular(35),
                 boxShadow: [
                   BoxShadow(
-                    color: (widget.primaryColor ?? Colors.amber)
-                        .withValues(alpha: 0.6 + (0.4 * _premiumAnimation.value)),
+                    color: (widget.primaryColor ?? Colors.amber).withValues(
+                        alpha: 0.6 + (0.4 * _premiumAnimation.value)),
                     blurRadius: 25 + (10 * _premiumAnimation.value),
                     spreadRadius: 5 + (3 * _premiumAnimation.value),
                     offset: const Offset(0, 5),

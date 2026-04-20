@@ -152,14 +152,14 @@ class _StoreSecondaryScreenState extends ConsumerState<StoreSecondaryScreen>
                   child: Container(
                     margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                     child: _buildSectionCard(
-                    title: 'Special Offers',
-                    subtitle: 'Limited time deals just for you',
-                    icon: Icons.local_offer,
-                    child: SaleInfo(
-                      data: data.saleInfo!,
-                      purchasePlan: data.adFree.defaultPurchasePlan,
+                      title: 'Special Offers',
+                      subtitle: 'Limited time deals just for you',
+                      icon: Icons.local_offer,
+                      child: SaleInfo(
+                        data: data.saleInfo!,
+                        purchasePlan: data.adFree.defaultPurchasePlan,
+                      ),
                     ),
-                  ),
                   ),
                 ),
               ),
@@ -357,7 +357,8 @@ class _StoreSecondaryScreenState extends ConsumerState<StoreSecondaryScreen>
                           ),
                           Text(
                             'Exclusive content & features',
-                            style: TextStyle(color: Colors.white70, fontSize: 14),
+                            style:
+                                TextStyle(color: Colors.white70, fontSize: 14),
                           ),
                         ],
                       ),
@@ -413,8 +414,8 @@ class _StoreSecondaryScreenState extends ConsumerState<StoreSecondaryScreen>
             offset: const Offset(0, 8),
           ),
         ],
-        border: Border.all(
-            color: const Color(0xFF64748B).withValues(alpha: 0.1)),
+        border:
+            Border.all(color: const Color(0xFF64748B).withValues(alpha: 0.1)),
       ),
       child: Column(
         children: [

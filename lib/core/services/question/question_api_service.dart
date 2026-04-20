@@ -22,7 +22,9 @@ class QuestionApiService {
       final decoded = jsonDecode(response.body);
       final data = decoded is List
           ? decoded
-          : (decoded is Map<String, dynamic> ? decoded['items'] as List? ?? const [] : const []);
+          : (decoded is Map<String, dynamic>
+              ? decoded['items'] as List? ?? const []
+              : const []);
       return data.map((e) => QuestionModel.fromJson(e)).toList();
     } else {
       throw Exception('Failed to load questions');

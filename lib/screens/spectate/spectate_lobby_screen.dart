@@ -16,7 +16,8 @@ class SpectateLobbyScreen extends StatefulWidget {
   State<SpectateLobbyScreen> createState() => _SpectateLobbyScreenState();
 }
 
-class _SpectateLobbyScreenState extends State<SpectateLobbyScreen> with SingleTickerProviderStateMixin {
+class _SpectateLobbyScreenState extends State<SpectateLobbyScreen>
+    with SingleTickerProviderStateMixin {
   final SpectateStreamingService _spectateService = SpectateStreamingService();
   late TabController _tabController;
   String _selectedCategory = 'All';
@@ -104,7 +105,14 @@ class _SpectateLobbyScreenState extends State<SpectateLobbyScreen> with SingleTi
   }
 
   Widget _buildCategoryFilter() {
-    final categories = ['All', 'Science', 'History', 'Sports', 'Movies', 'Music'];
+    final categories = [
+      'All',
+      'Science',
+      'History',
+      'Sports',
+      'Movies',
+      'Music'
+    ];
 
     return Container(
       height: 50,
@@ -261,7 +269,8 @@ class _SpectateLobbyScreenState extends State<SpectateLobbyScreen> with SingleTi
                     top: 12,
                     left: 12,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(4),
@@ -287,7 +296,8 @@ class _SpectateLobbyScreenState extends State<SpectateLobbyScreen> with SingleTi
                   top: 12,
                   right: 12,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: Colors.black.withValues(alpha: 0.7),
                       borderRadius: BorderRadius.circular(12),
@@ -295,7 +305,8 @@ class _SpectateLobbyScreenState extends State<SpectateLobbyScreen> with SingleTi
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.visibility, size: 14, color: Colors.white),
+                        const Icon(Icons.visibility,
+                            size: 14, color: Colors.white),
                         const SizedBox(width: 4),
                         Text(
                           '$spectators',
@@ -319,7 +330,8 @@ class _SpectateLobbyScreenState extends State<SpectateLobbyScreen> with SingleTi
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.primaryContainer,
                           borderRadius: BorderRadius.circular(4),
@@ -327,7 +339,9 @@ class _SpectateLobbyScreenState extends State<SpectateLobbyScreen> with SingleTi
                         child: Text(
                           category,
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.onPrimaryContainer,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer,
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
                           ),
@@ -339,22 +353,22 @@ class _SpectateLobbyScreenState extends State<SpectateLobbyScreen> with SingleTi
                   Text(
                     title,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                   const SizedBox(height: 8),
                   Row(
                     children: [
                       ...players.take(3).map((player) => Padding(
-                        padding: const EdgeInsets.only(right: 4),
-                        child: CircleAvatar(
-                          radius: 12,
-                          child: Text(
-                            player[0].toUpperCase(),
-                            style: const TextStyle(fontSize: 10),
-                          ),
-                        ),
-                      )),
+                            padding: const EdgeInsets.only(right: 4),
+                            child: CircleAvatar(
+                              radius: 12,
+                              child: Text(
+                                player[0].toUpperCase(),
+                                style: const TextStyle(fontSize: 10),
+                              ),
+                            ),
+                          )),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(

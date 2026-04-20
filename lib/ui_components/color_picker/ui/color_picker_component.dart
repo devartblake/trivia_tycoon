@@ -110,7 +110,6 @@ class _ColorPickerComponentState extends State<ColorPickerComponent>
           ),
           const SizedBox(height: 12),
         ],
-
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -304,7 +303,8 @@ class _ModernColorPickerDialog extends StatefulWidget {
   const _ModernColorPickerDialog({required this.initialColor});
 
   @override
-  State<_ModernColorPickerDialog> createState() => _ModernColorPickerDialogState();
+  State<_ModernColorPickerDialog> createState() =>
+      _ModernColorPickerDialogState();
 }
 
 class _ModernColorPickerDialogState extends State<_ModernColorPickerDialog>
@@ -468,7 +468,8 @@ class _ModernColorPickerDialogState extends State<_ModernColorPickerDialog>
                 indicatorSize: TabBarIndicatorSize.tab,
                 dividerColor: Colors.transparent,
                 labelColor: Colors.white,
-                unselectedLabelColor: colorScheme.onSurface.withValues(alpha: 0.6),
+                unselectedLabelColor:
+                    colorScheme.onSurface.withValues(alpha: 0.6),
                 labelStyle: const TextStyle(fontWeight: FontWeight.w600),
                 tabs: const [
                   Tab(text: "Wheel"),

@@ -21,10 +21,10 @@ class MissionService {
   final String _authToken;
 
   MissionService(
-      this._repository, {
-        required String apiBaseUrl,
-        required String apiKey,
-      })  : _apiBaseUrl = apiBaseUrl,
+    this._repository, {
+    required String apiBaseUrl,
+    required String apiKey,
+  })  : _apiBaseUrl = apiBaseUrl,
         _authToken = apiKey;
 
   // ----------------------------
@@ -86,10 +86,10 @@ class MissionService {
   /// To avoid breaking callers, we keep the same positional signature,
   /// but require `userId:` as a named parameter for correctness.
   Future<UserMission> updateProgress(
-      String userMissionId,
-      int increment, {
-        required String userId,
-      }) async {
+    String userMissionId,
+    int increment, {
+    required String userId,
+  }) async {
     try {
       // Get current mission state for the user
       final missions = await _repository.getUserMissions(userId);
@@ -98,14 +98,14 @@ class MissionService {
       final newProgress = mission.progress + increment;
 
       final updatedMission =
-      await _repository.updateMissionProgress(userMissionId, newProgress);
+          await _repository.updateMissionProgress(userMissionId, newProgress);
 
       // If mission just completed, show notification + call backend hooks
       if (updatedMission.isCompleted && !mission.isCompleted) {
         await _notificationService.showMissionNotification(
           title: 'Mission Complete! 🎯',
           body:
-          '${updatedMission.mission.title} completed! +${updatedMission.mission.rewardXp} XP earned',
+              '${updatedMission.mission.title} completed! +${updatedMission.mission.rewardXp} XP earned',
           reward: updatedMission.mission.rewardXp,
           payload: {
             'mission_id': userMissionId,
@@ -148,7 +148,7 @@ class MissionService {
       for (final missionId in missionIds) {
         try {
           final assigned =
-          await _repository.assignMissionToUser(userId, missionId);
+              await _repository.assignMissionToUser(userId, missionId);
           assignedMissions.add(assigned);
         } catch (e) {
           LogManager.debug('Failed to assign mission $missionId: $e');
@@ -177,10 +177,10 @@ class MissionService {
   // Track user action
   // ----------------------------
   Future<void> trackUserAction(
-      String userId,
-      String actionType,
-      Map<String, dynamic> metadata,
-      ) async {
+    String userId,
+    String actionType,
+    Map<String, dynamic> metadata,
+  ) async {
     try {
       final response = await _callFastAPI('/missions/track-action', {
         'user_id': userId,
@@ -207,9 +207,9 @@ class MissionService {
   // Mission recommendations
   // ----------------------------
   Future<List<Mission>> getMissionRecommendations(
-      String userId,
-      MissionType type,
-      ) async {
+    String userId,
+    MissionType type,
+  ) async {
     try {
       final response = await _callFastAPI('/missions/recommendations', {
         'user_id': userId,
@@ -217,7 +217,7 @@ class MissionService {
       });
 
       final recommendedIds =
-      List<String>.from(response['recommended_missions'] ?? const []);
+          List<String>.from(response['recommended_missions'] ?? const []);
       final allMissions = await _repository.getAvailableMissions(type);
 
       // Keep ordering stable based on server list
@@ -233,9 +233,9 @@ class MissionService {
   // Backend helper
   // ----------------------------
   Future<Map<String, dynamic>> _callFastAPI(
-      String endpoint,
-      Map<String, dynamic> data,
-      ) async {
+    String endpoint,
+    Map<String, dynamic> data,
+  ) async {
     final url = Uri.parse('$_apiBaseUrl$endpoint');
 
     final response = await http.post(

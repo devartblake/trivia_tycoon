@@ -17,25 +17,28 @@ final analyticsServiceProvider = Provider<AnalyticsService>((ref) {
 });
 
 /// Raw mock JSON fetchers (non-aggregated)
-final missionAnalyticsRawProvider = FutureProvider<List<MissionAnalyticsEntry>>((ref) async {
+final missionAnalyticsRawProvider =
+    FutureProvider<List<MissionAnalyticsEntry>>((ref) async {
   final service = ref.read(analyticsServiceProvider);
   return await service.fetchMissionAnalytics();
 });
 
-final engagementAnalyticsRawProvider = FutureProvider<List<EngagementEntry>>((ref) async {
+final engagementAnalyticsRawProvider =
+    FutureProvider<List<EngagementEntry>>((ref) async {
   final service = ref.read(analyticsServiceProvider);
   return await service.fetchEngagementAnalytics();
 });
 
-final retentionAnalyticsRawProvider = FutureProvider<List<RetentionEntry>>((ref) async {
+final retentionAnalyticsRawProvider =
+    FutureProvider<List<RetentionEntry>>((ref) async {
   final service = ref.read(analyticsServiceProvider);
   return await service.fetchRetentionAnalytics();
 });
 
 // ============ SPIN & EARN ANALYTICS PROVIDERS ============
 
-
-final spinLiveSummaryProvider = StreamProvider.autoDispose<SpinLiveSummary>((ref) {
+final spinLiveSummaryProvider =
+    StreamProvider.autoDispose<SpinLiveSummary>((ref) {
   final controller = StreamController<SpinLiveSummary>.broadcast();
   final adapter = SpinAnalyticsWebSocketAdapter();
   StreamSubscription<SpinLiveSummary>? wsSub;
@@ -87,7 +90,8 @@ final spinLiveSummaryProvider = StreamProvider.autoDispose<SpinLiveSummary>((ref
       );
       wsSub = adapter.summaryStream.listen(emitIfChanged);
 
-      localRefreshTimer = Timer.periodic(const Duration(seconds: 30), (_) async {
+      localRefreshTimer =
+          Timer.periodic(const Duration(seconds: 30), (_) async {
         if (!AppInit.isWebSocketConnected) {
           final refreshedSnapshot = await loadLocalSnapshot();
           emitIfChanged(refreshedSnapshot);
@@ -112,17 +116,20 @@ final spinLiveSummaryProvider = StreamProvider.autoDispose<SpinLiveSummary>((ref
 });
 
 /// Spin statistics provider
-final spinStatisticsProvider = FutureProvider<Map<String, dynamic>>((ref) async {
+final spinStatisticsProvider =
+    FutureProvider<Map<String, dynamic>>((ref) async {
   return await AppSettings.getSpinStatistics();
 });
 
 /// Spin history provider
-final spinHistoryProvider = FutureProvider<List<Map<String, dynamic>>>((ref) async {
+final spinHistoryProvider =
+    FutureProvider<List<Map<String, dynamic>>>((ref) async {
   return await AppSettings.getSpinHistory();
 });
 
 /// Daily spin metrics provider
-final dailySpinMetricsProvider = FutureProvider<Map<String, dynamic>>((ref) async {
+final dailySpinMetricsProvider =
+    FutureProvider<Map<String, dynamic>>((ref) async {
   final todayCount = await AppSettings.getTodaySpinCount();
   final weeklyCount = await AppSettings.getWeeklySpinCount();
   final totalSpins = await AppSettings.getTotalLifetimeSpins();
@@ -151,25 +158,27 @@ final spinEngagementRateProvider = FutureProvider<double>((ref) async {
 });
 
 /// Recent spins provider (last 10)
-final recentSpinsProvider = FutureProvider<List<Map<String, dynamic>>>((ref) async {
+final recentSpinsProvider =
+    FutureProvider<List<Map<String, dynamic>>>((ref) async {
   final history = await AppSettings.getSpinHistory();
   return history.take(10).toList();
 });
 
 /// Reward distribution provider
-final rewardDistributionProvider = FutureProvider<Map<String, int>>((ref) async {
+final rewardDistributionProvider =
+    FutureProvider<Map<String, int>>((ref) async {
   final stats = await AppSettings.getSpinStatistics();
   final rewardCounts = stats['rewardCounts'] as Map<String, dynamic>?;
 
   if (rewardCounts == null) return {};
 
   return Map<String, int>.from(
-      rewardCounts.map((key, value) => MapEntry(key, value as int))
-  );
+      rewardCounts.map((key, value) => MapEntry(key, value as int)));
 });
 
 /// Spin trend data provider (for charts)
-final spinTrendDataProvider = FutureProvider<List<Map<String, dynamic>>>((ref) async {
+final spinTrendDataProvider =
+    FutureProvider<List<Map<String, dynamic>>>((ref) async {
   final history = await AppSettings.getSpinHistory();
 
   // Group by date
@@ -183,7 +192,8 @@ final spinTrendDataProvider = FutureProvider<List<Map<String, dynamic>>>((ref) a
       final date = timestamp is DateTime
           ? timestamp
           : DateTime.parse(timestamp.toString());
-      final dateKey = '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+      final dateKey =
+          '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
 
       if (!dateGroups.containsKey(dateKey)) {
         dateGroups[dateKey] = {
@@ -193,9 +203,11 @@ final spinTrendDataProvider = FutureProvider<List<Map<String, dynamic>>>((ref) a
         };
       }
 
-      dateGroups[dateKey]!['spinCount'] = (dateGroups[dateKey]!['spinCount'] as int) + 1;
+      dateGroups[dateKey]!['spinCount'] =
+          (dateGroups[dateKey]!['spinCount'] as int) + 1;
       dateGroups[dateKey]!['totalRewards'] =
-          (dateGroups[dateKey]!['totalRewards'] as int) + (spin['rewardValue'] as int? ?? 0);
+          (dateGroups[dateKey]!['totalRewards'] as int) +
+              (spin['rewardValue'] as int? ?? 0);
     } catch (e) {
       // Skip invalid entries
       continue;
@@ -209,19 +221,20 @@ final spinTrendDataProvider = FutureProvider<List<Map<String, dynamic>>>((ref) a
 });
 
 /// Best spin rewards provider
-final bestSpinRewardsProvider = FutureProvider<List<Map<String, dynamic>>>((ref) async {
+final bestSpinRewardsProvider =
+    FutureProvider<List<Map<String, dynamic>>>((ref) async {
   final history = await AppSettings.getSpinHistory();
 
   final sorted = List<Map<String, dynamic>>.from(history)
-    ..sort((a, b) =>
-    ((b['rewardValue'] as int? ?? 0).compareTo(a['rewardValue'] as int? ?? 0))
-    );
+    ..sort((a, b) => ((b['rewardValue'] as int? ?? 0)
+        .compareTo(a['rewardValue'] as int? ?? 0)));
 
   return sorted.take(5).toList();
 });
 
 /// Spin performance metrics provider
-final spinPerformanceMetricsProvider = FutureProvider<Map<String, dynamic>>((ref) async {
+final spinPerformanceMetricsProvider =
+    FutureProvider<Map<String, dynamic>>((ref) async {
   final stats = await AppSettings.getSpinStatistics();
   final dailyMetrics = await ref.watch(dailySpinMetricsProvider.future);
 
@@ -242,7 +255,8 @@ final spinPerformanceMetricsProvider = FutureProvider<Map<String, dynamic>>((ref
 });
 
 /// Combined spin analytics provider
-final spinAnalyticsSummaryProvider = FutureProvider<Map<String, dynamic>>((ref) async {
+final spinAnalyticsSummaryProvider =
+    FutureProvider<Map<String, dynamic>>((ref) async {
   final stats = await ref.watch(spinStatisticsProvider.future);
   final dailyMetrics = await ref.watch(dailySpinMetricsProvider.future);
   final distribution = await ref.watch(rewardDistributionProvider.future);

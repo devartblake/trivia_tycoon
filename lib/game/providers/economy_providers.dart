@@ -42,7 +42,7 @@ final modeDenyReasonProvider = Provider.family<String?, String>((ref, mode) {
   return switch (cost.costType) {
     'energy' => 'Not enough energy',
     'ticket' => 'No ticket available',
-    _        => 'Mode unavailable right now',
+    _ => 'Mode unavailable right now',
   };
 });
 

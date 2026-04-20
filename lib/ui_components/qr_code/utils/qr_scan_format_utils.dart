@@ -63,14 +63,14 @@ class QrFormatUtils {
       case QrContentType.json:
         return Icons.code;
       case QrContentType.plainText:
-      return Icons.notes;
+        return Icons.notes;
     }
   }
 
   /// 🔄 Restore enum from string
   static QrContentType fromName(String name) {
     return QrContentType.values.firstWhere(
-          (e) => e.name == name,
+      (e) => e.name == name,
       orElse: () => QrContentType.plainText,
     );
   }

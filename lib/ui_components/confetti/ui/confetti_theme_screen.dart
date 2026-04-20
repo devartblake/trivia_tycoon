@@ -15,7 +15,8 @@ class ConfettiThemeScreen extends ConsumerStatefulWidget {
   const ConfettiThemeScreen({super.key});
 
   @override
-  ConsumerState<ConfettiThemeScreen> createState() => _ConfettiThemeScreenState();
+  ConsumerState<ConfettiThemeScreen> createState() =>
+      _ConfettiThemeScreenState();
 }
 
 class _ConfettiThemeScreenState extends ConsumerState<ConfettiThemeScreen>
@@ -301,7 +302,8 @@ class _ConfettiThemeScreenState extends ConsumerState<ConfettiThemeScreen>
     );
   }
 
-  Widget _buildCard(String title, IconData icon, Color iconColor, Widget child) {
+  Widget _buildCard(
+      String title, IconData icon, Color iconColor, Widget child) {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -389,7 +391,8 @@ class _ConfettiThemeScreenState extends ConsumerState<ConfettiThemeScreen>
       const Color(0xFF48BB78),
       ConfettiColorPicker(
         selectedColors: _settings.colors,
-        onColorsChanged: (colors) => _updateSettings(_settings.copyWith(colors: colors)),
+        onColorsChanged: (colors) =>
+            _updateSettings(_settings.copyWith(colors: colors)),
       ),
     );
   }
@@ -402,7 +405,8 @@ class _ConfettiThemeScreenState extends ConsumerState<ConfettiThemeScreen>
       ConfettiShapePicker(
         availableShapes: ConfettiShapeType.values,
         selectedShapes: _settings.shapes,
-        onShapesChanged: (shapes) => _updateSettings(_settings.copyWith(shapes: shapes)),
+        onShapesChanged: (shapes) =>
+            _updateSettings(_settings.copyWith(shapes: shapes)),
       ),
     );
   }
@@ -417,7 +421,8 @@ class _ConfettiThemeScreenState extends ConsumerState<ConfettiThemeScreen>
         gravity: _settings.gravity,
         wind: _settings.wind,
         onChanged: (speed, gravity, wind) {
-          _updateSettings(_settings.copyWith(speed: speed, gravity: gravity, wind: wind));
+          _updateSettings(
+              _settings.copyWith(speed: speed, gravity: gravity, wind: wind));
         },
       ),
     );
@@ -443,7 +448,8 @@ class _ConfettiThemeScreenState extends ConsumerState<ConfettiThemeScreen>
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: const Color(0xFF38B2AC).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
@@ -463,7 +469,8 @@ class _ConfettiThemeScreenState extends ConsumerState<ConfettiThemeScreen>
           SliderTheme(
             data: SliderTheme.of(context).copyWith(
               activeTrackColor: const Color(0xFF38B2AC),
-              inactiveTrackColor: const Color(0xFF38B2AC).withValues(alpha: 0.2),
+              inactiveTrackColor:
+                  const Color(0xFF38B2AC).withValues(alpha: 0.2),
               thumbColor: const Color(0xFF38B2AC),
               overlayColor: const Color(0xFF38B2AC).withValues(alpha: 0.1),
               trackHeight: 6,
@@ -473,7 +480,8 @@ class _ConfettiThemeScreenState extends ConsumerState<ConfettiThemeScreen>
               value: _settings.density.toDouble(),
               min: 10,
               max: 200,
-              onChanged: (value) => _updateSettings(_settings.copyWith(density: value)),
+              onChanged: (value) =>
+                  _updateSettings(_settings.copyWith(density: value)),
             ),
           ),
         ],
@@ -568,7 +576,8 @@ class _ConfettiThemeScreenState extends ConsumerState<ConfettiThemeScreen>
                   child: Padding(
                     padding: EdgeInsets.all(20),
                     child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF667EEA)),
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(Color(0xFF667EEA)),
                     ),
                   ),
                 );
@@ -607,7 +616,8 @@ class _ConfettiThemeScreenState extends ConsumerState<ConfettiThemeScreen>
               return Wrap(
                 spacing: 12,
                 runSpacing: 12,
-                children: themes.map((theme) => _buildThemeChip(theme)).toList(),
+                children:
+                    themes.map((theme) => _buildThemeChip(theme)).toList(),
               );
             },
           ),
@@ -636,7 +646,8 @@ class _ConfettiThemeScreenState extends ConsumerState<ConfettiThemeScreen>
               width: 12,
               height: 12,
               decoration: BoxDecoration(
-                color: theme.colors.isNotEmpty ? theme.colors.first : Colors.grey,
+                color:
+                    theme.colors.isNotEmpty ? theme.colors.first : Colors.grey,
                 shape: BoxShape.circle,
               ),
             ),

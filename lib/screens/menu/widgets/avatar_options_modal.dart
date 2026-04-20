@@ -44,7 +44,7 @@ class AvatarOptionsModal extends StatelessWidget {
                 context,
                 'Camera',
                 Icons.camera_alt,
-                    () async {
+                () async {
                   Navigator.pop(context);
                   await ref
                       .read(profileAvatarControllerProvider.notifier)
@@ -55,7 +55,7 @@ class AvatarOptionsModal extends StatelessWidget {
                 context,
                 'Gallery',
                 Icons.photo_library,
-                    () async {
+                () async {
                   Navigator.pop(context);
                   await ref
                       .read(profileAvatarControllerProvider.notifier)
@@ -66,7 +66,7 @@ class AvatarOptionsModal extends StatelessWidget {
                 context,
                 'Reset',
                 Icons.refresh,
-                    () async {
+                () async {
                   Navigator.pop(context);
                   await ref
                       .read(profileAvatarControllerProvider.notifier)
@@ -82,11 +82,11 @@ class AvatarOptionsModal extends StatelessWidget {
   }
 
   Widget _buildOption(
-      BuildContext context,
-      String label,
-      IconData icon,
-      VoidCallback onTap,
-      ) {
+    BuildContext context,
+    String label,
+    IconData icon,
+    VoidCallback onTap,
+  ) {
     return GestureDetector(
       onTap: onTap,
       child: Column(

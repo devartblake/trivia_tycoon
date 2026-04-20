@@ -8,7 +8,8 @@ class AllCategoriesScreen extends ConsumerStatefulWidget {
   const AllCategoriesScreen({super.key});
 
   @override
-  ConsumerState<AllCategoriesScreen> createState() => _AllCategoriesScreenState();
+  ConsumerState<AllCategoriesScreen> createState() =>
+      _AllCategoriesScreenState();
 }
 
 class _AllCategoriesScreenState extends ConsumerState<AllCategoriesScreen> {
@@ -31,11 +32,17 @@ class _AllCategoriesScreenState extends ConsumerState<AllCategoriesScreen> {
       // Category type filter (core, extended, specialized)
       if (selectedCategoryType != null) {
         if (QuizCategoryManager.coreCategories.contains(category)) {
-          return selectedCategoryType == QuizCategory.general; // Use general as "core" indicator
+          return selectedCategoryType ==
+              QuizCategory.general; // Use general as "core" indicator
         } else if (QuizCategoryManager.extendedCategories.contains(category)) {
-          return selectedCategoryType == QuizCategory.socialStudies; // Use socialStudies as "extended" indicator
-        } else if (QuizCategoryManager.specializedCategories.contains(category)) {
-          return selectedCategoryType == QuizCategory.architecture; // Use architecture as "specialized" indicator
+          return selectedCategoryType ==
+              QuizCategory
+                  .socialStudies; // Use socialStudies as "extended" indicator
+        } else if (QuizCategoryManager.specializedCategories
+            .contains(category)) {
+          return selectedCategoryType ==
+              QuizCategory
+                  .architecture; // Use architecture as "specialized" indicator
         }
       }
 
@@ -102,25 +109,32 @@ class _AllCategoriesScreenState extends ConsumerState<AllCategoriesScreen> {
                       _FilterChip(
                         label: 'All Categories',
                         isSelected: selectedCategoryType == null,
-                        onTap: () => setState(() => selectedCategoryType = null),
+                        onTap: () =>
+                            setState(() => selectedCategoryType = null),
                       ),
                       const SizedBox(width: 8),
                       _FilterChip(
                         label: 'Core Subjects',
-                        isSelected: selectedCategoryType == QuizCategory.general,
-                        onTap: () => setState(() => selectedCategoryType = QuizCategory.general),
+                        isSelected:
+                            selectedCategoryType == QuizCategory.general,
+                        onTap: () => setState(
+                            () => selectedCategoryType = QuizCategory.general),
                       ),
                       const SizedBox(width: 8),
                       _FilterChip(
                         label: 'Extended',
-                        isSelected: selectedCategoryType == QuizCategory.socialStudies,
-                        onTap: () => setState(() => selectedCategoryType = QuizCategory.socialStudies),
+                        isSelected:
+                            selectedCategoryType == QuizCategory.socialStudies,
+                        onTap: () => setState(() =>
+                            selectedCategoryType = QuizCategory.socialStudies),
                       ),
                       const SizedBox(width: 8),
                       _FilterChip(
                         label: 'Specialized',
-                        isSelected: selectedCategoryType == QuizCategory.architecture,
-                        onTap: () => setState(() => selectedCategoryType = QuizCategory.architecture),
+                        isSelected:
+                            selectedCategoryType == QuizCategory.architecture,
+                        onTap: () => setState(() =>
+                            selectedCategoryType = QuizCategory.architecture),
                       ),
                     ],
                   ),
@@ -406,16 +420,20 @@ class _EnhancedCategoryCard extends ConsumerWidget {
                                 ),
                               ),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 6, vertical: 2),
                                 decoration: BoxDecoration(
-                                  color: _getDifficultyColor(stats['difficulty']).withValues(alpha: 0.1),
+                                  color:
+                                      _getDifficultyColor(stats['difficulty'])
+                                          .withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                                 child: Text(
                                   stats['difficulty'].toString().toUpperCase(),
                                   style: TextStyle(
                                     fontSize: 8,
-                                    color: _getDifficultyColor(stats['difficulty']),
+                                    color: _getDifficultyColor(
+                                        stats['difficulty']),
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),

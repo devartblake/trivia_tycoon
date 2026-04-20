@@ -106,7 +106,9 @@ class _FABMenuState extends State<FABMenu> with SingleTickerProviderStateMixin {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: (_isExpanded ? const Color(0xFFEF4444) : const Color(0xFF6366F1))
+                color: (_isExpanded
+                        ? const Color(0xFFEF4444)
+                        : const Color(0xFF6366F1))
                     .withValues(alpha: 0.4),
                 blurRadius: 16,
                 offset: const Offset(0, 8),
@@ -136,11 +138,11 @@ class _FABMenuState extends State<FABMenu> with SingleTickerProviderStateMixin {
   }
 
   Widget _buildAction(
-      IconData icon,
-      String label,
-      Color color,
-      void Function()? onPressed,
-      ) {
+    IconData icon,
+    String label,
+    Color color,
+    void Function()? onPressed,
+  ) {
     return SlideTransition(
       position: _slide,
       child: FadeTransition(

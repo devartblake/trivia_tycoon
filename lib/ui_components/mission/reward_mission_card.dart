@@ -57,7 +57,8 @@ class RewardMissionCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  const Icon(Icons.emoji_events, color: Colors.orange, size: 20),
+                  const Icon(Icons.emoji_events,
+                      color: Colors.orange, size: 20),
                   const SizedBox(width: 4),
                   Text(
                     '$rewardAmount',

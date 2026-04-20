@@ -84,7 +84,8 @@ class HexNavButton extends StatelessWidget {
   };
 
   double get _effectiveRadius => radius ?? _sizeConfig[size]!['radius']!;
-  double get _effectiveBorderWidth => borderWidth ?? _sizeConfig[size]!['borderWidth']!;
+  double get _effectiveBorderWidth =>
+      borderWidth ?? _sizeConfig[size]!['borderWidth']!;
   double get _iconSize => _sizeConfig[size]!['iconSize']!;
   double get _fontSize => _sizeConfig[size]!['fontSize']!;
   double get _badgeSize => _sizeConfig[size]!['badgeSize']!;
@@ -96,13 +97,15 @@ class HexNavButton extends StatelessWidget {
     Widget hexWidget = Hexagon(
       radius: _effectiveRadius,
       orientation: orientation,
-      gradient: gradient ?? LinearGradient(
-        colors: selected
-            ? const [Color(0xFF2FD5FF), Color(0xFF5B6BFF)]
-            : const [Color(0x1AFFFFFF), Color(0x11000000)],
-      ),
+      gradient: gradient ??
+          LinearGradient(
+            colors: selected
+                ? const [Color(0xFF2FD5FF), Color(0xFF5B6BFF)]
+                : const [Color(0x1AFFFFFF), Color(0x11000000)],
+          ),
       borderColor: selected ? Colors.white : borderColor,
-      borderWidth: selected ? _effectiveBorderWidth + 0.7 : _effectiveBorderWidth,
+      borderWidth:
+          selected ? _effectiveBorderWidth + 0.7 : _effectiveBorderWidth,
       onTap: onPressed,
       child: Center(
         child: Column(

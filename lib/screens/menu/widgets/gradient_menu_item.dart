@@ -85,7 +85,8 @@ class GradientMenuItemWidget extends StatelessWidget {
               context.push(item.route);
             }
           },
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         ),
       ),
     );

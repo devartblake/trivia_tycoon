@@ -44,12 +44,12 @@ class _ChannelManagerSheetState extends ConsumerState<ChannelManagerSheet> {
     if (mounted) setState(() {});
   }
 
-
   Future<void> _loadServerChannels() async {
     setState(() => _isLoadingServerChannels = true);
     try {
       final serviceManager = ref.read(serviceManagerProvider);
-      final response = await serviceManager.apiService.get('/admin/notifications/channels');
+      final response =
+          await serviceManager.apiService.get('/admin/notifications/channels');
       final items = serviceManager.apiService
           .parsePageEnvelope<Map<String, dynamic>>(response, (json) => json)
           .items;
@@ -68,12 +68,15 @@ class _ChannelManagerSheetState extends ConsumerState<ChannelManagerSheet> {
   }
 
   List<_RemoteChannelRow> get _remoteRows {
-    return _serverChannels.map((raw) {
-      final key = (raw['channelKey'] ?? raw['key'] ?? '').toString();
-      final name = (raw['channelName'] ?? raw['name'] ?? key).toString();
-      final enabled = raw['enabled'] == true;
-      return _RemoteChannelRow(key: key, name: name, enabled: enabled);
-    }).where((r) => r.key.isNotEmpty).toList();
+    return _serverChannels
+        .map((raw) {
+          final key = (raw['channelKey'] ?? raw['key'] ?? '').toString();
+          final name = (raw['channelName'] ?? raw['name'] ?? key).toString();
+          final enabled = raw['enabled'] == true;
+          return _RemoteChannelRow(key: key, name: name, enabled: enabled);
+        })
+        .where((r) => r.key.isNotEmpty)
+        .toList();
   }
 
   @override
@@ -129,16 +132,19 @@ class _ChannelManagerSheetState extends ConsumerState<ChannelManagerSheet> {
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: _remoteRows.length,
-                              separatorBuilder: (_, __) => const Divider(height: 1),
+                              separatorBuilder: (_, __) =>
+                                  const Divider(height: 1),
                               itemBuilder: (_, i) {
                                 final row = _remoteRows[i];
-                                final current = _enabled[row.key] ?? row.enabled;
+                                final current =
+                                    _enabled[row.key] ?? row.enabled;
                                 return ListTile(
                                   title: Text(row.name),
                                   subtitle: Text(row.key),
                                   trailing: Switch.adaptive(
                                     value: current,
-                                    onChanged: (v) => _toggleChannel(row.key, v),
+                                    onChanged: (v) =>
+                                        _toggleChannel(row.key, v),
                                   ),
                                 );
                               },
@@ -148,7 +154,8 @@ class _ChannelManagerSheetState extends ConsumerState<ChannelManagerSheet> {
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: channels.length,
-                            separatorBuilder: (_, __) => const Divider(height: 1),
+                            separatorBuilder: (_, __) =>
+                                const Divider(height: 1),
                             itemBuilder: (_, i) {
                               final c = channels[i];
                               final key = c.channelKey ?? '';
@@ -197,11 +204,12 @@ class _ChannelManagerSheetState extends ConsumerState<ChannelManagerSheet> {
                         final key = d['key'] as String? ?? '';
                         final name = d['name'] as String? ?? key;
                         final desc = d['description'] as String? ?? '';
-                        final importanceStr = (d['importance'] as String?)?.trim();
+                        final importanceStr =
+                            (d['importance'] as String?)?.trim();
                         final imp = NotificationImportance.values.firstWhere(
-                           (v) => v.toString().split('.').last == importanceStr,
-                           orElse: () => NotificationImportance.Default,
-                         );
+                          (v) => v.toString().split('.').last == importanceStr,
+                          orElse: () => NotificationImportance.Default,
+                        );
                         return ListTile(
                           title: Text('$name • $key'),
                           subtitle: Text('$desc • Importance: ${imp.name}'),

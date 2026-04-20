@@ -17,19 +17,19 @@ final multiplayerServiceProvider = Provider<MultiplayerService>((ref) {
 
 // Controller Providers (StateNotifiers)
 final multiplayerControllerProvider =
-StateNotifierProvider<MultiplayerController, MultiplayerState>((ref) {
+    StateNotifierProvider<MultiplayerController, MultiplayerState>((ref) {
   final service = ref.watch(multiplayerServiceProvider);
   return MultiplayerController(service);
 });
 
 final roomControllerProvider =
-StateNotifierProvider<RoomController, RoomState>((ref) {
+    StateNotifierProvider<RoomController, RoomState>((ref) {
   final service = ref.watch(multiplayerServiceProvider);
   return RoomController(service);
 });
 
 final matchControllerProvider =
-StateNotifierProvider<MatchController, MatchState>((ref) {
+    StateNotifierProvider<MatchController, MatchState>((ref) {
   final service = ref.watch(multiplayerServiceProvider);
   return MatchController(service);
 });
@@ -86,7 +86,8 @@ final roomErrorProvider = Provider<String?>((ref) {
   return roomState.error;
 });
 
-final roomsListProvider = FutureProvider<List<Map<String, dynamic>>>((ref) async {
+final roomsListProvider =
+    FutureProvider<List<Map<String, dynamic>>>((ref) async {
   final service = ref.watch(multiplayerServiceProvider);
   return await service.listRooms(); // or whatever the correct method is
 });
@@ -126,8 +127,7 @@ final isInMatchProvider = Provider<bool>((ref) {
 
 final isMatchActiveProvider = Provider<bool>((ref) {
   final matchPhase = ref.watch(matchPhaseProvider);
-  return matchPhase == MatchPhase.question ||
-      matchPhase == MatchPhase.reveal;
+  return matchPhase == MatchPhase.question || matchPhase == MatchPhase.reveal;
 });
 
 final canSubmitAnswerProvider = Provider<bool>((ref) {
@@ -152,7 +152,9 @@ final canStartMatchProvider = Provider<bool>((ref) {
   final players = ref.watch(roomPlayersProvider);
   final isInRoom = ref.watch(isInRoomProvider);
 
-  return isHost && isInRoom && players.length >= 2; // Minimum 2 players to start
+  return isHost &&
+      isInRoom &&
+      players.length >= 2; // Minimum 2 players to start
 });
 
 // Error Aggregation Provider - combines all error sources
@@ -199,7 +201,8 @@ class MultiplayerActions {
     await controller.leaveRoom();
   }
 
-  Future<void> submitAnswer(String matchId, String questionId, String answerId) async {
+  Future<void> submitAnswer(
+      String matchId, String questionId, String answerId) async {
     final controller = ref.read(matchControllerProvider.notifier);
     await controller.submitAnswer(matchId, questionId, answerId);
   }

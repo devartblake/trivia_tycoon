@@ -6,7 +6,8 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
 
 import '../../game/providers/notification_history_store.dart';
-import '../../game/services/channel_prefs.dart' show kNotifDraftsKey, kNotifEnabledPrefix;
+import '../../game/services/channel_prefs.dart'
+    show kNotifDraftsKey, kNotifEnabledPrefix;
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class NotificationService {
@@ -144,11 +145,12 @@ class NotificationService {
               final name = (map['name'] as String?) ?? key;
               final desc = (map['description'] as String?) ?? 'Dynamic channel';
               final importanceStr = (map['importance'] as String?)?.trim();
-               final imp = NotificationImportance.values.firstWhere(
-                 (v) => v.toString().split('.').last == importanceStr,
-                 orElse: () => NotificationImportance.Default,
-               );
-              final duplicate = channels.any((c) => (c.channelKey ?? '') == key);
+              final imp = NotificationImportance.values.firstWhere(
+                (v) => v.toString().split('.').last == importanceStr,
+                orElse: () => NotificationImportance.Default,
+              );
+              final duplicate =
+                  channels.any((c) => (c.channelKey ?? '') == key);
               if (!duplicate) {
                 channels.add(NotificationChannel(
                   channelGroupKey: _groupKey,
@@ -178,7 +180,8 @@ class NotificationService {
         onDismissActionReceivedMethod: _onDismissed,
       );
 
-      LogManager.debug('[NotificationService] Channels initialized successfully');
+      LogManager.debug(
+          '[NotificationService] Channels initialized successfully');
 
       // Check permissions but don't request yet
       await _checkPermissions();
@@ -228,7 +231,8 @@ class NotificationService {
     try {
       _hasPermissions = await AwesomeNotifications().isNotificationAllowed();
       _permissionsChecked = true;
-      LogManager.debug('[NotificationService] Permission status: $_hasPermissions');
+      LogManager.debug(
+          '[NotificationService] Permission status: $_hasPermissions');
     } catch (e) {
       LogManager.debug('[NotificationService] Permission check failed: $e');
       _hasPermissions = false;
@@ -247,7 +251,8 @@ class NotificationService {
           '[NotificationService] Permission status unavailable: ${e.code} ${e.message}');
       return false;
     } catch (e) {
-      LogManager.debug('[NotificationService] Permission status unavailable: $e');
+      LogManager.debug(
+          '[NotificationService] Permission status unavailable: $e');
       return false;
     }
   }
@@ -287,7 +292,11 @@ class NotificationService {
   // ============================================================
 
   /// Existing: Show a basic notification (kept as-is)
-  Future<bool> showBasicNotification({required String title, required String body, String? bigPicture,Map<String, String>? payload}) async {
+  Future<bool> showBasicNotification(
+      {required String title,
+      required String body,
+      String? bigPicture,
+      Map<String, String>? payload}) async {
     try {
       final hasPermission = await _ensurePermissions();
       if (!hasPermission) {
@@ -317,7 +326,8 @@ class NotificationService {
           '[NotificationService] Basic notification skipped: ${e.code} ${e.message}');
       return false;
     } catch (e) {
-      LogManager.debug('[NotificationService] Failed to show basic notification: $e');
+      LogManager.debug(
+          '[NotificationService] Failed to show basic notification: $e');
       return false;
     }
   }
@@ -350,7 +360,8 @@ class NotificationService {
         ),
       );
 
-      LogManager.debug('[NotificationService] Mission notification sent: $title');
+      LogManager.debug(
+          '[NotificationService] Mission notification sent: $title');
       return true;
     } on PlatformException catch (e) {
       _markPermissionsDenied(e);
@@ -412,7 +423,11 @@ class NotificationService {
   }
 
   /// Existing: Scheduled reminder (kept as-is)
-  Future<bool> scheduleReminderNotification({required String title, required String body, required DateTime scheduledDate, Map<String, String>? payload}) async {
+  Future<bool> scheduleReminderNotification(
+      {required String title,
+      required String body,
+      required DateTime scheduledDate,
+      Map<String, String>? payload}) async {
     try {
       final hasPermission = await _ensurePermissions();
       if (!hasPermission) {
@@ -441,7 +456,8 @@ class NotificationService {
         ),
       );
 
-      LogManager.debug('[NotificationService] Reminder scheduled at: $scheduledDate');
+      LogManager.debug(
+          '[NotificationService] Reminder scheduled at: $scheduledDate');
       return true;
     } on PlatformException catch (e) {
       _markPermissionsDenied(e);
@@ -476,7 +492,8 @@ class NotificationService {
       return;
     }
     if (!await _isChannelEnabled(channelKey)) {
-      LogManager.debug('[NotificationService] Channel "$channelKey" is disabled. Skipping sendNow.');
+      LogManager.debug(
+          '[NotificationService] Channel "$channelKey" is disabled. Skipping sendNow.');
       return;
     }
     try {
@@ -515,7 +532,8 @@ class NotificationService {
       return;
     }
     if (!await _isChannelEnabled(channelKey)) {
-      LogManager.debug('[NotificationService] Channel "$channelKey" is disabled. Skipping sendNow.');
+      LogManager.debug(
+          '[NotificationService] Channel "$channelKey" is disabled. Skipping sendNow.');
       return;
     }
     try {
@@ -554,7 +572,8 @@ class NotificationService {
       await AwesomeNotifications().cancelAll();
       LogManager.debug('[NotificationService] All notifications cancelled');
     } catch (e) {
-      LogManager.debug('[NotificationService] Failed to cancel notifications: $e');
+      LogManager.debug(
+          '[NotificationService] Failed to cancel notifications: $e');
     }
   }
 
@@ -563,7 +582,8 @@ class NotificationService {
       await AwesomeNotifications().cancel(id);
       LogManager.debug('[NotificationService] Notification $id cancelled');
     } catch (e) {
-      LogManager.debug('[NotificationService] Failed to cancel notification $id: $e');
+      LogManager.debug(
+          '[NotificationService] Failed to cancel notification $id: $e');
     }
   }
 
@@ -762,4 +782,3 @@ class _NotificationFeatureRow extends StatelessWidget {
     );
   }
 }
-

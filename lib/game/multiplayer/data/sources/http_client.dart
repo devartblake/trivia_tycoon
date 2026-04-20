@@ -50,7 +50,8 @@ class MultiplayerHttpClient {
 
   /// Join a room by id; returns response JSON.
   Future<Map<String, dynamic>> joinRoom(String roomId) async {
-    final uri = _config.httpBase.resolve('${MultiplayerConstants.roomsPath}/$roomId/join');
+    final uri = _config.httpBase
+        .resolve('${MultiplayerConstants.roomsPath}/$roomId/join');
     final resp = await _post(uri, const {});
     return _decodeJson(resp.body) as Map<String, dynamic>;
   }
@@ -66,7 +67,8 @@ class MultiplayerHttpClient {
 
   /// Get current match info.
   Future<Map<String, dynamic>?> fetchMatch(String matchId) async {
-    final uri = _config.httpBase.resolve('${MultiplayerConstants.matchesPath}/$matchId');
+    final uri = _config.httpBase
+        .resolve('${MultiplayerConstants.matchesPath}/$matchId');
     final resp = await _get(uri);
     if (resp.statusCode == 404) return null;
     return _decodeJson(resp.body) as Map<String, dynamic>;
@@ -92,7 +94,8 @@ class MultiplayerHttpClient {
   Future<http.Response> _get(Uri uri) async {
     _log.d('GET $uri');
     final headers = await _headers();
-    final resp = await http.get(uri, headers: headers).timeout(_config.httpTimeout);
+    final resp =
+        await http.get(uri, headers: headers).timeout(_config.httpTimeout);
     _validate(resp, 'GET', uri);
     return resp;
   }
@@ -118,7 +121,8 @@ class MultiplayerHttpClient {
     return headers;
   }
 
-  void _validate(http.Response resp, String verb, Uri uri, {Map<String, dynamic>? sentBody}) {
+  void _validate(http.Response resp, String verb, Uri uri,
+      {Map<String, dynamic>? sentBody}) {
     if (resp.statusCode >= 200 && resp.statusCode < 300) return;
 
     _log.w('$verb $uri failed (${resp.statusCode}): ${resp.body}');
@@ -131,7 +135,10 @@ class MultiplayerHttpClient {
     if (resp.statusCode == 409) {
       throw RoomFull('Room full or conflict: ${resp.body}');
     }
-    throw HttpFailure(status: resp.statusCode, message: 'HTTP ${resp.statusCode}', body: resp.body);
+    throw HttpFailure(
+        status: resp.statusCode,
+        message: 'HTTP ${resp.statusCode}',
+        body: resp.body);
   }
 
   dynamic _decodeJson(String body) {

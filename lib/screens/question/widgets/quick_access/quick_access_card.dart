@@ -7,7 +7,8 @@ class QuickAccessCard extends StatelessWidget {
   final Color color;
   final VoidCallback onTap;
 
-  const QuickAccessCard({super.key,
+  const QuickAccessCard({
+    super.key,
     required this.title,
     required this.subtitle,
     required this.icon,

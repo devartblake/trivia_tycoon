@@ -49,14 +49,14 @@ class WheelPainter extends CustomPainter {
   }
 
   void _drawSegment(
-      Canvas canvas,
-      Offset center,
-      double radius,
-      double startAngle,
-      double endAngle,
-      WheelSegment segment,
-      bool isActive,
-      ) {
+    Canvas canvas,
+    Offset center,
+    double radius,
+    double startAngle,
+    double endAngle,
+    WheelSegment segment,
+    bool isActive,
+  ) {
     final paint = Paint()
       ..style = PaintingStyle.fill
       ..color = segment.color;
@@ -109,14 +109,14 @@ class WheelPainter extends CustomPainter {
   }
 
   void _drawSegmentLabel(
-      Canvas canvas,
-      Offset center,
-      double radius,
-      double startAngle,
-      double endAngle,
-      String label,
-      bool isActive,
-      ) {
+    Canvas canvas,
+    Offset center,
+    double radius,
+    double startAngle,
+    double endAngle,
+    String label,
+    bool isActive,
+  ) {
     final midAngle = (startAngle + endAngle) / 2;
     final labelRadius = radius * 0.7;
     final labelCenter = Offset(
@@ -207,8 +207,10 @@ class WheelPainter extends CustomPainter {
 
     final pointerPath = Path();
     pointerPath.moveTo(center.dx, center.dy - radius - strokeWidth);
-    pointerPath.lineTo(center.dx - pointerWidth, center.dy - radius + pointerLength);
-    pointerPath.lineTo(center.dx + pointerWidth, center.dy - radius + pointerLength);
+    pointerPath.lineTo(
+        center.dx - pointerWidth, center.dy - radius + pointerLength);
+    pointerPath.lineTo(
+        center.dx + pointerWidth, center.dy - radius + pointerLength);
     pointerPath.close();
 
     // Draw shadow
@@ -283,8 +285,7 @@ class WheelSegmentPainter extends CustomPainter {
   }
 
   void _drawSegment(Canvas canvas, Offset center, double radius) {
-    final paint = Paint()
-      ..style = PaintingStyle.fill;
+    final paint = Paint()..style = PaintingStyle.fill;
 
     // Create gradient
     paint.shader = LinearGradient(

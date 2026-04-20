@@ -418,7 +418,8 @@ extension SoundManagerExtension on SoundManager {
   }
 
   /// Fade out background music
-  Future<void> fadeOutMusic({Duration duration = const Duration(seconds: 2)}) async {
+  Future<void> fadeOutMusic(
+      {Duration duration = const Duration(seconds: 2)}) async {
     if (!isMusicPlaying) return;
 
     const steps = 20;
@@ -435,7 +436,8 @@ extension SoundManagerExtension on SoundManager {
   }
 
   /// Fade in background music
-  Future<void> fadeInMusic(String musicPath, {Duration duration = const Duration(seconds: 2)}) async {
+  Future<void> fadeInMusic(String musicPath,
+      {Duration duration = const Duration(seconds: 2)}) async {
     final originalVolume = musicVolume;
     await setMusicVolume(0.0);
     await playBackgroundMusic(musicPath);

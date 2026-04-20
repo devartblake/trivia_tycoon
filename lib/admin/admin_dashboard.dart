@@ -120,9 +120,24 @@ class AdminDashboardScreen extends ConsumerWidget {
                   child: _buildCombinedStatCard(
                     context: context,
                     stats: [
-                      (icon: Icons.category_rounded, label: 'Modules', value: '${actions.length}', color: theme.primaryColor),
-                      (icon: Icons.verified_user_rounded, label: 'Access', value: 'Full', color: Colors.green),
-                      (icon: Icons.question_answer_rounded, label: 'Total Questions', value: '1,204', color: Colors.orange),
+                      (
+                        icon: Icons.category_rounded,
+                        label: 'Modules',
+                        value: '${actions.length}',
+                        color: theme.primaryColor
+                      ),
+                      (
+                        icon: Icons.verified_user_rounded,
+                        label: 'Access',
+                        value: 'Full',
+                        color: Colors.green
+                      ),
+                      (
+                        icon: Icons.question_answer_rounded,
+                        label: 'Total Questions',
+                        value: '1,204',
+                        color: Colors.orange
+                      ),
                     ],
                   ),
                 ),
@@ -140,7 +155,7 @@ class AdminDashboardScreen extends ConsumerWidget {
                     childAspectRatio: 1.0,
                   ),
                   delegate: SliverChildBuilderDelegate(
-                        (context, index) {
+                    (context, index) {
                       final action = actions[index];
                       return _buildActionCard(
                         context: context,
@@ -187,7 +202,8 @@ class AdminDashboardScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildActionCard({required BuildContext context, required _AdminAction action}) {
+  Widget _buildActionCard(
+      {required BuildContext context, required _AdminAction action}) {
     return SizedBox(
       width: 280,
       child: Material(
@@ -281,7 +297,10 @@ class AdminDashboardScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildCombinedStatCard({required BuildContext context, required List<({IconData icon, String label, String value, Color color})> stats}) {
+  Widget _buildCombinedStatCard(
+      {required BuildContext context,
+      required List<({IconData icon, String label, String value, Color color})>
+          stats}) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(

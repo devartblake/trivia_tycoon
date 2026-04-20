@@ -9,7 +9,8 @@ class ConfigSettingsScreen extends ConsumerStatefulWidget {
   const ConfigSettingsScreen({super.key});
 
   @override
-  ConsumerState<ConfigSettingsScreen> createState() => _ConfigSettingsScreenState();
+  ConsumerState<ConfigSettingsScreen> createState() =>
+      _ConfigSettingsScreenState();
 }
 
 class _ConfigSettingsScreenState extends ConsumerState<ConfigSettingsScreen> {
@@ -48,8 +49,10 @@ class _ConfigSettingsScreenState extends ConsumerState<ConfigSettingsScreen> {
       final response = await serviceManager.apiService.get('/admin/config');
       final remoteApiUrl =
           (response['apiUrl'] ?? response['api_url'] ?? localApiUrl).toString();
-      final remoteLogging =
-          (response['enableLogging'] ?? response['enable_logging'] ?? localLogging) == true;
+      final remoteLogging = (response['enableLogging'] ??
+              response['enable_logging'] ??
+              localLogging) ==
+          true;
 
       if (!mounted) return;
       setState(() {
@@ -74,7 +77,8 @@ class _ConfigSettingsScreenState extends ConsumerState<ConfigSettingsScreen> {
       // keep local fallback silently for unsupported/offline environments.
       if (mounted) {
         setState(() {
-          _remoteSyncStatus = 'Remote config unavailable. Using local fallback.';
+          _remoteSyncStatus =
+              'Remote config unavailable. Using local fallback.';
         });
       }
     } finally {
@@ -134,10 +138,12 @@ class _ConfigSettingsScreenState extends ConsumerState<ConfigSettingsScreen> {
 
       if (!mounted) return;
       final errorCode = e.errorCode != null ? ' [${e.errorCode}]' : '';
-      setState(() => _remoteSyncStatus = 'Config sync failed$errorCode: ${e.message}');
+      setState(() =>
+          _remoteSyncStatus = 'Config sync failed$errorCode: ${e.message}');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Failed to sync config. Reverted changes$errorCode: ${e.message}'),
+          content: Text(
+              'Failed to sync config. Reverted changes$errorCode: ${e.message}'),
           backgroundColor: const Color(0xFFEF4444),
           behavior: SnackBarBehavior.floating,
         ),

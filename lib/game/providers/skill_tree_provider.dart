@@ -15,8 +15,8 @@ final skillTreeGraphProvider = FutureProvider<SkillTreeGraph>((ref) async {
 
 /// Fetches the player's skill tree state from the server.
 /// Returns null on any error so callers can fall back to asset data.
-final serverSkillTreeProvider =
-FutureProvider.autoDispose.family<SkillTreeDto?, String>((ref, playerId) async {
+final serverSkillTreeProvider = FutureProvider.autoDispose
+    .family<SkillTreeDto?, String>((ref, playerId) async {
   try {
     return await ref
         .read(serviceManagerProvider)
@@ -31,7 +31,7 @@ FutureProvider.autoDispose.family<SkillTreeDto?, String>((ref, playerId) async {
 /// merges it onto the asset graph. Falls back to asset-only when offline
 /// or when the player is not authenticated.
 final mergedSkillTreeGraphProvider =
-FutureProvider.autoDispose<SkillTreeGraph>((ref) async {
+    FutureProvider.autoDispose<SkillTreeGraph>((ref) async {
   final assetGraph = await ref.watch(skillTreeGraphProvider.future);
 
   // Get player ID from local profile storage (set during login)
@@ -50,7 +50,7 @@ FutureProvider.autoDispose<SkillTreeGraph>((ref) async {
 /// Uses the merged (server + asset) graph; falls back to an empty graph
 /// while data is loading so the UI remains alive.
 final skillTreeProvider =
-StateNotifierProvider<SkillTreeController, SkillTreeState>((ref) {
+    StateNotifierProvider<SkillTreeController, SkillTreeState>((ref) {
   final graphAsync = ref.watch(mergedSkillTreeGraphProvider);
 
   final graph = graphAsync.maybeWhen(

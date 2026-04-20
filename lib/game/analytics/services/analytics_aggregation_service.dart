@@ -8,9 +8,9 @@ enum AnalyticsTimeframe { daily, weekly, monthly }
 class AnalyticsAggregationService {
   /// Aggregates mission analytics based on timeframe
   static List<MissionAnalyticsEntry> aggregateMissionsBy(
-      AnalyticsTimeframe timeframe,
-      List<MissionAnalyticsEntry> rawData,
-      ) {
+    AnalyticsTimeframe timeframe,
+    List<MissionAnalyticsEntry> rawData,
+  ) {
     final Map<String, MissionAnalyticsEntry> aggregated = {};
 
     for (var entry in rawData) {
@@ -18,8 +18,9 @@ class AnalyticsAggregationService {
 
       aggregated.update(
         bucket,
-            (existing) => existing.copyWith(
-          missionsCompleted: existing.missionsCompleted + entry.missionsCompleted,
+        (existing) => existing.copyWith(
+          missionsCompleted:
+              existing.missionsCompleted + entry.missionsCompleted,
           missionsSwapped: existing.missionsSwapped + entry.missionsSwapped,
           xpEarned: existing.xpEarned + entry.xpEarned,
         ),
@@ -32,9 +33,9 @@ class AnalyticsAggregationService {
 
   /// Aggregates engagement analytics based on timeframe
   static List<EngagementEntry> aggregateEngagementBy(
-      AnalyticsTimeframe timeframe,
-      List<EngagementEntry> rawData,
-      ) {
+    AnalyticsTimeframe timeframe,
+    List<EngagementEntry> rawData,
+  ) {
     final Map<String, EngagementEntry> aggregated = {};
 
     for (var entry in rawData) {
@@ -42,10 +43,13 @@ class AnalyticsAggregationService {
 
       aggregated.update(
         bucket,
-            (existing) => existing.copyWith(
+        (existing) => existing.copyWith(
           activeUsers: existing.activeUsers + entry.activeUsers,
-          averageSessionLength: ((existing.averageSessionLength + entry.averageSessionLength) ~/ 2),
-          sessionsPerUser: ((existing.sessionsPerUser + entry.sessionsPerUser) ~/ 2),
+          averageSessionLength:
+              ((existing.averageSessionLength + entry.averageSessionLength) ~/
+                  2),
+          sessionsPerUser:
+              ((existing.sessionsPerUser + entry.sessionsPerUser) ~/ 2),
         ),
         ifAbsent: () => entry,
       );
@@ -56,9 +60,9 @@ class AnalyticsAggregationService {
 
   /// Aggregates retention analytics based on timeframe
   static List<RetentionEntry> aggregateRetentionBy(
-      AnalyticsTimeframe timeframe,
-      List<RetentionEntry> rawData,
-      ) {
+    AnalyticsTimeframe timeframe,
+    List<RetentionEntry> rawData,
+  ) {
     final Map<String, RetentionEntry> aggregated = {};
 
     for (var entry in rawData) {
@@ -66,7 +70,7 @@ class AnalyticsAggregationService {
 
       aggregated.update(
         bucket,
-            (existing) => existing.copyWith(
+        (existing) => existing.copyWith(
           day1Retention: (existing.day1Retention + entry.day1Retention) ~/ 2,
           day7Retention: (existing.day7Retention + entry.day7Retention) ~/ 2,
           day30Retention: (existing.day30Retention + entry.day30Retention) ~/ 2,
@@ -80,9 +84,9 @@ class AnalyticsAggregationService {
 
   /// Helper to filter by timeline range
   static List<MissionAnalyticsEntry> filterByTimeline(
-      List<MissionAnalyticsEntry> missions,
-      TimelineRange range,
-      ) {
+    List<MissionAnalyticsEntry> missions,
+    TimelineRange range,
+  ) {
     final now = DateTime.now();
     return missions.where((m) {
       final diff = now.difference(m.date).inDays;
@@ -119,18 +123,18 @@ class AnalyticsAggregationService {
   }
 
   static List<MissionAnalyticsEntry> aggregateMissions(
-      List<MissionAnalyticsEntry> missions,
-      AnalyticsTimeframe timeframe,
-      TimelineRange timeline,
-      String userType,
-      ) {
+    List<MissionAnalyticsEntry> missions,
+    AnalyticsTimeframe timeframe,
+    TimelineRange timeline,
+    String userType,
+  ) {
     final now = DateTime.now();
 
     final filtered = missions.where((m) {
       final diff = now.difference(m.date).inDays;
-      final userTypeMatch = userType == 'all'
-          || (userType == 'premium' && m.userType == 'premium')
-          || (userType == 'free' && m.userType == 'free');
+      final userTypeMatch = userType == 'all' ||
+          (userType == 'premium' && m.userType == 'premium') ||
+          (userType == 'free' && m.userType == 'free');
 
       bool timelineMatch;
       switch (timeline) {
@@ -155,9 +159,9 @@ class AnalyticsAggregationService {
   }
 
   static List<EngagementEntry> aggregateEngagements(
-      List<EngagementEntry> entries,
-      TimelineRange timeline,
-      ) {
+    List<EngagementEntry> entries,
+    TimelineRange timeline,
+  ) {
     final now = DateTime.now();
 
     final filtered = entries.where((e) {
@@ -178,9 +182,9 @@ class AnalyticsAggregationService {
   }
 
   static List<RetentionEntry> aggregateRetention(
-      List<RetentionEntry> entries,
-      TimelineRange timeline,
-      ) {
+    List<RetentionEntry> entries,
+    TimelineRange timeline,
+  ) {
     final now = DateTime.now();
 
     final filtered = entries.where((e) {

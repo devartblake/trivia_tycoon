@@ -74,7 +74,8 @@ class AudioController {
   Future<void> playRemoteMusic(String presignedUrl) async {
     _log.info('Playing remote music: $presignedUrl');
     _musicPlayer ??= ja.AudioPlayer();
-    await _musicPlayer!.setAudioSource(ja.AudioSource.uri(Uri.parse(presignedUrl)));
+    await _musicPlayer!
+        .setAudioSource(ja.AudioSource.uri(Uri.parse(presignedUrl)));
     await _musicPlayer!.play();
   }
 
@@ -110,13 +111,15 @@ class AudioController {
         await player.setAudioSource(ja.AudioSource.uri(Uri.parse(url)));
         _remoteSfxCache[type] = player;
       } catch (e) {
-        _log.warning('Remote SFX preload failed for ${paths.first}, will use local: $e');
+        _log.warning(
+            'Remote SFX preload failed for ${paths.first}, will use local: $e');
       }
     }
   }
 
   void playSfx(SfxType type) {
-    if (!(_settings?.audioOn.value ?? false) || !(_settings?.soundsOn.value ?? false)) {
+    if (!(_settings?.audioOn.value ?? false) ||
+        !(_settings?.soundsOn.value ?? false)) {
       _log.fine(() => 'Ignoring sound: $type');
       return;
     }
@@ -203,12 +206,14 @@ class AudioController {
         _playlist.add(_playlist.removeFirst());
         return;
       } catch (e) {
-        _log.warning('Remote audio failed for ${song.filename}, falling back to local: $e');
+        _log.warning(
+            'Remote audio failed for ${song.filename}, falling back to local: $e');
       }
     }
 
     // Fallback: load from bundled assets via SoLoud.
-    _nextMusic = (await soloud!.loadFile('assets/songs/${song.filename}')) as Handle?;
+    _nextMusic =
+        (await soloud!.loadFile('assets/songs/${song.filename}')) as Handle?;
     _crossfadeToNextSong();
   }
 
@@ -223,15 +228,18 @@ class AudioController {
 
   void _fadeOut(Handle sound) {
     for (double volume = 1.0; volume > 0; volume -= 0.1) {
-      Future.delayed(Duration(milliseconds: 100), () => soloud!.setVolume(sound as SoundHandle, volume));
+      Future.delayed(Duration(milliseconds: 100),
+          () => soloud!.setVolume(sound as SoundHandle, volume));
     }
-    Future.delayed(Duration(seconds: 1), () => soloud!.stop(sound as SoundHandle));
+    Future.delayed(
+        Duration(seconds: 1), () => soloud!.stop(sound as SoundHandle));
   }
 
   void _fadeIn(Handle sound) {
     soloud!.play(sound as AudioSource);
     for (double volume = 0; volume < 1.0; volume += 0.1) {
-      Future.delayed(Duration(milliseconds: 100), () => soloud?.setVolume(sound as SoundHandle, volume));
+      Future.delayed(Duration(milliseconds: 100),
+          () => soloud?.setVolume(sound as SoundHandle, volume));
     }
   }
 

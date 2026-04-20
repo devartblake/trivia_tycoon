@@ -7,7 +7,8 @@ class SearchDialog extends StatefulWidget {
   State<SearchDialog> createState() => _SearchDialogState();
 }
 
-class _SearchDialogState extends State<SearchDialog> with TickerProviderStateMixin {
+class _SearchDialogState extends State<SearchDialog>
+    with TickerProviderStateMixin {
   late TabController _tabController;
   final TextEditingController _searchController = TextEditingController();
 
@@ -47,7 +48,8 @@ class _SearchDialogState extends State<SearchDialog> with TickerProviderStateMix
             decoration: const InputDecoration(
               hintText: 'Search',
               hintStyle: TextStyle(color: Color(0xFF72767D)),
-              prefixIcon: Icon(Icons.search, color: Color(0xFF72767D), size: 20),
+              prefixIcon:
+                  Icon(Icons.search, color: Color(0xFF72767D), size: 20),
               border: InputBorder.none,
               contentPadding: EdgeInsets.symmetric(vertical: 8),
             ),
@@ -114,7 +116,8 @@ class _SearchDialogState extends State<SearchDialog> with TickerProviderStateMix
         children: [
           const Text(
             'Suggested',
-            style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+            style: TextStyle(
+                color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 16),
           ListTile(
@@ -122,8 +125,10 @@ class _SearchDialogState extends State<SearchDialog> with TickerProviderStateMix
               backgroundColor: Color(0xFF5865F2),
               child: Text('C', style: TextStyle(color: Colors.white)),
             ),
-            title: const Text('CavemanYeti', style: TextStyle(color: Colors.white)),
-            subtitle: const Text('cavemanyeti', style: TextStyle(color: Color(0xFF72767D))),
+            title: const Text('CavemanYeti',
+                style: TextStyle(color: Colors.white)),
+            subtitle: const Text('cavemanyeti',
+                style: TextStyle(color: Color(0xFF72767D))),
             onTap: () {},
           ),
           const SizedBox(height: 24),
@@ -132,7 +137,10 @@ class _SearchDialogState extends State<SearchDialog> with TickerProviderStateMix
             children: [
               const Text(
                 'Photos & Media',
-                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600),
               ),
               TextButton(
                 onPressed: () {},
@@ -260,7 +268,8 @@ class _SearchDialogState extends State<SearchDialog> with TickerProviderStateMix
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.insert_drive_file_outlined, color: Colors.white70, size: 64),
+          Icon(Icons.insert_drive_file_outlined,
+              color: Colors.white70, size: 64),
           SizedBox(height: 16),
           Text(
             'No files found',

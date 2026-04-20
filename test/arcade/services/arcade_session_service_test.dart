@@ -30,7 +30,8 @@ void main() {
       final before = DateTime.now();
       final started = svc.startSession();
       final after = DateTime.now();
-      expect(started.isAfter(before.subtract(const Duration(seconds: 1))), isTrue);
+      expect(
+          started.isAfter(before.subtract(const Duration(seconds: 1))), isTrue);
       expect(started.isBefore(after.add(const Duration(seconds: 1))), isTrue);
     });
 
@@ -60,7 +61,8 @@ void main() {
       expect(elapsed.inMilliseconds, greaterThanOrEqualTo(15));
     });
 
-    test('start → end → Duration is bounded by a reasonable upper limit', () async {
+    test('start → end → Duration is bounded by a reasonable upper limit',
+        () async {
       final started = svc.startSession();
       final elapsed = svc.endSession(started);
       // Should complete in under 1 second in any test environment
@@ -89,7 +91,8 @@ void main() {
     test('preserves difficulty', () {
       const dur = Duration(seconds: 30);
       final original = _result(difficulty: ArcadeDifficulty.hard);
-      expect(svc.attachDuration(original, dur).difficulty, ArcadeDifficulty.hard);
+      expect(
+          svc.attachDuration(original, dur).difficulty, ArcadeDifficulty.hard);
     });
 
     test('preserves score', () {

@@ -7,9 +7,7 @@ class BranchPathHelper {
   /// Computes a recommended unlock order for nodes in a specific branch
   /// This is a simplified version that can be used by UI components
   static List<SkillNode> computeRecommendedOrderForBranch(
-      SkillTreeGraph graph,
-      String branchId
-      ) {
+      SkillTreeGraph graph, String branchId) {
     // Filter nodes by branchId or category matching
     final branchNodes = graph.nodes.where((node) {
       // Check if node belongs to this branch (adjust logic based on your data structure)
@@ -28,12 +26,11 @@ class BranchPathHelper {
     while (remaining.isNotEmpty) {
       // Find nodes with no unprocessed prerequisites
       final available = remaining.where((node) {
-        final prereqs = graph.edges
-            .where((e) => e.toId == node.id)
-            .map((e) => e.fromId);
+        final prereqs =
+            graph.edges.where((e) => e.toId == node.id).map((e) => e.fromId);
 
         return prereqs.every((prereqId) =>
-        processed.contains(prereqId) ||
+            processed.contains(prereqId) ||
             !branchNodes.any((n) => n.id == prereqId));
       }).toList();
 
@@ -67,7 +64,8 @@ class BranchPathHelper {
   /// Checks if a node is on the critical path for a branch
   static bool isOnCriticalPath(SkillNode node, List<SkillNode> orderedNodes) {
     final index = orderedNodes.indexWhere((n) => n.id == node.id);
-    return index >= 0 && index < (orderedNodes.length * 0.7).round(); // First 70% are "critical"
+    return index >= 0 &&
+        index < (orderedNodes.length * 0.7).round(); // First 70% are "critical"
   }
 
   /// Gets weight for a node based on its effects or tier

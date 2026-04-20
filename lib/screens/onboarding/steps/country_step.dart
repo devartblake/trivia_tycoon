@@ -190,7 +190,8 @@ class _CountryStepState extends State<CountryStep> {
                       selected: isSelected,
                       label: Text(country),
                       onSelected: (_) => _selectCountry(country),
-                      backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                      backgroundColor:
+                          theme.colorScheme.surfaceContainerHighest,
                       selectedColor: theme.colorScheme.primaryContainer,
                       checkmarkColor: theme.colorScheme.onPrimaryContainer,
                     ),

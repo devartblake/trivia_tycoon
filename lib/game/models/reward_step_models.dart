@@ -27,7 +27,8 @@ class RewardStep {
   });
 
   /// Check if this reward is currently unlocked
-  bool get isUnlocked => !isLocked && (unlockDate == null || DateTime.now().isAfter(unlockDate!));
+  bool get isUnlocked =>
+      !isLocked && (unlockDate == null || DateTime.now().isAfter(unlockDate!));
 
   /// Get display text for the reward
   String get displayText {
@@ -93,7 +94,7 @@ class RewardStep {
       quantity: json['quantity'] as int? ?? 1,
       description: json['description'] as String? ?? '',
       type: RewardType.values.firstWhere(
-            (e) => e.name == json['type'],
+        (e) => e.name == json['type'],
         orElse: () => RewardType.coins,
       ),
       imageUrl: json['imageUrl'] as String?,

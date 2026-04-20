@@ -13,7 +13,7 @@ class EventMapper {
   GameEvent? fromEnvelope(WsEnvelopeDto env) {
     final data = env.data ?? const <String, dynamic>{};
     switch (env.op) {
-    // ---- Room / Lobby ----
+      // ---- Room / Lobby ----
       case WsProtocol.opJoinedRoom:
         return JoinedRoom(
           _asString(data['roomId']),
@@ -40,7 +40,7 @@ class EventMapper {
           newHostPlayerId: _asString(data['newHostPlayerId']),
         );
 
-    // ---- Match lifecycle ----
+      // ---- Match lifecycle ----
       case WsProtocol.opMatchStarted:
         return MatchStarted(
           matchId: _asString(data['matchId']),
@@ -84,7 +84,7 @@ class EventMapper {
           roomId: _asString(data['roomId']),
         );
 
-    // ---- Server-level notices & errors ----
+      // ---- Server-level notices & errors ----
       case WsProtocol.opServerNotice:
         return ServerNotice(
           code: _asString(data['code']),
@@ -97,14 +97,14 @@ class EventMapper {
       case WsProtocol.opProtocolError:
         return ProtocolError(_asString(data['message']));
 
-    // Often these are handshake/infra and not surfaced to UI:
+      // Often these are handshake/infra and not surfaced to UI:
       case WsProtocol.opHello:
       case WsProtocol.opAck:
       case WsProtocol.opPong:
         return null;
 
       default:
-      // Unknown op: keep resilient and surface as a ProtocolError for logging.
+        // Unknown op: keep resilient and surface as a ProtocolError for logging.
         return ProtocolError('Unknown op: ${env.op}');
     }
   }

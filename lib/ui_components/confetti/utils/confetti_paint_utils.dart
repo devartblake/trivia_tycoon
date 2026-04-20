@@ -2,14 +2,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class ConfettiPaintUtils {
-
   /// ***Generate a Triangle Path**
   static Path createTrianglePath(double size) {
     return Path()
-        ..moveTo(0, -size / 2)
-        ..lineTo(size / 2, size / 2)
-        ..lineTo(-size / 2, size /2)
-        ..close();
+      ..moveTo(0, -size / 2)
+      ..lineTo(size / 2, size / 2)
+      ..lineTo(-size / 2, size / 2)
+      ..close();
   }
 
   /// ***Generate a Star Path**
@@ -41,7 +40,8 @@ class ConfettiPaintUtils {
       case 'star':
         return createStarPath(size);
       default:
-        return Path()..addOval(Rect.fromCircle(center: Offset.zero, radius: size / 2));
+        return Path()
+          ..addOval(Rect.fromCircle(center: Offset.zero, radius: size / 2));
     }
   }
 }

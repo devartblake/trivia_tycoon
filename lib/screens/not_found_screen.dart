@@ -79,7 +79,7 @@ class NotFoundScreen extends StatelessWidget {
                   backgroundColor: Colors.white, // Button background
                   foregroundColor: Colors.black, // Text color
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),

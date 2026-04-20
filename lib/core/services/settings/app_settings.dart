@@ -254,8 +254,7 @@ class AppSettings {
     final box = await Hive.openBox(_boxName);
     final history = box.get('spinHistory', defaultValue: []);
     return List<Map<String, dynamic>>.from(
-        history.map((e) => Map<String, dynamic>.from(e))
-    );
+        history.map((e) => Map<String, dynamic>.from(e)));
   }
 
   /// Clears spin history
@@ -349,8 +348,7 @@ class AppSettings {
   static Future<void> addUnlockedSpinTheme(String theme) async {
     final box = await Hive.openBox(_boxName);
     List<String> themes = List<String>.from(
-        box.get('unlockedSpinThemes', defaultValue: ['default'])
-    );
+        box.get('unlockedSpinThemes', defaultValue: ['default']));
     if (!themes.contains(theme)) {
       themes.add(theme);
       await box.put('unlockedSpinThemes', themes);
@@ -361,8 +359,7 @@ class AppSettings {
   static Future<List<String>> getUnlockedSpinThemes() async {
     final box = await Hive.openBox(_boxName);
     return List<String>.from(
-        box.get('unlockedSpinThemes', defaultValue: ['default'])
-    );
+        box.get('unlockedSpinThemes', defaultValue: ['default']));
   }
 
   /// Saves spin statistics summary
@@ -375,8 +372,7 @@ class AppSettings {
   static Future<Map<String, dynamic>> getSpinStatistics() async {
     final box = await Hive.openBox(_boxName);
     return Map<String, dynamic>.from(
-        box.get('spinStatistics', defaultValue: {})
-    );
+        box.get('spinStatistics', defaultValue: {}));
   }
 
   /// Updates spin statistics with new spin data
@@ -395,7 +391,8 @@ class AppSettings {
     stats['rewardCounts'] = rewardCounts;
 
     // Update total rewards earned
-    stats['totalRewardsEarned'] = (stats['totalRewardsEarned'] ?? 0) + rewardValue;
+    stats['totalRewardsEarned'] =
+        (stats['totalRewardsEarned'] ?? 0) + rewardValue;
 
     // Update best reward
     if (rewardValue > (stats['bestReward'] ?? 0)) {
@@ -471,6 +468,7 @@ class AppSettings {
     final box = await Hive.openBox(_boxName);
     await box.put('musicOn', value);
   }
+
   /// Retrieves the music setting.
   static Future<bool> getMusicOn({required bool defaultValue}) async {
     final box = await Hive.openBox(_boxName);
@@ -541,7 +539,8 @@ class AppSettings {
   /// Retrieves player progress.
   static Future<Map<String, dynamic>> getPlayerProgress() async {
     final box = await Hive.openBox(_boxName);
-    return Map<String, dynamic>.from(box.get('playerProgress', defaultValue: {}));
+    return Map<String, dynamic>.from(
+        box.get('playerProgress', defaultValue: {}));
   }
 
   static Future<void> setHasCompletedOnboarding(bool value) async {
@@ -566,7 +565,8 @@ class AppSettings {
   }
 
   /// Saves unlocked achievements.
-  static Future<void> saveUnlockedAchievements(List<String> achievements) async {
+  static Future<void> saveUnlockedAchievements(
+      List<String> achievements) async {
     final box = await Hive.openBox(_boxName);
     await box.put('unlockedAchievements', achievements);
   }
@@ -580,7 +580,8 @@ class AppSettings {
   /// A helper function for purchasing a song: retrieves the current list, adds if not present, and saves it.
   static Future<void> purchaseSong(String songFilename) async {
     final box = await Hive.openBox(_boxName);
-    List<String> purchased = List<String>.from(box.get('purchasedSongs', defaultValue: []));
+    List<String> purchased =
+        List<String>.from(box.get('purchasedSongs', defaultValue: []));
     if (!purchased.contains(songFilename)) {
       purchased.add(songFilename);
       await box.put('purchasedSongs', purchased);
@@ -641,8 +642,11 @@ class AppSettings {
   static Future<Color> getPrimaryColor() async {
     final box = await Hive.openBox(_boxName);
     final value = box.get('primary_color');
-    return value is int ? Color(value) : const Color(0xFF2196F3); // Default to blue
+    return value is int
+        ? Color(value)
+        : const Color(0xFF2196F3); // Default to blue
   }
+
   /// ** Saves the custom theme presets
   static Future<void> saveCustomThemePreset(Map<String, dynamic> preset) async {
     final box = await Hive.openBox(_boxName);
@@ -677,7 +681,8 @@ class AppSettings {
         themeName: e['name'],
         primaryColor: Color(e['primaryColor']),
         secondaryColor: Color(e['secondaryColor']),
-        brightness: e['brightness'] == 'dark' ? Brightness.dark : Brightness.light,
+        brightness:
+            e['brightness'] == 'dark' ? Brightness.dark : Brightness.light,
       );
     }).toList();
   }
@@ -696,12 +701,14 @@ class AppSettings {
       ...current.where((t) => t.themeName != theme.themeName),
       theme,
     ];
-    final encoded = updated.map((t) => {
-      'name': t.themeName,
-      'primary': t.primaryColor.value,
-      'secondary': t.secondaryColor.value,
-      'brightness': t.brightness == Brightness.dark ? 'dark' : 'light',
-    }).toList();
+    final encoded = updated
+        .map((t) => {
+              'name': t.themeName,
+              'primary': t.primaryColor.value,
+              'secondary': t.secondaryColor.value,
+              'brightness': t.brightness == Brightness.dark ? 'dark' : 'light',
+            })
+        .toList();
     await box.put(_boxName, encoded);
   }
 
@@ -710,12 +717,14 @@ class AppSettings {
     final box = await Hive.openBox(_boxName);
     final current = await getCustomThemes();
     final updated = current.where((t) => t.themeName != name).toList();
-    final encoded = updated.map((t) => {
-      'name': t.themeName,
-      'primary': t.primaryColor.value,
-      'secondary': t.secondaryColor.value,
-      'brightness': t.brightness == Brightness.dark ? 'dark' : 'light',
-    }).toList();
+    final encoded = updated
+        .map((t) => {
+              'name': t.themeName,
+              'primary': t.primaryColor.value,
+              'secondary': t.secondaryColor.value,
+              'brightness': t.brightness == Brightness.dark ? 'dark' : 'light',
+            })
+        .toList();
     await box.put(_boxName, encoded);
   }
 
@@ -729,7 +738,9 @@ class AppSettings {
           themeName: entry['name'],
           primaryColor: Color(entry['primary']),
           secondaryColor: Color(entry['secondary']),
-          brightness: entry['brightness'] == 'dark' ? Brightness.dark : Brightness.light,
+          brightness: entry['brightness'] == 'dark'
+              ? Brightness.dark
+              : Brightness.light,
         );
       }).toList();
     }
@@ -737,7 +748,8 @@ class AppSettings {
   }
 
   /// Saves confetti settings.
-  static Future<void> saveConfettiSettings(Map<String, dynamic> settings) async {
+  static Future<void> saveConfettiSettings(
+      Map<String, dynamic> settings) async {
     final box = await Hive.openBox(_boxName);
     await box.put("confettiSettings", settings);
   }
@@ -745,7 +757,8 @@ class AppSettings {
   /// Retrieves confetti settings.
   static Future<Map<String, dynamic>> getConfettiSettings() async {
     final box = await Hive.openBox(_boxName);
-    return Map<String, dynamic>.from(box.get('confettiSettings', defaultValue: {}));
+    return Map<String, dynamic>.from(
+        box.get('confettiSettings', defaultValue: {}));
   }
 
   /// Saves the selected confetti theme.

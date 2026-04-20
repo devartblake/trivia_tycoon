@@ -8,7 +8,8 @@ import '../../../game/controllers/theme_settings_controller.dart';
 import '../../../game/models/seasonal_theme_models.dart';
 import '../../../game/providers/riverpod_providers.dart';
 
-final themeSettingsProvider = StateNotifierProvider<ThemeSettingsController, ThemeSettings>((ref) {
+final themeSettingsProvider =
+    StateNotifierProvider<ThemeSettingsController, ThemeSettings>((ref) {
   final themeService = ref.read(customThemeServiceProvider);
   return ThemeSettingsController(themeService);
 });
@@ -17,7 +18,8 @@ class ThemeSettingsScreen extends ConsumerStatefulWidget {
   const ThemeSettingsScreen({super.key});
 
   @override
-  ConsumerState<ThemeSettingsScreen> createState() => _ThemeSettingsScreenState();
+  ConsumerState<ThemeSettingsScreen> createState() =>
+      _ThemeSettingsScreenState();
 }
 
 class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
@@ -55,7 +57,7 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
 
     _sectionControllers = List.generate(
       5,
-          (index) => AnimationController(
+      (index) => AnimationController(
         duration: Duration(milliseconds: 600 + (index * 100)),
         vsync: this,
       ),
@@ -319,7 +321,8 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
           Flexible(
             child: Text(
               label,
-              style: TextStyles.Caption.textColor(textColor).size(FontSizes.s11),
+              style:
+                  TextStyles.Caption.textColor(textColor).size(FontSizes.s11),
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -448,7 +451,8 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
             final userOverride = snapshot.data!['override'] as ThemeType?;
 
             return Container(
-              margin: EdgeInsets.symmetric(horizontal: Insets.l, vertical: Insets.sm),
+              margin: EdgeInsets.symmetric(
+                  horizontal: Insets.l, vertical: Insets.sm),
               decoration: BoxDecoration(
                 color: theme.surface.withValues(alpha: 0.3),
                 borderRadius: Corners.s10Border,
@@ -472,7 +476,7 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
                     'Use seasonal theme when available',
                     Icons.auto_awesome_rounded,
                     !hasUserOverride,
-                        () async {
+                    () async {
                       await service.setUserThemeOverride(null);
                       setState(() {});
                     },
@@ -487,7 +491,7 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
                       _getThemeDescription(themeType),
                       _getThemeIcon(themeType),
                       hasUserOverride && userOverride == themeType,
-                          () async {
+                      () async {
                         await service.setUserThemeOverride(themeType);
                         setState(() {});
                       },
@@ -512,14 +516,14 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
   }
 
   Widget _buildThemeOption(
-      AppTheme theme,
-      ThemeType? themeType,
-      String title,
-      String subtitle,
-      IconData icon,
-      bool isSelected,
-      VoidCallback onTap,
-      ) {
+    AppTheme theme,
+    ThemeType? themeType,
+    String title,
+    String subtitle,
+    IconData icon,
+    bool isSelected,
+    VoidCallback onTap,
+  ) {
     final previewTheme = themeType != null
         ? AppTheme.fromType(themeType, ThemeMode.light)
         : theme;
@@ -588,7 +592,8 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
     );
   }
 
-  Widget _buildThemeSelectionSection(AppTheme theme, ThemeSettings customTheme) {
+  Widget _buildThemeSelectionSection(
+      AppTheme theme, ThemeSettings customTheme) {
     return SliverToBoxAdapter(
       child: SlideTransition(
         position: Tween<Offset>(
@@ -599,7 +604,8 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
           curve: Curves.easeOutBack,
         )),
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: Insets.l, vertical: Insets.sm),
+          margin:
+              EdgeInsets.symmetric(horizontal: Insets.l, vertical: Insets.sm),
           decoration: BoxDecoration(
             color: theme.surface,
             borderRadius: Corners.s10Border,
@@ -680,7 +686,8 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
           curve: Curves.easeOutBack,
         )),
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: Insets.l, vertical: Insets.sm),
+          margin:
+              EdgeInsets.symmetric(horizontal: Insets.l, vertical: Insets.sm),
           decoration: BoxDecoration(
             color: theme.surface,
             borderRadius: Corners.s10Border,
@@ -700,7 +707,7 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
                 Icons.circle,
                 customTheme.primaryColor,
                 _isPrimaryExpanded,
-                    () => setState(() => _isPrimaryExpanded = !_isPrimaryExpanded),
+                () => setState(() => _isPrimaryExpanded = !_isPrimaryExpanded),
               ),
               Divider(height: 1, color: theme.greyWeak),
               _buildExpandableColorPicker(
@@ -709,8 +716,8 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
                 Icons.circle_outlined,
                 customTheme.secondaryColor,
                 _isSecondaryExpanded,
-                    () =>
-                    setState(() => _isSecondaryExpanded = !_isSecondaryExpanded),
+                () => setState(
+                    () => _isSecondaryExpanded = !_isSecondaryExpanded),
               ),
             ],
           ),
@@ -720,13 +727,13 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
   }
 
   Widget _buildExpandableColorPicker(
-      AppTheme theme,
-      String title,
-      IconData icon,
-      Color currentColor,
-      bool isExpanded,
-      VoidCallback onTap,
-      ) {
+    AppTheme theme,
+    String title,
+    IconData icon,
+    Color currentColor,
+    bool isExpanded,
+    VoidCallback onTap,
+  ) {
     return AnimatedContainer(
       duration: Durations.fast,
       child: Column(
@@ -795,7 +802,9 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
               final isSelected = color.value == currentColor.value;
               return GestureDetector(
                 onTap: () {
-                  ref.read(themeSettingsProvider.notifier).setPrimaryColor(color);
+                  ref
+                      .read(themeSettingsProvider.notifier)
+                      .setPrimaryColor(color);
                   setState(() {});
                 },
                 child: Container(
@@ -839,7 +848,8 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
           curve: Curves.easeOutBack,
         )),
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: Insets.l, vertical: Insets.sm),
+          margin:
+              EdgeInsets.symmetric(horizontal: Insets.l, vertical: Insets.sm),
           decoration: BoxDecoration(
             color: theme.surface,
             borderRadius: Corners.s10Border,

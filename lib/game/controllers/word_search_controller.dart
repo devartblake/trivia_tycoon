@@ -45,7 +45,7 @@ class WordSearchController extends ChangeNotifier {
   void _generateGrid() {
     grid = List.generate(
       gridSize,
-          (_) => List.generate(gridSize, (_) => ''),
+      (_) => List.generate(gridSize, (_) => ''),
     );
     wordPositions.clear();
     foundWords.clear();
@@ -65,7 +65,7 @@ class WordSearchController extends ChangeNotifier {
 
         final wordToPlace = reverse ? word.split('').reversed.join() : word;
 
-        if (_tryPlaceWord(wordToPlace, word,direction, random)) {
+        if (_tryPlaceWord(wordToPlace, word, direction, random)) {
           placed = true;
         }
       }
@@ -83,21 +83,44 @@ class WordSearchController extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool _tryPlaceWord(String word, String originalWord, int direction, Random random) {
+  bool _tryPlaceWord(
+      String word, String originalWord, int direction, Random random) {
     int startRow = random.nextInt(gridSize);
     int startCol = random.nextInt(gridSize);
 
     int dRow = 0, dCol = 0;
 
     switch (direction) {
-      case 0: dCol = 1; break; // Horizontal
-      case 1: dRow = 1; break; // Vertical
-      case 2: dRow = 1; dCol = 1; break; // Diagonal down
-      case 3: dRow = -1; dCol = 1; break; // Diagonal up
-      case 4: dRow = 1; dCol = -1; break; // Diagonal down-left ↙
-      case 5: dRow = -1; dCol = -1; break; // Diagonal up-left ↖
-      case 6: dRow = 0; dCol = -1; break; // Left (if not using reverse)
-      case 7: dRow = -1; dCol = 0; break; // Up (if not using reverse)
+      case 0:
+        dCol = 1;
+        break; // Horizontal
+      case 1:
+        dRow = 1;
+        break; // Vertical
+      case 2:
+        dRow = 1;
+        dCol = 1;
+        break; // Diagonal down
+      case 3:
+        dRow = -1;
+        dCol = 1;
+        break; // Diagonal up
+      case 4:
+        dRow = 1;
+        dCol = -1;
+        break; // Diagonal down-left ↙
+      case 5:
+        dRow = -1;
+        dCol = -1;
+        break; // Diagonal up-left ↖
+      case 6:
+        dRow = 0;
+        dCol = -1;
+        break; // Left (if not using reverse)
+      case 7:
+        dRow = -1;
+        dCol = 0;
+        break; // Up (if not using reverse)
     }
 
     // Check if word fits
@@ -177,7 +200,6 @@ class WordSearchController extends ChangeNotifier {
       // Check if selected word matches (forward or backward)
       if (selectedWord == wordPos.word ||
           selectedWord == wordPos.word.split('').reversed.join()) {
-
         // Also verify positions match
         if (_matchesWord(selected, wordPos.positions)) {
           foundWords.add(wordPos.originalWord);

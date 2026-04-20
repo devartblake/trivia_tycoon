@@ -61,21 +61,28 @@ class ConfettiDebugOverlay extends ConsumerWidget {
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  _buildMetricRow('FPS', '${tracker.fps.toStringAsFixed(1)}', Icons.speed, Colors.green),
+                  _buildMetricRow('FPS', '${tracker.fps.toStringAsFixed(1)}',
+                      Icons.speed, Colors.green),
                   const SizedBox(height: 12),
-                  _buildMetricRow('Memory', '${tracker.memoryUsage.toStringAsFixed(1)} MB', Icons.memory, Colors.orange),
+                  _buildMetricRow(
+                      'Memory',
+                      '${tracker.memoryUsage.toStringAsFixed(1)} MB',
+                      Icons.memory,
+                      Colors.orange),
                   const SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       onPressed: () async {
-                        String logData = "FPS: ${tracker.fps}, Memory: ${tracker.memoryUsage} MB\n";
+                        String logData =
+                            "FPS: ${tracker.fps}, Memory: ${tracker.memoryUsage} MB\n";
                         await ConfettiLogManager.exportLog(logData);
                       },
                       icon: const Icon(Icons.download, size: 16),
                       label: const Text(
                         'Export Logs',
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                        style: TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.w500),
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF48BB78),
@@ -97,7 +104,8 @@ class ConfettiDebugOverlay extends ConsumerWidget {
     );
   }
 
-  Widget _buildMetricRow(String label, String value, IconData icon, Color color) {
+  Widget _buildMetricRow(
+      String label, String value, IconData icon, Color color) {
     return Row(
       children: [
         Icon(icon, color: color, size: 16),

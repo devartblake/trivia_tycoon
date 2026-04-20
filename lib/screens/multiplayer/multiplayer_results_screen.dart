@@ -12,10 +12,12 @@ class MultiplayerResultsScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<MultiplayerResultsScreen> createState() => _MultiplayerResultsScreenState();
+  ConsumerState<MultiplayerResultsScreen> createState() =>
+      _MultiplayerResultsScreenState();
 }
 
-class _MultiplayerResultsScreenState extends ConsumerState<MultiplayerResultsScreen>
+class _MultiplayerResultsScreenState
+    extends ConsumerState<MultiplayerResultsScreen>
     with TickerProviderStateMixin {
   late AnimationController _mainController;
   late AnimationController _scoreController;
@@ -159,7 +161,8 @@ class _MultiplayerResultsScreenState extends ConsumerState<MultiplayerResultsScr
   Widget build(BuildContext context) {
     final quizState = ref.watch(multiplayerQuizProvider);
     final gameColor = _getGameModeColor();
-    final resultColor = _getResultColor(quizState.playerScore, quizState.opponentScore);
+    final resultColor =
+        _getResultColor(quizState.playerScore, quizState.opponentScore);
 
     // Setup score counting animation
     _scoreCountAnimation = IntTween(
@@ -274,7 +277,10 @@ class _MultiplayerResultsScreenState extends ConsumerState<MultiplayerResultsScr
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [gameColor.withValues(alpha: 0.1), gameColor.withValues(alpha: 0.05)],
+          colors: [
+            gameColor.withValues(alpha: 0.1),
+            gameColor.withValues(alpha: 0.05)
+          ],
         ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: gameColor.withValues(alpha: 0.3)),
@@ -416,9 +422,7 @@ class _MultiplayerResultsScreenState extends ConsumerState<MultiplayerResultsScr
         AnimatedBuilder(
           animation: isPlayer ? _scoreCountAnimation : _scoreController,
           builder: (context, child) {
-            final displayScore = isPlayer
-                ? _scoreCountAnimation.value
-                : score;
+            final displayScore = isPlayer ? _scoreCountAnimation.value : score;
             return Text(
               displayScore.toString(),
               style: TextStyle(
@@ -496,7 +500,8 @@ class _MultiplayerResultsScreenState extends ConsumerState<MultiplayerResultsScr
     );
   }
 
-  Widget _buildStatItem(String label, String value, IconData icon, Color color) {
+  Widget _buildStatItem(
+      String label, String value, IconData icon, Color color) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(

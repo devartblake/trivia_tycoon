@@ -17,9 +17,11 @@ class UserIdentityResolver {
   static Future<String> resolveUserId(ServiceManager serviceManager) async {
     return resolveUserIdFromSources(
       getProfileUserId: () => serviceManager.playerProfileService.getUserId(),
-      saveProfileUserId: (id) => serviceManager.playerProfileService.saveUserId(id),
+      saveProfileUserId: (id) =>
+          serviceManager.playerProfileService.saveUserId(id),
       getSecureSecret: (key) => serviceManager.secureStorage.getSecret(key),
-      setSecureSecret: (key, value) => serviceManager.secureStorage.setSecret(key, value),
+      setSecureSecret: (key, value) =>
+          serviceManager.secureStorage.setSecret(key, value),
       readAuthTokenStoreUserId: () {
         if (Hive.isBoxOpen('auth_tokens')) {
           final authBox = Hive.box('auth_tokens');
@@ -83,7 +85,8 @@ class UserIdentityResolver {
     required Future<void> Function(String key, String value) setSecureSecret,
     required String? Function() readAuthTokenStoreUserId,
     required String Function() seedNowIso,
-    Future<void> Function(String previousId, String canonicalId)? onCanonicalPromotion,
+    Future<void> Function(String previousId, String canonicalId)?
+        onCanonicalPromotion,
     Future<void> Function(String source, String userId)? onResolutionSource,
     Future<void> Function(String generatedUserId)? onGeneratedFallback,
   }) async {
@@ -104,14 +107,17 @@ class UserIdentityResolver {
 
     if (canonical != null) {
       final previous = _firstNonEmpty([profileUserId, secureUserId]);
-      if (previous != null && previous != canonical && _isGeneratedLocalId(previous)) {
+      if (previous != null &&
+          previous != canonical &&
+          _isGeneratedLocalId(previous)) {
         await onCanonicalPromotion?.call(previous, canonical);
       }
 
       await setSecureSecret('user_id', canonical);
       await saveProfileUserId(canonical);
       await onResolutionSource?.call(
-        _canonicalSource(profileUserId, secureUserId, tokenStoreUserId, canonical),
+        _canonicalSource(
+            profileUserId, secureUserId, tokenStoreUserId, canonical),
         canonical,
       );
       return canonical;
@@ -143,7 +149,8 @@ class UserIdentityResolver {
     final seed = (seedEmail != null && seedEmail.isNotEmpty)
         ? seedEmail.toLowerCase()
         : seedNowIso();
-    final generatedLocalUserId = 'local_${const Uuid().v5(Uuid.NAMESPACE_URL, seed)}';
+    final generatedLocalUserId =
+        'local_${const Uuid().v5(Uuid.NAMESPACE_URL, seed)}';
 
     await setSecureSecret(_generatedLocalUserIdKey, generatedLocalUserId);
     await saveProfileUserId(generatedLocalUserId);
@@ -193,13 +200,15 @@ class UserIdentityResolver {
     if (secureUserId == canonical && !_isGeneratedLocalId(secureUserId!)) {
       return 'secure';
     }
-    if (tokenStoreUserId == canonical && !_isGeneratedLocalId(tokenStoreUserId!)) {
+    if (tokenStoreUserId == canonical &&
+        !_isGeneratedLocalId(tokenStoreUserId!)) {
       return 'token_store';
     }
     return 'token_store';
   }
 
-  static String _existingLocalSource(String? profileUserId, String? secureUserId) {
+  static String _existingLocalSource(
+      String? profileUserId, String? secureUserId) {
     if (profileUserId != null && profileUserId.isNotEmpty) {
       return 'profile';
     }
@@ -211,8 +220,10 @@ class UserIdentityResolver {
 
   static Future<String> resolveUserName(ServiceManager serviceManager) async {
     final username = await serviceManager.playerProfileService.getUsername();
-    final playerName = await serviceManager.playerProfileService.getPlayerName();
-    return resolveUserNameFromValues(username: username, playerName: playerName);
+    final playerName =
+        await serviceManager.playerProfileService.getPlayerName();
+    return resolveUserNameFromValues(
+        username: username, playerName: playerName);
   }
 
   @visibleForTesting

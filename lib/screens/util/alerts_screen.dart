@@ -9,7 +9,8 @@ class AlertsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Alerts'),
-        leading: IconButton( // ✅ Back button to return to previous screen
+        leading: IconButton(
+          // ✅ Back button to return to previous screen
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             context.pop(); // Navigate back

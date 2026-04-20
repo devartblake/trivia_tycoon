@@ -5,7 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../../core/models/social/friend_request_dto.dart';
 import '../../../core/services/api_service.dart';
 import '../../../game/providers/friends_providers.dart';
-import '../../../game/providers/profile_providers.dart' hide currentUserIdProvider;
+import '../../../game/providers/profile_providers.dart'
+    hide currentUserIdProvider;
 import '../../messages/widgets/safe_text.dart';
 
 class AddFriendDialog extends ConsumerStatefulWidget {
@@ -131,17 +132,20 @@ class _AddFriendDialogState extends ConsumerState<AddFriendDialog> {
             ),
             title: const SafeText(
               'Find Your Friends',
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
             ),
             trailing: const Icon(Icons.chevron_right, color: Colors.white70),
             onTap: () {},
           ),
           const Divider(color: Color(0xFF36393F), height: 1),
           ListTile(
-            leading: const Icon(Icons.alternate_email, color: Colors.white70, size: 24),
+            leading: const Icon(Icons.alternate_email,
+                color: Colors.white70, size: 24),
             title: const SafeText(
               'Add by Username',
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
             ),
             trailing: const Icon(Icons.chevron_right, color: Colors.white70),
             onTap: () {
@@ -175,7 +179,8 @@ class _AddFriendDialogState extends ConsumerState<AddFriendDialog> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.people_outline, color: Color(0xFF72767D), size: 48),
+                  Icon(Icons.people_outline,
+                      color: Color(0xFF72767D), size: 48),
                   SizedBox(height: 12),
                   SafeText(
                     'No incoming friend requests',
@@ -253,8 +258,7 @@ class _AddFriendDialogState extends ConsumerState<AddFriendDialog> {
           Column(
             children: [
               IconButton(
-                onPressed:
-                    _isMutating ? null : () => _declineRequest(request),
+                onPressed: _isMutating ? null : () => _declineRequest(request),
                 icon: const Icon(Icons.close, color: Color(0xFF72767D)),
                 tooltip: 'Decline request',
                 constraints: const BoxConstraints(minWidth: 32, minHeight: 32),

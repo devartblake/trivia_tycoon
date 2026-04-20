@@ -41,14 +41,15 @@ class SkillEffectHandler {
 
   /// Legacy positional constructor — kept so existing call-sites compile.
   SkillEffectHandler.legacy(
-      this.gameSession,
-      this.xpService,
-      this.achievementService,
-      this.powerUpController, {
-        ProfileService? profileService,
-        SkillCooldownService? cooldownService,
-      })  : profileService = profileService ?? gameSession.getProfileService(),
-        cooldownService = cooldownService ?? gameSession.getSkillCooldownService(),
+    this.gameSession,
+    this.xpService,
+    this.achievementService,
+    this.powerUpController, {
+    ProfileService? profileService,
+    SkillCooldownService? cooldownService,
+  })  : profileService = profileService ?? gameSession.getProfileService(),
+        cooldownService =
+            cooldownService ?? gameSession.getSkillCooldownService(),
         _ref = null;
 
   // ---------------------------
@@ -61,7 +62,8 @@ class SkillEffectHandler {
     } else if (arg is Map<String, num>) {
       _applyEffectMap(arg);
     } else {
-      LogManager.debug('[SkillEffectHandler] Unsupported argument: ${arg.runtimeType}');
+      LogManager.debug(
+          '[SkillEffectHandler] Unsupported argument: ${arg.runtimeType}');
     }
   }
 
@@ -82,7 +84,9 @@ class SkillEffectHandler {
       cooldownService.startCooldown(node.id, Duration(seconds: cooldownSec));
     }
 
-    try { achievementService?.logSkillUsed?.call(node.id); } catch (_) {}
+    try {
+      achievementService?.logSkillUsed?.call(node.id);
+    } catch (_) {}
 
     return true;
   }
@@ -105,10 +109,9 @@ class SkillEffectHandler {
   void _applyEffect(String key, num value) {
     final r = _ref;
     switch (key) {
-
-    // ================================================================
-    // XP / economy
-    // ================================================================
+      // ================================================================
+      // XP / economy
+      // ================================================================
 
       case 'xpBoost':
         profileService.setXPBonusMultiplier(1.0 + value.toDouble());
@@ -119,20 +122,23 @@ class SkillEffectHandler {
         break;
 
       case 'giftPoints':
-      // Multiplayer: gift to opponent. Single-player: award to self as coins.
+        // Multiplayer: gift to opponent. Single-player: award to self as coins.
         gameSession.addCoins(value.toInt());
-        LogManager.debug('[SkillEffectHandler] giftPoints: +${value.toInt()} coins');
+        LogManager.debug(
+            '[SkillEffectHandler] giftPoints: +${value.toInt()} coins');
         break;
 
-    // ================================================================
-    // Score multipliers
-    // ================================================================
+      // ================================================================
+      // Score multipliers
+      // ================================================================
 
       case 'scoreMultiplier':
         if (r != null) {
           final cur = r.read(scoreBonusMultiplierProvider);
-          r.read(scoreBonusMultiplierProvider.notifier).state = cur * value.toDouble();
-          LogManager.debug('[SkillEffectHandler] scoreMultiplier ×${value.toDouble()}');
+          r.read(scoreBonusMultiplierProvider.notifier).state =
+              cur * value.toDouble();
+          LogManager.debug(
+              '[SkillEffectHandler] scoreMultiplier ×${value.toDouble()}');
         }
         break;
 
@@ -147,29 +153,34 @@ class SkillEffectHandler {
               r.read(scoreBonusMultiplierProvider.notifier).state /= bonus;
             }
           });
-          LogManager.debug('[SkillEffectHandler] globalScoreBonus +${value.toDouble() * 100}% for ${durSec}s');
+          LogManager.debug(
+              '[SkillEffectHandler] globalScoreBonus +${value.toDouble() * 100}% for ${durSec}s');
         }
         break;
 
       case 'allCategoryBonus':
         if (r != null) {
           final cur = r.read(scoreBonusMultiplierProvider);
-          r.read(scoreBonusMultiplierProvider.notifier).state = cur * (1.0 + value.toDouble());
-          LogManager.debug('[SkillEffectHandler] allCategoryBonus +${value.toDouble() * 100}%');
+          r.read(scoreBonusMultiplierProvider.notifier).state =
+              cur * (1.0 + value.toDouble());
+          LogManager.debug(
+              '[SkillEffectHandler] allCategoryBonus +${value.toDouble() * 100}%');
         }
         break;
 
       case 'sportsScoreBoost':
         if (r != null) {
           final cur = r.read(scoreBonusMultiplierProvider);
-          r.read(scoreBonusMultiplierProvider.notifier).state = cur * (1.0 + value.toDouble());
+          r.read(scoreBonusMultiplierProvider.notifier).state =
+              cur * (1.0 + value.toDouble());
         }
         break;
 
       case 'hardBonus':
         if (r != null) {
           final cur = r.read(scoreBonusMultiplierProvider);
-          r.read(scoreBonusMultiplierProvider.notifier).state = cur * (1.0 + value.toDouble());
+          r.read(scoreBonusMultiplierProvider.notifier).state =
+              cur * (1.0 + value.toDouble());
         }
         break;
 
@@ -184,53 +195,59 @@ class SkillEffectHandler {
               r.read(speedBonusMultiplierProvider.notifier).state /= bonus;
             }
           });
-          LogManager.debug('[SkillEffectHandler] speedBonus ×$bonus for ${durSec}s');
+          LogManager.debug(
+              '[SkillEffectHandler] speedBonus ×$bonus for ${durSec}s');
         }
         break;
 
       case 'accuracyBonus':
         if (r != null) {
           r.read(accuracyBonusProvider.notifier).state += value.toDouble();
-          LogManager.debug('[SkillEffectHandler] accuracyBonus +${value.toDouble() * 100}%');
+          LogManager.debug(
+              '[SkillEffectHandler] accuracyBonus +${value.toDouble() * 100}%');
         }
         break;
 
-    // ================================================================
-    // Streak
-    // ================================================================
+      // ================================================================
+      // Streak
+      // ================================================================
 
       case 'streakMult':
         if (r != null) {
           final cur = r.read(streakMultiplierProvider);
-          r.read(streakMultiplierProvider.notifier).state = cur * value.toDouble();
+          r.read(streakMultiplierProvider.notifier).state =
+              cur * value.toDouble();
         }
         break;
 
       case 'streakBoost':
-      // Immediately increment the live streak counter by N.
+        // Immediately increment the live streak counter by N.
         if (r != null) {
           r.read(streakCountProvider.notifier).state += value.toInt();
-          LogManager.debug('[SkillEffectHandler] streakBoost +${value.toInt()}');
+          LogManager.debug(
+              '[SkillEffectHandler] streakBoost +${value.toInt()}');
         }
         break;
 
       case 'startingStreak':
         if (r != null) {
           r.read(streakCountProvider.notifier).state += value.toInt();
-          LogManager.debug('[SkillEffectHandler] startingStreak +${value.toInt()}');
+          LogManager.debug(
+              '[SkillEffectHandler] startingStreak +${value.toInt()}');
         }
         break;
 
       case 'streakProtection':
         if (r != null) {
           r.read(streakShieldProvider.notifier).state += value.toInt();
-          LogManager.debug('[SkillEffectHandler] streakProtection shields: ${value.toInt()}');
+          LogManager.debug(
+              '[SkillEffectHandler] streakProtection shields: ${value.toInt()}');
         }
         break;
 
-    // ================================================================
-    // Timer
-    // ================================================================
+      // ================================================================
+      // Timer
+      // ================================================================
 
       case 'timeBonusSec':
         gameSession.increaseTimer(value.toInt());
@@ -243,9 +260,9 @@ class SkillEffectHandler {
         }
         break;
 
-    // ================================================================
-    // Question manipulation
-    // ================================================================
+      // ================================================================
+      // Question manipulation
+      // ================================================================
 
       case 'eliminateOneWrong':
         if (r != null && value.toInt() > 0) {
@@ -264,7 +281,8 @@ class SkillEffectHandler {
       case 'extraHints':
         if (r != null) {
           r.read(pendingShowHintProvider.notifier).state = true;
-          LogManager.debug('[SkillEffectHandler] extraHints: hints enabled for all questions');
+          LogManager.debug(
+              '[SkillEffectHandler] extraHints: hints enabled for all questions');
         }
         break;
 
@@ -280,13 +298,14 @@ class SkillEffectHandler {
           final cur = r.read(autoCorrectChanceProvider);
           r.read(autoCorrectChanceProvider.notifier).state =
               (cur + value.toDouble()).clamp(0.0, 0.95);
-          LogManager.debug('[SkillEffectHandler] autoCorrectChance: ${(cur + value.toDouble()) * 100}%');
+          LogManager.debug(
+              '[SkillEffectHandler] autoCorrectChance: ${(cur + value.toDouble()) * 100}%');
         }
         break;
 
       case 'hideAnswers':
-      // Opponent visibility — handled by UI reading answersHiddenProvider.
-      // Routing through hideProgressActiveProvider (same stealth bucket).
+        // Opponent visibility — handled by UI reading answersHiddenProvider.
+        // Routing through hideProgressActiveProvider (same stealth bucket).
         if (r != null && value.toInt() > 0) {
           r.read(hideProgressActiveProvider.notifier).state = true;
         }
@@ -295,7 +314,8 @@ class SkillEffectHandler {
       case 'hintSpeedBonus':
         if (r != null) {
           r.read(hintSpeedBonusProvider.notifier).state += value.toInt();
-          LogManager.debug('[SkillEffectHandler] hintSpeedBonus +${value.toInt()}s');
+          LogManager.debug(
+              '[SkillEffectHandler] hintSpeedBonus +${value.toInt()}s');
         }
         break;
 
@@ -306,20 +326,21 @@ class SkillEffectHandler {
         }
         break;
 
-    // ================================================================
-    // Category
-    // ================================================================
+      // ================================================================
+      // Category
+      // ================================================================
 
       case 'categoryBonus':
-      // Stored alongside selectableCategory; the player picks the category
-      // via UI after selectableCategoryProvider becomes true.
+        // Stored alongside selectableCategory; the player picks the category
+        // via UI after selectableCategoryProvider becomes true.
         if (r != null) {
           final existing = r.read(categoryBonusProvider) ?? {};
           r.read(categoryBonusProvider.notifier).state = {
             ...existing,
             'bonus': (existing['bonus'] as double? ?? 0.0) + value.toDouble(),
           };
-          LogManager.debug('[SkillEffectHandler] categoryBonus +${value.toDouble() * 100}%');
+          LogManager.debug(
+              '[SkillEffectHandler] categoryBonus +${value.toDouble() * 100}%');
         }
         break;
 
@@ -332,9 +353,9 @@ class SkillEffectHandler {
         gameSession.unlockCategory(value.toString());
         break;
 
-    // ================================================================
-    // Access / elite flags
-    // ================================================================
+      // ================================================================
+      // Access / elite flags
+      // ================================================================
 
       case 'eliteAccess':
         if (r != null && value.toInt() > 0) {
@@ -356,18 +377,19 @@ class SkillEffectHandler {
         }
         break;
 
-    // ================================================================
-    // Cooldown management
-    // ================================================================
+      // ================================================================
+      // Cooldown management
+      // ================================================================
 
       case 'lifelineCooldownReduction':
         cooldownService.applyGlobalReduction(Duration(seconds: value.toInt()));
-        LogManager.debug('[SkillEffectHandler] lifelineCooldownReduction -${value.toInt()}s on all cooldowns');
+        LogManager.debug(
+            '[SkillEffectHandler] lifelineCooldownReduction -${value.toInt()}s on all cooldowns');
         break;
 
-    // ================================================================
-    // UI / Stealth (multiplayer)
-    // ================================================================
+      // ================================================================
+      // UI / Stealth (multiplayer)
+      // ================================================================
 
       case 'fakeScore':
         if (r != null && value.toInt() > 0) {
@@ -394,37 +416,39 @@ class SkillEffectHandler {
         }
         break;
 
-    // ================================================================
-    // Wildcard / chaos
-    // ================================================================
+      // ================================================================
+      // Wildcard / chaos
+      // ================================================================
 
       case 'periodicChaos':
         if (r != null) {
           r.read(periodicChaosIntervalProvider.notifier).state = value.toInt();
-          LogManager.debug('[SkillEffectHandler] periodicChaos every ${value.toInt()} questions');
+          LogManager.debug(
+              '[SkillEffectHandler] periodicChaos every ${value.toInt()} questions');
         }
         break;
 
       case 'randomBenefit':
         if (r != null && value.toInt() > 0) {
           r.read(randomBenefitActiveProvider.notifier).state = true;
-          LogManager.debug('[SkillEffectHandler] randomBenefit will fire at game start');
+          LogManager.debug(
+              '[SkillEffectHandler] randomBenefit will fire at game start');
         }
         break;
 
-    // ================================================================
-    // Administrative (consumed at call-sites, ignored in effect loop)
-    // ================================================================
+      // ================================================================
+      // Administrative (consumed at call-sites, ignored in effect loop)
+      // ================================================================
 
       case 'cooldownSec':
       case 'useXPCost':
-      case 'speedDuration':  // consumed by speedBonus via _currentEffects
-      case 'duration':       // consumed by globalScoreBonus/glitchScreens via _currentEffects
+      case 'speedDuration': // consumed by speedBonus via _currentEffects
+      case 'duration': // consumed by globalScoreBonus/glitchScreens via _currentEffects
         break;
 
-    // ================================================================
-    // Unknown
-    // ================================================================
+      // ================================================================
+      // Unknown
+      // ================================================================
 
       default:
         LogManager.debug('[SkillEffectHandler] Unhandled effect: $key=$value');

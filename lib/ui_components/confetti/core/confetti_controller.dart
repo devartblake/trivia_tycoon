@@ -202,7 +202,8 @@ class ConfettiController extends ChangeNotifier with DiagnosticableTreeMixin {
         'timestamp': DateTime.now().toIso8601String(),
       };
 
-      await AppSettings.setString('confetti_state_snapshot', stateSnapshot.toString());
+      await AppSettings.setString(
+          'confetti_state_snapshot', stateSnapshot.toString());
       _lastSaveTime = DateTime.now();
 
       LogManager.debug('Confetti state saved successfully');
@@ -283,7 +284,8 @@ class ConfettiController extends ChangeNotifier with DiagnosticableTreeMixin {
       }
 
       // Limit particle count on low-end devices
-      final performanceCategory = ConfettiPerformance().getPerformanceCategory();
+      final performanceCategory =
+          ConfettiPerformance().getPerformanceCategory();
       if (performanceCategory == 'Low' && particleCount > 20) {
         particleCount = 15;
         await ConfettiStorage.saveSettings(_settings);
@@ -383,9 +385,12 @@ class ConfettiController extends ChangeNotifier with DiagnosticableTreeMixin {
   Future<void> importConfettiSettings(Map<String, dynamic> data) async {
     try {
       if (data.containsKey('speed')) speed = data['speed'].toDouble();
-      if (data.containsKey('particleCount')) particleCount = data['particleCount'];
-      if (data.containsKey('particleDensity')) _particleDensity = data['particleDensity'];
-      if (data.containsKey('isRandomTheme')) isRandomTheme = data['isRandomTheme'];
+      if (data.containsKey('particleCount'))
+        particleCount = data['particleCount'];
+      if (data.containsKey('particleDensity'))
+        _particleDensity = data['particleDensity'];
+      if (data.containsKey('isRandomTheme'))
+        isRandomTheme = data['isRandomTheme'];
 
       if (data.containsKey('currentTheme')) {
         currentTheme = ConfettiPresets.getPresetByName(data['currentTheme']);

@@ -8,7 +8,8 @@ class GridCategorySection extends ConsumerStatefulWidget {
   const GridCategorySection({super.key});
 
   @override
-  ConsumerState<GridCategorySection> createState() => _GridCategorySectionState();
+  ConsumerState<GridCategorySection> createState() =>
+      _GridCategorySectionState();
 }
 
 class _GridCategorySectionState extends ConsumerState<GridCategorySection> {
@@ -110,7 +111,8 @@ class _GridCategorySectionState extends ConsumerState<GridCategorySection> {
 
         classStatsAsync.when(
           data: (data) {
-            final classStats = data['classStats'] as Map<String, dynamic>? ?? const {};
+            final classStats =
+                data['classStats'] as Map<String, dynamic>? ?? const {};
             return GridView.count(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -119,8 +121,10 @@ class _GridCategorySectionState extends ConsumerState<GridCategorySection> {
               crossAxisSpacing: 12,
               childAspectRatio: 2.2,
               children: classLevels.map((classLevel) {
-                final classData = classStats[classLevel['id']] as Map<String, dynamic>?;
-                final questionCount = (classData?['questionCount'] as num?)?.toInt() ?? 0;
+                final classData =
+                    classStats[classLevel['id']] as Map<String, dynamic>?;
+                final questionCount =
+                    (classData?['questionCount'] as num?)?.toInt() ?? 0;
                 return _EducationalClassCard(
                   title: classLevel['title'],
                   subtitle: classLevel['subtitle'],
@@ -199,9 +203,11 @@ class _GridCategorySectionState extends ConsumerState<GridCategorySection> {
               children: categories.map((category) {
                 return Consumer(
                   builder: (context, ref, child) {
-                    final categoryStats = ref.watch(question_data.categoryStatsProvider(category));
+                    final categoryStats = ref
+                        .watch(question_data.categoryStatsProvider(category));
                     final questionCount = categoryStats.maybeWhen(
-                      data: (stats) => (stats['questionCount'] as num?)?.toInt() ?? 0,
+                      data: (stats) =>
+                          (stats['questionCount'] as num?)?.toInt() ?? 0,
                       orElse: () => 0,
                     );
 
@@ -338,7 +344,8 @@ class _EducationalClassCard extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(8),
@@ -382,7 +389,8 @@ class _EnhancedEducationalCategoryCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: category.primaryColor.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: category.primaryColor.withValues(alpha: 0.3)),
+          border:
+              Border.all(color: category.primaryColor.withValues(alpha: 0.3)),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

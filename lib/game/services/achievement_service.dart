@@ -31,8 +31,10 @@ class AchievementService {
   }
 
   Future<List<Achievement>> fetchAchievements(String playerName) async {
-    final List<Map<String, dynamic>> response = await apiService.fetchAchievements(playerName);
-    final achievements = response.map((data) => Achievement.fromJson(data)).toList();
+    final List<Map<String, dynamic>> response =
+        await apiService.fetchAchievements(playerName);
+    final achievements =
+        response.map((data) => Achievement.fromJson(data)).toList();
 
     // Update cache
     _cachedAchievements = achievements;
@@ -46,7 +48,8 @@ class AchievementService {
     try {
       // Save using your original AppSettings method
       final achievementData = achievements.map((a) => a.toJson()).toList();
-      await AppSettings.saveUnlockedAchievements(achievementData.cast<String>());
+      await AppSettings.saveUnlockedAchievements(
+          achievementData.cast<String>());
 
       // Enhanced: Also save to Hive for better data integrity
       final box = await Hive.openBox(_achievementBoxName);
@@ -78,7 +81,8 @@ class AchievementService {
 
       if (enhancedData != null) {
         final achievements = (enhancedData as List)
-            .map<Achievement>((data) => Achievement.fromJson(Map<String, dynamic>.from(data)))
+            .map<Achievement>(
+                (data) => Achievement.fromJson(Map<String, dynamic>.from(data)))
             .toList();
 
         _cachedAchievements = achievements;
@@ -88,7 +92,10 @@ class AchievementService {
 
       // Fallback to your original AppSettings method
       final storedData = await AppSettings.getUnlockedAchievements();
-      final achievements = storedData.map<Achievement>((data) => Achievement.fromJson(data as Map<String, dynamic>)).toList();
+      final achievements = storedData
+          .map<Achievement>(
+              (data) => Achievement.fromJson(data as Map<String, dynamic>))
+          .toList();
 
       _cachedAchievements = achievements;
       _lastCacheUpdate = DateTime.now();
@@ -100,7 +107,8 @@ class AchievementService {
   }
 
   /// Unlocks a new achievement and saves it locally and remotely.
-  Future<void> unlockAchievement(Achievement achievement, String playerName) async {
+  Future<void> unlockAchievement(
+      Achievement achievement, String playerName) async {
     try {
       final unlockedAchievements = await getUnlockedAchievements();
 
@@ -135,8 +143,10 @@ class AchievementService {
   /// Syncs achievements with the API.
   Future<void> syncAchievements(String playerName) async {
     try {
-      final List<Map<String, dynamic>> achievementsData = await apiService.fetchAchievements(playerName);
-      final List<Achievement> achievements = achievementsData.map(Achievement.fromJson).toList();
+      final List<Map<String, dynamic>> achievementsData =
+          await apiService.fetchAchievements(playerName);
+      final List<Achievement> achievements =
+          achievementsData.map(Achievement.fromJson).toList();
 
       await saveAchievements(achievements);
       await _updateLastSync();
@@ -187,7 +197,8 @@ class AchievementService {
 
       // Check if sync is needed
       if (await _needsSync()) {
-        LogManager.debug('Achievement sync needed (will require playerName in actual implementation)');
+        LogManager.debug(
+            'Achievement sync needed (will require playerName in actual implementation)');
         // Note: In real implementation, you'd need to get playerName from user service
         // await syncAchievements(playerName);
       }
@@ -202,10 +213,12 @@ class AchievementService {
   }
 
   /// Records achievement unlock for statistics
-  Future<void> _recordAchievementUnlock(String achievementId, String playerName) async {
+  Future<void> _recordAchievementUnlock(
+      String achievementId, String playerName) async {
     try {
       final box = await Hive.openBox(_achievementBoxName);
-      final stats = Map<String, dynamic>.from(box.get(_achievementStatsKey, defaultValue: {}));
+      final stats = Map<String, dynamic>.from(
+          box.get(_achievementStatsKey, defaultValue: {}));
 
       stats[achievementId] = {
         'unlocked_at': DateTime.now().toIso8601String(),
@@ -222,7 +235,8 @@ class AchievementService {
   Future<Map<String, dynamic>> getAchievementStats() async {
     try {
       final box = await Hive.openBox(_achievementBoxName);
-      return Map<String, dynamic>.from(box.get(_achievementStatsKey, defaultValue: {}));
+      return Map<String, dynamic>.from(
+          box.get(_achievementStatsKey, defaultValue: {}));
     } catch (e) {
       return {};
     }

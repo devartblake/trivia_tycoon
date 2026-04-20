@@ -54,10 +54,10 @@ class SecureStorage {
 
   /// ** Retrieve, load and clear encryption cache
   Future<void> saveEncryptedCache(
-      String boxName,
-      String key,
-      String encrypted,
-      ) async {
+    String boxName,
+    String key,
+    String encrypted,
+  ) async {
     final box = await Hive.openBox(boxName);
     await box.put(key, encrypted);
   }

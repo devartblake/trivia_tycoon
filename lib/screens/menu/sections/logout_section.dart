@@ -57,7 +57,8 @@ class LogoutSection extends StatelessWidget {
               size: 16,
             ),
             onTap: () => _showLogoutDialog(context),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           ),
         ),
       ),

@@ -42,7 +42,8 @@ class PlayerProfileService {
 
   Future<List<String>> getPreferredCategories() async {
     final box = await _getBox();
-    final categories = box.get(_preferredCategoriesKey, defaultValue: <String>[]);
+    final categories =
+        box.get(_preferredCategoriesKey, defaultValue: <String>[]);
     return List<String>.from(categories);
   }
 
@@ -327,7 +328,8 @@ class PlayerProfileService {
     try {
       final box = await _getBox();
 
-      if (profileData.containsKey('user_id')) { // ← UPDATED: Handle user ID
+      if (profileData.containsKey('user_id')) {
+        // ← UPDATED: Handle user ID
         await box.put(_userIdKey, profileData['user_id']);
       }
       if (profileData.containsKey('player_name')) {
@@ -357,14 +359,16 @@ class PlayerProfileService {
       if (profileData.containsKey('preferred_categories')) {
         await box.put(
           _preferredCategoriesKey,
-          List<String>.from(profileData['preferred_categories'] as List? ?? const <String>[]),
+          List<String>.from(
+              profileData['preferred_categories'] as List? ?? const <String>[]),
         );
       }
       if (profileData.containsKey('synaptix_mode')) {
         await box.put(_synaptixModeKey, profileData['synaptix_mode']);
       }
       if (profileData.containsKey('preferred_home_surface')) {
-        await box.put(_preferredHomeSurfaceKey, profileData['preferred_home_surface']);
+        await box.put(
+            _preferredHomeSurfaceKey, profileData['preferred_home_surface']);
       }
       if (profileData.containsKey('reduced_motion')) {
         await box.put(_reducedMotionKey, profileData['reduced_motion']);
@@ -392,10 +396,18 @@ class PlayerProfileService {
             box.get(_playerNameKey, defaultValue: 'Player') != 'Player',
         'has_session_data': sessionData != null,
         'last_active': lastActive,
-        'total_profile_keys': box.keys.where((key) => [
-          _playerNameKey, _userIdKey, _userRoleKey, _userRolesKey, _isPremiumKey,
-          _countryKey, _ageGroupKey, _avatarKey
-        ].contains(key)).length,
+        'total_profile_keys': box.keys
+            .where((key) => [
+                  _playerNameKey,
+                  _userIdKey,
+                  _userRoleKey,
+                  _userRolesKey,
+                  _isPremiumKey,
+                  _countryKey,
+                  _ageGroupKey,
+                  _avatarKey
+                ].contains(key))
+            .length,
       };
     } catch (e) {
       return {'error': e.toString()};
@@ -406,7 +418,8 @@ class PlayerProfileService {
   Future<Map<String, bool>> validateProfile() async {
     try {
       return {
-        'has_user_id': (await getUserId()) != null, // ← UPDATED: Validate user ID
+        'has_user_id':
+            (await getUserId()) != null, // ← UPDATED: Validate user ID
         'has_name': (await getPlayerName()) != 'Player',
         'has_username': (await getUsername()) != null,
         'has_role': (await getUserRole()) != null,
@@ -457,9 +470,8 @@ class PlayerProfileService {
         'avatar': box.get(_avatarKey),
         'userId': box.get(_userIdKey),
         'synaptixMode': box.get(_synaptixModeKey),
-        'preferredCategories':
-            List<String>.from(
-                box.get(_preferredCategoriesKey, defaultValue: <String>[])),
+        'preferredCategories': List<String>.from(
+            box.get(_preferredCategoriesKey, defaultValue: <String>[])),
       };
     } catch (e) {
       LogManager.debug('[PlayerProfile] Error getting profile: $e');

@@ -139,12 +139,14 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
   Future<void> _showOnboardingReminderIfNeeded() async {
     try {
       final serviceManager = ref.read(serviceManagerProvider);
-      final completed = await serviceManager.onboardingSettingsService.hasCompletedOnboarding();
+      final completed = await serviceManager.onboardingSettingsService
+          .hasCompletedOnboarding();
       if (!mounted || completed) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Complete onboarding to unlock your profile and avatar setup.'),
+          content: Text(
+              'Complete onboarding to unlock your profile and avatar setup.'),
           duration: Duration(seconds: 3),
           behavior: SnackBarBehavior.floating,
         ),
@@ -174,7 +176,8 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     }
 
     try {
-      final player = await ref.read(synaptixApiClientProvider).getPlayer(playerId);
+      final player =
+          await ref.read(synaptixApiClientProvider).getPlayer(playerId);
       final coins = player.wallet.coins;
       final gems = player.wallet.gems;
 
@@ -540,7 +543,8 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     foregroundColor: primaryAccent,
-                    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),
@@ -623,7 +627,10 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     return Consumer(
       builder: (context, ref, _) {
         final ageGroup = ref.watch(userAgeGroupProvider);
-        final unreadNotifications = ref.watch(unreadNotificationsProvider);
+        ref.watch(notificationRealtimeSyncProvider);
+        final unreadNotifications = ref
+            .watch(playerNotificationUnreadCountProvider)
+            .maybeWhen(data: (value) => value, orElse: () => 0);
         final pendingInvites = ref.watch(pendingInvitesProvider);
         final dailyRewardsAvailable = ref.watch(dailyRewardsAvailableProvider);
 
@@ -832,7 +839,11 @@ class _AnimatedMeshBackdrop extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Color(0xFFF8FBFF), Color(0xFFF3F7FF), Color(0xFFEEF4FF)],
+                colors: [
+                  Color(0xFFF8FBFF),
+                  Color(0xFFF3F7FF),
+                  Color(0xFFEEF4FF)
+                ],
               ),
             ),
           ),
@@ -920,7 +931,8 @@ class _FloatingBottomNav extends StatelessWidget {
                       colors: [Color(0xFF5AA9FF), Color(0xFF6C8DFF)],
                     ),
                   ),
-                  child: const Icon(Icons.play_arrow_rounded, color: Colors.white, size: 30),
+                  child: const Icon(Icons.play_arrow_rounded,
+                      color: Colors.white, size: 30),
                 ),
               ),
               const _NavIcon(icon: Icons.leaderboard_outlined),

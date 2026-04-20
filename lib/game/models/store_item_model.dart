@@ -56,7 +56,9 @@ class StoreItemModel {
       name: json['name'],
       description: json['description'] ?? '',
       iconPath: json['iconPath'] ?? '',
-      price: (json['price'] is int) ? json['price'] : (json['price'] as num).round(),
+      price: (json['price'] is int)
+          ? json['price']
+          : (json['price'] as num).round(),
       currency: json['currency'],
       category: json['category'],
       displayPriceLabel: json['displayPriceLabel']?.toString(),
@@ -65,7 +67,7 @@ class StoreItemModel {
       isFeatured: json['isFeatured'] ?? false,
       duration: json['duration'],
       type: json['type'],
-      owned:  json['owned'] ?? false,
+      owned: json['owned'] ?? false,
       quantity: json['quantity'] ?? 1,
       grantQuantity: json['grantQuantity'] ?? 1,
       maxPerPlayer: json['maxPerPlayer'] ?? 0,
@@ -99,14 +101,14 @@ class StoreItemModel {
       id: json['id']?.toString() ?? json['sku']?.toString() ?? '',
       sku: json['sku']?.toString(),
       name: json['name']?.toString() ?? displayItem?.name ?? 'Store Item',
-      description: json['description']?.toString() ??
-          displayItem?.description ??
-          '',
+      description:
+          json['description']?.toString() ?? displayItem?.description ?? '',
       iconPath: displayItem?.iconPath ??
           _defaultIconPathForCategory(json['itemType']?.toString()),
       price: mappedPrice,
       currency: mappedCurrency,
-      category: json['itemType']?.toString() ?? displayItem?.category ?? 'store',
+      category:
+          json['itemType']?.toString() ?? displayItem?.category ?? 'store',
       displayPriceLabel: displayItem?.displayPriceLabel ??
           _buildDisplayPriceLabel(
             priceCoins: priceCoins,
@@ -129,28 +131,28 @@ class StoreItemModel {
   }
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'sku': sku,
-    'name': name,
-    'description': description,
-    'iconPath': iconPath,
-    'price': price,
-    'currency': currency,
-    'category': category,
-    'displayPriceLabel': displayPriceLabel,
-    'requiresExternalCheckout': requiresExternalCheckout,
-    'isLimited': isLimited,
-    'isFeatured': isFeatured,
-    if (duration != null) 'duration': duration,
-    'type': type,
-    'owned': owned,
-    'quantity': quantity,
-    'grantQuantity': grantQuantity,
-    'maxPerPlayer': maxPerPlayer,
-    'mediaKey': mediaKey,
-    'sortOrder': sortOrder,
-    'availableUtil': availableUntil,
-  };
+        'id': id,
+        'sku': sku,
+        'name': name,
+        'description': description,
+        'iconPath': iconPath,
+        'price': price,
+        'currency': currency,
+        'category': category,
+        'displayPriceLabel': displayPriceLabel,
+        'requiresExternalCheckout': requiresExternalCheckout,
+        'isLimited': isLimited,
+        'isFeatured': isFeatured,
+        if (duration != null) 'duration': duration,
+        'type': type,
+        'owned': owned,
+        'quantity': quantity,
+        'grantQuantity': grantQuantity,
+        'maxPerPlayer': maxPerPlayer,
+        'mediaKey': mediaKey,
+        'sortOrder': sortOrder,
+        'availableUtil': availableUntil,
+      };
 
   CurrencyType get currencyType {
     switch (currency.toLowerCase()) {
@@ -161,7 +163,6 @@ class StoreItemModel {
         return CurrencyType.coins;
     }
   }
-
 }
 
 String? _buildDisplayPriceLabel({

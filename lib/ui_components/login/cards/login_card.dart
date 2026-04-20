@@ -47,7 +47,8 @@ class _LoginCard extends ConsumerStatefulWidget {
   ConsumerState<_LoginCard> createState() => _LoginCardState();
 }
 
-class _LoginCardState extends ConsumerState<_LoginCard> with TickerProviderStateMixin {
+class _LoginCardState extends ConsumerState<_LoginCard>
+    with TickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   final _userFieldKey = GlobalKey<FormFieldState>();
@@ -104,16 +105,16 @@ class _LoginCardState extends ConsumerState<_LoginCard> with TickerProviderState
     _providerControllerList = auth.loginProviders
         .map(
           (e) => AnimationController(
-        vsync: this,
-        duration: const Duration(milliseconds: 1000),
-      ),
-    )
+            vsync: this,
+            duration: const Duration(milliseconds: 1000),
+          ),
+        )
         .toList();
 
     _nameTextFieldLoadingAnimationInterval = const Interval(0, .85);
     _passTextFieldLoadingAnimationInterval = const Interval(.15, 1.0);
     _textButtonLoadingAnimationInterval =
-    const Interval(.6, 1.0, curve: Curves.easeOut);
+        const Interval(.6, 1.0, curve: Curves.easeOut);
     _buttonScaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: widget.loadingController,
@@ -241,7 +242,7 @@ class _LoginCardState extends ConsumerState<_LoginCard> with TickerProviderState
 
     if (auth.isSignup) {
       final requireSignUpConfirmation =
-      await widget.requireSignUpConfirmation();
+          await widget.requireSignUpConfirmation();
       if (widget.requireAdditionalSignUpFields) {
         widget.onSwitchSignUpAdditionalData();
         // The login page wil be shown in login mode (used if loginAfterSignUp disabled)
@@ -370,10 +371,10 @@ class _LoginCardState extends ConsumerState<_LoginCard> with TickerProviderState
   }
 
   Widget _buildUserField(
-      double width,
-      LoginMessages messages,
-      Auth auth,
-      ) {
+    double width,
+    LoginMessages messages,
+    Auth auth,
+  ) {
     return AnimatedTextFormField(
       textFormFieldKey: _userFieldKey,
       userType: widget.userType,
@@ -406,11 +407,11 @@ class _LoginCardState extends ConsumerState<_LoginCard> with TickerProviderState
       autofillHints: _isSubmitting
           ? null
           : (auth.isLogin
-          ? [AutofillHints.password]
-          : [AutofillHints.newPassword]),
+              ? [AutofillHints.password]
+              : [AutofillHints.newPassword]),
       controller: _passController,
       textInputAction:
-      auth.isLogin ? TextInputAction.done : TextInputAction.next,
+          auth.isLogin ? TextInputAction.done : TextInputAction.next,
       focusNode: _passwordFocusNode,
       onFieldSubmitted: (value) {
         if (auth.isLogin) {
@@ -428,10 +429,10 @@ class _LoginCardState extends ConsumerState<_LoginCard> with TickerProviderState
   }
 
   Widget _buildConfirmPasswordField(
-      double width,
-      LoginMessages messages,
-      Auth auth,
-      ) {
+    double width,
+    LoginMessages messages,
+    Auth auth,
+  ) {
     return AnimatedPasswordTextFormField(
       animatedWidth: width,
       enabled: auth.isSignup,
@@ -445,11 +446,11 @@ class _LoginCardState extends ConsumerState<_LoginCard> with TickerProviderState
       onFieldSubmitted: (value) => _submit(),
       validator: auth.isSignup
           ? (value) {
-        if (value != _passController.text) {
-          return messages.confirmPasswordError;
-        }
-        return null;
-      }
+              if (value != _passController.text) {
+                return messages.confirmPasswordError;
+              }
+              return null;
+            }
           : (value) => null,
       onSaved: (value) => auth.confirmPassword = value!,
       initialIsoCode: widget.initialIsoCode,
@@ -465,10 +466,10 @@ class _LoginCardState extends ConsumerState<_LoginCard> with TickerProviderState
       child: TextButton(
         onPressed: buttonEnabled
             ? () {
-          // save state to populate email field on recovery card
-          _formKey.currentState!.save();
-          widget.onSwitchRecoveryPassword();
-        }
+                // save state to populate email field on recovery card
+                _formKey.currentState!.save();
+                widget.onSwitchRecoveryPassword();
+              }
             : null,
         child: Text(
           messages.forgotPasswordButton,
@@ -480,10 +481,10 @@ class _LoginCardState extends ConsumerState<_LoginCard> with TickerProviderState
   }
 
   Widget _buildSubmitButton(
-      ThemeData theme,
-      LoginMessages messages,
-      Auth auth,
-      ) {
+    ThemeData theme,
+    LoginMessages messages,
+    Auth auth,
+  ) {
     return ScaleTransition(
       scale: _buttonScaleAnimation,
       child: AnimatedButton(
@@ -495,15 +496,15 @@ class _LoginCardState extends ConsumerState<_LoginCard> with TickerProviderState
   }
 
   Widget _buildSwitchAuthButton(
-      ThemeData theme,
-      LoginMessages messages,
-      Auth auth,
-      LoginTheme loginTheme,
-      ) {
+    ThemeData theme,
+    LoginMessages messages,
+    Auth auth,
+    LoginTheme loginTheme,
+  ) {
     final calculatedTextColor =
-    (theme.cardTheme.color!.computeLuminance() < 0.5)
-        ? Colors.white
-        : theme.primaryColor;
+        (theme.cardTheme.color!.computeLuminance() < 0.5)
+            ? Colors.white
+            : theme.primaryColor;
     return FadeIn(
       controller: widget.loadingController,
       offset: .5,
@@ -555,11 +556,11 @@ class _LoginCardState extends ConsumerState<_LoginCard> with TickerProviderState
   // }
 
   Widget _buildProvidersLogInButton(
-      ThemeData theme,
-      LoginMessages messages,
-      Auth auth,
-      LoginTheme loginTheme,
-      ) {
+    ThemeData theme,
+    LoginMessages messages,
+    Auth auth,
+    LoginTheme loginTheme,
+  ) {
     final buttonProvidersList = <LoginProvider>[];
     final iconProvidersList = <LoginProvider>[];
     for (final loginProvider in auth.loginProviders) {
@@ -587,11 +588,11 @@ class _LoginCardState extends ConsumerState<_LoginCard> with TickerProviderState
   }
 
   Widget _buildButtonColumn(
-      ThemeData theme,
-      LoginMessages messages,
-      List<LoginProvider> buttonProvidersList,
-      LoginTheme loginTheme,
-      ) {
+    ThemeData theme,
+    LoginMessages messages,
+    List<LoginProvider> buttonProvidersList,
+    LoginTheme loginTheme,
+  ) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: buttonProvidersList.map((loginProvider) {
@@ -615,11 +616,11 @@ class _LoginCardState extends ConsumerState<_LoginCard> with TickerProviderState
   }
 
   Widget _buildIconRow(
-      ThemeData theme,
-      LoginMessages messages,
-      List<LoginProvider> iconProvidersList,
-      LoginTheme loginTheme,
-      ) {
+    ThemeData theme,
+    LoginMessages messages,
+    List<LoginProvider> iconProvidersList,
+    LoginTheme loginTheme,
+  ) {
     return Wrap(
       children: iconProvidersList.map((loginProvider) {
         final index = iconProvidersList.indexOf(loginProvider);

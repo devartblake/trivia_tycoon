@@ -77,7 +77,7 @@ class ArcadeHubScreen extends ConsumerWidget {
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate(
-                    (context, index) {
+                (context, index) {
                   final game = games[index];
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 16),
@@ -314,13 +314,13 @@ class ArcadeHubScreen extends ConsumerWidget {
                   icon: Icons.card_giftcard_rounded,
                   gradient: claimed
                       ? [
-                    Colors.white.withValues(alpha: 0.08),
-                    Colors.white.withValues(alpha: 0.04),
-                  ]
+                          Colors.white.withValues(alpha: 0.08),
+                          Colors.white.withValues(alpha: 0.04),
+                        ]
                       : [
-                    const Color(0xFFFBBF24),
-                    const Color(0xFFF59E0B),
-                  ],
+                          const Color(0xFFFBBF24),
+                          const Color(0xFFF59E0B),
+                        ],
                   badge: streak > 0 ? '🔥$streak' : null,
                   onTap: () => context.push('/arcade/daily-bonus'),
                   hasGlow: !claimed,
@@ -365,17 +365,17 @@ class ArcadeHubScreen extends ConsumerWidget {
   }
 
   Widget _buildActionCard(
-      BuildContext context,
-      WidgetRef ref, {
-        required String title,
-        required String subtitle,
-        required IconData icon,
-        required List<Color> gradient,
-        required VoidCallback onTap,
-        String? badge,
-        bool hasGlow = false,
-        bool isFullWidth = false,
-      }) {
+    BuildContext context,
+    WidgetRef ref, {
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required List<Color> gradient,
+    required VoidCallback onTap,
+    String? badge,
+    bool hasGlow = false,
+    bool isFullWidth = false,
+  }) {
     return Container(
       height: isFullWidth ? 90 : 120,
       decoration: BoxDecoration(
@@ -387,12 +387,12 @@ class ArcadeHubScreen extends ConsumerWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: hasGlow
             ? [
-          BoxShadow(
-            color: gradient.first.withValues(alpha: 0.4),
-            blurRadius: 16,
-            offset: const Offset(0, 8),
-          ),
-        ]
+                BoxShadow(
+                  color: gradient.first.withValues(alpha: 0.4),
+                  blurRadius: 16,
+                  offset: const Offset(0, 8),
+                ),
+              ]
             : [],
       ),
       child: Material(
@@ -404,120 +404,121 @@ class ArcadeHubScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(16),
             child: isFullWidth
                 ? Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(icon, color: Colors.white, size: 24),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(icon, color: Colors.white, size: 24),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              title,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: -0.5,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              subtitle,
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.9),
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(
+                          Icons.arrow_forward_ios_rounded,
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                      ),
+                    ],
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Icon(icon, color: Colors.white, size: 20),
+                          ),
+                          if (badge != null) ...[
+                            const Spacer(),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.2),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                badge,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                      const Spacer(),
                       Text(
                         title,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          letterSpacing: -0.5,
+                          letterSpacing: -0.3,
                         ),
                       ),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 2),
                       Text(
                         subtitle,
                         style: TextStyle(
                           color: Colors.white.withValues(alpha: 0.9),
-                          fontSize: 13,
+                          fontSize: 12,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    color: Colors.white,
-                    size: 16,
-                  ),
-                ),
-              ],
-            )
-                : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Icon(icon, color: Colors.white, size: 20),
-                    ),
-                    if (badge != null) ...[
-                      const Spacer(),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          badge,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-                const Spacer(),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: -0.3,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  subtitle,
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.9),
-                    fontSize: 12,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildFeaturedSection(BuildContext context, ArcadeGameDefinition game) {
+  Widget _buildFeaturedSection(
+      BuildContext context, ArcadeGameDefinition game) {
     return GestureDetector(
       onTap: () => _openDifficultyPicker(context, game),
       child: Container(
@@ -716,7 +717,8 @@ class ArcadeHubScreen extends ConsumerWidget {
                         runSpacing: 6,
                         children: game.supportedDifficulties
                             .take(3)
-                            .map((difficulty) => _buildDifficultyChip(difficulty))
+                            .map((difficulty) =>
+                                _buildDifficultyChip(difficulty))
                             .toList(),
                       ),
                     ],
@@ -784,9 +786,9 @@ class ArcadeHubScreen extends ConsumerWidget {
   }
 
   Future<void> _openDifficultyPicker(
-      BuildContext context,
-      ArcadeGameDefinition game,
-      ) async {
+    BuildContext context,
+    ArcadeGameDefinition game,
+  ) async {
     final selected = await showModalBottomSheet<ArcadeDifficulty>(
       context: context,
       backgroundColor: Colors.transparent,
@@ -797,7 +799,8 @@ class ArcadeHubScreen extends ConsumerWidget {
     if (selected == null) return;
 
     // ignore: use_build_context_synchronously
-    await context.push('/arcade/play', extra: {'game': game, 'difficulty': selected});
+    await context
+        .push('/arcade/play', extra: {'game': game, 'difficulty': selected});
   }
 
   Widget _buildModernDifficultyPicker(ArcadeGameDefinition game) {
@@ -879,7 +882,7 @@ class ArcadeHubScreen extends ConsumerWidget {
 
               // Difficulty Options
               ...game.supportedDifficulties.map(
-                    (difficulty) => Padding(
+                (difficulty) => Padding(
                   padding: const EdgeInsets.only(bottom: 12),
                   child: _buildDifficultyOption(difficulty),
                 ),

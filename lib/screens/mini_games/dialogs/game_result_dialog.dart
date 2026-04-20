@@ -116,7 +116,8 @@ class _HeaderSection extends StatelessWidget {
           ],
         ),
       ),
-      padding: const EdgeInsets.only(top: kToolbarHeight + 24, left: 24, right: 24, bottom: 24),
+      padding: const EdgeInsets.only(
+          top: kToolbarHeight + 24, left: 24, right: 24, bottom: 24),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -170,7 +171,8 @@ class _HeaderSection extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                   decoration: BoxDecoration(
                     color: const Color(0xFFFFF4E6),
                     borderRadius: BorderRadius.circular(20),
@@ -178,7 +180,8 @@ class _HeaderSection extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.timer, size: 16, color: Color(0xFFF59E0B)),
+                      const Icon(Icons.timer,
+                          size: 16, color: Color(0xFFF59E0B)),
                       const SizedBox(width: 6),
                       Text(
                         'solved in ${config.completionTime}',
@@ -204,7 +207,8 @@ class _HeaderSection extends StatelessWidget {
                 Text(
                   config.achievementSubtitle,
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 14, color: Colors.grey.shade600, height: 1.4),
+                  style: TextStyle(
+                      fontSize: 14, color: Colors.grey.shade600, height: 1.4),
                 ),
               ],
             ),
@@ -230,13 +234,21 @@ class _StatsSection extends StatelessWidget {
         children: [
           Row(
             children: [
-              Expanded(child: _StatItem(value: '${config.totalPlays}', label: 'Plays')),
+              Expanded(
+                  child:
+                      _StatItem(value: '${config.totalPlays}', label: 'Plays')),
               _VerticalDivider(),
-              Expanded(child: _StatItem(value: '${config.winPercentage}%', label: 'Win %')),
+              Expanded(
+                  child: _StatItem(
+                      value: '${config.winPercentage}%', label: 'Win %')),
               _VerticalDivider(),
-              Expanded(child: _StatItem(value: config.bestScore, label: 'Best score')),
+              Expanded(
+                  child:
+                      _StatItem(value: config.bestScore, label: 'Best score')),
               _VerticalDivider(),
-              Expanded(child: _StatItem(value: '${config.currentStreak}', label: 'Max streak')),
+              Expanded(
+                  child: _StatItem(
+                      value: '${config.currentStreak}', label: 'Max streak')),
             ],
           ),
           const SizedBox(height: 24),
@@ -254,17 +266,25 @@ class _StatsSection extends StatelessWidget {
                     children: [
                       const Text(
                         '1-day win streak',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF92400E)),
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF92400E)),
                       ),
                       const SizedBox(height: 4),
-                      Text('You\'re heating up!', style: TextStyle(fontSize: 13, color: Colors.grey.shade700)),
+                      Text('You\'re heating up!',
+                          style: TextStyle(
+                              fontSize: 13, color: Colors.grey.shade700)),
                     ],
                   ),
                 ),
                 Container(
                   padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                  child: const Icon(Icons.local_fire_department, color: Color(0xFFF59E0B), size: 28),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12)),
+                  child: const Icon(Icons.local_fire_department,
+                      color: Color(0xFFF59E0B), size: 28),
                 ),
               ],
             ),
@@ -286,10 +306,26 @@ class _StatsSection extends StatelessWidget {
           const Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _AchievementBadge(icon: Icons.star, label: '3 days', sublabel: 'Star', isEarned: true),
-              _AchievementBadge(icon: Icons.star, label: '5 days', sublabel: 'Superstar', isEarned: false),
-              _AchievementBadge(icon: Icons.emoji_events, label: '7 days', sublabel: 'Champion', isEarned: false),
-              _AchievementBadge(icon: Icons.workspace_premium, label: '31 days', sublabel: 'Icon', isEarned: false),
+              _AchievementBadge(
+                  icon: Icons.star,
+                  label: '3 days',
+                  sublabel: 'Star',
+                  isEarned: true),
+              _AchievementBadge(
+                  icon: Icons.star,
+                  label: '5 days',
+                  sublabel: 'Superstar',
+                  isEarned: false),
+              _AchievementBadge(
+                  icon: Icons.emoji_events,
+                  label: '7 days',
+                  sublabel: 'Champion',
+                  isEarned: false),
+              _AchievementBadge(
+                  icon: Icons.workspace_premium,
+                  label: '31 days',
+                  sublabel: 'Icon',
+                  isEarned: false),
             ],
           ),
           const SizedBox(height: 24),
@@ -303,10 +339,15 @@ class _StatsSection extends StatelessWidget {
                   },
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
                     side: BorderSide(color: Colors.grey.shade300, width: 1.5),
                   ),
-                  child: const Text('Close', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Color(0xFF1E293B))),
+                  child: const Text('Close',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF1E293B))),
                 ),
               ),
               const SizedBox(width: 12),
@@ -321,9 +362,12 @@ class _StatsSection extends StatelessWidget {
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     elevation: 0,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
                   ),
-                  child: const Text('Play Again', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                  child: const Text('Play Again',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                 ),
               ),
             ],
@@ -350,9 +394,14 @@ class _StatItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(value, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF1E293B))),
+        Text(value,
+            style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF1E293B))),
         const SizedBox(height: 4),
-        Text(label, style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
+        Text(label,
+            style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
       ],
     );
   }
@@ -375,7 +424,11 @@ class _DayIndicator extends StatelessWidget {
       child: Center(
         child: isCompleted
             ? const Icon(Icons.check, color: Colors.white, size: 20)
-            : Text(label, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.grey.shade400)),
+            : Text(label,
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey.shade400)),
       ),
     );
   }
@@ -386,7 +439,11 @@ class _AchievementBadge extends StatelessWidget {
   final String label;
   final String sublabel;
   final bool isEarned;
-  const _AchievementBadge({required this.icon, required this.label, required this.sublabel, required this.isEarned});
+  const _AchievementBadge(
+      {required this.icon,
+      required this.label,
+      required this.sublabel,
+      required this.isEarned});
 
   @override
   Widget build(BuildContext context) {
@@ -396,14 +453,26 @@ class _AchievementBadge extends StatelessWidget {
           width: 56,
           height: 56,
           decoration: BoxDecoration(
-            color: isEarned ? const Color(0xFFF59E0B).withValues(alpha: 0.1) : Colors.grey.shade100,
+            color: isEarned
+                ? const Color(0xFFF59E0B).withValues(alpha: 0.1)
+                : Colors.grey.shade100,
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Icon(icon, size: 28, color: isEarned ? const Color(0xFFF59E0B) : Colors.grey.shade300),
+          child: Icon(icon,
+              size: 28,
+              color: isEarned ? const Color(0xFFF59E0B) : Colors.grey.shade300),
         ),
         const SizedBox(height: 8),
-        Text(label, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: isEarned ? const Color(0xFF1E293B) : Colors.grey.shade400)),
-        Text(sublabel, style: TextStyle(fontSize: 11, color: isEarned ? Colors.grey.shade600 : Colors.grey.shade400)),
+        Text(label,
+            style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color:
+                    isEarned ? const Color(0xFF1E293B) : Colors.grey.shade400)),
+        Text(sublabel,
+            style: TextStyle(
+                fontSize: 11,
+                color: isEarned ? Colors.grey.shade600 : Colors.grey.shade400)),
       ],
     );
   }

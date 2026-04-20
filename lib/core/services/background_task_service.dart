@@ -6,7 +6,8 @@ import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Background task service to handle mission reminders and notifications
 class BackgroundTaskService {
-  static final BackgroundTaskService _instance = BackgroundTaskService._internal();
+  static final BackgroundTaskService _instance =
+      BackgroundTaskService._internal();
   factory BackgroundTaskService() => _instance;
   BackgroundTaskService._internal();
 
@@ -111,7 +112,8 @@ class BackgroundTaskService {
       _scheduleDailyReminders();
     });
 
-    LogManager.debug('[BackgroundTaskService] Next daily reminder at: $nextReminderTime');
+    LogManager.debug(
+        '[BackgroundTaskService] Next daily reminder at: $nextReminderTime');
   }
 
   /// Perform background mission checks
@@ -153,7 +155,8 @@ class BackgroundTaskService {
       if (hasExpiringSoon) {
         await _notificationService.showBasicNotification(
           title: 'Missions Expiring Soon!',
-          body: 'Some of your missions expire in less than 2 hours. Complete them now!',
+          body:
+              'Some of your missions expire in less than 2 hours. Complete them now!',
           payload: {
             'type': 'expiring_soon',
             'user_id': _currentUserId!,
@@ -162,7 +165,8 @@ class BackgroundTaskService {
         );
       }
     } catch (e) {
-      LogManager.debug('[BackgroundTaskService] Failed to check expiring missions: $e');
+      LogManager.debug(
+          '[BackgroundTaskService] Failed to check expiring missions: $e');
     }
   }
 
@@ -173,12 +177,14 @@ class BackgroundTaskService {
     try {
       final box = await _getBackgroundBox();
       final lastActivity = box.get(_lastActivityKey, defaultValue: 0) as int;
-      final lastInactivityReminder = box.get(_lastInactivityReminderKey, defaultValue: 0) as int;
+      final lastInactivityReminder =
+          box.get(_lastInactivityReminderKey, defaultValue: 0) as int;
       final now = DateTime.now().millisecondsSinceEpoch;
 
       // If user hasn't been active for 6+ hours
       final inactiveHours = (now - lastActivity) / (1000 * 60 * 60);
-      final hoursSinceLastReminder = (now - lastInactivityReminder) / (1000 * 60 * 60);
+      final hoursSinceLastReminder =
+          (now - lastInactivityReminder) / (1000 * 60 * 60);
 
       // Only send reminder if inactive for 6+ hours and haven't sent reminder in 12+ hours
       if (inactiveHours >= 6 && hoursSinceLastReminder >= 12) {
@@ -197,7 +203,8 @@ class BackgroundTaskService {
         await box.put(_lastInactivityReminderKey, now);
       }
     } catch (e) {
-      LogManager.debug('[BackgroundTaskService] Failed to check inactive missions: $e');
+      LogManager.debug(
+          '[BackgroundTaskService] Failed to check inactive missions: $e');
     }
   }
 
@@ -208,7 +215,8 @@ class BackgroundTaskService {
     try {
       final box = await _getBackgroundBox();
       final today = DateTime.now();
-      final todayKey = '${_dailyReminderKey}_${today.year}_${today.month}_${today.day}';
+      final todayKey =
+          '${_dailyReminderKey}_${today.year}_${today.month}_${today.day}';
 
       // Check if we already sent reminder today
       final sentToday = box.get(todayKey, defaultValue: false) as bool;
@@ -216,7 +224,8 @@ class BackgroundTaskService {
 
       await _notificationService.showMissionNotification(
         title: 'Good Morning!',
-        body: 'New daily missions are available. Start your day with some challenges!',
+        body:
+            'New daily missions are available. Start your day with some challenges!',
         payload: {
           'type': 'daily_reminder',
           'user_id': _currentUserId!,
@@ -229,7 +238,8 @@ class BackgroundTaskService {
 
       LogManager.debug('[BackgroundTaskService] Daily reminder sent');
     } catch (e) {
-      LogManager.debug('[BackgroundTaskService] Failed to send daily reminder: $e');
+      LogManager.debug(
+          '[BackgroundTaskService] Failed to send daily reminder: $e');
     }
   }
 
@@ -263,7 +273,8 @@ class BackgroundTaskService {
   static Future<void> runDailyQrSyncTask({required String userId}) async {
     try {
       LogManager.debug('[BG Task] Checking QR sync...');
-      await QrHistoryService.instance.autoSyncIfDue(userId: userId, retentionDays: 14);
+      await QrHistoryService.instance
+          .autoSyncIfDue(userId: userId, retentionDays: 14);
       LogManager.debug('[BG Task] QR sync (if due) completed.');
     } catch (e) {
       LogManager.debug('[BG Task] QR sync failed: $e');
@@ -285,8 +296,7 @@ class BackgroundTaskService {
     required String missionTitle,
     required int reward,
     required String missionId,
-  })
-  async {
+  }) async {
     // Send immediate celebration
     await _notificationService.showMissionNotification(
       title: 'Mission Complete!',
@@ -316,8 +326,7 @@ class BackgroundTaskService {
   Future<void> storeMissionStatistic({
     required String eventType,
     required Map<String, dynamic> data,
-  })
-  async {
+  }) async {
     try {
       final box = await _getBackgroundBox();
       final timestamp = DateTime.now().millisecondsSinceEpoch;
@@ -340,8 +349,7 @@ class BackgroundTaskService {
   Future<List<Map<String, dynamic>>> getMissionStatistics({
     String? eventType,
     DateTime? since,
-  })
-  async {
+  }) async {
     try {
       final box = await _getBackgroundBox();
       final statistics = <Map<String, dynamic>>[];
@@ -366,7 +374,8 @@ class BackgroundTaskService {
       }
 
       // Sort by timestamp (newest first)
-      statistics.sort((a, b) => (b['timestamp'] as int).compareTo(a['timestamp'] as int));
+      statistics.sort(
+          (a, b) => (b['timestamp'] as int).compareTo(a['timestamp'] as int));
       return statistics;
     } catch (e) {
       LogManager.debug('[BackgroundTaskService] Failed to get statistics: $e');
@@ -378,7 +387,9 @@ class BackgroundTaskService {
   Future<void> cleanupOldStatistics() async {
     try {
       final box = await _getBackgroundBox();
-      final thirtyDaysAgo = DateTime.now().subtract(const Duration(days: 30)).millisecondsSinceEpoch;
+      final thirtyDaysAgo = DateTime.now()
+          .subtract(const Duration(days: 30))
+          .millisecondsSinceEpoch;
       final keysToDelete = <String>[];
 
       for (final key in box.keys) {
@@ -397,9 +408,11 @@ class BackgroundTaskService {
         await box.delete(key);
       }
 
-      LogManager.debug('[BackgroundTaskService] Cleaned up ${keysToDelete.length} old statistics');
+      LogManager.debug(
+          '[BackgroundTaskService] Cleaned up ${keysToDelete.length} old statistics');
     } catch (e) {
-      LogManager.debug('[BackgroundTaskService] Failed to cleanup statistics: $e');
+      LogManager.debug(
+          '[BackgroundTaskService] Failed to cleanup statistics: $e');
     }
   }
 
@@ -453,8 +466,11 @@ class BackgroundTaskService {
         since: now.subtract(const Duration(days: 7)),
       );
 
-      final completionStats = recentStats.where((s) => s['event_type'] == 'mission_completed').length;
-      final swapStats = recentStats.where((s) => s['event_type'] == 'mission_swapped').length;
+      final completionStats = recentStats
+          .where((s) => s['event_type'] == 'mission_completed')
+          .length;
+      final swapStats =
+          recentStats.where((s) => s['event_type'] == 'mission_swapped').length;
 
       return {
         'last_activity': lastActivity > 0
@@ -510,7 +526,8 @@ extension BackgroundTaskIntegration on BackgroundTaskService {
     Timer(const Duration(hours: 1), () async {
       await _notificationService.showBasicNotification(
         title: 'Keep the momentum!',
-        body: 'Great job completing that mission! Ready for the next challenge?',
+        body:
+            'Great job completing that mission! Ready for the next challenge?',
         payload: {
           'type': 'momentum_reminder',
           'screen': 'missions',

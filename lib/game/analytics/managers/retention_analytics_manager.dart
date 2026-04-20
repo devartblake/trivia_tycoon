@@ -6,8 +6,8 @@ import 'package:trivia_tycoon/game/providers/timeline_filter_provider.dart';
 import '../../../screens/rewards/spin_earn_screen.dart';
 
 final retentionAnalyticsManagerProvider =
-AsyncNotifierProvider<RetentionAnalyticsManager, List<RetentionEntry>>(
-    RetentionAnalyticsManager.new);
+    AsyncNotifierProvider<RetentionAnalyticsManager, List<RetentionEntry>>(
+        RetentionAnalyticsManager.new);
 
 class RetentionAnalyticsManager extends AsyncNotifier<List<RetentionEntry>> {
   @override

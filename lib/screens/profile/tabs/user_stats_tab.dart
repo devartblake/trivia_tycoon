@@ -18,7 +18,8 @@ class UserStatsTab extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label),
-          Text(value.toString(), style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text(value.toString(),
+              style: const TextStyle(fontWeight: FontWeight.bold)),
         ],
       ),
     );
@@ -33,11 +34,13 @@ class UserStatsTab extends StatelessWidget {
         _buildStatRow("Wins", entry.wins),
         _buildStatRow("Rank", entry.rank),
         _buildStatRow("Streak", entry.streak),
-        _buildStatRow("Accuracy", "${(entry.accuracy * 100).toStringAsFixed(1)}%"),
+        _buildStatRow(
+            "Accuracy", "${(entry.accuracy * 100).toStringAsFixed(1)}%"),
         _buildStatRow("Favorite Category", entry.favoriteCategory),
         _buildStatRow("Joined", _formatDate(entry.joinedDate)),
         const SizedBox(height: 32),
-        Text("More stat tracking coming soon...", style: Theme.of(context).textTheme.labelMedium),
+        Text("More stat tracking coming soon...",
+            style: Theme.of(context).textTheme.labelMedium),
       ],
     );
   }

@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 final triviaTransitionControllerProvider =
-ChangeNotifierProvider((ref) => TriviaTransitionController(ref));
+    ChangeNotifierProvider((ref) => TriviaTransitionController(ref));
 
 class TriviaTransitionController extends ChangeNotifier {
   final Ref ref;

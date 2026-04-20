@@ -12,9 +12,9 @@ sealed class MultiplayerResult<T> {
   bool get isErr => this is Err<T>;
 
   T getOrElse(T fallback) => switch (this) {
-    Ok(value: final v) => v,
-    Err() => fallback,
-  };
+        Ok(value: final v) => v,
+        Err() => fallback,
+      };
 }
 
 class Ok<T> extends MultiplayerResult<T> {
@@ -25,7 +25,8 @@ class Ok<T> extends MultiplayerResult<T> {
   R match<R>({
     required R Function(T value) ok,
     required R Function(MultiplayerFailure err) err,
-  }) => ok(value);
+  }) =>
+      ok(value);
 }
 
 class Err<T> extends MultiplayerResult<T> {
@@ -36,18 +37,20 @@ class Err<T> extends MultiplayerResult<T> {
   R match<R>({
     required R Function(T value) ok,
     required R Function(MultiplayerFailure err) err,
-  }) => err(failure);
+  }) =>
+      err(failure);
 }
 
 /// Normalized failure shape for application/domain layers.
 /// You can map HTTP/WS/protocol errors into this.
 class MultiplayerFailure {
-  final String code;     // e.g. "http/401", "ws/disconnected", "room/full"
-  final String message;  // user/dev friendly
-  final Object? cause;   // original exception
+  final String code; // e.g. "http/401", "ws/disconnected", "room/full"
+  final String message; // user/dev friendly
+  final Object? cause; // original exception
   final StackTrace? stackTrace;
 
-  const MultiplayerFailure(this.code, this.message, {this.cause, this.stackTrace});
+  const MultiplayerFailure(this.code, this.message,
+      {this.cause, this.stackTrace});
 
   @override
   String toString() => 'Failure(code: $code, message: $message, cause: $cause)';

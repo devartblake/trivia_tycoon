@@ -3,7 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class WordSearchDataLoader {
-  static Future<List<String>> loadWords(String assetPath, {String? difficulty}) async {
+  static Future<List<String>> loadWords(String assetPath,
+      {String? difficulty}) async {
     try {
       final jsonString = await rootBundle.loadString(assetPath);
       final jsonData = json.decode(jsonString);
@@ -25,7 +26,8 @@ class WordSearchDataLoader {
         }
       } else if (jsonData is Map && jsonData.containsKey('words')) {
         // Alternative format: {"words": [...]}
-        words = List<String>.from(jsonData['words'].map((w) => w.toString().toUpperCase()));
+        words = List<String>.from(
+            jsonData['words'].map((w) => w.toString().toUpperCase()));
       }
 
       if (words.isEmpty) {

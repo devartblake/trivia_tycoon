@@ -51,14 +51,16 @@ class _InChatGiftingDialogState extends State<InChatGiftingDialog> {
                       Text(
                         'Send Gift',
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                       Text(
                         'to ${widget.recipientName}',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                            ),
                       ),
                     ],
                   ),
@@ -109,9 +111,10 @@ class _InChatGiftingDialogState extends State<InChatGiftingDialog> {
                         const SizedBox(height: 8),
                         Text(
                           gift['name'],
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                         const SizedBox(height: 4),
                         Row(
@@ -125,10 +128,13 @@ class _InChatGiftingDialogState extends State<InChatGiftingDialog> {
                             const SizedBox(width: 2),
                             Text(
                               '${gift['coins']}',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: Colors.amber.shade700,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
+                                    color: Colors.amber.shade700,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ],
                         ),

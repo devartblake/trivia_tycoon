@@ -134,9 +134,9 @@ class _UsernameStepState extends State<UsernameStep> {
               prefixIcon: const Icon(Icons.person_outline),
               suffixIcon: _isValid
                   ? Icon(
-                Icons.check_circle,
-                color: theme.colorScheme.primary,
-              )
+                      Icons.check_circle,
+                      color: theme.colorScheme.primary,
+                    )
                   : null,
               filled: true,
               fillColor: theme.colorScheme.surfaceContainerHighest,

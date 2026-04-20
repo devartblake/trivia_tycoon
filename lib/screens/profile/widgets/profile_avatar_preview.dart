@@ -14,7 +14,8 @@ class ProfileAvatarPreview extends ConsumerWidget {
     final controller = ref.watch(profileAvatarControllerProvider);
 
     final path = controller.avatarPath;
-    final is3D = path != null && (path.endsWith('glb') || path.endsWith('.obj'));
+    final is3D =
+        path != null && (path.endsWith('glb') || path.endsWith('.obj'));
 
     if (is3D) {
       return DepthCard3D(
@@ -27,7 +28,8 @@ class ProfileAvatarPreview extends ConsumerWidget {
           parallaxDepth: 0.05,
           theme: controller.depthCardTheme,
           backgroundFilterQuality: FilterQuality.none,
-          backgroundImage: const AssetImage('assets/images/backgrounds/geometry_background.jpg'),
+          backgroundImage: const AssetImage(
+              'assets/images/backgrounds/geometry_background.jpg'),
           onTap: () {}, // Optional interaction
         ),
       );

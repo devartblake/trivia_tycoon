@@ -6,7 +6,8 @@ import 'question_providers.dart' as question_data;
 import '../state/quiz_state.dart'; // Use your existing quiz_state.dart
 
 // Main quiz provider - uses your existing quiz_state.dart implementation
-final adaptedQuizProvider = StateNotifierProvider<AdaptedQuizNotifier, AdaptedQuizState>((ref) {
+final adaptedQuizProvider =
+    StateNotifierProvider<AdaptedQuizNotifier, AdaptedQuizState>((ref) {
   final repository = ref.watch(question_data.questionRepositoryProvider);
   return AdaptedQuizNotifier(repository: repository);
 });
@@ -39,34 +40,44 @@ final timerColorProvider = Provider<Color>((ref) {
 });
 
 // Category-specific providers
-final availableQuizCategoriesProvider = FutureProvider<List<QuizCategory>>((ref) async {
+final availableQuizCategoriesProvider =
+    FutureProvider<List<QuizCategory>>((ref) async {
   return ref.watch(question_data.quizCategoriesProvider.future);
 });
 
-final categoryQuestionCountProvider = FutureProvider.family<int, QuizCategory>((ref, category) async {
-  final stats = await ref.watch(question_data.categoryStatsProvider(category).future);
+final categoryQuestionCountProvider =
+    FutureProvider.family<int, QuizCategory>((ref, category) async {
+  final stats =
+      await ref.watch(question_data.categoryStatsProvider(category).future);
   return (stats['questionCount'] as num?)?.toInt() ?? 0;
 });
 
-final categoryDifficultyProvider = FutureProvider.family<String, QuizCategory>((ref, category) async {
-  final stats = await ref.watch(question_data.categoryStatsProvider(category).future);
+final categoryDifficultyProvider =
+    FutureProvider.family<String, QuizCategory>((ref, category) async {
+  final stats =
+      await ref.watch(question_data.categoryStatsProvider(category).future);
   return (stats['difficulty']?.toString() ?? 'mixed').toLowerCase();
 });
 
 // Class-specific providers
-final classQuestionCountProvider = FutureProvider.family<int, String>((ref, classId) async {
-  final stats = await ref.watch(question_data.classStatsProvider(classId).future);
+final classQuestionCountProvider =
+    FutureProvider.family<int, String>((ref, classId) async {
+  final stats =
+      await ref.watch(question_data.classStatsProvider(classId).future);
   return (stats['questionCount'] as num?)?.toInt() ?? 0;
 });
 
-final classSubjectCountProvider = FutureProvider.family<int, String>((ref, classId) async {
-  final stats = await ref.watch(question_data.classStatsProvider(classId).future);
+final classSubjectCountProvider =
+    FutureProvider.family<int, String>((ref, classId) async {
+  final stats =
+      await ref.watch(question_data.classStatsProvider(classId).future);
   return (stats['subjectCount'] as num?)?.toInt() ?? 0;
 });
 
 // Service status provider
 final serviceStatusProvider = FutureProvider<Map<String, dynamic>>((ref) async {
-  final questionStats = await ref.watch(question_data.questionStatsProvider.future);
+  final questionStats =
+      await ref.watch(question_data.questionStatsProvider.future);
   final datasetInfo = await ref.watch(question_data.datasetInfoProvider.future);
 
   return {

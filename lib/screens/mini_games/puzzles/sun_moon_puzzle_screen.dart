@@ -73,12 +73,12 @@ class _SunMoonPuzzleScreenState extends State<SunMoonPuzzleScreen> {
 
     grid = List.generate(
       gridSize,
-          (i) => List.generate(gridSize, (j) => CellState.empty),
+      (i) => List.generate(gridSize, (j) => CellState.empty),
     );
 
     isLocked = List.generate(
       gridSize,
-          (_) => List.generate(gridSize, (_) => false),
+      (_) => List.generate(gridSize, (_) => false),
     );
 
     // Randomly select cells to lock
@@ -104,7 +104,7 @@ class _SunMoonPuzzleScreenState extends State<SunMoonPuzzleScreen> {
   List<List<CellState>> _generateValidSolution(Random random) {
     List<List<CellState>> solution = List.generate(
       gridSize,
-          (_) => List.generate(gridSize, (_) => CellState.empty),
+      (_) => List.generate(gridSize, (_) => CellState.empty),
     );
 
     // Fill each row ensuring no more than 2 consecutive
@@ -135,8 +135,10 @@ class _SunMoonPuzzleScreenState extends State<SunMoonPuzzleScreen> {
 
     while (row.length < gridSize) {
       // Determine what can be placed
-      bool canPlaceSun = sunCount < targetCount && !_wouldViolateConsecutive(row, CellState.sun);
-      bool canPlaceMoon = moonCount < targetCount && !_wouldViolateConsecutive(row, CellState.moon);
+      bool canPlaceSun = sunCount < targetCount &&
+          !_wouldViolateConsecutive(row, CellState.sun);
+      bool canPlaceMoon = moonCount < targetCount &&
+          !_wouldViolateConsecutive(row, CellState.moon);
 
       if (canPlaceSun && canPlaceMoon) {
         // Both options valid, choose randomly
@@ -190,7 +192,8 @@ class _SunMoonPuzzleScreenState extends State<SunMoonPuzzleScreen> {
 
       // Find a position in this row to swap with
       for (int otherCol = 0; otherCol < gridSize; otherCol++) {
-        if (otherCol != col && solution[rowToSwap][otherCol] == CellState.moon) {
+        if (otherCol != col &&
+            solution[rowToSwap][otherCol] == CellState.moon) {
           // Swap
           solution[rowToSwap][col] = CellState.moon;
           solution[rowToSwap][otherCol] = CellState.sun;
@@ -215,7 +218,8 @@ class _SunMoonPuzzleScreenState extends State<SunMoonPuzzleScreen> {
             solution[row][col] == solution[row + 2][col]) {
           // Found 3 consecutive - swap middle one with a different cell
           CellState problematic = solution[row + 1][col];
-          CellState needed = problematic == CellState.sun ? CellState.moon : CellState.sun;
+          CellState needed =
+              problematic == CellState.sun ? CellState.moon : CellState.sun;
 
           // Find a cell in same column with needed state and swap
           for (int otherRow = 0; otherRow < gridSize; otherRow++) {
@@ -372,8 +376,10 @@ class _SunMoonPuzzleScreenState extends State<SunMoonPuzzleScreen> {
               ],
             ),
             const SizedBox(height: 24),
-            _buildRule('Fill the grid so that each cell contains either a ☀️ or a 🌙.'),
-            _buildRule('No more than 2 ☀️ or 🌙 may be next to each other, either vertically or horizontally.'),
+            _buildRule(
+                'Fill the grid so that each cell contains either a ☀️ or a 🌙.'),
+            _buildRule(
+                'No more than 2 ☀️ or 🌙 may be next to each other, either vertically or horizontally.'),
             Padding(
               padding: const EdgeInsets.only(left: 24, top: 4, bottom: 4),
               child: Row(
@@ -387,8 +393,10 @@ class _SunMoonPuzzleScreenState extends State<SunMoonPuzzleScreen> {
               ),
             ),
             const SizedBox(height: 8),
-            _buildRule('Each row (and column) must contain the same number of ☀️ and 🌙.'),
-            _buildRule('Cells with purple borders are locked hints to help you solve the puzzle.'),
+            _buildRule(
+                'Each row (and column) must contain the same number of ☀️ and 🌙.'),
+            _buildRule(
+                'Cells with purple borders are locked hints to help you solve the puzzle.'),
             _buildRule('Complete the puzzle as fast as you can!'),
             const SizedBox(height: 24),
             SizedBox(
@@ -565,12 +573,14 @@ class _SunMoonPuzzleScreenState extends State<SunMoonPuzzleScreen> {
                     GestureDetector(
                       onTap: _showHowToPlay,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 10),
                         decoration: BoxDecoration(
                           color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
-                            color: const Color(0xFF6366F1).withValues(alpha: 0.3),
+                            color:
+                                const Color(0xFF6366F1).withValues(alpha: 0.3),
                             width: 1,
                           ),
                         ),
@@ -609,7 +619,8 @@ class _SunMoonPuzzleScreenState extends State<SunMoonPuzzleScreen> {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF6366F1).withValues(alpha: 0.15),
+                            color:
+                                const Color(0xFF6366F1).withValues(alpha: 0.15),
                             blurRadius: 20,
                             offset: const Offset(0, 8),
                           ),
@@ -621,7 +632,8 @@ class _SunMoonPuzzleScreenState extends State<SunMoonPuzzleScreen> {
                         child: GridView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: gridSize,
                             crossAxisSpacing: 0,
                             mainAxisSpacing: 0,
@@ -642,7 +654,8 @@ class _SunMoonPuzzleScreenState extends State<SunMoonPuzzleScreen> {
                                       : Colors.white,
                                   border: Border.all(
                                     color: locked
-                                        ? const Color(0xFF6366F1).withValues(alpha: 0.5)
+                                        ? const Color(0xFF6366F1)
+                                            .withValues(alpha: 0.5)
                                         : Colors.grey.shade300,
                                     width: locked ? 2 : 0.5,
                                   ),
@@ -666,7 +679,9 @@ class _SunMoonPuzzleScreenState extends State<SunMoonPuzzleScreen> {
                         _buildButton(
                           'Undo',
                           Icons.undo,
-                          onPressed: history.isNotEmpty && !_puzzleCompleted ? undo : null,
+                          onPressed: history.isNotEmpty && !_puzzleCompleted
+                              ? undo
+                              : null,
                         ),
                         const SizedBox(width: 16),
                         _buildButton(
@@ -683,43 +698,47 @@ class _SunMoonPuzzleScreenState extends State<SunMoonPuzzleScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: _puzzleCompleted ? null : () {
-                          if (checkSolution()) {
-                            _stopTimer();
-                            setState(() {
-                              _puzzleCompleted = true;
-                            });
+                        onPressed: _puzzleCompleted
+                            ? null
+                            : () {
+                                if (checkSolution()) {
+                                  _stopTimer();
+                                  setState(() {
+                                    _puzzleCompleted = true;
+                                  });
 
-                            // Show result dialog
-                            _showResultDialog();
-                          } else {
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                title: Row(
-                                  children: const [
-                                    Icon(Icons.info_outline, color: Color(0xFFF59E0B)),
-                                    SizedBox(width: 8),
-                                    Text('Not quite right'),
-                                  ],
-                                ),
-                                content: const Text(
-                                  'The solution is incorrect or incomplete. Keep trying!',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('OK'),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-                        },
+                                  // Show result dialog
+                                  _showResultDialog();
+                                } else {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      title: Row(
+                                        children: const [
+                                          Icon(Icons.info_outline,
+                                              color: Color(0xFFF59E0B)),
+                                          SizedBox(width: 8),
+                                          Text('Not quite right'),
+                                        ],
+                                      ),
+                                      content: const Text(
+                                        'The solution is incorrect or incomplete. Keep trying!',
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                              },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: _puzzleCompleted
                               ? Colors.grey.shade300
@@ -734,8 +753,11 @@ class _SunMoonPuzzleScreenState extends State<SunMoonPuzzleScreen> {
                           elevation: 2,
                         ),
                         child: Text(
-                          _puzzleCompleted ? 'Puzzle Completed!' : 'Check Solution',
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          _puzzleCompleted
+                              ? 'Puzzle Completed!'
+                              : 'Check Solution',
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),
@@ -784,10 +806,15 @@ class _SunMoonPuzzleScreenState extends State<SunMoonPuzzleScreen> {
     return ElevatedButton.icon(
       onPressed: onPressed,
       icon: Icon(icon, size: 18),
-      label: Text(text, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+      label: Text(text,
+          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
       style: ElevatedButton.styleFrom(
-        backgroundColor: isEnabled ? const Color(0xFFE0DDD9) : const Color(0xFFE0DDD9).withValues(alpha: 0.5),
-        foregroundColor: isEnabled ? const Color(0xFF4A4A4A) : const Color(0xFF4A4A4A).withValues(alpha: 0.5),
+        backgroundColor: isEnabled
+            ? const Color(0xFFE0DDD9)
+            : const Color(0xFFE0DDD9).withValues(alpha: 0.5),
+        foregroundColor: isEnabled
+            ? const Color(0xFF4A4A4A)
+            : const Color(0xFF4A4A4A).withValues(alpha: 0.5),
         elevation: isEnabled ? 2 : 0,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
         shape: RoundedRectangleBorder(

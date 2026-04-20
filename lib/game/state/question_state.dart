@@ -13,9 +13,9 @@ class QuestionState {
   final bool powerUpUsed;
 
   /// In-session streak / accuracy tracking (used by skill effects).
-  final int streakCount;    // consecutive correct answers this game
-  final int correctCount;   // total correct answers (for accuracyBonus)
-  final int totalAnswered;  // total questions answered  (for accuracyBonus)
+  final int streakCount; // consecutive correct answers this game
+  final int correctCount; // total correct answers (for accuracyBonus)
+  final int totalAnswered; // total questions answered  (for accuracyBonus)
 
   const QuestionState({
     this.questions = const [],
@@ -38,8 +38,7 @@ class QuestionState {
 
   bool get isQuizOver => currentIndex >= questions.length;
 
-  double get accuracy =>
-      totalAnswered > 0 ? correctCount / totalAnswered : 0.0;
+  double get accuracy => totalAnswered > 0 ? correctCount / totalAnswered : 0.0;
 
   QuestionState copyWith({
     List<QuestionModel>? questions,

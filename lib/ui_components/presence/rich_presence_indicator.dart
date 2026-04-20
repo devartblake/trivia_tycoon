@@ -23,7 +23,8 @@ class RichPresenceIndicator extends StatelessWidget {
     }
 
     return Container(
-      padding: padding ?? const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding:
+          padding ?? const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: presence.status.color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
@@ -44,9 +45,9 @@ class RichPresenceIndicator extends StatelessWidget {
             child: Text(
               _getPresenceText(),
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w500,
-              ),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w500,
+                  ),
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -69,9 +70,9 @@ class RichPresenceIndicator extends StatelessWidget {
         Text(
           presence.status.displayName,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-            fontSize: 10,
-          ),
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                fontSize: 10,
+              ),
         ),
       ],
     );

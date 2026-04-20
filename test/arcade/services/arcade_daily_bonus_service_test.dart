@@ -135,7 +135,7 @@ void main() {
       final svc = ArcadeDailyBonusService(cache);
       final d7reward = svc.todayReward;
       expect(d7reward.coins, greaterThan(250)); // Day 1 is 250
-      expect(d7reward.gems, greaterThan(2));    // Day 1 is 2
+      expect(d7reward.gems, greaterThan(2)); // Day 1 is 2
     });
 
     test('reward caps at Day 7 (no wrap beyond schedule)', () {

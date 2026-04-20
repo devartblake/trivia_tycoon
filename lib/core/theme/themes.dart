@@ -59,9 +59,10 @@ class AppTheme {
   // Converts a string into a ThemeType enum, safe fallback to defaultTheme
   static ThemeType fromString(String? themeName) {
     return ThemeType.values.firstWhere(
-          (e) => e.name == themeName,
+      (e) => e.name == themeName,
       orElse: () {
-        LogManager.debug("Invalid theme type found ($themeName), using default.");
+        LogManager.debug(
+            "Invalid theme type found ($themeName), using default.");
         return defaultTheme;
       },
     );
@@ -144,35 +145,36 @@ class AppTheme {
 
   /// Generates ThemeData for the app
   ThemeData get themeData => ThemeData.from(
-      textTheme: (isDark ? ThemeData.dark() : ThemeData.light()).textTheme,
-      colorScheme: ColorScheme(
-        brightness: isDark ? Brightness.dark : Brightness.light,
-        primary: accent1,
-        primaryContainer: accent1Darker,
-        secondary: accent2,
-        secondaryContainer: accent1Dark,
-        surface: surface,
-        onSurface: txt,
-        onError: txt,
-        onPrimary: accentTxt,
-        onSecondary: accentTxt,
-        error: error,
-      ),
-    ).copyWith(
-      inputDecorationTheme: InputDecorationTheme(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: greyWeak),
+        textTheme: (isDark ? ThemeData.dark() : ThemeData.light()).textTheme,
+        colorScheme: ColorScheme(
+          brightness: isDark ? Brightness.dark : Brightness.light,
+          primary: accent1,
+          primaryContainer: accent1Darker,
+          secondary: accent2,
+          secondaryContainer: accent1Dark,
+          surface: surface,
+          onSurface: txt,
+          onError: txt,
+          onPrimary: accentTxt,
+          onSecondary: accentTxt,
+          error: error,
         ),
-      ),
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      textSelectionTheme: TextSelectionThemeData(
-        selectionColor: accent1.withValues(alpha: 0.5),
-        cursorColor: accent1,
-        selectionHandleColor: accent1,
-      ),
-      highlightColor: accent1,
-    );
+      ).copyWith(
+        inputDecorationTheme: InputDecorationTheme(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: greyWeak),
+          ),
+        ),
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        textSelectionTheme: TextSelectionThemeData(
+          selectionColor: accent1.withValues(alpha: 0.5),
+          cursorColor: accent1,
+          selectionHandleColor: accent1,
+        ),
+        highlightColor: accent1,
+      );
 
-  Color shift(Color c, double d) => ColorUtils.shiftHsl(c, d * (isDark? -1 : 1));
+  Color shift(Color c, double d) =>
+      ColorUtils.shiftHsl(c, d * (isDark ? -1 : 1));
 }

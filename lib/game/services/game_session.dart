@@ -45,7 +45,8 @@ class GameSession {
         'lastCoinUpdate': DateTime.now().toIso8601String(),
       });
 
-      LogManager.debug('GameSession: Successfully added $amount coins. New total: ${currentCoins + amount}');
+      LogManager.debug(
+          'GameSession: Successfully added $amount coins. New total: ${currentCoins + amount}');
     } catch (e) {
       LogManager.debug('GameSession: Error adding coins: $e');
     }
@@ -61,15 +62,18 @@ class GameSession {
         coinNotifier.deduct(amount);
 
         // Update profile stats
-        final profileManager = _profile.ref.read(profileManagerProvider.notifier);
+        final profileManager =
+            _profile.ref.read(profileManagerProvider.notifier);
         profileManager.updateActiveProfileGameStats({
           'coins': currentCoins - amount,
           'lastCoinUpdate': DateTime.now().toIso8601String(),
         });
 
-        LogManager.debug('GameSession: Successfully deducted $amount coins. New total: ${currentCoins - amount}');
+        LogManager.debug(
+            'GameSession: Successfully deducted $amount coins. New total: ${currentCoins - amount}');
       } else {
-        LogManager.debug('GameSession: Insufficient coins. Required: $amount, Available: $currentCoins');
+        LogManager.debug(
+            'GameSession: Insufficient coins. Required: $amount, Available: $currentCoins');
       }
     } catch (e) {
       LogManager.debug('GameSession: Error deducting coins: $e');
@@ -91,7 +95,8 @@ class GameSession {
         'lastGemUpdate': DateTime.now().toIso8601String(),
       });
 
-      LogManager.debug('GameSession: Successfully added $amount gems. New total: ${currentGems + amount}');
+      LogManager.debug(
+          'GameSession: Successfully added $amount gems. New total: ${currentGems + amount}');
     } catch (e) {
       LogManager.debug('GameSession: Error adding gems: $e');
     }
@@ -125,8 +130,5 @@ final gameSessionProvider = Provider<GameSession>((ref) {
   final cooldowns = ref.read(skillCooldownServiceProvider);
   final tierManager = ref.read(tierManagerProvider);
   return GameSession(
-    profile: profile,
-    cooldowns: cooldowns,
-    tierManager: tierManager
-  );
+      profile: profile, cooldowns: cooldowns, tierManager: tierManager);
 });

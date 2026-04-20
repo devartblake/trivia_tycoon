@@ -78,12 +78,13 @@ class AppLogo extends StatelessWidget {
           SizedBox(height: size * 0.15),
           Text(
             'Synaptix',
-            style: textStyle ?? TextStyle(
-              fontSize: size * 0.24,
-              fontWeight: FontWeight.bold,
-              color: defaultTextColor,
-              letterSpacing: 0.5,
-            ),
+            style: textStyle ??
+                TextStyle(
+                  fontSize: size * 0.24,
+                  fontWeight: FontWeight.bold,
+                  color: defaultTextColor,
+                  letterSpacing: 0.5,
+                ),
           ),
           SizedBox(height: size * 0.05),
           Text(

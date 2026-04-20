@@ -56,10 +56,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
       curve: Curves.easeInOut,
     ));
 
-    _sectionControllers = List.generate(4, (index) => AnimationController(
-      duration: Duration(milliseconds: 600 + (index * 100)),
-      vsync: this,
-    ));
+    _sectionControllers = List.generate(
+        4,
+        (index) => AnimationController(
+              duration: Duration(milliseconds: 600 + (index * 100)),
+              vsync: this,
+            ));
 
     _initializeSettings();
     _startAnimations();
@@ -148,7 +150,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
 
     _preferences.addAll([
       {
-        'title': 'App Preferences',  // NEW - Link to PreferencesScreen
+        'title': 'App Preferences', // NEW - Link to PreferencesScreen
         'subtitle': 'Game and accessibility settings',
         'icon': Icons.tune_rounded,
         'route': '/preferences',
@@ -160,7 +162,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
             ? 'Checking status...'
             : (_notificationsEnabled ? 'Enabled' : 'Disabled'),
         'icon': Icons.notifications_rounded,
-        'color': _notificationsEnabled ? const Color(0xFF10B981) : const Color(0xFFEF4444),
+        'color': _notificationsEnabled
+            ? const Color(0xFF10B981)
+            : const Color(0xFFEF4444),
         'type': 'notification_setting',
       },
       {
@@ -216,7 +220,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
       });
 
       try {
-        final granted = await NotificationService().requestPermissionsWithDialog(context);
+        final granted =
+            await NotificationService().requestPermissionsWithDialog(context);
 
         if (mounted) {
           setState(() {
@@ -249,7 +254,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           title: Row(
             children: [
               Container(
@@ -270,9 +276,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
           ),
           content: const Text(
             'You\'ll now receive notifications about:\n'
-                '• Spin wheel ready alerts\n'
-                '• Mission updates\n'
-                '• Daily reminders',
+            '• Spin wheel ready alerts\n'
+            '• Mission updates\n'
+            '• Daily reminders',
             style: TextStyle(color: Color(0xFF64748B)),
           ),
           actions: [
@@ -280,9 +286,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               onPressed: () => Navigator.of(context).pop(),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF10B981),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
               ),
-              child: const Text('Great!', style: TextStyle(color: Colors.white)),
+              child:
+                  const Text('Great!', style: TextStyle(color: Colors.white)),
             ),
           ],
         );
@@ -295,7 +303,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           title: Row(
             children: [
               Container(
@@ -316,17 +325,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
           ),
           content: const Text(
             'Notifications are currently enabled. To disable them:\n\n'
-                '1. Go to your device Settings\n'
-                '2. Find "Apps" or "Application Manager"\n'
-                '3. Select "Synaptix"\n'
-                '4. Tap "Notifications"\n'
-                '5. Turn off notifications',
+            '1. Go to your device Settings\n'
+            '2. Find "Apps" or "Application Manager"\n'
+            '3. Select "Synaptix"\n'
+            '4. Tap "Notifications"\n'
+            '5. Turn off notifications',
             style: TextStyle(color: Color(0xFF64748B)),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Got it', style: TextStyle(color: Color(0xFF06B6D4))),
+              child: const Text('Got it',
+                  style: TextStyle(color: Color(0xFF06B6D4))),
             ),
           ],
         );
@@ -339,7 +349,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           title: Row(
             children: [
               Container(
@@ -365,7 +376,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('OK', style: TextStyle(color: Color(0xFFEF4444))),
+              child:
+                  const Text('OK', style: TextStyle(color: Color(0xFFEF4444))),
             ),
           ],
         );
@@ -389,9 +401,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
       appBar: _buildAppBar(),
       body: _fadeAnimation != null
           ? FadeTransition(
-        opacity: _fadeAnimation!,
-        child: _buildBody(),
-      )
+              opacity: _fadeAnimation!,
+              child: _buildBody(),
+            )
           : _buildBody(),
     );
   }
@@ -437,16 +449,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
       physics: const BouncingScrollPhysics(),
       slivers: [
         const SliverToBoxAdapter(child: SizedBox(height: 8)),
-        _buildSection('Audio Settings', _audioSettings, 0, Icons.volume_up_rounded),
+        _buildSection(
+            'Audio Settings', _audioSettings, 0, Icons.volume_up_rounded),
         _buildSection('Appearance', _themeSettings, 1, Icons.brush_rounded),
         _buildSection('Preferences', _preferences, 2, Icons.tune_rounded),
-        _buildSection('Privacy & Security', _privacy, 3, Icons.security_rounded),
+        _buildSection(
+            'Privacy & Security', _privacy, 3, Icons.security_rounded),
         const SliverToBoxAdapter(child: SizedBox(height: 100)),
       ],
     );
   }
 
-  Widget _buildSection(String title, List<Map<String, dynamic>> items, int sectionIndex, IconData sectionIcon) {
+  Widget _buildSection(String title, List<Map<String, dynamic>> items,
+      int sectionIndex, IconData sectionIcon) {
     return SliverToBoxAdapter(
       child: SlideTransition(
         position: Tween<Offset>(
@@ -488,7 +503,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                       offset: Offset(0, 20 * (1 - value)),
                       child: Opacity(
                         opacity: value,
-                        child: _buildSettingItem(item, index == items.length - 1),
+                        child:
+                            _buildSettingItem(item, index == items.length - 1),
                       ),
                     );
                   },
@@ -564,7 +580,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
   }
 
   Widget _buildNotificationItem(Map<String, dynamic> item, bool isLast) {
-    final color = _notificationsEnabled ? const Color(0xFF10B981) : const Color(0xFFEF4444);
+    final color = _notificationsEnabled
+        ? const Color(0xFF10B981)
+        : const Color(0xFFEF4444);
 
     return Container(
       decoration: BoxDecoration(
@@ -572,9 +590,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
           bottom: isLast
               ? BorderSide.none
               : BorderSide(
-            color: const Color(0xFF64748B).withValues(alpha: 0.1),
-            width: 1,
-          ),
+                  color: const Color(0xFF64748B).withValues(alpha: 0.1),
+                  width: 1,
+                ),
         ),
       ),
       child: ListTile(
@@ -587,20 +605,20 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
           ),
           child: _isCheckingNotifications
               ? SizedBox(
-            width: 20,
-            height: 20,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation<Color>(color),
-            ),
-          )
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(color),
+                  ),
+                )
               : Icon(
-            _notificationsEnabled
-                ? Icons.notifications_active_rounded
-                : Icons.notifications_off_rounded,
-            color: color,
-            size: 20,
-          ),
+                  _notificationsEnabled
+                      ? Icons.notifications_active_rounded
+                      : Icons.notifications_off_rounded,
+                  color: color,
+                  size: 20,
+                ),
         ),
         title: Text(
           item['title'],
@@ -613,7 +631,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
         subtitle: Text(
           _isCheckingNotifications
               ? 'Checking status...'
-              : (_notificationsEnabled ? 'Enabled - tap for settings' : 'Tap to enable'),
+              : (_notificationsEnabled
+                  ? 'Enabled - tap for settings'
+                  : 'Tap to enable'),
           style: TextStyle(
             fontSize: 12,
             color: const Color(0xFF64748B).withValues(alpha: 0.8),
@@ -638,9 +658,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
           bottom: isLast
               ? BorderSide.none
               : BorderSide(
-            color: const Color(0xFF64748B).withValues(alpha: 0.1),
-            width: 1,
-          ),
+                  color: const Color(0xFF64748B).withValues(alpha: 0.1),
+                  width: 1,
+                ),
         ),
       ),
       child: ListTile(
@@ -689,9 +709,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
           bottom: isLast
               ? BorderSide.none
               : BorderSide(
-            color: const Color(0xFF64748B).withValues(alpha: 0.1),
-            width: 1,
-          ),
+                  color: const Color(0xFF64748B).withValues(alpha: 0.1),
+                  width: 1,
+                ),
         ),
       ),
       child: ListTile(
@@ -713,17 +733,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: isDestructive ? const Color(0xFFEF4444) : const Color(0xFF1E293B),
+            color: isDestructive
+                ? const Color(0xFFEF4444)
+                : const Color(0xFF1E293B),
           ),
         ),
         subtitle: item['subtitle'] != null
             ? Text(
-          item['subtitle'],
-          style: TextStyle(
-            fontSize: 12,
-            color: const Color(0xFF64748B).withValues(alpha: 0.8),
-          ),
-        )
+                item['subtitle'],
+                style: TextStyle(
+                  fontSize: 12,
+                  color: const Color(0xFF64748B).withValues(alpha: 0.8),
+                ),
+              )
             : null,
         trailing: Icon(
           Icons.arrow_forward_ios_rounded,

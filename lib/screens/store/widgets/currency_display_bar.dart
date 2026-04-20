@@ -10,8 +10,10 @@ class CurrencyDisplayBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currencyManager = ref.watch(currencyManagerProvider);
-    final coinBalance = ref.watch(currencyManager.getProvider(CurrencyType.coins));
-    final diamondBalance = ref.watch(currencyManager.getProvider(CurrencyType.diamonds));
+    final coinBalance =
+        ref.watch(currencyManager.getProvider(CurrencyType.coins));
+    final diamondBalance =
+        ref.watch(currencyManager.getProvider(CurrencyType.diamonds));
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -142,9 +144,9 @@ class CurrencyDisplayBar extends ConsumerWidget {
       return '${(number / 1000).toStringAsFixed(1)}K';
     }
     return number.toString().replaceAllMapped(
-      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
           (Match m) => '${m[1]},',
-    );
+        );
   }
 
   void _showCoinInfo(BuildContext context, int balance) {

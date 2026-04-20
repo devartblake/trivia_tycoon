@@ -4,7 +4,7 @@ import '../../core/services/settings/app_settings.dart';
 
 /// Keys (same as before to keep behavior stable)
 const String kNotifEnabledPrefix = 'notif.channel.enabled.'; // + <key> -> bool
-const String kNotifDraftsKey = 'notif.channels.drafts';      // JSON list
+const String kNotifDraftsKey = 'notif.channels.drafts'; // JSON list
 
 /// Single-purpose adapter around AppSettings for channels.
 class ChannelPrefs {
@@ -14,7 +14,8 @@ class ChannelPrefs {
   //AppSettings get _settings => AppSettings.instance; // adjust if your singleton differs
 
   Future<bool> getEnabled(String key) async {
-    final v = await AppSettings.getBool('$kNotifEnabledPrefix$key'); // bool? or dynamic?
+    final v = await AppSettings.getBool(
+        '$kNotifEnabledPrefix$key'); // bool? or dynamic?
     if (v == null) return true; // default enabled
     return v;
   }
@@ -29,7 +30,10 @@ class ChannelPrefs {
     try {
       final list = jsonDecode(raw);
       if (list is List) {
-        return list.cast<Map>().map((e) => Map<String, dynamic>.from(e)).toList();
+        return list
+            .cast<Map>()
+            .map((e) => Map<String, dynamic>.from(e))
+            .toList();
       }
     } catch (_) {}
     return [];

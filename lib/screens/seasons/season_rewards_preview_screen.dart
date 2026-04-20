@@ -17,7 +17,7 @@ class SeasonRewardsPreviewScreen extends StatelessWidget {
   Future<SeasonRewardPreview> _load() async {
     final json = await api.getJson(
       '/seasons/rewards/preview/$playerId',
-      query: { if (seasonId != null) 'seasonId': seasonId! },
+      query: {if (seasonId != null) 'seasonId': seasonId!},
     );
     return SeasonRewardPreview.fromJson(json);
   }
@@ -45,12 +45,16 @@ class SeasonRewardsPreviewScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Season: ${p.seasonId}', style: Theme.of(context).textTheme.bodySmall),
+                    Text('Season: ${p.seasonId}',
+                        style: Theme.of(context).textTheme.bodySmall),
                     const SizedBox(height: 12),
-                    Text('Tier ${p.tier} • Rank #${p.tierRank}', style: Theme.of(context).textTheme.titleLarge),
+                    Text('Tier ${p.tier} • Rank #${p.tierRank}',
+                        style: Theme.of(context).textTheme.titleLarge),
                     const SizedBox(height: 10),
                     Text(
-                      p.eligible ? 'Eligible for rewards' : 'Not eligible for rewards',
+                      p.eligible
+                          ? 'Eligible for rewards'
+                          : 'Not eligible for rewards',
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 12),

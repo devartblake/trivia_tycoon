@@ -5,7 +5,8 @@ import '../models/power_up.dart';
 
 class StoreDataService {
   static Future<List<StoreItemModel>> loadStoreItems() async {
-    final String jsonString = await rootBundle.loadString('assets/data/store_items.json');
+    final String jsonString =
+        await rootBundle.loadString('assets/data/store_items.json');
     final List<dynamic> jsonData = json.decode(jsonString);
     return jsonData.map((item) => StoreItemModel.fromJson(item)).toList();
   }

@@ -1,18 +1,17 @@
-
 /// Model representing a leaderboard entry
 class LeaderboardEntry {
   final int userId;
   final String playerName;
   final int score;
   final int rank;
-  final int tier;   // 1-10 (Bronze = 1, Tycoon Hall = 10)
+  final int tier; // 1-10 (Bronze = 1, Tycoon Hall = 10)
   final int tierRank; // 1-100 within tier
   final bool isPromotionEligible;
   final bool isRewardEligible;
   final int wins;
   final String country;
   final String state;
-  final String countryCode;  // ISO2/ISO3
+  final String countryCode; // ISO2/ISO3
   final int level;
   final String badges;
   final double xpProgress;
@@ -20,8 +19,8 @@ class LeaderboardEntry {
   final String avatar;
   final DateTime lastActive;
   final DateTime timestamp;
-  final String gender;     // 'male', 'female', 'other'
-  final String ageGroup;   // 'kids', 'teens', 'adults'
+  final String gender; // 'male', 'female', 'other'
+  final String ageGroup; // 'kids', 'teens', 'adults'
   final DateTime joinedDate;
   final int? streak;
   final double accuracy;
@@ -174,7 +173,8 @@ class LeaderboardEntry {
       timezone: timezone ?? this.timezone,
       powerUps: powerUps ?? this.powerUps,
       lastDeviceType: lastDeviceType ?? this.lastDeviceType,
-      preferredNotificationMethod: preferredNotificationMethod ?? this.preferredNotificationMethod,
+      preferredNotificationMethod:
+          preferredNotificationMethod ?? this.preferredNotificationMethod,
       subscriptionStatus: subscriptionStatus ?? this.subscriptionStatus,
       averageAnswerTime: averageAnswerTime ?? this.averageAnswerTime,
       isBot: isBot ?? this.isBot,
@@ -186,11 +186,13 @@ class LeaderboardEntry {
   /// Converts JSON to LeaderboardEntry object
   factory LeaderboardEntry.fromJson(Map<String, dynamic> json) {
     return LeaderboardEntry(
-      userId: json['user_id'] is int ? json['user_id'] : int.tryParse(json['user_id'].toString()) ?? 0,
+      userId: json['user_id'] is int
+          ? json['user_id']
+          : int.tryParse(json['user_id'].toString()) ?? 0,
       playerName: json['playerName']?.toString() ?? 'Unknown',
       score: json['score'] ?? 0,
       rank: json['rank'] ?? 0,
-      tier: json ['tier'] ?? 1,
+      tier: json['tier'] ?? 1,
       tierRank: json['tierRank'] ?? 0,
       isPromotionEligible: json['isPromotionEligible'] ?? false,
       isRewardEligible: json['isRewardEligible'] ?? false,
@@ -208,7 +210,7 @@ class LeaderboardEntry {
       ageGroup: json['ageGroup']?.toString() ?? '',
       joinedDate: DateTime.parse(json['joinedDate']),
       streak: json['streak'] ?? 0,
-      accuracy: (json['accuracy']?? 0).toDouble() ?? 0.0,
+      accuracy: (json['accuracy'] ?? 0).toDouble() ?? 0.0,
       favoriteCategory: json['favoriteCategory'],
       title: json['title']?.toString() ?? '',
       status: json['status']?.toString() ?? '',
@@ -223,7 +225,8 @@ class LeaderboardEntry {
       timezone: json['timezone'] ?? 'UTC',
       powerUps: List<String>.from(json['powerUps'] ?? []),
       lastDeviceType: json['lastDeviceType'] ?? '',
-      preferredNotificationMethod: json['preferredNotificationMethod'] ?? 'push',
+      preferredNotificationMethod:
+          json['preferredNotificationMethod'] ?? 'push',
       subscriptionStatus: json['subscriptionStatus'] ?? 'free',
       averageAnswerTime: (json['averageAnswerTime'] ?? 0).toDouble(),
       isBot: json['isBot'] ?? false,

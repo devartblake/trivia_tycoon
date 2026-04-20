@@ -68,8 +68,9 @@ Future<bool> _tryAdminRefresh(
       return false;
     }
 
-    final newAccess =
-        response['accessToken']?.toString() ?? response['access_token']?.toString() ?? '';
+    final newAccess = response['accessToken']?.toString() ??
+        response['access_token']?.toString() ??
+        '';
     if (newAccess.isEmpty) return false;
 
     final newRefresh = response['refreshToken']?.toString() ??
@@ -95,7 +96,8 @@ Future<bool> _tryAdminRefresh(
   }
 }
 
-Future<Map<String, dynamic>> _fallbackClaims(Ref ref, AuthTokenStore tokenStore) async {
+Future<Map<String, dynamic>> _fallbackClaims(
+    Ref ref, AuthTokenStore tokenStore) async {
   final session = tokenStore.load();
   final storedRoles = session.roles
       .map((role) => role.toLowerCase())

@@ -8,16 +8,16 @@ class RoomMapper {
   const RoomMapper();
 
   Room toDomain(RoomDto dto) => Room(
-    id: dto.roomId,
-    name: dto.roomName ?? 'Room',
-    capacity: dto.capacity,
-    players: dto.players.map(_presence.toDomain).toList(),
-  );
+        id: dto.roomId,
+        name: dto.roomName ?? 'Room',
+        capacity: dto.capacity,
+        players: dto.players.map(_presence.toDomain).toList(),
+      );
 
   RoomDto toDto(Room e) => RoomDto(
-    roomId: e.id,
-    roomName: e.name,
-    capacity: e.capacity,
-    players: e.players.map(_presence.toDto).toList(),
-  );
+        roomId: e.id,
+        roomName: e.name,
+        capacity: e.capacity,
+        players: e.players.map(_presence.toDto).toList(),
+      );
 }

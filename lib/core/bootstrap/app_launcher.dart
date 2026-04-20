@@ -13,7 +13,8 @@ import 'package:trivia_tycoon/core/services/user_identity_resolver.dart';
 import 'package:trivia_tycoon/game/analytics/models/spin_live_summary.dart';
 import 'package:trivia_tycoon/game/analytics/providers/analytics_providers.dart';
 import 'package:trivia_tycoon/game/providers/multi_profile_providers.dart';
-import 'package:trivia_tycoon/game/providers/riverpod_providers.dart' as providers;
+import 'package:trivia_tycoon/game/providers/riverpod_providers.dart'
+    as providers;
 import 'package:trivia_tycoon/game/providers/wallet_providers.dart';
 import 'package:trivia_tycoon/synaptix/mode/synaptix_mode_provider.dart';
 import 'package:trivia_tycoon/synaptix/theme/synaptix_theme_extension.dart';
@@ -37,7 +38,8 @@ class AppLauncher extends ConsumerStatefulWidget {
   ConsumerState<AppLauncher> createState() => _AppLauncherState();
 }
 
-class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingObserver {
+class _AppLauncherState extends ConsumerState<AppLauncher>
+    with WidgetsBindingObserver {
   GoRouter? _router;
   bool _authStateInitialized = false;
   ProviderSubscription<AsyncValue<SpinLiveSummary>>? _spinSummarySubscription;
@@ -97,11 +99,13 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
   Future<void> _trackLiveSpinSummary(SpinLiveSummary summary) async {
     try {
       final serviceManager = widget.initialData.$1;
-      await serviceManager.analyticsService.trackEvent('spin_summary_live_update', {
+      await serviceManager.analyticsService
+          .trackEvent('spin_summary_live_update', {
         ...summary.toMap(),
       });
     } catch (e) {
-      LogManager.error('Failed to track live spin summary update', source: 'AppLauncher', error: e);
+      LogManager.error('Failed to track live spin summary update',
+          source: 'AppLauncher', error: e);
     }
   }
 
@@ -111,20 +115,36 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
   }
 
   void _printSpinAnalyticsSummary(Map<String, dynamic> summary) {
-    LogManager.info('╔════════════════════════════════════════════════╗', source: 'AppLauncher');
-    LogManager.info('              SPIN ANALYTICS SUMMARY              ', source: 'AppLauncher');
-    LogManager.info('╠════════════════════════════════════════════════╣', source: 'AppLauncher');
-    LogManager.info(' User Name:     ${summary['user_name'] ?? 'Unknown'}', source: 'AppLauncher');
-    LogManager.info(' User ID:       ${summary['user_id'] ?? 'unknown'}', source: 'AppLauncher');
-    LogManager.info(' Snapshot At:   ${summary['snapshot_at'] ?? DateTime.now().toIso8601String()}', source: 'AppLauncher');
-    LogManager.info(' Today:         ${summary['today_count'] ?? 0}/${summary['daily_limit'] ?? 0}', source: 'AppLauncher');
-    LogManager.info(' Weekly:        ${summary['weekly_count'] ?? 0}', source: 'AppLauncher');
-    LogManager.info(' Total:         ${summary['total_spins'] ?? 0}', source: 'AppLauncher');
-    LogManager.info(' Can Spin:      ${summary['can_spin'] ?? false}', source: 'AppLauncher');
-    LogManager.info(' Remaining:     ${summary['spins_remaining'] ?? 0}', source: 'AppLauncher');
-    LogManager.info(' Reward Points: ${summary['reward_points'] ?? 0}', source: 'AppLauncher');
-    LogManager.info(' Source:        ${summary['source'] ?? 'unknown'}', source: 'AppLauncher');
-    LogManager.info('╚════════════════════════════════════════════════╝', source: 'AppLauncher');
+    LogManager.info('╔════════════════════════════════════════════════╗',
+        source: 'AppLauncher');
+    LogManager.info('              SPIN ANALYTICS SUMMARY              ',
+        source: 'AppLauncher');
+    LogManager.info('╠════════════════════════════════════════════════╣',
+        source: 'AppLauncher');
+    LogManager.info(' User Name:     ${summary['user_name'] ?? 'Unknown'}',
+        source: 'AppLauncher');
+    LogManager.info(' User ID:       ${summary['user_id'] ?? 'unknown'}',
+        source: 'AppLauncher');
+    LogManager.info(
+        ' Snapshot At:   ${summary['snapshot_at'] ?? DateTime.now().toIso8601String()}',
+        source: 'AppLauncher');
+    LogManager.info(
+        ' Today:         ${summary['today_count'] ?? 0}/${summary['daily_limit'] ?? 0}',
+        source: 'AppLauncher');
+    LogManager.info(' Weekly:        ${summary['weekly_count'] ?? 0}',
+        source: 'AppLauncher');
+    LogManager.info(' Total:         ${summary['total_spins'] ?? 0}',
+        source: 'AppLauncher');
+    LogManager.info(' Can Spin:      ${summary['can_spin'] ?? false}',
+        source: 'AppLauncher');
+    LogManager.info(' Remaining:     ${summary['spins_remaining'] ?? 0}',
+        source: 'AppLauncher');
+    LogManager.info(' Reward Points: ${summary['reward_points'] ?? 0}',
+        source: 'AppLauncher');
+    LogManager.info(' Source:        ${summary['source'] ?? 'unknown'}',
+        source: 'AppLauncher');
+    LogManager.info('╚════════════════════════════════════════════════╝',
+        source: 'AppLauncher');
   }
 
   // ============ LIFECYCLE TRACKING ============
@@ -146,7 +166,8 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
         diagnostics,
       );
     } catch (e) {
-      LogManager.error('Failed retrying queued profile sync updates', source: 'AppLauncher', error: e);
+      LogManager.error('Failed retrying queued profile sync updates',
+          source: 'AppLauncher', error: e);
     }
   }
 
@@ -157,7 +178,7 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
 
     switch (state) {
       case AppLifecycleState.resumed:
-      // This is now safe because we made trackAppLifecycle robust in app_init.dart
+        // This is now safe because we made trackAppLifecycle robust in app_init.dart
         AppInit.trackAppLifecycle(serviceManager, 'app_resumed');
         _checkSpinStatusOnResume();
         _retryQueuedProfileSyncUpdates();
@@ -218,7 +239,8 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
 
         final enrichedSummary = {
           ...summary,
-          'user_name': await UserIdentityResolver.resolveUserName(serviceManager),
+          'user_name':
+              await UserIdentityResolver.resolveUserName(serviceManager),
           'user_id': await _resolveUserId(),
           'snapshot_at': DateTime.now().toIso8601String(),
           'source': 'app_launch',
@@ -227,7 +249,8 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
         _printSpinAnalyticsSummary(enrichedSummary);
       }
     } catch (e) {
-      LogManager.error('Failed to track app launch', source: 'AppLauncher', error: e);
+      LogManager.error('Failed to track app launch',
+          source: 'AppLauncher', error: e);
     }
   }
 
@@ -238,7 +261,8 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
       serviceManager.analyticsService.flushEvents();
       LogManager.info('Analytics flushed on app pause', source: 'AppLauncher');
     } catch (e) {
-      LogManager.error('Failed to flush analytics', source: 'AppLauncher', error: e);
+      LogManager.error('Failed to flush analytics',
+          source: 'AppLauncher', error: e);
     }
   }
 
@@ -248,7 +272,8 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
       final summary = await AppInit.getSpinAnalyticsSummary();
       final serviceManager = widget.initialData.$1;
 
-      await serviceManager.analyticsService.trackEvent('app_resumed_spin_check', {
+      await serviceManager.analyticsService
+          .trackEvent('app_resumed_spin_check', {
         'spins_remaining': summary['spins_remaining'],
         'can_spin': summary['can_spin'],
         'reward_points': summary['reward_points'],
@@ -257,9 +282,12 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
         'snapshot_at': DateTime.now().toIso8601String(),
       });
 
-      LogManager.info('Spin status checked on resume: ${summary['spins_remaining']} spins remaining', source: 'AppLauncher');
+      LogManager.info(
+          'Spin status checked on resume: ${summary['spins_remaining']} spins remaining',
+          source: 'AppLauncher');
     } catch (e) {
-      LogManager.error('Failed to check spin status', source: 'AppLauncher', error: e);
+      LogManager.error('Failed to check spin status',
+          source: 'AppLauncher', error: e);
     }
   }
 
@@ -272,7 +300,8 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
 
       // Check existing auth state and update providers accordingly
       final isLoggedIn = await serviceManager.authService.isLoggedIn();
-      final hasOnboarded = await serviceManager.onboardingSettingsService.hasCompletedOnboarding();
+      final hasOnboarded = await serviceManager.onboardingSettingsService
+          .hasCompletedOnboarding();
 
       // Update the provider state to match service state
       if (isLoggedIn) {
@@ -281,7 +310,9 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
 
       if (isLoggedIn && hasOnboarded) {
         // User is returning and has completed onboarding
-        await ref.read(onboardingProgressProvider.notifier).markOnboardingCompleted(true);
+        await ref
+            .read(onboardingProgressProvider.notifier)
+            .markOnboardingCompleted(true);
       }
 
       setState(() {
@@ -291,9 +322,12 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
       // Initialize wallet persistence
       await ref.read(walletServiceProvider).init();
 
-      LogManager.info('Auth state initialized: isLoggedIn=$isLoggedIn, hasOnboarded=$hasOnboarded', source: 'AppLauncher');
+      LogManager.info(
+          'Auth state initialized: isLoggedIn=$isLoggedIn, hasOnboarded=$hasOnboarded',
+          source: 'AppLauncher');
     } catch (e) {
-      LogManager.error('Error initializing auth state', source: 'AppLauncher', error: e);
+      LogManager.error('Error initializing auth state',
+          source: 'AppLauncher', error: e);
       setState(() {
         _authStateInitialized = true; // Continue anyway
       });
@@ -431,7 +465,8 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
         theme: appTheme.themeData.copyWith(
           extensions: [synaptixTheme],
         ),
-        darkTheme: AppTheme.fromType(themeType, ThemeMode.dark).themeData.copyWith(
+        darkTheme:
+            AppTheme.fromType(themeType, ThemeMode.dark).themeData.copyWith(
           extensions: [synaptixTheme],
         ),
         themeMode: themeNotifier.themeMode,
@@ -443,7 +478,8 @@ class _AppLauncherState extends ConsumerState<AppLauncher> with WidgetsBindingOb
         builder: (context, child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(
-              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(0.8, 1.4),
+              textScaleFactor:
+                  MediaQuery.of(context).textScaleFactor.clamp(0.8, 1.4),
             ),
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 400),

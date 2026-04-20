@@ -219,11 +219,12 @@ void main() {
       c.dispose();
     });
 
-    test('maxStreak is preserved after a wrong answer breaks the streak', () async {
+    test('maxStreak is preserved after a wrong answer breaks the streak',
+        () async {
       final c = _ctrl();
       await answerCorrectlyN(c, 3); // maxStreak = 3
       await Future<void>.delayed(const Duration(milliseconds: 150));
-      answerWrong(c);               // streak resets; maxStreak stays 3
+      answerWrong(c); // streak resets; maxStreak stays 3
       expect(c.state.maxStreak, 3);
       expect(c.state.streak, 0);
       c.dispose();
@@ -282,7 +283,8 @@ void main() {
         for (int i = 0; i < 10; i++) {
           final q = c.state.question;
           expect(q.options.contains(q.answer), isTrue,
-              reason: 'Answer ${q.answer} not in options ${q.options} on $diff');
+              reason:
+                  'Answer ${q.answer} not in options ${q.options} on $diff');
           c.answer(q.answer, (_) {});
         }
         c.dispose();
@@ -356,7 +358,7 @@ void main() {
       final c = _ctrl();
       c.answer(c.state.question.answer, (_) {}); // correct
       await Future<void>.delayed(const Duration(milliseconds: 150));
-      answerWrong(c);                            // wrong
+      answerWrong(c); // wrong
       final accuracy = c.toResult().metadata['accuracy'] as double;
       expect(accuracy, closeTo(0.5, 0.001));
       c.dispose();

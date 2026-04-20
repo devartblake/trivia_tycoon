@@ -121,13 +121,15 @@ class ProfileManagementTile extends ConsumerWidget {
         children: [
           CircleAvatar(
             radius: 20,
-            backgroundImage: profile.avatar != null ? AssetImage(profile.avatar!) : null,
+            backgroundImage:
+                profile.avatar != null ? AssetImage(profile.avatar!) : null,
             backgroundColor: Colors.white.withValues(alpha: 0.2),
             child: profile.avatar == null
                 ? Text(
-              profile.name.substring(0, 1).toUpperCase(),
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            )
+                    profile.name.substring(0, 1).toUpperCase(),
+                    style: const TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  )
                 : null,
           ),
           const SizedBox(width: 12),
@@ -148,7 +150,8 @@ class ProfileManagementTile extends ConsumerWidget {
                     if (isActive) ...[
                       const SizedBox(width: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
                           color: const Color(0xFF6366F1),
                           borderRadius: BorderRadius.circular(8),
@@ -184,7 +187,8 @@ class ProfileManagementTile extends ConsumerWidget {
               ),
             ),
           PopupMenuButton<String>(
-            icon: Icon(Icons.more_vert, color: Colors.white.withValues(alpha: 0.7)),
+            icon: Icon(Icons.more_vert,
+                color: Colors.white.withValues(alpha: 0.7)),
             onSelected: (value) async {
               switch (value) {
                 case 'edit':
@@ -224,13 +228,15 @@ class ProfileManagementTile extends ConsumerWidget {
     );
   }
 
-  Future<void> _editProfile(BuildContext context, WidgetRef ref, ProfileData profile) async {
+  Future<void> _editProfile(
+      BuildContext context, WidgetRef ref, ProfileData profile) async {
     final nameController = TextEditingController(text: profile.name);
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: const Color(0xFF1A1B3D),
-        title: const Text('Edit Profile', style: TextStyle(color: Colors.white)),
+        title:
+            const Text('Edit Profile', style: TextStyle(color: Colors.white)),
         content: TextField(
           controller: nameController,
           style: const TextStyle(color: Colors.white),
@@ -238,18 +244,22 @@ class ProfileManagementTile extends ConsumerWidget {
           decoration: const InputDecoration(
             labelText: 'Name',
             labelStyle: TextStyle(color: Colors.white70),
-            enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white30)),
-            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF6366F1))),
+            enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white30)),
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFF6366F1))),
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancel', style: TextStyle(color: Colors.white70)),
+            child:
+                const Text('Cancel', style: TextStyle(color: Colors.white70)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(ctx, true),
-            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF6366F1)),
+            style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF6366F1)),
             child: const Text('Save'),
           ),
         ],
@@ -271,7 +281,8 @@ class ProfileManagementTile extends ConsumerWidget {
     }
   }
 
-  Future<void> _switchProfile(BuildContext context, WidgetRef ref, ProfileData profile) async {
+  Future<void> _switchProfile(
+      BuildContext context, WidgetRef ref, ProfileData profile) async {
     final activeProfile = ref.read(activeProfileStateProvider);
     final fromProfileName = activeProfile?.name ?? 'Unknown';
 
@@ -280,7 +291,8 @@ class ProfileManagementTile extends ConsumerWidget {
       await profileManager.switchProfile(profile.id);
 
       // Track analytics safely
-      final analyticsManager = ref.read(profileAnalyticsManagerProvider.notifier);
+      final analyticsManager =
+          ref.read(profileAnalyticsManagerProvider.notifier);
       await analyticsManager.trackProfileSwitch(
         fromProfileId: activeProfile?.id ?? 'unknown',
         toProfileId: profile.id,
@@ -314,12 +326,14 @@ class ProfileManagementTile extends ConsumerWidget {
     }
   }
 
-  Future<void> _deleteProfile(BuildContext context, WidgetRef ref, ProfileData profile, bool isActive) async {
+  Future<void> _deleteProfile(BuildContext context, WidgetRef ref,
+      ProfileData profile, bool isActive) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF1A1B3D),
-        title: const Text('Delete Profile', style: TextStyle(color: Colors.white)),
+        title:
+            const Text('Delete Profile', style: TextStyle(color: Colors.white)),
         content: Text(
           'Are you sure you want to delete "${profile.name}"? This action cannot be undone.',
           style: const TextStyle(color: Colors.white),
@@ -345,7 +359,8 @@ class ProfileManagementTile extends ConsumerWidget {
 
         if (success && context.mounted) {
           // Track analytics safely
-          final analyticsManager = ref.read(profileAnalyticsManagerProvider.notifier);
+          final analyticsManager =
+              ref.read(profileAnalyticsManagerProvider.notifier);
           await analyticsManager.trackProfileDeleted(
             profileId: profile.id,
             profileName: profile.name,

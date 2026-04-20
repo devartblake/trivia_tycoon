@@ -8,12 +8,12 @@ import 'package:go_router/go_router.dart';
 import 'package:hive/hive.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 
-
 class AdminEventQueueScreen extends ConsumerStatefulWidget {
   const AdminEventQueueScreen({super.key});
 
   @override
-  ConsumerState<AdminEventQueueScreen> createState() => _AdminEventQueueScreenState();
+  ConsumerState<AdminEventQueueScreen> createState() =>
+      _AdminEventQueueScreenState();
 }
 
 class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
@@ -35,7 +35,6 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
     super.initState();
     _loadEventQueue();
   }
-
 
   int _secondsRemaining(DateTime? until) {
     if (until == null) return 0;
@@ -62,20 +61,26 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
       // Read directly from Hive box
       final box = await Hive.openBox('event_queue');
 
-      final eventEntries = box.toMap().entries.map((e) {
-        try {
-          // Handle different possible types
-          if (e.value is Map<String, dynamic>) {
-            return MapEntry(e.key, e.value as Map<String, dynamic>);
-          } else if (e.value is Map) {
-            return MapEntry(e.key, Map<String, dynamic>.from(e.value as Map));
-          } else {
-            return null;
-          }
-        } catch (_) {
-          return null;
-        }
-      }).whereType<MapEntry<dynamic, Map<String, dynamic>>>().toList();
+      final eventEntries = box
+          .toMap()
+          .entries
+          .map((e) {
+            try {
+              // Handle different possible types
+              if (e.value is Map<String, dynamic>) {
+                return MapEntry(e.key, e.value as Map<String, dynamic>);
+              } else if (e.value is Map) {
+                return MapEntry(
+                    e.key, Map<String, dynamic>.from(e.value as Map));
+              } else {
+                return null;
+              }
+            } catch (_) {
+              return null;
+            }
+          })
+          .whereType<MapEntry<dynamic, Map<String, dynamic>>>()
+          .toList();
 
       setState(() {
         _events = eventEntries;
@@ -83,7 +88,6 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
         _isLoading = false;
         _currentPage = 0;
       });
-
     } catch (e) {
       setState(() => _isLoading = false);
       _showError('Failed to load event queue: $e');
@@ -222,10 +226,14 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
   Future<void> _exportQueueToFile() async {
     try {
       final box = await Hive.openBox('event_queue');
-      final allEvents = box.toMap().entries.map((e) => {
-        'key': e.key.toString(),
-        'data': e.value,
-      }).toList();
+      final allEvents = box
+          .toMap()
+          .entries
+          .map((e) => {
+                'key': e.key.toString(),
+                'data': e.value,
+              })
+          .toList();
 
       final exportJson = const JsonEncoder.withIndent('  ').convert({
         'export_time': DateTime.now().toIso8601String(),
@@ -278,7 +286,8 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
             .exportFailedEventsForUpload(playerId);
         final jsonString = jsonEncode(exportData);
         await Clipboard.setData(ClipboardData(text: jsonString));
-        _showError('Server upload failed. Copied payload to clipboard instead. Error: $e');
+        _showError(
+            'Server upload failed. Copied payload to clipboard instead. Error: $e');
       } catch (_) {
         _showError('Failed to export: $e');
       }
@@ -384,21 +393,21 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : Column(
-        children: [
-          // Status Card
-          _buildStatusCard(theme),
+              children: [
+                // Status Card
+                _buildStatusCard(theme),
 
-          // Action Buttons
-          _buildActionButtons(theme),
+                // Action Buttons
+                _buildActionButtons(theme),
 
-          // Events List with Pagination
-          Expanded(
-            child: _events.isEmpty
-                ? _buildEmptyState()
-                : _buildEventsList(theme),
-          ),
-        ],
-      ),
+                // Events List with Pagination
+                Expanded(
+                  child: _events.isEmpty
+                      ? _buildEmptyState()
+                      : _buildEventsList(theme),
+                ),
+              ],
+            ),
     );
   }
 
@@ -552,11 +561,11 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
   }
 
   Widget _buildActionChip(
-      String label,
-      IconData icon,
-      Color color,
-      VoidCallback onTap,
-      ) {
+    String label,
+    IconData icon,
+    Color color,
+    VoidCallback onTap,
+  ) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
@@ -657,7 +666,8 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
                     tooltip: 'Previous page',
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: theme.primaryColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
@@ -700,9 +710,7 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: isSelected
-                        ? theme.primaryColor
-                        : Colors.grey[300]!,
+                    color: isSelected ? theme.primaryColor : Colors.grey[300]!,
                     width: isSelected ? 2 : 1,
                   ),
                   boxShadow: [
@@ -775,7 +783,8 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
                             IconButton(
                               icon: const Icon(Icons.refresh_rounded),
                               color: Colors.orange,
-                              onPressed: _canReprocess(entry.key, event) && !_isReprocessCoolingDown(entry.key)
+                              onPressed: _canReprocess(entry.key, event) &&
+                                      !_isReprocessCoolingDown(entry.key)
                                   ? () => _reprocessEvent(entry.key, event)
                                   : null,
                               tooltip: _isReprocessCoolingDown(entry.key)
@@ -795,17 +804,21 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
                           spacing: 8,
                           runSpacing: 8,
                           children: [
-                            _buildOutcomeBadge('Status', _resolveStatus(entry.key, event)),
+                            _buildOutcomeBadge(
+                                'Status', _resolveStatus(entry.key, event)),
                             if (_resolveDedupeOutcome(entry.key, event) != null)
-                              _buildOutcomeBadge('Dedupe', _resolveDedupeOutcome(entry.key, event)!),
+                              _buildOutcomeBadge('Dedupe',
+                                  _resolveDedupeOutcome(entry.key, event)!),
                             if (_resolveFailureReason(entry.key, event) != null)
-                              _buildOutcomeBadge('Failure', _resolveFailureReason(entry.key, event)!),
+                              _buildOutcomeBadge('Failure',
+                                  _resolveFailureReason(entry.key, event)!),
                           ],
                         ),
                         const SizedBox(height: 8),
                         Text(
                           'Timestamp: ${event['timestamp']}',
-                          style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                          style:
+                              TextStyle(fontSize: 12, color: Colors.grey[500]),
                         ),
                         if (event['last_error'] != null) ...[
                           const SizedBox(height: 8),
@@ -838,7 +851,6 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
     );
   }
 
-
   String _resolveStatus(dynamic queueKey, Map<String, dynamic> event) {
     final server = _serverOutcomeByKey[queueKey];
     return (server?['status'] ?? event['status'] ?? 'queued').toString();
@@ -854,7 +866,9 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
 
   String? _resolveFailureReason(dynamic queueKey, Map<String, dynamic> event) {
     final server = _serverOutcomeByKey[queueKey];
-    final value = server?['failureReason'] ?? event['failure_reason'] ?? event['last_error'];
+    final value = server?['failureReason'] ??
+        event['failure_reason'] ??
+        event['last_error'];
     if (value == null) return null;
     final text = value.toString().trim();
     return text.isEmpty ? null : text;
@@ -868,9 +882,13 @@ class _AdminEventQueueScreenState extends ConsumerState<AdminEventQueueScreen> {
   Widget _buildOutcomeBadge(String label, String value) {
     final normalized = value.toLowerCase();
     Color color;
-    if (normalized == 'sent' || normalized == 'success' || normalized == 'processed') {
+    if (normalized == 'sent' ||
+        normalized == 'success' ||
+        normalized == 'processed') {
       color = Colors.green;
-    } else if (normalized == 'queued' || normalized == 'pending' || normalized == 'retrying') {
+    } else if (normalized == 'queued' ||
+        normalized == 'pending' ||
+        normalized == 'retrying') {
       color = Colors.blue;
     } else if (normalized == 'duplicate' || normalized == 'deduped') {
       color = Colors.purple;

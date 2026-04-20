@@ -12,7 +12,8 @@ class EngagementAnalyticsChart extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final filters = ref.watch(missionFiltersProvider);
-    final filtered = entries.take(filters.timeframe == 'Monthly' ? 30 : 7).toList();
+    final filtered =
+        entries.take(filters.timeframe == 'Monthly' ? 30 : 7).toList();
 
     if (filtered.isEmpty) {
       return Container(
@@ -55,8 +56,14 @@ class EngagementAnalyticsChart extends ConsumerWidget {
       );
     }
 
-    final maxEngagement = filtered.map((e) => e.sessionsPerUser).reduce((a, b) => a > b ? a : b).toDouble();
-    final minEngagement = filtered.map((e) => e.sessionsPerUser).reduce((a, b) => a < b ? a : b).toDouble();
+    final maxEngagement = filtered
+        .map((e) => e.sessionsPerUser)
+        .reduce((a, b) => a > b ? a : b)
+        .toDouble();
+    final minEngagement = filtered
+        .map((e) => e.sessionsPerUser)
+        .reduce((a, b) => a < b ? a : b)
+        .toDouble();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,7 +90,11 @@ class EngagementAnalyticsChart extends ConsumerWidget {
               Expanded(
                 child: _buildStatItem(
                   'Average',
-                  (filtered.map((e) => e.sessionsPerUser).reduce((a, b) => a + b) / filtered.length).toStringAsFixed(1),
+                  (filtered
+                              .map((e) => e.sessionsPerUser)
+                              .reduce((a, b) => a + b) /
+                          filtered.length)
+                      .toStringAsFixed(1),
                   Icons.trending_up,
                 ),
               ),
@@ -109,7 +120,8 @@ class EngagementAnalyticsChart extends ConsumerWidget {
               gridData: FlGridData(
                 show: true,
                 drawVerticalLine: false,
-                horizontalInterval: (maxEngagement / 5).clamp(1, double.infinity),
+                horizontalInterval:
+                    (maxEngagement / 5).clamp(1, double.infinity),
                 getDrawingHorizontalLine: (value) => FlLine(
                   color: Colors.grey[200]!,
                   strokeWidth: 1,
@@ -122,7 +134,8 @@ class EngagementAnalyticsChart extends ConsumerWidget {
                     showTitles: true,
                     reservedSize: 30,
                     getTitlesWidget: (value, meta) {
-                      if (value.toInt() >= 0 && value.toInt() < filtered.length) {
+                      if (value.toInt() >= 0 &&
+                          value.toInt() < filtered.length) {
                         return Padding(
                           padding: const EdgeInsets.only(top: 8),
                           child: Text(
@@ -180,9 +193,9 @@ class EngagementAnalyticsChart extends ConsumerWidget {
                       .asMap()
                       .entries
                       .map((e) => FlSpot(
-                    e.key.toDouble(),
-                    e.value.sessionsPerUser.toDouble(),
-                  ))
+                            e.key.toDouble(),
+                            e.value.sessionsPerUser.toDouble(),
+                          ))
                       .toList(),
                   isCurved: true,
                   color: const Color(0xFFF59E0B),

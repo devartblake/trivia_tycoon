@@ -117,10 +117,13 @@ class PatternSprintController {
       final nextStreak = _state.streak + 1;
       final streakBonusMultiplier = (1.0 + (nextStreak * 0.06)).clamp(1.0, 2.0);
 
-      final timeBonus = (_state.remaining.inSeconds / config.timeLimit.inSeconds)
-          .clamp(0.25, 1.0);
+      final timeBonus =
+          (_state.remaining.inSeconds / config.timeLimit.inSeconds)
+              .clamp(0.25, 1.0);
 
-      final gained = (config.basePoints * streakBonusMultiplier * (0.75 + (0.25 * timeBonus)))
+      final gained = (config.basePoints *
+              streakBonusMultiplier *
+              (0.75 + (0.25 * timeBonus)))
           .round();
 
       _state = _state.copyWith(

@@ -66,7 +66,7 @@ class _UserSettingsScreenState extends ConsumerState<UserSettingsScreen>
 
     _itemControllers = List.generate(
       _settingsItems.length + 1,
-          (index) => AnimationController(
+      (index) => AnimationController(
         duration: Duration(milliseconds: 400 + (index * 100)),
         vsync: this,
       ),
@@ -100,9 +100,9 @@ class _UserSettingsScreenState extends ConsumerState<UserSettingsScreen>
       appBar: _buildAppBar(),
       body: _fadeAnimation != null
           ? FadeTransition(
-        opacity: _fadeAnimation!,
-        child: _buildBody(),
-      )
+              opacity: _fadeAnimation!,
+              child: _buildBody(),
+            )
           : _buildBody(),
     );
   }
@@ -330,7 +330,8 @@ class _UserSettingsScreenState extends ConsumerState<UserSettingsScreen>
             ..._settingsItems.asMap().entries.map((entry) {
               final index = entry.key + 1;
               final item = entry.value;
-              return _buildSettingItem(item, index, index == _settingsItems.length);
+              return _buildSettingItem(
+                  item, index, index == _settingsItems.length);
             }).toList(),
           ],
         ),
@@ -353,13 +354,14 @@ class _UserSettingsScreenState extends ConsumerState<UserSettingsScreen>
             bottom: isLast
                 ? BorderSide.none
                 : BorderSide(
-              color: const Color(0xFF64748B).withValues(alpha: 0.1),
-              width: 1,
-            ),
+                    color: const Color(0xFF64748B).withValues(alpha: 0.1),
+                    width: 1,
+                  ),
           ),
         ),
         child: ListTile(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
           leading: Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
@@ -428,7 +430,8 @@ class _UserSettingsScreenState extends ConsumerState<UserSettingsScreen>
             ],
           ),
           child: ListTile(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             leading: Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -473,7 +476,6 @@ class _UserSettingsScreenState extends ConsumerState<UserSettingsScreen>
   }
 
   void _showLogoutDialog() async {
-
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (BuildContext context) {

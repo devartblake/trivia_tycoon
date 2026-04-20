@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 export 'menu_enums.dart' show AgeGroup;
 
 enum UserStatus { online, offline, away, busy }
+
 enum UserRole { user, premium, moderator, admin }
+
 enum AgeGroup { kids, teens, adults, general }
 
 class AdminUserModel {
@@ -204,15 +206,15 @@ class AdminUserModel {
       email: json['email'] as String,
       avatarUrl: json['avatarUrl'] as String?,
       status: UserStatus.values.firstWhere(
-            (e) => e.name == json['status'],
+        (e) => e.name == json['status'],
         orElse: () => UserStatus.offline,
       ),
       role: UserRole.values.firstWhere(
-            (e) => e.name == json['role'],
+        (e) => e.name == json['role'],
         orElse: () => UserRole.user,
       ),
       ageGroup: AgeGroup.values.firstWhere(
-            (e) => e.name == json['ageGroup'],
+        (e) => e.name == json['ageGroup'],
         orElse: () => AgeGroup.adults,
       ),
       createdAt: DateTime.parse(json['createdAt'] as String),

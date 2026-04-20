@@ -191,9 +191,14 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
 
   Widget _buildStoreContent(
       List<StoreItemModel> items, Map<String, dynamic> status) {
-    final categories = <String>['All', ...{for (var item in items) item.category}];
-    final storeItems = items.where((item) =>
-    _selectedCategory == 'All' || item.category == _selectedCategory).toList();
+    final categories = <String>[
+      'All',
+      ...{for (var item in items) item.category}
+    ];
+    final storeItems = items
+        .where((item) =>
+            _selectedCategory == 'All' || item.category == _selectedCategory)
+        .toList();
 
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
@@ -292,7 +297,9 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              _selectedCategory == 'All' ? 'All Items' : _selectedCategory,
+                              _selectedCategory == 'All'
+                                  ? 'All Items'
+                                  : _selectedCategory,
                               style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
@@ -310,12 +317,15 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
                           ],
                         ),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF6366F1).withValues(alpha: 0.1),
+                            color:
+                                const Color(0xFF6366F1).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: const Color(0xFF6366F1).withValues(alpha: 0.2),
+                              color: const Color(0xFF6366F1)
+                                  .withValues(alpha: 0.2),
                             ),
                           ),
                           child: Row(
@@ -363,7 +373,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
                 childAspectRatio: 0.75,
               ),
               delegate: SliverChildBuilderDelegate(
-                    (context, index) {
+                (context, index) {
                   final item = storeItems[index];
                   return TweenAnimationBuilder<double>(
                     duration: Duration(milliseconds: 1000 + (index * 100)),
@@ -378,7 +388,8 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
                             name: item.name,
                             description: item.description,
                             iconPath: item.iconPath,
-                            price: item.displayPriceLabel ?? item.price.toString(),
+                            price:
+                                item.displayPriceLabel ?? item.price.toString(),
                             onBuy: () => _handlePurchase(item),
                           ),
                         ),
@@ -502,7 +513,8 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF6366F1),
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -591,8 +603,8 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
     final paymentsEnabled = status['paymentsEnabled'] != false;
     final stripeEnabled = status['stripeEnabled'] == true;
     final payPalEnabled = status['payPalEnabled'] == true;
-    final message = status['message']?.toString() ??
-        'Store availability is being loaded.';
+    final message =
+        status['message']?.toString() ?? 'Store availability is being loaded.';
 
     final accent = !storeEnabled || !paymentsEnabled
         ? const Color(0xFFB91C1C)
@@ -664,9 +676,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: active
-            ? const Color(0xFFDCFCE7)
-            : const Color(0xFFFEE2E2),
+        color: active ? const Color(0xFFDCFCE7) : const Color(0xFFFEE2E2),
         borderRadius: BorderRadius.circular(999),
       ),
       child: Text(
@@ -726,7 +736,8 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
               const Icon(Icons.warning, color: Colors.white),
               const SizedBox(width: 12),
               const Expanded(
-                child: Text("Not enough coins! Visit the coin store to get more."),
+                child:
+                    Text("Not enough coins! Visit the coin store to get more."),
               ),
             ],
           ),
@@ -812,10 +823,9 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
       if (!mounted) return;
       Navigator.of(context).pop();
 
-      final redirectUrl = (useStripe
-              ? response['checkoutUrl']
-              : response['approveUrl'])
-          ?.toString();
+      final redirectUrl =
+          (useStripe ? response['checkoutUrl'] : response['approveUrl'])
+              ?.toString();
       if (redirectUrl == null || redirectUrl.isEmpty) {
         _showSnack(
           'The payment provider did not return a redirect URL.',
@@ -912,7 +922,8 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
                 const SizedBox(height: 12),
                 _buildProviderTile(
                   label: 'PayPal',
-                  subtitle: 'Approval flow available; capture return step still pending',
+                  subtitle:
+                      'Approval flow available; capture return step still pending',
                   icon: Icons.account_balance_wallet_outlined,
                   color: const Color(0xFF0EA5E9),
                   onTap: () => Navigator.of(context).pop(false),

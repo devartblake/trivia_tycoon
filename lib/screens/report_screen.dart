@@ -49,7 +49,8 @@ class _ReportScreenState extends State<ReportScreen> {
               Icon(Icons.check_circle, color: Colors.white),
               SizedBox(width: 12),
               Expanded(
-                child: Text('Report submitted successfully! We\'ll review it soon.'),
+                child: Text(
+                    'Report submitted successfully! We\'ll review it soon.'),
               ),
             ],
           ),
@@ -167,7 +168,8 @@ class _ReportScreenState extends State<ReportScreen> {
                     children: _categories.map((category) {
                       final isSelected = _selectedCategory == category;
                       return InkWell(
-                        onTap: () => setState(() => _selectedCategory = category),
+                        onTap: () =>
+                            setState(() => _selectedCategory = category),
                         borderRadius: BorderRadius.circular(10),
                         child: Container(
                           padding: const EdgeInsets.symmetric(
@@ -231,14 +233,13 @@ class _ReportScreenState extends State<ReportScreen> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
                       child: InkWell(
-                        onTap: () => setState(() => _selectedPriority = priority),
+                        onTap: () =>
+                            setState(() => _selectedPriority = priority),
                         borderRadius: BorderRadius.circular(10),
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
-                            color: isSelected
-                                ? color
-                                : const Color(0xFFF8FAFC),
+                            color: isSelected ? color : const Color(0xFFF8FAFC),
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
                               color: isSelected ? color : Colors.grey[300]!,
@@ -249,9 +250,7 @@ class _ReportScreenState extends State<ReportScreen> {
                             children: [
                               Icon(
                                 _getPriorityIcon(priority),
-                                color: isSelected
-                                    ? Colors.white
-                                    : color,
+                                color: isSelected ? Colors.white : color,
                                 size: 24,
                               ),
                               const SizedBox(height: 4),
@@ -310,7 +309,8 @@ class _ReportScreenState extends State<ReportScreen> {
                     controller: _descriptionController,
                     maxLines: 6,
                     decoration: InputDecoration(
-                      hintText: 'Describe what happened, what you expected, and any steps to reproduce the issue...',
+                      hintText:
+                          'Describe what happened, what you expected, and any steps to reproduce the issue...',
                       hintStyle: TextStyle(color: Colors.grey[400]),
                       filled: true,
                       fillColor: const Color(0xFFF8FAFC),
@@ -380,8 +380,8 @@ class _ReportScreenState extends State<ReportScreen> {
                         const SizedBox(height: 4),
                         Text(
                           '• Be specific about what went wrong\n'
-                              '• Include steps to reproduce the issue\n'
-                              '• Mention your device and app version',
+                          '• Include steps to reproduce the issue\n'
+                          '• Mention your device and app version',
                           style: TextStyle(
                             fontSize: 13,
                             color: Colors.grey[700],
@@ -422,28 +422,28 @@ class _ReportScreenState extends State<ReportScreen> {
                     child: Center(
                       child: _isSubmitting
                           ? const SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2,
-                        ),
-                      )
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
                           : const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.send, color: Colors.white),
-                          SizedBox(width: 12),
-                          Text(
-                            'Submit Report',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.send, color: Colors.white),
+                                SizedBox(width: 12),
+                                Text(
+                                  'Submit Report',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
                     ),
                   ),
                 ),

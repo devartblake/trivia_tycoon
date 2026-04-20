@@ -50,7 +50,8 @@ class ThemeNotifier extends ChangeNotifier {
         LogManager.debug("Loaded theme type: $savedTheme");
       } else {
         await storage.setString(_themeKey, AppTheme.defaultTheme.name);
-        LogManager.debug("Default theme type saved: ${AppTheme.defaultTheme.name}");
+        LogManager.debug(
+            "Default theme type saved: ${AppTheme.defaultTheme.name}");
       }
 
       /// Load ThemeMode

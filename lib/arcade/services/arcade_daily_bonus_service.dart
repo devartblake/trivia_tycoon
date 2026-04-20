@@ -20,13 +20,13 @@ class ArcadeDailyBonusService {
   // This schedule is 1-based: Day 1 reward, Day 2 reward, etc.
   // After the last index, we "cap" at the last reward (no wrap).
   static const List<DailyBonusReward> _schedule = <DailyBonusReward>[
-    DailyBonusReward(coins: 250, gems: 2),  // Day 1
-    DailyBonusReward(coins: 300, gems: 2),  // Day 2
-    DailyBonusReward(coins: 350, gems: 3),  // Day 3
-    DailyBonusReward(coins: 450, gems: 3),  // Day 4
-    DailyBonusReward(coins: 550, gems: 4),  // Day 5
-    DailyBonusReward(coins: 700, gems: 4),  // Day 6
-    DailyBonusReward(coins: 900, gems: 5),  // Day 7
+    DailyBonusReward(coins: 250, gems: 2), // Day 1
+    DailyBonusReward(coins: 300, gems: 2), // Day 2
+    DailyBonusReward(coins: 350, gems: 3), // Day 3
+    DailyBonusReward(coins: 450, gems: 3), // Day 4
+    DailyBonusReward(coins: 550, gems: 4), // Day 5
+    DailyBonusReward(coins: 700, gems: 4), // Day 6
+    DailyBonusReward(coins: 900, gems: 5), // Day 7
   ];
 
   // ---------------------------------------------------------------------------
@@ -175,9 +175,9 @@ class DailyBonusReward {
   });
 
   Map<String, dynamic> toJson() => {
-    'coins': coins,
-    'gems': gems,
-  };
+        'coins': coins,
+        'gems': gems,
+      };
 
   factory DailyBonusReward.fromJson(Map<String, dynamic> json) {
     return DailyBonusReward(

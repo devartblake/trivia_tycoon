@@ -52,7 +52,8 @@ class TierProgressionNotifier extends StateNotifier<TierProgressionState> {
   final TierManager _tierManager;
   final Ref _ref;
 
-  TierProgressionNotifier(this._tierManager, this._ref) : super(const TierProgressionState());
+  TierProgressionNotifier(this._tierManager, this._ref)
+      : super(const TierProgressionState());
 
   /// Update tier progression and return the result
   Future<TierUpdateResult> updateTierProgress() async {
@@ -134,7 +135,8 @@ class TierProgressionNotifier extends StateNotifier<TierProgressionState> {
 
     // Find next significant tier (e.g., every 3rd tier)
     for (int i = currentTierId + 1; i < allTiers.length; i++) {
-      if (i % 3 == 0) { // Milestone every 3rd tier
+      if (i % 3 == 0) {
+        // Milestone every 3rd tier
         return allTiers[i];
       }
     }
@@ -188,4 +190,5 @@ final currentTierProvider = _ProviderReferences.currentTierProvider;
 final currentTierIdProvider = _ProviderReferences.currentTierIdProvider;
 final allTiersProvider = _ProviderReferences.allTiersProvider;
 final nextTierProvider = _ProviderReferences.nextTierProvider;
-final tierProgressPercentageProvider = _ProviderReferences.tierProgressPercentageProvider;
+final tierProgressPercentageProvider =
+    _ProviderReferences.tierProgressPercentageProvider;

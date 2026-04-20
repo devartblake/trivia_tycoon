@@ -33,8 +33,11 @@ class Hexagon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = Size(radius * 2, orientation == HexOrientation.pointy
-        ? (radius * 1.7320508) : (radius * 2));
+    final size = Size(
+        radius * 2,
+        orientation == HexOrientation.pointy
+            ? (radius * 1.7320508)
+            : (radius * 2));
 
     Widget hexWidget = SizedBox(
       width: size.width,
@@ -116,7 +119,8 @@ class _HexPainter extends CustomPainter {
 
     // Fill the hexagon
     if (gradient != null) {
-      final paint = Paint()..shader = gradient!.createShader(Offset.zero & size);
+      final paint = Paint()
+        ..shader = gradient!.createShader(Offset.zero & size);
       canvas.drawPath(path, paint);
     } else {
       final paint = Paint()..color = color ?? const Color(0x11222222);
@@ -141,13 +145,15 @@ class _HexPainter extends CustomPainter {
   }) {
     if (cornerRadius <= 0) {
       // Use original hex path if no corner radius
-      return buildHexPath(center: center, radius: radius, orientation: orientation);
+      return buildHexPath(
+          center: center, radius: radius, orientation: orientation);
     }
 
     // Calculate hexagon vertices
     final vertices = <Offset>[];
     for (int i = 0; i < 6; i++) {
-      final angle = (orientation == HexOrientation.pointy ? 0.0 : 30.0) + (i * 60.0);
+      final angle =
+          (orientation == HexOrientation.pointy ? 0.0 : 30.0) + (i * 60.0);
       final radians = angle * (math.pi / 180.0);
       vertices.add(Offset(
         center.dx + radius * math.cos(radians),
@@ -157,7 +163,8 @@ class _HexPainter extends CustomPainter {
 
     // Build path with rounded corners
     final path = Path();
-    final clampedRadius = cornerRadius.clamp(0.0, radius * 0.3); // Limit corner radius
+    final clampedRadius =
+        cornerRadius.clamp(0.0, radius * 0.3); // Limit corner radius
 
     for (int i = 0; i < vertices.length; i++) {
       final current = vertices[i];
@@ -166,7 +173,8 @@ class _HexPainter extends CustomPainter {
 
       if (i == 0) {
         // Move to first point (adjusted for corner radius)
-        final startPoint = _getCornerStartPoint(prev, current, next, clampedRadius);
+        final startPoint =
+            _getCornerStartPoint(prev, current, next, clampedRadius);
         path.moveTo(startPoint.dx, startPoint.dy);
       }
 
@@ -178,10 +186,13 @@ class _HexPainter extends CustomPainter {
     return path;
   }
 
-  Offset _getCornerStartPoint(Offset prev, Offset current, Offset next, double cornerRadius) {
+  Offset _getCornerStartPoint(
+      Offset prev, Offset current, Offset next, double cornerRadius) {
     final toPrev = Offset(prev.dx - current.dx, prev.dy - current.dy);
-    final toPrevLength = math.sqrt(toPrev.dx * toPrev.dx + toPrev.dy * toPrev.dy);
-    final toPrevNorm = Offset(toPrev.dx / toPrevLength, toPrev.dy / toPrevLength);
+    final toPrevLength =
+        math.sqrt(toPrev.dx * toPrev.dx + toPrev.dy * toPrev.dy);
+    final toPrevNorm =
+        Offset(toPrev.dx / toPrevLength, toPrev.dy / toPrevLength);
 
     return Offset(
       current.dx + toPrevNorm.dx * cornerRadius,
@@ -189,16 +200,21 @@ class _HexPainter extends CustomPainter {
     );
   }
 
-  void _addRoundedCorner(Path path, Offset prev, Offset current, Offset next, double cornerRadius) {
+  void _addRoundedCorner(Path path, Offset prev, Offset current, Offset next,
+      double cornerRadius) {
     // Calculate vectors from current vertex to adjacent vertices
     final toPrev = Offset(prev.dx - current.dx, prev.dy - current.dy);
     final toNext = Offset(next.dx - current.dx, next.dy - current.dy);
 
-    final toPrevLength = math.sqrt(toPrev.dx * toPrev.dx + toPrev.dy * toPrev.dy);
-    final toNextLength = math.sqrt(toNext.dx * toNext.dx + toNext.dy * toNext.dy);
+    final toPrevLength =
+        math.sqrt(toPrev.dx * toPrev.dx + toPrev.dy * toPrev.dy);
+    final toNextLength =
+        math.sqrt(toNext.dx * toNext.dx + toNext.dy * toNext.dy);
 
-    final toPrevNorm = Offset(toPrev.dx / toPrevLength, toPrev.dy / toPrevLength);
-    final toNextNorm = Offset(toNext.dx / toNextLength, toNext.dy / toNextLength);
+    final toPrevNorm =
+        Offset(toPrev.dx / toPrevLength, toPrev.dy / toPrevLength);
+    final toNextNorm =
+        Offset(toNext.dx / toNextLength, toNext.dy / toNextLength);
 
     // Calculate control points for the rounded corner
     final startPoint = Offset(
@@ -219,12 +235,12 @@ class _HexPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _HexPainter old) =>
       old.radius != radius ||
-          old.orientation != orientation ||
-          old.gradient != gradient ||
-          old.color != color ||
-          old.borderColor != borderColor ||
-          old.borderWidth != borderWidth ||
-          old.cornerRadius != cornerRadius;
+      old.orientation != orientation ||
+      old.gradient != gradient ||
+      old.color != color ||
+      old.borderColor != borderColor ||
+      old.borderWidth != borderWidth ||
+      old.cornerRadius != cornerRadius;
 }
 
 class _HexBorder extends ShapeBorder {
@@ -243,10 +259,10 @@ class _HexBorder extends ShapeBorder {
 
   @override
   ShapeBorder scale(double t) => _HexBorder(
-    radius: radius * t,
-    orientation: orientation,
-    cornerRadius: cornerRadius * t,
-  );
+        radius: radius * t,
+        orientation: orientation,
+        cornerRadius: cornerRadius * t,
+      );
 
   @override
   Path getInnerPath(Rect rect, {TextDirection? textDirection}) =>
@@ -256,7 +272,8 @@ class _HexBorder extends ShapeBorder {
   Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
     final center = rect.center;
     if (cornerRadius <= 0) {
-      return buildHexPath(center: center, radius: radius, orientation: orientation);
+      return buildHexPath(
+          center: center, radius: radius, orientation: orientation);
     }
 
     // Use the same rounded path logic as the painter
@@ -277,7 +294,8 @@ class _HexBorder extends ShapeBorder {
     // Calculate hexagon vertices
     final vertices = <Offset>[];
     for (int i = 0; i < 6; i++) {
-      final angle = (orientation == HexOrientation.pointy ? 0.0 : 30.0) + (i * 60.0);
+      final angle =
+          (orientation == HexOrientation.pointy ? 0.0 : 30.0) + (i * 60.0);
       final radians = angle * (math.pi / 180.0);
       vertices.add(Offset(
         center.dx + radius * math.cos(radians),
@@ -294,7 +312,8 @@ class _HexBorder extends ShapeBorder {
       final prev = vertices[(i - 1 + vertices.length) % vertices.length];
 
       if (i == 0) {
-        final startPoint = _getCornerStartPoint(prev, current, next, clampedRadius);
+        final startPoint =
+            _getCornerStartPoint(prev, current, next, clampedRadius);
         path.moveTo(startPoint.dx, startPoint.dy);
       }
 
@@ -305,10 +324,13 @@ class _HexBorder extends ShapeBorder {
     return path;
   }
 
-  Offset _getCornerStartPoint(Offset prev, Offset current, Offset next, double cornerRadius) {
+  Offset _getCornerStartPoint(
+      Offset prev, Offset current, Offset next, double cornerRadius) {
     final toPrev = Offset(prev.dx - current.dx, prev.dy - current.dy);
-    final toPrevLength = math.sqrt(toPrev.dx * toPrev.dx + toPrev.dy * toPrev.dy);
-    final toPrevNorm = Offset(toPrev.dx / toPrevLength, toPrev.dy / toPrevLength);
+    final toPrevLength =
+        math.sqrt(toPrev.dx * toPrev.dx + toPrev.dy * toPrev.dy);
+    final toPrevNorm =
+        Offset(toPrev.dx / toPrevLength, toPrev.dy / toPrevLength);
 
     return Offset(
       current.dx + toPrevNorm.dx * cornerRadius,
@@ -316,15 +338,20 @@ class _HexBorder extends ShapeBorder {
     );
   }
 
-  void _addRoundedCorner(Path path, Offset prev, Offset current, Offset next, double cornerRadius) {
+  void _addRoundedCorner(Path path, Offset prev, Offset current, Offset next,
+      double cornerRadius) {
     final toPrev = Offset(prev.dx - current.dx, prev.dy - current.dy);
     final toNext = Offset(next.dx - current.dx, next.dy - current.dy);
 
-    final toPrevLength = math.sqrt(toPrev.dx * toPrev.dx + toPrev.dy * toPrev.dy);
-    final toNextLength = math.sqrt(toNext.dx * toNext.dx + toNext.dy * toNext.dy);
+    final toPrevLength =
+        math.sqrt(toPrev.dx * toPrev.dx + toPrev.dy * toPrev.dy);
+    final toNextLength =
+        math.sqrt(toNext.dx * toNext.dx + toNext.dy * toNext.dy);
 
-    final toPrevNorm = Offset(toPrev.dx / toPrevLength, toPrev.dy / toPrevLength);
-    final toNextNorm = Offset(toNext.dx / toNextLength, toNext.dy / toNextLength);
+    final toPrevNorm =
+        Offset(toPrev.dx / toPrevLength, toPrev.dy / toPrevLength);
+    final toNextNorm =
+        Offset(toNext.dx / toNextLength, toNext.dy / toNextLength);
 
     final startPoint = Offset(
       current.dx + toPrevNorm.dx * cornerRadius,

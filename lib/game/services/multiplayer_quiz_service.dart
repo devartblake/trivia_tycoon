@@ -137,7 +137,8 @@ class MultiplayerQuizService {
   }
 
   // Submit an answer for the current question
-  Future<void> submitAnswer(String matchId, String answer, int questionIndex) async {
+  Future<void> submitAnswer(
+      String matchId, String answer, int questionIndex) async {
     try {
       final response = await _client.post(
         Uri.parse('$baseUrl/api/multiplayer/matches/$matchId/answers'),
@@ -334,7 +335,8 @@ class MultiplayerQuizService {
     }
   }
 
-  QuestionModel _createMockQuestion(int number, String gameMode, Map<String, dynamic> theme) {
+  QuestionModel _createMockQuestion(
+      int number, String gameMode, Map<String, dynamic> theme) {
     final sampleQuestions = _getSampleQuestions(theme['category']);
     final sample = sampleQuestions[Random().nextInt(sampleQuestions.length)];
     final options = List<String>.from(sample['options']);
@@ -396,7 +398,12 @@ class MultiplayerQuizService {
         return [
           {
             'question': 'Who was the first President of the United States?',
-            'options': ['John Adams', 'Thomas Jefferson', 'George Washington', 'Benjamin Franklin'],
+            'options': [
+              'John Adams',
+              'Thomas Jefferson',
+              'George Washington',
+              'Benjamin Franklin'
+            ],
             'correct': 'George Washington',
             'hint': 'Known as the "Father of His Country"',
           },
@@ -440,7 +447,8 @@ class MultiplayerQuizService {
       case 'sports':
         return [
           {
-            'question': 'How many players are on a basketball team on the court at once?',
+            'question':
+                'How many players are on a basketball team on the court at once?',
             'options': ['4', '5', '6', '7'],
             'correct': '5',
             'hint': 'Same as the number of positions in basketball',
@@ -475,7 +483,8 @@ class MultiplayerQuizService {
       }
 
       // Simulate random opponent activities
-      if (Random().nextDouble() < 0.3) { // 30% chance per interval
+      if (Random().nextDouble() < 0.3) {
+        // 30% chance per interval
         // This is handled in submitAnswer method
       }
     });

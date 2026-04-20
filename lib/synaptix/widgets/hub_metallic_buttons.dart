@@ -67,7 +67,9 @@ class _MetallicButton extends ConsumerWidget {
         HapticFeedback.lightImpact();
         playHubTapSound(ref);
         final mode = ref.read(synaptixModeProvider);
-        ref.read(analyticsServiceProvider).trackEvent('synaptix_hub_action_tapped', {
+        ref
+            .read(analyticsServiceProvider)
+            .trackEvent('synaptix_hub_action_tapped', {
           'surface': surface,
           'synaptix_mode': mode.name,
           'entry_point': 'metallic_button',
@@ -109,7 +111,8 @@ class _MetallicButton extends ConsumerWidget {
               child: IgnorePointer(
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(radius)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(radius)),
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,

@@ -31,8 +31,7 @@ final gameControllerProvider = ChangeNotifierProvider<GameController>((ref) {
       questionRepository: questionRepository,
       achievementService: achievementService,
       quizProgressService: quizProgressService,
-      router: router
-  );
+      router: router);
 });
 
 class GameController extends ChangeNotifier {
@@ -78,19 +77,22 @@ class GameController extends ChangeNotifier {
   }
 
   Future<bool> isPowerUpExpired() async {
-    final controller = providers.refContainer.read(providers.equippedPowerUpProvider.notifier);
+    final controller =
+        providers.refContainer.read(providers.equippedPowerUpProvider.notifier);
     return controller.isExpired();
   }
 
   /// ✅ NEW: Access remaining power-up duration
   Future<Duration> getPowerUpRemainingTime() async {
-    final controller = providers.refContainer.read(providers.equippedPowerUpProvider.notifier);
+    final controller =
+        providers.refContainer.read(providers.equippedPowerUpProvider.notifier);
     return controller.getRemainingTime();
   }
 
   /// ✅ NEW: Clear the active power-up
   Future<void> clearEquippedPowerUp() async {
-    final controller = providers.refContainer.read(providers.equippedPowerUpProvider.notifier);
+    final controller =
+        providers.refContainer.read(providers.equippedPowerUpProvider.notifier);
     await controller.clearEquippedPowerUp();
     _equippedPowerUp = null;
     notifyListeners();
@@ -99,9 +101,11 @@ class GameController extends ChangeNotifier {
   /// Starts a new game session.
   Future<void> startGame(List<PowerUp> availablePowerUps) async {
     // 🧠 Restore previously equipped power-up
-    final powerUpController = providers.refContainer.read(providers.equippedPowerUpProvider.notifier);
+    final powerUpController =
+        providers.refContainer.read(providers.equippedPowerUpProvider.notifier);
     await powerUpController.restoreFromStorage(availablePowerUps);
-    _equippedPowerUp = providers.refContainer.read(providers.equippedPowerUpProvider);
+    _equippedPowerUp =
+        providers.refContainer.read(providers.equippedPowerUpProvider);
 
     // 🚀 Begin game logic
     _gameState = GameState.playing;

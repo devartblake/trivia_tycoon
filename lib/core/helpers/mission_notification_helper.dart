@@ -4,7 +4,8 @@ import '../services/background_task_service.dart';
 
 /// Helper class to integrate notifications with your existing mission system
 class MissionNotificationHelper {
-  static final MissionNotificationHelper _instance = MissionNotificationHelper._internal();
+  static final MissionNotificationHelper _instance =
+      MissionNotificationHelper._internal();
   factory MissionNotificationHelper() => _instance;
   MissionNotificationHelper._internal();
 

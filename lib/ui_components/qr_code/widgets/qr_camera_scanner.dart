@@ -38,8 +38,10 @@ class _QrCameraScannerState extends State<QrCameraScanner> {
 
   Future<void> _initializeCamera() async {
     final cameras = await availableCameras();
-    final rear = cameras.firstWhere((c) => c.lensDirection == CameraLensDirection.back);
-    _controller = CameraController(rear, ResolutionPreset.low, enableAudio: false);
+    final rear =
+        cameras.firstWhere((c) => c.lensDirection == CameraLensDirection.back);
+    _controller =
+        CameraController(rear, ResolutionPreset.low, enableAudio: false);
     await _controller.initialize();
     await _controller.startImageStream(_processCameraImage);
     setState(() => _isInitialized = true);
@@ -60,7 +62,9 @@ class _QrCameraScannerState extends State<QrCameraScanner> {
   }
 
   void _processCameraImage(CameraImage image) async {
-    if (_isPaused || _isProcessing || image.format.group != ImageFormatGroup.yuv420) return;
+    if (_isPaused ||
+        _isProcessing ||
+        image.format.group != ImageFormatGroup.yuv420) return;
     _isProcessing = true;
 
     try {
@@ -121,7 +125,8 @@ class _QrCameraScannerState extends State<QrCameraScanner> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_isInitialized) return const Center(child: CircularProgressIndicator());
+    if (!_isInitialized)
+      return const Center(child: CircularProgressIndicator());
 
     return Stack(
       alignment: Alignment.center,

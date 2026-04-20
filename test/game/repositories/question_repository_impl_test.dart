@@ -68,7 +68,8 @@ class _FakeQuestionHubService extends QuestionHubService {
   Future<Map<String, dynamic>> getDatasetInfo() async => const {};
 
   @override
-  Future<Map<String, dynamic>> getCategoryStats(QuizCategory category) async => const {};
+  Future<Map<String, dynamic>> getCategoryStats(QuizCategory category) async =>
+      const {};
 
   @override
   Future<Map<String, dynamic>> getClassStats(String classId) async => const {};
@@ -105,7 +106,8 @@ class _FakeQuestionHubService extends QuestionHubService {
 }
 
 void main() {
-  test('topicExplorer mode routes to category questions through hub service', () async {
+  test('topicExplorer mode routes to category questions through hub service',
+      () async {
     final hub = _FakeQuestionHubService();
     final repo = QuestionRepositoryImpl(questionHubService: hub);
 
@@ -130,7 +132,8 @@ void main() {
     expect(hub.lastDailyCount, 6);
   });
 
-  test('arena mode routes to mixed hub loader with multiplayer balance', () async {
+  test('arena mode routes to mixed hub loader with multiplayer balance',
+      () async {
     final hub = _FakeQuestionHubService();
     final repo = QuestionRepositoryImpl(questionHubService: hub);
 

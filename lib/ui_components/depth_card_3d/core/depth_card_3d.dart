@@ -150,9 +150,10 @@ class _DepthCard3DState extends State<DepthCard3D> {
                           mainAxisSize: MainAxisSize.min,
                           children: config.overlayActions!
                               .map((a) => Padding(
-                                padding: const EdgeInsets.only(left: 8),
-                                child: a.build(context),
-                              )).toList(),
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: a.build(context),
+                                  ))
+                              .toList(),
                         ),
                       ),
                   ],

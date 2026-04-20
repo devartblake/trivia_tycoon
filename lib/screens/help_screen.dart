@@ -79,7 +79,7 @@ class HelpScreen extends StatelessWidget {
                   'Email Us',
                   Icons.email,
                   const Color(0xFF10B981),
-                      () => _launchEmail(),
+                  () => _launchEmail(),
                 ),
               ),
               const SizedBox(width: 12),
@@ -88,7 +88,7 @@ class HelpScreen extends StatelessWidget {
                   'FAQ',
                   Icons.question_answer,
                   const Color(0xFF3B82F6),
-                      () {},
+                  () {},
                 ),
               ),
               const SizedBox(width: 12),
@@ -97,7 +97,7 @@ class HelpScreen extends StatelessWidget {
                   'Feedback',
                   Icons.rate_review,
                   const Color(0xFFF59E0B),
-                      () {},
+                  () {},
                 ),
               ),
             ],
@@ -155,7 +155,7 @@ class HelpScreen extends StatelessWidget {
                   'Email Support',
                   'support@synaptix.app',
                   const Color(0xFF10B981),
-                      () => _launchEmail(),
+                  () => _launchEmail(),
                 ),
                 const SizedBox(height: 16),
                 _buildContactOption(
@@ -163,7 +163,7 @@ class HelpScreen extends StatelessWidget {
                   'Visit Website',
                   'www.synaptix.app',
                   const Color(0xFF3B82F6),
-                      () => _launchURL('https://www.synaptix.app'),
+                  () => _launchURL('https://www.synaptix.app'),
                 ),
                 const SizedBox(height: 16),
                 _buildContactOption(
@@ -171,7 +171,7 @@ class HelpScreen extends StatelessWidget {
                   'Community Forum',
                   'Join the discussion',
                   const Color(0xFF6366F1),
-                      () => _launchURL('https://forum.synaptix.app'),
+                  () => _launchURL('https://forum.synaptix.app'),
                 ),
               ],
             ),
@@ -211,7 +211,8 @@ class HelpScreen extends StatelessWidget {
                 TextField(
                   maxLines: 5,
                   decoration: InputDecoration(
-                    hintText: 'Share your thoughts, suggestions, or report issues...',
+                    hintText:
+                        'Share your thoughts, suggestions, or report issues...',
                     filled: true,
                     fillColor: const Color(0xFFF8FAFC),
                     border: OutlineInputBorder(
@@ -371,11 +372,11 @@ class HelpScreen extends StatelessWidget {
   }
 
   Widget _buildQuickActionCard(
-      String label,
-      IconData icon,
-      Color color,
-      VoidCallback onTap,
-      ) {
+    String label,
+    IconData icon,
+    Color color,
+    VoidCallback onTap,
+  ) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -453,7 +454,8 @@ class HelpScreen extends StatelessWidget {
               color: const Color(0xFF3B82F6).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Icon(Icons.help_outline, color: Color(0xFF3B82F6), size: 20),
+            child: const Icon(Icons.help_outline,
+                color: Color(0xFF3B82F6), size: 20),
           ),
           title: Text(
             question,
@@ -479,12 +481,12 @@ class HelpScreen extends StatelessWidget {
   }
 
   Widget _buildContactOption(
-      IconData icon,
-      String title,
-      String subtitle,
-      Color color,
-      VoidCallback onTap,
-      ) {
+    IconData icon,
+    String title,
+    String subtitle,
+    Color color,
+    VoidCallback onTap,
+  ) {
     return Material(
       color: Colors.transparent,
       child: InkWell(

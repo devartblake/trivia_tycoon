@@ -100,8 +100,10 @@ void main() {
       svc.trySetBest(_result(difficulty: ArcadeDifficulty.easy, score: 100));
       svc.trySetBest(_result(difficulty: ArcadeDifficulty.hard, score: 800));
 
-      expect(svc.getBest(ArcadeGameId.quickMathRush, ArcadeDifficulty.easy), 100);
-      expect(svc.getBest(ArcadeGameId.quickMathRush, ArcadeDifficulty.hard), 800);
+      expect(
+          svc.getBest(ArcadeGameId.quickMathRush, ArcadeDifficulty.easy), 100);
+      expect(
+          svc.getBest(ArcadeGameId.quickMathRush, ArcadeDifficulty.hard), 800);
     });
 
     test('records are independent per game', () {
@@ -109,8 +111,10 @@ void main() {
       svc.trySetBest(_result(gameId: ArcadeGameId.quickMathRush, score: 400));
       svc.trySetBest(_result(gameId: ArcadeGameId.memoryFlip, score: 900));
 
-      expect(svc.getBest(ArcadeGameId.quickMathRush, ArcadeDifficulty.normal), 400);
-      expect(svc.getBest(ArcadeGameId.memoryFlip, ArcadeDifficulty.normal), 900);
+      expect(svc.getBest(ArcadeGameId.quickMathRush, ArcadeDifficulty.normal),
+          400);
+      expect(
+          svc.getBest(ArcadeGameId.memoryFlip, ArcadeDifficulty.normal), 900);
     });
   });
 
@@ -133,14 +137,20 @@ void main() {
 
     test('persists multiple game/difficulty entries', () {
       final svc1 = ArcadePersonalBestService(cache);
-      svc1.trySetBest(_result(gameId: ArcadeGameId.patternSprint,
-          difficulty: ArcadeDifficulty.easy, score: 111));
-      svc1.trySetBest(_result(gameId: ArcadeGameId.quickMathRush,
-          difficulty: ArcadeDifficulty.insane, score: 999));
+      svc1.trySetBest(_result(
+          gameId: ArcadeGameId.patternSprint,
+          difficulty: ArcadeDifficulty.easy,
+          score: 111));
+      svc1.trySetBest(_result(
+          gameId: ArcadeGameId.quickMathRush,
+          difficulty: ArcadeDifficulty.insane,
+          score: 999));
 
       final svc2 = ArcadePersonalBestService(cache);
-      expect(svc2.getBest(ArcadeGameId.patternSprint, ArcadeDifficulty.easy), 111);
-      expect(svc2.getBest(ArcadeGameId.quickMathRush, ArcadeDifficulty.insane), 999);
+      expect(
+          svc2.getBest(ArcadeGameId.patternSprint, ArcadeDifficulty.easy), 111);
+      expect(svc2.getBest(ArcadeGameId.quickMathRush, ArcadeDifficulty.insane),
+          999);
     });
   });
 }

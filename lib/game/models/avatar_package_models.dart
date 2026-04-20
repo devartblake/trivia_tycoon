@@ -11,7 +11,8 @@ enum AvatarPackageType {
 enum AvatarSource {
   asset,
   file,
-  remote, network,
+  remote,
+  network,
 }
 
 /// More Flutter-friendly, future-proof avatar kind.
@@ -99,36 +100,36 @@ class AvatarEntry {
   }
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'path': path,
-    'displayName': displayName,
-    'thumbnailPath': thumbnailPath,
-    'tags': tags,
-    'source': source.name,
-    'packageId': packageId,
-    'kind': kind.name,
-    'meta': meta,
-  };
+        'id': id,
+        'path': path,
+        'displayName': displayName,
+        'thumbnailPath': thumbnailPath,
+        'tags': tags,
+        'source': source.name,
+        'packageId': packageId,
+        'kind': kind.name,
+        'meta': meta,
+      };
 
   /// Note: source may be supplied externally (e.g. you know the package is local),
   /// but we also allow reading it from JSON for flexibility.
   factory AvatarEntry.fromJson(
-      Map<String, dynamic> json, {
-        AvatarSource? sourceOverride,
-        String? packageIdOverride,
-        AvatarKind? kindOverride,
-      }) {
+    Map<String, dynamic> json, {
+    AvatarSource? sourceOverride,
+    String? packageIdOverride,
+    AvatarKind? kindOverride,
+  }) {
     final sourceStr = json['source']?.toString();
     final src = sourceOverride ??
         AvatarSource.values.firstWhere(
-              (e) => e.name == sourceStr,
+          (e) => e.name == sourceStr,
           orElse: () => AvatarSource.asset,
         );
 
     final kindStr = json['kind']?.toString();
     final kind = kindOverride ??
         AvatarKind.values.firstWhere(
-              (e) => e.name == kindStr,
+          (e) => e.name == kindStr,
           orElse: () => AvatarKind.image,
         );
 
@@ -176,21 +177,21 @@ class AvatarPackage {
   });
 
   Map<String, dynamic> toJson() => {
-    'packageId': packageId,
-    'displayName': displayName,
-    'version': version,
-    'type': type.name,
-    'source': source.name,
-    'avatars': avatars.map((a) => a.toJson()).toList(),
-  };
+        'packageId': packageId,
+        'displayName': displayName,
+        'version': version,
+        'type': type.name,
+        'source': source.name,
+        'avatars': avatars.map((a) => a.toJson()).toList(),
+      };
 
   factory AvatarPackage.fromJson(
-      Map<String, dynamic> json, {
-        required AvatarSource source,
-      }) {
+    Map<String, dynamic> json, {
+    required AvatarSource source,
+  }) {
     final typeStr = json['type']?.toString() ?? 'image';
     final type = AvatarPackageType.values.firstWhere(
-          (e) => e.name == typeStr,
+      (e) => e.name == typeStr,
       orElse: () => AvatarPackageType.image,
     );
 
@@ -199,14 +200,14 @@ class AvatarPackage {
     final rawAvatars = json['avatars'];
     final avatars = (rawAvatars is List)
         ? rawAvatars
-        .whereType<Map>()
-        .map((e) => AvatarEntry.fromJson(
-      Map<String, dynamic>.from(e),
-      sourceOverride: source,
-      packageIdOverride: json['packageId']?.toString(),
-      kindOverride: kind,
-    ))
-        .toList()
+            .whereType<Map>()
+            .map((e) => AvatarEntry.fromJson(
+                  Map<String, dynamic>.from(e),
+                  sourceOverride: source,
+                  packageIdOverride: json['packageId']?.toString(),
+                  kindOverride: kind,
+                ))
+            .toList()
         : <AvatarEntry>[];
 
     return AvatarPackage(
@@ -256,14 +257,14 @@ class AvatarPackageRenderHints {
   });
 
   Map<String, dynamic> toJson() => {
-    'kind': kind.name,
-    'previewImagePath': previewImagePath,
-  };
+        'kind': kind.name,
+        'previewImagePath': previewImagePath,
+      };
 
   factory AvatarPackageRenderHints.fromJson(Map<String, dynamic> json) {
     final kindStr = (json['kind'] ?? 'image').toString();
     final kind = AvatarPackageType.values.firstWhere(
-          (x) => x.name == kindStr,
+      (x) => x.name == kindStr,
       orElse: () => AvatarPackageType.image,
     );
 
@@ -308,15 +309,15 @@ class AvatarPackageMetadata {
   String get installFolderName => '${id}_$version';
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'name': name,
-    'version': version,
-    'thumbnailUrl': thumbnailUrl,
-    'archiveUrl': archiveUrl,
-    'sizeBytes': sizeBytes,
-    'sha256': sha256,
-    'render': render.toJson(),
-  };
+        'id': id,
+        'name': name,
+        'version': version,
+        'thumbnailUrl': thumbnailUrl,
+        'archiveUrl': archiveUrl,
+        'sizeBytes': sizeBytes,
+        'sha256': sha256,
+        'render': render.toJson(),
+      };
 
   factory AvatarPackageMetadata.fromJson(Map<String, dynamic> json) {
     return AvatarPackageMetadata(
@@ -331,8 +332,8 @@ class AvatarPackageMetadata {
       sha256: json['sha256']?.toString(),
       render: json['render'] is Map
           ? AvatarPackageRenderHints.fromJson(
-        Map<String, dynamic>.from(json['render'] as Map),
-      )
+              Map<String, dynamic>.from(json['render'] as Map),
+            )
           : const AvatarPackageRenderHints(),
     );
   }
@@ -355,10 +356,10 @@ class AvatarPackageInstall {
   });
 
   Map<String, dynamic> toJson() => {
-    'meta': meta.toJson(),
-    'installDir': installDir,
-    'installedAtUtcIso': installedAtUtcIso,
-  };
+        'meta': meta.toJson(),
+        'installDir': installDir,
+        'installedAtUtcIso': installedAtUtcIso,
+      };
 
   factory AvatarPackageInstall.fromJson(Map<String, dynamic> json) {
     return AvatarPackageInstall(
@@ -404,9 +405,9 @@ class FolderIndex {
   }
 
   Map<String, dynamic> toJson() => {
-    'version': version,
-    'items': items,
-  };
+        'version': version,
+        'items': items,
+      };
 
   static FolderIndex decode(String s) =>
       FolderIndex.fromJson(jsonDecode(s) as Map<String, dynamic>);
@@ -450,16 +451,16 @@ class AvatarPackageManifest {
   });
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'name': name,
-    'version': version,
-    'description': description,
-    'kind': kind,
-    'thumbnail': thumbnail,
-    'tags': tags,
-    'imagesDir': imagesDir,
-    'modelsDir': modelsDir,
-  };
+        'id': id,
+        'name': name,
+        'version': version,
+        'description': description,
+        'kind': kind,
+        'thumbnail': thumbnail,
+        'tags': tags,
+        'imagesDir': imagesDir,
+        'modelsDir': modelsDir,
+      };
 
   factory AvatarPackageManifest.fromJson(Map<String, dynamic> json) {
     return AvatarPackageManifest(

@@ -17,15 +17,16 @@ class LeaderboardCard extends StatefulWidget {
   State<LeaderboardCard> createState() => _LeaderboardCardState();
 }
 
-class _LeaderboardCardState extends State<LeaderboardCard> with SingleTickerProviderStateMixin {
+class _LeaderboardCardState extends State<LeaderboardCard>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _pulseController;
 
   @override
   void initState() {
     super.initState();
     _pulseController = AnimationController(
-        vsync: this,
-        duration: const Duration(milliseconds: 1000),
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
     )..repeat(reverse: true);
   }
 
@@ -62,7 +63,6 @@ class _LeaderboardCardState extends State<LeaderboardCard> with SingleTickerProv
       onTap: () {
         context.push('/leaderboard/player', extra: entry);
       },
-
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
@@ -104,7 +104,8 @@ class _LeaderboardCardState extends State<LeaderboardCard> with SingleTickerProv
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(entry.playerName, style: Theme.of(context).textTheme.titleMedium),
+                  Text(entry.playerName,
+                      style: Theme.of(context).textTheme.titleMedium),
                   Text("Age: $ageLabel", style: const TextStyle(fontSize: 12)),
 
                   const SizedBox(height: 4),
@@ -140,7 +141,8 @@ class _LeaderboardCardState extends State<LeaderboardCard> with SingleTickerProv
                     color: Colors.green,
                     backgroundColor: Colors.grey[300],
                   ),
-                  Text("Accuracy: $accuracy%", style: const TextStyle(fontSize: 12)),
+                  Text("Accuracy: $accuracy%",
+                      style: const TextStyle(fontSize: 12)),
                 ],
               ),
             ),

@@ -97,26 +97,28 @@ class DepthCardSpec {
       height: height ?? this.height,
       borderRadius: borderRadius ?? this.borderRadius,
       parallaxDepth: parallaxDepth ?? this.parallaxDepth,
-      showInteractiveOverlay: showInteractiveOverlay ?? this.showInteractiveOverlay,
+      showInteractiveOverlay:
+          showInteractiveOverlay ?? this.showInteractiveOverlay,
       overlays: overlays ?? this.overlays,
       actions: actions ?? this.actions,
     );
   }
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'text': text,
-    'themeKey': themeKey,
-    'modelPath': modelPath,
-    if (backgroundAssetPath != null) 'backgroundAssetPath': backgroundAssetPath,
-    if (width != null) 'width': width,
-    if (height != null) 'height': height,
-    if (borderRadius != null) 'borderRadius': borderRadius,
-    if (parallaxDepth != null) 'parallaxDepth': parallaxDepth,
-    'showInteractiveOverlay': showInteractiveOverlay,
-    'overlays': overlays.map((e) => e.toJson()).toList(),
-    'actions': actions.map((e) => e.toJson()).toList(),
-  };
+        'id': id,
+        'text': text,
+        'themeKey': themeKey,
+        'modelPath': modelPath,
+        if (backgroundAssetPath != null)
+          'backgroundAssetPath': backgroundAssetPath,
+        if (width != null) 'width': width,
+        if (height != null) 'height': height,
+        if (borderRadius != null) 'borderRadius': borderRadius,
+        if (parallaxDepth != null) 'parallaxDepth': parallaxDepth,
+        'showInteractiveOverlay': showInteractiveOverlay,
+        'overlays': overlays.map((e) => e.toJson()).toList(),
+        'actions': actions.map((e) => e.toJson()).toList(),
+      };
 
   String toPrettyJson() => const JsonEncoder.withIndent('  ').convert(toJson());
 
@@ -126,10 +128,11 @@ class DepthCardSpec {
     final actionsRaw = json['actions'];
 
     return DepthCardSpec(
-      id: (json['id']?? '').toString(),
+      id: (json['id'] ?? '').toString(),
       text: (json['text'] ?? '').toString(),
       themeKey: (json['themeKey'] ?? json['theme'] ?? 'futuristic').toString(),
-      modelPath: (json['modelPath'] ?? json['src'] ?? json['model'] ?? '').toString(),
+      modelPath:
+          (json['modelPath'] ?? json['src'] ?? json['model'] ?? '').toString(),
       backgroundAssetPath: json['backgroundAssetPath']?.toString(),
       width: _num(json['width']),
       height: _num(json['height']),
@@ -140,15 +143,17 @@ class DepthCardSpec {
           : true,
       overlays: overlaysRaw is List
           ? overlaysRaw
-          .whereType<Map>()
-          .map((m) => DepthOverlaySpec.fromJson(Map<String, dynamic>.from(m)))
-          .toList()
+              .whereType<Map>()
+              .map((m) =>
+                  DepthOverlaySpec.fromJson(Map<String, dynamic>.from(m)))
+              .toList()
           : const [],
       actions: actionsRaw is List
           ? actionsRaw
-          .whereType<Map>()
-          .map((m) => DepthCardActionSpec.fromJson(Map<String, dynamic>.from(m)))
-          .toList()
+              .whereType<Map>()
+              .map((m) =>
+                  DepthCardActionSpec.fromJson(Map<String, dynamic>.from(m)))
+              .toList()
           : const [],
     );
   }
@@ -192,11 +197,11 @@ class DepthOverlaySpec {
   });
 
   Map<String, dynamic> toJson() => {
-    'type': type,
-    if (slot != null) 'slot': slot,
-    if (text != null) 'text': text,
-    'props': props,
-  };
+        'type': type,
+        if (slot != null) 'slot': slot,
+        if (text != null) 'text': text,
+        'props': props,
+      };
 
   factory DepthOverlaySpec.fromJson(Map<String, dynamic> json) {
     final rawProps = json['props'];
@@ -251,12 +256,12 @@ class DepthCardActionSpec {
   });
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'label': label,
-    'intent': intent,
-    if (icon != null) 'icon': icon,
-    if (payload.isNotEmpty) 'payload': payload,
-  };
+        'id': id,
+        'label': label,
+        'intent': intent,
+        if (icon != null) 'icon': icon,
+        if (payload.isNotEmpty) 'payload': payload,
+      };
 
   factory DepthCardActionSpec.fromJson(Map<String, dynamic> json) {
     final rawPayload = json['payload'];
@@ -266,7 +271,8 @@ class DepthCardActionSpec {
       label: (json['label'] ?? '').toString(),
       intent: (json['intent'] ?? '').toString(),
       icon: json['icon']?.toString(),
-      payload: rawPayload is Map ? Map<String, dynamic>.from(rawPayload) : const {},
+      payload:
+          rawPayload is Map ? Map<String, dynamic>.from(rawPayload) : const {},
     );
   }
 }

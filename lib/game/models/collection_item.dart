@@ -154,14 +154,14 @@ class CollectionItem {
   @override
   int get hashCode {
     return id.hashCode ^
-    name.hashCode ^
-    category.hashCode ^
-    rarity.hashCode ^
-    description.hashCode ^
-    pointValue.hashCode ^
-    isUnlocked.hashCode ^
-    unlockedAt.hashCode ^
-    iconPath.hashCode;
+        name.hashCode ^
+        category.hashCode ^
+        rarity.hashCode ^
+        description.hashCode ^
+        pointValue.hashCode ^
+        isUnlocked.hashCode ^
+        unlockedAt.hashCode ^
+        iconPath.hashCode;
   }
 
   @override

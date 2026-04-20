@@ -10,13 +10,13 @@ class VaultSplash extends StatefulWidget {
 }
 
 class _VaultSplashState extends State<VaultSplash> {
-@override
-void initState() {
-  super.initState();
-  Future.delayed(const Duration(seconds: 3), widget.onStart);
-}
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 3), widget.onStart);
+  }
 
-@override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blueGrey.shade900,

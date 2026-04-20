@@ -32,11 +32,9 @@ class AdRemovePlan {
   factory AdRemovePlan.fromJson(Map<String, dynamic> json) {
     final title = json['title'] as String? ?? '';
     final subtitle = json['subtitle'] as String? ?? '';
-    final price = json['price'] as String? ??
-        json['priceLabel'] as String? ??
-        '';
-    final durationLabel = json['durationLabel'] as String? ??
-        title;
+    final price =
+        json['price'] as String? ?? json['priceLabel'] as String? ?? '';
+    final durationLabel = json['durationLabel'] as String? ?? title;
 
     return AdRemovePlan(
       id: json['id'] as String? ?? '',
@@ -162,7 +160,8 @@ class SaleBenefitItem {
     required this.color,
   });
 
-  factory SaleBenefitItem.fromJson(Map<String, dynamic> json) => SaleBenefitItem(
+  factory SaleBenefitItem.fromJson(Map<String, dynamic> json) =>
+      SaleBenefitItem(
         icon: resolveIcon(json['icon'] as String?, fallback: Icons.star),
         value: json['value'] as String? ?? '',
         label: json['label'] as String? ?? '',
@@ -279,9 +278,8 @@ class RewardCard {
                   json['gradientEnd'] ?? '#8B5CF6',
                 ],
               ),
-        reward: json['reward'] as String? ??
-            json['rewardLabel'] as String? ??
-            '',
+        reward:
+            json['reward'] as String? ?? json['rewardLabel'] as String? ?? '',
         progress: (json['progress'] as num?)?.toDouble(),
         isAvailable: json['isAvailable'] as bool? ??
             json['isClaimAvailable'] as bool? ??
@@ -323,7 +321,8 @@ class RewardCenterData {
         id: 'daily-checkin',
         title: 'Daily Check-in',
         subtitle: 'Day 3 of 7',
-        gradient: LinearGradient(colors: [Color(0xFF10B981), Color(0xFF059669)]),
+        gradient:
+            LinearGradient(colors: [Color(0xFF10B981), Color(0xFF059669)]),
         reward: '500 Coins',
         progress: 0.43,
         isAvailable: true,
@@ -332,7 +331,8 @@ class RewardCenterData {
         id: 'watch-ad',
         title: 'Watch Ad',
         subtitle: '2 available today',
-        gradient: LinearGradient(colors: [Color(0xFF8B5CF6), Color(0xFF7C3AED)]),
+        gradient:
+            LinearGradient(colors: [Color(0xFF8B5CF6), Color(0xFF7C3AED)]),
         reward: '200 Coins',
         progress: null,
         isAvailable: true,
@@ -363,9 +363,13 @@ class PremiumStoreData {
     final rawSaleInfo = json['saleInfo'] as Map<String, dynamic>?;
     final rawReward = json['rewardCenter'] as Map<String, dynamic>?;
     return PremiumStoreData(
-      adFree: rawAdFree != null ? AdFreeConfig.fromJson(rawAdFree) : AdFreeConfig.fallback,
+      adFree: rawAdFree != null
+          ? AdFreeConfig.fromJson(rawAdFree)
+          : AdFreeConfig.fallback,
       saleInfo: rawSaleInfo != null ? SaleInfoData.fromJson(rawSaleInfo) : null,
-      rewardCenter: rawReward != null ? RewardCenterData.fromJson(rawReward) : RewardCenterData.fallback,
+      rewardCenter: rawReward != null
+          ? RewardCenterData.fromJson(rawReward)
+          : RewardCenterData.fallback,
     );
   }
 

@@ -61,7 +61,8 @@ class OnboardingProgress {
       intent: intent ?? this.intent,
       playStyle: playStyle ?? this.playStyle,
       synaptixMode: synaptixMode ?? this.synaptixMode,
-      hasCompletedFirstChallenge: hasCompletedFirstChallenge ?? this.hasCompletedFirstChallenge,
+      hasCompletedFirstChallenge:
+          hasCompletedFirstChallenge ?? this.hasCompletedFirstChallenge,
       hasSeenRewardReveal: hasSeenRewardReveal ?? this.hasSeenRewardReveal,
       lastUpdatedAt: lastUpdatedAt ?? this.lastUpdatedAt,
     );
@@ -99,7 +100,8 @@ class OnboardingProgress {
       intent: map['intent'] as String?,
       playStyle: map['play_style'] as String?,
       synaptixMode: map['synaptix_mode'] as String?,
-      hasCompletedFirstChallenge: map['has_completed_first_challenge'] as bool? ?? false,
+      hasCompletedFirstChallenge:
+          map['has_completed_first_challenge'] as bool? ?? false,
       hasSeenRewardReveal: map['has_seen_reward_reveal'] as bool? ?? false,
       lastUpdatedAt: map['last_updated_at'] != null
           ? DateTime.tryParse(map['last_updated_at'] as String)

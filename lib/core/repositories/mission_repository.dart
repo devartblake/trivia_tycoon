@@ -26,7 +26,8 @@ abstract class MissionRepository {
   Future<UserMission> assignMissionToUser(String userId, String missionId);
 
   Future<UserMission> swapMission(String userMissionId);
-  Future<UserMission> updateMissionProgress(String userMissionId, int newProgress);
+  Future<UserMission> updateMissionProgress(
+      String userMissionId, int newProgress);
 
   Future<void> cleanupExpiredMissions();
 }
@@ -66,12 +67,16 @@ class ApiMissionRepository implements MissionRepository {
   String _userMissions(String userId) => '/players/$userId/missions';
   String _missions() => '/missions';
   String _assignMission(String userId) => '/players/$userId/missions/assign';
-  String _swapMission(String userMissionId) => '/missions/user/$userMissionId/swap';
-  String _updateProgress(String userMissionId) => '/missions/user/$userMissionId/progress';
+  String _swapMission(String userMissionId) =>
+      '/missions/user/$userMissionId/swap';
+  String _updateProgress(String userMissionId) =>
+      '/missions/user/$userMissionId/progress';
   String _cleanupExpired() => '/missions/cleanup-expired';
 
   Uri _uri(String path, [Map<String, String>? query]) {
-    final cleanBase = baseUrl.endsWith('/') ? baseUrl.substring(0, baseUrl.length - 1) : baseUrl;
+    final cleanBase = baseUrl.endsWith('/')
+        ? baseUrl.substring(0, baseUrl.length - 1)
+        : baseUrl;
     final cleanPath = path.startsWith('/') ? path : '/$path';
     return Uri.parse('$cleanBase$cleanPath').replace(queryParameters: query);
   }
@@ -116,13 +121,17 @@ class ApiMissionRepository implements MissionRepository {
 
     final data = _decodeBody(res.body);
     if (data is List) {
-      return data.map((e) => UserMission.fromJson(e as Map<String, dynamic>)).toList();
+      return data
+          .map((e) => UserMission.fromJson(e as Map<String, dynamic>))
+          .toList();
     }
 
     // Some APIs wrap: { items: [...] }
     if (data is Map && data['items'] is List) {
       final items = data['items'] as List;
-      return items.map((e) => UserMission.fromJson(e as Map<String, dynamic>)).toList();
+      return items
+          .map((e) => UserMission.fromJson(e as Map<String, dynamic>))
+          .toList();
     }
 
     return <UserMission>[];
@@ -155,19 +164,24 @@ class ApiMissionRepository implements MissionRepository {
 
     final data = _decodeBody(res.body);
     if (data is List) {
-      return data.map((e) => Mission.fromJson(e as Map<String, dynamic>)).toList();
+      return data
+          .map((e) => Mission.fromJson(e as Map<String, dynamic>))
+          .toList();
     }
 
     if (data is Map && data['items'] is List) {
       final items = data['items'] as List;
-      return items.map((e) => Mission.fromJson(e as Map<String, dynamic>)).toList();
+      return items
+          .map((e) => Mission.fromJson(e as Map<String, dynamic>))
+          .toList();
     }
 
     return <Mission>[];
   }
 
   @override
-  Future<UserMission> assignMissionToUser(String userId, String missionId) async {
+  Future<UserMission> assignMissionToUser(
+      String userId, String missionId) async {
     final uri = _uri(_assignMission(userId));
     final res = await http.post(
       uri,
@@ -205,7 +219,8 @@ class ApiMissionRepository implements MissionRepository {
   }
 
   @override
-  Future<UserMission> updateMissionProgress(String userMissionId, int newProgress) async {
+  Future<UserMission> updateMissionProgress(
+      String userMissionId, int newProgress) async {
     final uri = _uri(_updateProgress(userMissionId));
     final res = await http.patch(
       uri,
@@ -222,7 +237,8 @@ class ApiMissionRepository implements MissionRepository {
       return UserMission.fromJson(data);
     }
 
-    throw Exception('Unexpected response for updateMissionProgress: ${res.body}');
+    throw Exception(
+        'Unexpected response for updateMissionProgress: ${res.body}');
   }
 
   @override

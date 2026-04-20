@@ -27,9 +27,8 @@ class RoomLobbyScreen extends ConsumerWidget {
         }
       },
       child: Scaffold(
-        backgroundColor: isDark
-            ? const Color(0xFF0A0A0F)
-            : MultiplayerPalette.background,
+        backgroundColor:
+            isDark ? const Color(0xFF0A0A0F) : MultiplayerPalette.background,
         body: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
@@ -56,7 +55,8 @@ class RoomLobbyScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSliverAppBar(dynamic state, ThemeData theme, bool isDark, BuildContext context) {
+  Widget _buildSliverAppBar(
+      dynamic state, ThemeData theme, bool isDark, BuildContext context) {
     return SliverAppBar(
       expandedHeight: 120,
       floating: false,
@@ -138,12 +138,14 @@ class RoomLobbyScreen extends ConsumerWidget {
         ),
         child: IconButton(
           onPressed: () async {
-            final ok = await showExitMatchConfirm(context, title: 'Leave lobby?');
+            final ok =
+                await showExitMatchConfirm(context, title: 'Leave lobby?');
             if (ok == true && context.mounted) {
               context.go('/multiplayer');
             }
           },
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          icon:
+              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
         ),
       ),
       actions: [
@@ -156,7 +158,8 @@ class RoomLobbyScreen extends ConsumerWidget {
           child: IconButton(
             icon: const Icon(Icons.logout_rounded, color: Colors.white),
             onPressed: () async {
-              final ok = await showExitMatchConfirm(context, title: 'Leave lobby?');
+              final ok =
+                  await showExitMatchConfirm(context, title: 'Leave lobby?');
               if (ok == true && context.mounted) {
                 context.go('/multiplayer');
               }
@@ -248,9 +251,7 @@ class RoomLobbyScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: isDark
-            ? const Color(0xFF2A2A3E)
-            : MultiplayerPalette.surfaceAlt,
+        color: isDark ? const Color(0xFF2A2A3E) : MultiplayerPalette.surfaceAlt,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -282,7 +283,8 @@ class RoomLobbyScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildPlayersSection(List<dynamic> players, ThemeData theme, bool isDark) {
+  Widget _buildPlayersSection(
+      List<dynamic> players, ThemeData theme, bool isDark) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -307,7 +309,10 @@ class RoomLobbyScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [MultiplayerPalette.primary, MultiplayerPalette.secondary],
+                    colors: [
+                      MultiplayerPalette.primary,
+                      MultiplayerPalette.secondary
+                    ],
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -328,7 +333,8 @@ class RoomLobbyScreen extends ConsumerWidget {
               ),
               const Spacer(),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: MultiplayerPalette.success.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
@@ -380,9 +386,9 @@ class RoomLobbyScreen extends ConsumerWidget {
                   .asMap()
                   .entries
                   .map((entry) => PlayerChip(
-                name: entry.value.name,
-                isHost: entry.value.isHost,
-              ))
+                        name: entry.value.name,
+                        isHost: entry.value.isHost,
+                      ))
                   .toList(),
             ),
         ],
@@ -415,7 +421,10 @@ class RoomLobbyScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [MultiplayerPalette.accent, MultiplayerPalette.danger],
+                    colors: [
+                      MultiplayerPalette.accent,
+                      MultiplayerPalette.danger
+                    ],
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -481,9 +490,7 @@ class RoomLobbyScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: isDark
-            ? const Color(0xFF2A2A3E)
-            : MultiplayerPalette.surfaceAlt,
+        color: isDark ? const Color(0xFF2A2A3E) : MultiplayerPalette.surfaceAlt,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -515,32 +522,31 @@ class RoomLobbyScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildStartButton(dynamic state, ThemeData theme, bool isDark, BuildContext context) {
+  Widget _buildStartButton(
+      dynamic state, ThemeData theme, bool isDark, BuildContext context) {
     return Container(
       width: double.infinity,
       height: 56,
       decoration: BoxDecoration(
         gradient: state.isHost
             ? const LinearGradient(
-          colors: [MultiplayerPalette.success, Color(0xFF2E8E68)],
-        )
+                colors: [MultiplayerPalette.success, Color(0xFF2E8E68)],
+              )
             : null,
         color: state.isHost ? null : Colors.grey.shade400,
         borderRadius: BorderRadius.circular(16),
         boxShadow: state.isHost
             ? [
-          BoxShadow(
-            color: MultiplayerPalette.success.withValues(alpha: 0.3),
-            blurRadius: 15,
-            offset: const Offset(0, 8),
-          ),
-        ]
+                BoxShadow(
+                  color: MultiplayerPalette.success.withValues(alpha: 0.3),
+                  blurRadius: 15,
+                  offset: const Offset(0, 8),
+                ),
+              ]
             : null,
       ),
       child: ElevatedButton.icon(
-        onPressed: state.isHost
-            ? () => context.go('/multiplayer/match')
-            : null,
+        onPressed: state.isHost ? () => context.go('/multiplayer/match') : null,
         icon: Icon(
           state.isHost ? Icons.play_arrow_rounded : Icons.lock_rounded,
           color: Colors.white,

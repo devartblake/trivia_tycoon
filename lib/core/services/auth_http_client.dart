@@ -26,13 +26,13 @@ class AuthHttpClient extends http.BaseClient {
   final void Function(Exception error)? onRefreshFailed;
 
   AuthHttpClient(
-      this._authService,
-      this._tokenStore, {
-        http.Client? innerClient,
-        this.autoRefresh = true,
-        this.onTokenRefreshed,
-        this.onRefreshFailed,
-      }) : _inner = innerClient ?? http.Client();
+    this._authService,
+    this._tokenStore, {
+    http.Client? innerClient,
+    this.autoRefresh = true,
+    this.onTokenRefreshed,
+    this.onRefreshFailed,
+  }) : _inner = innerClient ?? http.Client();
 
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) async {
@@ -68,8 +68,11 @@ class AuthHttpClient extends http.BaseClient {
       final response = await _inner.send(request);
 
       // If we get 401, token might be invalid - try refresh once
-      if (response.statusCode == 401 && autoRefresh && currentSession.hasTokens) {
-        LogManager.debug('[AuthHttpClient] Got 401, attempting token refresh...');
+      if (response.statusCode == 401 &&
+          autoRefresh &&
+          currentSession.hasTokens) {
+        LogManager.debug(
+            '[AuthHttpClient] Got 401, attempting token refresh...');
 
         try {
           await _authService.refresh();
@@ -78,7 +81,8 @@ class AuthHttpClient extends http.BaseClient {
           // Retry request with new token
           final retryRequest = _copyRequest(request);
           final newSession = _tokenStore.load();
-          retryRequest.headers['Authorization'] = 'Bearer ${newSession.accessToken}';
+          retryRequest.headers['Authorization'] =
+              'Bearer ${newSession.accessToken}';
 
           return await _inner.send(retryRequest);
         } catch (e) {
@@ -133,31 +137,31 @@ extension AuthHttpClientExtensions on AuthHttpClient {
 
   /// POST request with automatic auth and refresh
   Future<http.Response> postAuth(
-      Uri url, {
-        Map<String, String>? headers,
-        Object? body,
-        Encoding? encoding,
-      }) {
+    Uri url, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+  }) {
     return post(url, headers: headers, body: body, encoding: encoding);
   }
 
   /// PUT request with automatic auth and refresh
   Future<http.Response> putAuth(
-      Uri url, {
-        Map<String, String>? headers,
-        Object? body,
-        Encoding? encoding,
-      }) {
+    Uri url, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+  }) {
     return put(url, headers: headers, body: body, encoding: encoding);
   }
 
   /// DELETE request with automatic auth and refresh
   Future<http.Response> deleteAuth(
-      Uri url, {
-        Map<String, String>? headers,
-        Object? body,
-        Encoding? encoding,
-      }) {
+    Uri url, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+  }) {
     return delete(url, headers: headers, body: body, encoding: encoding);
   }
 }

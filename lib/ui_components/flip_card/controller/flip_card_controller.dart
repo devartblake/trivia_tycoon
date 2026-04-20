@@ -38,8 +38,8 @@ class FlipCardController {
   /// assigned to a [FlipCard] widget or state has not been initialized
   FlipCardState get state {
     assert(
-    _internalState != null,
-    'Controller not attached to any FlipCard. Did you forget to pass the controller to the FlipCard?',
+      _internalState != null,
+      'Controller not attached to any FlipCard. Did you forget to pass the controller to the FlipCard?',
     );
     return _internalState!;
   }
@@ -57,10 +57,10 @@ class FlipCardController {
 
   /// {@macro flip_card.FlipCardState.skew}
   Future<void> skew(
-      double target, {
-        Duration? duration,
-        Curve? curve,
-      }) async =>
+    double target, {
+    Duration? duration,
+    Curve? curve,
+  }) async =>
       await state.skew(
         target,
         duration: duration,

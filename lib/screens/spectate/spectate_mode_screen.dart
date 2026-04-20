@@ -110,8 +110,8 @@ class _SpectateModeScreenState extends State<SpectateModeScreen> {
           Text(
             'Connecting to game...',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: Colors.white,
-            ),
+                  color: Colors.white,
+                ),
           ),
         ],
       ),
@@ -139,16 +139,16 @@ class _SpectateModeScreenState extends State<SpectateModeScreen> {
             Text(
               'Game Ended!',
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             const SizedBox(height: 8),
             Text(
               'Winner: ${gameState.winner ?? "Unknown"}',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Colors.white70,
-              ),
+                    color: Colors.white70,
+                  ),
             ),
             const SizedBox(height: 24),
             Row(
@@ -236,7 +236,8 @@ class _SpectateModeScreenState extends State<SpectateModeScreen> {
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: const [
-                                Icon(Icons.circle, size: 8, color: Colors.white),
+                                Icon(Icons.circle,
+                                    size: 8, color: Colors.white),
                                 SizedBox(width: 4),
                                 Text(
                                   'LIVE',
@@ -331,9 +332,10 @@ class _SpectateModeScreenState extends State<SpectateModeScreen> {
   Widget _buildPlayerScores(GameSpectateState gameState) {
     return Row(
       children: gameState.players.map((player) {
-        final isLeading = player.score == gameState.players
-            .map((p) => p.score)
-            .reduce((a, b) => a > b ? a : b);
+        final isLeading = player.score ==
+            gameState.players
+                .map((p) => p.score)
+                .reduce((a, b) => a > b ? a : b);
 
         return Expanded(
           child: Container(
@@ -521,13 +523,14 @@ class _SpectateModeScreenState extends State<SpectateModeScreen> {
             Text(
               'Share This Game',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Colors.white,
-              ),
+                    color: Colors.white,
+                  ),
             ),
             const SizedBox(height: 24),
             ListTile(
               leading: const Icon(Icons.link, color: Colors.white),
-              title: const Text('Copy Link', style: TextStyle(color: Colors.white)),
+              title: const Text('Copy Link',
+                  style: TextStyle(color: Colors.white)),
               onTap: () {
                 Clipboard.setData(ClipboardData(
                   text: 'https://yourapp.com/spectate/${widget.gameId}',
@@ -540,7 +543,8 @@ class _SpectateModeScreenState extends State<SpectateModeScreen> {
             ),
             ListTile(
               leading: const Icon(Icons.message, color: Colors.white),
-              title: const Text('Share to Chat', style: TextStyle(color: Colors.white)),
+              title: const Text('Share to Chat',
+                  style: TextStyle(color: Colors.white)),
               onTap: () {
                 Navigator.pop(context);
                 // Share to chat
@@ -557,7 +561,8 @@ class _SpectateModeScreenState extends State<SpectateModeScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Join Next Game'),
-        content: const Text('Would you like to join when the next game starts?'),
+        content:
+            const Text('Would you like to join when the next game starts?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -568,7 +573,9 @@ class _SpectateModeScreenState extends State<SpectateModeScreen> {
               Navigator.pop(context);
               // Request to join logic
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('You\'ll be notified when the next game starts')),
+                const SnackBar(
+                    content:
+                        Text('You\'ll be notified when the next game starts')),
               );
             },
             child: const Text('Join Queue'),
@@ -588,7 +595,8 @@ class _SpectateModeScreenState extends State<SpectateModeScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Leave Spectate Mode'),
-        content: const Text('Are you sure you want to stop watching this game?'),
+        content:
+            const Text('Are you sure you want to stop watching this game?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),

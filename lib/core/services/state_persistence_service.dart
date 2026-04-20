@@ -76,14 +76,16 @@ class StatePersistenceService {
       // Save pending actions (unsent data)
       if (pendingActions != null && pendingActions.isNotEmpty) {
         await _box.put(_pendingActionsKey, pendingActions);
-        LogManager.debug('[StatePersistence] 💾 Saved ${pendingActions.length} pending actions');
+        LogManager.debug(
+            '[StatePersistence] 💾 Saved ${pendingActions.length} pending actions');
       }
 
       // Mark successful save (clear crash flag)
       await _markSaveComplete();
 
       final duration = DateTime.now().difference(startTime);
-      LogManager.debug('[StatePersistence] ✅ Saved all state in ${duration.inMilliseconds}ms');
+      LogManager.debug(
+          '[StatePersistence] ✅ Saved all state in ${duration.inMilliseconds}ms');
     } catch (e, stack) {
       LogManager.debug('[StatePersistence] ❌ Save failed: $e');
       LogManager.debug('[StatePersistence] Stack: $stack');
@@ -103,10 +105,12 @@ class StatePersistenceService {
       final didCrash = _box.get(_crashRecoveryKey, defaultValue: false) as bool;
 
       if (didCrash) {
-        LogManager.debug('[StatePersistence] ⚠️ CRASH DETECTED - Previous session crashed!');
+        LogManager.debug(
+            '[StatePersistence] ⚠️ CRASH DETECTED - Previous session crashed!');
         LogManager.debug('[StatePersistence] 🔄 Recovery data available');
       } else {
-        LogManager.debug('[StatePersistence] ✅ Previous session closed normally');
+        LogManager.debug(
+            '[StatePersistence] ✅ Previous session closed normally');
       }
 
       // Mark this session as potentially crashed (cleared on normal save)
@@ -229,9 +233,12 @@ class StatePersistenceService {
       final userSession = await getUserSession();
       final pendingActions = await getPendingActions();
 
-      return gameState != null || userSession != null || pendingActions.isNotEmpty;
+      return gameState != null ||
+          userSession != null ||
+          pendingActions.isNotEmpty;
     } catch (e) {
-      LogManager.debug('[StatePersistence] ❌ Check recoverable data failed: $e');
+      LogManager.debug(
+          '[StatePersistence] ❌ Check recoverable data failed: $e');
       return false;
     }
   }

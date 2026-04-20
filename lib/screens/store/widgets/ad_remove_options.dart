@@ -97,7 +97,8 @@ class _AdRemoveOptionsState extends ConsumerState<AdRemoveOptions>
                         color: Colors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Icon(Icons.block, color: Colors.white, size: 24),
+                      child: const Icon(Icons.block,
+                          color: Colors.white, size: 24),
                     ),
                     const SizedBox(width: 12),
                     const Text(
@@ -113,7 +114,8 @@ class _AdRemoveOptionsState extends ConsumerState<AdRemoveOptions>
                 ),
                 const SizedBox(height: 12),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(20),
@@ -227,7 +229,8 @@ class _AdRemoveOptionsState extends ConsumerState<AdRemoveOptions>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: plan.isBestValue ? const Color(0xFF10B981) : plan.accentColor,
+              color:
+                  plan.isBestValue ? const Color(0xFF10B981) : plan.accentColor,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
@@ -281,8 +284,9 @@ class _AdRemoveOptionsState extends ConsumerState<AdRemoveOptions>
             child: ElevatedButton(
               onPressed: () => _handlePurchase(plan),
               style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    plan.isBestValue ? const Color(0xFF10B981) : plan.accentColor,
+                backgroundColor: plan.isBestValue
+                    ? const Color(0xFF10B981)
+                    : plan.accentColor,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
@@ -291,7 +295,8 @@ class _AdRemoveOptionsState extends ConsumerState<AdRemoveOptions>
               ),
               child: Text(
                 plan.price,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -348,7 +353,8 @@ class _AdRemoveOptionsState extends ConsumerState<AdRemoveOptions>
                     child: Text(
                       'Enjoy uninterrupted gameplay!',
                       style: TextStyle(
-                          color: Color(0xFF10B981), fontWeight: FontWeight.w600),
+                          color: Color(0xFF10B981),
+                          fontWeight: FontWeight.w600),
                     ),
                   ),
                 ],

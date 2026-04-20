@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
 import '../models/leaderboard_filter_settings.dart';
 
-class LeaderboardFilterNotifier extends StateNotifier<LeaderboardFilterSettings> {
+class LeaderboardFilterNotifier
+    extends StateNotifier<LeaderboardFilterSettings> {
   LeaderboardFilterNotifier() : super(LeaderboardFilterSettings()) {
     _loadFromStorage();
   }
@@ -32,6 +33,6 @@ class LeaderboardFilterNotifier extends StateNotifier<LeaderboardFilterSettings>
 }
 
 final leaderboardFilterProvider =
-StateNotifierProvider<LeaderboardFilterNotifier, LeaderboardFilterSettings>(
-      (ref) => LeaderboardFilterNotifier(),
+    StateNotifierProvider<LeaderboardFilterNotifier, LeaderboardFilterSettings>(
+  (ref) => LeaderboardFilterNotifier(),
 );

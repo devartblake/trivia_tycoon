@@ -10,7 +10,8 @@ typedef AppLifecycleStateNotifier = ValueNotifier<AppLifecycleState>;
 typedef LifecycleCallback = void Function(AppLifecycleState state);
 
 /// Riverpod stream controller for broadcasting lifecycle changes
-final StreamController<AppLifecycleState> lifecycleStreamController = StreamController<AppLifecycleState>.broadcast();
+final StreamController<AppLifecycleState> lifecycleStreamController =
+    StreamController<AppLifecycleState>.broadcast();
 
 /// Riverpod provider for lifecycle value.
 ///
@@ -19,7 +20,8 @@ final StreamController<AppLifecycleState> lifecycleStreamController = StreamCont
 /// provider outside of an [AppLifecycleObserver] ancestor would be a widget
 /// tree error, so the throw surfaces the misconfiguration immediately.
 final appLifecycleProvider = Provider<AppLifecycleStateNotifier>((ref) {
-  throw UnimplementedError('AppLifecycleObserver must be mounted before accessing the lifecycle provider.');
+  throw UnimplementedError(
+      'AppLifecycleObserver must be mounted before accessing the lifecycle provider.');
 });
 
 /// Stream provider for lifecycle changes
@@ -38,12 +40,15 @@ class AppLifecycleObserver extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<AppLifecycleObserver> createState() => _AppLifecycleObserverState();
+  ConsumerState<AppLifecycleObserver> createState() =>
+      _AppLifecycleObserverState();
 }
 
-class _AppLifecycleObserverState extends ConsumerState<AppLifecycleObserver> with WidgetsBindingObserver {
+class _AppLifecycleObserverState extends ConsumerState<AppLifecycleObserver>
+    with WidgetsBindingObserver {
   static final _log = Logger('AppLifecycleObserver');
-  final AppLifecycleStateNotifier _lifecycleNotifier = ValueNotifier<AppLifecycleState>(AppLifecycleState.inactive);
+  final AppLifecycleStateNotifier _lifecycleNotifier =
+      ValueNotifier<AppLifecycleState>(AppLifecycleState.inactive);
 
   Timer? _backgroundTimer;
   DateTime? _pausedAt;
@@ -237,7 +242,6 @@ class _AppLifecycleObserverState extends ConsumerState<AppLifecycleObserver> wit
 
       // Save current state as a precaution
       _saveGameState();
-
     } catch (e) {
       _log.warning('Error handling inactive state: $e');
     }
@@ -251,7 +255,6 @@ class _AppLifecycleObserverState extends ConsumerState<AppLifecycleObserver> wit
       // Similar to inactive but more aggressive resource reduction
       _reduceBackgroundActivity();
       _pauseNonCriticalServices();
-
     } catch (e) {
       _log.warning('Error handling hidden state: $e');
     }
@@ -293,7 +296,6 @@ class _AppLifecycleObserverState extends ConsumerState<AppLifecycleObserver> wit
 
       // Ensure all Hive boxes are properly closed/synced
       _flushAllStorage();
-
     } catch (e) {
       _log.severe('Error saving all game data: $e');
     }
@@ -312,7 +314,6 @@ class _AppLifecycleObserverState extends ConsumerState<AppLifecycleObserver> wit
       // Pause spin wheel animations
       final spinController = ref.read(spinningControllerProvider);
       spinController.pause();
-
     } catch (e) {
       _log.warning('Error pausing timers: $e');
     }
@@ -331,7 +332,6 @@ class _AppLifecycleObserverState extends ConsumerState<AppLifecycleObserver> wit
 
       // Restart background timer if needed
       _startBackgroundTimer();
-
     } catch (e) {
       _log.warning('Error resuming timers: $e');
     }
@@ -364,14 +364,17 @@ class _AppLifecycleObserverState extends ConsumerState<AppLifecycleObserver> wit
     try {
       // Calculate offline rewards (coins, etc.)
       final offlineMinutes = pauseDuration.inMinutes;
-      if (offlineMinutes > 5) { // Only give rewards if away for 5+ minutes
-        final coinReward = (offlineMinutes / 10).floor(); // 1 coin per 10 minutes
+      if (offlineMinutes > 5) {
+        // Only give rewards if away for 5+ minutes
+        final coinReward =
+            (offlineMinutes / 10).floor(); // 1 coin per 10 minutes
 
         if (coinReward > 0) {
           final coinNotifier = ref.read(coinNotifierProvider);
           coinNotifier.addValue(coinReward);
 
-          _log.info('Awarded $coinReward offline coins for $offlineMinutes minutes away');
+          _log.info(
+              'Awarded $coinReward offline coins for $offlineMinutes minutes away');
         }
       }
     } catch (e) {
@@ -456,7 +459,6 @@ class _AppLifecycleObserverState extends ConsumerState<AppLifecycleObserver> wit
 
       // Auto-save progress
       serviceManager.quizProgressService.autoSave();
-
     } catch (e) {
       _log.warning('Error in background maintenance: $e');
     }

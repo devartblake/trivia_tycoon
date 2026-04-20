@@ -23,7 +23,8 @@ class CTAWidget extends StatefulWidget {
   State<CTAWidget> createState() => _CTAWidgetState();
 }
 
-class _CTAWidgetState extends State<CTAWidget> with SingleTickerProviderStateMixin {
+class _CTAWidgetState extends State<CTAWidget>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;

@@ -3,9 +3,9 @@ import '../../core/services/settings/onboarding_settings_service.dart';
 import 'game_providers.dart';
 
 final onboardingProgressProvider =
-StateNotifierProvider<OnboardingProgressNotifier, OnboardingProgressState>((
-    ref,
-    ) {
+    StateNotifierProvider<OnboardingProgressNotifier, OnboardingProgressState>((
+  ref,
+) {
   return OnboardingProgressNotifier(ref);
 });
 
@@ -28,9 +28,9 @@ final onboardingCompleteProvider = Provider<bool>((ref) {
 
 /// Enum for different onboarding phases
 enum OnboardingPhase {
-  intro,        // User needs to see intro carousel
+  intro, // User needs to see intro carousel
   profileSetup, // User needs to complete profile setup
-  done          // User has completed all onboarding
+  done // User has completed all onboarding
 }
 
 /// Provider that determines current onboarding phase based on completion flags
@@ -44,7 +44,7 @@ final onboardingPhaseProvider = Provider<OnboardingPhase>((ref) {
 
 /// Provider for onboarding state management
 final onboardingStateProvider =
-StateNotifierProvider<OnboardingStateNotifier, OnboardingState>((ref) {
+    StateNotifierProvider<OnboardingStateNotifier, OnboardingState>((ref) {
   return OnboardingStateNotifier(ref);
 });
 
@@ -72,14 +72,17 @@ class OnboardingProgressState {
   }
 }
 
-class OnboardingProgressNotifier extends StateNotifier<OnboardingProgressState> {
+class OnboardingProgressNotifier
+    extends StateNotifier<OnboardingProgressState> {
   final Ref ref;
 
-  OnboardingProgressNotifier(this.ref) : super(const OnboardingProgressState()) {
+  OnboardingProgressNotifier(this.ref)
+      : super(const OnboardingProgressState()) {
     load();
   }
 
-  OnboardingSettingsService get _service => ref.read(onboardingSettingsServiceProvider);
+  OnboardingSettingsService get _service =>
+      ref.read(onboardingSettingsServiceProvider);
 
   Future<void> load() async {
     try {
@@ -219,9 +222,9 @@ class OnboardingStateNotifier extends StateNotifier<OnboardingState> {
 
     try {
       await ref.read(onboardingProgressProvider.notifier).updateProgress(
-        hasCompletedProfile: true,
-        username: state.username,
-      );
+            hasCompletedProfile: true,
+            username: state.username,
+          );
 
       state = state.copyWith(hasCompletedProfile: true, isLoading: false);
     } catch (e) {

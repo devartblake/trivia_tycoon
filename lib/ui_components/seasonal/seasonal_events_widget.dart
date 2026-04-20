@@ -9,7 +9,6 @@ class SeasonalEventsWidget extends StatefulWidget {
 }
 
 class _SeasonalEventsWidgetState extends State<SeasonalEventsWidget> {
-
   // Mock seasonal event data
   final Map<String, dynamic> _currentEvent = {
     'name': 'EASTER SEASON',
@@ -17,14 +16,28 @@ class _SeasonalEventsWidgetState extends State<SeasonalEventsWidget> {
     'endTime': '01d 04h',
     'theme': 'easter',
     'rewards': [
-      {'label': 'x1', 'icon': Icons.check_circle, 'claimed': true, 'type': 'bonus'},
-      {'label': 'x5000', 'icon': Icons.monetization_on_outlined, 'claimed': false, 'type': 'coins'},
-      {'label': 'x50', 'icon': Icons.card_giftcard, 'claimed': false, 'type': 'gems'},
+      {
+        'label': 'x1',
+        'icon': Icons.check_circle,
+        'claimed': true,
+        'type': 'bonus'
+      },
+      {
+        'label': 'x5000',
+        'icon': Icons.monetization_on_outlined,
+        'claimed': false,
+        'type': 'coins'
+      },
+      {
+        'label': 'x50',
+        'icon': Icons.card_giftcard,
+        'claimed': false,
+        'type': 'gems'
+      },
     ],
     'progress': 33, // percentage
     'description': 'Celebrate the season with special rewards!',
   };
-
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +50,8 @@ class _SeasonalEventsWidgetState extends State<SeasonalEventsWidget> {
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: _getSeasonalColor(_currentEvent['theme']).withValues(alpha: 0.3),
+              color: _getSeasonalColor(_currentEvent['theme'])
+                  .withValues(alpha: 0.3),
               blurRadius: 20,
               offset: const Offset(0, 10),
             ),
@@ -54,7 +68,8 @@ class _SeasonalEventsWidgetState extends State<SeasonalEventsWidget> {
               // Background pattern
               Positioned.fill(
                 child: CustomPaint(
-                  painter: _SeasonalPatternPainter(theme: _currentEvent['theme']),
+                  painter:
+                      _SeasonalPatternPainter(theme: _currentEvent['theme']),
                 ),
               ),
               // Main content
@@ -246,7 +261,9 @@ class _SeasonalEventsWidgetState extends State<SeasonalEventsWidget> {
           Container(
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: isClaimed ? Colors.green : Colors.white.withValues(alpha: 0.2),
+              color: isClaimed
+                  ? Colors.green
+                  : Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(

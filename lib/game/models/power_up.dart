@@ -8,7 +8,7 @@ class PowerUp {
   final int duration; // in seconds
   final int price;
   final String currency; // 'coins' or 'diamonds'
-  final String type;     // 'xp', 'hint', 'eliminate', 'boost', 'shield', etc.
+  final String type; // 'xp', 'hint', 'eliminate', 'boost', 'shield', etc.
 
   PowerUp({
     required this.id,
@@ -51,27 +51,27 @@ class PowerUp {
 
   /// Convert to JSON
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'name': name,
-    'description': description,
-    'iconPath': iconPath,
-    'duration': duration,
-    'price': price,
-    'currency': currency,
-    'type': type,
-  };
+        'id': id,
+        'name': name,
+        'description': description,
+        'iconPath': iconPath,
+        'duration': duration,
+        'price': price,
+        'currency': currency,
+        'type': type,
+      };
 
   /// Create empty/none power-up
   factory PowerUp.none() => PowerUp(
-    id: 'none',
-    name: 'None',
-    description: '',
-    iconPath: '',
-    duration: 0,
-    price: 0,
-    currency: '',
-    type: 'none',
-  );
+        id: 'none',
+        name: 'None',
+        description: '',
+        iconPath: '',
+        duration: 0,
+        price: 0,
+        currency: '',
+        type: 'none',
+      );
 
   /// Check if this is the "none" power-up
   bool get isNone => id == 'none';

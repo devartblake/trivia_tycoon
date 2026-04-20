@@ -36,12 +36,12 @@ class WsEnvelopeDto {
   }
 
   Map<String, dynamic> toJson() => {
-    'op': op,
-    'ts': ts,
-    if (data != null) 'data': data,
-    if (seq != null) 'seq': seq,
-    if (reqId != null) 'reqId': reqId,
-  };
+        'op': op,
+        'ts': ts,
+        if (data != null) 'data': data,
+        if (seq != null) 'seq': seq,
+        if (reqId != null) 'reqId': reqId,
+      };
 
   WsEnvelopeDto copyWith({
     String? op,
@@ -69,13 +69,13 @@ class WsEnvelopeDto {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is WsEnvelopeDto &&
-              runtimeType == other.runtimeType &&
-              op == other.op &&
-              ts == other.ts &&
-              _mapEq(data, other.data) &&
-              seq == other.seq &&
-              reqId == other.reqId;
+      other is WsEnvelopeDto &&
+          runtimeType == other.runtimeType &&
+          op == other.op &&
+          ts == other.ts &&
+          _mapEq(data, other.data) &&
+          seq == other.seq &&
+          reqId == other.reqId;
 
   @override
   int get hashCode => Object.hash(op, ts, _mapHash(data), seq, reqId);
@@ -98,7 +98,8 @@ bool _mapEq(Map<String, dynamic>? a, Map<String, dynamic>? b) {
     if (!b.containsKey(k)) return false;
     final av = a[k], bv = b[k];
     if (av is Map && bv is Map) {
-      if (!_mapEq(av.cast<String, dynamic>(), bv.cast<String, dynamic>())) return false;
+      if (!_mapEq(av.cast<String, dynamic>(), bv.cast<String, dynamic>()))
+        return false;
     } else if (av != bv) {
       return false;
     }

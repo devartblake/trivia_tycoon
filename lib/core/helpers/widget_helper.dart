@@ -7,11 +7,11 @@ Size? getWidgetSize(GlobalKey key) {
 }
 
 TycoonToast showSuccessToast(
-    BuildContext context,
-    String title,
-    String message, [
-      Duration? duration,
-    ]) {
+  BuildContext context,
+  String title,
+  String message, [
+  Duration? duration,
+]) {
   return TycoonToast(
     title: title,
     message: message,

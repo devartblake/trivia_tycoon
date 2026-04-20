@@ -5,7 +5,8 @@ import '../services/avatar_package_service.dart';
 
 /// Provide a remote source later (FastAPI).
 /// For now, keep it null (or swap in a mock implementation).
-final avatarPackageRemoteSourceProvider = Provider<AvatarPackageRemoteSource?>((ref) {
+final avatarPackageRemoteSourceProvider =
+    Provider<AvatarPackageRemoteSource?>((ref) {
   return null;
 });
 
@@ -24,7 +25,7 @@ final avatarPackageServiceProvider = Provider<AvatarPackageService>((ref) {
 /// ----------------------------
 
 final installedAvatarPackagesProvider =
-FutureProvider<List<AvatarPackageInstall>>((ref) async {
+    FutureProvider<List<AvatarPackageInstall>>((ref) async {
   final service = ref.read(avatarPackageServiceProvider);
   return service.loadInstalledPackages();
 });
@@ -37,7 +38,7 @@ FutureProvider<List<AvatarPackageInstall>>((ref) async {
 /// If no backend is wired, it simply returns [].
 
 final serverAvatarPackagesProvider =
-FutureProvider<List<AvatarPackageMetadata>>((ref) async {
+    FutureProvider<List<AvatarPackageMetadata>>((ref) async {
   final service = ref.read(avatarPackageServiceProvider);
 
   // If remote source not connected yet, return empty list safely

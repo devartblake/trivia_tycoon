@@ -100,7 +100,8 @@ class _DepthCardThemeSelectorState extends State<DepthCardThemeSelector>
 
               // Stagger animation delay
               final delay = index * 0.1;
-              final progress = (_staggerAnimation.value - delay).clamp(0.0, 1.0);
+              final progress =
+                  (_staggerAnimation.value - delay).clamp(0.0, 1.0);
 
               return Transform.scale(
                 scale: progress,
@@ -122,11 +123,11 @@ class _DepthCardThemeSelectorState extends State<DepthCardThemeSelector>
   }
 
   Widget _buildThemeCard(
-      DepthCardTheme theme,
-      bool isSelected,
-      bool isHovered,
-      ColorScheme colorScheme,
-      ) {
+    DepthCardTheme theme,
+    bool isSelected,
+    bool isHovered,
+    ColorScheme colorScheme,
+  ) {
     return MouseRegion(
       onEnter: (_) => setState(() => _hoveredTheme = theme),
       onExit: (_) => setState(() => _hoveredTheme = null),
@@ -139,9 +140,7 @@ class _DepthCardThemeSelectorState extends State<DepthCardThemeSelector>
             gradient: _getThemeGradient(theme, isSelected, isHovered),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: isSelected
-                  ? Colors.white
-                  : Colors.transparent,
+              color: isSelected ? Colors.white : Colors.transparent,
               width: isSelected ? 3 : 0,
             ),
             boxShadow: [
@@ -245,7 +244,8 @@ class _DepthCardThemeSelectorState extends State<DepthCardThemeSelector>
     );
   }
 
-  Gradient _getThemeGradient(DepthCardTheme theme, bool isSelected, bool isHovered) {
+  Gradient _getThemeGradient(
+      DepthCardTheme theme, bool isSelected, bool isHovered) {
     final accentColor = _getThemeAccentColor(theme);
     final baseOpacity = isSelected ? 1.0 : (isHovered ? 0.9 : 0.8);
 
@@ -271,9 +271,11 @@ class _DepthCardThemeSelectorState extends State<DepthCardThemeSelector>
       return const Color(0xFF9F7AEA); // Electric purple
     } else if (themeName.contains('minimal') || themeName.contains('clean')) {
       return const Color(0xFF48BB78); // Clean green
-    } else if (themeName.contains('glass') || themeName.contains('transparent')) {
+    } else if (themeName.contains('glass') ||
+        themeName.contains('transparent')) {
       return const Color(0xFF4FD1C7); // Glass teal
-    } else if (themeName.contains('gradient') || themeName.contains('rainbow')) {
+    } else if (themeName.contains('gradient') ||
+        themeName.contains('rainbow')) {
       return const Color(0xFFED64A6); // Rainbow pink
     } else if (themeName.contains('shadow') || themeName.contains('depth')) {
       return const Color(0xFF805AD5); // Deep purple
@@ -314,9 +316,11 @@ class _DepthCardThemeSelectorState extends State<DepthCardThemeSelector>
       return Icons.auto_awesome_rounded;
     } else if (themeName.contains('minimal') || themeName.contains('clean')) {
       return Icons.circle_outlined;
-    } else if (themeName.contains('glass') || themeName.contains('transparent')) {
+    } else if (themeName.contains('glass') ||
+        themeName.contains('transparent')) {
       return Icons.blur_on_rounded;
-    } else if (themeName.contains('gradient') || themeName.contains('rainbow')) {
+    } else if (themeName.contains('gradient') ||
+        themeName.contains('rainbow')) {
       return Icons.gradient_rounded;
     } else if (themeName.contains('shadow') || themeName.contains('depth')) {
       return Icons.layers_rounded;
@@ -498,7 +502,8 @@ class DepthCardThemeSelectorEnhanced extends StatelessWidget {
     );
   }
 
-  Widget _buildPropertyRow(String label, String value, ColorScheme colorScheme) {
+  Widget _buildPropertyRow(
+      String label, String value, ColorScheme colorScheme) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

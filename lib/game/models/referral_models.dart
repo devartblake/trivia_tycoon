@@ -1,16 +1,17 @@
 import 'package:equatable/equatable.dart';
 
 enum ReferralCodeStatus { active, disabled, expired }
+
 enum InviteStatus { pending, redeemed, expired }
 
 class ReferralCode extends Equatable {
-  final String code;            // e.g., "RC8A9K2M"
-  final String ownerUserId;     // inviter userId
+  final String code; // e.g., "RC8A9K2M"
+  final String ownerUserId; // inviter userId
   final DateTime createdAt;
-  final DateTime? expiresAt;    // null => no expiry
+  final DateTime? expiresAt; // null => no expiry
   final ReferralCodeStatus status;
-  final bool isSynced;          // local vs server state
-  final String? serverId;       // server PK if known
+  final bool isSynced; // local vs server state
+  final String? serverId; // server PK if known
 
   const ReferralCode({
     required this.code,
@@ -43,45 +44,48 @@ class ReferralCode extends Equatable {
   }
 
   Map<String, dynamic> toJson() => {
-    'code': code,
-    'ownerUserId': ownerUserId,
-    'createdAt': createdAt.toUtc().toIso8601String(),
-    'expiresAt': expiresAt?.toUtc().toIso8601String(),
-    'status': status.name,
-    'isSynced': isSynced,
-    'serverId': serverId,
-  };
+        'code': code,
+        'ownerUserId': ownerUserId,
+        'createdAt': createdAt.toUtc().toIso8601String(),
+        'expiresAt': expiresAt?.toUtc().toIso8601String(),
+        'status': status.name,
+        'isSynced': isSynced,
+        'serverId': serverId,
+      };
 
   factory ReferralCode.fromJson(Map<String, dynamic> json) => ReferralCode(
-    code: json['code'] as String,
-    ownerUserId: json['ownerUserId'] as String,
-    createdAt: DateTime.parse(json['createdAt'] as String).toUtc(),
-    expiresAt: json['expiresAt'] != null ? DateTime.parse(json['expiresAt'] as String).toUtc() : null,
-    status: ReferralCodeStatus.values.firstWhere(
+        code: json['code'] as String,
+        ownerUserId: json['ownerUserId'] as String,
+        createdAt: DateTime.parse(json['createdAt'] as String).toUtc(),
+        expiresAt: json['expiresAt'] != null
+            ? DateTime.parse(json['expiresAt'] as String).toUtc()
+            : null,
+        status: ReferralCodeStatus.values.firstWhere(
           (e) => e.name == (json['status'] as String? ?? 'active'),
-      orElse: () => ReferralCodeStatus.active,
-    ),
-    isSynced: (json['isSynced'] as bool?) ?? false,
-    serverId: json['serverId'] as String?,
-  );
+          orElse: () => ReferralCodeStatus.active,
+        ),
+        isSynced: (json['isSynced'] as bool?) ?? false,
+        serverId: json['serverId'] as String?,
+      );
 
   @override
-  List<Object?> get props => [code, ownerUserId, createdAt, expiresAt, status, isSynced, serverId];
+  List<Object?> get props =>
+      [code, ownerUserId, createdAt, expiresAt, status, isSynced, serverId];
 }
 
 class ReferralInvite extends Equatable {
-  final String id;              // unique invite ID (UUID)
-  final String referrerUserId;  // who created the invite
-  final String referralCode;    // the referral code being used
+  final String id; // unique invite ID (UUID)
+  final String referrerUserId; // who created the invite
+  final String referralCode; // the referral code being used
   final DateTime createdAt;
-  final DateTime expiresAt;     // auto-calculated: createdAt + 7 days
-  final InviteStatus status;    // pending, redeemed, or expired
-  final String? redeemedBy;     // userId who redeemed
-  final DateTime? redeemedAt;   // when redeemed
-  final String? inviteeName;    // optional: name of person invited
-  final String? inviteeEmail;   // optional: email of person invited
-  final bool isSynced;          // synced to server?
-  final String? serverId;       // server-side ID if synced
+  final DateTime expiresAt; // auto-calculated: createdAt + 7 days
+  final InviteStatus status; // pending, redeemed, or expired
+  final String? redeemedBy; // userId who redeemed
+  final DateTime? redeemedAt; // when redeemed
+  final String? inviteeName; // optional: name of person invited
+  final String? inviteeEmail; // optional: email of person invited
+  final bool isSynced; // synced to server?
+  final String? serverId; // server-side ID if synced
   final Map<String, dynamic>? metadata; // additional data
 
   const ReferralInvite({
@@ -159,58 +163,58 @@ class ReferralInvite extends Equatable {
   }
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'referrerUserId': referrerUserId,
-    'referralCode': referralCode,
-    'createdAt': createdAt.toUtc().toIso8601String(),
-    'expiresAt': expiresAt.toUtc().toIso8601String(),
-    'status': status.name,
-    'redeemedBy': redeemedBy,
-    'redeemedAt': redeemedAt?.toUtc().toIso8601String(),
-    'inviteeName': inviteeName,
-    'inviteeEmail': inviteeEmail,
-    'isSynced': isSynced,
-    'serverId': serverId,
-    'metadata': metadata,
-  };
+        'id': id,
+        'referrerUserId': referrerUserId,
+        'referralCode': referralCode,
+        'createdAt': createdAt.toUtc().toIso8601String(),
+        'expiresAt': expiresAt.toUtc().toIso8601String(),
+        'status': status.name,
+        'redeemedBy': redeemedBy,
+        'redeemedAt': redeemedAt?.toUtc().toIso8601String(),
+        'inviteeName': inviteeName,
+        'inviteeEmail': inviteeEmail,
+        'isSynced': isSynced,
+        'serverId': serverId,
+        'metadata': metadata,
+      };
 
   factory ReferralInvite.fromJson(Map<String, dynamic> json) => ReferralInvite(
-    id: json['id'] as String,
-    referrerUserId: json['referrerUserId'] as String,
-    referralCode: json['referralCode'] as String,
-    createdAt: DateTime.parse(json['createdAt'] as String).toUtc(),
-    expiresAt: DateTime.parse(json['expiresAt'] as String).toUtc(),
-    status: InviteStatus.values.firstWhere(
+        id: json['id'] as String,
+        referrerUserId: json['referrerUserId'] as String,
+        referralCode: json['referralCode'] as String,
+        createdAt: DateTime.parse(json['createdAt'] as String).toUtc(),
+        expiresAt: DateTime.parse(json['expiresAt'] as String).toUtc(),
+        status: InviteStatus.values.firstWhere(
           (e) => e.name == (json['status'] as String? ?? 'pending'),
-      orElse: () => InviteStatus.pending,
-    ),
-    redeemedBy: json['redeemedBy'] as String?,
-    redeemedAt: json['redeemedAt'] != null
-        ? DateTime.parse(json['redeemedAt'] as String).toUtc()
-        : null,
-    inviteeName: json['inviteeName'] as String?,
-    inviteeEmail: json['inviteeEmail'] as String?,
-    isSynced: (json['isSynced'] as bool?) ?? false,
-    serverId: json['serverId'] as String?,
-    metadata: json['metadata'] as Map<String, dynamic>?,
-  );
+          orElse: () => InviteStatus.pending,
+        ),
+        redeemedBy: json['redeemedBy'] as String?,
+        redeemedAt: json['redeemedAt'] != null
+            ? DateTime.parse(json['redeemedAt'] as String).toUtc()
+            : null,
+        inviteeName: json['inviteeName'] as String?,
+        inviteeEmail: json['inviteeEmail'] as String?,
+        isSynced: (json['isSynced'] as bool?) ?? false,
+        serverId: json['serverId'] as String?,
+        metadata: json['metadata'] as Map<String, dynamic>?,
+      );
 
   @override
   List<Object?> get props => [
-    id,
-    referrerUserId,
-    referralCode,
-    createdAt,
-    expiresAt,
-    status,
-    redeemedBy,
-    redeemedAt,
-    inviteeName,
-    inviteeEmail,
-    isSynced,
-    serverId,
-    metadata,
-  ];
+        id,
+        referrerUserId,
+        referralCode,
+        createdAt,
+        expiresAt,
+        status,
+        redeemedBy,
+        redeemedAt,
+        inviteeName,
+        inviteeEmail,
+        isSynced,
+        serverId,
+        metadata,
+      ];
 
   @override
   String toString() {
@@ -223,8 +227,8 @@ class ReferralScanEvent extends Equatable {
   final String code;
   final String? scannerUserId; // who scanned (may be null if not signed in)
   final DateTime scannedAt;
-  final String source;         // "qr" | "link" | "manual"
-  final String? campaignId;    // optional attribution tag
+  final String source; // "qr" | "link" | "manual"
+  final String? campaignId; // optional attribution tag
 
   const ReferralScanEvent({
     required this.code,
@@ -235,21 +239,23 @@ class ReferralScanEvent extends Equatable {
   });
 
   Map<String, dynamic> toJson() => {
-    'code': code,
-    'scannerUserId': scannerUserId,
-    'scannedAt': scannedAt.toUtc().toIso8601String(),
-    'source': source,
-    'campaignId': campaignId,
-  };
+        'code': code,
+        'scannerUserId': scannerUserId,
+        'scannedAt': scannedAt.toUtc().toIso8601String(),
+        'source': source,
+        'campaignId': campaignId,
+      };
 
-  factory ReferralScanEvent.fromJson(Map<String, dynamic> json) => ReferralScanEvent(
-    code: json['code'] as String,
-    scannerUserId: json['scannerUserId'] as String?,
-    scannedAt: DateTime.parse(json['scannedAt'] as String).toUtc(),
-    source: (json['source'] as String?) ?? 'qr',
-    campaignId: json['campaignId'] as String?,
-  );
+  factory ReferralScanEvent.fromJson(Map<String, dynamic> json) =>
+      ReferralScanEvent(
+        code: json['code'] as String,
+        scannerUserId: json['scannerUserId'] as String?,
+        scannedAt: DateTime.parse(json['scannedAt'] as String).toUtc(),
+        source: (json['source'] as String?) ?? 'qr',
+        campaignId: json['campaignId'] as String?,
+      );
 
   @override
-  List<Object?> get props => [code, scannerUserId, scannedAt, source, campaignId];
+  List<Object?> get props =>
+      [code, scannerUserId, scannedAt, source, campaignId];
 }

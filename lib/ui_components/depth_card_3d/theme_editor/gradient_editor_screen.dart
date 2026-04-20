@@ -13,7 +13,8 @@ class GradientEditorScreen extends ConsumerStatefulWidget {
   const GradientEditorScreen({super.key});
 
   @override
-  ConsumerState<GradientEditorScreen> createState() => _GradientEditorScreenState();
+  ConsumerState<GradientEditorScreen> createState() =>
+      _GradientEditorScreenState();
 }
 
 class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
@@ -68,8 +69,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
     // Initialize controllers
     _textController = TextEditingController(text: 'Preview');
     _modelPathController = TextEditingController(
-        text: 'assets/models/avatars/cartoon_character.glb'
-    );
+        text: 'assets/models/avatars/cartoon_character.glb');
 
     // Initialize default gradient
     _backgroundGradient = LinearGradient(
@@ -110,7 +110,8 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
         borderRadius: _borderRadius,
         backgroundImage: _useGradientBackground
             ? null
-            : const AssetImage('assets/images/backgrounds/geometry_background.jpg'),
+            : const AssetImage(
+                'assets/images/backgrounds/geometry_background.jpg'),
         backgroundOpacity: _backgroundOpacity,
         backgroundBlur: _backgroundBlur,
         backgroundKenBurns: _backgroundKenBurns,
@@ -168,7 +169,8 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
             ),
             backgroundColor: Colors.purple.shade600,
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             margin: EdgeInsets.all(16),
             duration: Duration(seconds: 2),
           ),
@@ -187,7 +189,8 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
           ),
           backgroundColor: Colors.red.shade600,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           margin: EdgeInsets.all(16),
         ),
       );
@@ -232,26 +235,36 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
   Future<void> _saveExtendedConfig() async {
     // Save extended configuration to AppSettings
     await AppSettings.setString('depth_card_text', _textController.text);
-    await AppSettings.setString('depth_card_model_path', _modelPathController.text);
-    await AppSettings.setString('depth_card_background_opacity', _backgroundOpacity.toString());
-    await AppSettings.setString('depth_card_background_blur', _backgroundBlur.toString());
+    await AppSettings.setString(
+        'depth_card_model_path', _modelPathController.text);
+    await AppSettings.setString(
+        'depth_card_background_opacity', _backgroundOpacity.toString());
+    await AppSettings.setString(
+        'depth_card_background_blur', _backgroundBlur.toString());
     await AppSettings.setBool('depth_card_ken_burns', _backgroundKenBurns);
-    await AppSettings.setString('depth_card_background_fit', _backgroundFit.toString());
-    await AppSettings.setBool('depth_card_use_gradient', _useGradientBackground);
+    await AppSettings.setString(
+        'depth_card_background_fit', _backgroundFit.toString());
+    await AppSettings.setBool(
+        'depth_card_use_gradient', _useGradientBackground);
     await AppSettings.setBool('depth_card_show_3d_text', _show3DText);
     await AppSettings.setInt('depth_card_text_depth', _textDepth);
-    await AppSettings.setString('depth_card_text_elevation', _textElevation.toString());
+    await AppSettings.setString(
+        'depth_card_text_elevation', _textElevation.toString());
     await AppSettings.setBool('depth_card_text_shine', _textShine);
     await AppSettings.setString('depth_card_font_size', _fontSize.toString());
-    await AppSettings.setString('depth_card_font_weight', _fontWeight.toString());
-    await AppSettings.setString('depth_card_parallax_depth', _parallaxDepth.toString());
+    await AppSettings.setString(
+        'depth_card_font_weight', _fontWeight.toString());
+    await AppSettings.setString(
+        'depth_card_parallax_depth', _parallaxDepth.toString());
     await AppSettings.setString('depth_card_width', _cardWidth.toString());
     await AppSettings.setString('depth_card_height', _cardHeight.toString());
-    await AppSettings.setString('depth_card_border_radius', _borderRadius.toString());
+    await AppSettings.setString(
+        'depth_card_border_radius', _borderRadius.toString());
 
     // Save gradient data if needed
     if (_backgroundGradient != null && _useGradientBackground) {
-      await AppSettings.setString('depth_card_gradient_type', _backgroundGradient.runtimeType.toString());
+      await AppSettings.setString('depth_card_gradient_type',
+          _backgroundGradient.runtimeType.toString());
     }
   }
 
@@ -292,9 +305,8 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? const Color(0xFF0A0A0F)
-          : const Color(0xFFF8F9FA),
+      backgroundColor:
+          isDark ? const Color(0xFF0A0A0F) : const Color(0xFFF8F9FA),
       body: FadeTransition(
         opacity: _fadeInAnimation,
         child: CustomScrollView(
@@ -324,7 +336,8 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
                     ),
                   ),
                 )
@@ -345,9 +358,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        isDark
-                            ? const Color(0xFF1E1E2E)
-                            : Colors.white,
+                        isDark ? const Color(0xFF1E1E2E) : Colors.white,
                         isDark
                             ? const Color(0xFF0A0A0F).withValues(alpha: 0.8)
                             : const Color(0xFFF8F9FA).withValues(alpha: 0.8),
@@ -365,19 +376,23 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
                               borderRadius: BorderRadius.circular(20),
                               boxShadow: [
                                 BoxShadow(
-                                  color: theme.shadowColor.withValues(alpha: 0.3),
+                                  color:
+                                      theme.shadowColor.withValues(alpha: 0.3),
                                   blurRadius: 24,
                                   offset: const Offset(0, 12),
                                 ),
                               ],
                             ),
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(_borderRadius),
+                              borderRadius:
+                                  BorderRadius.circular(_borderRadius),
                               child: Container(
                                 width: _cardWidth,
                                 height: _cardHeight,
-                                decoration: _useGradientBackground && _backgroundGradient != null
-                                    ? BoxDecoration(gradient: _backgroundGradient)
+                                decoration: _useGradientBackground &&
+                                        _backgroundGradient != null
+                                    ? BoxDecoration(
+                                        gradient: _backgroundGradient)
                                     : null,
                                 child: DepthCard3D(config: _currentConfig),
                               ),
@@ -403,7 +418,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
               Icons.aspect_ratio_rounded,
               [Colors.teal.shade400, Colors.green.shade400],
               _dimensionsExpanded,
-                  () => setState(() => _dimensionsExpanded = !_dimensionsExpanded),
+              () => setState(() => _dimensionsExpanded = !_dimensionsExpanded),
               _buildDimensionsContent(colorScheme),
               isDark,
               colorScheme,
@@ -414,7 +429,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
               Icons.image_rounded,
               [Colors.indigo.shade400, Colors.cyan.shade400],
               _backgroundExpanded,
-                  () => setState(() => _backgroundExpanded = !_backgroundExpanded),
+              () => setState(() => _backgroundExpanded = !_backgroundExpanded),
               _buildBackgroundContent(colorScheme),
               isDark,
               colorScheme,
@@ -425,7 +440,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
               Icons.title_rounded,
               [Colors.purple.shade400, Colors.pink.shade400],
               _textExpanded,
-                  () => setState(() => _textExpanded = !_textExpanded),
+              () => setState(() => _textExpanded = !_textExpanded),
               _buildTextContent(colorScheme),
               isDark,
               colorScheme,
@@ -436,7 +451,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
               Icons.animation_rounded,
               [Colors.orange.shade400, Colors.red.shade400],
               _effectsExpanded,
-                  () => setState(() => _effectsExpanded = !_effectsExpanded),
+              () => setState(() => _effectsExpanded = !_effectsExpanded),
               _buildEffectsContent(colorScheme),
               isDark,
               colorScheme,
@@ -527,7 +542,8 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
                     ),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(Icons.settings_rounded, color: Colors.white, size: 20),
+                  child: Icon(Icons.settings_rounded,
+                      color: Colors.white, size: 20),
                 ),
                 const SizedBox(width: 12),
                 Text(
@@ -595,7 +611,8 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
                     ),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(Icons.palette_rounded, color: Colors.white, size: 20),
+                  child: Icon(Icons.palette_rounded,
+                      color: Colors.white, size: 20),
                 ),
                 const SizedBox(width: 12),
                 Text(
@@ -617,7 +634,8 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
                   theme = selected;
                 });
                 _updateConfig();
-                ref.read(profileAvatarControllerProvider.notifier)
+                ref
+                    .read(profileAvatarControllerProvider.notifier)
                     .setDepthCardTheme(selected);
               },
             ),
@@ -628,15 +646,15 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
   }
 
   Widget _buildExpandableSection(
-      String title,
-      IconData icon,
-      List<Color> gradientColors,
-      bool isExpanded,
-      VoidCallback onToggle,
-      List<Widget> children,
-      bool isDark,
-      ColorScheme colorScheme,
-      ) {
+    String title,
+    IconData icon,
+    List<Color> gradientColors,
+    bool isExpanded,
+    VoidCallback onToggle,
+    List<Widget> children,
+    bool isDark,
+    ColorScheme colorScheme,
+  ) {
     return SliverToBoxAdapter(
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -708,13 +726,13 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
               curve: Curves.easeInOut,
               child: isExpanded
                   ? Container(
-                padding: const EdgeInsets.only(
-                  left: 24,
-                  right: 24,
-                  bottom: 24,
-                ),
-                child: Column(children: children),
-              )
+                      padding: const EdgeInsets.only(
+                        left: 24,
+                        right: 24,
+                        bottom: 24,
+                      ),
+                      child: Column(children: children),
+                    )
                   : const SizedBox.shrink(),
             ),
           ],
@@ -731,7 +749,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
         _cardWidth,
         100.0,
         400.0,
-            (value) {
+        (value) {
           _cardWidth = value;
           _updateConfig();
         },
@@ -744,7 +762,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
         _cardHeight,
         100.0,
         400.0,
-            (value) {
+        (value) {
           _cardHeight = value;
           _updateConfig();
         },
@@ -757,7 +775,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
         _borderRadius,
         0.0,
         50.0,
-            (value) {
+        (value) {
           _borderRadius = value;
           _updateConfig();
         },
@@ -772,7 +790,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
         "Use Gradient Background",
         Icons.gradient_rounded,
         _useGradientBackground,
-            (value) {
+        (value) {
           HapticFeedback.lightImpact();
           setState(() {
             _useGradientBackground = value;
@@ -781,7 +799,6 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
         },
         colorScheme,
       ),
-
       if (_useGradientBackground) ...[
         const SizedBox(height: 16),
         Container(
@@ -799,7 +816,8 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
             children: [
               Row(
                 children: [
-                  Icon(Icons.gradient_rounded, size: 18, color: colorScheme.primary),
+                  Icon(Icons.gradient_rounded,
+                      size: 18, color: colorScheme.primary),
                   const SizedBox(width: 8),
                   Text(
                     "Current Gradient",
@@ -831,15 +849,16 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
                   onPressed: _isEditingGradient ? null : _openGradientEditor,
                   icon: _isEditingGradient
                       ? SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
-                  )
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
                       : Icon(Icons.edit_rounded, size: 16),
-                  label: Text(_isEditingGradient ? "Opening..." : "Edit Gradient"),
+                  label:
+                      Text(_isEditingGradient ? "Opening..." : "Edit Gradient"),
                   style: FilledButton.styleFrom(
                     backgroundColor: Colors.purple.shade600,
                     foregroundColor: Colors.white,
@@ -861,7 +880,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
           _backgroundOpacity,
           0.0,
           1.0,
-              (value) {
+          (value) {
             _backgroundOpacity = value;
             _updateConfig();
           },
@@ -874,7 +893,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
           _backgroundBlur,
           0.0,
           10.0,
-              (value) {
+          (value) {
             _backgroundBlur = value;
             _updateConfig();
           },
@@ -885,7 +904,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
           "Ken Burns Effect",
           Icons.movie_filter_rounded,
           _backgroundKenBurns,
-              (value) {
+          (value) {
             _backgroundKenBurns = value;
             _updateConfig();
           },
@@ -901,7 +920,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
         "Enable 3D Text",
         Icons.view_in_ar_rounded,
         _show3DText,
-            (value) {
+        (value) {
           _show3DText = value;
           _updateConfig();
         },
@@ -915,7 +934,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
           _fontSize,
           12.0,
           72.0,
-              (value) {
+          (value) {
             _fontSize = value;
             _updateConfig();
           },
@@ -928,7 +947,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
           _textDepth.toDouble(),
           0.0,
           30.0,
-              (value) {
+          (value) {
             _textDepth = value.round();
             _updateConfig();
           },
@@ -941,7 +960,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
           _textElevation,
           0.0,
           5.0,
-              (value) {
+          (value) {
             _textElevation = value;
             _updateConfig();
           },
@@ -952,7 +971,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
           "Text Shine Effect",
           Icons.auto_awesome_rounded,
           _textShine,
-              (value) {
+          (value) {
             _textShine = value;
             _updateConfig();
           },
@@ -970,7 +989,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
         _parallaxDepth,
         0.0,
         0.5,
-            (value) {
+        (value) {
           _parallaxDepth = value;
           _updateConfig();
         },
@@ -983,7 +1002,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
         theme.elevation,
         0.0,
         50.0,
-            (value) {
+        (value) {
           setState(() {
             theme = theme.copyWith(elevation: value);
           });
@@ -996,7 +1015,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
         "Glow Effect",
         Icons.auto_awesome_rounded,
         theme.glowEnabled,
-            (value) {
+        (value) {
           HapticFeedback.lightImpact();
           setState(() {
             theme = theme.copyWith(glowEnabled: value);
@@ -1041,7 +1060,8 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
                     ),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(Icons.color_lens_rounded, color: Colors.white, size: 20),
+                  child: Icon(Icons.color_lens_rounded,
+                      color: Colors.white, size: 20),
                 ),
                 const SizedBox(width: 12),
                 Text(
@@ -1059,7 +1079,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
               "Shadow",
               Icons.color_lens,
               theme.shadowColor,
-                  (colors) {
+              (colors) {
                 if (colors.isNotEmpty) {
                   setState(() {
                     theme = theme.copyWith(shadowColor: colors.first);
@@ -1074,7 +1094,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
               "Text",
               Icons.text_fields_rounded,
               theme.textColor,
-                  (colors) {
+              (colors) {
                 if (colors.isNotEmpty) {
                   setState(() {
                     theme = theme.copyWith(textColor: colors.first);
@@ -1089,7 +1109,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
               "Overlay",
               Icons.layers_outlined,
               theme.overlayColor,
-                  (colors) {
+              (colors) {
                 if (colors.isNotEmpty) {
                   setState(() {
                     theme = theme.copyWith(overlayColor: colors.first);
@@ -1106,12 +1126,12 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
   }
 
   Widget _buildTextField(
-      String label,
-      IconData icon,
-      TextEditingController controller,
-      ColorScheme colorScheme, {
-        Function(String)? onChanged,
-      }) {
+    String label,
+    IconData icon,
+    TextEditingController controller,
+    ColorScheme colorScheme, {
+    Function(String)? onChanged,
+  }) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -1146,13 +1166,15 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: colorScheme.outline.withValues(alpha: 0.3)),
+                borderSide: BorderSide(
+                    color: colorScheme.outline.withValues(alpha: 0.3)),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide(color: colorScheme.primary),
               ),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             ),
           ),
         ],
@@ -1161,14 +1183,14 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
   }
 
   Widget _buildModernSlider(
-      String title,
-      IconData icon,
-      double value,
-      double min,
-      double max,
-      ValueChanged<double> onChanged,
-      ColorScheme colorScheme,
-      ) {
+    String title,
+    IconData icon,
+    double value,
+    double min,
+    double max,
+    ValueChanged<double> onChanged,
+    ColorScheme colorScheme,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -1250,12 +1272,12 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
   }
 
   Widget _buildModernToggle(
-      String title,
-      IconData icon,
-      bool value,
-      ValueChanged<bool> onChanged,
-      ColorScheme colorScheme,
-      ) {
+    String title,
+    IconData icon,
+    bool value,
+    ValueChanged<bool> onChanged,
+    ColorScheme colorScheme,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -1291,12 +1313,12 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
   }
 
   Widget _buildColorPickerSection(
-      String title,
-      IconData icon,
-      Color currentColor,
-      ValueChanged<List<Color>> onChanged,
-      ColorScheme colorScheme,
-      ) {
+    String title,
+    IconData icon,
+    Color currentColor,
+    ValueChanged<List<Color>> onChanged,
+    ColorScheme colorScheme,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(

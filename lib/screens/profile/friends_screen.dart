@@ -91,7 +91,8 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
         _isLoadingFriends = false;
       });
     } on ApiRequestException catch (e) {
-      LogManager.debug('[Friends] Social load failed: ${e.message} (${e.path})');
+      LogManager.debug(
+          '[Friends] Social load failed: ${e.message} (${e.path})');
       if (!mounted) return;
       setState(() {
         _isLoadingFriends = false;
@@ -124,26 +125,27 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
   }
 
   Friend _friendFromDto(FriendListItemDto dto) => Friend(
-    id: dto.friendPlayerId,
-    name: dto.displayName,
-    username: dto.username,
-    avatar: dto.avatarUrl,
-    isOnline: dto.isOnline,
-  );
+        id: dto.friendPlayerId,
+        name: dto.displayName,
+        username: dto.username,
+        avatar: dto.avatarUrl,
+        isOnline: dto.isOnline,
+      );
 
   Friend _friendFromRequest(FriendRequestDto request) => Friend(
-    id: request.fromPlayerId,
-    name: request.senderDisplayName ?? request.senderUsername ?? 'Unknown',
-    username: request.senderUsername ?? request.senderDisplayName ?? 'unknown',
-    avatar: request.senderAvatarUrl,
-  );
+        id: request.fromPlayerId,
+        name: request.senderDisplayName ?? request.senderUsername ?? 'Unknown',
+        username:
+            request.senderUsername ?? request.senderDisplayName ?? 'unknown',
+        avatar: request.senderAvatarUrl,
+      );
 
   Friend _friendFromSuggestion(FriendSuggestionDto suggestion) => Friend(
-    id: suggestion.id,
-    name: suggestion.displayName,
-    username: suggestion.username,
-    avatar: suggestion.avatarUrl,
-  );
+        id: suggestion.id,
+        name: suggestion.displayName,
+        username: suggestion.username,
+        avatar: suggestion.avatarUrl,
+      );
 
   // ✅ ADD THIS - Subscribe to friends' presence
   void _subscribeToFriends() {
@@ -233,25 +235,25 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
             ? const Center(child: CircularProgressIndicator())
             : _loadErrorMessage != null
                 ? _buildLoadErrorState()
-            : CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            // Online Friends Section
-            SliverToBoxAdapter(
-              child: _buildOnlineFriendsSection(),
-            ),
+                : CustomScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    slivers: [
+                      // Online Friends Section
+                      SliverToBoxAdapter(
+                        child: _buildOnlineFriendsSection(),
+                      ),
 
-            // Tab Bar
-            SliverToBoxAdapter(
-              child: _buildTabBar(),
-            ),
+                      // Tab Bar
+                      SliverToBoxAdapter(
+                        child: _buildTabBar(),
+                      ),
 
-            // Friends List
-            SliverToBoxAdapter(
-              child: _buildFriendsList(),
-            ),
-          ],
-        ),
+                      // Friends List
+                      SliverToBoxAdapter(
+                        child: _buildFriendsList(),
+                      ),
+                    ],
+                  ),
       ),
       floatingActionButton: _buildFloatingActionButton(),
     );
@@ -470,7 +472,8 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
                       itemCount: _onlineFriends.length,
                       itemBuilder: (context, index) {
                         final friend = _onlineFriends[index];
-                        final presence = _presenceService.getUserPresence(friend.id);
+                        final presence =
+                            _presenceService.getUserPresence(friend.id);
 
                         return TweenAnimationBuilder<double>(
                           duration: Duration(milliseconds: 900 + (index * 100)),
@@ -480,7 +483,8 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
                               scale: animValue,
                               child: Opacity(
                                 opacity: animValue,
-                                child: _buildOnlineFriendAvatar(friend, presence),
+                                child:
+                                    _buildOnlineFriendAvatar(friend, presence),
                               ),
                             );
                           },
@@ -520,9 +524,7 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
                   child: CircleAvatar(
                     radius: 23,
                     backgroundImage: _avatarProvider(friend.avatar),
-                    child: friend.avatar == null
-                        ? Text(friend.name[0])
-                        : null,
+                    child: friend.avatar == null ? Text(friend.name[0]) : null,
                   ),
                 ),
                 if (presence != null)
@@ -582,9 +584,8 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? const Color(0xFF6366F1)
-                      : Colors.transparent,
+                  color:
+                      isSelected ? const Color(0xFF6366F1) : Colors.transparent,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -593,9 +594,7 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                    color: isSelected
-                        ? Colors.white
-                        : const Color(0xFF64748B),
+                    color: isSelected ? Colors.white : const Color(0xFF64748B),
                   ),
                 ),
               ),
@@ -681,9 +680,8 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
                     child: CircleAvatar(
                       radius: 22,
                       backgroundImage: _avatarProvider(friend.avatar),
-                      child: friend.avatar == null
-                          ? Text(friend.name[0])
-                          : null,
+                      child:
+                          friend.avatar == null ? Text(friend.name[0]) : null,
                     ),
                   ),
                   if (presence != null)
@@ -718,7 +716,7 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
                       style: TextStyle(
                         fontSize: 12,
                         color: presence?.status == PresenceStatus.online ||
-                            presence?.status == PresenceStatus.inGame
+                                presence?.status == PresenceStatus.inGame
                             ? const Color(0xFF10B981)
                             : const Color(0xFF64748B),
                       ),
@@ -791,8 +789,10 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
           onSelected: (value) => _handleFriendAction(friend, value),
           itemBuilder: (context) => [
             const PopupMenuItem(value: 'message', child: Text('Send Message')),
-            const PopupMenuItem(value: 'challenge', child: Text('Challenge to Match')),
-            const PopupMenuItem(value: 'quiz', child: Text('Start Quiz Together')),
+            const PopupMenuItem(
+                value: 'challenge', child: Text('Challenge to Match')),
+            const PopupMenuItem(
+                value: 'quiz', child: Text('Start Quiz Together')),
             const PopupMenuItem(value: 'profile', child: Text('View Profile')),
             const PopupMenuItem(value: 'remove', child: Text('Remove Friend')),
           ],
@@ -968,17 +968,24 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
     }
   }
 
-  void _handleFriendAction(Friend friend, String action) {
+  Future<void> _handleFriendAction(Friend friend, String action) async {
     switch (action) {
       case 'message':
-        final conversation = findOrCreateDirectConversation(ref, _currentUserId, friend.id);
+        final conversation = await findOrCreateDirectConversation(
+          ref,
+          _currentUserId,
+          friend.id,
+        );
         if (conversation != null) {
           final presence = _presenceService.getUserPresence(friend.id);
           context.push('/messages/detail/${conversation.id}', extra: {
             'contactName': friend.name,
             'contactAvatar': friend.avatar,
-            'isOnline': presence?.status == PresenceStatus.online || presence?.status == PresenceStatus.inGame,
-            'currentActivity': presence != null ? _presenceService.getFormattedPresence(friend.id) : null,
+            'isOnline': presence?.status == PresenceStatus.online ||
+                presence?.status == PresenceStatus.inGame,
+            'currentActivity': presence != null
+                ? _presenceService.getFormattedPresence(friend.id)
+                : null,
           });
         }
         break;

@@ -39,8 +39,8 @@ class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
     setState(() => isLoading = true);
 
     try {
-      final classStats =
-          await ref.read(question_data.classStatsProvider(widget.classLevel).future);
+      final classStats = await ref
+          .read(question_data.classStatsProvider(widget.classLevel).future);
       final categories = (classStats['availableCategories'] as List?)
               ?.whereType<QuizCategory>()
               .toList() ??
@@ -57,8 +57,8 @@ class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
       for (final subject in subjects) {
         final parsed = QuizCategoryManager.fromString(subject['id'].toString());
         if (parsed != null) {
-          final categoryStats =
-              await ref.read(question_data.categoryStatsProvider(parsed).future);
+          final categoryStats = await ref
+              .read(question_data.categoryStatsProvider(parsed).future);
           counts[subject['id'].toString()] =
               (categoryStats['questionCount'] as num?)?.toInt() ?? 0;
         } else {
@@ -70,7 +70,8 @@ class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
       setState(() {
         availableSubjects = subjects;
         questionCounts = counts;
-        if (selectedSubject != null && !questionCounts.containsKey(selectedSubject)) {
+        if (selectedSubject != null &&
+            !questionCounts.containsKey(selectedSubject)) {
           selectedSubject = null;
         }
         isLoading = false;
@@ -119,7 +120,8 @@ class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
     final category = QuizCategoryManager.fromString(selectedSubject!);
     if (category == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Unable to resolve the selected subject.')),
+        const SnackBar(
+            content: Text('Unable to resolve the selected subject.')),
       );
       return;
     }
@@ -138,7 +140,8 @@ class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
         amount: (selectedQuestionCount * 4).clamp(20, 200),
         difficulty: difficulty,
       );
-      final curatedQuestions = questions.take(selectedQuestionCount).toList(growable: false);
+      final curatedQuestions =
+          questions.take(selectedQuestionCount).toList(growable: false);
       if (curatedQuestions.isEmpty) {
         throw Exception('No questions available for ${category.displayName}.');
       }
@@ -280,7 +283,9 @@ class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
               onTap: () => setState(() => selectedSubject = subject['id']),
               child: Container(
                 decoration: BoxDecoration(
-                  color: isSelected ? subject['color'].withValues(alpha: 0.1) : Colors.grey.shade50,
+                  color: isSelected
+                      ? subject['color'].withValues(alpha: 0.1)
+                      : Colors.grey.shade50,
                   border: Border.all(
                     color: isSelected ? subject['color'] : Colors.grey.shade300,
                     width: isSelected ? 2 : 1,
@@ -293,7 +298,8 @@ class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
                     Icon(
                       subject['icon'],
                       size: 32,
-                      color: isSelected ? subject['color'] : Colors.grey.shade600,
+                      color:
+                          isSelected ? subject['color'] : Colors.grey.shade600,
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -301,8 +307,11 @@ class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                        color: isSelected ? subject['color'] : Colors.grey.shade700,
+                        fontWeight:
+                            isSelected ? FontWeight.bold : FontWeight.normal,
+                        color: isSelected
+                            ? subject['color']
+                            : Colors.grey.shade700,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -374,9 +383,12 @@ class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
             return ChoiceChip(
               label: Text('$count'),
               selected: isSelected && !isDisabled,
-              onSelected: isDisabled ? null : (selected) {
-                if (selected) setState(() => selectedQuestionCount = count);
-              },
+              onSelected: isDisabled
+                  ? null
+                  : (selected) {
+                      if (selected)
+                        setState(() => selectedQuestionCount = count);
+                    },
             );
           }).toList(),
         ),
@@ -391,7 +403,7 @@ class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
 
   Widget _buildStartButton() {
     final selectedSubjectData = availableSubjects.firstWhere(
-          (s) => s['id'] == selectedSubject,
+      (s) => s['id'] == selectedSubject,
       orElse: () => {'name': 'Unknown'},
     );
 

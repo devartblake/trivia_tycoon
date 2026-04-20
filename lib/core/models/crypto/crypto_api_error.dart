@@ -20,8 +20,7 @@ class CryptoApiException implements Exception {
   bool get isMinWithdrawal => code == 'MIN_WITHDRAWAL';
   bool get isWalletNotLinked => code == 'WALLET_NOT_LINKED';
   bool get isInsufficientBalance => code == 'INSUFFICIENT_CRYPTO_BALANCE';
-  bool get isInsufficientStakedBalance =>
-      code == 'INSUFFICIENT_STAKED_BALANCE';
+  bool get isInsufficientStakedBalance => code == 'INSUFFICIENT_STAKED_BALANCE';
 
   factory CryptoApiException.fromApiRequestException(
     ApiRequestException exception,

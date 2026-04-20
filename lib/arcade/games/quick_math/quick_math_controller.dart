@@ -139,7 +139,8 @@ class QuickMathController {
 
     if (isCorrect) {
       final nextStreak = _state.streak + 1;
-      final streakMult = (1.0 + (nextStreak * config.streakMultiplierStep)).clamp(1.0, 2.5);
+      final streakMult =
+          (1.0 + (nextStreak * config.streakMultiplierStep)).clamp(1.0, 2.5);
 
       // time bonus based on remaining total time (encourages speed)
       final total = config.timeLimit.inSeconds.clamp(1, 9999);

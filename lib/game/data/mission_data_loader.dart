@@ -20,14 +20,16 @@ class MissionDataLoader {
   static final Map<AgeGroup, List<Map<String, dynamic>>> _cachedMissions = {};
 
   // Load missions for specific age group
-  static Future<List<Map<String, dynamic>>> loadMissionsForAge(AgeGroup ageGroup) async {
+  static Future<List<Map<String, dynamic>>> loadMissionsForAge(
+      AgeGroup ageGroup) async {
     // Return cached if available
     if (_cachedMissions.containsKey(ageGroup)) {
       return _cachedMissions[ageGroup]!;
     }
 
     try {
-      final String jsonString = await rootBundle.loadString(_assetPaths[ageGroup]!);
+      final String jsonString =
+          await rootBundle.loadString(_assetPaths[ageGroup]!);
       final List<dynamic> jsonList = json.decode(jsonString);
 
       final List<Map<String, dynamic>> missions = jsonList.map((json) {
@@ -44,9 +46,11 @@ class MissionDataLoader {
   }
 
   // Convert JSON mission to the format your MissionPanel expects
-  static Map<String, dynamic> _convertJsonToMissionMap(Map<String, dynamic> json) {
+  static Map<String, dynamic> _convertJsonToMissionMap(
+      Map<String, dynamic> json) {
     return {
-      'id': DateTime.now().millisecondsSinceEpoch.toString() + Random().nextInt(1000).toString(),
+      'id': DateTime.now().millisecondsSinceEpoch.toString() +
+          Random().nextInt(1000).toString(),
       'title': json['title'] as String,
       'progress': json['progress'] as int? ?? 0,
       'total': json['total'] as int,
@@ -153,15 +157,14 @@ class MissionDataLoader {
 
   // Get random missions from age group
   static List<Map<String, dynamic>> selectRandomMissions(
-      List<Map<String, dynamic>> allMissions,
-      int count,
-      {String? preferredMode, String? preferredCategory}
-      ) {
+      List<Map<String, dynamic>> allMissions, int count,
+      {String? preferredMode, String? preferredCategory}) {
     List<Map<String, dynamic>> filteredMissions = [...allMissions];
 
     // Filter by mode if specified
     if (preferredMode != null) {
-      final modeFiltered = filteredMissions.where((m) => m['mode'] == preferredMode).toList();
+      final modeFiltered =
+          filteredMissions.where((m) => m['mode'] == preferredMode).toList();
       if (modeFiltered.isNotEmpty) {
         filteredMissions = modeFiltered;
       }
@@ -169,7 +172,9 @@ class MissionDataLoader {
 
     // Filter by category if specified
     if (preferredCategory != null) {
-      final categoryFiltered = filteredMissions.where((m) => m['category'] == preferredCategory).toList();
+      final categoryFiltered = filteredMissions
+          .where((m) => m['category'] == preferredCategory)
+          .toList();
       if (categoryFiltered.isNotEmpty) {
         filteredMissions = categoryFiltered;
       }
@@ -192,7 +197,8 @@ class LiveMissionsNotifier extends StateNotifier<List<Map<String, dynamic>>> {
 
   Future<void> _initializeMissions() async {
     // Load all missions for this age group
-    _allAvailableMissions = await MissionDataLoader.loadMissionsForAge(_ageGroup);
+    _allAvailableMissions =
+        await MissionDataLoader.loadMissionsForAge(_ageGroup);
 
     // Select initial random missions
     await generateNewMissions();
@@ -205,7 +211,8 @@ class LiveMissionsNotifier extends StateNotifier<List<Map<String, dynamic>>> {
     String? preferredCategory,
   }) async {
     if (_allAvailableMissions.isEmpty) {
-      _allAvailableMissions = await MissionDataLoader.loadMissionsForAge(_ageGroup);
+      _allAvailableMissions =
+          await MissionDataLoader.loadMissionsForAge(_ageGroup);
     }
 
     final selectedMissions = MissionDataLoader.selectRandomMissions(
@@ -219,7 +226,8 @@ class LiveMissionsNotifier extends StateNotifier<List<Map<String, dynamic>>> {
     final missionsWithIds = selectedMissions.map((mission) {
       return {
         ...mission,
-        'id': DateTime.now().millisecondsSinceEpoch.toString() + Random().nextInt(10000).toString(),
+        'id': DateTime.now().millisecondsSinceEpoch.toString() +
+            Random().nextInt(10000).toString(),
         'progress': 0, // Reset progress for new missions
       };
     }).toList();
@@ -230,7 +238,8 @@ class LiveMissionsNotifier extends StateNotifier<List<Map<String, dynamic>>> {
   // Swap a specific mission
   Future<void> swapMission(String missionId) async {
     final currentMissions = [...state];
-    final missionIndex = currentMissions.indexWhere((m) => m['id'] == missionId);
+    final missionIndex =
+        currentMissions.indexWhere((m) => m['id'] == missionId);
 
     if (missionIndex == -1) return;
 
@@ -251,7 +260,8 @@ class LiveMissionsNotifier extends StateNotifier<List<Map<String, dynamic>>> {
     // Create new mission with unique ID and reset progress
     final newMission = {
       ...replacement,
-      'id': DateTime.now().millisecondsSinceEpoch.toString() + Random().nextInt(10000).toString(),
+      'id': DateTime.now().millisecondsSinceEpoch.toString() +
+          Random().nextInt(10000).toString(),
       'progress': 0,
     };
 
@@ -319,7 +329,8 @@ class LiveMissionsNotifier extends StateNotifier<List<Map<String, dynamic>>> {
     }
   }
 
-  void _updateMissionsByAction(String type, String? value, String? mode, int increment) {
+  void _updateMissionsByAction(
+      String type, String? value, String? mode, int increment) {
     if (value == null) return;
 
     final updatedMissions = state.map((mission) {
@@ -386,10 +397,14 @@ class MissionActions {
 
     switch (ageGroup) {
       case AgeGroup.children:
-        await _ref.read(childrenMissionsProvider.notifier).swapMission(missionId);
+        await _ref
+            .read(childrenMissionsProvider.notifier)
+            .swapMission(missionId);
         break;
       case AgeGroup.adolescence:
-        await _ref.read(adolescenceMissionsProvider.notifier).swapMission(missionId);
+        await _ref
+            .read(adolescenceMissionsProvider.notifier)
+            .swapMission(missionId);
         break;
       case AgeGroup.adults:
         await _ref.read(adultsMissionsProvider.notifier).swapMission(missionId);
@@ -402,13 +417,19 @@ class MissionActions {
 
     switch (ageGroup) {
       case AgeGroup.children:
-        _ref.read(childrenMissionsProvider.notifier).updateMissionProgress(missionId, increment);
+        _ref
+            .read(childrenMissionsProvider.notifier)
+            .updateMissionProgress(missionId, increment);
         break;
       case AgeGroup.adolescence:
-        _ref.read(adolescenceMissionsProvider.notifier).updateMissionProgress(missionId, increment);
+        _ref
+            .read(adolescenceMissionsProvider.notifier)
+            .updateMissionProgress(missionId, increment);
         break;
       case AgeGroup.adults:
-        _ref.read(adultsMissionsProvider.notifier).updateMissionProgress(missionId, increment);
+        _ref
+            .read(adultsMissionsProvider.notifier)
+            .updateMissionProgress(missionId, increment);
         break;
     }
   }
@@ -418,13 +439,19 @@ class MissionActions {
 
     switch (ageGroup) {
       case AgeGroup.children:
-        _ref.read(childrenMissionsProvider.notifier).trackUserAction(actionType, metadata);
+        _ref
+            .read(childrenMissionsProvider.notifier)
+            .trackUserAction(actionType, metadata);
         break;
       case AgeGroup.adolescence:
-        _ref.read(adolescenceMissionsProvider.notifier).trackUserAction(actionType, metadata);
+        _ref
+            .read(adolescenceMissionsProvider.notifier)
+            .trackUserAction(actionType, metadata);
         break;
       case AgeGroup.adults:
-        _ref.read(adultsMissionsProvider.notifier).trackUserAction(actionType, metadata);
+        _ref
+            .read(adultsMissionsProvider.notifier)
+            .trackUserAction(actionType, metadata);
         break;
     }
   }
@@ -439,24 +466,26 @@ class MissionActions {
     switch (ageGroup) {
       case AgeGroup.children:
         await _ref.read(childrenMissionsProvider.notifier).generateNewMissions(
-          count: count,
-          preferredMode: preferredMode,
-          preferredCategory: preferredCategory,
-        );
+              count: count,
+              preferredMode: preferredMode,
+              preferredCategory: preferredCategory,
+            );
         break;
       case AgeGroup.adolescence:
-        await _ref.read(adolescenceMissionsProvider.notifier).generateNewMissions(
-          count: count,
-          preferredMode: preferredMode,
-          preferredCategory: preferredCategory,
-        );
+        await _ref
+            .read(adolescenceMissionsProvider.notifier)
+            .generateNewMissions(
+              count: count,
+              preferredMode: preferredMode,
+              preferredCategory: preferredCategory,
+            );
         break;
       case AgeGroup.adults:
         await _ref.read(adultsMissionsProvider.notifier).generateNewMissions(
-          count: count,
-          preferredMode: preferredMode,
-          preferredCategory: preferredCategory,
-        );
+              count: count,
+              preferredMode: preferredMode,
+              preferredCategory: preferredCategory,
+            );
         break;
     }
   }

@@ -90,10 +90,10 @@ class _AvatarStatusIndicatorState extends State<AvatarStatusIndicator>
       ),
       child: icon != null
           ? Icon(
-        icon,
-        size: size * 0.5,
-        color: Colors.white,
-      )
+              icon,
+              size: size * 0.5,
+              color: Colors.white,
+            )
           : null,
     );
 

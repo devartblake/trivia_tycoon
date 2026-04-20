@@ -25,7 +25,8 @@ class CurrencyManager {
   Future<void> _loadCurrencyState() async {
     try {
       final historyStr = await AppSettings.getString('transaction_history');
-      if (historyStr != null && historyStr.isNotEmpty) { // Check for null first
+      if (historyStr != null && historyStr.isNotEmpty) {
+        // Check for null first
         // Parse the string safely - you may need to adjust this parsing logic
         // depending on how you're storing the transaction history
         try {
@@ -38,7 +39,8 @@ class CurrencyManager {
       }
 
       final lastSaveStr = await AppSettings.getString('currency_last_save');
-      if (lastSaveStr != null && lastSaveStr.isNotEmpty) { // Check for null first
+      if (lastSaveStr != null && lastSaveStr.isNotEmpty) {
+        // Check for null first
         _lastSaveTime = DateTime.parse(lastSaveStr);
       }
     } catch (e) {
@@ -77,10 +79,10 @@ class CurrencyManager {
   }
 
   Future<void> earnFromAction(
-      String actionId, {
-        required CurrencyType type,
-        int amount = 100,
-      }) async {
+    String actionId, {
+    required CurrencyType type,
+    int amount = 100,
+  }) async {
     if (_isPaused) return;
 
     final notifier = getNotifier(type);
@@ -94,8 +96,10 @@ class CurrencyManager {
   /// Record transaction for statistics
   Future<void> _recordTransaction(String transactionType, int amount) async {
     try {
-      _transactionHistory[transactionType] = (_transactionHistory[transactionType] ?? 0) + amount;
-      await AppSettings.setString('transaction_history', _transactionHistory.toString());
+      _transactionHistory[transactionType] =
+          (_transactionHistory[transactionType] ?? 0) + amount;
+      await AppSettings.setString(
+          'transaction_history', _transactionHistory.toString());
     } catch (e) {
       LogManager.debug('Failed to record transaction: $e');
     }
@@ -110,8 +114,10 @@ class CurrencyManager {
       await ref.read(_diamondProvider.notifier).forceSave();
 
       // Save transaction history
-      await AppSettings.setString('transaction_history', _transactionHistory.toString());
-      await AppSettings.setString('currency_last_save', DateTime.now().toIso8601String());
+      await AppSettings.setString(
+          'transaction_history', _transactionHistory.toString());
+      await AppSettings.setString(
+          'currency_last_save', DateTime.now().toIso8601String());
 
       // Create state snapshot
       final stateSnapshot = {
@@ -121,7 +127,8 @@ class CurrencyManager {
         'timestamp': DateTime.now().toIso8601String(),
       };
 
-      await AppSettings.setString('currency_state_snapshot', stateSnapshot.toString());
+      await AppSettings.setString(
+          'currency_state_snapshot', stateSnapshot.toString());
       _lastSaveTime = DateTime.now();
 
       LogManager.debug('Currency state saved successfully');
@@ -170,7 +177,8 @@ class CurrencyManager {
       _transactionHistory.removeWhere((key, value) => value < 0);
 
       if (needsRepair) {
-        await AppSettings.setString('transaction_history', _transactionHistory.toString());
+        await AppSettings.setString(
+            'transaction_history', _transactionHistory.toString());
         LogManager.debug('Currency integrity restored');
       }
     } catch (e) {
@@ -239,7 +247,8 @@ class CurrencyManager {
 
       if (data.containsKey('transactionHistory')) {
         _transactionHistory = Map<String, int>.from(data['transactionHistory']);
-        await AppSettings.setString('transaction_history', _transactionHistory.toString());
+        await AppSettings.setString(
+            'transaction_history', _transactionHistory.toString());
       }
 
       LogManager.debug('Currency data imported successfully');

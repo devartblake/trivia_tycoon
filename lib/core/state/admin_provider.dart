@@ -21,7 +21,8 @@ final adminAccessProvider = FutureProvider<bool>((ref) async {
 });
 
 /// State notifier for admin-related state management
-final adminStateProvider = StateNotifierProvider<AdminStateNotifier, AdminState>((ref) {
+final adminStateProvider =
+    StateNotifierProvider<AdminStateNotifier, AdminState>((ref) {
   return AdminStateNotifier(ref);
 });
 

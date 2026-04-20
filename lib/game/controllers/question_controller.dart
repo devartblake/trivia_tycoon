@@ -4,7 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import 'package:trivia_tycoon/game/providers/question_providers.dart';
 import 'package:trivia_tycoon/game/providers/game_bonus_providers.dart';
-import 'package:trivia_tycoon/game/providers/xp_provider.dart';import '../../core/repositories/question_repository.dart';
+import 'package:trivia_tycoon/game/providers/xp_provider.dart';
+import '../../core/repositories/question_repository.dart';
 import '../../core/services/question/quiz_session_service.dart';
 import '../logic/power_up_effect_applier.dart';
 import '../models/question_model.dart';
@@ -36,7 +37,7 @@ class QuestionController extends StateNotifier<QuestionState> {
 
     // Reset per-session bonus state
     ref.read(streakCountProvider.notifier).state =
-        ref.read(streakCountProvider);        // keep startingStreak already set
+        ref.read(streakCountProvider); // keep startingStreak already set
     ref.read(timerFrozenProvider.notifier).state = false;
 
     final powerUp = ref.read(equippedPowerUpProvider);
@@ -161,9 +162,9 @@ class QuestionController extends StateNotifier<QuestionState> {
       final powerUpMult = state.currentQuestion?.multiplier ?? 1;
 
       // Skill-tree multipliers
-      final skillBonus  = ref.read(scoreBonusMultiplierProvider);
-      final streakMult  = ref.read(streakMultiplierProvider);
-      final speedBonus  = ref.read(speedBonusMultiplierProvider);
+      final skillBonus = ref.read(scoreBonusMultiplierProvider);
+      final streakMult = ref.read(streakMultiplierProvider);
+      final speedBonus = ref.read(speedBonusMultiplierProvider);
 
       // Category-specific bonus
       double catBonus = 1.0;
@@ -178,11 +179,11 @@ class QuestionController extends StateNotifier<QuestionState> {
       }
 
       int scorePoints = (basePoints *
-          powerUpMult *
-          skillBonus *
-          streakMult *
-          speedBonus *
-          catBonus)
+              powerUpMult *
+              skillBonus *
+              streakMult *
+              speedBonus *
+              catBonus)
           .round();
 
       // ── accuracyBonus ────────────────────────────────────────────────────
@@ -196,34 +197,33 @@ class QuestionController extends StateNotifier<QuestionState> {
         scorePoints *= 2;
       }
 
-      updatedScore    = state.score + scorePoints;
-      updatedMoney    = state.money + 5;
+      updatedScore = state.score + scorePoints;
+      updatedMoney = state.money + 5;
       updatedDiamonds = state.diamonds + 1;
 
       // Award XP (XPService applies its own active boost internally)
       final xpService = ref.read(xpServiceProvider);
       xpService.addXP(scorePoints);
       ref.read(playerXPProvider.notifier).state = xpService.playerXP;
-
     } else if (ref.read(doubleOrNothingProvider)) {
       // Wrong while doubleOrNothing is active → lose all accumulated score
       updatedScore = 0;
     }
 
     // ── Streak tracking ────────────────────────────────────────────────────
-    final newStreakCount = (correct || shieldUsed)
-        ? state.streakCount + (shieldUsed ? 0 : 1)
-        : 0;
+    final newStreakCount =
+        (correct || shieldUsed) ? state.streakCount + (shieldUsed ? 0 : 1) : 0;
     ref.read(streakCountProvider.notifier).state = newStreakCount;
 
-    final newCorrect   = (correct && !shieldUsed) ? state.correctCount + 1 : state.correctCount;
-    final newTotal     = state.totalAnswered + 1;
+    final newCorrect =
+        (correct && !shieldUsed) ? state.correctCount + 1 : state.correctCount;
+    final newTotal = state.totalAnswered + 1;
 
     state = state.copyWith(
-      score:        updatedScore,
-      money:        updatedMoney,
-      diamonds:     updatedDiamonds,
-      streakCount:  newStreakCount,
+      score: updatedScore,
+      money: updatedMoney,
+      diamonds: updatedDiamonds,
+      streakCount: newStreakCount,
       correctCount: newCorrect,
       totalAnswered: newTotal,
     );
@@ -260,11 +260,11 @@ class QuestionController extends StateNotifier<QuestionState> {
     updatedQuestions[nextIndex] = affected;
 
     state = state.copyWith(
-      questions:    updatedQuestions,
+      questions: updatedQuestions,
       currentIndex: nextIndex,
       selectedAnswer: null,
-      powerUpUsed:  false,
-      timeLeft:     30,
+      powerUpUsed: false,
+      timeLeft: 30,
     );
 
     _applyPendingQuestionEffects(nextIndex);
@@ -286,7 +286,7 @@ class QuestionController extends StateNotifier<QuestionState> {
 
       case 'eliminate':
         final incorrect =
-        updated.options.where((c) => c != updated.correctAnswer).toList();
+            updated.options.where((c) => c != updated.correctAnswer).toList();
         incorrect.shuffle();
         final reduced = updated.options
             .where((c) => c == updated.correctAnswer || c == incorrect.first)
@@ -393,15 +393,16 @@ class QuestionController extends StateNotifier<QuestionState> {
   void _triggerPeriodicChaos() {
     final options = <void Function()>[
       // Penalty: lose 5s on next question
-          () => state = state.copyWith(timeLeft: (state.timeLeft - 5).clamp(1, 999)),
+      () =>
+          state = state.copyWith(timeLeft: (state.timeLeft - 5).clamp(1, 999)),
       // Penalty: halve streak count
-          () {
+      () {
         final half = (state.streakCount / 2).floor();
         ref.read(streakCountProvider.notifier).state = half;
         state = state.copyWith(streakCount: half);
       },
       // Penalty: reduce score bonus multiplier by 10%
-          () {
+      () {
         final cur = ref.read(scoreBonusMultiplierProvider);
         if (cur > 1.0) {
           ref.read(scoreBonusMultiplierProvider.notifier).state =

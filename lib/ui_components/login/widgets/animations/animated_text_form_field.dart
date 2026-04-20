@@ -16,12 +16,12 @@ enum TextFieldInertiaDirection {
 }
 
 Interval _getInternalInterval(
-    double start,
-    double end,
-    double externalStart,
-    double externalEnd, [
-      Curve curve = Curves.linear,
-    ]) {
+  double start,
+  double end,
+  double externalStart,
+  double externalEnd, [
+  Curve curve = Curves.linear,
+]) {
   return Interval(
     start + (end - start) * externalStart,
     start + (end - start) * externalEnd,
@@ -57,9 +57,9 @@ class AnimatedTextFormField extends StatefulWidget {
     this.tooltip,
     required this.initialIsoCode,
   }) : assert(
-  (inertiaController == null && inertiaDirection == null) ||
-      (inertiaController != null && inertiaDirection != null),
-  );
+          (inertiaController == null && inertiaDirection == null) ||
+              (inertiaController != null && inertiaDirection != null),
+        );
 
   final Key? textFormFieldKey;
   final Interval? interval;
@@ -153,12 +153,12 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
       );
       iconRotationAnimation =
           Tween<double>(begin: 0.0, end: sign * pi / 12 /* ~15deg */).animate(
-            CurvedAnimation(
-              parent: inertiaController,
-              curve: const Interval(.5, 1.0, curve: Curves.easeOut),
-              reverseCurve: Curves.easeIn,
-            ),
-          );
+        CurvedAnimation(
+          parent: inertiaController,
+          curve: const Interval(.5, 1.0, curve: Curves.easeOut),
+          reverseCurve: Curves.easeIn,
+        ),
+      );
       iconTranslateAnimation = Tween<double>(begin: 0.0, end: 8.0).animate(
         CurvedAnimation(
           parent: inertiaController,
@@ -260,9 +260,9 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
       suffixIcon: _buildInertiaAnimation(
         widget.loadingController != null
             ? FadeTransition(
-          opacity: suffixIconOpacityAnimation,
-          child: widget.suffixIcon,
-        )
+                opacity: suffixIconOpacityAnimation,
+                child: widget.suffixIcon,
+              )
             : widget.suffixIcon,
       ),
     );
@@ -304,11 +304,11 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
                 phoneNumber.phoneNumber!.startsWith('+')) {
               _phoneNumberController.text =
                   _phoneNumberController.text.replaceAll(
-                    RegExp(
-                      '^([\\+]${phoneNumber.dialCode!.replaceAll('+', '')}[\\s]?)',
-                    ),
-                    '',
-                  );
+                RegExp(
+                  '^([\\+]${phoneNumber.dialCode!.replaceAll('+', '')}[\\s]?)',
+                ),
+                '',
+              );
             }
             _phoneNumberController.selection = TextSelection.collapsed(
               offset: _phoneNumberController.text.length,
@@ -321,8 +321,8 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
             trailingSpace: false,
             countryComparator: (c1, c2) =>
                 int.parse(c1.dialCode!.substring(1)).compareTo(
-                  int.parse(c2.dialCode!.substring(1)),
-                ),
+              int.parse(c2.dialCode!.substring(1)),
+            ),
           ),
           spaceBetweenSelectorAndTextField: 0,
           initialValue: _phoneNumberInitialValue,
@@ -339,34 +339,34 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
         },
         title: widget.linkUrl != null
             ? InkWell(
-          onTap: () {
-            launchUrl(Uri.parse(widget.linkUrl!));
-          },
-          child: Row(
-            children: [
-              Flexible(
-                child: Text(
-                  widget.labelText ?? '',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                  textAlign: TextAlign.left,
+                onTap: () {
+                  launchUrl(Uri.parse(widget.linkUrl!));
+                },
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        widget.labelText ?? '',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Icon(
+                        Icons.open_in_new,
+                        color: Theme.of(context).textTheme.bodyMedium!.color,
+                        size: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: Icon(
-                  Icons.open_in_new,
-                  color: Theme.of(context).textTheme.bodyMedium!.color,
-                  size: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                ),
-              ),
-            ],
-          ),
-        )
+              )
             : Text(
-          widget.labelText ?? '',
-          style: Theme.of(context).textTheme.bodyMedium,
-          textAlign: TextAlign.left,
-        ),
+                widget.labelText ?? '',
+                style: Theme.of(context).textTheme.bodyMedium,
+                textAlign: TextAlign.left,
+              ),
       );
     } else {
       inputField = TextFormField(
@@ -462,9 +462,9 @@ class AnimatedPasswordTextFormField extends StatefulWidget {
     this.autofillHints,
     required this.initialIsoCode,
   }) : assert(
-  (inertiaController == null && inertiaDirection == null) ||
-      (inertiaController != null && inertiaDirection != null),
-  );
+          (inertiaController == null && inertiaDirection == null) ||
+              (inertiaController != null && inertiaDirection != null),
+        );
 
   final Interval? interval;
   final AnimationController? loadingController;

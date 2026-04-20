@@ -20,12 +20,10 @@ class FriendListItemDto {
   factory FriendListItemDto.fromJson(Map<String, dynamic> json) {
     return FriendListItemDto(
       friendPlayerId: json['friendPlayerId']?.toString() ?? '',
-      displayName: json['displayName']?.toString() ??
-          json['username']?.toString() ??
-          '',
-      username: json['username']?.toString() ??
-          json['displayName']?.toString() ??
-          '',
+      displayName:
+          json['displayName']?.toString() ?? json['username']?.toString() ?? '',
+      username:
+          json['username']?.toString() ?? json['displayName']?.toString() ?? '',
       avatarUrl: json['avatarUrl']?.toString(),
       isOnline: json['isOnline'] as bool? ?? false,
       lastSeenUtc: _parseDateTime(json['lastSeenUtc']),

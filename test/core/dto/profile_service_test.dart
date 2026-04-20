@@ -13,9 +13,9 @@ import 'package:trivia_tycoon/game/providers/xp_provider.dart';
 ///
 /// Returns the result of [body].
 Future<T> _withRef<T>(
-    Future<T> Function(Ref ref, XPService xpService) body, {
-      int startingXP = 0,
-    }) async {
+  Future<T> Function(Ref ref, XPService xpService) body, {
+  int startingXP = 0,
+}) async {
   final xpService = XPService(startingPlayerXP: startingXP);
   late T result;
 
@@ -70,8 +70,7 @@ void main() {
     test('setDisplayName updates the name', () {
       final container = ProviderContainer();
       addTearDown(container.dispose);
-      final svc =
-      _makeSyncService(container: container, displayName: 'Alice');
+      final svc = _makeSyncService(container: container, displayName: 'Alice');
       svc.setDisplayName('Charlie');
       expect(svc.displayName, 'Charlie');
     });

@@ -153,7 +153,8 @@ class _QuestionScreenState extends ConsumerState<QuestionScreen> {
               Consumer(
                 builder: (context, ref, child) {
                   return categoriesAsync.when(
-                    data: (categories) => FeaturedCategoriesSection(categories: categories),
+                    data: (categories) =>
+                        FeaturedCategoriesSection(categories: categories),
                     loading: () => const FeaturedCategoriesLoadingSection(),
                     error: (error, stack) => const SizedBox(),
                   );
@@ -392,4 +393,3 @@ class _QuestionScreenState extends ConsumerState<QuestionScreen> {
     );
   }
 }
-

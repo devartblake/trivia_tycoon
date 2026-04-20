@@ -23,11 +23,16 @@ class GroupMemberList extends StatelessWidget {
     final canManage = currentMember?.role.canManageMembers ?? false;
 
     // Group members by role
-    final owners = group.members.where((m) => m.role == GroupRole.owner).toList();
-    final admins = group.members.where((m) => m.role == GroupRole.admin).toList();
-    final moderators = group.members.where((m) => m.role == GroupRole.moderator).toList();
-    final members = group.members.where((m) => m.role == GroupRole.member).toList();
-    final spectators = group.members.where((m) => m.role == GroupRole.spectator).toList();
+    final owners =
+        group.members.where((m) => m.role == GroupRole.owner).toList();
+    final admins =
+        group.members.where((m) => m.role == GroupRole.admin).toList();
+    final moderators =
+        group.members.where((m) => m.role == GroupRole.moderator).toList();
+    final members =
+        group.members.where((m) => m.role == GroupRole.member).toList();
+    final spectators =
+        group.members.where((m) => m.role == GroupRole.spectator).toList();
 
     return ListView(
       children: [
@@ -58,35 +63,36 @@ class GroupMemberList extends StatelessWidget {
   Widget _buildRoleHeader(BuildContext context, String role, int count) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      color: Theme.of(context).colorScheme.surfaceVariant.withValues(alpha: 0.5),
+      color:
+          Theme.of(context).colorScheme.surfaceVariant.withValues(alpha: 0.5),
       child: Text(
         '$role ($count)',
         style: Theme.of(context).textTheme.titleSmall?.copyWith(
-          fontWeight: FontWeight.bold,
-          color: Theme.of(context).colorScheme.primary,
-        ),
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.primary,
+            ),
       ),
     );
   }
 
-  Widget _buildMemberTile(BuildContext context, GroupMember member, bool canManage) {
+  Widget _buildMemberTile(
+      BuildContext context, GroupMember member, bool canManage) {
     return ListTile(
       leading: Stack(
         children: [
           CircleAvatar(
             radius: 20,
             backgroundColor: Theme.of(context).colorScheme.primary,
-            backgroundImage: member.avatar != null
-                ? NetworkImage(member.avatar!)
-                : null,
+            backgroundImage:
+                member.avatar != null ? NetworkImage(member.avatar!) : null,
             child: member.avatar == null
                 ? Text(
-              member.displayName[0].toUpperCase(),
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onPrimary,
-                fontWeight: FontWeight.bold,
-              ),
-            )
+                    member.displayName[0].toUpperCase(),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
                 : null,
           ),
           Positioned(
@@ -113,8 +119,8 @@ class GroupMemberList extends StatelessWidget {
             child: Text(
               member.displayName,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
+                    fontWeight: FontWeight.w500,
+                  ),
             ),
           ),
           if (member.role == GroupRole.owner)
@@ -169,62 +175,67 @@ class GroupMemberList extends StatelessWidget {
         member.isOnline
             ? 'Online'
             : member.lastSeen != null
-            ? 'Last seen ${_formatLastSeen(member.lastSeen!)}'
-            : 'Offline',
+                ? 'Last seen ${_formatLastSeen(member.lastSeen!)}'
+                : 'Offline',
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: member.isOnline
-              ? Colors.green.shade700
-              : Theme.of(context).colorScheme.onSurfaceVariant,
-        ),
+              color: member.isOnline
+                  ? Colors.green.shade700
+                  : Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
       ),
-      trailing: canManage && member.userId != currentUserId && member.role != GroupRole.owner
+      trailing: canManage &&
+              member.userId != currentUserId &&
+              member.role != GroupRole.owner
           ? PopupMenuButton<String>(
-        icon: const Icon(Icons.more_vert),
-        onSelected: (value) => _handleMemberAction(context, value, member),
-        itemBuilder: (context) => [
-          const PopupMenuItem(
-            value: 'view',
-            child: ListTile(
-              leading: Icon(Icons.person),
-              title: Text('View Profile'),
-              contentPadding: EdgeInsets.zero,
-            ),
-          ),
-          if (member.role != GroupRole.admin)
-            const PopupMenuItem(
-              value: 'promote',
-              child: ListTile(
-                leading: Icon(Icons.arrow_upward),
-                title: Text('Promote'),
-                contentPadding: EdgeInsets.zero,
-              ),
-            ),
-          if (member.role == GroupRole.admin || member.role == GroupRole.moderator)
-            const PopupMenuItem(
-              value: 'demote',
-              child: ListTile(
-                leading: Icon(Icons.arrow_downward),
-                title: Text('Demote'),
-                contentPadding: EdgeInsets.zero,
-              ),
-            ),
-          const PopupMenuDivider(),
-          const PopupMenuItem(
-            value: 'kick',
-            child: ListTile(
-              leading: Icon(Icons.person_remove, color: Colors.red),
-              title: Text('Kick', style: TextStyle(color: Colors.red)),
-              contentPadding: EdgeInsets.zero,
-            ),
-          ),
-        ],
-      )
+              icon: const Icon(Icons.more_vert),
+              onSelected: (value) =>
+                  _handleMemberAction(context, value, member),
+              itemBuilder: (context) => [
+                const PopupMenuItem(
+                  value: 'view',
+                  child: ListTile(
+                    leading: Icon(Icons.person),
+                    title: Text('View Profile'),
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                ),
+                if (member.role != GroupRole.admin)
+                  const PopupMenuItem(
+                    value: 'promote',
+                    child: ListTile(
+                      leading: Icon(Icons.arrow_upward),
+                      title: Text('Promote'),
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                  ),
+                if (member.role == GroupRole.admin ||
+                    member.role == GroupRole.moderator)
+                  const PopupMenuItem(
+                    value: 'demote',
+                    child: ListTile(
+                      leading: Icon(Icons.arrow_downward),
+                      title: Text('Demote'),
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                  ),
+                const PopupMenuDivider(),
+                const PopupMenuItem(
+                  value: 'kick',
+                  child: ListTile(
+                    leading: Icon(Icons.person_remove, color: Colors.red),
+                    title: Text('Kick', style: TextStyle(color: Colors.red)),
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                ),
+              ],
+            )
           : null,
       onTap: () => onMemberTap?.call(member),
     );
   }
 
-  void _handleMemberAction(BuildContext context, String action, GroupMember member) {
+  void _handleMemberAction(
+      BuildContext context, String action, GroupMember member) {
     switch (action) {
       case 'view':
         onMemberTap?.call(member);
@@ -252,7 +263,8 @@ class GroupMemberList extends StatelessWidget {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Kick Member'),
-        content: Text('Are you sure you want to kick ${member.displayName} from this group?'),
+        content: Text(
+            'Are you sure you want to kick ${member.displayName} from this group?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),

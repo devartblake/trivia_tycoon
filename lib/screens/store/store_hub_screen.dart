@@ -199,7 +199,11 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [Color(0xFF6366F1), Color(0xFF8B5CF6), Color(0xFFEC4899)],
+                  colors: [
+                    Color(0xFF6366F1),
+                    Color(0xFF8B5CF6),
+                    Color(0xFFEC4899)
+                  ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -301,24 +305,20 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
           child: Opacity(
             opacity: value,
             child: Container(
-              margin:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
                 children: [
                   Expanded(
-                    child: _buildStatCard(
-                        'Total Items', stats.totalItems, Icons.inventory,
-                        const Color(0xFF10B981))),
+                      child: _buildStatCard('Total Items', stats.totalItems,
+                          Icons.inventory, const Color(0xFF10B981))),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: _buildStatCard(
-                        'Active Offers', stats.activeOffers, Icons.local_offer,
-                        const Color(0xFFEF4444))),
+                      child: _buildStatCard('Active Offers', stats.activeOffers,
+                          Icons.local_offer, const Color(0xFFEF4444))),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: _buildStatCard(
-                        'New Today', stats.newToday, Icons.fiber_new,
-                        const Color(0xFF8B5CF6))),
+                      child: _buildStatCard('New Today', stats.newToday,
+                          Icons.fiber_new, const Color(0xFF8B5CF6))),
                 ],
               ),
             ),
@@ -412,16 +412,14 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
                     itemCount: sections.length,
                     itemBuilder: (context, index) {
                       return TweenAnimationBuilder<double>(
-                        duration:
-                            Duration(milliseconds: 1100 + (index * 100)),
+                        duration: Duration(milliseconds: 1100 + (index * 100)),
                         tween: Tween(begin: 0.0, end: 1.0),
                         builder: (context, animValue, child) {
                           return Transform.scale(
                             scale: 0.8 + (0.2 * animValue),
                             child: Opacity(
                               opacity: animValue,
-                              child:
-                                  _buildStoreSectionCard(sections[index]),
+                              child: _buildStoreSectionCard(sections[index]),
                             ),
                           );
                         },
@@ -480,8 +478,8 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
                 ),
                 if (section.badge != null)
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 6, vertical: 3),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                     decoration: BoxDecoration(
                       color: const Color(0xFFEF4444),
                       borderRadius: BorderRadius.circular(8),
@@ -676,8 +674,8 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
               if (featured.countdownLabel.isNotEmpty) const SizedBox(width: 12),
               if (featured.buttonText != null)
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 20, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),

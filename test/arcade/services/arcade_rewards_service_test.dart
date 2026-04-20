@@ -84,9 +84,8 @@ void main() {
     });
 
     test('difficulty order is easy < normal < hard < insane for XP', () {
-      final xps = ArcadeDifficulty.values
-          .map((d) => _rewardsFor(d).xp)
-          .toList();
+      final xps =
+          ArcadeDifficulty.values.map((d) => _rewardsFor(d).xp).toList();
       for (int i = 1; i < xps.length; i++) {
         expect(xps[i], greaterThanOrEqualTo(xps[i - 1]));
       }
@@ -99,8 +98,10 @@ void main() {
 
   group('ArcadeRewardsService time bonus', () {
     test('faster completion gives at least as much XP as slower', () {
-      final fast = service.computeRewards(_result(duration: const Duration(seconds: 30)));
-      final slow = service.computeRewards(_result(duration: const Duration(seconds: 3600)));
+      final fast = service
+          .computeRewards(_result(duration: const Duration(seconds: 30)));
+      final slow = service
+          .computeRewards(_result(duration: const Duration(seconds: 3600)));
       expect(fast.xp, greaterThanOrEqualTo(slow.xp));
     });
 
@@ -118,7 +119,8 @@ void main() {
 
   group('ArcadeRewardsService per-game tuning', () {
     // memoryFlip has xpMult=1.05 vs patternSprint xpMult=1.0
-    test('memoryFlip yields slightly more XP than patternSprint at same score', () {
+    test('memoryFlip yields slightly more XP than patternSprint at same score',
+        () {
       final memory = service.computeRewards(
         _result(gameId: ArcadeGameId.memoryFlip, score: 1000),
       );
@@ -129,7 +131,9 @@ void main() {
     });
 
     // quickMathRush has coinMult=1.05 vs patternSprint coinMult=1.0
-    test('quickMathRush yields slightly more coins than patternSprint at same score', () {
+    test(
+        'quickMathRush yields slightly more coins than patternSprint at same score',
+        () {
       final math = service.computeRewards(
         _result(gameId: ArcadeGameId.quickMathRush, score: 1000),
       );

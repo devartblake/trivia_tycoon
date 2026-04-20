@@ -18,12 +18,12 @@ class GradientPickerDialog extends StatefulWidget {
   });
 
   static Future<Gradient?> show(
-      BuildContext context, {
-        Gradient? initialGradient,
-        String? title,
-        bool allowCustomColors = true,
-        List<Color>? predefinedColors,
-      }) async {
+    BuildContext context, {
+    Gradient? initialGradient,
+    String? title,
+    bool allowCustomColors = true,
+    List<Color>? predefinedColors,
+  }) async {
     return await showDialog<Gradient>(
       context: context,
       barrierDismissible: false,
@@ -71,7 +71,11 @@ class _GradientPickerDialogState extends State<GradientPickerDialog>
     LinearGradient(colors: [Colors.amber.shade400, Colors.orange.shade400]),
     RadialGradient(colors: [Colors.purple.shade300, Colors.blue.shade600]),
     LinearGradient(
-      colors: [Colors.pink.shade300, Colors.purple.shade400, Colors.blue.shade500],
+      colors: [
+        Colors.pink.shade300,
+        Colors.purple.shade400,
+        Colors.blue.shade500
+      ],
     ),
   ];
 
@@ -303,7 +307,9 @@ class _GradientPickerDialogState extends State<GradientPickerDialog>
                     color: stop.color,
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: isSelected ? Colors.white : Colors.black.withValues(alpha: 0.3),
+                      color: isSelected
+                          ? Colors.white
+                          : Colors.black.withValues(alpha: 0.3),
                       width: isSelected ? 3 : 2,
                     ),
                     boxShadow: [
@@ -346,7 +352,8 @@ class _GradientPickerDialogState extends State<GradientPickerDialog>
               indicatorSize: TabBarIndicatorSize.tab,
               dividerColor: Colors.transparent,
               labelColor: Colors.white,
-              unselectedLabelColor: colorScheme.onSurface.withValues(alpha: 0.6),
+              unselectedLabelColor:
+                  colorScheme.onSurface.withValues(alpha: 0.6),
               labelStyle: const TextStyle(fontWeight: FontWeight.w600),
               tabs: const [
                 Tab(text: "Presets"),
@@ -496,9 +503,10 @@ class _GradientPickerDialogState extends State<GradientPickerDialog>
                         onPressed: () {
                           setState(() {
                             _stops.removeAt(index);
-                            _selectedStopIndex = (_selectedStopIndex >= _stops.length)
-                                ? _stops.length - 1
-                                : _selectedStopIndex;
+                            _selectedStopIndex =
+                                (_selectedStopIndex >= _stops.length)
+                                    ? _stops.length - 1
+                                    : _selectedStopIndex;
                           });
                           _updateGradient();
                         },
@@ -601,22 +609,26 @@ class _GradientPickerDialogState extends State<GradientPickerDialog>
           ),
         ),
         const SizedBox(height: 12),
-
         Wrap(
           spacing: 8,
           runSpacing: 8,
           children: [
-            _buildDirectionButton("→", Alignment.centerLeft, Alignment.centerRight),
-            _buildDirectionButton("↓", Alignment.topCenter, Alignment.bottomCenter),
-            _buildDirectionButton("↗", Alignment.bottomLeft, Alignment.topRight),
-            _buildDirectionButton("↘", Alignment.topLeft, Alignment.bottomRight),
+            _buildDirectionButton(
+                "→", Alignment.centerLeft, Alignment.centerRight),
+            _buildDirectionButton(
+                "↓", Alignment.topCenter, Alignment.bottomCenter),
+            _buildDirectionButton(
+                "↗", Alignment.bottomLeft, Alignment.topRight),
+            _buildDirectionButton(
+                "↘", Alignment.topLeft, Alignment.bottomRight),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildDirectionButton(String label, AlignmentGeometry begin, AlignmentGeometry end) {
+  Widget _buildDirectionButton(
+      String label, AlignmentGeometry begin, AlignmentGeometry end) {
     final isSelected = _beginAlignment == begin && _endAlignment == end;
 
     return GestureDetector(
@@ -632,7 +644,8 @@ class _GradientPickerDialogState extends State<GradientPickerDialog>
         height: 60,
         decoration: BoxDecoration(
           gradient: isSelected
-              ? LinearGradient(colors: [Colors.blue.shade400, Colors.purple.shade400])
+              ? LinearGradient(
+                  colors: [Colors.blue.shade400, Colors.purple.shade400])
               : null,
           color: isSelected ? null : Colors.grey.shade200,
           borderRadius: BorderRadius.circular(12),
@@ -668,7 +681,6 @@ class _GradientPickerDialogState extends State<GradientPickerDialog>
           ),
         ),
         const SizedBox(height: 12),
-
         Row(
           children: [
             Expanded(
@@ -712,9 +724,7 @@ class _GradientPickerDialogState extends State<GradientPickerDialog>
             ),
           ],
         ),
-
         const SizedBox(height: 16),
-
         Text("Radius: ${(_radius * 100).toInt()}%"),
         Slider(
           value: _radius,
@@ -744,7 +754,6 @@ class _GradientPickerDialogState extends State<GradientPickerDialog>
           ),
         ),
         const SizedBox(height: 12),
-
         Row(
           children: [
             Expanded(
@@ -812,9 +821,7 @@ class _GradientPickerDialogState extends State<GradientPickerDialog>
               ),
             ),
           ),
-
           const SizedBox(width: 16),
-
           Expanded(
             child: FilledButton.icon(
               onPressed: () {
@@ -917,24 +924,37 @@ class _ColorPickerDialogState extends State<_ColorPickerDialog> {
             spacing: 8,
             runSpacing: 8,
             children: [
-              Colors.red, Colors.pink, Colors.purple, Colors.blue,
-              Colors.cyan, Colors.teal, Colors.green, Colors.yellow,
-              Colors.orange, Colors.brown, Colors.grey, Colors.black,
-            ].map((color) => GestureDetector(
-              onTap: () => setState(() => _selectedColor = color),
-              child: Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: color,
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: _selectedColor == color ? Colors.white : Colors.transparent,
-                    width: 3,
-                  ),
-                ),
-              ),
-            )).toList(),
+              Colors.red,
+              Colors.pink,
+              Colors.purple,
+              Colors.blue,
+              Colors.cyan,
+              Colors.teal,
+              Colors.green,
+              Colors.yellow,
+              Colors.orange,
+              Colors.brown,
+              Colors.grey,
+              Colors.black,
+            ]
+                .map((color) => GestureDetector(
+                      onTap: () => setState(() => _selectedColor = color),
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: color,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: _selectedColor == color
+                                ? Colors.white
+                                : Colors.transparent,
+                            width: 3,
+                          ),
+                        ),
+                      ),
+                    ))
+                .toList(),
           ),
         ],
       ),

@@ -140,10 +140,10 @@ class ResponsivePadding {
   }
 
   static EdgeInsets symmetric(
-      BuildContext context, {
-        double? horizontal,
-        double? vertical,
-      }) {
+    BuildContext context, {
+    double? horizontal,
+    double? vertical,
+  }) {
     final width = MediaQuery.of(context).size.width;
     final layoutMode = MenuHelpers.getLayoutMode(width);
 

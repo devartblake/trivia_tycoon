@@ -18,10 +18,12 @@ class MultiplayerQuestionScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<MultiplayerQuestionScreen> createState() => _MultiplayerQuestionScreenState();
+  ConsumerState<MultiplayerQuestionScreen> createState() =>
+      _MultiplayerQuestionScreenState();
 }
 
-class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionScreen>
+class _MultiplayerQuestionScreenState
+    extends ConsumerState<MultiplayerQuestionScreen>
     with TickerProviderStateMixin {
   late PageController _pageController;
   late AnimationController _answerAnimationController;
@@ -45,7 +47,9 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
 
     // Start the multiplayer quiz
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(multiplayerQuizProvider.notifier).startMultiplayerQuiz(_gameMode);
+      ref
+          .read(multiplayerQuizProvider.notifier)
+          .startMultiplayerQuiz(_gameMode);
     });
   }
 
@@ -253,7 +257,8 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
                   const SizedBox(width: 16),
                   ElevatedButton.icon(
                     onPressed: () {
-                      ref.read(multiplayerQuizProvider.notifier)
+                      ref
+                          .read(multiplayerQuizProvider.notifier)
                           .startMultiplayerQuiz(_gameMode);
                     },
                     icon: const Icon(Icons.refresh),
@@ -290,7 +295,8 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
           context: context,
           builder: (context) => AlertDialog(
             title: const Text('Leave Match?'),
-            content: const Text('Leaving now will forfeit the match. Are you sure?'),
+            content:
+                const Text('Leaving now will forfeit the match. Are you sure?'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
@@ -334,7 +340,8 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Center(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: gameColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(16),
@@ -413,7 +420,9 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: QuizHelpers.getTimerColor(quizState.timeRemaining).withValues(alpha: 0.3),
+                          color:
+                              QuizHelpers.getTimerColor(quizState.timeRemaining)
+                                  .withValues(alpha: 0.3),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         ),
@@ -426,9 +435,11 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
                           width: 70,
                           height: 70,
                           child: CircularProgressIndicator(
-                            value: quizState.timeRemaining / 30.0, // 30 second timer
+                            value: quizState.timeRemaining /
+                                30.0, // 30 second timer
                             strokeWidth: 6,
-                            color: QuizHelpers.getTimerColor(quizState.timeRemaining),
+                            color: QuizHelpers.getTimerColor(
+                                quizState.timeRemaining),
                             backgroundColor: gameColor.withValues(alpha: 0.2),
                           ),
                         ),
@@ -440,7 +451,8 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                color: QuizHelpers.getTimerColor(quizState.timeRemaining),
+                                color: QuizHelpers.getTimerColor(
+                                    quizState.timeRemaining),
                               ),
                             ),
                             Text(
@@ -533,9 +545,13 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
                               _getGameModeIcon(),
                             ),
                             QuizHelpers.buildMetadataChip(
-                              QuizHelpers.getDifficultyText(currentQuestion.difficulty).toUpperCase(),
-                              QuizHelpers.getDifficultyColor(currentQuestion.difficulty),
-                              QuizHelpers.getDifficultyIcon(currentQuestion.difficulty),
+                              QuizHelpers.getDifficultyText(
+                                      currentQuestion.difficulty)
+                                  .toUpperCase(),
+                              QuizHelpers.getDifficultyColor(
+                                  currentQuestion.difficulty),
+                              QuizHelpers.getDifficultyIcon(
+                                  currentQuestion.difficulty),
                             ),
                           ],
                         ),
@@ -545,7 +561,9 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
                         // Dynamic question widget
                         AdaptedQuestionWidget.create(
                           question: currentQuestion,
-                          onAnswerSelected: quizState.hasPlayerAnswered ? null : _handleAnswer,
+                          onAnswerSelected: quizState.hasPlayerAnswered
+                              ? null
+                              : _handleAnswer,
                           showFeedback: false,
                           selectedAnswer: quizState.playerAnswer,
                           isMultiplayer: true,
@@ -562,14 +580,17 @@ class _MultiplayerQuestionScreenState extends ConsumerState<MultiplayerQuestionS
     );
   }
 
-  Widget _buildPlayerStatus(String name, bool hasAnswered, Color color, bool isPlayer) {
+  Widget _buildPlayerStatus(
+      String name, bool hasAnswered, Color color, bool isPlayer) {
     return Column(
       children: [
         Container(
           width: 60,
           height: 60,
           decoration: BoxDecoration(
-            color: hasAnswered ? color.withValues(alpha: 0.2) : Colors.grey.shade200,
+            color: hasAnswered
+                ? color.withValues(alpha: 0.2)
+                : Colors.grey.shade200,
             shape: BoxShape.circle,
             border: Border.all(
               color: hasAnswered ? color : Colors.grey.shade400,
@@ -630,7 +651,8 @@ class _MultiplayerFeedbackDialog extends StatefulWidget {
   });
 
   @override
-  State<_MultiplayerFeedbackDialog> createState() => _MultiplayerFeedbackDialogState();
+  State<_MultiplayerFeedbackDialog> createState() =>
+      _MultiplayerFeedbackDialogState();
 }
 
 class _MultiplayerFeedbackDialogState extends State<_MultiplayerFeedbackDialog>
@@ -645,8 +667,8 @@ class _MultiplayerFeedbackDialogState extends State<_MultiplayerFeedbackDialog>
       duration: const Duration(milliseconds: 600),
       vsync: this,
     );
-    _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0)
-        .animate(CurvedAnimation(
+    _scaleAnimation =
+        Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
       parent: _animationController,
       curve: Curves.bounceOut,
     ));
@@ -667,15 +689,18 @@ class _MultiplayerFeedbackDialogState extends State<_MultiplayerFeedbackDialog>
   }
 
   String _getResultText() {
-    if (widget.isCorrect && !widget.isOpponentCorrect) return 'You Win This Round!';
+    if (widget.isCorrect && !widget.isOpponentCorrect)
+      return 'You Win This Round!';
     if (!widget.isCorrect && widget.isOpponentCorrect) return 'Opponent Wins!';
     if (widget.isCorrect && widget.isOpponentCorrect) return 'Both Correct!';
     return 'Both Incorrect!';
   }
 
   IconData _getResultIcon() {
-    if (widget.isCorrect && !widget.isOpponentCorrect) return Icons.emoji_events;
-    if (!widget.isCorrect && widget.isOpponentCorrect) return Icons.sentiment_dissatisfied;
+    if (widget.isCorrect && !widget.isOpponentCorrect)
+      return Icons.emoji_events;
+    if (!widget.isCorrect && widget.isOpponentCorrect)
+      return Icons.sentiment_dissatisfied;
     if (widget.isCorrect && widget.isOpponentCorrect) return Icons.handshake;
     return Icons.help_outline;
   }
@@ -772,13 +797,15 @@ class _MultiplayerFeedbackDialogState extends State<_MultiplayerFeedbackDialog>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _buildScoreDisplay('You', widget.playerScore, widget.isCorrect),
+                    _buildScoreDisplay(
+                        'You', widget.playerScore, widget.isCorrect),
                     Container(
                       width: 2,
                       height: 40,
                       color: Colors.white.withValues(alpha: 0.3),
                     ),
-                    _buildScoreDisplay('Opponent', widget.opponentScore, widget.isOpponentCorrect),
+                    _buildScoreDisplay('Opponent', widget.opponentScore,
+                        widget.isOpponentCorrect),
                   ],
                 ),
 
@@ -788,7 +815,8 @@ class _MultiplayerFeedbackDialogState extends State<_MultiplayerFeedbackDialog>
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     foregroundColor: resultColor,
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 32, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),

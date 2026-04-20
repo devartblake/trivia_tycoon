@@ -57,9 +57,9 @@ class LeaderboardDataService extends ChangeNotifier {
     required this.apiService,
     this.assetLoader,
     required this.appCache,
-  }){
+  }) {
     // Initialize appCache with provided instance or create new one
-   //appCache = appCacheService ?? AppCacheService();
+    //appCache = appCacheService ?? AppCacheService();
   }
 
   Future<List<LeaderboardEntry>> loadLeaderboard() async {
@@ -70,8 +70,10 @@ class LeaderboardDataService extends ChangeNotifier {
 
     // 1. Try loading from asset loader if provided (Riverpod-based)
     try {
-      final jsonStr = await rootBundle.loadString('assets/data/leaderboard/leaderboard.json');
-      LogManager.debug("✅ Loaded JSON content: ${jsonStr.substring(0, 100)}...");
+      final jsonStr = await rootBundle
+          .loadString('assets/data/leaderboard/leaderboard.json');
+      LogManager.debug(
+          "✅ Loaded JSON content: ${jsonStr.substring(0, 100)}...");
       if (assetLoader != null) {
         final assetData = await assetLoader!();
         if (assetData.isNotEmpty) return assetData;
@@ -93,7 +95,8 @@ class LeaderboardDataService extends ChangeNotifier {
 
     // 3. Try API as fallback
     try {
-      final remote = await LeaderboardService(apiService: apiService).fetchLeaderboard(limit: 100);
+      final remote = await LeaderboardService(apiService: apiService)
+          .fetchLeaderboard(limit: 100);
       await appCache.cacheLeaderboard(remote);
       await _updateLastRefresh();
 
@@ -129,7 +132,8 @@ class LeaderboardDataService extends ChangeNotifier {
 
       _entriesById[entry.userId] = updatedEntry;
 
-      final index = _currentLeaderboard.indexWhere((e) => e.userId == entry.userId);
+      final index =
+          _currentLeaderboard.indexWhere((e) => e.userId == entry.userId);
       if (index != -1) {
         _currentLeaderboard[index] = updatedEntry;
         _currentLeaderboard.sort((a, b) => a.rank.compareTo(b.rank));
@@ -148,7 +152,8 @@ class LeaderboardDataService extends ChangeNotifier {
   }
 
   void _handlePlayerPassed(String userId, int newRank, int yourRank) {
-    LogManager.debug('[Leaderboard] Player $userId passed you! (#$newRank vs #$yourRank)');
+    LogManager.debug(
+        '[Leaderboard] Player $userId passed you! (#$newRank vs #$yourRank)');
     // Show notification
   }
 
@@ -181,7 +186,8 @@ class LeaderboardDataService extends ChangeNotifier {
 
       // Force a refresh after successful score submission
       await refreshData(force: true);
-      LogManager.debug('✅ Score submitted successfully for $playerName: $score');
+      LogManager.debug(
+          '✅ Score submitted successfully for $playerName: $score');
     } catch (e) {
       LogManager.debug('⚠️ Failed to submit score: $e');
 
@@ -202,7 +208,8 @@ class LeaderboardDataService extends ChangeNotifier {
       });
 
       await appCache.set('pending_submissions', pendingSubmissions);
-      LogManager.debug('💾 Stored pending submission for retry: $playerName - $score');
+      LogManager.debug(
+          '💾 Stored pending submission for retry: $playerName - $score');
     } catch (e) {
       LogManager.debug('❌ Failed to store pending submission: $e');
     }
@@ -238,9 +245,11 @@ class LeaderboardDataService extends ChangeNotifier {
             submission['score'],
           );
           successfulSubmissions.add(i);
-          LogManager.debug('✅ Retry successful: ${submission['playerName']} - ${submission['score']}');
+          LogManager.debug(
+              '✅ Retry successful: ${submission['playerName']} - ${submission['score']}');
         } catch (e) {
-          LogManager.debug('❌ Retry failed for ${submission['playerName']}: $e');
+          LogManager.debug(
+              '❌ Retry failed for ${submission['playerName']}: $e');
         }
       }
 
@@ -256,7 +265,8 @@ class LeaderboardDataService extends ChangeNotifier {
 
         // Refresh leaderboard after successful retries
         await refreshData(force: true);
-        LogManager.debug('🔄 Processed ${successfulSubmissions.length} pending submissions');
+        LogManager.debug(
+            '🔄 Processed ${successfulSubmissions.length} pending submissions');
       }
     } catch (e) {
       LogManager.debug('❌ Failed to retry pending submissions: $e');
@@ -315,7 +325,8 @@ class LeaderboardDataService extends ChangeNotifier {
         await _updateLastRefresh();
         await _resetRefreshFailureCount();
 
-        LogManager.debug('✅ Leaderboard refresh completed: ${freshData.length} entries');
+        LogManager.debug(
+            '✅ Leaderboard refresh completed: ${freshData.length} entries');
       } else {
         LogManager.debug('⚠️ Received empty leaderboard data');
         await _incrementRefreshFailureCount();
@@ -420,7 +431,8 @@ class LeaderboardDataService extends ChangeNotifier {
       // Check for basic data integrity
       for (final entry in cached) {
         if (entry.playerName.isEmpty || entry.score < 0) {
-          LogManager.debug('⚠️ Invalid leaderboard entry found: ${entry.playerName} - ${entry.score}');
+          LogManager.debug(
+              '⚠️ Invalid leaderboard entry found: ${entry.playerName} - ${entry.score}');
           return false;
         }
       }
@@ -446,7 +458,7 @@ class LeaderboardDataService extends ChangeNotifier {
     try {
       final leaderboard = await loadLeaderboard();
       return leaderboard.firstWhere(
-            (entry) => entry.playerName.toLowerCase() == playerName.toLowerCase(),
+        (entry) => entry.playerName.toLowerCase() == playerName.toLowerCase(),
         orElse: () => throw StateError('Player not found'),
       );
     } catch (e) {
@@ -459,7 +471,8 @@ class LeaderboardDataService extends ChangeNotifier {
     try {
       final leaderboard = await loadLeaderboard();
       for (int i = 0; i < leaderboard.length; i++) {
-        if (leaderboard[i].playerName.toLowerCase() == playerName.toLowerCase()) {
+        if (leaderboard[i].playerName.toLowerCase() ==
+            playerName.toLowerCase()) {
           return i + 1; // 1-based ranking
         }
       }
@@ -480,7 +493,8 @@ class LeaderboardDataService extends ChangeNotifier {
   }
 
   /// Gets players around a specific rank
-  Future<List<LeaderboardEntry>> getPlayersAroundRank(int rank, {int radius = 2}) async {
+  Future<List<LeaderboardEntry>> getPlayersAroundRank(int rank,
+      {int radius = 2}) async {
     try {
       final leaderboard = await loadLeaderboard();
       final startIndex = (rank - 1 - radius).clamp(0, leaderboard.length);
@@ -498,9 +512,9 @@ class LeaderboardDataService extends ChangeNotifier {
       final leaderboard = await loadLeaderboard();
       final pattern = namePattern.toLowerCase();
 
-      return leaderboard.where((entry) =>
-          entry.playerName.toLowerCase().contains(pattern)
-      ).toList();
+      return leaderboard
+          .where((entry) => entry.playerName.toLowerCase().contains(pattern))
+          .toList();
     } catch (e) {
       return [];
     }
@@ -587,7 +601,8 @@ class LeaderboardDataService extends ChangeNotifier {
         await appCache.cacheLeaderboard(entries);
       }
 
-      if (data.containsKey('pendingSubmissions') && data['pendingSubmissions'] is List) {
+      if (data.containsKey('pendingSubmissions') &&
+          data['pendingSubmissions'] is List) {
         await appCache.set('pending_submissions', data['pendingSubmissions']);
       }
 

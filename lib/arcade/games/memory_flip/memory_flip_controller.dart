@@ -11,8 +11,8 @@ class MemoryFlipState {
 
   final int score;
   final int matches; // number of pairs matched
-  final int moves;   // number of pair-attempts (two flips)
-  final int misses;  // non-matching attempts
+  final int moves; // number of pair-attempts (two flips)
+  final int misses; // non-matching attempts
 
   final Duration remaining;
   final bool isOver;
@@ -132,7 +132,8 @@ class MemoryFlipController {
   /// - 'first' when first card of a move is flipped
   /// - 'match' when second flip matches first
   /// - 'miss' when second flip mismatches first
-  Future<String> flip(int index, void Function(MemoryFlipState) onUpdate) async {
+  Future<String> flip(
+      int index, void Function(MemoryFlipState) onUpdate) async {
     if (_state.isOver) return 'ignored';
     if (_state.inputLocked) return 'ignored';
 
@@ -185,7 +186,8 @@ class MemoryFlipController {
       // Flip both down if still not over
       if (!_state.isOver) {
         _state = _state.copyWith(
-          cards: _setFaceUp(_firstIndex!, false, base: _setFaceUp(index, false)),
+          cards:
+              _setFaceUp(_firstIndex!, false, base: _setFaceUp(index, false)),
           inputLocked: false,
         );
         onUpdate(_state);
@@ -204,12 +206,19 @@ class MemoryFlipController {
     final timeFactor = (0.6 + 0.6 * (rem / totalSeconds)).clamp(0.6, 1.2);
 
     // Efficiency bonus: fewer misses => more points
-    final efficiency = (_state.misses == 0) ? 1.15 : (1.0 - (_state.misses * 0.03)).clamp(0.75, 1.1);
+    final efficiency = (_state.misses == 0)
+        ? 1.15
+        : (1.0 - (_state.misses * 0.03)).clamp(0.75, 1.1);
 
     // Difficulty multiplier already encoded via baseMatchPoints & penalties; keep small multiplier anyway
     final diff = difficulty.rewardMultiplier.clamp(1.0, 2.0);
 
-    return (config.baseMatchPoints * timeFactor * efficiency * (0.85 + (0.15 * diff))).round().clamp(30, 600);
+    return (config.baseMatchPoints *
+            timeFactor *
+            efficiency *
+            (0.85 + (0.15 * diff)))
+        .round()
+        .clamp(30, 600);
   }
 
   List<MemoryCard> _setFaceUp(int index, bool isUp, {List<MemoryCard>? base}) {

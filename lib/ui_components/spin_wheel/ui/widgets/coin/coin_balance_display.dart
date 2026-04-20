@@ -141,7 +141,8 @@ class _CoinBalanceDisplayState extends ConsumerState<CoinBalanceDisplay>
 
   @override
   Widget build(BuildContext context) {
-    final coinBalance = ref.watch(coinBalanceProvider); // Use the StateNotifierProvider that returns int
+    final coinBalance = ref.watch(
+        coinBalanceProvider); // Use the StateNotifierProvider that returns int
 
     // Check for balance changes
     if (coinBalance != _previousBalance) {
@@ -160,12 +161,14 @@ class _CoinBalanceDisplayState extends ConsumerState<CoinBalanceDisplay>
         ]),
         builder: (context, child) {
           return Transform.scale(
-            scale: _isIncreasing ? _scaleAnimation.value : _pulseAnimation.value,
+            scale:
+                _isIncreasing ? _scaleAnimation.value : _pulseAnimation.value,
             child: Container(
-              padding: widget.padding ?? const EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 6,
-              ),
+              padding: widget.padding ??
+                  const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
@@ -182,19 +185,19 @@ class _CoinBalanceDisplayState extends ConsumerState<CoinBalanceDisplay>
                 ),
                 boxShadow: _isIncreasing
                     ? [
-                  BoxShadow(
-                    color: Colors.amber.withValues(alpha: 0.4),
-                    blurRadius: 12,
-                    spreadRadius: 2,
-                  ),
-                ]
+                        BoxShadow(
+                          color: Colors.amber.withValues(alpha: 0.4),
+                          blurRadius: 12,
+                          spreadRadius: 2,
+                        ),
+                      ]
                     : [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
               ),
               child: Stack(
                 children: [
@@ -250,7 +253,8 @@ class _CoinBalanceDisplayState extends ConsumerState<CoinBalanceDisplay>
             ),
             boxShadow: [
               BoxShadow(
-                color: (_glowAnimation.value ?? Colors.amber).withValues(alpha: 0.3),
+                color: (_glowAnimation.value ?? Colors.amber)
+                    .withValues(alpha: 0.3),
                 blurRadius: 6,
                 spreadRadius: 1,
               ),
@@ -268,7 +272,8 @@ class _CoinBalanceDisplayState extends ConsumerState<CoinBalanceDisplay>
 
   Widget _buildBalanceText(int balance) {
     return AnimatedSwitcher(
-      duration: widget.animate ? const Duration(milliseconds: 500) : Duration.zero,
+      duration:
+          widget.animate ? const Duration(milliseconds: 500) : Duration.zero,
       transitionBuilder: (child, animation) {
         return SlideTransition(
           position: Tween<Offset>(
@@ -514,9 +519,9 @@ class CompactCoinBalanceDisplay extends CoinBalanceDisplay {
     super.textColor,
     super.onTap,
   }) : super(
-    fontSize: 14,
-    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-  );
+          fontSize: 14,
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        );
 }
 
 /// Premium version with enhanced effects
@@ -530,7 +535,7 @@ class PremiumCoinBalanceDisplay extends CoinBalanceDisplay {
     super.textColor,
     super.onTap,
   }) : super(
-    fontSize: 18,
-    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-  );
+          fontSize: 18,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        );
 }

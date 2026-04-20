@@ -95,7 +95,8 @@ class BackendAuthService {
       );
     } catch (e) {
       if (kDebugMode) {
-        LogManager.debug('[AuthService] Logout request failed, proceeding with local clear: $e');
+        LogManager.debug(
+            '[AuthService] Logout request failed, proceeding with local clear: $e');
       }
     } finally {
       // Always clear local tokens, even if backend call fails

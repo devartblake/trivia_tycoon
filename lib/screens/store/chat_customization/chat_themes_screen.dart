@@ -195,15 +195,15 @@ class _ChatThemesScreenState extends State<ChatThemesScreen> {
                 Text(
                   'Your Balance',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.white70,
-                  ),
+                        color: Colors.white70,
+                      ),
                 ),
                 Text(
                   '1,250 Coins',
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
               ],
             ),
@@ -269,7 +269,8 @@ class _ChatThemesScreenState extends State<ChatThemesScreen> {
                             ),
                             child: const Text(
                               'Hi there!',
-                              style: TextStyle(fontSize: 12, color: Colors.white),
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.white),
                             ),
                           ),
                         ],
@@ -335,8 +336,8 @@ class _ChatThemesScreenState extends State<ChatThemesScreen> {
                     Text(
                       theme.name,
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                            fontWeight: FontWeight.bold,
+                          ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -344,8 +345,9 @@ class _ChatThemesScreenState extends State<ChatThemesScreen> {
                     Text(
                       theme.description,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -353,14 +355,16 @@ class _ChatThemesScreenState extends State<ChatThemesScreen> {
                     Row(
                       children: [
                         if (!theme.isOwned) ...[
-                          const Icon(Icons.monetization_on, size: 16, color: Colors.amber),
+                          const Icon(Icons.monetization_on,
+                              size: 16, color: Colors.amber),
                           const SizedBox(width: 4),
                           Text(
                             '${theme.price}',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.amber.shade700,
-                            ),
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.amber.shade700,
+                                    ),
                           ),
                         ] else
                           Container(
@@ -415,7 +419,8 @@ class _ChatThemesScreenState extends State<ChatThemesScreen> {
                   gradient: LinearGradient(
                     colors: [theme.primaryColor, theme.secondaryColor],
                   ),
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(20)),
                 ),
                 child: Row(
                   children: [
@@ -429,10 +434,13 @@ class _ChatThemesScreenState extends State<ChatThemesScreen> {
                         children: [
                           Text(
                             theme.name,
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
                           ),
                           Text(
                             theme.description,
@@ -609,8 +617,8 @@ class _ChatThemesScreenState extends State<ChatThemesScreen> {
         title: const Text('Chat Themes'),
         content: const Text(
           'Personalize your chat experience with beautiful themes! '
-              'Themes change the colors and appearance of your chat messages. '
-              'Purchase themes with coins earned from playing games.',
+          'Themes change the colors and appearance of your chat messages. '
+          'Purchase themes with coins earned from playing games.',
         ),
         actions: [
           TextButton(

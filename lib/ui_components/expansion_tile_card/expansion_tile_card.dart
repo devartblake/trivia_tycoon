@@ -30,8 +30,8 @@ class ExpansionTileCard extends StatefulWidget {
     this.isThreeLine = false,
     this.shadowColor = const Color(0xffaaaaaa),
     this.animateTrailing = false,
-    this.maintainState = false,   // NEW: keep children in the tree when collapsed
-    this.dense = false,           // NEW: opt-in denser ListTile for long lists
+    this.maintainState = false, // NEW: keep children in the tree when collapsed
+    this.dense = false, // NEW: opt-in denser ListTile for long lists
   });
 
   final bool isThreeLine;
@@ -66,7 +66,7 @@ class ExpansionTileCard extends StatefulWidget {
   final Curve paddingCurve;
 
   final bool maintainState; // NEW
-  final bool dense;         // NEW
+  final bool dense; // NEW
 
   @override
   ExpansionTileCardState createState() => ExpansionTileCardState();
@@ -74,7 +74,8 @@ class ExpansionTileCard extends StatefulWidget {
 
 class ExpansionTileCardState extends State<ExpansionTileCard>
     with SingleTickerProviderStateMixin {
-  static final Animatable<double> _halfTween = Tween<double>(begin: 0.0, end: 0.5);
+  static final Animatable<double> _halfTween =
+      Tween<double>(begin: 0.0, end: 0.5);
 
   // Color tweens
   final ColorTween _headerColorTween = ColorTween();
@@ -194,7 +195,8 @@ class ExpansionTileCardState extends State<ExpansionTileCard>
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             InkWell(
-              customBorder: RoundedRectangleBorder(borderRadius: widget.borderRadius),
+              customBorder:
+                  RoundedRectangleBorder(borderRadius: widget.borderRadius),
               onTap: toggleExpansion,
               child: ListTileTheme.merge(
                 iconColor: _iconColor.value,
@@ -222,12 +224,12 @@ class ExpansionTileCardState extends State<ExpansionTileCard>
                 alignment: Alignment.topCenter,
                 child: widget.maintainState
                     ? TickerMode(
-                  enabled: _isExpanded,
-                  child: Offstage(
-                    offstage: !_isExpanded,
-                    child: child,
-                  ),
-                )
+                        enabled: _isExpanded,
+                        child: Offstage(
+                          offstage: !_isExpanded,
+                          child: child,
+                        ),
+                      )
                     : child,
               ),
             ),

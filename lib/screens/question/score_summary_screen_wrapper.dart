@@ -13,10 +13,12 @@ class ScoreSummaryScreenWrapper extends ConsumerStatefulWidget {
   const ScoreSummaryScreenWrapper({super.key});
 
   @override
-  ConsumerState<ScoreSummaryScreenWrapper> createState() => _ScoreSummaryScreenWrapperState();
+  ConsumerState<ScoreSummaryScreenWrapper> createState() =>
+      _ScoreSummaryScreenWrapperState();
 }
 
-class _ScoreSummaryScreenWrapperState extends ConsumerState<ScoreSummaryScreenWrapper> {
+class _ScoreSummaryScreenWrapperState
+    extends ConsumerState<ScoreSummaryScreenWrapper> {
   bool _hasProcessedResults = false;
   TierUpdateResult? _tierResult;
 
@@ -49,7 +51,8 @@ class _ScoreSummaryScreenWrapperState extends ConsumerState<ScoreSummaryScreenWr
           _showTierProgressionDialog();
         }
 
-        LogManager.debug('Educational data updated successfully for quiz completion');
+        LogManager.debug(
+            'Educational data updated successfully for quiz completion');
       } catch (e) {
         LogManager.debug('Error updating educational data: $e');
       }
@@ -92,7 +95,8 @@ class _ScoreSummaryScreenWrapperState extends ConsumerState<ScoreSummaryScreenWr
     }
 
     // Debug print for duration tracking
-    LogManager.debug('Quiz Duration: ${results.quizDuration.inMinutes}m ${results.quizDuration.inSeconds % 60}s');
+    LogManager.debug(
+        'Quiz Duration: ${results.quizDuration.inMinutes}m ${results.quizDuration.inSeconds % 60}s');
 
     return EnhancedScoreSummaryScreen(
       score: results.score,

@@ -169,7 +169,7 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return PopScope (
+    return PopScope(
       canPop: false,
       onPopInvoked: (didPop) async {
         if (!didPop) {
@@ -182,9 +182,7 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
           slivers: [
             _buildAppBar(theme),
             SliverToBoxAdapter(
-              child: _isLoading
-                  ? _buildLoadingState()
-                  : _buildContent(theme),
+              child: _isLoading ? _buildLoadingState() : _buildContent(theme),
             ),
           ],
         ),
@@ -346,7 +344,9 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
-                      _hasClaimedToday ? Icons.check_circle : Icons.card_giftcard,
+                      _hasClaimedToday
+                          ? Icons.check_circle
+                          : Icons.card_giftcard,
                       color: Colors.white,
                       size: 28,
                     ),
@@ -545,7 +545,8 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
                 child: _buildStatItem(
                   icon: Icons.today,
                   label: 'Today',
-                  value: '${_spinStats!.dailyCount}/${_spinStats!.maxSpinsPerDay}',
+                  value:
+                      '${_spinStats!.dailyCount}/${_spinStats!.maxSpinsPerDay}',
                   color: Colors.blue,
                 ),
               ),

@@ -57,7 +57,6 @@ enum SkillEffectType {
   custom, // fallback for Map-based effects
 }
 
-
 /// Represents a node in the skill tree
 class SkillNode {
   final String id;
@@ -66,7 +65,8 @@ class SkillNode {
   final int tier; // 0..n (row)
   final int cost; // XP or tokens
   final SkillCategory category;
-  final Map<String, num> effects; // e.g. {"timeBonusSec": 5, "sportsScoreBoost": 0.1}
+  final Map<String, num>
+      effects; // e.g. {"timeBonusSec": 5, "sportsScoreBoost": 0.1}
   final Duration? cooldown;
   final DateTime? lastUsed;
   final String? branchId;
@@ -107,7 +107,7 @@ class SkillNode {
     if (categoryStr != null) {
       try {
         category = SkillCategory.values.firstWhere(
-              (e) => e.name == categoryStr,
+          (e) => e.name == categoryStr,
           orElse: () => SkillCategory.unknown,
         );
       } catch (_) {
@@ -121,7 +121,7 @@ class SkillNode {
     if (effectTypeStr != null) {
       try {
         effectType = SkillEffectType.values.firstWhere(
-              (e) => e.name == effectTypeStr,
+          (e) => e.name == effectTypeStr,
           orElse: () => SkillEffectType.custom,
         );
       } catch (_) {
@@ -172,7 +172,8 @@ class SkillNode {
 
   SkillNode copyWith({bool? unlocked, bool? available, DateTime? lastUsed}) =>
       SkillNode(
-        id: id, title: title,
+        id: id,
+        title: title,
         description: description,
         tier: tier,
         cost: cost,
@@ -228,7 +229,7 @@ class SkillTreeGraph {
   final List<SkillEdge> edges;
   final Map<String, SkillGroup>? groups;
 
-  const SkillTreeGraph({required this.nodes, required this.edges,this.groups});
+  const SkillTreeGraph({required this.nodes, required this.edges, this.groups});
 
   Map<String, SkillNode> get byId => {for (final n in nodes) n.id: n};
   Iterable<SkillNode> tier(int t) => nodes.where((n) => n.tier == t);
@@ -268,18 +269,12 @@ class SkillTreeGraph {
 
   /// Get list of prerequisite node IDs for a given node
   List<String> getPrerequisites(String nodeId) {
-    return edges
-        .where((e) => e.toId == nodeId)
-        .map((e) => e.fromId)
-        .toList();
+    return edges.where((e) => e.toId == nodeId).map((e) => e.fromId).toList();
   }
 
   /// Get list of dependent node IDs for a given node
   List<String> getDependents(String nodeId) {
-    return edges
-        .where((e) => e.fromId == nodeId)
-        .map((e) => e.toId)
-        .toList();
+    return edges.where((e) => e.fromId == nodeId).map((e) => e.toId).toList();
   }
 
   /// Get all available nodes (unlocked prerequisites)
@@ -391,13 +386,17 @@ class SkillGroup {
 
 extension SkillTreeGraphBranch on SkillTreeGraph {
   SkillTreeGraph subgraphForBranch(String branchId) {
-    final ids = nodes.where((n) => n.branchId == branchId).map((n) => n.id).toSet();
+    final ids =
+        nodes.where((n) => n.branchId == branchId).map((n) => n.id).toSet();
     return SkillTreeGraph(
       nodes: nodes.where((n) => ids.contains(n.id)).toList(),
-      edges: edges.where((e) => ids.contains(e.fromId) && ids.contains(e.toId)).toList(),
+      edges: edges
+          .where((e) => ids.contains(e.fromId) && ids.contains(e.toId))
+          .toList(),
     );
   }
-  int indegree(String id) => edges.where((e) => e.toId == id).length;
-  Iterable<String> neighbors(String id) => edges.where((e) => e.fromId == id).map((e) => e.toId);
-}
 
+  int indegree(String id) => edges.where((e) => e.toId == id).length;
+  Iterable<String> neighbors(String id) =>
+      edges.where((e) => e.fromId == id).map((e) => e.toId);
+}

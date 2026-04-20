@@ -46,5 +46,4 @@ class PrizeLogExportService {
     final file = File('${dir.path}/prize_log_backup.csv');
     return file.writeAsString(buffer.toString());
   }
-
 }

@@ -34,7 +34,8 @@ void main() {
 
     test('all titles are non-empty', () {
       for (final game in registry.games) {
-        expect(game.title.isNotEmpty, isTrue, reason: '${game.id} has empty title');
+        expect(game.title.isNotEmpty, isTrue,
+            reason: '${game.id} has empty title');
       }
     });
 
@@ -66,15 +67,18 @@ void main() {
     });
 
     test('supports easy, normal, hard difficulties', () {
-      expect(def.supportedDifficulties, containsAll([
-        ArcadeDifficulty.easy,
-        ArcadeDifficulty.normal,
-        ArcadeDifficulty.hard,
-      ]));
+      expect(
+          def.supportedDifficulties,
+          containsAll([
+            ArcadeDifficulty.easy,
+            ArcadeDifficulty.normal,
+            ArcadeDifficulty.hard,
+          ]));
     });
 
     test('does not list insane difficulty', () {
-      expect(def.supportedDifficulties, isNot(contains(ArcadeDifficulty.insane)));
+      expect(
+          def.supportedDifficulties, isNot(contains(ArcadeDifficulty.insane)));
     });
   });
 
@@ -92,15 +96,18 @@ void main() {
     });
 
     test('supports easy, normal, hard difficulties', () {
-      expect(def.supportedDifficulties, containsAll([
-        ArcadeDifficulty.easy,
-        ArcadeDifficulty.normal,
-        ArcadeDifficulty.hard,
-      ]));
+      expect(
+          def.supportedDifficulties,
+          containsAll([
+            ArcadeDifficulty.easy,
+            ArcadeDifficulty.normal,
+            ArcadeDifficulty.hard,
+          ]));
     });
 
     test('does not list insane difficulty', () {
-      expect(def.supportedDifficulties, isNot(contains(ArcadeDifficulty.insane)));
+      expect(
+          def.supportedDifficulties, isNot(contains(ArcadeDifficulty.insane)));
     });
   });
 
@@ -118,12 +125,14 @@ void main() {
     });
 
     test('supports all four difficulties including insane', () {
-      expect(def.supportedDifficulties, containsAll([
-        ArcadeDifficulty.easy,
-        ArcadeDifficulty.normal,
-        ArcadeDifficulty.hard,
-        ArcadeDifficulty.insane,
-      ]));
+      expect(
+          def.supportedDifficulties,
+          containsAll([
+            ArcadeDifficulty.easy,
+            ArcadeDifficulty.normal,
+            ArcadeDifficulty.hard,
+            ArcadeDifficulty.insane,
+          ]));
     });
   });
 

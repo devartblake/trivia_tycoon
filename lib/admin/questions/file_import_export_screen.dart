@@ -14,14 +14,17 @@ class FileImportExportScreen extends ConsumerStatefulWidget {
   const FileImportExportScreen({super.key});
 
   @override
-  ConsumerState<FileImportExportScreen> createState() => _FileImportExportScreenState();
+  ConsumerState<FileImportExportScreen> createState() =>
+      _FileImportExportScreenState();
 }
 
-class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen> {
+class _FileImportExportScreenState
+    extends ConsumerState<FileImportExportScreen> {
   List<QuestionModel> _importedQuestions = [];
   String? _status;
   bool _isProcessing = false;
-  final TextEditingController _datasetNameController = TextEditingController(text: 'community_pack');
+  final TextEditingController _datasetNameController =
+      TextEditingController(text: 'community_pack');
   bool _publishAfterImport = false;
   List<QuestionValidationIssue> _validationErrors = const [];
   List<QuestionValidationIssue> _validationWarnings = const [];
@@ -44,7 +47,8 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
         try {
           final decrypted = EncryptionUtils.decryptAES(content);
           final List decoded = jsonDecode(decrypted);
-          final questions = decoded.map((e) => QuestionModel.fromJson(e)).toList();
+          final questions =
+              decoded.map((e) => QuestionModel.fromJson(e)).toList();
 
           setState(() {
             _importedQuestions = List<QuestionModel>.from(questions);
@@ -120,7 +124,8 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
       final jsonStr = jsonEncode(data);
       final encrypted = EncryptionUtils.encryptAES(jsonStr);
 
-      final outputFile = File('${Directory.systemTemp.path}/exported_questions.json');
+      final outputFile =
+          File('${Directory.systemTemp.path}/exported_questions.json');
       await outputFile.writeAsString(encrypted);
 
       setState(() {
@@ -223,7 +228,8 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
           _isProcessing = false;
           _validationErrors = errors;
           _validationWarnings = warnings;
-          _status = 'Validation failed: ${errors.length} issue(s) found (${summarizeValidationIssues(errors).duplicateLike} duplicate-like).';
+          _status =
+              'Validation failed: ${errors.length} issue(s) found (${summarizeValidationIssues(errors).duplicateLike} duplicate-like).';
         });
         return;
       }
@@ -242,10 +248,12 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
         publishAfterImport: _publishAfterImport,
       );
 
-      final imported = importResponse['importedCount'] ?? _importedQuestions.length;
+      final imported =
+          importResponse['importedCount'] ?? _importedQuestions.length;
       setState(() {
         _isProcessing = false;
-        _status = 'Backend import successful: $imported question(s) synced to $datasetName.';
+        _status =
+            'Backend import successful: $imported question(s) synced to $datasetName.';
       });
     } on ApiRequestException catch (e) {
       setState(() {
@@ -323,7 +331,8 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
       ),
       child: Row(
         children: [
-          Text(label, style: TextStyle(fontWeight: FontWeight.w600, color: color)),
+          Text(label,
+              style: TextStyle(fontWeight: FontWeight.w600, color: color)),
           const Spacer(),
           Text(
             'total ${summary.total} · duplicate-like ${summary.duplicateLike} · field ${summary.fieldScoped}',
@@ -474,28 +483,29 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
                         child: Center(
                           child: _isProcessing
                               ? const SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2,
-                            ),
-                          )
+                                  width: 24,
+                                  height: 24,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
                               : const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.upload_file, color: Colors.white),
-                              SizedBox(width: 12),
-                              Text(
-                                'Import Questions',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.upload_file,
+                                        color: Colors.white),
+                                    SizedBox(width: 12),
+                                    Text(
+                                      'Import Questions',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
                         ),
                       ),
                     ),
@@ -574,7 +584,10 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
               children: [
                 const Text(
                   'Backend Ingestion Workflow',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1A1A1A)),
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1A1A1A)),
                 ),
                 const SizedBox(height: 12),
                 TextField(
@@ -582,7 +595,8 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
                   decoration: InputDecoration(
                     labelText: 'Dataset Name',
                     hintText: 'community_pack',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -599,7 +613,8 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
                   children: [
                     Expanded(
                       child: OutlinedButton.icon(
-                        onPressed: _isProcessing ? null : _validateAndUploadToBackend,
+                        onPressed:
+                            _isProcessing ? null : _validateAndUploadToBackend,
                         icon: const Icon(Icons.cloud_upload),
                         label: const Text('Validate + Import'),
                       ),
@@ -607,7 +622,8 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
                     const SizedBox(width: 10),
                     Expanded(
                       child: OutlinedButton.icon(
-                        onPressed: _isProcessing ? null : () => _publishDataset(true),
+                        onPressed:
+                            _isProcessing ? null : () => _publishDataset(true),
                         icon: const Icon(Icons.publish),
                         label: const Text('Publish'),
                       ),
@@ -615,7 +631,8 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
                     const SizedBox(width: 10),
                     Expanded(
                       child: OutlinedButton.icon(
-                        onPressed: _isProcessing ? null : () => _publishDataset(false),
+                        onPressed:
+                            _isProcessing ? null : () => _publishDataset(false),
                         icon: const Icon(Icons.unpublished),
                         label: const Text('Unpublish'),
                       ),
@@ -647,9 +664,10 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
                     : const Color(0xFF10B981).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: _status!.contains('Failed') || _status!.contains('Error')
-                      ? const Color(0xFFEF4444)
-                      : const Color(0xFF10B981),
+                  color:
+                      _status!.contains('Failed') || _status!.contains('Error')
+                          ? const Color(0xFFEF4444)
+                          : const Color(0xFF10B981),
                 ),
               ),
               child: Row(
@@ -658,7 +676,8 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
                     _status!.contains('Failed') || _status!.contains('Error')
                         ? Icons.error_outline
                         : Icons.info_outline,
-                    color: _status!.contains('Failed') || _status!.contains('Error')
+                    color: _status!.contains('Failed') ||
+                            _status!.contains('Error')
                         ? const Color(0xFFEF4444)
                         : const Color(0xFF10B981),
                   ),
@@ -668,7 +687,8 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
                       _status!,
                       style: TextStyle(
                         fontSize: 14,
-                        color: _status!.contains('Failed') || _status!.contains('Error')
+                        color: _status!.contains('Failed') ||
+                                _status!.contains('Error')
                             ? const Color(0xFFEF4444)
                             : const Color(0xFF10B981),
                         fontWeight: FontWeight.w500,
@@ -703,7 +723,6 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
                       color: const Color(0xFFEF4444),
                     ),
                     const SizedBox(height: 8),
-
                     for (final issue in _validationErrors)
                       Padding(
                         padding: const EdgeInsets.only(bottom: 6),
@@ -712,7 +731,8 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
                           children: [
                             const Padding(
                               padding: EdgeInsets.only(top: 2),
-                              child: Icon(Icons.error_outline, size: 16, color: Color(0xFFEF4444)),
+                              child: Icon(Icons.error_outline,
+                                  size: 16, color: Color(0xFFEF4444)),
                             ),
                             const SizedBox(width: 8),
                             Expanded(child: Text(issue.displayText)),
@@ -728,7 +748,6 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
                       color: const Color(0xFFF59E0B),
                     ),
                     const SizedBox(height: 8),
-
                     for (final issue in _validationWarnings)
                       Padding(
                         padding: const EdgeInsets.only(bottom: 6),
@@ -737,7 +756,8 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
                           children: [
                             const Padding(
                               padding: EdgeInsets.only(top: 2),
-                              child: Icon(Icons.warning_amber_rounded, size: 16, color: Color(0xFFF59E0B)),
+                              child: Icon(Icons.warning_amber_rounded,
+                                  size: 16, color: Color(0xFFF59E0B)),
                             ),
                             const SizedBox(width: 8),
                             Expanded(child: Text(issue.displayText)),
@@ -773,18 +793,25 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
                         children: [
                           Expanded(
                             child: Text(
-                              (dataset['name'] ?? dataset['datasetName'] ?? 'unknown').toString(),
-                              style: const TextStyle(fontWeight: FontWeight.w600),
+                              (dataset['name'] ??
+                                      dataset['datasetName'] ??
+                                      'unknown')
+                                  .toString(),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w600),
                             ),
                           ),
-                          Text('items: ${(dataset['questionCount'] ?? dataset['count'] ?? 0).toString()}'),
+                          Text(
+                              'items: ${(dataset['questionCount'] ?? dataset['count'] ?? 0).toString()}'),
                           const SizedBox(width: 10),
                           Text(
-                            (dataset['published'] == true || dataset['status'] == 'published')
+                            (dataset['published'] == true ||
+                                    dataset['status'] == 'published')
                                 ? 'published'
                                 : 'draft',
                             style: TextStyle(
-                              color: (dataset['published'] == true || dataset['status'] == 'published')
+                              color: (dataset['published'] == true ||
+                                      dataset['status'] == 'published')
                                   ? const Color(0xFF10B981)
                                   : const Color(0xFFF59E0B),
                               fontWeight: FontWeight.w600,
@@ -795,11 +822,16 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
                             onPressed: _isProcessing
                                 ? null
                                 : () => _runDatasetPublishAction(
-                                      datasetName: (dataset['name'] ?? dataset['datasetName'] ?? '').toString(),
-                                      publish: !(dataset['published'] == true || dataset['status'] == 'published'),
+                                      datasetName: (dataset['name'] ??
+                                              dataset['datasetName'] ??
+                                              '')
+                                          .toString(),
+                                      publish: !(dataset['published'] == true ||
+                                          dataset['status'] == 'published'),
                                     ),
                             child: Text(
-                              (dataset['published'] == true || dataset['status'] == 'published')
+                              (dataset['published'] == true ||
+                                      dataset['status'] == 'published')
                                   ? 'Unpublish'
                                   : 'Publish',
                             ),
@@ -837,7 +869,8 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
                   padding: const EdgeInsets.all(20),
                   child: Row(
                     children: [
-                      const Icon(Icons.list, color: Color(0xFF6366F1), size: 24),
+                      const Icon(Icons.list,
+                          color: Color(0xFF6366F1), size: 24),
                       const SizedBox(width: 12),
                       const Text(
                         'Imported Questions',
@@ -855,7 +888,8 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF6366F1).withValues(alpha: 0.1),
+                            color:
+                                const Color(0xFF6366F1).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
@@ -869,105 +903,106 @@ class _FileImportExportScreenState extends ConsumerState<FileImportExportScreen>
                     ],
                   ),
                 ),
-
                 Divider(height: 1, color: Colors.grey[200]),
-
                 SizedBox(
                   height: 400,
                   child: _importedQuestions.isEmpty
                       ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.folder_open,
-                          size: 64,
-                          color: Colors.grey[400],
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'No questions imported yet',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey[600],
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Import a file to get started',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[500],
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                      : ListView.separated(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: _importedQuestions.length,
-                    separatorBuilder: (context, index) => const SizedBox(height: 8),
-                    itemBuilder: (context, index) {
-                      final question = _importedQuestions[index];
-                      return Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF8FAFC),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Colors.grey[200]!,
-                          ),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF6366F1).withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(10),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.folder_open,
+                                size: 64,
+                                color: Colors.grey[400],
                               ),
-                              child: Center(
-                                child: Text(
-                                  '${index + 1}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF6366F1),
-                                  ),
+                              const SizedBox(height: 16),
+                              Text(
+                                'No questions imported yet',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey[600],
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              const SizedBox(height: 8),
+                              Text(
+                                'Import a file to get started',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey[500],
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : ListView.separated(
+                          padding: const EdgeInsets.all(16),
+                          itemCount: _importedQuestions.length,
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 8),
+                          itemBuilder: (context, index) {
+                            final question = _importedQuestions[index];
+                            return Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF8FAFC),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: Colors.grey[200]!,
+                                ),
+                              ),
+                              child: Row(
                                 children: [
-                                  Text(
-                                    question.question,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14,
+                                  Container(
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF6366F1)
+                                          .withValues(alpha: 0.1),
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
+                                    child: Center(
+                                      child: Text(
+                                        '${index + 1}',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF6366F1),
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    'Category: ${question.category}',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey[600],
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          question.question,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14,
+                                          ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          'Category: ${question.category}',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.grey[600],
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                          ],
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
                 ),
               ],
             ),

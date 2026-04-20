@@ -45,6 +45,6 @@ class SkillTreeEdgesPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant SkillTreeEdgesPainter old) =>
       old.graph != graph ||
-          old.positions != positions ||
-          old.worldToScreen != worldToScreen;
+      old.positions != positions ||
+      old.worldToScreen != worldToScreen;
 }

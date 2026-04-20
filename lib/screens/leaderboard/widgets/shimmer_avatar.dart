@@ -9,19 +9,18 @@ class ShimmerAvatar extends StatelessWidget {
   final String? gender;
   final bool isLoading;
   final double xpProgress; // New XP progress field (0.0 to 1.0)
-  final String status;  // 'online', 'offline', 'in game'
+  final String status; // 'online', 'offline', 'in game'
 
-  const ShimmerAvatar({
-    super.key,
-    this.radius = 24,
-    this.avatarPath,
-    this.initials,
-    this.ageGroup,
-    this.gender,
-    this.isLoading = false,
-    this.xpProgress = 0.0,
-    this.status = 'offline'
-  });
+  const ShimmerAvatar(
+      {super.key,
+      this.radius = 24,
+      this.avatarPath,
+      this.initials,
+      this.ageGroup,
+      this.gender,
+      this.isLoading = false,
+      this.xpProgress = 0.0,
+      this.status = 'offline'});
 
   String _getFallbackAsset() {
     if (gender == 'male') {
@@ -57,10 +56,11 @@ class ShimmerAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     final avatar = isLoading
         ? Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: CircleAvatar(radius: radius, backgroundColor: Colors.grey[300]),
-    )
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child:
+                CircleAvatar(radius: radius, backgroundColor: Colors.grey[300]),
+          )
         : _buildAvatar();
 
     return Stack(

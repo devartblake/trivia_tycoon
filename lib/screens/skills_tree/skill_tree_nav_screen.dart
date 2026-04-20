@@ -45,8 +45,10 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
     super.dispose();
   }
 
-  void _deepLinkToBranchStep(String branchId, {int initialStep = 0, bool showPath = true}) {
-    context.push('/skill-tree/$branchId?step=$initialStep&showPath=${showPath ? 1 : 0}');
+  void _deepLinkToBranchStep(String branchId,
+      {int initialStep = 0, bool showPath = true}) {
+    context.push(
+        '/skill-tree/$branchId?step=$initialStep&showPath=${showPath ? 1 : 0}');
   }
 
   Color parseHex(String hex, {Color fallback = const Color(0xFF555555)}) {
@@ -90,7 +92,8 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
       elevation: 0,
       title: const Text(
         'Pathways',
-        style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
+        style: TextStyle(
+            color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
       ),
       actions: [
         const SizedBox(width: 8),
@@ -111,7 +114,8 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
           ),
           child: Text(
             'XP: ${state.playerPoints}',
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+            style: const TextStyle(
+                color: Colors.white, fontWeight: FontWeight.w600),
           ),
         ),
 
@@ -182,7 +186,8 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
           colors: [bg, bg.withValues(alpha: 0.7)],
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1),
+        border:
+            Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1),
       ),
       child: Material(
         color: Colors.transparent,
@@ -195,7 +200,8 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
               builder: (context, constraints) {
                 // Use available height to determine if we can fit all elements
                 final availableHeight = constraints.maxHeight;
-                final shouldShowPreview = availableHeight > 120; // Only show preview if enough space
+                final shouldShowPreview =
+                    availableHeight > 120; // Only show preview if enough space
 
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -209,7 +215,10 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
                           orientation: HexOrientation.pointy,
                           icon: Icon(group.icon, color: Colors.white),
                           gradient: LinearGradient(
-                            colors: [Colors.white.withValues(alpha: 0.22), Colors.white.withValues(alpha: 0.10)],
+                            colors: [
+                              Colors.white.withValues(alpha: 0.22),
+                              Colors.white.withValues(alpha: 0.10)
+                            ],
                           ),
                           borderColor: Colors.white.withValues(alpha: 0.6),
                           badgeCount: group.availableSkills,
@@ -217,7 +226,8 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
                         const Spacer(),
                         // Compact route icon
                         GestureDetector(
-                          onTap: () => _deepLinkToBranchStep(group.id, initialStep: 0, showPath: true),
+                          onTap: () => _deepLinkToBranchStep(group.id,
+                              initialStep: 0, showPath: true),
                           child: Container(
                             width: 24,
                             height: 24,
@@ -225,7 +235,8 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
                               color: Colors.white.withValues(alpha: 0.2),
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: const Icon(Icons.alt_route, color: Colors.white, size: 14),
+                            child: const Icon(Icons.alt_route,
+                                color: Colors.white, size: 14),
                           ),
                         ),
                       ],
@@ -241,14 +252,19 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
                         children: [
                           Text(
                             group.title,
-                            style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
                             '${group.branchCount} branches',
-                            style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 9),
+                            style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.85),
+                                fontSize: 9),
                           ),
                         ],
                       ),
@@ -282,7 +298,8 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
                                   ),
                                   child: const Tooltip(
                                     message: 'Open preview',
-                                    child: Icon(Icons.open_in_full, size: 14, color: Colors.white),
+                                    child: Icon(Icons.open_in_full,
+                                        size: 14, color: Colors.white),
                                   ),
                                 ),
                               ),
@@ -303,7 +320,10 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
                         const SizedBox(height: 1),
                         Text(
                           '${group.progressPercent}%',
-                          style: const TextStyle(color: Colors.white70, fontSize: 8, fontWeight: FontWeight.w500),
+                          style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 8,
+                              fontWeight: FontWeight.w500),
                         ),
                       ],
                     ),
@@ -312,7 +332,8 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
                     GestureDetector(
                       onTap: () => _showAutoPath(context, group.id),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
@@ -320,9 +341,12 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: const [
-                            Icon(Icons.alt_route, size: 10, color: Colors.white),
+                            Icon(Icons.alt_route,
+                                size: 10, color: Colors.white),
                             SizedBox(width: 2),
-                            Text('Auto-path', style: TextStyle(fontSize: 8, color: Colors.white)),
+                            Text('Auto-path',
+                                style: TextStyle(
+                                    fontSize: 8, color: Colors.white)),
                           ],
                         ),
                       ),
@@ -397,7 +421,8 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF15183A),
-        title: const Text('Search Skills', style: TextStyle(color: Colors.white)),
+        title:
+            const Text('Search Skills', style: TextStyle(color: Colors.white)),
         content: TextField(
           decoration: const InputDecoration(
             hintText: 'Enter skill name...',
@@ -438,7 +463,8 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
     );
   }
 
-  List<SkillSearchResult> _searchSkills(String query, List<SkillTreeGroupVM> groups) {
+  List<SkillSearchResult> _searchSkills(
+      String query, List<SkillTreeGroupVM> groups) {
     final results = <SkillSearchResult>[];
     final queryLower = query.toLowerCase();
 
@@ -446,12 +472,13 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
       for (final branch in group.branches) {
         for (final nodeMap in branch.nodeMaps) {
           final title = (nodeMap['title'] ?? '').toString().toLowerCase();
-          final description = (nodeMap['description'] ?? '').toString().toLowerCase();
+          final description =
+              (nodeMap['description'] ?? '').toString().toLowerCase();
           final id = (nodeMap['id'] ?? '').toString();
 
           // Search in title, description, and effects
-          bool matches = title.contains(queryLower) ||
-              description.contains(queryLower);
+          bool matches =
+              title.contains(queryLower) || description.contains(queryLower);
 
           // Search in effects
           if (!matches && nodeMap['effects'] is Map) {
@@ -474,7 +501,8 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
               branchId: branch.branchId,
               unlocked: nodeMap['unlocked'] ?? false,
               cost: nodeMap['cost'] ?? 0,
-              relevanceScore: _calculateRelevance(queryLower, title, description),
+              relevanceScore:
+                  _calculateRelevance(queryLower, title, description),
             ));
           }
         }
@@ -490,14 +518,17 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
     int score = 0;
 
     // Exact title match gets highest score
-    if (title == query) score += 100;
+    if (title == query)
+      score += 100;
     // Title starts with query
-    else if (title.startsWith(query)) score += 80;
+    else if (title.startsWith(query))
+      score += 80;
     // Title contains query
     else if (title.contains(query)) score += 60;
 
     // Description matches get lower scores
-    if (description.startsWith(query)) score += 40;
+    if (description.startsWith(query))
+      score += 40;
     else if (description.contains(query)) score += 20;
 
     return score;
@@ -535,18 +566,18 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
             Expanded(
               child: results.isEmpty
                   ? const Center(
-                child: Text(
-                  'No skills found',
-                  style: TextStyle(color: Colors.white60),
-                ),
-              )
+                      child: Text(
+                        'No skills found',
+                        style: TextStyle(color: Colors.white60),
+                      ),
+                    )
                   : ListView.builder(
-                itemCount: results.length,
-                itemBuilder: (context, index) {
-                  final result = results[index];
-                  return _buildSearchResultCard(result);
-                },
-              ),
+                      itemCount: results.length,
+                      itemBuilder: (context, index) {
+                        final result = results[index];
+                        return _buildSearchResultCard(result);
+                      },
+                    ),
             ),
           ],
         ),
@@ -565,7 +596,8 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
         ),
         title: Text(
           result.title,
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -802,7 +834,8 @@ class SkillSearchResult {
 }
 
 extension _AutoPathSheet on _SkillTreeNavScreenState {
-  void _showAutoPath(BuildContext context, String branchId, {int initialStep = 0}) {
+  void _showAutoPath(BuildContext context, String branchId,
+      {int initialStep = 0}) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -821,15 +854,20 @@ extension _AutoPathSheet on _SkillTreeNavScreenState {
                 children: [
                   // Handle
                   Container(
-                    width: 36, height: 4,
+                    width: 36,
+                    height: 4,
                     decoration: BoxDecoration(
-                      color: Colors.white24, borderRadius: BorderRadius.circular(2),
+                      color: Colors.white24,
+                      borderRadius: BorderRadius.circular(2),
                     ),
                   ),
                   const SizedBox(height: 12),
 
                   const Text('Auto-Path Preview',
-                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600)),
                   const SizedBox(height: 12),
 
                   // Larger read-only preview
@@ -854,11 +892,13 @@ extension _AutoPathSheet on _SkillTreeNavScreenState {
                   // Highlight toggle
                   Row(
                     children: [
-                      const Icon(Icons.visibility, color: Colors.white70, size: 18),
+                      const Icon(Icons.visibility,
+                          color: Colors.white70, size: 18),
                       const SizedBox(width: 8),
                       const Expanded(
                         child: Text('Highlight full path',
-                            style: TextStyle(color: Colors.white, fontSize: 13)),
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 13)),
                       ),
                       Switch(
                         value: highlight,
@@ -880,11 +920,13 @@ extension _AutoPathSheet on _SkillTreeNavScreenState {
                         backgroundColor: const Color(0xFF6EE7F9),
                         foregroundColor: const Color(0xFF0D1021),
                         padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
                       ),
                       onPressed: () {
                         Navigator.pop(context);
-                        _deepLinkToBranchStep(branchId, initialStep: initialStep, showPath: highlight);
+                        _deepLinkToBranchStep(branchId,
+                            initialStep: initialStep, showPath: highlight);
                       },
                     ),
                   ),

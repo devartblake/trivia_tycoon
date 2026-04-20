@@ -4,7 +4,8 @@ import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 
 import '../../../game/controllers/theme_settings_controller.dart';
 
-final themeSettingsProvider = StateNotifierProvider<ThemeSettingsController, ThemeSettings>((ref) {
+final themeSettingsProvider =
+    StateNotifierProvider<ThemeSettingsController, ThemeSettings>((ref) {
   final themeService = ref.read(customThemeServiceProvider);
   return ThemeSettingsController(themeService);
 });
@@ -28,7 +29,10 @@ class ThemedDrawer extends ConsumerWidget {
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [theme.primaryColor.withValues(alpha: 0.9), theme.secondaryColor],
+            colors: [
+              theme.primaryColor.withValues(alpha: 0.9),
+              theme.secondaryColor
+            ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),

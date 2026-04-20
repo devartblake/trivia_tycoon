@@ -28,9 +28,9 @@ class WsReliability {
 
   /// Send a message that requires acknowledgment
   void sendWithAck(
-      WsEnvelope message,
-      void Function(WsEnvelope) sendFn,
-      ) {
+    WsEnvelope message,
+    void Function(WsEnvelope) sendFn,
+  ) {
     // Generate unique message ID
     final msgId = _uuid.v4();
 
@@ -54,10 +54,10 @@ class WsReliability {
 
   /// Track a message for acknowledgment
   void _trackMessage(
-      String msgId,
-      WsEnvelope message,
-      void Function(WsEnvelope) sendFn,
-      ) {
+    String msgId,
+    WsEnvelope message,
+    void Function(WsEnvelope) sendFn,
+  ) {
     final pending = _PendingMessage(
       msgId: msgId,
       message: message,
@@ -120,7 +120,8 @@ class WsReliability {
     }
 
     if (_receivedSeqs.contains(message.seq)) {
-      LogManager.debug('[WsReliability] Duplicate message seq=${message.seq}, ignoring');
+      LogManager.debug(
+          '[WsReliability] Duplicate message seq=${message.seq}, ignoring');
       return false; // Duplicate
     }
 

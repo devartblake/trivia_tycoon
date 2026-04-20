@@ -1,1 +1,3 @@
-class TimeSync { const TimeSync(); }
+class TimeSync {
+  const TimeSync();
+}

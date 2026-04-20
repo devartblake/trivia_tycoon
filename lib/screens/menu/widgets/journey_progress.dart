@@ -187,8 +187,8 @@ class _JourneyProgressState extends State<JourneyProgress>
                   ),
                 ],
               ),
-              width: MediaQuery.of(context).size.width *
-                  _progressAnimation.value,
+              width:
+                  MediaQuery.of(context).size.width * _progressAnimation.value,
             ),
             // Shine effect
             if (_progressAnimation.value > 0)
@@ -266,7 +266,7 @@ class _JourneyProgressState extends State<JourneyProgress>
 
   Widget _buildPremiumBanner() {
     return GestureDetector(
-      onTap: () => context.push('/offers'),
+      onTap: () => context.push('/store-premium'),
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(

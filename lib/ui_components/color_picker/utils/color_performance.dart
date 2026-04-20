@@ -112,12 +112,14 @@ class ColorPerformance {
     if (_trackingStartTime == null) return;
 
     final duration = DateTime.now().difference(_trackingStartTime!);
-    final dropRate = _totalFrames > 0 ? (_droppedFrames / _totalFrames) * 100 : 0.0;
+    final dropRate =
+        _totalFrames > 0 ? (_droppedFrames / _totalFrames) * 100 : 0.0;
 
     LogManager.debug('Color Picker Performance Summary:');
     LogManager.debug('  Duration: ${duration.inSeconds}s');
     LogManager.debug('  Total Frames: $_totalFrames');
-    LogManager.debug('  Dropped Frames: $_droppedFrames (${dropRate.toStringAsFixed(1)}%)');
+    LogManager.debug(
+        '  Dropped Frames: $_droppedFrames (${dropRate.toStringAsFixed(1)}%)');
     LogManager.debug('  Average FPS: ${_averageFps.toStringAsFixed(1)}');
     LogManager.debug('  Final FPS: ${_fps.toStringAsFixed(1)}');
   }

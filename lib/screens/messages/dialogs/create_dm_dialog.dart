@@ -106,7 +106,8 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.error_outline, color: Colors.white70, size: 40),
+                const Icon(Icons.error_outline,
+                    color: Colors.white70, size: 40),
                 const SizedBox(height: 12),
                 const Text(
                   'Could not load friends right now',
@@ -116,7 +117,8 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
                 Text(
                   error.toString(),
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: Color(0xFFB9BBBE), fontSize: 13),
+                  style:
+                      const TextStyle(color: Color(0xFFB9BBBE), fontSize: 13),
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton(
@@ -237,7 +239,8 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
             ),
             title: const Text(
               'New Group',
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
             ),
             subtitle: const Text(
               'Select multiple friends',
@@ -263,11 +266,13 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
                 color: const Color(0xFFE91E63),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const Icon(Icons.person_add, color: Colors.white, size: 20),
+              child:
+                  const Icon(Icons.person_add, color: Colors.white, size: 20),
             ),
             title: const Text(
               'Add a Friend',
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
             ),
             subtitle: const Text(
               'Search by username',
@@ -339,7 +344,8 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Text(
                   letter,
                   style: const TextStyle(
@@ -476,7 +482,7 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
           throw Exception('Friend not found');
         }
 
-        final conversation = findOrCreateDirectConversation(
+        final conversation = await findOrCreateDirectConversation(
           ref,
           currentUserId,
           otherUserId,

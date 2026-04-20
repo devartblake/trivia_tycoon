@@ -199,20 +199,18 @@ void main() {
 
   test('stake and unstake parse current staked units', () async {
     final service = _buildService((options, handler) {
-      if (options.path == '/crypto/stake' || options.path == '/crypto/unstake') {
+      if (options.path == '/crypto/stake' ||
+          options.path == '/crypto/unstake') {
         handler.resolve(
           Response(
             requestOptions: options,
             statusCode: 200,
             data: {
-              'transactionId': options.path == '/crypto/stake'
-                  ? 'stake-tx'
-                  : 'unstake-tx',
+              'transactionId':
+                  options.path == '/crypto/stake' ? 'stake-tx' : 'unstake-tx',
               'playerId': 'player-1',
               'units': 200,
-              'currentStakedUnits': options.path == '/crypto/stake'
-                  ? 350
-                  : 150,
+              'currentStakedUnits': options.path == '/crypto/stake' ? 350 : 150,
               'status': 'Applied',
             },
           ),

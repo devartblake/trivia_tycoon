@@ -17,27 +17,46 @@ typedef FluidNavBarButtonTappedCallback = void Function();
 
 class FluidNavBarItem extends StatefulWidget {
   static const nominalExtent = Size(64, 64);
-  final String? svgPath; /// The path of the SVG asset
-  final IconData? icon; /// The icon data
-  final bool selected; /// Flag to know if this item is active or not
-  final Color selectedForegroundColor; /// The color used to paint the SVG when the item is active
-  final Color unselectedForegroundColor; /// The color used to paint the SVG when the item is inactive
-  final Color backgroundColor; /// The background color of the item
-  final double scaleFactor; /// The temporary SVG scale used when the item pop
-  final FluidNavBarButtonTappedCallback onTap; /// The callback used when the item is tapped
-  final double animationFactor;   /// The delay factor of the animations ( < 1 is faster, > 1 is slower)
+  final String? svgPath;
+
+  /// The path of the SVG asset
+  final IconData? icon;
+
+  /// The icon data
+  final bool selected;
+
+  /// Flag to know if this item is active or not
+  final Color selectedForegroundColor;
+
+  /// The color used to paint the SVG when the item is active
+  final Color unselectedForegroundColor;
+
+  /// The color used to paint the SVG when the item is inactive
+  final Color backgroundColor;
+
+  /// The background color of the item
+  final double scaleFactor;
+
+  /// The temporary SVG scale used when the item pop
+  final FluidNavBarButtonTappedCallback onTap;
+
+  /// The callback used when the item is tapped
+  final double animationFactor;
+
+  /// The delay factor of the animations ( < 1 is faster, > 1 is slower)
 
   const FluidNavBarItem(
-    this.svgPath,
-    this.icon,
-    this.selected,
-    this.onTap,
-    this.selectedForegroundColor,
-    this.unselectedForegroundColor,
-    this.backgroundColor,
-    this.scaleFactor,
-    this.animationFactor, {super.key}
-  )   : assert(scaleFactor >= 1.0),
+      this.svgPath,
+      this.icon,
+      this.selected,
+      this.onTap,
+      this.selectedForegroundColor,
+      this.unselectedForegroundColor,
+      this.backgroundColor,
+      this.scaleFactor,
+      this.animationFactor,
+      {super.key})
+      : assert(scaleFactor >= 1.0),
         assert(svgPath == null || icon == null,
             'Cannot provide both an iconPath and an icon.'),
         assert(!(svgPath == null && icon == null),
@@ -49,7 +68,8 @@ class FluidNavBarItem extends StatefulWidget {
   }
 }
 
-class _FluidNavBarItemState extends State<FluidNavBarItem> with SingleTickerProviderStateMixin {
+class _FluidNavBarItemState extends State<FluidNavBarItem>
+    with SingleTickerProviderStateMixin {
   static const double _activeOffset = 16;
   static const double _defaultOffset = 0;
   static const double _iconSize = 24;
@@ -67,29 +87,39 @@ class _FluidNavBarItemState extends State<FluidNavBarItem> with SingleTickerProv
   void _initializeAnimations() {
     double waveRatio = 0.28;
     _animationController = AnimationController(
-      duration: Duration(milliseconds: (1600 * widget.animationFactor).toInt()),
-      reverseDuration:
-          Duration(milliseconds: (1000 * widget.animationFactor).toInt()), vsync: this)..addListener(() => setState(() {}));
+        duration:
+            Duration(milliseconds: (1600 * widget.animationFactor).toInt()),
+        reverseDuration:
+            Duration(milliseconds: (1000 * widget.animationFactor).toInt()),
+        vsync: this)
+      ..addListener(() => setState(() {}));
 
-    _activeColorClipAnimation = Tween<double>(begin: 0.0, end: _iconSize).animate(CurvedAnimation(
-      parent: _animationController, curve: Interval(0.25, 0.38, curve: Curves.easeOut),
+    _activeColorClipAnimation =
+        Tween<double>(begin: 0.0, end: _iconSize).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Interval(0.25, 0.38, curve: Curves.easeOut),
       reverseCurve: Interval(0.7, 1.0, curve: Curves.easeInCirc),
     ));
 
-    var animation = CurvedAnimation(parent: _animationController, curve: LinearPointCurve(waveRatio, 0.0));
+    var animation = CurvedAnimation(
+        parent: _animationController, curve: LinearPointCurve(waveRatio, 0.0));
 
     _yOffsetAnimation = Tween<double>(begin: _defaultOffset, end: _activeOffset)
-        .animate(CurvedAnimation( parent: animation, curve: ElasticOutCurve(0.38), reverseCurve: Curves.easeInCirc,
+        .animate(CurvedAnimation(
+      parent: animation,
+      curve: ElasticOutCurve(0.38),
+      reverseCurve: Curves.easeInCirc,
     ));
 
     var activatingHalfTween = Tween<double>(begin: 1, end: widget.scaleFactor);
     _activatingAnimation = TweenSequence([
       TweenSequenceItem(tween: activatingHalfTween, weight: 50.0),
-      TweenSequenceItem(tween: ReverseTween<double>(activatingHalfTween), weight: 50.0)]).animate(CurvedAnimation(
-      parent: animation, curve: Interval(0.0, 0.3)));
+      TweenSequenceItem(
+          tween: ReverseTween<double>(activatingHalfTween), weight: 50.0)
+    ]).animate(CurvedAnimation(parent: animation, curve: Interval(0.0, 0.3)));
 
-    _inactivatingAnimation = ConstantTween<double>(1.0).animate(CurvedAnimation(
-      parent: animation, curve: Interval(0.3, 1.0)));
+    _inactivatingAnimation = ConstantTween<double>(1.0)
+        .animate(CurvedAnimation(parent: animation, curve: Interval(0.3, 1.0)));
   }
 
   @override
@@ -119,7 +149,8 @@ class _FluidNavBarItemState extends State<FluidNavBarItem> with SingleTickerProv
   @override
   Widget build(BuildContext context) {
     const ne = FluidNavBarItem.nominalExtent;
-    final scaleAnimation = _selected ? _activatingAnimation : _inactivatingAnimation;
+    final scaleAnimation =
+        _selected ? _activatingAnimation : _inactivatingAnimation;
 
     return GestureDetector(
       onTap: widget.onTap,

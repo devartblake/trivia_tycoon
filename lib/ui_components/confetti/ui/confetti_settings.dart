@@ -19,7 +19,8 @@ class ConfettiSettings extends ConsumerWidget {
     final presets = ConfettiTheme.presets;
 
     // Find if current theme exists in presets, or use first preset as fallback
-    final validTheme = presets.contains(currentTheme) ? currentTheme : presets.first;
+    final validTheme =
+        presets.contains(currentTheme) ? currentTheme : presets.first;
 
     return Scaffold(
       backgroundColor: const Color(0xFFFAFBFF),
@@ -165,7 +166,8 @@ class ConfettiSettings extends ConsumerWidget {
     );
   }
 
-  Widget _buildThemeCard(ThemeData theme, ConfettiTheme validTheme, List<ConfettiTheme> presets, dynamic confettiController) {
+  Widget _buildThemeCard(ThemeData theme, ConfettiTheme validTheme,
+      List<ConfettiTheme> presets, dynamic confettiController) {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -222,7 +224,8 @@ class ConfettiSettings extends ConsumerWidget {
               value: validTheme,
               isExpanded: true,
               underline: const SizedBox(),
-              icon: const Icon(Icons.keyboard_arrow_down, color: Color(0xFF667EEA)),
+              icon: const Icon(Icons.keyboard_arrow_down,
+                  color: Color(0xFF667EEA)),
               style: const TextStyle(
                 fontSize: 16,
                 color: Color(0xFF2D3748),
@@ -237,7 +240,9 @@ class ConfettiSettings extends ConsumerWidget {
                         width: 12,
                         height: 12,
                         decoration: BoxDecoration(
-                          color: theme.colors.isNotEmpty ? theme.colors.first : Colors.grey,
+                          color: theme.colors.isNotEmpty
+                              ? theme.colors.first
+                              : Colors.grey,
                           shape: BoxShape.circle,
                         ),
                       ),
@@ -259,7 +264,8 @@ class ConfettiSettings extends ConsumerWidget {
     );
   }
 
-  Widget _buildControlsCard(BuildContext context, ThemeData theme, dynamic confettiController) {
+  Widget _buildControlsCard(
+      BuildContext context, ThemeData theme, dynamic confettiController) {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -310,7 +316,7 @@ class ConfettiSettings extends ConsumerWidget {
             3.0,
             confettiController.speed.toStringAsFixed(1),
             const Color(0xFF667EEA),
-                (value) => confettiController.setSpeed(value),
+            (value) => confettiController.setSpeed(value),
           ),
           const SizedBox(height: 20),
           _buildSliderControl(
@@ -321,14 +327,22 @@ class ConfettiSettings extends ConsumerWidget {
             300,
             confettiController.particleCount.toString(),
             const Color(0xFF9F7AEA),
-                (value) => confettiController.setParticleCount(value.toInt()),
+            (value) => confettiController.setParticleCount(value.toInt()),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildSliderControl(BuildContext context, String label, double value, double min, double max, String displayValue, Color color, ValueChanged<double> onChanged) {
+  Widget _buildSliderControl(
+      BuildContext context,
+      String label,
+      double value,
+      double min,
+      double max,
+      String displayValue,
+      Color color,
+      ValueChanged<double> onChanged) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -381,7 +395,8 @@ class ConfettiSettings extends ConsumerWidget {
     );
   }
 
-  Widget _buildAdvancedCard(ThemeData theme, WidgetRef ref, dynamic confettiController) {
+  Widget _buildAdvancedCard(
+      ThemeData theme, WidgetRef ref, dynamic confettiController) {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -429,7 +444,7 @@ class ConfettiSettings extends ConsumerWidget {
             'Automatically switch between themes',
             Icons.shuffle,
             confettiController.isRandomTheme,
-                (value) => confettiController.toggleRandomTheme(),
+            (value) => confettiController.toggleRandomTheme(),
           ),
           const SizedBox(height: 16),
           _buildToggleOption(
@@ -437,21 +452,25 @@ class ConfettiSettings extends ConsumerWidget {
             'Show performance and debug information',
             Icons.bug_report,
             ref.watch(showDebugOverlayProvider),
-                (value) => ref.read(showDebugOverlayProvider.notifier).state = value,
+            (value) =>
+                ref.read(showDebugOverlayProvider.notifier).state = value,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildToggleOption(String title, String subtitle, IconData icon, bool value, ValueChanged<bool> onChanged) {
+  Widget _buildToggleOption(String title, String subtitle, IconData icon,
+      bool value, ValueChanged<bool> onChanged) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: const Color(0xFFF7FAFC),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: value ? const Color(0xFF667EEA).withValues(alpha: 0.3) : const Color(0xFFE2E8F0),
+          color: value
+              ? const Color(0xFF667EEA).withValues(alpha: 0.3)
+              : const Color(0xFFE2E8F0),
           width: 1,
         ),
       ),
@@ -460,7 +479,9 @@ class ConfettiSettings extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: value ? const Color(0xFF667EEA).withValues(alpha: 0.1) : Colors.grey.withValues(alpha: 0.1),
+              color: value
+                  ? const Color(0xFF667EEA).withValues(alpha: 0.1)
+                  : Colors.grey.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(

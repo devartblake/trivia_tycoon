@@ -6,7 +6,8 @@ import 'package:trivia_tycoon/core/manager/log_manager.dart';
 class MessageStorageService {
   // In-memory storage (replace with database later)
   final Map<String, Message> _messages = {};
-  final Map<String, List<String>> _conversationMessages = {}; // conversationId -> messageIds
+  final Map<String, List<String>> _conversationMessages =
+      {}; // conversationId -> messageIds
 
   // ============ CREATE ============
 
@@ -38,10 +39,7 @@ class MessageStorageService {
 
   List<Message> getMessagesByConversation(String conversationId) {
     final messageIds = _conversationMessages[conversationId] ?? [];
-    return messageIds
-        .map((id) => _messages[id])
-        .whereType<Message>()
-        .toList()
+    return messageIds.map((id) => _messages[id]).whereType<Message>().toList()
       ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
   }
 
@@ -59,7 +57,8 @@ class MessageStorageService {
 
   // ============ UPDATE ============
 
-  Future<Message?> updateMessage(String messageId, Message updatedMessage) async {
+  Future<Message?> updateMessage(
+      String messageId, Message updatedMessage) async {
     if (!_messages.containsKey(messageId)) return null;
 
     _messages[messageId] = updatedMessage;
@@ -92,7 +91,8 @@ class MessageStorageService {
     }
   }
 
-  Future<void> updateMessageStatus(String messageId, MessageStatus status) async {
+  Future<void> updateMessageStatus(
+      String messageId, MessageStatus status) async {
     final message = _messages[messageId];
     if (message != null) {
       _messages[messageId] = message.copyWith(status: status);
@@ -119,7 +119,8 @@ class MessageStorageService {
   }
 
   Future<void> deleteConversationMessages(String conversationId) async {
-    final messageIds = List<String>.from(_conversationMessages[conversationId] ?? []);
+    final messageIds =
+        List<String>.from(_conversationMessages[conversationId] ?? []);
     await deleteMessages(messageIds);
     _conversationMessages.remove(conversationId);
   }
@@ -152,7 +153,7 @@ class MessageStorageService {
       'totalMessages': _messages.length,
       'totalConversations': _conversationMessages.length,
       'messagesPerConversation': _conversationMessages.map(
-            (key, value) => MapEntry(key, value.length),
+        (key, value) => MapEntry(key, value.length),
       ),
     };
   }

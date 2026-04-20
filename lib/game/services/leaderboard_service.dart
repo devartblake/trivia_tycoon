@@ -10,7 +10,8 @@ class LeaderboardService {
   /// Fetches the leaderboard from the API
   Future<List<LeaderboardEntry>> fetchLeaderboard({int limit = 100}) async {
     try {
-      final List<Map<String, dynamic>> response = await apiService.fetchLeaderboard(limit: limit);
+      final List<Map<String, dynamic>> response =
+          await apiService.fetchLeaderboard(limit: limit);
       return response.map((data) => LeaderboardEntry.fromJson(data)).toList();
     } catch (e) {
       if (kDebugMode) {

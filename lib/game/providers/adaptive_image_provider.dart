@@ -36,13 +36,13 @@ class AdaptiveImageProvider {
 
   /// Widget wrapper for adaptive images
   static Widget image(
-      String path, {
-        double? width,
-        double? height,
-        BoxFit fit = BoxFit.cover,
-        Widget? placeholder,
-        Widget? errorWidget,
-      }) {
+    String path, {
+    double? width,
+    double? height,
+    BoxFit fit = BoxFit.cover,
+    Widget? placeholder,
+    Widget? errorWidget,
+  }) {
     return Image(
       image: getProvider(path),
       width: width,
@@ -71,10 +71,10 @@ class AdaptiveImageProvider {
 
   /// Circle avatar with adaptive image
   static Widget circleAvatar(
-      String path, {
-        double radius = 20,
-        Color backgroundColor = Colors.grey,
-      }) {
+    String path, {
+    double radius = 20,
+    Color backgroundColor = Colors.grey,
+  }) {
     if (path.isEmpty) {
       return CircleAvatar(
         radius: radius,

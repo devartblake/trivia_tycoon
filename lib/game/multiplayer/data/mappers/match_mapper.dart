@@ -10,29 +10,30 @@ class MatchMapper {
   const MatchMapper();
 
   Match toDomain(MatchDto dto) => Match(
-    id: dto.matchId,
-    roomId: dto.roomId,
-    players: dto.players.map(_presence.toDomain).toList(),
-    currentTurn: dto.currentTurn != null ? _turnToDomain(dto.currentTurn!) : null,
-  );
+        id: dto.matchId,
+        roomId: dto.roomId,
+        players: dto.players.map(_presence.toDomain).toList(),
+        currentTurn:
+            dto.currentTurn != null ? _turnToDomain(dto.currentTurn!) : null,
+      );
 
   MatchDto toDto(Match e) => MatchDto(
-    matchId: e.id,
-    roomId: e.roomId,
-    players: e.players.map(_presence.toDto).toList(),
-    currentTurn: e.currentTurn != null ? _turnToDto(e.currentTurn!) : null,
-  );
+        matchId: e.id,
+        roomId: e.roomId,
+        players: e.players.map(_presence.toDto).toList(),
+        currentTurn: e.currentTurn != null ? _turnToDto(e.currentTurn!) : null,
+      );
 
   // --- helpers ---
   GameTurn _turnToDomain(TurnDto d) => GameTurn(
-    questionId: d.questionId,
-    startAt: DateTime.fromMillisecondsSinceEpoch(d.startAtMs, isUtc: true),
-    endAt: DateTime.fromMillisecondsSinceEpoch(d.endAtMs, isUtc: true),
-  );
+        questionId: d.questionId,
+        startAt: DateTime.fromMillisecondsSinceEpoch(d.startAtMs, isUtc: true),
+        endAt: DateTime.fromMillisecondsSinceEpoch(d.endAtMs, isUtc: true),
+      );
 
   TurnDto _turnToDto(GameTurn t) => TurnDto(
-    questionId: t.questionId,
-    startAtMs: t.startAt.toUtc().millisecondsSinceEpoch,
-    endAtMs: t.endAt.toUtc().millisecondsSinceEpoch,
-  );
+        questionId: t.questionId,
+        startAtMs: t.startAt.toUtc().millisecondsSinceEpoch,
+        endAtMs: t.endAt.toUtc().millisecondsSinceEpoch,
+      );
 }

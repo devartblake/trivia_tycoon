@@ -63,9 +63,9 @@ class CollectionItemsLoader {
 
   /// Save collection items to local file
   Future<void> saveToLocalFile(
-      List<CollectionItem> items, {
-        String fileName = 'collection_items.json',
-      }) async {
+    List<CollectionItem> items, {
+    String fileName = 'collection_items.json',
+  }) async {
     try {
       final dir = await _collectionImagesDir;
       final file = File(p.join(dir.path, fileName));
@@ -136,10 +136,10 @@ class CollectionItemsLoader {
 
   /// Save an image for a collection item
   Future<void> saveImage(
-      String itemId,
-      List<int> imageBytes, {
-        String extension = 'png',
-      }) async {
+    String itemId,
+    List<int> imageBytes, {
+    String extension = 'png',
+  }) async {
     try {
       final dir = await _collectionImagesDir;
       final file = File(p.join(dir.path, '$itemId.$extension'));
@@ -151,10 +151,10 @@ class CollectionItemsLoader {
 
   /// Download and save image from URL
   Future<bool> downloadAndSaveImage(
-      String itemId,
-      String imageUrl, {
-        String extension = 'png',
-      }) async {
+    String itemId,
+    String imageUrl, {
+    String extension = 'png',
+  }) async {
     try {
       // Note: In a real app, you would use http package to download
       // This is a placeholder implementation
@@ -246,7 +246,8 @@ class CollectionItemsLoader {
         category: 'Arts & Culture',
         rarity: 'Epic',
         description: 'A painter\'s palette used during the Renaissance period',
-        aiImagePrompt: 'Ornate wooden artist palette with vibrant oil paint colors',
+        aiImagePrompt:
+            'Ornate wooden artist palette with vibrant oil paint colors',
         pointValue: 500,
       ),
       CollectionItem(
@@ -255,7 +256,8 @@ class CollectionItemsLoader {
         category: 'History & Literature',
         rarity: 'Legendary',
         description: 'A preserved scroll containing ancient wisdom',
-        aiImagePrompt: 'Aged parchment scroll with golden seal and mysterious text',
+        aiImagePrompt:
+            'Aged parchment scroll with golden seal and mysterious text',
         pointValue: 1000,
       ),
       CollectionItem(
@@ -263,8 +265,10 @@ class CollectionItemsLoader {
         name: 'DNA Double Helix Crystal',
         category: 'Science & Discovery',
         rarity: 'Epic',
-        description: 'Crystallized representation of the building blocks of life',
-        aiImagePrompt: 'Glowing crystal sculpture of DNA double helix structure',
+        description:
+            'Crystallized representation of the building blocks of life',
+        aiImagePrompt:
+            'Glowing crystal sculpture of DNA double helix structure',
         pointValue: 500,
       ),
       // Add more default items as needed

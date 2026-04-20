@@ -24,6 +24,7 @@ class Fonts {
 class Insets {
   static double gutterScale = 1;
   static const double scale = 1;
+
   /// Dynamic insets, may get scaled with the device size
   static double mGutter = m * gutterScale;
   static double lGutter = l * gutterScale;
@@ -85,13 +86,16 @@ class TextStyles {
 
   static TextStyle get Body3 => opensans.size(FontSizes.s11);
 
-  static TextStyle get Callout => faustina.size(FontSizes.s14).letterSpace(1.75);
+  static TextStyle get Callout =>
+      faustina.size(FontSizes.s14).letterSpace(1.75);
 
   static TextStyle get CalloutFocus => Callout.bold;
 
-  static TextStyle get Btn => faustina.bold.size(FontSizes.s14).letterSpace(1.75);
+  static TextStyle get Btn =>
+      faustina.bold.size(FontSizes.s14).letterSpace(1.75);
 
-  static TextStyle get BtnSelected => faustina.size(FontSizes.s14).letterSpace(1.75);
+  static TextStyle get BtnSelected =>
+      faustina.size(FontSizes.s14).letterSpace(1.75);
 
   static TextStyle get Footnote => faustina.bold.size(FontSizes.s11);
 
@@ -102,23 +106,23 @@ class Shadows {
   static bool enabled = true;
   static double get mRadius => 8;
 
-  static List<BoxShadow> m(Color color, [ double opacity = 0]) {
+  static List<BoxShadow> m(Color color, [double opacity = 0]) {
     return enabled
         ? [
-      BoxShadow(
-        color: color.withValues(alpha: opacity),
-        blurRadius: mRadius,
-        spreadRadius: mRadius / 2,
-        offset: Offset(1, 0),
-      ),
-      BoxShadow(
-        color: color.withValues(alpha: opacity),
-        blurRadius: mRadius / 2,
-        spreadRadius: mRadius / 4,
-        offset: Offset(1, 0),
-      )
-    ]
-        : const<BoxShadow>[];
+            BoxShadow(
+              color: color.withValues(alpha: opacity),
+              blurRadius: mRadius,
+              spreadRadius: mRadius / 2,
+              offset: Offset(1, 0),
+            ),
+            BoxShadow(
+              color: color.withValues(alpha: opacity),
+              blurRadius: mRadius / 2,
+              spreadRadius: mRadius / 4,
+              offset: Offset(1, 0),
+            )
+          ]
+        : const <BoxShadow>[];
   }
 }
 

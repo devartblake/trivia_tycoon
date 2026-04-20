@@ -33,7 +33,8 @@ class DepthCardController extends ChangeNotifier {
   static const int _maxFrameTimeSamples = 30;
 
   // Configuration
-  static const Duration _animationInterval = Duration(milliseconds: 16); // ~60fps
+  static const Duration _animationInterval =
+      Duration(milliseconds: 16); // ~60fps
   static const Duration _performanceUpdateInterval = Duration(seconds: 1);
   static const double _maxRotationSpeed = 2.0; // degrees per frame
 
@@ -52,7 +53,8 @@ class DepthCardController extends ChangeNotifier {
   /// Attach the 3D controller with error handling
   bool attach(Flutter3DController controller) {
     if (_isDisposed) {
-      LogManager.debug('DepthCardController: Cannot attach to disposed controller');
+      LogManager.debug(
+          'DepthCardController: Cannot attach to disposed controller');
       return false;
     }
 
@@ -62,7 +64,8 @@ class DepthCardController extends ChangeNotifier {
       _startPerformanceTracking();
       notifyListeners();
 
-      LogManager.debug('DepthCardController: Successfully attached to 3D controller');
+      LogManager.debug(
+          'DepthCardController: Successfully attached to 3D controller');
       return true;
     } catch (e) {
       LogManager.debug('DepthCardController: Error attaching controller: $e');
@@ -86,9 +89,11 @@ class DepthCardController extends ChangeNotifier {
   }
 
   /// Load 3D model with comprehensive error handling and performance optimization
-  Future<bool> loadModelFromAsset(String assetPath, {BuildContext? context}) async {
+  Future<bool> loadModelFromAsset(String assetPath,
+      {BuildContext? context}) async {
     if (!_isAttached || _isDisposed) {
-      LogManager.debug('DepthCardController: Cannot load model - controller not attached');
+      LogManager.debug(
+          'DepthCardController: Cannot load model - controller not attached');
       return false;
     }
 
@@ -118,11 +123,12 @@ class DepthCardController extends ChangeNotifier {
 
       notifyListeners();
 
-      LogManager.debug('DepthCardController: Model loaded successfully: $assetPath (${loadTime}ms)');
+      LogManager.debug(
+          'DepthCardController: Model loaded successfully: $assetPath (${loadTime}ms)');
       return true;
-
     } catch (e) {
-      LogManager.debug('DepthCardController: Error loading model $assetPath: $e');
+      LogManager.debug(
+          'DepthCardController: Error loading model $assetPath: $e');
       _isModelLoaded = false;
       _currentModelPath = null;
       notifyListeners();
@@ -157,7 +163,6 @@ class DepthCardController extends ChangeNotifier {
       // Trigger the load (replace with actual method)
       // _controller!.loadModelFromAsset(assetPath);
       await _simulateModelLoading(assetPath);
-
     } catch (e) {
       throw Exception('Failed to load 3D model: $e');
     }
@@ -166,8 +171,8 @@ class DepthCardController extends ChangeNotifier {
   /// Check if the model format is supported
   bool _isSupportedFormat(String assetPath) {
     final supportedExtensions = ['.glb', '.gltf', '.obj', '.fbx'];
-    return supportedExtensions.any((ext) =>
-        assetPath.toLowerCase().endsWith(ext));
+    return supportedExtensions
+        .any((ext) => assetPath.toLowerCase().endsWith(ext));
   }
 
   /// Simulate model loading for demonstration
@@ -196,7 +201,8 @@ class DepthCardController extends ChangeNotifier {
       notifyListeners();
 
       if (kDebugMode) {
-        print('DepthCardController: Glow effect ${enabled ? "enabled" : "disabled"} (strength: ${_glowStrength.toStringAsFixed(2)})');
+        print(
+            'DepthCardController: Glow effect ${enabled ? "enabled" : "disabled"} (strength: ${_glowStrength.toStringAsFixed(2)})');
       }
     }
   }
@@ -220,7 +226,8 @@ class DepthCardController extends ChangeNotifier {
     }
 
     if (kDebugMode) {
-      print('DepthCardController: Rotation set to x=$targetX, y=$targetY, z=$targetZ (animate=$animate)');
+      print(
+          'DepthCardController: Rotation set to x=$targetX, y=$targetY, z=$targetZ (animate=$animate)');
     }
   }
 
@@ -310,7 +317,8 @@ class DepthCardController extends ChangeNotifier {
     });
 
     if (kDebugMode) {
-      print('DepthCardController: Auto-rotation started (speedX=$speedX, speedY=$speedY)');
+      print(
+          'DepthCardController: Auto-rotation started (speedX=$speedX, speedY=$speedY)');
     }
   }
 
@@ -440,10 +448,9 @@ extension DepthCardControllerExtension on DepthCardController {
   bool get isReady => isAttached && !_isDisposed;
 
   /// Get rotation as a formatted string
-  String get rotationString =>
-      'X: ${rotationX.toStringAsFixed(1)}° '
-          'Y: ${rotationY.toStringAsFixed(1)}° '
-          'Z: ${rotationZ.toStringAsFixed(1)}°';
+  String get rotationString => 'X: ${rotationX.toStringAsFixed(1)}° '
+      'Y: ${rotationY.toStringAsFixed(1)}° '
+      'Z: ${rotationZ.toStringAsFixed(1)}°';
 
   /// Get performance category based on FPS
   String get performanceCategory {

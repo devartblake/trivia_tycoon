@@ -218,7 +218,7 @@ void main() {
       // Create 150 entries to span two tier groups
       final entries = List.generate(
         150,
-            (i) => _makeEntry(userId: i + 1, score: 150 - i),
+        (i) => _makeEntry(userId: i + 1, score: 150 - i),
       );
 
       final result = TierAssigner.assignTiers(entries);
@@ -236,7 +236,7 @@ void main() {
     test('promotion eligibility: top 25 in tier are eligible', () {
       final entries = List.generate(
         50,
-            (i) => _makeEntry(userId: i + 1, score: 50 - i),
+        (i) => _makeEntry(userId: i + 1, score: 50 - i),
       );
 
       final result = TierAssigner.assignTiers(entries);
@@ -254,7 +254,7 @@ void main() {
     test('reward eligibility: top 20 in tier are eligible', () {
       final entries = List.generate(
         30,
-            (i) => _makeEntry(userId: i + 1, score: 30 - i),
+        (i) => _makeEntry(userId: i + 1, score: 30 - i),
       );
 
       final result = TierAssigner.assignTiers(entries);
@@ -270,7 +270,7 @@ void main() {
     test('entries beyond rank 1000 are assigned tier 0', () {
       final entries = List.generate(
         1001,
-            (i) => _makeEntry(userId: i + 1, score: 1001 - i),
+        (i) => _makeEntry(userId: i + 1, score: 1001 - i),
       );
 
       final result = TierAssigner.assignTiers(entries);

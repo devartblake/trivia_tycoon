@@ -193,7 +193,8 @@ class ServiceManager {
     final fernetService = await FernetService.initialize(secureStorage);
     final encryptService = await EncryptionService.initialize(secureStorage);
     final cache = await AppCacheService.initialize();
-    final leaderboard = LeaderboardDataService(apiService: api, appCache: cache);
+    final leaderboard =
+        LeaderboardDataService(apiService: api, appCache: cache);
     final arcadePB = ArcadePersonalBestService(cache);
     final arcadeDaily = ArcadeDailyBonusService(cache);
     final arcadeMissions = ArcadeMissionService(cache);
@@ -209,7 +210,8 @@ class ServiceManager {
 
     final achievements = AchievementService(apiService: api);
     final confetti = ConfettiSettingsService();
-    final questions = QuestionService(apiService: api, quizProgressService: quizProgress);
+    final questions =
+        QuestionService(apiService: api, quizProgressService: quizProgress);
     final spinWheel = SpinWheelSettingsService();
     final prizeLog = PrizeLogService();
     final purchaseService = PurchaseSettingsService();
@@ -219,9 +221,10 @@ class ServiceManager {
     final theme = ThemeSettingsService();
     final admin = AdminSettingsService();
     final multiplayer = MultiplayerService(
-      // inject: settings, http client, analytics, cache, etc.
-    );
-    final missionRepository = ApiMissionRepository(baseUrl: baseUrl, accessTokenProvider: null);
+        // inject: settings, http client, analytics, cache, etc.
+        );
+    final missionRepository =
+        ApiMissionRepository(baseUrl: baseUrl, accessTokenProvider: null);
     final mission = MissionService(
       missionRepository,
       apiBaseUrl: api.baseUrl,
@@ -259,7 +262,10 @@ class ServiceManager {
       purchaseService: purchaseService,
     );
     // Legacy LocalAuthService (used for authService field, splash, etc.)
-    final auth = LocalAuthService(secureStorage: secureStorage, generalKey: generalKey, playerProfileService: playerProfile);
+    final auth = LocalAuthService(
+        secureStorage: secureStorage,
+        generalKey: generalKey,
+        playerProfileService: playerProfile);
 
     // Build BackendAuthService + AuthHttpClient for API calls
     final authBox = Hive.isBoxOpen('auth_tokens')
@@ -292,7 +298,7 @@ class ServiceManager {
       apiService: api,
       authService: auth,
       analyticsService: analytics,
-      eventQueueService:  eventQueueService,
+      eventQueueService: eventQueueService,
       audioSettingsService: audio,
       leaderboardDataService: leaderboard,
       storeService: store,

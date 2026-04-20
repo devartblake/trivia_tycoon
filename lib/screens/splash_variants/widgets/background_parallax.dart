@@ -6,7 +6,8 @@ class BackgroundParallax extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: Listenable.merge([]), // insert Ticker or use AnimatedController if needed
+      animation: Listenable.merge(
+          []), // insert Ticker or use AnimatedController if needed
       builder: (context, child) => Transform.translate(
         offset: const Offset(0, -10),
         child: Container(

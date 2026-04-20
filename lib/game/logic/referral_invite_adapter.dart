@@ -90,7 +90,7 @@ class ReferralInviteHive extends HiveObject {
       createdAt: createdAt,
       expiresAt: expiresAt,
       status: InviteStatus.values.firstWhere(
-            (e) => e.name == status,
+        (e) => e.name == status,
         orElse: () => InviteStatus.pending,
       ),
       redeemedBy: redeemedBy,

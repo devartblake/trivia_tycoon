@@ -19,12 +19,12 @@ class ProfileService {
   final Map<String, dynamic> preferences;
 
   ProfileService(
-      this.ref, {
-        required this.playerId,
-        required this.displayName,
-        Set<String>? unlockedCategories,
-        Map<String, dynamic>? preferences,
-      })  : unlockedCategories = unlockedCategories ?? <String>{},
+    this.ref, {
+    required this.playerId,
+    required this.displayName,
+    Set<String>? unlockedCategories,
+    Map<String, dynamic>? preferences,
+  })  : unlockedCategories = unlockedCategories ?? <String>{},
         preferences = preferences ?? <String, dynamic>{} {
     _loadFromStorage();
   }
@@ -68,24 +68,30 @@ class ProfileService {
   void addScoreBonus(double multiplier) {
     LogManager.debug('ProfileService: addScoreBonus($multiplier)');
     final current = ref.read(scoreBonusMultiplierProvider);
-    ref.read(scoreBonusMultiplierProvider.notifier).state = current * multiplier;
+    ref.read(scoreBonusMultiplierProvider.notifier).state =
+        current * multiplier;
   }
 
   // ---------- XP convenience (delegates to XPService via composition) ----------
   int getPlayerXP() => ref.read(xpServiceProvider).playerXP;
 
-  bool hasEnoughXP(int xpCost) => ref.read(xpServiceProvider).hasEnoughXP(xpCost);
+  bool hasEnoughXP(int xpCost) =>
+      ref.read(xpServiceProvider).hasEnoughXP(xpCost);
 
   void deductXP(int xpCost) => ref.read(xpServiceProvider).deductXP(xpCost);
 
-  void addXP(int amount, {bool applyMultiplier = true}) =>
-      ref.read(xpServiceProvider).addXP(amount, applyMultiplier: applyMultiplier);
+  void addXP(int amount, {bool applyMultiplier = true}) => ref
+      .read(xpServiceProvider)
+      .addXP(amount, applyMultiplier: applyMultiplier);
 
   void setXPBonusMultiplier(double multiplier) =>
       ref.read(xpServiceProvider).setBonusMultiplier(multiplier);
 
-  void applyTemporaryXPBoost(double multiplier, {Duration duration = const Duration(minutes: 10)}) =>
-      ref.read(xpServiceProvider).applyTemporaryXPBoost(multiplier, duration: duration);
+  void applyTemporaryXPBoost(double multiplier,
+          {Duration duration = const Duration(minutes: 10)}) =>
+      ref
+          .read(xpServiceProvider)
+          .applyTemporaryXPBoost(multiplier, duration: duration);
 
   @override
   String toString() => 'ProfileService(player=$playerId, name=$displayName, '

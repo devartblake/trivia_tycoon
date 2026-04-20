@@ -40,7 +40,7 @@ class _MatchesSectionState extends State<MatchesSection>
   @override
   Widget build(BuildContext context) {
     final displayMatches =
-    widget.matches.isEmpty ? _getSampleMatches() : widget.matches;
+        widget.matches.isEmpty ? _getSampleMatches() : widget.matches;
 
     return Container(
       decoration: BoxDecoration(
@@ -137,9 +137,8 @@ class _MatchesSectionState extends State<MatchesSection>
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
-                color: isSelected
-                    ? const Color(0xFF6366F1)
-                    : Colors.transparent,
+                color:
+                    isSelected ? const Color(0xFF6366F1) : Colors.transparent,
                 width: 3,
               ),
             ),

@@ -85,7 +85,8 @@ class _ColorSaveButtonState extends State<ColorSaveButton>
           ),
           backgroundColor: Colors.green.shade600,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           margin: EdgeInsets.all(16),
           duration: Duration(seconds: 3),
         ),
@@ -104,7 +105,8 @@ class _ColorSaveButtonState extends State<ColorSaveButton>
           ),
           backgroundColor: Colors.red.shade600,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           margin: EdgeInsets.all(16),
         ),
       );
@@ -158,7 +160,8 @@ class _ColorSaveButtonState extends State<ColorSaveButton>
                 onTap: _isSaving ? null : _saveColor,
                 borderRadius: BorderRadius.circular(16),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -191,7 +194,8 @@ class _ColorSaveButtonState extends State<ColorSaveButton>
                             border: Border.all(color: Colors.white, width: 2),
                             boxShadow: [
                               BoxShadow(
-                                color: widget.selectedColor.withValues(alpha: 0.4),
+                                color:
+                                    widget.selectedColor.withValues(alpha: 0.4),
                                 blurRadius: 4,
                                 offset: const Offset(0, 2),
                               ),

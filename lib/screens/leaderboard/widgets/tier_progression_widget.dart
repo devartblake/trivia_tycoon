@@ -32,7 +32,7 @@ class _TierProgressionWidgetState extends State<TierProgressionWidget>
   void _initializeAnimations() {
     _animationControllers = List.generate(
       widget.totalTiers,
-          (index) => AnimationController(
+      (index) => AnimationController(
         duration: Duration(milliseconds: 600 + (index * 100)),
         vsync: this,
       ),
@@ -133,14 +133,15 @@ class _TierProgressionWidgetState extends State<TierProgressionWidget>
             scale: _scaleAnimations[index].value,
             child: isCurrentTier
                 ? AnimatedBuilder(
-              animation: _pulseAnimations[index],
-              builder: (context, child) {
-                return Transform.scale(
-                  scale: _pulseAnimations[index].value,
-                  child: _buildTierIcon(index, isCurrentTier, isUnlocked, isNextTier),
-                );
-              },
-            )
+                    animation: _pulseAnimations[index],
+                    builder: (context, child) {
+                      return Transform.scale(
+                        scale: _pulseAnimations[index].value,
+                        child: _buildTierIcon(
+                            index, isCurrentTier, isUnlocked, isNextTier),
+                      );
+                    },
+                  )
                 : _buildTierIcon(index, isCurrentTier, isUnlocked, isNextTier),
           );
         },
@@ -148,7 +149,8 @@ class _TierProgressionWidgetState extends State<TierProgressionWidget>
     );
   }
 
-  Widget _buildTierIcon(int index, bool isCurrentTier, bool isUnlocked, bool isNextTier) {
+  Widget _buildTierIcon(
+      int index, bool isCurrentTier, bool isUnlocked, bool isNextTier) {
     final size = isCurrentTier ? 80.0 : 60.0;
 
     return Container(
@@ -161,27 +163,27 @@ class _TierProgressionWidgetState extends State<TierProgressionWidget>
           color: isCurrentTier
               ? Colors.white
               : isUnlocked
-              ? Colors.white.withValues(alpha: 0.5)
-              : Colors.white.withValues(alpha: 0.2),
+                  ? Colors.white.withValues(alpha: 0.5)
+                  : Colors.white.withValues(alpha: 0.2),
           width: isCurrentTier ? 3 : 2,
         ),
         boxShadow: isCurrentTier
             ? [
-          BoxShadow(
-            color: Colors.amber.withValues(alpha: 0.5),
-            blurRadius: 15,
-            spreadRadius: 2,
-          ),
-        ]
+                BoxShadow(
+                  color: Colors.amber.withValues(alpha: 0.5),
+                  blurRadius: 15,
+                  spreadRadius: 2,
+                ),
+              ]
             : isUnlocked
-            ? [
-          BoxShadow(
-            color: Colors.white.withValues(alpha: 0.2),
-            blurRadius: 8,
-            spreadRadius: 1,
-          ),
-        ]
-            : null,
+                ? [
+                    BoxShadow(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      blurRadius: 8,
+                      spreadRadius: 1,
+                    ),
+                  ]
+                : null,
       ),
       child: Stack(
         alignment: Alignment.center,
@@ -220,7 +222,8 @@ class _TierProgressionWidgetState extends State<TierProgressionWidget>
     );
   }
 
-  LinearGradient _getTierGradient(int index, bool isCurrentTier, bool isUnlocked) {
+  LinearGradient _getTierGradient(
+      int index, bool isCurrentTier, bool isUnlocked) {
     if (isCurrentTier) {
       return const LinearGradient(
         colors: [

@@ -26,7 +26,8 @@ class AchievementController extends ChangeNotifier {
     if (index != -1 && !_achievements[index].isUnlocked) {
       _achievements[index] = _achievements[index].unlock();
 
-      await _achievementService.unlockAchievement(_achievements[index], playerName);
+      await _achievementService.unlockAchievement(
+          _achievements[index], playerName);
       notifyListeners();
     }
   }

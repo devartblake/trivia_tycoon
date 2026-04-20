@@ -73,16 +73,20 @@ class ColorPickerTheme {
     // Set defaults based on Material Design 3
     final effectiveSurfaceColor = surfaceColor ?? backgroundColor;
     final effectiveOnSurfaceColor = onSurfaceColor ??
-        (backgroundColor.computeLuminance() > 0.5 ? Colors.black87 : Colors.white);
+        (backgroundColor.computeLuminance() > 0.5
+            ? Colors.black87
+            : Colors.white);
     final effectivePrimaryColor = primaryColor ?? presetButtonColor;
     final effectiveSecondaryColor = secondaryColor ?? sliderTrackColor;
     final effectiveErrorColor = errorColor ?? Colors.red.shade600;
-    final effectiveShadowColor = shadowColor ?? Colors.black.withValues(alpha: 0.2);
+    final effectiveShadowColor =
+        shadowColor ?? Colors.black.withValues(alpha: 0.2);
     final effectiveBorderRadius = borderRadius ?? BorderRadius.circular(12.0);
-    final effectiveTextStyle = textStyle ?? const TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
-    );
+    final effectiveTextStyle = textStyle ??
+        const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        );
 
     // Pre-calculate hash code for performance
     final hashCode = Object.hash(
@@ -237,7 +241,8 @@ class ColorPickerTheme {
       }
 
       // Modern format (version 2.0+)
-      final borderRadiusMap = map['borderRadius'] as Map<String, dynamic>? ?? {};
+      final borderRadiusMap =
+          map['borderRadius'] as Map<String, dynamic>? ?? {};
       final textStyleMap = map['textStyle'] as Map<String, dynamic>? ?? {};
 
       return ColorPickerTheme(
@@ -246,7 +251,8 @@ class ColorPickerTheme {
         borderWidth: (map['borderWidth'] ?? 2.0).toDouble(),
         indicatorColor: Color(map['indicatorColor'] ?? Colors.black.value),
         sliderTrackColor: Color(map['sliderTrackColor'] ?? Colors.grey.value),
-        presetButtonColor: Color(map['presetButtonColor'] ?? Colors.blueAccent.value),
+        presetButtonColor:
+            Color(map['presetButtonColor'] ?? Colors.blueAccent.value),
         presetButtonSize: (map['presetButtonSize'] ?? 40.0).toDouble(),
         surfaceColor: Color(map['surfaceColor'] ?? Colors.white.value),
         onSurfaceColor: Color(map['onSurfaceColor'] ?? Colors.black87.value),
@@ -256,10 +262,14 @@ class ColorPickerTheme {
         shadowColor: Color(map['shadowColor'] ?? Colors.black26.value),
         elevation: (map['elevation'] ?? 4.0).toDouble(),
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular((borderRadiusMap['topLeft'] ?? 12.0).toDouble()),
-          topRight: Radius.circular((borderRadiusMap['topRight'] ?? 12.0).toDouble()),
-          bottomLeft: Radius.circular((borderRadiusMap['bottomLeft'] ?? 12.0).toDouble()),
-          bottomRight: Radius.circular((borderRadiusMap['bottomRight'] ?? 12.0).toDouble()),
+          topLeft:
+              Radius.circular((borderRadiusMap['topLeft'] ?? 12.0).toDouble()),
+          topRight:
+              Radius.circular((borderRadiusMap['topRight'] ?? 12.0).toDouble()),
+          bottomLeft: Radius.circular(
+              (borderRadiusMap['bottomLeft'] ?? 12.0).toDouble()),
+          bottomRight: Radius.circular(
+              (borderRadiusMap['bottomRight'] ?? 12.0).toDouble()),
         ),
         textStyle: TextStyle(
           fontSize: (textStyleMap['fontSize'] ?? 14.0).toDouble(),
@@ -287,7 +297,8 @@ class ColorPickerTheme {
       borderWidth: (map['borderWidth'] ?? 2.0).toDouble(),
       indicatorColor: Color(map['indicatorColor'] ?? Colors.black.value),
       sliderTrackColor: Color(map['sliderTrackColor'] ?? Colors.grey.value),
-      presetButtonColor: Color(map['presetButtonColor'] ?? Colors.blueAccent.value),
+      presetButtonColor:
+          Color(map['presetButtonColor'] ?? Colors.blueAccent.value),
       presetButtonSize: (map['presetButtonSize'] ?? 40.0).toDouble(),
     );
   }

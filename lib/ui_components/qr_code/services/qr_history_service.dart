@@ -18,9 +18,7 @@ class QrHistoryService {
   /// Singleton accessor
   static QrHistoryService get instance {
     _instance ??= QrHistoryService(
-        cache: AppCacheService(),
-        settings: QrSettingsService()
-    );
+        cache: AppCacheService(), settings: QrSettingsService());
     return _instance!;
   }
 
@@ -58,11 +56,11 @@ class QrHistoryService {
     final allScans = await QrHistoryService.instance.getHistory();
 
     final filteredScans = retentionDays != null
-        ? allScans.where((scan) =>
-    DateTime
-        .now()
-        .difference(scan.timestamp)
-        .inDays <= retentionDays).toList()
+        ? allScans
+            .where((scan) =>
+                DateTime.now().difference(scan.timestamp).inDays <=
+                retentionDays)
+            .toList()
         : allScans;
 
     final payload = {

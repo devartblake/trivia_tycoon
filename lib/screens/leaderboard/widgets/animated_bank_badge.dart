@@ -42,8 +42,10 @@ class _AnimatedRankBadgeState extends State<AnimatedRankBadge>
 
   @override
   Widget build(BuildContext context) {
-    final improved = widget.previousRank != null && widget.rank < widget.previousRank!;
-    final declined = widget.previousRank != null && widget.rank > widget.previousRank!;
+    final improved =
+        widget.previousRank != null && widget.rank < widget.previousRank!;
+    final declined =
+        widget.previousRank != null && widget.rank > widget.previousRank!;
 
     return AnimatedBuilder(
       animation: _controller,
@@ -54,14 +56,15 @@ class _AnimatedRankBadgeState extends State<AnimatedRankBadge>
             color: improved
                 ? Colors.green.withOpacity(0.2 * (1 - _controller.value))
                 : declined
-                ? Colors.red.withOpacity(0.2 * (1 - _controller.value))
-                : Colors.transparent,
+                    ? Colors.red.withOpacity(0.2 * (1 - _controller.value))
+                    : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('#${widget.rank}', style: const TextStyle(fontWeight: FontWeight.bold)),
+              Text('#${widget.rank}',
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
               if (improved) ...[
                 const SizedBox(width: 4),
                 const Icon(Icons.arrow_upward, color: Colors.green, size: 16),

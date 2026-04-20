@@ -11,7 +11,8 @@ class LeaderboardWebSocketAdapter {
   // Callbacks for leaderboard events
   final void Function(LeaderboardUpdate)? onRankChange;
   final void Function(List<LeaderboardEntry>)? onSnapshot;
-  final void Function(String userId, int newRank, int oldRank)? onPlayerPassedYou;
+  final void Function(String userId, int newRank, int oldRank)?
+      onPlayerPassedYou;
 
   bool _isSubscribed = false;
   String? _currentSubscription; // 'global', 'friends', 'weekly', etc.
@@ -49,7 +50,7 @@ class LeaderboardWebSocketAdapter {
         _handlePlayerPassed(envelope.data);
         break;
       default:
-      // Ignore other message types
+        // Ignore other message types
         break;
     }
   }
@@ -73,7 +74,8 @@ class LeaderboardWebSocketAdapter {
       // Call callback
       onRankChange?.call(update);
 
-      LogManager.debug('[LeaderboardWS] Rank update: ${update.username} → #${update.rank} (score: ${update.score})');
+      LogManager.debug(
+          '[LeaderboardWS] Rank update: ${update.username} → #${update.rank} (score: ${update.score})');
     } catch (e) {
       LogManager.debug('[LeaderboardWS] Error parsing rank update: $e');
     }
@@ -93,7 +95,8 @@ class LeaderboardWebSocketAdapter {
       // Call callback
       onSnapshot?.call(entries);
 
-      LogManager.debug('[LeaderboardWS] Loaded ${entries.length} leaderboard entries');
+      LogManager.debug(
+          '[LeaderboardWS] Loaded ${entries.length} leaderboard entries');
     } catch (e) {
       LogManager.debug('[LeaderboardWS] Error parsing snapshot: $e');
     }
@@ -112,7 +115,8 @@ class LeaderboardWebSocketAdapter {
       // Call callback
       onPlayerPassedYou?.call(userId, newRank, yourRank);
 
-      LogManager.debug('[LeaderboardWS] Player passed you: $username (#$newRank)');
+      LogManager.debug(
+          '[LeaderboardWS] Player passed you: $username (#$newRank)');
     } catch (e) {
       LogManager.debug('[LeaderboardWS] Error parsing player passed: $e');
     }
@@ -190,11 +194,13 @@ class LeaderboardWebSocketAdapter {
         xpProgress: (data['xpProgress'] as num?)?.toDouble() ?? 0.0,
         timeframe: data['timeframe'] as String? ?? 'global',
         avatar: data['avatar'] as String? ?? '',
-        lastActive: DateTime.tryParse(data['lastActive'] as String? ?? '') ?? DateTime.now(),
+        lastActive: DateTime.tryParse(data['lastActive'] as String? ?? '') ??
+            DateTime.now(),
         timestamp: DateTime.now(),
         gender: data['gender'] as String? ?? '',
         ageGroup: data['ageGroup'] as String? ?? '',
-        joinedDate: DateTime.tryParse(data['joinedDate'] as String? ?? '') ?? DateTime.now(),
+        joinedDate: DateTime.tryParse(data['joinedDate'] as String? ?? '') ??
+            DateTime.now(),
         streak: data['streak'] as int?,
         accuracy: (data['accuracy'] as num?)?.toDouble() ?? 0.0,
         favoriteCategory: data['favoriteCategory'] as String? ?? '',
@@ -210,9 +216,11 @@ class LeaderboardWebSocketAdapter {
         timezone: data['timezone'] as String? ?? 'UTC',
         powerUps: (data['powerUps'] as List?)?.cast<String>(),
         lastDeviceType: data['lastDeviceType'] as String? ?? '',
-        preferredNotificationMethod: data['preferredNotificationMethod'] as String? ?? 'push',
+        preferredNotificationMethod:
+            data['preferredNotificationMethod'] as String? ?? 'push',
         subscriptionStatus: data['subscriptionStatus'] as String? ?? 'free',
-        averageAnswerTime: (data['averageAnswerTime'] as num?)?.toDouble() ?? 0.0,
+        averageAnswerTime:
+            (data['averageAnswerTime'] as num?)?.toDouble() ?? 0.0,
         isBot: data['isBot'] as bool? ?? false,
         accountAgeDays: (data['accountAgeDays'] as num?)?.toDouble() ?? 0.0,
         engagementScore: (data['engagementScore'] as num?)?.toDouble() ?? 0.0,

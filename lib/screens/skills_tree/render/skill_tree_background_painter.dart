@@ -3,7 +3,6 @@ import '../../../core/utils/math_types.dart';
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' show Matrix4;
 
-
 class SkillTreeBackgroundPainter extends CustomPainter {
   final Matrix4 worldToScreen;
   final double hexRadius;
@@ -61,7 +60,8 @@ class SkillTreeBackgroundPainter extends CustomPainter {
     }
   }
 
-  void _drawHexGrid(Canvas canvas, Offset center, Rect bounds, double radius, Paint paint) {
+  void _drawHexGrid(
+      Canvas canvas, Offset center, Rect bounds, double radius, Paint paint) {
     final double width = radius * 2;
     final double height = sqrt(3) * radius;
 
@@ -103,7 +103,8 @@ class SkillTreeBackgroundPainter extends CustomPainter {
 
   Rect _visibleWorldBounds(Matrix4 invMatrix, Size screenSize) {
     final topLeft = _transformPoint(invMatrix, Offset.zero);
-    final bottomRight = _transformPoint(invMatrix, Offset(screenSize.width, screenSize.height));
+    final bottomRight =
+        _transformPoint(invMatrix, Offset(screenSize.width, screenSize.height));
     return Rect.fromPoints(topLeft, bottomRight);
   }
 

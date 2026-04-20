@@ -31,8 +31,7 @@ class _FakeStorage extends GeneralKeyValueStorageService {
   }
 
   @override
-  Future<void> setString(String key, String value) async =>
-      _store[key] = value;
+  Future<void> setString(String key, String value) async => _store[key] = value;
 
   @override
   Future<bool?> getBool(String key) async {
@@ -196,7 +195,8 @@ void main() {
       expect(state.isRunActive, isFalse);
     });
 
-    test('canRevive is true when premiumRevivesUsed < premiumRevivesAllowed', () {
+    test('canRevive is true when premiumRevivesUsed < premiumRevivesAllowed',
+        () {
       const state = ChallengeLivesState(
         current: 0,
         max: kChallengeLivesPerRun,

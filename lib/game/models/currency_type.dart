@@ -1,2 +1,1 @@
-
 enum CurrencyType { coins, diamonds }

@@ -88,10 +88,10 @@ class LocalArcadeLeaderboardService {
 
   /// Returns top N (default 10) for a specific board.
   List<LocalArcadeScoreEntry> top(
-      ArcadeGameId gameId,
-      ArcadeDifficulty difficulty, {
-        int limit = 10,
-      }) {
+    ArcadeGameId gameId,
+    ArcadeDifficulty difficulty, {
+    int limit = 10,
+  }) {
     final k = _key(gameId, difficulty);
     final list = _boards[k] ?? const <LocalArcadeScoreEntry>[];
     return list.take(limit).toList();
@@ -99,9 +99,9 @@ class LocalArcadeLeaderboardService {
 
   /// Returns a merged view across difficulties for the game (top N overall).
   List<LocalArcadeScoreEntry> topForGame(
-      ArcadeGameId gameId, {
-        int limit = 10,
-      }) {
+    ArcadeGameId gameId, {
+    int limit = 10,
+  }) {
     final all = <LocalArcadeScoreEntry>[];
     for (final d in ArcadeDifficulty.values) {
       all.addAll(top(gameId, d, limit: limit));
@@ -112,9 +112,9 @@ class LocalArcadeLeaderboardService {
   /// Add a run result.
   /// Keeps only top `maxEntries` per game+difficulty.
   Future<void> recordRun(
-      ArcadeResult result, {
-        int maxEntries = 25,
-      }) async {
+    ArcadeResult result, {
+    int maxEntries = 25,
+  }) async {
     final k = _key(result.gameId, result.difficulty);
     final list = List<LocalArcadeScoreEntry>.from(_boards[k] ?? const []);
 
@@ -147,9 +147,9 @@ class LocalArcadeLeaderboardService {
 
   /// Clear for a specific game+difficulty
   Future<void> clearBoard(
-      ArcadeGameId gameId,
-      ArcadeDifficulty difficulty,
-      ) async {
+    ArcadeGameId gameId,
+    ArcadeDifficulty difficulty,
+  ) async {
     final k = _key(gameId, difficulty);
     _boards.remove(k);
     await _persist();
@@ -157,9 +157,9 @@ class LocalArcadeLeaderboardService {
 
   /// Returns the best entry for a board (or null if none).
   LocalArcadeScoreEntry? best(
-      ArcadeGameId gameId,
-      ArcadeDifficulty difficulty,
-      ) {
+    ArcadeGameId gameId,
+    ArcadeDifficulty difficulty,
+  ) {
     final k = _key(gameId, difficulty);
     final list = _boards[k];
     if (list == null || list.isEmpty) return null;
@@ -168,10 +168,10 @@ class LocalArcadeLeaderboardService {
 
   /// Returns rank (1-based) of a score entry by id, or null if not found.
   int? rankOf(
-      ArcadeGameId gameId,
-      ArcadeDifficulty difficulty,
-      String entryId,
-      ) {
+    ArcadeGameId gameId,
+    ArcadeDifficulty difficulty,
+    String entryId,
+  ) {
     final k = _key(gameId, difficulty);
     final list = _boards[k];
     if (list == null) return null;

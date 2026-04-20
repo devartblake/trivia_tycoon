@@ -35,10 +35,13 @@ class _FakeQuestionRepository implements QuestionRepository {
   }
 
   @override
-  Future<List<QuestionModel>> getQuestionsForCategory({required String category, int amount = 10, int? difficulty}) async => const [];
+  Future<List<QuestionModel>> getQuestionsForCategory(
+          {required String category, int amount = 10, int? difficulty}) async =>
+      const [];
 
   @override
-  Future<List<QuestionModel>> getDailyQuestions({int count = 5}) async => const [];
+  Future<List<QuestionModel>> getDailyQuestions({int count = 5}) async =>
+      const [];
 
   @override
   Future<List<QuizCategory>> getAvailableCategories() async => const [];
@@ -50,16 +53,24 @@ class _FakeQuestionRepository implements QuestionRepository {
   Future<Map<String, dynamic>> getDatasetInfo() async => const {};
 
   @override
-  Future<Map<String, dynamic>> getCategoryStats(QuizCategory category) async => const {};
+  Future<Map<String, dynamic>> getCategoryStats(QuizCategory category) async =>
+      const {};
 
   @override
   Future<Map<String, dynamic>> getClassStats(String classId) async => const {};
 
   @override
-  Future<List<QuestionModel>> getMixedQuiz({int questionCount = 10, List<String>? categories, List<String>? difficulties, bool balanceDifficulties = false}) async => const [];
+  Future<List<QuestionModel>> getMixedQuiz(
+          {int questionCount = 10,
+          List<String>? categories,
+          List<String>? difficulties,
+          bool balanceDifficulties = false}) async =>
+      const [];
 
   @override
-  Future<List<QuestionModel>> getMultiplayerQuestions({int amount = 10, String? category}) async => const [];
+  Future<List<QuestionModel>> getMultiplayerQuestions(
+          {int amount = 10, String? category}) async =>
+      const [];
 
   @override
   Future<QuestionAnswerCheckResult> checkAnswer({
@@ -84,7 +95,8 @@ class _FakeQuestionRepository implements QuestionRepository {
           (submission) => QuestionAnswerCheckResult(
             questionId: submission.question.id,
             selectedAnswer: submission.selectedAnswer,
-            isCorrect: submission.question.correctAnswer == submission.selectedAnswer,
+            isCorrect:
+                submission.question.correctAnswer == submission.selectedAnswer,
             correctAnswer: submission.question.correctAnswer,
             source: 'test',
           ),
@@ -93,7 +105,8 @@ class _FakeQuestionRepository implements QuestionRepository {
   }
 }
 
-Map<String, dynamic> _questionJson({required String id, required String category, int difficulty = 2}) {
+Map<String, dynamic> _questionJson(
+    {required String id, required String category, int difficulty = 2}) {
   return {
     'id': id,
     'category': category,
@@ -111,7 +124,9 @@ Map<String, dynamic> _questionJson({required String id, required String category
 void main() {
   test('uses repository-backed mode questions when available', () async {
     final repository = _FakeQuestionRepository(
-      questionsForMode: [QuestionModel.fromJson(_questionJson(id: 'repo-1', category: 'science'))],
+      questionsForMode: [
+        QuestionModel.fromJson(_questionJson(id: 'repo-1', category: 'science'))
+      ],
     );
 
     final service = MultiplayerQuizService(
@@ -128,7 +143,10 @@ void main() {
 
   test('prefetched questions are reused by getQuestionsForGameMode', () async {
     final repository = _FakeQuestionRepository(
-      questionsForMode: [QuestionModel.fromJson(_questionJson(id: 'prefetch-1', category: 'history'))],
+      questionsForMode: [
+        QuestionModel.fromJson(
+            _questionJson(id: 'prefetch-1', category: 'history'))
+      ],
     );
 
     final service = MultiplayerQuizService(

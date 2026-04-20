@@ -14,7 +14,8 @@ void main() {
 
     Future<String> resolve({
       String? tokenStoreUserId,
-      Future<void> Function(String previousId, String canonicalId)? onCanonicalPromotion,
+      Future<void> Function(String previousId, String canonicalId)?
+          onCanonicalPromotion,
       Future<void> Function(String source, String userId)? onResolutionSource,
       Future<void> Function(String generatedUserId)? onGeneratedFallback,
     }) {
@@ -43,7 +44,8 @@ void main() {
       expect(resolved, 'profile-123');
     });
 
-    test('promotes canonical secure id over generated local profile id', () async {
+    test('promotes canonical secure id over generated local profile id',
+        () async {
       profileUserId = 'local_generated_profile';
       secure['user_id'] = 'backend-123';
 
@@ -83,7 +85,8 @@ void main() {
       expect(profileUserId, 'secure-456');
     });
 
-    test('falls back to token store id and persists to secure/profile', () async {
+    test('falls back to token store id and persists to secure/profile',
+        () async {
       final resolved = await resolve(tokenStoreUserId: 'token-789');
 
       expect(resolved, 'token-789');

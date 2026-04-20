@@ -20,7 +20,8 @@ class EnhancedScoreDisplay extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<EnhancedScoreDisplay> createState() => _EnhancedScoreDisplayState();
+  ConsumerState<EnhancedScoreDisplay> createState() =>
+      _EnhancedScoreDisplayState();
 }
 
 class _EnhancedScoreDisplayState extends ConsumerState<EnhancedScoreDisplay>
@@ -135,7 +136,8 @@ class _EnhancedScoreDisplayState extends ConsumerState<EnhancedScoreDisplay>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: classColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(16),
@@ -213,7 +215,8 @@ class _EnhancedScoreDisplayState extends ConsumerState<EnhancedScoreDisplay>
 
               // Percentage and Performance Message
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   color: classColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
@@ -268,9 +271,7 @@ class _EnhancedScoreDisplayState extends ConsumerState<EnhancedScoreDisplay>
                       size: 20,
                     ),
                   ),
-
                   const SizedBox(width: 12),
-
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -348,9 +349,7 @@ class _EnhancedScoreDisplayState extends ConsumerState<EnhancedScoreDisplay>
               ),
             ],
           ),
-
           const SizedBox(height: 12),
-
           ...widget.categoryScores.entries.map((entry) {
             final categoryColor = _getCategoryColor(entry.key);
             return Padding(
@@ -368,7 +367,10 @@ class _EnhancedScoreDisplayState extends ConsumerState<EnhancedScoreDisplay>
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      entry.key.toLowerCase().replaceAll('_', ' ').toUpperCase(),
+                      entry.key
+                          .toLowerCase()
+                          .replaceAll('_', ' ')
+                          .toUpperCase(),
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
@@ -376,7 +378,8 @@ class _EnhancedScoreDisplayState extends ConsumerState<EnhancedScoreDisplay>
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
                       color: categoryColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),

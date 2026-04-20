@@ -10,7 +10,8 @@ class CreateQuizBottomSheet extends ConsumerStatefulWidget {
   const CreateQuizBottomSheet({super.key});
 
   @override
-  ConsumerState<CreateQuizBottomSheet> createState() => CreateQuizBottomSheetState();
+  ConsumerState<CreateQuizBottomSheet> createState() =>
+      CreateQuizBottomSheetState();
 }
 
 class CreateQuizBottomSheetState extends ConsumerState<CreateQuizBottomSheet> {
@@ -226,7 +227,8 @@ class CreateQuizBottomSheetState extends ConsumerState<CreateQuizBottomSheet> {
                         Wrap(
                           spacing: 8,
                           runSpacing: 8,
-                          children: QuizCategoryManager.coreCategories.map((category) {
+                          children: QuizCategoryManager.coreCategories
+                              .map((category) {
                             final isSelected = selectedCategory == category;
                             return GestureDetector(
                               onTap: () {
@@ -242,10 +244,12 @@ class CreateQuizBottomSheetState extends ConsumerState<CreateQuizBottomSheet> {
                                 decoration: BoxDecoration(
                                   color: isSelected
                                       ? category.primaryColor
-                                      : category.primaryColor.withValues(alpha: 0.1),
+                                      : category.primaryColor
+                                          .withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(20),
                                   border: Border.all(
-                                    color: category.primaryColor.withValues(alpha: 0.3),
+                                    color: category.primaryColor
+                                        .withValues(alpha: 0.3),
                                   ),
                                 ),
                                 child: Row(
@@ -278,7 +282,8 @@ class CreateQuizBottomSheetState extends ConsumerState<CreateQuizBottomSheet> {
                       ],
                     ),
                     loading: () => const CircularProgressIndicator(),
-                    error: (error, stack) => Text('Error loading categories: $error'),
+                    error: (error, stack) =>
+                        Text('Error loading categories: $error'),
                   ),
 
                   const SizedBox(height: 32),
@@ -366,11 +371,11 @@ class CreateQuizBottomSheetState extends ConsumerState<CreateQuizBottomSheet> {
                       final difficultyParam = selectedDifficulty.toLowerCase();
 
                       context.push(
-                          '/quiz/custom?category=$categoryParam&difficulty=$difficultyParam&count=$questionCount'
-                      );
+                          '/quiz/custom?category=$categoryParam&difficulty=$difficultyParam&count=$questionCount');
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: selectedCategory?.primaryColor ?? Colors.purple,
+                      backgroundColor:
+                          selectedCategory?.primaryColor ?? Colors.purple,
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(

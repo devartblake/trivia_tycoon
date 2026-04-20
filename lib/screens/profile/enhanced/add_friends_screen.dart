@@ -4,7 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:hive/hive.dart';
 import '../../../core/services/api_service.dart';
 import '../../../game/providers/friends_providers.dart';
-import '../../../game/providers/profile_providers.dart' hide currentUserIdProvider;
+import '../../../game/providers/profile_providers.dart'
+    hide currentUserIdProvider;
 
 class AddFriendByUsernameScreen extends ConsumerStatefulWidget {
   const AddFriendByUsernameScreen({super.key});
@@ -179,7 +180,8 @@ class _AddFriendByUsernameScreenState
         children: [
           Icon(
             _isSuccess ? Icons.check_circle : Icons.error,
-            color: _isSuccess ? const Color(0xFF3BA55C) : const Color(0xFFED4245),
+            color:
+                _isSuccess ? const Color(0xFF3BA55C) : const Color(0xFFED4245),
             size: 20,
           ),
           const SizedBox(width: 12),
@@ -187,7 +189,9 @@ class _AddFriendByUsernameScreenState
             child: Text(
               _resultMessage!,
               style: TextStyle(
-                color: _isSuccess ? const Color(0xFF3BA55C) : const Color(0xFFED4245),
+                color: _isSuccess
+                    ? const Color(0xFF3BA55C)
+                    : const Color(0xFFED4245),
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
               ),
@@ -206,7 +210,8 @@ class _AddFriendByUsernameScreenState
         onPressed: _isSending ? null : _sendFriendRequest,
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF5865F2),
-          disabledBackgroundColor: const Color(0xFF5865F2).withValues(alpha: 0.5),
+          disabledBackgroundColor:
+              const Color(0xFF5865F2).withValues(alpha: 0.5),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
@@ -214,21 +219,21 @@ class _AddFriendByUsernameScreenState
         ),
         child: _isSending
             ? const SizedBox(
-          height: 20,
-          width: 20,
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            color: Colors.white,
-          ),
-        )
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: Colors.white,
+                ),
+              )
             : const Text(
-          'Send Friend Request',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+                'Send Friend Request',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
       ),
     );
   }
@@ -374,8 +379,7 @@ class _AddFriendByUsernameScreenState
       }
 
       final hasIncomingPendingRequest = incomingResponse.items.any(
-        (request) =>
-            request.fromPlayerId == targetUserId && request.isPending,
+        (request) => request.fromPlayerId == targetUserId && request.isPending,
       );
       if (hasIncomingPendingRequest) {
         setState(() {
@@ -401,7 +405,8 @@ class _AddFriendByUsernameScreenState
         return;
       }
 
-      final response = await backendProfileService.sendFriendRequest(targetUserId);
+      final response =
+          await backendProfileService.sendFriendRequest(targetUserId);
 
       ref.invalidate(friendsListProvider);
       ref.invalidate(incomingFriendRequestsProvider);

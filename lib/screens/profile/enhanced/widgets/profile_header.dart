@@ -27,16 +27,17 @@ class ProfileHeader extends StatelessWidget {
             CircleAvatar(
               radius: 50,
               backgroundColor: Theme.of(context).colorScheme.primary,
-              backgroundImage: avatarUrl != null ? NetworkImage(avatarUrl!) : null,
+              backgroundImage:
+                  avatarUrl != null ? NetworkImage(avatarUrl!) : null,
               child: avatarUrl == null
                   ? Text(
-                displayName[0].toUpperCase(),
-                style: TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
-              )
+                      displayName[0].toUpperCase(),
+                      style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                    )
                   : null,
             ),
             if (isOwnProfile)
@@ -66,14 +67,14 @@ class ProfileHeader extends StatelessWidget {
         Text(
           displayName,
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+                fontWeight: FontWeight.bold,
+              ),
         ),
         Text(
           username,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: Theme.of(context).colorScheme.primary,
-          ),
+                color: Theme.of(context).colorScheme.primary,
+              ),
         ),
         if (bio != null) ...[
           const SizedBox(height: 8),

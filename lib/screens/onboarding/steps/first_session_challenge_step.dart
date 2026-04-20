@@ -122,7 +122,8 @@ class _FirstSessionChallengeStepState extends State<FirstSessionChallengeStep>
               return Expanded(
                 child: Container(
                   height: 6,
-                  margin: EdgeInsets.only(right: i < _questions.length - 1 ? 8 : 0),
+                  margin:
+                      EdgeInsets.only(right: i < _questions.length - 1 ? 8 : 0),
                   decoration: BoxDecoration(
                     color: chipColor,
                     borderRadius: BorderRadius.circular(3),
@@ -211,12 +212,15 @@ class _FirstSessionChallengeStepState extends State<FirstSessionChallengeStep>
                           ),
                           child: Center(
                             child: _revealed && isCorrect
-                                ? const Icon(Icons.check, color: Colors.green, size: 20)
+                                ? const Icon(Icons.check,
+                                    color: Colors.green, size: 20)
                                 : _revealed && isSelected && !isCorrect
-                                    ? const Icon(Icons.close, color: Colors.red, size: 20)
+                                    ? const Icon(Icons.close,
+                                        color: Colors.red, size: 20)
                                     : Text(
                                         String.fromCharCode(65 + index),
-                                        style: theme.textTheme.titleSmall?.copyWith(
+                                        style: theme.textTheme.titleSmall
+                                            ?.copyWith(
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),

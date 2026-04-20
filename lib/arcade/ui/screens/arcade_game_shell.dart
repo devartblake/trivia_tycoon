@@ -35,8 +35,10 @@ class ArcadeGameShell extends ConsumerStatefulWidget {
   });
 
   static ArcadeRunApi of(BuildContext context) {
-    final scope = context.dependOnInheritedWidgetOfExactType<_ArcadeShellScope>();
-    assert(scope != null, 'ArcadeGameShell.of(context) called outside ArcadeGameShell');
+    final scope =
+        context.dependOnInheritedWidgetOfExactType<_ArcadeShellScope>();
+    assert(scope != null,
+        'ArcadeGameShell.of(context) called outside ArcadeGameShell');
     return scope!.api;
   }
 

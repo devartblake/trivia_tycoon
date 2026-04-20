@@ -5,19 +5,19 @@ class CustomDrawerRoute extends PageRouteBuilder {
 
   CustomDrawerRoute({required this.page})
       : super(
-    pageBuilder: (context, animation, secondaryAnimation) => page,
-    transitionDuration: const Duration(milliseconds: 400),
-    reverseTransitionDuration: const Duration(milliseconds: 300),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      return _buildTransition(animation, secondaryAnimation, child);
-    },
-  );
+          pageBuilder: (context, animation, secondaryAnimation) => page,
+          transitionDuration: const Duration(milliseconds: 400),
+          reverseTransitionDuration: const Duration(milliseconds: 300),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return _buildTransition(animation, secondaryAnimation, child);
+          },
+        );
 
   static Widget _buildTransition(
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child,
-      ) {
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     // Primary slide animation
     final slideAnimation = Tween<Offset>(
       begin: const Offset(-1.0, 0.0),
@@ -102,29 +102,31 @@ class CustomDrawerRouteAdvanced extends PageRouteBuilder {
     Duration? customDuration,
     this.curve,
   }) : super(
-    pageBuilder: (context, animation, secondaryAnimation) => page,
-    transitionDuration: customDuration ?? const Duration(milliseconds: 400),
-    reverseTransitionDuration: const Duration(milliseconds: 300),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      return _buildAdvancedTransition(
-        animation,
-        secondaryAnimation,
-        child,
-        backgroundColor,
-        curve,
-      );
-    },
-  );
+          pageBuilder: (context, animation, secondaryAnimation) => page,
+          transitionDuration:
+              customDuration ?? const Duration(milliseconds: 400),
+          reverseTransitionDuration: const Duration(milliseconds: 300),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return _buildAdvancedTransition(
+              animation,
+              secondaryAnimation,
+              child,
+              backgroundColor,
+              curve,
+            );
+          },
+        );
 
   static Widget _buildAdvancedTransition(
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child,
-      Color? backgroundColor,
-      Curve? curve,
-      ) {
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+    Color? backgroundColor,
+    Curve? curve,
+  ) {
     final effectiveCurve = curve ?? Curves.easeOutExpo;
-    final effectiveBackgroundColor = backgroundColor ?? Colors.black.withValues(alpha: 0.4);
+    final effectiveBackgroundColor =
+        backgroundColor ?? Colors.black.withValues(alpha: 0.4);
 
     // Staggered animations for more sophisticated feel
     final slideAnimation = Tween<Offset>(

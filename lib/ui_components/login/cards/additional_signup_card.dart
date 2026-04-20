@@ -27,7 +27,8 @@ class _AdditionalSignUpCard extends ConsumerStatefulWidget {
   final String? initialIsoCode;
 
   @override
-  ConsumerState<_AdditionalSignUpCard> createState() => _AdditionalSignUpCardState();
+  ConsumerState<_AdditionalSignUpCard> createState() =>
+      _AdditionalSignUpCardState();
 }
 
 class _AdditionalSignUpCardState extends ConsumerState<_AdditionalSignUpCard>
@@ -59,10 +60,10 @@ class _AdditionalSignUpCardState extends ConsumerState<_AdditionalSignUpCard>
     _fieldAnimationControllers = widget.formFields
         .map(
           (e) => AnimationController(
-        vsync: this,
-        duration: const Duration(milliseconds: 1000),
-      ),
-    )
+            vsync: this,
+            duration: const Duration(milliseconds: 1000),
+          ),
+        )
         .toList();
 
     _submitController = AnimationController(
@@ -163,12 +164,14 @@ class _AdditionalSignUpCardState extends ConsumerState<_AdditionalSignUpCard>
               loadingController: widget.loadingController,
               width: width,
               labelText: formField.displayName,
-              prefixIcon: formField.icon ?? const Icon(FontAwesomeIcons.solidCircleUser),
+              prefixIcon: formField.icon ??
+                  const Icon(FontAwesomeIcons.solidCircleUser),
               keyboardType: getKeyboardType(formField.userType),
               autofillHints: [getAutofillHints(formField.userType)],
-              textInputAction: formField.keyName == widget.formFields.last.keyName
-                  ? TextInputAction.done
-                  : TextInputAction.next,
+              textInputAction:
+                  formField.keyName == widget.formFields.last.keyName
+                      ? TextInputAction.done
+                      : TextInputAction.next,
               validator: formField.fieldValidator,
               tooltip: formField.tooltip,
               initialIsoCode: widget.initialIsoCode,
@@ -192,22 +195,22 @@ class _AdditionalSignUpCardState extends ConsumerState<_AdditionalSignUpCard>
   }
 
   Widget _buildBackButton(
-      ThemeData theme,
-      LoginMessages messages,
-      LoginTheme? loginTheme,
-      ) {
+    ThemeData theme,
+    LoginMessages messages,
+    LoginTheme? loginTheme,
+  ) {
     final calculatedTextColor =
-    (theme.cardTheme.color!.computeLuminance() < 0.5)
-        ? Colors.white
-        : theme.primaryColor;
+        (theme.cardTheme.color!.computeLuminance() < 0.5)
+            ? Colors.white
+            : theme.primaryColor;
     return ScaleTransition(
       scale: _buttonScaleAnimation,
       child: MaterialButton(
         onPressed: !_isSubmitting
             ? () {
-          _formCompleteSignupKey.currentState!.save();
-          widget.onBack();
-        }
+                _formCompleteSignupKey.currentState!.save();
+                widget.onBack();
+              }
             : null,
         padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,

@@ -8,7 +8,12 @@ class ColorPickerSettings {
   ColorPickerSettings({
     this.pickerMode = "wheel",
     this.useCustomPalette = false,
-    this.customPalette = const [Colors.red, Colors.blue, Colors.green, Colors.yellow],
+    this.customPalette = const [
+      Colors.red,
+      Colors.blue,
+      Colors.green,
+      Colors.yellow
+    ],
   });
 
   /// **🔄 Copy settings with modifications**
@@ -38,7 +43,8 @@ class ColorPickerSettings {
     return ColorPickerSettings(
       pickerMode: map['pickerMode'] ?? "wheel",
       useCustomPalette: map['useCustomPalette'] ?? false,
-      customPalette: (map['customPalette'] as List).map((c) => Color(c)).toList(),
+      customPalette:
+          (map['customPalette'] as List).map((c) => Color(c)).toList(),
     );
   }
 }

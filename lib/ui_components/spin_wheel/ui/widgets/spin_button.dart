@@ -215,7 +215,8 @@ class _SpinButtonState extends ConsumerState<SpinButton>
       ]),
       builder: (context, child) {
         return Transform.scale(
-          scale: _scaleAnimation.value * (_canSpin ? _pulseAnimation.value : 1.0),
+          scale:
+              _scaleAnimation.value * (_canSpin ? _pulseAnimation.value : 1.0),
           child: Container(
             width: 80,
             height: 80,

@@ -14,14 +14,16 @@ class SlidingPanelCard extends StatefulWidget {
   State<SlidingPanelCard> createState() => _SlidingPanelCardState();
 }
 
-class _SlidingPanelCardState extends State<SlidingPanelCard> with SingleTickerProviderStateMixin {
+class _SlidingPanelCardState extends State<SlidingPanelCard>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _slideAnimation;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(duration: const Duration(milliseconds: 400), vsync: this);
+    _controller = AnimationController(
+        duration: const Duration(milliseconds: 400), vsync: this);
     _slideAnimation = Tween<Offset>(begin: const Offset(0, 1), end: Offset.zero)
         .animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
   }
@@ -59,7 +61,9 @@ class _SlidingPanelCardState extends State<SlidingPanelCard> with SingleTickerPr
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.95),
                 borderRadius: BorderRadius.circular(12),
-                boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 10)],
+                boxShadow: const [
+                  BoxShadow(color: Colors.black26, blurRadius: 10)
+                ],
               ),
               child: widget.panelContent,
             ),

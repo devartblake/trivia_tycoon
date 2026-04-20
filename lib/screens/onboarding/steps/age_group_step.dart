@@ -171,11 +171,11 @@ class _AgeGroupStepState extends State<AgeGroupStep> {
   }
 
   Widget _buildAgeGroupCard(
-      BuildContext context, {
-        required AgeGroupOption option,
-        required bool isSelected,
-        required VoidCallback onTap,
-      }) {
+    BuildContext context, {
+    required AgeGroupOption option,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
     final theme = Theme.of(context);
 
     return GestureDetector(

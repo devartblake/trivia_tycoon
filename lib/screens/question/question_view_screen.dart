@@ -25,7 +25,8 @@ class AdaptedQuestionScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<AdaptedQuestionScreen> createState() => _AdaptedQuestionScreenState();
+  ConsumerState<AdaptedQuestionScreen> createState() =>
+      _AdaptedQuestionScreenState();
 }
 
 class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
@@ -75,7 +76,9 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
 
   /// Resolve category string to QuizCategory enum
   QuizCategory? _resolveCategoryFromString(String? categoryString) {
-    if (categoryString == null || categoryString.isEmpty || categoryString.toLowerCase() == 'mixed') {
+    if (categoryString == null ||
+        categoryString.isEmpty ||
+        categoryString.toLowerCase() == 'mixed') {
       return null; // Will use mixed/general approach
     }
 
@@ -210,7 +213,9 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                             child: Icon(
                               isTimeout
                                   ? Icons.access_time
-                                  : (isCorrect ? Icons.check_circle : Icons.cancel),
+                                  : (isCorrect
+                                      ? Icons.check_circle
+                                      : Icons.cancel),
                               color: Colors.white,
                               size: 48,
                             ),
@@ -222,7 +227,9 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                     const SizedBox(height: 16),
 
                     Text(
-                      isTimeout ? "Time's Up!" : (isCorrect ? "Correct!" : "Incorrect!"),
+                      isTimeout
+                          ? "Time's Up!"
+                          : (isCorrect ? "Correct!" : "Incorrect!"),
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 28,
@@ -243,7 +250,8 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                       ),
                       const SizedBox(height: 4),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(8),
@@ -264,7 +272,8 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                     // XP and bonuses (only for correct answers)
                     if (isCorrect && !isTimeout && xpGained > 0) ...[
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(20),
@@ -272,7 +281,8 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.star, color: Colors.white, size: 16),
+                            const Icon(Icons.star,
+                                color: Colors.white, size: 16),
                             const SizedBox(width: 6),
                             Text(
                               "XP Gained: ",
@@ -292,11 +302,11 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                           ],
                         ),
                       ),
-
                       if (hasTimeBonus) ...[
                         const SizedBox(height: 8),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(20),
@@ -304,7 +314,8 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.speed, color: Colors.white, size: 16),
+                              const Icon(Icons.speed,
+                                  color: Colors.white, size: 16),
                               const SizedBox(width: 6),
                               Text(
                                 "Time Bonus: 50% Extra!",
@@ -318,12 +329,12 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                           ),
                         ),
                       ],
-
                       const SizedBox(height: 16),
                     ],
 
                     // Question explanation (if available)
-                    if (question.powerUpHint != null && question.powerUpHint!.isNotEmpty) ...[
+                    if (question.powerUpHint != null &&
+                        question.powerUpHint!.isNotEmpty) ...[
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
@@ -369,7 +380,8 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         foregroundColor: dialogColor,
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 12),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -379,7 +391,9 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                         onNext();
                       },
                       child: Text(
-                        ref.read(adaptedQuizProvider).isLastQuestion ? "View Results" : "Continue",
+                        ref.read(adaptedQuizProvider).isLastQuestion
+                            ? "View Results"
+                            : "Continue",
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -423,8 +437,9 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
         final currentState = ref.read(adaptedQuizProvider);
 
         if (currentState.isLastQuestion) {
-          final reconciledState =
-              await ref.read(adaptedQuizProvider.notifier).reconcileAuthoritativeResults();
+          final reconciledState = await ref
+              .read(adaptedQuizProvider.notifier)
+              .reconcileAuthoritativeResults();
 
           // STOP THE STOPWATCH HERE BEFORE NAVIGATION
           ref.read(adaptedQuizProvider.notifier).completeQuiz();
@@ -441,7 +456,8 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
             diamonds: finalState.diamonds ?? 0,
             stars: finalState.stars ?? 0,
             classLevel: finalState.classLevel,
-            category: _getCategoryDisplayName(), // Use resolved category display name
+            category:
+                _getCategoryDisplayName(), // Use resolved category display name
             categoryScores: Map<String, int>.from(
               reconciledState.categoryScores ?? {},
             ),
@@ -607,7 +623,8 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Center(
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: Colors.green.shade100,
                   borderRadius: BorderRadius.circular(16),
@@ -628,7 +645,8 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Center(
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: _getCategoryColor().withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(16),
@@ -675,7 +693,8 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: _getCategoryColor().withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
@@ -687,7 +706,8 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(_getCategoryIcon(), size: 12, color: _getCategoryColor()),
+                          Icon(_getCategoryIcon(),
+                              size: 12, color: _getCategoryColor()),
                           const SizedBox(width: 4),
                           Text(
                             'Class ${quizState.classLevel}',
@@ -714,14 +734,16 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                   ),
                   child: FractionallySizedBox(
                     alignment: Alignment.centerLeft,
-                    widthFactor: (quizState.currentIndex + 1) / quizState.totalQuestions,
+                    widthFactor:
+                        (quizState.currentIndex + 1) / quizState.totalQuestions,
                     child: Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: _resolvedCategory?.gradientColors ?? [
-                            _getCategoryColor(),
-                            _getCategoryColor().withValues(alpha: 0.7)
-                          ],
+                          colors: _resolvedCategory?.gradientColors ??
+                              [
+                                _getCategoryColor(),
+                                _getCategoryColor().withValues(alpha: 0.7)
+                              ],
                         ),
                         borderRadius: BorderRadius.circular(4),
                       ),
@@ -769,7 +791,8 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: QuizHelpers.getTimerColor(quizState.timeRemaining).withValues(alpha: 0.3),
+                      color: QuizHelpers.getTimerColor(quizState.timeRemaining)
+                          .withValues(alpha: 0.3),
                       blurRadius: 8,
                       offset: const Offset(0, 4),
                     ),
@@ -783,10 +806,14 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                       width: 70,
                       height: 70,
                       child: CircularProgressIndicator(
-                        value: quizState.timeRemaining / QuizHelpers.getTimeLimitForClass(quizState.classLevel),
+                        value: quizState.timeRemaining /
+                            QuizHelpers.getTimeLimitForClass(
+                                quizState.classLevel),
                         strokeWidth: 6,
-                        color: QuizHelpers.getTimerColor(quizState.timeRemaining),
-                        backgroundColor: _getCategoryColor().withValues(alpha: 0.2),
+                        color:
+                            QuizHelpers.getTimerColor(quizState.timeRemaining),
+                        backgroundColor:
+                            _getCategoryColor().withValues(alpha: 0.2),
                       ),
                     ),
 
@@ -799,7 +826,8 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: QuizHelpers.getTimerColor(quizState.timeRemaining),
+                            color: QuizHelpers.getTimerColor(
+                                quizState.timeRemaining),
                           ),
                         ),
                         Text(
@@ -817,7 +845,8 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                       Positioned(
                         top: 4,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
                             color: Colors.red,
                             borderRadius: BorderRadius.circular(8),
@@ -847,7 +876,8 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                       Positioned(
                         bottom: 4,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 4, vertical: 1),
                           decoration: BoxDecoration(
                             color: _getCategoryColor(),
                             borderRadius: BorderRadius.circular(6),
@@ -898,9 +928,13 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                             _getCategoryIcon(),
                           ),
                           QuizHelpers.buildMetadataChip(
-                            QuizHelpers.getDifficultyText(currentQuestion.difficulty).toUpperCase(),
-                            QuizHelpers.getDifficultyColor(currentQuestion.difficulty),
-                            QuizHelpers.getDifficultyIcon(currentQuestion.difficulty),
+                            QuizHelpers.getDifficultyText(
+                                    currentQuestion.difficulty)
+                                .toUpperCase(),
+                            QuizHelpers.getDifficultyColor(
+                                currentQuestion.difficulty),
+                            QuizHelpers.getDifficultyIcon(
+                                currentQuestion.difficulty),
                           ),
                         ],
                       ),
@@ -930,7 +964,9 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
       ),
 
       // Enhanced power-up buttons with category theming
-      floatingActionButton: quizState.showFeedback || quizState.hasUsedPowerUp || quizState.isTimerExpired
+      floatingActionButton: quizState.showFeedback ||
+              quizState.hasUsedPowerUp ||
+              quizState.isTimerExpired
           ? null
           : _buildPowerUpButtons(currentQuestion, quizState.classLevel),
     );
@@ -973,7 +1009,9 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                   }
                 },
                 icon: Icon(
-                  quizState.isAudioPlaying ? Icons.pause_circle : Icons.play_circle,
+                  quizState.isAudioPlaying
+                      ? Icons.pause_circle
+                      : Icons.play_circle,
                   size: 48,
                   color: _getCategoryColor(),
                 ),
@@ -984,10 +1022,13 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                   children: [
                     LinearProgressIndicator(
                       value: quizState.audioDuration != null
-                          ? quizState.audioPosition.inMilliseconds / quizState.audioDuration!.inMilliseconds
+                          ? quizState.audioPosition.inMilliseconds /
+                              quizState.audioDuration!.inMilliseconds
                           : 0.0,
-                      backgroundColor: _getCategoryColor().withValues(alpha: 0.2),
-                      valueColor: AlwaysStoppedAnimation<Color>(_getCategoryColor()),
+                      backgroundColor:
+                          _getCategoryColor().withValues(alpha: 0.2),
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(_getCategoryColor()),
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -1020,7 +1061,8 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
   }
 
   Widget? _buildPowerUpButtons(QuestionModel question, String classLevel) {
-    final availablePowerUps = QuizHelpers.getAvailablePowerUps(question, classLevel);
+    final availablePowerUps =
+        QuizHelpers.getAvailablePowerUps(question, classLevel);
 
     if (availablePowerUps.isEmpty) return null;
 
@@ -1032,7 +1074,9 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
           child: FloatingActionButton.small(
             heroTag: powerUp['type'],
             onPressed: () {
-              ref.read(adaptedQuizProvider.notifier).applyPowerUp(powerUp['type']);
+              ref
+                  .read(adaptedQuizProvider.notifier)
+                  .applyPowerUp(powerUp['type']);
             },
             backgroundColor: powerUp['color'],
             child: Icon(powerUp['icon'], color: Colors.white),

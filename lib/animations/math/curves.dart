@@ -14,7 +14,8 @@ class CenteredElasticOutCurve extends Curve {
   @override
   double transform(double x) {
     // A modified version of ElasticOutCurve with the oscillation centered around 0.5
-    return math.pow(2.0, -10.0 * x) * math.sin(x * 2.0 * math.pi / period) + 0.5;
+    return math.pow(2.0, -10.0 * x) * math.sin(x * 2.0 * math.pi / period) +
+        0.5;
   }
 }
 
@@ -26,7 +27,9 @@ class CenteredElasticInCurve extends Curve {
   @override
   double transform(double x) {
     // Basically just a slightly modified version of the built in ElasticInCurve
-    return -math.pow(2.0, 10.0 * (x - 1.0)) * math.sin((x - 1.0) * 2.0 * math.pi / period) + 0.5;
+    return -math.pow(2.0, 10.0 * (x - 1.0)) *
+            math.sin((x - 1.0) * 2.0 * math.pi / period) +
+        0.5;
   }
 }
 

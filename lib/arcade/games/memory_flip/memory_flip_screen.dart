@@ -105,7 +105,8 @@ class _MemoryFlipScreenState extends State<MemoryFlipScreen> {
                 _pill(Icons.emoji_events_rounded, 'Score', '${s.score}',
                     accent: Colors.amberAccent),
                 const SizedBox(width: 10),
-                _pill(Icons.grid_view_rounded, 'Pairs', '${s.matches}/${s.totalPairs}',
+                _pill(Icons.grid_view_rounded, 'Pairs',
+                    '${s.matches}/${s.totalPairs}',
                     accent: Colors.lightBlueAccent),
               ],
             ),
@@ -160,13 +161,15 @@ class _MemoryFlipScreenState extends State<MemoryFlipScreen> {
 
   int _inferColumns(int totalCards) {
     // Keep it visually clean across different grid sizes
-    if (totalCards <= 12) return 4; // 3x4 layout but 4 columns is good for compact tiles
+    if (totalCards <= 12)
+      return 4; // 3x4 layout but 4 columns is good for compact tiles
     if (totalCards <= 16) return 4;
     if (totalCards <= 20) return 5;
     return 6;
   }
 
-  Widget _pill(IconData icon, String label, String value, {required Color accent}) {
+  Widget _pill(IconData icon, String label, String value,
+      {required Color accent}) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -279,17 +282,17 @@ class _MemoryTile extends StatelessWidget {
             duration: const Duration(milliseconds: 180),
             child: faceUp
                 ? Icon(
-              icon,
-              key: const ValueKey('face'),
-              color: matched ? Colors.white : Colors.white,
-              size: 26,
-            )
+                    icon,
+                    key: const ValueKey('face'),
+                    color: matched ? Colors.white : Colors.white,
+                    size: 26,
+                  )
                 : Icon(
-              Icons.question_mark_rounded,
-              key: const ValueKey('back'),
-              color: Colors.white.withValues(alpha: 0.55),
-              size: 22,
-            ),
+                    Icons.question_mark_rounded,
+                    key: const ValueKey('back'),
+                    color: Colors.white.withValues(alpha: 0.55),
+                    size: 22,
+                  ),
           ),
         ),
       ),

@@ -25,7 +25,14 @@ class _SharedChallengeCreatorState extends State<SharedChallengeCreator> {
   String _selectedDifficulty = 'Medium';
   int _selectedWager = 0;
 
-  final List<String> _categories = ['Science', 'History', 'Sports', 'Movies', 'Music', 'General'];
+  final List<String> _categories = [
+    'Science',
+    'History',
+    'Sports',
+    'Movies',
+    'Music',
+    'General'
+  ];
   final List<int> _questionOptions = [5, 10, 15, 20];
   final List<String> _difficulties = ['Easy', 'Medium', 'Hard', 'Expert'];
   final List<int> _wagerOptions = [0, 10, 25, 50, 100];
@@ -56,15 +63,21 @@ class _SharedChallengeCreatorState extends State<SharedChallengeCreator> {
                         children: [
                           Text(
                             'Challenge ${widget.recipientName}',
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
                           ),
                           Text(
                             'Create a quiz challenge',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
-                            ),
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
+                                    ),
                           ),
                         ],
                       ),
@@ -145,13 +158,14 @@ class _SharedChallengeCreatorState extends State<SharedChallengeCreator> {
                             label: wager == 0
                                 ? const Text('No Wager')
                                 : Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(Icons.monetization_on, size: 14, color: Colors.amber),
-                                const SizedBox(width: 4),
-                                Text('$wager'),
-                              ],
-                            ),
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(Icons.monetization_on,
+                                          size: 14, color: Colors.amber),
+                                      const SizedBox(width: 4),
+                                      Text('$wager'),
+                                    ],
+                                  ),
                             selected: isSelected,
                             onSelected: (selected) {
                               setState(() => _selectedWager = wager);
@@ -163,10 +177,11 @@ class _SharedChallengeCreatorState extends State<SharedChallengeCreator> {
                         const SizedBox(height: 8),
                         Text(
                           'Winner takes all coins!',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.amber.shade700,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Colors.amber.shade700,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                       ],
                     ],
@@ -196,8 +211,8 @@ class _SharedChallengeCreatorState extends State<SharedChallengeCreator> {
         Text(
           title,
           style: Theme.of(context).textTheme.titleSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+                fontWeight: FontWeight.bold,
+              ),
         ),
         const SizedBox(height: 8),
         child,
@@ -239,11 +254,11 @@ class _SharedChallengeCreatorState extends State<SharedChallengeCreator> {
 
 // Helper function to show in-chat gifting
 Future<void> showInChatGifting(
-    BuildContext context, {
-      required String recipientId,
-      required String recipientName,
-      Function(String giftId, int coins)? onGiftSent,
-    }) {
+  BuildContext context, {
+  required String recipientId,
+  required String recipientName,
+  Function(String giftId, int coins)? onGiftSent,
+}) {
   return showDialog(
     context: context,
     builder: (context) => InChatGiftingDialog(
@@ -256,12 +271,12 @@ Future<void> showInChatGifting(
 
 // Helper function to show challenge creator
 Future<void> showChallengeCreator(
-    BuildContext context, {
-      required String recipientId,
-      required String recipientName,
-      required String currentUserId,
-      Function(Map<String, dynamic> challenge)? onChallengeCreated,
-    }) {
+  BuildContext context, {
+  required String recipientId,
+  required String recipientName,
+  required String currentUserId,
+  Function(Map<String, dynamic> challenge)? onChallengeCreated,
+}) {
   return showDialog(
     context: context,
     builder: (context) => SharedChallengeCreator(

@@ -21,11 +21,11 @@ class UserModel {
   }
 
   Map<String, dynamic> toJson() => {
-    'userId': userId,
-    'email': email,
-    'isPremium': isPremium,
-    'roles': roles,
-  };
+        'userId': userId,
+        'email': email,
+        'isPremium': isPremium,
+        'roles': roles,
+      };
 
   UserModel copyWith({
     String? userId,

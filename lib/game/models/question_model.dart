@@ -100,7 +100,9 @@ class QuestionModel {
       powerUpType: json['powerUpType'],
       // Defaults for power-up-related data
       showHint: json['showHint'] ?? false,
-      reducedOptions: json['reducedOptions'] != null ? List<String>.from(json['reducedOptions']) : null,
+      reducedOptions: json['reducedOptions'] != null
+          ? List<String>.from(json['reducedOptions'])
+          : null,
       multiplier: json['multiplier'],
       isBoostedTime: json['isBoostedTime'] ?? false,
       isShielded: json['isShielded'] ?? false,

@@ -277,26 +277,26 @@ class DailyBonusScreen extends ConsumerWidget {
   }
 
   Widget _buildMainClaimCard(
-      BuildContext context,
-      WidgetRef ref, {
-        required bool claimed,
-        required DailyBonusReward today,
-        required int streak,
-        required dynamic bonus,
-      }) {
+    BuildContext context,
+    WidgetRef ref, {
+    required bool claimed,
+    required DailyBonusReward today,
+    required int streak,
+    required dynamic bonus,
+  }) {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: claimed
               ? [
-            Colors.white.withValues(alpha: 0.08),
-            Colors.white.withValues(alpha: 0.04),
-          ]
+                  Colors.white.withValues(alpha: 0.08),
+                  Colors.white.withValues(alpha: 0.04),
+                ]
               : [
-            const Color(0xFF6366F1),
-            const Color(0xFF8B5CF6),
-            const Color(0xFFEC4899),
-          ],
+                  const Color(0xFF6366F1),
+                  const Color(0xFF8B5CF6),
+                  const Color(0xFFEC4899),
+                ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -304,19 +304,18 @@ class DailyBonusScreen extends ConsumerWidget {
         boxShadow: claimed
             ? []
             : [
-          BoxShadow(
-            color: const Color(0xFF6366F1).withValues(alpha: 0.4),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
+                BoxShadow(
+                  color: const Color(0xFF6366F1).withValues(alpha: 0.4),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+              ],
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: claimed
-              ? null
-              : () => _handleClaim(context, ref, bonus, today),
+          onTap:
+              claimed ? null : () => _handleClaim(context, ref, bonus, today),
           borderRadius: BorderRadius.circular(24),
           child: Padding(
             padding: const EdgeInsets.all(24),
@@ -336,7 +335,9 @@ class DailyBonusScreen extends ConsumerWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(
-                        claimed ? Icons.check_circle_rounded : Icons.card_giftcard_rounded,
+                        claimed
+                            ? Icons.check_circle_rounded
+                            : Icons.card_giftcard_rounded,
                         color: Colors.white,
                         size: 16,
                       ),
@@ -403,12 +404,12 @@ class DailyBonusScreen extends ConsumerWidget {
                     boxShadow: claimed
                         ? []
                         : [
-                      BoxShadow(
-                        color: Colors.white.withValues(alpha: 0.3),
-                        blurRadius: 12,
-                        offset: const Offset(0, 6),
-                      ),
-                    ],
+                            BoxShadow(
+                              color: Colors.white.withValues(alpha: 0.3),
+                              blurRadius: 12,
+                              offset: const Offset(0, 6),
+                            ),
+                          ],
                   ),
                   child: Material(
                     color: Colors.transparent,
@@ -425,7 +426,9 @@ class DailyBonusScreen extends ConsumerWidget {
                               claimed
                                   ? Icons.check_circle_rounded
                                   : Icons.card_giftcard_rounded,
-                              color: claimed ? Colors.white60 : const Color(0xFF6366F1),
+                              color: claimed
+                                  ? Colors.white60
+                                  : const Color(0xFF6366F1),
                             ),
                             const SizedBox(width: 12),
                             Text(
@@ -433,7 +436,9 @@ class DailyBonusScreen extends ConsumerWidget {
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
-                                color: claimed ? Colors.white60 : const Color(0xFF6366F1),
+                                color: claimed
+                                    ? Colors.white60
+                                    : const Color(0xFF6366F1),
                               ),
                             ),
                           ],
@@ -529,10 +534,10 @@ class DailyBonusScreen extends ConsumerWidget {
       decoration: BoxDecoration(
         gradient: isCompleted
             ? const LinearGradient(
-          colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        )
+                colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              )
             : null,
         color: isCompleted ? null : Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
@@ -541,12 +546,12 @@ class DailyBonusScreen extends ConsumerWidget {
             : Border.all(color: Colors.white.withValues(alpha: 0.1)),
         boxShadow: isCompleted
             ? [
-          BoxShadow(
-            color: const Color(0xFF6366F1).withValues(alpha: 0.3),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ]
+                BoxShadow(
+                  color: const Color(0xFF6366F1).withValues(alpha: 0.3),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ]
             : [],
       ),
       child: Column(
@@ -568,7 +573,9 @@ class DailyBonusScreen extends ConsumerWidget {
           Text(
             'Day $day',
             style: TextStyle(
-              color: isCompleted ? Colors.white : Colors.white.withValues(alpha: 0.5),
+              color: isCompleted
+                  ? Colors.white
+                  : Colors.white.withValues(alpha: 0.5),
               fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
@@ -579,10 +586,10 @@ class DailyBonusScreen extends ConsumerWidget {
   }
 
   Widget _buildRewardsProgression(
-      DailyBonusReward today,
-      DailyBonusReward tomorrow,
-      int streak,
-      ) {
+    DailyBonusReward today,
+    DailyBonusReward tomorrow,
+    int streak,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -623,12 +630,12 @@ class DailyBonusScreen extends ConsumerWidget {
   }
 
   Widget _buildProgressionCard(
-      String label,
-      int coins,
-      int gems,
-      bool isToday,
-      Color color,
-      ) {
+    String label,
+    int coins,
+    int gems,
+    bool isToday,
+    Color color,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -885,11 +892,11 @@ class DailyBonusScreen extends ConsumerWidget {
   }
 
   void _handleClaim(
-      BuildContext context,
-      WidgetRef ref,
-      dynamic bonus,
-      DailyBonusReward today,
-      ) {
+    BuildContext context,
+    WidgetRef ref,
+    dynamic bonus,
+    DailyBonusReward today,
+  ) {
     final accepted = bonus.tryClaimToday();
     if (!accepted) return;
 

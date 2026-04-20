@@ -18,10 +18,11 @@ class MultiplayerService {
     Object? configStorage,
   })  : _repo = repo ?? MultiplayerRepositoryImpl(),
         _ws = ws ?? WsClient(),
-        _config = config ?? MultiplayerConfig(
-          httpBase: Uri.parse('https://api.example.com'),
-          wsUri: Uri.parse('wss://api.example.com/ws'),
-        );
+        _config = config ??
+            MultiplayerConfig(
+              httpBase: Uri.parse('https://api.example.com'),
+              wsUri: Uri.parse('wss://api.example.com/ws'),
+            );
 
   int get lastLatencyMs => _ws.lastRttMs;
 
@@ -55,7 +56,8 @@ class MultiplayerService {
     );
   }
 
-  Future<void> submitAnswer(String matchId, String questionId, String answerId) =>
+  Future<void> submitAnswer(
+          String matchId, String questionId, String answerId) =>
       _repo.submitAnswer(matchId, questionId, answerId);
 
   Future<List<Map<String, dynamic>>> listRooms() => _repo.listRooms();

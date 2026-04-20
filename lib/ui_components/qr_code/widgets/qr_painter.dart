@@ -52,19 +52,20 @@ class QrPainter extends CustomPainter {
       for (int x = 0; x < matrix.size; x++) {
         totalModules++;
 
-      try {
-        if (matrix.get(x, y)) {
-          final left = x * moduleSize + gap / 2;
-          final top = y * moduleSize + gap / 2;
-          final sizeAdjusted = moduleSize - gap;
+        try {
+          if (matrix.get(x, y)) {
+            final left = x * moduleSize + gap / 2;
+            final top = y * moduleSize + gap / 2;
+            final sizeAdjusted = moduleSize - gap;
 
-          final rect = Rect.fromLTWH(left, top, sizeAdjusted, sizeAdjusted);
-          final rrect = RRect.fromRectAndRadius(rect, Radius.circular(gap / 2));
-          canvas.drawRRect(rrect, paint);
-          dotsDrawn++;
-        }
-      } catch (e) {
-        LogManager.debug('ERROR at position ($x, $y): $e');
+            final rect = Rect.fromLTWH(left, top, sizeAdjusted, sizeAdjusted);
+            final rrect =
+                RRect.fromRectAndRadius(rect, Radius.circular(gap / 2));
+            canvas.drawRRect(rrect, paint);
+            dotsDrawn++;
+          }
+        } catch (e) {
+          LogManager.debug('ERROR at position ($x, $y): $e');
         }
       }
     }

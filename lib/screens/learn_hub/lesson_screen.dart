@@ -69,10 +69,8 @@ class _LessonFlowState extends ConsumerState<_LessonFlow> {
 
   @override
   Widget build(BuildContext context) {
-    final flowState =
-        ref.watch(lessonFlowProvider(widget.lessons));
-    final notifier =
-        ref.read(lessonFlowProvider(widget.lessons).notifier);
+    final flowState = ref.watch(lessonFlowProvider(widget.lessons));
+    final notifier = ref.read(lessonFlowProvider(widget.lessons).notifier);
     final lesson = widget.lessons[flowState.currentIndex];
     final total = widget.lessons.length;
     final current = flowState.currentIndex + 1;
@@ -190,8 +188,7 @@ class _LessonFlowState extends ConsumerState<_LessonFlow> {
     setState(() => _completing = true);
 
     try {
-      final playerIdAsync =
-          await ref.read(currentPlayerIdProvider.future);
+      final playerIdAsync = await ref.read(currentPlayerIdProvider.future);
       final playerId = playerIdAsync ?? '';
 
       final result = await ref
@@ -240,7 +237,8 @@ class _OptionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     Color? bgColor;
     Color borderColor = Colors.grey.shade300;
-    Color textColor = Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black;
+    Color textColor =
+        Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black;
 
     if (answered) {
       if (option.id == correctOptionId) {
@@ -267,7 +265,8 @@ class _OptionTile extends StatelessWidget {
         ),
         child: Row(
           children: [
-            _OptionBadge(id: option.id, textColor: textColor, borderColor: borderColor),
+            _OptionBadge(
+                id: option.id, textColor: textColor, borderColor: borderColor),
             const SizedBox(width: 12),
             Expanded(
               child: Text(

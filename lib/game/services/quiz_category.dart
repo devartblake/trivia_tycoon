@@ -452,71 +452,79 @@ extension QuizCategoryExtension on QuizCategory {
 class QuizCategoryManager {
   /// Get all core academic categories
   static List<QuizCategory> get coreCategories => [
-    QuizCategory.arts,
-    QuizCategory.science,
-    QuizCategory.mathematics,
-    QuizCategory.history,
-    QuizCategory.geography,
-    QuizCategory.literature,
-    QuizCategory.technology,
-    QuizCategory.health,
-    QuizCategory.sports,
-    QuizCategory.entertainment,
-  ];
+        QuizCategory.arts,
+        QuizCategory.science,
+        QuizCategory.mathematics,
+        QuizCategory.history,
+        QuizCategory.geography,
+        QuizCategory.literature,
+        QuizCategory.technology,
+        QuizCategory.health,
+        QuizCategory.sports,
+        QuizCategory.entertainment,
+      ];
 
   /// Get all extended academic categories
   static List<QuizCategory> get extendedCategories => [
-    QuizCategory.economics,
-    QuizCategory.philosophy,
-    QuizCategory.psychology,
-    QuizCategory.politics,
-    QuizCategory.law,
-    QuizCategory.environment,
-    QuizCategory.currentEvents,
-    QuizCategory.media,
-    QuizCategory.socialStudies,
-  ];
+        QuizCategory.economics,
+        QuizCategory.philosophy,
+        QuizCategory.psychology,
+        QuizCategory.politics,
+        QuizCategory.law,
+        QuizCategory.environment,
+        QuizCategory.currentEvents,
+        QuizCategory.media,
+        QuizCategory.socialStudies,
+      ];
 
   /// Get all specialized categories
   static List<QuizCategory> get specializedCategories => [
-    QuizCategory.architecture,
-    QuizCategory.artHistory,
-    QuizCategory.astronomy,
-    QuizCategory.business,
-    QuizCategory.civicsLaw,
-    QuizCategory.comparativeReligions,
-    QuizCategory.computerScience,
-    QuizCategory.globalCultures,
-    QuizCategory.economicsFinance,
-    QuizCategory.engineeringTechnology,
-    QuizCategory.environmentalScience,
-    QuizCategory.healthMedicine,
-    QuizCategory.statisticsData,
-    QuizCategory.worldLiterature,
-  ];
+        QuizCategory.architecture,
+        QuizCategory.artHistory,
+        QuizCategory.astronomy,
+        QuizCategory.business,
+        QuizCategory.civicsLaw,
+        QuizCategory.comparativeReligions,
+        QuizCategory.computerScience,
+        QuizCategory.globalCultures,
+        QuizCategory.economicsFinance,
+        QuizCategory.engineeringTechnology,
+        QuizCategory.environmentalScience,
+        QuizCategory.healthMedicine,
+        QuizCategory.statisticsData,
+        QuizCategory.worldLiterature,
+      ];
 
   /// Get all educational level categories
   static List<QuizCategory> get educationalCategories => [
-    QuizCategory.kids,
-    QuizCategory.kidsGrade2,
-    QuizCategory.general,
-  ];
+        QuizCategory.kids,
+        QuizCategory.kidsGrade2,
+        QuizCategory.general,
+      ];
 
   /// Get all categories
   static List<QuizCategory> get allCategories => [
-    ...coreCategories,
-    ...extendedCategories,
-    ...specializedCategories,
-    ...educationalCategories,
-  ];
+        ...coreCategories,
+        ...extendedCategories,
+        ...specializedCategories,
+        ...educationalCategories,
+      ];
 
   /// Parse string to QuizCategory
   static QuizCategory? fromString(String categoryString) {
-    final normalized = categoryString.toLowerCase().replaceAll(' ', '').replaceAll('_', '').replaceAll('-', '');
+    final normalized = categoryString
+        .toLowerCase()
+        .replaceAll(' ', '')
+        .replaceAll('_', '')
+        .replaceAll('-', '');
 
     for (final category in QuizCategory.values) {
       final categoryName = category.name.toLowerCase();
-      final displayName = category.displayName.toLowerCase().replaceAll(' ', '').replaceAll('_', '').replaceAll('-', '');
+      final displayName = category.displayName
+          .toLowerCase()
+          .replaceAll(' ', '')
+          .replaceAll('_', '')
+          .replaceAll('-', '');
 
       if (categoryName == normalized || displayName == normalized) {
         return category;

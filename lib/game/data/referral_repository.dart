@@ -18,7 +18,7 @@ class ReferralRepository {
     try {
       // FIX: Ensure the API response is correctly cast to a Map.
       final serverResponse =
-      await api.post('/referrals', body: {'owner_user_id': ownerUserId});
+          await api.post('/referrals', body: {'owner_user_id': ownerUserId});
 
       final code = ReferralCode.fromJson({
         'code': serverResponse['code'],
@@ -37,10 +37,12 @@ class ReferralRepository {
       // ApiService wraps all network/HTTP errors into ApiRequestException before surfacing
       // them — catching DioException here would never fire. Use ApiRequestException for
       // the offline fallback so the intent is clear and the import on dio is not needed.
-      LogManager.debug('API error generating referral code: $e. Falling back to local generation.');
+      LogManager.debug(
+          'API error generating referral code: $e. Falling back to local generation.');
       return _generateLocalCode(ownerUserId);
     } catch (e) {
-      LogManager.debug('Unexpected error generating referral code: $e. Falling back to local generation.');
+      LogManager.debug(
+          'Unexpected error generating referral code: $e. Falling back to local generation.');
       return _generateLocalCode(ownerUserId);
     }
   }

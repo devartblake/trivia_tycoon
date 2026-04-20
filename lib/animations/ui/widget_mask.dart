@@ -5,13 +5,13 @@ import 'package:flutter/rendering.dart';
 class RenderWidgetMask extends RenderStack {
   RenderWidgetMask(
       {super.children,
-        required super.alignment,
-        required TextDirection super.textDirection,
-        required super.fit,
-        required Clip clip})
+      required super.alignment,
+      required TextDirection super.textDirection,
+      required super.fit,
+      required Clip clip})
       : super(
-    clipBehavior: clip,
-  );
+          clipBehavior: clip,
+        );
 
   @override
   void paintStack(context, offset) {
@@ -20,24 +20,28 @@ class RenderWidgetMask extends RenderStack {
 
     paintContent(PaintingContext context, Offset offset) {
       // Paint all but the first child
-      RenderBox? child = (firstChild?.parentData as StackParentData?)?.nextSibling;
+      RenderBox? child =
+          (firstChild?.parentData as StackParentData?)?.nextSibling;
       while (child != null) {
         final childParentData = child.parentData as StackParentData?;
         final lastChildRenderObject = lastChild as RenderObject?;
         if (childParentData != null && lastChildRenderObject != null) {
-          context.paintChild(lastChildRenderObject, offset + childParentData.offset);
+          context.paintChild(
+              lastChildRenderObject, offset + childParentData.offset);
         }
         child = childParentData?.nextSibling;
       }
     }
 
     paintMask(PaintingContext context, Offset offset) {
-      context.paintChild(firstChild as RenderObject, offset + (firstChild?.parentData as StackParentData).offset);
+      context.paintChild(firstChild as RenderObject,
+          offset + (firstChild?.parentData as StackParentData).offset);
     }
 
     paintEverything(PaintingContext context, Offset offset) {
       paintContent(context, offset);
-      context.canvas.saveLayer(offset & size, Paint()..blendMode = BlendMode.dstIn);
+      context.canvas
+          .saveLayer(offset & size, Paint()..blendMode = BlendMode.dstIn);
       paintMask(context, offset);
       context.canvas.restore();
     }
@@ -51,16 +55,16 @@ class RenderWidgetMask extends RenderStack {
 class WidgetMask extends Stack {
   WidgetMask(
       {super.key,
-        super.alignment,
-        super.textDirection,
-        super.fit,
-        Clip clip = Clip.hardEdge,
-        required Widget maskChild,
-        required Widget child})
+      super.alignment,
+      super.textDirection,
+      super.fit,
+      Clip clip = Clip.hardEdge,
+      required Widget maskChild,
+      required Widget child})
       : super(
-    clipBehavior: clip,
-    children: [maskChild, child],
-  );
+          clipBehavior: clip,
+          children: [maskChild, child],
+        );
 
   @override
   RenderStack createRenderObject(context) {

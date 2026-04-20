@@ -135,9 +135,10 @@ class EnhancedSpinTracker {
 
     // Calculate new counts
     final newDailyCount = isNewDay ? 1 : currentState.dailyCount + 1;
-    final newWeeklyCount = _shouldResetWeeklyCount(currentState.lastSpinTime, now)
-        ? 1
-        : currentState.weeklyCount + 1;
+    final newWeeklyCount =
+        _shouldResetWeeklyCount(currentState.lastSpinTime, now)
+            ? 1
+            : currentState.weeklyCount + 1;
     final newTotalSpins = currentState.totalSpins + 1;
 
     // Create updated state
@@ -159,7 +160,8 @@ class EnhancedSpinTracker {
 
     // Calculate start of current week (Monday)
     final nowWeekStart = now.subtract(Duration(days: now.weekday - 1));
-    final lastSpinWeekStart = lastSpin.subtract(Duration(days: lastSpin.weekday - 1));
+    final lastSpinWeekStart =
+        lastSpin.subtract(Duration(days: lastSpin.weekday - 1));
 
     return nowWeekStart.isAfter(lastSpinWeekStart);
   }
@@ -227,7 +229,8 @@ class EnhancedSpinTracker {
       canSpin: canSpin,
       lastSpinTime: state.lastSpinTime,
       cooldownDuration: state.cooldownDuration,
-      spinsRemainingToday: (state.maxSpinsPerDay - state.dailyCount).clamp(0, state.maxSpinsPerDay),
+      spinsRemainingToday: (state.maxSpinsPerDay - state.dailyCount)
+          .clamp(0, state.maxSpinsPerDay),
     );
   }
 
@@ -394,7 +397,8 @@ class SpinTrackerState {
       weeklyCount: json['weeklyCount'] ?? 0,
       totalSpins: json['totalSpins'] ?? 0,
       maxSpinsPerDay: json['maxSpinsPerDay'] ?? 5,
-      cooldownDuration: Duration(milliseconds: json['cooldownDuration'] ?? 10800000),
+      cooldownDuration:
+          Duration(milliseconds: json['cooldownDuration'] ?? 10800000),
       longestStreak: json['longestStreak'] ?? 0,
     );
   }
@@ -450,7 +454,8 @@ class SpinTracker {
   static Future<void> registerSpin() => EnhancedSpinTracker.registerSpin();
   static Future<Duration> timeLeft() => EnhancedSpinTracker.timeLeft();
   static Future<int> getDailyCount() => EnhancedSpinTracker.getDailyCount();
-  static Future<DateTime?> getLastSpinTime() => EnhancedSpinTracker.getLastSpinTime();
+  static Future<DateTime?> getLastSpinTime() =>
+      EnhancedSpinTracker.getLastSpinTime();
   static Future<int> getMaxSpins() => EnhancedSpinTracker.getMaxSpins();
 
   // Legacy constants

@@ -33,12 +33,12 @@ class AvatarImageCard extends StatelessWidget {
           ),
           boxShadow: isSelected
               ? [
-            BoxShadow(
-              color: const Color(0xFF6366F1).withValues(alpha: 0.3),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ]
+                  BoxShadow(
+                    color: const Color(0xFF6366F1).withValues(alpha: 0.3),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
               : null,
         ),
         child: ClipRRect(
@@ -53,7 +53,7 @@ class AvatarImageCard extends StatelessWidget {
     // Use the source type from the ref - no guessing!
     switch (avatarRef.source) {
       case AvatarSource.asset:
-      // Bundled asset
+        // Bundled asset
         return Image.asset(
           avatarRef.path,
           fit: BoxFit.cover,
@@ -63,7 +63,7 @@ class AvatarImageCard extends StatelessWidget {
         );
 
       case AvatarSource.file:
-      // File from installed package
+        // File from installed package
         return Image.file(
           File(avatarRef.path),
           fit: BoxFit.cover,
@@ -73,7 +73,7 @@ class AvatarImageCard extends StatelessWidget {
         );
 
       case AvatarSource.network:
-      // Network URL (if you add this later)
+        // Network URL (if you add this later)
         return Image.network(
           avatarRef.path,
           fit: BoxFit.cover,

@@ -92,7 +92,8 @@ class PurchaseSettingsService {
     }
 
     final box = await _getStoreDataBox();
-    final dynamic rawInventory = box.get(_inventoryKey, defaultValue: <String>[]);
+    final dynamic rawInventory =
+        box.get(_inventoryKey, defaultValue: <String>[]);
     _cachedInventory = List<String>.from(rawInventory ?? <String>[]);
     _lastCacheUpdate = DateTime.now();
     return List<String>.from(_cachedInventory!);
@@ -128,9 +129,11 @@ class PurchaseSettingsService {
   }
 
   /// Adds a pending purchase for later processing
-  Future<void> addPendingPurchase(String itemId, Map<String, dynamic> purchaseData) async {
+  Future<void> addPendingPurchase(
+      String itemId, Map<String, dynamic> purchaseData) async {
     final box = await _getStoreDataBox();
-    final dynamic rawPending = box.get(_pendingPurchasesKey, defaultValue: <dynamic>[]);
+    final dynamic rawPending =
+        box.get(_pendingPurchasesKey, defaultValue: <dynamic>[]);
     final List<dynamic> pending = List<dynamic>.from(rawPending ?? <dynamic>[]);
 
     pending.add({
@@ -144,7 +147,8 @@ class PurchaseSettingsService {
   /// Gets all pending purchases
   Future<List<Map<String, dynamic>>> getPendingPurchases() async {
     final box = await _getStoreDataBox();
-    final dynamic rawPending = box.get(_pendingPurchasesKey, defaultValue: <dynamic>[]);
+    final dynamic rawPending =
+        box.get(_pendingPurchasesKey, defaultValue: <dynamic>[]);
     final List<dynamic> pending = List<dynamic>.from(rawPending ?? <dynamic>[]);
     return pending.cast<Map<String, dynamic>>();
   }
@@ -199,8 +203,10 @@ class PurchaseSettingsService {
       final inventory = await getInventory();
 
       // Remove any invalid entries
-      final validPurchases = purchasedItems.where((item) => item.isNotEmpty).toList();
-      final validInventory = inventory.where((item) => item.isNotEmpty).toList();
+      final validPurchases =
+          purchasedItems.where((item) => item.isNotEmpty).toList();
+      final validInventory =
+          inventory.where((item) => item.isNotEmpty).toList();
 
       // Update if changes were made
       if (validPurchases.length != purchasedItems.length ||
@@ -216,7 +222,8 @@ class PurchaseSettingsService {
   }
 
   /// Helper method to save corrected data
-  Future<void> _saveCorrectedData(List<String> purchases, List<String> inventory) async {
+  Future<void> _saveCorrectedData(
+      List<String> purchases, List<String> inventory) async {
     // Clear and rebuild purchased items
     final purchasedBox = await _getPurchasedItemsBox();
     await purchasedBox.clear();

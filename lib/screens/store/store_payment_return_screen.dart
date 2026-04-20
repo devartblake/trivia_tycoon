@@ -183,8 +183,8 @@ class _StorePaymentReturnScreenState
     }
 
     final isActive = status['isActive'] == true;
-    final providerStatus =
-        status['providerStatus']?.toString() ?? status['stripeStatus']?.toString();
+    final providerStatus = status['providerStatus']?.toString() ??
+        status['stripeStatus']?.toString();
 
     _invalidateSubscriptionProviders(playerId);
 
@@ -249,8 +249,9 @@ class _StorePaymentReturnScreenState
 
     while (DateTime.now().isBefore(end)) {
       try {
-        lastStatus =
-            await ref.read(storeServiceProvider).getSubscriptionStatus(playerId);
+        lastStatus = await ref
+            .read(storeServiceProvider)
+            .getSubscriptionStatus(playerId);
         final isActive = lastStatus['isActive'] == true;
         final providerStatus =
             lastStatus['providerStatus']?.toString().toLowerCase() ??
@@ -368,14 +369,11 @@ class _StorePaymentReturnScreenState
                             height: 28,
                             child: CircularProgressIndicator(
                               strokeWidth: 3,
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(accent),
+                              valueColor: AlwaysStoppedAnimation<Color>(accent),
                             ),
                           )
                         : Icon(
-                            _success
-                                ? Icons.check_circle
-                                : Icons.info_outline,
+                            _success ? Icons.check_circle : Icons.info_outline,
                             color: accent,
                             size: 34,
                           ),

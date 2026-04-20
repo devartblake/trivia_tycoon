@@ -6,7 +6,7 @@ import '../models/skill_tree_graph.dart';
 SkillCategory _parseCategory(String raw) {
   // matches enum by its string name (scholar/strategist/xp/…)
   return SkillCategory.values.firstWhere(
-        (e) => describeEnum(e) == raw,
+    (e) => describeEnum(e) == raw,
     orElse: () => SkillCategory.unknown,
   );
 }
@@ -47,9 +47,9 @@ Future<SkillTreeGraph> loadBranchSkillTreeFromAsset(String assetPath) async {
           tier: 0, // temp; we’ll compute tiers below
           cost: (m['cost'] as num).toInt(),
           category: category,
-          effects: const <String, num>{},  // none provided in branch schema
+          effects: const <String, num>{}, // none provided in branch schema
           unlocked: (m['unlocked'] as bool?) ?? false,
-          available: requires.isEmpty,      // roots are available by default
+          available: requires.isEmpty, // roots are available by default
         ),
       );
 
@@ -81,9 +81,10 @@ Future<SkillTreeGraph> loadBranchSkillTreeFromAsset(String assetPath) async {
 }
 
 /// Assigns each node a layer (tier) based on its prerequisites (Kahn-like).
-Map<String, int> _computeTiers(Iterable<String> nodeIds, List<SkillEdge> edges) {
-  final inDeg = <String, int>{ for (final id in nodeIds) id: 0 };
-  final adj = <String, List<String>>{ for (final id in nodeIds) id: [] };
+Map<String, int> _computeTiers(
+    Iterable<String> nodeIds, List<SkillEdge> edges) {
+  final inDeg = <String, int>{for (final id in nodeIds) id: 0};
+  final adj = <String, List<String>>{for (final id in nodeIds) id: []};
 
   for (final e in edges) {
     inDeg[e.toId] = (inDeg[e.toId] ?? 0) + 1;

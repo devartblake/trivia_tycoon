@@ -5,7 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:trivia_tycoon/ui_components/spin_wheel/ui/widgets/floating_spin_cta.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../game/analytics/providers/analytics_providers.dart';
-import '../../../../game/providers/riverpod_providers.dart' hide analyticsServiceProvider;
+import '../../../../game/providers/riverpod_providers.dart'
+    hide analyticsServiceProvider;
 import '../../../../core/services/settings/app_settings.dart';
 import '../../../../core/services/notification_service.dart';
 import '../../models/spin_system_models.dart';
@@ -131,7 +132,8 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
   }
 
   /// Track user action
-  Future<void> _trackUserAction(String action, {Map<String, dynamic>? additionalData}) async {
+  Future<void> _trackUserAction(String action,
+      {Map<String, dynamic>? additionalData}) async {
     try {
       final analytics = ref.read(analyticsServiceProvider);
       await analytics.trackEngagement(
@@ -192,7 +194,6 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
 
       // Update reward points
       await AppSettings.addSpinRewardPoints(result.reward.toDouble());
-
     } catch (e) {
       LogManager.debug('Failed to track spin completion: $e');
     }
@@ -222,12 +223,12 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
     _animation = Tween<double>(begin: 0, end: 0).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeOutQuart),
     )..addListener(() {
-      if (mounted) {
-        setState(() {
-          _currentAngle = _animation.value;
-        });
-      }
-    });
+        if (mounted) {
+          setState(() {
+            _currentAngle = _animation.value;
+          });
+        }
+      });
 
     _scaleAnimation = Tween<double>(begin: 1.0, end: 1.1).animate(
       CurvedAnimation(parent: _scaleController, curve: Curves.elasticOut),
@@ -384,9 +385,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
       begin: _currentAngle,
       end: _currentAngle + distance,
     ).animate(CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.decelerate
-    ));
+        parent: _animationController, curve: Curves.decelerate));
 
     _animationController.forward(from: 0);
     HapticFeedback.lightImpact();
@@ -441,8 +440,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
 
   Future<void> _scheduleCooldownNotification() async {
     await NotificationService().cancelSpinNotifications();
-    final scheduled =
-        await NotificationService().scheduleSpinReadyNotification(
+    final scheduled = await NotificationService().scheduleSpinReadyNotification(
       SpinTracker.cooldown,
     );
     if (!scheduled) {
@@ -457,9 +455,8 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? const Color(0xFF0A0A0F)
-          : const Color(0xFFF8F9FA),
+      backgroundColor:
+          isDark ? const Color(0xFF0A0A0F) : const Color(0xFFF8F9FA),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -492,7 +489,8 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                 if (!snapshot.hasData) return const SizedBox.shrink();
 
                 return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: snapshot.data!
                         ? Colors.green.withValues(alpha: 0.1)
@@ -574,8 +572,10 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                         boxShadow: [
                                           BoxShadow(
                                             color: isDark
-                                                ? Colors.black.withValues(alpha: 0.3)
-                                                : Colors.grey.withValues(alpha: 0.1),
+                                                ? Colors.black
+                                                    .withValues(alpha: 0.3)
+                                                : Colors.grey
+                                                    .withValues(alpha: 0.1),
                                             blurRadius: 20,
                                             offset: const Offset(0, 10),
                                           ),
@@ -590,13 +590,18 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                               child: AspectRatio(
                                                 aspectRatio: 1.0,
                                                 child: Padding(
-                                                  padding: const EdgeInsets.all(16.0),
+                                                  padding: const EdgeInsets.all(
+                                                      16.0),
                                                   child: WheelSegmentStack(
                                                     segments: _segments,
-                                                    rotationAngle: _currentAngle,
+                                                    rotationAngle:
+                                                        _currentAngle,
                                                     activeIndex: _activeIndex,
-                                                    onSegmentTap: (index) => LogManager.debug('Tapped segment $index'),
-                                                    onGestureSpin: _handleGestureSpin,
+                                                    onSegmentTap: (index) =>
+                                                        LogManager.debug(
+                                                            'Tapped segment $index'),
+                                                    onGestureSpin:
+                                                        _handleGestureSpin,
                                                   ),
                                                 ),
                                               ),
@@ -606,12 +611,15 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                             if (_isSpinning)
                                               Container(
                                                 decoration: BoxDecoration(
-                                                  color: Colors.black.withValues(alpha: 0.2),
-                                                  borderRadius: BorderRadius.circular(24),
+                                                  color: Colors.black
+                                                      .withValues(alpha: 0.2),
+                                                  borderRadius:
+                                                      BorderRadius.circular(24),
                                                 ),
                                                 child: const Center(
                                                   child: Column(
-                                                    mainAxisSize: MainAxisSize.min,
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
                                                     children: [
                                                       CircularProgressIndicator(
                                                         color: Colors.purple,
@@ -623,7 +631,8 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                                         style: TextStyle(
                                                           color: Colors.white,
                                                           fontSize: 16,
-                                                          fontWeight: FontWeight.w600,
+                                                          fontWeight:
+                                                              FontWeight.w600,
                                                         ),
                                                       ),
                                                     ],
@@ -638,7 +647,8 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
 
                                   // Controls section
                                   Container(
-                                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                                    padding: const EdgeInsets.fromLTRB(
+                                        20, 0, 20, 20),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
@@ -649,7 +659,8 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                         if (_canSpin && !_isSpinning)
                                           AnimatedScale(
                                             scale: 1.0,
-                                            duration: const Duration(milliseconds: 200),
+                                            duration: const Duration(
+                                                milliseconds: 200),
                                             child: SpinButton(
                                               onSpin: () => _handleSpin(),
                                             ),
@@ -657,7 +668,8 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                         else
                                           AnimatedScale(
                                             scale: 0.95,
-                                            duration: const Duration(milliseconds: 200),
+                                            duration: const Duration(
+                                                milliseconds: 200),
                                             child: SpinButton(
                                               onSpin: () {},
                                             ),
@@ -668,13 +680,15 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                         // Stats row
                                         if (!_isSpinning)
                                           Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
                                             children: [
                                               Flexible(
                                                 child: StatCard(
                                                   icon: Icons.casino,
                                                   label: 'Spins Today',
-                                                  value: '${SpinTracker.maxSpinsPerDay}',
+                                                  value:
+                                                      '${SpinTracker.maxSpinsPerDay}',
                                                   color: Colors.blue,
                                                 ),
                                               ),
@@ -683,7 +697,8 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                                 child: StatCard(
                                                   icon: Icons.timer,
                                                   label: 'Cooldown',
-                                                  value: '${SpinTracker.cooldown.inHours}h',
+                                                  value:
+                                                      '${SpinTracker.cooldown.inHours}h',
                                                   color: Colors.orange,
                                                 ),
                                               ),

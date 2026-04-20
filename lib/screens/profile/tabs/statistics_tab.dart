@@ -84,10 +84,12 @@ class StatisticsTab extends ConsumerWidget {
           Row(
             children: [
               Expanded(
-                child: _buildStatItem('Correct Answers', '234', Icons.check_circle),
+                child: _buildStatItem(
+                    'Correct Answers', '234', Icons.check_circle),
               ),
               Expanded(
-                child: _buildStatItem('Current Streak', '12 days', Icons.local_fire_department),
+                child: _buildStatItem(
+                    'Current Streak', '12 days', Icons.local_fire_department),
               ),
             ],
           ),
@@ -98,10 +100,30 @@ class StatisticsTab extends ConsumerWidget {
 
   Widget _buildSubjectBreakdownCard() {
     final subjects = [
-      {'name': 'Mathematics', 'score': 92, 'quizzes': 28, 'color': Color(0xFF40E0D0)},
-      {'name': 'Science', 'score': 85, 'quizzes': 22, 'color': Color(0xFF26de81)},
-      {'name': 'History', 'score': 89, 'quizzes': 18, 'color': Color(0xFFFF6B6B)},
-      {'name': 'Literature', 'score': 81, 'quizzes': 19, 'color': Color(0xFFFFA726)},
+      {
+        'name': 'Mathematics',
+        'score': 92,
+        'quizzes': 28,
+        'color': Color(0xFF40E0D0)
+      },
+      {
+        'name': 'Science',
+        'score': 85,
+        'quizzes': 22,
+        'color': Color(0xFF26de81)
+      },
+      {
+        'name': 'History',
+        'score': 89,
+        'quizzes': 18,
+        'color': Color(0xFFFF6B6B)
+      },
+      {
+        'name': 'Literature',
+        'score': 81,
+        'quizzes': 19,
+        'color': Color(0xFFFFA726)
+      },
     ];
 
     return Container(
@@ -142,18 +164,21 @@ class StatisticsTab extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 20),
-          ...subjects.map((subject) => _buildSubjectItem(
-            subject['name'] as String,
-            subject['score'] as int,
-            subject['quizzes'] as int,
-            subject['color'] as Color,
-          )).toList(),
+          ...subjects
+              .map((subject) => _buildSubjectItem(
+                    subject['name'] as String,
+                    subject['score'] as int,
+                    subject['quizzes'] as int,
+                    subject['color'] as Color,
+                  ))
+              .toList(),
         ],
       ),
     );
   }
 
-  Widget _buildSubjectItem(String subject, int score, int quizzes, Color color) {
+  Widget _buildSubjectItem(
+      String subject, int score, int quizzes, Color color) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
@@ -251,7 +276,8 @@ class StatisticsTab extends ConsumerWidget {
                   color: const Color(0xFF26de81),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.trending_up, color: Colors.white, size: 20),
+                child: const Icon(Icons.trending_up,
+                    color: Colors.white, size: 20),
               ),
               const SizedBox(width: 12),
               const Text(
@@ -293,7 +319,8 @@ class StatisticsTab extends ConsumerWidget {
     );
   }
 
-  Widget _buildTrendItem(String title, String value, String subtitle, Color color, IconData icon) {
+  Widget _buildTrendItem(
+      String title, String value, String subtitle, Color color, IconData icon) {
     return Row(
       children: [
         Container(
@@ -374,7 +401,8 @@ class StatisticsTab extends ConsumerWidget {
                   color: const Color(0xFFFF6B6B),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.calendar_today, color: Colors.white, size: 20),
+                child: const Icon(Icons.calendar_today,
+                    color: Colors.white, size: 20),
               ),
               const SizedBox(width: 12),
               const Text(
@@ -390,11 +418,13 @@ class StatisticsTab extends ConsumerWidget {
           const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: weeklyData.map((data) => _buildWeeklyBar(
-              data['day'] as String,
-              data['quizzes'] as int,
-              data['score'] as int,
-            )).toList(),
+            children: weeklyData
+                .map((data) => _buildWeeklyBar(
+                      data['day'] as String,
+                      data['quizzes'] as int,
+                      data['score'] as int,
+                    ))
+                .toList(),
           ),
           const SizedBox(height: 16),
           Row(

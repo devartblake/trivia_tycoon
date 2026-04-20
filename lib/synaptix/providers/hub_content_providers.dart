@@ -53,10 +53,22 @@ final featuredMatchProvider = Provider<FeaturedMatchData>((ref) {
     final lower = category.toLowerCase();
 
     final (IconData, Color) visual = switch (lower) {
-      final c when c.contains('science') => (Icons.science_rounded, Colors.purpleAccent),
-      final c when c.contains('history') => (Icons.history_edu_rounded, Colors.amberAccent),
-      final c when c.contains('geography') => (Icons.public_rounded, Colors.lightBlueAccent),
-      final c when c.contains('math') => (Icons.calculate_rounded, Colors.greenAccent),
+      final c when c.contains('science') => (
+          Icons.science_rounded,
+          Colors.purpleAccent
+        ),
+      final c when c.contains('history') => (
+          Icons.history_edu_rounded,
+          Colors.amberAccent
+        ),
+      final c when c.contains('geography') => (
+          Icons.public_rounded,
+          Colors.lightBlueAccent
+        ),
+      final c when c.contains('math') => (
+          Icons.calculate_rounded,
+          Colors.greenAccent
+        ),
       _ => (Icons.public_rounded, Colors.purpleAccent),
     };
 

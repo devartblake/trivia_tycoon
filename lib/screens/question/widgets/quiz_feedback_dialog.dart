@@ -89,7 +89,8 @@ class QuizFeedbackDialog extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8),
@@ -114,7 +115,6 @@ class QuizFeedbackDialog extends StatelessWidget {
                 label: "XP Gained",
                 value: "+$xpGained",
               ),
-
               if (hasTimeBonus) ...[
                 const SizedBox(height: 8),
                 _buildRewardRow(
@@ -123,7 +123,6 @@ class QuizFeedbackDialog extends StatelessWidget {
                   value: "50% Extra!",
                 ),
               ],
-
               if (question.multiplier != null && question.multiplier! > 1) ...[
                 const SizedBox(height: 8),
                 _buildRewardRow(
@@ -132,7 +131,6 @@ class QuizFeedbackDialog extends StatelessWidget {
                   value: "${question.multiplier}x",
                 ),
               ],
-
               const SizedBox(height: 16),
             ],
 
@@ -191,7 +189,9 @@ class QuizFeedbackDialog extends StatelessWidget {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
-                        foregroundColor: isCorrect ? Colors.green.shade700 : Colors.red.shade700,
+                        foregroundColor: isCorrect
+                            ? Colors.green.shade700
+                            : Colors.red.shade700,
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -213,7 +213,9 @@ class QuizFeedbackDialog extends StatelessWidget {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
-                        foregroundColor: isCorrect ? Colors.green.shade700 : Colors.red.shade700,
+                        foregroundColor: isCorrect
+                            ? Colors.green.shade700
+                            : Colors.red.shade700,
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),

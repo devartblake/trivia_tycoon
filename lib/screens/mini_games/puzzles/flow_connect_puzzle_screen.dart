@@ -14,10 +14,12 @@ class FlowConnectPuzzleScreen extends ConsumerStatefulWidget {
   const FlowConnectPuzzleScreen({super.key});
 
   @override
-  ConsumerState<FlowConnectPuzzleScreen> createState() => _FlowConnectPuzzleScreenState();
+  ConsumerState<FlowConnectPuzzleScreen> createState() =>
+      _FlowConnectPuzzleScreenState();
 }
 
-class _FlowConnectPuzzleScreenState extends ConsumerState<FlowConnectPuzzleScreen> {
+class _FlowConnectPuzzleScreenState
+    extends ConsumerState<FlowConnectPuzzleScreen> {
   bool _dialogShown = false;
 
   @override
@@ -28,7 +30,7 @@ class _FlowConnectPuzzleScreenState extends ConsumerState<FlowConnectPuzzleScree
     // Listen for success status
     ref.listen(
       flowConnectStateProvider.select((state) => state.gameState.status),
-          (previous, next) {
+      (previous, next) {
         if (next == FlowConnectGameStatus.success &&
             previous != FlowConnectGameStatus.success &&
             !_dialogShown) {
@@ -144,9 +146,9 @@ class _FlowConnectPuzzleScreenState extends ConsumerState<FlowConnectPuzzleScree
           _dialogShown = false;
         });
         ref.read(flowConnectStateProvider).initializeGame(
-          settings.gridSize,
-          settings.difficulty,
-        );
+              settings.gridSize,
+              settings.difficulty,
+            );
       },
     );
   }
@@ -187,8 +189,10 @@ class _GameStatusHeader extends ConsumerWidget {
         icon = Icons.info_outline_rounded;
         break;
       case FlowConnectGameStatus.playing:
-        final currentNum = ref.watch(flowConnectStateProvider.select((p) => p.gameState.currentNumber));
-        final totalNums = ref.watch(flowConnectStateProvider.select((p) => p.gameState.totalNumbers));
+        final currentNum = ref.watch(
+            flowConnectStateProvider.select((p) => p.gameState.currentNumber));
+        final totalNums = ref.watch(
+            flowConnectStateProvider.select((p) => p.gameState.totalNumbers));
         final displayNum = (currentNum > totalNums) ? totalNums : currentNum;
         message = 'Find number $displayNum of $totalNums';
         bgColor = const Color(0xFF3B82F6).withValues(alpha: 0.1);
@@ -234,9 +238,9 @@ class _GameStatusHeader extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             ...[
-            Icon(icon, color: textColor, size: 20),
-            const SizedBox(width: 8),
-          ],
+              Icon(icon, color: textColor, size: 20),
+              const SizedBox(width: 8),
+            ],
             Text(
               message,
               style: TextStyle(
@@ -294,8 +298,10 @@ class _GameGrid extends ConsumerWidget {
                     ),
                   ),
                   GestureDetector(
-                    onPanStart: (details) => notifier.onPanStart(details.localPosition, cellSize),
-                    onPanUpdate: (details) => notifier.onPanUpdate(details.localPosition, cellSize),
+                    onPanStart: (details) =>
+                        notifier.onPanStart(details.localPosition, cellSize),
+                    onPanUpdate: (details) =>
+                        notifier.onPanUpdate(details.localPosition, cellSize),
                     onPanEnd: (_) => notifier.onPanEnd(),
                     child: GridView.builder(
                       physics: const NeverScrollableScrollPhysics(),
@@ -308,8 +314,10 @@ class _GameGrid extends ConsumerWidget {
                         final col = index % gameState.gridSize;
                         return _GridCell(
                           cell: gameState.grid[row][col],
-                          isPath: gameState.currentPath.any((p) => p.row == row && p.col == col),
-                          isHint: notifier.hintPoint?.row == row && notifier.hintPoint?.col == col,
+                          isPath: gameState.currentPath
+                              .any((p) => p.row == row && p.col == col),
+                          isHint: notifier.hintPoint?.row == row &&
+                              notifier.hintPoint?.col == col,
                         );
                       },
                     ),
@@ -329,7 +337,8 @@ class _GridCell extends StatelessWidget {
   final bool isPath;
   final bool isHint;
 
-  const _GridCell({required this.cell, required this.isPath, required this.isHint});
+  const _GridCell(
+      {required this.cell, required this.isPath, required this.isHint});
 
   @override
   Widget build(BuildContext context) {
@@ -339,7 +348,9 @@ class _GridCell extends StatelessWidget {
       decoration: BoxDecoration(
         color: isHint
             ? const Color(0xFFFBBF24).withValues(alpha: 0.15)
-            : (isPath ? const Color(0xFF6366F1).withValues(alpha: 0.08) : Colors.transparent),
+            : (isPath
+                ? const Color(0xFF6366F1).withValues(alpha: 0.08)
+                : Colors.transparent),
         border: Border.all(
           color: Colors.grey.shade100,
           width: 0.5,
@@ -347,38 +358,41 @@ class _GridCell extends StatelessWidget {
       ),
       child: cell.number != null
           ? Center(
-        child: Container(
-          width: 36,
-          height: 36,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: LinearGradient(
-              colors: isPath
-                  ? [const Color(0xFF6366F1), const Color(0xFF8B5CF6)]
-                  : [const Color(0xFF3B82F6), const Color(0xFF6366F1)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: (isPath ? const Color(0xFF6366F1) : const Color(0xFF3B82F6)).withValues(alpha: 0.3),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
+              child: Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(
+                    colors: isPath
+                        ? [const Color(0xFF6366F1), const Color(0xFF8B5CF6)]
+                        : [const Color(0xFF3B82F6), const Color(0xFF6366F1)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: (isPath
+                              ? const Color(0xFF6366F1)
+                              : const Color(0xFF3B82F6))
+                          .withValues(alpha: 0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: Text(
+                    cell.number.toString(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
               ),
-            ],
-          ),
-          child: Center(
-            child: Text(
-              cell.number.toString(),
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-          ),
-        ),
-      )
+            )
           : null,
     );
   }
@@ -389,7 +403,8 @@ class _GameControls extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gameState = ref.watch(flowConnectStateProvider.select((s) => s.gameState));
+    final gameState =
+        ref.watch(flowConnectStateProvider.select((s) => s.gameState));
     final notifier = ref.read(flowConnectStateProvider.notifier);
 
     return Container(
@@ -592,7 +607,8 @@ class _RuleItem extends StatelessWidget {
   final String text;
   final Color color;
 
-  const _RuleItem({required this.icon, required this.text, required this.color});
+  const _RuleItem(
+      {required this.icon, required this.text, required this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -676,7 +692,8 @@ class _PathPainter extends CustomPainter {
     canvas.drawPath(uiPath, paint);
 
     if (hintPoint != null) {
-      final hintPaint = Paint()..color = const Color(0xFFFBBF24).withValues(alpha: 0.6);
+      final hintPaint = Paint()
+        ..color = const Color(0xFFFBBF24).withValues(alpha: 0.6);
       final hintBorderPaint = Paint()
         ..color = const Color(0xFFFBBF24)
         ..style = PaintingStyle.stroke

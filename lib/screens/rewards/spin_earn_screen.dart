@@ -218,7 +218,8 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
   }
 
   /// Track analytics event
-  Future<void> _trackAnalyticsEvent(String eventName, Map<String, dynamic> data) async {
+  Future<void> _trackAnalyticsEvent(
+      String eventName, Map<String, dynamic> data) async {
     try {
       _analytics ??= ref.read(analyticsServiceProvider);
       await _analytics?.trackEvent(eventName, data);
@@ -228,7 +229,8 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
   }
 
   /// Track engagement
-  Future<void> _trackEngagement(String action, {Map<String, dynamic>? properties}) async {
+  Future<void> _trackEngagement(String action,
+      {Map<String, dynamic>? properties}) async {
     try {
       _analytics ??= ref.read(analyticsServiceProvider);
       await _analytics?.trackEngagement(
@@ -251,7 +253,8 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
   }
 
   /// Track user interaction
-  Future<void> _trackUserAction(String action, {Map<String, dynamic>? additionalData}) async {
+  Future<void> _trackUserAction(String action,
+      {Map<String, dynamic>? additionalData}) async {
     await _trackEngagement('user_action', properties: {
       'action': action,
       'spins_remaining': _spinsRemaining,
@@ -293,9 +296,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
           _buildAppBar(theme),
           SliverFillRemaining(
             hasScrollBody: false,
-            child: _isLoading
-                ? _buildLoadingState()
-                : _buildContent(theme),
+            child: _isLoading ? _buildLoadingState() : _buildContent(theme),
           ),
         ],
       ),
@@ -636,7 +637,10 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.cyan.withValues(alpha: 0.1), Colors.blue.withValues(alpha: 0.1)],
+                colors: [
+                  Colors.cyan.withValues(alpha: 0.1),
+                  Colors.blue.withValues(alpha: 0.1)
+                ],
               ),
               borderRadius: BorderRadius.circular(8),
               border: Border.all(color: Colors.cyan.withValues(alpha: 0.3)),
@@ -711,7 +715,8 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
   String _getCurrentRewardDescription(List<RewardStep> rewardSteps) {
     for (int i = 0; i < rewardSteps.length; i++) {
       if (_currentSpinSliderValue < rewardSteps[i].pointValue) {
-        final pointsNeeded = rewardSteps[i].pointValue - _currentSpinSliderValue;
+        final pointsNeeded =
+            rewardSteps[i].pointValue - _currentSpinSliderValue;
         return 'Next: ${rewardSteps[i].description} (${pointsNeeded.toInt()} points needed)';
       }
     }
@@ -786,7 +791,9 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                     color: Colors.transparent,
                     child: InkWell(
                       borderRadius: BorderRadius.circular(100),
-                      onTap: _spinsRemaining > 0 ? _navigateToFullWheelScreen : _handleNoSpinsRemaining,
+                      onTap: _spinsRemaining > 0
+                          ? _navigateToFullWheelScreen
+                          : _handleNoSpinsRemaining,
                       child: Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
@@ -806,7 +813,9 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                _spinsRemaining > 0 ? 'TAP TO SPIN' : 'NO SPINS',
+                                _spinsRemaining > 0
+                                    ? 'TAP TO SPIN'
+                                    : 'NO SPINS',
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,
@@ -975,98 +984,103 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
     if (!mounted) return;
 
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-              builder: (context, setDialogState) {
-                return Dialog(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                      Row(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
                       children: [
-                      const Icon(Icons.settings, size: 24),
-                      const SizedBox(width: 12),
-                      Text(
-                        'Spin Settings',
-                        style: theme.textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
+                        const Icon(Icons.settings, size: 24),
+                        const SizedBox(width: 12),
+                        Text(
+                          'Spin Settings',
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const Spacer(),
-                      IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: const Icon(Icons.close),
-                      ),
+                        const Spacer(),
+                        IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: const Icon(Icons.close),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 20),
                     SwitchListTile(
-                        title: const Text('Animations'),
-                        subtitle: const Text('Enable spin animations'),
-                        value: animationEnabled,
-                        onChanged: (value) async {
-                          await AppSettings.setSpinAnimationEnabled(value);
-                          await _trackUserAction('setting_changed', additionalData: {
-                            'setting': 'animations',
-                            'new_value': value,
-                              });
-                          setDialogState(() {
-                            animationEnabled = value;
-                          });
-                        },
+                      title: const Text('Animations'),
+                      subtitle: const Text('Enable spin animations'),
+                      value: animationEnabled,
+                      onChanged: (value) async {
+                        await AppSettings.setSpinAnimationEnabled(value);
+                        await _trackUserAction('setting_changed',
+                            additionalData: {
+                              'setting': 'animations',
+                              'new_value': value,
+                            });
+                        setDialogState(() {
+                          animationEnabled = value;
+                        });
+                      },
                     ),
-                            SwitchListTile(
-                              title: const Text('Sound Effects'),
-                              subtitle: const Text('Play sounds when spinning'),
-                              value: soundEnabled,
-                              onChanged: (value) async {
-                                await AppSettings.setSpinSoundEnabled(value);
-                                await _trackUserAction('setting_changed', additionalData: {
-                                  'setting': 'sound_effects',
-                                  'new_value': value,
-                                });
-                                setDialogState(() {
-                                  soundEnabled = value;
-                                });
-                              },
-                            ),
-                            SwitchListTile(
-                              title: const Text('Haptic Feedback'),
-                              subtitle: const Text('Vibrate when spinning'),
-                              value: hapticEnabled,
-                              onChanged: (value) async {
-                                await AppSettings.setSpinHapticEnabled(value);
-                                await _trackUserAction('setting_changed', additionalData: {
-                                  'setting': 'haptic_feedback',
-                                  'new_value': value,
-                                });
-                                setDialogState(() {
-                                  hapticEnabled = value;
-                                });
-                              },
-                            ),
-                            const SizedBox(height: 20),
-                            _buildShowSpinToastButton(),
-                          ],
-                      ),
+                    SwitchListTile(
+                      title: const Text('Sound Effects'),
+                      subtitle: const Text('Play sounds when spinning'),
+                      value: soundEnabled,
+                      onChanged: (value) async {
+                        await AppSettings.setSpinSoundEnabled(value);
+                        await _trackUserAction('setting_changed',
+                            additionalData: {
+                              'setting': 'sound_effects',
+                              'new_value': value,
+                            });
+                        setDialogState(() {
+                          soundEnabled = value;
+                        });
+                      },
                     ),
-                );
-              },
-          );
-        },
+                    SwitchListTile(
+                      title: const Text('Haptic Feedback'),
+                      subtitle: const Text('Vibrate when spinning'),
+                      value: hapticEnabled,
+                      onChanged: (value) async {
+                        await AppSettings.setSpinHapticEnabled(value);
+                        await _trackUserAction('setting_changed',
+                            additionalData: {
+                              'setting': 'haptic_feedback',
+                              'new_value': value,
+                            });
+                        setDialogState(() {
+                          hapticEnabled = value;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    _buildShowSpinToastButton(),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 
   String _formatDate(dynamic timestamp) {
     if (timestamp == null) return 'Unknown';
     try {
-      final date = timestamp is DateTime ? timestamp : DateTime.parse(timestamp.toString());
+      final date = timestamp is DateTime
+          ? timestamp
+          : DateTime.parse(timestamp.toString());
       final now = DateTime.now();
       final difference = now.difference(date);
 

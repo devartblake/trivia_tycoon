@@ -4,13 +4,15 @@ import 'package:trivia_tycoon/core/models/question_validation_models.dart';
 import 'package:trivia_tycoon/core/repositories/question_repository.dart';
 import 'package:trivia_tycoon/game/models/game_mode.dart';
 import 'package:trivia_tycoon/game/models/question_model.dart';
-import 'package:trivia_tycoon/game/providers/question_providers.dart' as question_data;
+import 'package:trivia_tycoon/game/providers/question_providers.dart'
+    as question_data;
 import 'package:trivia_tycoon/game/providers/quiz_providers.dart';
 import 'package:trivia_tycoon/game/services/quiz_category.dart';
 
 class _FakeQuestionRepository implements QuestionRepository {
   @override
-  Future<List<QuizCategory>> getAvailableCategories() async => [QuizCategory.science, QuizCategory.mathematics];
+  Future<List<QuizCategory>> getAvailableCategories() async =>
+      [QuizCategory.science, QuizCategory.mathematics];
 
   @override
   Future<Map<String, dynamic>> getCategoryStats(QuizCategory category) async {
@@ -33,7 +35,8 @@ class _FakeQuestionRepository implements QuestionRepository {
   }
 
   @override
-  Future<List<QuestionModel>> getDailyQuestions({int count = 5}) async => const [];
+  Future<List<QuestionModel>> getDailyQuestions({int count = 5}) async =>
+      const [];
 
   @override
   Future<Map<String, dynamic>> getDatasetInfo() async {
@@ -50,13 +53,15 @@ class _FakeQuestionRepository implements QuestionRepository {
     List<String>? categories,
     List<String>? difficulties,
     bool balanceDifficulties = false,
-  }) async => const [];
+  }) async =>
+      const [];
 
   @override
   Future<List<QuestionModel>> getMultiplayerQuestions({
     int amount = 10,
     String? category,
-  }) async => const [];
+  }) async =>
+      const [];
 
   @override
   Future<Map<String, dynamic>> getQuestionStats() async {
@@ -71,7 +76,8 @@ class _FakeQuestionRepository implements QuestionRepository {
     required String category,
     int amount = 10,
     int? difficulty,
-  }) async => const [];
+  }) async =>
+      const [];
 
   @override
   Future<List<QuestionModel>> getQuestionsForMode({
@@ -79,7 +85,8 @@ class _FakeQuestionRepository implements QuestionRepository {
     int amount = 10,
     String? category,
     int? difficulty,
-  }) async => const [];
+  }) async =>
+      const [];
 
   @override
   Future<QuestionAnswerCheckResult> checkAnswer({
@@ -104,7 +111,8 @@ class _FakeQuestionRepository implements QuestionRepository {
           (submission) => QuestionAnswerCheckResult(
             questionId: submission.question.id,
             selectedAnswer: submission.selectedAnswer,
-            isCorrect: submission.question.correctAnswer == submission.selectedAnswer,
+            isCorrect:
+                submission.question.correctAnswer == submission.selectedAnswer,
             correctAnswer: submission.question.correctAnswer,
             source: 'test',
           ),
@@ -126,10 +134,14 @@ void main() {
     final container = _containerWithRepo(_FakeQuestionRepository());
     addTearDown(container.dispose);
 
-    final questionStats = await container.read(question_data.questionStatsProvider.future);
-    final datasetInfo = await container.read(question_data.datasetInfoProvider.future);
-    final categoryStats = await container.read(question_data.categoryStatsProvider(QuizCategory.science).future);
-    final classStats = await container.read(question_data.classStatsProvider('7').future);
+    final questionStats =
+        await container.read(question_data.questionStatsProvider.future);
+    final datasetInfo =
+        await container.read(question_data.datasetInfoProvider.future);
+    final categoryStats = await container
+        .read(question_data.categoryStatsProvider(QuizCategory.science).future);
+    final classStats =
+        await container.read(question_data.classStatsProvider('7').future);
 
     expect(questionStats['questionCount'], 120);
     expect(questionStats['categoryCount'], 8);
@@ -147,7 +159,9 @@ void main() {
     expect(classStats['availableCategories'], [QuizCategory.history]);
   });
 
-  test('serviceStatusProvider returns normalized repository-backed status payload', () async {
+  test(
+      'serviceStatusProvider returns normalized repository-backed status payload',
+      () async {
     final container = _containerWithRepo(_FakeQuestionRepository());
     addTearDown(container.dispose);
 
@@ -155,7 +169,9 @@ void main() {
 
     expect(status['isHealthy'], isTrue);
     expect(status['source'], 'repository');
-    expect((status['questionStats'] as Map<String, dynamic>)['questionCount'], 120);
-    expect((status['datasetInfo'] as Map<String, dynamic>)['name'], 'phase2_pack');
+    expect((status['questionStats'] as Map<String, dynamic>)['questionCount'],
+        120);
+    expect(
+        (status['datasetInfo'] as Map<String, dynamic>)['name'], 'phase2_pack');
   });
 }

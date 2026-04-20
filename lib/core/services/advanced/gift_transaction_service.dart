@@ -38,7 +38,8 @@ enum TransactionType {
     }
   }
 
-  bool get isExpense => [giftSent, themePurchase, stickerPurchase, challengeWager].contains(this);
+  bool get isExpense =>
+      [giftSent, themePurchase, stickerPurchase, challengeWager].contains(this);
   bool get isIncome => !isExpense;
 }
 
@@ -95,7 +96,8 @@ class Transaction {
 }
 
 class GiftTransactionService extends ChangeNotifier {
-  static final GiftTransactionService _instance = GiftTransactionService._internal();
+  static final GiftTransactionService _instance =
+      GiftTransactionService._internal();
   factory GiftTransactionService() => _instance;
   GiftTransactionService._internal();
 
@@ -105,7 +107,8 @@ class GiftTransactionService extends ChangeNotifier {
 
   // Streams
   final Map<String, StreamController<int>> _balanceStreams = {};
-  final Map<String, StreamController<List<Transaction>>> _transactionStreams = {};
+  final Map<String, StreamController<List<Transaction>>> _transactionStreams =
+      {};
 
   void initialize() {
     _loadInitialBalances();
@@ -160,7 +163,8 @@ class GiftTransactionService extends ChangeNotifier {
     _transactionHistory[userId] ??= [];
     _transactionHistory[userId]!.add(transaction);
 
-    LogManager.debug('Added $amount coins to $userId. New balance: $newBalance');
+    LogManager.debug(
+        'Added $amount coins to $userId. New balance: $newBalance');
 
     _broadcastBalanceUpdate(userId);
     _broadcastTransactionUpdate(userId);
@@ -204,7 +208,8 @@ class GiftTransactionService extends ChangeNotifier {
     _transactionHistory[userId] ??= [];
     _transactionHistory[userId]!.add(transaction);
 
-    LogManager.debug('Deducted $amount coins from $userId. New balance: $newBalance');
+    LogManager.debug(
+        'Deducted $amount coins from $userId. New balance: $newBalance');
 
     _broadcastBalanceUpdate(userId);
     _broadcastTransactionUpdate(userId);
@@ -297,10 +302,10 @@ class GiftTransactionService extends ChangeNotifier {
   }
 
   List<Transaction> getTransactionsByDateRange(
-      String userId,
-      DateTime start,
-      DateTime end,
-      ) {
+    String userId,
+    DateTime start,
+    DateTime end,
+  ) {
     final history = _transactionHistory[userId] ?? [];
     return history
         .where((t) => t.timestamp.isAfter(start) && t.timestamp.isBefore(end))
@@ -325,7 +330,8 @@ class GiftTransactionService extends ChangeNotifier {
     final typeBreakdown = <String, int>{};
     for (final transaction in recent) {
       typeBreakdown[transaction.type.name] =
-          (typeBreakdown[transaction.type.name] ?? 0) + transaction.amount.abs();
+          (typeBreakdown[transaction.type.name] ?? 0) +
+              transaction.amount.abs();
     }
 
     return {
@@ -353,7 +359,7 @@ class GiftTransactionService extends ChangeNotifier {
 
   Stream<List<Transaction>> watchTransactions(String userId) {
     _transactionStreams[userId] ??=
-    StreamController<List<Transaction>>.broadcast();
+        StreamController<List<Transaction>>.broadcast();
 
     Future.delayed(Duration.zero, () {
       _broadcastTransactionUpdate(userId);

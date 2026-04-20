@@ -20,9 +20,8 @@ class SynaptixHubHeader extends ConsumerWidget {
     final greeting = _greeting(mode);
     final theme = Theme.of(context);
 
-    final titleColor = isDarkBackground
-        ? Colors.white
-        : theme.colorScheme.onSurface;
+    final titleColor =
+        isDarkBackground ? Colors.white : theme.colorScheme.onSurface;
     final subtitleColor = isDarkBackground
         ? Colors.white70
         : theme.colorScheme.onSurface.withValues(alpha: 0.6);

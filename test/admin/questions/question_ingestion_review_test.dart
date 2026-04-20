@@ -5,7 +5,11 @@ void main() {
   test('parseQuestionValidationIssues handles string/map/mixed payloads', () {
     final issues = parseQuestionValidationIssues([
       'invalid category',
-      {'field': 'difficulty', 'message': 'must be between 1-3', 'code': 'range_error'},
+      {
+        'field': 'difficulty',
+        'message': 'must be between 1-3',
+        'code': 'range_error'
+      },
       42,
     ]);
 
@@ -15,11 +19,14 @@ void main() {
     expect(issues[2].message, '42');
   });
 
-  test('summarizeValidationIssues counts duplicate-like and field-scoped issues', () {
+  test(
+      'summarizeValidationIssues counts duplicate-like and field-scoped issues',
+      () {
     final issues = [
       const QuestionValidationIssue(message: 'question already exists'),
       const QuestionValidationIssue(message: 'bad value', field: 'difficulty'),
-      const QuestionValidationIssue(message: 'duplicate row', code: 'duplicate_question'),
+      const QuestionValidationIssue(
+          message: 'duplicate row', code: 'duplicate_question'),
     ];
 
     final summary = summarizeValidationIssues(issues);

@@ -26,9 +26,10 @@ class SkillNodeWidget extends StatelessWidget {
   final SkillCooldownService cooldownService;
 
   /// Optional extras
-  final ui.Image? iconImage;         // category/node icon
-  final HexOrientation orientation;   // consistent with your grid (pointy-default)
-  final double cornerRadius;          // rounded hex corners
+  final ui.Image? iconImage; // category/node icon
+  final HexOrientation
+      orientation; // consistent with your grid (pointy-default)
+  final double cornerRadius; // rounded hex corners
   final double borderWidth;
   final Color? labelColor;
   final TextStyle? titleStyle;
@@ -110,8 +111,8 @@ class SkillNodeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final base = categoryColor;
-    final bg = _tint(base!, 0.12);       // subtle fill
-    final glow = _tint(base, 0.55);     // selected/unlocked glow
+    final bg = _tint(base!, 0.12); // subtle fill
+    final glow = _tint(base, 0.55); // selected/unlocked glow
     final textColor = labelColor ?? Colors.white;
 
     // Available = prerequisites met but not yet unlocked
@@ -121,11 +122,12 @@ class SkillNodeWidget extends StatelessWidget {
     final border = isAvailable
         ? const Color(0xFFFFB300).withValues(alpha: 0.80)
         : isUnlocked || isSelected
-        ? glow.withValues(alpha: 0.5)
-        : _tint(base, 0.30);
+            ? glow.withValues(alpha: 0.5)
+            : _tint(base, 0.30);
 
     // Elevation/glow rules
-    final elevation = isSelected ? 8.0 : (isUnlocked ? 5.0 : (isAvailable ? 4.0 : 2.0));
+    final elevation =
+        isSelected ? 8.0 : (isUnlocked ? 5.0 : (isAvailable ? 4.0 : 2.0));
 
     // Content with flexible sizing
     final title = Flexible(
@@ -136,40 +138,42 @@ class SkillNodeWidget extends StatelessWidget {
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
         style: (titleStyle ??
-            TextStyle(fontSize: _titleFontSize, fontWeight: FontWeight.w600))
+                TextStyle(
+                    fontSize: _titleFontSize, fontWeight: FontWeight.w600))
             .copyWith(color: textColor),
       ),
     );
 
     // Create status widget with icon instead of text
-    final statusIcon = _getStatusIcon(node.unlocked, isAvailable, textColor, _subtitleFontSize);
+    final statusIcon = _getStatusIcon(
+        node.unlocked, isAvailable, textColor, _subtitleFontSize);
 
     final badge = cooldownService.isOnCooldown(node.id)
         ? Positioned(
-      top: 6,
-      right: 6,
-      child: IgnorePointer(
-        child: _CooldownBadge(
-          remaining: cooldownService.remaining(node.id)!,
-          color: base,
-        ),
-      ),
-    )
+            top: 6,
+            right: 6,
+            child: IgnorePointer(
+              child: _CooldownBadge(
+                remaining: cooldownService.remaining(node.id)!,
+                color: base,
+              ),
+            ),
+          )
         : const SizedBox.shrink();
 
     final mainIcon = iconImage == null
         ? Icon(Icons.auto_awesome,
-        color: textColor.withValues(alpha: 0.85),
-        size: _iconSize)
+            color: textColor.withValues(alpha: 0.85), size: _iconSize)
         : RawImage(
-        image: iconImage,
-        width: _iconSize,
-        height: _iconSize,
-        fit: BoxFit.contain);
+            image: iconImage,
+            width: _iconSize,
+            height: _iconSize,
+            fit: BoxFit.contain);
 
     final body = Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min, // Important: Don't expand beyond needed space
+      mainAxisSize:
+          MainAxisSize.min, // Important: Don't expand beyond needed space
       children: [
         mainIcon,
         SizedBox(height: _iconSpacing),
@@ -205,8 +209,8 @@ class SkillNodeWidget extends StatelessWidget {
           shadowColor: isSelected || isUnlocked
               ? glow.withValues(alpha: 0.35)
               : isAvailable
-              ? const Color(0xFFFFB300).withValues(alpha: 0.25)
-              : const Color(0x33000000),
+                  ? const Color(0xFFFFB300).withValues(alpha: 0.25)
+                  : const Color(0x33000000),
           onTap: onTap,
           child: Padding(
             padding: EdgeInsets.all(_effectiveRadius * _paddingFactor),
@@ -220,25 +224,25 @@ class SkillNodeWidget extends StatelessWidget {
 
     // Amber pulse animation for available nodes
     if (isAvailable) {
-      hexWidget = hexWidget
-          .animate(onPlay: (c) => c.repeat(reverse: true))
-          .custom(
-        duration: 1200.ms,
-        curve: Curves.easeInOut,
-        builder: (_, value, child) => DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(cornerRadius + 4),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFFFFB300).withValues(alpha: 0.35 * value),
-                blurRadius: 12,
-                spreadRadius: 2,
-              ),
-            ],
-          ),
-          child: child,
-        ),
-      );
+      hexWidget =
+          hexWidget.animate(onPlay: (c) => c.repeat(reverse: true)).custom(
+                duration: 1200.ms,
+                curve: Curves.easeInOut,
+                builder: (_, value, child) => DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(cornerRadius + 4),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFFFFB300)
+                            .withValues(alpha: 0.35 * value),
+                        blurRadius: 12,
+                        spreadRadius: 2,
+                      ),
+                    ],
+                  ),
+                  child: child,
+                ),
+              );
     }
 
     return GestureDetector(
@@ -247,7 +251,8 @@ class SkillNodeWidget extends StatelessWidget {
     );
   }
 
-  Widget _getStatusIcon(bool unlocked, bool isAvailable, Color textColor, double fontSize) {
+  Widget _getStatusIcon(
+      bool unlocked, bool isAvailable, Color textColor, double fontSize) {
     if (unlocked) {
       return Icon(
         Icons.check_circle,

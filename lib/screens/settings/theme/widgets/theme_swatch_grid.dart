@@ -45,7 +45,7 @@ class _ThemeSwatchGridState extends ConsumerState<ThemeSwatchGrid>
     super.initState();
     _animationControllers = List.generate(
       _primarySwatches.length + _secondarySwatches.length,
-          (index) => AnimationController(
+      (index) => AnimationController(
         duration: Duration(milliseconds: 300 + (index * 50)),
         vsync: this,
       ),
@@ -97,9 +97,11 @@ class _ThemeSwatchGridState extends ConsumerState<ThemeSwatchGrid>
         children: [
           _buildSectionHeader('Color Swatches', Icons.palette_rounded),
           const SizedBox(height: 24),
-          _buildColorSection('Primary Color', _primarySwatches, current.primaryColor, true, controller),
+          _buildColorSection('Primary Color', _primarySwatches,
+              current.primaryColor, true, controller),
           const SizedBox(height: 32),
-          _buildColorSection('Secondary Color', _secondarySwatches, current.secondaryColor, false, controller),
+          _buildColorSection('Secondary Color', _secondarySwatches,
+              current.secondaryColor, false, controller),
           const SizedBox(height: 32),
           _buildCustomizeButton(),
         ],
@@ -143,12 +145,12 @@ class _ThemeSwatchGridState extends ConsumerState<ThemeSwatchGrid>
   }
 
   Widget _buildColorSection(
-      String title,
-      List<Map<String, dynamic>> swatches,
-      Color currentColor,
-      bool isPrimary,
-      ThemeSettingsController controller,
-      ) {
+    String title,
+    List<Map<String, dynamic>> swatches,
+    Color currentColor,
+    bool isPrimary,
+    ThemeSettingsController controller,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -197,7 +199,8 @@ class _ThemeSwatchGridState extends ConsumerState<ThemeSwatchGrid>
             final color = swatch['color'] as Color;
             final name = swatch['name'] as String;
             final isSelected = color.value == currentColor.value;
-            final animationIndex = isPrimary ? index : index + _primarySwatches.length;
+            final animationIndex =
+                isPrimary ? index : index + _primarySwatches.length;
 
             return ScaleTransition(
               scale: Tween<double>(
@@ -232,7 +235,8 @@ class _ThemeSwatchGridState extends ConsumerState<ThemeSwatchGrid>
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: color.withValues(alpha: isSelected ? 0.4 : 0.2),
+                          color:
+                              color.withValues(alpha: isSelected ? 0.4 : 0.2),
                           blurRadius: isSelected ? 12 : 6,
                           offset: Offset(0, isSelected ? 6 : 3),
                         ),
@@ -241,10 +245,10 @@ class _ThemeSwatchGridState extends ConsumerState<ThemeSwatchGrid>
                     child: Center(
                       child: isSelected
                           ? const Icon(
-                        Icons.check_rounded,
-                        color: Colors.white,
-                        size: 20,
-                      )
+                              Icons.check_rounded,
+                              color: Colors.white,
+                              size: 20,
+                            )
                           : null,
                     ),
                   ),

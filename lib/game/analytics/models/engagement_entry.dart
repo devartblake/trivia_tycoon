@@ -59,7 +59,13 @@ class EngagementEntry {
 
   static String _weekdayShort(int weekday) {
     const days = [
-      'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
+      'Mon',
+      'Tue',
+      'Wed',
+      'Thu',
+      'Fri',
+      'Sat',
+      'Sun',
     ];
     return days[(weekday - 1) % 7];
   }

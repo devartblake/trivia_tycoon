@@ -5,8 +5,9 @@ import '../../game/providers/riverpod_providers.dart';
 import '../controllers/admin_filter_controller.dart';
 import '../states/admin_filter_state.dart';
 
-final adminFilterProvider = StateNotifierProvider<AdminFilterController, AdminFilterState>(
-      (ref) => AdminFilterController(ref),
+final adminFilterProvider =
+    StateNotifierProvider<AdminFilterController, AdminFilterState>(
+  (ref) => AdminFilterController(ref),
 );
 
 class AdminLeaderboardFilterScreen extends ConsumerWidget {
@@ -163,7 +164,8 @@ class AdminLeaderboardFilterScreen extends ConsumerWidget {
                           label: 'Android',
                           icon: Icons.android_rounded,
                           selected: state.deviceTypes.contains('Android'),
-                          onSelected: () => controller.toggleDeviceType('Android'),
+                          onSelected: () =>
+                              controller.toggleDeviceType('Android'),
                         ),
                         _buildDeviceChip(
                           context: context,
@@ -200,7 +202,8 @@ class AdminLeaderboardFilterScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 12),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 4),
                       decoration: BoxDecoration(
                         color: theme.primaryColor.withValues(alpha: 0.05),
                         borderRadius: BorderRadius.circular(12),
@@ -213,7 +216,8 @@ class AdminLeaderboardFilterScreen extends ConsumerWidget {
                         child: DropdownButton<String>(
                           value: state.notificationMethod,
                           isExpanded: true,
-                          icon: Icon(Icons.keyboard_arrow_down_rounded,
+                          icon: Icon(
+                            Icons.keyboard_arrow_down_rounded,
                             color: theme.primaryColor,
                           ),
                           style: TextStyle(
@@ -247,7 +251,8 @@ class AdminLeaderboardFilterScreen extends ConsumerWidget {
                               value: 'push',
                               child: Row(
                                 children: [
-                                  Icon(Icons.notifications_active_rounded, size: 18),
+                                  Icon(Icons.notifications_active_rounded,
+                                      size: 18),
                                   SizedBox(width: 12),
                                   Text('Push Notifications'),
                                 ],
@@ -267,7 +272,8 @@ class AdminLeaderboardFilterScreen extends ConsumerWidget {
                               value: 'none',
                               child: Row(
                                 children: [
-                                  Icon(Icons.notifications_off_rounded, size: 18),
+                                  Icon(Icons.notifications_off_rounded,
+                                      size: 18),
                                   SizedBox(width: 12),
                                   Text('None'),
                                 ],
@@ -303,13 +309,15 @@ class AdminLeaderboardFilterScreen extends ConsumerWidget {
                 height: 56,
                 child: ElevatedButton(
                   onPressed: () async {
-                    await ref.read(adminFilterProvider.notifier).saveToStorage();
+                    await ref
+                        .read(adminFilterProvider.notifier)
+                        .saveToStorage();
                     if (!context.mounted) return;
                     context.pop();
 
                     ref.read(leaderboardControllerProvider).applySorting(
-                      ref.read(leaderboardControllerProvider).sortBy,
-                    );
+                          ref.read(leaderboardControllerProvider).sortBy,
+                        );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: theme.primaryColor,
@@ -401,7 +409,9 @@ class AdminLeaderboardFilterScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: value ? theme.primaryColor.withValues(alpha: 0.08) : Colors.grey[50],
+        color: value
+            ? theme.primaryColor.withValues(alpha: 0.08)
+            : Colors.grey[50],
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: value
@@ -475,14 +485,10 @@ class AdminLeaderboardFilterScreen extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: selected
-              ? theme.primaryColor
-              : Colors.grey[100],
+          color: selected ? theme.primaryColor : Colors.grey[100],
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: selected
-                ? theme.primaryColor
-                : Colors.grey[300]!,
+            color: selected ? theme.primaryColor : Colors.grey[300]!,
             width: 1.5,
           ),
         ),

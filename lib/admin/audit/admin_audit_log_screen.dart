@@ -12,7 +12,8 @@ class AdminAuditLogScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<AdminAuditLogScreen> createState() => _AdminAuditLogScreenState();
+  ConsumerState<AdminAuditLogScreen> createState() =>
+      _AdminAuditLogScreenState();
 }
 
 class _AdminAuditLogScreenState extends ConsumerState<AdminAuditLogScreen> {
@@ -55,7 +56,8 @@ class _AdminAuditLogScreenState extends ConsumerState<AdminAuditLogScreen> {
         },
       );
 
-      final envelope = serviceManager.apiService.parsePageEnvelope<Map<String, dynamic>>(
+      final envelope =
+          serviceManager.apiService.parsePageEnvelope<Map<String, dynamic>>(
         response,
         (json) => json,
       );
@@ -92,7 +94,6 @@ class _AdminAuditLogScreenState extends ConsumerState<AdminAuditLogScreen> {
     }).toList();
   }
 
-
   String _normalizedEntity(Map<String, dynamic> entry) {
     return (entry['entityType'] ?? entry['entity_type'] ?? '')
         .toString()
@@ -119,7 +120,8 @@ class _AdminAuditLogScreenState extends ConsumerState<AdminAuditLogScreen> {
         children: [
           Container(
             padding: const EdgeInsets.all(16),
-            color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.25),
+            color: theme.colorScheme.surfaceContainerHighest
+                .withValues(alpha: 0.25),
             child: Row(
               children: [
                 Expanded(
@@ -127,7 +129,8 @@ class _AdminAuditLogScreenState extends ConsumerState<AdminAuditLogScreen> {
                     controller: _actionFilterController,
                     onChanged: (_) => setState(() {}),
                     decoration: const InputDecoration(
-                      hintText: 'Filter by action (e.g. user.update, question.delete)',
+                      hintText:
+                          'Filter by action (e.g. user.update, question.delete)',
                       prefixIcon: Icon(Icons.search),
                     ),
                   ),
@@ -138,9 +141,12 @@ class _AdminAuditLogScreenState extends ConsumerState<AdminAuditLogScreen> {
                   hint: const Text('Entity'),
                   items: const [
                     DropdownMenuItem(value: null, child: Text('All')),
-                    DropdownMenuItem(value: 'user', child: Text('User mutations')),
-                    DropdownMenuItem(value: 'question', child: Text('Question mutations')),
-                    DropdownMenuItem(value: 'event', child: Text('Event reprocess actions')),
+                    DropdownMenuItem(
+                        value: 'user', child: Text('User mutations')),
+                    DropdownMenuItem(
+                        value: 'question', child: Text('Question mutations')),
+                    DropdownMenuItem(
+                        value: 'event', child: Text('Event reprocess actions')),
                   ],
                   onChanged: (value) => setState(() => _entityFilter = value),
                 ),
@@ -169,7 +175,9 @@ class _AdminAuditLogScreenState extends ConsumerState<AdminAuditLogScreen> {
                     separatorBuilder: (_, __) => const Divider(height: 1),
                     itemBuilder: (_, i) {
                       final entry = rows[i];
-                      final createdAtRaw = (entry['createdAt'] ?? entry['created_at'])?.toString();
+                      final createdAtRaw =
+                          (entry['createdAt'] ?? entry['created_at'])
+                              ?.toString();
                       DateTime? createdAt;
                       if (createdAtRaw != null && createdAtRaw.isNotEmpty) {
                         createdAt = DateTime.tryParse(createdAtRaw)?.toUtc();
@@ -178,7 +186,8 @@ class _AdminAuditLogScreenState extends ConsumerState<AdminAuditLogScreen> {
 
                       return ListTile(
                         leading: const Icon(Icons.history_toggle_off),
-                        title: Text(entry['action']?.toString() ?? 'unknown.action'),
+                        title: Text(
+                            entry['action']?.toString() ?? 'unknown.action'),
                         subtitle: Text(
                           'entity=${entry['entityType'] ?? entry['entity_type'] ?? '-'} • actor=${entry['actorUserId'] ?? entry['actor_user_id'] ?? '-'}\n'
                           'target=${entry['targetId'] ?? entry['target_id'] ?? '-'}',

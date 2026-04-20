@@ -7,27 +7,29 @@ class CompetitionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final competitionTheme = AppTheme.fromType(ThemeType.competition, ThemeMode.system);
+    final competitionTheme =
+        AppTheme.fromType(ThemeType.competition, ThemeMode.system);
 
     return Theme(
-      data: competitionTheme.themeData,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text("Competition Mode"),
-          leading: IconButton( // ✅ Back button to return to previous screen
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              context.pop(); // Navigate back
-            },
+        data: competitionTheme.themeData,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text("Competition Mode"),
+            leading: IconButton(
+              // ✅ Back button to return to previous screen
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                context.pop(); // Navigate back
+              },
+            ),
           ),
-        ),
-        body: Center(
-          child: Text(
-            "This screen uses a custom theme!",
-            style: TextStyle(fontSize: 20, fontFamily: competitionTheme.fontFamily),
+          body: Center(
+            child: Text(
+              "This screen uses a custom theme!",
+              style: TextStyle(
+                  fontSize: 20, fontFamily: competitionTheme.fontFamily),
+            ),
           ),
-        ),
-      )
-    );
+        ));
   }
 }

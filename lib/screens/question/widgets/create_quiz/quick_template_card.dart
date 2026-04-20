@@ -7,7 +7,8 @@ class QuickTemplate extends StatelessWidget {
   final Color color;
   final VoidCallback onTap;
 
-  const QuickTemplate({super.key,
+  const QuickTemplate({
+    super.key,
     required this.title,
     required this.subtitle,
     required this.icon,

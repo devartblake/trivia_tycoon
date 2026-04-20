@@ -41,7 +41,11 @@ class _SpectatorChatState extends State<SpectatorChat> {
       _messages.addAll([
         {'user': 'Sarah', 'message': 'This is intense! 🔥', 'isSystem': false},
         {'user': 'Mike', 'message': 'Go Alex!', 'isSystem': false},
-        {'user': 'System', 'message': '10 people are watching', 'isSystem': true},
+        {
+          'user': 'System',
+          'message': '10 people are watching',
+          'isSystem': true
+        },
       ]);
     });
   }
@@ -197,7 +201,8 @@ class _SpectatorChatState extends State<SpectatorChat> {
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 hintText: 'Say something...',
-                hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
+                hintStyle:
+                    TextStyle(color: Colors.white.withValues(alpha: 0.5)),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
                   borderSide: BorderSide.none,

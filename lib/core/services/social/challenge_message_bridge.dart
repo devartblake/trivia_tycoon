@@ -56,7 +56,8 @@ class ChallengeMessageBridge {
       message.timestamp,
     );
 
-    LogManager.debug('Challenge message created for challenge: ${challenge.id}');
+    LogManager.debug(
+        'Challenge message created for challenge: ${challenge.id}');
   }
 
   /// Called when a challenge is accepted
@@ -91,10 +92,10 @@ class ChallengeMessageBridge {
 
   /// Called when a challenge is completed
   Future<void> onChallengeCompleted(
-      PVPChallenge challenge,
-      String winnerId,
-      int coinsWon,
-      ) async {
+    PVPChallenge challenge,
+    String winnerId,
+    int coinsWon,
+  ) async {
     final conversationId = _getConversationId(
       challenge.challengerId,
       challenge.opponentId,
@@ -130,17 +131,16 @@ class ChallengeMessageBridge {
   // ============ Helper Methods ============
 
   String _getChallengeCreatedContent(PVPChallenge challenge) {
-    final wagerText = challenge.wager > 0
-        ? ' for ${challenge.wager} coins'
-        : '';
+    final wagerText =
+        challenge.wager > 0 ? ' for ${challenge.wager} coins' : '';
     return 'Challenged you to a ${challenge.category} quiz$wagerText!';
   }
 
   String _getChallengeResultContent(
-      PVPChallenge challenge,
-      String winnerId,
-      int coinsWon,
-      ) {
+    PVPChallenge challenge,
+    String winnerId,
+    int coinsWon,
+  ) {
     if (winnerId.isEmpty) {
       return 'Challenge ended in a draw!';
     }
@@ -153,10 +153,10 @@ class ChallengeMessageBridge {
   }
 
   Future<void> _ensureConversationExists(
-      String conversationId,
-      String userId1,
-      String userId2,
-      ) async {
+    String conversationId,
+    String userId1,
+    String userId2,
+  ) async {
     var conversation = _conversationStorage.getConversationById(conversationId);
 
     if (conversation == null) {

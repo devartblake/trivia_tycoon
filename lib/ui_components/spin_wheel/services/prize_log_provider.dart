@@ -29,7 +29,8 @@ class PrizeLogNotifier extends AsyncNotifier<List<PrizeEntry>> {
 
   void filterByDate(DateTime start, DateTime end) {
     final filtered = _allLogs.where((entry) {
-      return entry.timestamp.isAfter(start.subtract(const Duration(seconds: 1))) &&
+      return entry.timestamp
+              .isAfter(start.subtract(const Duration(seconds: 1))) &&
           entry.timestamp.isBefore(end.add(const Duration(seconds: 1)));
     }).toList();
 
@@ -54,7 +55,8 @@ class PrizeLogNotifier extends AsyncNotifier<List<PrizeEntry>> {
     }
     return buffer.toString();
   }
-
 }
 
-final prizeLogProvider = AsyncNotifierProvider<PrizeLogNotifier, List<PrizeEntry>>(PrizeLogNotifier.new);
+final prizeLogProvider =
+    AsyncNotifierProvider<PrizeLogNotifier, List<PrizeEntry>>(
+        PrizeLogNotifier.new);

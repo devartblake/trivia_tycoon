@@ -57,12 +57,12 @@ class ProfileStatsSection extends StatelessWidget {
   }
 
   Widget _buildStatCard(
-      String label,
-      String value,
-      IconData icon,
-      List<Color> gradient,
-      VoidCallback? onTap,
-      ) {
+    String label,
+    String value,
+    IconData icon,
+    List<Color> gradient,
+    VoidCallback? onTap,
+  ) {
     return Material(
       color: Colors.transparent,
       child: InkWell(

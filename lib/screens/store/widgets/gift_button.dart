@@ -71,7 +71,8 @@ class _GiftButtonState extends State<GiftButton>
               child: Transform.rotate(
                 angle: _rotationAnimation.value,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
                       colors: [Color(0xFFEC4899), Color(0xFFDB2777)],
@@ -81,7 +82,8 @@ class _GiftButtonState extends State<GiftButton>
                     borderRadius: BorderRadius.circular(25),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFFEC4899).withValues(alpha: _isPressed ? 0.4 : 0.3),
+                        color: const Color(0xFFEC4899)
+                            .withValues(alpha: _isPressed ? 0.4 : 0.3),
                         blurRadius: _isPressed ? 15 : 12,
                         offset: Offset(0, _isPressed ? 4 : 6),
                       ),
@@ -223,10 +225,18 @@ class _GiftButtonState extends State<GiftButton>
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               children: [
-                _buildGiftOption('Energy Pack', '5 Energy Refills', Icons.flash_on, const Color(0xFF10B981), '50 Coins'),
-                _buildGiftOption('Coin Gift', '1000 Coins', Icons.monetization_on, const Color(0xFFF59E0B), '100 Coins'),
-                _buildGiftOption('Extra Life', '1 Life Refill', Icons.favorite, const Color(0xFFEF4444), '25 Coins'),
-                _buildGiftOption('Power-up Bundle', '3 Random Power-ups', Icons.auto_fix_high, const Color(0xFF8B5CF6), '150 Coins'),
+                _buildGiftOption('Energy Pack', '5 Energy Refills',
+                    Icons.flash_on, const Color(0xFF10B981), '50 Coins'),
+                _buildGiftOption(
+                    'Coin Gift',
+                    '1000 Coins',
+                    Icons.monetization_on,
+                    const Color(0xFFF59E0B),
+                    '100 Coins'),
+                _buildGiftOption('Extra Life', '1 Life Refill', Icons.favorite,
+                    const Color(0xFFEF4444), '25 Coins'),
+                _buildGiftOption('Power-up Bundle', '3 Random Power-ups',
+                    Icons.auto_fix_high, const Color(0xFF8B5CF6), '150 Coins'),
               ],
             ),
           ),
@@ -235,7 +245,8 @@ class _GiftButtonState extends State<GiftButton>
     );
   }
 
-  Widget _buildGiftOption(String title, String description, IconData icon, Color color, String cost) {
+  Widget _buildGiftOption(String title, String description, IconData icon,
+      Color color, String cost) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
@@ -304,7 +315,8 @@ class _GiftButtonState extends State<GiftButton>
                 style: ElevatedButton.styleFrom(
                   backgroundColor: color,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),

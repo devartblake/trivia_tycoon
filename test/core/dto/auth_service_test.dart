@@ -54,9 +54,9 @@ class _StubHttpClient extends http.BaseClient {
 // ---------------------------------------------------------------------------
 
 AuthApiClient _makeApiClient(
-    _StubHttpClient httpClient,
-    _FakeDeviceIdService deviceId,
-    ) =>
+  _StubHttpClient httpClient,
+  _FakeDeviceIdService deviceId,
+) =>
     AuthApiClient(
       httpClient,
       apiBaseUrl: 'https://example.test',
@@ -104,11 +104,11 @@ void main() {
   group('AuthService.login', () {
     test('saves tokens on success', () async {
       final client = _StubHttpClient((_) => _jsonResp({
-        'access_token': 'access-123',
-        'refresh_token': 'refresh-456',
-        'expires_in': 3600,
-        'user_id': 'user-1',
-      }));
+            'access_token': 'access-123',
+            'refresh_token': 'refresh-456',
+            'expires_in': 3600,
+            'user_id': 'user-1',
+          }));
 
       final svc = _makeAuthService(store: tokenStore, httpClient: client);
       final session = await svc.login(email: 'a@b.com', password: 'pass');
@@ -120,12 +120,12 @@ void main() {
     });
 
     test('throws on 401', () async {
-      final client = _StubHttpClient((_) =>
-          _jsonResp({'message': 'Invalid credentials'}, status: 401));
+      final client = _StubHttpClient(
+          (_) => _jsonResp({'message': 'Invalid credentials'}, status: 401));
 
       final svc = _makeAuthService(store: tokenStore, httpClient: client);
       await expectLater(
-            () => svc.login(email: 'a@b.com', password: 'wrong'),
+        () => svc.login(email: 'a@b.com', password: 'wrong'),
         throwsA(isA<Exception>()),
       );
       expect(tokenStore.load().hasTokens, isFalse);
@@ -133,11 +133,11 @@ void main() {
 
     test('throws on server error', () async {
       final client =
-      _StubHttpClient((_) => _jsonResp({'message': 'oops'}, status: 500));
+          _StubHttpClient((_) => _jsonResp({'message': 'oops'}, status: 500));
 
       final svc = _makeAuthService(store: tokenStore, httpClient: client);
       await expectLater(
-            () => svc.login(email: 'a@b.com', password: 'pass'),
+        () => svc.login(email: 'a@b.com', password: 'pass'),
         throwsA(isA<Exception>()),
       );
     });
@@ -151,10 +151,10 @@ void main() {
       ));
 
       final client = _StubHttpClient((_) => _jsonResp({
-        'access_token': 'new-access',
-        'refresh_token': 'new-refresh',
-        'expires_in': 3600,
-      }));
+            'access_token': 'new-access',
+            'refresh_token': 'new-refresh',
+            'expires_in': 3600,
+          }));
 
       final svc = _makeAuthService(store: tokenStore, httpClient: client);
       final session = await svc.refresh();
@@ -196,7 +196,7 @@ void main() {
       ));
 
       final client =
-      _StubHttpClient((_) => _jsonResp({'message': 'error'}, status: 500));
+          _StubHttpClient((_) => _jsonResp({'message': 'error'}, status: 500));
       final svc = _makeAuthService(store: tokenStore, httpClient: client);
 
       await svc.logout();

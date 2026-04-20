@@ -6,8 +6,13 @@ class BlendMask extends SingleChildRenderObjectWidget {
   final BlendMode _blendMode;
   final double _opacity;
 
-  const BlendMask({required BlendMode blendMode, double opacity = 1.0, super.key, super.child })
-      : _blendMode = blendMode, _opacity = opacity;
+  const BlendMask(
+      {required BlendMode blendMode,
+      double opacity = 1.0,
+      super.key,
+      super.child})
+      : _blendMode = blendMode,
+        _opacity = opacity;
 
   @override
   RenderObject createRenderObject(context) {
@@ -26,12 +31,17 @@ class RenderBlendMask extends RenderProxyBox {
   double _opacity;
 
   RenderBlendMask(BlendMode blendMode, double opacity)
-      : _blendMode = blendMode, _opacity = opacity;
+      : _blendMode = blendMode,
+        _opacity = opacity;
 
   @override
   void paint(context, offset) {
     // Create a new layer and specify the blend mode and opacity to composite it with:
-    context.canvas.saveLayer(offset & size, Paint()..blendMode=_blendMode..color=Color.fromARGB((_opacity * 255).round(), 255, 255, 255));
+    context.canvas.saveLayer(
+        offset & size,
+        Paint()
+          ..blendMode = _blendMode
+          ..color = Color.fromARGB((_opacity * 255).round(), 255, 255, 255));
 
     super.paint(context, offset);
 

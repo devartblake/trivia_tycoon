@@ -15,7 +15,8 @@ class QuizCard extends StatefulWidget {
   State<QuizCard> createState() => _QuizCardState();
 }
 
-class _QuizCardState extends State<QuizCard> with SingleTickerProviderStateMixin {
+class _QuizCardState extends State<QuizCard>
+    with SingleTickerProviderStateMixin {
   AnimationController? _hoverController;
   Animation<double>? _scaleAnimation;
   Animation<double>? _elevationAnimation;
@@ -64,19 +65,21 @@ class _QuizCardState extends State<QuizCard> with SingleTickerProviderStateMixin
       onTapCancel: () => _hoverController!.reverse(),
       child: _scaleAnimation != null && _elevationAnimation != null
           ? AnimatedBuilder(
-        animation: _hoverController!,
-        builder: (context, child) {
-          return Transform.scale(
-            scale: _scaleAnimation!.value,
-            child: _buildCard(scoreColor, theme, _elevationAnimation!.value),
-          );
-        },
-      )
+              animation: _hoverController!,
+              builder: (context, child) {
+                return Transform.scale(
+                  scale: _scaleAnimation!.value,
+                  child:
+                      _buildCard(scoreColor, theme, _elevationAnimation!.value),
+                );
+              },
+            )
           : _buildCard(scoreColor, theme, 0.0),
     );
   }
 
-  Widget _buildCard(Color scoreColor, Map<String, dynamic> theme, double elevationValue) {
+  Widget _buildCard(
+      Color scoreColor, Map<String, dynamic> theme, double elevationValue) {
     final score = _parseScore(widget.quiz['score'] ?? '0%');
 
     return Container(
@@ -135,20 +138,20 @@ class _QuizCardState extends State<QuizCard> with SingleTickerProviderStateMixin
             ),
             child: widget.quiz['image'] != null
                 ? ColorFiltered(
-              colorFilter: ColorFilter.mode(
-                scoreColor.withValues(alpha: 0.3),
-                BlendMode.overlay,
-              ),
-              child: Image.asset(
-                widget.quiz['image']!,
-                width: double.infinity,
-                height: 100,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return _buildFallbackImage(scoreColor);
-                },
-              ),
-            )
+                    colorFilter: ColorFilter.mode(
+                      scoreColor.withValues(alpha: 0.3),
+                      BlendMode.overlay,
+                    ),
+                    child: Image.asset(
+                      widget.quiz['image']!,
+                      width: double.infinity,
+                      height: 100,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return _buildFallbackImage(scoreColor);
+                      },
+                    ),
+                  )
                 : _buildFallbackImage(scoreColor),
           ),
         ),
@@ -364,8 +367,11 @@ class _QuizCardState extends State<QuizCard> with SingleTickerProviderStateMixin
     final titleLower = title.toLowerCase();
     if (titleLower.contains('science')) return Icons.science;
     if (titleLower.contains('history')) return Icons.history_edu;
-    if (titleLower.contains('pop culture') || titleLower.contains('culture')) return Icons.trending_up;
-    if (titleLower.contains('movie') || titleLower.contains('film') || titleLower.contains('cinema')) return Icons.movie;
+    if (titleLower.contains('pop culture') || titleLower.contains('culture'))
+      return Icons.trending_up;
+    if (titleLower.contains('movie') ||
+        titleLower.contains('film') ||
+        titleLower.contains('cinema')) return Icons.movie;
     if (titleLower.contains('sport')) return Icons.sports_soccer;
     if (titleLower.contains('music')) return Icons.music_note;
     if (titleLower.contains('art')) return Icons.palette;

@@ -10,42 +10,45 @@ class ArcadeRegistry {
   const ArcadeRegistry();
 
   List<ArcadeGameDefinition> get games => [
-    ArcadeGameDefinition(
-      id: ArcadeGameId.patternSprint,
-      title: 'Pattern Sprint',
-      subtitle: 'Fill the missing pattern under time pressure.',
-      icon: Icons.auto_awesome,
-      supportedDifficulties: const [
-        ArcadeDifficulty.easy,
-        ArcadeDifficulty.normal,
-        ArcadeDifficulty.hard,
-      ],
-      builder: (context, difficulty) => PatternSprintScreen(difficulty: difficulty),
-    ),
-    ArcadeGameDefinition(
-      id: ArcadeGameId.memoryFlip,
-      title: 'Memory Flip',
-      subtitle: 'Match pairs quickly with minimal mistakes.',
-      icon: Icons.grid_view_rounded,
-      supportedDifficulties: const [
-        ArcadeDifficulty.easy,
-        ArcadeDifficulty.normal,
-        ArcadeDifficulty.hard,
-      ],
-      builder: (context, difficulty) => MemoryFlipScreen(difficulty: difficulty),
-    ),
-    ArcadeGameDefinition(
-      id: ArcadeGameId.quickMathRush,
-      title: 'Quick Math Rush',
-      subtitle: 'Answer fast, build streaks, climb difficulty.',
-      icon: Icons.calculate_rounded,
-      supportedDifficulties: [
-        ArcadeDifficulty.easy,
-        ArcadeDifficulty.normal,
-        ArcadeDifficulty.hard,
-        ArcadeDifficulty.insane,
-      ],
-      builder: (context, difficulty) => QuickMathRushScreen(difficulty: difficulty),
-    ),
-  ];
+        ArcadeGameDefinition(
+          id: ArcadeGameId.patternSprint,
+          title: 'Pattern Sprint',
+          subtitle: 'Fill the missing pattern under time pressure.',
+          icon: Icons.auto_awesome,
+          supportedDifficulties: const [
+            ArcadeDifficulty.easy,
+            ArcadeDifficulty.normal,
+            ArcadeDifficulty.hard,
+          ],
+          builder: (context, difficulty) =>
+              PatternSprintScreen(difficulty: difficulty),
+        ),
+        ArcadeGameDefinition(
+          id: ArcadeGameId.memoryFlip,
+          title: 'Memory Flip',
+          subtitle: 'Match pairs quickly with minimal mistakes.',
+          icon: Icons.grid_view_rounded,
+          supportedDifficulties: const [
+            ArcadeDifficulty.easy,
+            ArcadeDifficulty.normal,
+            ArcadeDifficulty.hard,
+          ],
+          builder: (context, difficulty) =>
+              MemoryFlipScreen(difficulty: difficulty),
+        ),
+        ArcadeGameDefinition(
+          id: ArcadeGameId.quickMathRush,
+          title: 'Quick Math Rush',
+          subtitle: 'Answer fast, build streaks, climb difficulty.',
+          icon: Icons.calculate_rounded,
+          supportedDifficulties: [
+            ArcadeDifficulty.easy,
+            ArcadeDifficulty.normal,
+            ArcadeDifficulty.hard,
+            ArcadeDifficulty.insane,
+          ],
+          builder: (context, difficulty) =>
+              QuickMathRushScreen(difficulty: difficulty),
+        ),
+      ];
 }

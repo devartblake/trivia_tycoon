@@ -110,8 +110,8 @@ class _IntentStepState extends State<IntentStep> {
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Center(
-                      child: Text(opt.emoji,
-                          style: const TextStyle(fontSize: 28)),
+                      child:
+                          Text(opt.emoji, style: const TextStyle(fontSize: 28)),
                     ),
                   ),
                   const SizedBox(width: 16),

@@ -15,21 +15,22 @@ class MatchDto {
   });
 
   factory MatchDto.fromJson(Map<String, dynamic> j) => MatchDto(
-    matchId: (j['matchId'] ?? '').toString(),
-    roomId: (j['roomId'] ?? '').toString(),
-    players: (j['players'] as List? ?? [])
-        .whereType<Map>()
-        .map((e) => PresenceDto.fromJson(e.cast<String, dynamic>()))
-        .toList(),
-    currentTurn: (j['currentTurn'] is Map)
-        ? TurnDto.fromJson((j['currentTurn'] as Map).cast<String, dynamic>())
-        : null,
-  );
+        matchId: (j['matchId'] ?? '').toString(),
+        roomId: (j['roomId'] ?? '').toString(),
+        players: (j['players'] as List? ?? [])
+            .whereType<Map>()
+            .map((e) => PresenceDto.fromJson(e.cast<String, dynamic>()))
+            .toList(),
+        currentTurn: (j['currentTurn'] is Map)
+            ? TurnDto.fromJson(
+                (j['currentTurn'] as Map).cast<String, dynamic>())
+            : null,
+      );
 
   Map<String, dynamic> toJson() => {
-    'matchId': matchId,
-    'roomId': roomId,
-    'players': players.map((e) => e.toJson()).toList(),
-    if (currentTurn != null) 'currentTurn': currentTurn!.toJson(),
-  };
+        'matchId': matchId,
+        'roomId': roomId,
+        'players': players.map((e) => e.toJson()).toList(),
+        if (currentTurn != null) 'currentTurn': currentTurn!.toJson(),
+      };
 }

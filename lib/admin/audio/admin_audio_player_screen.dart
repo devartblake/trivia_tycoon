@@ -132,17 +132,22 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
       // MP3 (ID3 tag or MPEG frame sync), WAV (RIFF), OGG (OggS), M4A/MP4 (ftyp).
       final hasId3 = bytes[0] == 0x49 && bytes[1] == 0x44 && bytes[2] == 0x33;
       final hasMp3FrameSync = bytes[0] == 0xFF && (bytes[1] & 0xE0) == 0xE0;
-      final hasRiff =
-          bytes[0] == 0x52 && bytes[1] == 0x49 && bytes[2] == 0x46 && bytes[3] == 0x46;
-      final hasOgg =
-          bytes[0] == 0x4F && bytes[1] == 0x67 && bytes[2] == 0x67 && bytes[3] == 0x53;
+      final hasRiff = bytes[0] == 0x52 &&
+          bytes[1] == 0x49 &&
+          bytes[2] == 0x46 &&
+          bytes[3] == 0x46;
+      final hasOgg = bytes[0] == 0x4F &&
+          bytes[1] == 0x67 &&
+          bytes[2] == 0x67 &&
+          bytes[3] == 0x53;
       final hasFtyp = bytes.length > 8 &&
           bytes[4] == 0x66 &&
           bytes[5] == 0x74 &&
           bytes[6] == 0x79 &&
           bytes[7] == 0x70;
 
-      final isSupported = hasId3 || hasMp3FrameSync || hasRiff || hasOgg || hasFtyp;
+      final isSupported =
+          hasId3 || hasMp3FrameSync || hasRiff || hasOgg || hasFtyp;
       _assetValidityCache[assetPath] = isSupported;
       return isSupported;
     } catch (_) {
@@ -218,7 +223,8 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
         await SystemSound.play(SystemSoundType.click);
         setState(() {
           _invalidSfxAsset = true;
-          _status = 'SFX asset is not a valid audio file. Played system click fallback.';
+          _status =
+              'SFX asset is not a valid audio file. Played system click fallback.';
         });
         return;
       }
@@ -239,7 +245,8 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
         await _sfxPlayer.play();
         setState(() => _status = 'SFX preview played (fallback)');
       } catch (fallbackError) {
-        setState(() => _status = 'SFX error: $e | Fallback error: $fallbackError');
+        setState(
+            () => _status = 'SFX error: $e | Fallback error: $fallbackError');
       }
     }
   }
@@ -346,7 +353,8 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
                                     value: track,
                                     child: Text(
                                       track.split('/').last,
-                                      style: const TextStyle(color: Colors.white),
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                     ),
                                   ))
                               .toList(),
@@ -374,8 +382,9 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
                         Row(
                           children: [
                             FilledButton.icon(
-                              onPressed:
-                                  _musicOn ? (_isPlaying ? _pauseTrack : _playTrack) : null,
+                              onPressed: _musicOn
+                                  ? (_isPlaying ? _pauseTrack : _playTrack)
+                                  : null,
                               icon: Icon(_isPlaying
                                   ? Icons.pause_rounded
                                   : Icons.play_arrow_rounded),
@@ -383,7 +392,9 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
                             ),
                             const SizedBox(width: 8),
                             OutlinedButton.icon(
-                              onPressed: (_isPlaying || _trackLoaded) ? _stopTrack : null,
+                              onPressed: (_isPlaying || _trackLoaded)
+                                  ? _stopTrack
+                                  : null,
                               icon: const Icon(Icons.stop_rounded),
                               label: const Text('Stop'),
                             ),
@@ -416,7 +427,8 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
                                     value: asset,
                                     child: Text(
                                       asset.split('/').last,
-                                      style: const TextStyle(color: Colors.white),
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                     ),
                                   ))
                               .toList(),

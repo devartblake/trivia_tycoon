@@ -16,7 +16,8 @@ class WsDisconnected extends MultiplayerException {
 /// Generic HTTP failure with status & body.
 class HttpFailure extends MultiplayerException {
   final String? body;
-  const HttpFailure({required int status, String message = 'HTTP failure', this.body})
+  const HttpFailure(
+      {required int status, String message = 'HTTP failure', this.body})
       : super(message, status: status);
 }
 
@@ -27,7 +28,8 @@ class ProtocolFailure extends MultiplayerException {
 
 /// User not authorized/forbidden.
 class NotAuthorized extends MultiplayerException {
-  const NotAuthorized([String msg = 'Not authorized']) : super(msg, status: 401);
+  const NotAuthorized([String msg = 'Not authorized'])
+      : super(msg, status: 401);
 }
 
 /// Room is full.

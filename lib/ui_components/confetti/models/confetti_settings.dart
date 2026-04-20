@@ -26,7 +26,11 @@ class ConfettiSettings {
     this.wind = 0.0,
     this.images = const [],
     this.colors = const [Colors.red, Colors.blue, Colors.green, Colors.yellow],
-    this.shapes = const [ConfettiShapeType.circle, ConfettiShapeType.square, ConfettiShapeType.triangle],
+    this.shapes = const [
+      ConfettiShapeType.circle,
+      ConfettiShapeType.square,
+      ConfettiShapeType.triangle
+    ],
     this.enableGravity = true,
     this.enableRotation = true,
     this.useImages = false,
@@ -89,10 +93,12 @@ class ConfettiSettings {
       return ConfettiSettings(
         name: 'Migrated Theme',
         colors: (map['colors'] as List).map((c) => Color(c)).toList(),
-        shapes: (map['shapes'] as List).map((s) => ConfettiShapeType.values.firstWhere(
-              (e) => e.toString().split('.').last == s,
-          orElse: () => ConfettiShapeType.circle, // Fallback to circle
-        )).toList(),
+        shapes: (map['shapes'] as List)
+            .map((s) => ConfettiShapeType.values.firstWhere(
+                  (e) => e.toString().split('.').last == s,
+                  orElse: () => ConfettiShapeType.circle, // Fallback to circle
+                ))
+            .toList(),
         speed: map['speed'],
         density: map['density'],
         enableGravity: true,
@@ -105,21 +111,21 @@ class ConfettiSettings {
     }
 
     // Default parsing for latest version
-      return ConfettiSettings(
-        name: map['name'] ?? 'Untitled',
-        density: map['density'] ?? 100,
-        speed: map['speed'] ?? 3.0,
-        gravity: map['gravity'] ?? 0.0,
-        wind: map['wind'] ?? 0.0,
-        colors: (map['colors'] as List).map((c) => Color(c)).toList(),
-        shapes: (map['shapes'] as List)
-            .map((s) => ConfettiShapeType.values[s])
-            .toList(),
-        enableGravity: map['enableGravity'] ?? true,
-        enableRotation: map['enableRotation'] ?? true,
-        useImages: map['useImages'] ?? false,
-      );
-    }
+    return ConfettiSettings(
+      name: map['name'] ?? 'Untitled',
+      density: map['density'] ?? 100,
+      speed: map['speed'] ?? 3.0,
+      gravity: map['gravity'] ?? 0.0,
+      wind: map['wind'] ?? 0.0,
+      colors: (map['colors'] as List).map((c) => Color(c)).toList(),
+      shapes: (map['shapes'] as List)
+          .map((s) => ConfettiShapeType.values[s])
+          .toList(),
+      enableGravity: map['enableGravity'] ?? true,
+      enableRotation: map['enableRotation'] ?? true,
+      useImages: map['useImages'] ?? false,
+    );
+  }
 
   /// Create settings from a "ConfettiTheme'
   factory ConfettiSettings.fromTheme(ConfettiTheme theme) {

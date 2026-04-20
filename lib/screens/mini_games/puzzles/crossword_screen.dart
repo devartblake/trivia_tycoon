@@ -100,9 +100,11 @@ class _CrosswordScreenState extends State<CrosswordScreen> {
           break;
       }
 
-      final assetPath = 'assets/data/mini-games/crossword_hard_${categoryString}_packs.json';
+      final assetPath =
+          'assets/data/mini-games/crossword_hard_${categoryString}_packs.json';
       final data = await CrosswordDataLoader.loadCrossword(assetPath);
-      _controller = CrosswordController(data, onPuzzleComplete: _showResultDialog);
+      _controller =
+          CrosswordController(data, onPuzzleComplete: _showResultDialog);
       setState(() {
         _isLoading = false;
       });
@@ -330,7 +332,8 @@ class _CrosswordScreenState extends State<CrosswordScreen> {
           appBar: AppBar(
             title: const Text(
               'Crossword',
-              style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: -0.5),
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, letterSpacing: -0.5),
             ),
             backgroundColor: Colors.white,
             foregroundColor: const Color(0xFF1E293B),
@@ -352,7 +355,8 @@ class _CrosswordScreenState extends State<CrosswordScreen> {
                 builder: (context, _) {
                   return Container(
                     margin: const EdgeInsets.only(right: 12),
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: const Color(0xFF10B981).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(20),
@@ -360,7 +364,8 @@ class _CrosswordScreenState extends State<CrosswordScreen> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.check_circle, size: 16, color: Color(0xFF10B981)),
+                        const Icon(Icons.check_circle,
+                            size: 16, color: Color(0xFF10B981)),
                         const SizedBox(width: 6),
                         Text(
                           '${_controller.completedWords}/${_controller.totalWords}',
@@ -492,9 +497,9 @@ class CrosswordController extends ChangeNotifier {
   void _buildGrid() {
     grid = List.generate(
       data.gridSize,
-          (i) => List.generate(
+      (i) => List.generate(
         data.gridSize,
-            (j) => CrosswordCell(row: i, col: j),
+        (j) => CrosswordCell(row: i, col: j),
       ),
     );
     wordNumbers.clear();
@@ -517,8 +522,12 @@ class CrosswordController extends ChangeNotifier {
 
     for (final word in data.words) {
       for (int i = 0; i < word.word.length; i++) {
-        final row = word.direction == WordDirection.across ? word.startRow : word.startRow + i;
-        final col = word.direction == WordDirection.across ? word.startCol + i : word.startCol;
+        final row = word.direction == WordDirection.across
+            ? word.startRow
+            : word.startRow + i;
+        final col = word.direction == WordDirection.across
+            ? word.startCol + i
+            : word.startCol;
 
         if (row < data.gridSize && col < data.gridSize) {
           grid[row][col].correctLetter = word.word[i];
@@ -573,9 +582,14 @@ class CrosswordController extends ChangeNotifier {
   List<CrosswordWord> _getWordsAtPosition(int row, int col) {
     return data.words.where((word) {
       if (word.direction == WordDirection.across) {
-        return row == word.startRow && col >= word.startCol && col < word.startCol + word.word.length;
-      } else { // down
-        return col == word.startCol && row >= word.startRow && row < word.startRow + word.word.length;
+        return row == word.startRow &&
+            col >= word.startCol &&
+            col < word.startCol + word.word.length;
+      } else {
+        // down
+        return col == word.startCol &&
+            row >= word.startRow &&
+            row < word.startRow + word.word.length;
       }
     }).toList();
   }
@@ -588,9 +602,11 @@ class CrosswordController extends ChangeNotifier {
         .toList();
 
     if (words.isNotEmpty) {
-      words.sort((a,b) {
-        final distA = (a.startRow - selectedRow!).abs() + (a.startCol - selectedCol!).abs();
-        final distB = (b.startRow - selectedRow!).abs() + (b.startCol - selectedCol!).abs();
+      words.sort((a, b) {
+        final distA = (a.startRow - selectedRow!).abs() +
+            (a.startCol - selectedCol!).abs();
+        final distB = (b.startRow - selectedRow!).abs() +
+            (b.startCol - selectedCol!).abs();
         return distA.compareTo(distB);
       });
       return words.first;
@@ -655,17 +671,18 @@ class CrosswordController extends ChangeNotifier {
     int nextRow = selectedRow!;
     int nextCol = selectedCol!;
 
-    if(currentDirection == WordDirection.across) {
-      if(selectedCol! < word.startCol + word.word.length - 1) {
+    if (currentDirection == WordDirection.across) {
+      if (selectedCol! < word.startCol + word.word.length - 1) {
         nextCol++;
       }
-    } else { // down
-      if(selectedRow! < word.startRow + word.word.length - 1) {
+    } else {
+      // down
+      if (selectedRow! < word.startRow + word.word.length - 1) {
         nextRow++;
       }
     }
 
-    if(grid[nextRow][nextCol].isActive) {
+    if (grid[nextRow][nextCol].isActive) {
       selectedRow = nextRow;
       selectedCol = nextCol;
     }
@@ -679,17 +696,18 @@ class CrosswordController extends ChangeNotifier {
     int prevRow = selectedRow!;
     int prevCol = selectedCol!;
 
-    if(currentDirection == WordDirection.across) {
-      if(selectedCol! > word.startCol) {
+    if (currentDirection == WordDirection.across) {
+      if (selectedCol! > word.startCol) {
         prevCol--;
       }
-    } else { // down
-      if(selectedRow! > word.startRow) {
+    } else {
+      // down
+      if (selectedRow! > word.startRow) {
         prevRow--;
       }
     }
 
-    if(grid[prevRow][prevCol].isActive) {
+    if (grid[prevRow][prevCol].isActive) {
       selectedRow = prevRow;
       selectedCol = prevCol;
     }
@@ -700,10 +718,18 @@ class CrosswordController extends ChangeNotifier {
     int newRow = selectedRow!;
     int newCol = selectedCol!;
     switch (dir) {
-      case Direction.up: newRow = max(0, newRow - 1); break;
-      case Direction.down: newRow = min(data.gridSize - 1, newRow + 1); break;
-      case Direction.left: newCol = max(0, newCol - 1); break;
-      case Direction.right: newCol = min(data.gridSize - 1, newCol + 1); break;
+      case Direction.up:
+        newRow = max(0, newRow - 1);
+        break;
+      case Direction.down:
+        newRow = min(data.gridSize - 1, newRow + 1);
+        break;
+      case Direction.left:
+        newCol = max(0, newCol - 1);
+        break;
+      case Direction.right:
+        newCol = min(data.gridSize - 1, newCol + 1);
+        break;
     }
     if (grid[newRow][newCol].isActive) {
       selectedRow = newRow;
@@ -720,8 +746,12 @@ class CrosswordController extends ChangeNotifier {
   List<CrosswordCell> _getWordCells(CrosswordWord word) {
     List<CrosswordCell> cells = [];
     for (int i = 0; i < word.word.length; i++) {
-      final row = word.direction == WordDirection.across ? word.startRow : word.startRow + i;
-      final col = word.direction == WordDirection.across ? word.startCol + i : word.startCol;
+      final row = word.direction == WordDirection.across
+          ? word.startRow
+          : word.startRow + i;
+      final col = word.direction == WordDirection.across
+          ? word.startCol + i
+          : word.startCol;
       cells.add(grid[row][col]);
     }
     return cells;
@@ -806,22 +836,22 @@ class CrosswordGrid extends StatelessWidget {
       );
     }
 
-    final isWrong = cell.userLetter.isNotEmpty &&
-        cell.userLetter != cell.correctLetter;
+    final isWrong =
+        cell.userLetter.isNotEmpty && cell.userLetter != cell.correctLetter;
 
     return Container(
       decoration: BoxDecoration(
         color: isSelected
             ? const Color(0xFFC7D2FE)
             : isInCurrentWord
-            ? const Color(0xFFE0E7FF)
-            : Colors.white,
+                ? const Color(0xFFE0E7FF)
+                : Colors.white,
         border: Border.all(
           color: isSelected
               ? const Color(0xFF6366F1)
               : isInCurrentWord
-              ? const Color(0xFFC7D2FE)
-              : Colors.grey.shade300,
+                  ? const Color(0xFFC7D2FE)
+                  : Colors.grey.shade300,
           width: isSelected ? 1.5 : 1,
         ),
         borderRadius: BorderRadius.circular(4),
@@ -847,9 +877,7 @@ class CrosswordGrid extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: isWrong
-                    ? Colors.red.shade600
-                    : const Color(0xFF1E293B),
+                color: isWrong ? Colors.red.shade600 : const Color(0xFF1E293B),
               ),
             ),
           ),
@@ -952,7 +980,9 @@ class CrosswordClues extends StatelessWidget {
                 word.clue,
                 style: TextStyle(
                   fontSize: 14,
-                  color: isComplete ? Colors.grey.shade500 : const Color(0xFF475569),
+                  color: isComplete
+                      ? Colors.grey.shade500
+                      : const Color(0xFF475569),
                   decoration: isComplete ? TextDecoration.lineThrough : null,
                 ),
               ),
@@ -966,6 +996,7 @@ class CrosswordClues extends StatelessWidget {
 
 // Models
 enum WordDirection { across, down }
+
 enum Direction { up, down, left, right }
 
 class CrosswordData {

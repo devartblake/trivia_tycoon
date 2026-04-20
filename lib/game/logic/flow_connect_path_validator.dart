@@ -3,7 +3,8 @@ import '../models/flow_connect_path_point.dart';
 import '../state/flow_connect_game_state.dart';
 
 class FlowConnectPathValidator {
-  static bool isValidPath(List<FlowConnectPathPoint> path, List<List<FlowConnectGridCell>> grid) {
+  static bool isValidPath(
+      List<FlowConnectPathPoint> path, List<List<FlowConnectGridCell>> grid) {
     if (path.length < 2) return true;
 
     final visitedPoints = <String>{};

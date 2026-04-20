@@ -48,9 +48,7 @@ class EnhancedPowerUpButtons extends StatelessWidget {
               ),
             ],
           ),
-
           const SizedBox(height: 12),
-
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -113,15 +111,18 @@ class _PowerUpButtonState extends State<_PowerUpButton>
           child: Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: widget.powerUp.isEnabled ? () {
-                _animationController.forward().then((_) {
-                  _animationController.reverse();
-                });
-                widget.powerUp.onTap();
-              } : null,
+              onTap: widget.powerUp.isEnabled
+                  ? () {
+                      _animationController.forward().then((_) {
+                        _animationController.reverse();
+                      });
+                      widget.powerUp.onTap();
+                    }
+                  : null,
               borderRadius: BorderRadius.circular(12),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   color: widget.powerUp.isEnabled
                       ? widget.powerUp.color.withValues(alpha: 0.1)

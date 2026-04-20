@@ -10,7 +10,8 @@ void main() {
   late Directory tempDir;
 
   setUpAll(() async {
-    tempDir = await Directory.systemTemp.createTemp('profile_sync_service_test');
+    tempDir =
+        await Directory.systemTemp.createTemp('profile_sync_service_test');
     Hive.init(tempDir.path);
   });
 
@@ -37,7 +38,8 @@ void main() {
     await tempDir.delete(recursive: true);
   });
 
-  test('syncProfileUpdate sends auth header and returns confirmed values', () async {
+  test('syncProfileUpdate sends auth header and returns confirmed values',
+      () async {
     final authBox = Hive.box('auth_tokens');
     await authBox.put('auth_access_token', 'token-abc');
 
@@ -131,7 +133,8 @@ void main() {
     expect(queueBox.length, 1);
   });
 
-  test('retryQueuedUpdates removes queued item after successful retry', () async {
+  test('retryQueuedUpdates removes queued item after successful retry',
+      () async {
     var attemptCount = 0;
     final dio = Dio(BaseOptions(baseUrl: 'https://example.test'));
 
@@ -222,8 +225,10 @@ void main() {
       trackEvent: (_, __) async {},
     );
 
-    await service.syncProfileUpdate(displayName: 'Same User', username: 'same_user');
-    await service.syncProfileUpdate(displayName: 'Same User', username: 'same_user');
+    await service.syncProfileUpdate(
+        displayName: 'Same User', username: 'same_user');
+    await service.syncProfileUpdate(
+        displayName: 'Same User', username: 'same_user');
 
     final queueBox = await Hive.openBox('profile_sync_queue');
     expect(queueBox.length, 1);
@@ -264,7 +269,8 @@ void main() {
       },
     );
 
-    await service.syncProfileUpdate(displayName: 'Retry User', username: 'retry_user');
+    await service.syncProfileUpdate(
+        displayName: 'Retry User', username: 'retry_user');
     for (var i = 0; i < 11; i++) {
       await service.retryQueuedUpdates();
     }
@@ -306,8 +312,10 @@ void main() {
       trackEvent: (_, __) async {},
     );
 
-    await service.syncProfileUpdate(displayName: 'Diag One', username: 'diag_one');
-    await service.syncProfileUpdate(displayName: 'Diag Two', username: 'diag_two');
+    await service.syncProfileUpdate(
+        displayName: 'Diag One', username: 'diag_one');
+    await service.syncProfileUpdate(
+        displayName: 'Diag Two', username: 'diag_two');
 
     final diagnostics = await service.getQueueDiagnostics();
     expect(diagnostics['queue_length'], 2);
@@ -361,7 +369,8 @@ void main() {
     expect(result.confirmedUsername, 'display_name');
   });
 
-  test('404 marks endpoints in backoff to avoid repeated retry noise', () async {
+  test('404 marks endpoints in backoff to avoid repeated retry noise',
+      () async {
     var requestCount = 0;
     final dio = Dio(BaseOptions(baseUrl: 'https://example.test'));
 

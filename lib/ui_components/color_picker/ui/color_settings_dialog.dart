@@ -95,14 +95,16 @@ class _ColorSettingsDialogState extends State<ColorSettingsDialog>
             SnackBar(
               content: Row(
                 children: [
-                  Icon(Icons.check_circle_outline, color: Colors.white, size: 20),
+                  Icon(Icons.check_circle_outline,
+                      color: Colors.white, size: 20),
                   SizedBox(width: 12),
                   Text("Palette '$name' created successfully!"),
                 ],
               ),
               backgroundColor: Colors.green.shade600,
               behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
               margin: EdgeInsets.all(16),
             ),
           );
@@ -245,7 +247,8 @@ class _ColorSettingsDialogState extends State<ColorSettingsDialog>
                           Text(
                             "Loading palettes...",
                             style: TextStyle(
-                              color: colorScheme.onSurface.withValues(alpha: 0.7),
+                              color:
+                                  colorScheme.onSurface.withValues(alpha: 0.7),
                             ),
                           ),
                         ],
@@ -325,7 +328,8 @@ class _ColorSettingsDialogState extends State<ColorSettingsDialog>
                             onPressed: () async {
                               HapticFeedback.lightImpact();
                               try {
-                                await ColorStorage.savePickerSettings(_localSettings);
+                                await ColorStorage.savePickerSettings(
+                                    _localSettings);
                                 Navigator.pop(context);
 
                                 if (mounted) {
@@ -333,14 +337,17 @@ class _ColorSettingsDialogState extends State<ColorSettingsDialog>
                                     SnackBar(
                                       content: Row(
                                         children: [
-                                          Icon(Icons.check_circle_outline, color: Colors.white, size: 20),
+                                          Icon(Icons.check_circle_outline,
+                                              color: Colors.white, size: 20),
                                           SizedBox(width: 12),
                                           Text("Settings saved successfully!"),
                                         ],
                                       ),
                                       backgroundColor: Colors.green.shade600,
                                       behavior: SnackBarBehavior.floating,
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12)),
                                       margin: EdgeInsets.all(16),
                                     ),
                                   );
@@ -349,7 +356,8 @@ class _ColorSettingsDialogState extends State<ColorSettingsDialog>
                                 if (mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text("Error saving settings: $e"),
+                                      content:
+                                          Text("Error saving settings: $e"),
                                       backgroundColor: Colors.red.shade600,
                                     ),
                                   );
@@ -381,12 +389,12 @@ class _ColorSettingsDialogState extends State<ColorSettingsDialog>
   }
 
   Widget _buildSection(
-      String title,
-      IconData icon,
-      Color accentColor,
-      List<Widget> children,
-      ColorScheme colorScheme,
-      ) {
+    String title,
+    IconData icon,
+    Color accentColor,
+    List<Widget> children,
+    ColorScheme colorScheme,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(

@@ -182,9 +182,9 @@ class _WidgetWheelSegmentState extends ConsumerState<WidgetWheelSegment>
         borderRadius: BorderRadius.circular(16),
         border: widget.isActive
             ? Border.all(
-          color: theme.colorScheme.primary,
-          width: 2,
-        )
+                color: theme.colorScheme.primary,
+                width: 2,
+              )
             : null,
       ),
       child: Column(

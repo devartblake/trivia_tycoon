@@ -4,7 +4,6 @@ import '../../../game/models/store_item_model.dart';
 import '../api_service.dart';
 import '../../manager/log_manager.dart';
 import '../../models/store/store_hub_model.dart';
-import '../../models/store/store_offer_model.dart';
 import '../../models/store/store_gift_model.dart';
 import '../../models/store/premium_store_model.dart';
 
@@ -79,16 +78,6 @@ class StoreService {
     } catch (e) {
       LogManager.debug('getHubData failed, using fallback: $e');
       return StoreHubData.fallback;
-    }
-  }
-
-  Future<StoreOffersData> getOffers() async {
-    try {
-      final json = await apiService.get('/store/offers');
-      return StoreOffersData.fromJson(json);
-    } catch (e) {
-      LogManager.debug('getOffers failed, using fallback: $e');
-      return StoreOffersData.fallback;
     }
   }
 
@@ -323,7 +312,7 @@ class StoreService {
     final items = await getAllItems();
     final lowerQuery = query.toLowerCase();
 
-      return items.where((item) {
+    return items.where((item) {
       return item.name.toLowerCase().contains(lowerQuery) ||
           item.description.toLowerCase().contains(lowerQuery) ||
           item.category.toLowerCase().contains(lowerQuery);
@@ -363,7 +352,8 @@ class StoreService {
 
       if (cachedItemsJson is List) {
         return cachedItemsJson
-            .map((json) => StoreItemModel.fromJson(Map<String, dynamic>.from(json)))
+            .map((json) =>
+                StoreItemModel.fromJson(Map<String, dynamic>.from(json)))
             .toList();
       }
     } catch (e) {
@@ -499,7 +489,8 @@ class StoreService {
       // Count items by category
       final categoryCounts = <String, int>{};
       for (final item in items) {
-        categoryCounts[item.category] = (categoryCounts[item.category] ?? 0) + 1;
+        categoryCounts[item.category] =
+            (categoryCounts[item.category] ?? 0) + 1;
       }
 
       // Count featured items
@@ -536,7 +527,8 @@ class StoreService {
     try {
       if (data.containsKey('items')) {
         final itemsList = (data['items'] as List)
-            .map((json) => StoreItemModel.fromJson(Map<String, dynamic>.from(json)))
+            .map((json) =>
+                StoreItemModel.fromJson(Map<String, dynamic>.from(json)))
             .toList();
 
         // Cache the imported data
@@ -568,7 +560,8 @@ class StoreService {
   }
 
   /// Get items by price range (if StoreItemModel has price field)
-  Future<List<StoreItemModel>> getItemsByPriceRange(double minPrice, double maxPrice) async {
+  Future<List<StoreItemModel>> getItemsByPriceRange(
+      double minPrice, double maxPrice) async {
     final items = await getAllItems();
     return items.where((item) {
       // Assuming StoreItemModel has a price field - adjust as needed
@@ -593,20 +586,19 @@ class StoreService {
         .whereType<Map>()
         .map((raw) => Map<String, dynamic>.from(raw))
         .map((json) {
-          final sku = json['sku']?.toString().toLowerCase();
-          final id = json['id']?.toString().toLowerCase();
-          final name = json['name']?.toString().toLowerCase();
-          final display = localById[sku] ??
-              localById[id] ??
-              (name != null ? localByName[name] : null);
-          final owned = sku != null && inventorySkus.contains(sku);
-          return StoreItemModel.fromStoreCatalog(
-            json,
-            displayItem: display,
-            owned: owned,
-          );
-        })
-        .toList()
+      final sku = json['sku']?.toString().toLowerCase();
+      final id = json['id']?.toString().toLowerCase();
+      final name = json['name']?.toString().toLowerCase();
+      final display = localById[sku] ??
+          localById[id] ??
+          (name != null ? localByName[name] : null);
+      final owned = sku != null && inventorySkus.contains(sku);
+      return StoreItemModel.fromStoreCatalog(
+        json,
+        displayItem: display,
+        owned: owned,
+      );
+    }).toList()
       ..sort((a, b) => (a.sortOrder ?? 0).compareTo(b.sortOrder ?? 0));
 
     LogManager.debug('[StoreService] Loaded ${items.length} catalog items');

@@ -85,18 +85,18 @@ class MiniHexBranchPreview extends ConsumerWidget {
         builder: (context, constraints) {
           final cx = constraints.maxWidth / 2;
           final cy = 42.0; // vertically centered within 90
-          final r = 14.0;  // mini hex radius
+          final r = 14.0; // mini hex radius
           final spacing = r * 1.6;
 
           // Create honeycomb pattern (center + 6 around)
           final centers = <Offset>[
             Offset(cx, cy), // center
             Offset(cx + spacing, cy), // right
-            Offset(cx + spacing/2, cy + spacing * 0.866), // bottom-right
-            Offset(cx - spacing/2, cy + spacing * 0.866), // bottom-left
+            Offset(cx + spacing / 2, cy + spacing * 0.866), // bottom-right
+            Offset(cx - spacing / 2, cy + spacing * 0.866), // bottom-left
             Offset(cx - spacing, cy), // left
-            Offset(cx - spacing/2, cy - spacing * 0.866), // top-left
-            Offset(cx + spacing/2, cy - spacing * 0.866), // top-right
+            Offset(cx - spacing / 2, cy - spacing * 0.866), // top-left
+            Offset(cx + spacing / 2, cy - spacing * 0.866), // top-right
           ];
 
           // Match at most 7 items to our centers
@@ -118,12 +118,12 @@ class MiniHexBranchPreview extends ConsumerWidget {
           };
 
           // Determine which path to use for highlighting
-          final effectivePathIds = pathIds ?? (highlightPath ? used.map((n) => n.id).toList() : null);
+          final effectivePathIds = pathIds ??
+              (highlightPath ? used.map((n) => n.id).toList() : null);
 
           // Get path IDs if highlighting is enabled
-          final pathIdsSet = highlightPath
-              ? used.map((n) => n.id).toSet()
-              : <String>{};
+          final pathIdsSet =
+              highlightPath ? used.map((n) => n.id).toSet() : <String>{};
 
           return Stack(
             fit: StackFit.expand,
@@ -141,8 +141,10 @@ class MiniHexBranchPreview extends ConsumerWidget {
                   // Enhanced gradient based on state
                   final gradient = LinearGradient(
                     colors: [
-                      baseColor.withValues(alpha: isOnPath ? 0.45 : (isUnlocked ? 0.30 : 0.20)),
-                      baseColor.withValues(alpha: isOnPath ? 0.25 : (isUnlocked ? 0.15 : 0.10)),
+                      baseColor.withValues(
+                          alpha: isOnPath ? 0.45 : (isUnlocked ? 0.30 : 0.20)),
+                      baseColor.withValues(
+                          alpha: isOnPath ? 0.25 : (isUnlocked ? 0.15 : 0.10)),
                     ],
                   );
 
@@ -152,9 +154,11 @@ class MiniHexBranchPreview extends ConsumerWidget {
                     orientation: HexOrientation.pointy,
                     icon: null, // Numbers will be added as text overlay
                     gradient: gradient,
-                    borderColor: Colors.white.withValues(alpha: isOnPath ? 0.85 : 0.55),
+                    borderColor:
+                        Colors.white.withValues(alpha: isOnPath ? 0.85 : 0.55),
                     borderWidth: isOnPath ? 2.0 : 1.2,
-                    glowColor: isOnPath ? baseColor.withValues(alpha: 0.3) : null,
+                    glowColor:
+                        isOnPath ? baseColor.withValues(alpha: 0.3) : null,
                   );
                 },
                 // Text overlay function - this will be called for each item to render text on top
@@ -187,7 +191,8 @@ class MiniHexBranchPreview extends ConsumerWidget {
                     stepPathWidth: 1.5,
                     fullPathColor: Colors.white54,
                     stepPathColor: Colors.white,
-                    dimMaskColor: const Color(0x00000000), // No dim mask for mini preview
+                    dimMaskColor:
+                        const Color(0x00000000), // No dim mask for mini preview
                   ),
                 ),
             ],

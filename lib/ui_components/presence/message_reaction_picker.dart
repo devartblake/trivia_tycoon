@@ -76,7 +76,8 @@ class _MessageReactionPickerState extends State<MessageReactionPicker>
 
   @override
   Widget build(BuildContext context) {
-    final quickReactions = widget.customQuickReactions ?? _reactionService.quickReactions;
+    final quickReactions =
+        widget.customQuickReactions ?? _reactionService.quickReactions;
 
     return SlideTransition(
       position: _slideAnimation,
@@ -91,7 +92,10 @@ class _MessageReactionPickerState extends State<MessageReactionPicker>
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
               border: Border.all(
-                color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+                color: Theme.of(context)
+                    .colorScheme
+                    .outline
+                    .withValues(alpha: 0.2),
               ),
             ),
             child: Column(
@@ -101,11 +105,11 @@ class _MessageReactionPickerState extends State<MessageReactionPicker>
                 _buildQuickReactionsRow(quickReactions),
 
                 // Gaming reactions (if enabled)
-                if (_shouldShowGamingReactions())
-                  _buildGamingReactionsRow(),
+                if (_shouldShowGamingReactions()) _buildGamingReactionsRow(),
 
                 // Custom reactions (premium feature)
-                if (_reactionService.canUseCustomReactions(widget.userIsPremium))
+                if (_reactionService
+                    .canUseCustomReactions(widget.userIsPremium))
                   _buildCustomReactionsRow(),
               ],
             ),
@@ -142,7 +146,9 @@ class _MessageReactionPickerState extends State<MessageReactionPicker>
         const SizedBox(height: 8),
         Row(
           mainAxisSize: MainAxisSize.min,
-          children: gamingReactions.map((type) => _buildReactionButton(type)).toList(),
+          children: gamingReactions
+              .map((type) => _buildReactionButton(type))
+              .toList(),
         ),
       ],
     );
@@ -166,9 +172,9 @@ class _MessageReactionPickerState extends State<MessageReactionPicker>
             Text(
               'Custom',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.w500,
-              ),
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.w500,
+                  ),
             ),
           ],
         ),
@@ -320,11 +326,11 @@ class MessageReactionBar extends StatelessWidget {
   }
 
   Widget _buildReactionChip(
-      BuildContext context,
-      ReactionType type,
-      int count,
-      MessageReactionSummary summary,
-      ) {
+    BuildContext context,
+    ReactionType type,
+    int count,
+    MessageReactionSummary summary,
+  ) {
     final hasUserReacted = summary.getUserReactionType(currentUserId) == type;
 
     return GestureDetector(
@@ -341,7 +347,8 @@ class MessageReactionBar extends StatelessWidget {
               ? Theme.of(context).colorScheme.primaryContainer
               : Theme.of(context).colorScheme.surfaceContainerHighest,
           border: hasUserReacted
-              ? Border.all(color: Theme.of(context).colorScheme.primary, width: 1)
+              ? Border.all(
+                  color: Theme.of(context).colorScheme.primary, width: 1)
               : null,
         ),
         child: Row(
@@ -356,11 +363,11 @@ class MessageReactionBar extends StatelessWidget {
               Text(
                 count.toString(),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.w500,
-                  color: hasUserReacted
-                      ? Theme.of(context).colorScheme.onPrimaryContainer
-                      : Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+                      fontWeight: FontWeight.w500,
+                      color: hasUserReacted
+                          ? Theme.of(context).colorScheme.onPrimaryContainer
+                          : Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
               ),
             ],
           ],
@@ -369,9 +376,12 @@ class MessageReactionBar extends StatelessWidget {
     );
   }
 
-  Widget _buildMoreReactionsChip(BuildContext context, MessageReactionSummary summary) {
+  Widget _buildMoreReactionsChip(
+      BuildContext context, MessageReactionSummary summary) {
     final remainingCount = summary.totalCount -
-        summary.getTopReactions(limit: 6).fold<int>(0, (sum, entry) => sum + entry.value);
+        summary
+            .getTopReactions(limit: 6)
+            .fold<int>(0, (sum, entry) => sum + entry.value);
 
     return GestureDetector(
       onTap: () => _showAllReactions(context, messageId),
@@ -384,9 +394,9 @@ class MessageReactionBar extends StatelessWidget {
         child: Text(
           '+$remainingCount',
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            fontWeight: FontWeight.w500,
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
+                fontWeight: FontWeight.w500,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
         ),
       ),
     );
@@ -412,7 +422,8 @@ class MessageReactionBar extends StatelessWidget {
     );
   }
 
-  void _showReactionDetails(BuildContext context, String messageId, ReactionType type) {
+  void _showReactionDetails(
+      BuildContext context, String messageId, ReactionType type) {
     final summary = MessageReactionService().getReactionSummary(messageId);
     if (summary == null) return;
 
@@ -440,13 +451,13 @@ class MessageReactionBar extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             ...users.map((user) => ListTile(
-              dense: true,
-              title: Text(user),
-              leading: CircleAvatar(
-                radius: 16,
-                child: Text(user[0].toUpperCase()),
-              ),
-            )),
+                  dense: true,
+                  title: Text(user),
+                  leading: CircleAvatar(
+                    radius: 16,
+                    child: Text(user[0].toUpperCase()),
+                  ),
+                )),
           ],
         ),
       ),
@@ -486,15 +497,18 @@ class MessageReactionBar extends StatelessWidget {
                         type.emoji,
                         style: const TextStyle(fontSize: 20),
                       ),
-                      title: Text('${users.length} ${users.length == 1 ? 'person' : 'people'}'),
-                      children: users.map((user) => ListTile(
-                        dense: true,
-                        title: Text(user),
-                        leading: CircleAvatar(
-                          radius: 16,
-                          child: Text(user[0].toUpperCase()),
-                        ),
-                      )).toList(),
+                      title: Text(
+                          '${users.length} ${users.length == 1 ? 'person' : 'people'}'),
+                      children: users
+                          .map((user) => ListTile(
+                                dense: true,
+                                title: Text(user),
+                                leading: CircleAvatar(
+                                  radius: 16,
+                                  child: Text(user[0].toUpperCase()),
+                                ),
+                              ))
+                          .toList(),
                     );
                   },
                 ),

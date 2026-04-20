@@ -33,7 +33,8 @@ class QrEncoder {
         if (matrix.get(x, y)) setCount++;
       }
     }
-    LogManager.debug('   Total modules set: $setCount out of ${matrix.size * matrix.size}');
+    LogManager.debug(
+        '   Total modules set: $setCount out of ${matrix.size * matrix.size}');
     LogManager.debug('🔵 Encoding complete\n');
 
     return matrix;
@@ -116,7 +117,8 @@ class QrEncoder {
     // Finder patterns (including separators)
     if ((x < 8 && y < 8) || // Top-left
         (x >= matrix.size - 8 && y < 8) || // Top-right
-        (x < 8 && y >= matrix.size - 8)) { // Bottom-left
+        (x < 8 && y >= matrix.size - 8)) {
+      // Bottom-left
       return true;
     }
 
@@ -157,7 +159,8 @@ class QrEncoder {
     while (bits.length < 152) {
       bits.addAll([true, true, true, false, true, true, false, false]); // 0xEC
       if (bits.length < 152) {
-        bits.addAll([false, false, false, true, false, false, false, true]); // 0x11
+        bits.addAll(
+            [false, false, false, true, false, false, false, true]); // 0x11
       }
     }
 
@@ -166,7 +169,8 @@ class QrEncoder {
       bits.removeRange(152, bits.length);
     }
 
-    LogManager.debug('Generated ${bits.length} data bits from ${data.length} chars');
+    LogManager.debug(
+        'Generated ${bits.length} data bits from ${data.length} chars');
 
     return bits;
   }

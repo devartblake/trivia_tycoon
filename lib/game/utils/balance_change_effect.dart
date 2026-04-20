@@ -1,4 +1,3 @@
-
 import '../models/currency_type.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 

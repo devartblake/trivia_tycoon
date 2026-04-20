@@ -17,7 +17,8 @@ final searchServiceProvider = Provider<SearchService>((ref) {
   ]);
 });
 
-final searchFilterProvider = StateProvider<SearchFilter>((ref) => SearchFilter());
+final searchFilterProvider =
+    StateProvider<SearchFilter>((ref) => SearchFilter());
 
 final searchQueryProvider = StateProvider<String>((ref) => '');
 
@@ -31,7 +32,8 @@ final searchResultsProvider = FutureProvider<List<SearchResult>>((ref) async {
   return service.search(query, filter);
 });
 
-final searchResultsByCategoryProvider = FutureProvider<Map<SearchCategory, List<SearchResult>>>((ref) async {
+final searchResultsByCategoryProvider =
+    FutureProvider<Map<SearchCategory, List<SearchResult>>>((ref) async {
   final service = ref.watch(searchServiceProvider);
   final query = ref.watch(searchQueryProvider);
   final filter = ref.watch(searchFilterProvider);

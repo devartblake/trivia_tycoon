@@ -26,7 +26,8 @@ class _HowToPlayScreenState extends State<HowToPlayScreen>
   static final Map<GameMode, GameModeInfo> _gameModeInfo = {
     GameMode.classic: GameModeInfo(
       title: 'Classic Quiz',
-      description: 'Traditional quiz experience with multiple choice questions across various topics.',
+      description:
+          'Traditional quiz experience with multiple choice questions across various topics.',
       icon: Icons.quiz,
       gradient: LinearGradient(
         colors: [Colors.blue, Colors.blueAccent],
@@ -57,10 +58,10 @@ class _HowToPlayScreenState extends State<HowToPlayScreen>
       duration: '5-15 minutes',
       navigationRoute: '/category-quiz/general',
     ),
-
     GameMode.topicExplorer: GameModeInfo(
       title: 'Topic Explorer',
-      description: 'Deep dive into specific subjects and master different categories with progressive learning.',
+      description:
+          'Deep dive into specific subjects and master different categories with progressive learning.',
       icon: Icons.explore,
       gradient: LinearGradient(
         colors: [Colors.green, Colors.teal],
@@ -91,10 +92,10 @@ class _HowToPlayScreenState extends State<HowToPlayScreen>
       duration: '10-30 minutes',
       navigationRoute: '/all-categories',
     ),
-
     GameMode.survival: GameModeInfo(
       title: 'Survival Mode',
-      description: 'Test your limits! Answer questions correctly to survive. One wrong answer ends the game.',
+      description:
+          'Test your limits! Answer questions correctly to survive. One wrong answer ends the game.',
       icon: Icons.local_fire_department,
       gradient: LinearGradient(
         colors: [Colors.orange, Colors.deepOrange],
@@ -125,10 +126,10 @@ class _HowToPlayScreenState extends State<HowToPlayScreen>
       difficulty: 'High Challenge',
       duration: '2-20 minutes',
     ),
-
     GameMode.arena: GameModeInfo(
       title: 'Survival Arena',
-      description: 'Battle other players in real-time survival challenges. Last player standing wins!',
+      description:
+          'Battle other players in real-time survival challenges. Last player standing wins!',
       icon: Icons.sports_martial_arts,
       gradient: LinearGradient(
         colors: [Colors.red, Colors.redAccent],
@@ -159,10 +160,10 @@ class _HowToPlayScreenState extends State<HowToPlayScreen>
       difficulty: 'Expert Level',
       duration: '3-8 minutes',
     ),
-
     GameMode.teams: GameModeInfo(
       title: 'Team Mode',
-      description: 'Collaborate with friends to tackle challenging quizzes together and achieve higher scores.',
+      description:
+          'Collaborate with friends to tackle challenging quizzes together and achieve higher scores.',
       icon: Icons.groups,
       gradient: LinearGradient(
         colors: [Colors.indigo, Colors.indigoAccent],
@@ -193,10 +194,10 @@ class _HowToPlayScreenState extends State<HowToPlayScreen>
       difficulty: 'Collaborative',
       duration: '10-20 minutes',
     ),
-
     GameMode.daily: GameModeInfo(
       title: 'Daily Challenge',
-      description: 'Fresh challenges every day with special themes, limited attempts, and exclusive rewards.',
+      description:
+          'Fresh challenges every day with special themes, limited attempts, and exclusive rewards.',
       icon: Icons.today,
       gradient: LinearGradient(
         colors: [Colors.amber, Colors.orange],
@@ -282,7 +283,8 @@ class _HowToPlayScreenState extends State<HowToPlayScreen>
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0A0A0F) : const Color(0xFFF8F9FA),
+      backgroundColor:
+          isDark ? const Color(0xFF0A0A0F) : const Color(0xFFF8F9FA),
       body: CustomScrollView(
         slivers: [
           // Custom App Bar with Gradient
@@ -332,12 +334,14 @@ class _HowToPlayScreenState extends State<HowToPlayScreen>
                                 const SizedBox(width: 20),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'How to Play',
                                         style: TextStyle(
-                                          color: Colors.white.withValues(alpha: 0.9),
+                                          color: Colors.white
+                                              .withValues(alpha: 0.9),
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -440,14 +444,14 @@ class _HowToPlayScreenState extends State<HowToPlayScreen>
                         isDark: isDark,
                       ),
                       const SizedBox(height: 16),
-                      ..._info.rules.asMap().entries.map((entry) =>
-                          _RuleItem(
-                            number: entry.key + 1,
-                            text: entry.value,
-                            color: _info.gradient.colors.first,
-                            isDark: isDark,
+                      ..._info.rules.asMap().entries.map(
+                            (entry) => _RuleItem(
+                              number: entry.key + 1,
+                              text: entry.value,
+                              color: _info.gradient.colors.first,
+                              isDark: isDark,
+                            ),
                           ),
-                      ),
 
                       const SizedBox(height: 32),
 
@@ -459,12 +463,12 @@ class _HowToPlayScreenState extends State<HowToPlayScreen>
                         isDark: isDark,
                       ),
                       const SizedBox(height: 16),
-                      ..._info.tips.map((tip) =>
-                          _TipItem(
-                            text: tip,
-                            color: Colors.amber.shade600,
-                            isDark: isDark,
-                          ),
+                      ..._info.tips.map(
+                        (tip) => _TipItem(
+                          text: tip,
+                          color: Colors.amber.shade600,
+                          isDark: isDark,
+                        ),
                       ),
 
                       const SizedBox(height: 40),
@@ -481,8 +485,10 @@ class _HowToPlayScreenState extends State<HowToPlayScreen>
                               icon: const Icon(Icons.arrow_back),
                               label: const Text('Back to Games'),
                               style: OutlinedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(vertical: 16),
-                                side: BorderSide(color: _info.gradient.colors.first),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
+                                side: BorderSide(
+                                    color: _info.gradient.colors.first),
                                 foregroundColor: _info.gradient.colors.first,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(16),
@@ -502,14 +508,19 @@ class _HowToPlayScreenState extends State<HowToPlayScreen>
                                   _showComingSoonSnackBar(context);
                                 }
                               },
-                              icon: Icon(widget.isMultiplayer ? Icons.people : Icons.play_arrow),
-                              label: Text(widget.isMultiplayer ? 'Find Match' : 'Start Playing'),
+                              icon: Icon(widget.isMultiplayer
+                                  ? Icons.people
+                                  : Icons.play_arrow),
+                              label: Text(widget.isMultiplayer
+                                  ? 'Find Match'
+                                  : 'Start Playing'),
                               style: FilledButton.styleFrom(
                                 backgroundColor: widget.isMultiplayer
                                     ? const Color(0xFF8B5CF6)
                                     : _info.gradient.colors.first,
                                 foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(16),
                                 ),
@@ -529,7 +540,7 @@ class _HowToPlayScreenState extends State<HowToPlayScreen>
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed:  () {
+        onPressed: () {
           HapticFeedback.mediumImpact();
           _startPlaying();
         },
@@ -699,41 +710,45 @@ class _FeatureGrid extends StatelessWidget {
         ],
       ),
       child: Column(
-        children: features.entries.map((entry) =>
-            Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: Row(
-                children: [
-                  Container(
-                    width: 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color: color,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Text(
-                    '${entry.key}: ',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: isDark ? Colors.white : Colors.grey.shade700,
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      entry.value,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: isDark ? Colors.grey.shade300 : Colors.grey.shade600,
+        children: features.entries
+            .map(
+              (entry) => Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: color,
+                        shape: BoxShape.circle,
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 16),
+                    Text(
+                      '${entry.key}: ',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: isDark ? Colors.white : Colors.grey.shade700,
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        entry.value,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: isDark
+                              ? Colors.grey.shade300
+                              : Colors.grey.shade600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-        ).toList(),
+            )
+            .toList(),
       ),
     );
   }

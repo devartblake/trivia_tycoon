@@ -7,10 +7,9 @@ import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Enhanced question loading with fallback strategies and dynamic path discovery
 Future<List<QuestionModel>> loadQuestionsFromAsset(
-    String category, {
-      String? categoryPath,
-    }) async {
-
+  String category, {
+  String? categoryPath,
+}) async {
   // First, try to use exact paths from constants if available
   final exactPath = _getExactPathFromConstants(category);
   if (exactPath != null) {
@@ -34,7 +33,7 @@ String? _getExactPathFromConstants(String category) {
 
   // Core subject mappings
   switch (categoryLower) {
-  // Basic subjects
+    // Basic subjects
     case 'arts':
     case 'art':
     case 'visual_arts':
@@ -120,7 +119,7 @@ String? _getExactPathFromConstants(String category) {
     case 'global':
       return World.WORLD_QUESTION;
 
-  // Extended subjects
+    // Extended subjects
     case 'current_events':
     case 'news':
     case 'current_affairs':
@@ -168,7 +167,7 @@ String? _getExactPathFromConstants(String category) {
     case 'cognition':
       return Psychology.PSYCHOLOGY_QUESTION;
 
-  // NEW CATEGORIES FROM YOUR QUESTION_PATHS.DART
+    // NEW CATEGORIES FROM YOUR QUESTION_PATHS.DART
     case 'architecture':
     case 'architectural':
     case 'buildings':
@@ -261,7 +260,7 @@ String? _getExactPathFromConstants(String category) {
     case 'global literature':
       return WorldLiterature.WORLD_LITERATURE_QUESTION;
 
-  // Alternative file paths for existing categories
+    // Alternative file paths for existing categories
     case 'media_questions':
     case 'media alternative':
       return Media.MEDIA_QUESTIONS;
@@ -275,7 +274,7 @@ String? _getExactPathFromConstants(String category) {
     case 'world extension':
       return World.WORLD_EXT_QUESTION;
 
-  // Misc categories
+    // Misc categories
     case 'misc':
     case 'miscellaneous':
     case 'mixed questions':
@@ -286,7 +285,7 @@ String? _getExactPathFromConstants(String category) {
     case 'questions offline':
       return Misc.QUESTIONS_OFFLINE_PACK;
 
-  // Game mode categories
+    // Game mode categories
     case 'media_challenge':
     case 'media challenge':
     case 'challenge media':
@@ -314,7 +313,7 @@ String? _getExactPathFromConstants(String category) {
     case 'lightning round':
       return Modes.SPEED_ULTRA_QUESTION;
 
-  // Class-based categories with multiple variations
+    // Class-based categories with multiple variations
     case 'class k':
     case 'class_k':
     case 'kindergarten':
@@ -405,7 +404,7 @@ String? _getExactPathFromConstants(String category) {
     case '12':
       return Classes.CLASS_12_QUESTIONS;
 
-  // Bonus/Extended content
+    // Bonus/Extended content
     case 'bonus':
     case 'extended':
     case 'special':
@@ -419,9 +418,9 @@ String? _getExactPathFromConstants(String category) {
 
 /// Fallback dynamic path resolution with enhanced path discovery
 Future<List<QuestionModel>> _loadWithDynamicPaths(
-    String category,
-    String? categoryPath,
-    ) async {
+  String category,
+  String? categoryPath,
+) async {
   const String base = 'assets/questions';
 
   // Normalize category name variants
@@ -452,7 +451,15 @@ Future<List<QuestionModel>> _loadWithDynamicPaths(
     }
 
     // Try in common subject directories
-    final commonDirs = ['general', 'science', 'math', 'history', 'arts', 'technology', 'classes'];
+    final commonDirs = [
+      'general',
+      'science',
+      'math',
+      'history',
+      'arts',
+      'technology',
+      'classes'
+    ];
     for (final commonDir in commonDirs) {
       candidates.addAll([
         '$base/$commonDir/${name}_questions.json',
@@ -495,7 +502,7 @@ Future<List<QuestionModel>> _loadWithDynamicPaths(
 
   throw FlutterError(
     'No matching asset for category="$category", categoryPath="$categoryPath". '
-        'Tried paths: ${ordered.join(", ")}. Last error: $lastErr',
+    'Tried paths: ${ordered.join(", ")}. Last error: $lastErr',
   );
 }
 
@@ -506,7 +513,8 @@ Future<List<QuestionModel>> loadQuestionsFromAssetPath(String fullPath) async {
     final List<dynamic> data = json.decode(jsonStr);
     return data.map((e) => QuestionModel.fromJson(e)).toList();
   } catch (e) {
-    throw FlutterError('Failed to load questions from path: $fullPath. Error: $e');
+    throw FlutterError(
+        'Failed to load questions from path: $fullPath. Error: $e');
   }
 }
 
@@ -545,7 +553,8 @@ Future<List<QuestionModel>> loadQuestionsForClass(dynamic classLevel) async {
 }
 
 /// Load questions from multiple categories with error handling
-Future<List<QuestionModel>> loadQuestionsFromMultipleCategories(List<String> categories) async {
+Future<List<QuestionModel>> loadQuestionsFromMultipleCategories(
+    List<String> categories) async {
   final List<QuestionModel> allQuestions = [];
   final List<String> failedCategories = [];
 
@@ -553,10 +562,12 @@ Future<List<QuestionModel>> loadQuestionsFromMultipleCategories(List<String> cat
     try {
       final questions = await loadQuestionsByCategory(category);
       allQuestions.addAll(questions);
-      LogManager.debug('Successfully loaded ${questions.length} questions from $category');
+      LogManager.debug(
+          'Successfully loaded ${questions.length} questions from $category');
     } catch (e) {
       failedCategories.add(category);
-      LogManager.debug('Warning: Failed to load questions for category $category: $e');
+      LogManager.debug(
+          'Warning: Failed to load questions for category $category: $e');
     }
   }
 
@@ -565,9 +576,11 @@ Future<List<QuestionModel>> loadQuestionsFromMultipleCategories(List<String> cat
     try {
       final generalQuestions = await loadQuestionsByCategory('general');
       allQuestions.addAll(generalQuestions);
-      LogManager.debug('Loaded ${generalQuestions.length} questions from general fallback');
+      LogManager.debug(
+          'Loaded ${generalQuestions.length} questions from general fallback');
     } catch (e) {
-      throw FlutterError('All categories failed to load: $failedCategories. General fallback also failed: $e');
+      throw FlutterError(
+          'All categories failed to load: $failedCategories. General fallback also failed: $e');
     }
   }
 
@@ -580,10 +593,28 @@ Future<List<String>> discoverAvailableCategories() async {
 
   // Test common category paths
   final testCategories = [
-    'science', 'math', 'history', 'geography', 'arts', 'literature',
-    'technology', 'sports', 'entertainment', 'health', 'economics',
-    'philosophy', 'psychology', 'politics', 'law', 'environment',
-    'current_events', 'world', 'social', 'media', 'kids', 'general'
+    'science',
+    'math',
+    'history',
+    'geography',
+    'arts',
+    'literature',
+    'technology',
+    'sports',
+    'entertainment',
+    'health',
+    'economics',
+    'philosophy',
+    'psychology',
+    'politics',
+    'law',
+    'environment',
+    'current_events',
+    'world',
+    'social',
+    'media',
+    'kids',
+    'general'
   ];
 
   for (final category in testCategories) {
@@ -621,7 +652,8 @@ bool validateQuestionData(Map<String, dynamic> questionJson) {
   }
 
   // Validate answers structure
-  if (questionJson['answers'] is! List || (questionJson['answers'] as List).isEmpty) {
+  if (questionJson['answers'] is! List ||
+      (questionJson['answers'] as List).isEmpty) {
     LogManager.debug('Invalid answers structure');
     return false;
   }
@@ -635,19 +667,22 @@ Future<List<QuestionModel>> loadQuestionsWithValidation(String category) async {
     final questions = await loadQuestionsByCategory(category);
 
     // Filter out invalid questions
-    final validQuestions = questions.where((q) =>
-    q.question.isNotEmpty &&
-        q.options.isNotEmpty &&
-        q.correctAnswer.isNotEmpty
-    ).toList();
+    final validQuestions = questions
+        .where((q) =>
+            q.question.isNotEmpty &&
+            q.options.isNotEmpty &&
+            q.correctAnswer.isNotEmpty)
+        .toList();
 
     if (validQuestions.length != questions.length) {
-      LogManager.debug('Filtered out ${questions.length - validQuestions.length} invalid questions from $category');
+      LogManager.debug(
+          'Filtered out ${questions.length - validQuestions.length} invalid questions from $category');
     }
 
     return validQuestions;
   } catch (e) {
-    LogManager.debug('Error loading questions with validation for $category: $e');
+    LogManager.debug(
+        'Error loading questions with validation for $category: $e');
     rethrow;
   }
 }

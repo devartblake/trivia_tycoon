@@ -9,7 +9,8 @@ import 'non_uniform_motion.dart';
 class UpdatedSpinHandlers {
   // Initialize enhanced physics (you can make this configurable)
   static final _physics = EnhancedNonUniformMotion.realistic(resistance: 0.015);
-  static final _velocityCalculator = EnhancedSpinVelocity(width: 400, height: 400);
+  static final _velocityCalculator =
+      EnhancedSpinVelocity(width: 400, height: 400);
 
   /// Updated handleSpinWithPhysics function
   static Future<void> handleSpinWithPhysics({
@@ -17,13 +18,16 @@ class UpdatedSpinHandlers {
     required WidgetRef ref,
     required double currentAngle,
     required List<WheelSegment> segments,
-    required void Function(AnimationController controller, Animation<double> animation) setAnimation,
+    required void Function(
+            AnimationController controller, Animation<double> animation)
+        setAnimation,
     required VoidCallback onStart,
     required void Function(WheelSegment) onComplete,
     double? customVelocity,
   }) async {
     // Generate velocity if not provided
-    final velocity = customVelocity ?? _velocityCalculator.generateRandomVelocity();
+    final velocity =
+        customVelocity ?? _velocityCalculator.generateRandomVelocity();
 
     // Calculate physics
     final duration = _physics.calculateDuration(velocity);

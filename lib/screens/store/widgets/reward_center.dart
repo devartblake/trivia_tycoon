@@ -121,8 +121,8 @@ class _RewardCenterState extends ConsumerState<RewardCenter>
                       ),
                       Text(
                         'Claim your daily rewards',
-                        style: TextStyle(
-                            fontSize: 14, color: Color(0xFF64748B)),
+                        style:
+                            TextStyle(fontSize: 14, color: Color(0xFF64748B)),
                       ),
                     ],
                   ),
@@ -208,15 +208,15 @@ class _RewardCenterState extends ConsumerState<RewardCenter>
                         ),
                         Text(
                           'Complete all rewards for bonus points',
-                          style: TextStyle(
-                              fontSize: 12, color: Color(0xFF64748B)),
+                          style:
+                              TextStyle(fontSize: 12, color: Color(0xFF64748B)),
                         ),
                       ],
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: const Color(0xFF6366F1),
                       borderRadius: BorderRadius.circular(12),
@@ -245,9 +245,9 @@ class _RewardCenterState extends ConsumerState<RewardCenter>
     return GestureDetector(
       onTap: canClaim
           ? () {
-        HapticFeedback.lightImpact();
-        _handleRewardClaim(card);
-      }
+              HapticFeedback.lightImpact();
+              _handleRewardClaim(card);
+            }
           : null,
       child: Container(
         padding: const EdgeInsets.all(20),
@@ -271,8 +271,7 @@ class _RewardCenterState extends ConsumerState<RewardCenter>
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.3)),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
@@ -326,13 +325,11 @@ class _RewardCenterState extends ConsumerState<RewardCenter>
               const SizedBox(height: 12),
             ],
             Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.3)),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
               ),
               child: Text(
                 card.reward,

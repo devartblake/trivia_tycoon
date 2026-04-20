@@ -65,8 +65,9 @@ class _SideInfo extends StatelessWidget {
           children: [
             _AvatarOrLogo(
               url: participant.avatarUrl,
-              fallbackChar:
-                  participant.displayName.isNotEmpty ? participant.displayName[0] : '?',
+              fallbackChar: participant.displayName.isNotEmpty
+                  ? participant.displayName[0]
+                  : '?',
               color: participant.color,
               radius: compact ? 22 : 28,
             ),
@@ -126,16 +127,18 @@ class _AvatarOrLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = (color ?? Theme.of(context).colorScheme.primary).withValues(alpha: 0.2);
+    final bg =
+        (color ?? Theme.of(context).colorScheme.primary).withValues(alpha: 0.2);
     return CircleAvatar(
       radius: radius,
       backgroundColor: bg,
       backgroundImage: url != null ? NetworkImage(url!) : null,
       child: url == null
           ? Text(
-        fallbackChar.toUpperCase(),
-        style: TextStyle(fontSize: radius * 0.78, fontWeight: FontWeight.w900),
-      )
+              fallbackChar.toUpperCase(),
+              style: TextStyle(
+                  fontSize: radius * 0.78, fontWeight: FontWeight.w900),
+            )
           : null,
     );
   }
@@ -167,16 +170,17 @@ class _MemberStack extends StatelessWidget {
               right: alignEnd ? i * gap : null,
               child: CircleAvatar(
                 radius: avatarRadius,
-                backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                backgroundColor:
+                    Theme.of(context).colorScheme.surfaceContainerHighest,
                 backgroundImage: children[i].avatarUrl != null
                     ? NetworkImage(children[i].avatarUrl!)
                     : null,
                 child: children[i].avatarUrl == null
                     ? Text(children[i].name[0].toUpperCase(),
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: compact ? 10 : 12,
-                    ))
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: compact ? 10 : 12,
+                        ))
                     : null,
               ),
             ),
@@ -186,7 +190,8 @@ class _MemberStack extends StatelessWidget {
               right: alignEnd ? children.length * gap : null,
               child: CircleAvatar(
                 radius: avatarRadius,
-                backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+                backgroundColor:
+                    Theme.of(context).colorScheme.secondaryContainer,
                 child: Text(
                   '+${members.length - children.length}',
                   style: TextStyle(fontSize: compact ? 9 : 11),
@@ -219,10 +224,9 @@ class _VsBadge extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: Theme.of(context)
-              .textTheme
-              .titleMedium
-              ?.copyWith(color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.w900),
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontWeight: FontWeight.w900),
         ),
       ),
     );

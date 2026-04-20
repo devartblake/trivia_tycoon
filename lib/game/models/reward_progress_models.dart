@@ -47,10 +47,10 @@ class RewardProgress {
 
   /// Get available rewards to claim
   List<RewardStep> get availableRewards {
-    return steps.where((step) =>
-    currentPoints >= step.pointValue &&
-        !claimedRewards.contains(step)
-    ).toList();
+    return steps
+        .where((step) =>
+            currentPoints >= step.pointValue && !claimedRewards.contains(step))
+        .toList();
   }
 
   /// Check if a specific reward is claimable

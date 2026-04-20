@@ -23,9 +23,12 @@ class StandardAppBar extends ConsumerWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = _getThemeData();
+    ref.watch(notificationRealtimeSyncProvider);
 
     // Watch the async currentUserId
     final currentUserIdAsync = ref.watch(currentUserIdProvider);
+    final unreadNotificationsAsync =
+        ref.watch(playerNotificationUnreadCountProvider);
 
     return AppBar(
       backgroundColor: Colors.transparent,
@@ -95,11 +98,13 @@ class StandardAppBar extends ConsumerWidget implements PreferredSizeWidget {
             ),
           ),
         if (showChat)
-        // Handle async userId state
+          // Handle async userId state
           currentUserIdAsync.when(
             data: (userId) => _buildChatButton(ref, userId),
-            loading: () => _buildChatButton(ref, 'guest'), // Show button in loading state
-            error: (_, __) => _buildChatButton(ref, 'guest'), // Show button in error state
+            loading: () =>
+                _buildChatButton(ref, 'guest'), // Show button in loading state
+            error: (_, __) =>
+                _buildChatButton(ref, 'guest'), // Show button in error state
           ),
         if (showNotifications)
           Stack(
@@ -125,7 +130,11 @@ class StandardAppBar extends ConsumerWidget implements PreferredSizeWidget {
               ),
               Consumer(
                 builder: (context, ref, child) {
-                  final unreadNotifications = ref.watch(unreadNotificationsProvider);
+                  final unreadNotifications =
+                      unreadNotificationsAsync.maybeWhen(
+                    data: (value) => value,
+                    orElse: () => 0,
+                  );
                   if (unreadNotifications > 0) {
                     return Positioned(
                       top: 6,
@@ -142,7 +151,8 @@ class StandardAppBar extends ConsumerWidget implements PreferredSizeWidget {
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFFEF4444).withValues(alpha: 0.5),
+                              color: const Color(0xFFEF4444)
+                                  .withValues(alpha: 0.5),
                               blurRadius: 4,
                               offset: const Offset(0, 1),
                             ),
@@ -190,7 +200,8 @@ class StandardAppBar extends ConsumerWidget implements PreferredSizeWidget {
         Consumer(
           builder: (context, ref, child) {
             // Now we can use the resolved userId
-            final unreadMessages = ref.watch(msg.unreadMessagesProvider(userId));
+            final unreadMessages =
+                ref.watch(msg.unreadMessagesProvider(userId));
             if (unreadMessages > 0) {
               return Positioned(
                 top: 6,

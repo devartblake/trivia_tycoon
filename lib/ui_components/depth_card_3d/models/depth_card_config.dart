@@ -61,13 +61,13 @@ class DepthCardConfig {
     this.borderRadius = 24,
     this.parallaxDepth = 0.1,
     this.theme = const DepthCardTheme(),
-    this.lightingOptions = const LightingOptions(), // 👈 default to avoid required arg everywhere
+    this.lightingOptions =
+        const LightingOptions(), // 👈 default to avoid required arg everywhere
     this.onTap,
     this.overlayActions,
     this.overlayWidgets = const [],
     this.slots = const DepthCardSlots(),
     this.backgroundImage,
-
     this.backgroundFit = BoxFit.cover,
     this.backgroundAlignment = Alignment.center,
     this.backgroundOpacity = 1.0,
@@ -85,7 +85,8 @@ class DepthCardConfig {
     this.textDepth = 12,
     this.textElevation = 1.0,
     this.textShine = true,
-    this.child = const SizedBox.shrink(), // 👈 default to avoid required arg everywhere
+    this.child =
+        const SizedBox.shrink(), // 👈 default to avoid required arg everywhere
     this.showInteractiveOverlay = true,
   });
 }

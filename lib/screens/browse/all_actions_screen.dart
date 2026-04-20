@@ -41,7 +41,8 @@ class AllActionsScreen extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 8),
                     child: ListTile(
-                      leading: Icon(action['icon'] as IconData, color: Colors.purple),
+                      leading: Icon(action['icon'] as IconData,
+                          color: Colors.purple),
                       title: Text(action['title'] as String),
                       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                       onTap: () => context.push(action['route'] as String),

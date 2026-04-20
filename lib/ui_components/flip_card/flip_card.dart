@@ -253,18 +253,18 @@ class FlipCardState extends State<FlipCard>
     if (target > controller.value) {
       await controller
           .animateTo(
-        target,
-        duration: duration,
-        curve: curve ?? Curves.linear,
-      )
+            target,
+            duration: duration,
+            curve: curve ?? Curves.linear,
+          )
           .complete;
     } else {
       await controller
           .animateBack(
-        target,
-        duration: duration,
-        curve: curve ?? Curves.linear,
-      )
+            target,
+            duration: duration,
+            curve: curve ?? Curves.linear,
+          )
           .complete;
     }
   }
@@ -288,23 +288,23 @@ class FlipCardState extends State<FlipCard>
 
     duration = duration ?? controller.duration!;
     final halfDuration =
-    Duration(milliseconds: (duration.inMilliseconds / 2).round());
+        Duration(milliseconds: (duration.inMilliseconds / 2).round());
 
     try {
       await controller
           .animateTo(
-        target,
-        duration: halfDuration,
-        curve: curveTo,
-      )
+            target,
+            duration: halfDuration,
+            curve: curveTo,
+          )
           .complete;
     } finally {
       await controller
           .animateBack(
-        0,
-        duration: halfDuration,
-        curve: curveBack,
-      )
+            0,
+            duration: halfDuration,
+            curve: curveBack,
+          )
           .complete;
     }
   }

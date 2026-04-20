@@ -10,18 +10,18 @@ enum ViewState {
 
 class _HeroTextContent extends StatefulWidget {
   const _HeroTextContent(
-      this.text, {
-        required this.viewState,
-        required this.smallFontSize,
-        required this.largeFontSize,
-        this.style,
-        this.textAlign,
-        this.textDirection,
-        this.textScaleFactor,
-        this.maxLines = 1,
-        this.locale,
-        this.strutStyle,
-      });
+    this.text, {
+    required this.viewState,
+    required this.smallFontSize,
+    required this.largeFontSize,
+    this.style,
+    this.textAlign,
+    this.textDirection,
+    this.textScaleFactor,
+    this.maxLines = 1,
+    this.locale,
+    this.strutStyle,
+  });
 
   final String? text;
   final ViewState viewState;
@@ -54,8 +54,8 @@ class __HeroTextContentState extends State<_HeroTextContent>
       vsync: this,
       duration: const Duration(milliseconds: 600),
     )..addListener(() {
-      setState(() => fontSize = _fontSizeTween.value);
-    });
+        setState(() => fontSize = _fontSizeTween.value);
+      });
 
     _updateFontSize();
 
@@ -142,22 +142,22 @@ class __HeroTextContentState extends State<_HeroTextContent>
 
 class HeroText extends StatelessWidget {
   const HeroText(
-      this.text, {
-        super.key,
-        required this.tag,
-        required this.viewState,
-        this.smallFontSize = 15.0,
-        this.largeFontSize = 48.0,
-        this.style,
-        this.textAlign = TextAlign.center,
-        this.textDirection,
-        this.textScaleFactor,
-        this.maxLines = 1,
-        this.locale,
-        this.strutStyle,
-      }) : assert(
-  viewState == ViewState.shrunk || viewState == ViewState.enlarged,
-  );
+    this.text, {
+    super.key,
+    required this.tag,
+    required this.viewState,
+    this.smallFontSize = 15.0,
+    this.largeFontSize = 48.0,
+    this.style,
+    this.textAlign = TextAlign.center,
+    this.textDirection,
+    this.textScaleFactor,
+    this.maxLines = 1,
+    this.locale,
+    this.strutStyle,
+  }) : assert(
+          viewState == ViewState.shrunk || viewState == ViewState.enlarged,
+        );
 
   final String? text;
   final Object? tag;
@@ -178,21 +178,21 @@ class HeroText extends StatelessWidget {
     return Hero(
       tag: tag!,
       flightShuttleBuilder: (
-          BuildContext flightContext,
-          Animation<double> animation,
-          HeroFlightDirection flightDirection,
-          BuildContext fromHeroContext,
-          BuildContext toHeroContext,
-          ) {
+        BuildContext flightContext,
+        Animation<double> animation,
+        HeroFlightDirection flightDirection,
+        BuildContext fromHeroContext,
+        BuildContext toHeroContext,
+      ) {
         return _HeroTextContent(
           text,
           viewState: viewState == ViewState.shrunk
               ? (flightDirection == HeroFlightDirection.push
-              ? ViewState.shrink
-              : ViewState.enlarge)
+                  ? ViewState.shrink
+                  : ViewState.enlarge)
               : (flightDirection == HeroFlightDirection.push
-              ? ViewState.enlarge
-              : ViewState.shrink),
+                  ? ViewState.enlarge
+                  : ViewState.shrink),
           smallFontSize: smallFontSize,
           largeFontSize: largeFontSize,
           style: style,

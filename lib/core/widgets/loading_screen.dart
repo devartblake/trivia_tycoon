@@ -90,28 +90,29 @@ class _TriviaLoadingScreenState extends State<TriviaLoadingScreen> {
       left: 20,
       child: isReady
           ? ElevatedButton(
-        onPressed: widget.onCountdownComplete,
-        child: const Text("Continue"),
-      )
+              onPressed: widget.onCountdownComplete,
+              child: const Text("Continue"),
+            )
           : Stack(
-        alignment: Alignment.center,
-        children: [
-          SizedBox(
-            width: 50,
-            height: 50,
-            child: CircularProgressIndicator(
-              value: (totalSeconds - remainingSeconds) / totalSeconds,
-              strokeWidth: 4,
-              valueColor: const AlwaysStoppedAnimation(Colors.amber),
-              backgroundColor: Colors.grey,
+              alignment: Alignment.center,
+              children: [
+                SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: CircularProgressIndicator(
+                    value: (totalSeconds - remainingSeconds) / totalSeconds,
+                    strokeWidth: 4,
+                    valueColor: const AlwaysStoppedAnimation(Colors.amber),
+                    backgroundColor: Colors.grey,
+                  ),
+                ),
+                Text(
+                  remainingSeconds.toString(),
+                  style: const TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                )
+              ],
             ),
-          ),
-          Text(
-            remainingSeconds.toString(),
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          )
-        ],
-      ),
     );
   }
 
@@ -132,7 +133,8 @@ class _TriviaLoadingScreenState extends State<TriviaLoadingScreen> {
               Center(
                 child: Text(
                   triviaFacts[currentFactIndex],
-                  style: const TextStyle(color: Colors.white70, fontStyle: FontStyle.italic),
+                  style: const TextStyle(
+                      color: Colors.white70, fontStyle: FontStyle.italic),
                   textAlign: TextAlign.center,
                 ),
               )

@@ -58,7 +58,8 @@ class AlignCircular extends StatelessWidget {
       width: size.width > 0 ? size.width : null,
       height: size.height > 0 ? size.height : null,
       left: size.width > 0 ? finalOffset.dx - size.width / 2.0 : finalOffset.dx,
-      top: size.height > 0 ? finalOffset.dy - size.height / 2.0 : finalOffset.dy,
+      top:
+          size.height > 0 ? finalOffset.dy - size.height / 2.0 : finalOffset.dy,
       child: OverflowBox(
         alignment: Alignment.center,
         minWidth: 0,

@@ -203,30 +203,42 @@ class QuizHelpers {
   /// Get difficulty icon
   static IconData getDifficultyIcon(int difficulty) {
     switch (difficulty) {
-      case 1: return Icons.star_outline;
-      case 2: return Icons.star_half;
-      case 3: return Icons.star;
-      default: return Icons.help_outline;
+      case 1:
+        return Icons.star_outline;
+      case 2:
+        return Icons.star_half;
+      case 3:
+        return Icons.star;
+      default:
+        return Icons.help_outline;
     }
   }
 
   /// Get difficulty color
   static Color getDifficultyColor(int difficulty) {
     switch (difficulty) {
-      case 1: return Colors.green;
-      case 2: return Colors.orange;
-      case 3: return Colors.red;
-      default: return Colors.grey;
+      case 1:
+        return Colors.green;
+      case 2:
+        return Colors.orange;
+      case 3:
+        return Colors.red;
+      default:
+        return Colors.grey;
     }
   }
 
   /// Get difficulty text
   static String getDifficultyText(int difficulty) {
     switch (difficulty) {
-      case 1: return 'easy';
-      case 2: return 'medium';
-      case 3: return 'hard';
-      default: return 'unknown';
+      case 1:
+        return 'easy';
+      case 2:
+        return 'medium';
+      case 3:
+        return 'hard';
+      default:
+        return 'unknown';
     }
   }
 
@@ -258,7 +270,8 @@ class QuizHelpers {
   }
 
   /// Get available power-ups for a question and class level
-  static List<Map<String, dynamic>> getAvailablePowerUps(QuestionModel question, String classLevel) {
+  static List<Map<String, dynamic>> getAvailablePowerUps(
+      QuestionModel question, String classLevel) {
     final availablePowerUps = <Map<String, dynamic>>[];
 
     if (!question.showHint && question.powerUpHint?.isNotEmpty == true) {

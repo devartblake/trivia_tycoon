@@ -54,7 +54,8 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
     });
 
     try {
-      final authenticated = await _authenticateWithServer(_passwordController.text);
+      final authenticated =
+          await _authenticateWithServer(_passwordController.text);
 
       if (!mounted) return;
 
@@ -95,7 +96,8 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
     final email = await secureStorage.getSecret('user_email');
 
     if (email == null || email.isEmpty) {
-      throw Exception('A logged-in user email is required for admin authentication.');
+      throw Exception(
+          'A logged-in user email is required for admin authentication.');
     }
 
     final deviceIdentity = await deviceIdService.getDeviceIdentityPayload();
@@ -104,7 +106,8 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
       'email': email,
       'password': password,
       ...deviceIdentity,
-      if (_otpController.text.trim().isNotEmpty) 'otpCode': _otpController.text.trim(),
+      if (_otpController.text.trim().isNotEmpty)
+        'otpCode': _otpController.text.trim(),
     };
 
     final response = await serviceManager.apiService.post(
@@ -118,10 +121,12 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
         response.containsKey('access_token');
     if (!success) return false;
 
-    final accessToken =
-        response['accessToken']?.toString() ?? response['access_token']?.toString() ?? '';
-    final refreshToken =
-        response['refreshToken']?.toString() ?? response['refresh_token']?.toString() ?? '';
+    final accessToken = response['accessToken']?.toString() ??
+        response['access_token']?.toString() ??
+        '';
+    final refreshToken = response['refreshToken']?.toString() ??
+        response['refresh_token']?.toString() ??
+        '';
     final expiresIn = response['expiresIn'];
     DateTime? expiresAt;
     if (expiresIn is int) {
@@ -156,7 +161,8 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
           accessToken: accessToken,
           refreshToken: refreshToken,
           expiresAtUtc: expiresAt,
-          userId: admin is Map<String, dynamic> ? admin['id']?.toString() : null,
+          userId:
+              admin is Map<String, dynamic> ? admin['id']?.toString() : null,
           metadata: {
             'role': primaryRole,
             'roles': resolvedRoles,
@@ -305,7 +311,8 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.error_outline, color: Colors.red.shade700, size: 20),
+                    Icon(Icons.error_outline,
+                        color: Colors.red.shade700, size: 20),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
@@ -334,7 +341,9 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
                 prefixIcon: Icon(Icons.lock_outline, color: theme.primaryColor),
                 suffixIcon: IconButton(
                   icon: Icon(
-                    _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                    _obscurePassword
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
                     color: Colors.grey[600],
                   ),
                   onPressed: () {
@@ -381,7 +390,8 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
               decoration: InputDecoration(
                 labelText: 'OTP (optional)',
                 hintText: 'Enter MFA code if required',
-                prefixIcon: Icon(Icons.password_rounded, color: theme.primaryColor),
+                prefixIcon:
+                    Icon(Icons.password_rounded, color: theme.primaryColor),
                 filled: true,
                 fillColor: Colors.grey[50],
                 border: OutlineInputBorder(
@@ -414,25 +424,26 @@ class _AdminLoginDialogState extends ConsumerState<AdminLoginDialog>
                   borderRadius: BorderRadius.circular(16),
                 ),
                 elevation: 0,
-                disabledBackgroundColor: theme.primaryColor.withValues(alpha: 0.5),
+                disabledBackgroundColor:
+                    theme.primaryColor.withValues(alpha: 0.5),
               ),
               child: _isLoading
                   ? const SizedBox(
-                height: 20,
-                width: 20,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                ),
-              )
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    )
                   : const Text(
-                'Login',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0.5,
-                ),
-              ),
+                      'Login',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
             ),
           ],
         ),

@@ -7,13 +7,12 @@ class Sprite extends StatefulWidget {
   final int frameHeight;
   final num frame;
 
-  const Sprite({
-    super.key,
-    required this.image,
-    required this.frameWidth,
-    required this.frameHeight,
-    this.frame=0
-  });
+  const Sprite(
+      {super.key,
+      required this.image,
+      required this.frameWidth,
+      required this.frameHeight,
+      this.frame = 0});
 
   @override
   _SpriteState createState() => _SpriteState();
@@ -37,20 +36,26 @@ class _SpriteState extends State<Sprite> {
   @override
   void didUpdateWidget(Sprite oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.image != oldWidget.image) { _getImage(); }
+    if (widget.image != oldWidget.image) {
+      _getImage();
+    }
   }
 
   void _getImage() {
     final ImageStream? oldImageStream = _imageStream;
     _imageStream = widget.image.resolve(createLocalImageConfiguration(context));
-    if (_imageStream?.key == oldImageStream?.key) { return; }
+    if (_imageStream?.key == oldImageStream?.key) {
+      return;
+    }
     final ImageStreamListener listener = ImageStreamListener(_updateImage);
     oldImageStream?.removeListener(listener);
     _imageStream?.addListener(listener);
   }
 
   void _updateImage(ImageInfo imageInfo, bool synchronousCall) {
-    setState(() { _imageInfo = imageInfo; });
+    setState(() {
+      _imageInfo = imageInfo;
+    });
   }
 
   @override
@@ -59,16 +64,18 @@ class _SpriteState extends State<Sprite> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     ui.Image? img = _imageInfo?.image;
-    if (img == null) { return SizedBox(); }
+    if (img == null) {
+      return SizedBox();
+    }
     int w = img.width, frame = widget.frame.round();
     int frameW = widget.frameWidth, frameH = widget.frameHeight;
     int cols = (w / frameW).floor();
     int col = frame % cols, row = (frame / cols).floor();
-    ui.Rect rect = ui.Rect.fromLTWH(col * frameW * 1.0, row * frameH * 1.0, frameW * 1.0, frameH * 1.0);
+    ui.Rect rect = ui.Rect.fromLTWH(
+        col * frameW * 1.0, row * frameH * 1.0, frameW * 1.0, frameH * 1.0);
     return CustomPaint(painter: _SpritePainter(img, rect));
   }
 }
@@ -81,7 +88,8 @@ class _SpritePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.drawImageRect(image, rect, ui.Rect.fromLTWH(0.0, 0.0, size.width, size.height), Paint());
+    canvas.drawImageRect(image, rect,
+        ui.Rect.fromLTWH(0.0, 0.0, size.width, size.height), Paint());
   }
 
   @override

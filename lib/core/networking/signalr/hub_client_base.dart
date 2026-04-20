@@ -7,8 +7,7 @@ import 'package:signalr_netcore/signalr_client.dart';
 abstract class HubClientBase {
   HubConnection? _connection;
 
-  bool get isConnected =>
-      _connection?.state == HubConnectionState.Connected;
+  bool get isConnected => _connection?.state == HubConnectionState.Connected;
 
   HubConnectionState? get state => _connection?.state;
 
@@ -23,13 +22,13 @@ abstract class HubClientBase {
 
     _connection = HubConnectionBuilder()
         .withUrl(
-      url,
-      options: HttpConnectionOptions(
-        accessTokenFactory: () async => accessToken,
-        transport: HttpTransportType.WebSockets,
-        skipNegotiation: true,
-      ),
-    )
+          url,
+          options: HttpConnectionOptions(
+            accessTokenFactory: () async => accessToken,
+            transport: HttpTransportType.WebSockets,
+            skipNegotiation: true,
+          ),
+        )
         .withAutomaticReconnect()
         .build();
 

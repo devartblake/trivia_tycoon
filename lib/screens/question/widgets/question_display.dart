@@ -91,7 +91,8 @@ class EnhancedQuestionDisplay extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: classColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(16),
@@ -116,11 +117,10 @@ class EnhancedQuestionDisplay extends StatelessWidget {
                   ],
                 ),
               ),
-
               const SizedBox(width: 8),
-
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: _getDifficultyColor().withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(16),

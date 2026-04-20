@@ -8,7 +8,8 @@ import '../../core/animations/animation_manager.dart';
 import '../../game/analytics/providers/analytics_providers.dart';
 import '../../game/models/leaderboard_entry.dart';
 import '../../game/models/seasonal_competition_model.dart';
-import '../../game/providers/riverpod_providers.dart' hide analyticsServiceProvider;
+import '../../game/providers/riverpod_providers.dart'
+    hide analyticsServiceProvider;
 import '../../synaptix/mode/synaptix_mode_provider.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
@@ -110,7 +111,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
         _entries = leaderboardService.currentLeaderboard;
       });
 
-      LogManager.debug('[LeaderboardScreen] Updated - ${_entries.length} entries');
+      LogManager.debug(
+          '[LeaderboardScreen] Updated - ${_entries.length} entries');
     } catch (e) {
       LogManager.debug('[LeaderboardScreen] Update error: $e');
     }
@@ -153,22 +155,22 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
           _buildSliverAppBar(),
           SliverToBoxAdapter(
             child: AnimationManager.fadeSlideIn(
-                    animation: _animationController!,
-                    begin: const Offset(0, 0.3),
-                    child: Column(
-                      children: [
-                        _buildTierHeader(),
-                        const SizedBox(height: 24),
-                        MissionPanel(
-                          playerXP: playerXP,
-                          onXPAdded: _handleXPAdded,
-                        ),
-                        const SizedBox(height: 24),
-                        const SeasonalEventsWidget(),
-                        const SizedBox(height: 100), // Bottom padding
-                      ],
-                    ),
+              animation: _animationController!,
+              begin: const Offset(0, 0.3),
+              child: Column(
+                children: [
+                  _buildTierHeader(),
+                  const SizedBox(height: 24),
+                  MissionPanel(
+                    playerXP: playerXP,
+                    onXPAdded: _handleXPAdded,
                   ),
+                  const SizedBox(height: 24),
+                  const SeasonalEventsWidget(),
+                  const SizedBox(height: 100), // Bottom padding
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -342,7 +344,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                   decoration: BoxDecoration(
                     color: Colors.red.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
+                    border:
+                        Border.all(color: Colors.red.withValues(alpha: 0.3)),
                   ),
                   child: Center(
                     child: Text(
@@ -410,7 +413,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                         // Display current tier name from provider
                         Consumer(
                           builder: (context, ref, child) {
-                            final currentTierAsync = ref.watch(currentTierProvider);
+                            final currentTierAsync =
+                                ref.watch(currentTierProvider);
                             return currentTierAsync.when(
                               data: (tier) => Text(
                                 tier?.name.toUpperCase() ?? "APPRENTICE I",
@@ -494,16 +498,15 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+                  border:
+                      Border.all(color: Colors.white.withValues(alpha: 0.2)),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        buildEnhancedTimerSection()
-                      ],
+                      children: [buildEnhancedTimerSection()],
                     ),
                     GestureDetector(
                       onTap: () {
@@ -567,7 +570,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
             ),
             onTimeExpired: () {
               // Handle season end
-              final seasonService = ref.read(seasonalCompetitionServiceProvider);
+              final seasonService =
+                  ref.read(seasonalCompetitionServiceProvider);
               seasonService.endSeason().then((result) {
                 if (result.hasTiebreakers) {
                   // Show tiebreaker notification
@@ -617,7 +621,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
     );
   }
 
-  void _showTiebreakerDialog(BuildContext context, List<List<SeasonPlayer>> tiebreakers) {
+  void _showTiebreakerDialog(
+      BuildContext context, List<List<SeasonPlayer>> tiebreakers) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -626,9 +631,11 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('Multiple players are tied for the final promotion spots.'),
+            const Text(
+                'Multiple players are tied for the final promotion spots.'),
             const SizedBox(height: 16),
-            const Text('A tiebreaker quiz has been scheduled. You have 2 hours to participate or you will be automatically eliminated.'),
+            const Text(
+                'A tiebreaker quiz has been scheduled. You have 2 hours to participate or you will be automatically eliminated.'),
           ],
         ),
         actions: [
@@ -677,7 +684,7 @@ class _TierProgressionWidgetState extends State<TierProgressionWidget>
   void _initializeAnimations() {
     _animationControllers = List.generate(
       widget.totalTiers,
-          (index) => AnimationController(
+      (index) => AnimationController(
         duration: Duration(milliseconds: 600 + (index * 100)),
         vsync: this,
       ),
@@ -782,27 +789,27 @@ class _TierProgressionWidgetState extends State<TierProgressionWidget>
           color: isCurrentTier
               ? Colors.white
               : isUnlocked
-              ? Colors.white.withValues(alpha: 0.5)
-              : Colors.white.withValues(alpha: 0.2),
+                  ? Colors.white.withValues(alpha: 0.5)
+                  : Colors.white.withValues(alpha: 0.2),
           width: isCurrentTier ? 3 : 2,
         ),
         boxShadow: isCurrentTier
             ? [
-          BoxShadow(
-            color: Colors.amber.withValues(alpha: 0.5),
-            blurRadius: 15,
-            spreadRadius: 2,
-          ),
-        ]
+                BoxShadow(
+                  color: Colors.amber.withValues(alpha: 0.5),
+                  blurRadius: 15,
+                  spreadRadius: 2,
+                ),
+              ]
             : isUnlocked
-            ? [
-          BoxShadow(
-            color: Colors.white.withValues(alpha: 0.2),
-            blurRadius: 8,
-            spreadRadius: 1,
-          ),
-        ]
-            : null,
+                ? [
+                    BoxShadow(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      blurRadius: 8,
+                      spreadRadius: 1,
+                    ),
+                  ]
+                : null,
       ),
       child: Stack(
         alignment: Alignment.center,
@@ -841,7 +848,8 @@ class _TierProgressionWidgetState extends State<TierProgressionWidget>
     );
   }
 
-  LinearGradient _getTierGradient(int index, bool isCurrentTier, bool isUnlocked) {
+  LinearGradient _getTierGradient(
+      int index, bool isCurrentTier, bool isUnlocked) {
     if (isCurrentTier) {
       // Gold gradient only for current tier
       return const LinearGradient(

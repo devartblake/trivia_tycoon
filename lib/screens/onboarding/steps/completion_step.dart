@@ -67,7 +67,8 @@ class _CompletionStepState extends State<CompletionStep>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final username = widget.controller.userData['username'] ?? 'Player';
-    final categories = widget.controller.userData['categories'] as List<dynamic>? ?? [];
+    final categories =
+        widget.controller.userData['categories'] as List<dynamic>? ?? [];
 
     return Padding(
       padding: const EdgeInsets.all(24),
@@ -229,8 +230,10 @@ class _CompletionStepState extends State<CompletionStep>
                                     ),
                                     child: Text(
                                       _formatCategoryName(cat.toString()),
-                                      style: theme.textTheme.labelSmall?.copyWith(
-                                        color: theme.colorScheme.onPrimaryContainer,
+                                      style:
+                                          theme.textTheme.labelSmall?.copyWith(
+                                        color: theme
+                                            .colorScheme.onPrimaryContainer,
                                       ),
                                     ),
                                   );
@@ -296,11 +299,11 @@ class _CompletionStepState extends State<CompletionStep>
   }
 
   Widget _buildSummaryRow(
-      BuildContext context, {
-        required IconData icon,
-        required String label,
-        required String value,
-      }) {
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required String value,
+  }) {
     final theme = Theme.of(context);
 
     return Row(

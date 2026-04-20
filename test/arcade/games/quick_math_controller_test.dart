@@ -187,7 +187,7 @@ void main() {
     test('resets streak to 0', () {
       final ctrl = _controller();
       ctrl.answer(ctrl.state.question.answer, (_) {}); // correct → streak 1
-      ctrl.answer(_wrongOption(ctrl), (_) {});         // wrong → streak 0
+      ctrl.answer(_wrongOption(ctrl), (_) {}); // wrong → streak 0
       expect(ctrl.state.streak, 0);
     });
 
@@ -312,11 +312,11 @@ void main() {
         for (int i = 0; i < 50; i++) {
           final q = ctrl.state.question;
           if (q.op == QuickMathOp.div) {
-            expect(q.b, isNonZero,
-                reason: 'Divisor must not be zero');
+            expect(q.b, isNonZero, reason: 'Divisor must not be zero');
             // The answer should be the integer quotient
             expect(q.a % q.b, 0,
-                reason: '${q.a} must be divisible by ${q.b} for integer result');
+                reason:
+                    '${q.a} must be divisible by ${q.b} for integer result');
           }
           ctrl.answer(q.answer, (_) {});
         }

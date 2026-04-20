@@ -8,10 +8,12 @@ class AuthErrorMessages {
   static String getUserFriendlyMessage(dynamic error) {
     if (error is AuthApiException) {
       if (kIsWeb) {
-        final status = error.statusCode != null ? ' [HTTP ${error.statusCode}]' : '';
-        final body = error.responseBody != null && error.responseBody!.trim().isNotEmpty
-            ? '\nBody: ${error.responseBody}'
-            : '';
+        final status =
+            error.statusCode != null ? ' [HTTP ${error.statusCode}]' : '';
+        final body =
+            error.responseBody != null && error.responseBody!.trim().isNotEmpty
+                ? '\nBody: ${error.responseBody}'
+                : '';
         return '${error.message}$status$body';
       }
       return error.message;
@@ -142,10 +144,12 @@ class AuthErrorMessages {
   /// Specific messages for auth operations
   static String getLoginErrorMessage(dynamic error) {
     if (error is AuthApiException && kIsWeb) {
-      final status = error.statusCode != null ? ' [HTTP ${error.statusCode}]' : '';
-      final body = error.responseBody != null && error.responseBody!.trim().isNotEmpty
-          ? '\nBody: ${error.responseBody}'
-          : '';
+      final status =
+          error.statusCode != null ? ' [HTTP ${error.statusCode}]' : '';
+      final body =
+          error.responseBody != null && error.responseBody!.trim().isNotEmpty
+              ? '\nBody: ${error.responseBody}'
+              : '';
       return '${error.message}$status$body';
     }
 
@@ -168,10 +172,12 @@ class AuthErrorMessages {
 
   static String getSignupErrorMessage(dynamic error) {
     if (error is AuthApiException && kIsWeb) {
-      final status = error.statusCode != null ? ' [HTTP ${error.statusCode}]' : '';
-      final body = error.responseBody != null && error.responseBody!.trim().isNotEmpty
-          ? '\nBody: ${error.responseBody}'
-          : '';
+      final status =
+          error.statusCode != null ? ' [HTTP ${error.statusCode}]' : '';
+      final body =
+          error.responseBody != null && error.responseBody!.trim().isNotEmpty
+              ? '\nBody: ${error.responseBody}'
+              : '';
       return '${error.message}$status$body';
     }
 

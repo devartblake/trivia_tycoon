@@ -11,7 +11,7 @@ class SkillEffectLabels {
   /// not be shown in the UI.
   static String label(String key, num value) {
     switch (key) {
-    // ── Time ──────────────────────────────────────────────────────────
+      // ── Time ──────────────────────────────────────────────────────────
       case 'timeBonusSec':
         return '⏱ +${value.toInt()}s per question';
       case 'freezeTimer':
@@ -19,7 +19,7 @@ class SkillEffectLabels {
       case 'speedBonus':
         return '⚡ ×$value speed score bonus';
 
-    // ── XP / Score ────────────────────────────────────────────────────
+      // ── XP / Score ────────────────────────────────────────────────────
       case 'xpBoost':
         return '⭐ +${(value * 100).toInt()}% XP gain';
       case 'bonusXP':
@@ -37,7 +37,7 @@ class SkillEffectLabels {
       case 'sportsScoreBoost':
         return '🏆 +${(value * 100).toInt()}% sports score';
 
-    // ── Streak ────────────────────────────────────────────────────────
+      // ── Streak ────────────────────────────────────────────────────────
       case 'streakMult':
         return '🔥 ×$value streak multiplier';
       case 'streakBoost':
@@ -47,7 +47,7 @@ class SkillEffectLabels {
       case 'streakProtection':
         return '🛡️ Streak shield ×${value.toInt()}';
 
-    // ── Answer manipulation ───────────────────────────────────────────
+      // ── Answer manipulation ───────────────────────────────────────────
       case 'eliminateOneWrong':
         return '✂️ Eliminate one wrong answer';
       case 'eliminateHalfWrong':
@@ -61,13 +61,13 @@ class SkillEffectLabels {
       case 'doubleOrNothing':
         return '🎰 Double score or lose it all';
 
-    // ── Coins / economy ───────────────────────────────────────────────
+      // ── Coins / economy ───────────────────────────────────────────────
       case 'giftPoints':
         return '🎁 Award ${value.toInt()} coins';
       case 'lifelineCooldownReduction':
         return '⏰ −${value.toInt()}s lifeline cooldown';
 
-    // ── Access ────────────────────────────────────────────────────────
+      // ── Access ────────────────────────────────────────────────────────
       case 'eliteAccess':
         return '⚡ Elite mode unlocked';
       case 'masterKnowledge':
@@ -79,7 +79,7 @@ class SkillEffectLabels {
       case 'hardBonus':
         return '💎 Bonus on hard questions';
 
-    // ── Stealth / opponents ──────────────────────────────────────────
+      // ── Stealth / opponents ──────────────────────────────────────────
       case 'glitchScreens':
         return '👾 Glitch opponents\' screens';
       case 'hideProgress':
@@ -87,13 +87,13 @@ class SkillEffectLabels {
       case 'fakeScore':
         return '🎭 Show fake score to opponents';
 
-    // ── Chaos / wildcard ─────────────────────────────────────────────
+      // ── Chaos / wildcard ─────────────────────────────────────────────
       case 'periodicChaos':
         return '🌪️ Chaos every ${value.toInt()} questions';
       case 'randomBenefit':
         return '🎲 Random bonus at game start';
 
-    // ── Administrative keys — intentionally invisible ─────────────────
+      // ── Administrative keys — intentionally invisible ─────────────────
       case 'duration':
       case 'speedDuration':
       case 'cooldownSec':

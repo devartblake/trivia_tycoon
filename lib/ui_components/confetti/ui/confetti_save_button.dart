@@ -29,12 +29,12 @@ class ConfettiSaveButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: canSave
             ? [
-          BoxShadow(
-            color: const Color(0xFF48BB78).withValues(alpha: 0.3),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ]
+                BoxShadow(
+                  color: const Color(0xFF48BB78).withValues(alpha: 0.3),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
+                ),
+              ]
             : [],
       ),
       child: Column(
@@ -71,7 +71,8 @@ class ConfettiSaveButton extends StatelessWidget {
               onPressed: canSave ? onSave : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
-                foregroundColor: canSave ? const Color(0xFF48BB78) : Colors.grey,
+                foregroundColor:
+                    canSave ? const Color(0xFF48BB78) : Colors.grey,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),

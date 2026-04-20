@@ -54,7 +54,8 @@ class _WheelWidgetState extends State<WheelWidget> {
         }
 
         try {
-          final imageData = await DefaultAssetBundle.of(context).load(segment.imagePath!);
+          final imageData =
+              await DefaultAssetBundle.of(context).load(segment.imagePath!);
           final codec = await ui.instantiateImageCodec(
             imageData.buffer.asUint8List(),
             // Optimize image size for better performance
@@ -166,7 +167,8 @@ class _WheelImagePainter extends CustomPainter {
     );
   }
 
-  void _drawSegment(Canvas canvas, Offset center, double radius, int index, double anglePerSegment) {
+  void _drawSegment(Canvas canvas, Offset center, double radius, int index,
+      double anglePerSegment) {
     final segment = segments[index];
     final startAngle = index * anglePerSegment;
     final isActive = index == activeIndex;
@@ -214,17 +216,18 @@ class _WheelImagePainter extends CustomPainter {
     }
 
     // Draw content
-    _drawSegmentContent(canvas, center, radius, segment, startAngle, anglePerSegment);
+    _drawSegmentContent(
+        canvas, center, radius, segment, startAngle, anglePerSegment);
   }
 
   void _drawSegmentContent(
-      Canvas canvas,
-      Offset center,
-      double radius,
-      WheelSegment segment,
-      double startAngle,
-      double anglePerSegment,
-      ) {
+    Canvas canvas,
+    Offset center,
+    double radius,
+    WheelSegment segment,
+    double startAngle,
+    double anglePerSegment,
+  ) {
     final angle = startAngle + anglePerSegment / 2;
     final contentRadius = radius * 0.65;
     final contentCenter = Offset(
@@ -268,7 +271,8 @@ class _WheelImagePainter extends CustomPainter {
     );
   }
 
-  void _drawSegmentLabel(Canvas canvas, Offset center, WheelSegment segment, double angle) {
+  void _drawSegmentLabel(
+      Canvas canvas, Offset center, WheelSegment segment, double angle) {
     final textStyle = ui.TextStyle(
       color: _getContrastColor(segment.color),
       fontSize: 10,
@@ -296,12 +300,12 @@ class _WheelImagePainter extends CustomPainter {
   }
 
   void _drawLockOverlay(
-      Canvas canvas,
-      Offset center,
-      double radius,
-      double startAngle,
-      double anglePerSegment,
-      ) {
+    Canvas canvas,
+    Offset center,
+    double radius,
+    double startAngle,
+    double anglePerSegment,
+  ) {
     final lockPaint = Paint()..color = Colors.black.withValues(alpha: 0.6);
 
     canvas.drawArc(

@@ -151,36 +151,36 @@ class _SegmentLabelState extends State<SegmentLabel>
                   borderRadius: BorderRadius.circular(8),
                   border: widget.isActive
                       ? Border.all(
-                    color: Colors.amber.withValues(alpha: 0.6),
-                    width: 1,
-                  )
+                          color: Colors.amber.withValues(alpha: 0.6),
+                          width: 1,
+                        )
                       : null,
                   boxShadow: widget.isActive
                       ? [
-                    BoxShadow(
-                      color: Colors.amber.withValues(alpha: 0.3),
-                      blurRadius: 8,
-                      spreadRadius: 1,
-                    ),
-                  ]
+                          BoxShadow(
+                            color: Colors.amber.withValues(alpha: 0.3),
+                            blurRadius: 8,
+                            spreadRadius: 1,
+                          ),
+                        ]
                       : _isHovered && !widget.isLocked
-                      ? [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.3),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                    ),
-                  ]
-                      : null,
+                          ? [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.3),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              ),
+                            ]
+                          : null,
                   gradient: widget.isActive
                       ? LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.amber.withValues(alpha: 0.2),
-                      Colors.amber.withValues(alpha: 0.1),
-                    ],
-                  )
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.amber.withValues(alpha: 0.2),
+                            Colors.amber.withValues(alpha: 0.1),
+                          ],
+                        )
                       : null,
                 ),
                 child: Stack(
@@ -193,7 +193,8 @@ class _SegmentLabelState extends State<SegmentLabel>
                             borderRadius: BorderRadius.circular(8),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.amber.withValues(alpha: _glowAnimation.value * 0.4),
+                                color: Colors.amber.withValues(
+                                    alpha: _glowAnimation.value * 0.4),
                                 blurRadius: 12,
                                 spreadRadius: 2,
                               ),
@@ -225,28 +226,29 @@ class _SegmentLabelState extends State<SegmentLabel>
 
     return Text(
       widget.segment.label,
-      style: widget.customTextStyle ?? theme.textTheme.bodySmall?.copyWith(
-        color: textColor,
-        fontWeight: widget.isActive ? FontWeight.bold : FontWeight.w600,
-        fontSize: 10,
-        letterSpacing: 0.5,
-        shadows: widget.isActive
-            ? [
-          Shadow(
-            color: Colors.amber.withValues(alpha: 0.8),
-            blurRadius: 4,
+      style: widget.customTextStyle ??
+          theme.textTheme.bodySmall?.copyWith(
+            color: textColor,
+            fontWeight: widget.isActive ? FontWeight.bold : FontWeight.w600,
+            fontSize: 10,
+            letterSpacing: 0.5,
+            shadows: widget.isActive
+                ? [
+                    Shadow(
+                      color: Colors.amber.withValues(alpha: 0.8),
+                      blurRadius: 4,
+                    ),
+                  ]
+                : _isHovered && !widget.isLocked
+                    ? [
+                        Shadow(
+                          color: Colors.black.withValues(alpha: 0.5),
+                          blurRadius: 2,
+                          offset: const Offset(0, 1),
+                        ),
+                      ]
+                    : null,
           ),
-        ]
-            : _isHovered && !widget.isLocked
-            ? [
-          Shadow(
-            color: Colors.black.withValues(alpha: 0.5),
-            blurRadius: 2,
-            offset: const Offset(0, 1),
-          ),
-        ]
-            : null,
-      ),
       textAlign: TextAlign.center,
       maxLines: 2,
       overflow: TextOverflow.ellipsis,

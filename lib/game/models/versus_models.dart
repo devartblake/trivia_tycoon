@@ -4,11 +4,11 @@ enum VersusMode { oneVone, teamVteam }
 
 class Participant {
   final String id;
-  final String displayName;          // Player or Team name
-  final String? subtitle;            // Tagline, rank, MMR, etc.
-  final String? avatarUrl;           // Team logo or player avatar
-  final Color? color;                // Accent color
-  final List<Member> members;        // Empty or [single] for 1v1; multiple for teams
+  final String displayName; // Player or Team name
+  final String? subtitle; // Tagline, rank, MMR, etc.
+  final String? avatarUrl; // Team logo or player avatar
+  final Color? color; // Accent color
+  final List<Member> members; // Empty or [single] for 1v1; multiple for teams
   final bool isHost;
 
   const Participant({
@@ -36,10 +36,10 @@ class VersusConfig {
   final VersusMode mode;
   final Participant left;
   final Participant right;
-  final String? seriesLabel;     // e.g., "Best of 3", "Final"
-  final String? mapOrCategory;   // optional meta (e.g., “General Knowledge”)
-  final Duration introDuration;  // total anim time
-  final bool showReadyBadges;    // if you have ready states later
+  final String? seriesLabel; // e.g., "Best of 3", "Final"
+  final String? mapOrCategory; // optional meta (e.g., “General Knowledge”)
+  final Duration introDuration; // total anim time
+  final bool showReadyBadges; // if you have ready states later
 
   const VersusConfig({
     required this.mode,

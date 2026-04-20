@@ -36,7 +36,9 @@ class SynaptixHubCard extends ConsumerWidget {
         HapticFeedback.lightImpact();
         playHubTapSound(ref);
         final mode = ref.read(synaptixModeProvider);
-        ref.read(analyticsServiceProvider).trackEvent('synaptix_hub_card_tapped', {
+        ref
+            .read(analyticsServiceProvider)
+            .trackEvent('synaptix_hub_card_tapped', {
           'surface': surface,
           'synaptix_mode': mode.name,
           'entry_point': 'hub_card',

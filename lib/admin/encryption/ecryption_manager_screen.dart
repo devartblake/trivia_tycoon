@@ -5,7 +5,8 @@ class EncryptionManagerScreen extends StatefulWidget {
   const EncryptionManagerScreen({super.key});
 
   @override
-  State<EncryptionManagerScreen> createState() => _EncryptionManagerScreenState();
+  State<EncryptionManagerScreen> createState() =>
+      _EncryptionManagerScreenState();
 }
 
 class _EncryptionManagerScreenState extends State<EncryptionManagerScreen> {

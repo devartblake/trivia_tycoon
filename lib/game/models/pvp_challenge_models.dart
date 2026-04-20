@@ -1,4 +1,3 @@
-
 enum PVPChallengeStatus {
   pending,
   accepted,
@@ -26,7 +25,8 @@ enum PVPChallengeStatus {
 
   bool get isActive => this == PVPChallengeStatus.accepted;
   bool get isPending => this == PVPChallengeStatus.pending;
-  bool get isFinished => [completed, declined, expired, cancelled].contains(this);
+  bool get isFinished =>
+      [completed, declined, expired, cancelled].contains(this);
 }
 
 class PVPChallenge {

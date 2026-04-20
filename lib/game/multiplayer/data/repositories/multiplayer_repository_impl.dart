@@ -51,7 +51,8 @@ class MultiplayerRepositoryImpl implements MultiplayerRepository {
       // Return empty synchronously; callers should watch events() for results.
       return [];
     } catch (e) {
-      LogManager.error('Error listing rooms: $e', source: 'MultiplayerRepository');
+      LogManager.error('Error listing rooms: $e',
+          source: 'MultiplayerRepository');
       return [];
     }
   }

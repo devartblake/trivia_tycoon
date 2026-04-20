@@ -110,8 +110,8 @@ class StoreCategoryTab extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: isSelected
               ? const LinearGradient(
-            colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-          )
+                  colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+                )
               : null,
           color: isSelected ? null : const Color(0xFFF8FAFF),
           borderRadius: BorderRadius.circular(12),
@@ -123,12 +123,12 @@ class StoreCategoryTab extends StatelessWidget {
           ),
           boxShadow: isSelected
               ? [
-            BoxShadow(
-              color: const Color(0xFF6366F1).withValues(alpha: 0.25),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ]
+                  BoxShadow(
+                    color: const Color(0xFF6366F1).withValues(alpha: 0.25),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
               : null,
         ),
         child: Row(

@@ -111,7 +111,8 @@ class _TryNowWidgetState extends State<TryNowWidget>
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: const Color(0xFF10B981).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(20),
@@ -170,7 +171,8 @@ class _TryNowWidgetState extends State<TryNowWidget>
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF6366F1).withValues(alpha: _isPressed ? 0.2 : 0.15),
+                            color: const Color(0xFF6366F1)
+                                .withValues(alpha: _isPressed ? 0.2 : 0.15),
                             blurRadius: _isPressed ? 15 : 20,
                             offset: Offset(0, _isPressed ? 4 : 8),
                           ),
@@ -274,7 +276,8 @@ class _TryNowWidgetState extends State<TryNowWidget>
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/backgrounds/geometry_background.jpg'),
+                image: AssetImage(
+                    'assets/images/backgrounds/geometry_background.jpg'),
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
                   Colors.black26,

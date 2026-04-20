@@ -37,7 +37,6 @@ class _AdminNotificationsScreenState
   bool _didLoadServerScheduled = false;
   List<Map<String, dynamic>> _serverScheduled = <Map<String, dynamic>>[];
 
-
   @override
   void initState() {
     super.initState();
@@ -69,11 +68,14 @@ class _AdminNotificationsScreenState
       final response = await serviceManager.apiService.get(
         '/admin/notifications/history',
         queryParameters: {
-          if (_fromController.text.trim().isNotEmpty) 'from': _fromController.text.trim(),
-          if (_toController.text.trim().isNotEmpty) 'to': _toController.text.trim(),
+          if (_fromController.text.trim().isNotEmpty)
+            'from': _fromController.text.trim(),
+          if (_toController.text.trim().isNotEmpty)
+            'to': _toController.text.trim(),
           if (_channelFilterController.text.trim().isNotEmpty)
             'channelKey': _channelFilterController.text.trim(),
-          if (_statusFilter != null && _statusFilter!.isNotEmpty) 'status': _statusFilter!,
+          if (_statusFilter != null && _statusFilter!.isNotEmpty)
+            'status': _statusFilter!,
         },
       );
 
@@ -97,7 +99,8 @@ class _AdminNotificationsScreenState
   Future<void> _loadServerTemplates() async {
     try {
       final serviceManager = ref.read(serviceManagerProvider);
-      final response = await serviceManager.apiService.get('/admin/notifications/templates');
+      final response =
+          await serviceManager.apiService.get('/admin/notifications/templates');
       final items = serviceManager.apiService
           .parsePageEnvelope<Map<String, dynamic>>(response, (json) => json)
           .items;
@@ -110,7 +113,8 @@ class _AdminNotificationsScreenState
         final payloadRaw = t['payload'];
         Map<String, String>? payload;
         if (payloadRaw is Map) {
-          payload = payloadRaw.map((k, v) => MapEntry(k.toString(), v.toString()));
+          payload =
+              payloadRaw.map((k, v) => MapEntry(k.toString(), v.toString()));
         }
         await store.saveRaw(id, title, body, payload);
       }
@@ -119,12 +123,12 @@ class _AdminNotificationsScreenState
     }
   }
 
-
   Future<void> _loadServerScheduled() async {
     setState(() => _isServerScheduledLoading = true);
     try {
       final serviceManager = ref.read(serviceManagerProvider);
-      final response = await serviceManager.apiService.get('/admin/notifications/schedule');
+      final response =
+          await serviceManager.apiService.get('/admin/notifications/schedule');
       final items = serviceManager.apiService
           .parsePageEnvelope<Map<String, dynamic>>(response, (json) => json)
           .items;
@@ -435,7 +439,8 @@ class _AdminNotificationsScreenState
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  icon: const Icon(Icons.notifications_active_rounded, size: 20),
+                  icon:
+                      const Icon(Icons.notifications_active_rounded, size: 20),
                   label: const Text(
                     'Request Permission',
                     style: TextStyle(
@@ -478,7 +483,8 @@ class _AdminNotificationsScreenState
     );
   }
 
-  Widget _buildTabContent(bool isAdmin, AsyncValue<List<dynamic>> scheduledAsync) {
+  Widget _buildTabContent(
+      bool isAdmin, AsyncValue<List<dynamic>> scheduledAsync) {
     switch (_tabIndex) {
       case 0: // All tab
         return Column(
@@ -496,7 +502,6 @@ class _AdminNotificationsScreenState
         return _buildComposeSection(isAdmin);
     }
   }
-
 
   Widget _buildServerHistorySection() {
     return Column(
@@ -578,7 +583,10 @@ class _AdminNotificationsScreenState
               separatorBuilder: (_, __) => const Divider(height: 1),
               itemBuilder: (context, i) {
                 final item = _serverHistory[i];
-                final rawStatus = (item['status'] ?? item['deliveryStatus'] ?? item['delivery_status'] ?? 'queued')
+                final rawStatus = (item['status'] ??
+                        item['deliveryStatus'] ??
+                        item['delivery_status'] ??
+                        'queued')
                     .toString()
                     .toLowerCase();
                 final statusColor = switch (rawStatus) {
@@ -588,7 +596,11 @@ class _AdminNotificationsScreenState
                   _ => const Color(0xFF3B82F6),
                 };
 
-                final sentAtRaw = (item['sentAt'] ?? item['sent_at'] ?? item['createdAt'] ?? item['created_at'])?.toString();
+                final sentAtRaw = (item['sentAt'] ??
+                        item['sent_at'] ??
+                        item['createdAt'] ??
+                        item['created_at'])
+                    ?.toString();
                 String when = '-';
                 if (sentAtRaw != null && sentAtRaw.isNotEmpty) {
                   final dt = DateTime.tryParse(sentAtRaw)?.toUtc().toLocal();
@@ -606,7 +618,8 @@ class _AdminNotificationsScreenState
                   ),
                   isThreeLine: true,
                   trailing: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
                       color: statusColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
@@ -887,7 +900,6 @@ class _AdminNotificationsScreenState
     );
   }
 
-
   Widget _buildScheduledItem(dynamic n, dynamic schedule) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -921,44 +933,44 @@ class _AdminNotificationsScreenState
                 const SizedBox(height: 4),
                 schedule == null
                     ? const Text(
-                  'Scheduled',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Color(0xFF6B7280),
-                  ),
-                )
-                    : FutureBuilder<DateTime?>(
-                  future: AwesomeNotifications().getNextDate(schedule),
-                  builder: (context, snap) {
-                    if (snap.connectionState == ConnectionState.waiting) {
-                      return const Text(
-                        'Computing next run…',
+                        'Scheduled',
                         style: TextStyle(
                           fontSize: 13,
                           color: Color(0xFF6B7280),
                         ),
-                      );
-                    }
-                    final dt = snap.data;
-                    return Row(
-                      children: [
-                        const Icon(
-                          Icons.schedule,
-                          size: 14,
-                          color: Color(0xFF6B7280),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          dt != null ? _dateFormat.format(dt) : '–',
-                          style: const TextStyle(
-                            fontSize: 13,
-                            color: Color(0xFF6B7280),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
+                      )
+                    : FutureBuilder<DateTime?>(
+                        future: AwesomeNotifications().getNextDate(schedule),
+                        builder: (context, snap) {
+                          if (snap.connectionState == ConnectionState.waiting) {
+                            return const Text(
+                              'Computing next run…',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Color(0xFF6B7280),
+                              ),
+                            );
+                          }
+                          final dt = snap.data;
+                          return Row(
+                            children: [
+                              const Icon(
+                                Icons.schedule,
+                                size: 14,
+                                color: Color(0xFF6B7280),
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                dt != null ? _dateFormat.format(dt) : '–',
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  color: Color(0xFF6B7280),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
               ],
             ),
           ),

@@ -27,7 +27,8 @@ class MessageDetailScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<MessageDetailScreen> createState() => _MessageDetailScreenState();
+  ConsumerState<MessageDetailScreen> createState() =>
+      _MessageDetailScreenState();
 }
 
 class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
@@ -38,7 +39,8 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
   String get _currentUsername {
     if (Hive.isBoxOpen('settings')) {
       final box = Hive.box('settings');
-      final name = box.get('username') as String? ?? box.get('playerName') as String?;
+      final name =
+          box.get('username') as String? ?? box.get('playerName') as String?;
       if (name != null && name.isNotEmpty) return name;
     }
     return 'Guest';
@@ -65,9 +67,7 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
   }
 
   void _onTextChanged() {
-    final hasText = _messageController.text
-        .trim()
-        .isNotEmpty;
+    final hasText = _messageController.text.trim().isNotEmpty;
 
     if (hasText && !_amITyping) {
       // User started typing
@@ -115,7 +115,8 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
       userName: _currentUsername,
       isTyping: isTyping,
     );
-    LogManager.debug('[Chat] Typing broadcast: $isTyping for ${widget.conversationId}');
+    LogManager.debug(
+        '[Chat] Typing broadcast: $isTyping for ${widget.conversationId}');
   }
 
   @override
@@ -130,13 +131,14 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Watch messages for this conversation
-    final messages = ref.watch(
-        conversationMessagesProvider(widget.conversationId));
+    final messagesAsync =
+        ref.watch(conversationMessagesProvider(widget.conversationId));
 
-    final typingStatus = ref.watch(conversationTypingStatusProvider(widget.conversationId));
+    final typingStatus =
+        ref.watch(conversationTypingStatusProvider(widget.conversationId));
     _isOtherUserTyping = typingStatus.maybeWhen(
-      data: (statuses) => statuses.any((s) => s.userId != _currentUserId && s.isTyping),
+      data: (statuses) =>
+          statuses.any((s) => s.userId != _currentUserId && s.isTyping),
       orElse: () => false,
     );
 
@@ -145,7 +147,22 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
       appBar: _buildAppBar(),
       body: Column(
         children: [
-          Expanded(child: _buildMessagesList(messages)),
+          Expanded(
+            child: messagesAsync.when(
+              data: _buildMessagesList,
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, _) => Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Text(
+                    error.toString(),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.white70),
+                  ),
+                ),
+              ),
+            ),
+          ),
           if (_isOtherUserTyping) _buildTypingIndicator(),
           _buildMessageInput(),
         ],
@@ -166,13 +183,13 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
                 : null,
             child: widget.contactAvatar == null
                 ? Text(
-              widget.contactName[0].toUpperCase(),
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-              ),
-            )
+                    widget.contactName[0].toUpperCase(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
                 : null,
           ),
           const SizedBox(width: 8),
@@ -205,9 +222,8 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
       builder: (context, value, child) {
         final delay = index * 0.2;
         final animValue = ((value + delay) % 1.0);
-        final opacity = (animValue < 0.5)
-            ? animValue * 2
-            : (1.0 - animValue) * 2;
+        final opacity =
+            (animValue < 0.5) ? animValue * 2 : (1.0 - animValue) * 2;
 
         return Opacity(
           opacity: 0.3 + (opacity * 0.7),
@@ -247,7 +263,7 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
         ref,
         conversationId: widget.conversationId,
         senderId: _currentUserId,
-        senderName: 'You',
+        senderName: _currentUsername,
         content: text,
       );
 
@@ -289,14 +305,14 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
                 : null,
             child: widget.contactAvatar == null
                 ? Text(
-              widget.contactName.isNotEmpty
-                  ? widget.contactName[0].toUpperCase()
-                  : '?',
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            )
+                    widget.contactName.isNotEmpty
+                        ? widget.contactName[0].toUpperCase()
+                        : '?',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
                 : null,
           ),
           const SizedBox(width: 12),
@@ -321,15 +337,14 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
                         fontWeight: FontWeight.w400),
                     overflow: TextOverflow.ellipsis,
                   )
-                else
-                  if (widget.isOnline)
-                    const Text(
-                      'Online',
-                      style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400),
-                    ),
+                else if (widget.isOnline)
+                  const Text(
+                    'Online',
+                    style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400),
+                  ),
               ],
             ),
           ),
@@ -396,9 +411,8 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
         final previousMessage = index > 0 ? messages[index - 1] : null;
         final showSenderInfo = previousMessage == null ||
             previousMessage.senderId != message.senderId ||
-            message.timestamp
-                .difference(previousMessage.timestamp)
-                .inMinutes > 5;
+            message.timestamp.difference(previousMessage.timestamp).inMinutes >
+                5;
 
         return _buildMessageBubble(message, showSenderInfo);
       },
@@ -412,7 +426,7 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
       padding: EdgeInsets.only(top: showSenderInfo ? 16 : 4),
       child: Row(
         mainAxisAlignment:
-        isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+            isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (!isMe && showSenderInfo)
@@ -424,25 +438,24 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
                   : null,
               child: widget.contactAvatar == null
                   ? Text(
-                message.senderName.isNotEmpty
-                    ? message.senderName[0].toUpperCase()
-                    : '?',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-              )
+                      message.senderName.isNotEmpty
+                          ? message.senderName[0].toUpperCase()
+                          : '?',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
                   : null,
             )
-          else
-            if (!isMe)
-              const SizedBox(width: 32),
+          else if (!isMe)
+            const SizedBox(width: 32),
           const SizedBox(width: 8),
           Flexible(
             child: Column(
               crossAxisAlignment:
-              isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                  isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
               children: [
                 if (showSenderInfo && !isMe)
                   Padding(
@@ -510,7 +523,8 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
     return GestureDetector(
       onLongPress: () => _showReactionPicker(message),
       child: Column(
-        crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        crossAxisAlignment:
+            isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -606,26 +620,26 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
       ),
       child: message.imageUrl != null
           ? ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: Image.asset(
-          message.imageUrl!,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) => const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text(
-              '[Image unavailable]',
-              style: TextStyle(color: Colors.white70, fontSize: 14),
-            ),
-          ),
-        ),
-      )
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                message.imageUrl!,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text(
+                    '[Image unavailable]',
+                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                  ),
+                ),
+              ),
+            )
           : const Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Text(
-          '[Image]',
-          style: TextStyle(color: Colors.white70, fontSize: 14),
-        ),
-      ),
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                '[Image]',
+                style: TextStyle(color: Colors.white70, fontSize: 14),
+              ),
+            ),
     );
   }
 
@@ -763,17 +777,23 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
               alignment: WrapAlignment.center,
               spacing: 12,
               runSpacing: 12,
-              children: reactions.map((emoji) => GestureDetector(
-                onTap: () {
-                  final storage = ref.read(messageStorageServiceProvider);
-                  final updated = [...message.reactions];
-                  if (!updated.contains(emoji)) updated.add(emoji);
-                  storage.updateMessage(message.id, message.copyWith(reactions: updated));
-                  LogManager.debug('[Chat] Reaction $emoji added to ${message.id}');
-                  Navigator.pop(context);
-                },
-                child: Text(emoji, style: const TextStyle(fontSize: 32)),
-              )).toList(),
+              children: reactions
+                  .map((emoji) => GestureDetector(
+                        onTap: () {
+                          final storage =
+                              ref.read(messageStorageServiceProvider);
+                          final updated = [...message.reactions];
+                          if (!updated.contains(emoji)) updated.add(emoji);
+                          storage.updateMessage(
+                              message.id, message.copyWith(reactions: updated));
+                          LogManager.debug(
+                              '[Chat] Reaction $emoji added to ${message.id}');
+                          Navigator.pop(context);
+                        },
+                        child:
+                            Text(emoji, style: const TextStyle(fontSize: 32)),
+                      ))
+                  .toList(),
             ),
           ),
         );
@@ -790,21 +810,26 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
           children: [
             ListTile(
               leading: const Icon(Icons.photo_library, color: Colors.white70),
-              title: const Text('Photo & Video Library', style: TextStyle(color: Colors.white)),
+              title: const Text('Photo & Video Library',
+                  style: TextStyle(color: Colors.white)),
               onTap: () async {
                 Navigator.pop(ctx);
-                final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
+                final picked =
+                    await ImagePicker().pickImage(source: ImageSource.gallery);
                 if (picked != null) {
-                  LogManager.debug('[Chat] Attachment selected: ${picked.path}');
+                  LogManager.debug(
+                      '[Chat] Attachment selected: ${picked.path}');
                 }
               },
             ),
             ListTile(
               leading: const Icon(Icons.camera_alt, color: Colors.white70),
-              title: const Text('Camera', style: TextStyle(color: Colors.white)),
+              title:
+                  const Text('Camera', style: TextStyle(color: Colors.white)),
               onTap: () async {
                 Navigator.pop(ctx);
-                final picked = await ImagePicker().pickImage(source: ImageSource.camera);
+                final picked =
+                    await ImagePicker().pickImage(source: ImageSource.camera);
                 if (picked != null) {
                   LogManager.debug('[Chat] Camera photo: ${picked.path}');
                 }
@@ -817,7 +842,8 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
                 Navigator.pop(ctx);
                 final result = await FilePicker.platform.pickFiles();
                 if (result != null && result.files.isNotEmpty) {
-                  LogManager.debug('[Chat] File selected: ${result.files.first.name}');
+                  LogManager.debug(
+                      '[Chat] File selected: ${result.files.first.name}');
                 }
               },
             ),
@@ -844,8 +870,8 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
             const SizedBox(width: 4),
             Icon(
               message.isRead ? Icons.done_all : Icons.done,
-              color: message.isRead ? Colors.blueAccent : const Color(
-                  0xFF72767D),
+              color:
+                  message.isRead ? Colors.blueAccent : const Color(0xFF72767D),
               size: 14,
             ),
           ],
@@ -857,8 +883,8 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
   String _formatTimestamp(DateTime timestamp) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    final messageDate = DateTime(
-        timestamp.year, timestamp.month, timestamp.day);
+    final messageDate =
+        DateTime(timestamp.year, timestamp.month, timestamp.day);
 
     if (messageDate == today) {
       // Today - show time only
@@ -868,9 +894,7 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
     } else if (messageDate == today.subtract(const Duration(days: 1))) {
       // Yesterday
       return 'Yesterday';
-    } else if (now
-        .difference(timestamp)
-        .inDays < 7) {
+    } else if (now.difference(timestamp).inDays < 7) {
       // This week - show day name
       final days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
       return days[timestamp.weekday - 1];

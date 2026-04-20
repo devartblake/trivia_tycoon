@@ -14,7 +14,8 @@ class ConfettiSettingsDialog extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ConfettiSettingsDialog> createState() => _ConfettiSettingsDialogState();
+  ConsumerState<ConfettiSettingsDialog> createState() =>
+      _ConfettiSettingsDialogState();
 }
 
 class _ConfettiSettingsDialogState extends ConsumerState<ConfettiSettingsDialog>
@@ -83,8 +84,8 @@ class _ConfettiSettingsDialogState extends ConsumerState<ConfettiSettingsDialog>
                         max: 200,
                         color: const Color(0xFF667EEA),
                         icon: Icons.grain,
-                        onChanged: (value) =>
-                            setState(() => _settings = _settings.copyWith(density: value)),
+                        onChanged: (value) => setState(() =>
+                            _settings = _settings.copyWith(density: value)),
                       ),
                       const SizedBox(height: 16),
                       _buildSliderCard(
@@ -94,8 +95,8 @@ class _ConfettiSettingsDialogState extends ConsumerState<ConfettiSettingsDialog>
                         max: 5.0,
                         color: const Color(0xFF48BB78),
                         icon: Icons.speed,
-                        onChanged: (value) =>
-                            setState(() => _settings = _settings.copyWith(speed: value)),
+                        onChanged: (value) => setState(
+                            () => _settings = _settings.copyWith(speed: value)),
                       ),
                       const SizedBox(height: 16),
                       _buildToggleSection(),
@@ -179,7 +180,8 @@ class _ConfettiSettingsDialogState extends ConsumerState<ConfettiSettingsDialog>
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
@@ -248,7 +250,8 @@ class _ConfettiSettingsDialogState extends ConsumerState<ConfettiSettingsDialog>
             "Add realistic falling motion",
             Icons.arrow_downward,
             _settings.enableGravity,
-                (value) => setState(() => _settings = _settings.copyWith(enableGravity: value)),
+            (value) => setState(
+                () => _settings = _settings.copyWith(enableGravity: value)),
           ),
           const SizedBox(height: 12),
           _buildToggleOption(
@@ -256,20 +259,24 @@ class _ConfettiSettingsDialogState extends ConsumerState<ConfettiSettingsDialog>
             "Add spinning animation",
             Icons.rotate_right,
             _settings.enableRotation,
-                (value) => setState(() => _settings = _settings.copyWith(enableRotation: value)),
+            (value) => setState(
+                () => _settings = _settings.copyWith(enableRotation: value)),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildToggleOption(String title, String subtitle, IconData icon, bool value, ValueChanged<bool> onChanged) {
+  Widget _buildToggleOption(String title, String subtitle, IconData icon,
+      bool value, ValueChanged<bool> onChanged) {
     return Row(
       children: [
         Container(
           padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
-            color: value ? const Color(0xFF9F7AEA).withValues(alpha: 0.1) : Colors.grey.withValues(alpha: 0.1),
+            color: value
+                ? const Color(0xFF9F7AEA).withValues(alpha: 0.1)
+                : Colors.grey.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(6),
           ),
           child: Icon(
@@ -368,7 +375,9 @@ class _ConfettiSettingsDialogState extends ConsumerState<ConfettiSettingsDialog>
           Expanded(
             child: ElevatedButton(
               onPressed: () {
-                ref.read(confettiControllerProvider.notifier).updateSettings(_settings);
+                ref
+                    .read(confettiControllerProvider.notifier)
+                    .updateSettings(_settings);
                 widget.onSave(_settings);
                 Navigator.of(context).pop();
               },

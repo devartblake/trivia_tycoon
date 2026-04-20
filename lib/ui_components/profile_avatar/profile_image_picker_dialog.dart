@@ -11,9 +11,9 @@ import '../../game/controllers/profile_avatar_controller.dart';
 /// - Select a pre-made avatar
 /// - Cancel the operation
 Future<void> showProfileImagePickerDialog(
-    BuildContext context,
-    ProfileAvatarController controller,
-    ) {
+  BuildContext context,
+  ProfileAvatarController controller,
+) {
   return showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -273,8 +273,7 @@ class _ProfileImagePickerBottomSheetState
                     child: Column(
                       children: [
                         LinearProgressIndicator(
-                          backgroundColor:
-                          colorScheme.surfaceContainerHighest,
+                          backgroundColor: colorScheme.surfaceContainerHighest,
                           color: colorScheme.primary,
                           borderRadius: BorderRadius.circular(2),
                         ),
@@ -295,9 +294,8 @@ class _ProfileImagePickerBottomSheetState
                   child: SizedBox(
                     width: double.infinity,
                     child: TextButton(
-                      onPressed: _isLoading
-                          ? null
-                          : () => Navigator.of(context).pop(),
+                      onPressed:
+                          _isLoading ? null : () => Navigator.of(context).pop(),
                       style: TextButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
@@ -383,9 +381,15 @@ class _OptionCardState extends State<_OptionCard>
           color: Colors.transparent,
           child: InkWell(
             onTap: widget.isEnabled ? widget.onTap : null,
-            onTapDown: widget.isEnabled ? (_) => setState(() => _isPressed = true) : null,
-            onTapUp: widget.isEnabled ? (_) => setState(() => _isPressed = false) : null,
-            onTapCancel: widget.isEnabled ? () => setState(() => _isPressed = false) : null,
+            onTapDown: widget.isEnabled
+                ? (_) => setState(() => _isPressed = true)
+                : null,
+            onTapUp: widget.isEnabled
+                ? (_) => setState(() => _isPressed = false)
+                : null,
+            onTapCancel: widget.isEnabled
+                ? () => setState(() => _isPressed = false)
+                : null,
             borderRadius: BorderRadius.circular(20),
             child: Ink(
               decoration: BoxDecoration(
@@ -452,7 +456,8 @@ class _OptionCardState extends State<_OptionCard>
                     Icon(
                       Icons.arrow_forward_ios_rounded,
                       size: 18,
-                      color: colorScheme.onPrimaryContainer.withValues(alpha: 0.5),
+                      color:
+                          colorScheme.onPrimaryContainer.withValues(alpha: 0.5),
                     ),
                   ],
                 ),

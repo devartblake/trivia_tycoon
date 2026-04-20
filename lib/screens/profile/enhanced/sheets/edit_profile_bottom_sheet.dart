@@ -288,7 +288,7 @@ class _EditProfileBottomSheetState
                 decoration: BoxDecoration(
                   color: Colors.black.withValues(alpha: 0.5),
                   borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(28)),
+                      const BorderRadius.vertical(top: Radius.circular(28)),
                 ),
                 child: Center(
                   child: Container(
@@ -382,7 +382,7 @@ class _EditProfileBottomSheetState
               if (_hasChanges && !_isLoading)
                 Container(
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
                     color: const Color(0xFFFBBF24).withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(8),
@@ -624,7 +624,8 @@ class _EditProfileBottomSheetState
       children: [
         Expanded(
           child: OutlinedButton(
-            onPressed: _isLoading ? null : () => Navigator.of(context).pop(false),
+            onPressed:
+                _isLoading ? null : () => Navigator.of(context).pop(false),
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.white,
               side: BorderSide(
@@ -665,24 +666,24 @@ class _EditProfileBottomSheetState
           decoration: BoxDecoration(
             gradient: _isLoading
                 ? LinearGradient(
-              colors: [
-                Colors.grey.shade700,
-                Colors.grey.shade600,
-              ],
-            )
+                    colors: [
+                      Colors.grey.shade700,
+                      Colors.grey.shade600,
+                    ],
+                  )
                 : const LinearGradient(
-              colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-            ),
+                    colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+                  ),
             borderRadius: BorderRadius.circular(16),
             boxShadow: _isLoading
                 ? []
                 : [
-              BoxShadow(
-                color: const Color(0xFF6366F1).withValues(alpha: 0.4),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ],
+                    BoxShadow(
+                      color: const Color(0xFF6366F1).withValues(alpha: 0.4),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

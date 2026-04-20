@@ -60,11 +60,14 @@ class HexSpiderBackgroundPainter extends CustomPainter {
     final t = _clamp((scale - 1.0) / (2.5 - 1.0), 0, 1);
     final gridAlpha = _lerp(baseGridAlpha, 0.15, t);
     final ringAlpha = _lerp(baseRingAlpha, 0.20, t);
-    final rayAlpha  = _lerp(baseRayAlpha,  0.18, t);
+    final rayAlpha = _lerp(baseRayAlpha, 0.18, t);
 
     // Compute origin: center, or align to a reference node transformed to screen
     Offset origin = size.center(Offset.zero);
-    if (alignToNodes && worldToScreen != null && positions != null && positions!.isNotEmpty) {
+    if (alignToNodes &&
+        worldToScreen != null &&
+        positions != null &&
+        positions!.isNotEmpty) {
       final anchorWorld = _chooseAnchor(positions!);
       origin = _transformPoint(worldToScreen!, anchorWorld);
     }
@@ -77,14 +80,16 @@ class HexSpiderBackgroundPainter extends CustomPainter {
 
     final tileSize = HexMetrics.tileSize(hexRadius, orientation);
     // Draw a limited disc of axial cells around 0,0
-    final radiusCells = (ringSpacing * ringCount / (tileSize.height / 2)).ceil() + 2;
+    final radiusCells =
+        (ringSpacing * ringCount / (tileSize.height / 2)).ceil() + 2;
 
     for (int q = -radiusCells; q <= radiusCells; q++) {
       final r1 = math.max(-radiusCells, -q - radiusCells);
       final r2 = math.min(radiusCells, -q + radiusCells);
       for (int r = r1; r <= r2; r++) {
         final c = HexMetrics.axialToPixel(q, r, hexRadius, orientation);
-        final rect = Rect.fromCenter(center: origin + c, width: tileSize.width, height: tileSize.height);
+        final rect = Rect.fromCenter(
+            center: origin + c, width: tileSize.width, height: tileSize.height);
         final path = HexMetrics.pathInRect(rect, orientation);
         canvas.drawPath(path, paintHex);
       }
@@ -94,20 +99,24 @@ class HexSpiderBackgroundPainter extends CustomPainter {
     final rayColors = _safeColors(
       // palette.rayGradient is expected to exist; fallback to two-color rayColor gradient
       _tryGetColors(palette, 'rayGradient'),
-      fallback: [rayColor.withValues(alpha: rayAlpha), rayColor.withValues(alpha: 0)],
+      fallback: [
+        rayColor.withValues(alpha: rayAlpha),
+        rayColor.withValues(alpha: 0)
+      ],
     );
-    final rayStops  = _evenStops(rayColors.length);
+    final rayStops = _evenStops(rayColors.length);
 
     final ringColors = _safeColors(
       // Prefer ringGradient if present; else reuse rayGradient; else fallback to ringColor fade
-      _tryGetColors(palette, 'ringGradient') ?? _tryGetColors(palette, 'rayGradient'),
+      _tryGetColors(palette, 'ringGradient') ??
+          _tryGetColors(palette, 'rayGradient'),
       fallback: [
         ringColor.withValues(alpha: ringAlpha),
         ringColor.withValues(alpha: ringAlpha * 0.6),
         ringColor.withValues(alpha: 0),
       ],
     );
-    final ringStops  = _evenStops(ringColors.length);
+    final ringStops = _evenStops(ringColors.length);
 
     /// 2) Radial rays (with soft gradient along length)
     for (int i = 0; i < rayCount; i++) {
@@ -145,21 +154,21 @@ class HexSpiderBackgroundPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant HexSpiderBackgroundPainter old) =>
       old.ringCount != ringCount ||
-          old.ringSpacing != ringSpacing ||
-          old.rayCount != rayCount ||
-          old.hexRadius != hexRadius ||
-          old.orientation != orientation ||
-          old.scale != scale ||
-          old.alignToNodes != alignToNodes ||
-          old.worldToScreen != worldToScreen ||
-          old.positions != positions ||
-          old.theme != theme ||
-          old.gridColor != gridColor ||
-          old.ringColor != ringColor ||
-          old.rayColor != rayColor ||
-          old.baseGridAlpha != baseGridAlpha ||
-          old.baseRingAlpha != baseRingAlpha ||
-          old.baseRayAlpha != baseRayAlpha;
+      old.ringSpacing != ringSpacing ||
+      old.rayCount != rayCount ||
+      old.hexRadius != hexRadius ||
+      old.orientation != orientation ||
+      old.scale != scale ||
+      old.alignToNodes != alignToNodes ||
+      old.worldToScreen != worldToScreen ||
+      old.positions != positions ||
+      old.theme != theme ||
+      old.gridColor != gridColor ||
+      old.ringColor != ringColor ||
+      old.rayColor != rayColor ||
+      old.baseGridAlpha != baseGridAlpha ||
+      old.baseRingAlpha != baseRingAlpha ||
+      old.baseRayAlpha != baseRayAlpha;
 
   // ---- helpers ----
   Offset _transformPoint(vmath.Matrix4 m, Offset p) {
@@ -177,13 +186,15 @@ class HexSpiderBackgroundPainter extends CustomPainter {
     // average
     double x = 0, y = 0;
     for (final p in pos.values) {
-      x += p.dx; y += p.dy;
+      x += p.dx;
+      y += p.dy;
     }
     final n = pos.length;
     return Offset(x / n, y / n);
   }
 
-  double _clamp(double v, double min, double max) => v < min ? min : (v > max ? max : v);
+  double _clamp(double v, double min, double max) =>
+      v < min ? min : (v > max ? max : v);
   double _lerp(double a, double b, double t) => a + (b - a) * t;
 
   // Ensures we always return a non-empty list of Colors

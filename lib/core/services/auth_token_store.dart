@@ -20,9 +20,7 @@ class AuthSession {
     this.metadata,
   });
 
-  bool get hasTokens =>
-      accessToken.isNotEmpty &&
-          refreshToken.isNotEmpty;
+  bool get hasTokens => accessToken.isNotEmpty && refreshToken.isNotEmpty;
 
   bool get isExpired {
     if (expiresAtUtc == null) return false;
@@ -54,9 +52,7 @@ class AuthSession {
     if (metadata == null) return [];
 
     if (metadata!.containsKey('roles') && metadata!['roles'] is List) {
-      return (metadata!['roles'] as List)
-          .map((r) => r.toString())
-          .toList();
+      return (metadata!['roles'] as List).map((r) => r.toString()).toList();
     }
 
     if (metadata!.containsKey('role')) {
@@ -160,7 +156,8 @@ class AuthTokenStore {
 
     DateTime? expiresAtUtc;
     if (expiresAtMs != null) {
-      expiresAtUtc = DateTime.fromMillisecondsSinceEpoch(expiresAtMs, isUtc: true);
+      expiresAtUtc =
+          DateTime.fromMillisecondsSinceEpoch(expiresAtMs, isUtc: true);
     }
 
     Map<String, dynamic>? metadata;
@@ -187,7 +184,8 @@ class AuthTokenStore {
     await _box.put(_refreshTokenKey, session.refreshToken);
 
     if (session.expiresAtUtc != null) {
-      await _box.put(_expiresAtKey, session.expiresAtUtc!.millisecondsSinceEpoch);
+      await _box.put(
+          _expiresAtKey, session.expiresAtUtc!.millisecondsSinceEpoch);
     } else {
       await _box.delete(_expiresAtKey);
     }
@@ -217,7 +215,8 @@ class AuthTokenStore {
   }
 
   /// Update only the access token (used during refresh)
-  Future<void> updateAccessToken(String newAccessToken, DateTime expiresAtUtc) async {
+  Future<void> updateAccessToken(
+      String newAccessToken, DateTime expiresAtUtc) async {
     await _box.put(_accessTokenKey, newAccessToken);
     await _box.put(_expiresAtKey, expiresAtUtc.millisecondsSinceEpoch);
   }

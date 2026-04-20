@@ -17,7 +17,7 @@ class SplashSettingsService {
     final box = await Hive.openBox(_boxName);
     final name = box.get(_key);
     return SplashType.values.firstWhere(
-          (e) => e.name == name,
+      (e) => e.name == name,
       orElse: () => SplashType.fortuneWheel,
     );
   }

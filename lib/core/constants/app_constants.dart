@@ -1,2 +1,1 @@
-
 const String appTitle = "Synaptix";

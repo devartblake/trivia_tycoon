@@ -33,17 +33,17 @@ class GlassCard extends StatelessWidget {
         ),
         boxShadow: elevated
             ? [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 16,
-            offset: const Offset(0, 4),
-          ),
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ]
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.08),
+                  blurRadius: 16,
+                  offset: const Offset(0, 4),
+                ),
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ]
             : null,
       ),
       child: child,
@@ -219,7 +219,8 @@ class CollapsedTileCard extends StatelessWidget {
           ),
           child: ListTile(
             dense: dense,
-            contentPadding: contentPadding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            contentPadding: contentPadding ??
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             leading: leading,
             title: title,
             subtitle: subtitle,

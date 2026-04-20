@@ -29,10 +29,15 @@ class ScanHistoryScreen extends ConsumerWidget {
                 context: context,
                 builder: (_) => AlertDialog(
                   title: const Text("Clear History"),
-                  content: const Text("Are you sure you want to delete all scan history?"),
+                  content: const Text(
+                      "Are you sure you want to delete all scan history?"),
                   actions: [
-                    TextButton(onPressed: () => Navigator.pop(context, false), child: const Text("Cancel")),
-                    TextButton(onPressed: () => Navigator.pop(context, true), child: const Text("Clear")),
+                    TextButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        child: const Text("Cancel")),
+                    TextButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        child: const Text("Clear")),
                   ],
                 ),
               );
@@ -59,25 +64,32 @@ class ScanHistoryScreen extends ConsumerWidget {
 
           final filteredHistory = selectedType == null
               ? allHistory
-              : allHistory.where((item) => item.type == selectedType.name).toList();
+              : allHistory
+                  .where((item) => item.type == selectedType.name)
+                  .toList();
 
           return Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 child: Wrap(
                   spacing: 8,
                   children: [
                     ChoiceChip(
                       label: const Text("All"),
                       selected: selectedType == null,
-                      onSelected: (_) => ref.read(selectedScanTypeProvider.notifier).state = null,
+                      onSelected: (_) => ref
+                          .read(selectedScanTypeProvider.notifier)
+                          .state = null,
                     ),
                     ...QrContentType.values.map((type) {
                       return ChoiceChip(
                         label: Text(QrFormatUtils.labelForType(type)),
                         selected: selectedType == type,
-                        onSelected: (_) => ref.read(selectedScanTypeProvider.notifier).state = type,
+                        onSelected: (_) => ref
+                            .read(selectedScanTypeProvider.notifier)
+                            .state = type,
                       );
                     }),
                   ],
@@ -89,11 +101,14 @@ class ScanHistoryScreen extends ConsumerWidget {
                   itemCount: filteredHistory.length,
                   itemBuilder: (_, index) {
                     final item = filteredHistory[index];
-                    final timeFormatted = DateFormat.yMMMd().add_jm().format(item.timestamp);
-                    final icon = QrFormatUtils.iconForType(QrFormatUtils.fromName(item.type));
+                    final timeFormatted =
+                        DateFormat.yMMMd().add_jm().format(item.timestamp);
+                    final icon = QrFormatUtils.iconForType(
+                        QrFormatUtils.fromName(item.type));
 
                     return Dismissible(
-                      key: ValueKey(item.timestamp.toIso8601String() + item.value),
+                      key: ValueKey(
+                          item.timestamp.toIso8601String() + item.value),
                       direction: DismissDirection.endToStart,
                       background: Container(
                         color: Colors.redAccent,
@@ -106,10 +121,16 @@ class ScanHistoryScreen extends ConsumerWidget {
                           context: context,
                           builder: (_) => AlertDialog(
                             title: const Text("Delete Scan"),
-                            content: Text("Remove this scan entry?\n\n${item.value}"),
+                            content: Text(
+                                "Remove this scan entry?\n\n${item.value}"),
                             actions: [
-                              TextButton(onPressed: () => Navigator.pop(context, false), child: const Text("Cancel")),
-                              TextButton(onPressed: () => Navigator.pop(context, true), child: const Text("Delete")),
+                              TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(context, false),
+                                  child: const Text("Cancel")),
+                              TextButton(
+                                  onPressed: () => Navigator.pop(context, true),
+                                  child: const Text("Delete")),
                             ],
                           ),
                         );
@@ -160,13 +181,17 @@ class ScanHistoryScreen extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SelectableText(item.value, style: const TextStyle(fontWeight: FontWeight.bold)),
+            SelectableText(item.value,
+                style: const TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            Text("Scanned at: ${DateFormat.yMMMd().add_jm().format(item.timestamp)}"),
+            Text(
+                "Scanned at: ${DateFormat.yMMMd().add_jm().format(item.timestamp)}"),
           ],
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text("Close")),
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Close")),
           if (contentType == QrContentType.url)
             TextButton(
               child: const Text("Open URL"),

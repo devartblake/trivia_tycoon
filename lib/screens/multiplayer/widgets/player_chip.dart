@@ -23,22 +23,22 @@ class PlayerChip extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: isHost
             ? const LinearGradient(
-          colors: [Color(0xFFEF4444), Color(0xFFDC2626)],
-        )
+                colors: [Color(0xFFEF4444), Color(0xFFDC2626)],
+              )
             : LinearGradient(
-          colors: [
-            isDark ? const Color(0xFF2A2A3E) : Colors.white,
-            isDark ? const Color(0xFF1E1E2E) : const Color(0xFFF8F9FC),
-          ],
-        ),
+                colors: [
+                  isDark ? const Color(0xFF2A2A3E) : Colors.white,
+                  isDark ? const Color(0xFF1E1E2E) : const Color(0xFFF8F9FC),
+                ],
+              ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
             color: isHost
                 ? const Color(0xFFEF4444).withValues(alpha: 0.3)
                 : isDark
-                ? Colors.black.withValues(alpha: 0.2)
-                : Colors.grey.withValues(alpha: 0.1),
+                    ? Colors.black.withValues(alpha: 0.2)
+                    : Colors.grey.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -46,11 +46,9 @@ class PlayerChip extends StatelessWidget {
         border: isHost
             ? null
             : Border.all(
-          color: isDark
-              ? Colors.grey.shade700
-              : Colors.grey.shade200,
-          width: 1,
-        ),
+                color: isDark ? Colors.grey.shade700 : Colors.grey.shade200,
+                width: 1,
+              ),
       ),
       child: Material(
         color: Colors.transparent,
@@ -76,9 +74,7 @@ class PlayerChip extends StatelessWidget {
                       child: Icon(
                         Icons.person_rounded,
                         size: 18,
-                        color: isHost
-                            ? Colors.white
-                            : const Color(0xFF8B5CF6),
+                        color: isHost ? Colors.white : const Color(0xFF8B5CF6),
                       ),
                     ),
                     if (isOnline)
@@ -107,8 +103,8 @@ class PlayerChip extends StatelessWidget {
                     color: isHost
                         ? Colors.white
                         : isDark
-                        ? Colors.white
-                        : const Color(0xFF1E293B),
+                            ? Colors.white
+                            : const Color(0xFF1E293B),
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
                   ),

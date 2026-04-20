@@ -241,9 +241,7 @@ class ChallengeCard extends StatelessWidget {
               minHeight: 12,
               backgroundColor: const Color(0x22000000),
               valueColor: AlwaysStoppedAnimation<Color>(
-                completed
-                    ? const Color(0xFF10B981)
-                    : theme.colorScheme.primary,
+                completed ? const Color(0xFF10B981) : theme.colorScheme.primary,
               ),
             ),
           ),
@@ -252,7 +250,8 @@ class ChallengeCard extends StatelessWidget {
     );
   }
 
-  Widget _buildActionButton(BuildContext context, ThemeData theme, bool completed) {
+  Widget _buildActionButton(
+      BuildContext context, ThemeData theme, bool completed) {
     return SizedBox(
       width: double.infinity,
       child: completed

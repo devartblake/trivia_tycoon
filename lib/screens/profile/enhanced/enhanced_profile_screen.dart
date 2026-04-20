@@ -51,7 +51,8 @@ class EnhancedProfileScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<EnhancedProfileScreen> createState() => _EnhancedProfileScreenState();
+  ConsumerState<EnhancedProfileScreen> createState() =>
+      _EnhancedProfileScreenState();
 }
 
 class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
@@ -172,15 +173,18 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
     _userData.addAll({
       if (_readInt(summary, ['level'], fallbackMap: progress) != null)
         'level': _readInt(summary, ['level'], fallbackMap: progress),
-      if (_readInt(summary, ['totalPoints', 'points'], fallbackMap: stats) != null)
+      if (_readInt(summary, ['totalPoints', 'points'], fallbackMap: stats) !=
+          null)
         'totalPoints':
             _readInt(summary, ['totalPoints', 'points'], fallbackMap: stats),
-      if (_readInt(summary, ['friendCount', 'friends'], fallbackMap: stats) != null)
+      if (_readInt(summary, ['friendCount', 'friends'], fallbackMap: stats) !=
+          null)
         'friendCount':
             _readInt(summary, ['friendCount', 'friends'], fallbackMap: stats),
       if (_readInt(summary, ['rank'], fallbackMap: stats) != null)
         'rank': _readInt(summary, ['rank'], fallbackMap: stats),
-      if (_readInt(summary, ['achievementCount'], fallbackMap: achievements) != null)
+      if (_readInt(summary, ['achievementCount'], fallbackMap: achievements) !=
+          null)
         'achievements':
             _readInt(summary, ['achievementCount'], fallbackMap: achievements),
     });
@@ -195,8 +199,10 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
       if (_readString(payload, const ['displayName', 'name']) != null)
         'displayName': _readString(payload, const ['displayName', 'name']),
       if (_readString(payload, const ['username', 'handle']) != null)
-        'username':
-            '@${_normalizeHandle(_readString(payload, const ['username', 'handle'])!)}',
+        'username': '@${_normalizeHandle(_readString(payload, const [
+              'username',
+              'handle'
+            ])!)}',
       if (_readString(payload, const ['bio']) != null)
         'bio': _readString(payload, const ['bio']),
       if (_readString(payload, const ['favoriteSubject']) != null)
@@ -377,14 +383,17 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
           fit: StackFit.expand,
           children: [
             // DepthCard3D Background
-            Center (
+            Center(
               child: DepthCard3D(
                 config: DepthCardConfig(
                   width: double.infinity,
                   height: 400,
-                  text: '', // Required parameter - empty since we're using custom overlay
-                  modelAssetPath: 'assets/models/flutter_dash.obj', // Your 3D model path
-                  backgroundImage: const AssetImage('assets/images/backgrounds/bg7.jpg'), // Optional background
+                  text:
+                      '', // Required parameter - empty since we're using custom overlay
+                  modelAssetPath:
+                      'assets/models/flutter_dash.obj', // Your 3D model path
+                  backgroundImage: const AssetImage(
+                      'assets/images/backgrounds/bg7.jpg'), // Optional background
                   backgroundOpacity: 0.3,
                   backgroundBlur: 2.0,
                   backgroundFit: BoxFit.cover,
@@ -399,7 +408,8 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
                   parallaxDepth: 0.5,
                   borderRadius: 0, // No border radius for app bar
                   show3DText: false, // We'll use our own overlay text
-                  slots: DepthCardSlots.empty, // Empty slots, we'll add our own overlay
+                  slots: DepthCardSlots
+                      .empty, // Empty slots, we'll add our own overlay
                   backgroundFilterQuality: FilterQuality.none,
                 ),
               ),
@@ -459,7 +469,8 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
                                 width: 2,
                               ),
                             ),
-                            child: const Icon(Icons.person, color: Colors.white, size: 28),
+                            child: const Icon(Icons.person,
+                                color: Colors.white, size: 28),
                           ),
                           const SizedBox(width: 12),
                           // Name and username
@@ -490,7 +501,8 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
                           ),
                           // Level badge
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 6),
                             decoration: BoxDecoration(
                               gradient: const LinearGradient(
                                 colors: [Color(0xFFFBBF24), Color(0xFFF59E0B)],
@@ -500,7 +512,8 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(Icons.stars_rounded, color: Colors.white, size: 14),
+                                const Icon(Icons.stars_rounded,
+                                    color: Colors.white, size: 14),
                                 const SizedBox(width: 4),
                                 Text(
                                   'Lv ${_userData['level']}',
@@ -618,7 +631,8 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
   }
 
   Widget _buildXPProgressCard() {
-    final progress = (_userData['currentXP'] / _userData['maxXP']).clamp(0.0, 1.0);
+    final progress =
+        (_userData['currentXP'] / _userData['maxXP']).clamp(0.0, 1.0);
     final xpNeeded = _userData['maxXP'] - _userData['currentXP'];
 
     return Container(
@@ -672,7 +686,8 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [Color(0xFF40E0D0), Color(0xFF00CED1)],
@@ -812,13 +827,13 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
         gradient: LinearGradient(
           colors: isWin
               ? [
-            const Color(0xFF10B981).withValues(alpha: 0.15),
-            const Color(0xFF3B82F6).withValues(alpha: 0.1),
-          ]
+                  const Color(0xFF10B981).withValues(alpha: 0.15),
+                  const Color(0xFF3B82F6).withValues(alpha: 0.1),
+                ]
               : [
-            const Color(0xFFEF4444).withValues(alpha: 0.15),
-            const Color(0xFFF59E0B).withValues(alpha: 0.1),
-          ],
+                  const Color(0xFFEF4444).withValues(alpha: 0.15),
+                  const Color(0xFFF59E0B).withValues(alpha: 0.1),
+                ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -983,19 +998,19 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
         decoration: BoxDecoration(
           gradient: isUnlocked
               ? LinearGradient(
-            colors: [
-              const Color(0xFFFBBF24).withValues(alpha: 0.2),
-              const Color(0xFFF59E0B).withValues(alpha: 0.15),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          )
+                  colors: [
+                    const Color(0xFFFBBF24).withValues(alpha: 0.2),
+                    const Color(0xFFF59E0B).withValues(alpha: 0.15),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                )
               : LinearGradient(
-            colors: [
-              Colors.white.withValues(alpha: 0.05),
-              Colors.white.withValues(alpha: 0.02),
-            ],
-          ),
+                  colors: [
+                    Colors.white.withValues(alpha: 0.05),
+                    Colors.white.withValues(alpha: 0.02),
+                  ],
+                ),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isUnlocked
@@ -1012,14 +1027,14 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
               decoration: BoxDecoration(
                 gradient: isUnlocked
                     ? const LinearGradient(
-                  colors: [Color(0xFFFBBF24), Color(0xFFF59E0B)],
-                )
+                        colors: [Color(0xFFFBBF24), Color(0xFFF59E0B)],
+                      )
                     : LinearGradient(
-                  colors: [
-                    Colors.white.withValues(alpha: 0.15),
-                    Colors.white.withValues(alpha: 0.08),
-                  ],
-                ),
+                        colors: [
+                          Colors.white.withValues(alpha: 0.15),
+                          Colors.white.withValues(alpha: 0.08),
+                        ],
+                      ),
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -1080,16 +1095,19 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
             ),
           ),
           const SizedBox(height: 12),
-          _buildCollectionSection('Installed Packages', _generateInstalledAvatars()),
+          _buildCollectionSection(
+              'Installed Packages', _generateInstalledAvatars()),
           const SizedBox(height: 20),
-          _buildCollectionSection('Built-in Avatars', _generateBuiltInAvatars()),
+          _buildCollectionSection(
+              'Built-in Avatars', _generateBuiltInAvatars()),
           const SizedBox(height: 20),
         ],
       ),
     );
   }
 
-  Widget _buildCollectionSection(String title, List<Map<String, dynamic>> items) {
+  Widget _buildCollectionSection(
+      String title, List<Map<String, dynamic>> items) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1197,7 +1215,8 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
         final loadedProfile = await multiProfileService.getActiveProfile();
 
         if (loadedProfile != null && mounted) {
-          final result = await EditProfileBottomSheet.show(context, loadedProfile);
+          final result =
+              await EditProfileBottomSheet.show(context, loadedProfile);
 
           if (result == true && mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -1252,7 +1271,8 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
   }
 
   void _showMutualFriends() {
-    context.push('/profile/mutual-friends/${widget.userId}', extra: widget.currentUserId);
+    context.push('/profile/mutual-friends/${widget.userId}',
+        extra: widget.currentUserId);
   }
 
   void _showOptionsMenu(BuildContext context) {

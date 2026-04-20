@@ -18,7 +18,8 @@ class ColorPickerPainter extends CustomPainter {
     this.isCircular = true,
   }) : _cacheKey = _generateCacheKey(colors, strokeWidth, isCircular);
 
-  static String _generateCacheKey(List<Color> colors, double strokeWidth, bool isCircular) {
+  static String _generateCacheKey(
+      List<Color> colors, double strokeWidth, bool isCircular) {
     final colorHash = colors.map((c) => c.value).join('-');
     return '$colorHash-$strokeWidth-$isCircular';
   }
@@ -56,7 +57,8 @@ class ColorPickerPainter extends CustomPainter {
     final picture = recorder.endRecording();
 
     try {
-      final image = await picture.toImage(size.width.toInt(), size.height.toInt());
+      final image =
+          await picture.toImage(size.width.toInt(), size.height.toInt());
       _imageCache[_cacheKey] = image;
 
       // Draw the image immediately
@@ -86,7 +88,8 @@ class ColorPickerPainter extends CustomPainter {
     final radius = size.width / 2;
     final center = Offset(radius, radius);
     final angleStep = (2 * pi) / colors.length;
-    final rect = Rect.fromCircle(center: center, radius: radius - strokeWidth / 2);
+    final rect =
+        Rect.fromCircle(center: center, radius: radius - strokeWidth / 2);
 
     // Use path for better performance with many colors
     if (colors.length > 50) {

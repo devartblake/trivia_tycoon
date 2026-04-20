@@ -20,10 +20,12 @@ class HubDailyQuest extends ConsumerWidget {
     final quizAsync = ref.watch(dailyQuizProvider);
 
     // Derive display values from providers
-    final completed = status.canPlay ? 0 : quizAsync.maybeWhen(
-      data: (d) => d.totalQuestions,
-      orElse: () => 0,
-    );
+    final completed = status.canPlay
+        ? 0
+        : quizAsync.maybeWhen(
+            data: (d) => d.totalQuestions,
+            orElse: () => 0,
+          );
     final total = quizAsync.maybeWhen(
       data: (d) => d.totalQuestions,
       orElse: () => 5,

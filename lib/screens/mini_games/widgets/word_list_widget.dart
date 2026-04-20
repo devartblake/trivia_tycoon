@@ -20,7 +20,8 @@ class WordList extends StatelessWidget {
             return Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                color: found ? const Color(0xFF10B981) : const Color(0xFF6366F1),
+                color:
+                    found ? const Color(0xFF10B981) : const Color(0xFF6366F1),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(

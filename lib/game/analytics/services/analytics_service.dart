@@ -25,7 +25,8 @@ class AnalyticsService {
   bool _offlineStorageWarningLogged = false;
 
   // Connectivity monitoring
-  late final StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
+  late final StreamSubscription<List<ConnectivityResult>>
+      _connectivitySubscription;
   bool _connectivityInitialized = false;
   bool _isOnline = false;
   String? _currentSessionId;
@@ -39,7 +40,8 @@ class AnalyticsService {
   AnalyticsService(this.apiService, this.eventQueueService);
 
   /// Initializes the enhanced analytics service with persistence and connectivity monitoring
-  Future<void> initialize({ String? initialSessionId, bool silent = true}) async {
+  Future<void> initialize(
+      {String? initialSessionId, bool silent = true}) async {
     LogManager.log('Initializing AnalyticsService',
         level: LogLevel.info, source: 'AnalyticsService');
 
@@ -122,20 +124,21 @@ class AnalyticsService {
           source: 'AnalyticsService');
 
       // Listen for connectivity changes
-      _connectivitySubscription =
-          Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> results) {
-            final wasOnline = _isOnline;
-            _isOnline = _hasInternetConnectivity(results);
+      _connectivitySubscription = Connectivity()
+          .onConnectivityChanged
+          .listen((List<ConnectivityResult> results) {
+        final wasOnline = _isOnline;
+        _isOnline = _hasInternetConnectivity(results);
 
-            if (!wasOnline && _isOnline) {
-              LogManager.log('Network restored - syncing offline events',
-                  level: LogLevel.info, source: 'AnalyticsService');
-              _syncOfflineEvents();
-            } else if (wasOnline && !_isOnline) {
-              LogManager.log('Network lost - switching to offline mode',
-                  level: LogLevel.warning, source: 'AnalyticsService');
-            }
-          });
+        if (!wasOnline && _isOnline) {
+          LogManager.log('Network restored - syncing offline events',
+              level: LogLevel.info, source: 'AnalyticsService');
+          _syncOfflineEvents();
+        } else if (wasOnline && !_isOnline) {
+          LogManager.log('Network lost - switching to offline mode',
+              level: LogLevel.warning, source: 'AnalyticsService');
+        }
+      });
       _connectivityInitialized = true;
     } catch (e) {
       LogManager.log('Failed to initialize connectivity monitoring: $e',
@@ -146,7 +149,7 @@ class AnalyticsService {
   /// Check if any of the connectivity results indicate internet access
   bool _hasInternetConnectivity(List<ConnectivityResult> results) {
     return results.any((result) =>
-    result == ConnectivityResult.mobile ||
+        result == ConnectivityResult.mobile ||
         result == ConnectivityResult.wifi ||
         result == ConnectivityResult.ethernet ||
         result == ConnectivityResult.vpn);
@@ -193,7 +196,8 @@ class AnalyticsService {
   }
 
   /// Store event for offline sync
-  Future<void> _storeOfflineEvent(String eventName, Map<String, dynamic> data) async {
+  Future<void> _storeOfflineEvent(
+      String eventName, Map<String, dynamic> data) async {
     try {
       // Ensure storage is initialized (handles early calls before initialize completes)
       await _ensureStorageBoxesInitialized();
@@ -218,7 +222,6 @@ class AnalyticsService {
       final key =
           '${DateTime.now().millisecondsSinceEpoch}_${const Uuid().v4()}';
       await _offlineEventsBox!.put(key, offlineEvent);
-
     } catch (e) {
       LogManager.log('Failed to store offline event: $e',
           level: LogLevel.error, source: 'AnalyticsService');
@@ -237,7 +240,6 @@ class AnalyticsService {
       final offlineEvents = _offlineEventsBox!.values.toList();
 
       if (offlineEvents.isEmpty) return;
-
 
       for (final event in offlineEvents) {
         final eventData = Map<String, dynamic>.from(event);
@@ -277,7 +279,10 @@ class AnalyticsService {
   }
 
   /// Enhanced session tracking
-  Future<void> trackAppSession({ required String userId, required String platform, required String appVersion}) async {
+  Future<void> trackAppSession(
+      {required String userId,
+      required String platform,
+      required String appVersion}) async {
     final sessionId = _currentSessionId ?? const Uuid().v4();
     final deviceId = const Uuid().v5(Uuid.NAMESPACE_URL, userId);
     final timestamp = DateTime.now().toUtc().toIso8601String();
@@ -303,7 +308,8 @@ class AnalyticsService {
   }
 
   /// Enhanced retry wrapper with better logging
-  Future<void> _sendWithRetry( String endpoint, Map<String, dynamic> data) async {
+  Future<void> _sendWithRetry(
+      String endpoint, Map<String, dynamic> data) async {
     if (_analyticsEndpointUnavailable && endpoint.startsWith('/analytics/')) {
       return;
     }
@@ -444,11 +450,11 @@ class AnalyticsService {
       'total_logs': logs.length,
       'logs': logs
           .map((log) => {
-        'timestamp': log.timestamp.toIso8601String(),
-        'level': log.level.name,
-        'message': log.message,
-        'source': log.source,
-      })
+                'timestamp': log.timestamp.toIso8601String(),
+                'level': log.level.name,
+                'message': log.message,
+                'source': log.source,
+              })
           .toList(),
     });
   }
@@ -466,16 +472,15 @@ class AnalyticsService {
   // Your existing analytics fetch methods remain the same...
   Future<List<MissionAnalyticsEntry>> fetchMissionAnalytics() async {
     final jsonData =
-    await apiService.getMockData('mock_mission_analytics.json');
+        await apiService.getMockData('mock_mission_analytics.json');
     return (jsonData as List<dynamic>)
-        .map((e) =>
-        MissionAnalyticsEntry.fromJson(e as Map<String, dynamic>))
+        .map((e) => MissionAnalyticsEntry.fromJson(e as Map<String, dynamic>))
         .toList();
   }
 
   Future<List<EngagementEntry>> fetchEngagementAnalytics() async {
     final jsonData =
-    await apiService.getMockData('mock_engagement_analytics.json');
+        await apiService.getMockData('mock_engagement_analytics.json');
     return (jsonData as List<dynamic>)
         .map((e) => EngagementEntry.fromJson(e as Map<String, dynamic>))
         .toList();
@@ -483,7 +488,7 @@ class AnalyticsService {
 
   Future<List<RetentionEntry>> fetchRetentionAnalytics() async {
     final jsonData =
-    await apiService.getMockData('mock_retention_analytics.json');
+        await apiService.getMockData('mock_retention_analytics.json');
     return (jsonData as List<dynamic>)
         .map((e) => RetentionEntry.fromJson(e as Map<String, dynamic>))
         .toList();
@@ -492,8 +497,7 @@ class AnalyticsService {
   // ------------------------- LIFECYCLE METHODS -------------------------
 
   /// Track specific event with data
-  Future<void> trackEvent(
-      String eventName, Map<String, dynamic> data) async {
+  Future<void> trackEvent(String eventName, Map<String, dynamic> data) async {
     await logEvent(eventName, data);
   }
 
@@ -591,7 +595,8 @@ class AnalyticsService {
   }
 
   /// Track app lifecycle events
-  Future<void> trackLifecycleEvent(String event, {Map<String, dynamic>? additionalData}) async {
+  Future<void> trackLifecycleEvent(String event,
+      {Map<String, dynamic>? additionalData}) async {
     final data = {
       'lifecycle_event': event,
       'timestamp': DateTime.now().toIso8601String(),
@@ -606,7 +611,11 @@ class AnalyticsService {
   }
 
   /// Track user engagement metrics
-  Future<void> trackEngagement({ required String action, String? screen, int? duration, Map<String, dynamic>? properties}) async {
+  Future<void> trackEngagement(
+      {required String action,
+      String? screen,
+      int? duration,
+      Map<String, dynamic>? properties}) async {
     final data = {
       'action': action,
       if (screen != null) 'screen': screen,
@@ -619,7 +628,11 @@ class AnalyticsService {
   }
 
   /// Track performance metrics
-  Future<void> trackPerformance({required String metric, required double value, String? unit, Map<String, dynamic>? context}) async {
+  Future<void> trackPerformance(
+      {required String metric,
+      required double value,
+      String? unit,
+      Map<String, dynamic>? context}) async {
     final data = {
       'metric': metric,
       'value': value,

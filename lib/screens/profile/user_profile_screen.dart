@@ -15,8 +15,10 @@ class UserProfileScreen extends StatelessWidget {
 
   Widget _buildFlag(String? code) {
     if (code == null || code.isEmpty) return const SizedBox.shrink();
-    final codeUnits = code.toUpperCase().codeUnits.map((c) => 0x1F1E6 + (c - 65));
-    return Text(String.fromCharCodes(codeUnits), style: const TextStyle(fontSize: 20));
+    final codeUnits =
+        code.toUpperCase().codeUnits.map((c) => 0x1F1E6 + (c - 65));
+    return Text(String.fromCharCodes(codeUnits),
+        style: const TextStyle(fontSize: 20));
   }
 
   @override
@@ -104,15 +106,21 @@ class UserProfileScreen extends StatelessWidget {
                     bottom: 2,
                     right: 2,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 4, vertical: 2),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10),
-                        boxShadow: const [BoxShadow(blurRadius: 2, color: Colors.black26)],
+                        boxShadow: const [
+                          BoxShadow(blurRadius: 2, color: Colors.black26)
+                        ],
                       ),
                       child: Text(
                         String.fromCharCodes(
-                          entry.country.toUpperCase().codeUnits.map((c) => 0x1F1E6 + (c - 65)),
+                          entry.country
+                              .toUpperCase()
+                              .codeUnits
+                              .map((c) => 0x1F1E6 + (c - 65)),
                         ),
                         style: const TextStyle(fontSize: 14),
                       ),
@@ -128,7 +136,9 @@ class UserProfileScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          Text(entry.playerName, style: theme.textTheme.headlineSmall?.copyWith(color: Colors.white)),
+          Text(entry.playerName,
+              style:
+                  theme.textTheme.headlineSmall?.copyWith(color: Colors.white)),
           const SizedBox(height: 6),
           Text("Share Profile", style: TextStyle(color: Colors.white70)),
           IconButton(
@@ -145,7 +155,9 @@ class UserProfileScreen extends StatelessWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Text("Scan or Share", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        const Text("Scan or Share",
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold)),
                         const SizedBox(height: 16),
                         // Placeholder for QR Code widget
                         const FlutterLogo(size: 120),
@@ -166,14 +178,14 @@ class UserProfileScreen extends StatelessWidget {
               );
             },
           ),
-
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Flexible(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
@@ -183,7 +195,8 @@ class UserProfileScreen extends StatelessWidget {
                     children: [
                       _buildFlag(entry.country),
                       const SizedBox(width: 6),
-                      Text(entry.country, style: const TextStyle(color: Colors.white)),
+                      Text(entry.country,
+                          style: const TextStyle(color: Colors.white)),
                     ],
                   ),
                 ),
@@ -191,12 +204,14 @@ class UserProfileScreen extends StatelessWidget {
               const SizedBox(width: 10),
               Flexible(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Text("ID: #${entry.userId}", style: const TextStyle(color: Colors.white)),
+                  child: Text("ID: #${entry.userId}",
+                      style: const TextStyle(color: Colors.white)),
                 ),
               ),
             ],
@@ -208,8 +223,11 @@ class UserProfileScreen extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  Text("870", style: theme.textTheme.titleMedium?.copyWith(color: Colors.white)),
-                  const Text("Following", style: TextStyle(color: Colors.white70, fontSize: 12)),
+                  Text("870",
+                      style: theme.textTheme.titleMedium
+                          ?.copyWith(color: Colors.white)),
+                  const Text("Following",
+                      style: TextStyle(color: Colors.white70, fontSize: 12)),
                 ],
               ),
               Container(
@@ -220,8 +238,11 @@ class UserProfileScreen extends StatelessWidget {
               ),
               Column(
                 children: [
-                  Text("1.2K", style: theme.textTheme.titleMedium?.copyWith(color: Colors.white)),
-                  const Text("Followers", style: TextStyle(color: Colors.white70, fontSize: 12)),
+                  Text("1.2K",
+                      style: theme.textTheme.titleMedium
+                          ?.copyWith(color: Colors.white)),
+                  const Text("Followers",
+                      style: TextStyle(color: Colors.white70, fontSize: 12)),
                 ],
               ),
               Container(
@@ -232,8 +253,11 @@ class UserProfileScreen extends StatelessWidget {
               ),
               Column(
                 children: [
-                  Text("328", style: theme.textTheme.titleMedium?.copyWith(color: Colors.white)),
-                  const Text("Questions", style: TextStyle(color: Colors.white70, fontSize: 12)),
+                  Text("328",
+                      style: theme.textTheme.titleMedium
+                          ?.copyWith(color: Colors.white)),
+                  const Text("Questions",
+                      style: TextStyle(color: Colors.white70, fontSize: 12)),
                 ],
               ),
             ],
@@ -247,7 +271,8 @@ class UserProfileScreen extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        const Text("Win Rate", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        const Text("Win Rate",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         const SizedBox(height: 8),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -271,8 +296,10 @@ class UserProfileScreen extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("${(winRate * 100).toStringAsFixed(0)}%", style: const TextStyle(color: Colors.green)),
-            Text("${(lossRate * 100).toStringAsFixed(0)}%", style: const TextStyle(color: Colors.redAccent)),
+            Text("${(winRate * 100).toStringAsFixed(0)}%",
+                style: const TextStyle(color: Colors.green)),
+            Text("${(lossRate * 100).toStringAsFixed(0)}%",
+                style: const TextStyle(color: Colors.redAccent)),
           ],
         ),
         Padding(
@@ -280,7 +307,8 @@ class UserProfileScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("Profile Info", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+              const Text("Profile Info",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
               const SizedBox(height: 12),
               _infoTile("Title", entry.title),
               _infoTile("Rank", "#${entry.rank}"),
@@ -288,7 +316,8 @@ class UserProfileScreen extends StatelessWidget {
               _infoTile("Account Status", entry.accountStatus),
               _infoTile("Subscription", entry.subscriptionStatus),
               _infoTile("Notification", entry.preferredNotificationMethod),
-              _infoTile("Engagement Score", entry.engagementScore.toStringAsFixed(1)),
+              _infoTile(
+                  "Engagement Score", entry.engagementScore.toStringAsFixed(1)),
             ],
           ),
         ),
@@ -296,7 +325,8 @@ class UserProfileScreen extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text("Match History", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            const Text("Match History",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
             TextButton(onPressed: () {}, child: const Text("View All")),
           ],
         ),
@@ -307,7 +337,8 @@ class UserProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMatchTile(String player1, String player2, int score1, int score2, bool win) {
+  Widget _buildMatchTile(
+      String player1, String player2, int score1, int score2, bool win) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -317,9 +348,14 @@ class UserProfileScreen extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const CircleAvatar(radius: 20, backgroundImage: AssetImage('assets/images/avatars/default-avatar.png')),
+          const CircleAvatar(
+              radius: 20,
+              backgroundImage:
+                  AssetImage('assets/images/avatars/default-avatar.png')),
           const SizedBox(width: 10),
-          Expanded(child: Text(player1, style: const TextStyle(fontWeight: FontWeight.bold))),
+          Expanded(
+              child: Text(player1,
+                  style: const TextStyle(fontWeight: FontWeight.bold))),
           Text(score1.toString()),
           const SizedBox(width: 8),
           const Icon(Icons.score, size: 16),
@@ -328,7 +364,10 @@ class UserProfileScreen extends StatelessWidget {
           const SizedBox(width: 10),
           Expanded(child: Text(player2, textAlign: TextAlign.right)),
           const SizedBox(width: 10),
-          const CircleAvatar(radius: 20, backgroundImage: AssetImage('assets/images/avatars/default-avatar.png')),
+          const CircleAvatar(
+              radius: 20,
+              backgroundImage:
+                  AssetImage('assets/images/avatars/default-avatar.png')),
         ],
       ),
     );
@@ -357,7 +396,8 @@ class UserProfileScreen extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text("Share Profile", style: Theme.of(context).textTheme.headlineSmall),
+          Text("Share Profile",
+              style: Theme.of(context).textTheme.headlineSmall),
           const SizedBox(height: 12),
 
           // ✅ Replace placeholder with QR Code
@@ -405,7 +445,8 @@ class UserInfoTile extends StatelessWidget {
     return ListTile(
       leading: Icon(icon, color: Colors.deepPurple),
       title: Text(title),
-      subtitle: Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
+      subtitle:
+          Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
     );
   }
 }

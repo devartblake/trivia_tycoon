@@ -21,10 +21,11 @@ class AppDrawerHeader extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final stats = activeProfile != null
         ? ProfileStats(
-      level: activeProfile!.level,
-      currentXP: activeProfile!.currentXP,
-      isPremium: activeProfile!.isPremium,
-    ) : const ProfileStats(level: 1, currentXP: 0, isPremium: false);
+            level: activeProfile!.level,
+            currentXP: activeProfile!.currentXP,
+            isPremium: activeProfile!.isPremium,
+          )
+        : const ProfileStats(level: 1, currentXP: 0, isPremium: false);
 
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 60, 24, 24),

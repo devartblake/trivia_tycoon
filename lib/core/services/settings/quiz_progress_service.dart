@@ -32,7 +32,8 @@ class QuizProgressService {
   /// Retrieves the stored quiz progress data.
   Future<Map<String, dynamic>> getQuizProgress() async {
     final box = await Hive.openBox(_settingsBox);
-    return Map<String, dynamic>.from(box.get(_quizProgressKey, defaultValue: {}));
+    return Map<String, dynamic>.from(
+        box.get(_quizProgressKey, defaultValue: {}));
   }
 
   /// Marks the onboarding screen as completed.
@@ -68,7 +69,8 @@ class QuizProgressService {
   /// Loads score and streak progress.
   Future<Map<String, dynamic>> getPlayerProgress() async {
     final box = await Hive.openBox(_settingsBox);
-    return Map<String, dynamic>.from(box.get(_playerProgressKey, defaultValue: {}));
+    return Map<String, dynamic>.from(
+        box.get(_playerProgressKey, defaultValue: {}));
   }
 
   // ------------------------- LIFECYCLE METHODS ---------------
@@ -81,7 +83,8 @@ class QuizProgressService {
       currentData['save_reason'] = 'lifecycle_pause';
 
       await saveQuizProgress(currentData);
-      LogManager.debug('[QuizProgress] Current progress saved for lifecycle event');
+      LogManager.debug(
+          '[QuizProgress] Current progress saved for lifecycle event');
     } catch (e) {
       LogManager.debug('[QuizProgress] Error saving current progress: $e');
     }
@@ -156,17 +159,20 @@ class QuizProgressService {
       final currentProgress = await getPlayerProgress();
 
       if (questionsAnswered != null) {
-        currentProgress['total_questions'] = (currentProgress['total_questions'] ?? 0) + questionsAnswered;
+        currentProgress['total_questions'] =
+            (currentProgress['total_questions'] ?? 0) + questionsAnswered;
       }
       if (correctAnswers != null) {
-        currentProgress['correct_answers'] = (currentProgress['correct_answers'] ?? 0) + correctAnswers;
+        currentProgress['correct_answers'] =
+            (currentProgress['correct_answers'] ?? 0) + correctAnswers;
       }
       if (currentStreak != null) {
         currentProgress['current_streak'] = currentStreak;
       }
       if (bestStreak != null) {
         final current = currentProgress['best_streak'] ?? 0;
-        currentProgress['best_streak'] = bestStreak > current ? bestStreak : current;
+        currentProgress['best_streak'] =
+            bestStreak > current ? bestStreak : current;
       }
       if (averageTime != null) {
         currentProgress['average_time'] = averageTime;
@@ -226,8 +232,7 @@ class QuizProgressService {
 
       if (recentQuizzes != null && recentQuizzes is List) {
         return List<Map<String, String>>.from(
-            recentQuizzes.map((quiz) => Map<String, String>.from(quiz))
-        );
+            recentQuizzes.map((quiz) => Map<String, String>.from(quiz)));
       }
 
       return _getDefaultRecentQuizzes();
@@ -302,8 +307,18 @@ class QuizProgressService {
   /// Format date for display
   String _formatDate(DateTime date) {
     final months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
     ];
     return '${months[date.month - 1]} ${date.day}';
   }
@@ -361,7 +376,8 @@ class QuizProgressService {
 
       await box.put(_dailyQuizLastDateKey, now.toIso8601String());
       await box.put(_dailyQuizStreakKey, newStreak);
-      LogManager.debug('[QuizProgress] Daily quiz completed — streak: $newStreak');
+      LogManager.debug(
+          '[QuizProgress] Daily quiz completed — streak: $newStreak');
     } catch (e) {
       LogManager.debug('[QuizProgress] Error marking daily quiz completed: $e');
     }
@@ -407,9 +423,8 @@ class QuizProgressService {
   }) async {
     try {
       final box = Hive.box(_settingsBox);
-      final rate = totalQuestions > 0
-          ? questionsCompleted / totalQuestions
-          : 0.0;
+      final rate =
+          totalQuestions > 0 ? questionsCompleted / totalQuestions : 0.0;
       final completed = questionsCompleted >= totalQuestions;
       await box.put(_monthlyKey(year, month), completed);
       await box.put(_monthlyRateKey(year, month), rate);
@@ -430,8 +445,8 @@ class QuizProgressService {
   bool isFeaturedChallengeUnlocked() {
     try {
       final box = Hive.box(_settingsBox);
-      final progress =
-      Map<String, dynamic>.from(box.get(_playerProgressKey, defaultValue: {}));
+      final progress = Map<String, dynamic>.from(
+          box.get(_playerProgressKey, defaultValue: {}));
       final totalQuizzes = (progress['total_quizzes'] ?? 0 as num).toInt();
       return totalQuizzes >= 3;
     } catch (_) {
@@ -492,13 +507,17 @@ class QuizProgressService {
       final currentProgress = await getPlayerProgress();
 
       // Update totals
-      currentProgress['total_quizzes'] = (currentProgress['total_quizzes'] ?? 0) + 1;
-      currentProgress['total_questions'] = (currentProgress['total_questions'] ?? 0) + questionsTotal;
-      currentProgress['correct_answers'] = (currentProgress['correct_answers'] ?? 0) + questionsCorrect;
+      currentProgress['total_quizzes'] =
+          (currentProgress['total_quizzes'] ?? 0) + 1;
+      currentProgress['total_questions'] =
+          (currentProgress['total_questions'] ?? 0) + questionsTotal;
+      currentProgress['correct_answers'] =
+          (currentProgress['correct_answers'] ?? 0) + questionsCorrect;
 
       // Update streaks
       if (questionsCorrect == questionsTotal) {
-        currentProgress['current_streak'] = (currentProgress['current_streak'] ?? 0) + 1;
+        currentProgress['current_streak'] =
+            (currentProgress['current_streak'] ?? 0) + 1;
         final bestStreak = currentProgress['best_streak'] ?? 0;
         if (currentProgress['current_streak'] > bestStreak) {
           currentProgress['best_streak'] = currentProgress['current_streak'];
@@ -511,13 +530,19 @@ class QuizProgressService {
       final categoryStats = currentProgress['category_stats'] ?? {};
       final categoryKey = category.toLowerCase();
       categoryStats[categoryKey] = {
-        'total_quizzes': (categoryStats[categoryKey]?['total_quizzes'] ?? 0) + 1,
-        'total_questions': (categoryStats[categoryKey]?['total_questions'] ?? 0) + questionsTotal,
-        'correct_answers': (categoryStats[categoryKey]?['correct_answers'] ?? 0) + questionsCorrect,
+        'total_quizzes':
+            (categoryStats[categoryKey]?['total_quizzes'] ?? 0) + 1,
+        'total_questions':
+            (categoryStats[categoryKey]?['total_questions'] ?? 0) +
+                questionsTotal,
+        'correct_answers':
+            (categoryStats[categoryKey]?['correct_answers'] ?? 0) +
+                questionsCorrect,
         'best_time': categoryStats[categoryKey]?['best_time'] ?? completionTime,
       };
 
-      if (completionTime < (categoryStats[categoryKey]['best_time'] ?? double.infinity)) {
+      if (completionTime <
+          (categoryStats[categoryKey]['best_time'] ?? double.infinity)) {
         categoryStats[categoryKey]['best_time'] = completionTime;
       }
 

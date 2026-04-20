@@ -11,7 +11,8 @@ class FavoritesQuizScreen extends ConsumerStatefulWidget {
   const FavoritesQuizScreen({super.key});
 
   @override
-  ConsumerState<FavoritesQuizScreen> createState() => _FavoritesQuizScreenEnhancedState();
+  ConsumerState<FavoritesQuizScreen> createState() =>
+      _FavoritesQuizScreenEnhancedState();
 }
 
 class _FavoritesQuizScreenEnhancedState
@@ -25,7 +26,7 @@ class _FavoritesQuizScreenEnhancedState
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    WidgetsBinding.instance.addPostFrameCallback((_){
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadInitialData();
     });
   }
@@ -39,14 +40,20 @@ class _FavoritesQuizScreenEnhancedState
 
   void _loadInitialData() {
     // Load mock data - replace with actual data loading
-    ref.read(favoriteCategoriesProvider.notifier).loadCategories(_getMockCategories());
-    ref.read(favoriteQuestionsProvider.notifier).loadQuestions(_getMockQuestions());
+    ref
+        .read(favoriteCategoriesProvider.notifier)
+        .loadCategories(_getMockCategories());
+    ref
+        .read(favoriteQuestionsProvider.notifier)
+        .loadQuestions(_getMockQuestions());
   }
 
   @override
   Widget build(BuildContext context) {
-    final categoriesCount = ref.watch(favoriteCategoriesProvider).where((c) => c.isFavorite).length;
-    final questionsCount = ref.watch(favoriteQuestionsProvider).where((q) => q.isFavorite).length;
+    final categoriesCount =
+        ref.watch(favoriteCategoriesProvider).where((c) => c.isFavorite).length;
+    final questionsCount =
+        ref.watch(favoriteQuestionsProvider).where((q) => q.isFavorite).length;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
@@ -132,7 +139,8 @@ class _FavoritesQuizScreenEnhancedState
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               // This Column now only contains the title and search bar.
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.end, // Push content to the bottom
+                mainAxisAlignment:
+                    MainAxisAlignment.end, // Push content to the bottom
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
@@ -535,7 +543,8 @@ class _FavoritesQuizScreenEnhancedState
           borderRadius: BorderRadius.circular(20),
           child: Padding(
             padding: const EdgeInsets.all(18),
-            child: Column( // <-- This is the parent Column
+            child: Column(
+              // <-- This is the parent Column
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Question Header
@@ -766,7 +775,8 @@ class _FavoritesQuizScreenEnhancedState
     );
   }
 
-  Widget _buildStatChip(IconData icon, String value, Color color, String label) {
+  Widget _buildStatChip(
+      IconData icon, String value, Color color, String label) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -797,7 +807,12 @@ class _FavoritesQuizScreenEnhancedState
     );
   }
 
-  Widget _buildEmptyState({ required IconData icon, required String title, required String subtitle, String? actionText, VoidCallback? onAction }) {
+  Widget _buildEmptyState(
+      {required IconData icon,
+      required String title,
+      required String subtitle,
+      String? actionText,
+      VoidCallback? onAction}) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -1338,7 +1353,8 @@ class _FavoritesQuizScreenEnhancedState
     );
   }
 
-  Widget _buildDetailStatItem(String label, String value, IconData icon, Color color) {
+  Widget _buildDetailStatItem(
+      String label, String value, IconData icon, Color color) {
     return Column(
       children: [
         Icon(icon, color: color, size: 32),

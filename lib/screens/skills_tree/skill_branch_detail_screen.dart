@@ -28,10 +28,12 @@ class SkillBranchDetailScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<SkillBranchDetailScreen> createState() => _SkillBranchDetailScreenState();
+  ConsumerState<SkillBranchDetailScreen> createState() =>
+      _SkillBranchDetailScreenState();
 }
 
-class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScreen> {
+class _SkillBranchDetailScreenState
+    extends ConsumerState<SkillBranchDetailScreen> {
   final TransformationController _transform = TransformationController();
   late final ScrollController _listCtrl;
   static const double _nodeRadius = 40;
@@ -54,7 +56,8 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
     super.initState();
     _transform.value = vmath.Matrix4.identity()..scale(0.9, 0.9);
     _showPath = widget.showPathInitially;
-    if (widget.initialStep != null) _pathIndex = widget.initialStep!.clamp(0, 9999);
+    if (widget.initialStep != null)
+      _pathIndex = widget.initialStep!.clamp(0, 9999);
 
     _listCtrl = ScrollController();
 
@@ -97,7 +100,8 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
     bool? show = widget.showPathInitially ? true : null;
 
     // Otherwise parse from router location
-    final loc = GoRouter.of(context).routeInformationProvider.value.uri.toString();
+    final loc =
+        GoRouter.of(context).routeInformationProvider.value.uri.toString();
     final uri = Uri.tryParse(loc);
     if (uri != null) {
       step ??= int.tryParse(uri.queryParameters['step'] ?? '');
@@ -150,25 +154,27 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
 
     final canUnlock = <String, bool>{
       for (final id in order)
-        id: _canUnlockNow(state.graph, id, unlocked, state.playerPoints, state.graph.byId[id]!.cost)
+        id: _canUnlockNow(state.graph, id, unlocked, state.playerPoints,
+            state.graph.byId[id]!.cost)
     };
 
     return BranchDetailVM(
         branchId: widget.branchId,
         nodes: orderedNodes,
         order: order,
-        canUnlock: canUnlock
-    );
+        canUnlock: canUnlock);
   }
 
-  bool _canUnlockNow(SkillTreeGraph graph, String id, Map<String, bool> unlocked, int xp, int cost) {
+  bool _canUnlockNow(SkillTreeGraph graph, String id,
+      Map<String, bool> unlocked, int xp, int cost) {
     if (unlocked[id] == true) return false;
     final prereqs = graph.edges.where((e) => e.toId == id).map((e) => e.fromId);
     final ready = prereqs.isEmpty || prereqs.every((p) => unlocked[p] == true);
     return ready && xp >= cost;
   }
 
-  Map<String, Offset> _filterPositions(Map<String, Offset> all, SkillTreeGraph filtered) {
+  Map<String, Offset> _filterPositions(
+      Map<String, Offset> all, SkillTreeGraph filtered) {
     final ids = filtered.nodes.map((n) => n.id).toSet();
     final out = <String, Offset>{};
     for (final id in ids) {
@@ -182,7 +188,8 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
     }
     // If some nodes have no saved layout yet, place them in a quick circle.
     if (out.length < filtered.nodes.length) {
-      final missing = filtered.nodes.where((n) => !out.containsKey(n.id)).toList();
+      final missing =
+          filtered.nodes.where((n) => !out.containsKey(n.id)).toList();
       final cx = 0.0, cy = 0.0, r = 260.0;
       for (int i = 0; i < missing.length; i++) {
         final a = (i / math.max(1, missing.length)) * 2 * math.pi;
@@ -202,7 +209,9 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
     final state = ref.read(skillTreeProvider);
     final node = state.graph.byId[nodeId];
 
-    if (node != null && ctrl.canUnlock(nodeId) && state.playerPoints >= node.cost) {
+    if (node != null &&
+        ctrl.canUnlock(nodeId) &&
+        state.playerPoints >= node.cost) {
       ctrl.unlock(nodeId);
     }
   }
@@ -213,7 +222,8 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
     return Offset(v.x, v.y);
   }
 
-  String? _hitTestNode(Offset localPos, Map<String, Offset> positions, vmath.Matrix4 worldToScreen) {
+  String? _hitTestNode(Offset localPos, Map<String, Offset> positions,
+      vmath.Matrix4 worldToScreen) {
     final inv = vmath.Matrix4.inverted(worldToScreen);
     final world = _transformPoint(inv, localPos);
     for (final entry in positions.entries) {
@@ -274,7 +284,10 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
               children: [
                 const Text(
                   'Recommended unlock order',
-                  style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
                 ),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
@@ -294,26 +307,33 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
                   return ListTile(
                     dense: true,
                     leading: CircleAvatar(
-                      backgroundColor: node.unlocked ? Colors.green : Colors.white12,
-                      child: Text('${i+1}', style: const TextStyle(color: Colors.white)),
+                      backgroundColor:
+                          node.unlocked ? Colors.green : Colors.white12,
+                      child: Text('${i + 1}',
+                          style: const TextStyle(color: Colors.white)),
                     ),
-                    title: Text(node.title, style: const TextStyle(color: Colors.white)),
+                    title: Text(node.title,
+                        style: const TextStyle(color: Colors.white)),
                     subtitle: Text(
                       'Cost: ${node.cost} • Tier ${node.tier}',
-                      style: const TextStyle(color: Colors.white70, fontSize: 12),
+                      style:
+                          const TextStyle(color: Colors.white70, fontSize: 12),
                     ),
                     trailing: node.unlocked
                         ? const Icon(Icons.check, color: Colors.green)
                         : ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: canUnlock ? Colors.teal : Colors.grey,
-                      ),
-                      onPressed: canUnlock ? () {
-                        _unlockSkill(node.id);
-                        setState(() => _focusedId = node.id);
-                      } : null,
-                      child: const Text('Unlock'),
-                    ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  canUnlock ? Colors.teal : Colors.grey,
+                            ),
+                            onPressed: canUnlock
+                                ? () {
+                                    _unlockSkill(node.id);
+                                    setState(() => _focusedId = node.id);
+                                  }
+                                : null,
+                            child: const Text('Unlock'),
+                          ),
                     onTap: () => setState(() => _focusedId = node.id),
                   );
                 },
@@ -327,9 +347,7 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
 
   Widget _pathControls(BuildContext context) {
     final total = _computedPath.length;
-    final label = total == 0
-        ? 'No steps'
-        : 'Step ${_pathIndex + 1} / $total';
+    final label = total == 0 ? 'No steps' : 'Step ${_pathIndex + 1} / $total';
 
     if (!_showPath || total == 0) return const SizedBox.shrink();
 
@@ -380,13 +398,11 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
               children: [
                 IconButton(
                     onPressed: () => _goToStep(step - 1),
-                    icon: const Icon(Icons.chevron_left, color: Colors.white)
-                ),
+                    icon: const Icon(Icons.chevron_left, color: Colors.white)),
                 Text('Step $step', style: const TextStyle(color: Colors.white)),
                 IconButton(
                     onPressed: () => _goToStep(step + 1),
-                    icon: const Icon(Icons.chevron_right, color: Colors.white)
-                ),
+                    icon: const Icon(Icons.chevron_right, color: Colors.white)),
               ],
             ),
           ),
@@ -472,7 +488,8 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
               behavior: HitTestBehavior.opaque,
               onTapDown: (d) => _handleTapDown(d, positions),
               onDoubleTapDown: (d) {
-                final id = _hitTestNode(d.localPosition, positions, _transform.value);
+                final id =
+                    _hitTestNode(d.localPosition, positions, _transform.value);
                 if (id != null) _unlockSkill(id);
               },
               child: Stack(
@@ -533,9 +550,12 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
                     right: 12,
                     bottom: 12,
                     child: _ZoomPad(
-                      onIn: () => setState(() => _transform.value = _transform.value.scaled(1.15)),
-                      onOut: () => setState(() => _transform.value = _transform.value.scaled(0.87)),
-                      onReset: () => setState(() => _transform.value = vmath.Matrix4.identity()..scale(0.9, 0.9)),
+                      onIn: () => setState(() =>
+                          _transform.value = _transform.value.scaled(1.15)),
+                      onOut: () => setState(() =>
+                          _transform.value = _transform.value.scaled(0.87)),
+                      onReset: () => setState(() => _transform.value =
+                          vmath.Matrix4.identity()..scale(0.9, 0.9)),
                     ),
                   ),
                   // Add path controls at the bottom
@@ -562,27 +582,42 @@ class _SkillBranchDetailScreenState extends ConsumerState<SkillBranchDetailScree
 
   Color _branchColor(String id) {
     switch (id.toLowerCase()) {
-      case 'combat': return const Color(0xFFE74C3C);
-      case 'scholar': return const Color(0xFF4A90E2);
-      case 'strategist': return const Color(0xFF9B59B6);
-      case 'xp': return const Color(0xFF27AE60);
-      case 'timer': return const Color(0xFF3498DB);
-      case 'combo': return const Color(0xFFE67E22);
-      case 'risk': return const Color(0xFFC0392B);
-      case 'luck': return const Color(0xFFF1C40F);
-      case 'stealth': return const Color(0xFF34495E);
-      case 'knowledge': return const Color(0xFF16A085);
-      case 'elite': return const Color(0xFFFFD700);
-      case 'wildcard': return const Color(0xFF8E44AD);
-      case 'general': return const Color(0xFF7F8C8D);
-      default: return const Color(0xFF6EE7F9);
+      case 'combat':
+        return const Color(0xFFE74C3C);
+      case 'scholar':
+        return const Color(0xFF4A90E2);
+      case 'strategist':
+        return const Color(0xFF9B59B6);
+      case 'xp':
+        return const Color(0xFF27AE60);
+      case 'timer':
+        return const Color(0xFF3498DB);
+      case 'combo':
+        return const Color(0xFFE67E22);
+      case 'risk':
+        return const Color(0xFFC0392B);
+      case 'luck':
+        return const Color(0xFFF1C40F);
+      case 'stealth':
+        return const Color(0xFF34495E);
+      case 'knowledge':
+        return const Color(0xFF16A085);
+      case 'elite':
+        return const Color(0xFFFFD700);
+      case 'wildcard':
+        return const Color(0xFF8E44AD);
+      case 'general':
+        return const Color(0xFF7F8C8D);
+      default:
+        return const Color(0xFF6EE7F9);
     }
   }
 }
 
 class _ZoomPad extends StatelessWidget {
   final VoidCallback onIn, onOut, onReset;
-  const _ZoomPad({required this.onIn, required this.onOut, required this.onReset});
+  const _ZoomPad(
+      {required this.onIn, required this.onOut, required this.onReset});
 
   @override
   Widget build(BuildContext context) {
@@ -592,9 +627,15 @@ class _ZoomPad extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          IconButton(onPressed: onIn, icon: const Icon(Icons.zoom_in, color: Colors.white)),
-          IconButton(onPressed: onOut, icon: const Icon(Icons.zoom_out, color: Colors.white)),
-          IconButton(onPressed: onReset, icon: const Icon(Icons.refresh, color: Colors.white)),
+          IconButton(
+              onPressed: onIn,
+              icon: const Icon(Icons.zoom_in, color: Colors.white)),
+          IconButton(
+              onPressed: onOut,
+              icon: const Icon(Icons.zoom_out, color: Colors.white)),
+          IconButton(
+              onPressed: onReset,
+              icon: const Icon(Icons.refresh, color: Colors.white)),
         ],
       ),
     );
@@ -605,7 +646,8 @@ class BranchDetailArgs {
   final String branchId;
   final int? initialStep;
   final bool highlightPath;
-  const BranchDetailArgs(this.branchId, {this.initialStep, this.highlightPath = false});
+  const BranchDetailArgs(this.branchId,
+      {this.initialStep, this.highlightPath = false});
 }
 
 class BranchDetailVM {
@@ -614,10 +656,9 @@ class BranchDetailVM {
   final List<String> order;
   final Map<String, bool> canUnlock;
 
-  BranchDetailVM({
-    required this.branchId,
-    required this.nodes,
-    required this.order,
-    required this.canUnlock
-  });
+  BranchDetailVM(
+      {required this.branchId,
+      required this.nodes,
+      required this.order,
+      required this.canUnlock});
 }

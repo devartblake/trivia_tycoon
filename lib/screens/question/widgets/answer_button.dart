@@ -99,29 +99,31 @@ class _EnhancedAnswerButtonState extends State<EnhancedAnswerButton>
               borderRadius: BorderRadius.circular(16),
               boxShadow: widget.isSelected || widget.showFeedback
                   ? [
-                BoxShadow(
-                  color: _getButtonColor().withValues(alpha: 0.3),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
-                ),
-              ]
+                      BoxShadow(
+                        color: _getButtonColor().withValues(alpha: 0.3),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ]
                   : [
-                BoxShadow(
-                  color: Colors.grey.withValues(alpha: 0.1),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
+                      BoxShadow(
+                        color: Colors.grey.withValues(alpha: 0.1),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
             ),
             child: Material(
               color: Colors.transparent,
               child: InkWell(
-                onTap: widget.isDisabled ? null : () {
-                  _animationController.forward().then((_) {
-                    _animationController.reverse();
-                  });
-                  widget.onPressed();
-                },
+                onTap: widget.isDisabled
+                    ? null
+                    : () {
+                        _animationController.forward().then((_) {
+                          _animationController.reverse();
+                        });
+                        widget.onPressed();
+                      },
                 borderRadius: BorderRadius.circular(16),
                 child: Container(
                   padding: const EdgeInsets.all(16),

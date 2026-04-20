@@ -9,7 +9,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/models/store/store_hub_model.dart';
-import '../../core/models/store/store_offer_model.dart';
 import '../../core/models/store/store_gift_model.dart';
 import '../../core/models/store/premium_store_model.dart';
 import '../../game/state/premium_profile_state.dart';
@@ -75,12 +74,12 @@ final quizProgressServiceProvider = Provider<QuizProgressService>((ref) {
 });
 
 final spinWheelSettingsServiceProvider =
-Provider<SpinWheelSettingsService>((ref) {
+    Provider<SpinWheelSettingsService>((ref) {
   return ref.watch(serviceManagerProvider).spinWheelSettingsService;
 });
 
 final confettiSettingsServiceProvider =
-Provider<ConfettiSettingsService>((ref) {
+    Provider<ConfettiSettingsService>((ref) {
   return ref.watch(serviceManagerProvider).confettiSettingsService;
 });
 
@@ -107,7 +106,7 @@ final playerProfileServiceProvider = Provider<PlayerProfileService>((ref) {
 });
 
 final purchaseSettingsServiceProvider =
-Provider<PurchaseSettingsService>((ref) {
+    Provider<PurchaseSettingsService>((ref) {
   return ref.read(serviceManagerProvider).purchaseSettingsService;
 });
 
@@ -116,7 +115,7 @@ final prizeLogServiceProvider = Provider<PrizeLogService>((ref) {
 });
 
 final onboardingSettingsServiceProvider =
-Provider<OnboardingSettingsService>((ref) {
+    Provider<OnboardingSettingsService>((ref) {
   return ref.read(serviceManagerProvider).onboardingSettingsService;
 });
 
@@ -133,7 +132,7 @@ final achievementServiceProvider = Provider<AchievementService>((ref) {
 // ---------------------------------------------------------------------------
 
 final questionControllerProvider =
-StateNotifierProvider<QuestionController, QuestionState>((ref) {
+    StateNotifierProvider<QuestionController, QuestionState>((ref) {
   return QuestionController(ref: ref);
 });
 
@@ -146,7 +145,7 @@ final questionServiceProvider = Provider<QuestionService>((ref) {
 // ---------------------------------------------------------------------------
 
 final leaderboardControllerProvider =
-ChangeNotifierProvider<LeaderboardController>((ref) {
+    ChangeNotifierProvider<LeaderboardController>((ref) {
   final dataService = ref.read(leaderboardDataServiceProvider);
   final storage = ref.read(generalKeyValueStorageProvider);
   return LeaderboardController(
@@ -165,9 +164,9 @@ final leaderboardDataServiceProvider = Provider<LeaderboardDataService>((ref) {
 });
 
 final leaderboardAssetProvider =
-FutureProvider<List<LeaderboardEntry>>((ref) async {
+    FutureProvider<List<LeaderboardEntry>>((ref) async {
   final jsonStr =
-  await rootBundle.loadString('assets/data/leaderboard/leaderboard.json');
+      await rootBundle.loadString('assets/data/leaderboard/leaderboard.json');
   final List<dynamic> decoded = json.decode(jsonStr);
   return decoded.map((e) => LeaderboardEntry.fromJson(e)).toList();
 });
@@ -177,7 +176,7 @@ FutureProvider<List<LeaderboardEntry>>((ref) async {
 // ---------------------------------------------------------------------------
 
 final profileAvatarControllerProvider =
-ChangeNotifierProvider<ProfileAvatarController>((ref) {
+    ChangeNotifierProvider<ProfileAvatarController>((ref) {
   final serviceManager = ref.read(serviceManagerProvider);
   return ProfileAvatarController(
     keyValueStorage: serviceManager.generalKeyValueStorageService,
@@ -218,7 +217,7 @@ final splashControllerProvider = Provider<SplashController>((ref) {
 });
 
 final confettiControllerProvider =
-ChangeNotifierProvider<ConfettiController>((ref) {
+    ChangeNotifierProvider<ConfettiController>((ref) {
   return ConfettiController();
 });
 
@@ -237,8 +236,8 @@ final qrHistoryServiceProvider = Provider<QrHistoryService>((ref) {
 });
 
 final qrSettingsProvider =
-StateNotifierProvider<QrSettingsNotifier, QrSettingsModel>(
-      (ref) => QrSettingsNotifier(),
+    StateNotifierProvider<QrSettingsNotifier, QrSettingsModel>(
+  (ref) => QrSettingsNotifier(),
 );
 
 // ---------------------------------------------------------------------------
@@ -246,7 +245,7 @@ StateNotifierProvider<QrSettingsNotifier, QrSettingsModel>(
 // ---------------------------------------------------------------------------
 
 final storeServiceProvider =
-Provider((ref) => ref.read(serviceManagerProvider).storeService);
+    Provider((ref) => ref.read(serviceManagerProvider).storeService);
 
 Future<String> _resolveCurrentStoreUserId(Ref ref) async {
   final authService = ref.watch(authServiceProvider);
@@ -274,10 +273,6 @@ final storeHubProvider = FutureProvider<StoreHubData>((ref) async {
   return ref.read(storeServiceProvider).getHubData();
 });
 
-final storeOffersProvider = FutureProvider<StoreOffersData>((ref) async {
-  return ref.read(storeServiceProvider).getOffers();
-});
-
 final giftsDataProvider = FutureProvider<GiftsData>((ref) async {
   return ref.read(storeServiceProvider).getGiftsData();
 });
@@ -296,7 +291,8 @@ final storeItemsProvider = FutureProvider<List<StoreItemModel>>((ref) async {
   return storeService.getAllItems();
 });
 
-final storeSystemStatusProvider = FutureProvider<Map<String, dynamic>>((ref) async {
+final storeSystemStatusProvider =
+    FutureProvider<Map<String, dynamic>>((ref) async {
   final storeService = ref.read(storeServiceProvider);
   return storeService.getSystemStatus();
 });
@@ -309,7 +305,8 @@ final storeSubscriptionStatusProvider =
 
 final premiumAccessStatusProvider = FutureProvider<PremiumStatus>((ref) async {
   final playerId = await _resolveCurrentStoreUserId(ref);
-  final status = await ref.watch(storeSubscriptionStatusProvider(playerId).future);
+  final status =
+      await ref.watch(storeSubscriptionStatusProvider(playerId).future);
 
   final isPremium = status['isActive'] == true ||
       status['hasPremiumAccess'] == true ||
@@ -329,9 +326,9 @@ final premiumAccessStatusProvider = FutureProvider<PremiumStatus>((ref) async {
 });
 
 final powerUpInventoryProvider =
-FutureProvider<List<StoreItemModel>>((ref) async {
+    FutureProvider<List<StoreItemModel>>((ref) async {
   final ids =
-  await ref.read(purchaseSettingsServiceProvider).getAllPurchasedItems();
+      await ref.read(purchaseSettingsServiceProvider).getAllPurchasedItems();
   final all = await StoreDataService.loadStoreItems();
   return all
       .where((item) => ids.contains(item.id) && item.category == 'power-up')
@@ -343,7 +340,7 @@ FutureProvider<List<StoreItemModel>>((ref) async {
 // ---------------------------------------------------------------------------
 
 final encryptionServiceProvider =
-FutureProvider<EncryptionService>((ref) async {
+    FutureProvider<EncryptionService>((ref) async {
   final fernet = await ref.watch(fernetControllerProvider.future);
   return EncryptionService(fernetService: fernet);
 });
@@ -353,5 +350,5 @@ final fernetServiceProvider = Provider<FernetService>((ref) {
 });
 
 final fernetControllerProvider =
-AsyncNotifierProvider<FernetController, FernetService>(
+    AsyncNotifierProvider<FernetController, FernetService>(
         () => FernetController());

@@ -182,7 +182,8 @@ class EnergyNotifier extends StateNotifier<EnergyState> {
 
   /// Synchronise local state with authoritative server values.
   /// Called after a successful GET /mobile/economy/state response.
-  void syncWithServer(int serverEnergy, int serverMax, Duration serverInterval) {
+  void syncWithServer(
+      int serverEnergy, int serverMax, Duration serverInterval) {
     state = state.copyWith(
       current: serverEnergy.clamp(0, serverMax),
       max: serverMax,

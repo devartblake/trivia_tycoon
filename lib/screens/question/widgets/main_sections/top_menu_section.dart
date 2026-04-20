@@ -11,9 +11,10 @@ class TopMenuSection extends ConsumerWidget {
     final profile = ref.watch(userProfileProvider);
     final coinBalance = ref.watch(coinBalanceProvider);
 
-    final displayName = (profile['username'] as String?)?.trim().isNotEmpty == true
-        ? profile['username'] as String
-        : (profile['name'] as String?) ?? 'Player';
+    final displayName =
+        (profile['username'] as String?)?.trim().isNotEmpty == true
+            ? profile['username'] as String
+            : (profile['name'] as String?) ?? 'Player';
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -50,7 +51,8 @@ class TopMenuSection extends ConsumerWidget {
                   ),
                   child: const CircleAvatar(
                     radius: 28,
-                    backgroundImage: AssetImage('assets/images/avatars/default-avatar.png'),
+                    backgroundImage:
+                        AssetImage('assets/images/avatars/default-avatar.png'),
                   ),
                 ),
               ),
@@ -86,7 +88,8 @@ class TopMenuSection extends ConsumerWidget {
               GestureDetector(
                 onTap: () => _showPointsDialog(context, coinBalance),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: Colors.purple.shade100,
                     borderRadius: BorderRadius.circular(20),
@@ -262,7 +265,8 @@ class TopMenuSection extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildPointRow('Coin Balance', _formatBalance(coinBalance), isTotal: true),
+            _buildPointRow('Coin Balance', _formatBalance(coinBalance),
+                isTotal: true),
           ],
         ),
         actions: [

@@ -16,13 +16,13 @@ class LeaderboardFilterSettings {
   });
 
   Map<String, dynamic> toJson() => {
-    'showVerifiedOnly': showVerifiedOnly,
-    'showPremiumOnly': showPremiumOnly,
-    'showPowerUsersOnly': showPowerUsersOnly,
-    'excludeBots': excludeBots,
-    'deviceType': deviceType,
-    'notificationPreference': notificationPreference,
-  };
+        'showVerifiedOnly': showVerifiedOnly,
+        'showPremiumOnly': showPremiumOnly,
+        'showPowerUsersOnly': showPowerUsersOnly,
+        'excludeBots': excludeBots,
+        'deviceType': deviceType,
+        'notificationPreference': notificationPreference,
+      };
 
   factory LeaderboardFilterSettings.fromJson(Map<String, dynamic> json) {
     return LeaderboardFilterSettings(
@@ -49,7 +49,8 @@ class LeaderboardFilterSettings {
       showPowerUsersOnly: showPowerUsersOnly ?? this.showPowerUsersOnly,
       excludeBots: excludeBots ?? this.excludeBots,
       deviceType: deviceType ?? this.deviceType,
-      notificationPreference: notificationPreference ?? this.notificationPreference,
+      notificationPreference:
+          notificationPreference ?? this.notificationPreference,
     );
   }
 }

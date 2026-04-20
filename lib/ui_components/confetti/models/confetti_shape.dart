@@ -35,10 +35,11 @@ class ConfettiShape {
   static ConfettiShape random(List<Color> availableColors) {
     final random = Random();
     return ConfettiShape(
-      type: ConfettiShapeType.values[random.nextInt(ConfettiShapeType.values.length)],
+      type: ConfettiShapeType
+          .values[random.nextInt(ConfettiShapeType.values.length)],
       color: Colors.primaries[random.nextInt(Colors.primaries.length)],
       size: random.nextDouble() * 15 + 5, // Random size between 5 and 20
-      rotation: random.nextDouble() * 360,  // Random rotation
+      rotation: random.nextDouble() * 360, // Random rotation
     );
   }
 
@@ -46,9 +47,12 @@ class ConfettiShape {
   Path getPath() {
     switch (type) {
       case ConfettiShapeType.circle:
-        return Path()..addOval(Rect.fromCircle(center: Offset.zero, radius: size / 2));
+        return Path()
+          ..addOval(Rect.fromCircle(center: Offset.zero, radius: size / 2));
       case ConfettiShapeType.square:
-        return Path()..addRect(Rect.fromCenter(center: Offset.zero, width: size, height: size));
+        return Path()
+          ..addRect(
+              Rect.fromCenter(center: Offset.zero, width: size, height: size));
       case ConfettiShapeType.triangle:
         return _createTrianglePath();
       case ConfettiShapeType.star:
@@ -63,10 +67,10 @@ class ConfettiShape {
   /// **Creates a triangle path.**
   Path _createTrianglePath() {
     return Path()
-        ..moveTo(0, -size / 2)
-        ..lineTo(size / 2, size / 2)
-        ..lineTo(-size / 2, size / 2)
-        ..close();
+      ..moveTo(0, -size / 2)
+      ..lineTo(size / 2, size / 2)
+      ..lineTo(-size / 2, size / 2)
+      ..close();
   }
 
   /// **Create a simple star path.**
@@ -78,8 +82,8 @@ class ConfettiShape {
 
     for (int i = 0; i < 10; i++) {
       double r = (i % 2 == 0) ? outerRadius : innerRadius;
-      double x = r * cos(i  * angle);
-      double y = r * sin( i * angle);
+      double x = r * cos(i * angle);
+      double y = r * sin(i * angle);
       if (i == 0) {
         path.moveTo(x, y);
       } else {

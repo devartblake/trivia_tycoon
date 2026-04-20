@@ -48,15 +48,11 @@ class EnhancedRewardProbability {
             jackpotModifier *
             currencyModifier *
             streakModifier *
-            pityModifier
-    );
+            pityModifier);
 
-    double rareChance = baseProbabilities.rare *
-        levelModifier *
-        streakModifier;
+    double rareChance = baseProbabilities.rare * levelModifier * streakModifier;
 
-    double uncommonChance = baseProbabilities.uncommon *
-        levelModifier;
+    double uncommonChance = baseProbabilities.uncommon * levelModifier;
 
     double commonChance = baseProbabilities.common;
 
@@ -80,17 +76,17 @@ class EnhancedRewardProbability {
     if (userProfile.winStreak <= 0) return 1.0;
 
     // Gradual improvement with diminishing returns
-    return 1.0 + math.min(
-        userProfile.winStreak * config.streakBonusMultiplier,
-        config.maxStreakBonus
-    );
+    return 1.0 +
+        math.min(userProfile.winStreak * config.streakBonusMultiplier,
+            config.maxStreakBonus);
   }
 
   /// Calculate jackpot cooldown modifier
   double _calculateJackpotModifier() {
     if (userProfile.lastJackpotWin == null) return 1.0;
 
-    final timeSinceJackpot = DateTime.now().difference(userProfile.lastJackpotWin!);
+    final timeSinceJackpot =
+        DateTime.now().difference(userProfile.lastJackpotWin!);
     final cooldownHours = config.jackpotCooldownHours;
 
     if (timeSinceJackpot.inHours < cooldownHours) {
@@ -108,10 +104,11 @@ class EnhancedRewardProbability {
     if (userProfile.exclusiveCurrency <= 0) return 1.0;
 
     // Logarithmic scaling to prevent excessive bonuses
-    return 1.0 + math.min(
-        math.log(userProfile.exclusiveCurrency + 1) * config.currencyBonusMultiplier,
-        config.maxCurrencyBonus
-    );
+    return 1.0 +
+        math.min(
+            math.log(userProfile.exclusiveCurrency + 1) *
+                config.currencyBonusMultiplier,
+            config.maxCurrencyBonus);
   }
 
   /// Calculate pity timer modifier for rare rewards
@@ -119,7 +116,8 @@ class EnhancedRewardProbability {
     if (userProfile.spinsSinceLastRare <= config.pityTimerThreshold) return 1.0;
 
     // Exponential increase after pity threshold
-    final excessSpins = userProfile.spinsSinceLastRare - config.pityTimerThreshold;
+    final excessSpins =
+        userProfile.spinsSinceLastRare - config.pityTimerThreshold;
     return 1.0 + (excessSpins * config.pityTimerMultiplier);
   }
 
@@ -413,7 +411,7 @@ class EnhancedRewardService {
   EnhancedRewardService({
     RewardConfig? config,
     Map<RewardType, List<WheelSegment>>? customRewardPools,
-  }) : config = config ?? RewardConfig.balanced(),
+  })  : config = config ?? RewardConfig.balanced(),
         _rewardPools = customRewardPools ?? _createDefaultRewardPools();
 
   /// Generate reward based on enhanced probability system
@@ -462,7 +460,8 @@ class EnhancedRewardService {
   Future<UserProfile> _loadUserProfile() async {
     final level = await AppSettings.getInt("userLevel") ?? 1;
     final winStreak = await AppSettings.getWinStreak() ?? 0;
-    final exclusiveCurrency = await AppSettings.getInt("exclusiveCurrency") ?? 0;
+    final exclusiveCurrency =
+        await AppSettings.getInt("exclusiveCurrency") ?? 0;
     final lastJackpot = await AppSettings.getJackpotTime();
     final spinsSinceRare = await AppSettings.getInt("spinsSinceLastRare") ?? 0;
     final totalSpins = await AppSettings.getTotalSpins() ?? 0;
@@ -478,9 +477,11 @@ class EnhancedRewardService {
   }
 
   /// Update user profile after spin
-  Future<void> _updateUserProfile(UserProfile profile, RewardType rewardType) async {
+  Future<void> _updateUserProfile(
+      UserProfile profile, RewardType rewardType) async {
     // Update win streak
-    final newStreak = rewardType != RewardType.common ? profile.winStreak + 1 : 0;
+    final newStreak =
+        rewardType != RewardType.common ? profile.winStreak + 1 : 0;
     await AppSettings.setWinStreak(newStreak);
 
     // Update jackpot time
@@ -489,9 +490,10 @@ class EnhancedRewardService {
     }
 
     // Update spins since last rare
-    final spinsSinceRare = (rewardType == RewardType.rare || rewardType == RewardType.jackpot)
-        ? 0
-        : profile.spinsSinceLastRare + 1;
+    final spinsSinceRare =
+        (rewardType == RewardType.rare || rewardType == RewardType.jackpot)
+            ? 0
+            : profile.spinsSinceLastRare + 1;
     await AppSettings.setInt("spinsSinceLastRare", spinsSinceRare);
 
     // Increment total spins
@@ -541,36 +543,48 @@ class EnhancedRewardService {
   static Map<RewardType, List<WheelSegment>> _createDefaultRewardPools() {
     return {
       RewardType.jackpot: [
-        _createSegment("Ultimate Diamond", RewardType.jackpot, 1000, "diamond.png", const Color(0xFFFFD700)),
-        _createSegment("Mega Jackpot", RewardType.jackpot, 750, "mega_diamond.png", const Color(0xFFFFD700)),
-        _createSegment("Super Prize", RewardType.jackpot, 500, "super_prize.png", const Color(0xFFFFD700)),
+        _createSegment("Ultimate Diamond", RewardType.jackpot, 1000,
+            "diamond.png", const Color(0xFFFFD700)),
+        _createSegment("Mega Jackpot", RewardType.jackpot, 750,
+            "mega_diamond.png", const Color(0xFFFFD700)),
+        _createSegment("Super Prize", RewardType.jackpot, 500,
+            "super_prize.png", const Color(0xFFFFD700)),
       ],
       RewardType.rare: [
-        _createSegment("Gold Chest", RewardType.rare, 300, "gold_chest.png", const Color(0xFF8E44AD)),
-        _createSegment("Rare Gem", RewardType.rare, 250, "rare_gem.png", const Color(0xFF8E44AD)),
-        _createSegment("Crystal Box", RewardType.rare, 200, "crystal_box.png", const Color(0xFF8E44AD)),
+        _createSegment("Gold Chest", RewardType.rare, 300, "gold_chest.png",
+            const Color(0xFF8E44AD)),
+        _createSegment("Rare Gem", RewardType.rare, 250, "rare_gem.png",
+            const Color(0xFF8E44AD)),
+        _createSegment("Crystal Box", RewardType.rare, 200, "crystal_box.png",
+            const Color(0xFF8E44AD)),
       ],
       RewardType.uncommon: [
-        _createSegment("Silver Crate", RewardType.uncommon, 150, "silver_crate.png", const Color(0xFF3498DB)),
-        _createSegment("Magic Pouch", RewardType.uncommon, 120, "magic_pouch.png", const Color(0xFF3498DB)),
-        _createSegment("Treasure Box", RewardType.uncommon, 100, "treasure_box.png", const Color(0xFF3498DB)),
+        _createSegment("Silver Crate", RewardType.uncommon, 150,
+            "silver_crate.png", const Color(0xFF3498DB)),
+        _createSegment("Magic Pouch", RewardType.uncommon, 120,
+            "magic_pouch.png", const Color(0xFF3498DB)),
+        _createSegment("Treasure Box", RewardType.uncommon, 100,
+            "treasure_box.png", const Color(0xFF3498DB)),
       ],
       RewardType.common: [
-        _createSegment("Coin Bag", RewardType.common, 75, "coin_bag.png", const Color(0xFF27AE60)),
-        _createSegment("Small Prize", RewardType.common, 50, "small_prize.png", const Color(0xFF27AE60)),
-        _createSegment("Bonus Coins", RewardType.common, 25, "bonus_coins.png", const Color(0xFF27AE60)),
+        _createSegment("Coin Bag", RewardType.common, 75, "coin_bag.png",
+            const Color(0xFF27AE60)),
+        _createSegment("Small Prize", RewardType.common, 50, "small_prize.png",
+            const Color(0xFF27AE60)),
+        _createSegment("Bonus Coins", RewardType.common, 25, "bonus_coins.png",
+            const Color(0xFF27AE60)),
       ],
     };
   }
 
   /// Create wheel segment helper
   static WheelSegment _createSegment(
-      String label,
-      RewardType rewardType,
-      int reward,
-      String imageName,
-      Color color,
-      ) {
+    String label,
+    RewardType rewardType,
+    int reward,
+    String imageName,
+    Color color,
+  ) {
     return WheelSegment(
       id: '${rewardType.name}_${label.toLowerCase().replaceAll(' ', '_')}',
       label: label,
@@ -585,13 +599,17 @@ class EnhancedRewardService {
   WheelSegment _createDefaultSegment(RewardType rewardType) {
     switch (rewardType) {
       case RewardType.jackpot:
-        return _createSegment("Ultimate Prize", rewardType, 500, "default_jackpot.png", rewardType.color);
+        return _createSegment("Ultimate Prize", rewardType, 500,
+            "default_jackpot.png", rewardType.color);
       case RewardType.rare:
-        return _createSegment("Rare Prize", rewardType, 250, "default_rare.png", rewardType.color);
+        return _createSegment("Rare Prize", rewardType, 250, "default_rare.png",
+            rewardType.color);
       case RewardType.uncommon:
-        return _createSegment("Good Prize", rewardType, 100, "default_uncommon.png", rewardType.color);
+        return _createSegment("Good Prize", rewardType, 100,
+            "default_uncommon.png", rewardType.color);
       case RewardType.common:
-        return _createSegment("Small Prize", rewardType, 50, "default_common.png", rewardType.color);
+        return _createSegment("Small Prize", rewardType, 50,
+            "default_common.png", rewardType.color);
     }
   }
 

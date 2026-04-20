@@ -58,14 +58,13 @@ class InteractiveOverlay extends StatelessWidget {
                   child: Text(
                     text,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                    ),
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                        ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-
                 if (_effectiveActions.isNotEmpty)
                   Align(
                     alignment: Alignment.bottomRight,
@@ -84,10 +83,13 @@ class InteractiveOverlay extends StatelessWidget {
                           onPressed: a.onPressed,
                           backgroundColor: Colors.black.withValues(alpha: 0.30),
                           shape: StadiumBorder(
-                            side: BorderSide(color: Colors.white.withValues(alpha: 0.25)),
+                            side: BorderSide(
+                                color: Colors.white.withValues(alpha: 0.25)),
                           ),
-                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          labelPadding: const EdgeInsets.symmetric(horizontal: 8),
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                          labelPadding:
+                              const EdgeInsets.symmetric(horizontal: 8),
                         );
                       }).toList(),
                     ),

@@ -12,7 +12,8 @@ class UserProfileHeader extends StatelessWidget {
   }
 
   Widget _buildFlag(String? countryCode) {
-    if (countryCode == null || countryCode.isEmpty) return const SizedBox.shrink();
+    if (countryCode == null || countryCode.isEmpty)
+      return const SizedBox.shrink();
 
     // Ensure only letters A-Z are processed and cast to int
     final codeUnits = countryCode
@@ -36,11 +37,11 @@ class UserProfileHeader extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 40,
-          backgroundImage: entry.avatar.isNotEmpty
-              ? NetworkImage(entry.avatar)
-              : null,
+          backgroundImage:
+              entry.avatar.isNotEmpty ? NetworkImage(entry.avatar) : null,
           child: (entry.avatar.isEmpty)
-              ? Text(entry.playerName[0].toUpperCase(), style: const TextStyle(fontSize: 24))
+              ? Text(entry.playerName[0].toUpperCase(),
+                  style: const TextStyle(fontSize: 24))
               : null,
         ),
         const SizedBox(width: 16),

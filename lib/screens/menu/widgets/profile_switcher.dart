@@ -64,11 +64,11 @@ class ProfileSwitcher extends ConsumerWidget {
   }
 
   Widget _buildProfileList(
-      BuildContext context,
-      WidgetRef ref,
-      List<ProfileData> profiles,
-      ProfileData? activeProfile,
-      ) {
+    BuildContext context,
+    WidgetRef ref,
+    List<ProfileData> profiles,
+    ProfileData? activeProfile,
+  ) {
     return SizedBox(
       height: 80,
       child: ListView.separated(
@@ -119,8 +119,8 @@ class _ProfileChip extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: isActive
               ? const LinearGradient(
-            colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-          )
+                  colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+                )
               : null,
           color: isActive ? null : Colors.white,
           borderRadius: BorderRadius.circular(16),

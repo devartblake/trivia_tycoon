@@ -32,8 +32,10 @@ class UnicodeUtils {
 
   static String replaceProblematicChars(String input) {
     return input
-        .replaceAll(RegExp(r'[^\u0000-\uD7FF\uE000-\uFFFF]'), '') // Remove surrogates
+        .replaceAll(
+            RegExp(r'[^\u0000-\uD7FF\uE000-\uFFFF]'), '') // Remove surrogates
         .replaceAll(RegExp(r'[\uFFFE\uFFFF]'), '') // Remove non-characters
-        .replaceAll(RegExp(r'[\u0000-\u001F\u007F-\u009F]'), ''); // Remove control chars
+        .replaceAll(RegExp(r'[\u0000-\u001F\u007F-\u009F]'),
+            ''); // Remove control chars
   }
 }

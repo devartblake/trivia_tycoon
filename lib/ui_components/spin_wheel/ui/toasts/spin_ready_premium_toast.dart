@@ -61,7 +61,8 @@ class PremiumSpinReadyToast {
     await toast.show(context);
   }
 
-  static String _buildMessage(int? spinsRemaining, int? rewardPoints, String? bonusMessage) {
+  static String _buildMessage(
+      int? spinsRemaining, int? rewardPoints, String? bonusMessage) {
     final parts = <String>[];
 
     if (spinsRemaining != null) {
@@ -124,7 +125,8 @@ class PremiumSpinReadyToast {
     );
   }
 
-  static Widget _buildPremiumButton(VoidCallback onTap, BuildContext context, int? spinsRemaining) {
+  static Widget _buildPremiumButton(
+      VoidCallback onTap, BuildContext context, int? spinsRemaining) {
     return Column(
       children: [
         if (spinsRemaining != null) ...[
@@ -163,7 +165,6 @@ class PremiumSpinReadyToast {
           ),
           const SizedBox(height: 12),
         ],
-
         Container(
           width: double.infinity,
           height: 56,

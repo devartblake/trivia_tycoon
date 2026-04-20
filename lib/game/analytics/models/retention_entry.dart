@@ -43,7 +43,6 @@ class RetentionEntry {
     );
   }
 
-
   /// New computed field based on day1Retention
   double get retentionPercentage => day1Retention.toDouble();
 

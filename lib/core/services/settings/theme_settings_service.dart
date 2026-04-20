@@ -29,13 +29,17 @@ class ThemeSettingsService {
     final box = await Hive.openBox(_boxName);
 
     final brightnessName = box.get('brightness', defaultValue: 'light');
-    _cachedBrightness = brightnessName == 'dark' ? Brightness.dark : Brightness.light;
+    _cachedBrightness =
+        brightnessName == 'dark' ? Brightness.dark : Brightness.light;
 
     final colorValue = box.get('primary_color');
-    _cachedPrimaryColor = colorValue is int ? Color(colorValue) : const Color(0xFF2196F3);
+    _cachedPrimaryColor =
+        colorValue is int ? Color(colorValue) : const Color(0xFF2196F3);
 
     final secondaryColorValue = box.get('secondary_color');
-    _cachedSecondaryColor = secondaryColorValue is int ? Color(secondaryColorValue) : const Color(0xFF03DAC6);
+    _cachedSecondaryColor = secondaryColorValue is int
+        ? Color(secondaryColorValue)
+        : const Color(0xFF03DAC6);
 
     _cachedThemeName = box.get('theme_name', defaultValue: 'Default');
     _lastCacheUpdate = DateTime.now();
@@ -108,7 +112,8 @@ class ThemeSettingsService {
 
     final box = await Hive.openBox(_boxName);
     final value = box.get('secondary_color');
-    _cachedSecondaryColor = value is int ? Color(value) : const Color(0xFF03DAC6);
+    _cachedSecondaryColor =
+        value is int ? Color(value) : const Color(0xFF03DAC6);
     return _cachedSecondaryColor;
   }
 
@@ -132,7 +137,8 @@ class ThemeSettingsService {
         themeName: e['name'],
         primaryColor: Color(e['primaryColor']),
         secondaryColor: Color(e['secondaryColor']),
-        brightness: e['brightness'] == 'dark' ? Brightness.dark : Brightness.light,
+        brightness:
+            e['brightness'] == 'dark' ? Brightness.dark : Brightness.light,
       );
     }).toList();
   }
@@ -147,7 +153,7 @@ class ThemeSettingsService {
   Future<void> applyThemePreset(String presetName) async {
     final presets = await getAllThemePresets();
     final preset = presets.firstWhere(
-          (p) => p.themeName == presetName,
+      (p) => p.themeName == presetName,
       orElse: () => ThemeSettings(
         themeName: 'Default',
         primaryColor: const Color(0xFF2196F3),
@@ -195,7 +201,8 @@ class ThemeSettingsService {
       await presetsBox.flush();
 
       if (kDebugMode) {
-        LogManager.debug('Current theme saved successfully: ${_cachedThemeName}');
+        LogManager.debug(
+            'Current theme saved successfully: ${_cachedThemeName}');
       }
     } catch (e) {
       if (kDebugMode) {
@@ -234,7 +241,8 @@ class ThemeSettingsService {
       }
 
       // Validate brightness
-      if (brightness == null || (brightness != 'light' && brightness != 'dark')) {
+      if (brightness == null ||
+          (brightness != 'light' && brightness != 'dark')) {
         await box.put('brightness', 'light');
         _cachedBrightness = Brightness.light;
         needsRepair = true;
@@ -363,9 +371,13 @@ class ThemeSettingsService {
   Future<void> importTheme(Map<String, dynamic> themeData) async {
     try {
       final name = themeData['name'] as String? ?? 'Imported';
-      final primaryColor = Color(themeData['primaryColor'] as int? ?? 0xFF2196F3);
-      final secondaryColor = Color(themeData['secondaryColor'] as int? ?? 0xFF03DAC6);
-      final brightness = themeData['brightness'] == 'dark' ? Brightness.dark : Brightness.light;
+      final primaryColor =
+          Color(themeData['primaryColor'] as int? ?? 0xFF2196F3);
+      final secondaryColor =
+          Color(themeData['secondaryColor'] as int? ?? 0xFF03DAC6);
+      final brightness = themeData['brightness'] == 'dark'
+          ? Brightness.dark
+          : Brightness.light;
 
       await setPrimaryColor(primaryColor);
       await setSecondaryColor(secondaryColor);

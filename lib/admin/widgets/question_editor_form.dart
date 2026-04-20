@@ -56,7 +56,13 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
     return 'Easy';
   }
 
-  final List<String> _categories = ['General', 'Science', 'History', 'Math', 'Literature'];
+  final List<String> _categories = [
+    'General',
+    'Science',
+    'History',
+    'Math',
+    'Literature'
+  ];
   final List<String> _difficulties = ['Easy', 'Medium', 'Hard'];
   final List<String> _powerUpTypes = ['Hint', 'Eliminate', 'Shield', 'Boost'];
 
@@ -75,10 +81,13 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
     });
 
     _correctAnswerIndex = q?.correctIndex ?? 0;
-    _selectedCategory = _categories.contains(q?.category) ? q!.category : _categories.first;
-    _selectedDifficulty = _difficulties.contains(
-        q?.difficulty is String ? q!.difficulty : _difficultyLabel(q?.difficulty)
-    ) ? _difficultyLabel(q?.difficulty) : _difficulties.first;
+    _selectedCategory =
+        _categories.contains(q?.category) ? q!.category : _categories.first;
+    _selectedDifficulty = _difficulties.contains(q?.difficulty is String
+            ? q!.difficulty
+            : _difficultyLabel(q?.difficulty))
+        ? _difficultyLabel(q?.difficulty)
+        : _difficulties.first;
     _selectedPowerUpType = q?.powerUpType;
     _showHint = q?.showHint ?? false;
     _isBoostedTime = q?.isBoostedTime ?? false;
@@ -147,7 +156,8 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Question Input
-          _buildSectionHeader('Question Details', Icons.quiz, const Color(0xFF6366F1)),
+          _buildSectionHeader(
+              'Question Details', Icons.quiz, const Color(0xFF6366F1)),
           const SizedBox(height: 12),
           TextFormField(
             controller: _questionController,
@@ -167,36 +177,44 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: Color(0xFF6366F1), width: 2),
+                borderSide:
+                    const BorderSide(color: Color(0xFF6366F1), width: 2),
               ),
             ),
-            validator: (value) => (value == null || value.isEmpty) ? 'Enter a question' : null,
+            validator: (value) =>
+                (value == null || value.isEmpty) ? 'Enter a question' : null,
           ),
 
           const SizedBox(height: 24),
 
           // Answer Options
-          _buildSectionHeader('Answer Options', Icons.checklist, const Color(0xFF10B981)),
+          _buildSectionHeader(
+              'Answer Options', Icons.checklist, const Color(0xFF10B981)),
           const SizedBox(height: 12),
           ...List.generate(_optionControllers.length, (index) {
             final isCorrect = _correctAnswerIndex == index;
             return Container(
               margin: const EdgeInsets.only(bottom: 12),
               decoration: BoxDecoration(
-                color: isCorrect ? const Color(0xFF10B981).withValues(alpha: 0.1) : const Color(0xFFF8FAFC),
+                color: isCorrect
+                    ? const Color(0xFF10B981).withValues(alpha: 0.1)
+                    : const Color(0xFFF8FAFC),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: isCorrect ? const Color(0xFF10B981) : Colors.grey[200]!,
+                  color:
+                      isCorrect ? const Color(0xFF10B981) : Colors.grey[200]!,
                   width: isCorrect ? 2 : 1,
                 ),
               ),
               child: ListTile(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 leading: Radio<int>(
                   value: index,
                   groupValue: _correctAnswerIndex,
                   activeColor: const Color(0xFF10B981),
-                  onChanged: (value) => setState(() => _correctAnswerIndex = value!),
+                  onChanged: (value) =>
+                      setState(() => _correctAnswerIndex = value!),
                 ),
                 title: TextFormField(
                   controller: _optionControllers[index],
@@ -204,12 +222,16 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
                     labelText: 'Option ${String.fromCharCode(65 + index)}',
                     border: InputBorder.none,
                     labelStyle: TextStyle(
-                      color: isCorrect ? const Color(0xFF10B981) : Colors.grey[600],
-                      fontWeight: isCorrect ? FontWeight.bold : FontWeight.normal,
+                      color: isCorrect
+                          ? const Color(0xFF10B981)
+                          : Colors.grey[600],
+                      fontWeight:
+                          isCorrect ? FontWeight.bold : FontWeight.normal,
                     ),
                   ),
-                  validator: (value) =>
-                  (value == null || value.isEmpty) ? 'Enter option ${index + 1}' : null,
+                  validator: (value) => (value == null || value.isEmpty)
+                      ? 'Enter option ${index + 1}'
+                      : null,
                 ),
                 trailing: isCorrect
                     ? const Icon(Icons.check_circle, color: Color(0xFF10B981))
@@ -221,7 +243,8 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
           const SizedBox(height: 24),
 
           // Category & Difficulty
-          _buildSectionHeader('Classification', Icons.category, const Color(0xFF3B82F6)),
+          _buildSectionHeader(
+              'Classification', Icons.category, const Color(0xFF3B82F6)),
           const SizedBox(height: 12),
           Row(
             children: [
@@ -231,7 +254,8 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
                   items: _categories,
                   label: 'Category',
                   icon: Icons.folder,
-                  onChanged: (value) => setState(() => _selectedCategory = value!),
+                  onChanged: (value) =>
+                      setState(() => _selectedCategory = value!),
                 ),
               ),
               const SizedBox(width: 12),
@@ -241,7 +265,8 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
                   items: _difficulties,
                   label: 'Difficulty',
                   icon: Icons.signal_cellular_alt,
-                  onChanged: (value) => setState(() => _selectedDifficulty = value!),
+                  onChanged: (value) =>
+                      setState(() => _selectedDifficulty = value!),
                 ),
               ),
             ],
@@ -250,7 +275,8 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
           const SizedBox(height: 24),
 
           // Media Section
-          _buildSectionHeader('Media & Resources', Icons.image, const Color(0xFFF59E0B)),
+          _buildSectionHeader(
+              'Media & Resources', Icons.image, const Color(0xFFF59E0B)),
           const SizedBox(height: 12),
           Container(
             padding: const EdgeInsets.all(16),
@@ -285,7 +311,8 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
                         height: 60,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: const Color(0xFFF59E0B), width: 2),
+                          border: Border.all(
+                              color: const Color(0xFFF59E0B), width: 2),
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(6),
@@ -300,7 +327,8 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
                   controller: _videoUrlController,
                   decoration: InputDecoration(
                     labelText: 'Video URL (Optional)',
-                    prefixIcon: const Icon(Icons.video_library, color: Color(0xFFF59E0B)),
+                    prefixIcon: const Icon(Icons.video_library,
+                        color: Color(0xFFF59E0B)),
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
@@ -320,7 +348,8 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
           const SizedBox(height: 24),
 
           // Power-ups Section
-          _buildSectionHeader('Power-ups', Icons.flash_on, const Color(0xFFEF4444)),
+          _buildSectionHeader(
+              'Power-ups', Icons.flash_on, const Color(0xFFEF4444)),
           const SizedBox(height: 12),
           Container(
             padding: const EdgeInsets.all(16),
@@ -335,7 +364,8 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
                   controller: _powerUpHintController,
                   decoration: InputDecoration(
                     labelText: 'Power-up Hint',
-                    prefixIcon: const Icon(Icons.lightbulb, color: Color(0xFFEF4444)),
+                    prefixIcon:
+                        const Icon(Icons.lightbulb, color: Color(0xFFEF4444)),
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
@@ -354,13 +384,17 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
                   items: _powerUpTypes,
                   label: 'Power-up Type',
                   icon: Icons.settings_power,
-                  onChanged: (value) => setState(() => _selectedPowerUpType = value),
+                  onChanged: (value) =>
+                      setState(() => _selectedPowerUpType = value),
                   allowNull: true,
                 ),
                 const SizedBox(height: 16),
-                _buildToggleOption('Show Hint Initially', _showHint, Icons.visibility, (val) => setState(() => _showHint = val)),
-                _buildToggleOption('Boosted Time', _isBoostedTime, Icons.timer, (val) => setState(() => _isBoostedTime = val)),
-                _buildToggleOption('Shield Active', _isShielded, Icons.shield, (val) => setState(() => _isShielded = val)),
+                _buildToggleOption('Show Hint Initially', _showHint,
+                    Icons.visibility, (val) => setState(() => _showHint = val)),
+                _buildToggleOption('Boosted Time', _isBoostedTime, Icons.timer,
+                    (val) => setState(() => _isBoostedTime = val)),
+                _buildToggleOption('Shield Active', _isShielded, Icons.shield,
+                    (val) => setState(() => _isShielded = val)),
               ],
             ),
           ),
@@ -397,7 +431,9 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
                         const Icon(Icons.save, color: Colors.white),
                         const SizedBox(width: 12),
                         Text(
-                          widget.initialQuestion != null ? 'Update Question' : 'Save Question',
+                          widget.initialQuestion != null
+                              ? 'Update Question'
+                              : 'Save Question',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -462,27 +498,33 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
           prefixIcon: Icon(icon, size: 20),
           border: InputBorder.none,
         ),
-        items: items.map((item) => DropdownMenuItem(
-          value: item,
-          child: Text(item),
-        )).toList(),
+        items: items
+            .map((item) => DropdownMenuItem(
+                  value: item,
+                  child: Text(item),
+                ))
+            .toList(),
         onChanged: onChanged,
       ),
     );
   }
 
-  Widget _buildToggleOption(String title, bool value, IconData icon, void Function(bool) onChanged) {
+  Widget _buildToggleOption(
+      String title, bool value, IconData icon, void Function(bool) onChanged) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: value ? const Color(0xFFEF4444) : Colors.grey[300]!),
+        border: Border.all(
+            color: value ? const Color(0xFFEF4444) : Colors.grey[300]!),
       ),
       child: Row(
         children: [
-          Icon(icon, color: value ? const Color(0xFFEF4444) : Colors.grey[600], size: 20),
+          Icon(icon,
+              color: value ? const Color(0xFFEF4444) : Colors.grey[600],
+              size: 20),
           const SizedBox(width: 12),
           Expanded(
             child: Text(

@@ -120,13 +120,13 @@ class GridMenuSection extends StatelessWidget {
   }
 
   Widget _buildRectangularMenuItem(
-      BuildContext context,
-      IconData icon,
-      String label,
-      Color color,
-      String route,
-      String description,
-      ) {
+    BuildContext context,
+    IconData icon,
+    String label,
+    Color color,
+    String route,
+    String description,
+  ) {
     return GestureDetector(
       onTap: () {
         context.push(route);
@@ -162,7 +162,8 @@ class GridMenuSection extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min, // Added to prevent overflow
                 children: [
-                  Flexible( // Wrapped with Flexible
+                  Flexible(
+                    // Wrapped with Flexible
                     child: Text(
                       label,
                       style: TextStyle(
@@ -175,7 +176,8 @@ class GridMenuSection extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 1), // Reduced from 2 to 1
-                  Flexible( // Wrapped with Flexible
+                  Flexible(
+                    // Wrapped with Flexible
                     child: Text(
                       description,
                       style: TextStyle(

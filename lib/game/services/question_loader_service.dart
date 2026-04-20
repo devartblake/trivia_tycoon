@@ -13,7 +13,8 @@ class QuestionDataset {
   final List<QuizCategory> categories; // Changed to use QuizCategory enum
   final Map<String, dynamic>? metadata;
   final bool isActive;
-  final QuizCategory? primaryCategory; // Add primary category for better mapping
+  final QuizCategory?
+      primaryCategory; // Add primary category for better mapping
 
   const QuestionDataset({
     required this.name,
@@ -45,8 +46,15 @@ class AdaptedQuestionLoaderService {
     QuestionDataset(
       name: 'General Knowledge',
       path: General.GENERAL_QUESTIONS,
-      description: 'Mixed categories including science, history, movies, geography, and music',
-      categories: [QuizCategory.general, QuizCategory.science, QuizCategory.history, QuizCategory.geography, QuizCategory.entertainment],
+      description:
+          'Mixed categories including science, history, movies, geography, and music',
+      categories: [
+        QuizCategory.general,
+        QuizCategory.science,
+        QuizCategory.history,
+        QuizCategory.geography,
+        QuizCategory.entertainment
+      ],
       primaryCategory: QuizCategory.general,
     ),
     QuestionDataset(
@@ -59,7 +67,8 @@ class AdaptedQuestionLoaderService {
     QuestionDataset(
       name: 'History',
       path: History.HISTORY_QUESTION,
-      description: 'Historical events, cultural knowledge, and world civilizations',
+      description:
+          'Historical events, cultural knowledge, and world civilizations',
       categories: [QuizCategory.history, QuizCategory.globalCultures],
       primaryCategory: QuizCategory.history,
     ),
@@ -101,7 +110,8 @@ class AdaptedQuestionLoaderService {
     QuestionDataset(
       name: 'Kids Questions',
       path: Kids.KIDS_QUESTIONS,
-      description: 'Age-appropriate questions for children, teens, and young adults',
+      description:
+          'Age-appropriate questions for children, teens, and young adults',
       categories: [QuizCategory.kids],
       primaryCategory: QuizCategory.kids,
     ),
@@ -119,7 +129,8 @@ class AdaptedQuestionLoaderService {
     QuestionDataset(
       name: 'Media',
       path: Media.MEDIA_QUESTION,
-      description: 'Questions about media, journalism, communication, and digital platforms',
+      description:
+          'Questions about media, journalism, communication, and digital platforms',
       categories: [QuizCategory.media],
       primaryCategory: QuizCategory.media,
     ),
@@ -140,8 +151,13 @@ class AdaptedQuestionLoaderService {
     QuestionDataset(
       name: 'World Affairs',
       path: World.WORLD_QUESTION,
-      description: 'Current events, international relations, and global knowledge',
-      categories: [QuizCategory.currentEvents, QuizCategory.politics, QuizCategory.globalCultures],
+      description:
+          'Current events, international relations, and global knowledge',
+      categories: [
+        QuizCategory.currentEvents,
+        QuizCategory.politics,
+        QuizCategory.globalCultures
+      ],
       primaryCategory: QuizCategory.currentEvents,
     ),
     QuestionDataset(
@@ -234,14 +250,21 @@ class AdaptedQuestionLoaderService {
       name: 'Civics & Law',
       path: CivicsLaw.CIVICS_LAW_QUESTION,
       description: 'Civic duties, government, and basic legal concepts',
-      categories: [QuizCategory.civicsLaw, QuizCategory.politics, QuizCategory.law],
+      categories: [
+        QuizCategory.civicsLaw,
+        QuizCategory.politics,
+        QuizCategory.law
+      ],
       primaryCategory: QuizCategory.civicsLaw,
     ),
     QuestionDataset(
       name: 'Comparative Religions',
       path: ComparativeReligions.COMPARATIVE_RELIGIONS_QUESTION,
       description: 'World religions, beliefs, and spiritual practices',
-      categories: [QuizCategory.comparativeReligions, QuizCategory.globalCultures],
+      categories: [
+        QuizCategory.comparativeReligions,
+        QuizCategory.globalCultures
+      ],
       primaryCategory: QuizCategory.comparativeReligions,
     ),
     QuestionDataset(
@@ -262,7 +285,11 @@ class AdaptedQuestionLoaderService {
       name: 'Economics & Finance',
       path: EconomicsFinance.ECONOMICS_FINANCE_QUESTION,
       description: 'Advanced economics and financial concepts',
-      categories: [QuizCategory.economicsFinance, QuizCategory.economics, QuizCategory.business],
+      categories: [
+        QuizCategory.economicsFinance,
+        QuizCategory.economics,
+        QuizCategory.business
+      ],
       primaryCategory: QuizCategory.economicsFinance,
     ),
     QuestionDataset(
@@ -276,7 +303,11 @@ class AdaptedQuestionLoaderService {
       name: 'Environmental Science',
       path: EnvironmentalScience.ENVIRONMENTAL_SCIENCE_ADVANCED_QUESTION,
       description: 'Advanced environmental science and ecological studies',
-      categories: [QuizCategory.environmentalScience, QuizCategory.environment, QuizCategory.science],
+      categories: [
+        QuizCategory.environmentalScience,
+        QuizCategory.environment,
+        QuizCategory.science
+      ],
       primaryCategory: QuizCategory.environmentalScience,
     ),
     QuestionDataset(
@@ -490,36 +521,43 @@ class AdaptedQuestionLoaderService {
 
   /// Get all available datasets (core + extended + class-based)
   List<QuestionDataset> get availableDatasets => [
-    ..._coreDatasets.where((ds) => ds.isActive),
-    ..._extendedDatasets.where((ds) => ds.isActive),
-    ..._modeDatasets.where((ds) => ds.isActive),
-    ..._alternativeDatasets.where((ds) => ds.isActive),
-    ..._classDatasets.where((ds) => ds.isActive)
-  ];
+        ..._coreDatasets.where((ds) => ds.isActive),
+        ..._extendedDatasets.where((ds) => ds.isActive),
+        ..._modeDatasets.where((ds) => ds.isActive),
+        ..._alternativeDatasets.where((ds) => ds.isActive),
+        ..._classDatasets.where((ds) => ds.isActive)
+      ];
 
   /// Get only core subject datasets
-  List<QuestionDataset> get coreDatasets => _coreDatasets.where((ds) => ds.isActive).toList();
+  List<QuestionDataset> get coreDatasets =>
+      _coreDatasets.where((ds) => ds.isActive).toList();
 
   /// Get only extended subject datasets
-  List<QuestionDataset> get extendedDatasets => _extendedDatasets.where((ds) => ds.isActive).toList();
+  List<QuestionDataset> get extendedDatasets =>
+      _extendedDatasets.where((ds) => ds.isActive).toList();
 
   /// Get only specialized mode datasets
-  List<QuestionDataset> get modeDatasets => _modeDatasets.where((ds) => ds.isActive).toList();
+  List<QuestionDataset> get modeDatasets =>
+      _modeDatasets.where((ds) => ds.isActive).toList();
 
   /// Get only alternative datasets
-  List<QuestionDataset> get alternativeDatasets => _alternativeDatasets.where((ds) => ds.isActive).toList();
+  List<QuestionDataset> get alternativeDatasets =>
+      _alternativeDatasets.where((ds) => ds.isActive).toList();
 
   /// Get only class-based datasets
-  List<QuestionDataset> get classDatasets => _classDatasets.where((ds) => ds.isActive).toList();
+  List<QuestionDataset> get classDatasets =>
+      _classDatasets.where((ds) => ds.isActive).toList();
 
   /// Load questions from a specific QuizCategory
-  Future<List<QuestionModel>> loadQuestionsByCategory(QuizCategory category) async {
+  Future<List<QuestionModel>> loadQuestionsByCategory(
+      QuizCategory category) async {
     final datasetName = category.datasetName;
     return loadDataset(datasetName);
   }
 
   /// Get questions by QuizCategory enum
-  Future<List<QuestionModel>> getQuestionsByQuizCategory(QuizCategory category) async {
+  Future<List<QuestionModel>> getQuestionsByQuizCategory(
+      QuizCategory category) async {
     // First try to find a dedicated dataset for this category
     final dedicatedDataset = _findDatasetForQuizCategory(category);
     if (dedicatedDataset != null) {
@@ -533,7 +571,8 @@ class AdaptedQuestionLoaderService {
               .toList(),
         );
       } catch (e) {
-        LogManager.debug('Failed to load dedicated dataset for ${category.displayName}: $e');
+        LogManager.debug(
+            'Failed to load dedicated dataset for ${category.displayName}: $e');
       }
     }
 
@@ -547,7 +586,9 @@ class AdaptedQuestionLoaderService {
   /// Get datasets that contain questions for a specific QuizCategory
   List<QuestionDataset> getDatasetsForCategory(QuizCategory category) {
     return availableDatasets
-        .where((dataset) => dataset.categories.contains(category) || dataset.primaryCategory == category)
+        .where((dataset) =>
+            dataset.categories.contains(category) ||
+            dataset.primaryCategory == category)
         .toList();
   }
 
@@ -633,44 +674,49 @@ class AdaptedQuestionLoaderService {
     // Apply type filter
     if (types != null && types.isNotEmpty) {
       filteredQuestions = filteredQuestions
-          .where((q) => types.any((type) =>
-      q.type.toLowerCase() == type.toLowerCase()))
+          .where((q) =>
+              types.any((type) => q.type.toLowerCase() == type.toLowerCase()))
           .toList();
     }
 
     // Apply tags filter
     if (tags != null && tags.isNotEmpty) {
-      filteredQuestions = filteredQuestions.where((q) =>
-      q.tags?.any((tag) => tags.contains(tag.toLowerCase())) == true
-      ).toList();
+      filteredQuestions = filteredQuestions
+          .where((q) =>
+              q.tags?.any((tag) => tags.contains(tag.toLowerCase())) == true)
+          .toList();
     }
 
     // Apply media filters
     if (!includeImages) {
-      filteredQuestions = filteredQuestions
-          .where((q) => q.imageUrl?.isEmpty != false)
-          .toList();
+      filteredQuestions =
+          filteredQuestions.where((q) => q.imageUrl?.isEmpty != false).toList();
     }
 
     if (!includeVideos) {
-      filteredQuestions = filteredQuestions
-          .where((q) => q.videoUrl?.isEmpty != false)
-          .toList();
+      filteredQuestions =
+          filteredQuestions.where((q) => q.videoUrl?.isEmpty != false).toList();
     }
 
     if (!includeAudio) {
-      filteredQuestions = filteredQuestions
-          .where((q) => q.audioUrl?.isEmpty != false)
-          .toList();
+      filteredQuestions =
+          filteredQuestions.where((q) => q.audioUrl?.isEmpty != false).toList();
     }
 
     // Balance difficulties and/or categories if requested
-    if (balanceDifficulties && balanceCategories && filteredQuestions.length >= questionCount) {
-      return _getBalancedQuestionsAdvancedByCategories(filteredQuestions, questionCount, categories);
-    } else if (balanceDifficulties && filteredQuestions.length >= questionCount) {
+    if (balanceDifficulties &&
+        balanceCategories &&
+        filteredQuestions.length >= questionCount) {
+      return _getBalancedQuestionsAdvancedByCategories(
+          filteredQuestions, questionCount, categories);
+    } else if (balanceDifficulties &&
+        filteredQuestions.length >= questionCount) {
       return _getBalancedQuestions(filteredQuestions, questionCount);
-    } else if (balanceCategories && categories != null && filteredQuestions.length >= questionCount) {
-      return _getBalancedByQuizCategories(filteredQuestions, questionCount, categories);
+    } else if (balanceCategories &&
+        categories != null &&
+        filteredQuestions.length >= questionCount) {
+      return _getBalancedByQuizCategories(
+          filteredQuestions, questionCount, categories);
     }
 
     // Regular random selection
@@ -684,7 +730,8 @@ class AdaptedQuestionLoaderService {
       final questions = await getQuestionsByQuizCategory(category);
       return questions.length;
     } catch (e) {
-      LogManager.debug('Error getting question count for ${category.displayName}: $e');
+      LogManager.debug(
+          'Error getting question count for ${category.displayName}: $e');
       return 0;
     }
   }
@@ -699,7 +746,8 @@ class AdaptedQuestionLoaderService {
       // Calculate difficulty distribution
       final difficultyCount = <int, int>{};
       for (final question in questions) {
-        difficultyCount[question.difficulty] = (difficultyCount[question.difficulty] ?? 0) + 1;
+        difficultyCount[question.difficulty] =
+            (difficultyCount[question.difficulty] ?? 0) + 1;
       }
 
       // If only one difficulty level, return it
@@ -709,8 +757,8 @@ class AdaptedQuestionLoaderService {
 
       // Calculate percentages
       final total = questions.length;
-      final percentages = difficultyCount.map((key, value) =>
-          MapEntry(key, value / total));
+      final percentages =
+          difficultyCount.map((key, value) => MapEntry(key, value / total));
 
       // If one difficulty dominates (>70%), return it
       for (final entry in percentages.entries) {
@@ -721,13 +769,15 @@ class AdaptedQuestionLoaderService {
 
       return 'mixed';
     } catch (e) {
-      LogManager.debug('Error getting difficulty for ${category.displayName}: $e');
+      LogManager.debug(
+          'Error getting difficulty for ${category.displayName}: $e');
       return 'mixed';
     }
   }
 
   /// Get questions appropriate for a specific class level using QuizCategory
-  Future<List<QuestionModel>> getQuizByClassLevel(String classLevel, {int questionCount = 10}) async {
+  Future<List<QuestionModel>> getQuizByClassLevel(String classLevel,
+      {int questionCount = 10}) async {
     final categories = QuizCategoryManager.getCategoriesForClass(classLevel);
 
     return getMixedQuizByCategories(
@@ -738,7 +788,8 @@ class AdaptedQuestionLoaderService {
   }
 
   /// Get quiz questions specifically designed for a class/grade level
-  Future<List<QuestionModel>> getQuizByClass(int classNumber, {int questionCount = 10}) async {
+  Future<List<QuestionModel>> getQuizByClass(int classNumber,
+      {int questionCount = 10}) async {
     final className = 'Class $classNumber';
 
     try {
@@ -749,11 +800,13 @@ class AdaptedQuestionLoaderService {
         return classQuestions.take(questionCount).toList();
       }
     } catch (e) {
-      LogManager.debug('Class dataset not available, generating from general content');
+      LogManager.debug(
+          'Class dataset not available, generating from general content');
     }
 
     // Fallback: Generate appropriate questions based on class level
-    final categories = QuizCategoryManager.getCategoriesForClass(classNumber.toString());
+    final categories =
+        QuizCategoryManager.getCategoriesForClass(classNumber.toString());
 
     List<int> difficulties;
     if (classNumber <= 3) {
@@ -795,7 +848,9 @@ class AdaptedQuestionLoaderService {
 
     // Check by name matching
     for (final dataset in availableDatasets) {
-      if (dataset.name.toLowerCase().contains(category.displayName.toLowerCase())) {
+      if (dataset.name
+          .toLowerCase()
+          .contains(category.displayName.toLowerCase())) {
         return dataset;
       }
     }
@@ -816,16 +871,16 @@ class AdaptedQuestionLoaderService {
   }
 
   /// Get balanced questions by QuizCategories
-  List<QuestionModel> _getBalancedByQuizCategories(List<QuestionModel> questions, int count, List<QuizCategory> categories) {
+  List<QuestionModel> _getBalancedByQuizCategories(
+      List<QuestionModel> questions, int count, List<QuizCategory> categories) {
     final balanced = <QuestionModel>[];
     final questionsPerCategory = count ~/ categories.length;
     final remainder = count % categories.length;
 
     for (int i = 0; i < categories.length; i++) {
       final category = categories[i];
-      final categoryQuestions = questions
-          .where((q) => _matchesCategory(q, category))
-          .toList();
+      final categoryQuestions =
+          questions.where((q) => _matchesCategory(q, category)).toList();
 
       categoryQuestions.shuffle();
       final targetCount = questionsPerCategory + (i < remainder ? 1 : 0);
@@ -835,7 +890,8 @@ class AdaptedQuestionLoaderService {
     // Fill remaining slots if needed
     final remaining = count - balanced.length;
     if (remaining > 0) {
-      final unusedQuestions = questions.where((q) => !balanced.contains(q)).toList();
+      final unusedQuestions =
+          questions.where((q) => !balanced.contains(q)).toList();
       unusedQuestions.shuffle();
       balanced.addAll(unusedQuestions.take(remaining));
     }
@@ -845,7 +901,10 @@ class AdaptedQuestionLoaderService {
   }
 
   /// Advanced balanced selection for both difficulty and QuizCategories
-  List<QuestionModel> _getBalancedQuestionsAdvancedByCategories(List<QuestionModel> questions, int count, List<QuizCategory>? categories) {
+  List<QuestionModel> _getBalancedQuestionsAdvancedByCategories(
+      List<QuestionModel> questions,
+      int count,
+      List<QuizCategory>? categories) {
     if (categories == null || categories.isEmpty) {
       return _getBalancedQuestions(questions, count);
     }
@@ -854,12 +913,12 @@ class AdaptedQuestionLoaderService {
     final questionsPerCategory = count ~/ categories.length;
 
     for (final category in categories) {
-      final categoryQuestions = questions
-          .where((q) => _matchesCategory(q, category))
-          .toList();
+      final categoryQuestions =
+          questions.where((q) => _matchesCategory(q, category)).toList();
 
       if (categoryQuestions.isNotEmpty) {
-        final balancedForCategory = _getBalancedQuestions(categoryQuestions, questionsPerCategory);
+        final balancedForCategory =
+            _getBalancedQuestions(categoryQuestions, questionsPerCategory);
         balanced.addAll(balancedForCategory);
       }
     }
@@ -867,8 +926,10 @@ class AdaptedQuestionLoaderService {
     // Fill remaining slots
     final remaining = count - balanced.length;
     if (remaining > 0) {
-      final unusedQuestions = questions.where((q) => !balanced.contains(q)).toList();
-      final additionalQuestions = _getBalancedQuestions(unusedQuestions, remaining);
+      final unusedQuestions =
+          questions.where((q) => !balanced.contains(q)).toList();
+      final additionalQuestions =
+          _getBalancedQuestions(unusedQuestions, remaining);
       balanced.addAll(additionalQuestions);
     }
 
@@ -879,7 +940,8 @@ class AdaptedQuestionLoaderService {
   /// Load questions from a specific dataset by name with enhanced error handling
   Future<List<QuestionModel>> loadDataset(String datasetName) async {
     // Check cache validity first
-    if (_cachedDatasets.containsKey(datasetName) && _isCacheValid(datasetName)) {
+    if (_cachedDatasets.containsKey(datasetName) &&
+        _isCacheValid(datasetName)) {
       return _cachedDatasets[datasetName]!;
     }
 
@@ -924,38 +986,44 @@ class AdaptedQuestionLoaderService {
   }
 
   /// Load questions directly from a path with validation
-  Future<List<QuestionModel>> _loadFromPath(String path, String datasetName) async {
+  Future<List<QuestionModel>> _loadFromPath(
+      String path, String datasetName) async {
     final String jsonString = await rootBundle.loadString(path);
     final List<dynamic> jsonList = json.decode(jsonString);
 
     final questions = jsonList
         .map((json) => _parseQuestionFromMixedFormat(json, datasetName))
-        .where((question) => question.options.isNotEmpty && question.question.isNotEmpty)
+        .where((question) =>
+            question.options.isNotEmpty && question.question.isNotEmpty)
         .toList();
 
     if (questions.isEmpty) {
       throw Exception('No valid questions found in dataset $datasetName');
     }
 
-    LogManager.debug('Successfully loaded ${questions.length} questions from $datasetName');
+    LogManager.debug(
+        'Successfully loaded ${questions.length} questions from $datasetName');
     return questions;
   }
 
   /// Handle unavailable dataset by trying alternatives
-  Future<List<QuestionModel>> _handleUnavailableDataset(String datasetName) async {
-    LogManager.debug('Dataset $datasetName is marked as unavailable, trying alternatives');
+  Future<List<QuestionModel>> _handleUnavailableDataset(
+      String datasetName) async {
+    LogManager.debug(
+        'Dataset $datasetName is marked as unavailable, trying alternatives');
 
     // Try to find similar datasets based on categories
     final targetDataset = availableDatasets.firstWhere(
-          (ds) => ds.name == datasetName,
+      (ds) => ds.name == datasetName,
       orElse: () => _coreDatasets.first,
     );
 
     // Find alternative datasets with overlapping categories
-    final alternatives = availableDatasets.where((ds) =>
-    ds.name != datasetName &&
-        ds.categories.any((cat) => targetDataset.categories.contains(cat))
-    ).toList();
+    final alternatives = availableDatasets
+        .where((ds) =>
+            ds.name != datasetName &&
+            ds.categories.any((cat) => targetDataset.categories.contains(cat)))
+        .toList();
 
     if (alternatives.isNotEmpty) {
       final alternative = alternatives.first;
@@ -972,15 +1040,18 @@ class AdaptedQuestionLoaderService {
   }
 
   /// Handle dataset fallback using the data service
-  Future<List<QuestionModel>> _handleDatasetFallback(String datasetName, QuestionDataset dataset) async {
-    LogManager.debug('Attempting fallback loading for $datasetName using data service');
+  Future<List<QuestionModel>> _handleDatasetFallback(
+      String datasetName, QuestionDataset dataset) async {
+    LogManager.debug(
+        'Attempting fallback loading for $datasetName using data service');
 
     // Try loading using category-based approach
     for (final category in dataset.categories) {
       try {
         final questions = await getQuestionsByQuizCategory(category);
         if (questions.isNotEmpty) {
-          LogManager.debug('Fallback successful: loaded ${questions.length} questions for category ${category.displayName}');
+          LogManager.debug(
+              'Fallback successful: loaded ${questions.length} questions for category ${category.displayName}');
 
           // Cache the successful result
           _cachedDatasets[datasetName] = questions;
@@ -990,7 +1061,8 @@ class AdaptedQuestionLoaderService {
           return questions;
         }
       } catch (e) {
-        LogManager.debug('Fallback failed for category ${category.displayName}: $e');
+        LogManager.debug(
+            'Fallback failed for category ${category.displayName}: $e');
       }
     }
 
@@ -1019,15 +1091,18 @@ class AdaptedQuestionLoaderService {
     }
 
     if (allQuestions.isEmpty) {
-      throw Exception('Failed to load any questions. Failed datasets: $failedDatasets');
+      throw Exception(
+          'Failed to load any questions. Failed datasets: $failedDatasets');
     }
 
-    LogManager.debug('Loaded ${allQuestions.length} total questions from ${availableDatasets.length - failedDatasets.length} datasets');
+    LogManager.debug(
+        'Loaded ${allQuestions.length} total questions from ${availableDatasets.length - failedDatasets.length} datasets');
     return allQuestions;
   }
 
   /// Load questions from multiple specific datasets
-  Future<List<QuestionModel>> loadQuestionsFromDatasets(List<String> datasetNames) async {
+  Future<List<QuestionModel>> loadQuestionsFromDatasets(
+      List<String> datasetNames) async {
     final allQuestions = <QuestionModel>[];
     final failedDatasets = <String>[];
 
@@ -1082,23 +1157,27 @@ class AdaptedQuestionLoaderService {
   }
 
   /// Enhanced validation and parsing
-  QuestionModel _parseQuestionFromMixedFormat(Map<String, dynamic> json, String sourceDataset) {
+  QuestionModel _parseQuestionFromMixedFormat(
+      Map<String, dynamic> json, String sourceDataset) {
     try {
       List<Map<String, dynamic>> answers = [];
       String correctAnswer = '';
 
       if (json.containsKey('answers')) {
         final answersList = json['answers'] as List;
-        answers = answersList.map((a) => {
-          'text': a['text'].toString(),
-          'isCorrect': a['isCorrect'] == "True" || a['isCorrect'] == true,
-        }).toList();
+        answers = answersList
+            .map((a) => {
+                  'text': a['text'].toString(),
+                  'isCorrect':
+                      a['isCorrect'] == "True" || a['isCorrect'] == true,
+                })
+            .toList();
 
         // Fixed type casting issue
         Map<String, dynamic>? correctAnswerEntry;
         try {
           correctAnswerEntry = answers.firstWhere(
-                (a) => a['isCorrect'] == true,
+            (a) => a['isCorrect'] == true,
           );
         } catch (e) {
           // If no correct answer found, use first one
@@ -1111,9 +1190,11 @@ class AdaptedQuestionLoaderService {
         } else if (answers.isNotEmpty) {
           correctAnswer = answers.first['text'].toString();
         }
-      } else if (json.containsKey('correct_answer') && json.containsKey('incorrect_answers')) {
+      } else if (json.containsKey('correct_answer') &&
+          json.containsKey('incorrect_answers')) {
         correctAnswer = json['correct_answer'];
-        final incorrectAnswers = List<String>.from(json['incorrect_answers'] ?? []);
+        final incorrectAnswers =
+            List<String>.from(json['incorrect_answers'] ?? []);
 
         answers = [
           {'text': correctAnswer, 'isCorrect': true},
@@ -1122,7 +1203,9 @@ class AdaptedQuestionLoaderService {
         answers.shuffle();
       } else if (json.containsKey('correctAnswer')) {
         correctAnswer = json['correctAnswer'];
-        answers = [{'text': correctAnswer, 'isCorrect': true}];
+        answers = [
+          {'text': correctAnswer, 'isCorrect': true}
+        ];
       }
 
       // Validate we have at least one answer
@@ -1130,13 +1213,15 @@ class AdaptedQuestionLoaderService {
         throw Exception('No valid answers found');
       }
 
-      final difficulty = json['difficulty'] != null
-          ? _parseDifficulty(json['difficulty'])
-          : 1;
+      final difficulty =
+          json['difficulty'] != null ? _parseDifficulty(json['difficulty']) : 1;
 
       final normalizedJson = {
-        'id': json['id'] ?? '${sourceDataset}_${DateTime.now().millisecondsSinceEpoch}',
-        'category': json['category'] ?? json['category_id'] ?? _inferCategoryFromDataset(sourceDataset),
+        'id': json['id'] ??
+            '${sourceDataset}_${DateTime.now().millisecondsSinceEpoch}',
+        'category': json['category'] ??
+            json['category_id'] ??
+            _inferCategoryFromDataset(sourceDataset),
         'question': json['question'] ?? '',
         'answers': answers,
         'correctAnswer': correctAnswer,
@@ -1233,7 +1318,8 @@ class AdaptedQuestionLoaderService {
     return DateTime.now().difference(timestamp) < _cacheExpiry;
   }
 
-  List<QuestionModel> _getBalancedQuestions(List<QuestionModel> questions, int count) {
+  List<QuestionModel> _getBalancedQuestions(
+      List<QuestionModel> questions, int count) {
     if (questions.length <= count) return questions;
 
     final easyQuestions = questions.where((q) => q.difficulty == 1).toList();
@@ -1257,9 +1343,11 @@ class AdaptedQuestionLoaderService {
     // Fill any remaining slots with random questions
     final remaining = count - balanced.length;
     if (remaining > 0) {
-      final allRemaining = [...easyQuestions, ...mediumQuestions, ...hardQuestions]
-          .where((q) => !balanced.contains(q))
-          .toList();
+      final allRemaining = [
+        ...easyQuestions,
+        ...mediumQuestions,
+        ...hardQuestions
+      ].where((q) => !balanced.contains(q)).toList();
       allRemaining.shuffle();
       balanced.addAll(allRemaining.take(remaining));
     }
@@ -1285,7 +1373,8 @@ class AdaptedQuestionLoaderService {
           .where((q) => q.category.toLowerCase() == categoryId.toLowerCase())
           .length;
     } catch (e) {
-      LogManager.debug('Error getting category question count for $categoryId: $e');
+      LogManager.debug(
+          'Error getting category question count for $categoryId: $e');
       return 0;
     }
   }
@@ -1310,7 +1399,8 @@ class AdaptedQuestionLoaderService {
       // Calculate difficulty distribution
       final difficultyCount = <int, int>{};
       for (final question in categoryQuestions) {
-        difficultyCount[question.difficulty] = (difficultyCount[question.difficulty] ?? 0) + 1;
+        difficultyCount[question.difficulty] =
+            (difficultyCount[question.difficulty] ?? 0) + 1;
       }
 
       // If only one difficulty level, return it
@@ -1320,8 +1410,8 @@ class AdaptedQuestionLoaderService {
 
       // Calculate percentages
       final total = categoryQuestions.length;
-      final percentages = difficultyCount.map((key, value) =>
-          MapEntry(key, value / total));
+      final percentages =
+          difficultyCount.map((key, value) => MapEntry(key, value / total));
 
       // If one difficulty dominates (>70%), return it
       for (final entry in percentages.entries) {
@@ -1393,7 +1483,8 @@ class AdaptedQuestionLoaderService {
     final categoryIndex = dayOfYear % availableCategories.length;
     final selectedCategory = availableCategories[categoryIndex];
 
-    final categoryQuestions = await getQuestionsByQuizCategory(selectedCategory);
+    final categoryQuestions =
+        await getQuestionsByQuizCategory(selectedCategory);
     categoryQuestions.shuffle();
     return categoryQuestions.take(questionCount).toList();
   }
@@ -1416,7 +1507,8 @@ class AdaptedQuestionLoaderService {
         status['availableDatasets'][dataset.name] = {
           'questionCount': questions.length,
           'status': 'available',
-          'categories': dataset.categories.map((cat) => cat.displayName).toList(),
+          'categories':
+              dataset.categories.map((cat) => cat.displayName).toList(),
           'primaryCategory': dataset.primaryCategory?.displayName,
           'description': dataset.description,
         };
@@ -1434,10 +1526,11 @@ class AdaptedQuestionLoaderService {
     final availableCategories = await getAvailableQuizCategories();
     status['availableQuizCategories'] = availableCategories
         .map((cat) => {
-      'name': cat.displayName,
-      'description': cat.description,
-      'datasetName': cat.datasetName,
-    }).toList();
+              'name': cat.displayName,
+              'description': cat.description,
+              'datasetName': cat.datasetName,
+            })
+        .toList();
 
     status['totalQuestionCount'] = totalQuestions;
     return status;
@@ -1468,7 +1561,8 @@ class AdaptedQuestionLoaderService {
 
       // Fallback: count questions that would be appropriate for this class
       final allQuestions = await loadAllQuestions();
-      final appropriateQuestions = _filterQuestionsForClass(allQuestions, classId);
+      final appropriateQuestions =
+          _filterQuestionsForClass(allQuestions, classId);
       return appropriateQuestions.length;
     } catch (e) {
       LogManager.debug('Error getting class question count for $classId: $e');
@@ -1509,12 +1603,15 @@ class AdaptedQuestionLoaderService {
     int powerUpCount = 0;
 
     for (final question in questions) {
-      categoryCount[question.category] = (categoryCount[question.category] ?? 0) + 1;
-      difficultyCount[question.difficulty] = (difficultyCount[question.difficulty] ?? 0) + 1;
+      categoryCount[question.category] =
+          (categoryCount[question.category] ?? 0) + 1;
+      difficultyCount[question.difficulty] =
+          (difficultyCount[question.difficulty] ?? 0) + 1;
       typeCount[question.type] = (typeCount[question.type] ?? 0) + 1;
 
       // Count media types
-      mediaCount[question.mediaType] = (mediaCount[question.mediaType] ?? 0) + 1;
+      mediaCount[question.mediaType] =
+          (mediaCount[question.mediaType] ?? 0) + 1;
 
       if (question.imageUrl?.isNotEmpty == true) imageCount++;
       if (question.videoUrl?.isNotEmpty == true) videoCount++;
@@ -1553,13 +1650,15 @@ class AdaptedQuestionLoaderService {
         // Aggregate category counts
         final categoryCount = stats['categoryCounts'] as Map<String, int>;
         for (final entry in categoryCount.entries) {
-          allCategoryCount[entry.key] = (allCategoryCount[entry.key] ?? 0) + entry.value;
+          allCategoryCount[entry.key] =
+              (allCategoryCount[entry.key] ?? 0) + entry.value;
         }
 
         // Aggregate difficulty counts
         final difficultyCount = stats['difficultyCounts'] as Map<int, int>;
         for (final entry in difficultyCount.entries) {
-          allDifficultyCount[entry.key] = (allDifficultyCount[entry.key] ?? 0) + entry.value;
+          allDifficultyCount[entry.key] =
+              (allDifficultyCount[entry.key] ?? 0) + entry.value;
         }
       } catch (e) {
         allStats[dataset.name] = {'error': e.toString()};
@@ -1600,12 +1699,16 @@ class AdaptedQuestionLoaderService {
   }
 
   /// Helper method to filter questions appropriate for a specific class
-  List<QuestionModel> _filterQuestionsForClass(List<QuestionModel> questions, String classId) {
+  List<QuestionModel> _filterQuestionsForClass(
+      List<QuestionModel> questions, String classId) {
     final classConfig = _getClassConfiguration(classId);
 
     return questions.where((q) {
-      final categoryMatch = classConfig['categories']?.contains(q.category.toLowerCase()) ?? false;
-      final difficultyMatch = classConfig['difficulties']?.contains(q.difficulty) ?? true;
+      final categoryMatch =
+          classConfig['categories']?.contains(q.category.toLowerCase()) ??
+              false;
+      final difficultyMatch =
+          classConfig['difficulties']?.contains(q.difficulty) ?? true;
       return categoryMatch && difficultyMatch;
     }).toList();
   }
@@ -1615,27 +1718,54 @@ class AdaptedQuestionLoaderService {
     switch (classId.toLowerCase()) {
       case 'kindergarten':
         return {
-          'categories': ['science', 'math', 'social_studies', 'english', 'arts'],
+          'categories': [
+            'science',
+            'math',
+            'social_studies',
+            'english',
+            'arts'
+          ],
           'difficulties': [1],
         };
       case '1':
       case '2':
       case '3':
         return {
-          'categories': ['science', 'math', 'social_studies', 'english', 'arts'],
+          'categories': [
+            'science',
+            'math',
+            'social_studies',
+            'english',
+            'arts'
+          ],
           'difficulties': [1],
         };
       case '4':
       case '5':
         return {
-          'categories': ['science', 'math', 'social_studies', 'english', 'arts', 'health'],
+          'categories': [
+            'science',
+            'math',
+            'social_studies',
+            'english',
+            'arts',
+            'health'
+          ],
           'difficulties': [1, 2],
         };
       case '6':
       case '7':
       case '8':
         return {
-          'categories': ['science', 'math', 'social_studies', 'english', 'history', 'geography', 'technology'],
+          'categories': [
+            'science',
+            'math',
+            'social_studies',
+            'english',
+            'history',
+            'geography',
+            'technology'
+          ],
           'difficulties': [1, 2, 3],
         };
       case '9':
@@ -1643,7 +1773,17 @@ class AdaptedQuestionLoaderService {
       case '11':
       case '12':
         return {
-          'categories': ['science', 'math', 'social_studies', 'english', 'history', 'geography', 'technology', 'literature', 'philosophy'],
+          'categories': [
+            'science',
+            'math',
+            'social_studies',
+            'english',
+            'history',
+            'geography',
+            'technology',
+            'literature',
+            'philosophy'
+          ],
           'difficulties': [2, 3],
         };
       default:
@@ -1684,36 +1824,48 @@ class AdaptedQuestionLoaderService {
   /// Get dataset information for UI purposes with QuizCategory integration
   Map<String, dynamic> getDatasetInfo() {
     return {
-      'coreDatasets': _coreDatasets.map((ds) => {
-        'name': ds.name,
-        'description': ds.description,
-        'categories': ds.categories.map((cat) => cat.displayName).toList(),
-        'primaryCategory': ds.primaryCategory?.displayName,
-      }).toList(),
-      'extendedDatasets': _extendedDatasets.map((ds) => {
-        'name': ds.name,
-        'description': ds.description,
-        'categories': ds.categories.map((cat) => cat.displayName).toList(),
-        'primaryCategory': ds.primaryCategory?.displayName,
-      }).toList(),
-      'classDatasets': _classDatasets.map((ds) => {
-        'name': ds.name,
-        'description': ds.description,
-        'categories': ds.categories.map((cat) => cat.displayName).toList(),
-        'primaryCategory': ds.primaryCategory?.displayName,
-      }).toList(),
+      'coreDatasets': _coreDatasets
+          .map((ds) => {
+                'name': ds.name,
+                'description': ds.description,
+                'categories':
+                    ds.categories.map((cat) => cat.displayName).toList(),
+                'primaryCategory': ds.primaryCategory?.displayName,
+              })
+          .toList(),
+      'extendedDatasets': _extendedDatasets
+          .map((ds) => {
+                'name': ds.name,
+                'description': ds.description,
+                'categories':
+                    ds.categories.map((cat) => cat.displayName).toList(),
+                'primaryCategory': ds.primaryCategory?.displayName,
+              })
+          .toList(),
+      'classDatasets': _classDatasets
+          .map((ds) => {
+                'name': ds.name,
+                'description': ds.description,
+                'categories':
+                    ds.categories.map((cat) => cat.displayName).toList(),
+                'primaryCategory': ds.primaryCategory?.displayName,
+              })
+          .toList(),
       'totalDatasets': availableDatasets.length,
-      'availableQuizCategories': QuizCategory.values.map((cat) => {
-        'name': cat.displayName,
-        'description': cat.description,
-        'datasetName': cat.datasetName,
-      }).toList(),
+      'availableQuizCategories': QuizCategory.values
+          .map((cat) => {
+                'name': cat.displayName,
+                'description': cat.description,
+                'datasetName': cat.datasetName,
+              })
+          .toList(),
     };
   }
 
   /// Comprehensive test with QuizCategory integration
   Future<void> runComprehensiveTest() async {
-    LogManager.debug('=== Comprehensive Dataset Test with QuizCategory Integration ===');
+    LogManager.debug(
+        '=== Comprehensive Dataset Test with QuizCategory Integration ===');
 
     final testResults = <String, Map<String, dynamic>>{};
     int totalQuestions = 0;
@@ -1734,14 +1886,16 @@ class AdaptedQuestionLoaderService {
           'categories': questions.map((q) => q.category).toSet().toList(),
           'difficulties': questions.map((q) => q.difficulty).toSet().toList(),
           'hasMultimedia': questions.any((q) => q.isMultimedia),
-          'quizCategories': dataset.categories.map((cat) => cat.displayName).toList(),
+          'quizCategories':
+              dataset.categories.map((cat) => cat.displayName).toList(),
           'primaryCategory': dataset.primaryCategory?.displayName,
         };
 
         totalQuestions += questions.length;
         successfulDatasets++;
 
-        LogManager.debug('✅ ${dataset.name}: ${questions.length} questions (${loadTime.inMilliseconds}ms)');
+        LogManager.debug(
+            '✅ ${dataset.name}: ${questions.length} questions (${loadTime.inMilliseconds}ms)');
       } catch (e) {
         testResults[dataset.name] = {
           'status': 'failed',
@@ -1752,7 +1906,8 @@ class AdaptedQuestionLoaderService {
     }
 
     LogManager.debug('=== Test Summary ===');
-    LogManager.debug('Successful datasets: $successfulDatasets/${availableDatasets.length}');
+    LogManager.debug(
+        'Successful datasets: $successfulDatasets/${availableDatasets.length}');
     LogManager.debug('Total questions loaded: $totalQuestions');
     LogManager.debug('Cache entries: ${_cachedDatasets.length}');
 
@@ -1771,7 +1926,8 @@ class AdaptedQuestionLoaderService {
       try {
         final count = await getQuizCategoryQuestionCount(category);
         final difficulty = await getQuizCategoryDifficulty(category);
-        LogManager.debug('✅ ${category.displayName}: $count questions, difficulty: $difficulty');
+        LogManager.debug(
+            '✅ ${category.displayName}: $count questions, difficulty: $difficulty');
       } catch (e) {
         LogManager.debug('❌ ${category.displayName}: Failed - $e');
       }

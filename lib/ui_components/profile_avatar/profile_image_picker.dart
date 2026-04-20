@@ -212,8 +212,7 @@ class _ProfileImagePickerState extends State<ProfileImagePicker>
                   Padding(
                     padding: const EdgeInsets.only(bottom: 16),
                     child: LinearProgressIndicator(
-                      backgroundColor:
-                      colorScheme.surfaceContainerHighest,
+                      backgroundColor: colorScheme.surfaceContainerHighest,
                       color: colorScheme.primary,
                     ),
                   ),
@@ -345,7 +344,8 @@ class _ImageSourceOptionState extends State<_ImageSourceOption> {
                   Icon(
                     Icons.arrow_forward_ios_rounded,
                     size: 16,
-                    color: colorScheme.onPrimaryContainer.withValues(alpha: 0.6),
+                    color:
+                        colorScheme.onPrimaryContainer.withValues(alpha: 0.6),
                   ),
                 ],
               ),

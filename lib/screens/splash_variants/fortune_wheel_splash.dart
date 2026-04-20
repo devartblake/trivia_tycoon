@@ -13,7 +13,8 @@ class FortuneWheelSplash extends StatefulWidget {
   State<FortuneWheelSplash> createState() => _FortuneWheelSplashState();
 }
 
-class _FortuneWheelSplashState extends State<FortuneWheelSplash> with SingleTickerProviderStateMixin {
+class _FortuneWheelSplashState extends State<FortuneWheelSplash>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _rotation;
   bool _showLogo = false;
@@ -22,7 +23,12 @@ class _FortuneWheelSplashState extends State<FortuneWheelSplash> with SingleTick
   final AudioPlayer _victoryPlayer = AudioPlayer();
 
   final List<String> categories = [
-    "🧠 Science", "📚 History", "🧮 Math", "🎭 Arts", "🌍 Geography", "🎩 Logic"
+    "🧠 Science",
+    "📚 History",
+    "🧮 Math",
+    "🎭 Arts",
+    "🌍 Geography",
+    "🎩 Logic"
   ];
 
   @override
@@ -37,7 +43,8 @@ class _FortuneWheelSplashState extends State<FortuneWheelSplash> with SingleTick
 
     _rotation = Tween<double>(
       begin: 0,
-      end: 2 * pi * randomTurns + (2 * pi / categories.length) * Random().nextInt(categories.length),
+      end: 2 * pi * randomTurns +
+          (2 * pi / categories.length) * Random().nextInt(categories.length),
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCirc))
       ..addStatusListener((status) async {
         if (status == AnimationStatus.completed) {
@@ -99,11 +106,15 @@ class _FortuneWheelSplashState extends State<FortuneWheelSplash> with SingleTick
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.amber.shade600,
                     foregroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 32, vertical: 14),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
                   ),
                   onPressed: widget.onStart,
-                  child: const Text("Start", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                  child: const Text("Start",
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                 ),
               ),
 
@@ -165,7 +176,8 @@ class WheelPainter extends CustomPainter {
     }
 
     final textPainter = TextPainter(textDirection: TextDirection.ltr);
-    final textStyle = const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600);
+    final textStyle = const TextStyle(
+        color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600);
 
     for (int i = 0; i < categories.length; i++) {
       final labelAngle = (i + 0.5) * angle;
@@ -174,7 +186,10 @@ class WheelPainter extends CustomPainter {
 
       textPainter.text = TextSpan(text: categories[i], style: textStyle);
       textPainter.layout();
-      textPainter.paint(canvas, Offset(labelX - textPainter.width / 2, labelY - textPainter.height / 2));
+      textPainter.paint(
+          canvas,
+          Offset(
+              labelX - textPainter.width / 2, labelY - textPainter.height / 2));
     }
   }
 

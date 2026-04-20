@@ -45,7 +45,6 @@ class LoginScreen extends ConsumerStatefulWidget {
 
 class _LoginScreenState extends ConsumerState<LoginScreen>
     with SingleTickerProviderStateMixin {
-
   static const mockUsers = <String, MockUser>{
     'admin@gmail.com': MockUser(
       email: 'admin@gmail.com',
@@ -185,9 +184,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         if (activeProfile != null) {
           ref.read(activeProfileStateProvider.notifier).state = activeProfile;
           await ref.read(onboardingProgressProvider.notifier).updateProgress(
-            hasSeenIntro: true,
-            hasCompletedProfile: true,
-          );
+                hasSeenIntro: true,
+                hasCompletedProfile: true,
+              );
         }
       } else {
         // Migrate existing profile data if present
@@ -208,11 +207,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
           if (migratedProfile != null) {
             await multiProfileService.setActiveProfile(migratedProfile.id);
-            ref.read(activeProfileStateProvider.notifier).state = migratedProfile;
+            ref.read(activeProfileStateProvider.notifier).state =
+                migratedProfile;
             await ref.read(onboardingProgressProvider.notifier).updateProgress(
-              hasSeenIntro: true,
-              hasCompletedProfile: true,
-            );
+                  hasSeenIntro: true,
+                  hasCompletedProfile: true,
+                );
           }
         } else {
           // New user - needs onboarding
@@ -221,7 +221,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('Complete onboarding to finish setting up your account.'),
+                content: Text(
+                    'Complete onboarding to finish setting up your account.'),
                 behavior: SnackBarBehavior.floating,
                 duration: Duration(seconds: 3),
               ),
@@ -480,7 +481,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                               color: Colors.white.withValues(alpha: 0.5),
                             ),
                             onPressed: () {
-                              setState(() => _obscurePassword = !_obscurePassword);
+                              setState(
+                                  () => _obscurePassword = !_obscurePassword);
                             },
                           ),
                           validator: (value) {
@@ -493,7 +495,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                               if (value.length < 8) {
                                 return 'Use at least 8 characters';
                               }
-                              final hasLetter = RegExp(r'[A-Za-z]').hasMatch(value);
+                              final hasLetter =
+                                  RegExp(r'[A-Za-z]').hasMatch(value);
                               final hasNumber = RegExp(r'\d').hasMatch(value);
                               if (!hasLetter || !hasNumber) {
                                 return 'Include at least one letter and one number';
@@ -521,16 +524,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                                     child: Checkbox(
                                       value: _rememberMe,
                                       onChanged: (value) {
-                                        setState(() => _rememberMe = value ?? false);
+                                        setState(
+                                            () => _rememberMe = value ?? false);
                                       },
-                                      fillColor: WidgetStateProperty.resolveWith((states) {
-                                        if (states.contains(WidgetState.selected)) {
+                                      fillColor:
+                                          WidgetStateProperty.resolveWith(
+                                              (states) {
+                                        if (states
+                                            .contains(WidgetState.selected)) {
                                           return const Color(0xFF6366F1);
                                         }
                                         return Colors.transparent;
                                       }),
                                       side: BorderSide(
-                                        color: Colors.white.withValues(alpha: 0.3),
+                                        color:
+                                            Colors.white.withValues(alpha: 0.3),
                                         width: 2,
                                       ),
                                     ),
@@ -539,7 +547,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                                   Text(
                                     'Remember me',
                                     style: TextStyle(
-                                      color: Colors.white.withValues(alpha: 0.7),
+                                      color:
+                                          Colors.white.withValues(alpha: 0.7),
                                       fontSize: 13,
                                     ),
                                   ),
@@ -565,21 +574,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                           onPressed: _isLoading ? null : _handleLogin,
                           child: _isLoading
                               ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                            ),
-                          )
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white),
+                                  ),
+                                )
                               : Text(
-                            _isSignUpMode ? 'Sign Up' : 'Log in',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
+                                  _isSignUpMode ? 'Sign Up' : 'Log in',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
                         ),
                         const SizedBox(height: 24),
 
@@ -593,7 +603,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
                               child: Text(
                                 'or continue with',
                                 style: TextStyle(
@@ -969,4 +980,5 @@ class GridPatternPainter extends CustomPainter {
 }
 
 // Provider for temporary signup data
-final tempSignupDataProvider = StateProvider<Map<String, dynamic>?>((ref) => null);
+final tempSignupDataProvider =
+    StateProvider<Map<String, dynamic>?>((ref) => null);

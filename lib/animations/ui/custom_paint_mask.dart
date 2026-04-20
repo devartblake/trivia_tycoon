@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 
 class RenderCustomPaintMask extends RenderProxyBox {
   CustomPainter _painter;
-  RenderCustomPaintMask({required CustomPainter painter }) : _painter = painter;
+  RenderCustomPaintMask({required CustomPainter painter}) : _painter = painter;
 
   @override
   void paint(context, offset) {
@@ -21,7 +21,8 @@ class RenderCustomPaintMask extends RenderProxyBox {
 
     paintEverything(PaintingContext context, Offset offset) {
       paintContent(context, offset);
-      context.canvas.saveLayer(offset & size, Paint()..blendMode=BlendMode.dstIn);
+      context.canvas
+          .saveLayer(offset & size, Paint()..blendMode = BlendMode.dstIn);
       paintMask(context, offset);
       context.canvas.restore();
     }
@@ -36,10 +37,10 @@ class RenderCustomPaintMask extends RenderProxyBox {
 /// See also:
 ///  - [CustomPainter](in the rendering library), for information on how to implement `painter`
 class CustomPaintMask extends SingleChildRenderObjectWidget {
-
   final CustomPainter _painter;
 
-  const CustomPaintMask({required CustomPainter painter, super.key, super.child })
+  const CustomPaintMask(
+      {required CustomPainter painter, super.key, super.child})
       : _painter = painter;
 
   @override
@@ -48,7 +49,8 @@ class CustomPaintMask extends SingleChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, RenderCustomPaintMask renderObject) {
+  void updateRenderObject(
+      BuildContext context, RenderCustomPaintMask renderObject) {
     renderObject._painter = _painter;
   }
 }

@@ -5,7 +5,7 @@ import '../models/skill_tree_graph.dart';
 
 SkillCategory _parseCategory(String raw) {
   final match = SkillCategory.values.firstWhere(
-        (e) => describeEnum(e) == raw,
+    (e) => describeEnum(e) == raw,
     orElse: () => SkillCategory.unknown,
   );
   return match;
@@ -24,7 +24,8 @@ Future<SkillTreeGraph> loadSkillTreeFromAsset(String assetPath) async {
       tier: m['tier'] as int,
       cost: m['cost'] as int,
       category: _parseCategory(m['category'] as String),
-      effects: (m['effects'] as Map<String, dynamic>).map((k, v) => MapEntry(k, (v as num))),
+      effects: (m['effects'] as Map<String, dynamic>)
+          .map((k, v) => MapEntry(k, (v as num))),
       unlocked: (m['unlocked'] as bool?) ?? false,
       available: (m['available'] as bool?) ?? false,
     );

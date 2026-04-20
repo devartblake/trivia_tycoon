@@ -24,7 +24,8 @@ class AudioAssetService {
   /// [category] defaults to `'songs'` for music. Pass `'sfx'` for
   /// sound effects. The cache key includes the category so the two
   /// namespaces are fully independent.
-  Future<String> getPresignedUrl(String filename, {String category = 'songs'}) async {
+  Future<String> getPresignedUrl(String filename,
+      {String category = 'songs'}) async {
     final cacheKey = '$category/$filename';
     final cached = _cache[cacheKey];
     if (cached != null &&

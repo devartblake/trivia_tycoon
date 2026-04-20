@@ -23,7 +23,8 @@ class ScheduledList extends ConsumerWidget {
         }
         return Card(
           elevation: 0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
           child: ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -38,15 +39,15 @@ class ScheduledList extends ConsumerWidget {
                 subtitle: schedule == null
                     ? const Text('Scheduled')
                     : FutureBuilder<DateTime?>(
-                  future: NotificationService().getNextFireTime(schedule),
-                  builder: (context, snap) {
-                    if (snap.connectionState == ConnectionState.waiting) {
-                      return const Text('Computing next run…');
-                    }
-                    final dt = snap.data;
-                    return Text(dt != null ? dateFormat.format(dt) : '—');
-                  },
-                ),
+                        future: NotificationService().getNextFireTime(schedule),
+                        builder: (context, snap) {
+                          if (snap.connectionState == ConnectionState.waiting) {
+                            return const Text('Computing next run…');
+                          }
+                          final dt = snap.data;
+                          return Text(dt != null ? dateFormat.format(dt) : '—');
+                        },
+                      ),
                 trailing: IconButton(
                   tooltip: 'Cancel',
                   icon: const Icon(Icons.close),
@@ -92,7 +93,11 @@ class _EmptyState extends StatelessWidget {
             Text(message, style: Theme.of(context).textTheme.bodyLarge),
             if (hint != null) ...[
               const SizedBox(height: 6),
-              Text(hint!, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey)),
+              Text(hint!,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.copyWith(color: Colors.grey)),
             ]
           ],
         ),

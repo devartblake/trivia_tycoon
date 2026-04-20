@@ -142,7 +142,8 @@ class MissionAnalyticsBarChart extends ConsumerWidget {
                   sideTitles: SideTitles(
                     showTitles: true,
                     getTitlesWidget: (value, meta) {
-                      if (value.toInt() >= 0 && value.toInt() < filtered.length) {
+                      if (value.toInt() >= 0 &&
+                          value.toInt() < filtered.length) {
                         return Padding(
                           padding: const EdgeInsets.only(top: 8),
                           child: Text(
@@ -251,7 +252,8 @@ class MissionAnalyticsBarChart extends ConsumerWidget {
   double _getMaxValue(List<MissionAnalyticsEntry> filtered) {
     double max = 0;
     for (var entry in filtered) {
-      if (entry.missionsCompleted > max) max = entry.missionsCompleted.toDouble();
+      if (entry.missionsCompleted > max)
+        max = entry.missionsCompleted.toDouble();
       if (entry.missionsSwapped > max) max = entry.missionsSwapped.toDouble();
     }
     return max > 0 ? max : 10;

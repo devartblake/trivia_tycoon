@@ -41,7 +41,8 @@ void main() {
     await tempDir.delete(recursive: true);
   });
 
-  test('adminClaimsProvider retries /admin/auth/me after refresh fallback path', () async {
+  test('adminClaimsProvider retries /admin/auth/me after refresh fallback path',
+      () async {
     final tokenStore = AuthTokenStore(authBox);
     await tokenStore.save(
       AuthSession(
@@ -143,7 +144,8 @@ void main() {
     expect(tokenStore.load().refreshToken, 'fresh-refresh-token');
   });
 
-  test('adminClaimsProvider uses token metadata fallback before local settings', () async {
+  test('adminClaimsProvider uses token metadata fallback before local settings',
+      () async {
     final tokenStore = AuthTokenStore(authBox);
     await tokenStore.save(
       AuthSession(

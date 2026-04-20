@@ -69,10 +69,10 @@ class _ExpandableContainerState extends State<ExpandableContainer> {
         curve: const Interval(.6875, 1.0, curve: Curves.fastOutSlowIn),
       ),
     )..addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        widget.onExpandCompleted?.call();
-      }
-    });
+        if (status == AnimationStatus.completed) {
+          widget.onExpandCompleted?.call();
+        }
+      });
   }
 
   @override

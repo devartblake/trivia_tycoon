@@ -7,6 +7,7 @@ import 'package:trivia_tycoon/core/services/storage/secure_storage.dart';
 import '../trivia_login.dart';
 
 enum AuthMode { signup, login }
+
 enum AuthType { provider, userPassword }
 
 /// A callback for provider login actions.
@@ -69,7 +70,8 @@ class Auth extends ChangeNotifier {
   bool get isSignup => _mode == AuthMode.signup;
   int currentCardIndex = 0;
 
-  AuthMode opposite() => _mode == AuthMode.login ? AuthMode.signup : AuthMode.login;
+  AuthMode opposite() =>
+      _mode == AuthMode.login ? AuthMode.signup : AuthMode.login;
 
   AuthMode switchAuth() {
     mode = opposite();
@@ -105,7 +107,9 @@ class Auth extends ChangeNotifier {
   }
 
   List<TermOfServiceResult> getTermsOfServiceResults() {
-    return termsOfService.map((e) => TermOfServiceResult(term: e, accepted: e.checked)).toList();
+    return termsOfService
+        .map((e) => TermOfServiceResult(term: e, accepted: e.checked))
+        .toList();
   }
 }
 
@@ -135,14 +139,18 @@ class LocalAuthService {
   }
 
   /// ✅ Login user and persist credentials
-  Future<void> login(String email, {String userId = 'guest', bool isPremiumUser = false, List<String> roles = const ['player']}) async {
+  Future<void> login(String email,
+      {String userId = 'guest',
+      bool isPremiumUser = false,
+      List<String> roles = const ['player']}) async {
     // Save login flag to local storage
     await generalKey.setBool(_loggedInKey, true);
     await secureStorage.setSecret(_userEmailKey, email);
 
     // 🌟 Persist profile details
     await playerProfileService.savePlayerName(email.split('@').first);
-    await playerProfileService.saveUsername(email.split('@').first.toLowerCase());
+    await playerProfileService
+        .saveUsername(email.split('@').first.toLowerCase());
     if (userId.isNotEmpty && userId != 'guest') {
       await playerProfileService.saveUserId(userId);
       await secureStorage.setSecret('user_id', userId);
@@ -155,7 +163,6 @@ class LocalAuthService {
   Future<void> logout(BuildContext context) async {
     await generalKey.setBool(_loggedInKey, false);
     await secureStorage.removeSecret(_userEmailKey);
-
 
     // 🔒 Cleanup logic
     await playerProfileService.clearProfile();

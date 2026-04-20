@@ -14,7 +14,8 @@ class AdminUserDetailScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<AdminUserDetailScreen> createState() => _AdminUserDetailScreenState();
+  ConsumerState<AdminUserDetailScreen> createState() =>
+      _AdminUserDetailScreenState();
 }
 
 class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
@@ -34,10 +35,12 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
     setState(() => _isLoading = true);
     try {
       final serviceManager = ref.read(serviceManagerProvider);
-      final response = await serviceManager.apiService.get('/admin/users/${widget.userId}');
+      final response =
+          await serviceManager.apiService.get('/admin/users/${widget.userId}');
       _user = AdminUserModel.fromJson(response);
     } catch (_) {
-      _user = await _loadUserFromListEndpoint(widget.userId) ?? _getUserById(widget.userId);
+      _user = await _loadUserFromListEndpoint(widget.userId) ??
+          _getUserById(widget.userId);
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -46,8 +49,8 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
   Future<AdminUserModel?> _loadUserFromListEndpoint(String userId) async {
     try {
       final serviceManager = ref.read(serviceManagerProvider);
-      final response =
-          await serviceManager.apiService.get('/admin/users?page=1&pageSize=100');
+      final response = await serviceManager.apiService
+          .get('/admin/users?page=1&pageSize=100');
       final envelope = serviceManager.apiService
           .parsePageEnvelope<Map<String, dynamic>>(response, (json) => json);
       for (final map in envelope.items) {
@@ -152,14 +155,15 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
               color: Color(0xFF6366F1),
             ),
           ),
-          itemBuilder: (context) => <PopupMenuEntry>
-          [
+          itemBuilder: (context) => <PopupMenuEntry>[
             PopupMenuItem(
               child: Row(
                 children: [
                   Icon(
                     user.isBanned ? Icons.check_circle : Icons.block,
-                    color: user.isBanned ? const Color(0xFF10B981) : const Color(0xFFEF4444),
+                    color: user.isBanned
+                        ? const Color(0xFF10B981)
+                        : const Color(0xFFEF4444),
                     size: 20,
                   ),
                   const SizedBox(width: 12),
@@ -204,7 +208,8 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
                 children: [
                   Icon(Icons.delete, color: Color(0xFFEF4444), size: 20),
                   SizedBox(width: 12),
-                  Text('Delete User', style: TextStyle(color: Color(0xFFEF4444))),
+                  Text('Delete User',
+                      style: TextStyle(color: Color(0xFFEF4444))),
                 ],
               ),
               onTap: () => _deleteUser(user),
@@ -468,7 +473,8 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
     );
   }
 
-  Widget _buildStatCard(String label, String value, IconData icon, Color color) {
+  Widget _buildStatCard(
+      String label, String value, IconData icon, Color color) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -588,9 +594,12 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
             _buildInfoRow('Email', user.email),
             _buildInfoRow('Status', user.statusText, color: user.statusColor),
             _buildInfoRow('Role', user.roleText, color: user.roleColor),
-            _buildInfoRow('Age Group', user.ageGroupText, color: user.ageGroupColor),
+            _buildInfoRow('Age Group', user.ageGroupText,
+                color: user.ageGroupColor),
             _buildInfoRow('Verified', user.isVerified ? 'Yes' : 'No',
-                color: user.isVerified ? const Color(0xFF10B981) : const Color(0xFFEF4444)),
+                color: user.isVerified
+                    ? const Color(0xFF10B981)
+                    : const Color(0xFFEF4444)),
           ]),
           const SizedBox(height: 24),
           _buildInfoSection('Account Dates', [
@@ -605,7 +614,8 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
           _buildInfoSection('Game Statistics', [
             _buildInfoRow('Total Games', user.totalGamesPlayed.toString()),
             _buildInfoRow('Total Points', user.totalPoints.toString()),
-            _buildInfoRow('Win Rate', '${(user.winRate * 100).toStringAsFixed(1)}%'),
+            _buildInfoRow(
+                'Win Rate', '${(user.winRate * 100).toStringAsFixed(1)}%'),
           ]),
         ],
       ),
@@ -678,11 +688,14 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
             ),
             child: Column(
               children: [
-                _buildProgressBar('Quiz Completion', 0.75, const Color(0xFF6366F1)),
+                _buildProgressBar(
+                    'Quiz Completion', 0.75, const Color(0xFF6366F1)),
                 const SizedBox(height: 16),
-                _buildProgressBar('Win Rate', user.winRate, const Color(0xFF10B981)),
+                _buildProgressBar(
+                    'Win Rate', user.winRate, const Color(0xFF10B981)),
                 const SizedBox(height: 16),
-                _buildProgressBar('Activity Level', 0.82, const Color(0xFFF59E0B)),
+                _buildProgressBar(
+                    'Activity Level', 0.82, const Color(0xFFF59E0B)),
               ],
             ),
           ),
@@ -707,102 +720,104 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
 
   Widget _buildSecurityTab(AdminUserModel user) {
     return SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-            _buildSecuritySection('Account Security', [
-          _buildSecurityItem(
-            'Two-Factor Authentication',
-            'Enabled',
-            Icons.security,
-            const Color(0xFF10B981),
-          ),
-          _buildSecurityItem(
-            'Email Verification',
-            user.isVerified ? 'Verified' : 'Not Verified',
-            Icons.email,
-            user.isVerified ? const Color(0xFF10B981) : const Color(0xFFEF4444),
-          ),
-          _buildSecurityItem(
-            'Password Strength',
-            'Strong',
-            Icons.lock,
-            const Color(0xFF10B981),
-          ),
-        ]),
-        const SizedBox(height: 24),
-        _buildSecuritySection('Recent Sessions', [
-          _buildSessionItem(
-            'Current Session',
-            'Mobile App - iOS',
-            'New York, USA',
-            DateTime.now().subtract(const Duration(minutes: 5)),
-            true,
-          ),
-          _buildSessionItem(
-            'Previous Session',
-            'Web Browser - Chrome',
-            'New York, USA',
-            DateTime.now().subtract(const Duration(hours: 12)),
-            false,
-          ),
-        ]),
-        const SizedBox(height: 24),
-        if (user.isBanned)
-    Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: const Color(0xFFEF4444).withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: const Color(0xFFEF4444),
-          width: 2,
-        ),
-      ),
+      padding: const EdgeInsets.all(24),
       child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-      const Row(
-      children: [
-      Icon(Icons.block, color: Color(0xFFEF4444)),
-      SizedBox(width: 12),
-      Text(
-        'Account Banned',
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: Color(0xFFEF4444),
-        ),
-      ),
-      ],
-    ),
-    const SizedBox(height:12),
-            Text(
-              'Reason: ${user.banReason ?? "No reason provided"}',
-              style: const TextStyle(
-                fontSize: 14,
-                color: Color(0xFFEF4444),
-              ),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSecuritySection('Account Security', [
+            _buildSecurityItem(
+              'Two-Factor Authentication',
+              'Enabled',
+              Icons.security,
+              const Color(0xFF10B981),
             ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () => _toggleBanUser(user),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF10B981),
-                foregroundColor: Colors.white,
-                minimumSize: const Size(double.infinity, 48),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+            _buildSecurityItem(
+              'Email Verification',
+              user.isVerified ? 'Verified' : 'Not Verified',
+              Icons.email,
+              user.isVerified
+                  ? const Color(0xFF10B981)
+                  : const Color(0xFFEF4444),
+            ),
+            _buildSecurityItem(
+              'Password Strength',
+              'Strong',
+              Icons.lock,
+              const Color(0xFF10B981),
+            ),
+          ]),
+          const SizedBox(height: 24),
+          _buildSecuritySection('Recent Sessions', [
+            _buildSessionItem(
+              'Current Session',
+              'Mobile App - iOS',
+              'New York, USA',
+              DateTime.now().subtract(const Duration(minutes: 5)),
+              true,
+            ),
+            _buildSessionItem(
+              'Previous Session',
+              'Web Browser - Chrome',
+              'New York, USA',
+              DateTime.now().subtract(const Duration(hours: 12)),
+              false,
+            ),
+          ]),
+          const SizedBox(height: 24),
+          if (user.isBanned)
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: const Color(0xFFEF4444).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: const Color(0xFFEF4444),
+                  width: 2,
                 ),
               ),
-              child: const Text('Unban User'),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Row(
+                    children: [
+                      Icon(Icons.block, color: Color(0xFFEF4444)),
+                      SizedBox(width: 12),
+                      Text(
+                        'Account Banned',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFEF4444),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Reason: ${user.banReason ?? "No reason provided"}',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Color(0xFFEF4444),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () => _toggleBanUser(user),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF10B981),
+                      foregroundColor: Colors.white,
+                      minimumSize: const Size(double.infinity, 48),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text('Unban User'),
+                  ),
+                ],
+              ),
             ),
-          ],
+        ],
       ),
-    ),
-            ],
-        ),
     );
   }
 
@@ -874,7 +889,8 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
     );
   }
 
-  Widget _buildActivityItem(String title, String subtitle, DateTime timestamp, IconData icon, Color color) {
+  Widget _buildActivityItem(String title, String subtitle, DateTime timestamp,
+      IconData icon, Color color) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
@@ -1066,11 +1082,11 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
   }
 
   Widget _buildSecurityItem(
-      String label,
-      String value,
-      IconData icon,
-      Color color,
-      ) {
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -1116,12 +1132,12 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
   }
 
   Widget _buildSessionItem(
-      String title,
-      String device,
-      String location,
-      DateTime timestamp,
-      bool isActive,
-      ) {
+    String title,
+    String device,
+    String location,
+    DateTime timestamp,
+    bool isActive,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -1144,7 +1160,8 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
             ),
             child: Icon(
               Icons.devices,
-              color: isActive ? const Color(0xFF10B981) : const Color(0xFF6B7280),
+              color:
+                  isActive ? const Color(0xFF10B981) : const Color(0xFF6B7280),
               size: 20,
             ),
           ),
@@ -1210,9 +1227,8 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
   }
 
   String _formatDate(DateTime date) {
-    return
-      'date.day/${date.day}/ date.day/${date.month}/${date.year} '
-      '${date.hour}:${date.minute.toString().padLeft(2,'0')}';
+    return 'date.day/${date.day}/ date.day/${date.month}/${date.year} '
+        '${date.hour}:${date.minute.toString().padLeft(2, '0')}';
   }
 
   String _formatTimeAgo(DateTime date) {
@@ -1308,7 +1324,8 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
               onPressed: () async {
                 try {
                   final serviceManager = ref.read(serviceManagerProvider);
-                  await serviceManager.apiService.patch('/admin/users/${user.id}', body: {
+                  await serviceManager.apiService
+                      .patch('/admin/users/${user.id}', body: {
                     'role': selectedRole.name,
                     'isVerified': verified,
                   });
@@ -1348,7 +1365,8 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
         try {
           final serviceManager = ref.read(serviceManagerProvider);
           if (user.isBanned) {
-            await serviceManager.apiService.post('/admin/users/${user.id}/unban', body: {});
+            await serviceManager.apiService
+                .post('/admin/users/${user.id}/unban', body: {});
           } else {
             await serviceManager.apiService.post('/admin/users/${user.id}/ban',
                 body: {'reason': 'Admin action'});
@@ -1357,7 +1375,9 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
           if (!mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(user.isBanned ? '${user.username} has been unbanned' : '${user.username} has been banned'),
+              content: Text(user.isBanned
+                  ? '${user.username} has been unbanned'
+                  : '${user.username} has been banned'),
               behavior: SnackBarBehavior.floating,
             ),
           );
@@ -1375,7 +1395,8 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
     showCustomAlertDialog(
       context: context,
       title: 'Delete User',
-      message: 'Are you sure you want to permanently delete ${user.username}? This action cannot be undone and all user data will be lost.',
+      message:
+          'Are you sure you want to permanently delete ${user.username}? This action cannot be undone and all user data will be lost.',
       type: AlertType.delete,
       confirmText: 'Delete User',
       cancelText: 'Cancel',
@@ -1411,7 +1432,6 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
     );
   }
 
-
   void _viewAuditLog(AdminUserModel user) {
     context.go('/admin/audit?userId=${Uri.encodeComponent(user.id)}');
   }
@@ -1423,7 +1443,8 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
   Future<void> _loadActivityLog(AdminUserModel user) async {
     try {
       final serviceManager = ref.read(serviceManagerProvider);
-      final response = await serviceManager.apiService.get('/admin/users/${user.id}/activity');
+      final response = await serviceManager.apiService
+          .get('/admin/users/${user.id}/activity');
       final envelope = serviceManager.apiService
           .parsePageEnvelope<Map<String, dynamic>>(response, (json) => json);
       final logs = envelope.items;
@@ -1447,7 +1468,11 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
                     ),
                   ),
           ),
-          actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Close'))],
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Close'))
+          ],
         ),
       );
     } catch (e) {
@@ -1457,5 +1482,4 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
       );
     }
   }
-
 }

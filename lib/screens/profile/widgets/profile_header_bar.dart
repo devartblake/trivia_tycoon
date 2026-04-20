@@ -94,7 +94,8 @@ class ProfileHeaderBar extends StatelessWidget {
                     ),
                   ),
                   child: PopupMenuButton<String>(
-                    icon: const Icon(Icons.more_vert_rounded, color: Colors.white),
+                    icon: const Icon(Icons.more_vert_rounded,
+                        color: Colors.white),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),

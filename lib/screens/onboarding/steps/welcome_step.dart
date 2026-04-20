@@ -195,11 +195,11 @@ class _WelcomeStepState extends State<WelcomeStep>
   }
 
   Widget _buildFeature(
-      BuildContext context, {
-        required IconData icon,
-        required String title,
-        required String description,
-      }) {
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required String description,
+  }) {
     final theme = Theme.of(context);
 
     return Row(

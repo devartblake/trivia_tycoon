@@ -5,9 +5,12 @@ import '../../providers/timeline_filter_provider.dart';
 import '../../../game/analytics/services/analytics_aggregation_service.dart';
 import '../models/mission_analytics_entry.dart';
 
-final missionAnalyticsManagerProvider = AsyncNotifierProvider<MissionAnalyticsManager, List<MissionAnalyticsEntry>>(() => MissionAnalyticsManager());
+final missionAnalyticsManagerProvider =
+    AsyncNotifierProvider<MissionAnalyticsManager, List<MissionAnalyticsEntry>>(
+        () => MissionAnalyticsManager());
 
-class MissionAnalyticsManager extends AsyncNotifier<List<MissionAnalyticsEntry>> {
+class MissionAnalyticsManager
+    extends AsyncNotifier<List<MissionAnalyticsEntry>> {
   @override
   Future<List<MissionAnalyticsEntry>> build() async {
     final filters = ref.watch(missionFiltersProvider);

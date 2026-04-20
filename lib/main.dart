@@ -27,7 +27,8 @@ Future<void> main() async {
 
     // Load auth state and user preferences before the first frame
     final isLoggedIn = await manager.authService.isLoggedIn();
-    final savedAgeGroup = await manager.playerProfileService.getAgeGroup() ?? 'teens';
+    final savedAgeGroup =
+        await manager.playerProfileService.getAgeGroup() ?? 'teens';
     final initialMode = SynaptixModeNotifier.mapAgeGroupToMode(savedAgeGroup);
 
     LogManager.info(
@@ -134,7 +135,8 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
         setState(() => _recoveryChecked = true);
       }
     } catch (e) {
-      LogManager.error('[Recovery] Check failed: $e', source: '_SynaptixAppState');
+      LogManager.error('[Recovery] Check failed: $e',
+          source: '_SynaptixAppState');
       setState(() => _recoveryChecked = true);
     }
   }
@@ -159,7 +161,7 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
           children: [
             const Text(
               'We detected that the app closed unexpectedly. '
-                  'Would you like to restore your previous session?',
+              'Would you like to restore your previous session?',
               style: TextStyle(fontSize: 15),
             ),
             if (summary['has_game_state'] == true) ...[
@@ -176,11 +178,13 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
                   children: [
                     const Row(
                       children: [
-                        Icon(Icons.videogame_asset, size: 16, color: Colors.blue),
+                        Icon(Icons.videogame_asset,
+                            size: 16, color: Colors.blue),
                         SizedBox(width: 8),
                         Text(
                           'Recoverable Data:',
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 13),
                         ),
                       ],
                     ),
@@ -237,8 +241,11 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
       // Get saved states
       final userSession = await persistenceService.getUserSession();
 
-      LogManager.info('[Recovery] Restoring session...', source: '_SynaptixAppState');
-      LogManager.debug('[Recovery] User session: ${userSession != null ? 'YES' : 'NO'}', source: '_SynaptixAppState');
+      LogManager.info('[Recovery] Restoring session...',
+          source: '_SynaptixAppState');
+      LogManager.debug(
+          '[Recovery] User session: ${userSession != null ? 'YES' : 'NO'}',
+          source: '_SynaptixAppState');
 
       final serviceManager = ref.read(serviceManagerProvider);
       final recoveryService = CrashRecoveryService(
@@ -250,7 +257,8 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
       // Restore auth state from saved user session
       if (result.restoredAuthState) {
         ref.read(isLoggedInSyncProvider.notifier).state = true;
-        LogManager.info('[Recovery] Auth state restored: logged in', source: '_SynaptixAppState');
+        LogManager.info('[Recovery] Auth state restored: logged in',
+            source: '_SynaptixAppState');
       }
 
       // Pending actions are left in the persistence service and will be
@@ -273,9 +281,11 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
         );
       }
 
-      LogManager.info('[Recovery] Session restored successfully', source: '_SynaptixAppState');
+      LogManager.info('[Recovery] Session restored successfully',
+          source: '_SynaptixAppState');
     } catch (e) {
-      LogManager.error('[Recovery] Restore failed: $e', source: '_SynaptixAppState');
+      LogManager.error('[Recovery] Restore failed: $e',
+          source: '_SynaptixAppState');
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

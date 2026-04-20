@@ -170,9 +170,7 @@ class BackendProfileSocialService {
       '/users/me/friends/suggestions',
       timeout: _socialTimeout,
     );
-    return response
-        .map(FriendSuggestionDto.fromJson)
-        .toList(growable: false);
+    return response.map(FriendSuggestionDto.fromJson).toList(growable: false);
   }
 
   Future<Map<String, dynamic>> removeFriend(

@@ -37,7 +37,6 @@ class QuizCompletionHandler {
       ref.invalidate(weeklyActivityProvider);
 
       LogManager.debug('Quiz completion processed successfully');
-
     } catch (e) {
       LogManager.debug('Error processing quiz completion: $e');
       // Don't throw - we don't want to break the quiz flow if stats fail
@@ -46,7 +45,8 @@ class QuizCompletionHandler {
 
   Future<void> _checkForNewAchievements(QuizResults result) async {
     try {
-      final stats = await ref.read(educationalStatsServiceProvider).getEducationalStats();
+      final stats =
+          await ref.read(educationalStatsServiceProvider).getEducationalStats();
 
       // Check for various achievements
       await _checkFirstQuizAchievement(stats);
@@ -54,7 +54,6 @@ class QuizCompletionHandler {
       await _checkSubjectMasteryAchievements(stats, result);
       await _checkPerfectScoreAchievements(result);
       await _checkVolumeAchievements(stats);
-
     } catch (e) {
       LogManager.debug('Error checking achievements: $e');
     }
@@ -69,21 +68,26 @@ class QuizCompletionHandler {
   Future<void> _checkStreakAchievements(EducationalStats stats) async {
     switch (stats.currentStreak) {
       case 3:
-        LogManager.debug('Achievement Unlocked: Getting Started (3-day streak)!');
+        LogManager.debug(
+            'Achievement Unlocked: Getting Started (3-day streak)!');
         break;
       case 7:
-        LogManager.debug('Achievement Unlocked: Weekly Warrior (7-day streak)!');
+        LogManager.debug(
+            'Achievement Unlocked: Weekly Warrior (7-day streak)!');
         break;
       case 30:
-        LogManager.debug('Achievement Unlocked: Monthly Master (30-day streak)!');
+        LogManager.debug(
+            'Achievement Unlocked: Monthly Master (30-day streak)!');
         break;
       case 100:
-        LogManager.debug('Achievement Unlocked: Dedication Legend (100-day streak)!');
+        LogManager.debug(
+            'Achievement Unlocked: Dedication Legend (100-day streak)!');
         break;
     }
   }
 
-  Future<void> _checkSubjectMasteryAchievements(EducationalStats stats, QuizResults result) async {
+  Future<void> _checkSubjectMasteryAchievements(
+      EducationalStats stats, QuizResults result) async {
     final subjectStats = stats.subjectStats[result.category];
     if (subjectStats != null) {
       // Math achievements
@@ -91,7 +95,8 @@ class QuizCompletionHandler {
         if (subjectStats.quizzesCompleted == 25) {
           LogManager.debug('Achievement Unlocked: Math Wizard!');
         }
-        if (subjectStats.averageScore >= 95 && subjectStats.quizzesCompleted >= 10) {
+        if (subjectStats.averageScore >= 95 &&
+            subjectStats.quizzesCompleted >= 10) {
           LogManager.debug('Achievement Unlocked: Math Genius!');
         }
       }
@@ -101,7 +106,8 @@ class QuizCompletionHandler {
         if (subjectStats.correctAnswers >= 100) {
           LogManager.debug('Achievement Unlocked: Science Explorer!');
         }
-        if (subjectStats.averageScore >= 90 && subjectStats.quizzesCompleted >= 15) {
+        if (subjectStats.averageScore >= 90 &&
+            subjectStats.quizzesCompleted >= 15) {
           LogManager.debug('Achievement Unlocked: Future Scientist!');
         }
       }
@@ -143,7 +149,8 @@ class QuizCompletionHandler {
         LogManager.debug('Achievement Unlocked: Quiz Master (50 quizzes)!');
         break;
       case 100:
-        LogManager.debug('Achievement Unlocked: Centennial Scholar (100 quizzes)!');
+        LogManager.debug(
+            'Achievement Unlocked: Centennial Scholar (100 quizzes)!');
         break;
       case 250:
         LogManager.debug('Achievement Unlocked: Quiz Legend (250 quizzes)!');
@@ -156,17 +163,18 @@ class QuizCompletionHandler {
 
   Future<void> _checkWeeklyPerfectPerformance() async {
     try {
-      final weeklyData = await ref.read(educationalStatsServiceProvider).getWeeklyActivity();
+      final weeklyData =
+          await ref.read(educationalStatsServiceProvider).getWeeklyActivity();
 
       // Check if user completed at least one quiz each day this week
-      final daysWithQuizzes = weeklyData.where((day) => day['quizzes'] > 0).length;
+      final daysWithQuizzes =
+          weeklyData.where((day) => day['quizzes'] > 0).length;
       if (daysWithQuizzes >= 7) {
         LogManager.debug('Achievement Unlocked: Weekly Dedication!');
 
         // Check if all scores this week were 90% or higher
-        final allScoresHigh = weeklyData.every((day) =>
-        day['quizzes'] == 0 || day['score'] >= 90
-        );
+        final allScoresHigh = weeklyData
+            .every((day) => day['quizzes'] == 0 || day['score'] >= 90);
 
         if (allScoresHigh && daysWithQuizzes >= 7) {
           LogManager.debug('Achievement Unlocked: Perfect Week!');
@@ -180,7 +188,8 @@ class QuizCompletionHandler {
 
 // Static utility class for easy integration
 class ProfileDataUpdater {
-  static Future<void> updateAfterQuiz(WidgetRef ref, QuizResults results) async {
+  static Future<void> updateAfterQuiz(
+      WidgetRef ref, QuizResults results) async {
     final handler = QuizCompletionHandler(ref);
     await handler.handleQuizCompletion(results);
 
@@ -216,7 +225,8 @@ class ProfileDataUpdater {
       final tierResult = await tierManager.updateTierProgress();
 
       if (tierResult.tierChanged) {
-        LogManager.debug('Tier progression: ${tierResult.oldTierId} -> ${tierResult.newTierId}');
+        LogManager.debug(
+            'Tier progression: ${tierResult.oldTierId} -> ${tierResult.newTierId}');
 
         // Award tier rewards
         final newTier = await tierManager.getCurrentTier();

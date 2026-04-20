@@ -26,7 +26,8 @@ class MessageRequestDialog extends StatelessWidget {
         ),
         title: const SafeText(
           'Message Requests',
-          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
+          style: TextStyle(
+              color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
       ),
@@ -57,7 +58,8 @@ class MessageRequestDialog extends StatelessWidget {
               ),
               child: const SafeText(
                 'Requests',
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -67,7 +69,8 @@ class MessageRequestDialog extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: const SafeText(
                 'Spam',
-                style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                    color: Colors.white70, fontWeight: FontWeight.w500),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -79,7 +82,8 @@ class MessageRequestDialog extends StatelessWidget {
 
   Widget _buildRequestsList() {
     // Clean the section header text using UnicodeUtils
-    final sectionHeaderText = UnicodeUtils.sanitizeString('MESSAGE REQUESTS — $requestCount');
+    final sectionHeaderText =
+        UnicodeUtils.sanitizeString('MESSAGE REQUESTS — $requestCount');
 
     return Expanded(
       child: Column(
@@ -89,25 +93,23 @@ class MessageRequestDialog extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: SafeText(
               sectionHeaderText,
-              style: const TextStyle(color: Color(0xFF72767D), fontSize: 12, fontWeight: FontWeight.w500),
+              style: const TextStyle(
+                  color: Color(0xFF72767D),
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500),
             ),
           ),
           const SizedBox(height: 16),
           Expanded(
             child: ListView(
               children: [
-                _buildRequestTile(
-                    'cameron_cancer99',
-                    'cam1999',
-                    '>30d ago',
-                    'https://discord.gg/ZNPGJ3eZ'
-                ),
+                _buildRequestTile('cameron_cancer99', 'cam1999', '>30d ago',
+                    'https://discord.gg/ZNPGJ3eZ'),
                 _buildRequestTile(
                     'Sofiya Yuki', // Cleaned up the problematic Unicode
                     'sofiya_...',
                     'June 9, 2023',
-                    'Message contains a sticker:'
-                ),
+                    'Message contains a sticker:'),
               ],
             ),
           ),
@@ -116,7 +118,8 @@ class MessageRequestDialog extends StatelessWidget {
     );
   }
 
-  Widget _buildRequestTile(String name, String username, String time, String message) {
+  Widget _buildRequestTile(
+      String name, String username, String time, String message) {
     // Sanitize all input strings using UnicodeUtils
     final safeName = InputValidator.safeString(name);
     final safeUsername = InputValidator.safeString(username);
@@ -142,7 +145,8 @@ class MessageRequestDialog extends StatelessWidget {
             backgroundColor: const Color(0xFF5865F2),
             child: SafeText(
               avatarChar,
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                  color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
           const SizedBox(width: 12),
@@ -157,22 +161,26 @@ class MessageRequestDialog extends StatelessWidget {
                   children: [
                     SafeText(
                       safeName,
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w600),
                     ),
                     SafeText(
                       safeUsername,
-                      style: const TextStyle(color: Color(0xFF72767D), fontSize: 12),
+                      style: const TextStyle(
+                          color: Color(0xFF72767D), fontSize: 12),
                     ),
                     SafeText(
                       safeTime,
-                      style: const TextStyle(color: Color(0xFF72767D), fontSize: 12),
+                      style: const TextStyle(
+                          color: Color(0xFF72767D), fontSize: 12),
                     ),
                   ],
                 ),
                 const SizedBox(height: 4),
                 SafeText(
                   safeMessage,
-                  style: const TextStyle(color: Color(0xFFB9BBBE), fontSize: 14),
+                  style:
+                      const TextStyle(color: Color(0xFFB9BBBE), fontSize: 14),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -213,11 +221,12 @@ class MessageRequest {
     required String time,
     required String message,
     String? avatarUrl,
-  }) : _name = InputValidator.safeString(name),
+  })  : _name = InputValidator.safeString(name),
         _username = InputValidator.safeString(username),
         _time = InputValidator.safeString(time),
         _message = InputValidator.safeString(message),
-        _avatarUrl = avatarUrl != null ? InputValidator.safeString(avatarUrl) : null;
+        _avatarUrl =
+            avatarUrl != null ? InputValidator.safeString(avatarUrl) : null;
 
   String get name => _name;
   String get username => _username;

@@ -3,7 +3,9 @@ import '../models/favorite_category_models.dart';
 import '../models/favorite_question_models.dart';
 
 /// Provider for favorite categories
-final favoriteCategoriesProvider = StateNotifierProvider<FavoriteCategoriesNotifier, List<FavoriteCategory>>((ref) {
+final favoriteCategoriesProvider =
+    StateNotifierProvider<FavoriteCategoriesNotifier, List<FavoriteCategory>>(
+        (ref) {
   return FavoriteCategoriesNotifier();
 });
 
@@ -40,7 +42,9 @@ class FavoriteCategoriesNotifier extends StateNotifier<List<FavoriteCategory>> {
 }
 
 /// Provider for favorite questions
-final favoriteQuestionsProvider = StateNotifierProvider<FavoriteQuestionsNotifier, List<FavoriteQuestion>>((ref) {
+final favoriteQuestionsProvider =
+    StateNotifierProvider<FavoriteQuestionsNotifier, List<FavoriteQuestion>>(
+        (ref) {
   return FavoriteQuestionsNotifier();
 });
 
@@ -69,7 +73,8 @@ class FavoriteQuestionsNotifier extends StateNotifier<List<FavoriteQuestion>> {
     state = state.where((q) => q.id != questionId).toList();
   }
 
-  void updateStats(String questionId, {int? correctCount, int? incorrectCount}) {
+  void updateStats(String questionId,
+      {int? correctCount, int? incorrectCount}) {
     state = [
       for (final question in state)
         if (question.id == questionId)
@@ -92,19 +97,23 @@ final favoritesCountProvider = Provider<int>((ref) {
 });
 
 /// Filtered categories by search
-final filteredCategoriesProvider = Provider.family<List<FavoriteCategory>, String>((ref, searchQuery) {
+final filteredCategoriesProvider =
+    Provider.family<List<FavoriteCategory>, String>((ref, searchQuery) {
   final categories = ref.watch(favoriteCategoriesProvider);
   if (searchQuery.isEmpty) return categories;
   return categories
-      .where((cat) => cat.name.toLowerCase().contains(searchQuery.toLowerCase()))
+      .where(
+          (cat) => cat.name.toLowerCase().contains(searchQuery.toLowerCase()))
       .toList();
 });
 
 /// Filtered questions by search
-final filteredQuestionsProvider = Provider.family<List<FavoriteQuestion>, String>((ref, searchQuery) {
+final filteredQuestionsProvider =
+    Provider.family<List<FavoriteQuestion>, String>((ref, searchQuery) {
   final questions = ref.watch(favoriteQuestionsProvider);
   if (searchQuery.isEmpty) return questions;
   return questions
-      .where((q) => q.questionText.toLowerCase().contains(searchQuery.toLowerCase()))
+      .where((q) =>
+          q.questionText.toLowerCase().contains(searchQuery.toLowerCase()))
       .toList();
 });

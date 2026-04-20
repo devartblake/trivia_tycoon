@@ -52,55 +52,56 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
     final isDark = theme.brightness == Brightness.dark;
 
     return PopScope(
-      canPop: false, // Prevent default back behavior
-      onPopInvoked: (didPop) async {
-        if (didPop) return;
+        canPop: false, // Prevent default back behavior
+        onPopInvoked: (didPop) async {
+          if (didPop) return;
 
-        final ok = await showExitMatchConfirm(context, title: 'Leave matchmaking?');
-        if (ok == true && context.mounted) {
-          context.go('/multiplayer'); // Go back to MultiplayerHub
-        }
-      },
-    child: Scaffold(
-      backgroundColor: isDark
-          ? const Color(0xFF0A0A0F)
-          : MultiplayerPalette.background,
-      appBar: AppBar(
-        title: const Text('Find Match'),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () async {
-            final ok = await showExitMatchConfirm(context, title: 'Leave matchmaking?');
-            if (ok == true && context.mounted) {
-              context.go('/multiplayer');
-            }
-          },
-          icon: const Icon(Icons.arrow_back),
-        ),
-      ),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ConnectionBanner(state: mpState),
-              const SizedBox(height: 32),
-              _buildMatchmakingOptions(theme, isDark),
-              const SizedBox(height: 32),
-              if (roomState.loading) _buildLoadingCard(theme, isDark),
-              if (!roomState.loading && roomState.roomId != null)
-                _buildRoomJoinedCard(roomState, theme, isDark),
-              const SizedBox(height: 24),
-              _buildQuickTips(theme, isDark),
-            ],
+          final ok =
+              await showExitMatchConfirm(context, title: 'Leave matchmaking?');
+          if (ok == true && context.mounted) {
+            context.go('/multiplayer'); // Go back to MultiplayerHub
+          }
+        },
+        child: Scaffold(
+          backgroundColor:
+              isDark ? const Color(0xFF0A0A0F) : MultiplayerPalette.background,
+          appBar: AppBar(
+            title: const Text('Find Match'),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            centerTitle: true,
+            leading: IconButton(
+              onPressed: () async {
+                final ok = await showExitMatchConfirm(context,
+                    title: 'Leave matchmaking?');
+                if (ok == true && context.mounted) {
+                  context.go('/multiplayer');
+                }
+              },
+              icon: const Icon(Icons.arrow_back),
+            ),
           ),
-        ),
-      ),
-    ));
+          body: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ConnectionBanner(state: mpState),
+                  const SizedBox(height: 32),
+                  _buildMatchmakingOptions(theme, isDark),
+                  const SizedBox(height: 32),
+                  if (roomState.loading) _buildLoadingCard(theme, isDark),
+                  if (!roomState.loading && roomState.roomId != null)
+                    _buildRoomJoinedCard(roomState, theme, isDark),
+                  const SizedBox(height: 24),
+                  _buildQuickTips(theme, isDark),
+                ],
+              ),
+            ),
+          ),
+        ));
   }
 
   Widget _buildMatchmakingOptions(ThemeData theme, bool isDark) {
@@ -128,7 +129,10 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [MultiplayerPalette.primary, MultiplayerPalette.secondary],
+                    colors: [
+                      MultiplayerPalette.primary,
+                      MultiplayerPalette.secondary
+                    ],
                   ),
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -188,9 +192,7 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
                 : MultiplayerPalette.surfaceAlt,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: isDark
-                  ? Colors.grey.shade700
-                  : Colors.grey.shade200,
+              color: isDark ? Colors.grey.shade700 : Colors.grey.shade200,
             ),
           ),
           child: TextField(
@@ -202,7 +204,9 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
               contentPadding: const EdgeInsets.all(16),
             ),
             maxLength: 30,
-            buildCounter: (context, {required currentLength, required isFocused, maxLength}) => null,
+            buildCounter: (context,
+                    {required currentLength, required isFocused, maxLength}) =>
+                null,
           ),
         ),
         const SizedBox(height: 12),
@@ -278,7 +282,10 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
-                colors: [MultiplayerPalette.primary, MultiplayerPalette.secondary],
+                colors: [
+                  MultiplayerPalette.primary,
+                  MultiplayerPalette.secondary
+                ],
               ),
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
@@ -408,9 +415,7 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isDark
-            ? const Color(0xFF1E1E2E)
-            : MultiplayerPalette.surfaceAlt,
+        color: isDark ? const Color(0xFF1E1E2E) : MultiplayerPalette.surfaceAlt,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: MultiplayerPalette.primary.withValues(alpha: 0.2),

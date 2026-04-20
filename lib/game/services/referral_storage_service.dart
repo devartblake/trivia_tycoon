@@ -26,7 +26,8 @@ class ReferralStorageService {
     }
   }
 
-  Future<void> updateSyncStatus(String code, bool isSynced, {String? serverId}) async {
+  Future<void> updateSyncStatus(String code, bool isSynced,
+      {String? serverId}) async {
     final current = getReferralCode();
     if (current != null && current.code == code) {
       final updated = current.copyWith(
@@ -121,10 +122,10 @@ extension ReferralInviteStorage on ReferralStorageService {
 
   /// Update invite sync status
   Future<void> updateInviteSyncStatus(
-      String inviteId,
-      bool isSynced, {
-        String? serverId,
-      }) async {
+    String inviteId,
+    bool isSynced, {
+    String? serverId,
+  }) async {
     final invite = getInvite(inviteId);
     if (invite != null) {
       final updated = invite.copyWith(

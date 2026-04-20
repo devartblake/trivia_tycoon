@@ -16,7 +16,8 @@ import '../services/prize_log_provider.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Enhanced spinning controller with modern architecture and performance optimizations
-final spinningControllerProvider = ChangeNotifierProvider<EnhancedSpinningController>((ref) {
+final spinningControllerProvider =
+    ChangeNotifierProvider<EnhancedSpinningController>((ref) {
   return EnhancedSpinningController(ref);
 });
 
@@ -112,7 +113,8 @@ class EnhancedSpinningController extends ChangeNotifier {
   // Performance optimizations
   Timer? _autoSaveTimer;
   Timer? _validationTimer;
-  final StreamController<SpinResult> _spinResultController = StreamController.broadcast();
+  final StreamController<SpinResult> _spinResultController =
+      StreamController.broadcast();
 
   // Cached values
   static const String _stateKey = 'enhanced_spinning_state';
@@ -166,7 +168,8 @@ class EnhancedSpinningController extends ChangeNotifier {
     _autoSaveTimer = Timer.periodic(_autoSaveInterval, (_) => _saveState());
 
     // Validate state periodically
-    _validationTimer = Timer.periodic(_validationInterval, (_) => _validateState());
+    _validationTimer =
+        Timer.periodic(_validationInterval, (_) => _validateState());
   }
 
   /// Enhanced state update with performance optimization
@@ -236,7 +239,8 @@ class EnhancedSpinningController extends ChangeNotifier {
 
       // Reset spinning if stuck
       if (currentState.isSpinning && currentState.lastSpinTime != null) {
-        final timeSinceLastSpin = DateTime.now().difference(currentState.lastSpinTime!);
+        final timeSinceLastSpin =
+            DateTime.now().difference(currentState.lastSpinTime!);
         if (timeSinceLastSpin.inMinutes > 5) {
           currentState = currentState.copyWith(isSpinning: false);
           needsUpdate = true;
@@ -245,7 +249,8 @@ class EnhancedSpinningController extends ChangeNotifier {
 
       // Clean old stats (older than 30 days)
       if (currentState.lastSpinTime != null) {
-        final daysSinceLastSpin = DateTime.now().difference(currentState.lastSpinTime!).inDays;
+        final daysSinceLastSpin =
+            DateTime.now().difference(currentState.lastSpinTime!).inDays;
         if (daysSinceLastSpin > 30) {
           currentState = currentState.copyWith(rewardStats: {});
           needsUpdate = true;
@@ -284,7 +289,8 @@ class EnhancedSpinningController extends ChangeNotifier {
 
     try {
       // Use enhanced physics directly instead of the handler
-      final velocity = customVelocity ?? _velocityCalculator.generateRandomVelocity();
+      final velocity =
+          customVelocity ?? _velocityCalculator.generateRandomVelocity();
 
       // Calculate physics
       final duration = _physics.calculateDuration(velocity);
@@ -314,7 +320,8 @@ class EnhancedSpinningController extends ChangeNotifier {
   }
 
   /// Handle spin completion with enhanced logic
-  Future<void> _handleSpinComplete(SpinResult result, BuildContext context) async {
+  Future<void> _handleSpinComplete(
+      SpinResult result, BuildContext context) async {
     try {
       // Calculate enhanced reward
       final enhancedResult = await _calculateEnhancedReward(result);
@@ -346,7 +353,6 @@ class EnhancedSpinningController extends ChangeNotifier {
       if (context.mounted) {
         _showResultDialog(context, enhancedResult);
       }
-
     } catch (e) {
       LogManager.debug('Failed to handle spin completion: $e');
       _updateState(_state.copyWith(isSpinning: false));
@@ -364,8 +370,10 @@ class EnhancedSpinningController extends ChangeNotifier {
       final rewardResult = await rewardService.generateReward();
 
       // Apply quality multiplier if available from base result
-      final qualityMultiplier = baseResult.metadata?['qualityMultiplier'] ?? 1.0;
-      final enhancedReward = (rewardResult.segment.reward * qualityMultiplier).round();
+      final qualityMultiplier =
+          baseResult.metadata?['qualityMultiplier'] ?? 1.0;
+      final enhancedReward =
+          (rewardResult.segment.reward * qualityMultiplier).round();
 
       // Create enhanced spin result combining both results
       return baseResult.copyWith(
@@ -381,7 +389,8 @@ class EnhancedSpinningController extends ChangeNotifier {
           'probabilities': rewardResult.probabilities.toMap(),
         },
         isJackpot: rewardResult.rewardType == RewardType.jackpot,
-        isRare: [RewardType.rare, RewardType.jackpot].contains(rewardResult.rewardType),
+        isRare: [RewardType.rare, RewardType.jackpot]
+            .contains(rewardResult.rewardType),
       );
     } catch (e) {
       LogManager.debug('Failed to calculate enhanced reward: $e');
@@ -405,15 +414,16 @@ class EnhancedSpinningController extends ChangeNotifier {
       switch (result.rewardType?.toLowerCase()) {
         case 'gems':
         case 'premium':
-        // Handle premium currency
+          // Handle premium currency
           final currentGems = await AppSettings.getInt('gems') ?? 0;
           await AppSettings.setInt('gems', currentGems + result.reward);
           break;
         case 'lives':
         case 'health':
-        // Handle lives/health
+          // Handle lives/health
           final currentLives = await AppSettings.getInt('lives') ?? 3;
-          await AppSettings.setInt('lives', math.min(currentLives + result.reward, 10));
+          await AppSettings.setInt(
+              'lives', math.min(currentLives + result.reward, 10));
           break;
       }
 
@@ -424,7 +434,6 @@ class EnhancedSpinningController extends ChangeNotifier {
       } else {
         HapticFeedback.lightImpact();
       }
-
     } catch (e) {
       LogManager.debug('Failed to process reward: $e');
     }

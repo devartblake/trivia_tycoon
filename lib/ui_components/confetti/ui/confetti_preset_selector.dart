@@ -47,7 +47,8 @@ class _ConfettiPresetSelectorState extends State<ConfettiPresetSelector> {
                     onTap: () => widget.onPresetSelected(preset),
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
-                      transform: Matrix4.identity()..scale(isHovered ? 1.05 : 1.0),
+                      transform: Matrix4.identity()
+                        ..scale(isHovered ? 1.05 : 1.0),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
@@ -59,7 +60,8 @@ class _ConfettiPresetSelectorState extends State<ConfettiPresetSelector> {
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: isHovered ? 0.1 : 0.04),
+                            color: Colors.black
+                                .withValues(alpha: isHovered ? 0.1 : 0.04),
                             blurRadius: isHovered ? 15 : 8,
                             offset: Offset(0, isHovered ? 6 : 2),
                           ),
@@ -97,9 +99,11 @@ class _ConfettiPresetSelectorState extends State<ConfettiPresetSelector> {
                           ),
                           const SizedBox(height: 4),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 2),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF667EEA).withValues(alpha: 0.1),
+                              color: const Color(0xFF667EEA)
+                                  .withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(

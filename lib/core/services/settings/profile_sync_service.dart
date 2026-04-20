@@ -38,7 +38,8 @@ class ProfileSyncService {
   static const int _maxRetryCount = 10;
   static const Duration _missingEndpointBackoff = Duration(minutes: 30);
 
-  static final Map<String, DateTime> _endpointBackoffUntil = <String, DateTime>{};
+  static final Map<String, DateTime> _endpointBackoffUntil =
+      <String, DateTime>{};
 
   @visibleForTesting
   static void resetEndpointBackoffForTests() {
@@ -46,7 +47,8 @@ class ProfileSyncService {
   }
 
   final ApiService _apiService;
-  final Future<void> Function(String event, Map<String, dynamic> data) _trackEvent;
+  final Future<void> Function(String event, Map<String, dynamic> data)
+      _trackEvent;
 
   ProfileSyncService({
     required ApiService apiService,
@@ -86,8 +88,10 @@ class ProfileSyncService {
       if (country != null) 'country': country,
       if (ageGroup != null) 'age_group': ageGroup,
       if (ageGroup != null) 'ageGroup': ageGroup,
-      if (preferredCategories != null) 'preferred_categories': preferredCategories,
-      if (preferredCategories != null) 'preferredCategories': preferredCategories,
+      if (preferredCategories != null)
+        'preferred_categories': preferredCategories,
+      if (preferredCategories != null)
+        'preferredCategories': preferredCategories,
       if (preferredCategories != null) 'categories': preferredCategories,
       if (avatar != null) 'avatar': avatar,
       if (synaptixMode != null) 'synaptix_mode': synaptixMode,
@@ -278,8 +282,8 @@ class ProfileSyncService {
     String? existingUsername,
   }) async {
     final normalizedDisplayName = displayName.trim();
-    final normalizedUsername =
-        _normalizeUsername(existingUsername) ?? _usernameFromDisplayName(normalizedDisplayName);
+    final normalizedUsername = _normalizeUsername(existingUsername) ??
+        _usernameFromDisplayName(normalizedDisplayName);
 
     final result = await syncProfileUpdate(
       displayName: normalizedDisplayName,
@@ -323,7 +327,8 @@ class ProfileSyncService {
         continue;
       }
 
-      final payload = Map<String, dynamic>.from(data['payload'] as Map? ?? const {});
+      final payload =
+          Map<String, dynamic>.from(data['payload'] as Map? ?? const {});
       if (payload.isEmpty) {
         await box.delete(key);
         continue;
@@ -447,7 +452,8 @@ class ProfileSyncService {
   }
 
   void _markEndpointInBackoff(String endpoint) {
-    _endpointBackoffUntil[endpoint] = DateTime.now().add(_missingEndpointBackoff);
+    _endpointBackoffUntil[endpoint] =
+        DateTime.now().add(_missingEndpointBackoff);
   }
 
   void _clearEndpointBackoff(String endpoint) {
@@ -495,8 +501,10 @@ class ProfileSyncService {
 
     final entries = box.toMap().entries.toList()
       ..sort((a, b) {
-        final aCreated = _parseIso((a.value is Map) ? a.value['created_at'] : null);
-        final bCreated = _parseIso((b.value is Map) ? b.value['created_at'] : null);
+        final aCreated =
+            _parseIso((a.value is Map) ? a.value['created_at'] : null);
+        final bCreated =
+            _parseIso((b.value is Map) ? b.value['created_at'] : null);
         return aCreated.compareTo(bCreated);
       });
 

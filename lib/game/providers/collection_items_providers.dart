@@ -8,33 +8,36 @@ final collectionItemsLoaderProvider = Provider<CollectionItemsLoader>((ref) {
 });
 
 /// Provider for all collection items
-final allCollectionItemsProvider = FutureProvider<List<CollectionItem>>((ref) async {
+final allCollectionItemsProvider =
+    FutureProvider<List<CollectionItem>>((ref) async {
   final loader = ref.read(collectionItemsLoaderProvider);
   return loader.loadAllItems();
 });
 
 /// Provider for unlocked collection items
-final unlockedCollectionItemsProvider = FutureProvider<List<CollectionItem>>((ref) async {
+final unlockedCollectionItemsProvider =
+    FutureProvider<List<CollectionItem>>((ref) async {
   final loader = ref.read(collectionItemsLoaderProvider);
   return loader.loadUnlocked();
 });
 
 /// Provider for locked collection items
-final lockedCollectionItemsProvider = FutureProvider<List<CollectionItem>>((ref) async {
+final lockedCollectionItemsProvider =
+    FutureProvider<List<CollectionItem>>((ref) async {
   final loader = ref.read(collectionItemsLoaderProvider);
   return loader.loadLocked();
 });
 
 /// Provider for collection items by category
 final collectionItemsByCategoryProvider =
-FutureProvider.family<List<CollectionItem>, String>((ref, category) async {
+    FutureProvider.family<List<CollectionItem>, String>((ref, category) async {
   final loader = ref.read(collectionItemsLoaderProvider);
   return loader.loadByCategory(category);
 });
 
 /// Provider for collection items by rarity
 final collectionItemsByRarityProvider =
-FutureProvider.family<List<CollectionItem>, String>((ref, rarity) async {
+    FutureProvider.family<List<CollectionItem>, String>((ref, rarity) async {
   final loader = ref.read(collectionItemsLoaderProvider);
   return loader.loadByRarity(rarity);
 });
@@ -59,20 +62,21 @@ final collectionCompletionProvider = FutureProvider<double>((ref) async {
 
 /// Provider for checking if an item has an image
 final itemHasImageProvider =
-FutureProvider.family<bool, String>((ref, itemId) async {
+    FutureProvider.family<bool, String>((ref, itemId) async {
   final loader = ref.read(collectionItemsLoaderProvider);
   return loader.hasImage(itemId);
 });
 
 /// Provider for getting an item's image path
 final itemImagePathProvider =
-FutureProvider.family<String?, String>((ref, itemId) async {
+    FutureProvider.family<String?, String>((ref, itemId) async {
   final loader = ref.read(collectionItemsLoaderProvider);
   return loader.getImagePath(itemId);
 });
 
 /// State notifier for managing collection item unlock actions
-class CollectionItemsNotifier extends StateNotifier<AsyncValue<List<CollectionItem>>> {
+class CollectionItemsNotifier
+    extends StateNotifier<AsyncValue<List<CollectionItem>>> {
   CollectionItemsNotifier(this._loader) : super(const AsyncValue.loading()) {
     _loadItems();
   }
@@ -108,8 +112,8 @@ class CollectionItemsNotifier extends StateNotifier<AsyncValue<List<CollectionIt
 }
 
 /// StateNotifier provider for collection items with actions
-final collectionItemsNotifierProvider =
-StateNotifierProvider<CollectionItemsNotifier, AsyncValue<List<CollectionItem>>>((ref) {
+final collectionItemsNotifierProvider = StateNotifierProvider<
+    CollectionItemsNotifier, AsyncValue<List<CollectionItem>>>((ref) {
   final loader = ref.read(collectionItemsLoaderProvider);
   return CollectionItemsNotifier(loader);
 });

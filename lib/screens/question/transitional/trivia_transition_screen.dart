@@ -10,7 +10,7 @@ class TriviaTransitionScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.watch(triviaTransitionControllerProvider);
     final secondsLeft = ref.watch(triviaTransitionControllerProvider.select(
-          (c) => c.secondsRemaining,
+      (c) => c.secondsRemaining,
     ));
 
     return Scaffold(
@@ -24,21 +24,21 @@ class TriviaTransitionScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(12.0),
                 child: secondsLeft > 0
                     ? CircleAvatar(
-                  radius: 24,
-                  backgroundColor: Colors.amber,
-                  child: Text(
-                    '$secondsLeft',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                )
+                        radius: 24,
+                        backgroundColor: Colors.amber,
+                        child: Text(
+                          '$secondsLeft',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      )
                     : ElevatedButton(
-                  onPressed: () => controller.navigateToNext(context),
-                  child: const Text('Next'),
-                ),
+                        onPressed: () => controller.navigateToNext(context),
+                        child: const Text('Next'),
+                      ),
               ),
             ),
             Center(

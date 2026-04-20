@@ -78,7 +78,8 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0A0A0F) : const Color(0xFFF8F9FA),
+      backgroundColor:
+          isDark ? const Color(0xFF0A0A0F) : const Color(0xFFF8F9FA),
       body: Row(
         children: [
           // Modern Navigation Rail
@@ -100,7 +101,8 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
                 children: [
                   // Header with Logo and Toggle
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 24, horizontal: 16),
                     child: Row(
                       children: [
                         Container(
@@ -157,7 +159,8 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
                       },
                       borderRadius: BorderRadius.circular(12),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 16),
                         decoration: BoxDecoration(
                           color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
@@ -337,7 +340,8 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0A0A0F) : const Color(0xFFF8F9FA),
+      backgroundColor:
+          isDark ? const Color(0xFF0A0A0F) : const Color(0xFFF8F9FA),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: isDark ? const Color(0xFF1E1E2E) : Colors.white,
@@ -413,12 +417,12 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
 
   // Build Navigation Item for Web Layout
   Widget _buildNavItem(
-      BuildContext context, {
-        required IconData icon,
-        required String label,
-        required int index,
-        required int selectedIndex,
-      }) {
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required int index,
+    required int selectedIndex,
+  }) {
     final isSelected = selectedIndex == index;
 
     return Padding(
@@ -434,8 +438,8 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
             decoration: BoxDecoration(
               gradient: isSelected
                   ? const LinearGradient(
-                colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-              )
+                      colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+                    )
                   : null,
               color: isSelected ? null : Colors.transparent,
               borderRadius: BorderRadius.circular(12),
@@ -454,8 +458,10 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
                       label,
                       style: TextStyle(
                         fontSize: 15,
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                        color: isSelected ? Colors.white : const Color(0xFF1F2937),
+                        fontWeight:
+                            isSelected ? FontWeight.w600 : FontWeight.w500,
+                        color:
+                            isSelected ? Colors.white : const Color(0xFF1F2937),
                       ),
                     ),
                   ),
@@ -470,12 +476,12 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
 
   // Build Action Button (e.g., Back to Home)
   Widget _buildActionButton(
-      BuildContext context, {
-        required IconData icon,
-        required String label,
-        required VoidCallback onTap,
-        required Color color,
-      }) {
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+    required Color color,
+  }) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -707,12 +713,12 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
 
   // Build Drawer Item
   Widget _buildDrawerItem(
-      BuildContext context, {
-        required IconData icon,
-        required String label,
-        required int index,
-        required int selectedIndex,
-      }) {
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required int index,
+    required int selectedIndex,
+  }) {
     final isSelected = selectedIndex == index;
 
     return Padding(
@@ -730,8 +736,8 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
             decoration: BoxDecoration(
               gradient: isSelected
                   ? const LinearGradient(
-                colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-              )
+                      colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+                    )
                   : null,
               color: isSelected ? null : Colors.transparent,
               borderRadius: BorderRadius.circular(12),
@@ -762,12 +768,12 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
 
   // Build Drawer Action Item
   Widget _buildDrawerActionItem(
-      BuildContext context, {
-        required IconData icon,
-        required String label,
-        required Color color,
-        required VoidCallback onTap,
-      }) {
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -862,12 +868,12 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
 
   // Build Bottom Navigation Item
   Widget _buildBottomNavItem(
-      BuildContext context, {
-        required IconData icon,
-        required String label,
-        required int index,
-        required int selectedIndex,
-      }) {
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required int index,
+    required int selectedIndex,
+  }) {
     final isSelected = selectedIndex == index;
 
     return InkWell(
@@ -879,8 +885,8 @@ class _AdminDashboardShellState extends State<AdminDashboardShell> {
         decoration: BoxDecoration(
           gradient: isSelected
               ? const LinearGradient(
-            colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-          )
+                  colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+                )
               : null,
           borderRadius: BorderRadius.circular(12),
         ),

@@ -5,11 +5,13 @@ class MatchesService {
   // Service methods for match management
   Future<List<Map<String, dynamic>>> getActiveMatches() async {
     // Implement API call to get active matches
-    await Future.delayed(const Duration(milliseconds: 500)); // Simulate network delay
+    await Future.delayed(
+        const Duration(milliseconds: 500)); // Simulate network delay
     return []; // Return actual match data
   }
 
-  Future<void> updateMatchScore(String matchId, int playerScore, int opponentScore) async {
+  Future<void> updateMatchScore(
+      String matchId, int playerScore, int opponentScore) async {
     // Implement API call to update match score
     await Future.delayed(const Duration(milliseconds: 300));
   }
@@ -22,35 +24,36 @@ class MatchesService {
 }
 
 class ActiveMatchesNotifier extends StateNotifier<List<Map<String, dynamic>>> {
-  ActiveMatchesNotifier() : super([
-    {
-      'id': '1',
-      'name': 'mindpixell',
-      'score': '0-0',
-      'time': '1d left',
-      'avatar': 'assets/images/avatars/avatar-1.png',
-      'status': 'waiting',
-      'lastMove': DateTime.now().subtract(const Duration(hours: 2)),
-    },
-    {
-      'id': '2',
-      'name': 'giovanni.rasmussen',
-      'score': '3-0',
-      'time': '1d left',
-      'avatar': 'assets/images/avatars/avatar-2.png',
-      'status': 'winning',
-      'lastMove': DateTime.now().subtract(const Duration(hours: 1)),
-    },
-    {
-      'id': '3',
-      'name': 'dexter.henderson',
-      'score': '0-1',
-      'time': '1d left',
-      'avatar': 'assets/images/avatars/avatar-3.png',
-      'status': 'losing',
-      'lastMove': DateTime.now().subtract(const Duration(minutes: 30)),
-    },
-  ]) {
+  ActiveMatchesNotifier()
+      : super([
+          {
+            'id': '1',
+            'name': 'mindpixell',
+            'score': '0-0',
+            'time': '1d left',
+            'avatar': 'assets/images/avatars/avatar-1.png',
+            'status': 'waiting',
+            'lastMove': DateTime.now().subtract(const Duration(hours: 2)),
+          },
+          {
+            'id': '2',
+            'name': 'giovanni.rasmussen',
+            'score': '3-0',
+            'time': '1d left',
+            'avatar': 'assets/images/avatars/avatar-2.png',
+            'status': 'winning',
+            'lastMove': DateTime.now().subtract(const Duration(hours: 1)),
+          },
+          {
+            'id': '3',
+            'name': 'dexter.henderson',
+            'score': '0-1',
+            'time': '1d left',
+            'avatar': 'assets/images/avatars/avatar-3.png',
+            'status': 'losing',
+            'lastMove': DateTime.now().subtract(const Duration(minutes: 30)),
+          },
+        ]) {
     // Start periodic updates for match times
     _startPeriodicUpdates();
   }

@@ -2,94 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/models/notifications/player_inbox_item.dart';
+import '../../game/providers/player_notification_providers.dart';
+import '../../core/services/api_service.dart';
 import 'notification_detail_screen.dart';
-
-// === Models & Providers ===
-enum InboxType {
-  alert,        // Red - urgent
-  notification, // Blue - general
-  friend,       // Green - social
-  achievement,  // Gold - rewards
-  system,       // Purple - updates
-  challenge,    // Orange - game
-}
-
-class InboxItem {
-  final String id;
-  final InboxType type;
-  final String title;
-  final String body;
-  final DateTime timestamp;
-  final String? actionRoute;
-  final Map<String, String>? payload;
-  final bool unread;
-  final String? icon;
-  final String? avatarUrl;
-
-  const InboxItem({
-    required this.id,
-    required this.type,
-    required this.title,
-    required this.body,
-    required this.timestamp,
-    this.actionRoute,
-    this.payload,
-    this.unread = true,
-    this.icon,
-    this.avatarUrl,
-  });
-}
-
-// Sample data provider
-final inboxProvider = StateProvider<List<InboxItem>>((ref) => [
-  InboxItem(
-    id: '1',
-    type: InboxType.friend,
-    title: 'Sarah Chen sent you a friend request',
-    body: 'You have 12 mutual friends',
-    timestamp: DateTime.now().subtract(const Duration(minutes: 5)),
-    icon: 'person_add',
-    unread: true,
-  ),
-  InboxItem(
-    id: '2',
-    type: InboxType.challenge,
-    title: 'New Challenge Available!',
-    body: 'Mike Johnson challenged you to a trivia duel',
-    timestamp: DateTime.now().subtract(const Duration(hours: 2)),
-    icon: 'emoji_events',
-    unread: true,
-  ),
-  InboxItem(
-    id: '3',
-    type: InboxType.achievement,
-    title: 'Achievement Unlocked!',
-    body: 'You earned the "Quiz Master" badge',
-    timestamp: DateTime.now().subtract(const Duration(hours: 5)),
-    icon: 'military_tech',
-    unread: false,
-  ),
-  InboxItem(
-    id: '4',
-    type: InboxType.system,
-    title: 'App Update Available',
-    body: 'Version 2.1.0 includes new features and bug fixes',
-    timestamp: DateTime.now().subtract(const Duration(days: 1)),
-    icon: 'system_update',
-    unread: false,
-  ),
-]);
-
-final unreadCountProvider = Provider<int>(
-      (ref) => ref.watch(inboxProvider).where((i) => i.unread).length,
-);
 
 // === Screen ===
 class NotificationsScreen extends ConsumerStatefulWidget {
   const NotificationsScreen({super.key});
 
   @override
-  ConsumerState<NotificationsScreen> createState() => _NotificationsScreenState();
+  ConsumerState<NotificationsScreen> createState() =>
+      _NotificationsScreenState();
 }
 
 class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
@@ -97,26 +21,29 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final allItems = ref.watch(inboxProvider);
-    final unreadCount = ref.watch(unreadCountProvider);
-
-    // Filter items based on selection
-    final filteredItems = _filter == 'all'
-        ? allItems
-        : _filter == 'unread'
-        ? allItems.where((i) => i.unread).toList()
-        : allItems.where((i) => i.type.name == _filter).toList();
+    ref.watch(notificationRealtimeSyncProvider);
+    final allItemsAsync = ref.watch(playerNotificationInboxProvider);
+    final unreadCount = ref
+        .watch(playerNotificationUnreadCountProvider)
+        .maybeWhen(data: (value) => value, orElse: () => 0);
 
     return Scaffold(
       backgroundColor: const Color(0xFF36393F),
       appBar: _buildAppBar(context, unreadCount),
       body: Column(
         children: [
-          _buildFilterChips(),
+          _buildFilterChips(unreadCount),
           Expanded(
-            child: filteredItems.isEmpty
-                ? _buildEmptyState()
-                : _buildNotificationList(filteredItems),
+            child: allItemsAsync.when(
+              data: (allItems) {
+                final filteredItems = _applyFilter(allItems);
+                return filteredItems.isEmpty
+                    ? _buildEmptyState()
+                    : _buildNotificationList(filteredItems);
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, _) => _buildErrorState(error),
+            ),
           ),
         ],
       ),
@@ -161,25 +88,18 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
       actions: [
         if (unreadCount > 0)
           TextButton.icon(
-            onPressed: () {
-              // Mark all as read
-              final items = ref.read(inboxProvider);
-              ref.read(inboxProvider.notifier).state = items.map((item) {
-                return InboxItem(
-                  id: item.id,
-                  type: item.type,
-                  title: item.title,
-                  body: item.body,
-                  timestamp: item.timestamp,
-                  actionRoute: item.actionRoute,
-                  payload: item.payload,
-                  unread: false,
-                  icon: item.icon,
-                  avatarUrl: item.avatarUrl,
+            onPressed: () async {
+              try {
+                await ref.read(playerNotificationActionsProvider).markAllRead();
+              } on ApiRequestException catch (e) {
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(e.message)),
                 );
-              }).toList();
+              }
             },
-            icon: const Icon(Icons.done_all, color: Color(0xFF5865F2), size: 18),
+            icon:
+                const Icon(Icons.done_all, color: Color(0xFF5865F2), size: 18),
             label: const Text(
               'Mark all read',
               style: TextStyle(color: Color(0xFF5865F2)),
@@ -190,7 +110,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
     );
   }
 
-  Widget _buildFilterChips() {
+  Widget _buildFilterChips(int unreadCount) {
     return Container(
       height: 60,
       color: const Color(0xFF2F3136),
@@ -201,7 +121,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
           _buildFilterChip('All', 'all', Icons.inbox),
           const SizedBox(width: 8),
           _buildFilterChip('Unread', 'unread', Icons.circle,
-              badge: ref.watch(unreadCountProvider)),
+              badge: unreadCount),
           const SizedBox(width: 8),
           _buildFilterChip('Friends', 'friend', Icons.people),
           const SizedBox(width: 8),
@@ -215,14 +135,17 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
     );
   }
 
-  Widget _buildFilterChip(String label, String value, IconData icon, {int? badge}) {
+  Widget _buildFilterChip(String label, String value, IconData icon,
+      {int? badge}) {
     final isSelected = _filter == value;
     return FilterChip(
       selected: isSelected,
       label: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 16, color: isSelected ? Colors.white : const Color(0xFFB9BBBE)),
+          Icon(icon,
+              size: 16,
+              color: isSelected ? Colors.white : const Color(0xFFB9BBBE)),
           const SizedBox(width: 6),
           Text(label),
           if (badge != null && badge > 0) ...[
@@ -314,39 +237,62 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
     );
   }
 
-  void _handleNotificationTap(InboxItem item) {
-    // Mark as read
-    final items = ref.read(inboxProvider);
-    ref.read(inboxProvider.notifier).state = items.map((i) {
-      if (i.id == item.id) {
-        return InboxItem(
-          id: i.id,
-          type: i.type,
-          title: i.title,
-          body: i.body,
-          timestamp: i.timestamp,
-          actionRoute: i.actionRoute,
-          payload: i.payload,
-          unread: false,
-          icon: i.icon,
-          avatarUrl: i.avatarUrl,
-        );
-      }
-      return i;
-    }).toList();
+  Widget _buildErrorState(Object error) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.cloud_off, size: 56, color: Color(0xFF72767D)),
+            const SizedBox(height: 16),
+            const Text(
+              'Unable to load notifications',
+              style: TextStyle(color: Colors.white, fontSize: 18),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              error is ApiRequestException ? error.message : error.toString(),
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Color(0xFFB9BBBE)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-    // Navigate if there's an action
-    if (item.actionRoute != null && item.actionRoute!.isNotEmpty) {
-      context.push(item.actionRoute!, extra: item.payload);
+  Future<void> _handleNotificationTap(InboxItem item) async {
+    if (item.unread) {
+      try {
+        await ref.read(playerNotificationActionsProvider).markRead(item.id);
+      } catch (_) {
+        // Allow detail navigation even if mark-read refresh fails.
+      }
     }
     // Navigate to detail screen
     context.push('/notifications/detail', extra: item);
   }
 
-  void _dismissNotification(String id) {
-    final items = ref.read(inboxProvider);
-    ref.read(inboxProvider.notifier).state =
-        items.where((i) => i.id != id).toList();
+  Future<void> _dismissNotification(String id) async {
+    try {
+      await ref.read(playerNotificationActionsProvider).dismiss(id);
+    } on ApiRequestException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.message)),
+      );
+    }
+  }
+
+  List<InboxItem> _applyFilter(List<InboxItem> allItems) {
+    if (_filter == 'all') return allItems;
+    if (_filter == 'unread') {
+      return allItems.where((item) => item.unread).toList(growable: false);
+    }
+    return allItems
+        .where((item) => item.type.name == _filter)
+        .toList(growable: false);
   }
 }
 
@@ -365,7 +311,7 @@ class NotificationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config = _getNotificationConfig(item.type);
+    final config = inboxTypeConfig(item.type);
 
     return Dismissible(
       key: Key(item.id),
@@ -383,7 +329,9 @@ class NotificationCard extends StatelessWidget {
           color: const Color(0xFF2F3136),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: item.unread ? config.color.withValues(alpha: 0.5) : Colors.transparent,
+            color: item.unread
+                ? config.color.withValues(alpha: 0.5)
+                : Colors.transparent,
             width: 1,
           ),
         ),
@@ -430,7 +378,9 @@ class NotificationCard extends StatelessWidget {
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 15,
-                                  fontWeight: item.unread ? FontWeight.w600 : FontWeight.w500,
+                                  fontWeight: item.unread
+                                      ? FontWeight.w600
+                                      : FontWeight.w500,
                                 ),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
@@ -501,47 +451,6 @@ class NotificationCard extends StatelessWidget {
     );
   }
 
-  NotificationConfig _getNotificationConfig(InboxType type) {
-    switch (type) {
-      case InboxType.alert:
-        return NotificationConfig(
-          color: const Color(0xFFED4245),
-          icon: Icons.warning_rounded,
-          label: 'ALERT',
-        );
-      case InboxType.friend:
-        return NotificationConfig(
-          color: const Color(0xFF3BA55C),
-          icon: Icons.people_rounded,
-          label: 'SOCIAL',
-        );
-      case InboxType.achievement:
-        return NotificationConfig(
-          color: const Color(0xFFFAA61A),
-          icon: Icons.military_tech,
-          label: 'ACHIEVEMENT',
-        );
-      case InboxType.challenge:
-        return NotificationConfig(
-          color: const Color(0xFFF26522),
-          icon: Icons.emoji_events,
-          label: 'CHALLENGE',
-        );
-      case InboxType.system:
-        return NotificationConfig(
-          color: const Color(0xFF8B5CF6),
-          icon: Icons.settings,
-          label: 'SYSTEM',
-        );
-      case InboxType.notification:
-        return NotificationConfig(
-          color: const Color(0xFF5865F2),
-          icon: Icons.notifications,
-          label: 'INFO',
-        );
-    }
-  }
-
   String _formatTimestamp(DateTime timestamp) {
     final now = DateTime.now();
     final difference = now.difference(timestamp);
@@ -553,16 +462,4 @@ class NotificationCard extends StatelessWidget {
 
     return '${timestamp.month}/${timestamp.day}/${timestamp.year}';
   }
-}
-
-class NotificationConfig {
-  final Color color;
-  final IconData icon;
-  final String label;
-
-  NotificationConfig({
-    required this.color,
-    required this.icon,
-    required this.label,
-  });
 }

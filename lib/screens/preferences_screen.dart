@@ -36,7 +36,8 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                 title: 'Questions with Images',
                 subtitle: 'Show visual content in trivia questions',
                 value: _showImagesInQuestions,
-                onChanged: (value) => setState(() => _showImagesInQuestions = value),
+                onChanged: (value) =>
+                    setState(() => _showImagesInQuestions = value),
                 color: const Color(0xFFF59E0B),
               ),
               _buildSwitchTile(
@@ -44,7 +45,8 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                 title: 'Auto-Advance Questions',
                 subtitle: 'Move to next question automatically',
                 value: _autoAdvanceQuestions,
-                onChanged: (value) => setState(() => _autoAdvanceQuestions = value),
+                onChanged: (value) =>
+                    setState(() => _autoAdvanceQuestions = value),
                 color: const Color(0xFF06B6D4),
               ),
               _buildNavigationTile(
@@ -67,7 +69,8 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                 title: 'Haptic Feedback',
                 subtitle: 'Vibrate on interactions',
                 value: _enableHapticFeedback,
-                onChanged: (value) => setState(() => _enableHapticFeedback = value),
+                onChanged: (value) =>
+                    setState(() => _enableHapticFeedback = value),
                 color: const Color(0xFF10B981),
               ),
               _buildNavigationTile(

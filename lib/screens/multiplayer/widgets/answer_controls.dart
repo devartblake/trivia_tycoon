@@ -80,11 +80,11 @@ class _AnswerControlsState extends State<AnswerControls> {
                 .asMap()
                 .entries
                 .map((entry) => _buildAnswerButton(
-              answer: entry.value,
-              index: entry.key,
-              isSelected: selectedAnswer == entry.value,
-              isDark: isDark,
-            ))
+                      answer: entry.value,
+                      index: entry.key,
+                      isSelected: selectedAnswer == entry.value,
+                      isDark: isDark,
+                    ))
                 .toList(),
           ),
           if (selectedAnswer != null) ...[
@@ -151,19 +151,21 @@ class _AnswerControlsState extends State<AnswerControls> {
               borderRadius: BorderRadius.circular(16),
               boxShadow: isSelected
                   ? [
-                BoxShadow(
-                  color: colors[index % colors.length][0].withValues(alpha: 0.4),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ]
+                      BoxShadow(
+                        color: colors[index % colors.length][0]
+                            .withValues(alpha: 0.4),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
+                      ),
+                    ]
                   : [
-                BoxShadow(
-                  color: colors[index % colors.length][0].withValues(alpha: 0.2),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
+                      BoxShadow(
+                        color: colors[index % colors.length][0]
+                            .withValues(alpha: 0.2),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
             ),
             child: Material(
               color: Colors.transparent,
@@ -171,11 +173,11 @@ class _AnswerControlsState extends State<AnswerControls> {
                 borderRadius: BorderRadius.circular(16),
                 onTap: localSelectedAnswer == null
                     ? () {
-                  setState(() {
-                    localSelectedAnswer = answer;
-                  });
-                  widget.onSelect(answer);
-                }
+                        setState(() {
+                          localSelectedAnswer = answer;
+                        });
+                        widget.onSelect(answer);
+                      }
                     : null,
                 child: Container(
                   padding: const EdgeInsets.all(16),

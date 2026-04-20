@@ -37,10 +37,12 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
       curve: Curves.easeInOut,
     ));
 
-    _sectionControllers = List.generate(6, (index) => AnimationController(
-      duration: Duration(milliseconds: 600 + (index * 100)),
-      vsync: this,
-    ));
+    _sectionControllers = List.generate(
+        6,
+        (index) => AnimationController(
+              duration: Duration(milliseconds: 600 + (index * 100)),
+              vsync: this,
+            ));
 
     final currentTheme = ref.read(themeSettingsProvider);
     _nameController.text = currentTheme.themeName;
@@ -82,7 +84,8 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
     final controller = ref.read(themeSettingsProvider.notifier);
 
     try {
-      final newPreset = settings.copyWith(themeName: _nameController.text.trim());
+      final newPreset =
+          settings.copyWith(themeName: _nameController.text.trim());
       await controller.saveCustomPreset(newPreset);
 
       if (mounted) {
@@ -97,7 +100,8 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
             ),
             backgroundColor: const Color(0xFF10B981),
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         );
         context.pop();
@@ -121,9 +125,9 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
       appBar: _buildAppBar(),
       body: _fadeAnimation != null
           ? FadeTransition(
-        opacity: _fadeAnimation!,
-        child: _buildBody(),
-      )
+              opacity: _fadeAnimation!,
+              child: _buildBody(),
+            )
           : _buildBody(),
     );
   }
@@ -269,7 +273,9 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
                     children: [
                       Expanded(
                         child: Text(
-                          settings.themeName.isEmpty ? 'Custom Theme' : settings.themeName,
+                          settings.themeName.isEmpty
+                              ? 'Custom Theme'
+                              : settings.themeName,
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -278,7 +284,9 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
                         ),
                       ),
                       Icon(
-                        isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
+                        isDark
+                            ? Icons.dark_mode_rounded
+                            : Icons.light_mode_rounded,
                         color: Colors.white,
                         size: 20,
                       ),
@@ -422,8 +430,13 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
                       boxShadow: [
                         BoxShadow(
                           color: (isPrimary
-                              ? ref.watch(themeSettingsProvider).primaryColor
-                              : ref.watch(themeSettingsProvider).secondaryColor).withValues(alpha: 0.3),
+                                  ? ref
+                                      .watch(themeSettingsProvider)
+                                      .primaryColor
+                                  : ref
+                                      .watch(themeSettingsProvider)
+                                      .secondaryColor)
+                              .withValues(alpha: 0.3),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         ),
@@ -456,7 +469,8 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
     );
   }
 
-  Widget _buildDarkModeSection(bool isDark, ThemeSettingsController controller) {
+  Widget _buildDarkModeSection(
+      bool isDark, ThemeSettingsController controller) {
     return SliverToBoxAdapter(
       child: SlideTransition(
         position: Tween<Offset>(
@@ -488,11 +502,15 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF59E0B),
+                      color: isDark
+                          ? const Color(0xFF1E293B)
+                          : const Color(0xFFF59E0B),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(
-                      isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
+                      isDark
+                          ? Icons.dark_mode_rounded
+                          : Icons.light_mode_rounded,
                       color: Colors.white,
                       size: 20,
                     ),
@@ -521,7 +539,9 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
                 child: Row(
                   children: [
                     Icon(
-                      isDark ? Icons.nights_stay_rounded : Icons.wb_sunny_rounded,
+                      isDark
+                          ? Icons.nights_stay_rounded
+                          : Icons.wb_sunny_rounded,
                       color: const Color(0xFF64748B),
                       size: 24,
                     ),
@@ -543,7 +563,8 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
                             isDark ? 'Easy on the eyes' : 'Bright and clear',
                             style: TextStyle(
                               fontSize: 12,
-                              color: const Color(0xFF64748B).withValues(alpha: 0.8),
+                              color: const Color(0xFF64748B)
+                                  .withValues(alpha: 0.8),
                             ),
                           ),
                         ],
@@ -643,7 +664,8 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
                   child: ThemePresetList(
                     onEdit: (presetName) {
                       // Handle edit - load the preset
-                      final controller = ref.read(themeSettingsProvider.notifier);
+                      final controller =
+                          ref.read(themeSettingsProvider.notifier);
                       final preset = controller.customPresets
                           .firstWhere((p) => p.themeName == presetName);
                       controller.updateTheme(preset);
@@ -655,7 +677,8 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
                         context: context,
                         builder: (context) => AlertDialog(
                           title: const Text('Delete Theme'),
-                          content: Text('Are you sure you want to delete "$presetName"?'),
+                          content: Text(
+                              'Are you sure you want to delete "$presetName"?'),
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.of(context).pop(false),
@@ -670,7 +693,8 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
                       );
 
                       if (confirmed == true) {
-                        final controller = ref.read(themeSettingsProvider.notifier);
+                        final controller =
+                            ref.read(themeSettingsProvider.notifier);
                         await controller.deletePreset(presetName);
                       }
                     },

@@ -50,25 +50,29 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
   void _applyFilters() {
     setState(() {
       _filtered = _questions.where((q) {
-        final matchesQuery = q.question.toLowerCase().contains(_searchQuery.toLowerCase());
-        final matchesCategory = _selectedCategory == 'All' || q.category == _selectedCategory;
+        final matchesQuery =
+            q.question.toLowerCase().contains(_searchQuery.toLowerCase());
+        final matchesCategory =
+            _selectedCategory == 'All' || q.category == _selectedCategory;
         final tags = q.tags ?? [];
-        final matchesTags = _activeTags.isEmpty || _activeTags.every((tag) => tags.contains(tag));
+        final matchesTags = _activeTags.isEmpty ||
+            _activeTags.every((tag) => tags.contains(tag));
         return matchesQuery && matchesCategory && matchesTags;
       }).toList();
     });
   }
 
   void _editQuestion(QuestionModel question, int index) async {
-    final updated = await context.push<QuestionModel>('/admin/question-editor', extra: question);
+    final updated = await context.push<QuestionModel>('/admin/question-editor',
+        extra: question);
 
     if (updated != null && updated is QuestionModel) {
       final i = _questions.indexWhere((q) => q.id == question.id);
       if (i != -1) {
         try {
           final serviceManager = ref.read(serviceManagerProvider);
-          await serviceManager.apiService.patch('/admin/questions/${updated.id}',
-              body: updated.toJson());
+          await serviceManager.apiService
+              .patch('/admin/questions/${updated.id}', body: updated.toJson());
         } catch (_) {
           // Keep local update behavior when backend patch is unavailable.
         }
@@ -93,35 +97,35 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ...question.options.asMap().entries.map((entry) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Row(
-                children: [
-                  Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: entry.key == question.correctIndex
-                          ? const Color(0xFF10B981)
-                          : const Color(0xFFF3F4F6),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Center(
-                      child: Text(
-                        String.fromCharCode(65 + entry.key),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 32,
+                        height: 32,
+                        decoration: BoxDecoration(
                           color: entry.key == question.correctIndex
-                              ? Colors.white
-                              : const Color(0xFF6B7280),
+                              ? const Color(0xFF10B981)
+                              : const Color(0xFFF3F4F6),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Center(
+                          child: Text(
+                            String.fromCharCode(65 + entry.key),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: entry.key == question.correctIndex
+                                  ? Colors.white
+                                  : const Color(0xFF6B7280),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                      const SizedBox(width: 12),
+                      Expanded(child: Text(entry.value)),
+                    ],
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(child: Text(entry.value)),
-                ],
-              ),
-            )),
+                )),
           ],
         ),
         actions: [
@@ -148,7 +152,8 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            style: TextButton.styleFrom(foregroundColor: const Color(0xFFEF4444)),
+            style:
+                TextButton.styleFrom(foregroundColor: const Color(0xFFEF4444)),
             child: const Text("Delete All"),
           ),
         ],
@@ -156,7 +161,8 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
     );
 
     if (confirmed == true) {
-      setState(() => _questions.removeWhere((q) => _selectedIds.contains(q.id)));
+      setState(
+          () => _questions.removeWhere((q) => _selectedIds.contains(q.id)));
       _selectedIds.clear();
       _bulkMode = false;
       await appCache.saveQuestions(_questions);
@@ -167,7 +173,8 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
   List<QuestionModel> _paginated() {
     final start = _currentPage * _pageSize;
     final end = (_currentPage + 1) * _pageSize;
-    return _filtered.sublist(start, end > _filtered.length ? _filtered.length : end);
+    return _filtered.sublist(
+        start, end > _filtered.length ? _filtered.length : end);
   }
 
   Future<void> _importQuestions() async {
@@ -196,7 +203,8 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
           ),
           backgroundColor: const Color(0xFF10B981),
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
       );
     }
@@ -226,7 +234,8 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
           ),
           backgroundColor: const Color(0xFF10B981),
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
       );
     }
@@ -235,8 +244,8 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
   Future<void> _syncFromServer() async {
     try {
       final serviceManager = ref.read(serviceManagerProvider);
-      final response =
-          await serviceManager.apiService.get('/admin/questions?page=1&pageSize=500');
+      final response = await serviceManager.apiService
+          .get('/admin/questions?page=1&pageSize=500');
       final envelope = serviceManager.apiService
           .parsePageEnvelope<Map<String, dynamic>>(response, (json) => json);
       final fetched = envelope.items.map(QuestionModel.fromJson).toList();
@@ -290,7 +299,8 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
     if (newQ != null && newQ is QuestionModel) {
       try {
         final serviceManager = ref.read(serviceManagerProvider);
-        await serviceManager.apiService.post('/admin/questions', body: newQ.toJson());
+        await serviceManager.apiService
+            .post('/admin/questions', body: newQ.toJson());
       } catch (_) {
         // Keep local create behavior when backend create is unavailable.
       }
@@ -365,10 +375,13 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _buildStatItem('Total', _questions.length.toString(), Icons.quiz),
-                  _buildStatItem('Filtered', _filtered.length.toString(), Icons.filter_list),
+                  _buildStatItem(
+                      'Total', _questions.length.toString(), Icons.quiz),
+                  _buildStatItem('Filtered', _filtered.length.toString(),
+                      Icons.filter_list),
                   if (_selectedIds.isNotEmpty)
-                    _buildStatItem('Selected', _selectedIds.length.toString(), Icons.check_circle),
+                    _buildStatItem('Selected', _selectedIds.length.toString(),
+                        Icons.check_circle),
                 ],
               ),
             ),
@@ -389,7 +402,8 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
                 decoration: BoxDecoration(
                   color: const Color(0xFFEF4444).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFFEF4444).withValues(alpha: 0.3)),
+                  border: Border.all(
+                      color: const Color(0xFFEF4444).withValues(alpha: 0.3)),
                 ),
                 child: Row(
                   children: [
@@ -417,7 +431,9 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
                         });
                       },
                       child: Text(
-                        _selectedIds.length == _filtered.length ? "Deselect All" : "Select All",
+                        _selectedIds.length == _filtered.length
+                            ? "Deselect All"
+                            : "Select All",
                       ),
                     ),
                   ],
@@ -429,181 +445,193 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
           Expanded(
             child: _filtered.isEmpty
                 ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.quiz_outlined, size: 64, color: Colors.grey[400]),
-                  const SizedBox(height: 16),
-                  Text(
-                    'No questions found',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey[600],
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-            )
-                : ReorderableListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: _paginated().length,
-              onReorder: (oldIndex, newIndex) {
-                setState(() {
-                  final actualOldIndex = _currentPage * _pageSize + oldIndex;
-                  var actualNewIndex = _currentPage * _pageSize + newIndex;
-                  if (actualNewIndex > actualOldIndex) actualNewIndex--;
-
-                  final item = _filtered.removeAt(actualOldIndex);
-                  _filtered.insert(actualNewIndex, item);
-
-                  _questions = _filtered.toList();
-                  appCache.saveQuestions(_questions);
-                });
-              },
-              itemBuilder: (context, index) {
-                final q = _paginated()[index];
-                return Container(
-                  key: ValueKey(q.id),
-                  margin: const EdgeInsets.only(bottom: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: _selectedIds.contains(q.id)
-                          ? const Color(0xFF6366F1)
-                          : const Color(0xFFE9ECEF),
-                      width: _selectedIds.contains(q.id) ? 2 : 1,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.04),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.all(16),
-                    title: Text(
-                      q.question,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
-                      ),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF3B82F6).withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Text(
-                                q.category,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Color(0xFF3B82F6),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
+                        Icon(Icons.quiz_outlined,
+                            size: 64, color: Colors.grey[400]),
+                        const SizedBox(height: 16),
+                        Text(
+                          'No questions found',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[600],
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : ReorderableListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: _paginated().length,
+                    onReorder: (oldIndex, newIndex) {
+                      setState(() {
+                        final actualOldIndex =
+                            _currentPage * _pageSize + oldIndex;
+                        var actualNewIndex =
+                            _currentPage * _pageSize + newIndex;
+                        if (actualNewIndex > actualOldIndex) actualNewIndex--;
+
+                        final item = _filtered.removeAt(actualOldIndex);
+                        _filtered.insert(actualNewIndex, item);
+
+                        _questions = _filtered.toList();
+                        appCache.saveQuestions(_questions);
+                      });
+                    },
+                    itemBuilder: (context, index) {
+                      final q = _paginated()[index];
+                      return Container(
+                        key: ValueKey(q.id),
+                        margin: const EdgeInsets.only(bottom: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: _selectedIds.contains(q.id)
+                                ? const Color(0xFF6366F1)
+                                : const Color(0xFFE9ECEF),
+                            width: _selectedIds.contains(q.id) ? 2 : 1,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.04),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
                             ),
-                            const SizedBox(width: 8),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFF59E0B).withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
+                          ],
+                        ),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.all(16),
+                          title: Text(
+                            q.question,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                            ),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 8),
+                              Row(
                                 children: [
-                                  const Icon(
-                                    Icons.star,
-                                    size: 12,
-                                    color: Color(0xFFF59E0B),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF3B82F6)
+                                          .withValues(alpha: 0.1),
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    child: Text(
+                                      q.category,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Color(0xFF3B82F6),
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
                                   ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    'Level ${q.difficulty}',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Color(0xFFF59E0B),
-                                      fontWeight: FontWeight.w600,
+                                  const SizedBox(width: 8),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFF59E0B)
+                                          .withValues(alpha: 0.1),
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Icon(
+                                          Icons.star,
+                                          size: 12,
+                                          color: Color(0xFFF59E0B),
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          'Level ${q.difficulty}',
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            color: Color(0xFFF59E0B),
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                          ],
-                        ),
-                        if (q.tags != null && q.tags!.isNotEmpty) ...[
-                          const SizedBox(height: 8),
-                          Wrap(
-                            spacing: 4,
-                            runSpacing: 4,
-                            children: q.tags!.map((tag) => Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF10B981).withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Text(
-                                tag,
-                                style: const TextStyle(
-                                  fontSize: 11,
-                                  color: Color(0xFF10B981),
-                                  fontWeight: FontWeight.w600,
+                              if (q.tags != null && q.tags!.isNotEmpty) ...[
+                                const SizedBox(height: 8),
+                                Wrap(
+                                  spacing: 4,
+                                  runSpacing: 4,
+                                  children: q.tags!
+                                      .map((tag) => Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 8,
+                                              vertical: 4,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFF10B981)
+                                                  .withValues(alpha: 0.1),
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
+                                            ),
+                                            child: Text(
+                                              tag,
+                                              style: const TextStyle(
+                                                fontSize: 11,
+                                                color: Color(0xFF10B981),
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ))
+                                      .toList(),
                                 ),
+                              ],
+                            ],
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.preview,
+                                    color: Color(0xFF6366F1)),
+                                onPressed: () => _previewQuestion(q),
                               ),
-                            )).toList(),
+                              IconButton(
+                                icon: const Icon(Icons.edit,
+                                    color: Color(0xFF10B981)),
+                                onPressed: () => _editQuestion(q, index),
+                              ),
+                              if (_bulkMode)
+                                Checkbox(
+                                  value: _selectedIds.contains(q.id),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      value == true
+                                          ? _selectedIds.add(q.id)
+                                          : _selectedIds.remove(q.id);
+                                    });
+                                  },
+                                ),
+                              const Icon(Icons.drag_handle,
+                                  color: Color(0xFF9CA3AF)),
+                            ],
                           ),
-                        ],
-                      ],
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.preview, color: Color(0xFF6366F1)),
-                          onPressed: () => _previewQuestion(q),
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.edit, color: Color(0xFF10B981)),
-                          onPressed: () => _editQuestion(q, index),
-                        ),
-                        if (_bulkMode)
-                          Checkbox(
-                            value: _selectedIds.contains(q.id),
-                            onChanged: (value) {
-                              setState(() {
-                                value == true
-                                    ? _selectedIds.add(q.id)
-                                    : _selectedIds.remove(q.id);
-                              });
-                            },
-                          ),
-                        const Icon(Icons.drag_handle, color: Color(0xFF9CA3AF)),
-                      ],
-                    ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           ),
 
           _buildPagination(pageCount),
@@ -667,7 +695,8 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
                 decoration: InputDecoration(
                   hintText: 'Search questions...',
                   hintStyle: TextStyle(color: Colors.grey[400]),
-                  prefixIcon: const Icon(Icons.search, color: Color(0xFF6366F1)),
+                  prefixIcon:
+                      const Icon(Icons.search, color: Color(0xFF6366F1)),
                   filled: true,
                   fillColor: const Color(0xFFF8FAFC),
                   border: OutlineInputBorder(
@@ -695,17 +724,20 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
               child: DropdownButton<String>(
                 value: _selectedCategory,
                 underline: const SizedBox(),
-                icon: const Icon(Icons.arrow_drop_down, color: Color(0xFF6366F1)),
+                icon:
+                    const Icon(Icons.arrow_drop_down, color: Color(0xFF6366F1)),
                 onChanged: (value) {
                   setState(() {
                     _selectedCategory = value!;
                     _applyFilters();
                   });
                 },
-                items: categories.map((cat) => DropdownMenuItem(
-                  value: cat,
-                  child: Text(cat),
-                )).toList(),
+                items: categories
+                    .map((cat) => DropdownMenuItem(
+                          value: cat,
+                          child: Text(cat),
+                        ))
+                    .toList(),
               ),
             ),
           ],
@@ -763,9 +795,8 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
         children: [
           IconButton(
             icon: const Icon(Icons.chevron_left),
-            onPressed: _currentPage > 0
-                ? () => setState(() => _currentPage--)
-                : null,
+            onPressed:
+                _currentPage > 0 ? () => setState(() => _currentPage--) : null,
             color: const Color(0xFF6366F1),
           ),
           const SizedBox(width: 16),

@@ -16,23 +16,22 @@ import 'depth_card_spec.dart';
 /// - Performance safety: overlays are lightweight + IgnorePointer
 /// - ThemeKey mapping uses your actual DepthCardThemes catalog
 class DepthCardSpecMapper {
-
   /// Map the JSON-safe spec into the UI config.
   ///
   /// - [fallbackWidth]/[fallbackHeight] provide defaults if spec omits them.
   /// - [onAction] lets you wire action intents without embedding logic into spec.
   static DepthCardConfig toConfig(
-      DepthCardSpec spec, {
-        required VoidCallback onTap,
-        double fallbackWidth = double.infinity,
-        double fallbackHeight = double.infinity,
+    DepthCardSpec spec, {
+    required VoidCallback onTap,
+    double fallbackWidth = double.infinity,
+    double fallbackHeight = double.infinity,
 
-        /// UI-only slots remain outside the data-only spec.
-        DepthCardSlots slots = DepthCardSlots.empty,
+    /// UI-only slots remain outside the data-only spec.
+    DepthCardSlots slots = DepthCardSlots.empty,
 
-        /// Optional action callback. If null, actions are not rendered.
-        void Function(DepthCardActionSpec action)? onAction,
-      }) {
+    /// Optional action callback. If null, actions are not rendered.
+    void Function(DepthCardActionSpec action)? onAction,
+  }) {
     final theme = _themeFromKey(spec.themeKey);
 
     final overlayWidgets = spec.overlays
@@ -86,7 +85,7 @@ class DepthCardSpecMapper {
       case 'dark':
         return DepthCardThemes.midnight;
 
-    // Existing catalog keys (based on your current DepthCardThemes)
+      // Existing catalog keys (based on your current DepthCardThemes)
       case 'light':
         return DepthCardThemes.light;
       case 'futuristic':
@@ -150,7 +149,7 @@ class DepthCardSpecMapper {
           text: (o.props['text'] ?? '').toString(),
         );
 
-    // Unknown overlays are ignored for forward compatibility.
+      // Unknown overlays are ignored for forward compatibility.
       default:
         return null;
     }
@@ -167,14 +166,14 @@ class DepthCardSpecMapper {
   // ---------------------------------------------------------------------------
 
   static CardOverlayAction _toCardOverlayAction(
-      DepthCardActionSpec a,
-      void Function(DepthCardActionSpec action) onAction,
-      ) {
+    DepthCardActionSpec a,
+    void Function(DepthCardActionSpec action) onAction,
+  ) {
     return CardOverlayAction(
       icon: _iconFromKey(a.icon),
       title: a.label,
       onTap: () => onAction(a),
-      onPressed: () {  },
+      onPressed: () {},
       tooltip: '',
     );
   }
@@ -215,7 +214,8 @@ class FileImageUriProvider extends ImageProvider<FileImageUriProvider> {
   const FileImageUriProvider(this.filePath);
 
   @override
-  ImageStreamCompleter loadImage(FileImageUriProvider key, ImageDecoderCallback decode) {
+  ImageStreamCompleter loadImage(
+      FileImageUriProvider key, ImageDecoderCallback decode) {
     // This is intentionally not implemented to avoid custom IO plumbing here.
     // If you need file path backgrounds, use `FileImage(File(path))` instead.
     //
@@ -225,15 +225,18 @@ class FileImageUriProvider extends ImageProvider<FileImageUriProvider> {
     // - use FileImage(File(path))
     throw UnsupportedError(
       'FileImageUriProvider is a placeholder. Replace _backgroundProvider() '
-          'with FileImage(File(path)) if you want file-based backgrounds.',
+      'with FileImage(File(path)) if you want file-based backgrounds.',
     );
   }
 
   @override
-  Future<FileImageUriProvider> obtainKey(ImageConfiguration configuration) async => this;
+  Future<FileImageUriProvider> obtainKey(
+          ImageConfiguration configuration) async =>
+      this;
 
   @override
-  bool operator ==(Object other) => other is FileImageUriProvider && other.filePath == filePath;
+  bool operator ==(Object other) =>
+      other is FileImageUriProvider && other.filePath == filePath;
 
   @override
   int get hashCode => filePath.hashCode;

@@ -53,8 +53,8 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
 
     try {
       final serviceManager = ref.read(serviceManagerProvider);
-      final response =
-          await serviceManager.apiService.get('/admin/users?page=1&pageSize=100');
+      final response = await serviceManager.apiService
+          .get('/admin/users?page=1&pageSize=100');
       final envelope = serviceManager.apiService
           .parsePageEnvelope<Map<String, dynamic>>(response, (json) => json);
 
@@ -66,7 +66,8 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
     } on ApiRequestException catch (e) {
       final errorCode = e.errorCode != null ? ' [${e.errorCode}]' : '';
       final statusCode = e.statusCode != null ? ' (${e.statusCode})' : '';
-      _usersError = 'Using local sample users$statusCode$errorCode: ${e.message}';
+      _usersError =
+          'Using local sample users$statusCode$errorCode: ${e.message}';
       _users = getMockUsers();
       _page = 1;
       _pageSize = _users.length;
@@ -144,16 +145,13 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
               color: const Color(0xFFFFF7ED),
               child: Text(
                 _usersError!,
-                style: const TextStyle(
-                    color: Color(0xFF9A3412), fontSize: 12),
+                style: const TextStyle(color: Color(0xFF9A3412), fontSize: 12),
               ),
             ),
           _buildFilters(),
           _buildContractSummary(users.length),
           Expanded(
-            child: users.isEmpty
-                ? _buildEmptyState()
-                : _buildUsersList(users),
+            child: users.isEmpty ? _buildEmptyState() : _buildUsersList(users),
           ),
         ],
       ),
@@ -308,9 +306,8 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
             Icon(
               hasValue ? Icons.close : Icons.arrow_drop_down,
               size: 18,
-              color: hasValue
-                  ? const Color(0xFF6366F1)
-                  : const Color(0xFF6B7280),
+              color:
+                  hasValue ? const Color(0xFF6366F1) : const Color(0xFF6B7280),
             ),
           ],
         ),
@@ -494,8 +491,8 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
               padding: const EdgeInsets.all(20),
               child: Text(
                 title,
-                style: const TextStyle(
-                    fontSize: 18, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
             ...items,
@@ -570,8 +567,7 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
                 },
               ),
               ListTile(
-                leading:
-                const Icon(Icons.history, color: Color(0xFF6B7280)),
+                leading: const Icon(Icons.history, color: Color(0xFF6B7280)),
                 title: const Text('View Activity Log'),
                 onTap: () {
                   Navigator.pop(context);
@@ -616,8 +612,7 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
         try {
           final sm = ref.read(serviceManagerProvider);
           if (user.isBanned) {
-            await sm.apiService
-                .post('/admin/users/${user.id}/unban', body: {});
+            await sm.apiService.post('/admin/users/${user.id}/unban', body: {});
           } else {
             await sm.apiService.post('/admin/users/${user.id}/ban',
                 body: {'reason': 'Admin action'});
@@ -647,7 +642,7 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
       context: context,
       title: 'Delete User',
       message:
-      'Are you sure you want to permanently delete ${user.username}? This action cannot be undone.',
+          'Are you sure you want to permanently delete ${user.username}? This action cannot be undone.',
       type: AlertType.delete,
       confirmText: 'Delete User',
       cancelText: 'Cancel',
@@ -727,8 +722,8 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(log['type']?.toString() ?? 'UNKNOWN',
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold)),
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold)),
                         const SizedBox(height: 4),
                         Text(log['description']?.toString() ?? '-'),
                         const SizedBox(height: 4),
@@ -773,20 +768,18 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
               children: [
                 TextField(
                   controller: usernameCtrl,
-                  decoration:
-                  const InputDecoration(labelText: 'Username'),
+                  decoration: const InputDecoration(labelText: 'Username'),
                 ),
                 const SizedBox(height: 10),
                 TextField(
                   controller: emailCtrl,
-                  decoration:
-                  const InputDecoration(labelText: 'Email'),
+                  decoration: const InputDecoration(labelText: 'Email'),
                 ),
                 const SizedBox(height: 10),
                 TextField(
                   controller: passwordCtrl,
-                  decoration: const InputDecoration(
-                      labelText: 'Temporary Password'),
+                  decoration:
+                      const InputDecoration(labelText: 'Temporary Password'),
                   obscureText: true,
                 ),
                 const SizedBox(height: 10),
@@ -794,32 +787,29 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
                   value: selectedRole,
                   items: UserRole.values
                       .map((r) => DropdownMenuItem(
-                      value: r, child: Text(getRoleText(r))))
+                          value: r, child: Text(getRoleText(r))))
                       .toList(),
                   onChanged: (v) {
                     if (v != null) setDialogState(() => selectedRole = v);
                   },
-                  decoration:
-                  const InputDecoration(labelText: 'Role'),
+                  decoration: const InputDecoration(labelText: 'Role'),
                 ),
                 const SizedBox(height: 10),
                 DropdownButtonFormField<AgeGroup>(
                   value: selectedAge,
                   items: AgeGroup.values
                       .map((a) => DropdownMenuItem(
-                      value: a, child: Text(getAgeGroupText(a))))
+                          value: a, child: Text(getAgeGroupText(a))))
                       .toList(),
                   onChanged: (v) {
                     if (v != null) setDialogState(() => selectedAge = v);
                   },
-                  decoration:
-                  const InputDecoration(labelText: 'Age Group'),
+                  decoration: const InputDecoration(labelText: 'Age Group'),
                 ),
                 const SizedBox(height: 6),
                 SwitchListTile(
                   value: isVerified,
-                  onChanged: (v) =>
-                      setDialogState(() => isVerified = v),
+                  onChanged: (v) => setDialogState(() => isVerified = v),
                   title: const Text('Verified'),
                   dense: true,
                   contentPadding: EdgeInsets.zero,
@@ -837,9 +827,7 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
                 final username = usernameCtrl.text.trim();
                 final email = emailCtrl.text.trim();
                 final tempPassword = passwordCtrl.text.trim();
-                if (username.isEmpty ||
-                    email.isEmpty ||
-                    tempPassword.isEmpty) {
+                if (username.isEmpty || email.isEmpty || tempPassword.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text(
                         'Username, email and temporary password are required.'),
@@ -895,8 +883,8 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
               DropdownButtonFormField<UserRole>(
                 value: selectedRole,
                 items: UserRole.values
-                    .map((r) => DropdownMenuItem(
-                    value: r, child: Text(getRoleText(r))))
+                    .map((r) =>
+                        DropdownMenuItem(value: r, child: Text(getRoleText(r))))
                     .toList(),
                 onChanged: (v) {
                   if (v != null) setDialogState(() => selectedRole = v);
@@ -907,8 +895,7 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
               SwitchListTile(
                 value: verified,
                 title: const Text('Verified'),
-                onChanged: (v) =>
-                    setDialogState(() => verified = v),
+                onChanged: (v) => setDialogState(() => verified = v),
               ),
             ],
           ),
@@ -921,11 +908,10 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
               onPressed: () async {
                 try {
                   final sm = ref.read(serviceManagerProvider);
-                  await sm.apiService.patch('/admin/users/${user.id}',
-                      body: {
-                        'role': selectedRole.name,
-                        'isVerified': verified,
-                      });
+                  await sm.apiService.patch('/admin/users/${user.id}', body: {
+                    'role': selectedRole.name,
+                    'isVerified': verified,
+                  });
                   if (!mounted) return;
                   Navigator.pop(context);
                   await _loadUsersFromBackend();

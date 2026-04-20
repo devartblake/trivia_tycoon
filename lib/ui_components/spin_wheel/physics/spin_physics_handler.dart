@@ -41,7 +41,9 @@ class EnhancedSpinHandler {
 
     if (customVelocity != null) {
       velocity = customVelocity;
-    } else if (gestureStart != null && gestureVelocity != null && gestureDuration != null) {
+    } else if (gestureStart != null &&
+        gestureVelocity != null &&
+        gestureDuration != null) {
       velocity = velocityCalculator.getVelocityFromGesture(
         gestureStart,
         gestureVelocity,

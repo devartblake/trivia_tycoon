@@ -38,7 +38,8 @@ class QuizHistoryScreen extends StatelessWidget {
                     color: Colors.white.withValues(alpha: 0.3),
                   ),
                   Expanded(
-                    child: _buildStatItem('Avg Score', '78%', Icons.trending_up),
+                    child:
+                        _buildStatItem('Avg Score', '78%', Icons.trending_up),
                   ),
                   Container(
                     width: 1,
@@ -83,7 +84,13 @@ class QuizHistoryScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return _buildHistoryItem(
                     classLevel: ['3', 'kindergarten', '5', '2', '4'][index],
-                    category: ['Science', 'Language Arts', 'Mathematics', 'Science', 'Social Studies'][index],
+                    category: [
+                      'Science',
+                      'Language Arts',
+                      'Mathematics',
+                      'Science',
+                      'Social Studies'
+                    ][index],
                     score: [8, 12, 15, 6, 11][index],
                     total: [10, 15, 20, 10, 15][index],
                     date: [
@@ -218,8 +225,11 @@ class QuizHistoryScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: percentage >= 80 ? Colors.green :
-                  percentage >= 60 ? Colors.orange : Colors.red,
+                  color: percentage >= 80
+                      ? Colors.green
+                      : percentage >= 60
+                          ? Colors.orange
+                          : Colors.red,
                 ),
               ),
               Text(

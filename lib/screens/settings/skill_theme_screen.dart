@@ -5,7 +5,7 @@ import '../../core/theme/hex_spider_theme.dart';
 import '../../game/providers/hex_theme_providers.dart';
 
 final hexSpiderThemeProvider =
-StateProvider<HexSpiderTheme>((ref) => HexSpiderTheme.brand);
+    StateProvider<HexSpiderTheme>((ref) => HexSpiderTheme.brand);
 
 class SkillThemeScreen extends ConsumerStatefulWidget {
   const SkillThemeScreen({super.key});
@@ -24,31 +24,36 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
     HexSpiderTheme.brand: {
       'name': 'Brand',
       'description': 'Classic brand colors',
-      'gradient': const LinearGradient(colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)]),
+      'gradient':
+          const LinearGradient(colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)]),
       'icon': Icons.business_rounded,
     },
     HexSpiderTheme.jamaica: {
       'name': 'Jamaican Flag',
       'description': 'Vibrant Caribbean colors',
-      'gradient': const LinearGradient(colors: [Color(0xFF10B981), Color(0xFFF59E0B), Color(0xFF059669)]),
+      'gradient': const LinearGradient(
+          colors: [Color(0xFF10B981), Color(0xFFF59E0B), Color(0xFF059669)]),
       'icon': Icons.flag_rounded,
     },
     HexSpiderTheme.usa: {
       'name': 'American Flag',
       'description': 'Patriotic red, white, and blue',
-      'gradient': const LinearGradient(colors: [Color(0xFFEF4444), Color(0xFF3B82F6), Color(0xFFDC2626)]),
+      'gradient': const LinearGradient(
+          colors: [Color(0xFFEF4444), Color(0xFF3B82F6), Color(0xFFDC2626)]),
       'icon': Icons.flag_circle_rounded,
     },
     HexSpiderTheme.pinterest: {
       'name': 'Pinterest',
       'description': 'Social media inspired',
-      'gradient': const LinearGradient(colors: [Color(0xFFE60023), Color(0xFFBD081C)]),
+      'gradient':
+          const LinearGradient(colors: [Color(0xFFE60023), Color(0xFFBD081C)]),
       'icon': Icons.interests,
     },
     HexSpiderTheme.neon: {
       'name': 'Neon',
       'description': 'Electric cyberpunk vibes',
-      'gradient': const LinearGradient(colors: [Color(0xFFFF00FF), Color(0xFF00FFFF), Color(0xFF7C3AED)]),
+      'gradient': const LinearGradient(
+          colors: [Color(0xFFFF00FF), Color(0xFF00FFFF), Color(0xFF7C3AED)]),
       'icon': Icons.electric_bolt_rounded,
     },
   };
@@ -71,7 +76,7 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
 
     _itemControllers = List.generate(
       _themeData.length + 1,
-          (index) => AnimationController(
+      (index) => AnimationController(
         duration: Duration(milliseconds: 400 + (index * 100)),
         vsync: this,
       ),
@@ -108,9 +113,9 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
       appBar: _buildAppBar(),
       body: _fadeAnimation != null
           ? FadeTransition(
-        opacity: _fadeAnimation!,
-        child: _buildBody(theme, snap),
-      )
+              opacity: _fadeAnimation!,
+              child: _buildBody(theme, snap),
+            )
           : _buildBody(theme, snap),
     );
   }
@@ -184,7 +189,10 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: (currentTheme['gradient'] as LinearGradient).colors.first.withValues(alpha: 0.3),
+                color: (currentTheme['gradient'] as LinearGradient)
+                    .colors
+                    .first
+                    .withValues(alpha: 0.3),
                 blurRadius: 25,
                 offset: const Offset(0, 12),
               ),
@@ -311,7 +319,8 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
             const SizedBox(height: 20),
             ..._themeData.entries.map((entry) {
               final index = _themeData.keys.toList().indexOf(entry.key) + 1;
-              return _buildThemeOption(entry.key, entry.value, currentTheme, index);
+              return _buildThemeOption(
+                  entry.key, entry.value, currentTheme, index);
             }).toList(),
           ],
         ),
@@ -319,7 +328,8 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
     );
   }
 
-  Widget _buildThemeOption(HexSpiderTheme themeType, Map<String, dynamic> themeData, HexSpiderTheme currentTheme, int index) {
+  Widget _buildThemeOption(HexSpiderTheme themeType,
+      Map<String, dynamic> themeData, HexSpiderTheme currentTheme, int index) {
     final isSelected = currentTheme == themeType;
 
     return SlideTransition(
@@ -342,13 +352,18 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
                 : const Color(0xFF64748B).withValues(alpha: 0.2),
             width: isSelected ? 2 : 1,
           ),
-          boxShadow: isSelected ? [
-            BoxShadow(
-              color: (themeData['gradient'] as LinearGradient).colors.first.withValues(alpha: 0.3),
-              blurRadius: 15,
-              offset: const Offset(0, 6),
-            ),
-          ] : null,
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: (themeData['gradient'] as LinearGradient)
+                        .colors
+                        .first
+                        .withValues(alpha: 0.3),
+                    blurRadius: 15,
+                    offset: const Offset(0, 6),
+                  ),
+                ]
+              : null,
         ),
         child: ListTile(
           contentPadding: const EdgeInsets.all(16),
@@ -357,7 +372,10 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
             decoration: BoxDecoration(
               color: isSelected
                   ? Colors.white.withValues(alpha: 0.2)
-                  : (themeData['gradient'] as LinearGradient).colors.first.withValues(alpha: 0.1),
+                  : (themeData['gradient'] as LinearGradient)
+                      .colors
+                      .first
+                      .withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
@@ -387,22 +405,22 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
           ),
           trailing: isSelected
               ? Container(
-            padding: const EdgeInsets.all(6),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: const Icon(
-              Icons.check_rounded,
-              color: Colors.white,
-              size: 16,
-            ),
-          )
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Icon(
+                    Icons.check_rounded,
+                    color: Colors.white,
+                    size: 16,
+                  ),
+                )
               : Icon(
-            Icons.radio_button_unchecked,
-            color: const Color(0xFF64748B).withValues(alpha: 0.5),
-            size: 20,
-          ),
+                  Icons.radio_button_unchecked,
+                  color: const Color(0xFF64748B).withValues(alpha: 0.5),
+                  size: 20,
+                ),
           onTap: () {
             ref.read(hexSpiderThemeProvider.notifier).state = themeType;
           },
@@ -521,7 +539,8 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
                             'Align background grid with skill nodes',
                             style: TextStyle(
                               fontSize: 12,
-                              color: const Color(0xFF64748B).withValues(alpha: 0.8),
+                              color: const Color(0xFF64748B)
+                                  .withValues(alpha: 0.8),
                             ),
                           ),
                         ],
@@ -529,7 +548,8 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
                     ),
                     Switch.adaptive(
                       value: snap,
-                      onChanged: (v) => ref.read(hexSnapToNodesProvider.notifier).state = v,
+                      onChanged: (v) =>
+                          ref.read(hexSnapToNodesProvider.notifier).state = v,
                       activeColor: const Color(0xFF10B981),
                     ),
                   ],

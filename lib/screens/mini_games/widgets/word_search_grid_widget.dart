@@ -34,13 +34,15 @@ class WordSearchGrid extends StatelessWidget {
 
               return GestureDetector(
                 onPanStart: (details) {
-                  final position = _getCellFromPosition(details.localPosition, cellSize);
+                  final position =
+                      _getCellFromPosition(details.localPosition, cellSize);
                   if (position != null) {
                     controller.onDragStart(position.x, position.y);
                   }
                 },
                 onPanUpdate: (details) {
-                  final position = _getCellFromPosition(details.localPosition, cellSize);
+                  final position =
+                      _getCellFromPosition(details.localPosition, cellSize);
                   if (position != null) {
                     controller.onDragUpdate(position.x, position.y);
                   }
@@ -87,7 +89,10 @@ class WordSearchGrid extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: highlight ?? (isSelected ? const Color(0xFF6366F1).withValues(alpha: 0.3) : Colors.grey.shade100),
+        color: highlight ??
+            (isSelected
+                ? const Color(0xFF6366F1).withValues(alpha: 0.3)
+                : Colors.grey.shade100),
         borderRadius: BorderRadius.circular(4),
       ),
       child: Center(

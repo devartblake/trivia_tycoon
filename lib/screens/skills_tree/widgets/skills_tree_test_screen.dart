@@ -40,11 +40,13 @@ class SkillTreeNavTestScreen extends ConsumerWidget {
                 TabBar(
                   isScrollable: true,
                   tabs: groupTabs,
-                  onTap: (i) => ref.read(selectedGroupProvider.notifier).state = groups[i].id,
+                  onTap: (i) => ref.read(selectedGroupProvider.notifier).state =
+                      groups[i].id,
                 ),
                 Expanded(
                   child: TabBarView(
-                    children: groups.map((g) => _GroupBranches(group: g)).toList(),
+                    children:
+                        groups.map((g) => _GroupBranches(group: g)).toList(),
                   ),
                 ),
               ],
@@ -79,7 +81,8 @@ class _GroupBranches extends ConsumerWidget {
             final graph = b.toGraph();
 
             Navigator.of(ctx).push(
-              MaterialPageRoute(builder: (_) => _BranchToHexScreen(graph: graph)),
+              MaterialPageRoute(
+                  builder: (_) => _BranchToHexScreen(graph: graph)),
             );
           },
         );
@@ -89,10 +92,14 @@ class _GroupBranches extends ConsumerWidget {
 
   HexSpiderTheme _themeForGroup(SkillTreeGroupId id) {
     switch (id) {
-      case SkillTreeGroupId.combat: return HexSpiderTheme.brand; // red-leaning palette in your theme map
-      case SkillTreeGroupId.enhancement: return HexSpiderTheme.brand; // orange variant if you have one
-      case SkillTreeGroupId.utility: return HexSpiderTheme.brand; // purple variant
-      case SkillTreeGroupId.advanced: return HexSpiderTheme.brand; // gold variant
+      case SkillTreeGroupId.combat:
+        return HexSpiderTheme.brand; // red-leaning palette in your theme map
+      case SkillTreeGroupId.enhancement:
+        return HexSpiderTheme.brand; // orange variant if you have one
+      case SkillTreeGroupId.utility:
+        return HexSpiderTheme.brand; // purple variant
+      case SkillTreeGroupId.advanced:
+        return HexSpiderTheme.brand; // gold variant
     }
   }
 }
@@ -117,16 +124,25 @@ class _BranchCard extends StatelessWidget {
         child: Row(
           children: [
             // Accent bar
-            Container(width: 6, height: 56, decoration: BoxDecoration(color: branch.accent, borderRadius: BorderRadius.circular(3))),
+            Container(
+                width: 6,
+                height: 56,
+                decoration: BoxDecoration(
+                    color: branch.accent,
+                    borderRadius: BorderRadius.circular(3))),
             const SizedBox(width: 12),
             // Texts
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(branch.title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                  Text(branch.title,
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w600)),
                   const SizedBox(height: 4),
-                  Text(branch.description, style: TextStyle(color: Colors.white.withValues(alpha: 0.7))),
+                  Text(branch.description,
+                      style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.7))),
                   const SizedBox(height: 8),
                   LinearProgressIndicator(
                     value: branch.progress,
@@ -140,7 +156,8 @@ class _BranchCard extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text('$pct%', style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text('$pct%',
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
                 const SizedBox(height: 8),
                 FilledButton(
                   onPressed: onOpenHex,
@@ -168,7 +185,8 @@ class _BranchToHexScreen extends ConsumerWidget {
           // Load into controller the first time this page paints
           WidgetsBinding.instance.addPostFrameCallback((_) {
             final ctrl = ref.read(skillTreeProvider.notifier);
-            ctrl.loadGraph(graph, recomputeLayout: true); // safe helper we add below
+            ctrl.loadGraph(graph,
+                recomputeLayout: true); // safe helper we add below
           });
           return const SkillTreeView();
         },

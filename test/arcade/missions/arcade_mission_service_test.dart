@@ -28,7 +28,8 @@ ArcadeResult _run({
       metadata: {'isNewPb': isNewPb},
     );
 
-ArcadeMissionService _buildService(AppCacheService cache, {String seasonId = 'season_test'}) {
+ArcadeMissionService _buildService(AppCacheService cache,
+    {String seasonId = 'season_test'}) {
   return ArcadeMissionService(cache, seasonId: seasonId);
 }
 
@@ -65,11 +66,13 @@ void main() {
     test('missions include daily, weekly, and season tiers', () {
       final svc = _buildService(cache);
       final tiers = svc.missions.map((m) => m.tier).toSet();
-      expect(tiers, containsAll([
-        ArcadeMissionTier.daily,
-        ArcadeMissionTier.weekly,
-        ArcadeMissionTier.season,
-      ]));
+      expect(
+          tiers,
+          containsAll([
+            ArcadeMissionTier.daily,
+            ArcadeMissionTier.weekly,
+            ArcadeMissionTier.season,
+          ]));
     });
 
     test('progressFor returns zero progress for all missions initially', () {
@@ -117,9 +120,11 @@ void main() {
       final svc = _buildService(cache);
 
       // Find a playRuns mission restricted to a specific game (if any)
-      final gameMissions = svc.missions.where(
-        (m) => m.type == ArcadeMissionType.playRuns && m.gameId != null,
-      ).toList();
+      final gameMissions = svc.missions
+          .where(
+            (m) => m.type == ArcadeMissionType.playRuns && m.gameId != null,
+          )
+          .toList();
 
       if (gameMissions.isNotEmpty) {
         final mission = gameMissions.first;
@@ -484,8 +489,8 @@ void main() {
         'target': 1,
         'reward': {},
       });
-      expect(m.tier, ArcadeMissionTier.daily);      // default
-      expect(m.type, ArcadeMissionType.playRuns);   // default
+      expect(m.tier, ArcadeMissionTier.daily); // default
+      expect(m.type, ArcadeMissionType.playRuns); // default
     });
   });
 
@@ -510,7 +515,8 @@ void main() {
     });
 
     test('copyWith produces correct update', () {
-      const p = ArcadeMissionProgress(missionId: 'x', current: 1, claimed: false);
+      const p =
+          ArcadeMissionProgress(missionId: 'x', current: 1, claimed: false);
       final updated = p.copyWith(current: 5, claimed: true);
       expect(updated.missionId, 'x');
       expect(updated.current, 5);
@@ -526,11 +532,13 @@ void main() {
     test('allMissions contains daily + weekly + season entries', () {
       final all = ArcadeMissionCatalog.allMissions(seasonId: 'sv1');
       final tiers = all.map((m) => m.tier).toSet();
-      expect(tiers, containsAll([
-        ArcadeMissionTier.daily,
-        ArcadeMissionTier.weekly,
-        ArcadeMissionTier.season,
-      ]));
+      expect(
+          tiers,
+          containsAll([
+            ArcadeMissionTier.daily,
+            ArcadeMissionTier.weekly,
+            ArcadeMissionTier.season,
+          ]));
     });
 
     test('all mission ids are unique', () {

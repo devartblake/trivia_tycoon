@@ -7,22 +7,33 @@ import '../../../../game/models/question_model.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 // Provider for monthly quiz preview data
-final monthlyQuizPreviewProvider = FutureProvider<MonthlyQuizPreview>((ref) async {
+final monthlyQuizPreviewProvider =
+    FutureProvider<MonthlyQuizPreview>((ref) async {
   final repository = ref.watch(question_data.questionRepositoryProvider);
   final quizService = ref.read(quizProgressServiceProvider);
   final now = DateTime.now();
 
   // Monthly themes
   final monthThemes = {
-    1: 'science', 2: 'history', 3: 'literature', 4: 'geography',
-    5: 'music', 6: 'sports', 7: 'technology', 8: 'entertainment',
-    9: 'science', 10: 'history', 11: 'world', 12: 'general',
+    1: 'science',
+    2: 'history',
+    3: 'literature',
+    4: 'geography',
+    5: 'music',
+    6: 'sports',
+    7: 'technology',
+    8: 'entertainment',
+    9: 'science',
+    10: 'history',
+    11: 'world',
+    12: 'general',
   };
 
   final currentTheme = monthThemes[now.month] ?? 'general';
-  final isCompleted = quizService.getMonthlyQuizCompletedSync(now.year, now.month);
+  final isCompleted =
+      quizService.getMonthlyQuizCompletedSync(now.year, now.month);
   final completionRate =
-  quizService.getMonthlyQuizCompletionRateSync(now.year, now.month);
+      quizService.getMonthlyQuizCompletionRateSync(now.year, now.month);
 
   try {
     final questions = await repository.getMixedQuiz(
@@ -156,7 +167,8 @@ class MonthlyQuizWidget extends ConsumerWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 ),
                 child: const Text(
                   "Retry",
@@ -223,7 +235,8 @@ class MonthlyQuizWidget extends ConsumerWidget {
               const SizedBox(height: 8),
               if (preview.isCompleted)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
                     color: Colors.green.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(10),
@@ -252,7 +265,8 @@ class MonthlyQuizWidget extends ConsumerWidget {
                     LinearProgressIndicator(
                       value: preview.completionRate,
                       backgroundColor: Colors.white.withValues(alpha: 0.3),
-                      valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                      valueColor:
+                          const AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
                   ],
                 ),
@@ -265,11 +279,13 @@ class MonthlyQuizWidget extends ConsumerWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 ),
                 child: Text(
                   preview.isCompleted ? "View Results" : "Start Challenge",
-                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 11),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w600, fontSize: 11),
                 ),
               ),
             ],
@@ -317,7 +333,8 @@ class MonthlyQuizWidget extends ConsumerWidget {
     );
   }
 
-  void _handleMonthlyChallengeTap(BuildContext context, MonthlyQuizPreview preview) {
+  void _handleMonthlyChallengeTap(
+      BuildContext context, MonthlyQuizPreview preview) {
     // Navigate to monthly quiz screen (full dedicated screen)
     context.push('/monthly-quiz');
   }
@@ -374,8 +391,18 @@ class MonthlyQuizPreview {
 // Helper function
 String _getMonthName(int month) {
   const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
   ];
   return months[month - 1];
 }

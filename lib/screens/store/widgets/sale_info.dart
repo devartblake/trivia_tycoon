@@ -306,8 +306,7 @@ class _SaleInfoState extends ConsumerState<SaleInfo>
             top: -8,
             right: 16,
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
                 color: const Color(0xFF059669),
                 borderRadius: BorderRadius.circular(12),
@@ -391,10 +390,8 @@ class _SaleInfoState extends ConsumerState<SaleInfo>
     }
 
     final hours = _timeRemaining.inHours.toString().padLeft(2, '0');
-    final minutes =
-        (_timeRemaining.inMinutes % 60).toString().padLeft(2, '0');
-    final seconds =
-        (_timeRemaining.inSeconds % 60).toString().padLeft(2, '0');
+    final minutes = (_timeRemaining.inMinutes % 60).toString().padLeft(2, '0');
+    final seconds = (_timeRemaining.inSeconds % 60).toString().padLeft(2, '0');
     return 'Ends in $hours:$minutes:$seconds';
   }
 
@@ -411,7 +408,8 @@ class _SaleInfoState extends ConsumerState<SaleInfo>
 
     final fallbackPlan = widget.purchasePlan;
     final tier = widget.data.tier ?? fallbackPlan?.tier;
-    final billingPeriod = widget.data.billingPeriod ?? fallbackPlan?.billingPeriod;
+    final billingPeriod =
+        widget.data.billingPeriod ?? fallbackPlan?.billingPeriod;
 
     if (tier == null || billingPeriod == null) {
       ScaffoldMessenger.of(context).showSnackBar(

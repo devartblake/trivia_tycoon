@@ -19,7 +19,8 @@ final scheduledProvider = FutureProvider<List<NotificationModel>>((ref) async {
 
 /// Available channels (from Awesome Notifications)
 /// Channels, filtered by enabled flag.
-final notificationChannelsProvider = FutureProvider<List<NotificationChannel>>((ref) async {
+final notificationChannelsProvider =
+    FutureProvider<List<NotificationChannel>>((ref) async {
   final known = NotificationService().knownChannels;
   final prefs = ChannelPrefs.instance;
   final List<NotificationChannel> enabledOnly = [];
@@ -184,7 +185,7 @@ class NotificationAdminActions extends AutoDisposeAsyncNotifier<void> {
 }
 
 final notificationAdminActionsProvider =
-AutoDisposeAsyncNotifierProvider<NotificationAdminActions, void>(() {
+    AutoDisposeAsyncNotifierProvider<NotificationAdminActions, void>(() {
   return NotificationAdminActions();
 });
 

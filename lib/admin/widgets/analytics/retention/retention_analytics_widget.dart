@@ -12,7 +12,8 @@ class RetentionAnalyticsChart extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final filters = ref.watch(missionFiltersProvider);
-    final filtered = entries.take(filters.timeframe == 'Monthly' ? 30 : 7).toList();
+    final filtered =
+        entries.take(filters.timeframe == 'Monthly' ? 30 : 7).toList();
 
     if (filtered.isEmpty) {
       return Container(
@@ -55,8 +56,14 @@ class RetentionAnalyticsChart extends ConsumerWidget {
       );
     }
 
-    final maxRetention = filtered.map((e) => e.retentionPercentage).reduce((a, b) => a > b ? a : b).toDouble();
-    final minRetention = filtered.map((e) => e.retentionPercentage).reduce((a, b) => a < b ? a : b).toDouble();
+    final maxRetention = filtered
+        .map((e) => e.retentionPercentage)
+        .reduce((a, b) => a > b ? a : b)
+        .toDouble();
+    final minRetention = filtered
+        .map((e) => e.retentionPercentage)
+        .reduce((a, b) => a < b ? a : b)
+        .toDouble();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,7 +129,8 @@ class RetentionAnalyticsChart extends ConsumerWidget {
                     showTitles: true,
                     reservedSize: 30,
                     getTitlesWidget: (value, meta) {
-                      if (value.toInt() >= 0 && value.toInt() < filtered.length) {
+                      if (value.toInt() >= 0 &&
+                          value.toInt() < filtered.length) {
                         return Padding(
                           padding: const EdgeInsets.only(top: 8),
                           child: Text(
@@ -180,9 +188,9 @@ class RetentionAnalyticsChart extends ConsumerWidget {
                       .asMap()
                       .entries
                       .map((e) => FlSpot(
-                    e.key.toDouble(),
-                    e.value.retentionPercentage.toDouble(),
-                  ))
+                            e.key.toDouble(),
+                            e.value.retentionPercentage.toDouble(),
+                          ))
                       .toList(),
                   isCurved: true,
                   color: const Color(0xFFEF4444),

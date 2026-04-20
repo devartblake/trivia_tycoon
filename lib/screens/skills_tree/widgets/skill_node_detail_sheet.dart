@@ -31,10 +31,10 @@ class SkillNodeDetailSheet extends ConsumerWidget {
   // ── Static show helper ────────────────────────────────────────────────────
 
   static Future<void> show(
-      BuildContext context,
-      WidgetRef ref,
-      SkillNode node,
-      ) {
+    BuildContext context,
+    WidgetRef ref,
+    SkillNode node,
+  ) {
     final graph = ref.read(skillTreeProvider).graph;
     final ctrl = ref.read(skillTreeProvider.notifier);
     final cooldowns = ref.read(skillCooldownServiceProvider);
@@ -98,7 +98,8 @@ class SkillNodeDetailSheet extends ConsumerWidget {
               // Header row: mini hex preview + title + category chip
               _buildHeader(context, categoryColor)
                   .animate()
-                  .slideY(begin: 0.15, duration: 250.ms, curve: Curves.easeOutCubic)
+                  .slideY(
+                      begin: 0.15, duration: 250.ms, curve: Curves.easeOutCubic)
                   .fadeIn(duration: 200.ms),
 
               const SizedBox(height: 14),
@@ -115,7 +116,8 @@ class SkillNodeDetailSheet extends ConsumerWidget {
               // Description
               Text(
                 node.description,
-                style: const TextStyle(color: Colors.white70, fontSize: 14, height: 1.45),
+                style: const TextStyle(
+                    color: Colors.white70, fontSize: 14, height: 1.45),
               ).animate().fadeIn(duration: 200.ms, delay: 80.ms),
 
               const SizedBox(height: 20),
@@ -145,7 +147,8 @@ class SkillNodeDetailSheet extends ConsumerWidget {
                         Expanded(
                           child: Text(
                             lbl,
-                            style: const TextStyle(color: Colors.white, fontSize: 13),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 13),
                           ),
                         ),
                       ],
@@ -164,7 +167,8 @@ class SkillNodeDetailSheet extends ConsumerWidget {
               const SizedBox(height: 20),
 
               // Cost + action button
-              _buildActionRow(context, ref, categoryColor, playerXP, onCooldown, remaining),
+              _buildActionRow(
+                  context, ref, categoryColor, playerXP, onCooldown, remaining),
             ],
           ),
         );
@@ -209,11 +213,13 @@ class SkillNodeDetailSheet extends ConsumerWidget {
               const SizedBox(height: 6),
               // Category chip
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: categoryColor.withValues(alpha: 0.18),
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: categoryColor.withValues(alpha: 0.5)),
+                  border:
+                      Border.all(color: categoryColor.withValues(alpha: 0.5)),
                 ),
                 child: Text(
                   node.category.name.toUpperCase(),
@@ -239,7 +245,8 @@ class SkillNodeDetailSheet extends ConsumerWidget {
     return Row(
       children: [
         // Tier dots
-        const Text('Tier ', style: TextStyle(color: Colors.white54, fontSize: 12)),
+        const Text('Tier ',
+            style: TextStyle(color: Colors.white54, fontSize: 12)),
         for (int i = 0; i <= maxTier; i++)
           Container(
             width: 10,
@@ -247,9 +254,7 @@ class SkillNodeDetailSheet extends ConsumerWidget {
             margin: const EdgeInsets.only(right: 4),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: i <= node.tier
-                  ? categoryColor
-                  : Colors.white12,
+              color: i <= node.tier ? categoryColor : Colors.white12,
             ),
           ),
         const Spacer(),
@@ -315,13 +320,13 @@ class SkillNodeDetailSheet extends ConsumerWidget {
   }
 
   Widget _buildActionRow(
-      BuildContext context,
-      WidgetRef ref,
-      Color categoryColor,
-      int playerXP,
-      bool onCooldown,
-      Duration? remaining,
-      ) {
+    BuildContext context,
+    WidgetRef ref,
+    Color categoryColor,
+    int playerXP,
+    bool onCooldown,
+    Duration? remaining,
+  ) {
     // Determine button state
     final _ButtonState btnState = _resolveButtonState(
       playerXP: playerXP,
@@ -329,8 +334,8 @@ class SkillNodeDetailSheet extends ConsumerWidget {
     );
 
     final String btnLabel = _buttonLabel(btnState, remaining);
-    final bool enabled = btnState == _ButtonState.canUnlock ||
-        btnState == _ButtonState.canUse;
+    final bool enabled =
+        btnState == _ButtonState.canUnlock || btnState == _ButtonState.canUse;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -366,9 +371,11 @@ class SkillNodeDetailSheet extends ConsumerWidget {
                   style: const TextStyle(color: Colors.white38, fontSize: 11),
                 ),
               if (node.unlocked && node.effectTrigger == 'active')
-                const Text('Active skill', style: TextStyle(color: Colors.white54, fontSize: 12)),
+                const Text('Active skill',
+                    style: TextStyle(color: Colors.white54, fontSize: 12)),
               if (node.unlocked && node.effectTrigger != 'active')
-                const Text('Passive — always active', style: TextStyle(color: Colors.white54, fontSize: 12)),
+                const Text('Passive — always active',
+                    style: TextStyle(color: Colors.white54, fontSize: 12)),
             ],
           ),
           const Spacer(),
@@ -376,13 +383,13 @@ class SkillNodeDetailSheet extends ConsumerWidget {
           FilledButton(
             onPressed: enabled
                 ? () {
-              if (btnState == _ButtonState.canUnlock) {
-                controller.unlockSkill(node.id);
-              } else {
-                controller.useSkill(node.id);
-              }
-              Navigator.of(context).pop();
-            }
+                    if (btnState == _ButtonState.canUnlock) {
+                      controller.unlockSkill(node.id);
+                    } else {
+                      controller.useSkill(node.id);
+                    }
+                    Navigator.of(context).pop();
+                  }
                 : null,
             style: FilledButton.styleFrom(
               backgroundColor: enabled ? categoryColor : Colors.white12,

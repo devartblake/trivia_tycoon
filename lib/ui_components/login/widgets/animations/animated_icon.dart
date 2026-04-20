@@ -61,11 +61,11 @@ class _AnimatedIconButtonState extends State<AnimatedIconButton>
     _ringThicknessAnimation =
         Tween<double>(begin: _loadingCircleRadius, end: _loadingCircleThickness)
             .animate(
-          CurvedAnimation(
-            parent: widget.controller,
-            curve: const Interval(.65, .85),
-          ),
-        );
+      CurvedAnimation(
+        parent: widget.controller,
+        curve: const Interval(.65, .85),
+      ),
+    );
     _ringOpacityAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(
       CurvedAnimation(
         parent: widget.controller,
@@ -157,8 +157,8 @@ class _AnimatedIconButtonState extends State<AnimatedIconButton>
     _width = textWidth > 120.0 && textWidth < 240.0
         ? textWidth
         : textWidth >= 240.0
-        ? 240.0
-        : 120.0;
+            ? 240.0
+            : 120.0;
 
     _sizeAnimation = Tween<double>(begin: 1.0, end: _height / _width).animate(
       CurvedAnimation(
@@ -182,8 +182,8 @@ class _AnimatedIconButtonState extends State<AnimatedIconButton>
             shadowColor: _color,
             elevation: !_isLoading
                 ? (_hover
-                ? buttonTheme.highlightElevation!
-                : buttonTheme.elevation!)
+                    ? buttonTheme.highlightElevation!
+                    : buttonTheme.elevation!)
                 : 0,
             child: child,
           ),

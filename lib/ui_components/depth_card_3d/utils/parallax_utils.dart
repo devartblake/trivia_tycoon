@@ -5,7 +5,8 @@ class ParallaxUtils {
 
   /// Update pointer position and normalize it relative to screen size
   static void updatePointer(Offset globalPosition) {
-    final size = WidgetsBinding.instance.platformDispatcher.views.first.physicalSize;
+    final size =
+        WidgetsBinding.instance.platformDispatcher.views.first.physicalSize;
     final normalized = Offset(
       (globalPosition.dx / size.width - 0.5) * 2,
       (globalPosition.dy / size.height - 0.5) * 2,

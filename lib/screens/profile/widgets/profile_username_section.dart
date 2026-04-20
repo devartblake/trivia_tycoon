@@ -11,7 +11,8 @@ class ProfileUsernameSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final favoriteSubject = profile.preferences['favoriteSubject'] ?? 'Learning';
+    final favoriteSubject =
+        profile.preferences['favoriteSubject'] ?? 'Learning';
 
     return Column(
       children: [

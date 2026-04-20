@@ -20,12 +20,10 @@ class FriendSuggestionDto {
   factory FriendSuggestionDto.fromJson(Map<String, dynamic> json) {
     return FriendSuggestionDto(
       id: json['id']?.toString() ?? '',
-      displayName: json['displayName']?.toString() ??
-          json['username']?.toString() ??
-          '',
-      username: json['username']?.toString() ??
-          json['displayName']?.toString() ??
-          '',
+      displayName:
+          json['displayName']?.toString() ?? json['username']?.toString() ?? '',
+      username:
+          json['username']?.toString() ?? json['displayName']?.toString() ?? '',
       avatarUrl: json['avatarUrl']?.toString(),
       mutualFriendCount: (json['mutualFriendCount'] as num?)?.toInt() ?? 0,
       reason: json['reason']?.toString() ?? '',

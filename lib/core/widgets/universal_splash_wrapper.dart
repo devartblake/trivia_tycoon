@@ -9,9 +9,11 @@ import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 final splashTypeProvider = FutureProvider<SplashType>((ref) {
-  final splashSettingsService = ref.watch(serviceManagerProvider).splashSettingsService;
+  final splashSettingsService =
+      ref.watch(serviceManagerProvider).splashSettingsService;
   return splashSettingsService.getSplashType();
 });
+
 /// UniversalSplashWrapper wraps your app's startup experience
 /// and shows the selected splash animation based on user or default setting.
 class UniversalSplashWrapper extends ConsumerWidget {

@@ -4,7 +4,8 @@ class QuestionScreenBottomNav extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
 
-  const QuestionScreenBottomNav({super.key,
+  const QuestionScreenBottomNav({
+    super.key,
     required this.currentIndex,
     required this.onTap,
   });

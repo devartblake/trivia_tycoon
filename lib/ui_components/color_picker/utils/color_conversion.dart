@@ -113,7 +113,8 @@ class ColorConversion {
   static void _cacheConversion(int colorValue, String hex) {
     if (_colorToHexCache.length > _maxCacheSize) {
       // Remove oldest entries
-      final keysToRemove = _colorToHexCache.keys.take(_maxCacheSize ~/ 4).toList();
+      final keysToRemove =
+          _colorToHexCache.keys.take(_maxCacheSize ~/ 4).toList();
       for (final key in keysToRemove) {
         _colorToHexCache.remove(key);
       }
@@ -176,13 +177,17 @@ class ColorConversion {
     final cleaned = rgbString.trim().toLowerCase();
 
     // Match rgb(r, g, b) or rgba(r, g, b, a)
-    final rgbMatch = RegExp(r'rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([\d.]+))?\s*\)').firstMatch(cleaned);
+    final rgbMatch = RegExp(
+            r'rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([\d.]+))?\s*\)')
+        .firstMatch(cleaned);
 
     if (rgbMatch != null) {
       final r = int.tryParse(rgbMatch.group(1)!) ?? 0;
       final g = int.tryParse(rgbMatch.group(2)!) ?? 0;
       final b = int.tryParse(rgbMatch.group(3)!) ?? 0;
-      final a = rgbMatch.group(4) != null ? (double.tryParse(rgbMatch.group(4)!) ?? 1.0) : 1.0;
+      final a = rgbMatch.group(4) != null
+          ? (double.tryParse(rgbMatch.group(4)!) ?? 1.0)
+          : 1.0;
 
       return Color.fromARGB((a * 255).round(), r, g, b);
     }
@@ -195,13 +200,17 @@ class ColorConversion {
     final cleaned = hslString.trim().toLowerCase();
 
     // Match hsl(h, s%, l%) or hsla(h, s%, l%, a)
-    final hslMatch = RegExp(r'hsla?\(\s*(\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\s*(?:,\s*([\d.]+))?\s*\)').firstMatch(cleaned);
+    final hslMatch = RegExp(
+            r'hsla?\(\s*(\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\s*(?:,\s*([\d.]+))?\s*\)')
+        .firstMatch(cleaned);
 
     if (hslMatch != null) {
       final h = (int.tryParse(hslMatch.group(1)!) ?? 0).toDouble();
       final s = (int.tryParse(hslMatch.group(2)!) ?? 0) / 100.0;
       final l = (int.tryParse(hslMatch.group(3)!) ?? 0) / 100.0;
-      final a = hslMatch.group(4) != null ? (double.tryParse(hslMatch.group(4)!) ?? 1.0) : 1.0;
+      final a = hslMatch.group(4) != null
+          ? (double.tryParse(hslMatch.group(4)!) ?? 1.0)
+          : 1.0;
 
       final hslColor = HSLColor.fromAHSL(a, h, s, l);
       return hslColor.toColor();
@@ -263,7 +272,8 @@ class ColorConversion {
   static Color lighten(Color color, double amount) {
     amount = amount.clamp(0.0, 1.0);
     final hsl = HSLColor.fromColor(color);
-    final newLightness = (hsl.lightness + amount * (1.0 - hsl.lightness)).clamp(0.0, 1.0);
+    final newLightness =
+        (hsl.lightness + amount * (1.0 - hsl.lightness)).clamp(0.0, 1.0);
     return hsl.withLightness(newLightness).toColor();
   }
 
@@ -279,7 +289,8 @@ class ColorConversion {
   static Color saturate(Color color, double amount) {
     amount = amount.clamp(0.0, 1.0);
     final hsl = HSLColor.fromColor(color);
-    final newSaturation = (hsl.saturation + amount * (1.0 - hsl.saturation)).clamp(0.0, 1.0);
+    final newSaturation =
+        (hsl.saturation + amount * (1.0 - hsl.saturation)).clamp(0.0, 1.0);
     return hsl.withSaturation(newSaturation).toColor();
   }
 
@@ -293,7 +304,8 @@ class ColorConversion {
 
   /// Convert color to grayscale
   static Color toGrayscale(Color color) {
-    final gray = (color.red * 0.299 + color.green * 0.587 + color.blue * 0.114).round();
+    final gray =
+        (color.red * 0.299 + color.green * 0.587 + color.blue * 0.114).round();
     return Color.fromARGB(color.alpha, gray, gray, gray);
   }
 
@@ -305,7 +317,8 @@ class ColorConversion {
   }
 
   /// Get analogous colors (adjacent on color wheel)
-  static List<Color> getAnalogous(Color color, {int count = 2, double step = 30}) {
+  static List<Color> getAnalogous(Color color,
+      {int count = 2, double step = 30}) {
     final hsl = HSLColor.fromColor(color);
     final colors = <Color>[];
 

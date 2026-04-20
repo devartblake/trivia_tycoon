@@ -17,25 +17,25 @@ enum SkillNodeFilterMode { all, unlocked, available, locked }
 
 extension SkillNodeFilterModeLabel on SkillNodeFilterMode {
   String get label => switch (this) {
-    SkillNodeFilterMode.all => 'Show All',
-    SkillNodeFilterMode.unlocked => 'Unlocked Only',
-    SkillNodeFilterMode.available => 'Available to Unlock',
-    SkillNodeFilterMode.locked => 'Locked Only',
-  };
+        SkillNodeFilterMode.all => 'Show All',
+        SkillNodeFilterMode.unlocked => 'Unlocked Only',
+        SkillNodeFilterMode.available => 'Available to Unlock',
+        SkillNodeFilterMode.locked => 'Locked Only',
+      };
 
   IconData get icon => switch (this) {
-    SkillNodeFilterMode.all => Icons.all_inclusive,
-    SkillNodeFilterMode.unlocked => Icons.check_circle,
-    SkillNodeFilterMode.available => Icons.lock_open,
-    SkillNodeFilterMode.locked => Icons.lock,
-  };
+        SkillNodeFilterMode.all => Icons.all_inclusive,
+        SkillNodeFilterMode.unlocked => Icons.check_circle,
+        SkillNodeFilterMode.available => Icons.lock_open,
+        SkillNodeFilterMode.locked => Icons.lock,
+      };
 
   Color get color => switch (this) {
-    SkillNodeFilterMode.all => Colors.blue,
-    SkillNodeFilterMode.unlocked => Colors.green,
-    SkillNodeFilterMode.available => Colors.amber,
-    SkillNodeFilterMode.locked => Colors.white54,
-  };
+        SkillNodeFilterMode.all => Colors.blue,
+        SkillNodeFilterMode.unlocked => Colors.green,
+        SkillNodeFilterMode.available => Colors.amber,
+        SkillNodeFilterMode.locked => Colors.white54,
+      };
 }
 
 class SkillTreeView extends ConsumerStatefulWidget {
@@ -95,8 +95,8 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
   }
 
   // Hit test for nodes
-  String? _hitTestNode(
-      Offset localPos, Map<String, Offset> positions, vmath.Matrix4 worldToScreen) {
+  String? _hitTestNode(Offset localPos, Map<String, Offset> positions,
+      vmath.Matrix4 worldToScreen) {
     final inv = vmath.Matrix4.inverted(worldToScreen);
     final world = _transformPoint(inv, localPos);
     for (final entry in positions.entries) {
@@ -116,7 +116,8 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
     allPositions.addAll(state.positions);
     _addChildPositions(state, allPositions);
 
-    final id = _hitTestNode(details.localPosition, allPositions, _transform.value);
+    final id =
+        _hitTestNode(details.localPosition, allPositions, _transform.value);
     if (id == null) return;
     ctrl.select(id);
 
@@ -171,7 +172,8 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
   }
 
   // Add child positions in hex pattern around parents
-  void _addChildPositions(SkillTreeState state, Map<String, Offset> allPositions) {
+  void _addChildPositions(
+      SkillTreeState state, Map<String, Offset> allPositions) {
     final hexDirections = [
       Offset(_layoutHexRadius * 1.5, 0),
       Offset(_layoutHexRadius * 0.75, _layoutHexRadius * 1.299),
@@ -236,7 +238,6 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
           onToggleTree: () => setState(() => _showTree = !_showTree),
           isTreeVisible: _showTree,
         ),
-
         Expanded(
           child: Container(
             color: const Color(0xFF0D1021),
@@ -256,12 +257,14 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
                       _addChildPositions(state, rawPositions);
 
                       // Apply filter for rendering nodes
-                      final allPositions = _applyFilter(rawPositions, state.graph);
+                      final allPositions =
+                          _applyFilter(rawPositions, state.graph);
 
                       final Set<Coordinates> coords = {};
                       final Map<Coordinates, String> coordToNodeId = {};
                       allPositions.forEach((id, world) {
-                        final axial = _pixelToAxialPointy(world, _layoutHexRadius);
+                        final axial =
+                            _pixelToAxialPointy(world, _layoutHexRadius);
                         final rounded = _axialRound(axial);
                         final cell = Coordinates(rounded.q, rounded.r);
                         coords.add(cell);
@@ -301,7 +304,8 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
                               child: CustomPaint(
                                 painter: _EdgesPainter(
                                   graph: state.graph,
-                                  positions: rawPositions, // use unfiltered so edges are always drawn
+                                  positions:
+                                      rawPositions, // use unfiltered so edges are always drawn
                                   worldToScreen: _transform.value,
                                 ),
                               ),
@@ -313,17 +317,19 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
                                 final nodeId = entry.key;
                                 final worldPos = entry.value;
                                 final screenPos =
-                                _transformPoint(_transform.value, worldPos);
+                                    _transformPoint(_transform.value, worldPos);
                                 final node = state.graph.byId[nodeId];
 
-                                if (node == null) return const SizedBox.shrink();
+                                if (node == null)
+                                  return const SizedBox.shrink();
 
-                                final isParent = state.positions.containsKey(nodeId);
+                                final isParent =
+                                    state.positions.containsKey(nodeId);
                                 final size = isParent
                                     ? SkillNodeSize.large
                                     : SkillNodeSize.medium;
                                 final effectiveRadius =
-                                isParent ? _nodeRadius : _nodeRadius * 0.75;
+                                    isParent ? _nodeRadius : _nodeRadius * 0.75;
 
                                 return Positioned(
                                   left: screenPos.dx - effectiveRadius,
@@ -336,10 +342,10 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
                                     isSelected: state.selectedId == node.id,
                                     size: size,
                                     categoryColor: SkillTreeCategoryColors
-                                        .categoryColors[node.category] ??
+                                            .categoryColors[node.category] ??
                                         Colors.grey,
-                                    cooldownService: ref
-                                        .read(skillCooldownServiceProvider),
+                                    cooldownService:
+                                        ref.read(skillCooldownServiceProvider),
                                     onTap: () {
                                       ref
                                           .read(skillTreeProvider.notifier)
@@ -529,7 +535,8 @@ class _TopBar extends ConsumerWidget {
                   value: 'respec',
                   child: Row(
                     children: [
-                      Icon(Icons.restart_alt, color: Colors.redAccent, size: 18),
+                      Icon(Icons.restart_alt,
+                          color: Colors.redAccent, size: 18),
                       SizedBox(width: 8),
                       Text('Respec Skills',
                           style: TextStyle(color: Colors.redAccent)),
@@ -564,13 +571,13 @@ class _EdgesPainter extends CustomPainter {
 
   /// Draw a dashed line between [p1] and [p2].
   void _drawDashed(
-      Canvas canvas,
-      Offset p1,
-      Offset p2,
-      Paint paint, {
-        double dashLen = 8.0,
-        double gapLen = 5.0,
-      }) {
+    Canvas canvas,
+    Offset p1,
+    Offset p2,
+    Paint paint, {
+    double dashLen = 8.0,
+    double gapLen = 5.0,
+  }) {
     final dir = p2 - p1;
     final dist = dir.distance;
     if (dist == 0) return;

@@ -200,9 +200,9 @@ class _RankLevelCardState extends ConsumerState<RankLevelCard>
   Widget _buildRankBadge(Map<String, dynamic> theme) {
     return _pulseAnimation != null
         ? ScaleTransition(
-      scale: _pulseAnimation!,
-      child: _rankBadgeContent(theme),
-    )
+            scale: _pulseAnimation!,
+            child: _rankBadgeContent(theme),
+          )
         : _rankBadgeContent(theme);
   }
 
@@ -316,37 +316,37 @@ class _RankLevelCardState extends ConsumerState<RankLevelCard>
           ),
           child: _progressAnimation != null
               ? AnimatedBuilder(
-            animation: _progressAnimation!,
-            builder: (context, child) {
-              return FractionallySizedBox(
-                alignment: Alignment.centerLeft,
-                widthFactor: _progressAnimation!.value,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(6),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.white.withValues(alpha: 0.5),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
+                  animation: _progressAnimation!,
+                  builder: (context, child) {
+                    return FractionallySizedBox(
+                      alignment: Alignment.centerLeft,
+                      widthFactor: _progressAnimation!.value,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(6),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.white.withValues(alpha: 0.5),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
+                    );
+                  },
+                )
+              : FractionallySizedBox(
+                  alignment: Alignment.centerLeft,
+                  widthFactor: progressValue,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
                   ),
                 ),
-              );
-            },
-          )
-              : FractionallySizedBox(
-            alignment: Alignment.centerLeft,
-            widthFactor: progressValue,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(6),
-              ),
-            ),
-          ),
         ),
         const SizedBox(height: 12),
         Row(

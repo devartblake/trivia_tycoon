@@ -114,29 +114,30 @@ class _QuestionEditorScreenState extends State<QuestionEditorScreen> {
                   onTap: _isSaving ? null : _saveQuestion,
                   borderRadius: BorderRadius.circular(12),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: _isSaving
                         ? const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                        strokeWidth: 2,
-                      ),
-                    )
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
                         : const Row(
-                      children: [
-                        Icon(Icons.save, color: Colors.white, size: 20),
-                        SizedBox(width: 8),
-                        Text(
-                          'Save',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
+                            children: [
+                              Icon(Icons.save, color: Colors.white, size: 20),
+                              SizedBox(width: 8),
+                              Text(
+                                'Save',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
                   ),
                 ),
               ),
@@ -161,7 +162,9 @@ class _QuestionEditorScreenState extends State<QuestionEditorScreen> {
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: (isEditing ? const Color(0xFF3B82F6) : const Color(0xFF10B981))
+                  color: (isEditing
+                          ? const Color(0xFF3B82F6)
+                          : const Color(0xFF10B981))
                       .withValues(alpha: 0.3),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
@@ -181,7 +184,9 @@ class _QuestionEditorScreenState extends State<QuestionEditorScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        isEditing ? 'Edit Your Question' : 'Create New Question',
+                        isEditing
+                            ? 'Edit Your Question'
+                            : 'Create New Question',
                         style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,

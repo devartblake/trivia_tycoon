@@ -22,8 +22,7 @@ class _MemoryMatchScreenState extends State<MemoryMatchScreen> {
     super.initState();
     _controller = GameController(
       onGameComplete: () {
-        Future.delayed(const
-        Duration(milliseconds: 500), () {
+        Future.delayed(const Duration(milliseconds: 500), () {
           _showResultDialog();
         });
       },
@@ -101,33 +100,33 @@ class _MemoryMatchScreenState extends State<MemoryMatchScreen> {
               'Remember the positions and find all pairs!',
               'Complete the game in as few moves as possible.',
             ].map((text) => Padding(
-              padding: const EdgeInsets.only(bottom: 12.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(top: 2),
-                    width: 6,
-                    height: 6,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF6366F1),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      text,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        height: 1.5,
-                        color: Color(0xFF475569),
+                  padding: const EdgeInsets.only(bottom: 12.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(top: 2),
+                        width: 6,
+                        height: 6,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF6366F1),
+                          shape: BoxShape.circle,
+                        ),
                       ),
-                    ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          text,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            height: 1.5,
+                            color: Color(0xFF475569),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            )),
+                )),
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
@@ -214,7 +213,8 @@ class _MemoryMatchScreenState extends State<MemoryMatchScreen> {
               return Center(
                 child: Container(
                   margin: const EdgeInsets.only(right: 8),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(20),
@@ -259,7 +259,8 @@ class _MemoryMatchScreenState extends State<MemoryMatchScreen> {
                 GestureDetector(
                   onTap: _showHowToPlay,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 10),
                     decoration: BoxDecoration(
                       color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(20),
@@ -271,7 +272,8 @@ class _MemoryMatchScreenState extends State<MemoryMatchScreen> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: const [
-                        Icon(Icons.lightbulb_outline, color: Color(0xFF6366F1), size: 20),
+                        Icon(Icons.lightbulb_outline,
+                            color: Color(0xFF6366F1), size: 20),
                         SizedBox(width: 8),
                         Text(
                           'How to Play',
@@ -292,9 +294,14 @@ class _MemoryMatchScreenState extends State<MemoryMatchScreen> {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _buildStatCard('Moves', _controller.moves, Icons.touch_app, const Color(0xFF6366F1)),
+                        _buildStatCard('Moves', _controller.moves,
+                            Icons.touch_app, const Color(0xFF6366F1)),
                         const SizedBox(width: 16),
-                        _buildStatCard('Pairs', '${_controller.matchedPairs}/${_controller.totalPairs}', Icons.check_circle, const Color(0xFF10B981)),
+                        _buildStatCard(
+                            'Pairs',
+                            '${_controller.matchedPairs}/${_controller.totalPairs}',
+                            Icons.check_circle,
+                            const Color(0xFF10B981)),
                       ],
                     );
                   },
@@ -309,7 +316,8 @@ class _MemoryMatchScreenState extends State<MemoryMatchScreen> {
     );
   }
 
-  Widget _buildStatCard(String label, dynamic value, IconData icon, Color color) {
+  Widget _buildStatCard(
+      String label, dynamic value, IconData icon, Color color) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
@@ -390,8 +398,7 @@ class GameController extends ChangeNotifier {
     const Color(0xFFFBBF24),
   ];
 
-  GameController({this.onGameComplete})
-  {
+  GameController({this.onGameComplete}) {
     _initGame();
   }
 

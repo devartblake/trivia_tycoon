@@ -6,7 +6,7 @@ import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class ChallengeCoordinationService extends ChangeNotifier {
   static final ChallengeCoordinationService _instance =
-  ChallengeCoordinationService._internal();
+      ChallengeCoordinationService._internal();
   factory ChallengeCoordinationService() => _instance;
   ChallengeCoordinationService._internal();
   ChallengeMessageBridge? _messageBridge;
@@ -16,7 +16,8 @@ class ChallengeCoordinationService extends ChangeNotifier {
   final Map<String, int> _userCoinBalances = {}; // userId -> coin balance
 
   // Streams
-  final Map<String, StreamController<List<PVPChallenge>>> _userChallengeStreams = {};
+  final Map<String, StreamController<List<PVPChallenge>>>
+      _userChallengeStreams = {};
 
   // Expiration timer
   Timer? _expirationTimer;
@@ -314,19 +315,22 @@ class ChallengeCoordinationService extends ChangeNotifier {
 
   void _addCoins(String userId, int amount) {
     _userCoinBalances[userId] = getCoinBalance(userId) + amount;
-    LogManager.debug('Added $amount coins to $userId. New balance: ${_userCoinBalances[userId]}');
+    LogManager.debug(
+        'Added $amount coins to $userId. New balance: ${_userCoinBalances[userId]}');
   }
 
   void _deductCoins(String userId, int amount) {
     _userCoinBalances[userId] = getCoinBalance(userId) - amount;
-    LogManager.debug('Deducted $amount coins from $userId. New balance: ${_userCoinBalances[userId]}');
+    LogManager.debug(
+        'Deducted $amount coins from $userId. New balance: ${_userCoinBalances[userId]}');
   }
 
   Future<bool> addCoins(String userId, int amount, {String? reason}) async {
     if (amount <= 0) return false;
 
     _addCoins(userId, amount);
-    LogManager.debug('Coins added: $amount to $userId. Reason: ${reason ?? "N/A"}');
+    LogManager.debug(
+        'Coins added: $amount to $userId. Reason: ${reason ?? "N/A"}');
     notifyListeners();
     return true;
   }
@@ -346,7 +350,8 @@ class ChallengeCoordinationService extends ChangeNotifier {
 
   List<PVPChallenge> getPendingChallenges(String userId) {
     return _challenges.values
-        .where((c) => c.opponentId == userId && c.status.isPending && !c.isExpired)
+        .where(
+            (c) => c.opponentId == userId && c.status.isPending && !c.isExpired)
         .toList()
       ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
   }
@@ -361,8 +366,8 @@ class ChallengeCoordinationService extends ChangeNotifier {
   List<PVPChallenge> getActiveChallenges(String userId) {
     return _challenges.values
         .where((c) =>
-    (c.challengerId == userId || c.opponentId == userId) &&
-        c.status.isActive)
+            (c.challengerId == userId || c.opponentId == userId) &&
+            c.status.isActive)
         .toList()
       ..sort((a, b) => b.acceptedAt!.compareTo(a.acceptedAt!));
   }
@@ -370,8 +375,8 @@ class ChallengeCoordinationService extends ChangeNotifier {
   List<PVPChallenge> getCompletedChallenges(String userId) {
     return _challenges.values
         .where((c) =>
-    (c.challengerId == userId || c.opponentId == userId) &&
-        c.status == PVPChallengeStatus.completed)
+            (c.challengerId == userId || c.opponentId == userId) &&
+            c.status == PVPChallengeStatus.completed)
         .toList()
       ..sort((a, b) => b.completedAt!.compareTo(a.completedAt!));
   }
@@ -387,15 +392,16 @@ class ChallengeCoordinationService extends ChangeNotifier {
 
   Map<String, dynamic> getChallengeStats(String userId) {
     final allChallenges = getUserChallenges(userId);
-    final completed = allChallenges.where((c) => c.status == PVPChallengeStatus.completed);
+    final completed =
+        allChallenges.where((c) => c.status == PVPChallengeStatus.completed);
 
     final wins = completed.where((c) => c.winnerId == userId).length;
-    final losses = completed.where((c) =>
-    c.winnerId != null && c.winnerId != userId).length;
+    final losses = completed
+        .where((c) => c.winnerId != null && c.winnerId != userId)
+        .length;
     final draws = completed.where((c) => c.winnerId == null).length;
 
-    final totalWagered = completed
-        .fold<int>(0, (sum, c) => sum + c.wager);
+    final totalWagered = completed.fold<int>(0, (sum, c) => sum + c.wager);
     final totalWon = completed
         .where((c) => c.winnerId == userId)
         .fold<int>(0, (sum, c) => sum + (c.wager * 2));
@@ -468,7 +474,7 @@ class ChallengeCoordinationService extends ChangeNotifier {
 
   Stream<List<PVPChallenge>> watchUserChallenges(String userId) {
     _userChallengeStreams[userId] ??=
-    StreamController<List<PVPChallenge>>.broadcast();
+        StreamController<List<PVPChallenge>>.broadcast();
 
     // Send initial data
     Future.delayed(Duration.zero, () {

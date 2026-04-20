@@ -65,7 +65,8 @@ class SimpleMenuItemWidget extends StatelessWidget {
             Navigator.pop(context);
             context.push(item.route);
           },
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
         ),
       ),
     );

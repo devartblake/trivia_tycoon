@@ -34,7 +34,8 @@ class EnhancedScoreSummaryScreen extends StatefulWidget {
   });
 
   @override
-  State<EnhancedScoreSummaryScreen> createState() => _EnhancedScoreSummaryScreenState();
+  State<EnhancedScoreSummaryScreen> createState() =>
+      _EnhancedScoreSummaryScreenState();
 }
 
 class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
@@ -74,7 +75,8 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
     );
 
     _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
-      CurvedAnimation(parent: _mainAnimationController, curve: Curves.elasticOut),
+      CurvedAnimation(
+          parent: _mainAnimationController, curve: Curves.elasticOut),
     );
 
     _slideAnimation = Tween<Offset>(
@@ -183,10 +185,15 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
       ],
     };
 
-    final threshold = percentage >= 90 ? 90 :
-    percentage >= 80 ? 80 :
-    percentage >= 70 ? 70 :
-    percentage >= 60 ? 60 : 0;
+    final threshold = percentage >= 90
+        ? 90
+        : percentage >= 80
+            ? 80
+            : percentage >= 70
+                ? 70
+                : percentage >= 60
+                    ? 60
+                    : 0;
 
     final messageList = messages[threshold]!;
     return messageList[widget.score.hashCode % messageList.length];
@@ -449,9 +456,7 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
               ),
             ],
           ),
-
           const SizedBox(height: 16),
-
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -471,7 +476,8 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: classColor,
                     borderRadius: BorderRadius.circular(16),
@@ -523,9 +529,7 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
               ),
             ],
           ),
-
           const SizedBox(height: 20),
-
           Row(
             children: [
               if (widget.coins > 0)
@@ -537,7 +541,6 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
                     color: Colors.amber,
                   ),
                 ),
-
               if (widget.diamonds > 0) ...[
                 if (widget.coins > 0) const SizedBox(width: 12),
                 Expanded(
@@ -549,9 +552,9 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
                   ),
                 ),
               ],
-
               if (widget.stars > 0) ...[
-                if (widget.coins > 0 || widget.diamonds > 0) const SizedBox(width: 12),
+                if (widget.coins > 0 || widget.diamonds > 0)
+                  const SizedBox(width: 12),
                 Expanded(
                   child: _buildRewardItem(
                     icon: Icons.star,
@@ -561,7 +564,6 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
                   ),
                 ),
               ],
-
               if (widget.totalXP > 0) ...[
                 if (widget.coins > 0 || widget.diamonds > 0 || widget.stars > 0)
                   const SizedBox(width: 12),
@@ -654,9 +656,7 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
               ),
             ],
           ),
-
           const SizedBox(height: 16),
-
           ...widget.achievements.map((achievement) {
             return Padding(
               padding: const EdgeInsets.only(bottom: 12),
@@ -741,10 +741,13 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
       ),
       child: Column(
         children: [
-          _buildStatRow("Quiz Duration", "${minutes}m ${seconds}s", Icons.timer),
+          _buildStatRow(
+              "Quiz Duration", "${minutes}m ${seconds}s", Icons.timer),
           _buildStatRow("Category", widget.category, Icons.category),
-          _buildStatRow("Correct Answers", "${widget.score}", Icons.check_circle),
-          _buildStatRow("Incorrect Answers", "${widget.totalQuestions - widget.score}", Icons.cancel),
+          _buildStatRow(
+              "Correct Answers", "${widget.score}", Icons.check_circle),
+          _buildStatRow("Incorrect Answers",
+              "${widget.totalQuestions - widget.score}", Icons.cancel),
 
           // NEW: Tier progression info
           if (widget.tierResult?.tierChanged == true) ...[
@@ -853,9 +856,7 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
                 ),
               ),
             ),
-
             const SizedBox(width: 16),
-
             Expanded(
               child: ElevatedButton.icon(
                 onPressed: () => context.go('/'),
@@ -893,7 +894,6 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
                 ),
               ),
             ),
-
             Expanded(
               child: TextButton.icon(
                 onPressed: () {

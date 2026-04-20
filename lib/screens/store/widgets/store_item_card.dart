@@ -59,11 +59,11 @@ class _StoreItemCardState extends ConsumerState<StoreItemCard>
   Widget build(BuildContext context) {
     final currencyManager = ref.watch(currencyManagerProvider);
     final isDiamond = widget.item.currency == 'diamonds';
-    final isExternalCheckout =
-        widget.item.requiresExternalCheckout ||
+    final isExternalCheckout = widget.item.requiresExternalCheckout ||
         widget.item.currency.toLowerCase() == 'usd';
-    final balance =
-        isExternalCheckout ? 0 : currencyManager.getBalance(widget.item.currencyType);
+    final balance = isExternalCheckout
+        ? 0
+        : currencyManager.getBalance(widget.item.currencyType);
     final equipped = ref.watch(equippedPowerUpProvider);
 
     final isPowerUp = widget.item.category.toLowerCase() == 'power-up';
@@ -100,8 +100,8 @@ class _StoreItemCardState extends ConsumerState<StoreItemCard>
                       color: isEquipped
                           ? glowColor
                           : isPowerUp
-                          ? glowColor.withValues(alpha: 0.3)
-                          : const Color(0xFF64748B).withValues(alpha: 0.1),
+                              ? glowColor.withValues(alpha: 0.3)
+                              : const Color(0xFF64748B).withValues(alpha: 0.1),
                       width: isEquipped ? 2 : 1,
                     ),
                     boxShadow: [
@@ -109,8 +109,9 @@ class _StoreItemCardState extends ConsumerState<StoreItemCard>
                         color: isEquipped
                             ? glowColor.withValues(alpha: 0.3)
                             : isPowerUp
-                            ? glowColor.withValues(alpha: 0.1)
-                            : const Color(0xFF64748B).withValues(alpha: 0.08),
+                                ? glowColor.withValues(alpha: 0.1)
+                                : const Color(0xFF64748B)
+                                    .withValues(alpha: 0.08),
                         blurRadius: isEquipped ? 15 : 10,
                         offset: const Offset(0, 4),
                       ),
@@ -200,16 +201,16 @@ class _StoreItemCardState extends ConsumerState<StoreItemCard>
                             height: 60,
                             decoration: isPowerUp
                                 ? BoxDecoration(
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: glowColor.withValues(
-                                      alpha: isEquipped ? 0.6 : 0.3),
-                                  blurRadius: isEquipped ? 15 : 8,
-                                  spreadRadius: isEquipped ? 3 : 1,
-                                ),
-                              ],
-                            )
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: glowColor.withValues(
+                                            alpha: isEquipped ? 0.6 : 0.3),
+                                        blurRadius: isEquipped ? 15 : 8,
+                                        spreadRadius: isEquipped ? 3 : 1,
+                                      ),
+                                    ],
+                                  )
                                 : null,
                             child: Container(
                               padding: const EdgeInsets.all(8),
@@ -221,7 +222,8 @@ class _StoreItemCardState extends ConsumerState<StoreItemCard>
                                 border: Border.all(
                                   color: isPowerUp
                                       ? glowColor.withValues(alpha: 0.3)
-                                      : const Color(0xFF64748B).withValues(alpha: 0.1),
+                                      : const Color(0xFF64748B)
+                                          .withValues(alpha: 0.1),
                                 ),
                               ),
                               child: ClipOval(

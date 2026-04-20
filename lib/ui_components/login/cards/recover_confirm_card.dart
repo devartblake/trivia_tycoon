@@ -15,7 +15,8 @@ class _ConfirmRecoverCard extends ConsumerStatefulWidget {
   final String? initialIsoCode;
 
   @override
-  ConsumerState<_ConfirmRecoverCard> createState() => _ConfirmRecoverCardState();
+  ConsumerState<_ConfirmRecoverCard> createState() =>
+      _ConfirmRecoverCardState();
 }
 
 class _ConfirmRecoverCardState extends ConsumerState<_ConfirmRecoverCard>

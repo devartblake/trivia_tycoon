@@ -25,16 +25,18 @@ class PowerUpEffectApplier {
   /// Removes one wrong choice from the available options.
   static QuestionModel _applyEliminateOption(QuestionModel question) {
     final incorrectChoices =
-    question.options.where((c) => c != question.correctAnswer).toList();
+        question.options.where((c) => c != question.correctAnswer).toList();
 
     if (incorrectChoices.isNotEmpty) {
       incorrectChoices.shuffle();
-      final filtered = question.options.where((c) =>
-      c == question.correctAnswer || c == incorrectChoices.first).toList();
+      final filtered = question.options
+          .where(
+              (c) => c == question.correctAnswer || c == incorrectChoices.first)
+          .toList();
 
       return question.copyWith(
-          options: filtered,          // Use reduced options in UI
-          reducedOptions: filtered,   // Store the result for later logic
+        options: filtered, // Use reduced options in UI
+        reducedOptions: filtered, // Store the result for later logic
       );
     }
     return question;

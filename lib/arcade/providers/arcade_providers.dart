@@ -23,10 +23,12 @@ final arcadeAnalyticsServiceProvider = Provider<ArcadeAnalyticsService>((ref) {
   return const ArcadeAnalyticsService();
 });
 
-final arcadePersonalBestServiceProvider = Provider<ArcadePersonalBestService>((ref) {
+final arcadePersonalBestServiceProvider =
+    Provider<ArcadePersonalBestService>((ref) {
   return ref.read(serviceManagerProvider).arcadePersonalBestService;
 });
 
-final arcadeDailyBonusServiceProvider = Provider<ArcadeDailyBonusService>((ref) {
+final arcadeDailyBonusServiceProvider =
+    Provider<ArcadeDailyBonusService>((ref) {
   return ref.read(serviceManagerProvider).arcadeDailyBonusService;
 });

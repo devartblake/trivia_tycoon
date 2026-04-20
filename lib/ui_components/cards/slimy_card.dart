@@ -29,7 +29,8 @@ class SlimyCard extends StatefulWidget {
   State<SlimyCard> createState() => _SlimyCardState();
 }
 
-class _SlimyCardState extends State<SlimyCard> with SingleTickerProviderStateMixin {
+class _SlimyCardState extends State<SlimyCard>
+    with SingleTickerProviderStateMixin {
   late bool _expanded;
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -169,7 +170,8 @@ class _SlimyCardState extends State<SlimyCard> with SingleTickerProviderStateMix
                         duration: const Duration(milliseconds: 300),
                         child: Icon(
                           Icons.keyboard_arrow_down,
-                          color: widget.backgroundGradient?.colors.first ?? Colors.grey[600],
+                          color: widget.backgroundGradient?.colors.first ??
+                              Colors.grey[600],
                           size: 24,
                         ),
                       ),
@@ -205,7 +207,9 @@ class _SlimyCardState extends State<SlimyCard> with SingleTickerProviderStateMix
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.75),
               borderRadius: BorderRadius.circular(20),
-              boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 6)],
+              boxShadow: const [
+                BoxShadow(color: Colors.black26, blurRadius: 6)
+              ],
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -221,14 +225,16 @@ class _SlimyCardState extends State<SlimyCard> with SingleTickerProviderStateMix
                         top: 8,
                         left: 8,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
                             color: widget.badgeColor,
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
                             widget.badgeText!,
-                            style: const TextStyle(color: Colors.white24, fontSize: 12),
+                            style: const TextStyle(
+                                color: Colors.white24, fontSize: 12),
                           ),
                         ),
                       ),

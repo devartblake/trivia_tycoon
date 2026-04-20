@@ -13,7 +13,8 @@ class MissionReminderService {
       final missions = await _missionService.getUserMissions(userId);
       final expiringSoon = missions.where((m) {
         if (m.mission.expiresAt == null) return false;
-        final hoursLeft = m.mission.expiresAt!.difference(DateTime.now()).inHours;
+        final hoursLeft =
+            m.mission.expiresAt!.difference(DateTime.now()).inHours;
         return hoursLeft <= 2 && hoursLeft > 0 && !m.isCompleted;
       }).toList();
 

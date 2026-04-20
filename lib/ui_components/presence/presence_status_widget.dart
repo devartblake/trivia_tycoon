@@ -74,9 +74,8 @@ class DetailedPresenceCard extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 24,
-                      backgroundImage: userAvatar != null
-                          ? NetworkImage(userAvatar!)
-                          : null,
+                      backgroundImage:
+                          userAvatar != null ? NetworkImage(userAvatar!) : null,
                       child: userAvatar == null
                           ? Text(userName[0].toUpperCase())
                           : null,
@@ -99,9 +98,10 @@ class DetailedPresenceCard extends StatelessWidget {
                     children: [
                       Text(
                         userName,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
                       ),
                       const SizedBox(height: 2),
                       RichPresenceIndicator(
@@ -122,8 +122,8 @@ class DetailedPresenceCard extends StatelessWidget {
             Text(
               'Last seen: ${_formatLastSeen(presence.lastSeen)}',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
             ),
           ],
         ),
@@ -137,7 +137,10 @@ class DetailedPresenceCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3),
+        color: Theme.of(context)
+            .colorScheme
+            .primaryContainer
+            .withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -155,9 +158,9 @@ class DetailedPresenceCard extends StatelessWidget {
               Text(
                 activity.gameState.displayName,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
               ),
             ],
           ),

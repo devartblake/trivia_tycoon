@@ -43,11 +43,31 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Watch the conversations from the provider with userId parameter
-    final conversations = ref.watch(userConversationsProvider(_currentUserId));
+    final conversationsAsync =
+        ref.watch(userConversationsProvider(_currentUserId));
     final unreadCount = ref.watch(unreadMessagesProvider(_currentUserId));
 
-    return _buildScreen(conversations, unreadCount);
+    return conversationsAsync.when(
+      data: (conversations) => _buildScreen(conversations, unreadCount),
+      loading: () => const Scaffold(
+        backgroundColor: Color(0xFF36393F),
+        body: Center(child: CircularProgressIndicator()),
+      ),
+      error: (error, _) => Scaffold(
+        backgroundColor: const Color(0xFF36393F),
+        appBar: _buildAppBar(),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Text(
+              error.toString(),
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.white70),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildScreen(List<Conversation> conversations, int unreadCount) {
@@ -55,9 +75,9 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
     final filteredConversations = _searchQuery.isEmpty
         ? conversations
         : conversations.where((conv) {
-      final title = conv.name ?? 'Direct Message';
-      return title.toLowerCase().contains(_searchQuery.toLowerCase());
-    }).toList();
+            final title = conv.name ?? 'Direct Message';
+            return title.toLowerCase().contains(_searchQuery.toLowerCase());
+          }).toList();
 
     return Scaffold(
       backgroundColor: const Color(0xFF2F3136),
@@ -115,7 +135,8 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
         children: [
           _buildIconButton(Icons.search, () => _showSearchDialog()),
           const SizedBox(width: 12),
-          _buildIconButton(Icons.mail_outline, () => _showMessageRequestDialog(),
+          _buildIconButton(
+              Icons.mail_outline, () => _showMessageRequestDialog(),
               badgeCount: _messageRequests),
           const SizedBox(width: 12),
           Expanded(
@@ -123,7 +144,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
               onTap: () => _showAddFriendDialog(),
               child: Container(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
                   color: const Color(0xFF40444B),
                   borderRadius: BorderRadius.circular(24),
@@ -227,7 +248,8 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         itemCount: groups.length,
-        itemBuilder: (context, index) => OnlineGroupWidget(group: groups[index]),
+        itemBuilder: (context, index) =>
+            OnlineGroupWidget(group: groups[index]),
       ),
     );
   }
@@ -240,7 +262,8 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.chat_bubble_outline, color: Color(0xFF72767D), size: 64),
+              Icon(Icons.chat_bubble_outline,
+                  color: Color(0xFF72767D), size: 64),
               SizedBox(height: 16),
               Text(
                 'No conversations yet',
@@ -270,10 +293,8 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
 
   Widget _buildConversationTile(Conversation conversation) {
     // Get display title based on conversation type
-    final String displayTitle = conversation.name ?? 'Direct Message';
-
-    // Get last message preview (you'll need to implement this in repository)
-    final String lastMessagePreview = 'Tap to view messages';
+    final String displayTitle = conversation.displayTitle;
+    final String lastMessagePreview = conversation.lastMessagePreview;
 
     return InkWell(
       onTap: () => _openConversationDetail(conversation),
@@ -301,21 +322,19 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                         ),
                       ),
                       // Add tags based on conversation type
-                      if (conversation.type == ConversationType.challenge)
-                        ...[
-                          const SizedBox(width: 6),
-                          _buildTag('CHALLENGE', const Color(0xFFFAA61A)),
-                        ],
-                      if (conversation.type == ConversationType.friendRequest)
-                        ...[
-                          const SizedBox(width: 6),
-                          _buildTag('FRIEND REQUEST', const Color(0xFF3BA55C)),
-                        ],
-                      if (conversation.type == ConversationType.system)
-                        ...[
-                          const SizedBox(width: 6),
-                          _buildTag('SYSTEM', const Color(0xFF5865F2)),
-                        ],
+                      if (conversation.type == ConversationType.challenge) ...[
+                        const SizedBox(width: 6),
+                        _buildTag('CHALLENGE', const Color(0xFFFAA61A)),
+                      ],
+                      if (conversation.type ==
+                          ConversationType.friendRequest) ...[
+                        const SizedBox(width: 6),
+                        _buildTag('FRIEND REQUEST', const Color(0xFF3BA55C)),
+                      ],
+                      if (conversation.type == ConversationType.system) ...[
+                        const SizedBox(width: 6),
+                        _buildTag('SYSTEM', const Color(0xFF5865F2)),
+                      ],
                     ],
                   ),
                   const SizedBox(height: 2),
@@ -408,13 +427,13 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
               : null,
           child: conversation.avatar == null
               ? Text(
-            displayText,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          )
+                  displayText,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
               : null,
         ),
       ],
@@ -559,8 +578,7 @@ class OnlineGroupWidget extends StatelessWidget {
                 ),
               ),
               Container(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
                   color: const Color(0xFF3BA55C),
                   borderRadius: BorderRadius.circular(8),

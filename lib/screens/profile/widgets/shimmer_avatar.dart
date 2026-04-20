@@ -3,6 +3,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:flutter/material.dart';
 
 enum AvatarStatus { online, offline, away, busy }
+
 enum AvatarBadgeType { none, level, notification, premium }
 
 class ShimmerAvatar extends StatefulWidget {
@@ -191,23 +192,24 @@ class _ShimmerAvatarState extends State<ShimmerAvatar>
         ),
         child: widget.status == AvatarStatus.away
             ? Icon(
-          Icons.schedule,
-          size: widget.radius * 0.15,
-          color: Colors.white,
-        )
+                Icons.schedule,
+                size: widget.radius * 0.15,
+                color: Colors.white,
+              )
             : widget.status == AvatarStatus.busy
-            ? Icon(
-          Icons.do_not_disturb,
-          size: widget.radius * 0.15,
-          color: Colors.white,
-        )
-            : null,
+                ? Icon(
+                    Icons.do_not_disturb,
+                    size: widget.radius * 0.15,
+                    color: Colors.white,
+                  )
+                : null,
       ),
     );
   }
 
   Widget _buildBadge() {
-    if (widget.badgeType == AvatarBadgeType.none) return const SizedBox.shrink();
+    if (widget.badgeType == AvatarBadgeType.none)
+      return const SizedBox.shrink();
 
     Widget badgeContent;
     Color badgeColor;
@@ -296,19 +298,19 @@ class _ShimmerAvatarState extends State<ShimmerAvatar>
         shape: BoxShape.circle,
         border: widget.borderColor != null
             ? Border.all(
-          color: widget.borderColor!,
-          width: widget.borderWidth,
-        )
+                color: widget.borderColor!,
+                width: widget.borderWidth,
+              )
             : null,
         boxShadow: widget.customShadow != null
             ? [widget.customShadow!]
             : [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
       ),
       child: ClipOval(
         child: widget.isLoading ? _buildShimmerEffect() : _buildAvatar(),
@@ -341,27 +343,27 @@ class _ShimmerAvatarState extends State<ShimmerAvatar>
       onLongPress: widget.onLongPress,
       onTapDown: widget.enableHoverEffect
           ? (_) {
-        if (mounted) {
-          setState(() => _isPressed = true);
-          _animationController.forward();
-        }
-      }
+              if (mounted) {
+                setState(() => _isPressed = true);
+                _animationController.forward();
+              }
+            }
           : null,
       onTapUp: widget.enableHoverEffect
           ? (_) {
-        if (mounted) {
-          setState(() => _isPressed = false);
-          _animationController.reverse();
-        }
-      }
+              if (mounted) {
+                setState(() => _isPressed = false);
+                _animationController.reverse();
+              }
+            }
           : null,
       onTapCancel: widget.enableHoverEffect
           ? () {
-        if (mounted) {
-          setState(() => _isPressed = false);
-          _animationController.reverse();
-        }
-      }
+              if (mounted) {
+                setState(() => _isPressed = false);
+                _animationController.reverse();
+              }
+            }
           : null,
       child: avatarContent,
     );

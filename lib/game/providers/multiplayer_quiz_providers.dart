@@ -104,7 +104,8 @@ class MultiplayerQuizState {
       isPlayerCorrect: isPlayerCorrect ?? this.isPlayerCorrect,
       isOpponentCorrect: isOpponentCorrect ?? this.isOpponentCorrect,
       matchId: matchId ?? this.matchId,
-      revealedCorrectAnswer: revealedCorrectAnswer ?? this.revealedCorrectAnswer,
+      revealedCorrectAnswer:
+          revealedCorrectAnswer ?? this.revealedCorrectAnswer,
       isRoundResolved: isRoundResolved ?? this.isRoundResolved,
     );
   }
@@ -116,7 +117,8 @@ class MultiplayerQuizNotifier extends StateNotifier<MultiplayerQuizState> {
   Timer? _timer;
   StreamSubscription? _opponentSubscription;
 
-  MultiplayerQuizNotifier(this._quizService) : super(const MultiplayerQuizState());
+  MultiplayerQuizNotifier(this._quizService)
+      : super(const MultiplayerQuizState());
 
   Future<void> startMultiplayerQuiz(String gameMode) async {
     final normalizedGameMode = normalizeGameModeName(gameMode);
@@ -160,7 +162,6 @@ class MultiplayerQuizNotifier extends StateNotifier<MultiplayerQuizState> {
 
       // Listen for opponent actions
       _subscribeToOpponentUpdates();
-
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
@@ -220,7 +221,7 @@ class MultiplayerQuizNotifier extends StateNotifier<MultiplayerQuizState> {
         break;
 
       case OpponentUpdateType.nextQuestion:
-      // Opponent is ready for next question
+        // Opponent is ready for next question
         break;
     }
   }
@@ -239,7 +240,8 @@ class MultiplayerQuizNotifier extends StateNotifier<MultiplayerQuizState> {
     );
 
     try {
-      await _quizService.submitAnswer(state.matchId!, answer, state.currentIndex);
+      await _quizService.submitAnswer(
+          state.matchId!, answer, state.currentIndex);
       final validation = await _quizService.validateAnswer(
         question: currentQuestion,
         selectedAnswer: answer,
@@ -361,7 +363,8 @@ class MultiplayerQuizNotifier extends StateNotifier<MultiplayerQuizState> {
 }
 
 // Provider
-final multiplayerQuizProvider = StateNotifierProvider<MultiplayerQuizNotifier, MultiplayerQuizState>((ref) {
+final multiplayerQuizProvider =
+    StateNotifierProvider<MultiplayerQuizNotifier, MultiplayerQuizState>((ref) {
   final quizService = ref.read(multiplayerQuizServiceProvider);
   return MultiplayerQuizNotifier(quizService);
 });
@@ -414,7 +417,7 @@ class OpponentUpdate {
   factory OpponentUpdate.fromJson(Map<String, dynamic> json) {
     return OpponentUpdate(
       type: OpponentUpdateType.values.firstWhere(
-            (e) => e.name == json['type'],
+        (e) => e.name == json['type'],
         orElse: () => OpponentUpdateType.answered,
       ),
       answer: json['answer'] as String?,

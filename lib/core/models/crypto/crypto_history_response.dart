@@ -30,7 +30,8 @@ class CryptoHistoryResponse {
       total: (json['total'] as num?)?.toInt() ?? rawItems.length,
       items: rawItems
           .whereType<Map>()
-          .map((item) => CryptoHistoryItem.fromJson(Map<String, dynamic>.from(item)))
+          .map((item) =>
+              CryptoHistoryItem.fromJson(Map<String, dynamic>.from(item)))
           .toList(growable: false),
     );
   }

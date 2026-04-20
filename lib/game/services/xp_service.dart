@@ -36,7 +36,8 @@ class XPService {
   bool hasEnoughXP(int xpCost) => _playerXP >= xpCost;
 
   void addXP(int baseAmount, {bool applyMultiplier = true}) {
-    final effectiveAmount = applyMultiplier ? (baseAmount * _xpMultiplier).round() : baseAmount;
+    final effectiveAmount =
+        applyMultiplier ? (baseAmount * _xpMultiplier).round() : baseAmount;
     _playerXP += effectiveAmount;
     _storage?.setInt(_xpKey, _playerXP);
   }

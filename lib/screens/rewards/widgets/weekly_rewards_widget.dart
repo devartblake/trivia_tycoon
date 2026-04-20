@@ -5,7 +5,8 @@ import '../../../ui_components/tycoon_toast/tycoon_toast_helper.dart';
 class WeeklyRewardsWidget extends StatelessWidget {
   const WeeklyRewardsWidget({super.key});
 
-  void _claimDayReward(BuildContext context, int day, String rewardType, String amount, bool canClaim) {
+  void _claimDayReward(BuildContext context, int day, String rewardType,
+      String amount, bool canClaim) {
     if (!canClaim) {
       // Show info toast for locked rewards
       TycoonToastHelper.createInformation(
@@ -90,11 +91,17 @@ class WeeklyRewardsWidget extends StatelessWidget {
             // First row - Days 1, 2, 3
             Row(
               children: [
-                Expanded(child: _buildDayCard(1, 'Coins', '100', Icons.monetization_on, Colors.amber, true)),
+                Expanded(
+                    child: _buildDayCard(1, 'Coins', '100',
+                        Icons.monetization_on, Colors.amber, true)),
                 SizedBox(width: 6),
-                Expanded(child: _buildDayCard(2, 'Gems', '5', Icons.diamond, Colors.blue, true)),
+                Expanded(
+                    child: _buildDayCard(
+                        2, 'Gems', '5', Icons.diamond, Colors.blue, true)),
                 SizedBox(width: 6),
-                Expanded(child: _buildDayCard(3, 'Boost', '1x', Icons.flash_on, Colors.orange, true)),
+                Expanded(
+                    child: _buildDayCard(
+                        3, 'Boost', '1x', Icons.flash_on, Colors.orange, true)),
               ],
             ),
 
@@ -103,11 +110,17 @@ class WeeklyRewardsWidget extends StatelessWidget {
             // Second row - Days 4, 5, 6
             Row(
               children: [
-                Expanded(child: _buildDayCard(4, 'Coins', '200', Icons.monetization_on, Colors.amber, false)),
+                Expanded(
+                    child: _buildDayCard(4, 'Coins', '200',
+                        Icons.monetization_on, Colors.amber, false)),
                 SizedBox(width: 6),
-                Expanded(child: _buildDayCard(5, 'Gems', '10', Icons.diamond, Colors.blue, false)),
+                Expanded(
+                    child: _buildDayCard(
+                        5, 'Gems', '10', Icons.diamond, Colors.blue, false)),
                 SizedBox(width: 6),
-                Expanded(child: _buildDayCard(6, 'Spins', '3', Icons.casino, Colors.purple, false)),
+                Expanded(
+                    child: _buildDayCard(
+                        6, 'Spins', '3', Icons.casino, Colors.purple, false)),
               ],
             ),
 
@@ -121,7 +134,8 @@ class WeeklyRewardsWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDayCard(int day, String rewardType, String amount, IconData icon, Color color, bool claimed) {
+  Widget _buildDayCard(int day, String rewardType, String amount, IconData icon,
+      Color color, bool claimed) {
     // Determine if this card can be claimed (for demo purposes, days 1-3 are claimed, day 4 is claimable)
     bool canClaim = day == 4 && !claimed; // Day 4 is ready to claim
 
@@ -141,15 +155,15 @@ class WeeklyRewardsWidget extends StatelessWidget {
               color: claimed
                   ? color.withValues(alpha: 0.1)
                   : canClaim
-                  ? color.withValues(alpha: 0.15)
-                  : Colors.grey.shade100,
+                      ? color.withValues(alpha: 0.15)
+                      : Colors.grey.shade100,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: claimed
                     ? color.withValues(alpha: 0.3)
                     : canClaim
-                    ? color.withValues(alpha: 0.4)
-                    : Colors.grey.shade300,
+                        ? color.withValues(alpha: 0.4)
+                        : Colors.grey.shade300,
                 width: claimed || canClaim ? 2 : 1,
               ),
             ),

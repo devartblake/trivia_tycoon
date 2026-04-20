@@ -145,7 +145,8 @@ class AdaptedQuizState {
   }
 
   String get categoryDisplayName => category?.displayName ?? 'Mixed';
-  String get categoryDescription => category?.description ?? 'Mixed category questions';
+  String get categoryDescription =>
+      category?.description ?? 'Mixed category questions';
   Color get categoryColor => category?.primaryColor ?? Colors.grey;
   IconData get categoryIcon => category?.icon ?? Icons.quiz;
 }
@@ -193,9 +194,10 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
       } else {
         // Fallback to class-based quiz
         final classStats = await _repository.getClassStats(classLevel);
-        final availableCategories =
-            (classStats['availableCategories'] as List?)?.whereType<QuizCategory>().toList() ??
-                <QuizCategory>[];
+        final availableCategories = (classStats['availableCategories'] as List?)
+                ?.whereType<QuizCategory>()
+                .toList() ??
+            <QuizCategory>[];
 
         final targetCategory = availableCategories.isNotEmpty
             ? availableCategories.first.name
@@ -402,9 +404,11 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
       }
 
       // Update category scores
-      final updatedCategoryScores = Map<String, int>.from(state.categoryScores ?? {});
+      final updatedCategoryScores =
+          Map<String, int>.from(state.categoryScores ?? {});
       final questionCategory = state.category?.name ?? currentQuestion.category;
-      updatedCategoryScores[questionCategory] = (updatedCategoryScores[questionCategory] ?? 0) + 1;
+      updatedCategoryScores[questionCategory] =
+          (updatedCategoryScores[questionCategory] ?? 0) + 1;
 
       state = state.copyWith(
         categoryScores: updatedCategoryScores,
@@ -539,7 +543,8 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
     }
 
     // Speed achievements
-    final avgTimePerQuestion = state.quizDuration.inSeconds / state.totalQuestions;
+    final avgTimePerQuestion =
+        state.quizDuration.inSeconds / state.totalQuestions;
     if (avgTimePerQuestion < 15) {
       achievements.add('Speed Demon');
     }
@@ -551,17 +556,17 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
   void applyPowerUp(String powerUpType) {
     switch (powerUpType) {
       case 'hint':
-      // Show hint for current question
+        // Show hint for current question
         break;
       case 'time':
-      // Add extra time
+        // Add extra time
         state = state.copyWith(
           timeRemaining: state.timeRemaining + 15,
           hasUsedExtraTime: true,
         );
         break;
       case 'skip':
-      // Skip current question
+        // Skip current question
         nextQuestion();
         break;
     }
@@ -647,6 +652,7 @@ final adaptedQuizProvider =
 });
 
 /// Provider for available quiz categories
-final availableQuizCategoriesProvider = FutureProvider<List<QuizCategory>>((ref) async {
+final availableQuizCategoriesProvider =
+    FutureProvider<List<QuizCategory>>((ref) async {
   return ref.watch(quizCategoriesProvider.future);
 });

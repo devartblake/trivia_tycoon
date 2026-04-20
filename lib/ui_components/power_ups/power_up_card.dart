@@ -122,7 +122,7 @@ class PowerUpCard extends ConsumerWidget {
                 label: Text(isEquipped ? "Unequip" : "Equip"),
                 style: ElevatedButton.styleFrom(
                   backgroundColor:
-                  isEquipped ? Colors.grey.shade300 : Colors.amber,
+                      isEquipped ? Colors.grey.shade300 : Colors.amber,
                   foregroundColor: isEquipped ? Colors.black87 : Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   shape: RoundedRectangleBorder(

@@ -187,8 +187,7 @@ class _Avatar3DTabState extends ConsumerState<Avatar3DTab> {
           height: 220,
           parallaxDepth: 0.1,
           borderRadius: 20.0,
-          backgroundImage:
-          const AssetImage('assets/images/logo/appLogo.png'),
+          backgroundImage: const AssetImage('assets/images/logo/appLogo.png'),
           overlayActions: [],
         );
 

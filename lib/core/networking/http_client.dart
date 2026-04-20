@@ -28,10 +28,10 @@ class HttpClient {
 
   /// GET request returning JSON
   Future<Map<String, dynamic>> getJson(
-      String path, {
-        Map<String, String>? query,
-        Map<String, String>? headers,
-      }) async {
+    String path, {
+    Map<String, String>? query,
+    Map<String, String>? headers,
+  }) async {
     final response = await _authClient.get(_uri(path, query), headers: headers);
     _checkResponse(response, 'GET', path);
     return jsonDecode(response.body) as Map<String, dynamic>;
@@ -39,10 +39,10 @@ class HttpClient {
 
   /// GET request returning JSON list
   Future<List<dynamic>> getJsonList(
-      String path, {
-        Map<String, String>? query,
-        Map<String, String>? headers,
-      }) async {
+    String path, {
+    Map<String, String>? query,
+    Map<String, String>? headers,
+  }) async {
     final response = await _authClient.get(_uri(path, query), headers: headers);
     _checkResponse(response, 'GET', path);
     return jsonDecode(response.body) as List<dynamic>;
@@ -50,10 +50,10 @@ class HttpClient {
 
   /// GET request returning raw response
   Future<http.Response> get(
-      String path, {
-        Map<String, String>? query,
-        Map<String, String>? headers,
-      }) async {
+    String path, {
+    Map<String, String>? query,
+    Map<String, String>? headers,
+  }) async {
     final response = await _authClient.get(_uri(path, query), headers: headers);
     _checkResponse(response, 'GET', path);
     return response;
@@ -65,11 +65,11 @@ class HttpClient {
 
   /// POST request with JSON body, returning JSON
   Future<Map<String, dynamic>> postJson(
-      String path, {
-        Map<String, dynamic>? body,
-        Map<String, String>? query,
-        Map<String, String>? headers,
-      }) async {
+    String path, {
+    Map<String, dynamic>? body,
+    Map<String, String>? query,
+    Map<String, String>? headers,
+  }) async {
     final response = await _authClient.post(
       _uri(path, query),
       headers: _jsonHeaders(headers),
@@ -81,11 +81,11 @@ class HttpClient {
 
   /// POST request with JSON body, returning JSON list
   Future<List<dynamic>> postJsonList(
-      String path, {
-        Map<String, dynamic>? body,
-        Map<String, String>? query,
-        Map<String, String>? headers,
-      }) async {
+    String path, {
+    Map<String, dynamic>? body,
+    Map<String, String>? query,
+    Map<String, String>? headers,
+  }) async {
     final response = await _authClient.post(
       _uri(path, query),
       headers: _jsonHeaders(headers),
@@ -97,11 +97,11 @@ class HttpClient {
 
   /// POST request with JSON body, returning raw response
   Future<http.Response> post(
-      String path, {
-        Map<String, dynamic>? body,
-        Map<String, String>? query,
-        Map<String, String>? headers,
-      }) async {
+    String path, {
+    Map<String, dynamic>? body,
+    Map<String, String>? query,
+    Map<String, String>? headers,
+  }) async {
     final response = await _authClient.post(
       _uri(path, query),
       headers: _jsonHeaders(headers),
@@ -117,11 +117,11 @@ class HttpClient {
 
   /// PUT request with JSON body, returning JSON
   Future<Map<String, dynamic>> putJson(
-      String path, {
-        Map<String, dynamic>? body,
-        Map<String, String>? query,
-        Map<String, String>? headers,
-      }) async {
+    String path, {
+    Map<String, dynamic>? body,
+    Map<String, String>? query,
+    Map<String, String>? headers,
+  }) async {
     final response = await _authClient.put(
       _uri(path, query),
       headers: _jsonHeaders(headers),
@@ -133,11 +133,11 @@ class HttpClient {
 
   /// PUT request with JSON body, returning raw response
   Future<http.Response> put(
-      String path, {
-        Map<String, dynamic>? body,
-        Map<String, String>? query,
-        Map<String, String>? headers,
-      }) async {
+    String path, {
+    Map<String, dynamic>? body,
+    Map<String, String>? query,
+    Map<String, String>? headers,
+  }) async {
     final response = await _authClient.put(
       _uri(path, query),
       headers: _jsonHeaders(headers),
@@ -153,11 +153,11 @@ class HttpClient {
 
   /// PATCH request with JSON body, returning JSON
   Future<Map<String, dynamic>> patchJson(
-      String path, {
-        Map<String, dynamic>? body,
-        Map<String, String>? query,
-        Map<String, String>? headers,
-      }) async {
+    String path, {
+    Map<String, dynamic>? body,
+    Map<String, String>? query,
+    Map<String, String>? headers,
+  }) async {
     final response = await _authClient.patch(
       _uri(path, query),
       headers: _jsonHeaders(headers),
@@ -169,11 +169,11 @@ class HttpClient {
 
   /// PATCH request with JSON body, returning raw response
   Future<http.Response> patch(
-      String path, {
-        Map<String, dynamic>? body,
-        Map<String, String>? query,
-        Map<String, String>? headers,
-      }) async {
+    String path, {
+    Map<String, dynamic>? body,
+    Map<String, String>? query,
+    Map<String, String>? headers,
+  }) async {
     final response = await _authClient.patch(
       _uri(path, query),
       headers: _jsonHeaders(headers),
@@ -189,10 +189,10 @@ class HttpClient {
 
   /// DELETE request returning JSON
   Future<Map<String, dynamic>> deleteJson(
-      String path, {
-        Map<String, String>? query,
-        Map<String, String>? headers,
-      }) async {
+    String path, {
+    Map<String, String>? query,
+    Map<String, String>? headers,
+  }) async {
     final response = await _authClient.delete(
       _uri(path, query),
       headers: headers,
@@ -209,10 +209,10 @@ class HttpClient {
 
   /// DELETE request returning raw response
   Future<http.Response> delete(
-      String path, {
-        Map<String, String>? query,
-        Map<String, String>? headers,
-      }) async {
+    String path, {
+    Map<String, String>? query,
+    Map<String, String>? headers,
+  }) async {
     final response = await _authClient.delete(
       _uri(path, query),
       headers: headers,

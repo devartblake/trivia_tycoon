@@ -39,7 +39,7 @@ class _SkillTreeScreenState extends ConsumerState<SkillTreeScreen> {
 
   String _getGroupDisplayName(String groupId) {
     switch (groupId) {
-    // Combat-Focused Groups
+      // Combat-Focused Groups
       case 'scholar':
         return 'Scholar Skills';
       case 'strategist':
@@ -47,7 +47,7 @@ class _SkillTreeScreenState extends ConsumerState<SkillTreeScreen> {
       case 'combat':
         return 'Combat Skills';
 
-    // Enhancement Groups
+      // Enhancement Groups
       case 'xp':
         return 'XP Booster Skills';
       case 'timer':
@@ -57,7 +57,7 @@ class _SkillTreeScreenState extends ConsumerState<SkillTreeScreen> {
       case 'risk':
         return 'Risk Skills';
 
-    // Utility Groups
+      // Utility Groups
       case 'luck':
         return 'Luck Skills';
       case 'stealth':
@@ -65,7 +65,7 @@ class _SkillTreeScreenState extends ConsumerState<SkillTreeScreen> {
       case 'knowledge':
         return 'Knowledge Skills';
 
-    // Advanced Groups
+      // Advanced Groups
       case 'elite':
         return 'Elite Skills';
       case 'wildcard':
@@ -112,7 +112,7 @@ class _SkillTreeScreenState extends ConsumerState<SkillTreeScreen> {
     // Example filtering logic - you can customize this based on your needs
     switch (groupId) {
       case 'scholar':
-      // Focus on scholar category skills
+        // Focus on scholar category skills
         _highlightSkillCategory('scholar');
         break;
       case 'strategist':
@@ -304,14 +304,12 @@ class _SkillTreeScreenState extends ConsumerState<SkillTreeScreen> {
 
     // Pre-compute counts for each filter mode
     int _count(SkillNodeFilterMode mode) => switch (mode) {
-      SkillNodeFilterMode.all => graph.nodes.length,
-      SkillNodeFilterMode.unlocked => graph.unlockedNodes.length,
-      SkillNodeFilterMode.available =>
-      graph.availableNodes.length,
-      SkillNodeFilterMode.locked => graph.nodes
-          .where((n) => !n.unlocked && !n.available)
-          .length,
-    };
+          SkillNodeFilterMode.all => graph.nodes.length,
+          SkillNodeFilterMode.unlocked => graph.unlockedNodes.length,
+          SkillNodeFilterMode.available => graph.availableNodes.length,
+          SkillNodeFilterMode.locked =>
+            graph.nodes.where((n) => !n.unlocked && !n.available).length,
+        };
 
     // Use a StatefulBuilder so the radio updates immediately inside the sheet
     SkillNodeFilterMode sheetSelected = _filterMode;
@@ -329,17 +327,17 @@ class _SkillTreeScreenState extends ConsumerState<SkillTreeScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-          // Handle
-          Center(
-          child: Container(
-          width: 40,
-            height: 4,
-            margin: const EdgeInsets.only(bottom: 16),
-            decoration: BoxDecoration(
-              color: Colors.white24,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
+              // Handle
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.white24,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
               ),
               const Text(
                 'Filter Skills',

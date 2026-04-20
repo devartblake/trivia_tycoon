@@ -28,7 +28,8 @@ class ProfileSelectionScreen extends ConsumerStatefulWidget {
   const ProfileSelectionScreen({super.key});
 
   @override
-  ConsumerState<ProfileSelectionScreen> createState() => _ProfileSelectionScreenState();
+  ConsumerState<ProfileSelectionScreen> createState() =>
+      _ProfileSelectionScreenState();
 }
 
 class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
@@ -154,7 +155,8 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
               crossAxisSpacing: 16,
               mainAxisSpacing: 16,
             ),
-            itemCount: profiles.length + (profiles.length < 5 ? 1 : 0), // Add button if under limit
+            itemCount: profiles.length +
+                (profiles.length < 5 ? 1 : 0), // Add button if under limit
             itemBuilder: (context, index) {
               if (index < profiles.length) {
                 return _buildProfileCard(profiles[index]);
@@ -233,13 +235,13 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
                         backgroundColor: Colors.white.withValues(alpha: 0.2),
                         child: profile.avatar == null
                             ? Text(
-                          profile.name.substring(0, 1).toUpperCase(),
-                          style: const TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        )
+                                profile.name.substring(0, 1).toUpperCase(),
+                                style: const TextStyle(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              )
                             : null,
                       ),
                     ),
@@ -249,7 +251,8 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
                       top: 8,
                       right: 8,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           color: Colors.black.withValues(alpha: 0.6),
                           borderRadius: BorderRadius.circular(12),
@@ -271,7 +274,8 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
                         top: 8,
                         left: 8,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
                             color: Colors.amber,
                             borderRadius: BorderRadius.circular(8),
@@ -290,11 +294,11 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
                 ),
               ),
             ),
-
             Expanded(
               flex: 1,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -434,12 +438,16 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
         );
 
         // After successfully selecting/switching to a profile, add this:
-        await ref.read(onboardingProgressProvider.notifier).markOnboardingCompleted(true);
+        await ref
+            .read(onboardingProgressProvider.notifier)
+            .markOnboardingCompleted(true);
 
         // And update the onboarding phase
         final serviceManager = ref.read(serviceManagerProvider);
-        await serviceManager.onboardingSettingsService.setOnboardingCompleted(true);
-        await serviceManager.onboardingSettingsService.setHasCompletedOnboarding(true);
+        await serviceManager.onboardingSettingsService
+            .setOnboardingCompleted(true);
+        await serviceManager.onboardingSettingsService
+            .setHasCompletedOnboarding(true);
 
         // Navigate to home screen
         context.go('/home');
@@ -488,7 +496,8 @@ class CreateProfileDialog extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<CreateProfileDialog> createState() => _CreateProfileDialogState();
+  ConsumerState<CreateProfileDialog> createState() =>
+      _CreateProfileDialogState();
 }
 
 class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
@@ -539,9 +548,11 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 labelText: 'Profile Name',
-                labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
+                labelStyle:
+                    TextStyle(color: Colors.white.withValues(alpha: 0.7)),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
+                  borderSide:
+                      BorderSide(color: Colors.white.withValues(alpha: 0.3)),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 focusedBorder: OutlineInputBorder(
@@ -576,17 +587,24 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
                       margin: const EdgeInsets.only(right: 8),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       decoration: BoxDecoration(
-                        color: isSelected ? const Color(0xFF6A5ACD) : Colors.white.withValues(alpha: 0.1),
+                        color: isSelected
+                            ? const Color(0xFF6A5ACD)
+                            : Colors.white.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
-                          color: isSelected ? const Color(0xFF6A5ACD) : Colors.white.withValues(alpha: 0.3),
+                          color: isSelected
+                              ? const Color(0xFF6A5ACD)
+                              : Colors.white.withValues(alpha: 0.3),
                         ),
                       ),
                       child: Text(
                         group.capitalize(),
                         style: TextStyle(
-                          color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.7),
-                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                          color: isSelected
+                              ? Colors.white
+                              : Colors.white.withValues(alpha: 0.7),
+                          fontWeight:
+                              isSelected ? FontWeight.bold : FontWeight.normal,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -676,10 +694,12 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
               children: [
                 Expanded(
                   child: TextButton(
-                    onPressed: _isCreating ? null : () => Navigator.pop(context),
+                    onPressed:
+                        _isCreating ? null : () => Navigator.pop(context),
                     child: Text(
                       'Cancel',
-                      style: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
+                      style:
+                          TextStyle(color: Colors.white.withValues(alpha: 0.7)),
                     ),
                   ),
                 ),
@@ -693,13 +713,13 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
                     ),
                     child: _isCreating
                         ? const SizedBox(
-                      height: 16,
-                      width: 16,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: Colors.white,
-                      ),
-                    )
+                            height: 16,
+                            width: 16,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
                         : const Text('Create'),
                   ),
                 ),
@@ -713,7 +733,8 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
 
   Future<void> _createProfile() async {
     if (_nameController.text.trim().isEmpty) {
-      LogManager.logProfileValidation(_nameController.text.trim(), 'Empty profile name');
+      LogManager.logProfileValidation(
+          _nameController.text.trim(), 'Empty profile name');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please enter a profile name'),
@@ -733,11 +754,13 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
         ageGroup: _selectedAgeGroup,
       );
 
-      if (profile != null && mounted) { // Check if still mounted
+      if (profile != null && mounted) {
+        // Check if still mounted
         // Track analytics safely - only if widget is still mounted
         if (mounted) {
           try {
-            final analyticsManager = ref.read(profileAnalyticsManagerProvider.notifier);
+            final analyticsManager =
+                ref.read(profileAnalyticsManagerProvider.notifier);
             await analyticsManager.trackProfileCreated(
               profileId: profile.id,
               profileName: profile.name,
@@ -750,7 +773,8 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
           }
         }
 
-        if (mounted) { // Check again before navigation
+        if (mounted) {
+          // Check again before navigation
           Navigator.pop(context);
           widget.onProfileCreated();
           ScaffoldMessenger.of(context).showSnackBar(
@@ -761,10 +785,12 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
           );
         }
       } else if (mounted) {
-        LogManager.logProfileError('creation', 'Profile creation returned null');
+        LogManager.logProfileError(
+            'creation', 'Profile creation returned null');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Failed to create profile. Name might already exist.'),
+            content: const Text(
+                'Failed to create profile. Name might already exist.'),
             backgroundColor: Colors.red[300],
           ),
         );
@@ -854,7 +880,8 @@ class ManageProfilesDialog extends ConsumerWidget {
     );
   }
 
-  Widget _buildProfileManagementTile(BuildContext context, WidgetRef ref, ProfileData profile) {
+  Widget _buildProfileManagementTile(
+      BuildContext context, WidgetRef ref, ProfileData profile) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
@@ -866,13 +893,15 @@ class ManageProfilesDialog extends ConsumerWidget {
         children: [
           CircleAvatar(
             radius: 20,
-            backgroundImage: profile.avatar != null ? AssetImage(profile.avatar!) : null,
+            backgroundImage:
+                profile.avatar != null ? AssetImage(profile.avatar!) : null,
             backgroundColor: Colors.white.withValues(alpha: 0.2),
             child: profile.avatar == null
                 ? Text(
-              profile.name.substring(0, 1).toUpperCase(),
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            )
+                    profile.name.substring(0, 1).toUpperCase(),
+                    style: const TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  )
                 : null,
           ),
           const SizedBox(width: 12),
@@ -899,11 +928,12 @@ class ManageProfilesDialog extends ConsumerWidget {
             ),
           ),
           PopupMenuButton<String>(
-            icon: Icon(Icons.more_vert, color: Colors.white.withValues(alpha: 0.7)),
+            icon: Icon(Icons.more_vert,
+                color: Colors.white.withValues(alpha: 0.7)),
             onSelected: (value) async {
               switch (value) {
                 case 'edit':
-                // Implement edit profile functionality
+                  // Implement edit profile functionality
                   break;
                 case 'delete':
                   await _deleteProfile(context, ref, profile);
@@ -938,12 +968,14 @@ class ManageProfilesDialog extends ConsumerWidget {
     );
   }
 
-  Future<void> _deleteProfile(BuildContext context, WidgetRef ref, ProfileData profile) async {
+  Future<void> _deleteProfile(
+      BuildContext context, WidgetRef ref, ProfileData profile) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF1A1B3D),
-        title: const Text('Delete Profile', style: TextStyle(color: Colors.white)),
+        title:
+            const Text('Delete Profile', style: TextStyle(color: Colors.white)),
         content: Text(
           'Are you sure you want to delete "${profile.name}"? This action cannot be undone.',
           style: const TextStyle(color: Colors.white),

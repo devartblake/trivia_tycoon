@@ -25,8 +25,8 @@ class SplashController {
     final route = !isLoggedIn
         ? '/login'
         : !hasOnboarded
-        ? '/onboarding'
-        : '/';
+            ? '/onboarding'
+            : '/';
 
     analyticsService.logEvent('init_app_flow', {
       'isLoggedIn': isLoggedIn,

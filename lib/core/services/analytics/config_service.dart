@@ -101,7 +101,7 @@ class ConfigService extends ChangeNotifier {
   Future<void> _loadLocalConfig() async {
     try {
       final jsonString =
-      await rootBundle.loadString('assets/config/config.json');
+          await rootBundle.loadString('assets/config/config.json');
       _config = json.decode(jsonString);
       _isGalleryActive = _config["GALLERY_MODE"] ?? false;
     } catch (e) {
@@ -136,7 +136,8 @@ class ConfigService extends ChangeNotifier {
           _config = {..._config, ...remoteConfig};
           _isGalleryActive = _config["GALLERY_MODE"] ?? false;
 
-          await _configStorage.saveConfig(_remoteConfigKey, json.encode(remoteConfig));
+          await _configStorage.saveConfig(
+              _remoteConfigKey, json.encode(remoteConfig));
           notifyListeners();
 
           if (kDebugMode) {

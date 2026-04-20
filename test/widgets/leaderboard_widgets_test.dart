@@ -18,8 +18,8 @@ import 'package:trivia_tycoon/screens/question/widgets/score_display.dart';
 Widget _wrap(Widget child) => MaterialApp(home: Scaffold(body: child));
 
 Widget _riverpodWrap(Widget child) => ProviderScope(
-  child: MaterialApp(home: Scaffold(body: child)),
-);
+      child: MaterialApp(home: Scaffold(body: child)),
+    );
 
 // ---------------------------------------------------------------------------
 // AnimatedRankBadge — leaderboard rank indicator
@@ -52,8 +52,8 @@ void main() {
     });
 
     testWidgets('no previous rank (first appearance)', (tester) async {
-      await tester
-          .pumpWidget(_wrap(const AnimatedRankBadge(rank: 7, previousRank: null)));
+      await tester.pumpWidget(
+          _wrap(const AnimatedRankBadge(rank: 7, previousRank: null)));
       expect(find.text('#7'), findsOneWidget);
     });
 
@@ -61,8 +61,8 @@ void main() {
       await tester.pumpWidget(_wrap(const AnimatedRankBadge(rank: 3)));
       expect(find.text('#3'), findsOneWidget);
 
-      await tester.pumpWidget(
-          _wrap(const AnimatedRankBadge(rank: 1, previousRank: 3)));
+      await tester
+          .pumpWidget(_wrap(const AnimatedRankBadge(rank: 1, previousRank: 3)));
       await tester.pump(const Duration(milliseconds: 100));
       expect(find.text('#1'), findsOneWidget);
     });
@@ -75,7 +75,7 @@ void main() {
   group('LiveCountdownTimer — season countdown', () {
     testWidgets('renders MM:SS format for sub-hour duration', (tester) async {
       final endTime =
-      DateTime.now().add(const Duration(minutes: 5, seconds: 30));
+          DateTime.now().add(const Duration(minutes: 5, seconds: 30));
       await tester.pumpWidget(_wrap(LiveCountdownTimer(endTime: endTime)));
       await tester.pump();
 
@@ -87,7 +87,8 @@ void main() {
           reason: 'Expected MM:SS formatted countdown; got: $texts');
     });
 
-    testWidgets('shows "Season ended" when time has already passed', (tester) async {
+    testWidgets('shows "Season ended" when time has already passed',
+        (tester) async {
       final pastTime = DateTime.now().subtract(const Duration(hours: 1));
       await tester.pumpWidget(_wrap(LiveCountdownTimer(endTime: pastTime)));
       await tester.pump();
@@ -95,10 +96,11 @@ void main() {
       expect(find.textContaining('Season ended'), findsOneWidget);
     });
 
-    testWidgets('calls onTimeExpired callback immediately when past', (tester) async {
+    testWidgets('calls onTimeExpired callback immediately when past',
+        (tester) async {
       bool expired = false;
       final pastTime =
-      DateTime.now().subtract(const Duration(milliseconds: 100));
+          DateTime.now().subtract(const Duration(milliseconds: 100));
 
       await tester.pumpWidget(_wrap(LiveCountdownTimer(
         endTime: pastTime,
@@ -110,33 +112,32 @@ void main() {
     });
 
     testWidgets('renders hours+minutes format for multi-hour duration',
-            (tester) async {
-          final endTime =
-          DateTime.now().add(const Duration(hours: 3, minutes: 45));
-          await tester.pumpWidget(_wrap(LiveCountdownTimer(endTime: endTime)));
-          await tester.pump();
+        (tester) async {
+      final endTime = DateTime.now().add(const Duration(hours: 3, minutes: 45));
+      await tester.pumpWidget(_wrap(LiveCountdownTimer(endTime: endTime)));
+      await tester.pump();
 
-          final texts = tester
-              .widgetList<Text>(find.byType(Text))
-              .map((t) => t.data ?? '')
-              .toList();
-          expect(texts.any((t) => t.contains('h')), isTrue,
-              reason: 'Expected "Xh YYm" formatted duration; got: $texts');
-        });
+      final texts = tester
+          .widgetList<Text>(find.byType(Text))
+          .map((t) => t.data ?? '')
+          .toList();
+      expect(texts.any((t) => t.contains('h')), isTrue,
+          reason: 'Expected "Xh YYm" formatted duration; got: $texts');
+    });
 
     testWidgets('renders days+hours format for multi-day duration',
-            (tester) async {
-          final endTime = DateTime.now().add(const Duration(days: 2, hours: 6));
-          await tester.pumpWidget(_wrap(LiveCountdownTimer(endTime: endTime)));
-          await tester.pump();
+        (tester) async {
+      final endTime = DateTime.now().add(const Duration(days: 2, hours: 6));
+      await tester.pumpWidget(_wrap(LiveCountdownTimer(endTime: endTime)));
+      await tester.pump();
 
-          final texts = tester
-              .widgetList<Text>(find.byType(Text))
-              .map((t) => t.data ?? '')
-              .toList();
-          expect(texts.any((t) => t.contains('d')), isTrue,
-              reason: 'Expected "Xd YYh" format; got: $texts');
-        });
+      final texts = tester
+          .widgetList<Text>(find.byType(Text))
+          .map((t) => t.data ?? '')
+          .toList();
+      expect(texts.any((t) => t.contains('d')), isTrue,
+          reason: 'Expected "Xd YYh" format; got: $texts');
+    });
   });
 
   // -------------------------------------------------------------------------
@@ -156,17 +157,17 @@ void main() {
     });
 
     testWidgets('renders with full params including XP and category scores',
-            (tester) async {
-          await tester.pumpWidget(_riverpodWrap(const EnhancedScoreDisplay(
-            score: 8,
-            totalQuestions: 10,
-            totalXP: 250,
-            classLevel: '6',
-            categoryScores: {'science': 5, 'history': 3},
-          )));
-          await tester.pump();
-          expect(find.byType(EnhancedScoreDisplay), findsOneWidget);
-        });
+        (tester) async {
+      await tester.pumpWidget(_riverpodWrap(const EnhancedScoreDisplay(
+        score: 8,
+        totalQuestions: 10,
+        totalXP: 250,
+        classLevel: '6',
+        categoryScores: {'science': 5, 'history': 3},
+      )));
+      await tester.pump();
+      expect(find.byType(EnhancedScoreDisplay), findsOneWidget);
+    });
 
     testWidgets('renders with power-up timer active', (tester) async {
       await tester.pumpWidget(_riverpodWrap(const EnhancedScoreDisplay(
@@ -180,15 +181,15 @@ void main() {
     });
 
     testWidgets('perfect score (all correct) renders without crash',
-            (tester) async {
-          await tester.pumpWidget(_riverpodWrap(const EnhancedScoreDisplay(
-            score: 10,
-            totalQuestions: 10,
-            totalXP: 1000,
-          )));
-          await tester.pump();
-          expect(find.byType(EnhancedScoreDisplay), findsOneWidget);
-        });
+        (tester) async {
+      await tester.pumpWidget(_riverpodWrap(const EnhancedScoreDisplay(
+        score: 10,
+        totalQuestions: 10,
+        totalXP: 1000,
+      )));
+      await tester.pump();
+      expect(find.byType(EnhancedScoreDisplay), findsOneWidget);
+    });
 
     testWidgets('zero score renders without crash', (tester) async {
       await tester.pumpWidget(_riverpodWrap(const EnhancedScoreDisplay(

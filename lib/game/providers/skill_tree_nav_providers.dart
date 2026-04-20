@@ -6,7 +6,8 @@ final skillTreeNavRepoProvider = Provider<SkillTreeNavRepository>((ref) {
   return SkillTreeNavRepository(); // default asset path
 });
 
-final skillTreeGroupsProvider = FutureProvider<List<SkillTreeGroupVM>>((ref) async {
+final skillTreeGroupsProvider =
+    FutureProvider<List<SkillTreeGroupVM>>((ref) async {
   final repo = ref.watch(skillTreeNavRepoProvider);
   return repo.load();
 });

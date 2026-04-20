@@ -36,8 +36,7 @@ class ModuleDetailScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 8),
                 TextButton(
-                  onPressed: () =>
-                      ref.refresh(moduleDetailProvider(moduleId)),
+                  onPressed: () => ref.refresh(moduleDetailProvider(moduleId)),
                   child: const Text('Retry'),
                 ),
               ],
@@ -129,8 +128,8 @@ class _ModuleDetailBody extends StatelessWidget {
             child: FilledButton.icon(
               icon: const Icon(Icons.play_arrow),
               label: const Text('Start Learning'),
-              onPressed: () => context
-                  .push('/learn-hub/module/${module.id}/lessons'),
+              onPressed: () =>
+                  context.push('/learn-hub/module/${module.id}/lessons'),
             ),
           ),
         ],

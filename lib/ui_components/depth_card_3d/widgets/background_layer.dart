@@ -8,6 +8,7 @@ import '../models/depth_card_theme.dart';
 /// when textures don't have generated mip levels.
 class BackgroundLayer extends StatefulWidget {
   final ImageProvider image;
+
   /// Optional theme (used by DepthCard3D). If not provided, this widget
   /// behaves exactly as before.
   final DepthCardTheme? theme;
@@ -49,9 +50,14 @@ class BackgroundLayer extends StatefulWidget {
 
 class _BackgroundLayerState extends State<BackgroundLayer>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller = AnimationController(vsync: this, duration: widget.kenBurnsDuration)..repeat(reverse: true);
-  late Animation<double> _scale = Tween(begin: 1.02, end: 1.08).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-  late final Animation<Alignment> _align = AlignmentTween(begin: const Alignment(-0.08, -0.06), end: const Alignment(0.08, 0.06))
+  late AnimationController _controller =
+      AnimationController(vsync: this, duration: widget.kenBurnsDuration)
+        ..repeat(reverse: true);
+  late Animation<double> _scale = Tween(begin: 1.02, end: 1.08)
+      .animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+  late final Animation<Alignment> _align = AlignmentTween(
+          begin: const Alignment(-0.08, -0.06),
+          end: const Alignment(0.08, 0.06))
       .animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
   @override
@@ -95,16 +101,15 @@ class _BackgroundLayerState extends State<BackgroundLayer>
       alignment: widget.kenBurns ? _align.value : widget.alignment,
       width: double.infinity,
       height: double.infinity,
-      filterQuality: widget.filterQuality, // 👈 keep low unless you have mipmaps
-      isAntiAlias: widget.isAntiAlias,     // 👈 false helps avoid higher-quality sampling
+      filterQuality:
+          widget.filterQuality, // 👈 keep low unless you have mipmaps
+      isAntiAlias:
+          widget.isAntiAlias, // 👈 false helps avoid higher-quality sampling
     );
 
     if (widget.blur > 0) {
       img = ImageFiltered(
-        imageFilter: ImageFilter.blur(
-            sigmaX: widget.blur,
-            sigmaY: widget.blur
-        ),
+        imageFilter: ImageFilter.blur(sigmaX: widget.blur, sigmaY: widget.blur),
         child: img,
       );
     }
@@ -118,8 +123,8 @@ class _BackgroundLayerState extends State<BackgroundLayer>
       child: Transform.translate(
         offset: parallaxOffset,
         child: Transform.scale(
-        scale: widget.kenBurns ? _scale.value : 1.0,
-        child: img,
+          scale: widget.kenBurns ? _scale.value : 1.0,
+          child: img,
         ),
       ),
     );

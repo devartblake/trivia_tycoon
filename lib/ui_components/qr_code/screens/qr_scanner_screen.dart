@@ -109,9 +109,7 @@ class _QrScannerScreenState extends ConsumerState<QrScannerScreen> {
                 aspectRatio: cam.value.aspectRatio,
                 child: CameraPreview(cam),
               ),
-
               ScanBoxOverlay(type: _scanType),
-
               Positioned(
                 bottom: 40,
                 left: 16,

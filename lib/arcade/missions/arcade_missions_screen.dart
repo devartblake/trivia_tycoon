@@ -152,14 +152,16 @@ class ArcadeMissionsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildStatsBanner(BuildContext context, WidgetRef ref, dynamic service) {
+  Widget _buildStatsBanner(
+      BuildContext context, WidgetRef ref, dynamic service) {
     final totalMissions = service.missions.length;
     final completedToday = service.missions
-        .where((m) => m.tier == ArcadeMissionTier.daily && service.progressFor(m.id).claimed)
+        .where((m) =>
+            m.tier == ArcadeMissionTier.daily &&
+            service.progressFor(m.id).claimed)
         .length;
-    final dailyMissions = service.missions
-        .where((m) => m.tier == ArcadeMissionTier.daily)
-        .length;
+    final dailyMissions =
+        service.missions.where((m) => m.tier == ArcadeMissionTier.daily).length;
 
     return Container(
       margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -260,14 +262,14 @@ class ArcadeMissionsScreen extends ConsumerWidget {
         gradient: LinearGradient(
           colors: claimed
               ? [
-            Colors.white.withValues(alpha: 0.08),
-            Colors.white.withValues(alpha: 0.04),
-          ]
+                  Colors.white.withValues(alpha: 0.08),
+                  Colors.white.withValues(alpha: 0.04),
+                ]
               : [
-            const Color(0xFFFBBF24),
-            const Color(0xFFF59E0B),
-            const Color(0xFFEF4444),
-          ],
+                  const Color(0xFFFBBF24),
+                  const Color(0xFFF59E0B),
+                  const Color(0xFFEF4444),
+                ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -275,12 +277,12 @@ class ArcadeMissionsScreen extends ConsumerWidget {
         boxShadow: claimed
             ? []
             : [
-          BoxShadow(
-            color: const Color(0xFFFBBF24).withValues(alpha: 0.4),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
+                BoxShadow(
+                  color: const Color(0xFFFBBF24).withValues(alpha: 0.4),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+              ],
       ),
       child: Material(
         color: Colors.transparent,
@@ -299,7 +301,9 @@ class ArcadeMissionsScreen extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: Icon(
-                    claimed ? Icons.check_circle_rounded : Icons.card_giftcard_rounded,
+                    claimed
+                        ? Icons.check_circle_rounded
+                        : Icons.card_giftcard_rounded,
                     color: Colors.white,
                     size: 32,
                   ),
@@ -395,11 +399,11 @@ class ArcadeMissionsScreen extends ConsumerWidget {
   }
 
   Widget _buildMissionSections(
-      BuildContext context,
-      WidgetRef ref,
-      dynamic service,
-      List<ArcadeMission> Function(ArcadeMissionTier) byTier,
-      ) {
+    BuildContext context,
+    WidgetRef ref,
+    dynamic service,
+    List<ArcadeMission> Function(ArcadeMissionTier) byTier,
+  ) {
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -445,15 +449,15 @@ class ArcadeMissionsScreen extends ConsumerWidget {
   }
 
   Widget _buildMissionSection(
-      BuildContext context,
-      WidgetRef ref,
-      dynamic service,
-      String title,
-      ArcadeMissionTier tier,
-      List<ArcadeMission> missions,
-      Color color,
-      IconData icon,
-      ) {
+    BuildContext context,
+    WidgetRef ref,
+    dynamic service,
+    String title,
+    ArcadeMissionTier tier,
+    List<ArcadeMission> missions,
+    Color color,
+    IconData icon,
+  ) {
     if (missions.isEmpty) return const SizedBox.shrink();
 
     return Column(
@@ -504,23 +508,23 @@ class ArcadeMissionsScreen extends ConsumerWidget {
 
         // Mission Cards
         ...missions.map((mission) => _buildModernMissionCard(
-          context,
-          ref,
-          service,
-          mission,
-          color,
-        )),
+              context,
+              ref,
+              service,
+              mission,
+              color,
+            )),
       ],
     );
   }
 
   Widget _buildModernMissionCard(
-      BuildContext context,
-      WidgetRef ref,
-      dynamic service,
-      ArcadeMission mission,
-      Color tierColor,
-      ) {
+    BuildContext context,
+    WidgetRef ref,
+    dynamic service,
+    ArcadeMission mission,
+    Color tierColor,
+  ) {
     final progress = service.progressFor(mission.id);
     final canClaim = service.canClaim(mission.id);
     final ratio = (progress.current / mission.target).clamp(0.0, 1.0);
@@ -546,12 +550,12 @@ class ArcadeMissionsScreen extends ConsumerWidget {
         ),
         boxShadow: canClaim
             ? [
-          BoxShadow(
-            color: tierColor.withValues(alpha: 0.3),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
-          ),
-        ]
+                BoxShadow(
+                  color: tierColor.withValues(alpha: 0.3),
+                  blurRadius: 12,
+                  offset: const Offset(0, 6),
+                ),
+              ]
             : [],
       ),
       child: Material(
@@ -694,7 +698,10 @@ class ArcadeMissionsScreen extends ConsumerWidget {
                           height: 8,
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
-                              colors: [tierColor, tierColor.withValues(alpha: 0.7)],
+                              colors: [
+                                tierColor,
+                                tierColor.withValues(alpha: 0.7)
+                              ],
                             ),
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: [
@@ -785,14 +792,14 @@ class ArcadeMissionsScreen extends ConsumerWidget {
   }
 
   Widget _buildClaimButton(
-      BuildContext context,
-      WidgetRef ref,
-      dynamic service,
-      ArcadeMission mission,
-      bool canClaim,
-      bool claimed,
-      Color tierColor,
-      ) {
+    BuildContext context,
+    WidgetRef ref,
+    dynamic service,
+    ArcadeMission mission,
+    bool canClaim,
+    bool claimed,
+    Color tierColor,
+  ) {
     String buttonText;
     Color buttonColor;
     Color textColor;
@@ -816,19 +823,19 @@ class ArcadeMissionsScreen extends ConsumerWidget {
       decoration: BoxDecoration(
         gradient: canClaim && !claimed
             ? LinearGradient(
-          colors: [tierColor, tierColor.withValues(alpha: 0.8)],
-        )
+                colors: [tierColor, tierColor.withValues(alpha: 0.8)],
+              )
             : null,
         color: !canClaim || claimed ? buttonColor : null,
         borderRadius: BorderRadius.circular(12),
         boxShadow: canClaim && !claimed
             ? [
-          BoxShadow(
-            color: tierColor.withValues(alpha: 0.4),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ]
+                BoxShadow(
+                  color: tierColor.withValues(alpha: 0.4),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ]
             : [],
       ),
       child: Material(
@@ -836,40 +843,40 @@ class ArcadeMissionsScreen extends ConsumerWidget {
         child: InkWell(
           onTap: canClaim && !claimed
               ? () {
-            final accepted = service.tryClaim(mission.id);
-            if (!accepted) return;
+                  final accepted = service.tryClaim(mission.id);
+                  if (!accepted) return;
 
-            incrementCoins(ref, mission.reward.coins);
-            incrementGems(ref, mission.reward.gems);
+                  incrementCoins(ref, mission.reward.coins);
+                  incrementGems(ref, mission.reward.gems);
 
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Row(
-                  children: [
-                    const Icon(
-                      Icons.check_circle_rounded,
-                      color: Colors.white,
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        'Claimed +${mission.reward.coins} coins & +${mission.reward.gems} gems!',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                        ),
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Row(
+                        children: [
+                          const Icon(
+                            Icons.check_circle_rounded,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              'Claimed +${mission.reward.coins} coins & +${mission.reward.gems} gems!',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
+                      backgroundColor: const Color(0xFF10B981),
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      margin: const EdgeInsets.all(16),
                     ),
-                  ],
-                ),
-                backgroundColor: const Color(0xFF10B981),
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                margin: const EdgeInsets.all(16),
-              ),
-            );
-          }
+                  );
+                }
               : null,
           borderRadius: BorderRadius.circular(12),
           child: Padding(

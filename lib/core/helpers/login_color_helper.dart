@@ -28,7 +28,7 @@ const shades = {
 
 MaterialColor getMaterialColor(Color color) {
   return Colors.primaries.firstWhere(
-        (c) => c.value == color.value,
+    (c) => c.value == color.value,
     orElse: () => MaterialColor(
       color.value,
       <int, Color>{
@@ -63,11 +63,11 @@ Brightness estimateBrightnessForColor(Color color) {
 
 /// get the dark shades version of current color,
 List<Color?> getDarkShades(
-    Color color, [
-      ColorShade minShade = ColorShade.fifthLightest,
-    ]) {
+  Color color, [
+  ColorShade minShade = ColorShade.fifthLightest,
+]) {
   final materialColor =
-  color is MaterialColor ? color : getMaterialColor(color);
+      color is MaterialColor ? color : getMaterialColor(color);
   final darkShades = <Color>[];
 
   for (final shade in shades.values) {

@@ -9,7 +9,6 @@ import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import '../../../core/services/storage/config_storage_service.dart';
 import '../models/spin_system_models.dart';
 
-
 enum SegmentSource { local, remote }
 
 class SegmentLoader {
@@ -38,7 +37,8 @@ class SegmentLoader {
     try {
       if (source == SegmentSource.remote && remoteUrl != null) {
         rawSegments = await _loadFromRemote();
-        await configStorage.saveConfig('segments', json.encode(rawSegments.map((s) => s.toJson()).toList()));
+        await configStorage.saveConfig('segments',
+            json.encode(rawSegments.map((s) => s.toJson()).toList()));
         await spinWheelService.setSegmentFetchTime(DateTime.now());
       } else {
         rawSegments = await _loadFromLocal();
@@ -64,7 +64,8 @@ class SegmentLoader {
     if (remoteUrl == null) throw Exception("Remote URL not provided.");
 
     final response = await http.get(Uri.parse(remoteUrl!));
-    if (response.statusCode != 200) throw Exception("Failed to load remote segments");
+    if (response.statusCode != 200)
+      throw Exception("Failed to load remote segments");
 
     final List<dynamic> data = json.decode(response.body);
     return data.map((e) => WheelSegment.fromJson(e)).toList();
@@ -108,5 +109,4 @@ class SegmentLoader {
       generalKeyStorage: manager.generalKeyValueStorageService,
     );
   });
-
 }

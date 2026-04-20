@@ -74,14 +74,14 @@ class _LiveMatchScreenState extends ConsumerState<LiveMatchScreen>
         if (!didPop) {
           final ok = await showExitMatchConfirm(context);
           if (ok == true && context.mounted) {
-            context.go('/multiplayer/rooms'); // Return to room lobby instead of main hub
+            context.go(
+                '/multiplayer/rooms'); // Return to room lobby instead of main hub
           }
         }
       },
       child: Scaffold(
-        backgroundColor: isDark
-            ? const Color(0xFF0A0A0F)
-            : MultiplayerPalette.background,
+        backgroundColor:
+            isDark ? const Color(0xFF0A0A0F) : MultiplayerPalette.background,
         body: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
@@ -113,7 +113,9 @@ class _LiveMatchScreenState extends ConsumerState<LiveMatchScreen>
                                 });
                                 final id = match.matchId ?? 'temp';
                                 final q = match.questionId ?? 'Q-1';
-                                ref.read(matchControllerProvider.notifier).submitAnswer(id, q, answer);
+                                ref
+                                    .read(matchControllerProvider.notifier)
+                                    .submitAnswer(id, q, answer);
                               }
                             },
                           ),
@@ -131,7 +133,8 @@ class _LiveMatchScreenState extends ConsumerState<LiveMatchScreen>
     );
   }
 
-  Widget _buildSliverAppBar(dynamic match, ThemeData theme, bool isDark, BuildContext context) {
+  Widget _buildSliverAppBar(
+      dynamic match, ThemeData theme, bool isDark, BuildContext context) {
     return SliverAppBar(
       expandedHeight: 120,
       floating: false,
@@ -214,7 +217,8 @@ class _LiveMatchScreenState extends ConsumerState<LiveMatchScreen>
               context.go('/multiplayer/rooms'); // Return to room lobby
             }
           },
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          icon:
+              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
         ),
       ),
       actions: [
@@ -306,7 +310,10 @@ class _LiveMatchScreenState extends ConsumerState<LiveMatchScreen>
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [MultiplayerPalette.primary, MultiplayerPalette.secondary],
+                    colors: [
+                      MultiplayerPalette.primary,
+                      MultiplayerPalette.secondary
+                    ],
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -327,7 +334,8 @@ class _LiveMatchScreenState extends ConsumerState<LiveMatchScreen>
               ),
               const Spacer(),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: MultiplayerPalette.success.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
@@ -402,7 +410,10 @@ class _LiveMatchScreenState extends ConsumerState<LiveMatchScreen>
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
-                        colors: [MultiplayerPalette.primary, MultiplayerPalette.secondary],
+                        colors: [
+                          MultiplayerPalette.primary,
+                          MultiplayerPalette.secondary
+                        ],
                       ),
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -418,7 +429,9 @@ class _LiveMatchScreenState extends ConsumerState<LiveMatchScreen>
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
+                      color: isDark
+                          ? Colors.white
+                          : MultiplayerPalette.textPrimary,
                     ),
                   ),
                 ],
@@ -430,7 +443,12 @@ class _LiveMatchScreenState extends ConsumerState<LiveMatchScreen>
                 itemCount: 4, // Mock data
                 itemBuilder: (context, index) {
                   final positions = ['1st', '2nd', '3rd', '4th'];
-                  final names = ['Player 1', 'Player 2', 'Player 3', 'Player 4'];
+                  final names = [
+                    'Player 1',
+                    'Player 2',
+                    'Player 3',
+                    'Player 4'
+                  ];
                   final scores = [850, 720, 680, 520];
                   final colors = [
                     const Color(0xFFEF4444),
@@ -477,7 +495,9 @@ class _LiveMatchScreenState extends ConsumerState<LiveMatchScreen>
                                 names[index],
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
-                                  color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
+                                  color: isDark
+                                      ? Colors.white
+                                      : MultiplayerPalette.textPrimary,
                                 ),
                               ),
                               Text(
@@ -561,13 +581,13 @@ class _LiveMatchScreenState extends ConsumerState<LiveMatchScreen>
   }
 
   String _titleForPhase(MatchPhase p) => switch (p) {
-    MatchPhase.idle => 'Match',
-    MatchPhase.queued => 'Queued',
-    MatchPhase.starting => 'Starting',
-    MatchPhase.question => 'Question Time',
-    MatchPhase.reveal => 'Answer Reveal',
-    MatchPhase.results => 'Results',
-    MatchPhase.finished => 'Match Finished',
-    MatchPhase.error => 'Error',
-  };
+        MatchPhase.idle => 'Match',
+        MatchPhase.queued => 'Queued',
+        MatchPhase.starting => 'Starting',
+        MatchPhase.question => 'Question Time',
+        MatchPhase.reveal => 'Answer Reveal',
+        MatchPhase.results => 'Results',
+        MatchPhase.finished => 'Match Finished',
+        MatchPhase.error => 'Error',
+      };
 }

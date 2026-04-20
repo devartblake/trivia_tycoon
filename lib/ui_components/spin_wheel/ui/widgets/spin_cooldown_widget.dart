@@ -28,7 +28,8 @@ class _SpinCooldownWidgetState extends ConsumerState<SpinCooldownWidget>
     super.initState();
     _initAnimations();
     _refreshCooldown();
-    _timer = Timer.periodic(const Duration(seconds: 1), (_) => _refreshCooldown());
+    _timer =
+        Timer.periodic(const Duration(seconds: 1), (_) => _refreshCooldown());
   }
 
   void _initAnimations() {
@@ -74,7 +75,8 @@ class _SpinCooldownWidgetState extends ConsumerState<SpinCooldownWidget>
 
     if (!mounted) return;
 
-    final percentage = (_timeLeft.inSeconds / SpinTracker.cooldown.inSeconds).clamp(0.0, 1.0);
+    final percentage =
+        (_timeLeft.inSeconds / SpinTracker.cooldown.inSeconds).clamp(0.0, 1.0);
 
     setState(() {
       _timeLeft = timeLeft;
@@ -259,8 +261,14 @@ class _SpinCooldownWidgetState extends ConsumerState<SpinCooldownWidget>
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: canSpin
-                    ? [Colors.green.withValues(alpha: 0.1), Colors.green.withValues(alpha: 0.05)]
-                    : [Colors.grey.withValues(alpha: 0.1), Colors.grey.withValues(alpha: 0.05)],
+                    ? [
+                        Colors.green.withValues(alpha: 0.1),
+                        Colors.green.withValues(alpha: 0.05)
+                      ]
+                    : [
+                        Colors.grey.withValues(alpha: 0.1),
+                        Colors.grey.withValues(alpha: 0.05)
+                      ],
               ),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(

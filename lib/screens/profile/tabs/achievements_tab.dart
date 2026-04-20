@@ -56,7 +56,8 @@ class AchievementsTab extends ConsumerWidget {
                   color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.emoji_events, color: Colors.white, size: 20),
+                child: const Icon(Icons.emoji_events,
+                    color: Colors.white, size: 20),
               ),
               const SizedBox(width: 12),
               const Text(
@@ -182,7 +183,8 @@ class AchievementsTab extends ConsumerWidget {
                   color: const Color(0xFF6A5ACD),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.new_releases, color: Colors.white, size: 20),
+                child: const Icon(Icons.new_releases,
+                    color: Colors.white, size: 20),
               ),
               const SizedBox(width: 12),
               const Text(
@@ -196,20 +198,23 @@ class AchievementsTab extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 20),
-          ...recentAchievements.map((achievement) => _buildAchievementItem(
-            achievement['title'] as String,
-            achievement['description'] as String,
-            achievement['icon'] as IconData,
-            achievement['color'] as Color,
-            achievement['date'] as String,
-            achievement['isNew'] as bool,
-          )).toList(),
+          ...recentAchievements
+              .map((achievement) => _buildAchievementItem(
+                    achievement['title'] as String,
+                    achievement['description'] as String,
+                    achievement['icon'] as IconData,
+                    achievement['color'] as Color,
+                    achievement['date'] as String,
+                    achievement['isNew'] as bool,
+                  ))
+              .toList(),
         ],
       ),
     );
   }
 
-  Widget _buildAchievementItem(String title, String description, IconData icon, Color color, String date, bool isNew) {
+  Widget _buildAchievementItem(String title, String description, IconData icon,
+      Color color, String date, bool isNew) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
@@ -253,7 +258,8 @@ class AchievementsTab extends ConsumerWidget {
                     if (isNew) ...[
                       const SizedBox(width: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
                           color: const Color(0xFFFF6B6B),
                           borderRadius: BorderRadius.circular(8),
@@ -297,10 +303,30 @@ class AchievementsTab extends ConsumerWidget {
 
   Widget _buildSubjectMasteryCard() {
     final subjects = [
-      {'name': 'Mathematics', 'level': 4, 'maxLevel': 5, 'color': Color(0xFF6A5ACD)},
-      {'name': 'Science', 'level': 3, 'maxLevel': 5, 'color': Color(0xFF26de81)},
-      {'name': 'History', 'level': 3, 'maxLevel': 5, 'color': Color(0xFFFF6B6B)},
-      {'name': 'Literature', 'level': 2, 'maxLevel': 5, 'color': Color(0xFFFFA726)},
+      {
+        'name': 'Mathematics',
+        'level': 4,
+        'maxLevel': 5,
+        'color': Color(0xFF6A5ACD)
+      },
+      {
+        'name': 'Science',
+        'level': 3,
+        'maxLevel': 5,
+        'color': Color(0xFF26de81)
+      },
+      {
+        'name': 'History',
+        'level': 3,
+        'maxLevel': 5,
+        'color': Color(0xFFFF6B6B)
+      },
+      {
+        'name': 'Literature',
+        'level': 2,
+        'maxLevel': 5,
+        'color': Color(0xFFFFA726)
+      },
     ];
 
     return Container(
@@ -327,7 +353,8 @@ class AchievementsTab extends ConsumerWidget {
                   color: const Color(0xFF26de81),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.military_tech, color: Colors.white, size: 20),
+                child: const Icon(Icons.military_tech,
+                    color: Colors.white, size: 20),
               ),
               const SizedBox(width: 12),
               const Text(
@@ -341,18 +368,21 @@ class AchievementsTab extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 20),
-          ...subjects.map((subject) => _buildMasteryItem(
-            subject['name'] as String,
-            subject['level'] as int,
-            subject['maxLevel'] as int,
-            subject['color'] as Color,
-          )).toList(),
+          ...subjects
+              .map((subject) => _buildMasteryItem(
+                    subject['name'] as String,
+                    subject['level'] as int,
+                    subject['maxLevel'] as int,
+                    subject['color'] as Color,
+                  ))
+              .toList(),
         ],
       ),
     );
   }
 
-  Widget _buildMasteryItem(String subject, int level, int maxLevel, Color color) {
+  Widget _buildMasteryItem(
+      String subject, int level, int maxLevel, Color color) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       child: Row(
@@ -379,19 +409,23 @@ class AchievementsTab extends ConsumerWidget {
                   decoration: BoxDecoration(
                     color: index < level ? color : Colors.grey[300],
                     shape: BoxShape.circle,
-                    boxShadow: index < level ? [
-                      BoxShadow(
-                        color: color.withValues(alpha: 0.3),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                      ),
-                    ] : null,
+                    boxShadow: index < level
+                        ? [
+                            BoxShadow(
+                              color: color.withValues(alpha: 0.3),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ]
+                        : null,
                   ),
-                  child: index < level ? const Icon(
-                    Icons.star,
-                    color: Colors.white,
-                    size: 14,
-                  ) : null,
+                  child: index < level
+                      ? const Icon(
+                          Icons.star,
+                          color: Colors.white,
+                          size: 14,
+                        )
+                      : null,
                 );
               }),
             ),
@@ -464,7 +498,8 @@ class AchievementsTab extends ConsumerWidget {
                   color: const Color(0xFFFF6B6B),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.local_fire_department, color: Colors.white, size: 20),
+                child: const Icon(Icons.local_fire_department,
+                    color: Colors.white, size: 20),
               ),
               const SizedBox(width: 12),
               const Text(
@@ -478,21 +513,24 @@ class AchievementsTab extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 20),
-          ...streakAchievements.map((achievement) => _buildStreakItem(
-            achievement['title'] as String,
-            achievement['description'] as String,
-            achievement['currentStreak'] as int,
-            achievement['targetStreak'] as int,
-            achievement['icon'] as IconData,
-            achievement['color'] as Color,
-            achievement['completed'] as bool,
-          )).toList(),
+          ...streakAchievements
+              .map((achievement) => _buildStreakItem(
+                    achievement['title'] as String,
+                    achievement['description'] as String,
+                    achievement['currentStreak'] as int,
+                    achievement['targetStreak'] as int,
+                    achievement['icon'] as IconData,
+                    achievement['color'] as Color,
+                    achievement['completed'] as bool,
+                  ))
+              .toList(),
         ],
       ),
     );
   }
 
-  Widget _buildStreakItem(String title, String description, int currentStreak, int targetStreak, IconData icon, Color color, bool completed) {
+  Widget _buildStreakItem(String title, String description, int currentStreak,
+      int targetStreak, IconData icon, Color color, bool completed) {
     final progress = (currentStreak / targetStreak).clamp(0.0, 1.0);
 
     return Container(
@@ -512,13 +550,15 @@ class AchievementsTab extends ConsumerWidget {
             decoration: BoxDecoration(
               color: completed ? color : Colors.grey[400],
               borderRadius: BorderRadius.circular(12),
-              boxShadow: completed ? [
-                BoxShadow(
-                  color: color.withValues(alpha: 0.3),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
-                ),
-              ] : null,
+              boxShadow: completed
+                  ? [
+                      BoxShadow(
+                        color: color.withValues(alpha: 0.3),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ]
+                  : null,
             ),
             child: Icon(icon, color: Colors.white, size: 24),
           ),
@@ -540,7 +580,8 @@ class AchievementsTab extends ConsumerWidget {
                     if (completed) ...[
                       const SizedBox(width: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
                           color: color,
                           borderRadius: BorderRadius.circular(8),

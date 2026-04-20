@@ -5,7 +5,7 @@ import '../../game/providers/riverpod_providers.dart';
 import '../controllers/encryption_controller.dart';
 
 final encryptionControllerProvider =
-ChangeNotifierProvider((ref) => EncryptionController());
+    ChangeNotifierProvider((ref) => EncryptionController());
 
 enum EncryptionType { aes, fernet }
 
@@ -232,7 +232,7 @@ class _EncryptionManagerScreenState
                   'Encrypt',
                   Icons.lock,
                   const Color(0xFF10B981),
-                      () => _handleEncrypt(controller),
+                  () => _handleEncrypt(controller),
                 ),
               ),
               const SizedBox(width: 12),
@@ -241,7 +241,7 @@ class _EncryptionManagerScreenState
                   'Decrypt',
                   Icons.lock_open,
                   const Color(0xFF3B82F6),
-                      () => _handleDecrypt(controller),
+                  () => _handleDecrypt(controller),
                 ),
               ),
             ],
@@ -376,7 +376,8 @@ class _EncryptionManagerScreenState
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 14),
           decoration: BoxDecoration(
-            color: isSelected ? const Color(0xFF6366F1) : const Color(0xFFF8FAFC),
+            color:
+                isSelected ? const Color(0xFF6366F1) : const Color(0xFFF8FAFC),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: isSelected ? const Color(0xFF6366F1) : Colors.grey[300]!,
@@ -408,11 +409,11 @@ class _EncryptionManagerScreenState
   }
 
   Widget _buildActionButton(
-      String label,
-      IconData icon,
-      Color color,
-      VoidCallback onPressed,
-      ) {
+    String label,
+    IconData icon,
+    Color color,
+    VoidCallback onPressed,
+  ) {
     return Container(
       height: 56,
       decoration: BoxDecoration(

@@ -10,13 +10,13 @@ import 'package:trivia_tycoon/core/manager/log_manager.dart';
 /// Modern Color Picker with optimized performance and enhanced UX
 class ColorPicker {
   static Future<Color?> showColorPickerDialog(
-      BuildContext context, {
-        Color initialColor = Colors.blue,
-        bool showSwatches = true,
-        bool allowCustomSwatches = true,
-        String? title,
-        List<Color>? customColors,
-      }) async {
+    BuildContext context, {
+    Color initialColor = Colors.blue,
+    bool showSwatches = true,
+    bool allowCustomSwatches = true,
+    String? title,
+    List<Color>? customColors,
+  }) async {
     return await showDialog<Color>(
       context: context,
       barrierDismissible: false,
@@ -47,7 +47,8 @@ class _ModernColorPickerDialog extends StatefulWidget {
   });
 
   @override
-  State<_ModernColorPickerDialog> createState() => _ModernColorPickerDialogState();
+  State<_ModernColorPickerDialog> createState() =>
+      _ModernColorPickerDialogState();
 }
 
 class _ModernColorPickerDialogState extends State<_ModernColorPickerDialog>
@@ -97,7 +98,8 @@ class _ModernColorPickerDialogState extends State<_ModernColorPickerDialog>
     }
 
     try {
-      final swatches = widget.customColors ?? await SwatchService.getCustomSwatches();
+      final swatches =
+          widget.customColors ?? await SwatchService.getCustomSwatches();
       if (mounted) {
         setState(() {
           _customSwatches = swatches;
@@ -212,23 +214,25 @@ class _ModernColorPickerDialogState extends State<_ModernColorPickerDialog>
 
   Future<bool> _showConfirmDialog(String title, String content) async {
     return await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(title),
-        content: Text(content),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Cancel'),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: const Text('Reset'),
+              ),
+            ],
           ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Reset'),
-          ),
-        ],
-      ),
-    ) ?? false;
+        ) ??
+        false;
   }
 
   @override
@@ -365,7 +369,8 @@ class _ModernColorPickerDialogState extends State<_ModernColorPickerDialog>
               indicatorSize: TabBarIndicatorSize.tab,
               dividerColor: Colors.transparent,
               labelColor: Colors.white,
-              unselectedLabelColor: colorScheme.onSurface.withValues(alpha: 0.6),
+              unselectedLabelColor:
+                  colorScheme.onSurface.withValues(alpha: 0.6),
               labelStyle: const TextStyle(fontWeight: FontWeight.w600),
               tabs: const [
                 Tab(text: "Wheel"),
@@ -438,49 +443,52 @@ class _ModernColorPickerDialogState extends State<_ModernColorPickerDialog>
             height: 40,
             child: _customSwatches.isEmpty
                 ? Center(
-              child: Text(
-                "No custom swatches",
-                style: TextStyle(
-                  color: colorScheme.onSurface.withValues(alpha: 0.6),
-                ),
-              ),
-            )
-                : ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: _customSwatches.length,
-              itemBuilder: (context, index) {
-                final color = _customSwatches[index];
-                final isSelected = color == _selectedColor;
-
-                return Container(
-                  margin: const EdgeInsets.only(right: 8),
-                  child: GestureDetector(
-                    onTap: () => _onColorChanged(color),
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: color,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: isSelected
-                              ? Colors.white
-                              : colorScheme.outline.withValues(alpha: 0.3),
-                          width: isSelected ? 3 : 1,
-                        ),
-                        boxShadow: isSelected ? [
-                          BoxShadow(
-                            color: color.withValues(alpha: 0.4),
-                            blurRadius: 8,
-                            offset: const Offset(0, 4),
-                          ),
-                        ] : null,
+                    child: Text(
+                      "No custom swatches",
+                      style: TextStyle(
+                        color: colorScheme.onSurface.withValues(alpha: 0.6),
                       ),
                     ),
+                  )
+                : ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _customSwatches.length,
+                    itemBuilder: (context, index) {
+                      final color = _customSwatches[index];
+                      final isSelected = color == _selectedColor;
+
+                      return Container(
+                        margin: const EdgeInsets.only(right: 8),
+                        child: GestureDetector(
+                          onTap: () => _onColorChanged(color),
+                          child: Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: color,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: isSelected
+                                    ? Colors.white
+                                    : colorScheme.outline
+                                        .withValues(alpha: 0.3),
+                                width: isSelected ? 3 : 1,
+                              ),
+                              boxShadow: isSelected
+                                  ? [
+                                      BoxShadow(
+                                        color: color.withValues(alpha: 0.4),
+                                        blurRadius: 8,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ]
+                                  : null,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           ),
         ],
       ),
@@ -498,10 +506,10 @@ class _ModernColorPickerDialogState extends State<_ModernColorPickerDialog>
                 onPressed: _isSaving ? null : _saveCustomSwatch,
                 icon: _isSaving
                     ? const SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
                     : const Icon(Icons.bookmark_add_rounded),
                 label: Text(_isSaving ? "Saving..." : "Save Swatch"),
                 style: OutlinedButton.styleFrom(
@@ -512,10 +520,8 @@ class _ModernColorPickerDialogState extends State<_ModernColorPickerDialog>
                 ),
               ),
             ),
-
           if (widget.allowCustomSwatches && widget.showSwatches)
             const SizedBox(width: 16),
-
           Expanded(
             child: FilledButton.icon(
               onPressed: () => Navigator.pop(context),
@@ -531,9 +537,7 @@ class _ModernColorPickerDialogState extends State<_ModernColorPickerDialog>
               ),
             ),
           ),
-
           const SizedBox(width: 16),
-
           Expanded(
             child: FilledButton.icon(
               onPressed: () {

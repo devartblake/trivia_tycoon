@@ -97,9 +97,9 @@ class _AppDrawerState extends ConsumerState<AppDrawer>
         ),
         child: _fadeAnimation != null
             ? FadeTransition(
-          opacity: _fadeAnimation!,
-          child: _buildDrawerContent(activeProfile),
-        )
+                opacity: _fadeAnimation!,
+                child: _buildDrawerContent(activeProfile),
+              )
             : _buildDrawerContent(activeProfile),
       ),
     );

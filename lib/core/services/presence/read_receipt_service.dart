@@ -21,7 +21,8 @@ enum ReadStatus {
     }
   }
 
-  bool get isDelivered => this == ReadStatus.delivered || this == ReadStatus.read;
+  bool get isDelivered =>
+      this == ReadStatus.delivered || this == ReadStatus.read;
   bool get isRead => this == ReadStatus.read;
 }
 
@@ -88,11 +89,14 @@ class MessageReadStatus {
     required this.lastUpdated,
   });
 
-  bool get isDeliveredToAll => receipts.values.every((r) => r.status.isDelivered);
+  bool get isDeliveredToAll =>
+      receipts.values.every((r) => r.status.isDelivered);
   bool get isReadByAll => receipts.values.every((r) => r.status.isRead);
-  bool get hasFailures => receipts.values.any((r) => r.status == ReadStatus.failed);
+  bool get hasFailures =>
+      receipts.values.any((r) => r.status == ReadStatus.failed);
 
-  int get deliveredCount => receipts.values.where((r) => r.status.isDelivered).length;
+  int get deliveredCount =>
+      receipts.values.where((r) => r.status.isDelivered).length;
   int get readCount => receipts.values.where((r) => r.status.isRead).length;
   int get totalRecipients => receipts.length;
 
@@ -134,7 +138,8 @@ class ReadReceiptService extends ChangeNotifier {
   // Getters
   bool get readReceiptsEnabled => _readReceiptsEnabled;
   bool get deliveryReceiptsEnabled => _deliveryReceiptsEnabled;
-  Map<String, MessageReadStatus> get allMessageStatuses => Map.unmodifiable(_messageStatuses);
+  Map<String, MessageReadStatus> get allMessageStatuses =>
+      Map.unmodifiable(_messageStatuses);
 
   void initialize() {
     _startCleanupTimer();
@@ -158,7 +163,8 @@ class ReadReceiptService extends ChangeNotifier {
     int? maxStoredReceipts,
   }) {
     _readReceiptsEnabled = readReceiptsEnabled ?? _readReceiptsEnabled;
-    _deliveryReceiptsEnabled = deliveryReceiptsEnabled ?? _deliveryReceiptsEnabled;
+    _deliveryReceiptsEnabled =
+        deliveryReceiptsEnabled ?? _deliveryReceiptsEnabled;
     _receiptTimeout = receiptTimeout ?? _receiptTimeout;
     _maxStoredReceipts = maxStoredReceipts ?? _maxStoredReceipts;
 
@@ -192,7 +198,8 @@ class ReadReceiptService extends ChangeNotifier {
       lastUpdated: now,
     );
 
-    LogManager.debug('Tracking message $messageId for ${recipientIds.length} recipients');
+    LogManager.debug(
+        'Tracking message $messageId for ${recipientIds.length} recipients');
     notifyListeners();
     _broadcastStatusUpdate(messageId);
   }
@@ -219,7 +226,8 @@ class ReadReceiptService extends ChangeNotifier {
       error: error,
     );
 
-    final updatedReceipts = Map<String, ReadReceipt>.from(messageStatus.receipts);
+    final updatedReceipts =
+        Map<String, ReadReceipt>.from(messageStatus.receipts);
     updatedReceipts[userId] = updatedReceipt;
 
     _messageStatuses[messageId] = messageStatus.copyWith(
@@ -234,7 +242,15 @@ class ReadReceiptService extends ChangeNotifier {
   }
 
   // Batch update for efficiency
-  void updateMultipleStatuses(List<({String messageId, String userId, ReadStatus status, String? error})> updates) {
+  void updateMultipleStatuses(
+      List<
+              ({
+                String messageId,
+                String userId,
+                ReadStatus status,
+                String? error
+              })>
+          updates) {
     bool hasUpdates = false;
 
     for (final update in updates) {
@@ -253,7 +269,8 @@ class ReadReceiptService extends ChangeNotifier {
         error: update.error,
       );
 
-      final updatedReceipts = Map<String, ReadReceipt>.from(messageStatus.receipts);
+      final updatedReceipts =
+          Map<String, ReadReceipt>.from(messageStatus.receipts);
       updatedReceipts[update.userId] = updatedReceipt;
 
       _messageStatuses[update.messageId] = messageStatus.copyWith(
@@ -286,12 +303,14 @@ class ReadReceiptService extends ChangeNotifier {
   void markMultipleAsRead(List<String> messageIds, String currentUserId) {
     if (!_readReceiptsEnabled) return;
 
-    final updates = messageIds.map((messageId) => (
-    messageId: messageId,
-    userId: currentUserId,
-    status: ReadStatus.read,
-    error: null as String?,
-    )).toList();
+    final updates = messageIds
+        .map((messageId) => (
+              messageId: messageId,
+              userId: currentUserId,
+              status: ReadStatus.read,
+              error: null as String?,
+            ))
+        .toList();
 
     updateMultipleStatuses(updates);
   }
@@ -318,7 +337,9 @@ class ReadReceiptService extends ChangeNotifier {
       return readCount == total ? 'Read' : 'Read by $readCount';
     }
     if (deliveredCount > 0) {
-      return deliveredCount == total ? 'Delivered' : 'Delivered to $deliveredCount';
+      return deliveredCount == total
+          ? 'Delivered'
+          : 'Delivered to $deliveredCount';
     }
 
     return 'Sending';
@@ -424,7 +445,8 @@ class ReadReceiptService extends ChangeNotifier {
     return {
       'totalMessages': totalMessages,
       'totalReceipts': totalReceipts,
-      'averageRecipientsPerMessage': totalMessages > 0 ? totalReceipts / totalMessages : 0,
+      'averageRecipientsPerMessage':
+          totalMessages > 0 ? totalReceipts / totalMessages : 0,
       'statusDistribution': statusCounts.map((k, v) => MapEntry(k.name, v)),
       'settingsEnabled': {
         'readReceipts': _readReceiptsEnabled,

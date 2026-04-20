@@ -56,7 +56,8 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
             const SizedBox(height: 16),
 
             // Daily Metrics Card
-            _buildDailyMetricsCard(context, dailyMetrics, liveSummaryAsync.valueOrNull),
+            _buildDailyMetricsCard(
+                context, dailyMetrics, liveSummaryAsync.valueOrNull),
             const SizedBox(height: 16),
 
             // Reward Distribution
@@ -85,7 +86,8 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
     );
   }
 
-  Widget _buildOverviewStats(BuildContext context, Map<String, dynamic> performance) {
+  Widget _buildOverviewStats(
+      BuildContext context, Map<String, dynamic> performance) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Container(
@@ -172,7 +174,8 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
     );
   }
 
-  Widget _buildStatCard(String label, String value, IconData icon, Color color) {
+  Widget _buildStatCard(
+      String label, String value, IconData icon, Color color) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -248,7 +251,8 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: spinsRemaining > 0
                         ? const Color(0xFF10B981)
@@ -384,10 +388,10 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
   }
 
   Widget _buildRewardDistribution(
-      BuildContext context,
-      Map<String, int> distribution,
-      Map<String, dynamic> stats,
-      ) {
+    BuildContext context,
+    Map<String, int> distribution,
+    Map<String, dynamic> stats,
+  ) {
     if (distribution.isEmpty) {
       return const SizedBox.shrink();
     }
@@ -485,7 +489,8 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
     return const Color(0xFF10B981);
   }
 
-  Widget _buildTrendChart(BuildContext context, List<Map<String, dynamic>> trendData) {
+  Widget _buildTrendChart(
+      BuildContext context, List<Map<String, dynamic>> trendData) {
     if (trendData.isEmpty) {
       return const SizedBox.shrink();
     }
@@ -534,13 +539,16 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
                   gridData: FlGridData(show: false),
                   titlesData: FlTitlesData(
                     leftTitles: AxisTitles(
-                      sideTitles: SideTitles(showTitles: true, reservedSize: 40),
+                      sideTitles:
+                          SideTitles(showTitles: true, reservedSize: 40),
                     ),
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
                     ),
-                    rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                    topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    rightTitles:
+                        AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    topTitles:
+                        AxisTitles(sideTitles: SideTitles(showTitles: false)),
                   ),
                   borderData: FlBorderData(show: false),
                   lineBarsData: [
@@ -570,7 +578,8 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
     );
   }
 
-  Widget _buildRecentActivity(BuildContext context, List<Map<String, dynamic>> recentSpins) {
+  Widget _buildRecentActivity(
+      BuildContext context, List<Map<String, dynamic>> recentSpins) {
     if (recentSpins.isEmpty) {
       return const SizedBox.shrink();
     }
@@ -648,7 +657,8 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
                     ),
                   ),
                   trailing: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: const Color(0xFF10B981).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),

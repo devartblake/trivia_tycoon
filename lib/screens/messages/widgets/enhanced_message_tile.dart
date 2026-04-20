@@ -171,9 +171,9 @@ class _EnhancedMessageTileState extends State<EnhancedMessageTile> {
           Text(
             widget.senderName,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
           ),
           const SizedBox(width: 8),
           _buildPresenceIndicator(),
@@ -182,8 +182,8 @@ class _EnhancedMessageTileState extends State<EnhancedMessageTile> {
         Text(
           _formatTimestamp(widget.timestamp),
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
         ),
       ],
     );
@@ -272,9 +272,9 @@ class _EnhancedMessageTileState extends State<EnhancedMessageTile> {
               Text(
                 _receiptService.getStatusSummary(widget.messageId),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontSize: 10,
-                ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      fontSize: 10,
+                    ),
               ),
             ],
           ),

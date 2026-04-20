@@ -96,7 +96,8 @@ class _SimpleSplashScreenState extends State<SimpleSplashScreen>
                               borderRadius: BorderRadius.circular(10),
                               child: LinearProgressIndicator(
                                 value: _progressAnimation.value,
-                                backgroundColor: Colors.white.withValues(alpha: 0.2),
+                                backgroundColor:
+                                    Colors.white.withValues(alpha: 0.2),
                                 valueColor: const AlwaysStoppedAnimation<Color>(
                                   Colors.white,
                                 ),

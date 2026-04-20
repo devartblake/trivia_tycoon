@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../game/analytics/providers/analytics_providers.dart';
 import '../../game/providers/multi_profile_providers.dart';
-import '../../game/providers/riverpod_providers.dart' hide analyticsServiceProvider;
+import '../../game/providers/riverpod_providers.dart'
+    hide analyticsServiceProvider;
 import '../../synaptix/mode/synaptix_mode_provider.dart';
 import '../../screens/profile/widgets/profile_game_card.dart';
 import '../../screens/profile/widgets/profile_header_bar.dart';
@@ -93,9 +94,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
             Text('Admin Mode ${enabled ? "Enabled" : "Disabled"}'),
           ],
         ),
-        backgroundColor: enabled
-            ? const Color(0xFF10B981)
-            : const Color(0xFF6B7280),
+        backgroundColor:
+            enabled ? const Color(0xFF10B981) : const Color(0xFF6B7280),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         margin: const EdgeInsets.all(16),
@@ -311,22 +311,22 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
           ),
         ],
       ),
-        child: ElevatedButton.icon(
-            onPressed: () => ref.refresh(activeProfileProvider),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.transparent,
-              shadowColor: Colors.transparent,
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-              shape: RoundedRectangleBorder(
+      child: ElevatedButton.icon(
+        onPressed: () => ref.refresh(activeProfileProvider),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+          shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
         ),
-          icon: const Icon(Icons.refresh_rounded, color: Colors.white, size: 20),
-          label: const Text(
-            'Retry',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
+        icon: const Icon(Icons.refresh_rounded, color: Colors.white, size: 20),
+        label: const Text(
+          'Retry',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
         ),

@@ -27,7 +27,7 @@ class DecodedBitStreamParser {
           buffer.write(_readByte(count));
           break;
         default:
-        // For now, skip unsupported modes like Kanji/ECI
+          // For now, skip unsupported modes like Kanji/ECI
           return '[Unsupported mode: $modeBits]';
       }
     }
@@ -66,7 +66,8 @@ class DecodedBitStreamParser {
     return buffer.toString();
   }
 
-  static const _alphanumericTable = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ \$%*+-./:';
+  static const _alphanumericTable =
+      '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ \$%*+-./:';
 
   String _readAlphanumeric(int count) {
     final buffer = StringBuffer();

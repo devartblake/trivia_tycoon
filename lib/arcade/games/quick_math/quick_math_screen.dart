@@ -158,8 +158,10 @@ class _QuickMathRushScreenState extends State<QuickMathRushScreen> {
                       backgroundColor: Colors.white.withValues(alpha: 0.10),
                       foregroundColor: Colors.white,
                       elevation: 0,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-                      side: BorderSide(color: Colors.white.withValues(alpha: 0.12)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18)),
+                      side: BorderSide(
+                          color: Colors.white.withValues(alpha: 0.12)),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                     child: Text(
@@ -192,7 +194,8 @@ class _QuickMathRushScreenState extends State<QuickMathRushScreen> {
     );
   }
 
-  Widget _pill(IconData icon, String label, String value, {required Color accent}) {
+  Widget _pill(IconData icon, String label, String value,
+      {required Color accent}) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),

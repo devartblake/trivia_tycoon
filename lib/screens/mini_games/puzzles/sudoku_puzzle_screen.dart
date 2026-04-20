@@ -79,12 +79,12 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
     // Create puzzle by removing numbers
     puzzle = List.generate(
       gridSize,
-          (i) => List.generate(gridSize, (j) => solution[i][j]),
+      (i) => List.generate(gridSize, (j) => solution[i][j]),
     );
 
     isFixed = List.generate(
       gridSize,
-          (_) => List.generate(gridSize, (_) => false),
+      (_) => List.generate(gridSize, (_) => false),
     );
 
     // Remove numbers based on difficulty
@@ -124,7 +124,7 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
   List<List<int>> _generateCompleteSudoku() {
     List<List<int>> board = List.generate(
       gridSize,
-          (_) => List.generate(gridSize, (_) => 0),
+      (_) => List.generate(gridSize, (_) => 0),
     );
 
     _fillSudoku(board);
@@ -390,10 +390,14 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
             ),
             const SizedBox(height: 24),
             _buildRule('Fill the 9×9 grid with digits from 1 to 9.'),
-            _buildRule('Each row must contain all digits from 1 to 9 without repetition.'),
-            _buildRule('Each column must contain all digits from 1 to 9 without repetition.'),
-            _buildRule('Each 3×3 box must contain all digits from 1 to 9 without repetition.'),
-            _buildRule('Tap a cell to select it, then tap a number below to place it.'),
+            _buildRule(
+                'Each row must contain all digits from 1 to 9 without repetition.'),
+            _buildRule(
+                'Each column must contain all digits from 1 to 9 without repetition.'),
+            _buildRule(
+                'Each 3×3 box must contain all digits from 1 to 9 without repetition.'),
+            _buildRule(
+                'Tap a cell to select it, then tap a number below to place it.'),
             _buildRule('Gray cells are fixed and cannot be changed.'),
             const SizedBox(height: 24),
             SizedBox(
@@ -591,12 +595,15 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
                       GestureDetector(
                         onTap: _showHowToPlay,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 10),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF6366F1).withValues(alpha: 0.1),
+                            color:
+                                const Color(0xFF6366F1).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: const Color(0xFF6366F1).withValues(alpha: 0.3),
+                              color: const Color(0xFF6366F1)
+                                  .withValues(alpha: 0.3),
                               width: 1,
                             ),
                           ),
@@ -626,7 +633,8 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
 
                       // Difficulty indicator
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           color: _getDifficultyColor().withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(20),
@@ -654,7 +662,8 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
                           borderRadius: BorderRadius.circular(12),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFF6366F1).withValues(alpha: 0.15),
+                              color: const Color(0xFF6366F1)
+                                  .withValues(alpha: 0.15),
                               blurRadius: 20,
                               offset: const Offset(0, 8),
                             ),
@@ -689,7 +698,8 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
                     // Number buttons
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: List.generate(9, (i) => _buildNumberButton(i + 1)),
+                      children:
+                          List.generate(9, (i) => _buildNumberButton(i + 1)),
                     ),
                     const SizedBox(height: 12),
                     // Action buttons
@@ -700,7 +710,8 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
                             enabled: history.isNotEmpty && !_puzzleCompleted),
                         _buildActionButton('Clear', Icons.clear, _clearCell,
                             enabled: selectedCell != null && !_puzzleCompleted),
-                        _buildActionButton('Check', Icons.check_circle, _checkCompletion,
+                        _buildActionButton(
+                            'Check', Icons.check_circle, _checkCompletion,
                             enabled: !_puzzleCompleted),
                       ],
                     ),
@@ -748,8 +759,8 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
           color: isSelected
               ? const Color(0xFF6366F1).withValues(alpha: 0.2)
               : isFixedCell
-              ? Colors.grey.shade200
-              : Colors.white,
+                  ? Colors.grey.shade200
+                  : Colors.white,
           border: Border(
             right: BorderSide(
               width: isRightBorder ? 2 : 0.5,
@@ -764,15 +775,14 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
         child: Center(
           child: value != 0
               ? Text(
-            '$value',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: isFixedCell ? FontWeight.bold : FontWeight.normal,
-              color: isFixedCell
-                  ? Colors.black
-                  : const Color(0xFF6366F1),
-            ),
-          )
+                  '$value',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight:
+                        isFixedCell ? FontWeight.bold : FontWeight.normal,
+                    color: isFixedCell ? Colors.black : const Color(0xFF6366F1),
+                  ),
+                )
               : null,
         ),
       ),
@@ -810,7 +820,8 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
     );
   }
 
-  Widget _buildActionButton(String label, IconData icon, VoidCallback onPressed, {bool enabled = true}) {
+  Widget _buildActionButton(String label, IconData icon, VoidCallback onPressed,
+      {bool enabled = true}) {
     return GestureDetector(
       onTap: enabled ? onPressed : null,
       child: Container(
@@ -822,7 +833,9 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 18, color: enabled ? const Color(0xFF4A4A4A) : Colors.grey),
+            Icon(icon,
+                size: 18,
+                color: enabled ? const Color(0xFF4A4A4A) : Colors.grey),
             const SizedBox(width: 6),
             Text(
               label,

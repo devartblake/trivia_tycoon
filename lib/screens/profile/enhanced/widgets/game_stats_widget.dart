@@ -26,15 +26,16 @@ class GameStatsWidget extends StatelessWidget {
                 Text(
                   'Game Statistics',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
               ],
             ),
             const SizedBox(height: 20),
             _buildStatRow(context, 'Total Games', '342', Icons.games),
             const SizedBox(height: 12),
-            _buildStatRow(context, 'Win Rate', '68%', Icons.trending_up, color: Colors.green),
+            _buildStatRow(context, 'Win Rate', '68%', Icons.trending_up,
+                color: Colors.green),
             const SizedBox(height: 12),
             _buildStatRow(context, 'Average Score', '825', Icons.stars),
             const SizedBox(height: 12),
@@ -48,15 +49,16 @@ class GameStatsWidget extends StatelessWidget {
   }
 
   Widget _buildStatRow(
-      BuildContext context,
-      String label,
-      String value,
-      IconData icon, {
-        Color? color,
-      }) {
+    BuildContext context,
+    String label,
+    String value,
+    IconData icon, {
+    Color? color,
+  }) {
     return Row(
       children: [
-        Icon(icon, size: 20, color: color ?? Theme.of(context).colorScheme.primary),
+        Icon(icon,
+            size: 20, color: color ?? Theme.of(context).colorScheme.primary),
         const SizedBox(width: 12),
         Expanded(
           child: Text(
@@ -67,9 +69,9 @@ class GameStatsWidget extends StatelessWidget {
         Text(
           value,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: color,
-          ),
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
         ),
       ],
     );
@@ -90,41 +92,42 @@ class GameStatsWidget extends StatelessWidget {
         Text(
           'Category Performance',
           style: Theme.of(context).textTheme.titleSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+                fontWeight: FontWeight.bold,
+              ),
         ),
         const SizedBox(height: 12),
         ...categories.map((category) => Padding(
-          padding: const EdgeInsets.only(bottom: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    category['name'] as String,
-                    style: Theme.of(context).textTheme.bodySmall,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        category['name'] as String,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      Text(
+                        '${category['score']}',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    '${category['score']}',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.bold,
+                  const SizedBox(height: 4),
+                  LinearProgressIndicator(
+                    value: category['percentage'] as double,
+                    backgroundColor:
+                        Theme.of(context).colorScheme.surfaceContainerHighest,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 4),
-              LinearProgressIndicator(
-                value: category['percentage'] as double,
-                backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  Theme.of(context).colorScheme.primary,
-                ),
-              ),
-            ],
-          ),
-        )),
+            )),
       ],
     );
   }

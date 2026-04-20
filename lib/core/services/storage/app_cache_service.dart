@@ -54,7 +54,6 @@ class AppCacheService {
   /// - Do NOT call get<Map<String, dynamic>>. Use getJsonMap().
   /// - Do NOT call get<List<dynamic>> for JSON arrays. Use getJsonList() when you can.
   T? get<T>(String key) {
-
     final raw = _box.get(key);
     if (raw == null) return null;
 
@@ -114,7 +113,8 @@ class AppCacheService {
 
   /// Dedicated method for saving JSON-encodable objects.
   /// Ensures any object is stored as a JSON string for stable decoding.
-  Future<void> setJson(String key, dynamic value, {Duration? expiration}) async {
+  Future<void> setJson(String key, dynamic value,
+      {Duration? expiration}) async {
     try {
       final encoded = jsonEncode(value);
       await _box.put(key, encoded);
@@ -155,10 +155,10 @@ class AppCacheService {
 
   /// Set with explicit expiration time
   Future<void> setWithExpiration(
-      String key,
-      dynamic value,
-      DateTime expiration,
-      ) async {
+    String key,
+    dynamic value,
+    DateTime expiration,
+  ) async {
     final isPrimitive =
         value is String || value is num || value is bool || value is DateTime;
 
@@ -201,7 +201,8 @@ class AppCacheService {
     try {
       return raw.map((e) {
         if (e is Map<String, dynamic>) return LeaderboardEntry.fromJson(e);
-        if (e is Map) return LeaderboardEntry.fromJson(Map<String, dynamic>.from(e));
+        if (e is Map)
+          return LeaderboardEntry.fromJson(Map<String, dynamic>.from(e));
         throw StateError('Invalid leaderboard entry type: ${e.runtimeType}');
       }).toList();
     } catch (e) {
@@ -211,7 +212,8 @@ class AppCacheService {
   }
 
   /// Save QuestionModel list to Hive (as JSON strings) with expiration
-  Future<void> saveQuestionCache(String key, List<QuestionModel> questions) async {
+  Future<void> saveQuestionCache(
+      String key, List<QuestionModel> questions) async {
     try {
       final encoded = questions.map((q) => q.toJson()).toList();
       await setWithExpiration(
@@ -234,7 +236,8 @@ class AppCacheService {
     try {
       return raw.map((e) {
         if (e is Map<String, dynamic>) return QuestionModel.fromJson(e);
-        if (e is Map) return QuestionModel.fromJson(Map<String, dynamic>.from(e));
+        if (e is Map)
+          return QuestionModel.fromJson(Map<String, dynamic>.from(e));
         throw StateError('Invalid question type: ${e.runtimeType}');
       }).toList();
     } catch (e) {
@@ -267,7 +270,8 @@ class AppCacheService {
       if (raw is List) {
         return raw.map((q) {
           if (q is Map<String, dynamic>) return QuestionModel.fromJson(q);
-          if (q is Map) return QuestionModel.fromJson(Map<String, dynamic>.from(q));
+          if (q is Map)
+            return QuestionModel.fromJson(Map<String, dynamic>.from(q));
           throw StateError('Invalid saved question type: ${q.runtimeType}');
         }).toList();
       }
@@ -298,7 +302,8 @@ class AppCacheService {
       final raw = getJsonList('qr_scan_history') ?? const <dynamic>[];
       return raw.map((e) {
         if (e is Map<String, dynamic>) return ScanHistoryItem.fromJson(e);
-        if (e is Map) return ScanHistoryItem.fromJson(Map<String, dynamic>.from(e));
+        if (e is Map)
+          return ScanHistoryItem.fromJson(Map<String, dynamic>.from(e));
         throw StateError('Invalid scan item type: ${e.runtimeType}');
       }).toList();
     } catch (e) {
@@ -411,7 +416,8 @@ class AppCacheService {
       await _updateLastCleanup();
 
       if (kDebugMode) {
-        print('✅ Cache cleanup completed. Removed ${keysToRemove.length} expired entries');
+        print(
+            '✅ Cache cleanup completed. Removed ${keysToRemove.length} expired entries');
       }
     } catch (e) {
       if (kDebugMode) {

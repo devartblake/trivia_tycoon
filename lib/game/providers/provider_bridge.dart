@@ -70,7 +70,8 @@ final bridgedOnboardingPhaseProvider = Provider<OnboardingPhase>((ref) {
 });
 
 /// State notifier that manages the bridge between services and providers
-final providerBridgeStateProvider = StateNotifierProvider<ProviderBridgeNotifier, ProviderBridgeState>((ref) {
+final providerBridgeStateProvider =
+    StateNotifierProvider<ProviderBridgeNotifier, ProviderBridgeState>((ref) {
   return ProviderBridgeNotifier(ref);
 });
 
@@ -113,9 +114,12 @@ class ProviderBridgeNotifier extends StateNotifier<ProviderBridgeState> {
         ref.read(isLoggedInSyncProvider.notifier).state = true;
 
         // Check if they've completed onboarding
-        final hasCompletedOnboarding = await onboardingService.hasCompletedOnboarding();
+        final hasCompletedOnboarding =
+            await onboardingService.hasCompletedOnboarding();
         if (hasCompletedOnboarding) {
-          await ref.read(onboardingProgressProvider.notifier).markOnboardingCompleted(true);
+          await ref
+              .read(onboardingProgressProvider.notifier)
+              .markOnboardingCompleted(true);
         }
       }
 
@@ -130,7 +134,9 @@ class ProviderBridgeNotifier extends StateNotifier<ProviderBridgeState> {
     try {
       final onboardingService = ref.read(onboardingSettingsServiceProvider);
       await onboardingService.setHasCompletedOnboarding(true);
-      await ref.read(onboardingProgressProvider.notifier).markOnboardingCompleted(true);
+      await ref
+          .read(onboardingProgressProvider.notifier)
+          .markOnboardingCompleted(true);
     } catch (e) {
       state = state.copyWith(error: e.toString());
     }

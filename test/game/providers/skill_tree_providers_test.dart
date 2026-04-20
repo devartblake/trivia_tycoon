@@ -246,7 +246,7 @@ void main() {
       addTearDown(container.dispose);
 
       final result =
-      await container.read(serverSkillTreeProvider('player1').future);
+          await container.read(serverSkillTreeProvider('player1').future);
       expect(result, isNull);
     });
 
@@ -258,14 +258,13 @@ void main() {
       );
       final container = ProviderContainer(
         overrides: [
-          serverSkillTreeProvider('player1')
-              .overrideWith((_) async => stubDto),
+          serverSkillTreeProvider('player1').overrideWith((_) async => stubDto),
         ],
       );
       addTearDown(container.dispose);
 
       final result =
-      await container.read(serverSkillTreeProvider('player1').future);
+          await container.read(serverSkillTreeProvider('player1').future);
       expect(result?.playerId, 'player1');
       expect(result?.availablePoints, 3);
     });

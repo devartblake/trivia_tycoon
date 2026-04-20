@@ -4,7 +4,8 @@ import '../../../game/models/message_reaction.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class MessageReactionService extends ChangeNotifier {
-  static final MessageReactionService _instance = MessageReactionService._internal();
+  static final MessageReactionService _instance =
+      MessageReactionService._internal();
   factory MessageReactionService() => _instance;
   MessageReactionService._internal();
 
@@ -28,7 +29,8 @@ class MessageReactionService extends ChangeNotifier {
   bool get reactionsEnabled => _reactionsEnabled;
   bool get customReactionsEnabled => _customReactionsEnabled;
   List<ReactionType> get quickReactions => List.unmodifiable(_quickReactions);
-  Map<String, MessageReactionSummary> get allReactionSummaries => Map.unmodifiable(_reactionSummaries);
+  Map<String, MessageReactionSummary> get allReactionSummaries =>
+      Map.unmodifiable(_reactionSummaries);
 
   void initialize() {
     LogManager.debug('MessageReactionService initialized');
@@ -92,7 +94,8 @@ class MessageReactionService extends ChangeNotifier {
     // Update summary
     _updateReactionSummary(messageId);
 
-    LogManager.debug('Added reaction ${type.emoji} to message $messageId by $userDisplayName');
+    LogManager.debug(
+        'Added reaction ${type.emoji} to message $messageId by $userDisplayName');
     notifyListeners();
     return true;
   }
@@ -108,7 +111,8 @@ class MessageReactionService extends ChangeNotifier {
         final removedReaction = reactions.removeAt(reactionIndex);
         _updateReactionSummary(messageId);
 
-        LogManager.debug('Removed reaction ${removedReaction.type.emoji} from message $messageId');
+        LogManager.debug(
+            'Removed reaction ${removedReaction.type.emoji} from message $messageId');
         notifyListeners();
         return true;
       }
@@ -127,7 +131,8 @@ class MessageReactionService extends ChangeNotifier {
 
     if (reactions.length != initialLength) {
       _updateReactionSummary(messageId);
-      LogManager.debug('Removed user reactions from message $messageId for user $userId');
+      LogManager.debug(
+          'Removed user reactions from message $messageId for user $userId');
       notifyListeners();
       return true;
     }
@@ -225,7 +230,8 @@ class MessageReactionService extends ChangeNotifier {
 
     for (final reactions in _messageReactions.values) {
       for (final reaction in reactions) {
-        reactionCounts[reaction.type] = (reactionCounts[reaction.type] ?? 0) + 1;
+        reactionCounts[reaction.type] =
+            (reactionCounts[reaction.type] ?? 0) + 1;
       }
     }
 
@@ -238,13 +244,16 @@ class MessageReactionService extends ChangeNotifier {
   // Analytics
   Map<String, dynamic> getReactionAnalytics() {
     final totalMessages = _messageReactions.length;
-    final totalReactions = _messageReactions.values.fold<int>(0, (sum, reactions) => sum + reactions.length);
-    final averageReactionsPerMessage = totalMessages > 0 ? totalReactions / totalMessages : 0.0;
+    final totalReactions = _messageReactions.values
+        .fold<int>(0, (sum, reactions) => sum + reactions.length);
+    final averageReactionsPerMessage =
+        totalMessages > 0 ? totalReactions / totalMessages : 0.0;
 
     final reactionCounts = <String, int>{};
     for (final reactions in _messageReactions.values) {
       for (final reaction in reactions) {
-        reactionCounts[reaction.type.code] = (reactionCounts[reaction.type.code] ?? 0) + 1;
+        reactionCounts[reaction.type.code] =
+            (reactionCounts[reaction.type.code] ?? 0) + 1;
       }
     }
 
@@ -303,19 +312,28 @@ class MessageReactionService extends ChangeNotifier {
     final suggestions = <ReactionType>[];
 
     // Add contextual suggestions
-    if (content.contains('congratulations') || content.contains('congrats') || content.contains('well done')) {
-      suggestions.addAll([ReactionType.clap, ReactionType.party, ReactionType.trophy]);
+    if (content.contains('congratulations') ||
+        content.contains('congrats') ||
+        content.contains('well done')) {
+      suggestions
+          .addAll([ReactionType.clap, ReactionType.party, ReactionType.trophy]);
     }
-    if (content.contains('funny') || content.contains('lol') || content.contains('haha')) {
+    if (content.contains('funny') ||
+        content.contains('lol') ||
+        content.contains('haha')) {
       suggestions.add(ReactionType.laugh);
     }
-    if (content.contains('amazing') || content.contains('awesome') || content.contains('incredible')) {
+    if (content.contains('amazing') ||
+        content.contains('awesome') ||
+        content.contains('incredible')) {
       suggestions.addAll([ReactionType.fire, ReactionType.wow]);
     }
     if (content.contains('love') || content.contains('❤️')) {
       suggestions.add(ReactionType.heart);
     }
-    if (content.contains('smart') || content.contains('brilliant') || content.contains('genius')) {
+    if (content.contains('smart') ||
+        content.contains('brilliant') ||
+        content.contains('genius')) {
       suggestions.add(ReactionType.brain);
     }
 

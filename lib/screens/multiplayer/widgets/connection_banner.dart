@@ -90,7 +90,11 @@ class ConnectionBanner extends StatelessWidget {
 
   (String, IconData, Color) _info(MultiplayerState s) {
     if (s.error != null) {
-      return ('Connection Error', Icons.error_outline_rounded, const Color(0xFFEF4444));
+      return (
+        'Connection Error',
+        Icons.error_outline_rounded,
+        const Color(0xFFEF4444)
+      );
     }
     if (!s.connected) {
       return ('Disconnected', Icons.wifi_off_rounded, const Color(0xFF6B7280));

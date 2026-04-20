@@ -169,7 +169,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     final onboardingService = serviceManager.onboardingSettingsService;
     final progress = await onboardingService.getOnboardingProgress();
 
-    final restoredStep = progress.currentStep.clamp(0, _controller.totalSteps - 1);
+    final restoredStep =
+        progress.currentStep.clamp(0, _controller.totalSteps - 1);
     _controller.updateUserData({
       if (progress.username != null) 'username': progress.username,
       if (progress.ageGroup != null) 'ageGroup': progress.ageGroup,
@@ -218,8 +219,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
       synaptixMode: _controller.synaptixMode,
       hasCompletedFirstChallenge:
           _controller.userData['firstChallengeCompleted'] == true,
-      hasSeenRewardReveal:
-          _controller.userData['hasSeenRewardReveal'] == true,
+      hasSeenRewardReveal: _controller.userData['hasSeenRewardReveal'] == true,
     );
   }
 
@@ -442,17 +442,18 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                     controller: _pageController,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
-                      WelcomeStep(controller: _controller),         // 0
-                      UsernameStep(controller: _controller),        // 1
-                      AgeGroupStep(controller: _controller),        // 2
-                      IntentStep(controller: _controller),          // 3
-                      PlayStyleStep(controller: _controller),       // 4
-                      CountryStep(controller: _controller),         // 5
-                      CategoriesStep(controller: _controller),      // 6
-                      AvatarStep(controller: _controller),          // 7
+                      WelcomeStep(controller: _controller), // 0
+                      UsernameStep(controller: _controller), // 1
+                      AgeGroupStep(controller: _controller), // 2
+                      IntentStep(controller: _controller), // 3
+                      PlayStyleStep(controller: _controller), // 4
+                      CountryStep(controller: _controller), // 5
+                      CategoriesStep(controller: _controller), // 6
+                      AvatarStep(controller: _controller), // 7
                       FirstSessionChallengeStep(controller: _controller), // 8
-                      RewardRevealStep(controller: _controller),    // 9
-                      CompletionStep(                               // 10
+                      RewardRevealStep(controller: _controller), // 9
+                      CompletionStep(
+                        // 10
                         controller: _controller,
                         onComplete: _handleCompletion,
                       ),
@@ -538,7 +539,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                       borderRadius: BorderRadius.circular(8),
                       boxShadow: [
                         BoxShadow(
-                          color: theme.colorScheme.primary.withValues(alpha: 0.3),
+                          color:
+                              theme.colorScheme.primary.withValues(alpha: 0.3),
                           blurRadius: 8,
                           spreadRadius: 2,
                         ),
@@ -551,7 +553,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                     child: LinearProgressIndicator(
                       value: _progressAnimationController.value,
                       minHeight: 8,
-                      backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                      backgroundColor:
+                          theme.colorScheme.surfaceContainerHighest,
                       valueColor: AlwaysStoppedAnimation<Color>(
                         theme.colorScheme.primary,
                       ),

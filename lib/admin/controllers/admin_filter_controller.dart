@@ -30,10 +30,13 @@ class AdminFilterController extends StateNotifier<AdminFilterState> {
       final showVerified = await _storageService.getBool(_keyVerified) ?? false;
       final showPremium = await _storageService.getBool(_keyPremium) ?? false;
       final showBots = await _storageService.getBool(_keyBots) ?? false;
-      final showPowerUsers = await _storageService.getBool(_keyPowerUsers) ?? false;
+      final showPowerUsers =
+          await _storageService.getBool(_keyPowerUsers) ?? false;
       final deviceTypes = await _storageService.getStringList(_keyDeviceTypes);
-      final notificationMethod = await _storageService.getString(_keyNotification) ?? 'all';
-      final dateRange = await _storageService.getString(_keyDateRange) ?? '7days';
+      final notificationMethod =
+          await _storageService.getString(_keyNotification) ?? 'all';
+      final dateRange =
+          await _storageService.getString(_keyDateRange) ?? '7days';
       final minScore = await _storageService.getInt(_keyMinScore);
       final maxScore = await _storageService.getInt(_keyMaxScore);
 
@@ -63,7 +66,8 @@ class AdminFilterController extends StateNotifier<AdminFilterState> {
         _storageService.setBool(_keyPremium, state.showPremium),
         _storageService.setBool(_keyBots, state.showBots),
         _storageService.setBool(_keyPowerUsers, state.showPowerUsers),
-        _storageService.setStringList(_keyDeviceTypes, state.deviceTypes.toList()),
+        _storageService.setStringList(
+            _keyDeviceTypes, state.deviceTypes.toList()),
         _storageService.setString(_keyNotification, state.notificationMethod),
         _storageService.setString(_keyDateRange, state.dateRange ?? '7days'),
         _storageService.setInt(_keyMinScore, state.minScore ?? 0),

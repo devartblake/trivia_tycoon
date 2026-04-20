@@ -202,14 +202,16 @@ class FriendSuggestion {
 }
 
 class FriendDiscoveryService extends ChangeNotifier {
-  static final FriendDiscoveryService _instance = FriendDiscoveryService._internal();
+  static final FriendDiscoveryService _instance =
+      FriendDiscoveryService._internal();
   factory FriendDiscoveryService() => _instance;
   FriendDiscoveryService._internal();
 
   // Storage
   final Map<String, Friendship> _friendships = {};
   final Map<String, FriendRequest> _pendingRequests = {};
-  final Map<String, Set<String>> _blockedUsers = {}; // userId -> Set of blocked user IDs
+  final Map<String, Set<String>> _blockedUsers =
+      {}; // userId -> Set of blocked user IDs
   final Map<String, UserProfile> _userProfiles = {};
 
   // Streams
@@ -254,7 +256,7 @@ class FriendDiscoveryService extends ChangeNotifier {
 
     // Check if request already exists
     final existingRequest = _pendingRequests.values.firstWhere(
-          (req) => req.senderId == senderId && req.recipientId == recipientId,
+      (req) => req.senderId == senderId && req.recipientId == recipientId,
       orElse: () => FriendRequest(
         id: '',
         senderId: '',
@@ -293,7 +295,8 @@ class FriendDiscoveryService extends ChangeNotifier {
     return true;
   }
 
-  Future<bool> acceptFriendRequest(String requestId, String currentUserId) async {
+  Future<bool> acceptFriendRequest(
+      String requestId, String currentUserId) async {
     final request = _pendingRequests[requestId];
     if (request == null || request.recipientId != currentUserId) {
       return false;
@@ -310,7 +313,8 @@ class FriendDiscoveryService extends ChangeNotifier {
     _friendships[friendship.id] = friendship;
     _pendingRequests.remove(requestId);
 
-    LogManager.debug('Friend request accepted: ${request.senderName} and $currentUserId');
+    LogManager.debug(
+        'Friend request accepted: ${request.senderName} and $currentUserId');
 
     _broadcastFriendListUpdate(request.senderId);
     _broadcastFriendListUpdate(request.recipientId);
@@ -320,7 +324,8 @@ class FriendDiscoveryService extends ChangeNotifier {
     return true;
   }
 
-  Future<bool> declineFriendRequest(String requestId, String currentUserId) async {
+  Future<bool> declineFriendRequest(
+      String requestId, String currentUserId) async {
     final request = _pendingRequests[requestId];
     if (request == null || request.recipientId != currentUserId) {
       return false;
@@ -353,7 +358,8 @@ class FriendDiscoveryService extends ChangeNotifier {
 
   Future<bool> removeFriend(String userId1, String userId2) async {
     final friendship = _friendships.values.firstWhere(
-          (f) => (f.user1Id == userId1 && f.user2Id == userId2) ||
+      (f) =>
+          (f.user1Id == userId1 && f.user2Id == userId2) ||
           (f.user1Id == userId2 && f.user2Id == userId1),
       orElse: () => Friendship(
         id: '',
@@ -424,8 +430,10 @@ class FriendDiscoveryService extends ChangeNotifier {
     // Remove any pending requests
     final requestsToRemove = _pendingRequests.entries
         .where((entry) =>
-    (entry.value.senderId == userId && entry.value.recipientId == targetUserId) ||
-        (entry.value.senderId == targetUserId && entry.value.recipientId == userId))
+            (entry.value.senderId == userId &&
+                entry.value.recipientId == targetUserId) ||
+            (entry.value.senderId == targetUserId &&
+                entry.value.recipientId == userId))
         .map((entry) => entry.key)
         .toList();
 
@@ -463,13 +471,15 @@ class FriendDiscoveryService extends ChangeNotifier {
 
   bool areFriends(String userId1, String userId2) {
     return _friendships.values.any((f) =>
-    (f.user1Id == userId1 && f.user2Id == userId2) ||
+        (f.user1Id == userId1 && f.user2Id == userId2) ||
         (f.user1Id == userId2 && f.user2Id == userId1));
   }
 
-  FriendshipStatus getFriendshipStatus(String currentUserId, String targetUserId) {
+  FriendshipStatus getFriendshipStatus(
+      String currentUserId, String targetUserId) {
     // Check if blocked
-    if (isBlocked(currentUserId, targetUserId) || isBlocked(targetUserId, currentUserId)) {
+    if (isBlocked(currentUserId, targetUserId) ||
+        isBlocked(targetUserId, currentUserId)) {
       return FriendshipStatus.blocked;
     }
 
@@ -480,14 +490,14 @@ class FriendDiscoveryService extends ChangeNotifier {
 
     // Check for pending request sent
     final sentRequest = _pendingRequests.values.any((req) =>
-    req.senderId == currentUserId && req.recipientId == targetUserId);
+        req.senderId == currentUserId && req.recipientId == targetUserId);
     if (sentRequest) {
       return FriendshipStatus.requestSent;
     }
 
     // Check for pending request received
     final receivedRequest = _pendingRequests.values.any((req) =>
-    req.senderId == targetUserId && req.recipientId == currentUserId);
+        req.senderId == targetUserId && req.recipientId == currentUserId);
     if (receivedRequest) {
       return FriendshipStatus.requestReceived;
     }
@@ -517,8 +527,8 @@ class FriendDiscoveryService extends ChangeNotifier {
 
   List<UserProfile> getFavoriteFriends(String userId) {
     final friendIds = _friendships.values
-        .where((f) =>
-    (f.user1Id == userId || f.user2Id == userId) && f.isFavorite)
+        .where(
+            (f) => (f.user1Id == userId || f.user2Id == userId) && f.isFavorite)
         .map((f) => f.getFriendId(userId))
         .toList();
 
@@ -608,7 +618,8 @@ class FriendDiscoveryService extends ChangeNotifier {
           user: profile,
           mutualFriendCount: mutualIds.length,
           mutualFriendIds: mutualIds,
-          reason: '${mutualIds.length} mutual ${mutualIds.length == 1 ? "friend" : "friends"}',
+          reason:
+              '${mutualIds.length} mutual ${mutualIds.length == 1 ? "friend" : "friends"}',
           score: mutualIds.length.toDouble(),
         ));
       }
@@ -635,15 +646,13 @@ class FriendDiscoveryService extends ChangeNotifier {
     if (query.trim().isEmpty) return [];
 
     final lowerQuery = query.toLowerCase();
-    return _userProfiles.values
-        .where((profile) {
+    return _userProfiles.values.where((profile) {
       if (excludeUserId != null && profile.id == excludeUserId) {
         return false;
       }
       return profile.displayName.toLowerCase().contains(lowerQuery) ||
           (profile.username?.toLowerCase().contains(lowerQuery) ?? false);
-    })
-        .toList();
+    }).toList();
   }
 
   // ============ Streams ============
@@ -660,7 +669,8 @@ class FriendDiscoveryService extends ChangeNotifier {
   }
 
   Stream<List<FriendRequest>> watchPendingRequests(String userId) {
-    _requestStreams[userId] ??= StreamController<List<FriendRequest>>.broadcast();
+    _requestStreams[userId] ??=
+        StreamController<List<FriendRequest>>.broadcast();
 
     // Send initial data
     Future.delayed(Duration.zero, () {
@@ -689,7 +699,7 @@ class FriendDiscoveryService extends ChangeNotifier {
   Friendship? _findFriendship(String userId1, String userId2) {
     try {
       return _friendships.values.firstWhere((f) =>
-      (f.user1Id == userId1 && f.user2Id == userId2) ||
+          (f.user1Id == userId1 && f.user2Id == userId2) ||
           (f.user1Id == userId2 && f.user2Id == userId1));
     } catch (e) {
       return null;
@@ -713,14 +723,62 @@ class FriendDiscoveryService extends ChangeNotifier {
   void _loadMockData() {
     // Create mock user profiles
     final mockUsers = [
-      UserProfile(id: 'user_1', displayName: 'Sarah Chen', username: '@sarah', level: 15, totalPoints: 2500, isOnline: true),
-      UserProfile(id: 'user_2', displayName: 'Mike Johnson', username: '@mikej', level: 12, totalPoints: 1800, isOnline: false),
-      UserProfile(id: 'user_3', displayName: 'Emma Davis', username: '@emmad', level: 20, totalPoints: 4200, isOnline: true),
-      UserProfile(id: 'user_4', displayName: 'James Wilson', username: '@jamesw', level: 18, totalPoints: 3600, isOnline: true),
-      UserProfile(id: 'user_5', displayName: 'Lisa Anderson', username: '@lisaa', level: 14, totalPoints: 2200, isOnline: false),
-      UserProfile(id: 'user_6', displayName: 'David Brown', username: '@davidb', level: 16, totalPoints: 2800, isOnline: true),
-      UserProfile(id: 'user_7', displayName: 'Sophie Taylor', username: '@sophiet', level: 19, totalPoints: 3900, isOnline: false),
-      UserProfile(id: 'user_8', displayName: 'Ryan Martinez', username: '@ryanm', level: 13, totalPoints: 1950, isOnline: true),
+      UserProfile(
+          id: 'user_1',
+          displayName: 'Sarah Chen',
+          username: '@sarah',
+          level: 15,
+          totalPoints: 2500,
+          isOnline: true),
+      UserProfile(
+          id: 'user_2',
+          displayName: 'Mike Johnson',
+          username: '@mikej',
+          level: 12,
+          totalPoints: 1800,
+          isOnline: false),
+      UserProfile(
+          id: 'user_3',
+          displayName: 'Emma Davis',
+          username: '@emmad',
+          level: 20,
+          totalPoints: 4200,
+          isOnline: true),
+      UserProfile(
+          id: 'user_4',
+          displayName: 'James Wilson',
+          username: '@jamesw',
+          level: 18,
+          totalPoints: 3600,
+          isOnline: true),
+      UserProfile(
+          id: 'user_5',
+          displayName: 'Lisa Anderson',
+          username: '@lisaa',
+          level: 14,
+          totalPoints: 2200,
+          isOnline: false),
+      UserProfile(
+          id: 'user_6',
+          displayName: 'David Brown',
+          username: '@davidb',
+          level: 16,
+          totalPoints: 2800,
+          isOnline: true),
+      UserProfile(
+          id: 'user_7',
+          displayName: 'Sophie Taylor',
+          username: '@sophiet',
+          level: 19,
+          totalPoints: 3900,
+          isOnline: false),
+      UserProfile(
+          id: 'user_8',
+          displayName: 'Ryan Martinez',
+          username: '@ryanm',
+          level: 13,
+          totalPoints: 1950,
+          isOnline: true),
     ];
 
     for (final user in mockUsers) {
@@ -746,8 +804,9 @@ class FriendDiscoveryService extends ChangeNotifier {
       'sentRequests': sentRequests.length,
       'blockedUsers': blocked.length,
       'friendsWithNicknames': _friendships.values
-          .where((f) => f.nickname != null &&
-          (f.user1Id == userId || f.user2Id == userId))
+          .where((f) =>
+              f.nickname != null &&
+              (f.user1Id == userId || f.user2Id == userId))
           .length,
       'favoriteFriends': getFavoriteFriends(userId).length,
     };

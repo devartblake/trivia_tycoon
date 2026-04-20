@@ -160,9 +160,7 @@ class _EnhancedRewardSectionState extends State<EnhancedRewardSection>
                   color: Colors.amber,
                 ),
               ),
-
               const SizedBox(width: 16),
-
               Expanded(
                 child: _buildRewardItem(
                   icon: Icons.diamond,
@@ -171,7 +169,6 @@ class _EnhancedRewardSectionState extends State<EnhancedRewardSection>
                   color: Colors.lightBlue,
                 ),
               ),
-
               if (widget.stars > 0) ...[
                 const SizedBox(width: 16),
                 Expanded(
@@ -232,9 +229,7 @@ class _EnhancedRewardSectionState extends State<EnhancedRewardSection>
                   size: 24,
                 ),
               ),
-
               const SizedBox(height: 8),
-
               Text(
                 animation.value.toString(),
                 style: TextStyle(
@@ -243,9 +238,7 @@ class _EnhancedRewardSectionState extends State<EnhancedRewardSection>
                   color: color,
                 ),
               ),
-
               const SizedBox(height: 4),
-
               Text(
                 label,
                 style: TextStyle(
@@ -292,9 +285,7 @@ class _EnhancedRewardSectionState extends State<EnhancedRewardSection>
               ),
             ],
           ),
-
           const SizedBox(height: 12),
-
           ...widget.achievements.map((achievement) {
             return Padding(
               padding: const EdgeInsets.only(bottom: 8),

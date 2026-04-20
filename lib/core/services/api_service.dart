@@ -18,13 +18,13 @@ class ApiRequestException implements Exception {
   final Duration? retryAfter;
 
   ApiRequestException(
-      this.message, {
-        this.statusCode,
-        this.path,
-        this.errorCode,
-        this.details,
-        this.retryAfter,
-      });
+    this.message, {
+    this.statusCode,
+    this.path,
+    this.errorCode,
+    this.details,
+    this.retryAfter,
+  });
 
   @override
   String toString() {
@@ -53,14 +53,14 @@ class ApiPageEnvelope<T> {
   bool get hasPrevious => page > 1;
 
   Map<String, dynamic> toMap() => <String, dynamic>{
-    'items': items,
-    'page': page,
-    'pageSize': pageSize,
-    'total': total,
-    'totalPages': totalPages,
-    'hasNext': hasNext,
-    'hasPrevious': hasPrevious,
-  };
+        'items': items,
+        'page': page,
+        'pageSize': pageSize,
+        'total': total,
+        'totalPages': totalPages,
+        'hasNext': hasNext,
+        'hasPrevious': hasPrevious,
+      };
 }
 
 class ApiService {
@@ -77,13 +77,13 @@ class ApiService {
     ConfigService? configService,
     bool initializeCache = true,
   })  : _dio = dio ??
-      Dio(BaseOptions(
-        baseUrl: baseUrl,
-        // Shorter timeouts for development to fail fast
-        connectTimeout: const Duration(seconds: 3),
-        receiveTimeout: const Duration(seconds: 3),
-        sendTimeout: const Duration(seconds: 3),
-      )),
+            Dio(BaseOptions(
+              baseUrl: baseUrl,
+              // Shorter timeouts for development to fail fast
+              connectTimeout: const Duration(seconds: 3),
+              receiveTimeout: const Duration(seconds: 3),
+              sendTimeout: const Duration(seconds: 3),
+            )),
         _refreshDio = refreshDio ??
             Dio(BaseOptions(
               baseUrl: baseUrl,
@@ -153,7 +153,8 @@ class ApiService {
     });
   }
 
-  Future<List<Map<String, dynamic>>> fetchAchievements(String playerName) async {
+  Future<List<Map<String, dynamic>>> fetchAchievements(
+      String playerName) async {
     return _handleRequest(() async {
       final response = await _dio.get(
         '/achievements',
@@ -239,7 +240,7 @@ class ApiService {
       final envelope = _extractErrorEnvelope(e.response?.data);
       final retryAfterDuration = _extractRetryAfter(e);
       var normalizedMessage =
-      _extractErrorMessageFromResponse(e, envelope: envelope);
+          _extractErrorMessageFromResponse(e, envelope: envelope);
 
       if (_shouldAttemptRefresh(e, allowAuthRetry)) {
         final refreshed = await _refreshSessionToken();
@@ -250,7 +251,7 @@ class ApiService {
 
       if (e.response?.statusCode == 429 && retryAfterDuration != null) {
         normalizedMessage =
-        '$normalizedMessage (retry after ${retryAfterDuration.inSeconds}s)';
+            '$normalizedMessage (retry after ${retryAfterDuration.inSeconds}s)';
       }
 
       await _handleErrorCodeSideEffects(e.response?.statusCode);
@@ -334,7 +335,7 @@ class ApiService {
     };
 
     final hasAuthorization =
-    resolved.keys.any((key) => key.toLowerCase() == 'authorization');
+        resolved.keys.any((key) => key.toLowerCase() == 'authorization');
 
     if (!hasAuthorization && _isProtectedPath(path)) {
       final accessToken = _loadAccessToken();
@@ -349,7 +350,7 @@ class ApiService {
   /// Loads mock data from assets/json
   Future<dynamic> getMockData(String filename) async {
     final String jsonString =
-    await rootBundle.loadString('assets/data/analytics/$filename');
+        await rootBundle.loadString('assets/data/analytics/$filename');
     return jsonDecode(jsonString);
   }
 
@@ -359,8 +360,8 @@ class ApiService {
   /// FIX: Returns a type-safe Map for predictable JSON responses.
   Future<Map<String, dynamic>> post(String path,
       {required Map<String, dynamic> body,
-        Map<String, String>? headers,
-        Duration? timeout}) async {
+      Map<String, String>? headers,
+      Duration? timeout}) async {
     return _handleRequest(() async {
       final response = await _dio.post(
         path,
@@ -375,8 +376,8 @@ class ApiService {
   /// **🔹 Generic GET Request (JSON map response)**
   Future<Map<String, dynamic>> get(String path,
       {Map<String, String>? headers,
-        Map<String, dynamic>? queryParameters,
-        Duration? timeout}) async {
+      Map<String, dynamic>? queryParameters,
+      Duration? timeout}) async {
     return _handleRequest(() async {
       final response = await _dio.get(
         path,
@@ -390,8 +391,8 @@ class ApiService {
   /// **🔹 Generic DELETE Request**
   Future<Map<String, dynamic>> delete(String path,
       {Map<String, dynamic>? body,
-        Map<String, String>? headers,
-        Duration? timeout}) async {
+      Map<String, String>? headers,
+      Duration? timeout}) async {
     return _handleRequest(() async {
       final response = await _dio.delete(
         path,
@@ -405,8 +406,8 @@ class ApiService {
   /// Generic GET request for endpoints that return a JSON array.
   Future<List<Map<String, dynamic>>> getList(String path,
       {Map<String, String>? headers,
-        Map<String, dynamic>? queryParameters,
-        Duration? timeout}) async {
+      Map<String, dynamic>? queryParameters,
+      Duration? timeout}) async {
     return _handleRequest(() async {
       final response = await _dio.get(
         path,
@@ -433,8 +434,8 @@ class ApiService {
   /// **🔹 Generic PATCH Request**
   Future<Map<String, dynamic>> patch(String path,
       {required Map<String, dynamic> body,
-        Map<String, String>? headers,
-        Duration? timeout}) async {
+      Map<String, String>? headers,
+      Duration? timeout}) async {
     return _handleRequest(() async {
       final response = await _dio.patch(
         path,
@@ -448,8 +449,8 @@ class ApiService {
   /// **🔹 Generic PUT Request**
   Future<Map<String, dynamic>> put(String path,
       {required Map<String, dynamic> body,
-        Map<String, String>? headers,
-        Duration? timeout}) async {
+      Map<String, String>? headers,
+      Duration? timeout}) async {
     return _handleRequest(() async {
       final response = await _dio.put(
         path,
@@ -462,8 +463,7 @@ class ApiService {
 
   /// Parses common paginated envelope variants into a typed structure.
   /// Supports optional itemParser as second positional parameter.
-  ApiPageEnvelope<T> parsePageEnvelope<T>(
-      Map<String, dynamic> response,
+  ApiPageEnvelope<T> parsePageEnvelope<T>(Map<String, dynamic> response,
       [T Function(Map<String, dynamic>)? itemParser]) {
     // Default data keys to try
     const dataKeys = ['items', 'data', 'results', 'rows'];
@@ -535,11 +535,14 @@ class ApiService {
 
     // User-scoped/profile endpoints also require auth headers and token refresh handling.
     if (path == '/users/me' || path.startsWith('/users/me/')) return true;
-    if (path == '/users/search' || path.startsWith('/users/search/')) return true;
+    if (path == '/users/search' || path.startsWith('/users/search/'))
+      return true;
     if (path == '/friends' || path.startsWith('/friends/')) return true;
     if (path == '/profile' || path.startsWith('/profile/')) return true;
-    if (path == '/auth/profile' || path.startsWith('/auth/profile/')) return true;
-    if (path == '/user/profile' || path.startsWith('/user/profile/')) return true;
+    if (path == '/auth/profile' || path.startsWith('/auth/profile/'))
+      return true;
+    if (path == '/user/profile' || path.startsWith('/user/profile/'))
+      return true;
 
     return false;
   }
@@ -636,8 +639,9 @@ class ApiService {
           .millisecondsSinceEpoch;
     }
 
-    final expiresAtRaw =
-        payload['expiresAtUtc'] ?? payload['expires_at'] ?? payload['expiresAt'];
+    final expiresAtRaw = payload['expiresAtUtc'] ??
+        payload['expires_at'] ??
+        payload['expiresAt'];
     if (expiresAtRaw is String && expiresAtRaw.isNotEmpty) {
       final parsed = DateTime.tryParse(expiresAtRaw)?.toUtc();
       if (parsed != null) return parsed.millisecondsSinceEpoch;

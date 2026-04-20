@@ -27,7 +27,8 @@ class _AvatarImagesTabState extends ConsumerState<AvatarImagesTab> {
     setState(() => _isLoading = true);
 
     final cache = ref.read(appCacheServiceProvider);
-    final loadedRefs = await AvatarAssetLoader.loadImageAvatarRefs(cache: cache);
+    final loadedRefs =
+        await AvatarAssetLoader.loadImageAvatarRefs(cache: cache);
 
     if (mounted) {
       setState(() {
@@ -37,9 +38,10 @@ class _AvatarImagesTabState extends ConsumerState<AvatarImagesTab> {
     }
   }
 
-  void _selectAvatar(AvatarAssetRef avatarRef) {  // ✅ Changed parameter type
+  void _selectAvatar(AvatarAssetRef avatarRef) {
+    // ✅ Changed parameter type
     final controller = ref.read(profileAvatarControllerProvider.notifier);
-    controller.selectAvatarFromAsset(avatarRef.path);  // Use ref.path
+    controller.selectAvatarFromAsset(avatarRef.path); // Use ref.path
     Navigator.pop(context);
   }
 

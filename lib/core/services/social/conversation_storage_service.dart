@@ -4,7 +4,8 @@ import 'package:trivia_tycoon/core/manager/log_manager.dart';
 /// Simple storage service for conversations - no business logic
 class ConversationStorageService {
   final Map<String, Conversation> _conversations = {};
-  final Map<String, Set<String>> _userConversations = {}; // userId -> conversationIds
+  final Map<String, Set<String>> _userConversations =
+      {}; // userId -> conversationIds
 
   // ============ CREATE ============
 
@@ -66,9 +67,9 @@ class ConversationStorageService {
   // ============ UPDATE ============
 
   Future<Conversation?> updateConversation(
-      String conversationId,
-      Conversation updatedConversation,
-      ) async {
+    String conversationId,
+    Conversation updatedConversation,
+  ) async {
     if (!_conversations.containsKey(conversationId)) return null;
 
     _conversations[conversationId] = updatedConversation;
@@ -77,10 +78,10 @@ class ConversationStorageService {
   }
 
   Future<void> updateLastMessage(
-      String conversationId,
-      String messageId,
-      DateTime messageTime,
-      ) async {
+    String conversationId,
+    String messageId,
+    DateTime messageTime,
+  ) async {
     final conversation = _conversations[conversationId];
     if (conversation != null) {
       _conversations[conversationId] = conversation.copyWith(
@@ -152,7 +153,7 @@ class ConversationStorageService {
       'totalConversations': _conversations.length,
       'totalUsers': _userConversations.length,
       'conversationsPerUser': _userConversations.map(
-            (key, value) => MapEntry(key, value.length),
+        (key, value) => MapEntry(key, value.length),
       ),
     };
   }

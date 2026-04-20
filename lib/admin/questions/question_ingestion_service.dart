@@ -5,7 +5,8 @@ import '../../game/models/question_model.dart';
 import '../../game/providers/riverpod_providers.dart';
 
 class QuestionIngestionService {
-  const QuestionIngestionService({required ApiService apiService}) : _apiService = apiService;
+  const QuestionIngestionService({required ApiService apiService})
+      : _apiService = apiService;
 
   final ApiService _apiService;
 
@@ -16,7 +17,8 @@ class QuestionIngestionService {
     final response = await _apiService.post(
       '/admin/questions/validate-bulk',
       body: {
-        if (datasetName != null && datasetName.trim().isNotEmpty) 'datasetName': datasetName.trim(),
+        if (datasetName != null && datasetName.trim().isNotEmpty)
+          'datasetName': datasetName.trim(),
         'items': questions.map((q) => q.toJson()).toList(),
       },
     );
@@ -58,7 +60,8 @@ class QuestionIngestionService {
       rethrow;
     } catch (_) {
       // Fallback for legacy payloads that are not page-envelope shaped.
-      final rawItems = response['items'] ?? response['datasets'] ?? response['data'];
+      final rawItems =
+          response['items'] ?? response['datasets'] ?? response['data'];
       if (rawItems is! List) {
         return const <Map<String, dynamic>>[];
       }
@@ -87,7 +90,8 @@ class QuestionIngestionService {
   }
 }
 
-final questionIngestionServiceProvider = Provider<QuestionIngestionService>((ref) {
+final questionIngestionServiceProvider =
+    Provider<QuestionIngestionService>((ref) {
   final serviceManager = ref.watch(serviceManagerProvider);
   return QuestionIngestionService(apiService: serviceManager.apiService);
 });

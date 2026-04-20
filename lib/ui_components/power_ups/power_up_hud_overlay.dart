@@ -28,7 +28,8 @@ class PowerUpHUDOverlay extends ConsumerStatefulWidget {
   ConsumerState<PowerUpHUDOverlay> createState() => _PowerUpHUDOverlayState();
 }
 
-class _PowerUpHUDOverlayState extends ConsumerState<PowerUpHUDOverlay> with TickerProviderStateMixin {
+class _PowerUpHUDOverlayState extends ConsumerState<PowerUpHUDOverlay>
+    with TickerProviderStateMixin {
   late AnimationController _controller;
   late AnimationController _glowController;
   late Animation<Offset> _offsetAnimation;
@@ -74,7 +75,10 @@ class _PowerUpHUDOverlayState extends ConsumerState<PowerUpHUDOverlay> with Tick
     if (current != null && _previousPowerUp == null) {
       _controller.forward(); // Show
       _flashed = false; // Reset flash flag
-    } else if (isEnding && !_flashed && current == null && _previousPowerUp != null) {
+    } else if (isEnding &&
+        !_flashed &&
+        current == null &&
+        _previousPowerUp != null) {
       _triggerFlashEffect(); // Flash before hiding
       _controller.reverse(); // Hide
       _flashed = true;
@@ -98,7 +102,9 @@ class _PowerUpHUDOverlayState extends ConsumerState<PowerUpHUDOverlay> with Tick
 
     _handleAnimation(activePowerUp);
 
-    if (activePowerUp == null || remainingSeconds == null || remainingSeconds <= 0) {
+    if (activePowerUp == null ||
+        remainingSeconds == null ||
+        remainingSeconds <= 0) {
       return const SizedBox.shrink();
     }
 

@@ -28,7 +28,6 @@ class SwatchService {
     return list != null && list.isNotEmpty;
   }
 
-
   static Future<void> setCustomSwatches(List<Color> colors) async {
     final hexList = colors.map((c) => c.value.toRadixString(16)).toList();
     await AppSettings.setStringList(_key, hexList);

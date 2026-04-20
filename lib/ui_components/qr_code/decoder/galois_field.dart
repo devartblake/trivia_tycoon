@@ -19,7 +19,8 @@ class GaloisField {
     }
   }
 
-  static final GaloisField qrField = GaloisField._internal(0x011D, 256, 0); // QR-specific GF(256)
+  static final GaloisField qrField =
+      GaloisField._internal(0x011D, 256, 0); // QR-specific GF(256)
 
   int addOrSubtract(int a, int b) => a ^ b;
 

@@ -27,7 +27,8 @@ class _CollectionTabState extends ConsumerState<CollectionTab> {
     AsyncValue<List<CollectionItem>> itemsAsync;
 
     if (_selectedCategory != null) {
-      itemsAsync = ref.watch(collectionItemsByCategoryProvider(_selectedCategory!));
+      itemsAsync =
+          ref.watch(collectionItemsByCategoryProvider(_selectedCategory!));
     } else if (_selectedRarity != null) {
       itemsAsync = ref.watch(collectionItemsByRarityProvider(_selectedRarity!));
     } else if (_selectedFilter == 'unlocked') {
@@ -93,7 +94,8 @@ class _CollectionTabState extends ConsumerState<CollectionTab> {
                         child: LinearProgressIndicator(
                           value: percentage / 100,
                           minHeight: 8,
-                          backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                          backgroundColor:
+                              theme.colorScheme.surfaceContainerHighest,
                           valueColor: AlwaysStoppedAnimation<Color>(
                             theme.colorScheme.primary,
                           ),
@@ -218,7 +220,9 @@ class _CollectionTabState extends ConsumerState<CollectionTab> {
   }
 
   Widget _buildFilterChip(String label, String value, ThemeData theme) {
-    final isSelected = _selectedFilter == value && _selectedCategory == null && _selectedRarity == null;
+    final isSelected = _selectedFilter == value &&
+        _selectedCategory == null &&
+        _selectedRarity == null;
 
     return FilterChip(
       label: Text(label),
@@ -278,9 +282,8 @@ class CollectionItemCard extends ConsumerWidget {
         decoration: BoxDecoration(
           color: theme.colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(16),
-          border: item.isUnlocked
-              ? Border.all(color: rarityColor, width: 2)
-              : null,
+          border:
+              item.isUnlocked ? Border.all(color: rarityColor, width: 2) : null,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -480,7 +483,8 @@ class CollectionItemCard extends ConsumerWidget {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
+                color:
+                    theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),

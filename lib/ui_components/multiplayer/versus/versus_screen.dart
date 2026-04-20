@@ -378,10 +378,12 @@ class PlayerContainer extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Align(
-            alignment: isLeftSide ? Alignment.centerLeft : Alignment.centerRight,
+            alignment:
+                isLeftSide ? Alignment.centerLeft : Alignment.centerRight,
             child: ElevatedButton.icon(
               onPressed: onReadyPressed,
-              icon: Icon(isReady ? Icons.check_circle : Icons.play_arrow_rounded),
+              icon:
+                  Icon(isReady ? Icons.check_circle : Icons.play_arrow_rounded),
               label: Text(isReady ? 'Ready' : 'Ready Up'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: isReady
@@ -604,7 +606,8 @@ class ParticlesPainter extends CustomPainter {
       final offsetX = (isLeft ? -50 : 50) * (1 - animationValue);
       final opacity = animationValue * 0.6;
 
-      paint.color = (isLeft ? leftColor : rightColor).withValues(alpha: opacity);
+      paint.color =
+          (isLeft ? leftColor : rightColor).withValues(alpha: opacity);
 
       canvas.drawCircle(
         Offset(baseX + offsetX, baseY),

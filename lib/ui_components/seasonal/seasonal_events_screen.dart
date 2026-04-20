@@ -29,24 +29,120 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
       'totalChallenges': 12,
       'completedChallenges': 8,
       'rewards': [
-        {'id': 'r1', 'type': 'xp', 'amount': 1000, 'claimed': true, 'requirement': 'Complete 3 challenges'},
-        {'id': 'r2', 'type': 'coins', 'amount': 5000, 'claimed': true, 'requirement': 'Complete 6 challenges'},
-        {'id': 'r3', 'type': 'gems', 'amount': 50, 'claimed': false, 'requirement': 'Complete 9 challenges'},
-        {'id': 'r4', 'type': 'exclusive_avatar', 'amount': 1, 'claimed': false, 'requirement': 'Complete all challenges'},
+        {
+          'id': 'r1',
+          'type': 'xp',
+          'amount': 1000,
+          'claimed': true,
+          'requirement': 'Complete 3 challenges'
+        },
+        {
+          'id': 'r2',
+          'type': 'coins',
+          'amount': 5000,
+          'claimed': true,
+          'requirement': 'Complete 6 challenges'
+        },
+        {
+          'id': 'r3',
+          'type': 'gems',
+          'amount': 50,
+          'claimed': false,
+          'requirement': 'Complete 9 challenges'
+        },
+        {
+          'id': 'r4',
+          'type': 'exclusive_avatar',
+          'amount': 1,
+          'claimed': false,
+          'requirement': 'Complete all challenges'
+        },
       ],
       'challenges': [
-        {'title': 'Spring Trivia Master', 'description': 'Answer 25 spring-themed questions', 'progress': 25, 'total': 25, 'completed': true},
-        {'title': 'Easter Egg Hunt', 'description': 'Find 10 hidden easter eggs in quizzes', 'progress': 10, 'total': 10, 'completed': true},
-        {'title': 'Bunny Hop Streak', 'description': 'Achieve a 15-question streak', 'progress': 15, 'total': 15, 'completed': true},
-        {'title': 'Garden Knowledge', 'description': 'Complete 5 nature category quizzes', 'progress': 5, 'total': 5, 'completed': true},
-        {'title': 'Spring Festival', 'description': 'Participate in 3 daily events', 'progress': 3, 'total': 3, 'completed': true},
-        {'title': 'Flower Power', 'description': 'Score 90% or higher in 5 quizzes', 'progress': 5, 'total': 5, 'completed': true},
-        {'title': 'Seasonal Scholar', 'description': 'Learn 20 new facts about spring', 'progress': 20, 'total': 20, 'completed': true},
-        {'title': 'Community Helper', 'description': 'Help 5 friends with quiz questions', 'progress': 5, 'total': 5, 'completed': true},
-        {'title': 'Master Collector', 'description': 'Collect all seasonal badges', 'progress': 8, 'total': 12, 'completed': false},
-        {'title': 'Speed Demon', 'description': 'Complete 10 quizzes in under 2 minutes each', 'progress': 6, 'total': 10, 'completed': false},
-        {'title': 'Perfect Score', 'description': 'Get 100% on 3 challenging quizzes', 'progress': 1, 'total': 3, 'completed': false},
-        {'title': 'Event Champion', 'description': 'Finish in top 10 of seasonal leaderboard', 'progress': 0, 'total': 1, 'completed': false},
+        {
+          'title': 'Spring Trivia Master',
+          'description': 'Answer 25 spring-themed questions',
+          'progress': 25,
+          'total': 25,
+          'completed': true
+        },
+        {
+          'title': 'Easter Egg Hunt',
+          'description': 'Find 10 hidden easter eggs in quizzes',
+          'progress': 10,
+          'total': 10,
+          'completed': true
+        },
+        {
+          'title': 'Bunny Hop Streak',
+          'description': 'Achieve a 15-question streak',
+          'progress': 15,
+          'total': 15,
+          'completed': true
+        },
+        {
+          'title': 'Garden Knowledge',
+          'description': 'Complete 5 nature category quizzes',
+          'progress': 5,
+          'total': 5,
+          'completed': true
+        },
+        {
+          'title': 'Spring Festival',
+          'description': 'Participate in 3 daily events',
+          'progress': 3,
+          'total': 3,
+          'completed': true
+        },
+        {
+          'title': 'Flower Power',
+          'description': 'Score 90% or higher in 5 quizzes',
+          'progress': 5,
+          'total': 5,
+          'completed': true
+        },
+        {
+          'title': 'Seasonal Scholar',
+          'description': 'Learn 20 new facts about spring',
+          'progress': 20,
+          'total': 20,
+          'completed': true
+        },
+        {
+          'title': 'Community Helper',
+          'description': 'Help 5 friends with quiz questions',
+          'progress': 5,
+          'total': 5,
+          'completed': true
+        },
+        {
+          'title': 'Master Collector',
+          'description': 'Collect all seasonal badges',
+          'progress': 8,
+          'total': 12,
+          'completed': false
+        },
+        {
+          'title': 'Speed Demon',
+          'description': 'Complete 10 quizzes in under 2 minutes each',
+          'progress': 6,
+          'total': 10,
+          'completed': false
+        },
+        {
+          'title': 'Perfect Score',
+          'description': 'Get 100% on 3 challenging quizzes',
+          'progress': 1,
+          'total': 3,
+          'completed': false
+        },
+        {
+          'title': 'Event Champion',
+          'description': 'Finish in top 10 of seasonal leaderboard',
+          'progress': 0,
+          'total': 1,
+          'completed': false
+        },
       ],
     },
     {
@@ -218,11 +314,11 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
                 gradient: isSelected
                     ? _getSeasonalGradient(event['theme'])
                     : LinearGradient(
-                  colors: [
-                    Colors.white.withValues(alpha: 0.1),
-                    Colors.white.withValues(alpha: 0.05),
-                  ],
-                ),
+                        colors: [
+                          Colors.white.withValues(alpha: 0.1),
+                          Colors.white.withValues(alpha: 0.05),
+                        ],
+                      ),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                   color: isSelected
@@ -232,12 +328,13 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
                 ),
                 boxShadow: isSelected
                     ? [
-                  BoxShadow(
-                    color: _getSeasonalColor(event['theme']).withValues(alpha: 0.3),
-                    blurRadius: 20,
-                    offset: const Offset(0, 8),
-                  ),
-                ]
+                        BoxShadow(
+                          color: _getSeasonalColor(event['theme'])
+                              .withValues(alpha: 0.3),
+                          blurRadius: 20,
+                          offset: const Offset(0, 8),
+                        ),
+                      ]
                     : null,
               ),
               child: Column(
@@ -369,7 +466,8 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
                     if (isActive) ...[
                       const SizedBox(width: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           color: Colors.green,
                           borderRadius: BorderRadius.circular(8),
@@ -398,7 +496,8 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      const Icon(Icons.access_time, color: Colors.white70, size: 16),
+                      const Icon(Icons.access_time,
+                          color: Colors.white70, size: 16),
                       const SizedBox(width: 4),
                       const Text(
                         'Ends in 01d 04h',
@@ -605,7 +704,9 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
             ),
           ),
           const SizedBox(height: 16),
-          ...challenges.map((challenge) => _buildChallengeItem(challenge)).toList(),
+          ...challenges
+              .map((challenge) => _buildChallengeItem(challenge))
+              .toList(),
         ],
       ),
     );

@@ -24,19 +24,19 @@ class SynaptixApiClient {
   /// GET request returning JSON object
   /// For backward compatibility with existing screens
   Future<Map<String, dynamic>> getJson(
-      String path, {
-        Map<String, String>? query,
-      }) async {
+    String path, {
+    Map<String, String>? query,
+  }) async {
     return await _http.getJson(path, query: query);
   }
 
   /// POST request with JSON body, returning JSON
   /// For backward compatibility
   Future<Map<String, dynamic>> postJson(
-      String path, {
-        Map<String, dynamic>? body,
-        Map<String, String>? query,
-      }) async {
+    String path, {
+    Map<String, dynamic>? body,
+    Map<String, String>? query,
+  }) async {
     return await _http.postJson(path, body: body, query: query);
   }
 
@@ -429,7 +429,8 @@ class SynaptixApiClient {
   // ========================================
 
   Future<SkillTreeDto> getSkillTree({required String playerId}) async {
-    final j = await _http.getJson('/skills/tree', query: {'playerId': playerId});
+    final j =
+        await _http.getJson('/skills/tree', query: {'playerId': playerId});
     return SkillTreeDto.fromJson(j);
   }
 
@@ -487,7 +488,7 @@ class SynaptixApiClient {
     required String gameEventId,
   }) async {
     final data =
-    await _http.getJsonList('/game-events/$gameEventId/leaderboard');
+        await _http.getJsonList('/game-events/$gameEventId/leaderboard');
     return data
         .cast<Map<String, dynamic>>()
         .map(GameEventLeaderboardEntryDto.fromJson)
@@ -519,8 +520,7 @@ class SynaptixApiClient {
     required String seasonId,
     required int tierNumber,
   }) async {
-    final data =
-    await _http.getJsonList('/guardians/$seasonId/$tierNumber');
+    final data = await _http.getJsonList('/guardians/$seasonId/$tierNumber');
     return data.cast<Map<String, dynamic>>().map(GuardianDto.fromJson).toList();
   }
 
@@ -539,7 +539,8 @@ class SynaptixApiClient {
   Future<MyGuardianStatusDto> getMyGuardianStatus({
     required String playerId,
   }) async {
-    final j = await _http.getJson('/guardians/my', query: {'playerId': playerId});
+    final j =
+        await _http.getJson('/guardians/my', query: {'playerId': playerId});
     return MyGuardianStatusDto.fromJson(j);
   }
 
@@ -644,7 +645,8 @@ class SynaptixApiClient {
   }
 
   /// POST /mobile/economy/session/start
-  Future<SessionStartDto> startEconomySession({required String playerId}) async {
+  Future<SessionStartDto> startEconomySession(
+      {required String playerId}) async {
     final j = await _http.postJson(
       '/mobile/economy/session/start',
       query: {'playerId': playerId},

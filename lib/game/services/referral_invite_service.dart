@@ -225,7 +225,8 @@ class ReferralInviteService {
     final now = DateTime.now().toUtc();
 
     for (final invite in invites) {
-      if (invite.status == InviteStatus.pending && now.isAfter(invite.expiresAt)) {
+      if (invite.status == InviteStatus.pending &&
+          now.isAfter(invite.expiresAt)) {
         // Mark as expired
         final expiredInvite = invite.copyWith(status: InviteStatus.expired);
         _storage.saveInvite(expiredInvite);
@@ -252,7 +253,7 @@ class ReferralInviteService {
     _expirationCheckTimer?.cancel();
     _expirationCheckTimer = Timer.periodic(
       const Duration(hours: 1),
-          (_) {
+      (_) {
         final invites = getInvites();
         _checkAndUpdateExpiredInvites(invites);
       },

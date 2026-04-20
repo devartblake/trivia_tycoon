@@ -18,6 +18,6 @@ class GameSessionController extends StateNotifier<GameSession> {
 }
 
 final gameSessionControllerProvider =
-StateNotifierProvider<GameSessionController, GameSession>((ref) {
+    StateNotifierProvider<GameSessionController, GameSession>((ref) {
   return GameSessionController(ref);
 });

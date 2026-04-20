@@ -29,6 +29,7 @@ class MissionFiltersNotifier extends StateNotifier<MissionFilters> {
   }
 }
 
-final missionFiltersProvider = StateNotifierProvider<MissionFiltersNotifier, MissionFilters>(
-      (ref) => MissionFiltersNotifier(),
+final missionFiltersProvider =
+    StateNotifierProvider<MissionFiltersNotifier, MissionFilters>(
+  (ref) => MissionFiltersNotifier(),
 );

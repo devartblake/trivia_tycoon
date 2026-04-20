@@ -5,7 +5,11 @@ class MenuButton extends StatelessWidget {
   final String label;
   final VoidCallback onTap;
 
-  const MenuButton({super.key, required this.icon, required this.label, required this.onTap});
+  const MenuButton(
+      {super.key,
+      required this.icon,
+      required this.label,
+      required this.onTap});
 
   @override
   Widget build(BuildContext context) {

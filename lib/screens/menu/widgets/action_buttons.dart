@@ -520,7 +520,8 @@ class _ActionItemState extends State<_ActionItem>
                         border: Border.all(color: Colors.white, width: 2),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFFEF4444).withValues(alpha: 0.5),
+                            color:
+                                const Color(0xFFEF4444).withValues(alpha: 0.5),
                             blurRadius: 6,
                             offset: const Offset(0, 2),
                           ),

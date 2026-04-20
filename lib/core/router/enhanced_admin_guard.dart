@@ -36,7 +36,9 @@ class AdminRouteWrapper extends ConsumerWidget {
 
     // Increment navigation attempts when this widget builds
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(adminNavigationAttemptsProvider.notifier).update((state) => state + 1);
+      ref
+          .read(adminNavigationAttemptsProvider.notifier)
+          .update((state) => state + 1);
     });
 
     // Check if user is logged in first
@@ -68,7 +70,8 @@ class AdminRouteWrapper extends ConsumerWidget {
           ),
         ),
       ),
-      error: (error, stack) => _buildErrorScreen(context, error.toString(), ref),
+      error: (error, stack) =>
+          _buildErrorScreen(context, error.toString(), ref),
     );
   }
 
@@ -103,9 +106,9 @@ class AdminRouteWrapper extends ConsumerWidget {
               Text(
                 'Access Check Failed',
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: Colors.orange.shade400,
-                  fontWeight: FontWeight.bold,
-                ),
+                      color: Colors.orange.shade400,
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
               const SizedBox(height: 16),
               Text(
@@ -178,7 +181,8 @@ class _AdminAccessPromptState extends ConsumerState<_AdminAccessPrompt> {
       await _promptForAdminLogin();
     } else {
       // Show feedback about progress
-      final navProgress = navigationAttempts >= 2 ? '✓' : '$navigationAttempts/2';
+      final navProgress =
+          navigationAttempts >= 2 ? '✓' : '$navigationAttempts/2';
       final clickProgress = newClicks >= 2 ? '✓' : '$newClicks/2';
 
       if (mounted) {
@@ -280,16 +284,21 @@ class _AdminAccessPromptState extends ConsumerState<_AdminAccessPrompt> {
                             : Colors.red.shade400,
                         width: 2,
                       ),
-                      boxShadow: _isHovering ? [
-                        BoxShadow(
-                          color: theme.primaryColor.withValues(alpha: 0.3),
-                          blurRadius: 20,
-                          spreadRadius: 2,
-                        ),
-                      ] : [],
+                      boxShadow: _isHovering
+                          ? [
+                              BoxShadow(
+                                color:
+                                    theme.primaryColor.withValues(alpha: 0.3),
+                                blurRadius: 20,
+                                spreadRadius: 2,
+                              ),
+                            ]
+                          : [],
                     ),
                     child: Icon(
-                      _isHovering ? Icons.lock_open : Icons.admin_panel_settings_outlined,
+                      _isHovering
+                          ? Icons.lock_open
+                          : Icons.admin_panel_settings_outlined,
                       size: 80,
                       color: _isHovering
                           ? theme.primaryColor
@@ -302,9 +311,9 @@ class _AdminAccessPromptState extends ConsumerState<_AdminAccessPrompt> {
               Text(
                 'Admin Access Required',
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: Colors.red.shade400,
-                  fontWeight: FontWeight.bold,
-                ),
+                      color: Colors.red.shade400,
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
               const SizedBox(height: 16),
               Text(
@@ -316,9 +325,9 @@ class _AdminAccessPromptState extends ConsumerState<_AdminAccessPrompt> {
               Text(
                 'Try tapping the lock icon above...',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey[600],
-                  fontStyle: FontStyle.italic,
-                ),
+                      color: Colors.grey[600],
+                      fontStyle: FontStyle.italic,
+                    ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
@@ -354,7 +363,8 @@ class _AdminAccessPromptState extends ConsumerState<_AdminAccessPrompt> {
                 children: [
                   OutlinedButton.icon(
                     onPressed: () {
-                      ref.read(adminNavigationAttemptsProvider.notifier).state = 0;
+                      ref.read(adminNavigationAttemptsProvider.notifier).state =
+                          0;
                       ref.read(lockIconClicksProvider.notifier).state = 0;
                       context.go('/main');
                     },
@@ -370,7 +380,8 @@ class _AdminAccessPromptState extends ConsumerState<_AdminAccessPrompt> {
     );
   }
 
-  Widget _buildProgressRow(String label, int current, int required, IconData icon) {
+  Widget _buildProgressRow(
+      String label, int current, int required, IconData icon) {
     final isComplete = current >= required;
     final color = isComplete ? Colors.green : Colors.grey;
 

@@ -36,7 +36,8 @@ class FlowConnectStateNotifier extends ChangeNotifier {
   }
 
   void initializeGame(int gridSize, FlowConnectDifficulty difficulty) {
-    final FlowConnectLevelData level = FlowConnectLevelGenerator.generateLevel(gridSize, difficulty);
+    final FlowConnectLevelData level =
+        FlowConnectLevelGenerator.generateLevel(gridSize, difficulty);
     _solutionPath = level.solutionPath;
     _gameState = FlowConnectGameState(
       grid: level.grid,
@@ -109,10 +110,13 @@ class FlowConnectStateNotifier extends ChangeNotifier {
 
     // If the user is trying to go back to the previous point (backtracking)
     if (_gameState.currentPath.length > 1 &&
-        currentGridPoint.row == _gameState.currentPath[_gameState.currentPath.length - 2].row &&
-        currentGridPoint.col == _gameState.currentPath[_gameState.currentPath.length - 2].col) {
+        currentGridPoint.row ==
+            _gameState.currentPath[_gameState.currentPath.length - 2].row &&
+        currentGridPoint.col ==
+            _gameState.currentPath[_gameState.currentPath.length - 2].col) {
       _gameState = _gameState.copyWith(
-        currentPath: List<FlowConnectPathPoint>.from(_gameState.currentPath)..removeLast(),
+        currentPath: List<FlowConnectPathPoint>.from(_gameState.currentPath)
+          ..removeLast(),
       );
       _lastPoint = _gameState.currentPath.last;
       final cell = _gameState.grid[_lastPoint!.row][_lastPoint!.col];
@@ -125,32 +129,40 @@ class FlowConnectStateNotifier extends ChangeNotifier {
     }
 
     // If the user is trying to move to the same point, do nothing
-    if (_lastPoint != null && currentGridPoint.row == _lastPoint!.row && currentGridPoint.col == _lastPoint!.col) {
+    if (_lastPoint != null &&
+        currentGridPoint.row == _lastPoint!.row &&
+        currentGridPoint.col == _lastPoint!.col) {
       return;
     }
 
     // Check if the new point is a valid next step (adjacent and not already in path, unless it's a number)
     final isAdjacent = (currentGridPoint.row - _lastPoint!.row).abs() +
-        (currentGridPoint.col - _lastPoint!.col).abs() ==
+            (currentGridPoint.col - _lastPoint!.col).abs() ==
         1;
     final isAlreadyInPath = _gameState.currentPath.any(
-            (p) => p.row == currentGridPoint.row && p.col == currentGridPoint.col);
-    final isNumberedCell = _gameState.grid[currentGridPoint.row][currentGridPoint.col].number != null;
+        (p) => p.row == currentGridPoint.row && p.col == currentGridPoint.col);
+    final isNumberedCell =
+        _gameState.grid[currentGridPoint.row][currentGridPoint.col].number !=
+            null;
 
     if (isAdjacent && (!isAlreadyInPath || isNumberedCell)) {
-      final newPath = List<FlowConnectPathPoint>.from(_gameState.currentPath)..add(currentGridPoint);
+      final newPath = List<FlowConnectPathPoint>.from(_gameState.currentPath)
+        ..add(currentGridPoint);
 
       if (FlowConnectPathValidator.isValidPath(newPath, _gameState.grid)) {
-        final cell = _gameState.grid[currentGridPoint.row][currentGridPoint.col];
+        final cell =
+            _gameState.grid[currentGridPoint.row][currentGridPoint.col];
         int nextNumber = _gameState.currentNumber;
         if (cell.number == nextNumber) {
           nextNumber++;
         }
 
-        _gameState = _gameState.copyWith(
-          currentPath: newPath,
-          currentNumber: nextNumber,
-        ).recordState();
+        _gameState = _gameState
+            .copyWith(
+              currentPath: newPath,
+              currentNumber: nextNumber,
+            )
+            .recordState();
         _lastPoint = currentGridPoint;
         notifyListeners();
       }
@@ -158,7 +170,8 @@ class FlowConnectStateNotifier extends ChangeNotifier {
   }
 
   FlowConnectGameStatus onPanEnd() {
-    if (_gameState.status != FlowConnectGameStatus.playing) return _gameState.status;
+    if (_gameState.status != FlowConnectGameStatus.playing)
+      return _gameState.status;
 
     if (FlowConnectPathValidator.checkWinCondition(_gameState)) {
       _endTime = DateTime.now();
@@ -182,8 +195,12 @@ class FlowConnectStateNotifier extends ChangeNotifier {
     final row = (offset.dy / cellSize).floor();
     final col = (offset.dx / cellSize).floor();
 
-    if (row >= 0 && row < _gameState.gridSize && col >= 0 && col < _gameState.gridSize) {
-      return FlowConnectPathPoint(row: row, col: col, order: _gameState.currentPath.length);
+    if (row >= 0 &&
+        row < _gameState.gridSize &&
+        col >= 0 &&
+        col < _gameState.gridSize) {
+      return FlowConnectPathPoint(
+          row: row, col: col, order: _gameState.currentPath.length);
     }
     return null;
   }

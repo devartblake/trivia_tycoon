@@ -54,7 +54,8 @@ class QuestionResponseContract {
       );
     }
 
-    final meta = _parseMeta(response, endpoint: endpoint, requireMeta: requireMeta);
+    final meta =
+        _parseMeta(response, endpoint: endpoint, requireMeta: requireMeta);
     return QuestionCollectionEnvelope<dynamic>(items: items, meta: meta);
   }
 
@@ -66,12 +67,14 @@ class QuestionResponseContract {
     bool requireMeta = false,
   }) {
     if (response.isEmpty) {
-      throw QuestionContractException(endpoint: endpoint, reason: 'empty object payload');
+      throw QuestionContractException(
+          endpoint: endpoint, reason: 'empty object payload');
     }
 
     for (final key in requiredKeys) {
       if (!response.containsKey(key)) {
-        throw QuestionContractException(endpoint: endpoint, reason: 'missing required key: $key');
+        throw QuestionContractException(
+            endpoint: endpoint, reason: 'missing required key: $key');
       }
     }
 
@@ -82,7 +85,8 @@ class QuestionResponseContract {
       );
     }
 
-    final meta = _parseMeta(response, endpoint: endpoint, requireMeta: requireMeta);
+    final meta =
+        _parseMeta(response, endpoint: endpoint, requireMeta: requireMeta);
     return QuestionObjectEnvelope(data: response, meta: meta);
   }
 
@@ -94,13 +98,15 @@ class QuestionResponseContract {
     final rawMeta = response['meta'];
     if (rawMeta == null) {
       if (requireMeta) {
-        throw QuestionContractException(endpoint: endpoint, reason: 'missing meta');
+        throw QuestionContractException(
+            endpoint: endpoint, reason: 'missing meta');
       }
       return const <String, dynamic>{};
     }
 
     if (rawMeta is! Map) {
-      throw QuestionContractException(endpoint: endpoint, reason: 'meta must be an object');
+      throw QuestionContractException(
+          endpoint: endpoint, reason: 'meta must be an object');
     }
 
     return Map<String, dynamic>.from(rawMeta);

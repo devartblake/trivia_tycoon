@@ -20,7 +20,8 @@ class MatchController extends StateNotifier<MatchState> {
   }
 
   /// Submit an answer for the current question/turn.
-  Future<void> submitAnswer(String matchId, String questionId, String answerId) async {
+  Future<void> submitAnswer(
+      String matchId, String questionId, String answerId) async {
     await _svc.submitAnswer(matchId, questionId, answerId);
     // Depending on server protocol you might optimistically set a sub-phase:
     // state = MatchState(matchId: matchId, phase: MatchPhase.question);
@@ -32,7 +33,10 @@ class MatchController extends StateNotifier<MatchState> {
       return;
     }
     if (e is TurnStarted) {
-      state = MatchState(matchId: state.matchId, phase: MatchPhase.question); // you can store questionId in state if needed
+      state = MatchState(
+          matchId: state.matchId,
+          phase: MatchPhase
+              .question); // you can store questionId in state if needed
       return;
     }
     // You could add a TurnRevealed event and set phase 'reveal'

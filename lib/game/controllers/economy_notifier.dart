@@ -85,8 +85,8 @@ class EconomyNotifier extends StateNotifier<EconomyState> {
     final raw = await _storage.getString(_kEconomyStateCacheKey);
     if (raw == null || raw.isEmpty) return;
     try {
-      final dto = EconomyStateDto.fromJson(
-          jsonDecode(raw) as Map<String, dynamic>);
+      final dto =
+          EconomyStateDto.fromJson(jsonDecode(raw) as Map<String, dynamic>);
       _applyDto(dto);
     } catch (_) {
       // Stale / corrupt cache — silently ignore; fetchState will overwrite.
@@ -182,8 +182,7 @@ class EconomyNotifier extends StateNotifier<EconomyState> {
   }
 
   /// Call before showing adjusted mode costs to the player.
-  Future<SessionStartDto?> startSession(
-      String playerId, String mode) async {
+  Future<SessionStartDto?> startSession(String playerId, String mode) async {
     try {
       final dto = await _api.startEconomySession(playerId: playerId);
       // Merge in adjusted costs from session start
@@ -199,10 +198,8 @@ class EconomyNotifier extends StateNotifier<EconomyState> {
   }
 
   /// Attempt to enter a mode. Handles 409 policy denial internally.
-  Future<MatchStartResultDto> enterMode(
-      String playerId, String mode) async {
-    final result =
-        await _api.startPolicyMatch(playerId: playerId, mode: mode);
+  Future<MatchStartResultDto> enterMode(String playerId, String mode) async {
+    final result = await _api.startPolicyMatch(playerId: playerId, mode: mode);
     if (result.started) {
       _analytics.logEvent('mode_entry_attempted', {
         'playerId': playerId,

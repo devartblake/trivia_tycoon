@@ -16,18 +16,18 @@ class AvatarShape {
 
   /// Perfect circle avatar
   static AvatarShape circle(double radius) => AvatarShape._(
-    width: radius * 2,
-    height: radius * 2,
-    shapeBorder: const CircleBorder(),
-    boxShape: BoxShape.circle,
-  );
+        width: radius * 2,
+        height: radius * 2,
+        shapeBorder: const CircleBorder(),
+        boxShape: BoxShape.circle,
+      );
 
   /// Rounded rectangle avatar
   static AvatarShape rectangle(
-      double width,
-      double height, [
-        BorderRadius borderRadius = BorderRadius.zero,
-      ]) =>
+    double width,
+    double height, [
+    BorderRadius borderRadius = BorderRadius.zero,
+  ]) =>
       AvatarShape._(
         width: width,
         height: height,
@@ -59,11 +59,11 @@ class AvatarShape {
 
   /// Stadium (pill shape) for horizontal avatars
   static AvatarShape stadium(double width, double height) => AvatarShape._(
-    width: width,
-    height: height,
-    shapeBorder: const StadiumBorder(),
-    boxShape: BoxShape.rectangle,
-  );
+        width: width,
+        height: height,
+        shapeBorder: const StadiumBorder(),
+        boxShape: BoxShape.rectangle,
+      );
 
   /// Custom shape with specified shape border
   static AvatarShape custom({

@@ -22,24 +22,25 @@ class ProfileAnalyticsEvent {
   });
 
   Map<String, dynamic> toJson() => {
-    'event_id': eventId,
-    'action': action,
-    'profile_id': profileId,
-    if (profileName != null) 'profile_name': profileName,
-    if (fromProfileId != null) 'from_profile_id': fromProfileId,
-    'timestamp': timestamp.toIso8601String(),
-    ...additionalData,
-  };
+        'event_id': eventId,
+        'action': action,
+        'profile_id': profileId,
+        if (profileName != null) 'profile_name': profileName,
+        if (fromProfileId != null) 'from_profile_id': fromProfileId,
+        'timestamp': timestamp.toIso8601String(),
+        ...additionalData,
+      };
 }
 
 /// Provider for the ProfileAnalyticsManager
 final profileAnalyticsManagerProvider =
-AsyncNotifierProvider<ProfileAnalyticsManager, List<ProfileAnalyticsEvent>>(
-      () => ProfileAnalyticsManager(),
+    AsyncNotifierProvider<ProfileAnalyticsManager, List<ProfileAnalyticsEvent>>(
+  () => ProfileAnalyticsManager(),
 );
 
 /// Manager for handling profile-related analytics without breaking core functionality
-class ProfileAnalyticsManager extends AsyncNotifier<List<ProfileAnalyticsEvent>> {
+class ProfileAnalyticsManager
+    extends AsyncNotifier<List<ProfileAnalyticsEvent>> {
   final List<ProfileAnalyticsEvent> _pendingEvents = [];
 
   @override
@@ -130,7 +131,8 @@ class ProfileAnalyticsManager extends AsyncNotifier<List<ProfileAnalyticsEvent>>
     );
 
     await _trackEvent(event);
-    LogManager.info("Profile edited: '$profileName' (ID: $profileId)", source: 'ProfileManager');
+    LogManager.info("Profile edited: '$profileName' (ID: $profileId)",
+        source: 'ProfileManager');
   }
 
   /// Internal method to safely track events
@@ -161,7 +163,6 @@ class ProfileAnalyticsManager extends AsyncNotifier<List<ProfileAnalyticsEvent>>
       );
 
       // Events remain queued; wire up analytics service here when backend is available
-
     } catch (e) {
       LogManager.logProfileError('pending_analytics_retry', e.toString());
     }
@@ -180,9 +181,8 @@ class ProfileAnalyticsManager extends AsyncNotifier<List<ProfileAnalyticsEvent>>
       'total_events': events.length,
       'pending_events': _pendingEvents.length,
       'events_by_action': eventsByAction,
-      'last_event_time': events.isNotEmpty
-          ? events.last.timestamp.toIso8601String()
-          : null,
+      'last_event_time':
+          events.isNotEmpty ? events.last.timestamp.toIso8601String() : null,
     };
   }
 
@@ -197,7 +197,8 @@ class ProfileAnalyticsManager extends AsyncNotifier<List<ProfileAnalyticsEvent>>
     try {
       state = const AsyncData([]);
       _pendingEvents.clear();
-      LogManager.info('Profile analytics history cleared', source: 'ProfileAnalyticsManager');
+      LogManager.info('Profile analytics history cleared',
+          source: 'ProfileAnalyticsManager');
     } catch (e) {
       LogManager.logProfileError('clear_analytics', e.toString());
     }

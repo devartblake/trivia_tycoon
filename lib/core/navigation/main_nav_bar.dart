@@ -19,7 +19,8 @@ class MainNavBar extends StatelessWidget {
 
   int _currentIndex(BuildContext context) {
     final location = GoRouterState.of(context).uri.toString();
-    final index = _navItems.indexWhere((item) => location.startsWith(item.route));
+    final index =
+        _navItems.indexWhere((item) => location.startsWith(item.route));
     return index == -1 ? 0 : index;
   }
 
@@ -31,7 +32,10 @@ class MainNavBar extends StatelessWidget {
       body: child,
       bottomNavigationBar: FluidNavBar(
         body: const SizedBox.shrink(),
-        icons: _navItems.map((item) => FluidNavBarIcon(icon: item.icon, extras: {'label': item.label})).toList(),
+        icons: _navItems
+            .map((item) =>
+                FluidNavBarIcon(icon: item.icon, extras: {'label': item.label}))
+            .toList(),
         defaultIndex: currentIndex,
         onChange: (index) {
           final route = _navItems[index].route;
@@ -60,5 +64,6 @@ class _NavItem {
   final IconData icon;
   final String route;
 
-  const _NavItem({required this.label, required this.icon, required this.route});
+  const _NavItem(
+      {required this.label, required this.icon, required this.route});
 }

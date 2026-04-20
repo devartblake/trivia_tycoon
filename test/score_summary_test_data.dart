@@ -18,13 +18,15 @@ class ScoreSummaryTestData {
       'category': category,
       'timeTaken': '3:45',
       'difficulty': _getDifficultyForClass(classLevel),
-      'categoryBreakdown': _getCategoryBreakdown(category, score, totalQuestions),
+      'categoryBreakdown':
+          _getCategoryBreakdown(category, score, totalQuestions),
       'achievements': _getAchievements(score, totalQuestions, classLevel),
       'streakInfo': {
         'current': score >= (totalQuestions * 0.8).round() ? 3 : 0,
         'best': 5,
       },
-      'recommendations': _getRecommendations(classLevel, category, score, totalQuestions),
+      'recommendations':
+          _getRecommendations(classLevel, category, score, totalQuestions),
     };
   }
 
@@ -53,7 +55,8 @@ class ScoreSummaryTestData {
     }
   }
 
-  static Map<String, Map<String, dynamic>> _getCategoryBreakdown(String category, int score, int total) {
+  static Map<String, Map<String, dynamic>> _getCategoryBreakdown(
+      String category, int score, int total) {
     // Simulate category performance breakdown
     Map<String, Map<String, dynamic>> breakdown = {};
 
@@ -88,7 +91,8 @@ class ScoreSummaryTestData {
     return breakdown;
   }
 
-  static List<Map<String, dynamic>> _getAchievements(int score, int total, String classLevel) {
+  static List<Map<String, dynamic>> _getAchievements(
+      int score, int total, String classLevel) {
     List<Map<String, dynamic>> achievements = [];
 
     double percentage = (score / total) * 100;
@@ -126,7 +130,8 @@ class ScoreSummaryTestData {
     return achievements;
   }
 
-  static List<String> _getRecommendations(String classLevel, String category, int score, int total) {
+  static List<String> _getRecommendations(
+      String classLevel, String category, int score, int total) {
     double percentage = (score / total) * 100;
     List<String> recommendations = [];
 
@@ -193,7 +198,8 @@ class ScoreSummaryTestData {
 // Integration test helpers
 class ScoreSummaryIntegrationTest {
   static void testNavigationFlow() {
-    testWidgets('Score summary navigation integration', (WidgetTester tester) async {
+    testWidgets('Score summary navigation integration',
+        (WidgetTester tester) async {
       // Test that enhanced score summary can be reached from quiz completion
       // Test that all parameters are properly passed
       // Test that navigation back to home works

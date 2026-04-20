@@ -60,7 +60,9 @@ class Achievement {
       title: json['title'] as String,
       description: json['description'] as String,
       isUnlocked: json['isUnlocked'] as bool? ?? false,
-      unlockedAt: json['unlockedAt'] != null ? DateTime.parse(json['unlockedAt']) : null,
+      unlockedAt: json['unlockedAt'] != null
+          ? DateTime.parse(json['unlockedAt'])
+          : null,
     );
   }
 
@@ -78,6 +80,10 @@ class Achievement {
 
   @override
   int get hashCode {
-    return id.hashCode ^ title.hashCode ^ description.hashCode ^ isUnlocked.hashCode ^ unlockedAt.hashCode;
+    return id.hashCode ^
+        title.hashCode ^
+        description.hashCode ^
+        isUnlocked.hashCode ^
+        unlockedAt.hashCode;
   }
 }

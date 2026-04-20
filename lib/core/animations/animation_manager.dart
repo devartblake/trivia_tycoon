@@ -375,8 +375,7 @@ class AnimationManager {
             value: value,
             minHeight: height,
             color: color,
-            backgroundColor:
-                backgroundColor ?? color.withValues(alpha: 0.18),
+            backgroundColor: backgroundColor ?? color.withValues(alpha: 0.18),
           );
         },
       ),
@@ -707,7 +706,8 @@ class _TypingDotsWidgetState extends State<_TypingDotsWidget>
           mainAxisSize: MainAxisSize.min,
           children: List<Widget>.generate(widget.count, (index) {
             return Padding(
-              padding: EdgeInsets.only(right: index == widget.count - 1 ? 0 : 4),
+              padding:
+                  EdgeInsets.only(right: index == widget.count - 1 ? 0 : 4),
               child: Opacity(
                 opacity: opacities[index],
                 child: Container(

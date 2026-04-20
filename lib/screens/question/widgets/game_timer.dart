@@ -47,7 +47,8 @@ class _EnhancedGameTimerState extends State<EnhancedGameTimer>
     _progressController.addListener(() {
       if (!widget.isPaused) {
         setState(() {
-          remainingTime = (widget.duration * (1 - _progressController.value)).round();
+          remainingTime =
+              (widget.duration * (1 - _progressController.value)).round();
         });
 
         // Start pulsing when time is running low

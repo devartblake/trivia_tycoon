@@ -1,13 +1,13 @@
 /// High-level match phases used by the live match UI.
 enum MatchPhase {
-  idle,        // not in a match
-  queued,      // matchmaking queue, pre-room
-  starting,    // countdown / intro
-  question,    // question live
-  reveal,      // reveal correct answer
-  results,     // post-match summary
-  finished,    // finalized, exiting
-  error,       // an error occurred
+  idle, // not in a match
+  queued, // matchmaking queue, pre-room
+  starting, // countdown / intro
+  question, // question live
+  reveal, // reveal correct answer
+  results, // post-match summary
+  finished, // finalized, exiting
+  error, // an error occurred
 }
 
 /// Snapshot of the player's current match context.
@@ -46,9 +46,9 @@ class MatchState {
     String? matchId,
     MatchPhase? phase,
     String? questionId,
-    int? remainingMs,          // pass explicit null to clear
+    int? remainingMs, // pass explicit null to clear
     bool clearRemaining = false,
-    String? message,           // pass explicit null to clear
+    String? message, // pass explicit null to clear
     bool clearMessage = false,
   }) {
     return MatchState(
@@ -63,18 +63,18 @@ class MatchState {
   @override
   String toString() =>
       'MatchState(matchId: $matchId, phase: $phase, questionId: $questionId, '
-          'remainingMs: $remainingMs, message: $message)';
+      'remainingMs: $remainingMs, message: $message)';
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is MatchState &&
-              runtimeType == other.runtimeType &&
-              matchId == other.matchId &&
-              phase == other.phase &&
-              questionId == other.questionId &&
-              remainingMs == other.remainingMs &&
-              message == other.message;
+      other is MatchState &&
+          runtimeType == other.runtimeType &&
+          matchId == other.matchId &&
+          phase == other.phase &&
+          questionId == other.questionId &&
+          remainingMs == other.remainingMs &&
+          message == other.message;
 
   @override
   int get hashCode =>

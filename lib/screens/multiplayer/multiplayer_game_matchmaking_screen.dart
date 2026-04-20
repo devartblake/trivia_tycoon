@@ -23,7 +23,6 @@ class MultiplayerGameMatchmakingScreen extends ConsumerStatefulWidget {
 class _MultiplayerGameMatchmakingScreenState
     extends ConsumerState<MultiplayerGameMatchmakingScreen>
     with TickerProviderStateMixin {
-
   late AnimationController _searchController;
   late Animation<double> _pulseAnimation;
   bool _isSearching = false;
@@ -36,8 +35,8 @@ class _MultiplayerGameMatchmakingScreenState
       duration: const Duration(seconds: 2),
       vsync: this,
     );
-    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.1)
-        .animate(CurvedAnimation(
+    _pulseAnimation =
+        Tween<double>(begin: 1.0, end: 1.1).animate(CurvedAnimation(
       parent: _searchController,
       curve: Curves.easeInOut,
     ));
@@ -45,7 +44,9 @@ class _MultiplayerGameMatchmakingScreenState
     // Auto-start search for the specific game mode
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Warm up multiplayer question payloads through repository-backed service path.
-      ref.read(multiplayerQuizServiceProvider).prefetchQuestionsForGameMode(widget.gameMode);
+      ref
+          .read(multiplayerQuizServiceProvider)
+          .prefetchQuestionsForGameMode(widget.gameMode);
       _startMatchmaking();
     });
   }
@@ -183,7 +184,8 @@ class _MultiplayerGameMatchmakingScreenState
           context: context,
           builder: (context) => AlertDialog(
             title: const Text('Cancel Matchmaking?'),
-            content: const Text('Are you sure you want to stop looking for a match?'),
+            content: const Text(
+                'Are you sure you want to stop looking for a match?'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
@@ -253,7 +255,10 @@ class _MultiplayerGameMatchmakingScreenState
                           height: 120,
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
-                              colors: [gameColor, gameColor.withValues(alpha: 0.7)],
+                              colors: [
+                                gameColor,
+                                gameColor.withValues(alpha: 0.7)
+                              ],
                             ),
                             shape: BoxShape.circle,
                             boxShadow: [
@@ -273,18 +278,14 @@ class _MultiplayerGameMatchmakingScreenState
                       );
                     },
                   ),
-
                   const SizedBox(height: 24),
-
                   Text(
                     'Finding Opponent...',
                     style: theme.textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-
                   const SizedBox(height: 12),
-
                   Text(
                     'Looking for players ready to challenge in ${_getGameModeDisplayName()}',
                     style: theme.textTheme.bodyLarge?.copyWith(
@@ -292,14 +293,11 @@ class _MultiplayerGameMatchmakingScreenState
                     ),
                     textAlign: TextAlign.center,
                   ),
-
                   const SizedBox(height: 32),
-
                   LinearProgressIndicator(
                     backgroundColor: gameColor.withValues(alpha: 0.2),
                     valueColor: AlwaysStoppedAnimation<Color>(gameColor),
                   ),
-
                 ] else if (_matchedOpponent != null) ...[
                   Container(
                     padding: const EdgeInsets.all(20),
@@ -355,7 +353,9 @@ class _MultiplayerGameMatchmakingScreenState
                     label: const Text('Cancel Search'),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: MultiplayerPalette.textSecondary,
-                      side: BorderSide(color: MultiplayerPalette.textSecondary.withValues(alpha: 0.35)),
+                      side: BorderSide(
+                          color: MultiplayerPalette.textSecondary
+                              .withValues(alpha: 0.35)),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,
                         vertical: 12,

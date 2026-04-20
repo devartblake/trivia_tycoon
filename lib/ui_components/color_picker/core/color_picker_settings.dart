@@ -27,7 +27,12 @@ class ColorPickerSettings {
     bool useCustomPalette = false,
     List<Color> customPalette = const [],
     String pickerMode = "wheel",
-    List<Color> colors = const [Colors.red, Colors.blue, Colors.green, Colors.yellow],
+    List<Color> colors = const [
+      Colors.red,
+      Colors.blue,
+      Colors.green,
+      Colors.yellow
+    ],
   }) {
     // Ensure immutability
     final immutableCustomPalette = List<Color>.unmodifiable(customPalette);
@@ -109,7 +114,8 @@ class ColorPickerSettings {
     return <String, dynamic>{
       'selectedColor': selectedColor.value,
       'useCustomPalette': useCustomPalette,
-      'customPalette': customPalette.map((c) => c.value).toList(growable: false),
+      'customPalette':
+          customPalette.map((c) => c.value).toList(growable: false),
       'pickerMode': pickerMode,
       'colors': colors.map((c) => c.value).toList(growable: false),
     };
@@ -119,9 +125,8 @@ class ColorPickerSettings {
   factory ColorPickerSettings.fromMap(Map<String, dynamic> map) {
     try {
       final selectedColorValue = map['selectedColor'];
-      final selectedColor = selectedColorValue is int
-          ? Color(selectedColorValue)
-          : Colors.blue;
+      final selectedColor =
+          selectedColorValue is int ? Color(selectedColorValue) : Colors.blue;
 
       final useCustomPalette = map['useCustomPalette'] is bool
           ? map['useCustomPalette'] as bool
@@ -136,17 +141,19 @@ class ColorPickerSettings {
             .toList(growable: false);
       }
 
-      final pickerMode = map['pickerMode'] is String
-          ? map['pickerMode'] as String
-          : "wheel";
+      final pickerMode =
+          map['pickerMode'] is String ? map['pickerMode'] as String : "wheel";
 
       final colorsData = map['colors'];
-      List<Color> colors = const [Colors.red, Colors.blue, Colors.green, Colors.yellow];
+      List<Color> colors = const [
+        Colors.red,
+        Colors.blue,
+        Colors.green,
+        Colors.yellow
+      ];
       if (colorsData is List) {
-        final parsedColors = colorsData
-            .whereType<int>()
-            .map((c) => Color(c))
-            .toList();
+        final parsedColors =
+            colorsData.whereType<int>().map((c) => Color(c)).toList();
         if (parsedColors.isNotEmpty) {
           colors = List<Color>.unmodifiable(parsedColors);
         }

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:just_audio/just_audio.dart';
 import 'tycoon_toast_route.dart' as route;
-import 'Toast_theme_manager.dart';
+import 'toast_theme_manager.dart';
 
 const String tycoonToastRouteName = '/tycoonToastRoute';
 
@@ -12,11 +12,17 @@ typedef TycoonToastStatusCallback = void Function(TycoonToastStatus? status);
 typedef OnTycoonTap = void Function(TycoonToast toast);
 
 enum TycoonToastType { success, error, info, reward, custom }
+
 enum TycoonToastPosition { top, bottom }
+
 enum TycoonToastStyle { floating, grounded }
+
 enum TycoonToastDismissDirection { horizontal, vertical }
+
 enum TycoonToastStatus { showing, dismissed, isAppearing, isHiding }
+
 enum TycoonToastTransition { slide, fade, scale }
+
 typedef TycoonThemeEvent = String;
 
 class TycoonToast<T> extends StatefulWidget {
@@ -73,9 +79,10 @@ class TycoonToast<T> extends StatefulWidget {
     this.transitionType = TycoonToastTransition.slide,
     this.themeEvent = 'general',
     this.isDismissible = true,
-  })  : onStatusChanged = onStatusChanged ?? ((_) {}) {
+  }) : onStatusChanged = onStatusChanged ?? ((_) {}) {
     // Apply modern gradient with glassmorphism effect
-    this.backgroundGradient ??= TycoonToastThemeManager.getGradientForEvent(themeEvent);
+    this.backgroundGradient ??=
+        TycoonToastThemeManager.getGradientForEvent(themeEvent);
   }
 
   final String? title;
@@ -246,20 +253,23 @@ class _TycoonToastState<K extends Object?> extends State<TycoonToast<K>>
           borderRadius: widget.borderRadius ?? BorderRadius.circular(20),
           gradient: widget.backgroundGradient,
           border: widget.borderWidth > 0
-              ? Border.all(color: widget.borderColor ?? Colors.white24, width: widget.borderWidth)
+              ? Border.all(
+                  color: widget.borderColor ?? Colors.white24,
+                  width: widget.borderWidth)
               : null,
-          boxShadow: widget.boxShadows ?? [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.2),
-              blurRadius: 20,
-              offset: const Offset(0, 10),
-            ),
-            BoxShadow(
-              color: Colors.white.withValues(alpha: 0.1),
-              blurRadius: 1,
-              offset: const Offset(0, 1),
-            ),
-          ],
+          boxShadow: widget.boxShadows ??
+              [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.2),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+                BoxShadow(
+                  color: Colors.white.withValues(alpha: 0.1),
+                  blurRadius: 1,
+                  offset: const Offset(0, 1),
+                ),
+              ],
         ),
         child: ClipRRect(
           borderRadius: widget.borderRadius ?? BorderRadius.circular(20),
@@ -315,7 +325,8 @@ class _TycoonToastState<K extends Object?> extends State<TycoonToast<K>>
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.start, // Changed from center
+                        crossAxisAlignment:
+                            CrossAxisAlignment.start, // Changed from center
                         children: [
                           // Icon with pulse animation
                           if (widget.icon != null)
@@ -323,11 +334,14 @@ class _TycoonToastState<K extends Object?> extends State<TycoonToast<K>>
                               animation: _pulseAnimation,
                               builder: (context, child) {
                                 return Transform.scale(
-                                  scale: widget.shouldIconPulse ? _pulseAnimation.value : 1.0,
+                                  scale: widget.shouldIconPulse
+                                      ? _pulseAnimation.value
+                                      : 1.0,
                                   child: Container(
                                     padding: const EdgeInsets.all(8),
                                     decoration: BoxDecoration(
-                                      color: Colors.white.withValues(alpha: 0.2),
+                                      color:
+                                          Colors.white.withValues(alpha: 0.2),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: widget.icon,
@@ -356,13 +370,15 @@ class _TycoonToastState<K extends Object?> extends State<TycoonToast<K>>
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                if (widget.title != null && widget.message != null)
+                                if (widget.title != null &&
+                                    widget.message != null)
                                   const SizedBox(height: 2),
                                 if (widget.message != null)
                                   Text(
                                     widget.message!,
                                     style: TextStyle(
-                                      color: widget.messageColor ?? Colors.white.withValues(alpha: 0.9),
+                                      color: widget.messageColor ??
+                                          Colors.white.withValues(alpha: 0.9),
                                       fontSize: widget.messageSize ?? 12,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -403,8 +419,9 @@ class _TycoonToastState<K extends Object?> extends State<TycoonToast<K>>
                       if (widget.showProgressIndicator) ...[
                         const SizedBox(height: 12),
                         LinearProgressIndicator(
-                          backgroundColor: widget.progressIndicatorBackgroundColor ??
-                              Colors.white.withValues(alpha: 0.2),
+                          backgroundColor:
+                              widget.progressIndicatorBackgroundColor ??
+                                  Colors.white.withValues(alpha: 0.2),
                           valueColor: widget.progressIndicatorValueColor ??
                               AlwaysStoppedAnimation<Color>(Colors.white),
                         ),

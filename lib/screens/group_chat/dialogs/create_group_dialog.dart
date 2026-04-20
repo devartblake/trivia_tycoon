@@ -106,9 +106,9 @@ class _CreateGroupDialogState extends State<CreateGroupDialog> {
           Text(
             'Create Group',
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              color: Theme.of(context).colorScheme.onPrimaryContainer,
-              fontWeight: FontWeight.bold,
-            ),
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  fontWeight: FontWeight.bold,
+                ),
           ),
           const Spacer(),
           IconButton(
@@ -134,7 +134,10 @@ class _CreateGroupDialogState extends State<CreateGroupDialog> {
               shape: BoxShape.circle,
               color: Theme.of(context).colorScheme.surfaceVariant,
               border: Border.all(
-                color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+                color: Theme.of(context)
+                    .colorScheme
+                    .outline
+                    .withValues(alpha: 0.2),
                 width: 2,
               ),
             ),
@@ -222,8 +225,8 @@ class _CreateGroupDialogState extends State<CreateGroupDialog> {
         Text(
           'Group Type',
           style: Theme.of(context).textTheme.titleSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+                fontWeight: FontWeight.bold,
+              ),
         ),
         const SizedBox(height: 12),
         Wrap(
@@ -258,12 +261,12 @@ class _CreateGroupDialogState extends State<CreateGroupDialog> {
   }
 
   Widget _buildTypeChip(
-      BuildContext context,
-      GroupType type,
-      IconData icon,
-      String label,
-      String description,
-      ) {
+    BuildContext context,
+    GroupType type,
+    IconData icon,
+    String label,
+    String description,
+  ) {
     final isSelected = _selectedType == type;
 
     return InkWell(
@@ -295,20 +298,21 @@ class _CreateGroupDialogState extends State<CreateGroupDialog> {
             Text(
               label,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                color: isSelected
-                    ? Theme.of(context).colorScheme.onPrimaryContainer
-                    : Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+                    fontWeight:
+                        isSelected ? FontWeight.bold : FontWeight.normal,
+                    color: isSelected
+                        ? Theme.of(context).colorScheme.onPrimaryContainer
+                        : Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
             ),
             Text(
               description,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: isSelected
-                    ? Theme.of(context).colorScheme.onPrimaryContainer
-                    : Theme.of(context).colorScheme.onSurfaceVariant,
-                fontSize: 10,
-              ),
+                    color: isSelected
+                        ? Theme.of(context).colorScheme.onPrimaryContainer
+                        : Theme.of(context).colorScheme.onSurfaceVariant,
+                    fontSize: 10,
+                  ),
             ),
           ],
         ),
@@ -325,15 +329,15 @@ class _CreateGroupDialogState extends State<CreateGroupDialog> {
             Text(
               'Add Members',
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             const Spacer(),
             Text(
               '${_selectedMembers.length} selected',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.primary,
-              ),
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
             ),
           ],
         ),
@@ -341,10 +345,14 @@ class _CreateGroupDialogState extends State<CreateGroupDialog> {
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceVariant.withValues(alpha: 0.5),
+            color: Theme.of(context)
+                .colorScheme
+                .surfaceVariant
+                .withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+              color:
+                  Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
             ),
           ),
           child: Column(
@@ -364,9 +372,9 @@ class _CreateGroupDialogState extends State<CreateGroupDialog> {
               Text(
                 'Member search will be implemented with your friends list',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontStyle: FontStyle.italic,
-                ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      fontStyle: FontStyle.italic,
+                    ),
               ),
             ],
           ),
@@ -398,13 +406,13 @@ class _CreateGroupDialogState extends State<CreateGroupDialog> {
             onPressed: _isCreating ? null : _createGroup,
             icon: _isCreating
                 ? const SizedBox(
-              width: 16,
-              height: 16,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-              ),
-            )
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  )
                 : const Icon(Icons.check),
             label: Text(_isCreating ? 'Creating...' : 'Create Group'),
           ),
@@ -462,11 +470,11 @@ class _CreateGroupDialogState extends State<CreateGroupDialog> {
 
 // Helper function to show the dialog
 Future<GroupChat?> showCreateGroupDialog(
-    BuildContext context, {
-      required String currentUserId,
-      required String currentUserDisplayName,
-      List<String>? preselectedMemberIds,
-    }) {
+  BuildContext context, {
+  required String currentUserId,
+  required String currentUserDisplayName,
+  List<String>? preselectedMemberIds,
+}) {
   return showDialog<GroupChat>(
     context: context,
     builder: (context) => CreateGroupDialog(

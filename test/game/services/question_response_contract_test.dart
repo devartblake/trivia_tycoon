@@ -19,7 +19,9 @@ void main() {
     test('throws when collection key is missing', () {
       expect(
         () => QuestionResponseContract.parseCollection(
-          {'meta': {'page': 1}},
+          {
+            'meta': {'page': 1}
+          },
           endpoint: '/quiz/mixed',
           itemKeys: const ['items', 'questions'],
         ),

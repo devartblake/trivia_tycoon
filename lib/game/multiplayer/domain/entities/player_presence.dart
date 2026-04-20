@@ -41,12 +41,12 @@ class PlayerPresence {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is PlayerPresence &&
-              runtimeType == other.runtimeType &&
-              id == other.id &&
-              name == other.name &&
-              avatarUrl == other.avatarUrl &&
-              isHost == other.isHost;
+      other is PlayerPresence &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          name == other.name &&
+          avatarUrl == other.avatarUrl &&
+          isHost == other.isHost;
 
   @override
   int get hashCode => Object.hash(id, name, avatarUrl, isHost);

@@ -19,10 +19,12 @@ class LeaderboardTabView extends ConsumerWidget {
             isScrollable: true,
             onTap: (index) {
               ref.read(leaderboardControllerProvider).setCategory(
-                LeaderboardCategory.values[index],
-              );
+                    LeaderboardCategory.values[index],
+                  );
             },
-            tabs: LeaderboardCategory.values.map((e) => Tab(text: _getLabel(e))).toList(),
+            tabs: LeaderboardCategory.values
+                .map((e) => Tab(text: _getLabel(e)))
+                .toList(),
           ),
           Expanded(
             child: controller.isLoading

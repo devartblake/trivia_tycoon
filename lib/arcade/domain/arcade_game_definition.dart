@@ -3,9 +3,9 @@ import 'arcade_difficulty.dart';
 import 'arcade_game_id.dart';
 
 typedef ArcadeGameBuilder = Widget Function(
-    BuildContext context,
-    ArcadeDifficulty difficulty,
-    );
+  BuildContext context,
+  ArcadeDifficulty difficulty,
+);
 
 class ArcadeGameDefinition {
   final ArcadeGameId id;

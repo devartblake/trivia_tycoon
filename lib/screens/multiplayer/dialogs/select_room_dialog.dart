@@ -35,14 +35,17 @@ class _SelectRoomDialog extends ConsumerWidget {
               separatorBuilder: (_, __) => const SizedBox(height: 8),
               itemBuilder: (_, i) => RoomCard.fromJson(
                 json: rooms[i],
-                onTap: () => Navigator.of(context).pop((rooms[i]['roomId'] ?? '').toString()),
+                onTap: () => Navigator.of(context)
+                    .pop((rooms[i]['roomId'] ?? '').toString()),
               ),
             );
           },
         ),
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Close')),
+        TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Close')),
       ],
     );
   }

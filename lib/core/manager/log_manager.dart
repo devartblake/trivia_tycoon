@@ -48,7 +48,8 @@ class LogEntry {
   final String message;
   final String? source;
 
-  LogEntry(this.level, this.message, {this.source}) : timestamp = DateTime.now();
+  LogEntry(this.level, this.message, {this.source})
+      : timestamp = DateTime.now();
 
   @override
   String toString({bool useColors = true}) {
@@ -95,28 +96,28 @@ class LogEntry {
     switch (level) {
       case LogLevel.info:
         return (
-        "${LogColors.brightBlue}${LogColors.bold}[INFO]${LogColors.reset} ${LogColors.blue}📌${LogColors.reset}",
-        LogColors.brightBlue
+          "${LogColors.brightBlue}${LogColors.bold}[INFO]${LogColors.reset} ${LogColors.blue}📌${LogColors.reset}",
+          LogColors.brightBlue
         );
       case LogLevel.debug:
         return (
-        "${LogColors.gray}${LogColors.bold}[DEBUG]${LogColors.reset} ${LogColors.gray}🐛${LogColors.reset}",
-        LogColors.gray
+          "${LogColors.gray}${LogColors.bold}[DEBUG]${LogColors.reset} ${LogColors.gray}🐛${LogColors.reset}",
+          LogColors.gray
         );
       case LogLevel.warning:
         return (
-        "${LogColors.brightYellow}${LogColors.bold}[WARN]${LogColors.reset} ${LogColors.yellow}⚠️${LogColors.reset}",
-        LogColors.brightYellow
+          "${LogColors.brightYellow}${LogColors.bold}[WARN]${LogColors.reset} ${LogColors.yellow}⚠️${LogColors.reset}",
+          LogColors.brightYellow
         );
       case LogLevel.error:
         return (
-        "${LogColors.brightRed}${LogColors.bold}[ERROR]${LogColors.reset} ${LogColors.red}🚨${LogColors.reset}",
-        LogColors.brightRed
+          "${LogColors.brightRed}${LogColors.bold}[ERROR]${LogColors.reset} ${LogColors.red}🚨${LogColors.reset}",
+          LogColors.brightRed
         );
       case LogLevel.performance:
         return (
-        "${LogColors.brightMagenta}${LogColors.bold}[PERF]${LogColors.reset} ${LogColors.magenta}🚀${LogColors.reset}",
-        LogColors.brightMagenta
+          "${LogColors.brightMagenta}${LogColors.bold}[PERF]${LogColors.reset} ${LogColors.magenta}🚀${LogColors.reset}",
+          LogColors.brightMagenta
         );
     }
   }
@@ -128,7 +129,7 @@ class LogManager {
 
   /// Stream of logs for real-time listening (UI debug tools)
   static final StreamController<LogEntry> _logStreamController =
-  StreamController<LogEntry>.broadcast();
+      StreamController<LogEntry>.broadcast();
 
   static Stream<LogEntry> get logStream => _logStreamController.stream;
 
@@ -142,11 +143,11 @@ class LogManager {
 
   /// Main logging function
   static void log(
-      String message, {
-        LogLevel level = LogLevel.debug,
-        String? source,
-        bool forceLog = false,
-      }) {
+    String message, {
+    LogLevel level = LogLevel.debug,
+    String? source,
+    bool forceLog = false,
+  }) {
     final entry = LogEntry(level, message, source: source);
 
     if (kDebugMode || ConfigService.enableLogging || forceLog) {
@@ -173,7 +174,8 @@ class LogManager {
     log(message, level: LogLevel.warning, source: source);
   }
 
-  static void error(String message, {String? source, Object? error, StackTrace? stackTrace}) {
+  static void error(String message,
+      {String? source, Object? error, StackTrace? stackTrace}) {
     String fullMessage = message;
     if (error != null) {
       fullMessage += "\nError: $error";
@@ -184,7 +186,8 @@ class LogManager {
     log(fullMessage, level: LogLevel.error, source: source);
   }
 
-  static void performance(String message, {String? source, Duration? duration}) {
+  static void performance(String message,
+      {String? source, Duration? duration}) {
     String fullMessage = message;
     if (duration != null) {
       fullMessage += " (${duration.inMilliseconds}ms)";
@@ -194,13 +197,13 @@ class LogManager {
 
   /// Log with custom colors (for special cases)
   static void logWithCustomColor(
-      String message, {
-        String? source,
-        String color = LogColors.white,
-        String backgroundColor = '',
-        bool bold = false,
-        bool underline = false,
-      }) {
+    String message, {
+    String? source,
+    String color = LogColors.white,
+    String backgroundColor = '',
+    bool bold = false,
+    bool underline = false,
+  }) {
     if (!kDebugMode || !_useColors) {
       log(message, source: source);
       return;
@@ -258,7 +261,8 @@ class LogManager {
   }
 
   /// Performance timing helper
-  static void timeOperation(String operationName, Function operation, {String? source}) {
+  static void timeOperation(String operationName, Function operation,
+      {String? source}) {
     final stopwatch = Stopwatch()..start();
     performance("Starting: $operationName", source: source);
 
@@ -267,17 +271,14 @@ class LogManager {
     } finally {
       stopwatch.stop();
       performance("Completed: $operationName",
-          source: source,
-          duration: stopwatch.elapsed);
+          source: source, duration: stopwatch.elapsed);
     }
   }
 
   /// Async performance timing helper
   static Future<T> timeAsyncOperation<T>(
-      String operationName,
-      Future<T> Function() operation,
-      {String? source}
-      ) async {
+      String operationName, Future<T> Function() operation,
+      {String? source}) async {
     final stopwatch = Stopwatch()..start();
     performance("Starting: $operationName", source: source);
 
@@ -286,8 +287,7 @@ class LogManager {
     } finally {
       stopwatch.stop();
       performance("Completed: $operationName",
-          source: source,
-          duration: stopwatch.elapsed);
+          source: source, duration: stopwatch.elapsed);
     }
   }
 
@@ -299,7 +299,8 @@ class LogManager {
     if (label != null) {
       final padding = (dividerLength - label.length - 4) ~/ 2;
       final leftPadding = dividerChar * padding;
-      final rightPadding = dividerChar * (dividerLength - padding - label.length - 4);
+      final rightPadding =
+          dividerChar * (dividerLength - padding - label.length - 4);
       logWithCustomColor(
         "$leftPadding $label $rightPadding",
         source: source,
@@ -325,20 +326,26 @@ class LogManager {
   }
 
   /// Export logs as a formatted string
-  static String exportLogs({LogLevel? level, String? source, bool useColors = false}) {
+  static String exportLogs(
+      {LogLevel? level, String? source, bool useColors = false}) {
     final logsToExport = getLogs(level: level, source: source);
-    return logsToExport.map((entry) => entry.toString(useColors: useColors)).join('\n');
+    return logsToExport
+        .map((entry) => entry.toString(useColors: useColors))
+        .join('\n');
   }
 
   /// Export logs as JSON
   static String exportLogsAsJson({LogLevel? level, String? source}) {
     final logsToExport = getLogs(level: level, source: source);
-    return logsToExport.map((entry) => {
-      'timestamp': entry.timestamp.toIso8601String(),
-      'level': entry.level.name,
-      'message': entry.message,
-      'source': entry.source,
-    }).toList().toString();
+    return logsToExport
+        .map((entry) => {
+              'timestamp': entry.timestamp.toIso8601String(),
+              'level': entry.level.name,
+              'message': entry.message,
+              'source': entry.source,
+            })
+        .toList()
+        .toString();
   }
 
   /// Get log statistics
@@ -402,23 +409,33 @@ class LogManager {
   }
 
   /// Profile management specific logging methods
-  static void logProfileCreated(String profileName, String profileId, {String? source}) {
-    success("Profile created: '$profileName' (ID: $profileId)", source: source ?? 'ProfileManager');
+  static void logProfileCreated(String profileName, String profileId,
+      {String? source}) {
+    success("Profile created: '$profileName' (ID: $profileId)",
+        source: source ?? 'ProfileManager');
   }
 
-  static void logProfileSwitched(String fromProfile, String toProfile, {String? source}) {
-    info("Profile switched: '$fromProfile' → '$toProfile'", source: source ?? 'ProfileManager');
+  static void logProfileSwitched(String fromProfile, String toProfile,
+      {String? source}) {
+    info("Profile switched: '$fromProfile' → '$toProfile'",
+        source: source ?? 'ProfileManager');
   }
 
-  static void logProfileDeleted(String profileName, String profileId, {String? source}) {
-    warning("Profile deleted: '$profileName' (ID: $profileId)", source: source ?? 'ProfileManager');
+  static void logProfileDeleted(String profileName, String profileId,
+      {String? source}) {
+    warning("Profile deleted: '$profileName' (ID: $profileId)",
+        source: source ?? 'ProfileManager');
   }
 
-  static void logProfileError(String operation, String error, {String? source}) {
-    LogManager.error("Profile $operation failed: $error", source: source ?? 'ProfileManager');
+  static void logProfileError(String operation, String error,
+      {String? source}) {
+    LogManager.error("Profile $operation failed: $error",
+        source: source ?? 'ProfileManager');
   }
 
-  static void logProfileValidation(String profileName, String issue, {String? source}) {
-    warning("Profile validation issue for '$profileName': $issue", source: source ?? 'ProfileManager');
+  static void logProfileValidation(String profileName, String issue,
+      {String? source}) {
+    warning("Profile validation issue for '$profileName': $issue",
+        source: source ?? 'ProfileManager');
   }
 }

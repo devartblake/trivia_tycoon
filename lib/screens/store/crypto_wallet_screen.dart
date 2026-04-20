@@ -121,17 +121,17 @@ class _CryptoWalletScreenState extends ConsumerState<CryptoWalletScreen> {
               ),
               const SizedBox(width: 12),
               Expanded(
-              child: stakingAsync.when(
-                data: (staking) => _MetricCard(
-                  title: 'Staked',
-                  value: '${staking.stakedUnits}',
-                  subtitle: _networkSubtitle(
-                    historyAsync.valueOrNull?.items,
-                    fallback: 'Locked units',
+                child: stakingAsync.when(
+                  data: (staking) => _MetricCard(
+                    title: 'Staked',
+                    value: '${staking.stakedUnits}',
+                    subtitle: _networkSubtitle(
+                      historyAsync.valueOrNull?.items,
+                      fallback: 'Locked units',
+                    ),
+                    icon: Icons.lock_rounded,
+                    accent: const Color(0xFF8B5CF6),
                   ),
-                  icon: Icons.lock_rounded,
-                  accent: const Color(0xFF8B5CF6),
-                ),
                   loading: () => const _LoadingCard(height: 138),
                   error: (error, _) => _MetricErrorCard(
                     title: 'Staked',
@@ -173,13 +173,17 @@ class _CryptoWalletScreenState extends ConsumerState<CryptoWalletScreen> {
               },
               onPreviousPage: historyQuery.page > 1
                   ? () {
-                      ref.read(currentUserCryptoHistoryQueryProvider.notifier).state =
+                      ref
+                              .read(currentUserCryptoHistoryQueryProvider.notifier)
+                              .state =
                           historyQuery.copyWith(page: historyQuery.page - 1);
                     }
                   : null,
               onNextPage: historyQuery.page < history.totalPages
                   ? () {
-                      ref.read(currentUserCryptoHistoryQueryProvider.notifier).state =
+                      ref
+                              .read(currentUserCryptoHistoryQueryProvider.notifier)
+                              .state =
                           historyQuery.copyWith(page: historyQuery.page + 1);
                     }
                   : null,
@@ -205,8 +209,8 @@ class _CryptoWalletScreenState extends ConsumerState<CryptoWalletScreen> {
 
   void _syncHistoryPolling(bool shouldPoll) {
     if (shouldPoll) {
-      _historyPollingTimer ??=
-          Timer.periodic(const Duration(seconds: 15), (_) => _refreshWalletData());
+      _historyPollingTimer ??= Timer.periodic(
+          const Duration(seconds: 15), (_) => _refreshWalletData());
       return;
     }
 
@@ -379,8 +383,7 @@ class _LinkWalletSheetState extends ConsumerState<_LinkWalletSheet> {
                       height: 18,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(Colors.white),
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                       ),
                     )
                   : const Icon(Icons.link_rounded),
@@ -441,12 +444,12 @@ class _LinkWalletSheetState extends ConsumerState<_LinkWalletSheet> {
 
     try {
       await ref.read(linkWalletProvider)(
-            CryptoLinkWalletRequest(
-              playerId: widget.playerId,
-              walletAddress: address,
-              network: _network,
-            ),
-          );
+        CryptoLinkWalletRequest(
+          playerId: widget.playerId,
+          walletAddress: address,
+          network: _network,
+        ),
+      );
 
       if (!mounted) return;
       context.pop();
@@ -492,7 +495,8 @@ class _WithdrawSheetState extends ConsumerState<_WithdrawSheet> {
   void initState() {
     super.initState();
     _network = widget.initialNetwork;
-    _addressController = TextEditingController(text: widget.initialAddress ?? '');
+    _addressController =
+        TextEditingController(text: widget.initialAddress ?? '');
   }
 
   @override
@@ -600,8 +604,7 @@ class _WithdrawSheetState extends ConsumerState<_WithdrawSheet> {
                       height: 18,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(Colors.white),
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                       ),
                     )
                   : const Icon(Icons.north_east_rounded),
@@ -672,19 +675,20 @@ class _WithdrawSheetState extends ConsumerState<_WithdrawSheet> {
 
     try {
       await ref.read(withdrawCryptoProvider)(
-            CryptoWithdrawRequest(
-              playerId: widget.playerId,
-              units: units,
-              toWalletAddress: address,
-              network: _network,
-            ),
-          );
+        CryptoWithdrawRequest(
+          playerId: widget.playerId,
+          units: units,
+          toWalletAddress: address,
+          network: _network,
+        ),
+      );
 
       if (!mounted) return;
       context.pop();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Withdrawal requested. Status will remain pending until settled.'),
+          content: Text(
+              'Withdrawal requested. Status will remain pending until settled.'),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -1030,7 +1034,8 @@ class _TransactionHistorySection extends StatelessWidget {
     if (history.items.isEmpty) {
       return const _InfoCard(
         title: 'No crypto activity yet',
-        subtitle: 'Your wallet history will appear here after linking, staking, or withdrawing.',
+        subtitle:
+            'Your wallet history will appear here after linking, staking, or withdrawing.',
         icon: Icons.receipt_long_rounded,
         accent: Color(0xFF334155),
       );
@@ -1075,7 +1080,9 @@ class _TransactionHistorySection extends StatelessWidget {
               ),
             ),
           const SizedBox(height: 14),
-          ...history.items.take(query.pageSize >= 100 ? history.items.length : 6).map(
+          ...history.items
+              .take(query.pageSize >= 100 ? history.items.length : 6)
+              .map(
                 _TransactionHistoryTile.new,
               ),
           if (history.totalPages > 1) ...[
@@ -1088,7 +1095,8 @@ class _TransactionHistorySection extends StatelessWidget {
                   label: const Text('Previous'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: Colors.white,
-                    side: BorderSide(color: Colors.white.withValues(alpha: 0.18)),
+                    side:
+                        BorderSide(color: Colors.white.withValues(alpha: 0.18)),
                   ),
                 ),
                 const Spacer(),
@@ -1106,7 +1114,8 @@ class _TransactionHistorySection extends StatelessWidget {
                   label: const Text('Next'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: Colors.white,
-                    side: BorderSide(color: Colors.white.withValues(alpha: 0.18)),
+                    side:
+                        BorderSide(color: Colors.white.withValues(alpha: 0.18)),
                   ),
                 ),
               ],
@@ -1201,9 +1210,7 @@ class _TransactionHistoryTile extends StatelessWidget {
           Text(
             '${isPositive ? '+' : ''}${item.unitsDelta}',
             style: TextStyle(
-              color: isPositive
-                  ? const Color(0xFF10B981)
-                  : Colors.white,
+              color: isPositive ? const Color(0xFF10B981) : Colors.white,
               fontSize: 16,
               fontWeight: FontWeight.w800,
             ),
@@ -1244,7 +1251,8 @@ String _friendlyCryptoErrorMessage(Object error) {
       case 'WALLET_NOT_LINKED':
         return 'Link a wallet first before requesting a withdrawal.';
       case 'MIN_WITHDRAWAL':
-        final minimum = error.details['minimumUnits'] ?? error.details['minUnits'];
+        final minimum =
+            error.details['minimumUnits'] ?? error.details['minUnits'];
         if (minimum != null) {
           return 'Minimum withdrawal is $minimum units.';
         }

@@ -46,7 +46,8 @@ class SkillSearchProvider implements SearchProvider {
               icon: _getSkillIcon(branch.branchId),
               color: group.accent,
               navigationRoute: '/skill-tree/${branch.branchId}',
-              relevanceScore: _calculateRelevance(queryLower, title, description),
+              relevanceScore:
+                  _calculateRelevance(queryLower, title, description),
               metadata: {
                 'unlocked': nodeMap['unlocked'] ?? false,
                 'cost': nodeMap['cost'] ?? 0,
@@ -65,11 +66,15 @@ class SkillSearchProvider implements SearchProvider {
   IconData _getSkillIcon(String branchId) {
     // Implementation matches your existing _getBranchIcon method
     switch (branchId.toLowerCase()) {
-      case 'scholar': return Icons.school;
-      case 'strategist': return Icons.psychology;
-      case 'combat': return Icons.local_fire_department;
-    // ... other cases
-      default: return Icons.account_tree;
+      case 'scholar':
+        return Icons.school;
+      case 'strategist':
+        return Icons.psychology;
+      case 'combat':
+        return Icons.local_fire_department;
+      // ... other cases
+      default:
+        return Icons.account_tree;
     }
   }
 
@@ -83,11 +88,14 @@ class SkillSearchProvider implements SearchProvider {
     final titleLower = title.toLowerCase();
     final descLower = description.toLowerCase();
 
-    if (titleLower == query) score += 100;
-    else if (titleLower.startsWith(query)) score += 80;
+    if (titleLower == query)
+      score += 100;
+    else if (titleLower.startsWith(query))
+      score += 80;
     else if (titleLower.contains(query)) score += 60;
 
-    if (descLower.startsWith(query)) score += 40;
+    if (descLower.startsWith(query))
+      score += 40;
     else if (descLower.contains(query)) score += 20;
 
     return score;
@@ -166,8 +174,10 @@ class NavigationSearchProvider implements SearchProvider {
     int score = 0;
     final titleLower = title.toLowerCase();
 
-    if (titleLower == query) score += 100;
-    else if (titleLower.startsWith(query)) score += 80;
+    if (titleLower == query)
+      score += 100;
+    else if (titleLower.startsWith(query))
+      score += 80;
     else if (titleLower.contains(query)) score += 60;
 
     return score;

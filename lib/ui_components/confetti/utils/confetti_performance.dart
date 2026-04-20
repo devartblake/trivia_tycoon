@@ -17,7 +17,7 @@ class ConfettiPerformance extends ChangeNotifier {
   void startTracking() {
     _frameCount = 0;
     _fps = 60.0;
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer){
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       _fps = _frameCount.toDouble();
       _memoryUsage = _getMemoryUsage();
       _frameCount = 0;
@@ -33,7 +33,7 @@ class ConfettiPerformance extends ChangeNotifier {
   }
 
   void _trackFrames() {
-    WidgetsBinding.instance.addPostFrameCallback((_){
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _frameCount++;
       _trackFrames();
     });

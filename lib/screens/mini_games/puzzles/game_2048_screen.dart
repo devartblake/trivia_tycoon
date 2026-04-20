@@ -143,33 +143,33 @@ class _Game2048ScreenState extends State<Game2048Screen> {
               'Keep playing after reaching 2048 to achieve higher scores.',
               'The game ends when no more moves are possible.',
             ].map((text) => Padding(
-              padding: const EdgeInsets.only(bottom: 12.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(top: 2),
-                    width: 6,
-                    height: 6,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF6366F1),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      text,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        height: 1.5,
-                        color: Color(0xFF475569),
+                  padding: const EdgeInsets.only(bottom: 12.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(top: 2),
+                        width: 6,
+                        height: 6,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF6366F1),
+                          shape: BoxShape.circle,
+                        ),
                       ),
-                    ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          text,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            height: 1.5,
+                            color: Color(0xFF475569),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            )),
+                )),
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
@@ -215,7 +215,8 @@ class _Game2048ScreenState extends State<Game2048Screen> {
               return Center(
                 child: Container(
                   margin: const EdgeInsets.only(right: 8),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(20),
@@ -263,19 +264,23 @@ class _Game2048ScreenState extends State<Game2048Screen> {
                       GestureDetector(
                         onTap: _showHowToPlay,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 10),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF6366F1).withValues(alpha: 0.1),
+                            color:
+                                const Color(0xFF6366F1).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: const Color(0xFF6366F1).withValues(alpha: 0.3),
+                              color: const Color(0xFF6366F1)
+                                  .withValues(alpha: 0.3),
                               width: 1,
                             ),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: const [
-                              Icon(Icons.lightbulb_outline, color: Color(0xFF6366F1), size: 20),
+                              Icon(Icons.lightbulb_outline,
+                                  color: Color(0xFF6366F1), size: 20),
                               SizedBox(width: 8),
                               Text(
                                 'How to Play',
@@ -296,9 +301,11 @@ class _Game2048ScreenState extends State<Game2048Screen> {
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              _buildScoreCard('Score', _gameController.score, const Color(0xFF6366F1)),
+                              _buildScoreCard('Score', _gameController.score,
+                                  const Color(0xFF6366F1)),
                               const SizedBox(width: 16),
-                              _buildScoreCard('Best', _gameController.bestScore, const Color(0xFFFFD700)),
+                              _buildScoreCard('Best', _gameController.bestScore,
+                                  const Color(0xFFFFD700)),
                             ],
                           );
                         },
@@ -310,14 +317,18 @@ class _Game2048ScreenState extends State<Game2048Screen> {
                         listenable: _gameController,
                         builder: (context, _) {
                           return ElevatedButton.icon(
-                            onPressed: _gameController.canUndo ? _gameController.undo : null,
+                            onPressed: _gameController.canUndo
+                                ? _gameController.undo
+                                : null,
                             icon: const Icon(Icons.undo, size: 18),
                             label: const Text('Undo'),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFFE0DDD9),
                               foregroundColor: const Color(0xFF4A4A4A),
-                              disabledBackgroundColor: const Color(0xFFE0DDD9).withValues(alpha: 0.5),
-                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                              disabledBackgroundColor: const Color(0xFFE0DDD9)
+                                  .withValues(alpha: 0.5),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 14),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -480,7 +491,11 @@ class GameController extends ChangeNotifier {
       }
 
       final mergeTarget = tiles.firstWhere(
-            (t) => t.x == target.x && t.y == target.y && t != tile && !merged.contains(t.id),
+        (t) =>
+            t.x == target.x &&
+            t.y == target.y &&
+            t != tile &&
+            !merged.contains(t.id),
         orElse: () => tile,
       );
 
@@ -539,7 +554,8 @@ class GameController extends ChangeNotifier {
     }
   }
 
-  Point<int> _getTargetPosition(Tile tile, SwipeDirection direction, Set<String> merged) {
+  Point<int> _getTargetPosition(
+      Tile tile, SwipeDirection direction, Set<String> merged) {
     int x = tile.x;
     int y = tile.y;
 
@@ -566,12 +582,12 @@ class GameController extends ChangeNotifier {
         break;
       }
 
-      final blocked = tiles.any((t) =>
-      t.x == nextX && t.y == nextY && t != tile && !t.removed
-      );
+      final blocked = tiles
+          .any((t) => t.x == nextX && t.y == nextY && t != tile && !t.removed);
 
       if (blocked) {
-        final blocker = tiles.firstWhere((t) => t.x == nextX && t.y == nextY && t != tile);
+        final blocker =
+            tiles.firstWhere((t) => t.x == nextX && t.y == nextY && t != tile);
         if (blocker.value == tile.value && !merged.contains(blocker.id)) {
           return Point(nextX, nextY);
         }
@@ -612,12 +628,14 @@ class GameController extends ChangeNotifier {
 
   void _saveSnapshot() {
     _history.add(GameSnapshot(
-      tiles: tiles.map((t) => Tile(
-        id: t.id,
-        value: t.value,
-        x: t.x,
-        y: t.y,
-      )).toList(),
+      tiles: tiles
+          .map((t) => Tile(
+                id: t.id,
+                value: t.value,
+                x: t.x,
+                y: t.y,
+              ))
+          .toList(),
       score: score,
     ));
   }
@@ -649,9 +667,11 @@ class GameBoard extends StatelessWidget {
       onPanEnd: (details) {
         final velocity = details.velocity.pixelsPerSecond;
         if (velocity.dx.abs() > velocity.dy.abs()) {
-          controller.move(velocity.dx > 0 ? SwipeDirection.right : SwipeDirection.left);
+          controller.move(
+              velocity.dx > 0 ? SwipeDirection.right : SwipeDirection.left);
         } else {
-          controller.move(velocity.dy > 0 ? SwipeDirection.down : SwipeDirection.up);
+          controller
+              .move(velocity.dy > 0 ? SwipeDirection.down : SwipeDirection.up);
         }
       },
       child: Container(
@@ -673,7 +693,8 @@ class GameBoard extends StatelessWidget {
                     // Background grid
                     GridView.builder(
                       physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 4,
                         crossAxisSpacing: 8,
                         mainAxisSpacing: 8,
@@ -732,18 +753,30 @@ class TileWidget extends StatelessWidget {
 
   Color _getTileColor(int value) {
     switch (value) {
-      case 2: return const Color(0xFFEEE4DA);
-      case 4: return const Color(0xFFEDE0C8);
-      case 8: return const Color(0xFFF2B179);
-      case 16: return const Color(0xFFF59563);
-      case 32: return const Color(0xFFF67C5F);
-      case 64: return const Color(0xFFF65E3B);
-      case 128: return const Color(0xFFEDCF72);
-      case 256: return const Color(0xFFEDCC61);
-      case 512: return const Color(0xFFEDC850);
-      case 1024: return const Color(0xFFEDC53F);
-      case 2048: return const Color(0xFFEDC22E);
-      default: return const Color(0xFF3C3A32);
+      case 2:
+        return const Color(0xFFEEE4DA);
+      case 4:
+        return const Color(0xFFEDE0C8);
+      case 8:
+        return const Color(0xFFF2B179);
+      case 16:
+        return const Color(0xFFF59563);
+      case 32:
+        return const Color(0xFFF67C5F);
+      case 64:
+        return const Color(0xFFF65E3B);
+      case 128:
+        return const Color(0xFFEDCF72);
+      case 256:
+        return const Color(0xFFEDCC61);
+      case 512:
+        return const Color(0xFFEDC850);
+      case 1024:
+        return const Color(0xFFEDC53F);
+      case 2048:
+        return const Color(0xFFEDC22E);
+      default:
+        return const Color(0xFF3C3A32);
     }
   }
 
@@ -760,19 +793,25 @@ class TileWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: _getTileColor(tile.value),
           borderRadius: BorderRadius.circular(8),
-          boxShadow: tile.merged ? [
-            BoxShadow(
-              color: _getTileColor(tile.value).withValues(alpha: 0.5),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ] : null,
+          boxShadow: tile.merged
+              ? [
+                  BoxShadow(
+                    color: _getTileColor(tile.value).withValues(alpha: 0.5),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
+              : null,
         ),
         child: Center(
           child: Text(
             '${tile.value}',
             style: TextStyle(
-              fontSize: tile.value < 100 ? 32 : tile.value < 1000 ? 28 : 24,
+              fontSize: tile.value < 100
+                  ? 32
+                  : tile.value < 1000
+                      ? 28
+                      : 24,
               fontWeight: FontWeight.bold,
               color: _getTextColor(tile.value),
             ),

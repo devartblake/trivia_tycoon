@@ -146,7 +146,9 @@ class RewardSettingsService {
 
     final box = await Hive.openBox(_settingsBox);
     final raw = box.get('lastJackpotWin');
-    _cachedJackpotTime = raw != null ? DateTime.parse(raw) : DateTime.fromMillisecondsSinceEpoch(0);
+    _cachedJackpotTime = raw != null
+        ? DateTime.parse(raw)
+        : DateTime.fromMillisecondsSinceEpoch(0);
     _lastCacheUpdate = DateTime.now();
     return _cachedJackpotTime!;
   }
@@ -260,7 +262,8 @@ class RewardSettingsService {
     if (lastReward == null) return true;
 
     final now = DateTime.now();
-    final lastRewardDate = DateTime(lastReward.year, lastReward.month, lastReward.day);
+    final lastRewardDate =
+        DateTime(lastReward.year, lastReward.month, lastReward.day);
     final currentDate = DateTime(now.year, now.month, now.day);
 
     return currentDate.isAfter(lastRewardDate);
@@ -347,7 +350,9 @@ class RewardSettingsService {
 
       // Validate exclusive currency
       final exclusiveCurrency = box.get('exclusiveCurrency');
-      if (exclusiveCurrency == null || exclusiveCurrency is! int || exclusiveCurrency < 0) {
+      if (exclusiveCurrency == null ||
+          exclusiveCurrency is! int ||
+          exclusiveCurrency < 0) {
         await box.put('exclusiveCurrency', 0);
         _cachedExclusiveCurrency = 0;
         needsRepair = true;
@@ -355,7 +360,9 @@ class RewardSettingsService {
 
       // Validate regular currency
       final regularCurrency = box.get('regularCurrency');
-      if (regularCurrency == null || regularCurrency is! int || regularCurrency < 0) {
+      if (regularCurrency == null ||
+          regularCurrency is! int ||
+          regularCurrency < 0) {
         await box.put('regularCurrency', 0);
         needsRepair = true;
       }
@@ -373,7 +380,8 @@ class RewardSettingsService {
         try {
           DateTime.parse(jackpotTime);
         } catch (e) {
-          await box.put('lastJackpotWin', DateTime.fromMillisecondsSinceEpoch(0).toIso8601String());
+          await box.put('lastJackpotWin',
+              DateTime.fromMillisecondsSinceEpoch(0).toIso8601String());
           _cachedJackpotTime = DateTime.fromMillisecondsSinceEpoch(0);
           needsRepair = true;
         }
@@ -419,7 +427,8 @@ class RewardSettingsService {
       final inventory = box.get(_inventoryKey, defaultValue: [])!;
 
       // Remove any null or invalid entries
-      final validInventory = inventory.where((item) => item.isNotEmpty).toList();
+      final validInventory =
+          inventory.where((item) => item.isNotEmpty).toList();
 
       if (validInventory.length != inventory.length) {
         await box.put(_inventoryKey, validInventory);
@@ -454,7 +463,8 @@ class RewardSettingsService {
       await box.put('exclusiveCurrency', 0);
       await box.put('regularCurrency', 0);
       await box.put('totalScore', 0);
-      await box.put('lastJackpotWin', DateTime.fromMillisecondsSinceEpoch(0).toIso8601String());
+      await box.put('lastJackpotWin',
+          DateTime.fromMillisecondsSinceEpoch(0).toIso8601String());
       await box.delete('lastDailyReward');
 
       _cachedWinStreak = 0;
@@ -520,8 +530,16 @@ class RewardSettingsService {
     final storeBox = await Hive.openBox<List<String>>(_storeDataBox);
 
     // Clear reward-related keys from settings
-    final rewardKeys = ['winStreak', 'exclusiveCurrency', 'regularCurrency', 'totalScore',
-      'lastJackpotWin', 'lastDailyReward', _rewardStateKey, _lastRewardUpdateKey];
+    final rewardKeys = [
+      'winStreak',
+      'exclusiveCurrency',
+      'regularCurrency',
+      'totalScore',
+      'lastJackpotWin',
+      'lastDailyReward',
+      _rewardStateKey,
+      _lastRewardUpdateKey
+    ];
 
     for (final key in rewardKeys) {
       await settingsBox.delete(key);

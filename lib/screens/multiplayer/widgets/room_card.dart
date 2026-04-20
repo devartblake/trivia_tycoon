@@ -56,9 +56,7 @@ class RoomCard extends StatelessWidget {
           ),
         ],
         border: Border.all(
-          color: isDark
-              ? Colors.grey.shade800
-              : Colors.grey.shade200,
+          color: isDark ? Colors.grey.shade800 : Colors.grey.shade200,
           width: 1,
         ),
       ),
@@ -98,21 +96,26 @@ class RoomCard extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: isDark ? Colors.white : const Color(0xFF1E293B),
+                              color: isDark
+                                  ? Colors.white
+                                  : const Color(0xFF1E293B),
                             ),
                           ),
                           Text(
                             'ID: $id',
                             style: TextStyle(
                               fontSize: 12,
-                              color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+                              color: isDark
+                                  ? Colors.grey.shade400
+                                  : Colors.grey.shade600,
                             ),
                           ),
                         ],
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
                         color: statusInfo.$2.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
@@ -229,13 +232,21 @@ class RoomCard extends StatelessWidget {
   (String, Color, IconData) _getStatusInfo(String? status) {
     switch (status?.toLowerCase()) {
       case 'waiting':
-        return ('Waiting', const Color(0xFF10B981), Icons.hourglass_empty_rounded);
+        return (
+          'Waiting',
+          const Color(0xFF10B981),
+          Icons.hourglass_empty_rounded
+        );
       case 'in_game':
         return ('In Game', const Color(0xFFF59E0B), Icons.play_circle_rounded);
       case 'full':
         return ('Full', const Color(0xFFEF4444), Icons.block_rounded);
       default:
-        return ('Available', const Color(0xFF10B981), Icons.check_circle_rounded);
+        return (
+          'Available',
+          const Color(0xFF10B981),
+          Icons.check_circle_rounded
+        );
     }
   }
 }

@@ -114,7 +114,8 @@ void main() {
 
     test('all cards start face-down and unmatched', () {
       final c = _ctrl();
-      expect(c.state.cards.every((card) => !card.isFaceUp && !card.isMatched), isTrue);
+      expect(c.state.cards.every((card) => !card.isFaceUp && !card.isMatched),
+          isTrue);
       c.dispose();
     });
 
@@ -321,7 +322,8 @@ void main() {
       c.dispose();
     });
 
-    test('returns "ignored" when flipping a card that is face-up (same card)', () async {
+    test('returns "ignored" when flipping a card that is face-up (same card)',
+        () async {
       final c = _ctrl();
       await c.flip(0, (_) {}); // first flip
       expect(await c.flip(0, (_) {}), 'ignored');
@@ -382,7 +384,9 @@ void main() {
       c.dispose();
     });
 
-    test('metadata contains pairsMatched, totalPairs, moves, misses, completion, hitRate', () async {
+    test(
+        'metadata contains pairsMatched, totalPairs, moves, misses, completion, hitRate',
+        () async {
       final c = _ctrl();
       final pair = findMatchingPair(c.state.cards);
       await c.flip(pair[0], (_) {});

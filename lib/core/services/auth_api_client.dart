@@ -39,10 +39,11 @@ class AuthApiClient {
   final String _apiBaseUrl;
   final DeviceIdService _deviceId;
 
-  AuthApiClient(this._http, {required String apiBaseUrl, required DeviceIdService deviceId})
+  AuthApiClient(this._http,
+      {required String apiBaseUrl, required DeviceIdService deviceId})
       : _apiBaseUrl = apiBaseUrl.endsWith('/')
-      ? apiBaseUrl.substring(0, apiBaseUrl.length - 1)
-      : apiBaseUrl,
+            ? apiBaseUrl.substring(0, apiBaseUrl.length - 1)
+            : apiBaseUrl,
         _deviceId = deviceId;
 
   Uri _u(String path) => Uri.parse('$_apiBaseUrl$path');
@@ -110,7 +111,8 @@ class AuthApiClient {
 
     if (response.statusCode == 401) {
       throw AuthApiException(
-        message: _extractErrorMessage(response, fallback: 'Invalid credentials'),
+        message:
+            _extractErrorMessage(response, fallback: 'Invalid credentials'),
         statusCode: response.statusCode,
         path: loginPath,
         method: 'POST',
@@ -230,8 +232,10 @@ class AuthApiClient {
       if (user.containsKey('role')) metadata['role'] = user['role'];
       if (user.containsKey('roles')) metadata['roles'] = user['roles'];
       if (user.containsKey('tier')) metadata['tier'] = user['tier'];
-      if (user.containsKey('isPremium')) metadata['isPremium'] = user['isPremium'];
-      if (user.containsKey('is_premium')) metadata['is_premium'] = user['is_premium'];
+      if (user.containsKey('isPremium'))
+        metadata['isPremium'] = user['isPremium'];
+      if (user.containsKey('is_premium'))
+        metadata['is_premium'] = user['is_premium'];
       if (user.containsKey('premium')) metadata['premium'] = user['premium'];
       if (user.containsKey('subscriptionStatus')) {
         metadata['subscriptionStatus'] = user['subscriptionStatus'];
@@ -245,8 +249,10 @@ class AuthApiClient {
     if (response.containsKey('role')) metadata['role'] = response['role'];
     if (response.containsKey('roles')) metadata['roles'] = response['roles'];
     if (response.containsKey('tier')) metadata['tier'] = response['tier'];
-    if (response.containsKey('isPremium')) metadata['isPremium'] = response['isPremium'];
-    if (response.containsKey('is_premium')) metadata['is_premium'] = response['is_premium'];
+    if (response.containsKey('isPremium'))
+      metadata['isPremium'] = response['isPremium'];
+    if (response.containsKey('is_premium'))
+      metadata['is_premium'] = response['is_premium'];
 
     return metadata;
   }
@@ -403,7 +409,6 @@ class AuthApiClient {
     return raw.isEmpty ? null : raw;
   }
 
-
   Map<String, dynamic> _decodeBodyMap(String body, {required String context}) {
     final parsed = _tryDecodeBodyMap(body);
     if (parsed != null) return parsed;
@@ -423,7 +428,8 @@ class AuthApiClient {
     }
   }
 
-  String _extractErrorMessage(http.Response response, {required String fallback}) {
+  String _extractErrorMessage(http.Response response,
+      {required String fallback}) {
     final parsed = _tryDecodeBodyMap(response.body);
     if (parsed != null) {
       final nestedError = _asJsonMap(parsed['error']);
@@ -432,7 +438,10 @@ class AuthApiClient {
         return nestedMessage;
       }
 
-      final dynamic message = parsed['message'] ?? parsed['error'] ?? parsed['detail'] ?? parsed['title'];
+      final dynamic message = parsed['message'] ??
+          parsed['error'] ??
+          parsed['detail'] ??
+          parsed['title'];
       if (message is String && message.trim().isNotEmpty) {
         return message.trim();
       }
@@ -480,13 +489,15 @@ class AuthApiClient {
     }
 
     // Or expiresAtUtc as ISO string
-    final expiresRaw = json['expiresAtUtc'] ?? json['expires_at'] ?? json['expiresAt'];
+    final expiresRaw =
+        json['expiresAtUtc'] ?? json['expires_at'] ?? json['expiresAt'];
     if (expiresRaw is String && expiresRaw.isNotEmpty) {
       expiresAtUtc = DateTime.tryParse(expiresRaw)?.toUtc();
     } else if (expiresRaw is int) {
       // If backend returns epoch seconds or ms, adapt here if needed.
       // Assuming ms:
-      expiresAtUtc = DateTime.fromMillisecondsSinceEpoch(expiresRaw, isUtc: true);
+      expiresAtUtc =
+          DateTime.fromMillisecondsSinceEpoch(expiresRaw, isUtc: true);
     }
 
     if (access.isEmpty || refresh.isEmpty) {

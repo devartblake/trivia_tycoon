@@ -248,7 +248,8 @@ class GroupChatService extends ChangeNotifier {
 
   // Getters
   Map<String, GroupChat> get allGroups => Map.unmodifiable(_groups);
-  List<GroupChat> get activeGroups => _groups.values.where((g) => g.isActive).toList();
+  List<GroupChat> get activeGroups =>
+      _groups.values.where((g) => g.isActive).toList();
 
   void initialize() {
     _startPresenceUpdates();
@@ -330,7 +331,8 @@ class GroupChatService extends ChangeNotifier {
     return group;
   }
 
-  Future<bool> joinGroup(String groupId, String userId, String displayName) async {
+  Future<bool> joinGroup(
+      String groupId, String userId, String displayName) async {
     final group = _groups[groupId];
     if (group == null || !group.isActive) return false;
 
@@ -354,7 +356,8 @@ class GroupChatService extends ChangeNotifier {
       isOnline: true,
     );
 
-    final updatedMembers = List<GroupMember>.from(group.members)..add(newMember);
+    final updatedMembers = List<GroupMember>.from(group.members)
+      ..add(newMember);
 
     _groups[groupId] = group.copyWith(
       members: updatedMembers,
@@ -378,7 +381,8 @@ class GroupChatService extends ChangeNotifier {
 
     // If owner is leaving, transfer ownership or delete group
     if (member.role == GroupRole.owner) {
-      final admins = group.members.where((m) => m.role == GroupRole.admin).toList();
+      final admins =
+          group.members.where((m) => m.role == GroupRole.admin).toList();
       if (admins.isNotEmpty) {
         // Transfer ownership to first admin
         final newOwner = admins.first.copyWith(role: GroupRole.owner);
@@ -398,9 +402,8 @@ class GroupChatService extends ChangeNotifier {
       }
     } else {
       // Regular member leaving
-      final updatedMembers = group.members
-          .where((m) => m.userId != userId)
-          .toList();
+      final updatedMembers =
+          group.members.where((m) => m.userId != userId).toList();
 
       _groups[groupId] = group.copyWith(
         members: updatedMembers,
@@ -437,11 +440,11 @@ class GroupChatService extends ChangeNotifier {
 
   // Member management
   Future<bool> updateMemberRole(
-      String groupId,
-      String targetUserId,
-      GroupRole newRole,
-      String requesterId,
-      ) async {
+    String groupId,
+    String targetUserId,
+    GroupRole newRole,
+    String requesterId,
+  ) async {
     final group = _groups[groupId];
     if (group == null) return false;
 
@@ -464,7 +467,8 @@ class GroupChatService extends ChangeNotifier {
       lastActivity: DateTime.now(),
     );
 
-    LogManager.debug('Updated ${targetMember.displayName} role to ${newRole.displayName}');
+    LogManager.debug(
+        'Updated ${targetMember.displayName} role to ${newRole.displayName}');
     notifyListeners();
     _broadcastGroupUpdate(groupId);
     _broadcastMemberUpdate(groupId);
@@ -473,10 +477,10 @@ class GroupChatService extends ChangeNotifier {
   }
 
   Future<bool> kickMember(
-      String groupId,
-      String targetUserId,
-      String requesterId,
-      ) async {
+    String groupId,
+    String targetUserId,
+    String requesterId,
+  ) async {
     final group = _groups[groupId];
     if (group == null) return false;
 
@@ -486,7 +490,8 @@ class GroupChatService extends ChangeNotifier {
     if (requester == null || targetMember == null) return false;
     if (!requester.role.canManageMembers) return false;
     if (targetMember.role == GroupRole.owner) return false;
-    if (targetMember.role.index <= requester.role.index && requester.role != GroupRole.owner) {
+    if (targetMember.role.index <= requester.role.index &&
+        requester.role != GroupRole.owner) {
       return false; // Can't kick someone with equal or higher role
     }
 
@@ -527,7 +532,7 @@ class GroupChatService extends ChangeNotifier {
   void _startPresenceUpdates() {
     _presenceUpdateTimer = Timer.periodic(
       const Duration(seconds: 30),
-          (_) => _cleanupInactiveGroups(),
+      (_) => _cleanupInactiveGroups(),
     );
   }
 
@@ -569,9 +574,9 @@ class GroupChatService extends ChangeNotifier {
   List<GroupChat> getActiveGameSessions() {
     return _groups.values
         .where((group) =>
-    group.type == GroupType.gameSession &&
-        group.isActive &&
-        group.onlineMemberCount > 0)
+            group.type == GroupType.gameSession &&
+            group.isActive &&
+            group.onlineMemberCount > 0)
         .toList()
       ..sort((a, b) => b.onlineMemberCount.compareTo(a.onlineMemberCount));
   }
@@ -580,9 +585,7 @@ class GroupChatService extends ChangeNotifier {
     if (!_allowPublicGroups) return [];
 
     return _groups.values
-        .where((group) =>
-    group.type == GroupType.publicGroup &&
-        group.isActive)
+        .where((group) => group.type == GroupType.publicGroup && group.isActive)
         .toList()
       ..sort((a, b) => b.memberCount.compareTo(a.memberCount));
   }
@@ -591,8 +594,8 @@ class GroupChatService extends ChangeNotifier {
     final lowerQuery = query.toLowerCase();
     return _groups.values
         .where((group) =>
-    group.name.toLowerCase().contains(lowerQuery) ||
-        (group.description?.toLowerCase().contains(lowerQuery) ?? false))
+            group.name.toLowerCase().contains(lowerQuery) ||
+            (group.description?.toLowerCase().contains(lowerQuery) ?? false))
         .toList()
       ..sort((a, b) => b.lastActivity.compareTo(a.lastActivity));
   }
@@ -665,10 +668,10 @@ class GroupChatService extends ChangeNotifier {
 
   // Invite system (placeholder for future implementation)
   Future<bool> inviteToGroup(
-      String groupId,
-      String targetUserId,
-      String inviterId,
-      ) async {
+    String groupId,
+    String targetUserId,
+    String inviterId,
+  ) async {
     final group = _groups[groupId];
     if (group == null) return false;
 
@@ -676,7 +679,8 @@ class GroupChatService extends ChangeNotifier {
     if (inviter == null || !inviter.role.canManageMembers) return false;
 
     // In a real app, this would create an invitation that the user can accept/decline
-    LogManager.debug('Invitation sent to $targetUserId for group ${group.name}');
+    LogManager.debug(
+        'Invitation sent to $targetUserId for group ${group.name}');
     return true;
   }
 
@@ -687,7 +691,9 @@ class GroupChatService extends ChangeNotifier {
 
     final now = DateTime.now();
     final activeMembers = group.members
-        .where((m) => m.lastSeen?.isAfter(now.subtract(const Duration(days: 7))) ?? m.isOnline)
+        .where((m) =>
+            m.lastSeen?.isAfter(now.subtract(const Duration(days: 7))) ??
+            m.isOnline)
         .length;
 
     return {
@@ -703,7 +709,8 @@ class GroupChatService extends ChangeNotifier {
   Map<String, int> _getRoleDistribution(GroupChat group) {
     final distribution = <String, int>{};
     for (final member in group.members) {
-      distribution[member.role.name] = (distribution[member.role.name] ?? 0) + 1;
+      distribution[member.role.name] =
+          (distribution[member.role.name] ?? 0) + 1;
     }
     return distribution;
   }
@@ -713,9 +720,10 @@ class GroupChatService extends ChangeNotifier {
     final activeGroupsCount = activeGroups.length;
     final totalMembers = _groups.values.fold<int>(
       0,
-          (sum, group) => sum + group.memberCount,
+      (sum, group) => sum + group.memberCount,
     );
-    final averageMembersPerGroup = totalGroups > 0 ? totalMembers / totalGroups : 0;
+    final averageMembersPerGroup =
+        totalGroups > 0 ? totalMembers / totalGroups : 0;
 
     final groupTypeDistribution = <String, int>{};
     for (final group in _groups.values) {

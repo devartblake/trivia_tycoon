@@ -25,7 +25,8 @@ class SkillCooldownService {
     final end = _expiry[skillId];
     if (end != null) {
       final reduced = end.subtract(reduction);
-      _expiry[skillId] = reduced.isBefore(DateTime.now()) ? DateTime.now() : reduced;
+      _expiry[skillId] =
+          reduced.isBefore(DateTime.now()) ? DateTime.now() : reduced;
     }
   }
 

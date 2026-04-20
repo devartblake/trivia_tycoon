@@ -34,15 +34,16 @@ class SwipeItem extends StatefulWidget {
   final Email data;
   final bool isEven;
   final Widget child;
-  final void Function(GlobalKey key, {required SwipeAction action})? onSwipe; // called when a row is swiped left.
+  final void Function(GlobalKey key, {required SwipeAction action})?
+      onSwipe; // called when a row is swiped left.
 
   const SwipeItem({
-    super.key, 
-    required this.data, 
-    this.onSwipe, 
+    super.key,
+    required this.data,
+    this.onSwipe,
     required this.isEven,
     required this.child,
-    });
+  });
 
   @override
   State<SwipeItem> createState() {
@@ -65,7 +66,8 @@ class SwipeItemState extends State<SwipeItem> {
   @override
   Widget build(BuildContext context) {
     // Determine the swipe state. How far, what direction, etc.
-    final double swipeRatio = math.min(1.0, _swipeDistance.abs() / SwipeItem.swipeDistance);
+    final double swipeRatio =
+        math.min(1.0, _swipeDistance.abs() / SwipeItem.swipeDistance);
     final bool lToR = _swipeDistance < 0.0;
     final double swipeSign = _swipeDistance.sign;
     final double swipeDistance = _swipeDistance.abs();
@@ -100,12 +102,14 @@ class SwipeItemState extends State<SwipeItem> {
                       boxShadow: [
                         if (widget.data.isFavorite && lToR)
                           BoxShadow(
-                            color: Colors.white70.withValues(alpha: swipeRatio), 
-                            blurRadius: 18
-                          )
+                              color:
+                                  Colors.white70.withValues(alpha: swipeRatio),
+                              blurRadius: 18)
                       ],
                       borderRadius: BorderRadius.circular(50),
-                      color: widget.data.isFavorite || !lToR ? Colors.white : Colors.transparent),
+                      color: widget.data.isFavorite || !lToR
+                          ? Colors.white
+                          : Colors.transparent),
                 ),
                 Icon(
                   lToR ? Icons.stars : Icons.cancel,
@@ -127,9 +131,9 @@ class SwipeItemState extends State<SwipeItem> {
             child: Opacity(
               opacity: 1.0 - swipeRatio * 0.9,
               child: Transform.scale(
-                  scale: 1.0 - swipeRatio * 0.1,
-                  child: widget.child,
-                ),
+                scale: 1.0 - swipeRatio * 0.1,
+                child: widget.child,
+              ),
             )),
       ]),
     );
@@ -148,7 +152,9 @@ class SwipeItemState extends State<SwipeItem> {
       // Right swipe.
       widget.onSwipe?.call(_key, action: SwipeAction.favorite);
       _hzScrollController
-          .animateTo(0, duration: Duration(milliseconds: 800), curve: Interval(.25, 1, curve: Curves.easeOutQuad))
+          .animateTo(0,
+              duration: Duration(milliseconds: 800),
+              curve: Interval(.25, 1, curve: Curves.easeOutQuad))
           .whenComplete(() => _isPerformingAction = false);
     }
     // Redraw the item with the new swipe distance:

@@ -10,14 +10,14 @@ class SafeText extends StatelessWidget {
   final bool softWrap;
 
   const SafeText(
-      this.data, {
-        super.key,
-        this.style,
-        this.textAlign,
-        this.overflow,
-        this.maxLines,
-        this.softWrap = true,
-      });
+    this.data, {
+    super.key,
+    this.style,
+    this.textAlign,
+    this.overflow,
+    this.maxLines,
+    this.softWrap = true,
+  });
 
   @override
   Widget build(BuildContext context) {

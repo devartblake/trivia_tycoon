@@ -117,7 +117,8 @@ class _TierRankScreenState extends ConsumerState<TierRankScreen>
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: IconButton(
-                  icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+                  icon:
+                      const Icon(Icons.arrow_back_rounded, color: Colors.white),
                   onPressed: () {
                     context.pop(); // Navigate to home route
                   },
@@ -205,7 +206,9 @@ class _TierRankScreenState extends ConsumerState<TierRankScreen>
                         ),
                         onPressed: () async {
                           await context.push('/admin/leaderboard-filters');
-                          await ref.read(leaderboardControllerProvider).refreshFilters();
+                          await ref
+                              .read(leaderboardControllerProvider)
+                              .refreshFilters();
                         },
                       ),
                     ),
@@ -233,7 +236,8 @@ class _TierRankScreenState extends ConsumerState<TierRankScreen>
               ),
               child: Row(
                 children: [
-                  Icon(Icons.sort_rounded,
+                  Icon(
+                    Icons.sort_rounded,
                     size: 20,
                     color: theme.primaryColor.withValues(alpha: 0.7),
                   ),
@@ -258,7 +262,8 @@ class _TierRankScreenState extends ConsumerState<TierRankScreen>
                         child: DropdownButton<String>(
                           value: _selectedSort,
                           onChanged: _onSortChanged,
-                          icon: Icon(Icons.keyboard_arrow_down_rounded,
+                          icon: Icon(
+                            Icons.keyboard_arrow_down_rounded,
                             color: theme.primaryColor,
                           ),
                           style: TextStyle(
@@ -268,9 +273,9 @@ class _TierRankScreenState extends ConsumerState<TierRankScreen>
                           ),
                           items: _sortOptions
                               .map((opt) => DropdownMenuItem(
-                            value: opt,
-                            child: Text(opt),
-                          ))
+                                    value: opt,
+                                    child: Text(opt),
+                                  ))
                               .toList(),
                         ),
                       ),
@@ -326,111 +331,119 @@ class _TierRankScreenState extends ConsumerState<TierRankScreen>
           // Content
           leaderboardController.isLoading
               ? const SliverFillRemaining(
-            child: Center(child: CircularProgressIndicator()),
-          )
-              : SliverFillRemaining(
-            child: TabBarView(
-              controller: _tabController,
-              children: _categories.map((_) {
-                return entries.isEmpty
-                    ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.leaderboard_outlined,
-                        size: 64,
-                        color: Colors.grey[300],
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        "No rankings yet",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.grey[400],
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        "Be the first to compete!",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey[400],
-                        ),
-                      ),
-                    ],
-                  ),
+                  child: Center(child: CircularProgressIndicator()),
                 )
-                    : Column(
-                  children: [
-                    // Top Three Podium
-                    Container(
-                      margin: const EdgeInsets.all(16),
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.08),
-                            blurRadius: 15,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: TopThreeLeaderboard(
-                        topThree: entries.take(3).toList(),
-                      ),
-                    ),
-
-                    // Rest of Rankings
-                    Expanded(
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 16),
-                        child: ListView.builder(
-                          controller: _scrollController,
-                          padding: const EdgeInsets.only(bottom: 20),
-                          itemCount: entries.length - 3,
-                          itemBuilder: (_, index) {
-                            final entry = entries[index + 3];
-                            return Container(
-                              margin: const EdgeInsets.only(bottom: 12),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(16),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withValues(alpha: 0.04),
-                                    blurRadius: 8,
-                                    offset: const Offset(0, 2),
+              : SliverFillRemaining(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: _categories.map((_) {
+                      return entries.isEmpty
+                          ? Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.leaderboard_outlined,
+                                    size: 64,
+                                    color: Colors.grey[300],
+                                  ),
+                                  const SizedBox(height: 16),
+                                  Text(
+                                    "No rankings yet",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.grey[400],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    "Be the first to compete!",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.grey[400],
+                                    ),
                                   ),
                                 ],
                               ),
-                              child: LeaderboardSwipeCard(
-                                playerName: entry.playerName,
-                                score: entry.score,
-                                entry: entry,
-                                onPromote: () => ref
-                                    .read(leaderboardControllerProvider)
-                                    .promoteUser(entry),
-                                onBan: () {
-                                  ref
-                                      .read(leaderboardControllerProvider)
-                                      .banUser(entry);
-                                  setState(() {});
-                                },
-                              ),
+                            )
+                          : Column(
+                              children: [
+                                // Top Three Podium
+                                Container(
+                                  margin: const EdgeInsets.all(16),
+                                  padding: const EdgeInsets.all(20),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black
+                                            .withValues(alpha: 0.08),
+                                        blurRadius: 15,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ],
+                                  ),
+                                  child: TopThreeLeaderboard(
+                                    topThree: entries.take(3).toList(),
+                                  ),
+                                ),
+
+                                // Rest of Rankings
+                                Expanded(
+                                  child: Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    child: ListView.builder(
+                                      controller: _scrollController,
+                                      padding:
+                                          const EdgeInsets.only(bottom: 20),
+                                      itemCount: entries.length - 3,
+                                      itemBuilder: (_, index) {
+                                        final entry = entries[index + 3];
+                                        return Container(
+                                          margin:
+                                              const EdgeInsets.only(bottom: 12),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black
+                                                    .withValues(alpha: 0.04),
+                                                blurRadius: 8,
+                                                offset: const Offset(0, 2),
+                                              ),
+                                            ],
+                                          ),
+                                          child: LeaderboardSwipeCard(
+                                            playerName: entry.playerName,
+                                            score: entry.score,
+                                            entry: entry,
+                                            onPromote: () => ref
+                                                .read(
+                                                    leaderboardControllerProvider)
+                                                .promoteUser(entry),
+                                            onBan: () {
+                                              ref
+                                                  .read(
+                                                      leaderboardControllerProvider)
+                                                  .banUser(entry);
+                                              setState(() {});
+                                            },
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
                             );
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }).toList(),
-            ),
-          ),
+                    }).toList(),
+                  ),
+                ),
         ],
       ),
     );

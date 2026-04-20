@@ -29,8 +29,9 @@ class Room {
 
   bool get isFull => playerCount >= capacity;
 
-  PlayerPresence? get host =>
-      players.cast<PlayerPresence?>().firstWhere((p) => p?.isHost == true, orElse: () => null);
+  PlayerPresence? get host => players
+      .cast<PlayerPresence?>()
+      .firstWhere((p) => p?.isHost == true, orElse: () => null);
 
   Room copyWith({
     String? id,
@@ -56,13 +57,13 @@ class Room {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is Room &&
-              runtimeType == other.runtimeType &&
-              id == other.id &&
-              name == other.name &&
-              capacity == other.capacity &&
-              _listEq(players, other.players) &&
-              isHost == other.isHost;
+      other is Room &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          name == other.name &&
+          capacity == other.capacity &&
+          _listEq(players, other.players) &&
+          isHost == other.isHost;
 
   @override
   int get hashCode =>

@@ -16,7 +16,6 @@ class TermOfService {
   }) {
     checked = initialValue;
   }
-
 }
 
 class TermOfServiceResult {

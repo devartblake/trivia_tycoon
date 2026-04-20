@@ -74,7 +74,8 @@ class _CarouselSectionState extends State<CarouselSection> {
         // Page indicators
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(3, (index) { // Changed to 3 indicators
+          children: List.generate(3, (index) {
+            // Changed to 3 indicators
             return Container(
               margin: const EdgeInsets.symmetric(horizontal: 4),
               width: _currentPage == index ? 20 : 8,

@@ -105,7 +105,6 @@ class WsClient {
         ts: DateTime.now().millisecondsSinceEpoch,
         data: {'clientVersion': '1.0.0'},
       ));
-
     } catch (e) {
       LogManager.debug('[WsClient] Connection error: $e');
       _handleError(e);
@@ -205,7 +204,6 @@ class WsClient {
       // Notify listeners
       _messageController.add(envelope);
       onMessage?.call(envelope);
-
     } catch (e) {
       LogManager.debug('[WsClient] Message parse error: $e');
       onError?.call('Invalid message: $e');
@@ -253,13 +251,15 @@ class WsClient {
     if (_reconnectAttempts >= _maxReconnectAttempts) {
       LogManager.debug('[WsClient] Max reconnect attempts reached');
       _setState(WsState.disconnected);
-      onError?.call('Failed to reconnect after $_maxReconnectAttempts attempts');
+      onError
+          ?.call('Failed to reconnect after $_maxReconnectAttempts attempts');
       return;
     }
 
     // Exponential backoff
     final delay = _getReconnectDelay();
-    LogManager.debug('[WsClient] Reconnecting in ${delay.inSeconds}s (attempt ${_reconnectAttempts + 1})');
+    LogManager.debug(
+        '[WsClient] Reconnecting in ${delay.inSeconds}s (attempt ${_reconnectAttempts + 1})');
 
     _reconnectTimer = Timer(delay, () {
       _reconnectAttempts++;

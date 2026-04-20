@@ -8,7 +8,8 @@ void main() {
   late Directory tempDir;
 
   setUpAll(() async {
-    tempDir = await Directory.systemTemp.createTemp('multi_profile_service_test');
+    tempDir =
+        await Directory.systemTemp.createTemp('multi_profile_service_test');
     Hive.init(tempDir.path);
   });
 
@@ -29,7 +30,8 @@ void main() {
     await tempDir.delete(recursive: true);
   });
 
-  test('createProfile persists new profile and sets first active profile', () async {
+  test('createProfile persists new profile and sets first active profile',
+      () async {
     final service = MultiProfileService();
 
     final created = await service.createProfile(name: 'Player One');

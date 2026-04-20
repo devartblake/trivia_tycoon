@@ -9,7 +9,10 @@ class SpriteSheet {
   int length;
 
   SpriteSheet(
-      {required ImageProvider imageProvider, required this.length, required this.frameWidth, this.frameHeight = 0}) {
+      {required ImageProvider imageProvider,
+      required this.length,
+      required this.frameWidth,
+      this.frameHeight = 0}) {
     // Resolve the provider into a stream, then listen for it to complete.
     // This will happen synchronously if it's already loaded into memory.
     ImageStream stream = imageProvider.resolve(ImageConfiguration());
@@ -28,8 +31,11 @@ class SpriteSheet {
     int cols = (image!.width / frameWidth).floor();
     int x = index % cols;
     int y = (index / cols).floor();
-    int h = frameHeight == 0 ? image!.height : frameHeight; // default to the image's height
+    int h = frameHeight == 0
+        ? image!.height
+        : frameHeight; // default to the image's height
 
-    return Rect.fromLTWH(x * frameWidth + 0.0, y * h + 0.0, frameWidth + 0.0, h + 0.0);
+    return Rect.fromLTWH(
+        x * frameWidth + 0.0, y * h + 0.0, frameWidth + 0.0, h + 0.0);
   }
 }

@@ -12,7 +12,10 @@ class QrPayload {
       'ts': issuedAtUnix.toString(),
       if (signature != null) 'sig': signature,
     };
-    final query = qp.entries.map((e) => '${Uri.encodeQueryComponent(e.key)}=${Uri.encodeQueryComponent(e.value)}').join('&');
+    final query = qp.entries
+        .map((e) =>
+            '${Uri.encodeQueryComponent(e.key)}=${Uri.encodeQueryComponent(e.value)}')
+        .join('&');
     return 'tt://invite?$query';
   }
 }

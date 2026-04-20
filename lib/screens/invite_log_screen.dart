@@ -102,8 +102,10 @@ class _InviteLogScreenState extends ConsumerState<InviteLogScreen>
           final stats = service.getStats();
           return _buildTabBar(stats);
         },
-        loading: () => _buildTabBar({'total': 0, 'pending': 0, 'redeemed': 0, 'expired': 0}),
-        error: (_, __) => _buildTabBar({'total': 0, 'pending': 0, 'redeemed': 0, 'expired': 0}),
+        loading: () => _buildTabBar(
+            {'total': 0, 'pending': 0, 'redeemed': 0, 'expired': 0}),
+        error: (_, __) => _buildTabBar(
+            {'total': 0, 'pending': 0, 'redeemed': 0, 'expired': 0}),
       ),
     );
   }
@@ -224,7 +226,8 @@ class _InviteLogScreenState extends ConsumerState<InviteLogScreen>
     );
   }
 
-  Widget _buildInviteCard(ReferralInvite invite, ReferralInviteService service) {
+  Widget _buildInviteCard(
+      ReferralInvite invite, ReferralInviteService service) {
     final status = invite.status;
     final Color statusColor;
     final IconData statusIcon;
@@ -349,7 +352,8 @@ class _InviteLogScreenState extends ConsumerState<InviteLogScreen>
                   ),
                 ),
               ],
-              if (status == InviteStatus.redeemed && invite.redeemedAt != null) ...[
+              if (status == InviteStatus.redeemed &&
+                  invite.redeemedAt != null) ...[
                 _buildInfoRow(
                   Icons.check_circle_outline,
                   'Redeemed ${_formatDate(invite.redeemedAt!)}',
@@ -443,7 +447,8 @@ class _InviteLogScreenState extends ConsumerState<InviteLogScreen>
     }
   }
 
-  void _showInviteDetails(ReferralInvite invite, ReferralInviteService service) {
+  void _showInviteDetails(
+      ReferralInvite invite, ReferralInviteService service) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -483,14 +488,17 @@ class _InviteLogScreenState extends ConsumerState<InviteLogScreen>
                 const SizedBox(height: 24),
                 _buildDetailRow('Referral Code', invite.referralCode),
                 _buildDetailRow('Status', invite.status.name.toUpperCase()),
-                _buildDetailRow('Created', DateFormat('MMM d, y h:mm a').format(invite.createdAt)),
-                _buildDetailRow('Expires', DateFormat('MMM d, y h:mm a').format(invite.expiresAt)),
+                _buildDetailRow('Created',
+                    DateFormat('MMM d, y h:mm a').format(invite.createdAt)),
+                _buildDetailRow('Expires',
+                    DateFormat('MMM d, y h:mm a').format(invite.expiresAt)),
                 if (invite.inviteeName != null)
                   _buildDetailRow('Invited', invite.inviteeName!),
                 if (invite.inviteeEmail != null)
                   _buildDetailRow('Email', invite.inviteeEmail!),
                 if (invite.redeemedAt != null)
-                  _buildDetailRow('Redeemed', DateFormat('MMM d, y h:mm a').format(invite.redeemedAt!)),
+                  _buildDetailRow('Redeemed',
+                      DateFormat('MMM d, y h:mm a').format(invite.redeemedAt!)),
                 if (invite.redeemedBy != null)
                   _buildDetailRow('Redeemed By', invite.redeemedBy!),
                 _buildDetailRow('Synced', invite.isSynced ? 'Yes' : 'No'),

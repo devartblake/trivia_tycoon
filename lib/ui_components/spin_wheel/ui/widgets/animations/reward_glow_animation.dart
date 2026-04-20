@@ -18,19 +18,27 @@ class RewardGlowAnimation extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!trigger) return child;
 
-    return child.animate(delay: delay).scale(
-      duration: 300.ms,
-      curve: Curves.elasticOut,
-      begin: const Offset(0.8, 0.8),
-      end: const Offset(1.1, 1.1),
-    ).then().scale(
-      duration: 150.ms,
-      curve: Curves.easeInOut,
-      begin: const Offset(1.1, 1.1),
-      end: const Offset(1.0, 1.0),
-    ).then().fadeIn(duration: 150.ms).then().shimmer(
-      duration: 500.ms,
-      color: Colors.amberAccent,
-    );
+    return child
+        .animate(delay: delay)
+        .scale(
+          duration: 300.ms,
+          curve: Curves.elasticOut,
+          begin: const Offset(0.8, 0.8),
+          end: const Offset(1.1, 1.1),
+        )
+        .then()
+        .scale(
+          duration: 150.ms,
+          curve: Curves.easeInOut,
+          begin: const Offset(1.1, 1.1),
+          end: const Offset(1.0, 1.0),
+        )
+        .then()
+        .fadeIn(duration: 150.ms)
+        .then()
+        .shimmer(
+          duration: 500.ms,
+          color: Colors.amberAccent,
+        );
   }
 }

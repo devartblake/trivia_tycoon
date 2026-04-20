@@ -14,9 +14,9 @@ class TriviaSplashOverlay extends StatelessWidget {
           Text(
             "Synaptix",
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
           ),
         ],
       ),

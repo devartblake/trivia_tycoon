@@ -5,14 +5,14 @@ class PresenceMapper {
   const PresenceMapper();
 
   PlayerPresence toDomain(PresenceDto dto) => PlayerPresence(
-    id: dto.playerId,
-    name: dto.playerName,
-    isHost: dto.isHost,
-  );
+        id: dto.playerId,
+        name: dto.playerName,
+        isHost: dto.isHost,
+      );
 
   PresenceDto toDto(PlayerPresence e) => PresenceDto(
-    playerId: e.id,
-    playerName: e.name,
-    isHost: e.isHost,
-  );
+        playerId: e.id,
+        playerName: e.name,
+        isHost: e.isHost,
+      );
 }

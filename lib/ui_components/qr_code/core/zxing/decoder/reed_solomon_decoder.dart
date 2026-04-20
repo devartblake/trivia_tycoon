@@ -22,9 +22,9 @@ class ReedSolomonDecoder {
     if (noError) return true; // No errors
 
     final syndromePoly = GFPoly(field, syndrome);
-    final monomial = GFPoly(field, [1])
-        .multiplyByMonomial(numECCodewords, 1);
-    final errorLocator = _runEuclideanAlgorithm(monomial, syndromePoly, numECCodewords);
+    final monomial = GFPoly(field, [1]).multiplyByMonomial(numECCodewords, 1);
+    final errorLocator =
+        _runEuclideanAlgorithm(monomial, syndromePoly, numECCodewords);
 
     if (errorLocator == null) return false;
 
@@ -61,9 +61,11 @@ class ReedSolomonDecoder {
 
       while (rLast.degree >= r.degree && !rLast.isZero) {
         final degreeDiff = rLast.degree - r.degree;
-        final scale = field.multiply(rLast.getCoefficient(rLast.degree), dltInverse);
+        final scale =
+            field.multiply(rLast.getCoefficient(rLast.degree), dltInverse);
         final term = r.multiplyByMonomial(degreeDiff, scale);
-        q = q.addOrSubtract(GFPoly(field, [...List.filled(degreeDiff, 0), scale]));
+        q = q.addOrSubtract(
+            GFPoly(field, [...List.filled(degreeDiff, 0), scale]));
         rLast = rLast.addOrSubtract(term);
       }
 
@@ -95,10 +97,10 @@ class ReedSolomonDecoder {
   }
 
   List<int> _findErrorMagnitudes(
-      GFPoly errorEvaluator,
-      GFPoly errorLocator,
-      List<int> errorLocations,
-      ) {
+    GFPoly errorEvaluator,
+    GFPoly errorLocator,
+    List<int> errorLocations,
+  ) {
     final result = <int>[];
     for (var xi in errorLocations) {
       final xiInverse = field.inverse(xi);
@@ -107,7 +109,8 @@ class ReedSolomonDecoder {
       for (var xj in errorLocations) {
         if (xi != xj) {
           final term = field.multiply(xj, xiInverse);
-          denominator = field.multiply(denominator, field.addOrSubtract(1, term));
+          denominator =
+              field.multiply(denominator, field.addOrSubtract(1, term));
         }
       }
 

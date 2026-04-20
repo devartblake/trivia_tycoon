@@ -44,12 +44,12 @@ class Match {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is Match &&
-              runtimeType == other.runtimeType &&
-              id == other.id &&
-              roomId == other.roomId &&
-              _listEq(players, other.players) &&
-              currentTurn == other.currentTurn;
+      other is Match &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          roomId == other.roomId &&
+          _listEq(players, other.players) &&
+          currentTurn == other.currentTurn;
 
   @override
   int get hashCode =>

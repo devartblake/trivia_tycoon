@@ -6,7 +6,8 @@ class GoldenTriviaCoin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Icon(Icons.monetization_on_rounded,
+    return const Icon(
+      Icons.monetization_on_rounded,
       color: Colors.amberAccent,
       size: 100,
     ).animate(onPlay: (c) => c.repeat()).rotate(duration: 4.seconds);

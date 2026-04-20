@@ -14,7 +14,8 @@ class MissionsScreen extends ConsumerStatefulWidget {
 class _MissionsScreenState extends ConsumerState<MissionsScreen>
     with TickerProviderStateMixin {
   late TabController _tabController;
-  final MissionNotificationHelper _notificationHelper = MissionNotificationHelper();
+  final MissionNotificationHelper _notificationHelper =
+      MissionNotificationHelper();
 
   @override
   void initState() {
@@ -345,7 +346,8 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
     );
   }
 
-  Widget _buildSectionHeader(String title, String subtitle, String refreshTime) {
+  Widget _buildSectionHeader(
+      String title, String subtitle, String refreshTime) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -396,7 +398,8 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.access_time, color: Color(0xFFFF8500), size: 16),
+                  const Icon(Icons.access_time,
+                      color: Color(0xFFFF8500), size: 16),
                   const SizedBox(width: 6),
                   Text(
                     refreshTime,
@@ -431,13 +434,13 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
         gradient: LinearGradient(
           colors: isCompleted
               ? [
-            const Color(0xFF52B788).withValues(alpha: 0.3),
-            const Color(0xFF40916C).withValues(alpha: 0.2),
-          ]
+                  const Color(0xFF52B788).withValues(alpha: 0.3),
+                  const Color(0xFF40916C).withValues(alpha: 0.2),
+                ]
               : [
-            const Color(0xFF2C2C54).withValues(alpha: 0.8),
-            const Color(0xFF1B1B2F).withValues(alpha: 0.6),
-          ],
+                  const Color(0xFF2C2C54).withValues(alpha: 0.8),
+                  const Color(0xFF1B1B2F).withValues(alpha: 0.6),
+                ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -537,7 +540,8 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
               const SizedBox(width: 16),
               if (isCompleted)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   decoration: BoxDecoration(
                     color: const Color(0xFF52B788),
                     borderRadius: BorderRadius.circular(20),
@@ -553,7 +557,8 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
                 )
               else
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
                     color: const Color(0xFFFFD60A).withValues(alpha: 0.25),
                     borderRadius: BorderRadius.circular(12),
@@ -564,7 +569,8 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.star, color: Color(0xFFFFD60A), size: 16),
+                      const Icon(Icons.star,
+                          color: Color(0xFFFFD60A), size: 16),
                       const SizedBox(width: 4),
                       Text(
                         "x$reward",
@@ -599,13 +605,13 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
         gradient: LinearGradient(
           colors: isCompleted
               ? [
-            const Color(0xFF52B788).withValues(alpha: 0.4),
-            const Color(0xFF40916C).withValues(alpha: 0.3),
-          ]
+                  const Color(0xFF52B788).withValues(alpha: 0.4),
+                  const Color(0xFF40916C).withValues(alpha: 0.3),
+                ]
               : [
-            const Color(0xFF74C0FC).withValues(alpha: 0.3),
-            const Color(0xFF5A9FE8).withValues(alpha: 0.2),
-          ],
+                  const Color(0xFF74C0FC).withValues(alpha: 0.3),
+                  const Color(0xFF5A9FE8).withValues(alpha: 0.2),
+                ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -694,7 +700,8 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
           Column(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFD60A).withValues(alpha: 0.25),
                   borderRadius: BorderRadius.circular(12),
@@ -721,7 +728,8 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
               const SizedBox(height: 8),
               if (isCompleted)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
                     color: const Color(0xFF52B788),
                     borderRadius: BorderRadius.circular(16),
@@ -867,7 +875,8 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(8),
@@ -893,7 +902,8 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
                   textAlign: TextAlign.center,
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: Colors.black.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(8),
@@ -902,8 +912,12 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(
-                        currency == "coins" ? Icons.monetization_on : Icons.star,
-                        color: currency == "coins" ? const Color(0xFFFFD60A) : Colors.amber,
+                        currency == "coins"
+                            ? Icons.monetization_on
+                            : Icons.star,
+                        color: currency == "coins"
+                            ? const Color(0xFFFFD60A)
+                            : Colors.amber,
                         size: 14,
                       ),
                       const SizedBox(width: 4),

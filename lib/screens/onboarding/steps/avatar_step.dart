@@ -20,18 +20,57 @@ class _AvatarStepState extends State<AvatarStep>
   late final Animation<double> _scaleAnimation;
 
   final List<AvatarOption> avatars = [
-    AvatarOption(id: 'person', icon: Icons.person, color: Colors.blue, label: 'Classic'),
-    AvatarOption(id: 'face', icon: Icons.face, color: Colors.green, label: 'Friendly'),
-    AvatarOption(id: 'account_circle', icon: Icons.account_circle, color: Colors.orange, label: 'Circle'),
-    AvatarOption(id: 'sentiment_satisfied', icon: Icons.sentiment_satisfied, color: Colors.purple, label: 'Happy'),
-    AvatarOption(id: 'child_care', icon: Icons.child_care, color: Colors.red, label: 'Young'),
-    AvatarOption(id: 'psychology', icon: Icons.psychology, color: Colors.teal, label: 'Brainy'),
-    AvatarOption(id: 'sports_esports', icon: Icons.sports_esports, color: Colors.indigo, label: 'Gamer'),
-    AvatarOption(id: 'school', icon: Icons.school, color: Colors.brown, label: 'Scholar'),
-    AvatarOption(id: 'emoji_events', icon: Icons.emoji_events, color: Colors.amber, label: 'Champion'),
-    AvatarOption(id: 'star', icon: Icons.star, color: Colors.deepPurple, label: 'Star'),
-    AvatarOption(id: 'favorite', icon: Icons.favorite, color: Colors.pink, label: 'Heart'),
-    AvatarOption(id: 'rocket_launch', icon: Icons.rocket_launch, color: Colors.deepOrange, label: 'Rocket'),
+    AvatarOption(
+        id: 'person', icon: Icons.person, color: Colors.blue, label: 'Classic'),
+    AvatarOption(
+        id: 'face', icon: Icons.face, color: Colors.green, label: 'Friendly'),
+    AvatarOption(
+        id: 'account_circle',
+        icon: Icons.account_circle,
+        color: Colors.orange,
+        label: 'Circle'),
+    AvatarOption(
+        id: 'sentiment_satisfied',
+        icon: Icons.sentiment_satisfied,
+        color: Colors.purple,
+        label: 'Happy'),
+    AvatarOption(
+        id: 'child_care',
+        icon: Icons.child_care,
+        color: Colors.red,
+        label: 'Young'),
+    AvatarOption(
+        id: 'psychology',
+        icon: Icons.psychology,
+        color: Colors.teal,
+        label: 'Brainy'),
+    AvatarOption(
+        id: 'sports_esports',
+        icon: Icons.sports_esports,
+        color: Colors.indigo,
+        label: 'Gamer'),
+    AvatarOption(
+        id: 'school',
+        icon: Icons.school,
+        color: Colors.brown,
+        label: 'Scholar'),
+    AvatarOption(
+        id: 'emoji_events',
+        icon: Icons.emoji_events,
+        color: Colors.amber,
+        label: 'Champion'),
+    AvatarOption(
+        id: 'star', icon: Icons.star, color: Colors.deepPurple, label: 'Star'),
+    AvatarOption(
+        id: 'favorite',
+        icon: Icons.favorite,
+        color: Colors.pink,
+        label: 'Heart'),
+    AvatarOption(
+        id: 'rocket_launch',
+        icon: Icons.rocket_launch,
+        color: Colors.deepOrange,
+        label: 'Rocket'),
   ];
 
   @override
@@ -182,11 +221,11 @@ class _AvatarStepState extends State<AvatarStep>
   }
 
   Widget _buildAvatarCard(
-      BuildContext context, {
-        required AvatarOption avatar,
-        required bool isSelected,
-        required VoidCallback onTap,
-      }) {
+    BuildContext context, {
+    required AvatarOption avatar,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
     final theme = Theme.of(context);
 
     return GestureDetector(
@@ -196,13 +235,13 @@ class _AvatarStepState extends State<AvatarStep>
         decoration: BoxDecoration(
           gradient: isSelected
               ? LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              avatar.color.withValues(alpha: 0.8),
-              avatar.color.withValues(alpha: 0.6),
-            ],
-          )
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    avatar.color.withValues(alpha: 0.8),
+                    avatar.color.withValues(alpha: 0.6),
+                  ],
+                )
               : null,
           color: isSelected ? null : theme.colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(20),
@@ -212,12 +251,12 @@ class _AvatarStepState extends State<AvatarStep>
           ),
           boxShadow: isSelected
               ? [
-            BoxShadow(
-              color: avatar.color.withValues(alpha: 0.4),
-              blurRadius: 12,
-              offset: const Offset(0, 6),
-            ),
-          ]
+                  BoxShadow(
+                    color: avatar.color.withValues(alpha: 0.4),
+                    blurRadius: 12,
+                    offset: const Offset(0, 6),
+                  ),
+                ]
               : null,
         ),
         child: Stack(
@@ -249,7 +288,8 @@ class _AvatarStepState extends State<AvatarStep>
                       color: isSelected
                           ? Colors.white
                           : theme.colorScheme.onSurfaceVariant,
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.normal,
                     ),
                   ),
                 ],

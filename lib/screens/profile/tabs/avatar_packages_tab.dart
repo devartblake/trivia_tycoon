@@ -97,10 +97,10 @@ class AvatarPackagesTab extends ConsumerWidget {
   }
 
   Widget _buildInstalledPackages(
-      BuildContext context,
-      WidgetRef ref,
-      List<AvatarPackageInstall> items,
-      ) {
+    BuildContext context,
+    WidgetRef ref,
+    List<AvatarPackageInstall> items,
+  ) {
     if (items.isEmpty) {
       return _EmptyPlaceholder(
         icon: Icons.folder_off_rounded,
@@ -137,10 +137,10 @@ class AvatarPackagesTab extends ConsumerWidget {
   }
 
   Widget _buildServerPackages(
-      BuildContext context,
-      WidgetRef ref,
-      List<AvatarPackageMetadata> items,
-      ) {
+    BuildContext context,
+    WidgetRef ref,
+    List<AvatarPackageMetadata> items,
+  ) {
     if (items.isEmpty) {
       return _EmptyPlaceholder(
         icon: Icons.cloud_off_rounded,

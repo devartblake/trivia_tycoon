@@ -26,7 +26,8 @@ class DailyQuizScreen extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.error_outline, size: 64, color: Colors.redAccent),
+              const Icon(Icons.error_outline,
+                  size: 64, color: Colors.redAccent),
               const SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -48,7 +49,10 @@ class DailyQuizScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Colors.orange.shade400, Colors.deepOrange.shade400],
+                    colors: [
+                      Colors.orange.shade400,
+                      Colors.deepOrange.shade400
+                    ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -132,16 +136,17 @@ class DailyQuizScreen extends ConsumerWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: dailyQuizStatus.canPlay && quizData.questions.isNotEmpty
-                      ? () {
-                          context.push('/quiz/play', extra: {
-                            'questions': quizData.questions,
-                            'questionCount': quizData.questions.length,
-                            'classLevel': '9',
-                            'displayTitle': 'Daily Quiz',
-                          });
-                        }
-                      : null,
+                  onPressed:
+                      dailyQuizStatus.canPlay && quizData.questions.isNotEmpty
+                          ? () {
+                              context.push('/quiz/play', extra: {
+                                'questions': quizData.questions,
+                                'questionCount': quizData.questions.length,
+                                'classLevel': '9',
+                                'displayTitle': 'Daily Quiz',
+                              });
+                            }
+                          : null,
                   child: const Padding(
                     padding: EdgeInsets.symmetric(vertical: 14),
                     child: Text('Start Daily Quiz'),

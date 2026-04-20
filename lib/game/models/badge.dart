@@ -14,18 +14,18 @@ class GameBadge {
   });
 
   factory GameBadge.fromJson(Map<String, dynamic> json) => GameBadge(
-    id: json['id'],
-    name: json['name'],
-    description: json['description'],
-    iconPath: json['iconPath'],
-    isUnlocked: json['isUnlocked'] ?? false,
-  );
+        id: json['id'],
+        name: json['name'],
+        description: json['description'],
+        iconPath: json['iconPath'],
+        isUnlocked: json['isUnlocked'] ?? false,
+      );
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'name': name,
-    'description': description,
-    'iconPath': iconPath,
-    'isUnlocked': isUnlocked,
-  };
+        'id': id,
+        'name': name,
+        'description': description,
+        'iconPath': iconPath,
+        'isUnlocked': isUnlocked,
+      };
 }

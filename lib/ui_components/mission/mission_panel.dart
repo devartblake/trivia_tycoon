@@ -108,7 +108,9 @@ class _MissionPanelState extends ConsumerState<MissionPanel>
     final currentProgress = mission['progress'] as int;
 
     if (currentProgress < total) {
-      ref.read(missionActionsProvider).updateProgress(missionId, total - currentProgress);
+      ref
+          .read(missionActionsProvider)
+          .updateProgress(missionId, total - currentProgress);
     }
 
     _showRewardSnackBar(reward);
@@ -256,7 +258,8 @@ class _MissionPanelState extends ConsumerState<MissionPanel>
       child: Padding(
         padding: const EdgeInsets.all(1.0),
         child: Column(
-          mainAxisSize: MainAxisSize.min, // Key change: prevent unbounded height
+          mainAxisSize:
+              MainAxisSize.min, // Key change: prevent unbounded height
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header - fixed size
@@ -339,7 +342,8 @@ class _MissionPanelState extends ConsumerState<MissionPanel>
                           height: 16,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
                           ),
                         ),
                       ),
@@ -364,7 +368,9 @@ class _MissionPanelState extends ConsumerState<MissionPanel>
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  _isSwapping ? "Swapping mission..." : "Complete missions to earn XP",
+                  _isSwapping
+                      ? "Swapping mission..."
+                      : "Complete missions to earn XP",
                   style: TextStyle(
                     fontSize: 14,
                     color: Colors.white.withValues(alpha: 0.8),
@@ -426,7 +432,8 @@ class _MissionPanelState extends ConsumerState<MissionPanel>
     // - Fixed viewport height to avoid unbounded height inside Column
     // - MissionCard currently has a fixed size (280x250), so we center it
     return SizedBox(
-      height: 560, // Tune this based on how many missions you want visible at once
+      height:
+          560, // Tune this based on how many missions you want visible at once
       child: ListView.separated(
         scrollDirection: Axis.vertical,
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
@@ -454,13 +461,13 @@ class _MissionPanelState extends ConsumerState<MissionPanel>
                       onTap: null,
                       onDoubleTap: isCompleted
                           ? () => _handleCompleteMission(
-                        missionId,
-                        mission['reward'],
-                      )
+                                missionId,
+                                mission['reward'],
+                              )
                           : null,
                       child: Stack(
                         children: [
-                            MissionCardWithSwapButton(
+                          MissionCardWithSwapButton(
                             title: mission['title'],
                             progress: mission['progress'],
                             total: mission['total'],
@@ -480,17 +487,26 @@ class _MissionPanelState extends ConsumerState<MissionPanel>
                                   onPressed: alreadyClaimed
                                       ? null
                                       : () async {
-                                    // mark claimed FIRST, then grant XP
-                                    await claimService.markClaimedToday(missionId);
-                                    _handleCompleteMission(missionId, mission['reward']);
-                                    setState(() {}); // refresh local claimed state
-                                  },
+                                          // mark claimed FIRST, then grant XP
+                                          await claimService
+                                              .markClaimedToday(missionId);
+                                          _handleCompleteMission(
+                                              missionId, mission['reward']);
+                                          setState(
+                                              () {}); // refresh local claimed state
+                                        },
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: alreadyClaimed ? Colors.grey.shade700 : const Color(0xFF6C5CE7),
+                                    backgroundColor: alreadyClaimed
+                                        ? Colors.grey.shade700
+                                        : const Color(0xFF6C5CE7),
                                     foregroundColor: Colors.white,
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
                                   ),
-                                  child: Text(alreadyClaimed ? "Claimed" : "Claim Reward"),
+                                  child: Text(alreadyClaimed
+                                      ? "Claimed"
+                                      : "Claim Reward"),
                                 ),
                               ),
                             ),

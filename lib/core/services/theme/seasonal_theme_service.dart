@@ -80,7 +80,8 @@ class SeasonalThemeService {
       } else {
         // FIXED: Use setString() instead of set()
         await _storage.setString(_userThemeOverrideKey, themeType.name);
-        LogManager.debug('[SeasonalTheme] ✓ Set user theme override: ${themeType.name}');
+        LogManager.debug(
+            '[SeasonalTheme] ✓ Set user theme override: ${themeType.name}');
       }
     } catch (e) {
       LogManager.debug('[SeasonalTheme] ❌ Error setting user override: $e');
@@ -93,14 +94,16 @@ class SeasonalThemeService {
     // 1. Check user override first
     final userOverride = await getUserThemeOverride();
     if (userOverride != null) {
-      LogManager.debug('[SeasonalTheme] Using user override: ${userOverride.name}');
+      LogManager.debug(
+          '[SeasonalTheme] Using user override: ${userOverride.name}');
       return userOverride;
     }
 
     // 2. Check seasonal theme
     final seasonalTheme = await getCurrentSeasonalTheme();
     if (seasonalTheme != null) {
-      LogManager.debug('[SeasonalTheme] Using seasonal theme: ${seasonalTheme.name}');
+      LogManager.debug(
+          '[SeasonalTheme] Using seasonal theme: ${seasonalTheme.name}');
       return seasonalTheme.themeType;
     }
 
@@ -183,7 +186,8 @@ final isSeasonalThemeActiveProvider = FutureProvider<bool>((ref) async {
 
 /// Provider for current seasonal theme (if any)
 /// FIXED: Changed to FutureProvider since getCurrentSeasonalTheme() is now async
-final currentSeasonalThemeProvider = FutureProvider<SeasonalTheme?>((ref) async {
+final currentSeasonalThemeProvider =
+    FutureProvider<SeasonalTheme?>((ref) async {
   final seasonalService = ref.watch(seasonalThemeServiceProvider);
   return await seasonalService.getCurrentSeasonalTheme();
 });

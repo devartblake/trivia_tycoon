@@ -6,10 +6,10 @@ import '../arcade_mission_models.dart';
 
 class MissionDetailsModal {
   static Future<void> show(
-      BuildContext context, {
-        required WidgetRef ref,
-        required ArcadeMission mission,
-      }) async {
+    BuildContext context, {
+    required WidgetRef ref,
+    required ArcadeMission mission,
+  }) async {
     final service = ref.read(arcadeMissionServiceProvider);
     final progress = service.progressFor(mission.id);
     final ratio = (progress.current / mission.target).clamp(0.0, 1.0);
@@ -36,7 +36,6 @@ class MissionDetailsModal {
               children: [
                 _Header(mission: mission),
                 const SizedBox(height: 12),
-
                 Text(
                   mission.subtitle,
                   style: TextStyle(
@@ -46,10 +45,8 @@ class MissionDetailsModal {
                   ),
                 ),
                 const SizedBox(height: 14),
-
                 _RewardRow(reward: mission.reward),
                 const SizedBox(height: 14),
-
                 Text(
                   'Progress',
                   style: TextStyle(
@@ -58,7 +55,6 @@ class MissionDetailsModal {
                   ),
                 ),
                 const SizedBox(height: 8),
-
                 LinearProgressIndicator(
                   value: ratio,
                   backgroundColor: Colors.white.withValues(alpha: 0.10),
@@ -66,7 +62,6 @@ class MissionDetailsModal {
                   minHeight: 7,
                 ),
                 const SizedBox(height: 8),
-
                 Row(
                   children: [
                     Text(
@@ -84,16 +79,15 @@ class MissionDetailsModal {
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 16),
-
                 Row(
                   children: [
                     Expanded(
                       child: OutlinedButton(
                         onPressed: () => Navigator.of(context).pop(),
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: Colors.white.withValues(alpha: 0.20)),
+                          side: BorderSide(
+                              color: Colors.white.withValues(alpha: 0.20)),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
                           ),
@@ -121,25 +115,25 @@ class MissionDetailsModal {
                           return ElevatedButton(
                             onPressed: canClaim
                                 ? () {
-                              final accepted = svc.tryClaim(mission.id);
-                              if (!accepted) return;
+                                    final accepted = svc.tryClaim(mission.id);
+                                    if (!accepted) return;
 
-                              // Award only if accepted (anti-double-claim protection)
-                              incrementCoins(ref2, mission.reward.coins);
-                              incrementGems(ref2, mission.reward.gems);
-                              // If you have XP in your wallet providers:
-                              // incrementXp(ref2, mission.reward.xp);
+                                    // Award only if accepted (anti-double-claim protection)
+                                    incrementCoins(ref2, mission.reward.coins);
+                                    incrementGems(ref2, mission.reward.gems);
+                                    // If you have XP in your wallet providers:
+                                    // incrementXp(ref2, mission.reward.xp);
 
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Mission claimed: +${mission.reward.coins} coins, +${mission.reward.gems} gems',
-                                  ),
-                                ),
-                              );
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Mission claimed: +${mission.reward.coins} coins, +${mission.reward.gems} gems',
+                                        ),
+                                      ),
+                                    );
 
-                              Navigator.of(context).pop();
-                            }
+                                    Navigator.of(context).pop();
+                                  }
                                 : null,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: canClaim
@@ -155,7 +149,9 @@ class MissionDetailsModal {
                             child: Text(
                               p.claimed
                                   ? 'Claimed'
-                                  : (p.current >= mission.target ? 'Claim' : 'Not Ready'),
+                                  : (p.current >= mission.target
+                                      ? 'Claim'
+                                      : 'Not Ready'),
                               style: const TextStyle(
                                 fontWeight: FontWeight.w900,
                               ),
@@ -293,8 +289,8 @@ class _StatusChip extends StatelessWidget {
     final (text, color) = claimed
         ? ('CLAIMED', const Color(0xFF10B981))
         : completed
-        ? ('READY', const Color(0xFFFBBF24))
-        : ('IN PROGRESS', Colors.white54);
+            ? ('READY', const Color(0xFFFBBF24))
+            : ('IN PROGRESS', Colors.white54);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),

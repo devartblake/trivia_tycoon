@@ -26,34 +26,34 @@ class _TermCheckboxState extends State<TermCheckbox> {
       initialValue: widget.termOfService.initialValue,
       title: widget.termOfService.linkUrl != null
           ? InkWell(
-        onTap: () {
-          launchUrl(Uri.parse(widget.termOfService.linkUrl!));
-        },
-        child: Row(
-          children: [
-            Flexible(
-              child: Text(
-                widget.termOfService.text,
-                style: Theme.of(context).textTheme.bodyMedium,
-                textAlign: TextAlign.left,
+              onTap: () {
+                launchUrl(Uri.parse(widget.termOfService.linkUrl!));
+              },
+              child: Row(
+                children: [
+                  Flexible(
+                    child: Text(
+                      widget.termOfService.text,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Icon(
+                      Icons.open_in_new,
+                      color: Theme.of(context).textTheme.bodyMedium!.color,
+                      size: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                    ),
+                  ),
+                ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Icon(
-                Icons.open_in_new,
-                color: Theme.of(context).textTheme.bodyMedium!.color,
-                size: Theme.of(context).textTheme.bodyMedium!.fontSize,
-              ),
-            ),
-          ],
-        ),
-      )
+            )
           : Text(
-        widget.termOfService.text,
-        style: Theme.of(context).textTheme.bodyMedium,
-        textAlign: TextAlign.left,
-      ),
+              widget.termOfService.text,
+              style: Theme.of(context).textTheme.bodyMedium,
+              textAlign: TextAlign.left,
+            ),
       validator: (bool? value) {
         if (widget.validation &&
             widget.termOfService.mandatory &&
@@ -74,27 +74,27 @@ class CheckboxFormField extends FormField<bool> {
     bool super.initialValue = false,
     required ValueChanged<bool?> onChanged,
   }) : super(
-    builder: (FormFieldState<bool> state) {
-      return CheckboxListTile(
-        dense: true,
-        title: title,
-        value: state.value,
-        onChanged: (value) {
-          onChanged(value);
-          state.didChange(value);
-        },
-        subtitle: state.hasError
-            ? Builder(
-          builder: (BuildContext context) => Text(
-            state.errorText!,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.error,
-            ),
-          ),
-        )
-            : null,
-        controlAffinity: ListTileControlAffinity.leading,
-      );
-    },
-  );
+          builder: (FormFieldState<bool> state) {
+            return CheckboxListTile(
+              dense: true,
+              title: title,
+              value: state.value,
+              onChanged: (value) {
+                onChanged(value);
+                state.didChange(value);
+              },
+              subtitle: state.hasError
+                  ? Builder(
+                      builder: (BuildContext context) => Text(
+                        state.errorText!,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                      ),
+                    )
+                  : null,
+              controlAffinity: ListTileControlAffinity.leading,
+            );
+          },
+        );
 }

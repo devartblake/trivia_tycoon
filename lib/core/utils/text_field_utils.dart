@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../ui_components/login/models/login_user_type.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-
 String getAutofillHints(LoginUserType userType) {
   switch (userType) {
     case LoginUserType.name:

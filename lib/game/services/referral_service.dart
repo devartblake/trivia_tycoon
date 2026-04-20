@@ -88,7 +88,8 @@ class ReferralService {
   }
 
   /// Track a scan event
-  Future<void> trackScan(String code, {String? scannerId, String source = 'qr'}) async {
+  Future<void> trackScan(String code,
+      {String? scannerId, String source = 'qr'}) async {
     final event = ReferralScanEvent(
       code: code,
       scannerUserId: scannerId,

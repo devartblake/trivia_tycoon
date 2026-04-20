@@ -72,7 +72,8 @@ class _ConfettiColorPickerState extends State<ConfettiColorPicker> {
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: _colors.map((color) => _buildSelectedColorChip(color)).toList(),
+            children:
+                _colors.map((color) => _buildSelectedColorChip(color)).toList(),
           ),
           const SizedBox(height: 20),
         ],
@@ -88,7 +89,9 @@ class _ConfettiColorPickerState extends State<ConfettiColorPicker> {
         Wrap(
           spacing: 8,
           runSpacing: 8,
-          children: _predefinedColors.map((color) => _buildColorOption(color)).toList(),
+          children: _predefinedColors
+              .map((color) => _buildColorOption(color))
+              .toList(),
         ),
       ],
     );
@@ -153,10 +156,10 @@ class _ConfettiColorPickerState extends State<ConfettiColorPicker> {
         ),
         child: isSelected
             ? const Icon(
-          Icons.check,
-          color: Colors.white,
-          size: 24,
-        )
+                Icons.check,
+                color: Colors.white,
+                size: 24,
+              )
             : null,
       ),
     );

@@ -45,15 +45,15 @@ class DepthCardResourceRefV2 {
   });
 
   Map<String, dynamic> toJson() => {
-    'source': source.name,
-    'path': path,
-  };
+        'source': source.name,
+        'path': path,
+      };
 
   factory DepthCardResourceRefV2.fromJson(Map<String, dynamic> json) {
     final src = (json['source'] ?? 'asset').toString();
     return DepthCardResourceRefV2(
       source: DepthCardResourceSourceV2.values.firstWhere(
-            (e) => e.name == src,
+        (e) => e.name == src,
         orElse: () => DepthCardResourceSourceV2.asset,
       ),
       path: (json['path'] ?? '').toString(),
@@ -75,9 +75,9 @@ class DepthCardGradientV2 {
   });
 
   Map<String, dynamic> toJson() => {
-    'colors': colors,
-    if (stops != null) 'stops': stops,
-  };
+        'colors': colors,
+        if (stops != null) 'stops': stops,
+      };
 
   factory DepthCardGradientV2.fromJson(Map<String, dynamic> json) {
     final rawColors = json['colors'];
@@ -126,13 +126,13 @@ class DepthCardThemeOverridesV2 {
   });
 
   Map<String, dynamic> toJson() => {
-    if (borderRadius != null) 'borderRadius': borderRadius,
-    if (backgroundColor != null) 'backgroundColor': backgroundColor,
-    if (borderColor != null) 'borderColor': borderColor,
-    if (borderWidth != null) 'borderWidth': borderWidth,
-    if (textColor != null) 'textColor': textColor,
-    if (accentGradient != null) 'accentGradient': accentGradient!.toJson(),
-  };
+        if (borderRadius != null) 'borderRadius': borderRadius,
+        if (backgroundColor != null) 'backgroundColor': backgroundColor,
+        if (borderColor != null) 'borderColor': borderColor,
+        if (borderWidth != null) 'borderWidth': borderWidth,
+        if (textColor != null) 'textColor': textColor,
+        if (accentGradient != null) 'accentGradient': accentGradient!.toJson(),
+      };
 
   factory DepthCardThemeOverridesV2.fromJson(Map<String, dynamic> json) {
     return DepthCardThemeOverridesV2(
@@ -143,8 +143,8 @@ class DepthCardThemeOverridesV2 {
       textColor: _parseInt(json['textColor']),
       accentGradient: (json['accentGradient'] is Map)
           ? DepthCardGradientV2.fromJson(
-        Map<String, dynamic>.from(json['accentGradient'] as Map),
-      )
+              Map<String, dynamic>.from(json['accentGradient'] as Map),
+            )
           : null,
     );
   }
@@ -209,12 +209,12 @@ class DepthCardOverlayV2 {
   }
 
   Map<String, dynamic> toJson() => {
-    'kind': kind,
-    'slot': slot,
-    'z': z,
-    'enabled': enabled,
-    'data': data,
-  };
+        'kind': kind,
+        'slot': slot,
+        'z': z,
+        'enabled': enabled,
+        'data': data,
+      };
 
   factory DepthCardOverlayV2.fromJson(Map<String, dynamic> json) {
     return DepthCardOverlayV2(
@@ -314,19 +314,19 @@ class DepthCardConfigV2 {
   }
 
   Map<String, dynamic> toJson() => {
-    'schemaVersion': schemaVersion,
-    'mode': mode.name,
-    'media': media.toJson(),
-    if (background != null) 'background': background!.toJson(),
-    'text': text,
-    if (width != null) 'width': width,
-    if (height != null) 'height': height,
-    'parallaxDepth': parallaxDepth,
-    if (themeId != null) 'themeId': themeId,
-    if (themeOverrides != null) 'themeOverrides': themeOverrides!.toJson(),
-    'overlays': overlays.map((e) => e.toJson()).toList(),
-    if (meta.isNotEmpty) 'meta': meta,
-  };
+        'schemaVersion': schemaVersion,
+        'mode': mode.name,
+        'media': media.toJson(),
+        if (background != null) 'background': background!.toJson(),
+        'text': text,
+        if (width != null) 'width': width,
+        if (height != null) 'height': height,
+        'parallaxDepth': parallaxDepth,
+        if (themeId != null) 'themeId': themeId,
+        if (themeOverrides != null) 'themeOverrides': themeOverrides!.toJson(),
+        'overlays': overlays.map((e) => e.toJson()).toList(),
+        if (meta.isNotEmpty) 'meta': meta,
+      };
 
   String toPrettyJson() => const JsonEncoder.withIndent('  ').convert(toJson());
 
@@ -336,17 +336,20 @@ class DepthCardConfigV2 {
 
     // Tolerant parsing: unknown modes default to image.
     final mode = DepthCardRenderModeV2.values.firstWhere(
-          (e) => e.name == modeStr,
+      (e) => e.name == modeStr,
       orElse: () => DepthCardRenderModeV2.image,
     );
 
     // Required media ref.
     final media = (json['media'] is Map)
-        ? DepthCardResourceRefV2.fromJson(Map<String, dynamic>.from(json['media'] as Map))
-        : const DepthCardResourceRefV2(source: DepthCardResourceSourceV2.asset, path: '');
+        ? DepthCardResourceRefV2.fromJson(
+            Map<String, dynamic>.from(json['media'] as Map))
+        : const DepthCardResourceRefV2(
+            source: DepthCardResourceSourceV2.asset, path: '');
 
     final background = (json['background'] is Map)
-        ? DepthCardResourceRefV2.fromJson(Map<String, dynamic>.from(json['background'] as Map))
+        ? DepthCardResourceRefV2.fromJson(
+            Map<String, dynamic>.from(json['background'] as Map))
         : null;
 
     final overlaysRaw = json['overlays'];
@@ -354,12 +357,15 @@ class DepthCardConfigV2 {
     if (overlaysRaw is List) {
       for (final item in overlaysRaw) {
         if (item is Map) {
-          overlays.add(DepthCardOverlayV2.fromJson(Map<String, dynamic>.from(item)));
+          overlays.add(
+              DepthCardOverlayV2.fromJson(Map<String, dynamic>.from(item)));
         }
       }
     }
 
-    final meta = json['meta'] is Map ? Map<String, dynamic>.from(json['meta'] as Map) : const <String, dynamic>{};
+    final meta = json['meta'] is Map
+        ? Map<String, dynamic>.from(json['meta'] as Map)
+        : const <String, dynamic>{};
 
     // You can add version migration logic here if you later change schema.
     // For now, V1->V2 tolerant parsing is enough.
@@ -374,7 +380,8 @@ class DepthCardConfigV2 {
       parallaxDepth: _parseDouble(json['parallaxDepth']) ?? 0.2,
       themeId: json['themeId']?.toString(),
       themeOverrides: (json['themeOverrides'] is Map)
-          ? DepthCardThemeOverridesV2.fromJson(Map<String, dynamic>.from(json['themeOverrides'] as Map))
+          ? DepthCardThemeOverridesV2.fromJson(
+              Map<String, dynamic>.from(json['themeOverrides'] as Map))
           : null,
       overlays: overlays,
       meta: meta,

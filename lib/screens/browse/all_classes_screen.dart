@@ -27,7 +27,12 @@ class _AllClassesScreenState extends ConsumerState<AllClassesScreen> {
         'icon': Icons.child_care,
         'ageRange': '4-5 years',
         'ageGroup': 'elementary',
-        'focusAreas': ['Colors & Shapes', 'Basic Numbers', 'Letter Recognition', 'Social Skills'],
+        'focusAreas': [
+          'Colors & Shapes',
+          'Basic Numbers',
+          'Letter Recognition',
+          'Social Skills'
+        ],
       },
       {
         'id': '1',
@@ -38,7 +43,12 @@ class _AllClassesScreenState extends ConsumerState<AllClassesScreen> {
         'icon': Icons.looks_one,
         'ageRange': '5-6 years',
         'ageGroup': 'elementary',
-        'focusAreas': ['Reading Basics', 'Simple Math', 'Science Wonder', 'Community'],
+        'focusAreas': [
+          'Reading Basics',
+          'Simple Math',
+          'Science Wonder',
+          'Community'
+        ],
       },
       {
         'id': '2',
@@ -49,7 +59,12 @@ class _AllClassesScreenState extends ConsumerState<AllClassesScreen> {
         'icon': Icons.looks_two,
         'ageRange': '6-7 years',
         'ageGroup': 'elementary',
-        'focusAreas': ['Reading Fluency', 'Addition/Subtraction', 'Nature Study', 'Geography'],
+        'focusAreas': [
+          'Reading Fluency',
+          'Addition/Subtraction',
+          'Nature Study',
+          'Geography'
+        ],
       },
       {
         'id': '3',
@@ -60,7 +75,12 @@ class _AllClassesScreenState extends ConsumerState<AllClassesScreen> {
         'icon': Icons.looks_3,
         'ageRange': '7-8 years',
         'ageGroup': 'elementary',
-        'focusAreas': ['Complex Reading', 'Multiplication', 'Human Body', 'History'],
+        'focusAreas': [
+          'Complex Reading',
+          'Multiplication',
+          'Human Body',
+          'History'
+        ],
       },
       {
         'id': '4',
@@ -71,7 +91,12 @@ class _AllClassesScreenState extends ConsumerState<AllClassesScreen> {
         'icon': Icons.looks_4,
         'ageRange': '8-9 years',
         'ageGroup': 'elementary',
-        'focusAreas': ['Literature', 'Fractions', 'Earth Science', 'Government'],
+        'focusAreas': [
+          'Literature',
+          'Fractions',
+          'Earth Science',
+          'Government'
+        ],
       },
       {
         'id': '5',
@@ -82,7 +107,12 @@ class _AllClassesScreenState extends ConsumerState<AllClassesScreen> {
         'icon': Icons.looks_5,
         'ageRange': '9-10 years',
         'ageGroup': 'elementary',
-        'focusAreas': ['Writing Skills', 'Decimals', 'Physical Science', 'World Cultures'],
+        'focusAreas': [
+          'Writing Skills',
+          'Decimals',
+          'Physical Science',
+          'World Cultures'
+        ],
       },
       // Middle School Classes
       {
@@ -94,7 +124,12 @@ class _AllClassesScreenState extends ConsumerState<AllClassesScreen> {
         'icon': Icons.looks_6,
         'ageRange': '10-11 years',
         'ageGroup': 'middle',
-        'focusAreas': ['Pre-Algebra', 'Research Skills', 'Ancient History', 'Life Science'],
+        'focusAreas': [
+          'Pre-Algebra',
+          'Research Skills',
+          'Ancient History',
+          'Life Science'
+        ],
       },
       {
         'id': '7',
@@ -105,7 +140,12 @@ class _AllClassesScreenState extends ConsumerState<AllClassesScreen> {
         'icon': Icons.school,
         'ageRange': '11-12 years',
         'ageGroup': 'middle',
-        'focusAreas': ['Algebra Basics', 'Essay Writing', 'World Geography', 'Biology'],
+        'focusAreas': [
+          'Algebra Basics',
+          'Essay Writing',
+          'World Geography',
+          'Biology'
+        ],
       },
       {
         'id': '8',
@@ -116,7 +156,12 @@ class _AllClassesScreenState extends ConsumerState<AllClassesScreen> {
         'icon': Icons.grade,
         'ageRange': '12-13 years',
         'ageGroup': 'middle',
-        'focusAreas': ['Algebra I', 'Critical Analysis', 'American History', 'Chemistry Intro'],
+        'focusAreas': [
+          'Algebra I',
+          'Critical Analysis',
+          'American History',
+          'Chemistry Intro'
+        ],
       },
       // High School Classes
       {
@@ -128,7 +173,12 @@ class _AllClassesScreenState extends ConsumerState<AllClassesScreen> {
         'icon': Icons.school_outlined,
         'ageRange': '13-14 years',
         'ageGroup': 'high',
-        'focusAreas': ['Geometry', 'Literature Analysis', 'World History', 'Physical Science'],
+        'focusAreas': [
+          'Geometry',
+          'Literature Analysis',
+          'World History',
+          'Physical Science'
+        ],
       },
       {
         'id': '10',
@@ -139,7 +189,12 @@ class _AllClassesScreenState extends ConsumerState<AllClassesScreen> {
         'icon': Icons.auto_stories,
         'ageRange': '14-15 years',
         'ageGroup': 'high',
-        'focusAreas': ['Algebra II', 'World Literature', 'Government', 'Chemistry'],
+        'focusAreas': [
+          'Algebra II',
+          'World Literature',
+          'Government',
+          'Chemistry'
+        ],
       },
       {
         'id': '11',
@@ -150,7 +205,12 @@ class _AllClassesScreenState extends ConsumerState<AllClassesScreen> {
         'icon': Icons.psychology,
         'ageRange': '15-16 years',
         'ageGroup': 'high',
-        'focusAreas': ['Pre-Calculus', 'American Literature', 'Economics', 'Physics'],
+        'focusAreas': [
+          'Pre-Calculus',
+          'American Literature',
+          'Economics',
+          'Physics'
+        ],
       },
       {
         'id': '12',
@@ -161,7 +221,12 @@ class _AllClassesScreenState extends ConsumerState<AllClassesScreen> {
         'icon': Icons.workspace_premium,
         'ageRange': '16-18 years',
         'ageGroup': 'high',
-        'focusAreas': ['Calculus', 'College Writing', 'Advanced Sciences', 'Critical Thinking'],
+        'focusAreas': [
+          'Calculus',
+          'College Writing',
+          'Advanced Sciences',
+          'Critical Thinking'
+        ],
       },
     ];
   }
@@ -251,13 +316,15 @@ class _AllClassesScreenState extends ConsumerState<AllClassesScreen> {
                       _FilterChip(
                         label: 'Elementary',
                         isSelected: selectedAgeGroup == 'elementary',
-                        onTap: () => setState(() => selectedAgeGroup = 'elementary'),
+                        onTap: () =>
+                            setState(() => selectedAgeGroup = 'elementary'),
                       ),
                       const SizedBox(width: 8),
                       _FilterChip(
                         label: 'Middle School',
                         isSelected: selectedAgeGroup == 'middle',
-                        onTap: () => setState(() => selectedAgeGroup = 'middle'),
+                        onTap: () =>
+                            setState(() => selectedAgeGroup = 'middle'),
                       ),
                       const SizedBox(width: 8),
                       _FilterChip(
@@ -275,7 +342,8 @@ class _AllClassesScreenState extends ConsumerState<AllClassesScreen> {
           // Class List
           Expanded(
             child: allStatsAsync.when(
-              data: (allStats) => _buildClassList(filteredClasses, allStats['classStats']),
+              data: (allStats) =>
+                  _buildClassList(filteredClasses, allStats['classStats']),
               loading: () => _buildLoadingState(),
               error: (error, stack) => _buildErrorState(error),
             ),
@@ -333,7 +401,8 @@ class _AllClassesScreenState extends ConsumerState<AllClassesScreen> {
     );
   }
 
-  Widget _buildClassList(List<Map<String, dynamic>> classes, Map<String, dynamic> classStats) {
+  Widget _buildClassList(
+      List<Map<String, dynamic>> classes, Map<String, dynamic> classStats) {
     if (classes.isEmpty) {
       return Center(
         child: Column(
@@ -370,7 +439,8 @@ class _AllClassesScreenState extends ConsumerState<AllClassesScreen> {
         final stats = classStats[classId] ?? {};
         final questionCount = stats['questionCount'] ?? 0;
         final subjectCount = stats['subjectCount'] ?? 0;
-        final availableCategories = stats['availableCategories'] as List<QuizCategory>? ?? [];
+        final availableCategories =
+            stats['availableCategories'] as List<QuizCategory>? ?? [];
 
         return Padding(
           padding: const EdgeInsets.only(bottom: 16),
@@ -426,7 +496,10 @@ class _EnhancedEducationalClassCard extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [classData['color'], classData['color'].withValues(alpha: 0.8)],
+                  colors: [
+                    classData['color'],
+                    classData['color'].withValues(alpha: 0.8)
+                  ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -533,12 +606,14 @@ class _EnhancedEducationalClassCard extends StatelessWidget {
                       runSpacing: 6,
                       children: availableCategories.take(4).map((category) {
                         return Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
                             color: category.primaryColor.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: category.primaryColor.withValues(alpha: 0.3),
+                              color:
+                                  category.primaryColor.withValues(alpha: 0.3),
                               width: 1,
                             ),
                           ),
@@ -590,9 +665,11 @@ class _EnhancedEducationalClassCard extends StatelessWidget {
                     Wrap(
                       spacing: 6,
                       runSpacing: 6,
-                      children: (classData['focusAreas'] as List<String>).map((area) {
+                      children:
+                          (classData['focusAreas'] as List<String>).map((area) {
                         return Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
                             color: classData['color'].withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),

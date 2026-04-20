@@ -16,14 +16,18 @@ class QrDecoder {
     final dimension = matrix.getWidth();
 
     // Step 1: Get version
-    final version = Version.decode(matrix) ?? Version.fromDimension(matrix.getWidth());
+    final version =
+        Version.decode(matrix) ?? Version.fromDimension(matrix.getWidth());
     if (version == null) {
-      if (kDebugMode) { print('Unsupported version.'); }
+      if (kDebugMode) {
+        print('Unsupported version.');
+      }
       return null;
     }
 
     // Step 2: Dummy format info (in production, extract from matrix positions)
-    final formatInfo = FormatInformation.decode(matrix); // hardcoded error correction + mask
+    final formatInfo =
+        FormatInformation.decode(matrix); // hardcoded error correction + mask
 
     // Step 3: Unmask matrix using mask pattern (skip for now — assume unmasked)
     MaskUtil.unmask(matrix, formatInfo.maskPattern);
@@ -88,7 +92,8 @@ class QrDecoder {
 
   /// Applies Reed-Solomon correction using the correct per-block EC codeword
   /// count for [version] and [ecLevel] from ISO/IEC 18004:2015 Table 9.
-  List<int>? _correctErrors(List<int> codewords, Version version, String ecLevel) {
+  List<int>? _correctErrors(
+      List<int> codewords, Version version, String ecLevel) {
     final int ecCodewords = version.ecCodewordsPerBlockFor(ecLevel);
     final copy = List<int>.from(codewords);
     final success = _ecc.decode(copy, ecCodewords);

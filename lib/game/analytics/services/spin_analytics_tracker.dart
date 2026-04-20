@@ -25,9 +25,7 @@ class SpinAnalyticsTracker {
 
     // Track best reward in session
     if (results.isNotEmpty) {
-      final bestReward = results.reduce((a, b) =>
-      a.reward > b.reward ? a : b
-      );
+      final bestReward = results.reduce((a, b) => a.reward > b.reward ? a : b);
 
       await analytics.trackEvent('session_best_reward', {
         'reward_type': bestReward.label,
@@ -48,15 +46,18 @@ class SpinAnalyticsTracker {
     }
 
     final avgInterval = intervals.fold<Duration>(
-      Duration.zero,
+          Duration.zero,
           (sum, interval) => sum + interval,
-    ) ~/ intervals.length;
+        ) ~/
+        intervals.length;
 
     await analytics.trackEvent('spin_engagement_pattern', {
       'total_spins': spinTimestamps.length,
       'average_interval_seconds': avgInterval.inSeconds,
-      'min_interval_seconds': intervals.map((e) => e.inSeconds).reduce((a, b) => a < b ? a : b),
-      'max_interval_seconds': intervals.map((e) => e.inSeconds).reduce((a, b) => a > b ? a : b),
+      'min_interval_seconds':
+          intervals.map((e) => e.inSeconds).reduce((a, b) => a < b ? a : b),
+      'max_interval_seconds':
+          intervals.map((e) => e.inSeconds).reduce((a, b) => a > b ? a : b),
     });
   }
 
@@ -74,9 +75,8 @@ class SpinAnalyticsTracker {
     await analytics.trackEvent('reward_preferences', {
       'total_spins': totalSpins,
       'reward_distribution': preferences,
-      'most_common_reward': rewardCounts.entries
-          .reduce((a, b) => a.value > b.value ? a : b)
-          .key,
+      'most_common_reward':
+          rewardCounts.entries.reduce((a, b) => a.value > b.value ? a : b).key,
     });
   }
 
@@ -128,9 +128,8 @@ class SpinAnalyticsTracker {
       hourCounts[hour] = (hourCounts[hour] ?? 0) + 1;
     }
 
-    final mostActiveHour = hourCounts.entries
-        .reduce((a, b) => a.value > b.value ? a : b)
-        .key;
+    final mostActiveHour =
+        hourCounts.entries.reduce((a, b) => a.value > b.value ? a : b).key;
 
     await analytics.trackEvent('spin_time_preferences', {
       'most_active_hour': mostActiveHour,
@@ -142,7 +141,8 @@ class SpinAnalyticsTracker {
     });
   }
 
-  int _countSpinsByTimeOfDay(Map<int, int> hourCounts, int startHour, int endHour) {
+  int _countSpinsByTimeOfDay(
+      Map<int, int> hourCounts, int startHour, int endHour) {
     int count = 0;
     for (int hour = startHour; hour < endHour; hour++) {
       count += hourCounts[hour] ?? 0;

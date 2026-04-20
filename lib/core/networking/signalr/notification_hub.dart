@@ -10,9 +10,9 @@ import 'hub_client_base.dart';
 /// eliminations/closures, guardian changes, territory captures, and vote tallies.
 class NotificationHub extends HubClientBase {
   final _playerNotifications =
-  StreamController<PlayerNotificationDto>.broadcast();
+      StreamController<PlayerNotificationDto>.broadcast();
   final _gameEventEliminations =
-  StreamController<GameEventEliminationDto>.broadcast();
+      StreamController<GameEventEliminationDto>.broadcast();
   final _gameEventsClosed = StreamController<GameEventClosedDto>.broadcast();
   final _guardianChanges = StreamController<GuardianChangedDto>.broadcast();
   final _territoryCaptures = StreamController<TerritoryCaptureDto>.broadcast();
@@ -22,13 +22,11 @@ class NotificationHub extends HubClientBase {
       _playerNotifications.stream;
   Stream<GameEventEliminationDto> get gameEventEliminations =>
       _gameEventEliminations.stream;
-  Stream<GameEventClosedDto> get gameEventsClosed =>
-      _gameEventsClosed.stream;
+  Stream<GameEventClosedDto> get gameEventsClosed => _gameEventsClosed.stream;
   Stream<GuardianChangedDto> get guardianChanges => _guardianChanges.stream;
   Stream<TerritoryCaptureDto> get territoryCaptures =>
       _territoryCaptures.stream;
-  Stream<VoteTallyUpdatedDto> get voteTallyUpdates =>
-      _voteTallyUpdates.stream;
+  Stream<VoteTallyUpdatedDto> get voteTallyUpdates => _voteTallyUpdates.stream;
 
   @override
   void registerHandlers(HubConnection connection) {
@@ -86,8 +84,7 @@ class NotificationHub extends HubClientBase {
   Future<void> joinTerritory(String seasonId, int tierNumber) =>
       invoke('JoinTerritory', args: [seasonId, tierNumber]);
 
-  Future<void> joinTopic(String topic) =>
-      invoke('JoinTopic', args: [topic]);
+  Future<void> joinTopic(String topic) => invoke('JoinTopic', args: [topic]);
 
   // ── Lifecycle ────────────────────────────────────────────────────────────
 

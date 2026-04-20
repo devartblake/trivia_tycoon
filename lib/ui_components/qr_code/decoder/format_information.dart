@@ -24,13 +24,16 @@ class FormatInformation {
 
     // ✅ Try Hamming fallback if both null
     if (decoded1 == null && decoded2 == null) {
-      return _fallbackByHamming(bits1) ?? _fallbackByHamming(bits2) ?? FormatInformation('M', 0);
+      return _fallbackByHamming(bits1) ??
+          _fallbackByHamming(bits2) ??
+          FormatInformation('M', 0);
     }
 
     return decoded1 ?? decoded2 ?? FormatInformation('M', 0);
   }
 
-  static int _readBit(BitMatrix matrix, int x, int y) => matrix.get(x, y) ? 1 : 0;
+  static int _readBit(BitMatrix matrix, int x, int y) =>
+      matrix.get(x, y) ? 1 : 0;
 
   static int _readFormatBits(BitMatrix matrix, bool primary) {
     int bits = 0;
@@ -57,8 +60,8 @@ class FormatInformation {
   }
 
   static FormatInformation? _decodeFormatBits(int bits) {
-    final ecBits = (bits >> 3) & 0x03;  // 0x03 = binary 00000011
-    final maskBits = bits & 0x07;       // 0x07 = binary 00000111
+    final ecBits = (bits >> 3) & 0x03; // 0x03 = binary 00000011
+    final maskBits = bits & 0x07; // 0x07 = binary 00000111
 
     final level = _ecLevelMap[ecBits];
     if (level == null || maskBits > 7) return null;

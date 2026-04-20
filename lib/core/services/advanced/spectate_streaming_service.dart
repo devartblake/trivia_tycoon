@@ -101,19 +101,20 @@ class GameSpectateState {
     required this.startTime,
   });
 
-  double get progress => totalQuestions > 0
-      ? currentQuestionIndex / totalQuestions
-      : 0.0;
+  double get progress =>
+      totalQuestions > 0 ? currentQuestionIndex / totalQuestions : 0.0;
 }
 
 class SpectateStreamingService extends ChangeNotifier {
-  static final SpectateStreamingService _instance = SpectateStreamingService._internal();
+  static final SpectateStreamingService _instance =
+      SpectateStreamingService._internal();
   factory SpectateStreamingService() => _instance;
   SpectateStreamingService._internal();
 
   final Map<String, GameSpectateState> _activeGames = {};
   final Map<String, StreamController<GameSpectateState>> _gameStreams = {};
-  final Map<String, Set<String>> _spectators = {}; // gameId -> Set of spectatorIds
+  final Map<String, Set<String>> _spectators =
+      {}; // gameId -> Set of spectatorIds
 
   Timer? _updateTimer;
 
@@ -227,7 +228,8 @@ class SpectateStreamingService extends ChangeNotifier {
     required String reaction,
   }) {
     // In a real app, this would broadcast the reaction to other spectators
-    LogManager.debug('Spectator $spectatorId sent reaction $reaction to game $gameId');
+    LogManager.debug(
+        'Spectator $spectatorId sent reaction $reaction to game $gameId');
   }
 
   // Simulate game updates

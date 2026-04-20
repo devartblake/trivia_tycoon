@@ -4,7 +4,8 @@ class BadgeProgressMeter extends StatelessWidget {
   final int current;
   final int goal;
 
-  const BadgeProgressMeter({super.key, required this.current, required this.goal});
+  const BadgeProgressMeter(
+      {super.key, required this.current, required this.goal});
 
   @override
   Widget build(BuildContext context) {

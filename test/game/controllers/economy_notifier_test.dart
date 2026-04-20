@@ -75,8 +75,7 @@ class _FakeStorage extends GeneralKeyValueStorageService {
   }
 
   @override
-  Future<void> setString(String key, String value) async =>
-      _store[key] = value;
+  Future<void> setString(String key, String value) async => _store[key] = value;
 
   @override
   Future<bool?> getBool(String key) async {
@@ -97,7 +96,8 @@ class _FakeAnalyticsService extends AnalyticsService {
             EventQueueService());
 
   @override
-  Future<void> initialize({String? initialSessionId, bool silent = true}) async {}
+  Future<void> initialize(
+      {String? initialSessionId, bool silent = true}) async {}
 
   @override
   Future<void> logEvent(String name, Map<String, dynamic> data) async {
@@ -235,8 +235,8 @@ SynaptixApiClient _buildRealClient(_StubHttpClient stub, Box authBox) {
 _FakeApiClient _buildFakeClient(Box authBox) {
   final store = AuthTokenStore(authBox);
   final deviceId = _FakeDeviceIdService();
-  final noop = _StubHttpClient(
-      (_) => http.Response('{}', 200, headers: {'content-type': 'application/json'}));
+  final noop = _StubHttpClient((_) =>
+      http.Response('{}', 200, headers: {'content-type': 'application/json'}));
   final authApi =
       AuthApiClient(noop, apiBaseUrl: 'https://test', deviceId: deviceId);
   final auth =
@@ -286,31 +286,50 @@ void main() {
     });
 
     test('effectiveCost returns adjustedCost when present', () {
-      final dto = ModeCostDto.fromJson(
-          {'mode': 'casual', 'costType': 'energy', 'baseCost': 3, 'adjustedCost': 1, 'available': true});
+      final dto = ModeCostDto.fromJson({
+        'mode': 'casual',
+        'costType': 'energy',
+        'baseCost': 3,
+        'adjustedCost': 1,
+        'available': true
+      });
       expect(dto.effectiveCost, 1);
     });
 
     test('effectiveCost falls back to baseCost when adjustedCost absent', () {
-      final dto = ModeCostDto.fromJson(
-          {'mode': 'casual', 'costType': 'energy', 'baseCost': 3, 'available': true});
+      final dto = ModeCostDto.fromJson({
+        'mode': 'casual',
+        'costType': 'energy',
+        'baseCost': 3,
+        'available': true
+      });
       expect(dto.effectiveCost, 3);
     });
 
     test('hasDiscount true when adjustedCost < baseCost', () {
-      final dto = ModeCostDto.fromJson(
-          {'mode': 'casual', 'costType': 'energy', 'baseCost': 4, 'adjustedCost': 2, 'available': true});
+      final dto = ModeCostDto.fromJson({
+        'mode': 'casual',
+        'costType': 'energy',
+        'baseCost': 4,
+        'adjustedCost': 2,
+        'available': true
+      });
       expect(dto.hasDiscount, isTrue);
     });
 
     test('hasDiscount false when adjustedCost absent', () {
-      final dto = ModeCostDto.fromJson(
-          {'mode': 'casual', 'costType': 'energy', 'baseCost': 4, 'available': true});
+      final dto = ModeCostDto.fromJson({
+        'mode': 'casual',
+        'costType': 'energy',
+        'baseCost': 4,
+        'available': true
+      });
       expect(dto.hasDiscount, isFalse);
     });
 
     test('defaults available to true on missing field', () {
-      final dto = ModeCostDto.fromJson({'mode': 'casual', 'costType': 'energy', 'baseCost': 3});
+      final dto = ModeCostDto.fromJson(
+          {'mode': 'casual', 'costType': 'energy', 'baseCost': 3});
       expect(dto.available, isTrue);
     });
   });
@@ -391,8 +410,12 @@ void main() {
     });
 
     test('hasDiscount false when finalCost == baseCost', () {
-      final dto = ReviveQuoteDto.fromJson(
-          {'baseCost': 100, 'finalCost': 100, 'almostWinApplied': false, 'costCurrency': 'gems'});
+      final dto = ReviveQuoteDto.fromJson({
+        'baseCost': 100,
+        'finalCost': 100,
+        'almostWinApplied': false,
+        'costCurrency': 'gems'
+      });
       expect(dto.hasDiscount, isFalse);
     });
 
@@ -426,7 +449,8 @@ void main() {
 
   group('PityResponseDto parsing', () {
     test('parses pity active', () {
-      final dto = PityResponseDto.fromJson({'pityActive': true, 'lossCount': 4});
+      final dto =
+          PityResponseDto.fromJson({'pityActive': true, 'lossCount': 4});
       expect(dto.pityActive, isTrue);
       expect(dto.lossCount, 4);
     });
@@ -490,8 +514,14 @@ void main() {
 
     test('isEmpty false after successful fetch', () {
       final s = EconomyState(
-        modes: {'casual': ModeCostDto.fromJson(
-            {'mode': 'casual', 'costType': 'energy', 'baseCost': 3, 'available': true})},
+        modes: {
+          'casual': ModeCostDto.fromJson({
+            'mode': 'casual',
+            'costType': 'energy',
+            'baseCost': 3,
+            'available': true
+          })
+        },
         lastFetched: DateTime.now(),
       );
       expect(s.isEmpty, isFalse);
@@ -505,8 +535,8 @@ void main() {
       final stub = _StubHttpClient((_) => _jsonResp({'matchId': 'match-abc'}));
       final client = _buildRealClient(stub, authBox);
 
-      final result = await client.startPolicyMatch(
-          playerId: 'p1', mode: 'casual');
+      final result =
+          await client.startPolicyMatch(playerId: 'p1', mode: 'casual');
       expect(result.started, isTrue);
       expect(result.matchId, 'match-abc');
       expect(result.denyReason, isNull);
@@ -517,8 +547,8 @@ void main() {
           (_) => _jsonResp({'message': 'insufficient_energy'}, status: 409));
       final client = _buildRealClient(stub, authBox);
 
-      final result = await client.startPolicyMatch(
-          playerId: 'p1', mode: 'ranked');
+      final result =
+          await client.startPolicyMatch(playerId: 'p1', mode: 'ranked');
       expect(result.started, isFalse);
       expect(result.denyReason, contains('insufficient_energy'));
     });
@@ -604,15 +634,15 @@ void main() {
       await notifier.fetchState('p1', maxRetries: 0);
 
       expect(analytics.eventNames, contains('economy_state_loaded'));
-      final data = analytics.eventData[analytics.eventNames.indexOf('economy_state_loaded')];
+      final data = analytics
+          .eventData[analytics.eventNames.indexOf('economy_state_loaded')];
       expect(data['playerId'], 'p1');
       expect(data['attempt'], 0);
     });
 
     test('transient error retries — call count == 2 with maxRetries=1',
         () async {
-      api.addEconomyState(
-          Exception('SocketException: connection refused'));
+      api.addEconomyState(Exception('SocketException: connection refused'));
       api.addEconomyState(_stateDto(energy: 25));
 
       await notifier.fetchState('p1', maxRetries: 1);
@@ -632,8 +662,7 @@ void main() {
     });
 
     test('all retries exhausted → error set', () async {
-      api.addEconomyState(
-          Exception('SocketException: host unreachable'));
+      api.addEconomyState(Exception('SocketException: host unreachable'));
 
       await notifier.fetchState('p1', maxRetries: 0);
 
@@ -643,15 +672,14 @@ void main() {
 
     test('isOffline true when cache exists and fetch fails', () async {
       // Pre-populate cache to simulate a previous successful fetch.
-      await storage.setString(
-          'economy_last_state_json', jsonEncode(_stateDto(energy: 10).toJson()));
+      await storage.setString('economy_last_state_json',
+          jsonEncode(_stateDto(energy: 10).toJson()));
       // Re-create notifier so _hydrateCachedState runs with the pre-seeded cache.
       notifier.dispose();
       notifier = EconomyNotifier(api, energy, analytics, storage);
       await Future.delayed(Duration.zero); // let _hydrateCachedState resolve
 
-      api.addEconomyState(
-          Exception('SocketException: host unreachable'));
+      api.addEconomyState(Exception('SocketException: host unreachable'));
       await notifier.fetchState('p1', maxRetries: 0);
 
       expect(notifier.state.isOffline, isTrue);
@@ -659,8 +687,7 @@ void main() {
 
     test('all retries exhausted → fires economy_state_load_failed analytics',
         () async {
-      api.addEconomyState(
-          Exception('SocketException: host unreachable'));
+      api.addEconomyState(Exception('SocketException: host unreachable'));
 
       await notifier.fetchState('p1', maxRetries: 0);
 
@@ -689,8 +716,8 @@ void main() {
     });
 
     test('success: updates ticket state', () async {
-      api.addClaimTicket(const DailyTicketClaimDto(
-          success: true, ticketsRemaining: 2));
+      api.addClaimTicket(
+          const DailyTicketClaimDto(success: true, ticketsRemaining: 2));
 
       await notifier.claimTicket('p1');
 
@@ -699,9 +726,10 @@ void main() {
       expect(analytics.eventNames, contains('daily_ticket_claimed'));
     });
 
-    test('success: dailyTicketAvailable false when ticketsRemaining == 0', () async {
-      api.addClaimTicket(const DailyTicketClaimDto(
-          success: true, ticketsRemaining: 0));
+    test('success: dailyTicketAvailable false when ticketsRemaining == 0',
+        () async {
+      api.addClaimTicket(
+          const DailyTicketClaimDto(success: true, ticketsRemaining: 0));
 
       await notifier.claimTicket('p1');
 
@@ -790,10 +818,18 @@ void main() {
     test('merges adjustedCosts into modes', () async {
       // Seed an existing mode map.
       api.addEconomyState(_stateDto(modes: {
-        'casual': ModeCostDto.fromJson(
-            {'mode': 'casual', 'costType': 'energy', 'baseCost': 3, 'available': true}),
-        'ranked': ModeCostDto.fromJson(
-            {'mode': 'ranked', 'costType': 'energy', 'baseCost': 4, 'available': true}),
+        'casual': ModeCostDto.fromJson({
+          'mode': 'casual',
+          'costType': 'energy',
+          'baseCost': 3,
+          'available': true
+        }),
+        'ranked': ModeCostDto.fromJson({
+          'mode': 'ranked',
+          'costType': 'energy',
+          'baseCost': 4,
+          'available': true
+        }),
       }));
       await notifier.fetchState('p1', maxRetries: 0);
 
@@ -848,7 +884,8 @@ void main() {
     });
 
     test('started=true fires mode_entry_attempted analytics', () async {
-      api.addMatch(const MatchStartResultDto(started: true, matchId: 'match-1'));
+      api.addMatch(
+          const MatchStartResultDto(started: true, matchId: 'match-1'));
 
       final result = await notifier.enterMode('p1', 'casual');
 
@@ -856,7 +893,8 @@ void main() {
       expect(analytics.eventNames, contains('mode_entry_attempted'));
     });
 
-    test('started=false fires mode_entry_blocked analytics with reasonCode', () async {
+    test('started=false fires mode_entry_blocked analytics with reasonCode',
+        () async {
       api.addMatch(const MatchStartResultDto(
           started: false, denyReason: 'insufficient_energy'));
 

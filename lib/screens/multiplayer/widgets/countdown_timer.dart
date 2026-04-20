@@ -112,7 +112,9 @@ class _CountdownTimerState extends State<CountdownTimer>
                     value: progress,
                     backgroundColor: Colors.transparent,
                     valueColor: AlwaysStoppedAnimation<Color>(
-                      isUrgent ? Colors.white : Colors.white.withValues(alpha: 0.9),
+                      isUrgent
+                          ? Colors.white
+                          : Colors.white.withValues(alpha: 0.9),
                     ),
                   ),
                 ),

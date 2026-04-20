@@ -41,7 +41,7 @@ class PresenceWebSocketAdapter {
         _handleBulkPresence(envelope.data);
         break;
       default:
-      // Ignore other message types
+        // Ignore other message types
         break;
     }
   }
@@ -130,7 +130,8 @@ class PresenceWebSocketAdapter {
     }
 
     // Only subscribe to new users
-    final newUserIds = userIds.where((id) => !_subscribedUserIds.contains(id)).toList();
+    final newUserIds =
+        userIds.where((id) => !_subscribedUserIds.contains(id)).toList();
     if (newUserIds.isEmpty) return;
 
     wsClient.send(WsEnvelope(
@@ -184,9 +185,11 @@ class PresenceWebSocketAdapter {
       data['gameActivity'] = {
         'gameType': gameActivity.gameType,
         if (gameActivity.gameMode != null) 'gameMode': gameActivity.gameMode,
-        if (gameActivity.currentLevel != null) 'currentLevel': gameActivity.currentLevel,
+        if (gameActivity.currentLevel != null)
+          'currentLevel': gameActivity.currentLevel,
         if (gameActivity.score != null) 'score': gameActivity.score,
-        if (gameActivity.timeRemaining != null) 'timeRemaining': gameActivity.timeRemaining,
+        if (gameActivity.timeRemaining != null)
+          'timeRemaining': gameActivity.timeRemaining,
         'gameState': gameActivity.gameState.name,
         'startTime': gameActivity.startTime.toIso8601String(),
         if (gameActivity.metadata.isNotEmpty) 'metadata': gameActivity.metadata,

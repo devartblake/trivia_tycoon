@@ -21,9 +21,7 @@ final learningRepositoryProvider = Provider<LearningRepository>((ref) {
 /// for the given player ID. Pass null when the player is not authenticated.
 final modulesProvider = FutureProvider.autoDispose
     .family<List<ModuleDto>, String?>((ref, playerId) async {
-  return ref
-      .read(learningRepositoryProvider)
-      .getModules(playerId: playerId);
+  return ref.read(learningRepositoryProvider).getModules(playerId: playerId);
 });
 
 /// Fetches modules filtered by difficulty (1–4). The playerId is still
@@ -118,7 +116,8 @@ final lessonFlowProvider = StateNotifierProvider.autoDispose
 
 /// Resolves the current player's ID from local profile storage.
 /// Returns null when the player is not authenticated / ID not yet set.
-final currentPlayerIdProvider = FutureProvider.autoDispose<String?>((ref) async {
+final currentPlayerIdProvider =
+    FutureProvider.autoDispose<String?>((ref) async {
   final profileService = ref.read(playerProfileServiceProvider);
   final id = await profileService.getUserId();
   return (id != null && id.isNotEmpty) ? id : null;

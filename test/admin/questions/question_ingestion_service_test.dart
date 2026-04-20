@@ -54,7 +54,9 @@ QuestionModel _sampleQuestion() {
 }
 
 void main() {
-  test('validateBulkImport posts payload and returns normalized validation object', () async {
+  test(
+      'validateBulkImport posts payload and returns normalized validation object',
+      () async {
     final api = _FakeApiService()
       ..nextResponse = {
         'valid': true,
@@ -93,10 +95,12 @@ void main() {
     final service = QuestionIngestionService(apiService: api);
 
     await service.publishDataset('phase3 pack/v1');
-    expect(api.lastPath, '/admin/questions/datasets/phase3%20pack%2Fv1/publish');
+    expect(
+        api.lastPath, '/admin/questions/datasets/phase3%20pack%2Fv1/publish');
 
     await service.unpublishDataset('phase3 pack/v1');
-    expect(api.lastPath, '/admin/questions/datasets/phase3%20pack%2Fv1/unpublish');
+    expect(
+        api.lastPath, '/admin/questions/datasets/phase3%20pack%2Fv1/unpublish');
   });
 
   test('getDatasetStatuses maps dataset list response', () async {

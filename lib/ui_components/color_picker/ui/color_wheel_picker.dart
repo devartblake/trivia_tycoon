@@ -66,7 +66,8 @@ class _ColorWheelPickerState extends State<ColorWheelPicker>
     });
   }
 
-  Color get _currentColor => HSLColor.fromAHSL(1.0, _hue, _saturation, _brightness).toColor();
+  Color get _currentColor =>
+      HSLColor.fromAHSL(1.0, _hue, _saturation, _brightness).toColor();
 
   void _updateColor() {
     final color = _currentColor;
@@ -136,7 +137,7 @@ class _ColorWheelPickerState extends State<ColorWheelPicker>
             "Saturation",
             Icons.water_drop_outlined,
             _saturation,
-                (value) {
+            (value) {
               HapticFeedback.selectionClick();
               setState(() => _saturation = value);
               _updateColor();
@@ -151,7 +152,7 @@ class _ColorWheelPickerState extends State<ColorWheelPicker>
             "Brightness",
             Icons.brightness_6_rounded,
             _brightness,
-                (value) {
+            (value) {
               HapticFeedback.selectionClick();
               setState(() => _brightness = value);
               _updateColor();
@@ -185,13 +186,13 @@ class _ColorWheelPickerState extends State<ColorWheelPicker>
   }
 
   Widget _buildModernSlider(
-      String title,
-      IconData icon,
-      double value,
-      ValueChanged<double> onChanged,
-      Gradient trackGradient,
-      ColorScheme colorScheme,
-      ) {
+    String title,
+    IconData icon,
+    double value,
+    ValueChanged<double> onChanged,
+    Gradient trackGradient,
+    ColorScheme colorScheme,
+  ) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -254,7 +255,6 @@ class _ColorWheelPickerState extends State<ColorWheelPicker>
             ],
           ),
           const SizedBox(height: 8),
-
           SizedBox(
             height: 24,
             child: Stack(
@@ -275,7 +275,8 @@ class _ColorWheelPickerState extends State<ColorWheelPicker>
                   data: SliderTheme.of(context).copyWith(
                     trackHeight: 6,
                     thumbShape: _CustomSliderThumb(_currentColor),
-                    overlayShape: const RoundSliderOverlayShape(overlayRadius: 12),
+                    overlayShape:
+                        const RoundSliderOverlayShape(overlayRadius: 12),
                     activeTrackColor: Colors.transparent,
                     inactiveTrackColor: Colors.transparent,
                     thumbColor: Colors.white,
@@ -374,7 +375,8 @@ class _ColorWheelPainter extends CustomPainter {
     canvas.drawCircle(selectedPosition, 12, outerPaint);
 
     // Inner color
-    final currentColor = HSLColor.fromAHSL(1, hue, saturation, brightness).toColor();
+    final currentColor =
+        HSLColor.fromAHSL(1, hue, saturation, brightness).toColor();
     final innerPaint = Paint()
       ..color = currentColor
       ..style = PaintingStyle.fill;
@@ -404,19 +406,19 @@ class _CustomSliderThumb extends SliderComponentShape {
 
   @override
   void paint(
-      PaintingContext context,
-      Offset center, {
-        required Animation<double> activationAnimation,
-        required Animation<double> enableAnimation,
-        required bool isDiscrete,
-        required TextPainter labelPainter,
-        required RenderBox parentBox,
-        required SliderThemeData sliderTheme,
-        required TextDirection textDirection,
-        required double value,
-        required double textScaleFactor,
-        required Size sizeWithOverflow,
-      }) {
+    PaintingContext context,
+    Offset center, {
+    required Animation<double> activationAnimation,
+    required Animation<double> enableAnimation,
+    required bool isDiscrete,
+    required TextPainter labelPainter,
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required TextDirection textDirection,
+    required double value,
+    required double textScaleFactor,
+    required Size sizeWithOverflow,
+  }) {
     final Canvas canvas = context.canvas;
 
     // Shadow

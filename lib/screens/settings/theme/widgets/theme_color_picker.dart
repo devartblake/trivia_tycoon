@@ -43,7 +43,9 @@ class _ThemeColorPickerState extends ConsumerState<ThemeColorPicker> {
 
     final hsb = HSVColor.fromColor(color);
 
-    if (hsb.hue != hue || hsb.saturation != saturation || hsb.value != brightness) {
+    if (hsb.hue != hue ||
+        hsb.saturation != saturation ||
+        hsb.value != brightness) {
       setState(() {
         hue = hsb.hue;
         saturation = hsb.saturation;
@@ -54,7 +56,7 @@ class _ThemeColorPickerState extends ConsumerState<ThemeColorPicker> {
 
   void _scheduleThemeUpdate() {
     _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 800), (){
+    _debounce = Timer(const Duration(milliseconds: 800), () {
       final color = currentColor;
       final controller = ref.read(themeSettingsProvider.notifier);
       if (widget.isPrimary) {
@@ -85,7 +87,8 @@ class _ThemeColorPickerState extends ConsumerState<ThemeColorPicker> {
   @override
   Widget build(BuildContext context) {
     final label = widget.isPrimary ? "Primary Color" : "Secondary Color";
-    final currentColor = HSVColor.fromAHSV(1.0, hue, saturation, brightness).toColor();
+    final currentColor =
+        HSVColor.fromAHSV(1.0, hue, saturation, brightness).toColor();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,7 +113,11 @@ class _ThemeColorPickerState extends ConsumerState<ThemeColorPicker> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Preview', style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white)),
+              Text('Preview',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.copyWith(color: Colors.white)),
               Icon(Icons.brightness_6, color: Colors.white),
             ],
           ),
@@ -126,11 +133,10 @@ class _ThemeColorPickerState extends ConsumerState<ThemeColorPicker> {
             border: Border.all(color: Colors.grey.shade400),
             boxShadow: [
               BoxShadow(
-                color: currentColor.withValues(alpha: 0.4),
-                blurRadius: 12,
-                spreadRadius: 2,
-                offset: const Offset(0, 3)
-              )
+                  color: currentColor.withValues(alpha: 0.4),
+                  blurRadius: 12,
+                  spreadRadius: 2,
+                  offset: const Offset(0, 3))
             ],
           ),
           height: 60,
@@ -139,7 +145,11 @@ class _ThemeColorPickerState extends ConsumerState<ThemeColorPicker> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Preview', style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white)),
+              Text('Preview',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.copyWith(color: Colors.white)),
               Icon(Icons.brightness_6, color: Colors.white),
             ],
           ),

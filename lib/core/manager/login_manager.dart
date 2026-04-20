@@ -106,9 +106,9 @@ class LoginManager {
   /// Apply backend session to local state
   /// This extracts role, premium status, and other user metadata from the session
   Future<void> _applyBackendSession(
-      String email,
-      AuthSession session,
-      ) async {
+    String email,
+    AuthSession session,
+  ) async {
     // Mark as logged in
     await secureStorage.setLoggedIn(true);
 
@@ -164,9 +164,8 @@ class LoginManager {
 
       // Store all roles if multiple exist
       if (metadata.containsKey('roles') && metadata['roles'] is List) {
-        final roles = (metadata['roles'] as List)
-            .map((r) => r.toString())
-            .toList();
+        final roles =
+            (metadata['roles'] as List).map((r) => r.toString()).toList();
         await profileService.saveUserRoles(roles);
       }
     }

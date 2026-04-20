@@ -58,7 +58,8 @@ class ProfileCharacterSection extends ConsumerWidget {
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  onTap: () => showProfileImagePickerDialog(context, controller),
+                  onTap: () =>
+                      showProfileImagePickerDialog(context, controller),
                   customBorder: const CircleBorder(),
                   child: Container(
                     width: 44,
@@ -99,13 +100,16 @@ class ProfileCharacterSection extends ConsumerWidget {
     final imageFile = controller.imageFile;
     final avatarPath = controller.avatarPath ?? profile.avatar;
 
-    if (imageFile == null && controller.avatarPath == null && profile.avatar == null) {
+    if (imageFile == null &&
+        controller.avatarPath == null &&
+        profile.avatar == null) {
       return ShimmerAvatar(
         avatarPath: '',
         status: AvatarStatus.online,
         isLoading: true,
         radius: 120,
-        badgeType: profile.isPremium ? AvatarBadgeType.premium : AvatarBadgeType.level,
+        badgeType:
+            profile.isPremium ? AvatarBadgeType.premium : AvatarBadgeType.level,
         badgeText: 'L${profile.level}',
         showStatusIndicator: false,
       );

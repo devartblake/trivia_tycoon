@@ -11,7 +11,8 @@ class PowerUpController extends StateNotifier<PowerUp?> {
   static const _equippedKey = 'equipped_power_up';
   static const _activationTimeKey = 'active_power_up_timestamp';
 
-  GeneralKeyValueStorageService get _storage => ref.read(generalKeyValueStorageProvider);
+  GeneralKeyValueStorageService get _storage =>
+      ref.read(generalKeyValueStorageProvider);
 
   /// Returns the activation time of the currently equipped power-up (if any)
   Future<DateTime?> get activationTimestamp async {
@@ -30,13 +31,14 @@ class PowerUpController extends StateNotifier<PowerUp?> {
     }
 
     final match = availablePowerUps.firstWhere(
-          (p) => p.id == savedId,
+      (p) => p.id == savedId,
       orElse: () => PowerUp.none(),
     );
 
     final startTime = DateTime.tryParse(timestamp);
     final isValid = startTime != null &&
-        DateTime.now().isBefore(startTime.add(Duration(seconds: match.duration)));
+        DateTime.now()
+            .isBefore(startTime.add(Duration(seconds: match.duration)));
 
     if (match.id != PowerUp.none().id && isValid) {
       state = match;
@@ -57,7 +59,8 @@ class PowerUpController extends StateNotifier<PowerUp?> {
   Future<void> activate(PowerUp powerUp) async {
     state = powerUp;
     await _storage.setString(_equippedKey, powerUp.id);
-    await _storage.setString(_activationTimeKey, DateTime.now().toIso8601String());
+    await _storage.setString(
+        _activationTimeKey, DateTime.now().toIso8601String());
   }
 
   /// ✅ Clear equipped power-up and remove its activation timestamp.
@@ -72,7 +75,7 @@ class PowerUpController extends StateNotifier<PowerUp?> {
     final savedId = await _storage.getString(_equippedKey);
     if (savedId != null) {
       final match = availablePowerUps.firstWhere(
-            (p) => p.id == savedId,
+        (p) => p.id == savedId,
         orElse: () => PowerUp.none(),
       );
       if (match.id != PowerUp.none().id) state = match;
@@ -82,7 +85,7 @@ class PowerUpController extends StateNotifier<PowerUp?> {
   /// ✅ Equip a power-up by its ID directly.
   Future<void> equipById(String id, List<PowerUp> availablePowerUps) async {
     final match = availablePowerUps.firstWhere(
-          (p) => p.id == id,
+      (p) => p.id == id,
       orElse: () => PowerUp.none(),
     );
     if (match.id != PowerUp.none().id) {
@@ -118,7 +121,9 @@ class PowerUpController extends StateNotifier<PowerUp?> {
     if (start == null) return Duration.zero;
 
     final end = start.add(Duration(seconds: state!.duration));
-    return end.difference(DateTime.now()).isNegative ? Duration.zero : end.difference(DateTime.now());
+    return end.difference(DateTime.now()).isNegative
+        ? Duration.zero
+        : end.difference(DateTime.now());
   }
 
   /// ✅ Automatically unequipped if expired.

@@ -14,7 +14,8 @@ class AchievementSettingsService {
   /// Unlocks a badge and stores it if not already present.
   Future<void> unlockBadge(String badge) async {
     final box = await Hive.openBox(_boxName);
-    List<String> current = List<String>.from(box.get(_unlockedBadgesKey, defaultValue: []));
+    List<String> current =
+        List<String>.from(box.get(_unlockedBadgesKey, defaultValue: []));
     if (!current.contains(badge)) {
       current.add(badge);
       await box.put(_unlockedBadgesKey, current);

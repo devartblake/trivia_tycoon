@@ -52,11 +52,11 @@ class ArcadeMissionService {
   final Set<String> _claimInFlight = <String>{};
 
   ArcadeMissionService(
-      this._cache, {
-        ArcadeMissionRemoteSource? remote,
-        String seasonId = 'season_v1',
-        ArcadeMissionRemotePolicy remotePolicy = ArcadeMissionRemotePolicy.replace,
-      })  : _remote = remote,
+    this._cache, {
+    ArcadeMissionRemoteSource? remote,
+    String seasonId = 'season_v1',
+    ArcadeMissionRemotePolicy remotePolicy = ArcadeMissionRemotePolicy.replace,
+  })  : _remote = remote,
         _seasonId = seasonId,
         _remotePolicy = remotePolicy {
     _ensureLoadedAndRolledOver();
@@ -172,7 +172,7 @@ class ArcadeMissionService {
       final id = entry.key;
       final raw = entry.value;
       if (raw is Map) {
-       try {
+        try {
           out[id] =
               ArcadeMissionProgress.fromJson(Map<String, dynamic>.from(raw));
         } catch (_) {
@@ -199,7 +199,8 @@ class ArcadeMissionService {
   }
 
   void _applyTierRollovers() {
-    final rollover = _cache.get<Map<String, dynamic>>(_rolloverKey) ?? <String, dynamic>{};
+    final rollover =
+        _cache.get<Map<String, dynamic>>(_rolloverKey) ?? <String, dynamic>{};
 
     final dailyToken = _dailyTokenUtc();
     final weeklyToken = _weeklyTokenUtc();
@@ -248,7 +249,8 @@ class ArcadeMissionService {
     final weekday = now.weekday; // 1..7 (Mon..Sun)
     final thursday = now.add(Duration(days: 4 - weekday));
     final yearStart = DateTime.utc(thursday.year, 1, 1);
-    final weekNumber = ((thursday.difference(yearStart).inDays) / 7).floor() + 1;
+    final weekNumber =
+        ((thursday.difference(yearStart).inDays) / 7).floor() + 1;
     return '${thursday.year}-W${weekNumber.toString().padLeft(2, '0')}';
   }
 
@@ -275,7 +277,8 @@ class ArcadeMissionService {
     if (fresh.isEmpty) return;
 
     // Cache remote missions for offline use
-    await _cache.setJson(_missionDefsKey, fresh.map((m) => m.toJson()).toList());
+    await _cache.setJson(
+        _missionDefsKey, fresh.map((m) => m.toJson()).toList());
 
     // Reload with policy
     _missions = _loadMissionDefinitions();
@@ -302,7 +305,7 @@ class ArcadeMissionService {
 
       switch (m.type) {
         case ArcadeMissionType.playRuns:
-        // Optional filter by gameId
+          // Optional filter by gameId
           if (m.gameId == null || result.gameId == m.gameId) {
             _progress[m.id] = p.copyWith(
               current: min(p.current + 1, m.target),
@@ -349,7 +352,7 @@ class ArcadeMissionService {
   /// Returns true only if the claim is accepted.
   bool tryClaim(String missionId) {
     // In-frame mutex
-    if(_claimInFlight.contains(missionId)) return false;
+    if (_claimInFlight.contains(missionId)) return false;
     _claimInFlight.add(missionId);
 
     // Actual claim ()

@@ -68,7 +68,8 @@ class DailyQuizWidget extends ConsumerWidget {
       child: dailyQuizAsync.when(
         loading: () => _buildLoadingState(),
         error: (error, stackTrace) => _buildErrorState(context, ref, error),
-        data: (dailyQuizData) => _buildDataState(context, dailyQuizData, quizStatus),
+        data: (dailyQuizData) =>
+            _buildDataState(context, dailyQuizData, quizStatus),
       ),
     );
   }
@@ -182,7 +183,8 @@ class DailyQuizWidget extends ConsumerWidget {
     );
   }
 
-  Widget _buildDataState(BuildContext context, DailyQuizData quizData, DailyQuizStatus status) {
+  Widget _buildDataState(
+      BuildContext context, DailyQuizData quizData, DailyQuizStatus status) {
     return Row(
       children: [
         Expanded(
@@ -202,7 +204,8 @@ class DailyQuizWidget extends ConsumerWidget {
                   if (status.completionStreak > 0) ...[
                     const SizedBox(width: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(10),
@@ -235,7 +238,8 @@ class DailyQuizWidget extends ConsumerWidget {
                     ? () => _handleDailyQuizTap(context, quizData)
                     : null,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: status.canPlay ? Colors.white : Colors.white54,
+                  backgroundColor:
+                      status.canPlay ? Colors.white : Colors.white54,
                   foregroundColor: Colors.orange.shade600,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -294,7 +298,8 @@ class DailyQuizWidget extends ConsumerWidget {
     if (quizData.questions.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('No daily questions available. Please try again later.'),
+          content:
+              Text('No daily questions available. Please try again later.'),
         ),
       );
       return;

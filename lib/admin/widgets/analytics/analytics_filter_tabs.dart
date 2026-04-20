@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum UserTypeFilter { all, admin, premium, regular }
+
 enum TimeframeFilter { allTime, daily, weekly, monthly }
 
-final userTypeFilterProvider = StateProvider<UserTypeFilter>((ref) => UserTypeFilter.all);
-final timeframeFilterProvider = StateProvider<TimeframeFilter>((ref) => TimeframeFilter.allTime);
+final userTypeFilterProvider =
+    StateProvider<UserTypeFilter>((ref) => UserTypeFilter.all);
+final timeframeFilterProvider =
+    StateProvider<TimeframeFilter>((ref) => TimeframeFilter.allTime);
 
 class AnalyticsFilterTabs extends ConsumerWidget {
   const AnalyticsFilterTabs({super.key});
@@ -80,8 +83,9 @@ class AnalyticsFilterTabs extends ConsumerWidget {
               ),
             ],
             selected: <UserTypeFilter>{userType},
-            onSelectionChanged: (newSelection) =>
-            ref.read(userTypeFilterProvider.notifier).state = newSelection.first,
+            onSelectionChanged: (newSelection) => ref
+                .read(userTypeFilterProvider.notifier)
+                .state = newSelection.first,
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.resolveWith((states) {
                 if (states.contains(MaterialState.selected)) {
@@ -152,8 +156,9 @@ class AnalyticsFilterTabs extends ConsumerWidget {
               ),
             ],
             selected: <TimeframeFilter>{timeframe},
-            onSelectionChanged: (newSelection) =>
-            ref.read(timeframeFilterProvider.notifier).state = newSelection.first,
+            onSelectionChanged: (newSelection) => ref
+                .read(timeframeFilterProvider.notifier)
+                .state = newSelection.first,
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.resolveWith((states) {
                 if (states.contains(MaterialState.selected)) {

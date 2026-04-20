@@ -14,20 +14,20 @@ class UserModel {
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
-    id: json['id'] ?? '',
-    email: json['email'] ?? '',
-    roles: List<String>.from(json['roles'] ?? []),
-    isPremium: json['isPremium'] ?? false,
-    createdAt: DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now(),
-  );
+        id: json['id'] ?? '',
+        email: json['email'] ?? '',
+        roles: List<String>.from(json['roles'] ?? []),
+        isPremium: json['isPremium'] ?? false,
+        createdAt: DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now(),
+      );
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'email': email,
-    'roles': roles,
-    'isPremium': isPremium,
-    'createdAt': createdAt.toIso8601String(),
-  };
+        'id': id,
+        'email': email,
+        'roles': roles,
+        'isPremium': isPremium,
+        'createdAt': createdAt.toIso8601String(),
+      };
 
   UserModel copyWith({
     String? id,

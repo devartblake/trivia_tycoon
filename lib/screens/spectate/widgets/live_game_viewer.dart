@@ -15,7 +15,8 @@ class LiveGameViewer extends StatefulWidget {
   State<LiveGameViewer> createState() => _LiveGameViewerState();
 }
 
-class _LiveGameViewerState extends State<LiveGameViewer> with SingleTickerProviderStateMixin {
+class _LiveGameViewerState extends State<LiveGameViewer>
+    with SingleTickerProviderStateMixin {
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
 
@@ -95,8 +96,8 @@ class _LiveGameViewerState extends State<LiveGameViewer> with SingleTickerProvid
           Text(
             'Waiting for next question...',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: Colors.white,
-            ),
+                  color: Colors.white,
+                ),
           ),
         ],
       ),
@@ -140,8 +141,8 @@ class _LiveGameViewerState extends State<LiveGameViewer> with SingleTickerProvid
           Text(
             question.question,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+                  fontWeight: FontWeight.bold,
+                ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
@@ -156,7 +157,8 @@ class _LiveGameViewerState extends State<LiveGameViewer> with SingleTickerProvid
       stream: Stream.periodic(const Duration(milliseconds: 100)),
       builder: (context, snapshot) {
         final remaining = question.timeRemaining;
-        final progress = remaining.inMilliseconds / question.timeLimit.inMilliseconds;
+        final progress =
+            remaining.inMilliseconds / question.timeLimit.inMilliseconds;
 
         return Column(
           children: [
@@ -205,11 +207,14 @@ class _LiveGameViewerState extends State<LiveGameViewer> with SingleTickerProvid
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: isRevealed
-                      ? (isCorrect ? Colors.green.withValues(alpha: 0.3) : Colors.white.withValues(alpha: 0.1))
+                      ? (isCorrect
+                          ? Colors.green.withValues(alpha: 0.3)
+                          : Colors.white.withValues(alpha: 0.1))
                       : Colors.white.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: isRevealed && isCorrect ? Colors.green : Colors.white30,
+                    color:
+                        isRevealed && isCorrect ? Colors.green : Colors.white30,
                     width: 2,
                   ),
                 ),

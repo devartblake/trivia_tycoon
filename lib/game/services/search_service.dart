@@ -28,9 +28,7 @@ class SearchService {
   }
 
   Future<Map<SearchCategory, List<SearchResult>>> searchByCategory(
-      String query,
-      SearchFilter filter
-      ) async {
+      String query, SearchFilter filter) async {
     final results = await search(query, filter);
     final grouped = <SearchCategory, List<SearchResult>>{};
 

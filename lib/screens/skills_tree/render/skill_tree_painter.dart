@@ -27,7 +27,7 @@ class SkillTreePainter extends CustomPainter {
     this.glowPulse = 0.2,
     Map<SkillCategory, ui.Image?>? categoryImages,
     String? focusedId,
-  }) : categoryImages = categoryImages ?? const <SkillCategory, ui.Image?>{},
+  })  : categoryImages = categoryImages ?? const <SkillCategory, ui.Image?>{},
         focusedId = focusedId ?? selectedId;
 
   @override
@@ -107,7 +107,9 @@ class _SkillNodePainter {
 
   void paint(Canvas canvas, Size size) {
     final bgColor = categoryColor;
-    final glowColor = (isSelected || isUnlocked) ? bgColor.withValues(alpha: 0.5) : Colors.transparent;
+    final glowColor = (isSelected || isUnlocked)
+        ? bgColor.withValues(alpha: 0.5)
+        : Colors.transparent;
     final borderColor = isSelected ? Colors.white : Colors.black;
 
     final center = Offset(size.width / 2, size.height / 2);
@@ -135,12 +137,16 @@ class _SkillNodePainter {
     final textPainter = TextPainter(
       text: TextSpan(
         text: node.title,
-        style: TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),
+        style: TextStyle(
+            fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),
       ),
       textDirection: TextDirection.ltr,
       textAlign: TextAlign.center,
     );
     textPainter.layout(maxWidth: radius * 2);
-    textPainter.paint(canvas, Offset(center.dx - textPainter.width / 2, center.dy - textPainter.height / 2));
+    textPainter.paint(
+        canvas,
+        Offset(center.dx - textPainter.width / 2,
+            center.dy - textPainter.height / 2));
   }
 }

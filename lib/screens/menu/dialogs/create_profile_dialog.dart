@@ -13,7 +13,8 @@ class CreateProfileDialog extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<CreateProfileDialog> createState() => _CreateProfileDialogState();
+  ConsumerState<CreateProfileDialog> createState() =>
+      _CreateProfileDialogState();
 }
 
 class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
@@ -64,9 +65,11 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 labelText: 'Profile Name',
-                labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
+                labelStyle:
+                    TextStyle(color: Colors.white.withValues(alpha: 0.7)),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
+                  borderSide:
+                      BorderSide(color: Colors.white.withValues(alpha: 0.3)),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 focusedBorder: OutlineInputBorder(
@@ -101,17 +104,24 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
                       margin: const EdgeInsets.only(right: 8),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       decoration: BoxDecoration(
-                        color: isSelected ? const Color(0xFF6A5ACD) : Colors.white.withValues(alpha: 0.1),
+                        color: isSelected
+                            ? const Color(0xFF6A5ACD)
+                            : Colors.white.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
-                          color: isSelected ? const Color(0xFF6A5ACD) : Colors.white.withValues(alpha: 0.3),
+                          color: isSelected
+                              ? const Color(0xFF6A5ACD)
+                              : Colors.white.withValues(alpha: 0.3),
                         ),
                       ),
                       child: Text(
                         group.capitalize(),
                         style: TextStyle(
-                          color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.7),
-                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                          color: isSelected
+                              ? Colors.white
+                              : Colors.white.withValues(alpha: 0.7),
+                          fontWeight:
+                              isSelected ? FontWeight.bold : FontWeight.normal,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -200,10 +210,12 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
               children: [
                 Expanded(
                   child: TextButton(
-                    onPressed: _isCreating ? null : () => Navigator.pop(context),
+                    onPressed:
+                        _isCreating ? null : () => Navigator.pop(context),
                     child: Text(
                       'Cancel',
-                      style: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
+                      style:
+                          TextStyle(color: Colors.white.withValues(alpha: 0.7)),
                     ),
                   ),
                 ),
@@ -217,13 +229,13 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
                     ),
                     child: _isCreating
                         ? const SizedBox(
-                      height: 16,
-                      width: 16,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: Colors.white,
-                      ),
-                    )
+                            height: 16,
+                            width: 16,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
                         : const Text('Create'),
                   ),
                 ),
@@ -237,7 +249,8 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
 
   Future<void> _createProfile() async {
     if (_nameController.text.trim().isEmpty) {
-      LogManager.logProfileValidation(_nameController.text.trim(), 'Empty profile name');
+      LogManager.logProfileValidation(
+          _nameController.text.trim(), 'Empty profile name');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please enter a profile name'),
@@ -259,7 +272,8 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
 
       if (profile != null && mounted) {
         // Track analytics safely without breaking profile creation
-        final analyticsManager = ref.read(profileAnalyticsManagerProvider.notifier);
+        final analyticsManager =
+            ref.read(profileAnalyticsManagerProvider.notifier);
         await analyticsManager.trackProfileCreated(
           profileId: profile.id,
           profileName: profile.name,
@@ -276,10 +290,12 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
           ),
         );
       } else if (mounted) {
-        LogManager.logProfileError('creation', 'Profile creation returned null');
+        LogManager.logProfileError(
+            'creation', 'Profile creation returned null');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Failed to create profile. Name might already exist.'),
+            content:
+                Text('Failed to create profile. Name might already exist.'),
             backgroundColor: Colors.red,
           ),
         );

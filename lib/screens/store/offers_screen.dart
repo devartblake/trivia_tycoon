@@ -6,7 +6,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:trivia_tycoon/core/models/store/store_offer_model.dart';
 import 'package:trivia_tycoon/core/services/api_service.dart';
 import 'package:trivia_tycoon/core/services/store/store_return_url_builder.dart';
-import 'package:trivia_tycoon/game/providers/game_providers.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 
 class OffersScreen extends ConsumerStatefulWidget {
@@ -47,12 +46,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
 
   @override
   Widget build(BuildContext context) {
-    final offersAsync = ref.watch(storeOffersProvider);
-    final offersData = offersAsync.when(
-      data: (d) => d,
-      loading: () => StoreOffersData.fallback,
-      error: (_, __) => StoreOffersData.fallback,
-    );
+    final offersData = StoreOffersData.fallback;
     if (!offersData.tabs.contains(_selectedTab)) {
       _selectedTab =
           offersData.tabs.isNotEmpty ? offersData.tabs.first : _selectedTab;
@@ -371,13 +365,14 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                           horizontal: 20, vertical: 12),
                       decoration: BoxDecoration(
                         color:
-                        isSelected ? const Color(0xFF6366F1) : Colors.white,
+                            isSelected ? const Color(0xFF6366F1) : Colors.white,
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
                             color: isSelected
                                 ? const Color(0xFF6366F1).withValues(alpha: 0.3)
-                                : const Color(0xFF64748B).withValues(alpha: 0.1),
+                                : const Color(0xFF64748B)
+                                    .withValues(alpha: 0.1),
                             blurRadius: isSelected ? 12 : 8,
                             offset: const Offset(0, 4),
                           ),
@@ -435,7 +430,6 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
   }
 
   Widget _buildOffersList(List<OfferItem> offers) {
-
     return Column(
       children: offers.asMap().entries.map((entry) {
         final index = entry.key;
@@ -469,8 +463,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
         borderRadius: BorderRadius.circular(20),
         border: offer.isPopular
             ? Border.all(color: const Color(0xFF6366F1), width: 2)
-            : Border.all(
-                color: const Color(0xFF64748B).withValues(alpha: 0.1)),
+            : Border.all(color: const Color(0xFF64748B).withValues(alpha: 0.1)),
         boxShadow: [
           BoxShadow(
             color: offer.isPopular
@@ -486,8 +479,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
           if (offer.isPopular)
             Container(
               margin: const EdgeInsets.only(bottom: 16),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
@@ -716,7 +708,8 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
     final status = await ref.read(storeSystemStatusProvider.future);
     if (status['storeEnabled'] == false || status['paymentsEnabled'] == false) {
       _showSnack(
-        status['message']?.toString() ?? 'Subscriptions are currently unavailable.',
+        status['message']?.toString() ??
+            'Subscriptions are currently unavailable.',
         const Color(0xFFEF4444),
       );
       return;

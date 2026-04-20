@@ -28,13 +28,13 @@ class PackageCardBundled extends ConsumerWidget {
             gradient: LinearGradient(
               colors: installed
                   ? [
-                Colors.white.withValues(alpha: 0.06),
-                Colors.white.withValues(alpha: 0.03),
-              ]
+                      Colors.white.withValues(alpha: 0.06),
+                      Colors.white.withValues(alpha: 0.03),
+                    ]
                   : [
-                const Color(0xFFFBBF24).withValues(alpha: 0.15),
-                const Color(0xFFF59E0B).withValues(alpha: 0.1),
-              ],
+                      const Color(0xFFFBBF24).withValues(alpha: 0.15),
+                      const Color(0xFFF59E0B).withValues(alpha: 0.1),
+                    ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -150,65 +150,65 @@ class PackageCardBundled extends ConsumerWidget {
                       onPressed: installed
                           ? null
                           : () async {
-                        final svc =
-                        ref.read(avatarPackageServiceProvider);
+                              final svc =
+                                  ref.read(avatarPackageServiceProvider);
 
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content:
-                              Text('Installing "${meta.name}"...'),
-                              backgroundColor: const Color(0xFFFBBF24),
-                              behavior: SnackBarBehavior.floating,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                          );
-                        }
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content:
+                                        Text('Installing "${meta.name}"...'),
+                                    backgroundColor: const Color(0xFFFBBF24),
+                                    behavior: SnackBarBehavior.floating,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                );
+                              }
 
-                        try {
-                          await svc.installBundledAssetArchive(
-                            meta: meta,
-                            assetArchivePath: assetArchivePath,
-                          );
+                              try {
+                                await svc.installBundledAssetArchive(
+                                  meta: meta,
+                                  assetArchivePath: assetArchivePath,
+                                );
 
-                          await onInstalled();
+                                await onInstalled();
 
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content:
-                                Text('Installed "${meta.name}"'),
-                                backgroundColor: const Color(0xFF10B981),
-                                behavior: SnackBarBehavior.floating,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                            );
-                          }
-                        } catch (e) {
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Install failed: $e'),
-                                backgroundColor: Colors.redAccent,
-                                behavior: SnackBarBehavior.floating,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                            );
-                          }
-                        }
-                      },
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Installed "${meta.name}"'),
+                                      backgroundColor: const Color(0xFF10B981),
+                                      behavior: SnackBarBehavior.floating,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                  );
+                                }
+                              } catch (e) {
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Install failed: $e'),
+                                      backgroundColor: Colors.redAccent,
+                                      behavior: SnackBarBehavior.floating,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                  );
+                                }
+                              }
+                            },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: installed
                             ? Colors.white.withValues(alpha: 0.1)
                             : const Color(0xFFFBBF24),
-                        foregroundColor:
-                        installed ? Colors.white54 : const Color(0xFF0A0A0F),
+                        foregroundColor: installed
+                            ? Colors.white54
+                            : const Color(0xFF0A0A0F),
                         elevation: installed ? 0 : 3,
                         shadowColor: installed
                             ? Colors.transparent

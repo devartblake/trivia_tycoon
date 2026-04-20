@@ -16,11 +16,11 @@ class NotificationTemplate {
   });
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'title': title,
-    'body': body,
-    'payload': payload,
-  };
+        'id': id,
+        'title': title,
+        'body': body,
+        'payload': payload,
+      };
 
   static NotificationTemplate fromJson(Map<String, dynamic> json) {
     final p = json['payload'];
@@ -35,7 +35,8 @@ class NotificationTemplate {
 
 class NotificationTemplateStore {
   NotificationTemplateStore._();
-  static final NotificationTemplateStore instance = NotificationTemplateStore._();
+  static final NotificationTemplateStore instance =
+      NotificationTemplateStore._();
 
   static const String _indexKey = 'notif.template.__index';
   static String _templateKey(String id) => 'notif.template.$id';
@@ -45,8 +46,8 @@ class NotificationTemplateStore {
 
   Stream<List<NotificationTemplate>> watchAll() => _controller.stream;
 
-  List<NotificationTemplate> getAll() => _templates.values.toList()
-    ..sort((a, b) => a.id.compareTo(b.id));
+  List<NotificationTemplate> getAll() =>
+      _templates.values.toList()..sort((a, b) => a.id.compareTo(b.id));
 
   void _emit() => _controller.add(getAll());
 
@@ -94,8 +95,8 @@ class NotificationTemplateStore {
   /// Convenience for quick save by raw fields.
   Future<void> saveRaw(
       String id, String title, String body, Map<String, String>? payload) {
-    return save(
-        NotificationTemplate(id: id, title: title, body: body, payload: payload));
+    return save(NotificationTemplate(
+        id: id, title: title, body: body, payload: payload));
   }
 
   // ---------- helpers ----------

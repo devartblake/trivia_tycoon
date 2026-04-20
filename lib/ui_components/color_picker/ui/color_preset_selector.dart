@@ -127,7 +127,8 @@ class _ColorPresetSelectorState extends State<ColorPresetSelector>
                                   shape: BoxShape.circle,
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withValues(alpha: 0.3),
+                                      color:
+                                          Colors.black.withValues(alpha: 0.3),
                                       blurRadius: 4,
                                       offset: const Offset(0, 2),
                                     ),
@@ -149,7 +150,8 @@ class _ColorPresetSelectorState extends State<ColorPresetSelector>
                               onTap: () => _selectColor(color),
                               customBorder: const CircleBorder(),
                               splashColor: Colors.white.withValues(alpha: 0.3),
-                              highlightColor: Colors.white.withValues(alpha: 0.1),
+                              highlightColor:
+                                  Colors.white.withValues(alpha: 0.1),
                               child: Container(
                                 width: 64,
                                 height: 64,

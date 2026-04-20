@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 /// One freely-placed hex item (already positioned in world/screen space by you).
 class HexFreeItem {
   final String id;
-  final Offset center;          // pixel-space center
-  final double? sizeOverride;   // optional, defaults to grid hexSize
+  final Offset center; // pixel-space center
+  final double? sizeOverride; // optional, defaults to grid hexSize
   final List<HexSubItem> subItems; // optional subnodes orbiting the parent
 
   const HexFreeItem({

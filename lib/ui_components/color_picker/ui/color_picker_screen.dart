@@ -112,7 +112,8 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
           ),
           backgroundColor: Colors.green.shade600,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           margin: EdgeInsets.all(16),
         ),
       );
@@ -145,7 +146,8 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
           ),
           backgroundColor: Colors.green.shade600,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           margin: EdgeInsets.all(16),
         ),
       );
@@ -166,9 +168,8 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? const Color(0xFF0A0A0F)
-          : const Color(0xFFF8F9FA),
+      backgroundColor:
+          isDark ? const Color(0xFF0A0A0F) : const Color(0xFFF8F9FA),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -208,7 +209,8 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               ),
             ),
           ),
@@ -226,13 +228,12 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
                     margin: const EdgeInsets.all(20),
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      color: isDark
-                          ? const Color(0xFF1E1E2E)
-                          : Colors.white,
+                      color: isDark ? const Color(0xFF1E1E2E) : Colors.white,
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: _controller.selectedColor.withValues(alpha: 0.2),
+                          color:
+                              _controller.selectedColor.withValues(alpha: 0.2),
                           blurRadius: 20,
                           offset: const Offset(0, 8),
                         ),
@@ -290,7 +291,8 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
                 // Color Presets Section
                 SliverToBoxAdapter(
                   child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
                       color: isDark
@@ -362,7 +364,8 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
                 // Color Picker Tools Section
                 SliverToBoxAdapter(
                   child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
                       color: isDark
@@ -452,32 +455,36 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
                           duration: const Duration(milliseconds: 300),
                           child: _selectedTabIndex == 0
                               ? ColorSliderPicker(
-                            key: const ValueKey('sliders'),
-                            color: _controller.selectedColor,
-                            onColorChanged: (color) {
-                              setState(() {
-                                _controller.updateColor(color);
-                                ColorLogManager.logColorSelection(
-                                  color.value.toRadixString(16).toUpperCase(),
-                                );
-                              });
-                            },
-                            initialColor: _controller.selectedColor,
-                          )
+                                  key: const ValueKey('sliders'),
+                                  color: _controller.selectedColor,
+                                  onColorChanged: (color) {
+                                    setState(() {
+                                      _controller.updateColor(color);
+                                      ColorLogManager.logColorSelection(
+                                        color.value
+                                            .toRadixString(16)
+                                            .toUpperCase(),
+                                      );
+                                    });
+                                  },
+                                  initialColor: _controller.selectedColor,
+                                )
                               : ColorWheelPicker(
-                            key: const ValueKey('wheel'),
-                            selectedColor: _controller.selectedColor,
-                            onColorChanged: (color) {
-                              setState(() {
-                                _controller.updateColor(color);
-                                ColorLogManager.logColorSelection(
-                                  color.value.toRadixString(16).toUpperCase(),
-                                );
-                              });
-                            },
-                            initialColor: _controller.selectedColor,
-                            onColorSelected: (color) {},
-                          ),
+                                  key: const ValueKey('wheel'),
+                                  selectedColor: _controller.selectedColor,
+                                  onColorChanged: (color) {
+                                    setState(() {
+                                      _controller.updateColor(color);
+                                      ColorLogManager.logColorSelection(
+                                        color.value
+                                            .toRadixString(16)
+                                            .toUpperCase(),
+                                      );
+                                    });
+                                  },
+                                  initialColor: _controller.selectedColor,
+                                  onColorSelected: (color) {},
+                                ),
                         ),
                       ],
                     ),
@@ -487,7 +494,8 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
                 // Save Button Section
                 SliverToBoxAdapter(
                   child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
                     child: ColorSaveButton(
                       selectedColor: _controller.selectedColor,
                       onSaved: () {
@@ -514,11 +522,11 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
   }
 
   Widget _buildTabButton(
-      String title,
-      IconData icon,
-      int index,
-      ColorScheme colorScheme,
-      ) {
+    String title,
+    IconData icon,
+    int index,
+    ColorScheme colorScheme,
+  ) {
     final isSelected = _selectedTabIndex == index;
 
     return GestureDetector(
@@ -533,11 +541,11 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
         decoration: BoxDecoration(
           gradient: isSelected
               ? LinearGradient(
-            colors: [
-              Colors.teal.shade400,
-              Colors.green.shade400,
-            ],
-          )
+                  colors: [
+                    Colors.teal.shade400,
+                    Colors.green.shade400,
+                  ],
+                )
               : null,
           borderRadius: BorderRadius.circular(8),
         ),
@@ -546,14 +554,18 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
           children: [
             Icon(
               icon,
-              color: isSelected ? Colors.white : colorScheme.onSurface.withValues(alpha: 0.6),
+              color: isSelected
+                  ? Colors.white
+                  : colorScheme.onSurface.withValues(alpha: 0.6),
               size: 18,
             ),
             const SizedBox(width: 8),
             Text(
               title,
               style: TextStyle(
-                color: isSelected ? Colors.white : colorScheme.onSurface.withValues(alpha: 0.6),
+                color: isSelected
+                    ? Colors.white
+                    : colorScheme.onSurface.withValues(alpha: 0.6),
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                 fontSize: 14,
               ),

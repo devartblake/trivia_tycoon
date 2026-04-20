@@ -297,13 +297,17 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
                         margin: const EdgeInsets.symmetric(horizontal: 4),
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         decoration: BoxDecoration(
-                          color: isSelected ? const Color(0xFF6366F1) : Colors.white,
+                          color: isSelected
+                              ? const Color(0xFF6366F1)
+                              : Colors.white,
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
                               color: isSelected
-                                  ? const Color(0xFF6366F1).withValues(alpha: 0.3)
-                                  : const Color(0xFF64748B).withValues(alpha: 0.1),
+                                  ? const Color(0xFF6366F1)
+                                      .withValues(alpha: 0.3)
+                                  : const Color(0xFF64748B)
+                                      .withValues(alpha: 0.1),
                               blurRadius: isSelected ? 12 : 8,
                               offset: const Offset(0, 4),
                             ),
@@ -311,14 +315,17 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
                           border: Border.all(
                             color: isSelected
                                 ? const Color(0xFF6366F1)
-                                : const Color(0xFF64748B).withValues(alpha: 0.1),
+                                : const Color(0xFF64748B)
+                                    .withValues(alpha: 0.1),
                           ),
                         ),
                         child: Center(
                           child: Text(
                             tab,
                             style: TextStyle(
-                              color: isSelected ? Colors.white : const Color(0xFF64748B),
+                              color: isSelected
+                                  ? Colors.white
+                                  : const Color(0xFF64748B),
                               fontWeight: FontWeight.w600,
                               fontSize: 14,
                             ),
@@ -577,8 +584,8 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
                     ),
                     if (gift.claimed)
                       Container(
-                        padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           color: const Color(0xFF10B981).withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),

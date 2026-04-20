@@ -67,8 +67,10 @@ class FlowConnectGameState {
 
   // Methods for history management
   FlowConnectGameState recordState() {
-    final newPathHistory = List<List<FlowConnectPathPoint>>.from(_pathHistory.sublist(0, _historyIndex + 1));
-    final newNumberHistory = List<int>.from(_numberHistory.sublist(0, _historyIndex + 1));
+    final newPathHistory = List<List<FlowConnectPathPoint>>.from(
+        _pathHistory.sublist(0, _historyIndex + 1));
+    final newNumberHistory =
+        List<int>.from(_numberHistory.sublist(0, _historyIndex + 1));
 
     newPathHistory.add(currentPath);
     newNumberHistory.add(currentNumber);
@@ -109,8 +111,10 @@ class FlowConnectGameState {
 
   FlowConnectGameState trimHistory() {
     if (_historyIndex < _pathHistory.length - 1) {
-      final newPathHistory = List<List<FlowConnectPathPoint>>.from(_pathHistory.sublist(0, _historyIndex + 1));
-      final newNumberHistory = List<int>.from(_numberHistory.sublist(0, _historyIndex + 1));
+      final newPathHistory = List<List<FlowConnectPathPoint>>.from(
+          _pathHistory.sublist(0, _historyIndex + 1));
+      final newNumberHistory =
+          List<int>.from(_numberHistory.sublist(0, _historyIndex + 1));
       return copyWith(
         pathHistory: newPathHistory,
         numberHistory: newNumberHistory,
@@ -123,18 +127,18 @@ class FlowConnectGameState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is FlowConnectGameState &&
-              runtimeType == other.runtimeType &&
-              listEquals(grid, other.grid) &&
-              listEquals(currentPath, other.currentPath) &&
-              currentNumber == other.currentNumber &&
-              isComplete == other.isComplete &&
-              gridSize == other.gridSize &&
-              totalNumbers == other.totalNumbers &&
-              status == other.status &&
-              listEquals(_pathHistory, other._pathHistory) &&
-              listEquals(_numberHistory, other._numberHistory) &&
-              _historyIndex == other._historyIndex;
+      other is FlowConnectGameState &&
+          runtimeType == other.runtimeType &&
+          listEquals(grid, other.grid) &&
+          listEquals(currentPath, other.currentPath) &&
+          currentNumber == other.currentNumber &&
+          isComplete == other.isComplete &&
+          gridSize == other.gridSize &&
+          totalNumbers == other.totalNumbers &&
+          status == other.status &&
+          listEquals(_pathHistory, other._pathHistory) &&
+          listEquals(_numberHistory, other._numberHistory) &&
+          _historyIndex == other._historyIndex;
 
   @override
   int get hashCode =>

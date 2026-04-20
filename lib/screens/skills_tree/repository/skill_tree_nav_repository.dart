@@ -6,7 +6,8 @@ import 'package:trivia_tycoon/core/manager/log_manager.dart';
 /// Reads your skill_tree.json and produces group/branch VMs.
 class SkillTreeNavRepository {
   final String assetPath;
-  SkillTreeNavRepository({this.assetPath = 'assets/data/skill_tree/skill_tree.json'});
+  SkillTreeNavRepository(
+      {this.assetPath = 'assets/data/skill_tree/skill_tree.json'});
 
   Future<List<SkillTreeGroupVM>> load() async {
     final raw = await rootBundle.loadString(assetPath);
@@ -21,7 +22,8 @@ class SkillTreeNavRepository {
       }
     } else if (decoded is List) {
       // Fallback: infer a single “utility” bucket
-      final branches = decoded.map<SkillBranchVM>(_parseBranchMapLoose).toList();
+      final branches =
+          decoded.map<SkillBranchVM>(_parseBranchMapLoose).toList();
       groups.add(SkillTreeGroupVM(
         id: SkillTreeGroupId.utility,
         title: 'All Branches',
@@ -37,9 +39,10 @@ class SkillTreeNavRepository {
   }
 
   SkillTreeGroupVM _parseGroupMap(Map g) {
-    final groupId = parseGroupId((g['group_id'] ?? g['id'] ?? 'utility').toString());
+    final groupId =
+        parseGroupId((g['group_id'] ?? g['id'] ?? 'utility').toString());
     final title = (g['title'] ?? groupId.name).toString();
-    final desc  = (g['description'] ?? '').toString();
+    final desc = (g['description'] ?? '').toString();
     final branchesRaw = (g['branches'] as List?) ?? const [];
     final branches = <SkillBranchVM>[];
 
@@ -66,11 +69,13 @@ class SkillTreeNavRepository {
   SkillBranchVM _parseBranchMap(Map b, SkillTreeGroupId groupId) {
     final branchId = (b['branch_id'] ?? b['id'] ?? 'unknown').toString();
     final title = (b['title'] ?? branchId).toString();
-    final desc  = (b['description'] ?? '').toString();
+    final desc = (b['description'] ?? '').toString();
     final nodes = b['nodes'] is List
         ? (b['nodes'] as List).whereType<Map>().toList()
         : const <Map>[];
-    final nodeMaps = nodes.map<Map<String, dynamic>>((m) => Map<String, dynamic>.from(m)).toList();
+    final nodeMaps = nodes
+        .map<Map<String, dynamic>>((m) => Map<String, dynamic>.from(m))
+        .toList();
 
     return SkillBranchVM(
       branchId: branchId,

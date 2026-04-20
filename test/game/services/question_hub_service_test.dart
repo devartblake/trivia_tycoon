@@ -90,10 +90,12 @@ class _FakeLoaderService extends AdaptedQuestionLoaderService {
   }
 
   @override
-  Future<int> getQuizCategoryQuestionCount(QuizCategory category) async => categoryQuestions.length;
+  Future<int> getQuizCategoryQuestionCount(QuizCategory category) async =>
+      categoryQuestions.length;
 
   @override
-  Future<String> getQuizCategoryDifficulty(QuizCategory category) async => 'mixed';
+  Future<String> getQuizCategoryDifficulty(QuizCategory category) async =>
+      'mixed';
 
   @override
   Future<int> getClassQuestionCount(String classId) async => classQuestionCount;
@@ -102,7 +104,8 @@ class _FakeLoaderService extends AdaptedQuestionLoaderService {
   Future<int> getClassSubjectCount(String classId) async => classSubjectCount;
 }
 
-Map<String, dynamic> _questionJson({required String id, required int difficulty}) {
+Map<String, dynamic> _questionJson(
+    {required String id, required int difficulty}) {
   return {
     'id': id,
     'category': 'science',
@@ -118,24 +121,31 @@ Map<String, dynamic> _questionJson({required String id, required int difficulty}
 }
 
 void main() {
-  test('getQuestionsForCategory returns backend questions when available', () async {
+  test('getQuestionsForCategory returns backend questions when available',
+      () async {
     final api = _FakeApiService()
       ..getResponses['/questions/set'] = {
         'items': [_questionJson(id: '1', difficulty: 1)],
       };
     final loader = _FakeLoaderService()
-      ..categoryQuestions = [QuestionModel.fromJson(_questionJson(id: 'fallback', difficulty: 2))];
+      ..categoryQuestions = [
+        QuestionModel.fromJson(_questionJson(id: 'fallback', difficulty: 2))
+      ];
 
     final service = QuestionHubService(apiService: api, localLoader: loader);
-    final result = await service.getQuestionsForCategory(category: 'science', amount: 1);
+    final result =
+        await service.getQuestionsForCategory(category: 'science', amount: 1);
 
     expect(result.length, 1);
     expect(result.first.id, '1');
   });
 
-  test('getQuestionsForCategory falls back to local and respects amount+difficulty', () async {
+  test(
+      'getQuestionsForCategory falls back to local and respects amount+difficulty',
+      () async {
     final api = _FakeApiService()
-      ..fetchQuestionsError = ApiRequestException('offline', path: '/quiz/play');
+      ..fetchQuestionsError =
+          ApiRequestException('offline', path: '/quiz/play');
     final loader = _FakeLoaderService()
       ..categoryQuestions = [
         QuestionModel.fromJson(_questionJson(id: '1', difficulty: 1)),
@@ -155,13 +165,17 @@ void main() {
     expect(result.first.difficulty, 2);
   });
 
-  test('getDailyQuiz falls back to local when backend contract is invalid', () async {
+  test('getDailyQuiz falls back to local when backend contract is invalid',
+      () async {
     final api = _FakeApiService()
       ..getResponses['/quiz/daily'] = {
         'items': [_questionJson(id: 'bad', difficulty: 1)],
       };
     final loader = _FakeLoaderService()
-      ..dailyQuizQuestions = [QuestionModel.fromJson(_questionJson(id: 'fallback-daily', difficulty: 1))];
+      ..dailyQuizQuestions = [
+        QuestionModel.fromJson(
+            _questionJson(id: 'fallback-daily', difficulty: 1))
+      ];
 
     final service = QuestionHubService(apiService: api, localLoader: loader);
     final result = await service.getDailyQuiz(questionCount: 1);
@@ -170,22 +184,29 @@ void main() {
     expect(result.first.id, 'fallback-daily');
   });
 
-  test('getMixedQuiz falls back to local when backend returns invalid envelope', () async {
+  test('getMixedQuiz falls back to local when backend returns invalid envelope',
+      () async {
     final api = _FakeApiService()
       ..getResponses['/quiz/mixed'] = {
         'questions': [_questionJson(id: 'bad-mixed', difficulty: 2)],
       };
     final loader = _FakeLoaderService()
-      ..mixedQuizQuestions = [QuestionModel.fromJson(_questionJson(id: 'fallback-mixed', difficulty: 2))];
+      ..mixedQuizQuestions = [
+        QuestionModel.fromJson(
+            _questionJson(id: 'fallback-mixed', difficulty: 2))
+      ];
 
     final service = QuestionHubService(apiService: api, localLoader: loader);
-    final result = await service.getMixedQuiz(questionCount: 1, categories: const ['science']);
+    final result = await service
+        .getMixedQuiz(questionCount: 1, categories: const ['science']);
 
     expect(result.length, 1);
     expect(result.first.id, 'fallback-mixed');
   });
 
-  test('getClassStats falls back to local when backend class payload is invalid', () async {
+  test(
+      'getClassStats falls back to local when backend class payload is invalid',
+      () async {
     final api = _FakeApiService()
       ..getResponses['/quiz/classes/7/stats'] = {'questionCount': 10};
     final loader = _FakeLoaderService()
@@ -216,7 +237,8 @@ void main() {
     expect(stats['category'], 'science');
   });
 
-  test('checkAnswer returns backend validation result when available', () async {
+  test('checkAnswer returns backend validation result when available',
+      () async {
     final api = _FakeApiService()
       ..postResponses['/questions/check'] = {
         'questionId': '1',
@@ -226,7 +248,8 @@ void main() {
       };
     final loader = _FakeLoaderService();
     final service = QuestionHubService(apiService: api, localLoader: loader);
-    final question = QuestionModel.fromJson(_questionJson(id: '1', difficulty: 1));
+    final question =
+        QuestionModel.fromJson(_questionJson(id: '1', difficulty: 1));
 
     final result = await service.checkAnswer(
       question: question,
@@ -238,14 +261,16 @@ void main() {
     expect(result.source, 'deployed-model');
   });
 
-  test('checkAnswer falls back to local validation when backend fails', () async {
+  test('checkAnswer falls back to local validation when backend fails',
+      () async {
     final api = _FakeApiService()
       ..postError = ApiRequestException('offline', path: '/questions/check');
     final service = QuestionHubService(
       apiService: api,
       localLoader: _FakeLoaderService(),
     );
-    final question = QuestionModel.fromJson(_questionJson(id: '1', difficulty: 1));
+    final question =
+        QuestionModel.fromJson(_questionJson(id: '1', difficulty: 1));
 
     final result = await service.checkAnswer(
       question: question,
@@ -256,7 +281,9 @@ void main() {
     expect(result.source, 'local_fallback');
   });
 
-  test('checkAnswerBatch falls back to local validation when payload is invalid', () async {
+  test(
+      'checkAnswerBatch falls back to local validation when payload is invalid',
+      () async {
     final api = _FakeApiService()
       ..postResponses['/questions/check-batch'] = {
         'items': [
@@ -267,7 +294,8 @@ void main() {
       apiService: api,
       localLoader: _FakeLoaderService(),
     );
-    final question = QuestionModel.fromJson(_questionJson(id: '1', difficulty: 1));
+    final question =
+        QuestionModel.fromJson(_questionJson(id: '1', difficulty: 1));
 
     final result = await service.checkAnswerBatch(
       submissions: [

@@ -181,11 +181,11 @@ class _DifficultyStepState extends State<DifficultyStep> {
   }
 
   Widget _buildDifficultyCard(
-      BuildContext context, {
-        required DifficultyOption option,
-        required bool isSelected,
-        required VoidCallback onTap,
-      }) {
+    BuildContext context, {
+    required DifficultyOption option,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
     final theme = Theme.of(context);
 
     return GestureDetector(

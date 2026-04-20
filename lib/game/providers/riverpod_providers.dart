@@ -20,6 +20,7 @@
 ///   provider_bridge.dart      — bridge providers for routing
 ///   power_up_timer_provider.dart — power-up countdown timer
 ///   notification_providers.dart  — push notification management
+///   player_notification_providers.dart — backend inbox + unread state
 library;
 
 export 'core_providers.dart';
@@ -38,4 +39,5 @@ export 'question_providers.dart';
 export 'provider_bridge.dart';
 export 'power_up_timer_provider.dart';
 export 'notification_providers.dart';
+export 'player_notification_providers.dart';
 export 'learning_providers.dart';

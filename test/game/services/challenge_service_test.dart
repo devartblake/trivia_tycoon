@@ -190,7 +190,8 @@ void main() {
 
       // updateProgress calls clearCache internally
       final secondBundle = ChallengeService.getChallenges(ChallengeType.daily);
-      expect(identical(firstBundle.challenges, secondBundle.challenges), isFalse);
+      expect(
+          identical(firstBundle.challenges, secondBundle.challenges), isFalse);
     });
   });
 }

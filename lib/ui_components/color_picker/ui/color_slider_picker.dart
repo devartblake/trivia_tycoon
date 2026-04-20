@@ -48,7 +48,8 @@ class _ColorSliderPickerState extends State<ColorSliderPicker> {
   }
 
   void _updateColor() {
-    final Color newColor = HSLColor.fromAHSL(_alpha, _hue, _saturation, _lightness).toColor();
+    final Color newColor =
+        HSLColor.fromAHSL(_alpha, _hue, _saturation, _lightness).toColor();
     widget.onColorChanged(newColor);
   }
 
@@ -66,7 +67,7 @@ class _ColorSliderPickerState extends State<ColorSliderPicker> {
             _hue,
             0,
             360,
-                (value) {
+            (value) {
               HapticFeedback.selectionClick();
               setState(() => _hue = value);
               _updateColor();
@@ -74,16 +75,14 @@ class _ColorSliderPickerState extends State<ColorSliderPicker> {
             _getHueGradient(),
             colorScheme,
           ),
-
           const SizedBox(height: 12),
-
           _buildModernSlider(
             "Saturation",
             Icons.water_drop_outlined,
             _saturation,
             0,
             1,
-                (value) {
+            (value) {
               HapticFeedback.selectionClick();
               setState(() => _saturation = value);
               _updateColor();
@@ -91,16 +90,14 @@ class _ColorSliderPickerState extends State<ColorSliderPicker> {
             _getSaturationGradient(),
             colorScheme,
           ),
-
           const SizedBox(height: 12),
-
           _buildModernSlider(
             "Lightness",
             Icons.brightness_6_rounded,
             _lightness,
             0,
             1,
-                (value) {
+            (value) {
               HapticFeedback.selectionClick();
               setState(() => _lightness = value);
               _updateColor();
@@ -108,16 +105,14 @@ class _ColorSliderPickerState extends State<ColorSliderPicker> {
             _getLightnessGradient(),
             colorScheme,
           ),
-
           const SizedBox(height: 12),
-
           _buildModernSlider(
             "Opacity",
             Icons.opacity_rounded,
             _alpha,
             0,
             1,
-                (value) {
+            (value) {
               HapticFeedback.selectionClick();
               setState(() => _alpha = value);
               _updateColor();
@@ -131,15 +126,15 @@ class _ColorSliderPickerState extends State<ColorSliderPicker> {
   }
 
   Widget _buildModernSlider(
-      String title,
-      IconData icon,
-      double value,
-      double min,
-      double max,
-      ValueChanged<double> onChanged,
-      Gradient trackGradient,
-      ColorScheme colorScheme,
-      ) {
+    String title,
+    IconData icon,
+    double value,
+    double min,
+    double max,
+    ValueChanged<double> onChanged,
+    Gradient trackGradient,
+    ColorScheme colorScheme,
+  ) {
     String displayValue;
     if (title == "Hue") {
       displayValue = "${value.toInt()}°";
@@ -236,7 +231,8 @@ class _ColorSliderPickerState extends State<ColorSliderPicker> {
                   data: SliderTheme.of(context).copyWith(
                     trackHeight: 5,
                     thumbShape: _CustomSliderThumb(colorScheme.primary),
-                    overlayShape: const RoundSliderOverlayShape(overlayRadius: 10),
+                    overlayShape:
+                        const RoundSliderOverlayShape(overlayRadius: 10),
                     activeTrackColor: Colors.transparent,
                     inactiveTrackColor: Colors.transparent,
                     thumbColor: Colors.white,
@@ -291,7 +287,8 @@ class _ColorSliderPickerState extends State<ColorSliderPicker> {
   }
 
   Gradient _getAlphaGradient() {
-    final baseColor = HSLColor.fromAHSL(1, _hue, _saturation, _lightness).toColor();
+    final baseColor =
+        HSLColor.fromAHSL(1, _hue, _saturation, _lightness).toColor();
     return LinearGradient(
       colors: [
         baseColor.withValues(alpha: 0),
@@ -313,19 +310,19 @@ class _CustomSliderThumb extends SliderComponentShape {
 
   @override
   void paint(
-      PaintingContext context,
-      Offset center, {
-        required Animation<double> activationAnimation,
-        required Animation<double> enableAnimation,
-        required bool isDiscrete,
-        required TextPainter labelPainter,
-        required RenderBox parentBox,
-        required SliderThemeData sliderTheme,
-        required TextDirection textDirection,
-        required double value,
-        required double textScaleFactor,
-        required Size sizeWithOverflow,
-      }) {
+    PaintingContext context,
+    Offset center, {
+    required Animation<double> activationAnimation,
+    required Animation<double> enableAnimation,
+    required bool isDiscrete,
+    required TextPainter labelPainter,
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required TextDirection textDirection,
+    required double value,
+    required double textScaleFactor,
+    required Size sizeWithOverflow,
+  }) {
     final Canvas canvas = context.canvas;
 
     // Shadow

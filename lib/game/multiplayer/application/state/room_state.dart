@@ -53,7 +53,7 @@ class RoomState {
     String? roomName,
     List<PlayerPresence>? players,
     bool? loading,
-    String? error,     // pass explicit null to clear
+    String? error, // pass explicit null to clear
     bool clearError = false,
     bool? isHost,
   }) {
@@ -74,18 +74,18 @@ class RoomState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is RoomState &&
-              runtimeType == other.runtimeType &&
-              roomId == other.roomId &&
-              roomName == other.roomName &&
-              _listEq(players, other.players) &&
-              loading == other.loading &&
-              error == other.error &&
-              isHost == other.isHost;
+      other is RoomState &&
+          runtimeType == other.runtimeType &&
+          roomId == other.roomId &&
+          roomName == other.roomName &&
+          _listEq(players, other.players) &&
+          loading == other.loading &&
+          error == other.error &&
+          isHost == other.isHost;
 
   @override
-  int get hashCode =>
-      Object.hash(roomId, roomName, Object.hashAll(players), loading, error, isHost);
+  int get hashCode => Object.hash(
+      roomId, roomName, Object.hashAll(players), loading, error, isHost);
 }
 
 bool _listEq<T>(List<T> a, List<T> b) {

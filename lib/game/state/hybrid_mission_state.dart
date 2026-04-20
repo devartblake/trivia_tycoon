@@ -16,10 +16,10 @@ class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
   bool _isBackendMode = false;
 
   HybridMissionNotifier(
-      this._ageGroup, {
-        MissionService? missionService,
-        String? userId,
-      })  : _missionService = missionService,
+    this._ageGroup, {
+    MissionService? missionService,
+    String? userId,
+  })  : _missionService = missionService,
         _userId = userId,
         super([]) {
     _isBackendMode = _missionService != null && _userId != null;
@@ -28,13 +28,15 @@ class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
 
   Future<void> _initializeMissions() async {
     // Load missions from JSON (always load these for templates)
-    _allAvailableMissions = await MissionDataLoader.loadMissionsForAge(_ageGroup);
+    _allAvailableMissions =
+        await MissionDataLoader.loadMissionsForAge(_ageGroup);
 
     if (_isBackendMode) {
       try {
         await _loadFromBackend();
       } catch (e) {
-        LogManager.debug('Backend unavailable, falling back to JSON-only mode: $e');
+        LogManager.debug(
+            'Backend unavailable, falling back to JSON-only mode: $e');
         _isBackendMode = false;
         await _generateLocalMissions();
       }
@@ -89,7 +91,8 @@ class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
     if (_isBackendMode) {
       try {
         // Use the existing generateDailyMissions method
-        final userMissions = await _missionService!.generateDailyMissions(_userId!);
+        final userMissions =
+            await _missionService!.generateDailyMissions(_userId!);
 
         if (userMissions.isNotEmpty) {
           final missionsAsMap = userMissions.map((userMission) {
@@ -114,7 +117,8 @@ class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
           return;
         }
       } catch (e) {
-        LogManager.debug('Backend mission generation failed, falling back to local: $e');
+        LogManager.debug(
+            'Backend mission generation failed, falling back to local: $e');
         _isBackendMode = false;
       }
     }
@@ -123,8 +127,7 @@ class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
     await _generateLocalMissions(
         count: count,
         preferredMode: preferredMode,
-        preferredCategory: preferredCategory
-    );
+        preferredCategory: preferredCategory);
   }
 
   // Generate missions locally (JSON-only mode)
@@ -180,7 +183,8 @@ class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
 
   Future<void> _swapMissionLocally(String missionId) async {
     final currentMissions = [...state];
-    final missionIndex = currentMissions.indexWhere((m) => m['id'] == missionId);
+    final missionIndex =
+        currentMissions.indexWhere((m) => m['id'] == missionId);
 
     if (missionIndex == -1) return;
 
@@ -217,7 +221,8 @@ class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
         final backendId = mission['backend_id'] as String?;
 
         if (backendId != null) {
-          await _missionService!.updateProgress(backendId, increment, userId: '');
+          await _missionService!
+              .updateProgress(backendId, increment, userId: '');
           // Reload from backend
           await _loadFromBackend();
           return;
@@ -255,7 +260,9 @@ class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
   void trackUserAction(String actionType, Map<String, dynamic> metadata) {
     if (_isBackendMode) {
       // Try backend tracking (async, don't wait)
-      _missionService!.trackUserAction(_userId!, actionType, metadata).catchError((e) {
+      _missionService!
+          .trackUserAction(_userId!, actionType, metadata)
+          .catchError((e) {
         LogManager.debug('Backend tracking failed: $e');
       });
     }
@@ -307,7 +314,8 @@ class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
     }
   }
 
-  void _updateMissionsByAction(String type, String? value, String? mode, int increment) {
+  void _updateMissionsByAction(
+      String type, String? value, String? mode, int increment) {
     if (value == null) return;
 
     final updatedMissions = state.map((mission) {
@@ -383,7 +391,10 @@ final currentUserIdProvider = Provider<String?>((ref) {
 });
 
 // Hybrid mission providers
-final hybridMissionsProvider = StateNotifierProvider.family<HybridMissionNotifier, List<Map<String, dynamic>>, AgeGroup>((ref, ageGroup) {
+final hybridMissionsProvider = StateNotifierProvider.family<
+    HybridMissionNotifier,
+    List<Map<String, dynamic>>,
+    AgeGroup>((ref, ageGroup) {
   final missionService = ref.watch(missionServiceProvider);
   final userId = ref.watch(currentUserIdProvider);
 
@@ -395,7 +406,9 @@ final hybridMissionsProvider = StateNotifierProvider.family<HybridMissionNotifie
 });
 
 // Current user missions based on age
-final liveMissionsProvider = StateNotifierProvider<HybridMissionNotifier, List<Map<String, dynamic>>>((ref) {
+final liveMissionsProvider =
+    StateNotifierProvider<HybridMissionNotifier, List<Map<String, dynamic>>>(
+        (ref) {
   final ageGroup = ref.watch(currentUserAgeGroupProvider);
   return ref.watch(hybridMissionsProvider(ageGroup).notifier);
 });
@@ -415,11 +428,15 @@ class HybridMissionActions {
   }
 
   Future<void> updateProgress(String missionId, int increment) async {
-    await _ref.read(liveMissionsProvider.notifier).updateMissionProgress(missionId, increment);
+    await _ref
+        .read(liveMissionsProvider.notifier)
+        .updateMissionProgress(missionId, increment);
   }
 
   void trackUserAction(String actionType, Map<String, dynamic> metadata) {
-    _ref.read(liveMissionsProvider.notifier).trackUserAction(actionType, metadata);
+    _ref
+        .read(liveMissionsProvider.notifier)
+        .trackUserAction(actionType, metadata);
   }
 
   Future<void> generateNewMissions({
@@ -428,9 +445,9 @@ class HybridMissionActions {
     String? preferredCategory,
   }) async {
     await _ref.read(liveMissionsProvider.notifier).generateNewMissions(
-      count: count,
-      preferredMode: preferredMode,
-      preferredCategory: preferredCategory,
-    );
+          count: count,
+          preferredMode: preferredMode,
+          preferredCategory: preferredCategory,
+        );
   }
 }

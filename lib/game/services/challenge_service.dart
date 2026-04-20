@@ -140,8 +140,10 @@ class ChallengeService {
   }
 
   /// Update challenge progress (mocked; replace with API call when backend is ready)
-  static Future<Challenge> updateProgress(Challenge challenge, double newProgress) async {
-    await Future.delayed(const Duration(milliseconds: 300)); // Simulate API call
+  static Future<Challenge> updateProgress(
+      Challenge challenge, double newProgress) async {
+    await Future.delayed(
+        const Duration(milliseconds: 300)); // Simulate API call
     clearCache(); // Invalidate cache when data changes
     return challenge.copyWith(
       progress: newProgress,

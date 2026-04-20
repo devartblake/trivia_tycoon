@@ -76,7 +76,9 @@ class ProfileGameCard extends ConsumerWidget {
                 icon: Icons.restore_rounded,
                 tooltip: 'Reset Avatar',
                 onPressed: () async {
-                  await ref.read(profileAvatarControllerProvider.notifier).resetAvatar();
+                  await ref
+                      .read(profileAvatarControllerProvider.notifier)
+                      .resetAvatar();
                 },
               ),
             ),
@@ -91,7 +93,8 @@ class ProfileGameCard extends ConsumerWidget {
                       icon: adminModeEnabled
                           ? Icons.toggle_on
                           : Icons.toggle_off_outlined,
-                      tooltip: adminModeEnabled ? 'Disable Admin' : 'Enable Admin',
+                      tooltip:
+                          adminModeEnabled ? 'Disable Admin' : 'Enable Admin',
                       onPressed: () => onToggleAdmin(!adminModeEnabled),
                       iconColor: adminModeEnabled
                           ? const Color(0xFF10B981)
@@ -100,7 +103,8 @@ class ProfileGameCard extends ConsumerWidget {
                     const SizedBox(width: 8),
                   ],
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
@@ -346,7 +350,8 @@ class ProfileGameCard extends ConsumerWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: () {
-              context.push('/profile/enhanced/current_user_id?currentUserId=current_user_id&isOwnProfile=true');
+              context.push(
+                  '/profile/enhanced/current_user_id?currentUserId=current_user_id&isOwnProfile=true');
             },
             borderRadius: BorderRadius.circular(16),
             child: Container(
@@ -403,17 +408,17 @@ class ProfileGameCard extends ConsumerWidget {
             decoration: BoxDecoration(
               gradient: adminModeEnabled
                   ? const LinearGradient(
-                colors: [Color(0xFF10B981), Color(0xFF059669)],
-              )
+                      colors: [Color(0xFF10B981), Color(0xFF059669)],
+                    )
                   : LinearGradient(
-                colors: [Colors.grey.shade700, Colors.grey.shade600],
-              ),
+                      colors: [Colors.grey.shade700, Colors.grey.shade600],
+                    ),
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
                   color: (adminModeEnabled
-                      ? const Color(0xFF10B981)
-                      : Colors.grey.shade700)
+                          ? const Color(0xFF10B981)
+                          : Colors.grey.shade700)
                       .withValues(alpha: 0.4),
                   blurRadius: 12,
                   offset: const Offset(0, 6),
@@ -451,7 +456,9 @@ class ProfileGameCard extends ConsumerWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        adminModeEnabled ? 'All features unlocked' : 'Standard access',
+                        adminModeEnabled
+                            ? 'All features unlocked'
+                            : 'Standard access',
                         style: TextStyle(
                           color: Colors.white.withValues(alpha: 0.8),
                           fontSize: 12,

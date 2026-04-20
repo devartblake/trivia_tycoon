@@ -10,8 +10,8 @@ class EmailCard extends StatelessWidget {
   final Color backgroundColor;
 
   const EmailCard({
-    super.key, 
-    required this.email, 
+    super.key,
+    required this.email,
     this.backgroundColor = const Color(0xfff5f5f5),
   });
 
@@ -23,7 +23,8 @@ class EmailCard extends StatelessWidget {
     String getInitials(String name) {
       List<String> names = name.split(' ');
       String initials = names.isNotEmpty
-        ? names.map((name) => name[0]).take(2).join().toUpperCase() : '';
+          ? names.map((name) => name[0]).take(2).join().toUpperCase()
+          : '';
       return initials;
     }
 
@@ -92,7 +93,8 @@ class EmailCard extends StatelessWidget {
               ),
               // Dynamic time display
               Text(
-                email.time, // Assuming `email.time` holds the dynamic time string
+                email
+                    .time, // Assuming `email.time` holds the dynamic time string
                 style: TextStyle(
                   fontSize: 11,
                   letterSpacing: 0.3,

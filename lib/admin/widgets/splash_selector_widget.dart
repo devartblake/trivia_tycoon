@@ -63,7 +63,9 @@ class _SplashSelectorWidgetState extends State<SplashSelectorWidget> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: isSelected ? const Color(0xFFF59E0B) : const Color(0xFFE9ECEF),
+              color: isSelected
+                  ? const Color(0xFFF59E0B)
+                  : const Color(0xFFE9ECEF),
               width: isSelected ? 2 : 1,
             ),
             boxShadow: [
@@ -85,7 +87,9 @@ class _SplashSelectorWidgetState extends State<SplashSelectorWidget> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: isSelected ? const Color(0xFFF59E0B) : Colors.grey[300]!,
+                      color: isSelected
+                          ? const Color(0xFFF59E0B)
+                          : Colors.grey[300]!,
                       width: 2,
                     ),
                     boxShadow: [
@@ -127,7 +131,9 @@ class _SplashSelectorWidgetState extends State<SplashSelectorWidget> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: isSelected ? const Color(0xFFF59E0B) : const Color(0xFF1A1A1A),
+                          color: isSelected
+                              ? const Color(0xFFF59E0B)
+                              : const Color(0xFF1A1A1A),
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -156,7 +162,8 @@ class _SplashSelectorWidgetState extends State<SplashSelectorWidget> {
                         borderRadius: BorderRadius.circular(8),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF6366F1).withValues(alpha: 0.3),
+                            color:
+                                const Color(0xFF6366F1).withValues(alpha: 0.3),
                             blurRadius: 8,
                             offset: const Offset(0, 4),
                           ),
@@ -168,11 +175,13 @@ class _SplashSelectorWidgetState extends State<SplashSelectorWidget> {
                           onTap: () => _showPreview(type),
                           borderRadius: BorderRadius.circular(8),
                           child: const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Icons.visibility, color: Colors.white, size: 16),
+                                Icon(Icons.visibility,
+                                    color: Colors.white, size: 16),
                                 SizedBox(width: 6),
                                 Text(
                                   'Preview',
@@ -199,7 +208,9 @@ class _SplashSelectorWidgetState extends State<SplashSelectorWidget> {
                             : const Color(0xFFF8FAFC),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
-                          color: isSelected ? const Color(0xFFF59E0B) : Colors.grey[300]!,
+                          color: isSelected
+                              ? const Color(0xFFF59E0B)
+                              : Colors.grey[300]!,
                         ),
                       ),
                       child: Radio<SplashType>(
@@ -215,9 +226,11 @@ class _SplashSelectorWidgetState extends State<SplashSelectorWidget> {
                               SnackBar(
                                 content: Row(
                                   children: [
-                                    const Icon(Icons.check_circle, color: Colors.white),
+                                    const Icon(Icons.check_circle,
+                                        color: Colors.white),
                                     const SizedBox(width: 12),
-                                    Text('Splash screen set to ${_formatSplashName(val.name)}'),
+                                    Text(
+                                        'Splash screen set to ${_formatSplashName(val.name)}'),
                                   ],
                                 ),
                                 backgroundColor: const Color(0xFF10B981),

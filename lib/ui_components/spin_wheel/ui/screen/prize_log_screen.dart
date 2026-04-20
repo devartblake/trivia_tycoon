@@ -198,9 +198,8 @@ class _PrizeLogScreenState extends ConsumerState<PrizeLogScreen>
     final notifier = ref.read(prizeLogProvider.notifier);
 
     return Scaffold(
-      backgroundColor: isDark
-          ? const Color(0xFF0A0A0F)
-          : const Color(0xFFF8F9FA),
+      backgroundColor:
+          isDark ? const Color(0xFF0A0A0F) : const Color(0xFFF8F9FA),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -255,9 +254,7 @@ class _PrizeLogScreenState extends ConsumerState<PrizeLogScreen>
                     margin: const EdgeInsets.all(20),
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: isDark
-                          ? const Color(0xFF1E1E2E)
-                          : Colors.white,
+                      color: isDark ? const Color(0xFF1E1E2E) : Colors.white,
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
@@ -293,7 +290,8 @@ class _PrizeLogScreenState extends ConsumerState<PrizeLogScreen>
                             const Text("Export Format: "),
                             const SizedBox(width: 12),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
                               decoration: BoxDecoration(
                                 border: Border.all(color: Colors.grey.shade300),
                                 borderRadius: BorderRadius.circular(8),
@@ -304,12 +302,15 @@ class _PrizeLogScreenState extends ConsumerState<PrizeLogScreen>
                                   onChanged: (value) {
                                     if (value != null) {
                                       setState(() => _exportFormat = value);
-                                      AppSettings.savePrizeLogFilters(exportFormat: value);
+                                      AppSettings.savePrizeLogFilters(
+                                          exportFormat: value);
                                     }
                                   },
                                   items: const [
-                                    DropdownMenuItem(value: 'json', child: Text("JSON")),
-                                    DropdownMenuItem(value: 'csv', child: Text("CSV")),
+                                    DropdownMenuItem(
+                                        value: 'json', child: Text("JSON")),
+                                    DropdownMenuItem(
+                                        value: 'csv', child: Text("CSV")),
                                   ],
                                 ),
                               ),
@@ -333,7 +334,8 @@ class _PrizeLogScreenState extends ConsumerState<PrizeLogScreen>
                               onPressed: () {
                                 _badgeController.clear();
                                 notifier.resetFilter();
-                                AppSettings.savePrizeLogFilters(badge: '', viewRange: 'all');
+                                AppSettings.savePrizeLogFilters(
+                                    badge: '', viewRange: 'all');
                               },
                             ),
                           ),
@@ -349,17 +351,21 @@ class _PrizeLogScreenState extends ConsumerState<PrizeLogScreen>
                         Wrap(
                           spacing: 8,
                           children: _badgeChips.map((badge) {
-                            final isSelected = _badgeController.text.toLowerCase() == badge.toLowerCase();
+                            final isSelected =
+                                _badgeController.text.toLowerCase() ==
+                                    badge.toLowerCase();
                             return FilterChip(
                               label: Text(badge),
                               selected: isSelected,
                               onSelected: (selected) {
                                 _badgeController.text = selected ? badge : '';
                                 notifier.filterByBadge(selected ? badge : '');
-                                AppSettings.savePrizeLogFilters(badge: selected ? badge : '');
+                                AppSettings.savePrizeLogFilters(
+                                    badge: selected ? badge : '');
                                 setState(() {});
                               },
-                              selectedColor: Colors.amber.withValues(alpha: 0.2),
+                              selectedColor:
+                                  Colors.amber.withValues(alpha: 0.2),
                               checkmarkColor: Colors.amber,
                             );
                           }).toList(),
@@ -377,7 +383,8 @@ class _PrizeLogScreenState extends ConsumerState<PrizeLogScreen>
                               onSelected: (_) {
                                 setState(() => _selectedView = "all");
                                 notifier.resetFilter();
-                                AppSettings.savePrizeLogFilters(viewRange: 'all');
+                                AppSettings.savePrizeLogFilters(
+                                    viewRange: 'all');
                               },
                             ),
                             FilterChip(
@@ -386,7 +393,8 @@ class _PrizeLogScreenState extends ConsumerState<PrizeLogScreen>
                               onSelected: (_) {
                                 setState(() => _selectedView = "7");
                                 final now = DateTime.now();
-                                notifier.filterByDate(now.subtract(const Duration(days: 7)), now);
+                                notifier.filterByDate(
+                                    now.subtract(const Duration(days: 7)), now);
                                 AppSettings.savePrizeLogFilters(viewRange: '7');
                               },
                             ),
@@ -396,8 +404,11 @@ class _PrizeLogScreenState extends ConsumerState<PrizeLogScreen>
                               onSelected: (_) {
                                 setState(() => _selectedView = "30");
                                 final now = DateTime.now();
-                                notifier.filterByDate(now.subtract(const Duration(days: 30)), now);
-                                AppSettings.savePrizeLogFilters(viewRange: '30');
+                                notifier.filterByDate(
+                                    now.subtract(const Duration(days: 30)),
+                                    now);
+                                AppSettings.savePrizeLogFilters(
+                                    viewRange: '30');
                               },
                             ),
                           ],
@@ -410,16 +421,19 @@ class _PrizeLogScreenState extends ConsumerState<PrizeLogScreen>
                           children: [
                             Expanded(
                               child: FilledButton.icon(
-                                onPressed: _isLoading ? null : () async {
-                                  final range = await showDateRangePicker(
-                                    context: context,
-                                    firstDate: DateTime(2023),
-                                    lastDate: DateTime.now(),
-                                  );
-                                  if (range != null) {
-                                    notifier.filterByDate(range.start, range.end);
-                                  }
-                                },
+                                onPressed: _isLoading
+                                    ? null
+                                    : () async {
+                                        final range = await showDateRangePicker(
+                                          context: context,
+                                          firstDate: DateTime(2023),
+                                          lastDate: DateTime.now(),
+                                        );
+                                        if (range != null) {
+                                          notifier.filterByDate(
+                                              range.start, range.end);
+                                        }
+                                      },
                                 icon: const Icon(Icons.date_range),
                                 label: const Text("Date Range"),
                                 style: FilledButton.styleFrom(
@@ -433,12 +447,15 @@ class _PrizeLogScreenState extends ConsumerState<PrizeLogScreen>
                             const SizedBox(width: 12),
                             Expanded(
                               child: OutlinedButton.icon(
-                                onPressed: _isLoading ? null : () {
-                                  _badgeController.clear();
-                                  setState(() => _selectedView = "all");
-                                  AppSettings.savePrizeLogFilters(badge: '', viewRange: 'all');
-                                  notifier.resetFilter();
-                                },
+                                onPressed: _isLoading
+                                    ? null
+                                    : () {
+                                        _badgeController.clear();
+                                        setState(() => _selectedView = "all");
+                                        AppSettings.savePrizeLogFilters(
+                                            badge: '', viewRange: 'all');
+                                        notifier.resetFilter();
+                                      },
                                 icon: const Icon(Icons.clear_all),
                                 label: const Text("Clear All"),
                                 style: OutlinedButton.styleFrom(
@@ -461,13 +478,13 @@ class _PrizeLogScreenState extends ConsumerState<PrizeLogScreen>
                                 onPressed: _isLoading ? null : _handleExport,
                                 icon: _isLoading
                                     ? const SizedBox(
-                                  width: 16,
-                                  height: 16,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Colors.white,
-                                  ),
-                                )
+                                        width: 16,
+                                        height: 16,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: Colors.white,
+                                        ),
+                                      )
                                     : const Icon(Icons.download),
                                 label: const Text("Export"),
                                 style: FilledButton.styleFrom(
@@ -504,41 +521,42 @@ class _PrizeLogScreenState extends ConsumerState<PrizeLogScreen>
                 child: state.when(
                   data: (logs) => logs.isNotEmpty
                       ? Container(
-                    margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: _StatsCard(
-                            title: 'Total Value',
-                            value: '\${_calculateTotal(logs)}',
-                            icon: Icons.monetization_on,
-                            color: Colors.green,
-                            isDark: isDark,
+                          margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: _StatsCard(
+                                  title: 'Total Value',
+                                  value: '\${_calculateTotal(logs)}',
+                                  icon: Icons.monetization_on,
+                                  color: Colors.green,
+                                  isDark: isDark,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: _StatsCard(
+                                  title: 'Total Prizes',
+                                  value: '${logs.length}',
+                                  icon: Icons.card_giftcard,
+                                  color: Colors.blue,
+                                  isDark: isDark,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: _StatsCard(
+                                  title: 'Most Common',
+                                  value:
+                                      _findFrequentPrize(logs).split(' ').first,
+                                  icon: Icons.trending_up,
+                                  color: Colors.purple,
+                                  isDark: isDark,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: _StatsCard(
-                            title: 'Total Prizes',
-                            value: '${logs.length}',
-                            icon: Icons.card_giftcard,
-                            color: Colors.blue,
-                            isDark: isDark,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: _StatsCard(
-                            title: 'Most Common',
-                            value: _findFrequentPrize(logs).split(' ').first,
-                            icon: Icons.trending_up,
-                            color: Colors.purple,
-                            isDark: isDark,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
+                        )
                       : const SizedBox.shrink(),
                   loading: () => const SizedBox.shrink(),
                   error: (_, __) => const SizedBox.shrink(),
@@ -550,9 +568,7 @@ class _PrizeLogScreenState extends ConsumerState<PrizeLogScreen>
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
-                    color: isDark
-                        ? const Color(0xFF1E1E2E)
-                        : Colors.white,
+                    color: isDark ? const Color(0xFF1E1E2E) : Colors.white,
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
@@ -567,66 +583,69 @@ class _PrizeLogScreenState extends ConsumerState<PrizeLogScreen>
                   child: state.when(
                     data: (logs) => logs.isEmpty
                         ? Container(
-                      padding: const EdgeInsets.all(40),
-                      child: Column(
-                        children: [
-                          Icon(
-                            Icons.emoji_events_outlined,
-                            size: 64,
-                            color: Colors.grey.shade400,
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            "No prizes yet!",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.grey.shade600,
+                            padding: const EdgeInsets.all(40),
+                            child: Column(
+                              children: [
+                                Icon(
+                                  Icons.emoji_events_outlined,
+                                  size: 64,
+                                  color: Colors.grey.shade400,
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  "No prizes yet!",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey.shade600,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  "Start spinning the wheel to earn rewards",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey.shade500,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            "Start spinning the wheel to earn rewards",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey.shade500,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    )
+                          )
                         : Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(20),
-                          child: Row(
                             children: [
-                              const Icon(Icons.history, color: Colors.amber),
-                              const SizedBox(width: 8),
-                              Text(
-                                'Prize History (${logs.length})',
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
+                              Container(
+                                padding: const EdgeInsets.all(20),
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.history,
+                                        color: Colors.amber),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      'Prize History (${logs.length})',
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              ListView.separated(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                padding:
+                                    const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                                itemCount: logs.length,
+                                separatorBuilder: (_, __) =>
+                                    const SizedBox(height: 8),
+                                itemBuilder: (_, i) => _PrizeListItem(
+                                  entry: logs[i],
+                                  isDark: isDark,
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                        ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                          itemCount: logs.length,
-                          separatorBuilder: (_, __) => const SizedBox(height: 8),
-                          itemBuilder: (_, i) => _PrizeListItem(
-                            entry: logs[i],
-                            isDark: isDark,
-                          ),
-                        ),
-                      ],
-                    ),
                     loading: () => Container(
                       padding: const EdgeInsets.all(40),
                       child: const Center(
@@ -696,9 +715,7 @@ class _StatsCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark
-            ? const Color(0xFF2A2A3E)
-            : Colors.white,
+        color: isDark ? const Color(0xFF2A2A3E) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: color.withValues(alpha: 0.2),
@@ -782,9 +799,7 @@ class _PrizeListItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark
-            ? const Color(0xFF2A2A3E)
-            : const Color(0xFFF8F9FA),
+        color: isDark ? const Color(0xFF2A2A3E) : const Color(0xFFF8F9FA),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: color.withValues(alpha: 0.2),

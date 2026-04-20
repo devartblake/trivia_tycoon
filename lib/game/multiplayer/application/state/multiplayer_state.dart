@@ -46,7 +46,7 @@ class MultiplayerState {
   MultiplayerState copyWith({
     bool? connected,
     int? latencyMs,
-    String? error,         // pass explicit null to clear
+    String? error, // pass explicit null to clear
     bool clearError = false,
   }) {
     return MultiplayerState(
@@ -63,11 +63,11 @@ class MultiplayerState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is MultiplayerState &&
-              runtimeType == other.runtimeType &&
-              connected == other.connected &&
-              latencyMs == other.latencyMs &&
-              error == other.error;
+      other is MultiplayerState &&
+          runtimeType == other.runtimeType &&
+          connected == other.connected &&
+          latencyMs == other.latencyMs &&
+          error == other.error;
 
   @override
   int get hashCode => Object.hash(connected, latencyMs, error);

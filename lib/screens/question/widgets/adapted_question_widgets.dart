@@ -134,7 +134,9 @@ class AdaptedMultipleChoiceWidget extends AdaptedQuestionWidget {
         const SizedBox(height: 24),
 
         // Power-up indicators
-        if (question.isBoostedTime || question.isShielded || question.multiplier != null)
+        if (question.isBoostedTime ||
+            question.isShielded ||
+            question.multiplier != null)
           _buildPowerUpIndicators(),
 
         // Hint display (if power-up is active)
@@ -191,18 +193,21 @@ class AdaptedMultipleChoiceWidget extends AdaptedQuestionWidget {
           if (question.isBoostedTime) ...[
             Icon(Icons.speed, color: Colors.blue.shade600, size: 16),
             const SizedBox(width: 4),
-            Text('Time Boost', style: TextStyle(color: Colors.blue.shade600, fontSize: 12)),
+            Text('Time Boost',
+                style: TextStyle(color: Colors.blue.shade600, fontSize: 12)),
             const SizedBox(width: 8),
           ],
           if (question.isShielded) ...[
             Icon(Icons.shield, color: Colors.green.shade600, size: 16),
             const SizedBox(width: 4),
-            Text('Protected', style: TextStyle(color: Colors.green.shade600, fontSize: 12)),
+            Text('Protected',
+                style: TextStyle(color: Colors.green.shade600, fontSize: 12)),
             const SizedBox(width: 8),
           ],
           if (question.multiplier != null) ...[
             Icon(Icons.close, color: Colors.purple.shade600, size: 16),
-            Text('${question.multiplier}x XP', style: TextStyle(color: Colors.purple.shade600, fontSize: 12)),
+            Text('${question.multiplier}x XP',
+                style: TextStyle(color: Colors.purple.shade600, fontSize: 12)),
           ],
         ],
       ),
@@ -336,7 +341,9 @@ class AdaptedImageQuestionWidget extends AdaptedQuestionWidget {
         const SizedBox(height: 24),
 
         // Power-up indicators
-        if (question.isBoostedTime || question.isShielded || question.multiplier != null)
+        if (question.isBoostedTime ||
+            question.isShielded ||
+            question.multiplier != null)
           _buildPowerUpIndicators(),
 
         // Hint display
@@ -364,18 +371,21 @@ class AdaptedImageQuestionWidget extends AdaptedQuestionWidget {
           if (question.isBoostedTime) ...[
             Icon(Icons.speed, color: Colors.blue.shade600, size: 16),
             const SizedBox(width: 4),
-            Text('Time Boost', style: TextStyle(color: Colors.blue.shade600, fontSize: 12)),
+            Text('Time Boost',
+                style: TextStyle(color: Colors.blue.shade600, fontSize: 12)),
             const SizedBox(width: 8),
           ],
           if (question.isShielded) ...[
             Icon(Icons.shield, color: Colors.green.shade600, size: 16),
             const SizedBox(width: 4),
-            Text('Protected', style: TextStyle(color: Colors.green.shade600, fontSize: 12)),
+            Text('Protected',
+                style: TextStyle(color: Colors.green.shade600, fontSize: 12)),
             const SizedBox(width: 8),
           ],
           if (question.multiplier != null) ...[
             Icon(Icons.close, color: Colors.purple.shade600, size: 16),
-            Text('${question.multiplier}x XP', style: TextStyle(color: Colors.purple.shade600, fontSize: 12)),
+            Text('${question.multiplier}x XP',
+                style: TextStyle(color: Colors.purple.shade600, fontSize: 12)),
           ],
         ],
       ),
@@ -484,10 +494,12 @@ class _VideoQuestionWidgetStateful extends StatefulWidget {
   });
 
   @override
-  State<_VideoQuestionWidgetStateful> createState() => _VideoQuestionWidgetStatefulState();
+  State<_VideoQuestionWidgetStateful> createState() =>
+      _VideoQuestionWidgetStatefulState();
 }
 
-class _VideoQuestionWidgetStatefulState extends State<_VideoQuestionWidgetStateful> {
+class _VideoQuestionWidgetStatefulState
+    extends State<_VideoQuestionWidgetStateful> {
   VideoPlayerController? _videoController;
   ChewieController? _chewieController;
   bool _isLoading = true;
@@ -500,7 +512,8 @@ class _VideoQuestionWidgetStatefulState extends State<_VideoQuestionWidgetStatef
 
   Future<void> _initializeVideo() async {
     if (widget.question.videoUrl?.isNotEmpty == true) {
-      _videoController = VideoPlayerController.network(widget.question.videoUrl!);
+      _videoController =
+          VideoPlayerController.network(widget.question.videoUrl!);
       await _videoController!.initialize();
 
       _chewieController = ChewieController(
@@ -518,7 +531,8 @@ class _VideoQuestionWidgetStatefulState extends State<_VideoQuestionWidgetStatef
 
   @override
   Widget build(BuildContext context) {
-    final displayOptions = widget.question.reducedOptions ?? widget.question.options;
+    final displayOptions =
+        widget.question.reducedOptions ?? widget.question.options;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -553,7 +567,8 @@ class _VideoQuestionWidgetStatefulState extends State<_VideoQuestionWidgetStatef
         const SizedBox(height: 24),
 
         // Power-up indicators and hints
-        if (widget.question.showHint && widget.question.powerUpHint?.isNotEmpty == true)
+        if (widget.question.showHint &&
+            widget.question.powerUpHint?.isNotEmpty == true)
           _buildHint(),
 
         // Answer options
@@ -664,10 +679,12 @@ class _AudioQuestionWidgetStateful extends StatefulWidget {
   });
 
   @override
-  State<_AudioQuestionWidgetStateful> createState() => _AudioQuestionWidgetStatefulState();
+  State<_AudioQuestionWidgetStateful> createState() =>
+      _AudioQuestionWidgetStatefulState();
 }
 
-class _AudioQuestionWidgetStatefulState extends State<_AudioQuestionWidgetStateful> {
+class _AudioQuestionWidgetStatefulState
+    extends State<_AudioQuestionWidgetStateful> {
   late AudioPlayer _audioPlayer;
   PlayerState? _playerState;
   Duration _duration = Duration.zero;
@@ -748,7 +765,8 @@ class _AudioQuestionWidgetStatefulState extends State<_AudioQuestionWidgetStatef
 
   @override
   Widget build(BuildContext context) {
-    final displayOptions = widget.question.reducedOptions ?? widget.question.options;
+    final displayOptions =
+        widget.question.reducedOptions ?? widget.question.options;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -851,8 +869,10 @@ class _AudioQuestionWidgetStatefulState extends State<_AudioQuestionWidgetStatef
                   SliderTheme(
                     data: SliderTheme.of(context).copyWith(
                       trackHeight: 4,
-                      thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
-                      overlayShape: const RoundSliderOverlayShape(overlayRadius: 16),
+                      thumbShape:
+                          const RoundSliderThumbShape(enabledThumbRadius: 8),
+                      overlayShape:
+                          const RoundSliderOverlayShape(overlayRadius: 16),
                       activeTrackColor: Colors.blue.shade600,
                       inactiveTrackColor: Colors.blue.shade200,
                       thumbColor: Colors.blue.shade600,
@@ -863,7 +883,8 @@ class _AudioQuestionWidgetStatefulState extends State<_AudioQuestionWidgetStatef
                           : 0.0,
                       onChanged: (value) {
                         final newPosition = Duration(
-                          milliseconds: (value * _duration.inMilliseconds).round(),
+                          milliseconds:
+                              (value * _duration.inMilliseconds).round(),
                         );
                         _seekTo(newPosition);
                       },
@@ -900,11 +921,14 @@ class _AudioQuestionWidgetStatefulState extends State<_AudioQuestionWidgetStatef
         const SizedBox(height: 24),
 
         // Power-up indicators
-        if (widget.question.isBoostedTime || widget.question.isShielded || widget.question.multiplier != null)
+        if (widget.question.isBoostedTime ||
+            widget.question.isShielded ||
+            widget.question.multiplier != null)
           _buildPowerUpIndicators(),
 
         // Hint display
-        if (widget.question.showHint && widget.question.powerUpHint?.isNotEmpty == true)
+        if (widget.question.showHint &&
+            widget.question.powerUpHint?.isNotEmpty == true)
           _buildHint(),
 
         // Answer options
@@ -928,18 +952,21 @@ class _AudioQuestionWidgetStatefulState extends State<_AudioQuestionWidgetStatef
           if (widget.question.isBoostedTime) ...[
             Icon(Icons.speed, color: Colors.blue.shade600, size: 16),
             const SizedBox(width: 4),
-            Text('Time Boost', style: TextStyle(color: Colors.blue.shade600, fontSize: 12)),
+            Text('Time Boost',
+                style: TextStyle(color: Colors.blue.shade600, fontSize: 12)),
             const SizedBox(width: 8),
           ],
           if (widget.question.isShielded) ...[
             Icon(Icons.shield, color: Colors.green.shade600, size: 16),
             const SizedBox(width: 4),
-            Text('Protected', style: TextStyle(color: Colors.green.shade600, fontSize: 12)),
+            Text('Protected',
+                style: TextStyle(color: Colors.green.shade600, fontSize: 12)),
             const SizedBox(width: 8),
           ],
           if (widget.question.multiplier != null) ...[
             Icon(Icons.close, color: Colors.purple.shade600, size: 16),
-            Text('${widget.question.multiplier}x XP', style: TextStyle(color: Colors.purple.shade600, fontSize: 12)),
+            Text('${widget.question.multiplier}x XP',
+                style: TextStyle(color: Colors.purple.shade600, fontSize: 12)),
           ],
         ],
       ),

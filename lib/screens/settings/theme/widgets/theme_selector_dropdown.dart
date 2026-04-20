@@ -6,7 +6,8 @@ class ThemeSelectorDropdown extends ConsumerStatefulWidget {
   const ThemeSelectorDropdown({super.key});
 
   @override
-  ConsumerState<ThemeSelectorDropdown> createState() => _ThemeSelectorDropdownState();
+  ConsumerState<ThemeSelectorDropdown> createState() =>
+      _ThemeSelectorDropdownState();
 }
 
 class _ThemeSelectorDropdownState extends ConsumerState<ThemeSelectorDropdown>
@@ -93,7 +94,10 @@ class _ThemeSelectorDropdownState extends ConsumerState<ThemeSelectorDropdown>
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [currentTheme.primaryColor, currentTheme.primaryColor.withValues(alpha: 0.7)],
+                  colors: [
+                    currentTheme.primaryColor,
+                    currentTheme.primaryColor.withValues(alpha: 0.7)
+                  ],
                 ),
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -104,7 +108,8 @@ class _ThemeSelectorDropdownState extends ConsumerState<ThemeSelectorDropdown>
               ),
             ),
             border: InputBorder.none,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           ),
           dropdownColor: Colors.white,
           icon: Container(
@@ -158,7 +163,8 @@ class _ThemeSelectorDropdownState extends ConsumerState<ThemeSelectorDropdown>
                             _getThemeDescription(preset.themeName),
                             style: TextStyle(
                               fontSize: 12,
-                              color: const Color(0xFF64748B).withValues(alpha: 0.8),
+                              color: const Color(0xFF64748B)
+                                  .withValues(alpha: 0.8),
                             ),
                           ),
                         ],
@@ -189,7 +195,7 @@ class _ThemeSelectorDropdownState extends ConsumerState<ThemeSelectorDropdown>
               });
 
               final selectedPreset = allPresets.firstWhere(
-                    (preset) => preset.themeName == selectedName,
+                (preset) => preset.themeName == selectedName,
                 orElse: () => allPresets.first,
               );
               controller.updateTheme(selectedPreset);

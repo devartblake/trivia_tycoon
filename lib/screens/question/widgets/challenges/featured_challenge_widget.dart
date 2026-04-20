@@ -7,7 +7,8 @@ import '../../../../game/models/question_model.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 // Provider for featured challenge data
-final featuredChallengeProvider = FutureProvider<FeaturedChallenge>((ref) async {
+final featuredChallengeProvider =
+    FutureProvider<FeaturedChallenge>((ref) async {
   final repository = ref.watch(question_data.questionRepositoryProvider);
   final quizService = ref.read(quizProgressServiceProvider);
 
@@ -166,7 +167,8 @@ class FeaturedChallengeWidget extends ConsumerWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 ),
                 child: const Text(
                   "Retry",
@@ -254,12 +256,14 @@ class FeaturedChallengeWidget extends ConsumerWidget {
                     ? () => _handleChallengeTap(context, challenge)
                     : null,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: challenge.isUnlocked ? Colors.white : Colors.white54,
+                  backgroundColor:
+                      challenge.isUnlocked ? Colors.white : Colors.white54,
                   foregroundColor: Colors.indigo.shade600,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 ),
                 child: Text(
                   challenge.isUnlocked ? "Accept Challenge" : "Locked",
@@ -310,7 +314,8 @@ class FeaturedChallengeWidget extends ConsumerWidget {
                 left: 0,
                 right: 0,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                   decoration: BoxDecoration(
                     color: Colors.black.withValues(alpha: 0.6),
                     borderRadius: BorderRadius.circular(8),

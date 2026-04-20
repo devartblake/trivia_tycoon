@@ -5,8 +5,9 @@ import '../../../game/analytics/services/analytics_service.dart';
 import '../../providers/riverpod_providers.dart';
 import '../models/engagement_entry.dart';
 
-final engagementAnalyticsManagerProvider = AsyncNotifierProvider<EngagementAnalyticsManager, List<EngagementEntry>>(
-      () => EngagementAnalyticsManager(),
+final engagementAnalyticsManagerProvider =
+    AsyncNotifierProvider<EngagementAnalyticsManager, List<EngagementEntry>>(
+  () => EngagementAnalyticsManager(),
 );
 
 class EngagementAnalyticsManager extends AsyncNotifier<List<EngagementEntry>> {
@@ -16,7 +17,9 @@ class EngagementAnalyticsManager extends AsyncNotifier<List<EngagementEntry>> {
     final apiService = ref.read(apiServiceProvider);
     final eventQueueService = ref.read(eventQueueServiceProvider);
 
-    final rawEngagements = await AnalyticsService(apiService, eventQueueService).fetchEngagementAnalytics();
-    return AnalyticsAggregationService.aggregateEngagements(rawEngagements, timeline);
+    final rawEngagements = await AnalyticsService(apiService, eventQueueService)
+        .fetchEngagementAnalytics();
+    return AnalyticsAggregationService.aggregateEngagements(
+        rawEngagements, timeline);
   }
 }

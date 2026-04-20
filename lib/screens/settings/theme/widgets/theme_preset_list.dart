@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../game/controllers/theme_settings_controller.dart';
 
-
 class ThemePresetList extends ConsumerWidget {
   final void Function(String presetName) onEdit;
   final void Function(String presetName) onDelete;
@@ -15,7 +14,8 @@ class ThemePresetList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final customPresets = ref.watch(themeSettingsProvider.notifier).customPresets;
+    final customPresets =
+        ref.watch(themeSettingsProvider.notifier).customPresets;
 
     if (customPresets.isEmpty) {
       return const Text("No custom themes saved.");

@@ -24,29 +24,47 @@ SkillTreeGroupId parseGroupId(String raw) {
 
 Color groupAccent(SkillTreeGroupId g) {
   switch (g) {
-    case SkillTreeGroupId.combat: return const Color(0xFFFF4444); // red
-    case SkillTreeGroupId.enhancement: return const Color(0xFFF39C12); // orange
-    case SkillTreeGroupId.utility: return const Color(0xFF8E44AD); // purple
-    case SkillTreeGroupId.advanced: return const Color(0xFFFFD700); // gold
+    case SkillTreeGroupId.combat:
+      return const Color(0xFFFF4444); // red
+    case SkillTreeGroupId.enhancement:
+      return const Color(0xFFF39C12); // orange
+    case SkillTreeGroupId.utility:
+      return const Color(0xFF8E44AD); // purple
+    case SkillTreeGroupId.advanced:
+      return const Color(0xFFFFD700); // gold
   }
 }
 
 SkillCategory branchIdToCategory(String branchId) {
   switch (branchId.toLowerCase()) {
-    case 'scholar': return SkillCategory.scholar;
-    case 'strategist': return SkillCategory.strategist;
-    case 'combat': return SkillCategory.combat;
-    case 'xp': return SkillCategory.xp;
-    case 'timer': return SkillCategory.timer;
-    case 'combo': return SkillCategory.combo;
-    case 'risk': return SkillCategory.risk;
-    case 'luck': return SkillCategory.luck;
-    case 'stealth': return SkillCategory.stealth;
-    case 'knowledge': return SkillCategory.knowledge;
-    case 'elite': return SkillCategory.elite;
-    case 'wildcard': return SkillCategory.wildcard;
-    case 'general': return SkillCategory.general;
-    default: return SkillCategory.unknown;
+    case 'scholar':
+      return SkillCategory.scholar;
+    case 'strategist':
+      return SkillCategory.strategist;
+    case 'combat':
+      return SkillCategory.combat;
+    case 'xp':
+      return SkillCategory.xp;
+    case 'timer':
+      return SkillCategory.timer;
+    case 'combo':
+      return SkillCategory.combo;
+    case 'risk':
+      return SkillCategory.risk;
+    case 'luck':
+      return SkillCategory.luck;
+    case 'stealth':
+      return SkillCategory.stealth;
+    case 'knowledge':
+      return SkillCategory.knowledge;
+    case 'elite':
+      return SkillCategory.elite;
+    case 'wildcard':
+      return SkillCategory.wildcard;
+    case 'general':
+      return SkillCategory.general;
+    default:
+      return SkillCategory.unknown;
   }
 }
 
@@ -127,7 +145,9 @@ class SkillBranchVM {
     int dfsTier(String id) {
       if (memo.containsKey(id)) return memo[id]!;
       final preds = incoming[id]!;
-      final tier = preds.isEmpty ? 0 : (preds.map(dfsTier).fold<int>(0, (a, b) => a > b ? a : b) + 1);
+      final tier = preds.isEmpty
+          ? 0
+          : (preds.map(dfsTier).fold<int>(0, (a, b) => a > b ? a : b) + 1);
       memo[id] = tier;
       return tier;
     }

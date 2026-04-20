@@ -51,12 +51,14 @@ void main() {
   group('LocalArcadeLeaderboardService.top() — initial state', () {
     test('returns empty list when no runs recorded', () {
       final svc = LocalArcadeLeaderboardService(cache);
-      expect(svc.top(ArcadeGameId.quickMathRush, ArcadeDifficulty.normal), isEmpty);
+      expect(svc.top(ArcadeGameId.quickMathRush, ArcadeDifficulty.normal),
+          isEmpty);
     });
 
     test('best() returns null when no runs recorded', () {
       final svc = LocalArcadeLeaderboardService(cache);
-      expect(svc.best(ArcadeGameId.quickMathRush, ArcadeDifficulty.normal), isNull);
+      expect(svc.best(ArcadeGameId.quickMathRush, ArcadeDifficulty.normal),
+          isNull);
     });
   });
 
@@ -84,28 +86,50 @@ void main() {
 
     test('entries with equal score are sorted by duration ascending', () async {
       final svc = LocalArcadeLeaderboardService(cache);
-      await svc.recordRun(_result(score: 500, duration: const Duration(seconds: 90)));
-      await svc.recordRun(_result(score: 500, duration: const Duration(seconds: 45)));
+      await svc.recordRun(
+          _result(score: 500, duration: const Duration(seconds: 90)));
+      await svc.recordRun(
+          _result(score: 500, duration: const Duration(seconds: 45)));
       final list = svc.top(ArcadeGameId.quickMathRush, ArcadeDifficulty.normal);
       expect(list[0].durationMs, lessThan(list[1].durationMs));
     });
 
     test('records are isolated per game', () async {
       final svc = LocalArcadeLeaderboardService(cache);
-      await svc.recordRun(_result(gameId: ArcadeGameId.quickMathRush, score: 400));
+      await svc
+          .recordRun(_result(gameId: ArcadeGameId.quickMathRush, score: 400));
       await svc.recordRun(_result(gameId: ArcadeGameId.memoryFlip, score: 800));
 
-      expect(svc.top(ArcadeGameId.quickMathRush, ArcadeDifficulty.normal).first.score, 400);
-      expect(svc.top(ArcadeGameId.memoryFlip, ArcadeDifficulty.normal).first.score, 800);
+      expect(
+          svc
+              .top(ArcadeGameId.quickMathRush, ArcadeDifficulty.normal)
+              .first
+              .score,
+          400);
+      expect(
+          svc.top(ArcadeGameId.memoryFlip, ArcadeDifficulty.normal).first.score,
+          800);
     });
 
     test('records are isolated per difficulty', () async {
       final svc = LocalArcadeLeaderboardService(cache);
-      await svc.recordRun(_result(difficulty: ArcadeDifficulty.easy, score: 111));
-      await svc.recordRun(_result(difficulty: ArcadeDifficulty.hard, score: 999));
+      await svc
+          .recordRun(_result(difficulty: ArcadeDifficulty.easy, score: 111));
+      await svc
+          .recordRun(_result(difficulty: ArcadeDifficulty.hard, score: 999));
 
-      expect(svc.top(ArcadeGameId.quickMathRush, ArcadeDifficulty.easy).first.score, 111);
-      expect(svc.top(ArcadeGameId.quickMathRush, ArcadeDifficulty.hard).first.score, 999);
+      expect(
+          svc
+              .top(ArcadeGameId.quickMathRush, ArcadeDifficulty.easy)
+              .first
+              .score,
+          111);
+      expect(
+          svc
+              .top(ArcadeGameId.quickMathRush, ArcadeDifficulty.hard)
+              .first
+              .score,
+          999);
     });
 
     test('stored entries have correct gameId and difficulty', () async {
@@ -115,9 +139,8 @@ void main() {
         difficulty: ArcadeDifficulty.hard,
         score: 750,
       ));
-      final entry = svc
-          .top(ArcadeGameId.patternSprint, ArcadeDifficulty.hard)
-          .first;
+      final entry =
+          svc.top(ArcadeGameId.patternSprint, ArcadeDifficulty.hard).first;
       expect(entry.gameId, ArcadeGameId.patternSprint);
       expect(entry.difficulty, ArcadeDifficulty.hard);
     });
@@ -133,7 +156,9 @@ void main() {
       for (int i = 0; i < 15; i++) {
         await svc.recordRun(_result(score: i * 10));
       }
-      expect(svc.top(ArcadeGameId.quickMathRush, ArcadeDifficulty.normal).length, 10);
+      expect(
+          svc.top(ArcadeGameId.quickMathRush, ArcadeDifficulty.normal).length,
+          10);
     });
 
     test('custom limit is respected', () async {
@@ -142,7 +167,9 @@ void main() {
         await svc.recordRun(_result(score: i * 10));
       }
       expect(
-        svc.top(ArcadeGameId.quickMathRush, ArcadeDifficulty.normal, limit: 3).length,
+        svc
+            .top(ArcadeGameId.quickMathRush, ArcadeDifficulty.normal, limit: 3)
+            .length,
         3,
       );
     });
@@ -152,7 +179,9 @@ void main() {
       await svc.recordRun(_result(score: 200));
       await svc.recordRun(_result(score: 100));
       expect(
-        svc.top(ArcadeGameId.quickMathRush, ArcadeDifficulty.normal, limit: 50).length,
+        svc
+            .top(ArcadeGameId.quickMathRush, ArcadeDifficulty.normal, limit: 50)
+            .length,
         2,
       );
     });
@@ -168,12 +197,15 @@ void main() {
       await svc.recordRun(_result(score: 200));
       await svc.recordRun(_result(score: 800));
       await svc.recordRun(_result(score: 500));
-      expect(svc.best(ArcadeGameId.quickMathRush, ArcadeDifficulty.normal)!.score, 800);
+      expect(
+          svc.best(ArcadeGameId.quickMathRush, ArcadeDifficulty.normal)!.score,
+          800);
     });
 
     test('returns null for an empty board', () {
       final svc = LocalArcadeLeaderboardService(cache);
-      expect(svc.best(ArcadeGameId.patternSprint, ArcadeDifficulty.insane), isNull);
+      expect(svc.best(ArcadeGameId.patternSprint, ArcadeDifficulty.insane),
+          isNull);
     });
   });
 
@@ -193,7 +225,8 @@ void main() {
       expect(svc.wouldBeNewBest(_result(score: 301)), isTrue);
     });
 
-    test('returns false when new score equals current best (same duration)', () async {
+    test('returns false when new score equals current best (same duration)',
+        () async {
       final svc = LocalArcadeLeaderboardService(cache);
       await svc.recordRun(
         _result(score: 300, duration: const Duration(seconds: 60)),
@@ -244,9 +277,11 @@ void main() {
 
       await svc.clearBoard(ArcadeGameId.quickMathRush, ArcadeDifficulty.normal);
 
-      expect(svc.top(ArcadeGameId.quickMathRush, ArcadeDifficulty.normal), isEmpty);
+      expect(svc.top(ArcadeGameId.quickMathRush, ArcadeDifficulty.normal),
+          isEmpty);
       // Other boards unaffected
-      expect(svc.top(ArcadeGameId.memoryFlip, ArcadeDifficulty.normal), isNotEmpty);
+      expect(svc.top(ArcadeGameId.memoryFlip, ArcadeDifficulty.normal),
+          isNotEmpty);
     });
   });
 
@@ -257,15 +292,19 @@ void main() {
   group('LocalArcadeLeaderboardService.clearAll()', () {
     test('removes all entries across all boards', () async {
       final svc = LocalArcadeLeaderboardService(cache);
-      await svc.recordRun(_result(gameId: ArcadeGameId.quickMathRush, score: 400));
-      await svc.recordRun(
-          _result(gameId: ArcadeGameId.memoryFlip, difficulty: ArcadeDifficulty.easy, score: 600));
+      await svc
+          .recordRun(_result(gameId: ArcadeGameId.quickMathRush, score: 400));
+      await svc.recordRun(_result(
+          gameId: ArcadeGameId.memoryFlip,
+          difficulty: ArcadeDifficulty.easy,
+          score: 600));
 
       await svc.clearAll();
 
       for (final id in ArcadeGameId.values) {
         for (final diff in ArcadeDifficulty.values) {
-          expect(svc.top(id, diff), isEmpty, reason: 'Board $id/$diff not cleared');
+          expect(svc.top(id, diff), isEmpty,
+              reason: 'Board $id/$diff not cleared');
         }
       }
     });
@@ -281,7 +320,12 @@ void main() {
       await svc1.recordRun(_result(score: 777));
 
       final svc2 = LocalArcadeLeaderboardService(cache);
-      expect(svc2.top(ArcadeGameId.quickMathRush, ArcadeDifficulty.normal).first.score, 777);
+      expect(
+          svc2
+              .top(ArcadeGameId.quickMathRush, ArcadeDifficulty.normal)
+              .first
+              .score,
+          777);
     });
 
     test('clearAll survives service re-creation', () async {
@@ -290,7 +334,8 @@ void main() {
       await svc1.clearAll();
 
       final svc2 = LocalArcadeLeaderboardService(cache);
-      expect(svc2.top(ArcadeGameId.quickMathRush, ArcadeDifficulty.normal), isEmpty);
+      expect(svc2.top(ArcadeGameId.quickMathRush, ArcadeDifficulty.normal),
+          isEmpty);
     });
 
     test('multiple game/difficulty entries all persist', () async {
@@ -323,10 +368,14 @@ void main() {
   group('LocalArcadeLeaderboardService.topForGame()', () {
     test('merges entries across all difficulties for a game', () async {
       final svc = LocalArcadeLeaderboardService(cache);
-      await svc.recordRun(
-          _result(gameId: ArcadeGameId.quickMathRush, difficulty: ArcadeDifficulty.easy, score: 100));
-      await svc.recordRun(
-          _result(gameId: ArcadeGameId.quickMathRush, difficulty: ArcadeDifficulty.hard, score: 900));
+      await svc.recordRun(_result(
+          gameId: ArcadeGameId.quickMathRush,
+          difficulty: ArcadeDifficulty.easy,
+          score: 100));
+      await svc.recordRun(_result(
+          gameId: ArcadeGameId.quickMathRush,
+          difficulty: ArcadeDifficulty.hard,
+          score: 900));
 
       final list = svc.topForGame(ArcadeGameId.quickMathRush, limit: 10);
       expect(list.any((e) => e.score == 100), isTrue);
@@ -335,10 +384,14 @@ void main() {
 
     test('topForGame is sorted by score descending', () async {
       final svc = LocalArcadeLeaderboardService(cache);
-      await svc.recordRun(
-          _result(gameId: ArcadeGameId.quickMathRush, difficulty: ArcadeDifficulty.easy, score: 200));
-      await svc.recordRun(
-          _result(gameId: ArcadeGameId.quickMathRush, difficulty: ArcadeDifficulty.hard, score: 800));
+      await svc.recordRun(_result(
+          gameId: ArcadeGameId.quickMathRush,
+          difficulty: ArcadeDifficulty.easy,
+          score: 200));
+      await svc.recordRun(_result(
+          gameId: ArcadeGameId.quickMathRush,
+          difficulty: ArcadeDifficulty.hard,
+          score: 800));
 
       final list = svc.topForGame(ArcadeGameId.quickMathRush);
       expect(list.first.score, 800);

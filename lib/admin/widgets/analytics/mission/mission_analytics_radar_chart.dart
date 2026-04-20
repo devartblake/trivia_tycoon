@@ -24,7 +24,8 @@ class MissionAnalyticsRadarChart extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final filters = ref.watch(missionFiltersProvider);
 
-    final List<MissionAnalyticsEntry> filtered = _filterMissions(missions, filters.timeframe);
+    final List<MissionAnalyticsEntry> filtered =
+        _filterMissions(missions, filters.timeframe);
 
     if (filtered.length < 3) {
       return Container(
@@ -94,7 +95,8 @@ class MissionAnalyticsRadarChart extends ConsumerWidget {
               dataSets: [
                 RadarDataSet(
                   dataEntries: filtered
-                      .map((e) => RadarEntry(value: e.missionsCompleted.toDouble()))
+                      .map((e) =>
+                          RadarEntry(value: e.missionsCompleted.toDouble()))
                       .toList(),
                   borderColor: const Color(0xFF10B981),
                   fillColor: const Color(0xFF10B981).withValues(alpha: 0.2),
@@ -103,7 +105,8 @@ class MissionAnalyticsRadarChart extends ConsumerWidget {
                 ),
                 RadarDataSet(
                   dataEntries: filtered
-                      .map((e) => RadarEntry(value: e.missionsSwapped.toDouble()))
+                      .map((e) =>
+                          RadarEntry(value: e.missionsSwapped.toDouble()))
                       .toList(),
                   borderColor: const Color(0xFFF59E0B),
                   fillColor: const Color(0xFFF59E0B).withValues(alpha: 0.2),

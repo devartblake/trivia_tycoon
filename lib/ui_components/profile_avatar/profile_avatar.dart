@@ -114,9 +114,9 @@ class ProfileAvatar extends StatefulWidget {
     this.onLongPress,
     this.enableCropZoom = false,
   }) : assert(
-  image == null || child == null,
-  'Cannot provide both image and child',
-  );
+          image == null || child == null,
+          'Cannot provide both image and child',
+        );
 
   @override
   State<ProfileAvatar> createState() => _ProfileAvatarState();
@@ -220,18 +220,18 @@ class _ProfileAvatarState extends State<ProfileAvatar>
     // Wrap in gesture detector if tap callbacks are provided
     Widget avatarWidget = widget.onTap != null || widget.onLongPress != null
         ? Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: widget.onTap,
-        onLongPress: widget.onLongPress,
-        customBorder: widget.avatarShape == BoxShape.circle
-            ? const CircleBorder()
-            : RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(widget.size * 0.2),
-        ),
-        child: avatarContainer,
-      ),
-    )
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: widget.onTap,
+              onLongPress: widget.onLongPress,
+              customBorder: widget.avatarShape == BoxShape.circle
+                  ? const CircleBorder()
+                  : RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(widget.size * 0.2),
+                    ),
+              child: avatarContainer,
+            ),
+          )
         : avatarContainer;
 
     // Add hover effect for web/desktop
@@ -393,9 +393,9 @@ class _ProfileAvatarState extends State<ProfileAvatar>
           // Dynamic badge rendering
           if (widget.badges != null)
             ...widget.badges!.map((badge) => Align(
-              alignment: badge.alignment,
-              child: badge.badge,
-            )),
+                  alignment: badge.alignment,
+                  child: badge.badge,
+                )),
 
           // Single badge
           if (widget.badge != null) _buildBadge(colorScheme),
@@ -434,13 +434,13 @@ class _ProfileAvatarState extends State<ProfileAvatar>
       alignment: widget.statusAlignment,
       child: widget.animatedStatus
           ? FadeTransition(
-        opacity: _statusController,
-        child: ScaleTransition(
-          scale: Tween<double>(begin: 0.8, end: 1.0)
-              .animate(_statusController),
-          child: indicator,
-        ),
-      )
+              opacity: _statusController,
+              child: ScaleTransition(
+                scale: Tween<double>(begin: 0.8, end: 1.0)
+                    .animate(_statusController),
+                child: indicator,
+              ),
+            )
           : indicator,
     );
   }
@@ -471,17 +471,17 @@ class _ProfileAvatarState extends State<ProfileAvatar>
       alignment: widget.badgeAlignment,
       child: widget.badgeAnimated
           ? TweenAnimationBuilder<double>(
-        tween: Tween(begin: 0.0, end: 1.0),
-        duration: const Duration(milliseconds: 400),
-        curve: Curves.elasticOut,
-        builder: (context, value, child) {
-          return Transform.scale(
-            scale: value,
-            child: child,
-          );
-        },
-        child: badge,
-      )
+              tween: Tween(begin: 0.0, end: 1.0),
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.elasticOut,
+              builder: (context, value, child) {
+                return Transform.scale(
+                  scale: value,
+                  child: child,
+                );
+              },
+              child: badge,
+            )
           : badge,
     );
   }

@@ -4,7 +4,8 @@ import 'gift_transaction_service.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class CustomizationService extends ChangeNotifier {
-  static final CustomizationService _instance = CustomizationService._internal();
+  static final CustomizationService _instance =
+      CustomizationService._internal();
   factory CustomizationService() => _instance;
   CustomizationService._internal();
 
@@ -94,7 +95,8 @@ class CustomizationService extends ChangeNotifier {
 
   // ============ Sticker Pack Management ============
 
-  Future<bool> purchaseStickerPack(String userId, String packId, int price) async {
+  Future<bool> purchaseStickerPack(
+      String userId, String packId, int price) async {
     // Check if already owned
     if (ownsStickerPack(userId, packId)) {
       LogManager.debug('Sticker pack already owned');
@@ -278,9 +280,9 @@ class CustomizationService extends ChangeNotifier {
   }
 
   Future<bool> importCustomizations(
-      String userId,
-      Map<String, dynamic> data,
-      ) async {
+    String userId,
+    Map<String, dynamic> data,
+  ) async {
     try {
       // Import themes
       final themes = data['themes'] as Map<String, dynamic>?;

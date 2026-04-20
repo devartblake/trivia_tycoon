@@ -15,7 +15,8 @@ class ConfettiPhysicsControls extends StatefulWidget {
   });
 
   @override
-  State<ConfettiPhysicsControls> createState() => _ConfettiPhysicsControlsState();
+  State<ConfettiPhysicsControls> createState() =>
+      _ConfettiPhysicsControlsState();
 }
 
 class _ConfettiPhysicsControlsState extends State<ConfettiPhysicsControls> {
@@ -35,7 +36,8 @@ class _ConfettiPhysicsControlsState extends State<ConfettiPhysicsControls> {
     widget.onChanged(speed, gravity, wind);
   }
 
-  Widget _buildSliderControl(String label, double value, double min, double max, Color color, ValueChanged<double> onChanged) {
+  Widget _buildSliderControl(String label, double value, double min, double max,
+      Color color, ValueChanged<double> onChanged) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -98,7 +100,7 @@ class _ConfettiPhysicsControlsState extends State<ConfettiPhysicsControls> {
           0.1,
           10.0,
           const Color(0xFF667EEA),
-              (value) {
+          (value) {
             setState(() => speed = value);
             _updatePhysics();
           },
@@ -110,7 +112,7 @@ class _ConfettiPhysicsControlsState extends State<ConfettiPhysicsControls> {
           0.0,
           5.0,
           const Color(0xFF9F7AEA),
-              (value) {
+          (value) {
             setState(() => gravity = value);
             _updatePhysics();
           },
@@ -122,7 +124,7 @@ class _ConfettiPhysicsControlsState extends State<ConfettiPhysicsControls> {
           -2.0,
           2.0,
           const Color(0xFF38B2AC),
-              (value) {
+          (value) {
             setState(() => wind = value);
             _updatePhysics();
           },

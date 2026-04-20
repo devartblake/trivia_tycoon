@@ -6,7 +6,6 @@ import 'package:trivia_tycoon/core/manager/log_manager.dart';
 /// This ensures that sensitive keys and configuration-specific URLs are not
 /// hardcoded in the application source code.
 class EnvConfig {
-
   /// API Base URL
   static String? _apiBaseUrl = '';
 
@@ -39,7 +38,8 @@ class EnvConfig {
 
   /// Getter for the SignalR Presence hub URL.
   static String get presenceHubUrl {
-    assert(_presenceHubUrl != null, 'API_PRESENCE_HUB_URL is not loaded from .env');
+    assert(_presenceHubUrl != null,
+        'API_PRESENCE_HUB_URL is not loaded from .env');
     return _presenceHubUrl!;
   }
 
@@ -54,17 +54,23 @@ class EnvConfig {
 
   static String _joinWsPath(String baseUrl, String suffixPath) {
     final baseUri = Uri.parse(baseUrl);
-    final baseSegments = baseUri.pathSegments.where((s) => s.isNotEmpty).toList();
-    final suffixSegments = Uri.parse(suffixPath).pathSegments.where((s) => s.isNotEmpty).toList();
+    final baseSegments =
+        baseUri.pathSegments.where((s) => s.isNotEmpty).toList();
+    final suffixSegments =
+        Uri.parse(suffixPath).pathSegments.where((s) => s.isNotEmpty).toList();
 
     final mergedSegments = <String>[...baseSegments];
-    if (mergedSegments.isNotEmpty && suffixSegments.isNotEmpty && mergedSegments.last == suffixSegments.first) {
+    if (mergedSegments.isNotEmpty &&
+        suffixSegments.isNotEmpty &&
+        mergedSegments.last == suffixSegments.first) {
       mergedSegments.addAll(suffixSegments.skip(1));
     } else {
       mergedSegments.addAll(suffixSegments);
     }
 
-    return baseUri.replace(pathSegments: mergedSegments, fragment: '').toString();
+    return baseUri
+        .replace(pathSegments: mergedSegments, fragment: '')
+        .toString();
   }
 
   static String _normalizeApiBaseUrlForRuntime(String rawUrl) {
@@ -134,19 +140,24 @@ class EnvConfig {
 
       // Derive WebSocket URL from HTTP URL
       // Convert http:// to ws:// and https:// to wss://
-      _apiWsBaseUrl = '${apiBaseUrl
-          .replaceFirst('http://', 'ws://')
-          .replaceFirst('https://', 'wss://')}/ws';
+      _apiWsBaseUrl =
+          '${apiBaseUrl.replaceFirst('http://', 'ws://').replaceFirst('https://', 'wss://')}/ws';
 
       LogManager.debug('[EnvConfig] API Base: $apiBaseUrl');
       LogManager.debug('[EnvConfig] WebSocket: $apiWsBaseUrl');
 
       _matchHubUrl = dotenv.env['API_MATCH_HUB_URL'] ??
-          (_apiWsBaseUrl == null ? null : _joinWsPath(_apiWsBaseUrl!, '/ws/match'));
+          (_apiWsBaseUrl == null
+              ? null
+              : _joinWsPath(_apiWsBaseUrl!, '/ws/match'));
       _presenceHubUrl = dotenv.env['API_PRESENCE_HUB_URL'] ??
-          (_apiWsBaseUrl == null ? null : _joinWsPath(_apiWsBaseUrl!, '/ws/presence'));
+          (_apiWsBaseUrl == null
+              ? null
+              : _joinWsPath(_apiWsBaseUrl!, '/ws/presence'));
       _notifyHubUrl = dotenv.env['API_NOTIFY_HUB_URL'] ??
-          (_apiWsBaseUrl == null ? null : _joinWsPath(_apiWsBaseUrl!, '/ws/notify'));
+          (_apiWsBaseUrl == null
+              ? null
+              : _joinWsPath(_apiWsBaseUrl!, '/ws/notify'));
       _appRedirectBaseUrl = _resolveAppRedirectBaseUrl();
 
       // Perform checks to ensure essential variables are present

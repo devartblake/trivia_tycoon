@@ -84,7 +84,8 @@ class _SlidingCardDemoScreenState extends State<SlidingCardDemoScreen>
                 title: Text("Panel Example"),
                 subtitle: Text("Click 'More' to slide up"),
               ),
-              panelContent: const Text("This is the hidden sliding panel content."),
+              panelContent:
+                  const Text("This is the hidden sliding panel content."),
             ),
           ),
         ],

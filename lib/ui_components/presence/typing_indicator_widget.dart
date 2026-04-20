@@ -77,8 +77,10 @@ class _TypingIndicatorWidgetState extends State<TypingIndicatorWidget>
   void _onTypingStatusChanged() {
     if (!mounted) return;
 
-    final isAnyoneTyping = _typingService?.isAnyoneTyping(widget.conversationId) ?? false;
-    final typingText = _typingService?.getTypingText(widget.conversationId) ?? '';
+    final isAnyoneTyping =
+        _typingService?.isAnyoneTyping(widget.conversationId) ?? false;
+    final typingText =
+        _typingService?.getTypingText(widget.conversationId) ?? '';
 
     if (isAnyoneTyping != _isVisible) {
       setState(() {
@@ -112,10 +114,11 @@ class _TypingIndicatorWidgetState extends State<TypingIndicatorWidget>
           child: Transform.translate(
             offset: Offset(0, _slideAnimation.value),
             child: Container(
-              padding: widget.padding ?? const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 8,
-              ),
+              padding: widget.padding ??
+                  const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
               child: Row(
                 children: [
                   _buildTypingDots(),
@@ -123,11 +126,12 @@ class _TypingIndicatorWidgetState extends State<TypingIndicatorWidget>
                   Expanded(
                     child: SafeText(
                       _currentText,
-                      style: widget.textStyle ?? TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 13,
-                        fontStyle: FontStyle.italic,
-                      ),
+                      style: widget.textStyle ??
+                          TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: 13,
+                            fontStyle: FontStyle.italic,
+                          ),
                     ),
                   ),
                 ],
@@ -169,8 +173,6 @@ class _TypingIndicatorWidgetState extends State<TypingIndicatorWidget>
       ),
     );
   }
-
-
 }
 
 /// Compact typing indicator for message tiles
@@ -191,7 +193,8 @@ class CompactTypingIndicator extends StatelessWidget {
     return ListenableBuilder(
       listenable: TypingIndicatorService(),
       builder: (context, child) {
-        final isTyping = TypingIndicatorService().isAnyoneTyping(conversationId);
+        final isTyping =
+            TypingIndicatorService().isAnyoneTyping(conversationId);
 
         if (!isTyping) return const SizedBox.shrink();
 
@@ -281,10 +284,11 @@ class _TypingAwareTextFieldState extends State<TypingAwareTextField> {
       controller: widget.controller,
       style: widget.style,
       maxLines: widget.maxLines,
-      decoration: widget.decoration ?? InputDecoration(
-        hintText: widget.hintText,
-        border: InputBorder.none,
-      ),
+      decoration: widget.decoration ??
+          InputDecoration(
+            hintText: widget.hintText,
+            border: InputBorder.none,
+          ),
       onChanged: (text) {
         // Handle typing indicator
         _typingService.handleTextInput(widget.conversationId, text);

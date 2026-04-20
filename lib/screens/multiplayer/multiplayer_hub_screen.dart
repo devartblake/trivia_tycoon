@@ -10,7 +10,8 @@ class MultiplayerHubScreen extends ConsumerStatefulWidget {
   const MultiplayerHubScreen({super.key});
 
   @override
-  ConsumerState<MultiplayerHubScreen> createState() => _MultiplayerHubScreenState();
+  ConsumerState<MultiplayerHubScreen> createState() =>
+      _MultiplayerHubScreenState();
 }
 
 class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
@@ -60,9 +61,8 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? const Color(0xFF0A0A0F)
-          : MultiplayerPalette.background,
+      backgroundColor:
+          isDark ? const Color(0xFF0A0A0F) : MultiplayerPalette.background,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
@@ -226,10 +226,14 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
                 title: 'Quick Match',
                 subtitle: 'Find opponents instantly',
                 gradient: const LinearGradient(
-                  colors: [MultiplayerPalette.accent, MultiplayerPalette.danger],
+                  colors: [
+                    MultiplayerPalette.accent,
+                    MultiplayerPalette.danger
+                  ],
                 ),
                 onTap: () async {
-                  final ok = await ref.read(multiplayerServiceProvider).quickMatch();
+                  final ok =
+                      await ref.read(multiplayerServiceProvider).quickMatch();
                   if (context.mounted && ok) {
                     context.push('/multiplayer/find');
                   }
@@ -243,7 +247,10 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
                 title: 'Browse Rooms',
                 subtitle: 'Join existing games',
                 gradient: const LinearGradient(
-                  colors: [MultiplayerPalette.primary, MultiplayerPalette.secondary],
+                  colors: [
+                    MultiplayerPalette.primary,
+                    MultiplayerPalette.secondary
+                  ],
                 ),
                 onTap: () => context.push('/multiplayer/find'),
               ),
@@ -321,7 +328,8 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
     );
   }
 
-  Widget _buildRoomsSection(AsyncValue<List<Map<String, dynamic>>> roomsAsync, ThemeData theme, bool isDark) {
+  Widget _buildRoomsSection(AsyncValue<List<Map<String, dynamic>>> roomsAsync,
+      ThemeData theme, bool isDark) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -345,7 +353,8 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
         const SizedBox(height: 16),
         Container(
           decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1E1E2E) : MultiplayerPalette.surface,
+            color:
+                isDark ? const Color(0xFF1E1E2E) : MultiplayerPalette.surface,
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
@@ -374,7 +383,8 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
     if (rooms.isEmpty) {
       return Container(
         height: 200,
-        child: Center( // Add explicit Center widget
+        child: Center(
+          // Add explicit Center widget
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -401,7 +411,8 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
               ),
               const SizedBox(height: 8),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24), // Add padding for better text wrapping
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 24), // Add padding for better text wrapping
                 child: Text(
                   'Be the first to create a room or try Quick Match!',
                   style: TextStyle(
@@ -472,7 +483,8 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
           const SizedBox(height: 16),
           const Text('Error loading rooms'),
           const SizedBox(height: 8),
-          Text('$error', style: const TextStyle(fontSize: 12, color: Colors.grey)),
+          Text('$error',
+              style: const TextStyle(fontSize: 12, color: Colors.grey)),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () => ref.refresh(roomsListProvider),

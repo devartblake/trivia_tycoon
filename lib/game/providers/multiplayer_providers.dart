@@ -14,7 +14,7 @@ import 'core_providers.dart'; // ignore: unused_import — kept for consistency
 // ---------------------------------------------------------------------------
 
 final challengeCoordinationServiceProvider =
-Provider<ChallengeCoordinationService>((ref) {
+    Provider<ChallengeCoordinationService>((ref) {
   final service = ChallengeCoordinationService();
   service.initialize();
   return service;
@@ -29,7 +29,7 @@ final matchesServiceProvider = Provider<MatchesService>((ref) {
 });
 
 final activeMatchesProvider =
-StateNotifierProvider<ActiveMatchesNotifier, List<Map<String, dynamic>>>(
+    StateNotifierProvider<ActiveMatchesNotifier, List<Map<String, dynamic>>>(
         (ref) {
-      return ActiveMatchesNotifier();
-    });
+  return ActiveMatchesNotifier();
+});

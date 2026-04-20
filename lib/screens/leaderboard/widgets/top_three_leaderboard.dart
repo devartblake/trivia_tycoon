@@ -21,15 +21,19 @@ class TopThreeLeaderboard extends StatelessWidget {
             ShimmerAvatar(
               radius: size / 2,
               avatarPath: entry.avatar,
-              initials: entry.playerName.isNotEmpty ? entry.playerName[0].toUpperCase() : '',
+              initials: entry.playerName.isNotEmpty
+                  ? entry.playerName[0].toUpperCase()
+                  : '',
               ageGroup: entry.ageGroup,
               gender: entry.gender,
               xpProgress: entry.xpProgress,
               isLoading: false,
-              status: entry.status, // Add this line once `status` is in the widget
+              status:
+                  entry.status, // Add this line once `status` is in the widget
             ),
             const SizedBox(height: 6),
-            Text(entry.playerName, style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text(entry.playerName,
+                style: const TextStyle(fontWeight: FontWeight.bold)),
             Text('${entry.score} XP'),
           ],
         );

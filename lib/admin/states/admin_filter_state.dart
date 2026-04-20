@@ -86,16 +86,16 @@ class AdminFilterState {
 
   /// Serialize to JSON
   Map<String, dynamic> toJson() => {
-    'showVerified': showVerified,
-    'showPremium': showPremium,
-    'showBots': showBots,
-    'showPowerUsers': showPowerUsers,
-    'deviceTypes': deviceTypes.toList(),
-    'notificationMethod': notificationMethod,
-    'dateRange': dateRange,
-    'minScore': minScore,
-    'maxScore': maxScore,
-  };
+        'showVerified': showVerified,
+        'showPremium': showPremium,
+        'showBots': showBots,
+        'showPowerUsers': showPowerUsers,
+        'deviceTypes': deviceTypes.toList(),
+        'notificationMethod': notificationMethod,
+        'dateRange': dateRange,
+        'minScore': minScore,
+        'maxScore': maxScore,
+      };
 
   /// Deserialize from JSON
   factory AdminFilterState.fromJson(Map<String, dynamic> json) {

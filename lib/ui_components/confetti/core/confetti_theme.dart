@@ -27,9 +27,8 @@ class ConfettiTheme {
   });
 
   /// Getter for preview image.
-  String get previewImage => images.isNotEmpty
-      ? images.first
-      : 'assets/default_preview.png';
+  String get previewImage =>
+      images.isNotEmpty ? images.first : 'assets/default_preview.png';
 
   /// **🔄 Updated copyWith method**
   ConfettiTheme copyWith({
@@ -45,7 +44,7 @@ class ConfettiTheme {
   }) {
     return ConfettiTheme(
       name: name ?? this.name,
-      colors: colors ??  this.colors,
+      colors: colors ?? this.colors,
       shapes: shapes ?? this.shapes,
       images: images ?? this.images,
       speed: speed ?? this.speed,
@@ -71,9 +70,12 @@ class ConfettiTheme {
   }
 
   /// ** Ensures themes and settings stay in sync when customizing, preview,or persisting changes. **
-  factory ConfettiTheme.fromSettings(ConfettiSettings settings, {String name = 'Custom'}) {
+  factory ConfettiTheme.fromSettings(ConfettiSettings settings,
+      {String name = 'Custom'}) {
     return ConfettiTheme(
-      name: settings.name.isEmpty ? _generateNameFromSettings(settings) : settings.name,
+      name: settings.name.isEmpty
+          ? _generateNameFromSettings(settings)
+          : settings.name,
       colors: settings.colors,
       shapes: settings.shapes,
       images: settings.images,
@@ -89,7 +91,11 @@ class ConfettiTheme {
   static String _generateNameFromSettings(ConfettiSettings s) {
     final colorsHash = s.colors.map((c) => c.value.toRadixString(16)).join("-");
     final gravityLabel = s.gravity > 0.2 ? "Heavy" : "Light";
-    final speedLabel = s.speed > 2.0 ? "Fast" : s.speed < 1.0 ? "Slow" : "Normal";
+    final speedLabel = s.speed > 2.0
+        ? "Fast"
+        : s.speed < 1.0
+            ? "Slow"
+            : "Normal";
     return "${speedLabel}_${gravityLabel}_${s.useImages ? "Images" : "Basic"}_${colorsHash.substring(0, 6)}";
   }
 
@@ -133,7 +139,14 @@ class ConfettiTheme {
     ),
     ConfettiTheme(
       name: "Rainbow",
-      colors: [Colors.red, Colors.orange, Colors.yellow, Colors.green, Colors.blue, Colors.purple],
+      colors: [
+        Colors.red,
+        Colors.orange,
+        Colors.yellow,
+        Colors.green,
+        Colors.blue,
+        Colors.purple
+      ],
       shapes: [ConfettiShapeType.circle],
       images: [],
       speed: 1.5,
@@ -144,7 +157,14 @@ class ConfettiTheme {
     ),
     ConfettiTheme(
       name: "Heart",
-      colors: [Colors.red, Colors.orange, Colors.yellow, Colors.green, Colors.blue, Colors.purple],
+      colors: [
+        Colors.red,
+        Colors.orange,
+        Colors.yellow,
+        Colors.green,
+        Colors.blue,
+        Colors.purple
+      ],
       shapes: [],
       images: [ConfettiPresetImages.heart],
       speed: 1.5,
@@ -155,7 +175,14 @@ class ConfettiTheme {
     ),
     ConfettiTheme(
       name: "star",
-      colors: [Colors.red, Colors.orange, Colors.yellow, Colors.green, Colors.blue, Colors.purple],
+      colors: [
+        Colors.red,
+        Colors.orange,
+        Colors.yellow,
+        Colors.green,
+        Colors.blue,
+        Colors.purple
+      ],
       shapes: [],
       images: [ConfettiPresetImages.star],
       speed: 1.5,

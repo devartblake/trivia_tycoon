@@ -43,7 +43,9 @@ class _ClaimButton extends ConsumerWidget {
       ),
       icon: const Icon(Icons.confirmation_number_outlined, size: 18),
       label: Text(
-        remaining == 1 ? 'Claim Daily Ticket' : 'Claim Ticket ($remaining left)',
+        remaining == 1
+            ? 'Claim Daily Ticket'
+            : 'Claim Ticket ($remaining left)',
         style: const TextStyle(fontWeight: FontWeight.w600),
       ),
       onPressed: () async {

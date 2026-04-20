@@ -47,7 +47,8 @@ class SpinLiveSummary {
       userId: (map['user_id'] as String?)?.trim().isNotEmpty == true
           ? map['user_id'] as String
           : fallbackUserId,
-      snapshotAt: DateTime.tryParse(rawTimestamp?.toString() ?? '') ?? DateTime.now(),
+      snapshotAt:
+          DateTime.tryParse(rawTimestamp?.toString() ?? '') ?? DateTime.now(),
       source: source,
     );
   }
@@ -70,15 +71,15 @@ class SpinLiveSummary {
 
   /// Used to suppress duplicate UI/log/analytics updates.
   String get dedupeKey => [
-    todayCount,
-    dailyLimit,
-    weeklyCount,
-    totalSpins,
-    canSpin,
-    spinsRemaining,
-    rewardPoints,
-    userId,
-    snapshotAt.toIso8601String(),
-    source,
-  ].join('|');
+        todayCount,
+        dailyLimit,
+        weeklyCount,
+        totalSpins,
+        canSpin,
+        spinsRemaining,
+        rewardPoints,
+        userId,
+        snapshotAt.toIso8601String(),
+        source,
+      ].join('|');
 }

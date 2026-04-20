@@ -75,11 +75,13 @@ class ProfileStudyGroupSection extends StatelessWidget {
                   _buildTeamMemberAvatar('assets/images/avatars/avatar-5.png'),
                   Transform.translate(
                     offset: const Offset(-8, 0),
-                    child: _buildTeamMemberAvatar('assets/images/avatars/avatar-5.png'),
+                    child: _buildTeamMemberAvatar(
+                        'assets/images/avatars/avatar-5.png'),
                   ),
                   Transform.translate(
                     offset: const Offset(-16, 0),
-                    child: _buildTeamMemberAvatar('assets/images/avatars/avatar-5.png'),
+                    child: _buildTeamMemberAvatar(
+                        'assets/images/avatars/avatar-5.png'),
                   ),
                   if (profile.isPremium) ...[
                     const SizedBox(width: 4),
@@ -95,7 +97,8 @@ class ProfileStudyGroupSection extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFFFBBF24).withValues(alpha: 0.4),
+                            color:
+                                const Color(0xFFFBBF24).withValues(alpha: 0.4),
                             blurRadius: 8,
                             offset: const Offset(0, 2),
                           ),

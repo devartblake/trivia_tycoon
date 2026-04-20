@@ -97,8 +97,7 @@ class TycoonLinearProgressIndicator extends StatefulWidget {
 }
 
 class _TycoonLinearProgressIndicatorState
-    extends State<TycoonLinearProgressIndicator>
-    with TickerProviderStateMixin {
+    extends State<TycoonLinearProgressIndicator> with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
   late AnimationController _xpPulseController;
@@ -127,7 +126,7 @@ class _TycoonLinearProgressIndicatorState
     final clampedValue = widget.value.clamp(0.0, widget.maxValue);
     final normalizedValue = (clampedValue / widget.maxValue).clamp(0.0, 1.0);
     final normalizedPreviousValue =
-    (_previousValue / widget.maxValue).clamp(0.0, 1.0);
+        (_previousValue / widget.maxValue).clamp(0.0, 1.0);
 
     _animation = Tween<double>(
       begin: normalizedPreviousValue,
@@ -207,7 +206,7 @@ class _TycoonLinearProgressIndicatorState
                 backgroundColor: widget.backgroundColor,
                 valueColor: widget.colorLinearProgress,
                 linearProgressBarBorderRadius:
-                widget.linearProgressBarBorderRadius,
+                    widget.linearProgressBarBorderRadius,
                 gradientColors: widget.gradientColors,
               ),
               size: Size.infinite,
@@ -223,7 +222,6 @@ class _TycoonLinearProgressIndicatorState
                   ),
                 ),
               ),
-
             if (widget.showGlowOnComplete && _animation.value >= 1.0)
               Positioned.fill(
                 child: IgnorePointer(
@@ -232,10 +230,12 @@ class _TycoonLinearProgressIndicatorState
                     duration: const Duration(milliseconds: 300),
                     child: Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(widget.borderRadius),
+                        borderRadius:
+                            BorderRadius.circular(widget.borderRadius),
                         boxShadow: [
                           BoxShadow(
-                            color: widget.colorLinearProgress.withValues(alpha: 0.6),
+                            color: widget.colorLinearProgress
+                                .withValues(alpha: 0.6),
                             blurRadius: 16,
                             spreadRadius: 4,
                           ),
@@ -245,7 +245,6 @@ class _TycoonLinearProgressIndicatorState
                   ),
                 ),
               ),
-
             if (widget.trailingXpIcon != null && _animation.value >= 1.0)
               Positioned(
                 right: 6,

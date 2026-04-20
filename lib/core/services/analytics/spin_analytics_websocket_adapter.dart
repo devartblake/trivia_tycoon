@@ -28,7 +28,8 @@ class SpinAnalyticsWebSocketAdapter {
 
     final wsClient = AppInit.wsClient;
     if (wsClient == null || !AppInit.isWebSocketConnected) {
-      LogManager.debug('[SpinWS] WebSocket not connected - live spin summary disabled');
+      LogManager.debug(
+          '[SpinWS] WebSocket not connected - live spin summary disabled');
       return;
     }
 
@@ -45,7 +46,8 @@ class SpinAnalyticsWebSocketAdapter {
     _subscribe(wsClient: wsClient, userId: userId);
     requestLatestSummary();
 
-    LogManager.debug('[SpinWS] Subscribed to live spin analytics for user $userId');
+    LogManager.debug(
+        '[SpinWS] Subscribed to live spin analytics for user $userId');
   }
 
   void requestLatestSummary() {

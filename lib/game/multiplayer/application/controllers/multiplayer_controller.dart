@@ -12,7 +12,8 @@ class MultiplayerController extends StateNotifier<MultiplayerState> {
   StreamSubscription<GameEvent>? _eventSub;
   Timer? _latencyTimer;
 
-  MultiplayerController(this._svc) : super(const MultiplayerState.disconnected());
+  MultiplayerController(this._svc)
+      : super(const MultiplayerState.disconnected());
 
   /// Connect to the multiplayer backend using an auth token.
   Future<void> connect({required String token}) async {

@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../game/providers/auth_providers.dart';
-import '../../game/providers/onboarding_providers.dart' show onboardingCompleteProvider;
+import '../../game/providers/onboarding_providers.dart'
+    show onboardingCompleteProvider;
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Navigation redirect service that determines where users should be redirected
@@ -45,7 +46,8 @@ class NavigationRedirectService {
 }
 
 /// Provider for the navigation redirect service
-final navigationRedirectServiceProvider = Provider<NavigationRedirectService>((ref) {
+final navigationRedirectServiceProvider =
+    Provider<NavigationRedirectService>((ref) {
   return NavigationRedirectService(ref);
 });
 
@@ -73,11 +75,12 @@ class NavigationState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is NavigationState &&
-              runtimeType == other.runtimeType &&
-              isLoggedIn == other.isLoggedIn &&
-              isOnboardingComplete == other.isOnboardingComplete; // FIX 2 (cont.)
+      other is NavigationState &&
+          runtimeType == other.runtimeType &&
+          isLoggedIn == other.isLoggedIn &&
+          isOnboardingComplete == other.isOnboardingComplete; // FIX 2 (cont.)
 
   @override
-  int get hashCode => isLoggedIn.hashCode ^ isOnboardingComplete.hashCode; // FIX 2 (cont.)
+  int get hashCode =>
+      isLoggedIn.hashCode ^ isOnboardingComplete.hashCode; // FIX 2 (cont.)
 }

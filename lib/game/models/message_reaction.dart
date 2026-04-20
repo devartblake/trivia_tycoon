@@ -43,7 +43,8 @@ enum ReactionType {
   }
 
   bool get isCustom => this == ReactionType.custom;
-  bool get isGamingSpecific => [trophy, brain, target, lightning, gem].contains(this);
+  bool get isGamingSpecific =>
+      [trophy, brain, target, lightning, gem].contains(this);
 }
 
 class MessageReaction {
@@ -67,7 +68,8 @@ class MessageReaction {
     this.isPremium = false,
   });
 
-  String get displayEmoji => type.isCustom && customEmoji != null ? customEmoji! : type.emoji;
+  String get displayEmoji =>
+      type.isCustom && customEmoji != null ? customEmoji! : type.emoji;
 
   MessageReaction copyWith({
     String? id,
@@ -110,7 +112,8 @@ class MessageReaction {
       messageId: json['messageId'] as String,
       userId: json['userId'] as String,
       userDisplayName: json['userDisplayName'] as String,
-      type: ReactionType.fromCode(json['type'] as String) ?? ReactionType.thumbsUp,
+      type: ReactionType.fromCode(json['type'] as String) ??
+          ReactionType.thumbsUp,
       customEmoji: json['customEmoji'] as String?,
       timestamp: DateTime.parse(json['timestamp'] as String),
       isPremium: json['isPremium'] as bool? ?? false,
@@ -135,7 +138,8 @@ class MessageReactionSummary {
   List<ReactionType> get reactionTypes => reactions.keys.toList();
 
   int getCountForType(ReactionType type) => reactions[type]?.length ?? 0;
-  List<MessageReaction> getReactionsForType(ReactionType type) => reactions[type] ?? [];
+  List<MessageReaction> getReactionsForType(ReactionType type) =>
+      reactions[type] ?? [];
 
   bool hasUserReacted(String userId) {
     return reactions.values.any((reactionList) =>
@@ -185,8 +189,8 @@ class MessageReactionSummary {
   // Get users who reacted with specific type
   List<String> getUsersForReaction(ReactionType type) {
     return reactions[type]
-        ?.map((reaction) => reaction.userDisplayName)
-        .toList() ?? [];
+            ?.map((reaction) => reaction.userDisplayName)
+            .toList() ??
+        [];
   }
 }
-

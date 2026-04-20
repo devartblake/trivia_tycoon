@@ -234,7 +234,8 @@ class _RewardIconOverlayState extends State<RewardIconOverlay>
                   gradient: RadialGradient(
                     colors: [
                       Colors.white,
-                      (_colorAnimation.value ?? _getRewardColor()).withValues(alpha: 0.9),
+                      (_colorAnimation.value ?? _getRewardColor())
+                          .withValues(alpha: 0.9),
                     ],
                   ),
                   boxShadow: [
@@ -280,16 +281,16 @@ class _RewardIconOverlayState extends State<RewardIconOverlay>
         Center(
           child: _shouldUseEmoji()
               ? Text(
-            _getRewardEmoji(),
-            style: const TextStyle(fontSize: 16),
-          )
+                  _getRewardEmoji(),
+                  style: const TextStyle(fontSize: 16),
+                )
               : Icon(
-            _getRewardIcon(),
-            size: 18,
-            color: _getRewardColor().computeLuminance() > 0.5
-                ? Colors.black87
-                : Colors.white,
-          ),
+                  _getRewardIcon(),
+                  size: 18,
+                  color: _getRewardColor().computeLuminance() > 0.5
+                      ? Colors.black87
+                      : Colors.white,
+                ),
         ),
         // Sparkle effect for premium rewards
         if (_isPremiumReward()) _buildSparkleEffect(),
@@ -299,9 +300,22 @@ class _RewardIconOverlayState extends State<RewardIconOverlay>
 
   bool _shouldUseEmoji() {
     // Use emojis for better visual appeal on certain reward types
-    return ['coins', 'currency', 'gems', 'premium', 'lives', 'health',
-      'powerup', 'boost', 'experience', 'xp', 'rare', 'legendary',
-      'mystery', 'jackpot'].contains(widget.segment.rewardType.toLowerCase());
+    return [
+      'coins',
+      'currency',
+      'gems',
+      'premium',
+      'lives',
+      'health',
+      'powerup',
+      'boost',
+      'experience',
+      'xp',
+      'rare',
+      'legendary',
+      'mystery',
+      'jackpot'
+    ].contains(widget.segment.rewardType.toLowerCase());
   }
 
   bool _isPremiumReward() {

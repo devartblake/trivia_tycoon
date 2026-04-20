@@ -8,7 +8,8 @@ import '../models/spin_system_models.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Enhanced spin history provider with caching and analytics
-final spinHistoryProvider = AsyncNotifierProvider<EnhancedSpinHistoryNotifier, SpinHistoryState>(
+final spinHistoryProvider =
+    AsyncNotifierProvider<EnhancedSpinHistoryNotifier, SpinHistoryState>(
   EnhancedSpinHistoryNotifier.new,
 );
 
@@ -51,8 +52,9 @@ class SpinHistoryState {
 
   factory SpinHistoryState.fromJson(Map<String, dynamic> json) {
     final entriesList = (json['entries'] as List<dynamic>?)
-        ?.map((e) => SpinResult.fromJson(e as Map<String, dynamic>))
-        .toList() ?? [];
+            ?.map((e) => SpinResult.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [];
 
     return SpinHistoryState(
       entries: entriesList,
@@ -104,7 +106,8 @@ class SpinHistoryAnalytics {
 
     // Calculate basic stats
     final totalSpins = entries.length;
-    final totalRewards = entries.fold<int>(0, (sum, entry) => sum + entry.reward);
+    final totalRewards =
+        entries.fold<int>(0, (sum, entry) => sum + entry.reward);
     final averageReward = totalSpins > 0 ? totalRewards / totalSpins : 0.0;
 
     // Find most frequent prize
@@ -115,8 +118,8 @@ class SpinHistoryAnalytics {
     final mostFrequentPrize = prizeFrequency.isEmpty
         ? 'N/A'
         : prizeFrequency.entries
-        .reduce((a, b) => a.value > b.value ? a : b)
-        .key;
+            .reduce((a, b) => a.value > b.value ? a : b)
+            .key;
 
     // Find highest reward
     final highestRewardEntry = entries.isEmpty
@@ -149,7 +152,8 @@ class SpinHistoryAnalytics {
       highestReward: highestReward,
       rewardTypeDistribution: rewardTypeDistribution,
       dailySpinCounts: dailySpinCounts,
-      firstSpin: sortedEntries.isNotEmpty ? sortedEntries.first.timestamp : null,
+      firstSpin:
+          sortedEntries.isNotEmpty ? sortedEntries.first.timestamp : null,
       lastSpin: sortedEntries.isNotEmpty ? sortedEntries.last.timestamp : null,
       currentStreak: streaks['current'] ?? 0,
       longestStreak: streaks['longest'] ?? 0,
@@ -217,10 +221,13 @@ class SpinHistoryAnalytics {
       averageReward: (json['averageReward'] ?? 0.0).toDouble(),
       mostFrequentPrize: json['mostFrequentPrize'] ?? 'N/A',
       highestReward: json['highestReward'] ?? 'N/A',
-      rewardTypeDistribution: Map<String, int>.from(json['rewardTypeDistribution'] ?? {}),
+      rewardTypeDistribution:
+          Map<String, int>.from(json['rewardTypeDistribution'] ?? {}),
       dailySpinCounts: Map<String, int>.from(json['dailySpinCounts'] ?? {}),
-      firstSpin: json['firstSpin'] != null ? DateTime.parse(json['firstSpin']) : null,
-      lastSpin: json['lastSpin'] != null ? DateTime.parse(json['lastSpin']) : null,
+      firstSpin:
+          json['firstSpin'] != null ? DateTime.parse(json['firstSpin']) : null,
+      lastSpin:
+          json['lastSpin'] != null ? DateTime.parse(json['lastSpin']) : null,
       currentStreak: json['currentStreak'] ?? 0,
       longestStreak: json['longestStreak'] ?? 0,
     );
@@ -312,9 +319,8 @@ class EnhancedSpinHistoryNotifier extends AsyncNotifier<SpinHistoryState> {
       final currentState = await future;
 
       // Add new result and maintain order
-      final updatedEntries = [result, ...currentState.entries]
-          .take(_maxEntries)
-          .toList();
+      final updatedEntries =
+          [result, ...currentState.entries].take(_maxEntries).toList();
 
       // Recalculate analytics
       final newAnalytics = SpinHistoryAnalytics.fromEntries(updatedEntries);
@@ -406,8 +412,7 @@ class EnhancedSpinHistoryNotifier extends AsyncNotifier<SpinHistoryState> {
 
     return currentState.entries
         .where((entry) =>
-    entry.timestamp.isAfter(start) &&
-        entry.timestamp.isBefore(end))
+            entry.timestamp.isAfter(start) && entry.timestamp.isBefore(end))
         .toList();
   }
 

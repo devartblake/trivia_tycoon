@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'ui_state_providers.dart';
 
 /// Provider for power-up countdown timer
-final powerUpTimeProvider = StateNotifierProvider<PowerUpTimeNotifier, int?>((ref) {
+final powerUpTimeProvider =
+    StateNotifierProvider<PowerUpTimeNotifier, int?>((ref) {
   return PowerUpTimeNotifier(ref);
 });
 

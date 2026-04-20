@@ -3,6 +3,7 @@
 class Coordinates {
   final int q;
   final int r;
+
   /// Unnamed constructor so you can do: `Coordinates(1, 2)`
   const Coordinates(this.q, this.r);
 
@@ -18,7 +19,8 @@ class Coordinates {
 
   int get s => -q - r;
 
-  Coordinates copyWith({int? q, int? r}) => Coordinates(q ?? this.q, r ?? this.r);
+  Coordinates copyWith({int? q, int? r}) =>
+      Coordinates(q ?? this.q, r ?? this.r);
 
   @override
   String toString() => 'Coordinates(q: $q, r: $r, s: $s)';
@@ -31,6 +33,7 @@ class Coordinates {
 }
 
 enum OffsetParity { odd, even }
+
 enum OffsetKind { row, column }
 
 class OffsetCoordinates {

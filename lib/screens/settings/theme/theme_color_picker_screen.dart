@@ -13,7 +13,8 @@ class _ThemeColorPickerScreenState extends State<ThemeColorPickerScreen> {
   final List<Color> recentColors = [];
 
   void _openColorPicker() async {
-    final result = await ColorPicker.showColorPickerDialog(context, initialColor: selectedColor);
+    final result = await ColorPicker.showColorPickerDialog(context,
+        initialColor: selectedColor);
     if (result != null) {
       setState(() {
         selectedColor = result;
@@ -25,7 +26,8 @@ class _ThemeColorPickerScreenState extends State<ThemeColorPickerScreen> {
     }
   }
 
-  String _getColorHex(Color color) => '#${color.value.toRadixString(16).padLeft(8, '0').toUpperCase()}';
+  String _getColorHex(Color color) =>
+      '#${color.value.toRadixString(16).padLeft(8, '0').toUpperCase()}';
 
   String _getColorName(Color color) {
     final hex = _getColorHex(color);
@@ -78,7 +80,10 @@ class _ThemeColorPickerScreenState extends State<ThemeColorPickerScreen> {
               ),
               Text(
                 colorHex,
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(color: Colors.grey),
+                style: Theme.of(context)
+                    .textTheme
+                    .labelMedium
+                    ?.copyWith(color: Colors.grey),
               ),
               const SizedBox(height: 16),
 
@@ -101,7 +106,8 @@ class _ThemeColorPickerScreenState extends State<ThemeColorPickerScreen> {
                         backgroundColor: c,
                         radius: 18,
                         child: selectedColor == c
-                            ? const Icon(Icons.check, size: 16, color: Colors.white)
+                            ? const Icon(Icons.check,
+                                size: 16, color: Colors.white)
                             : null,
                       ),
                     );

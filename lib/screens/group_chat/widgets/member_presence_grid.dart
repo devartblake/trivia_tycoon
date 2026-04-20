@@ -67,7 +67,8 @@ class MemberPresenceGrid extends StatelessWidget {
     );
   }
 
-  Widget _buildMemberCard(BuildContext context, GroupMember member, {bool compact = false}) {
+  Widget _buildMemberCard(BuildContext context, GroupMember member,
+      {bool compact = false}) {
     return GestureDetector(
       onTap: () => onMemberTap?.call(member),
       child: Container(
@@ -86,13 +87,13 @@ class MemberPresenceGrid extends StatelessWidget {
                       : null,
                   child: member.avatar == null
                       ? Text(
-                    member.displayName[0].toUpperCase(),
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      fontSize: compact ? 16 : 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
+                          member.displayName[0].toUpperCase(),
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontSize: compact ? 16 : 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
                       : null,
                 ),
                 Positioned(
@@ -111,7 +112,8 @@ class MemberPresenceGrid extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (member.role == GroupRole.owner || member.role == GroupRole.admin)
+                if (member.role == GroupRole.owner ||
+                    member.role == GroupRole.admin)
                   Positioned(
                     top: 0,
                     right: 0,
@@ -142,8 +144,8 @@ class MemberPresenceGrid extends StatelessWidget {
             Text(
               member.displayName,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
+                    fontWeight: FontWeight.w500,
+                  ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
@@ -153,9 +155,9 @@ class MemberPresenceGrid extends StatelessWidget {
               Text(
                 member.role.displayName,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontSize: 10,
-                ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      fontSize: 10,
+                    ),
               ),
             ],
           ],

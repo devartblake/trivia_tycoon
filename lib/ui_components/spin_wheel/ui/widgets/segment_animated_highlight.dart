@@ -18,7 +18,8 @@ class SegmentAnimatedHighlight extends StatefulWidget {
   });
 
   @override
-  State<SegmentAnimatedHighlight> createState() => _SegmentAnimatedHighlightState();
+  State<SegmentAnimatedHighlight> createState() =>
+      _SegmentAnimatedHighlightState();
 }
 
 class _SegmentAnimatedHighlightState extends State<SegmentAnimatedHighlight>
@@ -255,12 +256,14 @@ class _SegmentAnimatedHighlightState extends State<SegmentAnimatedHighlight>
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: widget.primaryColor.withValues(alpha: _opacityAnimation.value),
+            color:
+                widget.primaryColor.withValues(alpha: _opacityAnimation.value),
             width: 4,
           ),
           boxShadow: [
             BoxShadow(
-              color: widget.primaryColor.withValues(alpha: _opacityAnimation.value * 0.5),
+              color: widget.primaryColor
+                  .withValues(alpha: _opacityAnimation.value * 0.5),
               blurRadius: 12,
               spreadRadius: 2,
             ),
@@ -291,7 +294,8 @@ class _SegmentAnimatedHighlightState extends State<SegmentAnimatedHighlight>
         gradient: RadialGradient(
           colors: [
             widget.secondaryColor.withValues(alpha: _opacityAnimation.value),
-            widget.primaryColor.withValues(alpha: _opacityAnimation.value * 0.5),
+            widget.primaryColor
+                .withValues(alpha: _opacityAnimation.value * 0.5),
             Colors.transparent,
           ],
         ),
@@ -354,8 +358,7 @@ class SparklePainter extends CustomPainter {
     final center = size.center(Offset.zero);
     final radius = size.width / 3;
 
-    final paint = Paint()
-      ..style = PaintingStyle.fill;
+    final paint = Paint()..style = PaintingStyle.fill;
 
     // Draw sparkle particles
     for (int i = 0; i < 8; i++) {
@@ -368,8 +371,8 @@ class SparklePainter extends CustomPainter {
       );
 
       // Alternate colors for sparkles
-      paint.color = (i % 2 == 0 ? primaryColor : secondaryColor)
-          .withValues(alpha: opacity * (0.5 + 0.5 * math.sin(animation * math.pi * 6)));
+      paint.color = (i % 2 == 0 ? primaryColor : secondaryColor).withValues(
+          alpha: opacity * (0.5 + 0.5 * math.sin(animation * math.pi * 6)));
 
       // Draw sparkle as a small star
       _drawStar(canvas, sparklePosition, 3, paint);
@@ -426,7 +429,6 @@ class SparklePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant SparklePainter oldDelegate) {
-    return oldDelegate.animation != animation ||
-        oldDelegate.opacity != opacity;
+    return oldDelegate.animation != animation || oldDelegate.opacity != opacity;
   }
 }

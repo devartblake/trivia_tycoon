@@ -159,9 +159,9 @@ class _FlipCardTransitionState extends State<FlipCardTransition> {
       child: FlipTransition(
         animation: isFront
             ? (widget.frontAnimator ?? FlipCardTransition.defaultFrontAnimator)
-            .animate(widget.animation)
+                .animate(widget.animation)
             : (widget.backAnimator ?? FlipCardTransition.defaultBackAnimator)
-            .animate(widget.animation),
+                .animate(widget.animation),
         direction: widget.direction,
         filterQuality: widget.filterQuality,
         child: child,

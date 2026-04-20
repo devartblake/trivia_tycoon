@@ -117,7 +117,8 @@ class AppLifecycleManager with WidgetsBindingObserver {
 
   /// App detached (app closing)
   void _handleAppDetached() async {
-    LogManager.debug('[Lifecycle] App DETACHED - Final save before shutdown...');
+    LogManager.debug(
+        '[Lifecycle] App DETACHED - Final save before shutdown...');
     onAppDetached?.call();
 
     // Final save before app closes
@@ -139,7 +140,8 @@ class AppLifecycleManager with WidgetsBindingObserver {
   void _setupCrashHandling() {
     // Catch Flutter framework errors
     FlutterError.onError = (FlutterErrorDetails details) async {
-      LogManager.debug('[Lifecycle] Flutter Error Caught: ${details.exception}');
+      LogManager.debug(
+          '[Lifecycle] Flutter Error Caught: ${details.exception}');
 
       // Save state before crash
       await _performSave(reason: 'crash');
@@ -171,7 +173,8 @@ class AppLifecycleManager with WidgetsBindingObserver {
     if (_lastSaveTime != null) {
       final timeSinceLastSave = DateTime.now().difference(_lastSaveTime!);
       if (timeSinceLastSave < _minSaveInterval) {
-        LogManager.debug('[Lifecycle] Save throttled (too soon since last save)');
+        LogManager.debug(
+            '[Lifecycle] Save throttled (too soon since last save)');
         return;
       }
     }
@@ -185,7 +188,8 @@ class AppLifecycleManager with WidgetsBindingObserver {
       _lastSaveTime = DateTime.now();
       final duration = _lastSaveTime!.difference(startTime);
 
-      LogManager.debug('[Lifecycle] Save complete in ${duration.inMilliseconds}ms');
+      LogManager.debug(
+          '[Lifecycle] Save complete in ${duration.inMilliseconds}ms');
     } catch (e, stack) {
       LogManager.debug('[Lifecycle] Save failed: $e');
       LogManager.debug('[Lifecycle] Stack: $stack');

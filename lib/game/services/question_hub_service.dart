@@ -110,7 +110,8 @@ class QuestionHubService {
         _recordBackend(
           operation: 'category_questions',
           endpoint: '/quiz/play',
-          detail: 'Loaded ${questions.length} legacy quiz questions for $category',
+          detail:
+              'Loaded ${questions.length} legacy quiz questions for $category',
         );
         return questions;
       }
@@ -216,30 +217,29 @@ class QuestionHubService {
       }
 
       final submissionsById = {
-        for (final submission in submissions) submission.question.id: submission,
+        for (final submission in submissions)
+          submission.question.id: submission,
       };
 
       final results = rawItems
           .whereType<Map>()
           .map((item) => Map<String, dynamic>.from(item))
           .map((item) {
-            final questionId = item['questionId']?.toString() ??
-                item['id']?.toString() ??
-                '';
-            final submission = submissionsById[questionId];
-            if (submission == null) {
-              throw QuestionContractException(
-                endpoint: '/questions/check-batch',
-                reason: 'Unknown question id returned by backend: $questionId',
-              );
-            }
-            return _parseAnswerCheckResult(
-              item,
-              question: submission.question,
-              selectedAnswer: submission.selectedAnswer,
-            );
-          })
-          .toList(growable: false);
+        final questionId =
+            item['questionId']?.toString() ?? item['id']?.toString() ?? '';
+        final submission = submissionsById[questionId];
+        if (submission == null) {
+          throw QuestionContractException(
+            endpoint: '/questions/check-batch',
+            reason: 'Unknown question id returned by backend: $questionId',
+          );
+        }
+        return _parseAnswerCheckResult(
+          item,
+          question: submission.question,
+          selectedAnswer: submission.selectedAnswer,
+        );
+      }).toList(growable: false);
 
       if (results.isNotEmpty) {
         _recordBackend(
@@ -280,7 +280,11 @@ class QuestionHubService {
         itemKeys: const ['items', 'categories', 'data'],
       );
 
-      final categories = envelope.items.map(_parseCategory).whereType<QuizCategory>().toSet().toList();
+      final categories = envelope.items
+          .map(_parseCategory)
+          .whereType<QuizCategory>()
+          .toSet()
+          .toList();
       if (categories.isNotEmpty) {
         _recordBackend(
           operation: 'categories',
@@ -360,7 +364,8 @@ class QuestionHubService {
       }
     }
 
-    final questionCount = await _localLoader.getQuizCategoryQuestionCount(category);
+    final questionCount =
+        await _localLoader.getQuizCategoryQuestionCount(category);
     final difficulty = await _localLoader.getQuizCategoryDifficulty(category);
 
     _recordFallback(
@@ -389,7 +394,10 @@ class QuestionHubService {
             endpoint: endpoint,
             itemKeys: const ['availableCategories', 'categories', 'items'],
           );
-          final categories = envelope.items.map(_parseCategory).whereType<QuizCategory>().toList();
+          final categories = envelope.items
+              .map(_parseCategory)
+              .whereType<QuizCategory>()
+              .toList();
 
           _recordBackend(
             operation: 'class_stats',
@@ -398,7 +406,8 @@ class QuestionHubService {
           );
           return {
             'questionCount': (response['questionCount'] as num?)?.toInt() ?? 0,
-            'subjectCount': (response['subjectCount'] as num?)?.toInt() ?? categories.length,
+            'subjectCount': (response['subjectCount'] as num?)?.toInt() ??
+                categories.length,
             'availableCategories': categories,
             'source': 'backend',
             'meta': envelope.meta,
@@ -429,7 +438,10 @@ class QuestionHubService {
   }
 
   Future<Map<String, dynamic>> getDatasetInfo() async {
-    for (final endpoint in const ['/quiz/datasets/info', '/questions/datasets/info']) {
+    for (final endpoint in const [
+      '/quiz/datasets/info',
+      '/questions/datasets/info'
+    ]) {
       try {
         final response = await _apiService.get(endpoint);
         final envelope = QuestionResponseContract.parseObject(
@@ -469,8 +481,10 @@ class QuestionHubService {
         '/questions/set',
         queryParameters: {
           'count': questionCount,
-          if (categories != null && categories.length == 1) 'category': categories.first,
-          if (difficulties != null && difficulties.length == 1) 'difficulty': difficulties.first,
+          if (categories != null && categories.length == 1)
+            'category': categories.first,
+          if (difficulties != null && difficulties.length == 1)
+            'difficulty': difficulties.first,
         },
       );
       final questions = _parseQuestionListResponse(
@@ -497,8 +511,10 @@ class QuestionHubService {
           endpoint,
           queryParameters: {
             'count': questionCount,
-            if (categories != null && categories.isNotEmpty) 'categories': categories.join(','),
-            if (difficulties != null && difficulties.isNotEmpty) 'difficulties': difficulties.join(','),
+            if (categories != null && categories.isNotEmpty)
+              'categories': categories.join(','),
+            if (difficulties != null && difficulties.isNotEmpty)
+              'difficulties': difficulties.join(','),
             'balanceDifficulties': balanceDifficulties,
           },
         );
@@ -531,7 +547,11 @@ class QuestionHubService {
       }
     }
 
-    final quizCategories = categories?.map(QuizCategoryManager.fromString).whereType<QuizCategory>().toList() ?? const <QuizCategory>[];
+    final quizCategories = categories
+            ?.map(QuizCategoryManager.fromString)
+            .whereType<QuizCategory>()
+            .toList() ??
+        const <QuizCategory>[];
 
     _recordFallback(
       operation: 'mixed_quiz',

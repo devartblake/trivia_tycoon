@@ -60,10 +60,10 @@ class AuthOperations {
 
   /// Signup user via backend (uses LoginManager)
   Future<void> signup(
-      String email,
-      String password, {
-        Map<String, dynamic>? extra,
-      }) async {
+    String email,
+    String password, {
+    Map<String, dynamic>? extra,
+  }) async {
     try {
       final loginManager = ref.read(loginManagerProvider);
       final secureStorage = ref.read(secureStorageProvider);
@@ -133,7 +133,8 @@ class AuthOperations {
 
       final remoteProfile = await profileSyncService.fetchRemoteProfile();
       if (remoteProfile != null && remoteProfile.isNotEmpty) {
-        await serviceManager.playerProfileService.saveProfileBatch(remoteProfile);
+        await serviceManager.playerProfileService
+            .saveProfileBatch(remoteProfile);
       }
     } catch (e) {
       LogManager.debug('[AuthOperations] Remote profile hydrate skipped: $e');
@@ -173,7 +174,7 @@ class AuthOperations {
 
 /// Legacy providers for backward compatibility if needed
 final authStateProvider =
-StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
+    StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
   return AuthStateNotifier();
 });
 

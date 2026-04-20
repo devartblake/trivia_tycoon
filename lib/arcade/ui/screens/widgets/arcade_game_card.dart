@@ -108,7 +108,8 @@ class ArcadeGameCard extends StatelessWidget {
                         runSpacing: 6,
                         children: game.supportedDifficulties
                             .take(3)
-                            .map((difficulty) => _buildDifficultyChip(difficulty))
+                            .map((difficulty) =>
+                                _buildDifficultyChip(difficulty))
                             .toList(),
                       ),
                     ],

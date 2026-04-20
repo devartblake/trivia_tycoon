@@ -190,10 +190,10 @@ class GesturePhysics {
 
   /// Convert gesture velocity to angular velocity
   static double gestureToAngularVelocity(
-      Offset gestureVelocity,
-      Offset centerPoint,
-      Offset touchPoint,
-      ) {
+    Offset gestureVelocity,
+    Offset centerPoint,
+    Offset touchPoint,
+  ) {
     // Calculate the vector from center to touch point
     final touchVector = touchPoint - centerPoint;
     final radius = touchVector.distance;
@@ -226,10 +226,10 @@ class GesturePhysics {
 
   /// Calculate tangential velocity component
   static double _calculateTangentialVelocity(
-      Offset gestureVelocity,
-      Offset touchVector,
-      double radius,
-      ) {
+    Offset gestureVelocity,
+    Offset touchVector,
+    double radius,
+  ) {
     // Normalize the touch vector
     final normalizedTouch = touchVector / radius;
 
@@ -237,25 +237,25 @@ class GesturePhysics {
     final tangent = Offset(-normalizedTouch.dy, normalizedTouch.dx);
 
     // Project gesture velocity onto tangent
-    final dotProduct = gestureVelocity.dx * tangent.dx +
-        gestureVelocity.dy * tangent.dy;
+    final dotProduct =
+        gestureVelocity.dx * tangent.dx + gestureVelocity.dy * tangent.dy;
 
     return dotProduct;
   }
 
   /// Calculate spin direction based on gesture
   static int getSpinDirection(
-      Offset gestureVelocity,
-      Offset centerPoint,
-      Offset touchPoint,
-      ) {
+    Offset gestureVelocity,
+    Offset centerPoint,
+    Offset touchPoint,
+  ) {
     final angularVelocity = gestureToAngularVelocity(
       gestureVelocity,
       centerPoint,
       touchPoint,
     );
 
-    if (angularVelocity > 0) return 1;  // Clockwise
+    if (angularVelocity > 0) return 1; // Clockwise
     if (angularVelocity < 0) return -1; // Counter-clockwise
     return 0; // No rotation
   }
@@ -289,7 +289,8 @@ class WheelMomentum {
   /// Update the wheel physics for one time step
   void update(double deltaTime) {
     // Apply friction
-    final frictionTorque = -friction * _angularVelocity.sign * mass * 9.81 * radius;
+    final frictionTorque =
+        -friction * _angularVelocity.sign * mass * 9.81 * radius;
     final angularAcceleration = frictionTorque / _momentOfInertia;
 
     // Update velocity and angle
@@ -330,8 +331,8 @@ class EasingFunctions {
     return t == 0
         ? 0
         : t == 1
-        ? 1
-        : pow(2, -10 * t) * sin((t * 10 - 0.75) * c4) + 1;
+            ? 1
+            : pow(2, -10 * t) * sin((t * 10 - 0.75) * c4) + 1;
   }
 
   /// Ease out bounce - bouncing effect
@@ -362,39 +363,39 @@ class EasingFunctions {
 /// Predefined physics configurations for different wheel behaviors
 class WheelPhysicsPresets {
   static WheelPhysicsEngine get realistic => WheelPhysicsEngine(
-    friction: 0.015,
-    airResistance: 0.0008,
-    mass: 2.0,
-    radius: 1.2,
-  );
+        friction: 0.015,
+        airResistance: 0.0008,
+        mass: 2.0,
+        radius: 1.2,
+      );
 
   static WheelPhysicsEngine get smooth => WheelPhysicsEngine(
-    friction: 0.008,
-    airResistance: 0.0005,
-    mass: 1.5,
-    radius: 1.0,
-  );
+        friction: 0.008,
+        airResistance: 0.0005,
+        mass: 1.5,
+        radius: 1.0,
+      );
 
   static WheelPhysicsEngine get snappy => WheelPhysicsEngine(
-    friction: 0.025,
-    airResistance: 0.002,
-    mass: 0.8,
-    radius: 0.9,
-  );
+        friction: 0.025,
+        airResistance: 0.002,
+        mass: 0.8,
+        radius: 0.9,
+      );
 
   static WheelPhysicsEngine get heavy => WheelPhysicsEngine(
-    friction: 0.02,
-    airResistance: 0.001,
-    mass: 5.0,
-    radius: 1.5,
-  );
+        friction: 0.02,
+        airResistance: 0.001,
+        mass: 5.0,
+        radius: 1.5,
+      );
 
   static WheelPhysicsEngine get light => WheelPhysicsEngine(
-    friction: 0.03,
-    airResistance: 0.005,
-    mass: 0.5,
-    radius: 0.8,
-  );
+        friction: 0.03,
+        airResistance: 0.005,
+        mass: 0.5,
+        radius: 0.8,
+      );
 }
 
 /// Utility functions for physics calculations

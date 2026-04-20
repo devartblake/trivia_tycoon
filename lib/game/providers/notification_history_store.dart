@@ -37,7 +37,8 @@ class NotificationHistoryEntry {
       body: json['body'] as String? ?? '',
       channelKey: json['channelKey'] as String? ?? '',
       type: json['type'] as String? ?? 'sentNow',
-      payload: payload == null ? null : Map<String, String>.from(payload as Map),
+      payload:
+          payload == null ? null : Map<String, String>.from(payload as Map),
     );
   }
 }
@@ -48,7 +49,8 @@ class NotificationHistoryStore {
   static const String _storageKey = 'notif.history.entries';
   static const int _maxEntries = 100;
 
-  final _controller = StreamController<List<NotificationHistoryEntry>>.broadcast();
+  final _controller =
+      StreamController<List<NotificationHistoryEntry>>.broadcast();
   final List<NotificationHistoryEntry> _entries = [];
 
   Stream<List<NotificationHistoryEntry>> get stream => _controller.stream;

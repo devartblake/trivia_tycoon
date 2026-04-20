@@ -95,7 +95,7 @@ final glitchScreensActiveProvider = StateProvider<bool>((ref) => false);
 /// Category-specific bonus: {category: String, bonus: double}.
 /// Null when no category bonus is active.
 final categoryBonusProvider =
-StateProvider<Map<String, dynamic>?>((ref) => null);
+    StateProvider<Map<String, dynamic>?>((ref) => null);
 
 /// Trigger a random chaos event every N questions (0 = disabled).
 final periodicChaosIntervalProvider = StateProvider<int>((ref) => 0);
