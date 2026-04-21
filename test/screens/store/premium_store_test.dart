@@ -43,6 +43,7 @@ class _FakeRewardStoreService implements StoreService {
   String? lastPlayerId;
   String? lastRewardId;
 
+  @override
   Future<Map<String, dynamic>> claimPlayerReward({
     required String playerId,
     required String rewardId,
