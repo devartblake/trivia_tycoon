@@ -111,6 +111,16 @@ class StoreService {
     return apiService.get('/store/inventory/$playerId');
   }
 
+  Future<Map<String, dynamic>> purchaseAvatar({
+    required String playerId,
+    required String avatarId,
+  }) {
+    return apiService.post(
+      '/store/avatars/$avatarId/purchase',
+      body: <String, dynamic>{'playerId': playerId},
+    );
+  }
+
   Future<Map<String, dynamic>> getSubscriptionStatus(String playerId) {
     return apiService.get('/store/subscription/status/$playerId');
   }
