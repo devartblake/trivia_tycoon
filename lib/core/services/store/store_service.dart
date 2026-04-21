@@ -72,25 +72,11 @@ class StoreService {
     }
   }
 
-  Future<StoreHubData> getHubData() async {
-    try {
-      final json = await apiService.get('/store/hub');
-      return StoreHubData.fromJson(json);
-    } catch (e) {
-      LogManager.debug('getHubData failed, using fallback: $e');
-      return StoreHubData.fallback;
-    }
-  }
+  // /store/hub and /store/gifts are not implemented in the backend.
+  // Serve static fallback data directly until backend adds these endpoints.
+  Future<StoreHubData> getHubData() async => StoreHubData.fallback;
 
-  Future<GiftsData> getGiftsData() async {
-    try {
-      final json = await apiService.get('/store/gifts');
-      return GiftsData.fromJson(json);
-    } catch (e) {
-      LogManager.debug('getGiftsData failed, using fallback: $e');
-      return GiftsData.fallback;
-    }
-  }
+  Future<GiftsData> getGiftsData() async => GiftsData.fallback;
 
   Future<PremiumStoreData> getPremiumStoreData() async {
     try {
@@ -123,6 +109,16 @@ class StoreService {
 
   Future<Map<String, dynamic>> getInventory(String playerId) {
     return apiService.get('/store/inventory/$playerId');
+  }
+
+  Future<Map<String, dynamic>> purchaseAvatar({
+    required String playerId,
+    required String avatarId,
+  }) {
+    return apiService.post(
+      '/store/avatars/$avatarId/purchase',
+      body: <String, dynamic>{'playerId': playerId},
+    );
   }
 
   Future<Map<String, dynamic>> getSubscriptionStatus(String playerId) {
