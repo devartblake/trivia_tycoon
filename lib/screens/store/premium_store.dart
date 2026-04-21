@@ -131,6 +131,7 @@ class _StoreSecondaryScreenState extends ConsumerState<StoreSecondaryScreen>
                     child: TryNowWidget(
                       modelPath: 'assets/models/cartoon_character.obj',
                       title: 'Get your own 3D Avatar',
+                      avatarId: 'avatar:cartoon-hero:v1',
                     ),
                   ),
                 ),
