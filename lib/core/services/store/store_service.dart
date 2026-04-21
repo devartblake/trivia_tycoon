@@ -67,7 +67,8 @@ class StoreService {
         return cachedItems;
       }
 
-      return [];
+      // Final fallback: local asset bundle (always available)
+      return StoreDataService.loadStoreItems();
     }
   }
 
