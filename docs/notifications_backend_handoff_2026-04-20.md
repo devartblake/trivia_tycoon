@@ -2,15 +2,15 @@
 
 > **Audience:** Frontend + backend teams  
 > **Date:** 2026-04-20  
-> **Scope:** Player inbox + unread count + push refresh behavior
+> **Scope:** Player inbox + unread count + lightweight realtime refresh
 
 ---
 
-## Contract Summary
+## Status
 
-The frontend is now prepared to treat notifications as a backend-owned player inbox instead of local sample state.
+Player notifications v1 are now implemented and registered in the backend route surface.
 
-Expected routes:
+Implemented routes:
 
 - `GET /notifications/inbox`
 - `GET /notifications/unread-count`
@@ -18,45 +18,85 @@ Expected routes:
 - `POST /notifications/read-all`
 - `DELETE /notifications/{notificationId}`
 
-Realtime behavior:
+Validated on **April 20, 2026** with:
 
-- keep using the existing player notification hub/websocket channel
-- any new notification push should be sufficient to trigger inbox + unread-count refresh
-- push does not replace inbox hydration; the inbox endpoints remain the source of truth
+- `dotnet test Tycoon.Backend.Api.Tests\Tycoon.Backend.Api.Tests.csproj --no-build --no-restore --filter "PlayerNotificationsEndpointsTests|MessagesEndpointsTests"`
+- Result: `Passed (8/8)`
+
+Current v1 notification sources:
+
+- friend request received
+- friend request accepted
+- onboarding reward claimed as a simple system notification
+
+This is a dedicated player inbox domain. It is separate from admin notification history and should be treated as the source of truth for player notifications.
+
+---
+
+## Contract Summary
+
+The frontend should treat notifications as a backend-owned inbox rather than local sample state.
+
+### Read and mutation routes
+
+- `GET /notifications/inbox`
+- `GET /notifications/unread-count`
+- `POST /notifications/{notificationId}/read`
+- `POST /notifications/read-all`
+- `DELETE /notifications/{notificationId}`
+
+### Auth behavior
+
+- bearer auth required for every route
+- inbox is always implicitly "me"
+- no `{playerId}` path is used for notifications v1
+
+### Pagination behavior
+
+`GET /notifications/inbox` supports optional query parameters:
+
+- `page`
+- `pageSize`
+
+If omitted, the backend defaults to:
+
+- `page = 1`
+- `pageSize = 50`
 
 ---
 
 ## DTO Shape
 
-Frontend currently expects each inbox item to support:
+Each inbox item is returned in this canonical shape:
 
 ```json
 {
-  "id": "notif-1",
+  "id": "6d0b0d2f-19f3-4d0a-a0a7-4f5c8e1931fd",
   "type": "friend",
-  "title": "Sarah sent you a friend request",
-  "body": "You have 12 mutual friends",
+  "title": "New friend request",
+  "body": "Sarah sent you a friend request.",
   "createdAtUtc": "2026-04-20T12:00:00Z",
   "unread": true,
   "actionRoute": "/friends",
   "payload": {
-    "friendId": "player-2"
+    "requestId": "fd46c9eb-7cb8-4380-94c8-c30dffb8dbef",
+    "fromPlayerId": "9e8f0e85-e1bb-42c5-9184-1b2685151f7d"
   },
   "icon": "person_add",
   "avatarUrl": "https://example.test/avatar.png"
 }
 ```
 
-Accepted `type` values for the current app:
+Current important fields:
 
-- `alert`
-- `notification`
-- `friend`
-- `achievement`
-- `system`
-- `challenge`
-
-The frontend also tolerates `category`, `kind`, `summary`, `message`, `createdAt`, and `route` aliases, but backend should standardize on the JSON shown above.
+- `type`
+  v1 currently emits `friend` and `system`
+- `actionRoute`
+  current values are route-like frontend navigation targets such as `/friends` and `/wallet`
+- `payload`
+  structured JSON object surfaced from JSON-backed backend storage
+- `avatarUrl`
+  optional and nullable
 
 Paginated inbox response:
 
@@ -80,30 +120,86 @@ Unread count response:
 
 ---
 
+## Realtime Refresh
+
+The inbox endpoints remain the source of truth. Realtime is only a freshness signal in v1.
+
+Current backend behavior:
+
+- when a new player notification is created, the backend emits a refresh event over `/ws/notify`
+- when notification read state changes, the backend emits a refresh event over `/ws/notify`
+
+Current lightweight player event:
+
+- `NotificationInboxUpdated`
+
+Message payload shape:
+
+```json
+{
+  "playerId": "00000000-0000-0000-0000-000000000000",
+  "unreadCount": 2,
+  "reason": "created",
+  "occurredAtUtc": "2026-04-20T12:00:00Z"
+}
+```
+
+Frontend guidance:
+
+- treat websocket events as a refresh signal only
+- refetch `GET /notifications/inbox` and `GET /notifications/unread-count` after receiving the event
+- do not treat the websocket event itself as a replacement for inbox hydration
+
+---
+
 ## Frontend Integration Notes
 
-- notifications screen is now backed by the inbox endpoints, not local sample providers
-- notification badges in the main app chrome now read from `GET /notifications/unread-count`
-- opening a notification attempts `POST /notifications/{notificationId}/read`
-- “Mark all read” uses `POST /notifications/read-all`
-- swipe-to-dismiss and delete actions use `DELETE /notifications/{notificationId}`
+- notifications screen should hydrate from `GET /notifications/inbox`
+- notification badge counts should hydrate from `GET /notifications/unread-count`
+- opening a notification should call `POST /notifications/{notificationId}/read`
+- "mark all read" should call `POST /notifications/read-all`
+- swipe-to-dismiss/delete should call `DELETE /notifications/{notificationId}`
 
-The app still supports local UI filtering by notification type, but the backend inbox is the source of truth for content and unread state.
+The backend does not provide a separate archive endpoint in v1. Deletion is hard delete from the player inbox record.
 
 ---
 
 ## Error Handling
 
-Use the shared nested error envelope:
+Notifications use the shared backend-standard nested error envelope:
 
 ```json
 {
   "error": {
-    "code": "forbidden",
-    "message": "You do not have access to this notification.",
+    "code": "FORBIDDEN",
+    "message": "Notification does not belong to the authenticated user.",
     "details": {}
   }
 }
 ```
 
-Frontend already reuses the shared `ApiRequestException.message` parsing path used by premium store.
+Current common error codes:
+
+- `UNAUTHORIZED`
+- `FORBIDDEN`
+- `NOT_FOUND`
+
+Frontend should parse:
+
+- `error.code`
+- `error.message`
+- `error.details`
+
+---
+
+## Current Limits
+
+Notifications v1 intentionally does not yet include:
+
+- achievements/challenges/gameplay alerts
+- rich notification preferences
+- notification categories endpoint
+- bulk delete endpoint
+- server-pushed full notification payload sync
+
+Those can be layered on top of the current inbox model without changing the basic route family above.

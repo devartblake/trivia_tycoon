@@ -6,18 +6,11 @@
 
 ---
 
-## Contract Summary
+## Status
 
-The frontend has been updated to treat direct messages as a backend-owned domain for:
+Direct messaging v1 is now implemented as a REST-owned DM surface with lightweight realtime refresh signaling.
 
-- conversation list
-- direct-conversation creation
-- message history
-- send message
-- mark conversation read
-- unread count via conversation summaries
-
-Expected routes:
+Implemented routes:
 
 - `GET /messages/conversations`
 - `POST /messages/conversations/direct`
@@ -26,24 +19,60 @@ Expected routes:
 - `POST /messages/conversations/{conversationId}/read`
 - `GET /messages/unread-count`
 
-Non-goals for this first pass:
+Validated on **April 20, 2026** with:
 
-- group chat
-- attachments/uploads
-- reactions
-- typing/presence parity
+- `dotnet test Tycoon.Backend.Api.Tests\Tycoon.Backend.Api.Tests.csproj --no-build --no-restore --filter "PlayerNotificationsEndpointsTests|MessagesEndpointsTests"`
+- Result: `Passed (8/8)`
+
+This is direct conversation support only. Group chat, attachments, reactions, and typing-state backend parity remain out of scope.
+
+---
+
+## Contract Summary
+
+The frontend should treat direct messages as a backend-owned domain for:
+
+- conversation list
+- direct conversation creation
+- message history
+- send message
+- mark conversation read
+- unread count
+
+### Auth behavior
+
+- bearer auth required for every route
+- conversation membership is enforced for history, send, and read operations
+- `POST /messages/conversations/direct` is idempotent for the same two participants
+
+### Pagination behavior
+
+`GET /messages/conversations` supports optional query parameters:
+
+- `page`
+- `pageSize`
+
+If omitted, the backend defaults to:
+
+- `page = 1`
+- `pageSize = 50`
+
+`GET /messages/conversations/{conversationId}/messages` currently returns the full ordered message list for the conversation in v1 and is not paginated yet.
 
 ---
 
 ## Conversation DTO
 
-The frontend now accepts this conversation summary shape:
+Conversation summaries use this canonical shape:
 
 ```json
 {
-  "id": "conv-1",
+  "id": "0a90f4ae-75e7-4f4e-8d77-b9d5ed4dd488",
   "type": "direct",
-  "participantIds": ["player-1", "player-2"],
+  "participantIds": [
+    "c90af807-b31a-465f-8d04-5e7915b73f18",
+    "6f3eb420-4516-4f77-bd79-e9503bfa73cc"
+  ],
   "displayTitle": "Sarah Chen",
   "avatarUrl": "https://example.test/avatar.png",
   "lastMessagePreview": "See you soon!",
@@ -70,21 +99,27 @@ Paginated response envelope:
 
 ```json
 {
-  "targetPlayerId": "player-2"
+  "targetPlayerId": "6f3eb420-4516-4f77-bd79-e9503bfa73cc"
 }
 ```
+
+Current creation rules:
+
+- self-DM is rejected
+- target player must exist and be active
+- repeat creation for the same two players returns the existing conversation
 
 ---
 
 ## Message DTO
 
-Thread history and send responses should use:
+Thread history and send responses use this shape:
 
 ```json
 {
-  "id": "msg-1",
-  "conversationId": "conv-1",
-  "senderId": "player-2",
+  "id": "4f31d5f4-4603-4f4f-b286-6c95e73a4a57",
+  "conversationId": "0a90f4ae-75e7-4f4e-8d77-b9d5ed4dd488",
+  "senderId": "6f3eb420-4516-4f77-bd79-e9503bfa73cc",
   "senderDisplayName": "Sarah Chen",
   "content": "Hey there",
   "type": "text",
@@ -102,7 +137,11 @@ Thread history and send responses should use:
 }
 ```
 
-`clientMessageId` is optional but recommended for idempotent retries.
+`clientMessageId` behavior:
+
+- optional
+- sender-scoped idempotency key
+- repeated send with the same `clientMessageId` returns the same stored message instead of duplicating it
 
 Unread count response:
 
@@ -112,31 +151,96 @@ Unread count response:
 }
 ```
 
+Unread state is derived from conversation participant read state, not from a separate denormalized counter table.
+
+---
+
+## Realtime Refresh
+
+DM history remains REST-owned in v1. Realtime is only a refresh signal.
+
+Current backend behavior:
+
+- when a message is sent, the backend emits a refresh event over `/ws/notify`
+- the event is sent to the recipient player group
+- the event is also sent back to the sender player group for cross-device refresh
+
+Current lightweight player event:
+
+- `DirectMessagesUpdated`
+
+Message payload shape:
+
+```json
+{
+  "playerId": "00000000-0000-0000-0000-000000000000",
+  "conversationId": "11111111-1111-1111-1111-111111111111",
+  "unreadCount": 1,
+  "reason": "message_sent",
+  "occurredAtUtc": "2026-04-20T13:05:00Z"
+}
+```
+
+Frontend guidance:
+
+- use websocket events as a signal to refetch conversation list or thread data
+- do not treat the websocket message as the source of truth for the full message body
+- keep thread hydration and read-state refresh anchored on the REST endpoints above
+
 ---
 
 ## Frontend Integration Notes
 
-- messages list is no longer intended to be sourced from local sample storage for normal online flows
-- the DM creation flows in friends and create-DM dialogs now expect backend conversation creation
-- message detail hydration now expects backend message history
-- mark-read state for a thread now expects `POST /messages/conversations/{conversationId}/read`
+- DM creation flows from friends/search should call `POST /messages/conversations/direct`
+- conversation list screens should hydrate from `GET /messages/conversations`
+- thread screens should hydrate from `GET /messages/conversations/{conversationId}/messages`
+- message send should call `POST /messages/conversations/{conversationId}/messages`
+- thread open/read completion should call `POST /messages/conversations/{conversationId}/read`
+- app-level unread badges should use `GET /messages/unread-count`
 
-The current frontend still retains lightweight local typing state only as transitional UI behavior. It is not the message source of truth and should not be used as the backend contract reference.
+The current frontend can keep temporary local typing indicators as UI-only state, but that is not part of the backend contract.
 
 ---
 
 ## Error Handling
 
-Use the shared nested error envelope:
+Messaging uses the shared backend-standard nested error envelope:
 
 ```json
 {
   "error": {
-    "code": "forbidden",
-    "message": "You are not a participant in this conversation.",
+    "code": "FORBIDDEN",
+    "message": "Conversation does not belong to the authenticated user.",
     "details": {}
   }
 }
 ```
 
-Frontend already consumes this through the shared API layer, consistent with premium-store handling.
+Current common error codes:
+
+- `UNAUTHORIZED`
+- `VALIDATION_ERROR`
+- `SELF_DM_NOT_ALLOWED`
+- `FORBIDDEN`
+- `NOT_FOUND`
+
+Frontend should parse:
+
+- `error.code`
+- `error.message`
+- `error.details`
+
+---
+
+## Current Limits
+
+Messaging v1 intentionally does not yet include:
+
+- group chat
+- message attachments/uploads
+- reactions
+- typing-state backend events
+- edit/delete message endpoints
+- paginated thread history
+
+Those are follow-up features on top of the current direct-message baseline rather than blockers for the current frontend integration.
