@@ -636,3 +636,30 @@ The current implementation is intentionally v1:
 - no admin-managed premium campaign storage yet
 
 Frontend should treat this contract as stable for current integration, but not assume today’s config-backed implementation is the permanent storage model.
+
+---
+
+## Frontend Implementation Status - April 20, 2026
+
+### Completed
+
+- Premium catalog hydration is wired to `GET /store/premium`.
+- Player-specific reward state is wired to `GET /store/rewards/{playerId}`.
+- Reward claims are wired to `POST /store/rewards/{playerId}/claim/{rewardId}`.
+- Successful claims update local coin balance from backend `newBalance` and invalidate reward state.
+- Backend conflict/error messages are surfaced through the shared `ApiRequestException.message` path.
+- Sale content hides when `saleInfo` is `null`.
+- Sale countdown renders from `SaleInfoData.expiresAt` and shows an ended state for expired offers.
+- Premium access state is derived from backend subscription status rather than the old hardcoded premium placeholder.
+- Premium purchase CTAs launch the existing Stripe/PayPal subscription checkout flows directly from premium plan data.
+- Legacy `/offers` frontend navigation redirects to `/store-premium`.
+- The frontend no longer calls `GET /store/offers` for premium-store flow.
+- Service/widget coverage was added for premium DTO parsing, reward claim success/conflict, sale hiding, sale expiry, reward endpoints, and checkout mapping.
+
+### Remaining Frontend Work
+
+- Run the full Flutter test suite in an environment where `flutter` and `dart` are available on PATH.
+- Perform device-level checkout smoke tests for Stripe and PayPal return flows against the active backend environment.
+- Validate live reward reset behavior across UTC day boundaries with real player accounts.
+- Decide whether the unused legacy `OffersScreen` file should be removed entirely or kept as a local-only compatibility screen.
+- Future growth-plan work remains separate from v1 integration: premium analytics, admin-managed premium catalog/campaigns, explicit premium entitlement records, and broader reward definitions.

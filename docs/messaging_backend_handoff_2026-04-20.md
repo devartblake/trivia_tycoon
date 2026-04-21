@@ -244,3 +244,35 @@ Messaging v1 intentionally does not yet include:
 - paginated thread history
 
 Those are follow-up features on top of the current direct-message baseline rather than blockers for the current frontend integration.
+
+---
+
+## Frontend Implementation Status - April 20, 2026
+
+### Completed
+
+- Added `DirectMessageService` for the v1 direct-message REST routes:
+  - `GET /messages/conversations`
+  - `POST /messages/conversations/direct`
+  - `GET /messages/conversations/{conversationId}/messages`
+  - `POST /messages/conversations/{conversationId}/messages`
+  - `POST /messages/conversations/{conversationId}/read`
+  - `GET /messages/unread-count`
+- Updated `Conversation` and `Message` model parsing to tolerate the backend DTO field names in this handoff.
+- Replaced normal DM conversation hydration with backend-backed providers.
+- Replaced normal DM thread hydration with backend-backed providers.
+- Message send now calls the backend send route and invalidates thread, conversation, and unread-count providers.
+- Thread open/read behavior now calls the backend read route and invalidates thread, conversation, and unread-count providers.
+- Create-DM flows from friends and create-DM dialog now await `POST /messages/conversations/direct`.
+- App-level message badges now read from `GET /messages/unread-count`.
+- Added frontend service tests that verify conversation list, direct-conversation creation, message history, send payloads, and DTO parsing.
+
+### Remaining Frontend Work
+
+- Run Flutter tests once `flutter`/`dart` are available on PATH.
+- Validate against the real backend that conversation creation is idempotent for repeat DM creation.
+- Validate real backend behavior for unauthorized conversation access, self-DM rejection, and missing target players.
+- Add widget/integration tests for message list loading/error states, thread loading/error states, send success/failure, and read-state clearing.
+- Hook websocket `DirectMessagesUpdated` refresh events into conversation/thread invalidation once the exact frontend event handler contract is confirmed.
+- Replace or remove remaining local-only transitional message features that are outside DM v1, including typing simulation, reactions, attachments, online groups, and group chat placeholders.
+- Add paginated thread-history UI when the backend moves message history from full-list v1 responses to paginated responses.

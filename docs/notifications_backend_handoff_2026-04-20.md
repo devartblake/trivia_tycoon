@@ -203,3 +203,31 @@ Notifications v1 intentionally does not yet include:
 - server-pushed full notification payload sync
 
 Those can be layered on top of the current inbox model without changing the basic route family above.
+
+---
+
+## Frontend Implementation Status - April 20, 2026
+
+### Completed
+
+- Added `PlayerNotificationsService` for the v1 inbox routes:
+  - `GET /notifications/inbox`
+  - `GET /notifications/unread-count`
+  - `POST /notifications/{notificationId}/read`
+  - `POST /notifications/read-all`
+  - `DELETE /notifications/{notificationId}`
+- Extracted `InboxItem`, `InboxType`, and notification display config into a shared core model instead of defining them inside the screen.
+- Replaced local sample notification data in `NotificationsScreen` with backend-backed Riverpod providers.
+- Notification unread badges in the main menu/app bar now read from `GET /notifications/unread-count`.
+- Mark-one-read, mark-all-read, and dismiss/delete UI actions now call backend mutation routes and invalidate inbox/unread providers.
+- Existing notification hub stream is used as a lightweight refresh signal by invalidating inbox and unread-count providers.
+- Added frontend service tests that verify endpoint paths, query parameters, DTO parsing, unread count parsing, mark-read, and dismiss calls.
+
+### Remaining Frontend Work
+
+- Run Flutter tests once `flutter`/`dart` are available on PATH.
+- Validate against the real backend that `/ws/notify` emits the expected refresh event name and payload for inbox changes.
+- Add widget/integration tests for notification screen loading, error, mark-read, mark-all-read, and dismiss flows.
+- Decide whether notification detail primary actions should deep-link immediately from the list or remain detail-screen actions only.
+- Wire additional notification sources as backend emits them, such as achievements, challenges, gameplay alerts, and richer system notices.
+- Add notification preferences/categories UI only after the backend exposes those as a separate v2 contract.

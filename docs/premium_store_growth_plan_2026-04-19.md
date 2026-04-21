@@ -538,3 +538,31 @@ If we want the best ROI after the fast-track release, the next backend work shou
 5. Add admin UX for premium plans, campaigns, and reward definitions.
 
 That order keeps the current release stable while building toward a system that can scale beyond one screen and two reward IDs.
+
+---
+
+## Frontend Status Update - April 20, 2026
+
+### Completed Since This Growth Plan
+
+- The v1 premium-store frontend integration is complete against the current backend handoff.
+- Premium catalog, reward state, reward claims, sale visibility/countdown, premium access status, and premium checkout routing are backend-backed.
+- The legacy `/offers` dependency has been removed from the premium purchase path and now redirects to `/store-premium`.
+- New backend-first frontend groundwork has started for the next two systems:
+  - player notifications inbox + unread count
+  - direct-message core
+- Separate backend handoff docs now exist for notifications and direct messaging:
+  - `docs/notifications_backend_handoff_2026-04-20.md`
+  - `docs/messaging_backend_handoff_2026-04-20.md`
+
+### Frontend Work Still Remaining
+
+- Premium store growth-plan phases beyond v1 are not complete:
+  - durable/admin-managed premium catalog storage
+  - premium campaign scheduling
+  - explicit premium entitlement records
+  - premium analytics and experimentation
+  - premium-specific admin tooling
+- Notifications still need full widget/integration coverage and real backend websocket smoke testing.
+- Direct messaging still needs full widget/integration coverage, real backend auth/error smoke testing, and follow-up decisions on typing, read receipts, groups, attachments, reactions, and pagination.
+- Flutter test execution remains blocked in this environment because `flutter` and `dart` are not available on PATH.

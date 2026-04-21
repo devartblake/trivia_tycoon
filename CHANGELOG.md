@@ -8,6 +8,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added - Backend-first notifications and direct messaging frontend integration (2026-04-20)
+
+Locks the premium store as the reference integration pattern and adds the frontend contract layer for the next backend-first systems: player notifications and direct-message core.
+
+**Changes:**
+- `lib/core/services/notifications/player_notifications_service.dart` - new backend service for `GET /notifications/inbox`, `GET /notifications/unread-count`, mark-read, mark-all-read, and dismiss/delete.
+- `lib/core/models/notifications/player_inbox_item.dart` - extracted player inbox DTO/model and notification type display config from the notifications screen.
+- `lib/game/providers/player_notification_providers.dart` - new Riverpod providers for backend inbox state, unread count, notification mutations, and SignalR refresh invalidation.
+- `lib/screens/notifications/notifications_screen.dart` and `notification_detail_screen.dart` - replaced local sample inbox state with backend-backed inbox/unread providers and mutation calls.
+- `lib/screens/menu/widgets/standard_appbar.dart` and `lib/screens/menu/main_menu_screen.dart` - notification badges now read from backend unread count instead of local UI state.
+- `lib/core/services/messaging/direct_message_service.dart` - new backend service for direct-message conversation list, find-or-create DM, message history, send, read-state, and unread count.
+- `lib/game/providers/message_providers.dart` - DM core now hydrates from backend services; local message storage remains only for transitional typing/legacy helpers.
+- `lib/screens/messages/messages_screen.dart`, `message_detail_screen.dart`, `screens/profile/friends_screen.dart`, and `screens/messages/dialogs/create_dm_dialog.dart` - DM list, thread hydration, send, read, and create-DM flows now use backend-backed providers.
+- `docs/notifications_backend_handoff_2026-04-20.md` and `docs/messaging_backend_handoff_2026-04-20.md` - added/updated backend handoff docs with current frontend status and remaining work.
+- `test/core/services/player_notifications_service_test.dart` and `test/core/services/direct_message_service_test.dart` - added endpoint-contract tests for the new frontend services.
+
+**Verification note:** `dart` and `flutter` are not available on PATH in this environment, so tests could not be executed locally from this session.
+
 ### Added – MinIO audio integration: remote SFX support (2026-04-18)
 
 Extends the MinIO audio layer to cover **sound effects** in addition to
