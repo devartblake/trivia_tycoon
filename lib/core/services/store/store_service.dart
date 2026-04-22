@@ -6,6 +6,7 @@ import '../../manager/log_manager.dart';
 import '../../models/store/store_hub_model.dart';
 import '../../models/store/store_gift_model.dart';
 import '../../models/store/premium_store_model.dart';
+import '../../models/store/store_stock_ui_model.dart';
 
 class StoreService {
   final ApiService apiService;
@@ -539,6 +540,38 @@ class StoreService {
     } catch (e) {
       LogManager.debug('Failed to import store data: $e');
       rethrow;
+    }
+  }
+
+  /// Fetch the player-scoped catalog from GET /store/catalog/{playerId}.
+  /// Falls back to the generic catalog if the player-scoped endpoint is unavailable.
+  Future<List<PlayerStoreItem>> fetchPlayerCatalog(String playerId) async {
+    try {
+      final response = await apiService.get('/store/catalog/$playerId');
+      final rawItems =
+          response['items'] as List<dynamic>? ?? const <dynamic>[];
+      return rawItems
+          .whereType<Map>()
+          .map((raw) =>
+              PlayerStoreItem.fromJson(Map<String, dynamic>.from(raw)))
+          .toList();
+    } catch (e) {
+      LogManager.debug('fetchPlayerCatalog failed, falling back: $e');
+      // Convert generic catalog items to PlayerStoreItem
+      final items = await getAllItems();
+      return items.map((item) {
+        return PlayerStoreItem(
+          sku: item.sku ?? item.id,
+          title: item.name,
+          description: item.description,
+          type: item.type ?? item.category,
+          price: item.price,
+          currency: item.currency,
+          iconPath: item.iconPath,
+          owned: item.owned,
+          isFeatured: item.isFeatured,
+        );
+      }).toList();
     }
   }
 
