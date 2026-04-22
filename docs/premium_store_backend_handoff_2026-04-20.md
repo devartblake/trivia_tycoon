@@ -661,5 +661,5 @@ Frontend should treat this contract as stable for current integration, but not a
 - Run the full Flutter test suite in an environment where `flutter` and `dart` are available on PATH.
 - Perform device-level checkout smoke tests for Stripe and PayPal return flows against the active backend environment.
 - Validate live reward reset behavior across UTC day boundaries with real player accounts.
-- Decide whether the unused legacy `OffersScreen` file should be removed entirely or kept as a local-only compatibility screen.
+- Decide whether the unused legacy `StoreSpecialScreen` file should be removed entirely or kept as a local-only compatibility screen.
 - Future growth-plan work remains separate from v1 integration: premium analytics, admin-managed premium catalog/campaigns, explicit premium entitlement records, and broader reward definitions.

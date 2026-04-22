@@ -8,14 +8,14 @@ import 'package:trivia_tycoon/core/services/api_service.dart';
 import 'package:trivia_tycoon/core/services/store/store_return_url_builder.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 
-class OffersScreen extends ConsumerStatefulWidget {
-  const OffersScreen({super.key});
+class StoreSpecialScreen extends ConsumerStatefulWidget {
+  const StoreSpecialScreen({super.key});
 
   @override
-  ConsumerState<OffersScreen> createState() => _OffersScreenState();
+  ConsumerState<StoreSpecialScreen> createState() => _StoreSpecialScreenState();
 }
 
-class _OffersScreenState extends ConsumerState<OffersScreen>
+class _StoreSpecialScreenState extends ConsumerState<StoreSpecialScreen>
     with TickerProviderStateMixin {
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
