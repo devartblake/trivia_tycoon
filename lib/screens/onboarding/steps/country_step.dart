@@ -17,6 +17,7 @@ class CountryStep extends StatefulWidget {
 
 class _CountryStepState extends State<CountryStep> {
   final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchFocus = FocusNode();
   String? _selectedCountry;
   List<String> _filteredCountries = [];
 
@@ -96,6 +97,7 @@ class _CountryStepState extends State<CountryStep> {
     }
 
     _searchController.addListener(_filterCountries);
+    _searchFocus.addListener(() => setState(() {}));
   }
 
   void _filterCountries() {
@@ -128,6 +130,7 @@ class _CountryStepState extends State<CountryStep> {
   @override
   void dispose() {
     _searchController.dispose();
+    _searchFocus.dispose();
     super.dispose();
   }
 
@@ -156,6 +159,7 @@ class _CountryStepState extends State<CountryStep> {
         children: [
           TextField(
             controller: _searchController,
+            focusNode: _searchFocus,
             decoration: InputDecoration(
               hintText: 'Search countries...',
               prefixIcon: const Icon(Icons.search),
@@ -168,7 +172,7 @@ class _CountryStepState extends State<CountryStep> {
             ),
           ),
           const SizedBox(height: 16),
-          if (_searchController.text.isEmpty) ...[
+          if (_searchController.text.isEmpty && !_searchFocus.hasFocus) ...[
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
