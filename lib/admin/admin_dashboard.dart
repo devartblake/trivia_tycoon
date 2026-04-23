@@ -457,6 +457,13 @@ class AdminDashboardScreen extends ConsumerWidget {
         color: Colors.amber,
         onTap: () => context.push('/admin/question-editor'),
       ),
+      _AdminAction(
+        title: 'Store Inventory',
+        subtitle: 'Stock policies, flash sales, rewards & overrides',
+        icon: Icons.inventory_2_outlined,
+        color: const Color(0xFF6366F1),
+        onTap: () => context.push('/admin/store'),
+      ),
     ];
   }
 }

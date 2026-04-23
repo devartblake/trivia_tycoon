@@ -124,6 +124,11 @@ import '../../arcade/domain/arcade_game_definition.dart';
 import '../../arcade/ui/screens/arcade_game_shell.dart';
 import '../../admin/audio/admin_audio_player_screen.dart';
 import '../../admin/splash_screen/splash_selector_screen.dart';
+import '../../admin/store/screens/admin_store_inventory_screen.dart';
+import '../../admin/store/screens/admin_stock_policy_screen.dart';
+import '../../admin/store/screens/admin_flash_sales_screen.dart';
+import '../../admin/store/screens/admin_reward_limits_screen.dart';
+import '../../admin/store/screens/admin_stock_analytics_screen.dart';
 import '../../game/models/leaderboard_entry.dart';
 import '../../screens/group_chat/group_settings_screen.dart';
 import '../../screens/messages/message_detail_screen.dart';
@@ -343,6 +348,31 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             path: '/admin/audio-studio',
             name: 'admin-audio-studio',
             builder: (context, state) => const AdminAudioPlayerScreen(),
+          ),
+          GoRoute(
+            path: '/admin/store',
+            name: 'admin-store-inventory',
+            builder: (context, state) => const AdminStoreInventoryScreen(),
+          ),
+          GoRoute(
+            path: '/admin/store/policies',
+            name: 'admin-store-policies',
+            builder: (context, state) => const AdminStockPolicyScreen(),
+          ),
+          GoRoute(
+            path: '/admin/store/flash-sales',
+            name: 'admin-store-flash-sales',
+            builder: (context, state) => const AdminFlashSalesScreen(),
+          ),
+          GoRoute(
+            path: '/admin/store/reward-limits',
+            name: 'admin-store-reward-limits',
+            builder: (context, state) => const AdminRewardLimitsScreen(),
+          ),
+          GoRoute(
+            path: '/admin/store/analytics',
+            name: 'admin-store-analytics',
+            builder: (context, state) => const AdminStockAnalyticsScreen(),
           ),
         ],
       ),
