@@ -575,7 +575,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const JoinQuizScreen(),
       ),
       GoRoute(
-        path: '/play',
+        path: '/quiz/play',
         builder: (context, state) {
           final extra = state.extra;
           if (extra is Map<String, dynamic>) {
