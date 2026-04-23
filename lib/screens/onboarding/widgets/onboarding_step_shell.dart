@@ -29,8 +29,6 @@ class OnboardingStepShell extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Spacer(flex: 1),
-
           // Hero area
           hero,
 
@@ -57,7 +55,7 @@ class OnboardingStepShell extends StatelessWidget {
           const SizedBox(height: 32),
 
           // Main content
-          Expanded(flex: 3, child: child),
+          Expanded(child: child),
 
           const SizedBox(height: 24),
 
