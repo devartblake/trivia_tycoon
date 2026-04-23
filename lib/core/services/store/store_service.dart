@@ -7,6 +7,7 @@ import '../../models/store/store_hub_model.dart';
 import '../../models/store/store_gift_model.dart';
 import '../../models/store/premium_store_model.dart';
 import '../../models/store/store_stock_ui_model.dart';
+import '../../models/store/daily_store_model.dart';
 
 class StoreService {
   final ApiService apiService;
@@ -76,6 +77,24 @@ class StoreService {
   // /store/hub and /store/gifts are not implemented in the backend.
   // Serve static fallback data directly until backend adds these endpoints.
   Future<StoreHubData> getHubData() async => StoreHubData.fallback;
+
+  /// Fetch the global daily rotating store.
+  ///
+  /// Backend: `GET /store/daily`
+  /// Response: `{ items, nextResetAt (ISO-8601 UTC), resetIntervalSeconds, bannerMessage? }`
+  ///
+  /// The Sidecar cron job rotates items at [nextResetAt] for all players
+  /// simultaneously. The client invalidates [dailyStoreProvider] when the
+  /// countdown expires so the new slate loads automatically.
+  Future<DailyStoreData> getDailyItems() async {
+    try {
+      final json = await apiService.get('/store/daily');
+      return DailyStoreData.fromJson(json);
+    } catch (e) {
+      LogManager.debug('getDailyItems failed, using fallback: $e');
+      return DailyStoreData.fallback;
+    }
+  }
 
   Future<GiftsData> getGiftsData() async => GiftsData.fallback;
 
