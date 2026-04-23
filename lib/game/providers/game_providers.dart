@@ -11,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/models/store/store_hub_model.dart';
 import '../../core/models/store/store_gift_model.dart';
 import '../../core/models/store/premium_store_model.dart';
+import '../../core/models/store/daily_store_model.dart';
 import '../../game/state/premium_profile_state.dart';
 import '../../core/services/leaderboard_data_service.dart';
 import '../../core/services/question/question_service.dart';
@@ -271,6 +272,15 @@ Future<String> _resolveCurrentStoreUserId(Ref ref) async {
 
 final storeHubProvider = FutureProvider<StoreHubData>((ref) async {
   return ref.read(storeServiceProvider).getHubData();
+});
+
+/// Provides the current daily rotating store, including the global [nextResetAt]
+/// timestamp that is identical for every player (set by the backend Sidecar).
+///
+/// The screen auto-invalidates this provider when [DailyStoreData.nextResetAt]
+/// is reached so the next day's items load without a manual refresh.
+final dailyStoreProvider = FutureProvider<DailyStoreData>((ref) async {
+  return ref.read(storeServiceProvider).getDailyItems();
 });
 
 final giftsDataProvider = FutureProvider<GiftsData>((ref) async {

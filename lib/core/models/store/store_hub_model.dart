@@ -35,6 +35,8 @@ IconData resolveIcon(String? name, {IconData fallback = Icons.store}) {
       return Icons.bolt;
     case 'local_fire_department':
       return Icons.local_fire_department;
+    case 'today':
+      return Icons.today;
     default:
       return fallback;
   }
@@ -223,16 +225,28 @@ class StoreHubData {
             preview: 'Latest power-ups and themes available',
           ),
           const StoreSectionData(
+            id: 'daily-items',
+            title: 'Daily Items',
+            subtitle: 'Restocks every day at midnight UTC',
+            icon: Icons.today,
+            gradient:
+                LinearGradient(colors: [Color(0xFF10B981), Color(0xFF059669)]),
+            route: '/store/daily',
+            itemCount: '4 items today',
+            badge: 'NEW',
+            preview: 'Fresh power-ups and cosmetics, every day',
+          ),
+          const StoreSectionData(
             id: 'special-offers',
             title: 'Special Offers',
             subtitle: 'Limited time deals',
             icon: Icons.local_offer,
             gradient:
                 LinearGradient(colors: [Color(0xFFEF4444), Color(0xFFDC2626)]),
-            route: '/store-premium',
+            route: '/store-special',
             itemCount: '8 deals',
             badge: 'HOT',
-            preview: '80% off premium membership',
+            preview: 'Flash sales and exclusive bundles',
           ),
           const StoreSectionData(
             id: 'gifts-center',
@@ -243,7 +257,7 @@ class StoreHubData {
                 LinearGradient(colors: [Color(0xFFEC4899), Color(0xFFDB2777)]),
             route: '/gifts',
             itemCount: '3 pending',
-            badge: 'NEW',
+            badge: null,
             preview: 'Energy packs and coin gifts',
           ),
           const StoreSectionData(

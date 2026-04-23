@@ -73,6 +73,8 @@ import '../../screens/store/gifts_screen.dart';
 import '../../screens/store/store_payment_return_screen.dart';
 import '../../screens/store/store_hub_screen.dart';
 import '../../screens/store/premium_store.dart';
+import '../../screens/store/store_special_screen.dart';
+import '../../screens/store/daily_items_screen.dart';
 import '../../screens/users/achievements_screen.dart';
 import '../../screens/browse/all_actions_screen.dart';
 import '../../screens/browse/all_categories_screen.dart';
@@ -494,7 +496,17 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/offers',
         name: 'Offers',
-        redirect: (context, state) => '/store-premium',
+        redirect: (context, state) => '/store-special',
+      ),
+      GoRoute(
+        path: '/store-special',
+        name: 'Store Special',
+        builder: (context, state) => const StoreSpecialScreen(),
+      ),
+      GoRoute(
+        path: '/store/daily',
+        name: 'Daily Items',
+        builder: (context, state) => const DailyItemsScreen(),
       ),
       GoRoute(
           path: '/gifts',
