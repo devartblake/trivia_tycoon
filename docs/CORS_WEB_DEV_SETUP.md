@@ -2,7 +2,7 @@
 
 **Project:** Synaptix / Trivia Tycoon  
 **Scope:** Flutter Web local development  
-**Status:** ✅ Fix implemented (VS Code launch config + `run_web.sh`)
+**Status:** ✅ Fix implemented (VS Code launch config + Android Studio run configs + `run_web.sh`)
 
 ---
 
@@ -64,14 +64,38 @@ Added to `.vscode/launch.json` (created if it didn't exist):
 Select **Flutter Web (Fixed Port)** from the Run & Debug panel (F5) to start on the
 allowed port automatically.
 
-### Option B – Dev Script (`run_web.sh`)
+### Option B – Android Studio Run Configurations (`.idea/runConfigurations/`)
+
+Three run configurations are committed under `.idea/runConfigurations/`. Android
+Studio loads them automatically when you open the project.
+
+| Config name | Device | Port |
+|---|---|---|
+| Flutter Web Edge (Fixed Port 63033) | Microsoft Edge | 63033 |
+| Flutter Web Chrome (Fixed Port 63033) | Google Chrome | 63033 |
+| Flutter Mobile Debug | Connected device / emulator | n/a |
+
+**To use:**
+
+1. Open the project in Android Studio
+2. Click the run configuration dropdown (top toolbar, next to the run ▶ button)
+3. Select **Flutter Web Edge (Fixed Port 63033)** or **Flutter Web Chrome (Fixed Port 63033)**
+4. Press ▶ Run or ⇧F10
+
+The configurations are XML files in `.idea/runConfigurations/` — they are committed
+to version control so every team member gets them automatically on `git pull`.
+
+> If Android Studio shows "Unknown configuration type", install the **Flutter** and
+> **Dart** plugins via **File → Settings → Plugins**.
+
+### Option C – Dev Script (`run_web.sh`)
 
 ```bash
 ./run_web.sh          # launches in Edge on port 63033
 ./run_web.sh chrome   # launches in Chrome on port 63033
 ```
 
-### Option C – Manual command
+### Option D – Manual command
 
 ```bash
 flutter run -d edge --web-port 63033
@@ -154,4 +178,4 @@ The backend team should verify:
 
 ---
 
-*Last updated: 2026-04-24*
+*Last updated: 2026-04-24 — added Android Studio run configurations*
