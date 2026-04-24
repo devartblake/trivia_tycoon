@@ -1,0 +1,24 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Flutter Web (Fixed Port)",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "edge",
+      "args": ["--web-port", "63033"]
+    },
+    {
+      "name": "Flutter Web (Chrome Fixed Port)",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "chrome",
+      "args": ["--web-port", "63033"]
+    },
+    {
+      "name": "Flutter (Mobile Debug)",
+      "request": "launch",
+      "type": "dart"
+    }
+  ]
+}
