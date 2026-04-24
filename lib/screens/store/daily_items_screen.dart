@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/models/store/daily_store_model.dart';
+import '../../core/models/store/store_stock_ui_model.dart';
 import '../../game/providers/game_providers.dart';
 import '../../game/providers/store_stock_providers.dart';
 
