@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// Adaptive Image Provider that handles both assets and file paths
@@ -27,7 +28,10 @@ class AdaptiveImageProvider {
         path.contains('/storage/emulated/')) {
       // Remove file:// prefix if present
       final cleanPath = path.replaceFirst('file://', '');
-      return FileImage(File(cleanPath));
+      return kIsWeb
+          ? const AssetImage('assets/images/avatar_placeholder.png')
+              as ImageProvider
+          : FileImage(File(cleanPath));
     }
 
     // Default to AssetImage for relative paths

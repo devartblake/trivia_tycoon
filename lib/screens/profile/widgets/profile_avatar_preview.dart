@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../ui_components/depth_card_3d/depth_card.dart';
@@ -36,7 +37,10 @@ class ProfileAvatarPreview extends ConsumerWidget {
     } else if (path != null && path.isNotEmpty) {
       return CircleAvatar(
         radius: size / 2,
-        backgroundImage: FileImage(File(path)),
+        backgroundImage: kIsWeb
+            ? const AssetImage('assets/images/avatar_placeholder.png')
+                as ImageProvider
+            : FileImage(File(path)),
       );
     } else {
       return CircleAvatar(

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:archive/archive.dart';
 import 'package:archive/archive_io.dart';
 import 'package:crypto/crypto.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
@@ -61,6 +62,7 @@ class AvatarPackageService {
   /// Local: discover installed packages by scanning avatarPackages/*/manifest.json.
   /// This is the authoritative fallback.
   Future<List<AvatarPackageInstall>> listInstalled() async {
+    if (kIsWeb) return const [];
     final root = await _packagesRootDir;
     final out = <AvatarPackageInstall>[];
 
@@ -201,6 +203,7 @@ class AvatarPackageService {
   /// 5) update installed index
   Future<AvatarPackageInstall> downloadAndInstall(
       AvatarPackageMetadata meta) async {
+    if (kIsWeb) throw UnsupportedError('Avatar package installation is not supported on web.');
     final url = meta.archiveUrl;
     if (url == null || url.isEmpty) {
       throw StateError('archiveUrl is missing for package ${meta.id}.');
@@ -267,6 +270,7 @@ class AvatarPackageService {
     required AvatarPackageMetadata meta,
     required String assetArchivePath,
   }) async {
+    if (kIsWeb) throw UnsupportedError('Avatar package installation is not supported on web.');
     final root = await _packagesRootDir;
     final installDir = Directory(p.join(root.path, meta.installFolderName));
 

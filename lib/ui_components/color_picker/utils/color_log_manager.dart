@@ -131,6 +131,7 @@ class ColorLogManager {
     bool includeMetadata = true,
   }) async {
     try {
+      if (kIsWeb) return 'Log export is not supported on web.';
       // Filter logs based on criteria
       final filteredLogs = _logEntries
           .where((entry) {

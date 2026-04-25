@@ -46,7 +46,19 @@ class _StoreSpecialScreenState extends ConsumerState<StoreSpecialScreen>
 
   @override
   Widget build(BuildContext context) {
-    final offersData = StoreOffersData.fallback;
+    final offersAsync = ref.watch(specialOffersProvider);
+
+    return offersAsync.when(
+      loading: () => const Scaffold(
+        backgroundColor: Color(0xFFF8FAFF),
+        body: Center(child: CircularProgressIndicator()),
+      ),
+      error: (_, __) => _buildScaffold(StoreOffersData.fallback),
+      data: _buildScaffold,
+    );
+  }
+
+  Widget _buildScaffold(StoreOffersData offersData) {
     if (!offersData.tabs.contains(_selectedTab)) {
       _selectedTab =
           offersData.tabs.isNotEmpty ? offersData.tabs.first : _selectedTab;

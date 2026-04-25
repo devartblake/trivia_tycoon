@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../game/providers/collection_items_providers.dart';
@@ -302,13 +303,25 @@ class CollectionItemCard extends ConsumerWidget {
                       child: imagePathAsync.when(
                         data: (imagePath) {
                           if (imagePath != null && item.isUnlocked) {
-                            return Image.file(
-                              File(imagePath),
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return _buildPlaceholder(theme, rarityColor);
-                              },
-                            );
+                            return kIsWeb
+                                ? Image.asset(
+                                    'assets/images/avatar_placeholder.png',
+                                    fit: BoxFit.cover,
+                                    errorBuilder:
+                                        (context, error, stackTrace) {
+                                      return _buildPlaceholder(
+                                          theme, rarityColor);
+                                    },
+                                  )
+                                : Image.file(
+                                    File(imagePath),
+                                    fit: BoxFit.cover,
+                                    errorBuilder:
+                                        (context, error, stackTrace) {
+                                      return _buildPlaceholder(
+                                          theme, rarityColor);
+                                    },
+                                  );
                           } else {
                             return _buildLockedPlaceholder(theme);
                           }

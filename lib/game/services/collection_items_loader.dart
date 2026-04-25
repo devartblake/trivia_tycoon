@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -40,6 +41,7 @@ class CollectionItemsLoader {
   Future<List<CollectionItem>> loadFromLocalFile({
     String fileName = 'collection_items.json',
   }) async {
+    if (kIsWeb) return const [];
     try {
       final dir = await _collectionImagesDir;
       final file = File(p.join(dir.path, fileName));
@@ -66,6 +68,7 @@ class CollectionItemsLoader {
     List<CollectionItem> items, {
     String fileName = 'collection_items.json',
   }) async {
+    if (kIsWeb) return;
     try {
       final dir = await _collectionImagesDir;
       final file = File(p.join(dir.path, fileName));
@@ -140,6 +143,7 @@ class CollectionItemsLoader {
     List<int> imageBytes, {
     String extension = 'png',
   }) async {
+    if (kIsWeb) return;
     try {
       final dir = await _collectionImagesDir;
       final file = File(p.join(dir.path, '$itemId.$extension'));

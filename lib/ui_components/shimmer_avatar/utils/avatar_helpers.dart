@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// Avatar helper utilities
@@ -68,6 +69,6 @@ class AvatarHelpers {
     if (path == null || path.isEmpty) return false;
     return path.startsWith('assets/') ||
         path.startsWith('http') ||
-        File(path).existsSync();
+        (kIsWeb ? false : File(path).existsSync());
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -59,6 +60,15 @@ class AvatarContent extends StatelessWidget {
   }
 
   Widget _buildFileImage() {
+    if (kIsWeb) {
+      return Image.asset(
+        'assets/images/avatar_placeholder.png',
+        fit: BoxFit.cover,
+        width: radius * 2,
+        height: radius * 2,
+        errorBuilder: (context, error, stackTrace) => _buildFallbackAvatar(),
+      );
+    }
     return Image.file(
       File(avatarPath!),
       fit: BoxFit.cover,

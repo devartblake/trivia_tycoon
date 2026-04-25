@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:file_picker/file_picker.dart';
 import '../../../core/services/settings/app_settings.dart';
@@ -8,6 +9,7 @@ import '../models/spin_system_models.dart';
 class PrizeLogExportService {
   /// Export as JSON file
   static Future<File> exportToFile(List<PrizeEntry> entries) async {
+    if (kIsWeb) throw UnsupportedError('File export is not supported on web.');
     final jsonString = jsonEncode(entries.map((e) => e.toJson()).toList());
     final dir = await getApplicationDocumentsDirectory();
     final file = File('${dir.path}/prize_log_backup.json');
@@ -16,6 +18,7 @@ class PrizeLogExportService {
 
   /// Import from JSON file and append to prize log
   static Future<void> importFromFile() async {
+    if (kIsWeb) throw UnsupportedError('File export is not supported on web.');
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['json'],
@@ -36,6 +39,7 @@ class PrizeLogExportService {
   }
 
   static Future<File> exportToCsv(List<PrizeEntry> entries) async {
+    if (kIsWeb) throw UnsupportedError('File export is not supported on web.');
     final buffer = StringBuffer();
     buffer.writeln("Prize,Timestamp");
     for (final e in entries) {
