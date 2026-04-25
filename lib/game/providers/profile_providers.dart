@@ -6,6 +6,7 @@ library;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/manager/currency_manager.dart';
+import '../../core/models/user_wallet_model.dart';
 import '../../game/controllers/coin_balance_notifier.dart';
 import '../../game/controllers/energy_notifier.dart';
 import '../../game/controllers/challenge_lives_notifier.dart';
@@ -21,6 +22,33 @@ import '../../game/services/referral_storage_service.dart';
 import '../../core/services/social/backend_profile_social_service.dart';
 import 'core_providers.dart';
 import 'game_providers.dart';
+
+// ---------------------------------------------------------------------------
+// Wallet (server-authoritative)
+// ---------------------------------------------------------------------------
+
+/// Fetches the authoritative wallet balance from GET /users/me/wallet.
+/// Field mapping: credits→coins, neuralXp→xp, synapseShards→diamonds.
+final walletProvider = FutureProvider<UserWallet>((ref) async {
+  try {
+    final api = ref.read(apiServiceProvider);
+    final json = await api.get('/users/me/wallet');
+    return UserWallet.fromJson(json);
+  } catch (_) {
+    return UserWallet.empty;
+  }
+});
+
+/// Listens to [walletProvider] and keeps [coinBalanceProvider] in sync with
+/// the server-authoritative credit balance. Activate by reading this provider
+/// once at app startup (ProviderScope override or ref.read in main).
+final walletSyncProvider = Provider<void>((ref) {
+  ref.listen<AsyncValue<UserWallet>>(walletProvider, (_, next) {
+    next.whenData((wallet) {
+      ref.read(coinBalanceProvider.notifier).set(wallet.coins);
+    });
+  });
+});
 
 // ---------------------------------------------------------------------------
 // Currency

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../game/models/question_model.dart';
@@ -31,6 +32,12 @@ class _FileImportExportScreenState
   List<Map<String, dynamic>> _datasetStatuses = const [];
 
   Future<void> _importFromFile() async {
+    if (kIsWeb) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('File operations are not supported on web.')),
+      );
+      return;
+    }
     setState(() {
       _status = 'Picking file...';
       _isProcessing = true;
@@ -94,6 +101,12 @@ class _FileImportExportScreenState
   }
 
   Future<void> _exportToFile() async {
+    if (kIsWeb) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('File operations are not supported on web.')),
+      );
+      return;
+    }
     if (_importedQuestions.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
@@ -71,6 +72,7 @@ class AvatarPackageImage extends StatelessWidget {
   }
 
   bool _isFilePath(String path) {
+    if (kIsWeb) return false;
     return path.startsWith('/') ||
         path.contains('/data/user/') ||
         path.contains('/storage/emulated/') ||

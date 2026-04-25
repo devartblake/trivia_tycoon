@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter/material.dart';
 
@@ -115,8 +116,11 @@ class _ShimmerAvatarState extends State<ShimmerAvatar>
           },
         );
       } else {
-        return Image.file(
-          File(widget.avatarPath!),
+        return Image(
+          image: kIsWeb
+              ? const AssetImage('assets/images/avatar_placeholder.png')
+                  as ImageProvider
+              : FileImage(File(widget.avatarPath!)),
           fit: BoxFit.cover,
           width: widget.radius * 2,
           height: widget.radius * 2,

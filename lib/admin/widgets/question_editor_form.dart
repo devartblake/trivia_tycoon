@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
@@ -108,7 +109,7 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
   Future<void> _pickImage() async {
     final picked = await _picker.pickImage(source: ImageSource.gallery);
     if (picked != null) {
-      setState(() => _selectedImage = File(picked.path));
+      if (!kIsWeb) setState(() => _selectedImage = File(picked.path));
     }
   }
 

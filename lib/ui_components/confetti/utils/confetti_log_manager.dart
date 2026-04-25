@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 
 class ConfettiLogManager {
   static Future<void> exportLog(String logData) async {
+    if (kIsWeb) return;
     final directory = await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/confetti_performance_log.txt');
 

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:trivia_tycoon/core/animations/animation_manager.dart';
@@ -84,7 +85,7 @@ class _ProfileImagePickerState extends State<ProfileImagePicker>
       if (!mounted) return;
 
       if (picked != null) {
-        widget.onImageSelected(File(picked.path));
+        if (!kIsWeb) widget.onImageSelected(File(picked.path));
         await _animationController.reverse();
         if (mounted) {
           Navigator.of(context).pop();

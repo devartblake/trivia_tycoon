@@ -22,6 +22,7 @@ import '../../core/services/analytics/config_service.dart';
 import '../../core/services/api_service.dart';
 import '../../core/services/auth_api_client.dart';
 import '../../core/services/auth_http_client.dart';
+import '../../core/networking/tycoon_api_client_enhanced.dart';
 import '../../core/services/auth_token_store.dart';
 import '../../core/services/auth_service.dart' as core_auth;
 import '../../core/services/device_id_service.dart';
@@ -177,6 +178,16 @@ final wsClientProvider = Provider<WsClient>((ref) {
 
 final audioAssetServiceProvider = Provider<AudioAssetService>((ref) {
   return AudioAssetService(ref.watch(synaptixApiClientProvider));
+});
+
+/// Unified REST + WebSocket client.
+/// Connect the WebSocket after login: `ref.read(tycoonApiClientEnhancedProvider).connectWs()`.
+final tycoonApiClientEnhancedProvider =
+    Provider<TycoonApiClientEnhanced>((ref) {
+  return TycoonApiClientEnhanced(
+    api: ref.watch(apiServiceProvider),
+    ws: ref.watch(wsClientProvider),
+  );
 });
 
 final loginManagerProvider = Provider<LoginManager>((ref) {

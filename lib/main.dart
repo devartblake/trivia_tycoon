@@ -90,6 +90,15 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
     }
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Activate wallet sync whenever the user is (or becomes) logged in so
+    // coinBalanceProvider is always seeded with the server-authoritative value.
+    final loggedIn = ref.read(isLoggedInSyncProvider);
+    if (loggedIn) ref.read(walletSyncProvider);
+  }
+
   Future<void> _init() async {
     try {
       final data = await AppInit.initialize();
@@ -257,6 +266,7 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
       // Restore auth state from saved user session
       if (result.restoredAuthState) {
         ref.read(isLoggedInSyncProvider.notifier).state = true;
+        ref.read(walletSyncProvider); // activate server wallet → coinBalance sync
         LogManager.info('[Recovery] Auth state restored: logged in',
             source: '_SynaptixAppState');
       }

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_3d_controller/flutter_3d_controller.dart';
 
@@ -216,11 +217,18 @@ class _DepthCard3DState extends State<DepthCard3D> {
       );
     }
 
-    return Image.file(
-      File(path),
-      fit: BoxFit.cover,
-      width: double.infinity,
-      height: double.infinity,
-    );
+    return kIsWeb
+        ? const Image(
+            image: AssetImage('assets/images/avatar_placeholder.png'),
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          )
+        : Image.file(
+            File(path),
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          );
   }
 }

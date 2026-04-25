@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../../game/models/avatar_package_models.dart';
 
@@ -64,8 +65,11 @@ class AvatarImageCard extends StatelessWidget {
 
       case AvatarSource.file:
         // File from installed package
-        return Image.file(
-          File(avatarRef.path),
+        return Image(
+          image: kIsWeb
+              ? const AssetImage('assets/images/avatar_placeholder.png')
+                  as ImageProvider
+              : FileImage(File(avatarRef.path)),
           fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) {
             return _buildErrorWidget();

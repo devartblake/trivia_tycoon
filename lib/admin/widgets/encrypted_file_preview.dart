@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import '../../admin/controllers/encryption_controller.dart';
@@ -16,6 +17,7 @@ class _EncryptedFilePreviewState extends State<EncryptedFilePreview> {
   bool _isProcessing = false;
 
   Future<void> _pickAndDecryptFile() async {
+    if (kIsWeb) return;
     setState(() => _isProcessing = true);
 
     try {

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
@@ -42,6 +43,7 @@ class ProfileAvatarController extends ChangeNotifier {
 
   // 🎯 Load image from gallery or camera with square crop applied
   Future<void> pickImage(ImageSource source) async {
+    if (kIsWeb) return;
     final picked = await _picker.pickImage(source: source);
     if (picked == null) return;
 
@@ -92,6 +94,7 @@ class ProfileAvatarController extends ChangeNotifier {
 
   // 🧠 Load saved image path from Hive
   Future<void> loadProfileImage() async {
+    if (kIsWeb) return;
     final path = await keyValueStorage.getString(_profileImageKey);
     if (path != null && File(path).existsSync()) {
       _imageFile = File(path);

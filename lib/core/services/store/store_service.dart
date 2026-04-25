@@ -8,6 +8,7 @@ import '../../models/store/store_gift_model.dart';
 import '../../models/store/premium_store_model.dart';
 import '../../models/store/store_stock_ui_model.dart';
 import '../../models/store/daily_store_model.dart';
+import '../../models/store/store_offer_model.dart';
 
 class StoreService {
   final ApiService apiService;
@@ -74,9 +75,25 @@ class StoreService {
     }
   }
 
-  // /store/hub and /store/gifts are not implemented in the backend.
-  // Serve static fallback data directly until backend adds these endpoints.
-  Future<StoreHubData> getHubData() async => StoreHubData.fallback;
+  Future<StoreHubData> getHubData() async {
+    try {
+      final json = await apiService.get('/store/hub');
+      return StoreHubData.fromJson(json);
+    } catch (e) {
+      LogManager.debug('getHubData failed, using fallback: $e');
+      return StoreHubData.fallback;
+    }
+  }
+
+  Future<StoreOffersData> getSpecialOffers() async {
+    try {
+      final json = await apiService.get('/store/special-offers');
+      return StoreOffersData.fromJson(json);
+    } catch (e) {
+      LogManager.debug('getSpecialOffers failed, using fallback: $e');
+      return StoreOffersData.fallback;
+    }
+  }
 
   /// Fetch the global daily rotating store.
   ///

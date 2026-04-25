@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:file_picker/file_picker.dart';
@@ -178,6 +179,12 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
   }
 
   Future<void> _importQuestions() async {
+    if (kIsWeb) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('File operations are not supported on web.')),
+      );
+      return;
+    }
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['json'],
@@ -211,6 +218,12 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
   }
 
   Future<void> _exportQuestions() async {
+    if (kIsWeb) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('File operations are not supported on web.')),
+      );
+      return;
+    }
     final jsonString = json.encode(_questions.map((q) => q.toJson()).toList());
     final filePath = await FilePicker.platform.saveFile(
       dialogTitle: 'Export Questions as JSON',
