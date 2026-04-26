@@ -56,11 +56,10 @@ class SkillTreeView extends ConsumerStatefulWidget {
 class _SkillTreeViewState extends ConsumerState<SkillTreeView>
     with SingleTickerProviderStateMixin {
   final TransformationController _transform = TransformationController();
-  static const double _nodeRadius = 40;
-
-  // IMPORTANT: this must match the "size" you used when generating positions via hexToPixel
-  // in _overrideWithHexLayout. You used 200.0 there, so use the same here to recover coords.
-  static const double _layoutHexRadius = 200.0; // pointy-top axial radius
+  // Rendered node half-size in screen pixels.
+  static const double _nodeRadius = 65;
+  // Must match hexSize in SkillTreeController._computeLayout (110).
+  static const double _layoutHexRadius = 110.0;
 
   bool _showTree = true;
 
@@ -75,7 +74,7 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
       final size = box?.size ?? const Size(400, 700);
       _transform.value = vmath.Matrix4.identity()
         ..translate(size.width / 2.0, size.height / 2.0)
-        ..scale(0.65, 0.65);
+        ..scale(0.8, 0.8);
     });
   }
 
@@ -91,7 +90,7 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
     setState(() {
       _transform.value = vmath.Matrix4.identity()
         ..translate(size.width / 2.0, size.height / 2.0)
-        ..scale(0.65, 0.65);
+        ..scale(0.8, 0.8);
     });
   }
 
@@ -304,24 +303,17 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
                                 if (node == null)
                                   return const SizedBox.shrink();
 
-                                final isParent =
-                                    state.positions.containsKey(nodeId);
-                                final size = isParent
-                                    ? SkillNodeSize.large
-                                    : SkillNodeSize.medium;
-                                final effectiveRadius =
-                                    isParent ? _nodeRadius : _nodeRadius * 0.75;
-
                                 return Positioned(
-                                  left: screenPos.dx - effectiveRadius,
-                                  top: screenPos.dy - effectiveRadius,
-                                  width: effectiveRadius * 2,
-                                  height: effectiveRadius * 2,
+                                  left: screenPos.dx - _nodeRadius,
+                                  top: screenPos.dy - _nodeRadius,
+                                  width: _nodeRadius * 2,
+                                  height: _nodeRadius * 2,
                                   child: SkillNodeWidget(
                                     node: node,
                                     isUnlocked: node.unlocked,
                                     isSelected: state.selectedId == node.id,
-                                    size: size,
+                                    size: SkillNodeSize.large,
+                                    radius: _nodeRadius,
                                     categoryColor: SkillTreeCategoryColors
                                             .categoryColors[node.category] ??
                                         Colors.grey,
