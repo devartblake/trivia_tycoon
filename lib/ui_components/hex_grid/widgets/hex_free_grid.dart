@@ -159,7 +159,8 @@ class _HexagonFreeGridState extends State<HexagonFreeGrid>
 
         if (!useCoords && !useItems) return const SizedBox.shrink();
 
-        if (useCoords && widget.buildTile == null) {
+        // coords-mode: needs at least one of buildTile or buildChild
+        if (useCoords && widget.buildTile == null && widget.buildChild == null) {
           return const SizedBox.shrink();
         }
         if (useItems && widget.buildItem == null) {
@@ -266,7 +267,7 @@ class _HexagonFreeGridState extends State<HexagonFreeGrid>
       final left = center.dx - baseTileSize.width / 2;
       final top = center.dy - baseTileSize.height / 2;
 
-      final bg = widget.buildTile!(placement.coord!);
+      final bg = widget.buildTile?.call(placement.coord!);
       final fg = widget.buildChild?.call(placement.coord!);
 
       results.add(Positioned(
@@ -276,7 +277,7 @@ class _HexagonFreeGridState extends State<HexagonFreeGrid>
         height: baseTileSize.height,
         child: Stack(
           children: [
-            Positioned.fill(child: bg),
+            if (bg != null) Positioned.fill(child: bg),
             if (fg != null) Positioned.fill(child: fg),
           ],
         ),
