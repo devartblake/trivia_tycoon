@@ -57,9 +57,9 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
     with SingleTickerProviderStateMixin {
   final TransformationController _transform = TransformationController();
   // Rendered node half-size in screen pixels.
-  static const double _nodeRadius = 65;
-  // Must match hexSize in SkillTreeController._computeLayout (110).
-  static const double _layoutHexRadius = 110.0;
+  static const double _nodeRadius = 72;
+  // Must match hexSize in SkillTreeController._computeLayout (120).
+  static const double _layoutHexRadius = 120.0;
 
   bool _showTree = true;
 

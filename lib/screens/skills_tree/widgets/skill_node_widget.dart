@@ -110,43 +110,76 @@ class SkillNodeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final base = categoryColor;
-    final bg = _tint(base!, 0.12); // subtle fill
-    final glow = _tint(base, 0.55); // selected/unlocked glow
-    final textColor = labelColor ?? Colors.white;
-
-    // Available = prerequisites met but not yet unlocked
+    final base = categoryColor ?? Colors.grey;
     final isAvailable = node.available && !isUnlocked;
 
-    // Border colour: amber for available, glow for unlocked/selected, muted otherwise
-    final border = isAvailable
+    // Fill: pastel category tint, stronger when selected/unlocked
+    final fillOpacity =
+        isSelected ? 0.22 : (isUnlocked ? 0.18 : 0.10);
+    final fillColor = base.withValues(alpha: fillOpacity);
+
+    // Border: amber for available, category-color otherwise
+    final borderColor = isAvailable
         ? const Color(0xFFFFB300).withValues(alpha: 0.80)
-        : isUnlocked || isSelected
-            ? glow.withValues(alpha: 0.5)
-            : _tint(base, 0.30);
+        : base.withValues(
+            alpha: isSelected ? 0.90 : (isUnlocked ? 0.60 : 0.35));
+    final effectiveBorderWidth =
+        isSelected ? 2.0 : (isAvailable ? 2.5 : borderWidth);
 
-    // Elevation/glow rules
-    final elevation =
-        isSelected ? 8.0 : (isUnlocked ? 5.0 : (isAvailable ? 4.0 : 2.0));
+    // Cost number colour
+    final costColor = isUnlocked
+        ? base.withValues(alpha: 0.55)
+        : isSelected
+            ? base
+            : isAvailable
+                ? const Color(0xFFFFB300)
+                : base.withValues(alpha: 0.50);
 
-    // Content with flexible sizing
-    final title = Flexible(
-      flex: 2,
-      child: Text(
-        node.title,
-        textAlign: TextAlign.center,
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-        style: (titleStyle ??
-                TextStyle(
-                    fontSize: _titleFontSize, fontWeight: FontWeight.w600))
-            .copyWith(color: textColor),
-      ),
+    final costFontSize = _titleFontSize * 1.3;
+    final nameFontSize = _titleFontSize * 0.62;
+
+    // Abbreviated title — single line, max 11 chars
+    final abbrev = node.title.length > 11
+        ? '${node.title.substring(0, 10)}…'
+        : node.title;
+
+    final content = Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          '+${node.cost}',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: costFontSize,
+            fontWeight: FontWeight.bold,
+            color: costColor,
+            height: 1.0,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          abbrev,
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: nameFontSize,
+            fontWeight: FontWeight.w500,
+            color: Colors.white.withValues(alpha: 0.70),
+            height: 1.0,
+          ),
+        ),
+        if (isUnlocked) ...[
+          const SizedBox(height: 3),
+          Icon(
+            Icons.check,
+            color: Colors.greenAccent.withValues(alpha: 0.65),
+            size: nameFontSize + 2,
+          ),
+        ],
+      ],
     );
-
-    // Create status widget with icon instead of text
-    final statusIcon = _getStatusIcon(
-        node.unlocked, isAvailable, textColor, _subtitleFontSize);
 
     final badge = cooldownService.isOnCooldown(node.id)
         ? Positioned(
@@ -161,68 +194,28 @@ class SkillNodeWidget extends StatelessWidget {
           )
         : const SizedBox.shrink();
 
-    final mainIcon = iconImage == null
-        ? Icon(Icons.auto_awesome,
-            color: textColor.withValues(alpha: 0.85), size: _iconSize)
-        : RawImage(
-            image: iconImage,
-            width: _iconSize,
-            height: _iconSize,
-            fit: BoxFit.contain);
-
-    final body = Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize:
-          MainAxisSize.min, // Important: Don't expand beyond needed space
-      children: [
-        mainIcon,
-        SizedBox(height: _iconSpacing),
-        title,
-        SizedBox(height: _statusSpacing),
-        statusIcon,
-      ],
-    );
-
-    // Create gradient for selected/unlocked states
-    final gradient = isSelected || isUnlocked
-        ? LinearGradient(
-            colors: [
-              bg,
-              glow.withValues(alpha: 0.2),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          )
-        : null;
     Widget hexWidget = Stack(
       children: [
-        // Hexagon background
         Hexagon(
           radius: _effectiveRadius,
           orientation: orientation,
           cornerRadius: cornerRadius,
-          elevation: elevation,
-          borderWidth: isAvailable ? 2.5 : borderWidth,
-          color: gradient == null ? bg : null,
-          gradient: gradient,
-          borderColor: border,
-          shadowColor: isSelected || isUnlocked
-              ? glow.withValues(alpha: 0.35)
-              : isAvailable
-                  ? const Color(0xFFFFB300).withValues(alpha: 0.25)
-                  : const Color(0x33000000),
+          elevation: 0,
+          borderWidth: effectiveBorderWidth,
+          color: fillColor,
+          borderColor: borderColor,
+          shadowColor: Colors.transparent,
           onTap: onTap,
           child: Padding(
             padding: EdgeInsets.all(_effectiveRadius * _paddingFactor),
-            child: Center(child: body),
+            child: Center(child: content),
           ),
         ),
-        // Cooldown badge overlay if any
         badge,
       ],
     );
 
-    // Amber pulse animation for available nodes
+    // Amber pulse for available nodes
     if (isAvailable) {
       hexWidget =
           hexWidget.animate(onPlay: (c) => c.repeat(reverse: true)).custom(
@@ -245,6 +238,28 @@ class SkillNodeWidget extends StatelessWidget {
               );
     }
 
+    // Subtle category glow for selected nodes
+    if (isSelected) {
+      hexWidget =
+          hexWidget.animate(onPlay: (c) => c.repeat(reverse: true)).custom(
+                duration: 1500.ms,
+                curve: Curves.easeInOut,
+                builder: (_, value, child) => DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(cornerRadius + 4),
+                    boxShadow: [
+                      BoxShadow(
+                        color: base.withValues(alpha: 0.28 * value),
+                        blurRadius: 18,
+                        spreadRadius: 3,
+                      ),
+                    ],
+                  ),
+                  child: child,
+                ),
+              );
+    }
+
     return GestureDetector(
       onTap: onTap,
       child: hexWidget,
@@ -253,25 +268,7 @@ class SkillNodeWidget extends StatelessWidget {
 
   Widget _getStatusIcon(
       bool unlocked, bool isAvailable, Color textColor, double fontSize) {
-    if (unlocked) {
-      return Icon(
-        Icons.check_circle,
-        color: Colors.green.withValues(alpha: 0.8),
-        size: fontSize + 4,
-      );
-    } else if (isAvailable) {
-      return Icon(
-        Icons.lock_open,
-        color: const Color(0xFFFFB300).withValues(alpha: 0.9),
-        size: fontSize + 2,
-      );
-    } else {
-      return Icon(
-        Icons.lock,
-        color: Colors.white24,
-        size: fontSize + 2,
-      );
-    }
+    return const SizedBox.shrink();
   }
 
   Color _tint(Color c, double a) => c.withValues(alpha: a);
