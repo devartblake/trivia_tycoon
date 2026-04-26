@@ -38,7 +38,7 @@ class TycoonApiClientEnhanced {
   void send(WsEnvelope message) => ws.send(message);
 
   /// Send a message that requires an ACK; retried up to [WsReliability._maxRetries] times.
-  void sendReliable(WsEnvelope message) => ws.sendReliable(message);
+  void sendReliable(WsEnvelope message) => ws.send(message, requireAck: true);
 
   /// Broadcast stream of incoming envelopes.
   Stream<WsEnvelope> get messages => ws.messageStream;

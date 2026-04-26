@@ -193,8 +193,54 @@ class StoreHubData {
   });
 
   factory StoreHubData.fromJson(Map<String, dynamic> json) {
+    // Backend format: { featured: [...], daily: [...], categories: [...] }
+    // Legacy format:  { sections: [...], featured: {}, stats: {} }
+    final rawFeaturedField = json['featured'];
+    final isBackendFormat = rawFeaturedField is List || json['categories'] != null;
+
+    if (isBackendFormat) {
+      // New backend format from GET /store/hub
+      final featuredList = (rawFeaturedField as List?)?.whereType<Map>().toList() ?? [];
+      final dailyList = (json['daily'] as List?)?.whereType<Map>().toList() ?? [];
+      final categories = (json['categories'] as List?)
+              ?.map((c) => c.toString())
+              .toList() ??
+          const <String>[];
+
+      // Map first featured catalog item to FeaturedItemData for the carousel.
+      FeaturedItemData? featured;
+      if (featuredList.isNotEmpty) {
+        final first = Map<String, dynamic>.from(featuredList.first);
+        featured = FeaturedItemData(
+          id: first['sku']?.toString() ?? '',
+          title: first['name']?.toString() ?? '',
+          subtitle: first['description']?.toString() ?? '',
+          icon: resolveIcon(first['itemType']?.toString(), fallback: Icons.auto_awesome),
+          gradient: resolveGradient(null),
+          buttonText: 'View',
+          sku: first['sku']?.toString(),
+          expiresAt: first['nextResetAt'] != null
+              ? DateTime.tryParse(first['nextResetAt'].toString())
+              : null,
+        );
+      }
+
+      final fallback = StoreHubData.fallback;
+      return StoreHubData(
+        sections: fallback.sections,
+        featured: featured ?? fallback.featured,
+        stats: StoreHubStats(
+          totalItems: (featuredList.length + dailyList.length).toString(),
+          activeOffers: dailyList.length.toString(),
+          newToday: dailyList.length.toString(),
+        ),
+        flashSaleMessage: null,
+      );
+    }
+
+    // Legacy format.
     final rawSections = json['sections'] as List? ?? [];
-    final rawFeatured = json['featured'] as Map<String, dynamic>?;
+    final rawFeatured = rawFeaturedField as Map<String, dynamic>?;
     final rawStats = json['stats'] as Map<String, dynamic>? ?? {};
 
     return StoreHubData(

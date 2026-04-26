@@ -33,14 +33,31 @@ class OfferItem {
   });
 
   factory OfferItem.fromJson(Map<String, dynamic> json) {
+    // Backend flash-sale format: salePriceCoins / originalPriceCoins / discountPercent.
+    // Legacy format: price / originalPrice / discount.
+    final salePriceCoins = (json['salePriceCoins'] as num?)?.toInt();
+    final originalPriceCoins = (json['originalPriceCoins'] as num?)?.toInt();
+    final discountPercent = (json['discountPercent'] as num?)?.toInt();
+
+    final priceStr = salePriceCoins != null
+        ? salePriceCoins.toString()
+        : (json['price']?.toString() ?? '0');
+    final originalPriceStr = originalPriceCoins != null
+        ? originalPriceCoins.toString()
+        : json['originalPrice']?.toString();
+    final discount = discountPercent ?? json['discount'] as int?;
+
+    // Flash sales from backend use sku as id and default to 'Limited Time' tab.
+    final id = json['sku'] as String? ?? json['id'] as String? ?? '';
+
     return OfferItem(
-      id: json['id'] as String? ?? '',
+      id: id,
       tab: json['tab'] as String? ?? 'Limited Time',
-      title: json['title'] as String? ?? '',
+      title: json['name'] as String? ?? json['title'] as String? ?? '',
       description: json['description'] as String? ?? '',
-      price: json['price']?.toString() ?? '0.00',
-      originalPrice: json['originalPrice']?.toString(),
-      discount: json['discount'] as int?,
+      price: priceStr,
+      originalPrice: originalPriceStr,
+      discount: discount,
       icon: resolveIcon(json['icon'] as String?, fallback: Icons.local_offer),
       gradient: resolveGradient(json['gradient'] as List?),
       buttonText: json['buttonText'] as String? ?? 'Buy Now',
@@ -81,14 +98,14 @@ class FeaturedOffer {
   }
 
   factory FeaturedOffer.fromJson(Map<String, dynamic> json) {
+    // Backend uses endsAt; legacy uses expiresAt.
+    final expiresRaw = json['endsAt'] as String? ?? json['expiresAt'] as String?;
     return FeaturedOffer(
       badgeText: json['badgeText'] as String? ?? 'SALE',
       headline: json['headline'] as String? ?? '',
       subtitle: json['subtitle'] as String? ?? '',
       description: json['description'] as String? ?? '',
-      expiresAt: json['expiresAt'] != null
-          ? DateTime.tryParse(json['expiresAt'] as String)
-          : null,
+      expiresAt: expiresRaw != null ? DateTime.tryParse(expiresRaw) : null,
       buttonText: json['buttonText'] as String? ?? 'Claim Offer',
       sku: json['sku'] as String?,
     );

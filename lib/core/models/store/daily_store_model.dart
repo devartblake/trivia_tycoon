@@ -26,19 +26,40 @@ class DailyStoreItem {
   });
 
   factory DailyStoreItem.fromJson(Map<String, dynamic> json) {
+    // Backend sends priceCoins/priceDiamonds (flat). Fallback to legacy price/currency.
+    final priceCoins = (json['priceCoins'] as num?)?.toInt();
+    final price = priceCoins ?? (json['price'] as num?)?.toInt() ?? 0;
+    final currency = priceCoins != null ? 'coins' : (json['currency'] as String? ?? 'coins');
+
+    // Build stock state from flat backend fields or legacy nested stock object.
+    final StoreStockState stock;
+    if (json['stock'] != null) {
+      stock = StoreStockState.fromJson(Map<String, dynamic>.from(json['stock'] as Map));
+    } else {
+      stock = StoreStockState(
+        policyType: (json['resetInterval'] as String?) != null ? 'per_user' : 'unlimited',
+        maxQuantity: (json['maxQuantity'] as num?)?.toInt(),
+        remainingQuantity: (json['remainingQuantity'] as num?)?.toInt(),
+        resetInterval: json['resetInterval'] as String?,
+        nextResetAt: json['nextResetAt'] != null
+            ? DateTime.tryParse(json['nextResetAt'] as String)
+            : null,
+        isSoldOut: json['soldOut'] as bool? ?? false,
+        isUnlimited: (json['remainingQuantity'] as num?)?.toInt() == -1 ||
+            json['resetInterval'] == null,
+      );
+    }
+
     return DailyStoreItem(
       sku: json['sku'] as String? ?? json['id'] as String? ?? '',
-      title: json['title'] as String? ?? json['name'] as String? ?? '',
+      title: json['name'] as String? ?? json['title'] as String? ?? '',
       description: json['description'] as String? ?? '',
-      price: (json['price'] as num?)?.toInt() ?? 0,
-      currency: json['currency'] as String? ?? 'coins',
+      price: price,
+      currency: currency,
       iconPath: json['iconPath'] as String?,
-      category: json['category'] as String?,
+      category: json['itemType'] as String? ?? json['category'] as String?,
       owned: json['owned'] as bool? ?? false,
-      stock: json['stock'] != null
-          ? StoreStockState.fromJson(
-              Map<String, dynamic>.from(json['stock'] as Map))
-          : StoreStockState.unlimited,
+      stock: stock,
     );
   }
 
@@ -75,8 +96,10 @@ class DailyStoreData {
 
   factory DailyStoreData.fromJson(Map<String, dynamic> json) {
     final rawItems = json['items'] as List? ?? [];
-    final resetAt = json['nextResetAt'] != null
-        ? DateTime.parse(json['nextResetAt'] as String).toUtc()
+    // Backend sends "resetsAt"; fallback to legacy "nextResetAt".
+    final resetRaw = json['resetsAt'] as String? ?? json['nextResetAt'] as String?;
+    final resetAt = resetRaw != null
+        ? DateTime.parse(resetRaw).toUtc()
         : DateTime.now().toUtc().add(const Duration(hours: 24));
 
     return DailyStoreData(
