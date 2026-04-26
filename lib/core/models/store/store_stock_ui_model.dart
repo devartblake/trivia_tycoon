@@ -136,25 +136,73 @@ class PlayerStoreItem {
   factory PlayerStoreItem.fromJson(Map<String, dynamic> json) {
     final stockJson = json['stock'];
     final availJson = json['availability'];
+
+    // Flat backend format (GET /store/catalog/{playerId}) sends priceCoins/priceDiamonds,
+    // availabilityState string, stockState string, and stock fields directly.
+    final priceCoins = (json['priceCoins'] as num?)?.toInt();
+    final price = priceCoins ?? (json['price'] as num?)?.toInt() ?? 0;
+    final currency = priceCoins != null ? 'coins' : (json['currency'] ?? 'coins').toString();
+
+    // Build stock from nested object (legacy) or flat fields (backend).
+    final StoreStockState stock;
+    if (stockJson is Map) {
+      stock = StoreStockState.fromJson(Map<String, dynamic>.from(stockJson));
+    } else {
+      final remainingQty = (json['remainingQuantity'] as num?)?.toInt();
+      stock = StoreStockState(
+        policyType: _stockStateToPolicy(json['stockState'] as String?),
+        maxQuantity: (json['maxQuantity'] as num?)?.toInt(),
+        remainingQuantity: remainingQty,
+        resetInterval: json['resetInterval'] as String?,
+        lastResetAt: json['lastResetAt'] != null
+            ? DateTime.tryParse(json['lastResetAt'].toString())
+            : null,
+        nextResetAt: json['nextResetAt'] != null
+            ? DateTime.tryParse(json['nextResetAt'].toString())
+            : null,
+        isSoldOut: json['soldOut'] as bool? ?? false,
+        isUnlimited: remainingQty == -1 || json['stockState'] == 'unlimited',
+        isOneTimePurchase: json['availabilityState'] == 'already_owned',
+      );
+    }
+
+    // Build availability from nested object (legacy) or flat availabilityState (backend).
+    final StoreAvailabilityState availability;
+    if (availJson is Map) {
+      availability = StoreAvailabilityState.fromJson(Map<String, dynamic>.from(availJson));
+    } else {
+      final availState = json['availabilityState'] as String?;
+      final isAvail = json['isAvailable'] as bool? ?? (availState == 'available');
+      final discountPct = (json['discountPercent'] as num?)?.toInt() ?? 0;
+      availability = StoreAvailabilityState(
+        isVisible: true,
+        isPurchasable: isAvail && availState != 'already_owned',
+        isFlashSale: discountPct > 0,
+        saleEndsAt: null,
+      );
+    }
+
     return PlayerStoreItem(
       sku: (json['sku'] ?? json['id'] ?? '').toString(),
-      title: (json['title'] ?? json['name'] ?? '').toString(),
+      title: (json['name'] ?? json['title'] ?? '').toString(),
       description: (json['description'] ?? '').toString(),
-      type: (json['type'] ?? '').toString(),
-      price: (json['price'] as num?)?.toInt() ?? 0,
-      currency: (json['currency'] ?? 'coins').toString(),
-      stock: stockJson is Map
-          ? StoreStockState.fromJson(Map<String, dynamic>.from(stockJson))
-          : const StoreStockState(),
-      availability: availJson is Map
-          ? StoreAvailabilityState.fromJson(
-              Map<String, dynamic>.from(availJson))
-          : const StoreAvailabilityState(),
+      type: (json['itemType'] ?? json['type'] ?? '').toString(),
+      price: price,
+      currency: currency,
+      stock: stock,
+      availability: availability,
       iconPath: json['iconPath']?.toString(),
       thumbnailUrl: json['thumbnailUrl']?.toString(),
       owned: json['owned'] as bool? ?? false,
       isFeatured: json['isFeatured'] as bool? ?? false,
     );
+  }
+
+  static String _stockStateToPolicy(String? stockState) {
+    return switch (stockState) {
+      'in_stock' || 'low_stock' || 'out_of_stock' => 'per_user',
+      _ => 'unlimited',
+    };
   }
 
   bool get isFree => price == 0 || currency == 'free';
