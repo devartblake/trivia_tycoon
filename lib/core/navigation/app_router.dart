@@ -1133,7 +1133,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         },
       ),
       GoRoute(
-        path: '/skill-tree/:branchId',
+        path: '/skill-branch/:branchId',
+        name: 'skillBranch',
         builder: (context, state) => SkillBranchDetailScreen(
           branchId: state.pathParameters['branchId']!,
           initialStep: int.tryParse(state.uri.queryParameters['step'] ?? ''),

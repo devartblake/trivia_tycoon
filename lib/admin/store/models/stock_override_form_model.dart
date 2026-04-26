@@ -117,12 +117,16 @@ class FlashSaleFormModel {
   }
 
   factory FlashSaleFormModel.fromJson(Map<String, dynamic> json) {
+    // Backend (handoff 2026-04-26) uses startsAtUtc/endsAtUtc; legacy uses startTime/endTime.
+    final startRaw = json['startsAtUtc']?.toString() ?? json['startTime']?.toString();
+    final endRaw = json['endsAtUtc']?.toString() ?? json['endTime']?.toString();
+    final now = DateTime.now().toUtc();
     return FlashSaleFormModel(
-      saleId: json['saleId']?.toString() ?? json['id']?.toString(),
-      title: (json['title'] ?? '').toString(),
-      linkedSku: (json['linkedSku'] ?? json['sku'] ?? '').toString(),
-      startTime: DateTime.parse(json['startTime'].toString()),
-      endTime: DateTime.parse(json['endTime'].toString()),
+      saleId: json['id']?.toString() ?? json['saleId']?.toString(),
+      title: (json['title'] ?? json['reason'] ?? json['sku'] ?? '').toString(),
+      linkedSku: (json['sku'] ?? json['linkedSku'] ?? '').toString(),
+      startTime: startRaw != null ? DateTime.parse(startRaw) : now,
+      endTime: endRaw != null ? DateTime.parse(endRaw) : now.add(const Duration(days: 1)),
       purchaseCapPerUser: (json['purchaseCapPerUser'] as num?)?.toInt() ?? 1,
       discountPercent: (json['discountPercent'] as num?)?.toDouble(),
       discountAmount: (json['discountAmount'] as num?)?.toInt(),

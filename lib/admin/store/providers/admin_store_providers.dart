@@ -17,14 +17,28 @@ final adminStorePoliciesProvider =
 
 final adminStorePolicyProvider =
     FutureProvider.family<StockPolicyFormModel, String>((ref, sku) {
-  return ref.watch(adminStoreServiceProvider).fetchPolicy(sku);
+  // Re-use the list provider and filter — avoids an extra endpoint call.
+  return ref.watch(adminStorePoliciesProvider.future).then(
+        (policies) => policies.firstWhere(
+          (p) => p.sku == sku,
+          orElse: () => StockPolicyFormModel(sku: sku, itemTitle: '', itemType: ''),
+        ),
+      );
+});
+
+// ── Player Stock ──────────────────────────────────────────────────────────────
+
+final adminPlayerStockProvider =
+    FutureProvider.family<Map<String, dynamic>, String>((ref, playerId) async {
+  if (playerId.isEmpty) return const {};
+  return ref.watch(adminStoreServiceProvider).fetchPlayerStock(playerId);
 });
 
 // ── Reward Limits ─────────────────────────────────────────────────────────────
 
-final adminRewardLimitsProvider =
-    FutureProvider<List<RewardLimitFormModel>>((ref) {
-  return ref.watch(adminStoreServiceProvider).fetchRewardLimits();
+final adminRewardLimitProvider =
+    FutureProvider.family<RewardLimitFormModel, String>((ref, rewardId) {
+  return ref.watch(adminStoreServiceProvider).fetchRewardLimit(rewardId);
 });
 
 // ── Flash Sales ───────────────────────────────────────────────────────────────
@@ -34,18 +48,14 @@ final adminFlashSalesProvider =
   return ref.watch(adminStoreServiceProvider).fetchFlashSales();
 });
 
-// ── User Overrides ────────────────────────────────────────────────────────────
-
-final adminPlayerOverridesProvider =
-    FutureProvider.family<List<Map<String, dynamic>>, String>(
-        (ref, playerId) async {
-  if (playerId.isEmpty) return const [];
-  return ref.watch(adminStoreServiceProvider).fetchPlayerOverrides(playerId);
-});
-
 // ── Analytics ─────────────────────────────────────────────────────────────────
 
-final adminStoreAnalyticsProvider =
+final adminPurchaseAnalyticsProvider =
     FutureProvider<Map<String, dynamic>>((ref) {
-  return ref.watch(adminStoreServiceProvider).fetchAnalyticsSummary();
+  return ref.watch(adminStoreServiceProvider).fetchPurchaseAnalytics();
+});
+
+final adminStockResetHistoryProvider =
+    FutureProvider<Map<String, dynamic>>((ref) {
+  return ref.watch(adminStoreServiceProvider).fetchStockResetHistory();
 });
