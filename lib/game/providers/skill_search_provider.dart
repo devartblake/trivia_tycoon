@@ -45,7 +45,7 @@ class SkillSearchProvider implements SearchProvider {
               subtitle: '${group.title} > ${branch.title}',
               icon: _getSkillIcon(branch.branchId),
               color: group.accent,
-              navigationRoute: '/skill-tree/${branch.branchId}',
+              navigationRoute: '/skill-branch/${branch.branchId}',
               relevanceScore:
                   _calculateRelevance(queryLower, title, description),
               metadata: {

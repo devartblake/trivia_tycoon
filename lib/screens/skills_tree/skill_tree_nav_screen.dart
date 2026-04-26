@@ -48,7 +48,7 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
   void _deepLinkToBranchStep(String branchId,
       {int initialStep = 0, bool showPath = true}) {
     context.push(
-        '/skill-tree/$branchId?step=$initialStep&showPath=${showPath ? 1 : 0}');
+        '/skill-branch/$branchId?step=$initialStep&showPath=${showPath ? 1 : 0}');
   }
 
   Color parseHex(String hex, {Color fallback = const Color(0xFF555555)}) {
@@ -632,7 +632,7 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
         ),
         onTap: () {
           Navigator.of(context).pop();
-          context.push('/skill-tree/${result.branchId}?step=0&showPath=1');
+          context.push('/skill-branch/${result.branchId}?step=0&showPath=1');
         },
       ),
     );
@@ -652,140 +652,64 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
     context.push('/skill-tree/$groupId');
   }
 
+  /// Compute live progress for a branch category from the skill tree state.
+  _GroupProgress _liveProgress(String categoryId) {
+    final graph = ref.read(skillTreeProvider).graph;
+    final nodes = graph.nodes
+        .where((n) => n.category.name == categoryId)
+        .toList();
+    final total = nodes.length;
+    final unlocked = nodes.where((n) => n.unlocked).length;
+    final available = nodes.where((n) => n.available && !n.unlocked).length;
+    final pct = total == 0 ? 0 : ((unlocked / total) * 100).round();
+    return _GroupProgress(progressPercent: pct, availableSkills: available);
+  }
+
   List<SkillGroupData> _getGroupsForType(String groupType) {
     switch (groupType) {
       case 'combat_focused':
-        return [
-          SkillGroupData(
-            id: 'scholar',
-            title: 'Scholar',
-            color: '#4A90E2',
-            icon: Icons.school,
-            branchCount: 3,
-            progressPercent: 45,
-            availableSkills: 2,
-          ),
-          SkillGroupData(
-            id: 'strategist',
-            title: 'Strategist',
-            color: '#9B59B6',
-            icon: Icons.psychology,
-            branchCount: 4,
-            progressPercent: 38,
-            availableSkills: 3,
-          ),
-          SkillGroupData(
-            id: 'combat',
-            title: 'Combat',
-            color: '#E74C3C',
-            icon: Icons.local_fire_department,
-            branchCount: 3,
-            progressPercent: 22,
-            availableSkills: 1,
-          ),
-        ];
+        return _buildGroups([
+          _GroupSpec('scholar', 'Scholar', '#4A90E2', Icons.school, 3),
+          _GroupSpec('strategist', 'Strategist', '#9B59B6', Icons.psychology, 4),
+          _GroupSpec('combat', 'Combat', '#E74C3C', Icons.local_fire_department, 3),
+        ]);
       case 'enhancement_branches':
-        return [
-          SkillGroupData(
-            id: 'xp',
-            title: 'XP Booster',
-            color: '#27AE60',
-            icon: Icons.trending_up,
-            branchCount: 4,
-            progressPercent: 67,
-            availableSkills: 4,
-          ),
-          SkillGroupData(
-            id: 'timer',
-            title: 'Timer',
-            color: '#3498DB',
-            icon: Icons.timer,
-            branchCount: 3,
-            progressPercent: 33,
-            availableSkills: 1,
-          ),
-          SkillGroupData(
-            id: 'combo',
-            title: 'Combo',
-            color: '#E67E22',
-            icon: Icons.bolt,
-            branchCount: 3,
-            progressPercent: 55,
-            availableSkills: 2,
-          ),
-          SkillGroupData(
-            id: 'risk',
-            title: 'Risk',
-            color: '#C0392B',
-            icon: Icons.casino,
-            branchCount: 3,
-            progressPercent: 11,
-            availableSkills: 0,
-          ),
-        ];
+        return _buildGroups([
+          _GroupSpec('xp', 'XP Booster', '#27AE60', Icons.trending_up, 4),
+          _GroupSpec('timer', 'Timer', '#3498DB', Icons.timer, 3),
+          _GroupSpec('combo', 'Combo', '#E67E22', Icons.bolt, 3),
+          _GroupSpec('risk', 'Risk', '#C0392B', Icons.casino, 3),
+        ]);
       case 'utility_branches':
-        return [
-          SkillGroupData(
-            id: 'luck',
-            title: 'Luck',
-            color: '#F1C40F',
-            icon: Icons.stars,
-            branchCount: 3,
-            progressPercent: 29,
-            availableSkills: 1,
-          ),
-          SkillGroupData(
-            id: 'stealth',
-            title: 'Stealth',
-            color: '#34495E',
-            icon: Icons.visibility_off,
-            branchCount: 3,
-            progressPercent: 0,
-            availableSkills: 1,
-          ),
-          SkillGroupData(
-            id: 'knowledge',
-            title: 'Knowledge',
-            color: '#16A085',
-            icon: Icons.library_books,
-            branchCount: 3,
-            progressPercent: 15,
-            availableSkills: 0,
-          ),
-        ];
+        return _buildGroups([
+          _GroupSpec('luck', 'Luck', '#F1C40F', Icons.stars, 3),
+          _GroupSpec('stealth', 'Stealth', '#34495E', Icons.visibility_off, 3),
+          _GroupSpec('knowledge', 'Knowledge', '#16A085', Icons.library_books, 3),
+        ]);
       case 'advanced_branches':
-        return [
-          SkillGroupData(
-            id: 'elite',
-            title: 'Elite',
-            color: '#FFD700',
-            icon: Icons.military_tech,
-            branchCount: 3,
-            progressPercent: 0,
-            availableSkills: 0,
-          ),
-          SkillGroupData(
-            id: 'wildcard',
-            title: 'Wildcard',
-            color: '#8E44AD',
-            icon: Icons.shuffle,
-            branchCount: 2,
-            progressPercent: 25,
-            availableSkills: 1,
-          ),
-          SkillGroupData(
-            id: 'general',
-            title: 'General',
-            color: '#7F8C8D',
-            icon: Icons.balance,
-            branchCount: 2,
-            progressPercent: 50,
-            availableSkills: 1,
-          ),
-        ];
+        return _buildGroups([
+          _GroupSpec('elite', 'Elite', '#FFD700', Icons.military_tech, 3),
+          _GroupSpec('wildcard', 'Wildcard', '#8E44AD', Icons.shuffle, 2),
+          _GroupSpec('general', 'General', '#7F8C8D', Icons.balance, 2),
+        ]);
       default:
         return [];
     }
+  }
+
+  List<SkillGroupData> _buildGroups(List<_GroupSpec> specs) {
+    return specs.map((s) {
+      final live = _liveProgress(s.id);
+      return SkillGroupData(
+        id: s.id,
+        title: s.title,
+        color: s.color,
+        icon: s.icon,
+        branchCount: s.branchCount,
+        progressPercent: live.progressPercent,
+        availableSkills: live.availableSkills,
+      );
+    }).toList();
   }
 }
 
@@ -831,6 +755,21 @@ class SkillSearchResult {
     required this.cost,
     required this.relevanceScore,
   });
+}
+
+class _GroupSpec {
+  final String id;
+  final String title;
+  final String color;
+  final IconData icon;
+  final int branchCount;
+  const _GroupSpec(this.id, this.title, this.color, this.icon, this.branchCount);
+}
+
+class _GroupProgress {
+  final int progressPercent;
+  final int availableSkills;
+  const _GroupProgress({required this.progressPercent, required this.availableSkills});
 }
 
 extension _AutoPathSheet on _SkillTreeNavScreenState {

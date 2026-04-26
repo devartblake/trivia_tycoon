@@ -68,22 +68,28 @@ class StockPolicyFormModel {
   }
 
   factory StockPolicyFormModel.fromJson(Map<String, dynamic> json) {
+    // Backend (handoff 2026-04-26) sends maxQuantityPerUser; legacy uses maxQuantity.
+    final maxQty = (json['maxQuantityPerUser'] as num?)?.toInt() ??
+        (json['maxQuantity'] as num?)?.toInt();
+    final resetInterval = json['resetInterval']?.toString();
     return StockPolicyFormModel(
       sku: (json['sku'] ?? '').toString(),
       itemTitle: (json['itemTitle'] ?? json['name'] ?? '').toString(),
       itemType: (json['itemType'] ?? json['type'] ?? '').toString(),
       policyType: (json['policyType'] ?? 'unlimited').toString(),
-      maxQuantity: (json['maxQuantity'] as num?)?.toInt(),
-      resetInterval: json['resetInterval']?.toString(),
+      maxQuantity: maxQty,
+      resetInterval: resetInterval,
       isOneTimePurchase: json['isOneTimePurchase'] as bool? ?? false,
-      isUnlimited: json['isUnlimited'] as bool? ?? true,
+      isUnlimited: maxQty == null || maxQty == 0
+          ? (json['isUnlimited'] as bool? ?? true)
+          : false,
       expiresAt: json['expiresAt'] != null
           ? DateTime.tryParse(json['expiresAt'].toString())
           : null,
       requiresPremium: json['requiresPremium'] as bool? ?? false,
       minimumLevel: (json['minimumLevel'] as num?)?.toInt(),
       isVisible: json['isVisible'] as bool? ?? true,
-      isPurchasable: json['isPurchasable'] as bool? ?? true,
+      isPurchasable: json['isActive'] as bool? ?? json['isPurchasable'] as bool? ?? true,
     );
   }
 
