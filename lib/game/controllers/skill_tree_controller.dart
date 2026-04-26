@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -81,21 +82,32 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
     _computeLayout();
   }
 
-  // Simple layered layout: nodes grouped by tier, spaced evenly.
+  // Hex-grid layout: pointy-top axial coordinates, same-category nodes adjacent.
   void _computeLayout() {
-    const double xGap = 280.0;
-    const double yGap = 180.0;
+    const double hexSize = 130.0;
     final positions = <String, Offset>{};
+
+    // Group by tier; within each tier sort by category then title so
+    // nodes of the same branch cluster together in the honeycomb.
     final tiers = List.generate(state.graph.maxTier + 1, (_) => <SkillNode>[]);
     for (final n in state.graph.nodes) {
       tiers[n.tier].add(n);
     }
     for (var t = 0; t < tiers.length; t++) {
-      final row = tiers[t];
+      final row = List<SkillNode>.from(tiers[t])
+        ..sort((a, b) {
+          final c = a.category.name.compareTo(b.category.name);
+          return c != 0 ? c : a.title.compareTo(b.title);
+        });
+
+      // Compensate for pointy-top axial stagger: x = √3·size·(q + r/2).
+      // To keep each row visually centred on x=0: q_start = -(n-1)/2 - t/2.
+      final qStart = (-((row.length - 1) / 2.0) - (t / 2.0)).round();
       for (var i = 0; i < row.length; i++) {
-        // Center items around 0 on x
-        final x = (i - (row.length - 1) / 2.0) * xGap;
-        final y = t * yGap;
+        final q = qStart + i;
+        final r = t;
+        final x = math.sqrt(3) * hexSize * (q + r / 2.0);
+        final y = 1.5 * hexSize * r;
         positions[row[i].id] = Offset(x, y);
       }
     }

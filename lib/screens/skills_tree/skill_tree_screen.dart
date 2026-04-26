@@ -259,6 +259,8 @@ class _SkillTreeScreenState extends ConsumerState<SkillTreeScreen> {
           Expanded(
             child: SkillTreeView(
               filterMode: _filterMode,
+              // When a specific group is selected, only show that category's nodes.
+              categoryId: _selectedGroupId,
             ),
           ),
         ],

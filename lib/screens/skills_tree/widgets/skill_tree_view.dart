@@ -40,10 +40,13 @@ extension SkillNodeFilterModeLabel on SkillNodeFilterMode {
 
 class SkillTreeView extends ConsumerStatefulWidget {
   final SkillNodeFilterMode filterMode;
+  /// When set, only nodes of this category are shown (e.g. 'scholar', 'xp').
+  final String? categoryId;
 
   const SkillTreeView({
     super.key,
     this.filterMode = SkillNodeFilterMode.all,
+    this.categoryId,
   });
 
   @override
@@ -64,15 +67,15 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
   @override
   void initState() {
     super.initState();
-    _transform.value = vmath.Matrix4.identity()..scale(0.8, 0.8);
-    // Position a few sample nodes on a hex layout *after* first frame to avoid
-    // "modifying provider during build" errors.
+    // Centering happens in the first post-frame callback once we know the size.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      Future.microtask(() {
-        if (!mounted) return;
-        _overrideWithHexLayout(); // calls controller.updatePositions(...)
-      });
+      // Place world-origin at screen centre so the hex grid is immediately visible.
+      final box = context.findRenderObject() as RenderBox?;
+      final size = box?.size ?? const Size(400, 700);
+      _transform.value = vmath.Matrix4.identity()
+        ..translate(size.width / 2.0, size.height / 2.0)
+        ..scale(0.65, 0.65);
     });
   }
 
@@ -83,8 +86,12 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
   }
 
   void _resetZoom() {
+    final box = context.findRenderObject() as RenderBox?;
+    final size = box?.size ?? const Size(400, 700);
     setState(() {
-      _transform.value = vmath.Matrix4.identity();
+      _transform.value = vmath.Matrix4.identity()
+        ..translate(size.width / 2.0, size.height / 2.0)
+        ..scale(0.65, 0.65);
     });
   }
 
@@ -133,45 +140,8 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
     // Unlock/use is now handled exclusively inside SkillNodeDetailSheet.
   }
 
-  // --- Simple example layout override using axial hex coordinates -> world offsets
-  void _overrideWithHexLayout() {
-    final state = ref.read(skillTreeProvider);
-    if (state.positions.isNotEmpty) return; // don't stomp an existing layout
-
-    const size = _layoutHexRadius;
-    Offset hexToPixel(int q, int r, double size) {
-      final x = size * 3 / 2 * q;
-      final y = size * sqrt(3) * (r + q / 2);
-      return Offset(x, y);
-    }
-
-    // Hex coordinates in world space
-    final hexCoords = <String, Offset>{
-      'core': hexToPixel(0, 0, size),
-      'hint': hexToPixel(-1, 0, size),
-      'double_hint': hexToPixel(1, 0, size),
-      'xp1': hexToPixel(0, -1, size),
-      'xp2': hexToPixel(0, 1, size),
-      'cooldown': hexToPixel(-1, 1, size),
-      'lifeline': hexToPixel(1, -1, size),
-    };
-
-    final updated = Map<String, Offset>.from(state.positions);
-    for (final entry in hexCoords.entries) {
-      if (state.graph.byId.containsKey(entry.key)) {
-        updated[entry.key] = entry.value;
-      }
-    }
-
-    // Schedule microtask to avoid provider write during layout edge-cases.
-    Future.microtask(() {
-      if (mounted) {
-        ref.read(skillTreeProvider.notifier).updatePositions(updated);
-      }
-    });
-  }
-
-  // Add child positions in hex pattern around parents
+  // Add child positions only for nodes that have no position yet.
+  // Since _computeLayout assigns all known nodes, this is a safety net only.
   void _addChildPositions(
       SkillTreeState state, Map<String, Offset> allPositions) {
     final hexDirections = [
@@ -195,8 +165,10 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
 
       for (int i = 0; i < children.length && i < 6; i++) {
         final childId = children[i];
-        final childPos = parentPos + hexDirections[i];
-        allPositions[childId] = childPos;
+        // Only place child if it doesn't already have a computed position.
+        if (!allPositions.containsKey(childId)) {
+          allPositions[childId] = parentPos + hexDirections[i];
+        }
       }
     }
   }
@@ -256,7 +228,16 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
                       rawPositions.addAll(state.positions);
                       _addChildPositions(state, rawPositions);
 
-                      // Apply filter for rendering nodes
+                      // Filter to a single category if requested (branch view).
+                      if (widget.categoryId != null) {
+                        rawPositions.removeWhere((id, _) {
+                          final node = state.graph.byId[id];
+                          return node == null ||
+                              node.category.name != widget.categoryId;
+                        });
+                      }
+
+                      // Apply lock/unlock filter for rendering nodes
                       final allPositions =
                           _applyFilter(rawPositions, state.graph);
 
