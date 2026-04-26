@@ -11,6 +11,9 @@ class HexEdgePainter extends CustomPainter {
   final HexOrientation orientation;
   final Color color;
   final double strokeWidth;
+  // Pre-computed screen positions (preferred — avoids coordinate mismatch).
+  // When provided, hexOf/hexSize/orientation are ignored for positioning.
+  final Map<String, Offset>? screenPositions;
 
   HexEdgePainter({
     required this.graph,
@@ -19,17 +22,30 @@ class HexEdgePainter extends CustomPainter {
     this.orientation = HexOrientation.pointy,
     this.color = const Color(0x44FFFFFF),
     this.strokeWidth = 2.0,
+    this.screenPositions,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
     final p = Paint()
       ..color = color
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round;
 
+    if (screenPositions != null) {
+      // Use pre-computed positions — perfectly aligned with HexagonFreeGrid.
+      for (final e in graph.edges) {
+        final pa = screenPositions![e.fromId];
+        final pb = screenPositions![e.toId];
+        if (pa == null || pb == null) continue;
+        canvas.drawLine(pa, pb, p);
+      }
+      return;
+    }
+
+    // Fallback: derive from axial coordinates (may be misaligned if spacing != 0).
+    final center = Offset(size.width / 2, size.height / 2);
     for (final e in graph.edges) {
       final a = hexOf[e.fromId];
       final b = hexOf[e.toId];
@@ -48,5 +64,6 @@ class HexEdgePainter extends CustomPainter {
       old.hexSize != hexSize ||
       old.orientation != orientation ||
       old.color != color ||
-      old.strokeWidth != strokeWidth;
+      old.strokeWidth != strokeWidth ||
+      old.screenPositions != screenPositions;
 }
