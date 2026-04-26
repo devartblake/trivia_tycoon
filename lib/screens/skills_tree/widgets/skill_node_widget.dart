@@ -113,40 +113,54 @@ class SkillNodeWidget extends StatelessWidget {
     final base = categoryColor ?? Colors.grey;
     final isAvailable = node.available && !isUnlocked;
 
-    // Fill: pastel category tint, stronger when selected/unlocked
-    final fillOpacity =
-        isSelected ? 0.22 : (isUnlocked ? 0.18 : 0.10);
-    final fillColor = base.withValues(alpha: fillOpacity);
+    // Dark-to-pastel gradient: dark background with category color blended in.
+    // Mix factor scales with node state so unlocked/selected cells glow more.
+    final mixA = isSelected ? 0.45 : (isUnlocked ? 0.30 : (isAvailable ? 0.22 : 0.12));
+    final mixB = mixA + 0.12;
+    final gradient = LinearGradient(
+      colors: [
+        Color.lerp(const Color(0xFF090C1A), base, mixA)!,
+        Color.lerp(const Color(0xFF15183A), base, mixB)!,
+      ],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    );
 
     // Border: amber for available, category-color otherwise
     final borderColor = isAvailable
-        ? const Color(0xFFFFB300).withValues(alpha: 0.80)
+        ? const Color(0xFFFFB300).withValues(alpha: 0.85)
         : base.withValues(
-            alpha: isSelected ? 0.90 : (isUnlocked ? 0.60 : 0.35));
+            alpha: isSelected ? 0.95 : (isUnlocked ? 0.65 : 0.40));
     final effectiveBorderWidth =
         isSelected ? 2.0 : (isAvailable ? 2.5 : borderWidth);
 
-    // Cost number colour
+    // Cost number colour — bright in active states, muted when locked
     final costColor = isUnlocked
-        ? base.withValues(alpha: 0.55)
+        ? base.withValues(alpha: 0.90)
         : isSelected
-            ? base
+            ? Colors.white
             : isAvailable
                 ? const Color(0xFFFFB300)
-                : base.withValues(alpha: 0.50);
+                : base.withValues(alpha: 0.55);
 
     final costFontSize = _titleFontSize * 1.3;
     final nameFontSize = _titleFontSize * 0.62;
+    final iconSz = _titleFontSize * 0.85;
 
     // Abbreviated title — single line, max 11 chars
     final abbrev = node.title.length > 11
         ? '${node.title.substring(0, 10)}…'
         : node.title;
 
+    final statusIcon =
+        _getStatusIcon(isUnlocked, isAvailable, base, iconSz);
+
     final content = Column(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
+        statusIcon,
+        SizedBox(height: statusIcon is SizedBox ? 0 : 2),
         Text(
           '+${node.cost}',
           textAlign: TextAlign.center,
@@ -157,7 +171,7 @@ class SkillNodeWidget extends StatelessWidget {
             height: 1.0,
           ),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 3),
         Text(
           abbrev,
           textAlign: TextAlign.center,
@@ -170,14 +184,6 @@ class SkillNodeWidget extends StatelessWidget {
             height: 1.0,
           ),
         ),
-        if (isUnlocked) ...[
-          const SizedBox(height: 3),
-          Icon(
-            Icons.check,
-            color: Colors.greenAccent.withValues(alpha: 0.65),
-            size: nameFontSize + 2,
-          ),
-        ],
       ],
     );
 
@@ -194,17 +200,26 @@ class SkillNodeWidget extends StatelessWidget {
           )
         : const SizedBox.shrink();
 
+    // Shadow: category glow for unlocked/selected, amber for available, dark otherwise
+    final shadowColor = isSelected || isUnlocked
+        ? base.withValues(alpha: 0.35)
+        : isAvailable
+            ? const Color(0xFFFFB300).withValues(alpha: 0.25)
+            : const Color(0x33000000);
+    final elevation =
+        isSelected ? 8.0 : (isUnlocked ? 5.0 : (isAvailable ? 4.0 : 1.0));
+
     Widget hexWidget = Stack(
       children: [
         Hexagon(
           radius: _effectiveRadius,
           orientation: orientation,
           cornerRadius: cornerRadius,
-          elevation: 0,
+          elevation: elevation,
           borderWidth: effectiveBorderWidth,
-          color: fillColor,
+          gradient: gradient,
           borderColor: borderColor,
-          shadowColor: Colors.transparent,
+          shadowColor: shadowColor,
           onTap: onTap,
           child: Padding(
             padding: EdgeInsets.all(_effectiveRadius * _paddingFactor),
@@ -227,8 +242,8 @@ class SkillNodeWidget extends StatelessWidget {
                     boxShadow: [
                       BoxShadow(
                         color: const Color(0xFFFFB300)
-                            .withValues(alpha: 0.35 * value),
-                        blurRadius: 12,
+                            .withValues(alpha: 0.40 * value),
+                        blurRadius: 14,
                         spreadRadius: 2,
                       ),
                     ],
@@ -238,7 +253,7 @@ class SkillNodeWidget extends StatelessWidget {
               );
     }
 
-    // Subtle category glow for selected nodes
+    // Breathing category glow for selected nodes
     if (isSelected) {
       hexWidget =
           hexWidget.animate(onPlay: (c) => c.repeat(reverse: true)).custom(
@@ -249,9 +264,9 @@ class SkillNodeWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(cornerRadius + 4),
                     boxShadow: [
                       BoxShadow(
-                        color: base.withValues(alpha: 0.28 * value),
-                        blurRadius: 18,
-                        spreadRadius: 3,
+                        color: base.withValues(alpha: 0.35 * value),
+                        blurRadius: 20,
+                        spreadRadius: 4,
                       ),
                     ],
                   ),
@@ -266,9 +281,18 @@ class SkillNodeWidget extends StatelessWidget {
     );
   }
 
+  /// Small status icon rendered above the cost number.
   Widget _getStatusIcon(
-      bool unlocked, bool isAvailable, Color textColor, double fontSize) {
-    return const SizedBox.shrink();
+      bool unlocked, bool isAvailable, Color base, double size) {
+    if (unlocked) {
+      return Icon(Icons.auto_awesome,
+          color: base.withValues(alpha: 0.90), size: size);
+    } else if (isAvailable) {
+      return Icon(Icons.lock_open,
+          color: const Color(0xFFFFB300).withValues(alpha: 0.90), size: size);
+    } else {
+      return Icon(Icons.lock, color: Colors.white24, size: size);
+    }
   }
 
   Color _tint(Color c, double a) => c.withValues(alpha: a);
