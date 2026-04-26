@@ -84,7 +84,7 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
 
   // Hex-grid layout: pointy-top axial coordinates, same-category nodes adjacent.
   void _computeLayout() {
-    const double hexSize = 110.0;
+    const double hexSize = 120.0;
     final positions = <String, Offset>{};
 
     // Group by tier; within each tier sort by category then title so
