@@ -173,4 +173,31 @@ class AdminStoreService {
     if (sku != null) qp['sku'] = sku;
     return _api.get('/admin/store/analytics/stock-resets', queryParameters: qp);
   }
+
+  // ── Backward-compatible aliases ─────────────────────────────────────────────
+
+  Future<void> updatePolicy(StockPolicyFormModel model) =>
+      upsertPolicy(model).then((_) {});
+
+  Future<void> resetPolicyStock(String sku) =>
+      bulkResetPolicies(skus: [sku]).then((_) {});
+
+  Future<void> updateRewardLimit(RewardLimitFormModel model) =>
+      upsertRewardLimit(model).then((_) {});
+
+  /// Backend has no PUT for flash sales; cancel the old one and recreate.
+  Future<void> updateFlashSale(FlashSaleFormModel model) async {
+    if (model.saleId != null) await cancelFlashSale(model.saleId!);
+    await createFlashSale(model);
+  }
+
+  Future<void> deleteFlashSale(String saleId) => cancelFlashSale(saleId);
+
+  Future<void> createOverride(StockOverrideFormModel model) =>
+      overridePlayerStock(
+        playerId: model.playerId ?? '',
+        sku: model.sku,
+        effectiveMaxQuantity: model.overrideMaxQuantity,
+        reason: model.notes,
+      );
 }
