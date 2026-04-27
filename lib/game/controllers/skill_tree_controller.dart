@@ -169,8 +169,9 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
       final currentXP = xpService.playerXP;
       if (currentXP < node.cost) return;
 
-      // Deduct XP through service
+      // Deduct XP through service and keep the reactive provider in sync.
       xpService.deductXP(node.cost);
+      ref.read(playerXPProvider.notifier).state = xpService.playerXP;
     } catch (_) {
       // Fallback to points system if XP service unavailable
       if (state.playerPoints < node.cost) return;
@@ -243,6 +244,7 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
       );
 
       _persistProfile();
+      _persistUseSkill(nodeId);
       return true;
     } catch (_) {
       // Fallback for when services aren't available
@@ -269,7 +271,8 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
     // Try to refund through XP service, fallback to points
     try {
       final xpService = ref.read(xpServiceProvider);
-      xpService.addXP(refunded);
+      xpService.addXP(refunded, applyMultiplier: false);
+      ref.read(playerXPProvider.notifier).state = xpService.playerXP;
       state = state.copyWith(
         graph: SkillTreeGraph(nodes: reset, edges: state.graph.edges),
         selectedId: null,
@@ -284,6 +287,7 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
     }
 
     _persistProfile();
+    _persistRespec();
   }
 
   // ----- Positions -----
@@ -332,6 +336,40 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
     } catch (_) {
       // Service unavailable (e.g., test environment) — skip server sync
     }
+  }
+
+  /// Fire-and-forget: records a skill activation on the server.
+  void _persistUseSkill(String nodeId) {
+    try {
+      ref.read(playerProfileServiceProvider).getUserId().then((userId) {
+        if (userId == null || userId.isEmpty) return;
+        unawaited(() async {
+          try {
+            await ref
+                .read(serviceManagerProvider)
+                .synaptixApiClient
+                .useSkillNode(playerId: userId, nodeId: nodeId);
+          } catch (_) {}
+        }());
+      });
+    } catch (_) {}
+  }
+
+  /// Fire-and-forget: notifies the server that the player has respecced.
+  void _persistRespec() {
+    try {
+      ref.read(playerProfileServiceProvider).getUserId().then((userId) {
+        if (userId == null || userId.isEmpty) return;
+        unawaited(() async {
+          try {
+            await ref
+                .read(serviceManagerProvider)
+                .synaptixApiClient
+                .respecSkillTree(playerId: userId);
+          } catch (_) {}
+        }());
+      });
+    } catch (_) {}
   }
 
   // ----- Profile Sync (optional, safe no-op if not provided) -----

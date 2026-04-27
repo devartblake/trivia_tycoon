@@ -445,6 +445,25 @@ class SynaptixApiClient {
     return SkillNodeDto.fromJson(j);
   }
 
+  /// Resets all unlocked nodes for [playerId] and refunds spent points.
+  Future<void> respecSkillTree({required String playerId}) async {
+    await _http.postJson(
+      '/skills/tree/respec',
+      body: {'playerId': playerId},
+    );
+  }
+
+  /// Records that [playerId] activated the active skill [nodeId].
+  Future<void> useSkillNode({
+    required String playerId,
+    required String nodeId,
+  }) async {
+    await _http.postJson(
+      '/skills/$nodeId/use',
+      body: {'playerId': playerId},
+    );
+  }
+
   // ========================================
   // Game Events
   // ========================================
