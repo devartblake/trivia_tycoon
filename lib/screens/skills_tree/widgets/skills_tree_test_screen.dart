@@ -172,25 +172,29 @@ class _BranchCard extends StatelessWidget {
   }
 }
 
-/// Small trampoline screen: it injects the branch graph **after** build via button press, avoiding "modify provider during build"
-class _BranchToHexScreen extends ConsumerWidget {
+/// Small trampoline screen: loads the branch graph into the existing controller
+/// after the first frame (avoids "setState during build" errors).
+class _BranchToHexScreen extends ConsumerStatefulWidget {
   final SkillTreeGraph graph;
   const _BranchToHexScreen({required this.graph});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return ProviderScope(
-      child: Builder(
-        builder: (_) {
-          // Load into controller the first time this page paints
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            final ctrl = ref.read(skillTreeProvider.notifier);
-            ctrl.loadGraph(graph,
-                recomputeLayout: true); // safe helper we add below
-          });
-          return const SkillTreeView();
-        },
-      ),
-    );
+  ConsumerState<_BranchToHexScreen> createState() => _BranchToHexScreenState();
+}
+
+class _BranchToHexScreenState extends ConsumerState<_BranchToHexScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        ref
+            .read(skillTreeProvider.notifier)
+            .loadGraph(widget.graph, recomputeLayout: true);
+      }
+    });
   }
+
+  @override
+  Widget build(BuildContext context) => const SkillTreeView();
 }

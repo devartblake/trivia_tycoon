@@ -106,47 +106,85 @@ class _SkillNodePainter {
   });
 
   void paint(Canvas canvas, Size size) {
-    final bgColor = categoryColor;
-    final glowColor = (isSelected || isUnlocked)
-        ? bgColor.withValues(alpha: 0.5)
-        : Colors.transparent;
-    final borderColor = isSelected ? Colors.white : Colors.black;
-
     final center = Offset(size.width / 2, size.height / 2);
 
-    final paintFill = Paint()
-      ..color = bgColor
-      ..style = PaintingStyle.fill;
+    // Dark-to-pastel fill matching SkillNodeWidget gradient logic.
+    final mixA = isSelected ? 0.45 : (isUnlocked ? 0.30 : 0.12);
+    final fillColor = Color.lerp(const Color(0xFF090C1A), categoryColor, mixA)!;
 
-    final paintBorder = Paint()
-      ..color = borderColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
+    // Border: white for selected, category-tinted otherwise.
+    final borderColor = isSelected
+        ? Colors.white
+        : isUnlocked
+            ? categoryColor.withValues(alpha: 0.65)
+            : categoryColor.withValues(alpha: 0.40);
+    final borderWidth = isSelected ? 2.0 : 1.5;
 
+    // Optional glow for selected / unlocked nodes.
     if (isSelected || isUnlocked) {
-      final glowPaint = Paint()
-        ..color = glowColor
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
-      canvas.drawCircle(center, radius, glowPaint);
+      canvas.drawCircle(
+        center,
+        radius + 4,
+        Paint()
+          ..color = categoryColor.withValues(alpha: isSelected ? 0.35 : 0.18)
+          ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8),
+      );
     }
 
-    canvas.drawCircle(center, radius, paintFill);
-    canvas.drawCircle(center, radius, paintBorder);
+    canvas.drawCircle(center, radius, Paint()..color = fillColor);
+    canvas.drawCircle(
+      center,
+      radius,
+      Paint()
+        ..color = borderColor
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = borderWidth,
+    );
 
-// Optional: You can render the title or icon here
-    final textPainter = TextPainter(
+    // "+cost" label — large, category-coloured.
+    final costColor = isUnlocked
+        ? categoryColor.withValues(alpha: 0.90)
+        : isSelected
+            ? Colors.white
+            : categoryColor.withValues(alpha: 0.55);
+
+    final costPainter = TextPainter(
       text: TextSpan(
-        text: node.title,
+        text: '+${node.cost}',
         style: TextStyle(
-            fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),
+          fontSize: radius * 0.50,
+          fontWeight: FontWeight.bold,
+          color: costColor,
+        ),
       ),
       textDirection: TextDirection.ltr,
       textAlign: TextAlign.center,
+    )..layout(maxWidth: radius * 2);
+    costPainter.paint(
+      canvas,
+      Offset(center.dx - costPainter.width / 2,
+          center.dy - costPainter.height / 2 - radius * 0.10),
     );
-    textPainter.layout(maxWidth: radius * 2);
-    textPainter.paint(
-        canvas,
-        Offset(center.dx - textPainter.width / 2,
-            center.dy - textPainter.height / 2));
+
+    // Abbreviated title — small, muted white.
+    final abbrev = node.title.length > 8
+        ? '${node.title.substring(0, 7)}…'
+        : node.title;
+    final titlePainter = TextPainter(
+      text: TextSpan(
+        text: abbrev,
+        style: TextStyle(
+          fontSize: radius * 0.26,
+          color: Colors.white.withValues(alpha: 0.65),
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+      textAlign: TextAlign.center,
+    )..layout(maxWidth: radius * 2);
+    titlePainter.paint(
+      canvas,
+      Offset(center.dx - titlePainter.width / 2,
+          center.dy + radius * 0.22),
+    );
   }
 }
