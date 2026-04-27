@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/manager/log_manager.dart';
 import '../../core/services/settings/multi_profile_service.dart';
 import '../../game/analytics/managers/profile_analytics_manager.dart';
+import '../../game/providers/auth_providers.dart';
 import '../../game/providers/multi_profile_providers.dart';
 import '../../game/providers/onboarding_providers.dart';
 import '../../game/providers/riverpod_providers.dart';
@@ -448,6 +449,10 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
             .setOnboardingCompleted(true);
         await serviceManager.onboardingSettingsService
             .setHasCompletedOnboarding(true);
+
+        // Mark profile as selected for this session — the router will now
+        // allow navigation past the profile-selection gate.
+        ref.read(profileSelectedProvider.notifier).state = true;
 
         // Navigate to home screen
         context.go('/home');

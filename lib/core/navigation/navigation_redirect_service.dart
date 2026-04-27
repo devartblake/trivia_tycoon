@@ -12,10 +12,12 @@ class NavigationRedirectService {
 
   String? determineRedirect(String currentPath) {
     final isLoggedIn = ref.read(isLoggedInSyncProvider);
+    final profileSelected = ref.read(profileSelectedProvider);
     final isOnboardingComplete = ref.read(onboardingCompleteProvider);
 
     LogManager.debug(
-        'REDIRECT DEBUG: isLoggedIn=$isLoggedIn, onboardingComplete=$isOnboardingComplete, path=$currentPath');
+        'REDIRECT DEBUG: isLoggedIn=$isLoggedIn, profileSelected=$profileSelected, '
+        'onboardingComplete=$isOnboardingComplete, path=$currentPath');
 
     // 1) Always allow splash / root
     if (currentPath == '/') return null;
@@ -26,23 +28,30 @@ class NavigationRedirectService {
       return '/login';
     }
 
-    // 3) Logged in but onboarding not done → gate to /onboarding
+    // 3) Logged in but no profile chosen this session → profile selection gate.
+    //    This runs on every cold start / crash recovery because profileSelectedProvider
+    //    is runtime-only and always initialises to false.
+    if (!profileSelected) {
+      if (currentPath == '/profile-selection') return null;
+      return '/profile-selection';
+    }
+
+    // 4) Profile chosen but onboarding not done → gate to /onboarding
     if (!isOnboardingComplete) {
       if (currentPath == '/onboarding') return null;
       return '/onboarding';
     }
 
-    // 4) Fully onboarded → redirect away from auth/onboarding screens
+    // 5) Fully onboarded → redirect away from auth/onboarding/profile-selection
     if (currentPath == '/onboarding' ||
         currentPath == '/login' ||
-        currentPath == '/signup') {
+        currentPath == '/signup' ||
+        currentPath == '/profile-selection') {
       return '/home';
     }
 
     return null;
-  } // FIX 1: Removed the extra stray `}` that was closing the class one brace early,
-// pushing all of section 4 outside the method and making the trailing `}` dangle
-// at the top level (triggering "expected_executable" at what was line 44).
+  }
 }
 
 /// Provider for the navigation redirect service
@@ -54,22 +63,25 @@ final navigationRedirectServiceProvider =
 /// Provider that watches for navigation state changes and triggers router rebuilds.
 final navigationStateProvider = Provider<NavigationState>((ref) {
   final isLoggedIn = ref.watch(isLoggedInSyncProvider);
+  final profileSelected = ref.watch(profileSelectedProvider);
   final isOnboardingComplete = ref.watch(onboardingCompleteProvider);
 
   return NavigationState(
     isLoggedIn: isLoggedIn,
+    profileSelected: profileSelected,
     isOnboardingComplete: isOnboardingComplete,
   );
 });
 
 class NavigationState {
   final bool isLoggedIn;
+  final bool profileSelected;
   final bool isOnboardingComplete;
 
   const NavigationState({
     required this.isLoggedIn,
-    required this.isOnboardingComplete, // FIX 2: was `required this.onboardingPhase`
-    // which doesn't match the declared field name
+    required this.profileSelected,
+    required this.isOnboardingComplete,
   });
 
   @override
@@ -78,9 +90,10 @@ class NavigationState {
       other is NavigationState &&
           runtimeType == other.runtimeType &&
           isLoggedIn == other.isLoggedIn &&
-          isOnboardingComplete == other.isOnboardingComplete; // FIX 2 (cont.)
+          profileSelected == other.profileSelected &&
+          isOnboardingComplete == other.isOnboardingComplete;
 
   @override
   int get hashCode =>
-      isLoggedIn.hashCode ^ isOnboardingComplete.hashCode; // FIX 2 (cont.)
+      isLoggedIn.hashCode ^ profileSelected.hashCode ^ isOnboardingComplete.hashCode;
 }

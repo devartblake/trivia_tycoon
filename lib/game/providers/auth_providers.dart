@@ -12,6 +12,11 @@ import 'package:trivia_tycoon/core/manager/log_manager.dart';
 /// Main auth provider - initialized by AppInit, used by router
 final isLoggedInSyncProvider = StateProvider<bool>((ref) => false);
 
+/// Whether the user has selected a profile this process lifetime.
+/// Intentionally NOT persisted — resets to false on every cold start / crash,
+/// so the profile-selection gate always appears when the app relaunches.
+final profileSelectedProvider = StateProvider<bool>((ref) => false);
+
 /// Auth operations provider for login/logout
 final authOperationsProvider = Provider<AuthOperations>((ref) {
   return AuthOperations(ref);
@@ -166,6 +171,7 @@ class AuthOperations {
 
     // Update Riverpod state immediately
     ref.read(isLoggedInSyncProvider.notifier).state = false;
+    ref.read(profileSelectedProvider.notifier).state = false;
 
     // Also clear onboarding state
     await ref.read(onboardingProgressProvider.notifier).reset();
