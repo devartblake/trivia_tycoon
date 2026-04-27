@@ -12,6 +12,7 @@ import '../../../game/models/skill_tree_graph.dart';
 import '../../../game/controllers/skill_tree_controller.dart';
 import '../../game/planning/skill_branch_path_planner.dart';
 import '../../game/providers/skill_tree_provider.dart';
+import '../../game/providers/xp_provider.dart';
 import '../../ui_components/hex_grid/math/hex_orientation.dart';
 import '../../ui_components/hex_grid/paint/branch_path_overlay_painter.dart';
 
@@ -142,20 +143,22 @@ class _SkillBranchDetailScreenState
     super.dispose();
   }
 
-  // Build VM using the centralized planner
-  BranchDetailVM _buildVM(SkillTreeState state) {
+  // Build VM using the centralized planner.
+  // [playerXP] comes from playerXPProvider so unlock eligibility reflects real
+  // XP rather than the legacy playerPoints counter.
+  BranchDetailVM _buildVM(SkillTreeState state, {required int playerXP}) {
     final planner = SkillBranchPathPlanner.fromGraph(state.graph);
     final orderedNodes = planner.forBranch(widget.branchId);
     final order = orderedNodes.map((n) => n.id).toList();
 
-    final unlocked = <String, bool>{
+    final unlockedMap = <String, bool>{
       for (final n in state.graph.nodes) n.id: n.unlocked
     };
 
     final canUnlock = <String, bool>{
       for (final id in order)
-        id: _canUnlockNow(state.graph, id, unlocked, state.playerPoints,
-            state.graph.byId[id]!.cost)
+        id: _canUnlockNow(
+            state.graph, id, unlockedMap, playerXP, state.graph.byId[id]!.cost)
     };
 
     return BranchDetailVM(
@@ -203,17 +206,9 @@ class _SkillBranchDetailScreenState
     return out;
   }
 
-  // Safe unlock method that checks permissions
+  // Delegates to the unified XP-based unlock path (handles prereqs + server sync).
   void _unlockSkill(String nodeId) {
-    final ctrl = ref.read(skillTreeProvider.notifier);
-    final state = ref.read(skillTreeProvider);
-    final node = state.graph.byId[nodeId];
-
-    if (node != null &&
-        ctrl.canUnlock(nodeId) &&
-        state.playerPoints >= node.cost) {
-      ctrl.unlock(nodeId);
-    }
+    ref.read(skillTreeProvider.notifier).unlockSkill(nodeId);
   }
 
   // Hit-test helpers
@@ -414,7 +409,8 @@ class _SkillBranchDetailScreenState
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(skillTreeProvider);
-    final vm = _buildVM(state);
+    final playerXP = ref.watch(playerXPProvider);
+    final vm = _buildVM(state, playerXP: playerXP);
     final filtered = state.graph.subgraphForBranch(widget.branchId);
     final positions = _filterPositions(state.positions, filtered);
 
@@ -461,6 +457,10 @@ class _SkillBranchDetailScreenState
               worldToScreen: _transform.value,
               nodeRadius: _nodeRadius,
               selectedId: state.selectedId,
+              unlocked: state.graph.nodes
+                  .where((n) => n.unlocked)
+                  .map((n) => n.id)
+                  .toSet(),
               categoryImages: const <SkillCategory, ui.Image?>{},
               focusedId: _focusedId,
             );
