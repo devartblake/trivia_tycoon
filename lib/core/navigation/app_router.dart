@@ -98,6 +98,10 @@ import '../../screens/learn_hub/learn_hub_screen.dart';
 import '../../screens/learn_hub/lesson_screen.dart';
 import '../../screens/learn_hub/module_complete_screen.dart';
 import '../../screens/learn_hub/module_detail_screen.dart';
+import '../../screens/study_hub/study_hub_screen.dart';
+import '../../screens/study_hub/study_set_screen.dart';
+import '../../screens/study_hub/study_session_screen.dart';
+import '../dto/study_dto.dart';
 import '../../screens/login_screen.dart';
 import '../../screens/onboarding/onboarding_screen.dart';
 import '../../screens/profile/avatar_selection_screen.dart';
@@ -834,6 +838,39 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         ),
         redirect: onboardingGuard,
       ),
+      // ── Study Hub ─────────────────────────────────────────────────────────
+      GoRoute(
+        path: '/study',
+        name: 'study-hub',
+        builder: (context, state) => const StudyHubScreen(),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/study/set/:setId',
+        name: 'study-set',
+        builder: (context, state) => StudySetScreen(
+          setId: state.pathParameters['setId']!,
+        ),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/study/session/:sessionId',
+        name: 'study-session',
+        builder: (context, state) => StudySessionScreen(
+          initialSession: state.extra is StudySession
+              ? state.extra as StudySession
+              : StudySession(
+                  id: state.pathParameters['sessionId']!,
+                  studySetId: '',
+                  mode: StudySessionMode.selfTest,
+                  title: '',
+                  kind: '',
+                  questionCount: 0,
+                ),
+        ),
+        redirect: onboardingGuard,
+      ),
+
       GoRoute(
         path: '/learn-hub/module/:moduleId/complete',
         name: 'module-complete',

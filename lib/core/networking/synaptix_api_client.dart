@@ -50,19 +50,19 @@ class SynaptixApiClient {
     String? category,
     String? difficulty,
   }) async {
-    final questions = await _http.getJsonList(
-      '/quiz/play',
+    final raw = await _http.getJson(
+      '/questions/set',
       query: {
-        'amount': amount.toString(),
+        'count': amount.toString(),
         if (category != null) 'category': category,
         if (difficulty != null) 'difficulty': difficulty,
       },
     );
-
-    return questions.cast<Map<String, dynamic>>();
+    final items = raw['questions'] ?? raw['items'] ?? const [];
+    return List<Map<String, dynamic>>.from(items);
   }
 
-  /// Submit quiz results
+  /// Submit quiz results via canonical batch-check endpoint.
   Future<Map<String, dynamic>> submitQuizResults({
     required String quizId,
     required List<Map<String, dynamic>> answers,
@@ -70,7 +70,7 @@ class SynaptixApiClient {
     required int totalQuestions,
   }) async {
     return await _http.postJson(
-      '/quiz/submit',
+      '/questions/check-batch',
       body: {
         'quizId': quizId,
         'answers': answers,

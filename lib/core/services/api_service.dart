@@ -128,15 +128,19 @@ class ApiService {
   }) async {
     return _handleRequest(() async {
       final response = await _dio.get(
-        '/quiz/play',
+        '/questions/set',
         queryParameters: {
-          'amount': amount,
+          'count': amount,
           if (category != null) 'category': category,
           if (difficulty != null) 'difficulty': difficulty,
         },
         options: _cacheOptions.toOptions(),
       );
-      return List<Map<String, dynamic>>.from(response.data);
+      final body = response.data;
+      final items = body is List
+          ? body
+          : (body is Map ? body['questions'] ?? body['items'] ?? const [] : const []);
+      return List<Map<String, dynamic>>.from(items);
     });
   }
 
