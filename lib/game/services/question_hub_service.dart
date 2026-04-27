@@ -99,28 +99,6 @@ class QuestionHubService {
       // fallback below
     }
 
-    try {
-      final response = await _apiService.fetchQuestions(
-        amount: amount,
-        category: category,
-        difficulty: difficulty?.toString(),
-      );
-      final questions = response.map(QuestionModel.fromJson).toList();
-      if (questions.isNotEmpty) {
-        _recordBackend(
-          operation: 'category_questions',
-          endpoint: '/quiz/play',
-          detail:
-              'Loaded ${questions.length} legacy quiz questions for $category',
-        );
-        return questions;
-      }
-    } on ApiRequestException {
-      // fallback below
-    } catch (_) {
-      // fallback below
-    }
-
     final localQuestions = await _localLoader.getQuestionsByCategory(category);
     final filtered = difficulty == null
         ? localQuestions
@@ -149,8 +127,7 @@ class QuestionHubService {
         '/questions/check',
         body: {
           'questionId': question.id,
-          'answer': selectedAnswer,
-          'selectedAnswer': selectedAnswer,
+          'selectedOptionId': selectedAnswer,
         },
       );
       return _parseAnswerCheckResult(
@@ -196,8 +173,7 @@ class QuestionHubService {
           'answers': submissions
               .map((submission) => {
                     'questionId': submission.question.id,
-                    'answer': submission.selectedAnswer,
-                    'selectedAnswer': submission.selectedAnswer,
+                    'selectedOptionId': submission.selectedAnswer,
                   })
               .toList(growable: false),
         },
@@ -273,10 +249,10 @@ class QuestionHubService {
 
   Future<List<QuizCategory>> getAvailableCategories() async {
     try {
-      final response = await _apiService.get('/quiz/categories');
+      final response = await _apiService.get('/questions/categories');
       final envelope = QuestionResponseContract.parseCollection(
         response,
-        endpoint: '/quiz/categories',
+        endpoint: '/questions/categories',
         itemKeys: const ['items', 'categories', 'data'],
       );
 
@@ -288,7 +264,7 @@ class QuestionHubService {
       if (categories.isNotEmpty) {
         _recordBackend(
           operation: 'categories',
-          endpoint: '/quiz/categories',
+          endpoint: '/questions/categories',
           detail: 'Loaded ${categories.length} categories from backend',
         );
         return categories;
@@ -301,33 +277,30 @@ class QuestionHubService {
 
     _recordFallback(
       operation: 'categories',
-      endpoint: '/quiz/categories',
+      endpoint: '/questions/categories',
       detail: 'Using local category catalog',
     );
     return _localLoader.getAvailableQuizCategories();
   }
 
   Future<Map<String, dynamic>> getQuestionStats() async {
-    for (final endpoint in const ['/quiz/stats', '/questions/stats']) {
-      try {
-        final response = await _apiService.get(endpoint);
-        final envelope = QuestionResponseContract.parseObject(
-          response,
-          endpoint: endpoint,
-          anyOfKeys: const ['totalQuestions', 'questionCount', 'total'],
-        );
-
-        _recordBackend(
-          operation: 'question_stats',
-          endpoint: endpoint,
-          detail: 'Loaded question stats from backend',
-        );
-        return envelope.data;
-      } on ApiRequestException {
-        // try next endpoint or fallback
-      } on QuestionContractException {
-        // invalid contract, try next endpoint or fallback
-      }
+    try {
+      final response = await _apiService.get('/questions/metadata');
+      final envelope = QuestionResponseContract.parseObject(
+        response,
+        endpoint: '/questions/metadata',
+        anyOfKeys: const ['totalQuestions', 'questionCount', 'total'],
+      );
+      _recordBackend(
+        operation: 'question_stats',
+        endpoint: '/questions/metadata',
+        detail: 'Loaded question stats from backend',
+      );
+      return envelope.data;
+    } on ApiRequestException {
+      // fallback below
+    } on QuestionContractException {
+      // fallback below
     }
 
     _recordFallback(
@@ -339,29 +312,25 @@ class QuestionHubService {
 
   Future<Map<String, dynamic>> getCategoryStats(QuizCategory category) async {
     final categorySlug = category.name;
-    for (final endpoint in [
-      '/quiz/categories/$categorySlug/stats',
-      '/questions/categories/$categorySlug/stats',
-    ]) {
-      try {
-        final response = await _apiService.get(endpoint);
-        final envelope = QuestionResponseContract.parseObject(
-          response,
-          endpoint: endpoint,
-          anyOfKeys: const ['questionCount', 'totalQuestions', 'total'],
-        );
-
-        _recordBackend(
-          operation: 'category_stats',
-          endpoint: endpoint,
-          detail: 'Loaded stats for ${category.name}',
-        );
-        return envelope.data;
-      } on ApiRequestException {
-        // try next endpoint or fallback
-      } on QuestionContractException {
-        // invalid contract, try next endpoint or fallback
-      }
+    try {
+      final response = await _apiService.get(
+        '/questions/categories/$categorySlug/stats',
+      );
+      final envelope = QuestionResponseContract.parseObject(
+        response,
+        endpoint: '/questions/categories/$categorySlug/stats',
+        anyOfKeys: const ['questionCount', 'totalQuestions', 'total'],
+      );
+      _recordBackend(
+        operation: 'category_stats',
+        endpoint: '/questions/categories/$categorySlug/stats',
+        detail: 'Loaded stats for ${category.name}',
+      );
+      return envelope.data;
+    } on ApiRequestException {
+      // fallback below
+    } on QuestionContractException {
+      // fallback below
     }
 
     final questionCount =
@@ -382,42 +351,38 @@ class QuestionHubService {
   }
 
   Future<Map<String, dynamic>> getClassStats(String classId) async {
-    for (final endpoint in [
-      '/quiz/classes/$classId/stats',
-      '/questions/classes/$classId/stats',
-    ]) {
-      try {
-        final response = await _apiService.get(endpoint);
-        if (response.isNotEmpty) {
-          final envelope = QuestionResponseContract.parseCollection(
-            response,
-            endpoint: endpoint,
-            itemKeys: const ['availableCategories', 'categories', 'items'],
-          );
-          final categories = envelope.items
-              .map(_parseCategory)
-              .whereType<QuizCategory>()
-              .toList();
+    try {
+      final endpoint = '/questions/classes/$classId/stats';
+      final response = await _apiService.get(endpoint);
+      if (response.isNotEmpty) {
+        final envelope = QuestionResponseContract.parseCollection(
+          response,
+          endpoint: endpoint,
+          itemKeys: const ['availableCategories', 'categories', 'items'],
+        );
+        final categories = envelope.items
+            .map(_parseCategory)
+            .whereType<QuizCategory>()
+            .toList();
 
-          _recordBackend(
-            operation: 'class_stats',
-            endpoint: endpoint,
-            detail: 'Loaded class stats for $classId',
-          );
-          return {
-            'questionCount': (response['questionCount'] as num?)?.toInt() ?? 0,
-            'subjectCount': (response['subjectCount'] as num?)?.toInt() ??
-                categories.length,
-            'availableCategories': categories,
-            'source': 'backend',
-            'meta': envelope.meta,
-          };
-        }
-      } on ApiRequestException {
-        // try next endpoint or fallback
-      } on QuestionContractException {
-        // invalid contract, fallback below
+        _recordBackend(
+          operation: 'class_stats',
+          endpoint: endpoint,
+          detail: 'Loaded class stats for $classId',
+        );
+        return {
+          'questionCount': (response['questionCount'] as num?)?.toInt() ?? 0,
+          'subjectCount': (response['subjectCount'] as num?)?.toInt() ??
+              categories.length,
+          'availableCategories': categories,
+          'source': 'backend',
+          'meta': envelope.meta,
+        };
       }
+    } on ApiRequestException {
+      // fallback below
+    } on QuestionContractException {
+      // fallback below
     }
 
     final questionCount = await _localLoader.getClassQuestionCount(classId);
@@ -438,29 +403,23 @@ class QuestionHubService {
   }
 
   Future<Map<String, dynamic>> getDatasetInfo() async {
-    for (final endpoint in const [
-      '/quiz/datasets/info',
-      '/questions/datasets/info'
-    ]) {
-      try {
-        final response = await _apiService.get(endpoint);
-        final envelope = QuestionResponseContract.parseObject(
-          response,
-          endpoint: endpoint,
-          anyOfKeys: const ['name', 'version', 'datasetName'],
-        );
-
-        _recordBackend(
-          operation: 'dataset_info',
-          endpoint: endpoint,
-          detail: 'Loaded dataset info from backend',
-        );
-        return envelope.data;
-      } on ApiRequestException {
-        // try next endpoint or fallback
-      } on QuestionContractException {
-        // invalid contract, try next endpoint or fallback
-      }
+    try {
+      final response = await _apiService.get('/questions/metadata');
+      final envelope = QuestionResponseContract.parseObject(
+        response,
+        endpoint: '/questions/metadata',
+        anyOfKeys: const ['name', 'version', 'datasetName', 'totalQuestions'],
+      );
+      _recordBackend(
+        operation: 'dataset_info',
+        endpoint: '/questions/metadata',
+        detail: 'Loaded dataset info from backend',
+      );
+      return envelope.data;
+    } on ApiRequestException {
+      // fallback below
+    } on QuestionContractException {
+      // fallback below
     }
 
     _recordFallback(
@@ -503,48 +462,6 @@ class QuestionHubService {
       // try legacy/fallback endpoints below
     } on QuestionContractException {
       // try legacy/fallback endpoints below
-    }
-
-    for (final endpoint in const ['/quiz/mixed', '/questions/mixed']) {
-      try {
-        final response = await _apiService.get(
-          endpoint,
-          queryParameters: {
-            'count': questionCount,
-            if (categories != null && categories.isNotEmpty)
-              'categories': categories.join(','),
-            if (difficulties != null && difficulties.isNotEmpty)
-              'difficulties': difficulties.join(','),
-            'balanceDifficulties': balanceDifficulties,
-          },
-        );
-
-        final envelope = QuestionResponseContract.parseCollection(
-          response,
-          endpoint: endpoint,
-          itemKeys: const ['items', 'questions', 'data'],
-          requireMeta: true,
-        );
-
-        final questions = envelope.items
-            .whereType<Map>()
-            .map((e) => Map<String, dynamic>.from(e))
-            .map(QuestionModel.fromJson)
-            .toList();
-
-        if (questions.isNotEmpty) {
-          _recordBackend(
-            operation: 'mixed_quiz',
-            endpoint: endpoint,
-            detail: 'Loaded ${questions.length} mixed questions',
-          );
-          return questions;
-        }
-      } on ApiRequestException {
-        // try next endpoint or fallback
-      } on QuestionContractException {
-        // invalid contract, fallback below
-      }
     }
 
     final quizCategories = categories
@@ -590,41 +507,9 @@ class QuestionHubService {
       // fallback below
     }
 
-    try {
-      final response = await _apiService.get(
-        '/quiz/daily',
-        queryParameters: {'count': questionCount},
-      );
-      final envelope = QuestionResponseContract.parseCollection(
-        response,
-        endpoint: '/quiz/daily',
-        itemKeys: const ['items', 'questions', 'data'],
-        requireMeta: true,
-      );
-
-      final questions = envelope.items
-          .whereType<Map>()
-          .map((e) => Map<String, dynamic>.from(e))
-          .map(QuestionModel.fromJson)
-          .toList();
-
-      if (questions.isNotEmpty) {
-        _recordBackend(
-          operation: 'daily_quiz',
-          endpoint: '/quiz/daily',
-          detail: 'Loaded ${questions.length} daily questions',
-        );
-        return questions;
-      }
-    } on ApiRequestException {
-      // fallback below
-    } on QuestionContractException {
-      // invalid contract, fallback below
-    }
-
     _recordFallback(
       operation: 'daily_quiz',
-      endpoint: '/quiz/daily',
+      endpoint: '/questions/set',
       detail: 'Using local daily quiz questions',
     );
     return _localLoader.getDailyQuiz(questionCount: questionCount);
@@ -719,7 +604,8 @@ class QuestionHubService {
       );
     }
 
-    final correctAnswer = response['correctAnswer']?.toString() ??
+    final correctAnswer = response['correctOptionId']?.toString() ??
+        response['correctAnswer']?.toString() ??
         response['expectedAnswer']?.toString() ??
         question.correctAnswer;
     final questionId = response['questionId']?.toString() ??
