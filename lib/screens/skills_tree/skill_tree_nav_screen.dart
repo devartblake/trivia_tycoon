@@ -9,6 +9,7 @@ import '../../../ui_components/hex_grid/math/hex_orientation.dart';
 import '../../game/models/skill_tree_nav_models.dart';
 import '../../game/providers/skill_tree_nav_providers.dart';
 import '../../game/providers/skill_tree_provider.dart';
+import '../../game/providers/xp_provider.dart';
 import '../../ui_components/hex_grid/widgets/mini_hex_preview.dart';
 
 class SkillTreeNavScreen extends ConsumerStatefulWidget {
@@ -113,7 +114,7 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
-            'XP: ${state.playerPoints}',
+            'XP: ${ref.watch(playerXPProvider)}',
             style: const TextStyle(
                 color: Colors.white, fontWeight: FontWeight.w600),
           ),
