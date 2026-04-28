@@ -147,7 +147,7 @@ class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
       }
 
       if (!mounted) return;
-      context.push('/quiz/play', extra: {
+      context.go('/quiz/play', extra: {
         'questions': curatedQuestions,
         'classLevel': widget.classLevel,
         'category': category.name,
