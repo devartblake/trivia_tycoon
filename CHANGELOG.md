@@ -8,7 +8,91 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-### Added - Backend-first notifications and direct messaging frontend integration (2026-04-20)
+### Added – Study Hub full implementation (2026-04-28)
+
+Introduces the complete Quizlet-like study surface (Phase 5 of the migration plan) — wiring three new screens, backend service, DTOs, Riverpod providers, and router routes.
+
+**New files:**
+- `lib/core/dto/study_dto.dart` — `StudySetListItem`, `StudySetDetail`, `StudyQuestion`, `StudyOption`, `StudySession`; enums `StudySessionMode` (selfTest/flashcard) and `FlashcardAction` (again/hard/good/easy) with `apiValue` extensions.
+- `lib/core/services/study/study_service.dart` — all 10 study endpoints: `GET /study-sets`, `GET /study-sets/recommended`, `GET /study-sets/{id}`, `POST /study-sets/favorites/{questionId}`, `DELETE /study-sets/favorites/{questionId}`, `POST /study-sessions`, `POST /study-sessions/{id}/progress`, `GET /study-sessions/{id}/summary`, `GET /study/categories`, `GET /study/search`.
+- `lib/game/providers/study_providers.dart` — `studyServiceProvider`, `studySetsProvider`, `recommendedStudySetsProvider`, `studySetDetailProvider`, `studySessionSummaryProvider`.
+- `lib/screens/study_hub/study_hub_screen.dart` — browse screen with recommended (horizontal scroll) and all-sets (vertical list) sections; kind-based color coding (Favorites/DueReview/WeakArea/Custom/General).
+- `lib/screens/study_hub/study_set_screen.dart` — set detail screen with question preview list and Flashcards / Self-Test launch buttons.
+- `lib/screens/study_hub/study_session_screen.dart` — session screen with flashcard mode (Show Answer → Again/Hard/Good/Easy) and self-test mode (option tap → reveal correct/incorrect); completion screen with score.
+
+**Router additions** (`lib/core/navigation/app_router.dart`):
+- `/study` → `StudyHubScreen`
+- `/study/set/:setId` → `StudySetScreen`
+- `/study/session/:sessionId` → `StudySessionScreen`
+- `/study/favorites` → redirects to `/study/set/favorites`
+- `/study/weak-areas` → redirects to `/study/set/weak-area`
+
+### Added – DirectMessagesUpdated SignalR real-time wiring (2026-04-28)
+
+Closes the real-time messaging gap — conversation lists and unread badges now update without polling when the backend pushes a `DirectMessagesUpdated` event.
+
+**Changes:**
+- `lib/core/dto/hub_event_dto.dart` — added `DirectMessagesUpdatedDto` matching the backend payload: `playerId`, `conversationId`, `unreadCount`, `reason`, `occurredAtUtc`.
+- `lib/core/networking/signalr/notification_hub.dart` — added `DirectMessagesUpdated` SignalR handler and `directMessagesUpdated` broadcast stream.
+- `lib/game/providers/hub_providers.dart` — added `directMessagesUpdatedStreamProvider`.
+- `lib/game/providers/message_providers.dart` — added `messageRealtimeSyncProvider` that listens to the stream and invalidates `userConversationsProvider`, `directMessageUnreadCountProvider`, and the specific `conversationMessagesProvider` on each push event.
+- `lib/screens/messages/messages_screen.dart` — watches `messageRealtimeSyncProvider` to activate live updates.
+- `lib/screens/menu/widgets/standard_appbar.dart` — watches `messageRealtimeSyncProvider` alongside the existing `notificationRealtimeSyncProvider` so the unread badge refreshes app-wide.
+
+### Changed – Legacy quiz method deprecations (2026-04-28)
+
+Marks the two remaining legacy question-fetch methods with `@Deprecated` as required by Phase 6 of the migration plan.
+
+- `lib/core/services/api_service.dart` — `fetchQuestions()` annotated `@Deprecated`; callers should route through `QuestionHubService`.
+- `lib/core/networking/synaptix_api_client.dart` — `getQuizQuestions()` annotated `@Deprecated`; callers should route through `QuestionHubService`.
+
+### Removed – Dead adapted question screen (2026-04-28)
+
+- `lib/screens/question/adapted_question_screen.dart` deleted. `lib/screens/question/question_view_screen.dart` is the router-canonical `AdaptedQuestionScreen` implementation. No imports referenced the deleted file.
+
+### Added – ML signal service (2026-04-28)
+
+- `lib/core/services/ml_signal_service.dart` — fire-and-forget wrapper for `POST /ml/churn-risk` and `POST /ml/match-quality`. Errors are silently swallowed so gameplay flows are never blocked.
+
+### Added – Avatar upload service (2026-04-28)
+
+- `lib/core/services/avatar_upload_service.dart` — two-step MinIO upload: `POST /users/me/avatar/upload-url` returns a presigned PUT URL; client then streams the file directly to MinIO with a progress callback.
+
+### Fixed – All /quiz/* backend API calls retired (2026-04-28)
+
+All remaining frontend calls to the retired `/quiz/*` backend surface have been replaced with their canonical equivalents.
+
+**Transport layer** (`lib/core/services/api_service.dart`, `lib/core/networking/synaptix_api_client.dart`):
+- `/quiz/play` → `/questions/set`; response array extracted from envelope.
+- `/quiz/submit` → `/questions/check-batch`.
+
+**Service layer** (`lib/game/services/question_hub_service.dart`):
+- `getAvailableCategories()`: `/quiz/categories` → `/questions/categories`.
+- `getQuestionStats()`: removed `/quiz/stats` fallback; canonical path only.
+- `getCategoryStats()`, `getClassStats()`, `getDatasetInfo()`: removed all dead `/quiz/*` first-try blocks.
+- `getDailyQuiz()`, `getMixedQuiz()`, `getQuestionsForCategory()`: removed entire dead `/quiz/*` fallback chains.
+- `checkAnswer()` / `checkAnswerBatch()`: request key `answer` → `selectedOptionId`; response parsing reads `correctOptionId` first.
+
+**Answer contract fix** — `POST /questions/check` now sends `{ selectedOptionId }` and parses `{ correctOptionId }` from the response, matching the documented backend contract.
+
+### Fixed – Persistent session: profile selection gate (2026-04-28)
+
+Users remain signed in across app restarts (tokens are persisted in Hive). On relaunch they land on the profile selection screen, not the login screen. Logging out clears the gate.
+
+**Changes:**
+- `lib/game/providers/auth_providers.dart` — added `profileSelectedProvider` (`StateProvider<bool>`, RAM-only, resets to `false` on cold start). `logout()` also resets it.
+- `lib/core/navigation/navigation_redirect_service.dart` — added profile-selection gate after login check and before onboarding check; `NavigationState` now includes `profileSelected`.
+- `lib/screens/profile/profile_selection_screen.dart` — sets `profileSelectedProvider` to `true` on successful profile tap and navigates to `/home`.
+
+### Fixed – Admin store 14 compile errors (2026-04-28)
+
+Previous session's `AdminStoreService` rewrite renamed and removed methods that admin screens depended on. Fixed without touching any screen files.
+
+**Changes:**
+- `lib/admin/store/services/admin_store_service.dart` — added backward-compatible aliases: `updatePolicy()`, `resetPolicyStock()`, `updateRewardLimit()`, `updateFlashSale()`, `deleteFlashSale()`, `createOverride()`.
+- `lib/admin/store/providers/admin_store_providers.dart` — restored three removed providers: `adminStoreAnalyticsProvider`, `adminRewardLimitsProvider`, `adminPlayerOverridesProvider`.
+
+
 
 Locks the premium store as the reference integration pattern and adds the frontend contract layer for the next backend-first systems: player notifications and direct-message core.
 

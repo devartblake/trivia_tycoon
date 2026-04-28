@@ -36,6 +36,10 @@ class _AdminNotificationsScreenState
   bool _isServerScheduledLoading = false;
   bool _didLoadServerScheduled = false;
   List<Map<String, dynamic>> _serverScheduled = <Map<String, dynamic>>[];
+  bool _isDeadLetterLoading = false;
+  bool _didLoadDeadLetter = false;
+  List<Map<String, dynamic>> _deadLetterItems = [];
+  bool _isReplaying = false;
 
   @override
   void initState() {
@@ -43,6 +47,7 @@ class _AdminNotificationsScreenState
     _loadServerHistory();
     _loadServerTemplates();
     _loadServerScheduled();
+    _loadDeadLetterItems();
   }
 
   @override
@@ -56,9 +61,72 @@ class _AdminNotificationsScreenState
   Future<void> _refresh() async {
     ref.invalidate(scheduledProvider);
     ref.invalidate(permissionAllowedProvider);
-    await _loadServerHistory();
-    await _loadServerTemplates();
-    await _loadServerScheduled();
+    await Future.wait([
+      _loadServerHistory(),
+      _loadServerTemplates(),
+      _loadServerScheduled(),
+      _loadDeadLetterItems(),
+    ]);
+  }
+
+  Future<void> _loadDeadLetterItems() async {
+    setState(() => _isDeadLetterLoading = true);
+    try {
+      final serviceManager = ref.read(serviceManagerProvider);
+      final response = await serviceManager.apiService
+          .get('/admin/notifications/dead-letters');
+      final items = serviceManager.apiService
+          .parsePageEnvelope<Map<String, dynamic>>(response, (json) => json)
+          .items;
+      if (!mounted) return;
+      setState(() {
+        _deadLetterItems = items;
+        _didLoadDeadLetter = true;
+      });
+    } catch (_) {
+      if (mounted) setState(() => _didLoadDeadLetter = true);
+    } finally {
+      if (mounted) setState(() => _isDeadLetterLoading = false);
+    }
+  }
+
+  Future<void> _replayDeadLetter(String envelopeId) async {
+    setState(() => _isReplaying = true);
+    try {
+      final serviceManager = ref.read(serviceManagerProvider);
+      await serviceManager.apiService.post(
+        '/admin/notifications/dead-letters/$envelopeId/replay',
+        body: <String, dynamic>{},
+      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Replay queued successfully'),
+            backgroundColor: Color(0xFF10B981),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+        await _loadDeadLetterItems();
+      }
+    } on Exception catch (e) {
+      final msg = e.toString().toLowerCase();
+      final label = msg.contains('conflict')
+          ? 'Already replayed or not in failed state'
+          : msg.contains('rate')
+              ? 'Rate limited — try again shortly'
+              : 'Replay failed: $e';
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(label),
+            backgroundColor: const Color(0xFFEF4444),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isReplaying = false);
+    }
   }
 
   Future<void> _loadServerHistory() async {
@@ -479,14 +547,14 @@ class _AdminNotificationsScreenState
     return SegmentedTabs(
       index: _tabIndex,
       onChanged: (i) => setState(() => _tabIndex = i),
-      tabs: const ['All', 'Scheduled', 'History'],
+      tabs: const ['All', 'Scheduled', 'History', 'Dead Letter'],
     );
   }
 
   Widget _buildTabContent(
       bool isAdmin, AsyncValue<List<dynamic>> scheduledAsync) {
     switch (_tabIndex) {
-      case 0: // All tab
+      case 0:
         return Column(
           children: [
             _buildComposeSection(isAdmin),
@@ -494,13 +562,142 @@ class _AdminNotificationsScreenState
             _buildScheduledSection(scheduledAsync),
           ],
         );
-      case 1: // Scheduled tab
+      case 1:
         return _buildScheduledSection(scheduledAsync);
-      case 2: // History tab
+      case 2:
         return _buildServerHistorySection();
+      case 3:
+        return _buildDeadLetterSection();
       default:
         return _buildComposeSection(isAdmin);
     }
+  }
+
+  Widget _buildDeadLetterSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: const Color(0xFFEF4444).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Icon(Icons.report_gmailerrorred_outlined,
+                  color: Color(0xFFEF4444), size: 20),
+            ),
+            const SizedBox(width: 12),
+            const Text(
+              'Dead Letter Queue',
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1F2937)),
+            ),
+            const Spacer(),
+            IconButton(
+              icon: const Icon(Icons.refresh, size: 20),
+              tooltip: 'Refresh',
+              onPressed: _isDeadLetterLoading ? null : _loadDeadLetterItems,
+            ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        const Text(
+          'Notifications that permanently failed delivery. Replay to retry.',
+          style: TextStyle(fontSize: 13, color: Color(0xFF6B7280)),
+        ),
+        const SizedBox(height: 16),
+        if (_isDeadLetterLoading || _isReplaying)
+          const LinearProgressIndicator(minHeight: 2),
+        if (!_didLoadDeadLetter)
+          const SizedBox(height: 48, child: Center(child: CircularProgressIndicator()))
+        else if (_deadLetterItems.isEmpty)
+          _buildDeadLetterEmptyState()
+        else
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
+            ),
+            child: ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: _deadLetterItems.length,
+              separatorBuilder: (_, __) => const Divider(height: 1),
+              itemBuilder: (_, i) {
+                final item = _deadLetterItems[i];
+                final id = (item['id'] ??
+                        item['envelopeId'] ??
+                        item['messageId'] ??
+                        '')
+                    .toString();
+                final title =
+                    (item['title'] ?? item['subject'] ?? '(untitled)')
+                        .toString();
+                final channel =
+                    (item['channelKey'] ?? item['channel_key'] ?? '-')
+                        .toString();
+                final reason =
+                    (item['failureReason'] ?? item['failure_reason'] ?? '-')
+                        .toString();
+                final rawTs = (item['failedAtUtc'] ??
+                        item['failed_at'] ??
+                        item['createdAt'] ??
+                        '')
+                    .toString();
+                final ts = DateTime.tryParse(rawTs)?.toLocal();
+
+                return ListTile(
+                  leading: const Icon(Icons.error_outline,
+                      color: Color(0xFFEF4444)),
+                  title: Text(title),
+                  subtitle: Text(
+                    'channel=$channel\n$reason'
+                    '${ts != null ? '\n${_dateFormat.format(ts)}' : ''}',
+                  ),
+                  isThreeLine: true,
+                  trailing: TextButton.icon(
+                    onPressed:
+                        (_isReplaying || id.isEmpty) ? null : () => _replayDeadLetter(id),
+                    icon: const Icon(Icons.replay, size: 16),
+                    label: const Text('Replay'),
+                    style: TextButton.styleFrom(
+                      foregroundColor: const Color(0xFF6366F1),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildDeadLetterEmptyState() {
+    return Container(
+      padding: const EdgeInsets.all(32),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
+      ),
+      child: const Row(
+        children: [
+          Icon(Icons.check_circle_outline, color: Color(0xFF10B981)),
+          SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              'No dead-letter items — all notifications delivered successfully.',
+              style: TextStyle(color: Color(0xFF6B7280)),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildServerHistorySection() {
