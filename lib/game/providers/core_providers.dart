@@ -22,7 +22,7 @@ import '../../core/services/analytics/config_service.dart';
 import '../../core/services/api_service.dart';
 import '../../core/services/auth_api_client.dart';
 import '../../core/services/auth_http_client.dart';
-import '../../core/networking/tycoon_api_client_enhanced.dart';
+import '../../core/networking/synaptix_api_client_enhanced.dart';
 import '../../core/services/auth_token_store.dart';
 import '../../core/services/auth_service.dart' as core_auth;
 import '../../core/services/device_id_service.dart';
