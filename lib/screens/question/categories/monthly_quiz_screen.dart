@@ -223,7 +223,7 @@ class MonthlyQuizScreen extends ConsumerWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     // Navigate to quiz with monthly questions
-                    context.push('quiz/play', extra: {
+                    context.push('/quiz/play', extra: {
                       'questions': questions,
                       'title': '$currentMonth Challenge',
                       'isMonthlyChallenge': true,

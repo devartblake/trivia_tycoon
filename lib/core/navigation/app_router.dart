@@ -20,6 +20,7 @@ import 'package:trivia_tycoon/screens/settings/settings_screen.dart';
 import '../../admin/admin_dashboard_shell.dart';
 import '../../admin/analytics/analytics_screen.dart';
 import '../../admin/audit/admin_audit_log_screen.dart';
+import '../../admin/audit/admin_security_audit_screen.dart';
 import '../../admin/config/config_settings_screen.dart';
 import '../../admin/encryption/encryption_manager_screen.dart';
 import '../../admin/notifications/admin_notifications_screen.dart';
@@ -339,6 +340,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => AdminAuditLogScreen(
               userId: state.uri.queryParameters['userId'],
             ),
+          ),
+          GoRoute(
+            path: '/admin/audit/security',
+            name: 'admin-security-audit',
+            builder: (context, state) => const AdminSecurityAuditScreen(),
           ),
           GoRoute(
             path: '/admin/card-demo',
