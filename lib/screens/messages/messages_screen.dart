@@ -43,6 +43,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(messageRealtimeSyncProvider);
     final conversationsAsync =
         ref.watch(userConversationsProvider(_currentUserId));
     final unreadCount = ref.watch(unreadMessagesProvider(_currentUserId));

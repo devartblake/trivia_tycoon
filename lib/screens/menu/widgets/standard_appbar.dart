@@ -24,6 +24,7 @@ class StandardAppBar extends ConsumerWidget implements PreferredSizeWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = _getThemeData();
     ref.watch(notificationRealtimeSyncProvider);
+    ref.watch(msg.messageRealtimeSyncProvider);
 
     // Watch the async currentUserId
     final currentUserIdAsync = ref.watch(currentUserIdProvider);

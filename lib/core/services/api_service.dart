@@ -121,6 +121,8 @@ class ApiService {
     _dio.interceptors.add(_cacheInterceptor);
   }
 
+  @Deprecated('Use QuestionHubService or StudyService instead. '
+      'Direct question fetching is handled by /questions endpoints.')
   Future<List<Map<String, dynamic>>> fetchQuestions({
     required int amount,
     String? category,

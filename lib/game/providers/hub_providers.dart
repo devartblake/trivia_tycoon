@@ -54,6 +54,11 @@ final voteTallyStreamProvider = StreamProvider<VoteTallyUpdatedDto>((ref) {
   return ref.watch(notificationHubProvider).voteTallyUpdates;
 });
 
+final directMessagesUpdatedStreamProvider =
+    StreamProvider<DirectMessagesUpdatedDto>((ref) {
+  return ref.watch(notificationHubProvider).directMessagesUpdated;
+});
+
 // ── MatchHub stream provider ─────────────────────────────────────────────────
 
 final matchUpdateStreamProvider = StreamProvider<MatchUpdateDto>((ref) {

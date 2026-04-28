@@ -17,6 +17,8 @@ class NotificationHub extends HubClientBase {
   final _guardianChanges = StreamController<GuardianChangedDto>.broadcast();
   final _territoryCaptures = StreamController<TerritoryCaptureDto>.broadcast();
   final _voteTallyUpdates = StreamController<VoteTallyUpdatedDto>.broadcast();
+  final _directMessagesUpdated =
+      StreamController<DirectMessagesUpdatedDto>.broadcast();
 
   Stream<PlayerNotificationDto> get playerNotifications =>
       _playerNotifications.stream;
@@ -27,6 +29,8 @@ class NotificationHub extends HubClientBase {
   Stream<TerritoryCaptureDto> get territoryCaptures =>
       _territoryCaptures.stream;
   Stream<VoteTallyUpdatedDto> get voteTallyUpdates => _voteTallyUpdates.stream;
+  Stream<DirectMessagesUpdatedDto> get directMessagesUpdated =>
+      _directMessagesUpdated.stream;
 
   @override
   void registerHandlers(HubConnection connection) {
@@ -71,6 +75,13 @@ class NotificationHub extends HubClientBase {
         _voteTallyUpdates.add(VoteTallyUpdatedDto.fromJson(raw));
       }
     });
+
+    connection.on('DirectMessagesUpdated', (args) {
+      final raw = _firstArg(args);
+      if (raw != null) {
+        _directMessagesUpdated.add(DirectMessagesUpdatedDto.fromJson(raw));
+      }
+    });
   }
 
   // ── Group subscriptions ──────────────────────────────────────────────────
@@ -97,6 +108,7 @@ class NotificationHub extends HubClientBase {
     await _guardianChanges.close();
     await _territoryCaptures.close();
     await _voteTallyUpdates.close();
+    await _directMessagesUpdated.close();
   }
 
   // ── Helpers ──────────────────────────────────────────────────────────────
