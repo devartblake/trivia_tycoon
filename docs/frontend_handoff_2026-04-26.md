@@ -466,14 +466,14 @@ These backend endpoints are live and tested. The only remaining work is on the F
 
 | Surface | Backend | Flutter work needed |
 |---------|---------|-------------------|
-| Study hub | ✅ Live | `StudyHubScreen`, `/study` routes, flashcard + self-test flows. See `docs/study_frontend_backend_handoff_2026-04-18.md` |
-| Direct messaging | ✅ Live | WebSocket `DirectMessagesUpdated` hookup, paginated thread UI. See `docs/messaging_backend_handoff_2026-04-20.md` |
-| Notifications | ✅ Live | `/ws/notify` refresh, mark-read/dismiss UI. See `docs/notifications_backend_handoff_2026-04-20.md` |
-| Crypto economy | ✅ Live | All 10 crypto endpoints (this doc, Part 2). Flutter service + providers not yet wired |
-| Avatar upload | ✅ Live (`POST /users/me/avatar/upload-url`) | Upload service, progress UI, MinIO-backed URL persistence |
-| ML signals | ✅ Live | `POST /ml/churn-risk`, `POST /ml/match-quality` consumption in `ml_signal_service.dart` |
-| Admin security UI | ✅ Live | Error envelope normalization, dead-letter list, audit security page. See `docs/frontend_admin_security_rollout_plan.md` |
-| Sprint 2 networking layer | N/A | Copy 4 files into `lib/core/networking/`, add `web_socket_channel` + `uuid` to pubspec, add 3 Riverpod providers |
+| Study hub | ✅ Live | ✅ **Done (2026-04-28)** — `StudyHubScreen`, `StudySetScreen`, `StudySessionScreen`, all `/study/*` routes, flashcard + self-test modes, `/study/favorites` + `/study/weak-areas` shortcuts. |
+| Direct messaging | ✅ Live | ✅ **Done (2026-04-28)** — `DirectMessagesUpdated` SignalR handler wired in `NotificationHub`; `messageRealtimeSyncProvider` invalidates conversation/unread providers; watched in `MessagesScreen` and `StandardAppBar`. |
+| Notifications | ✅ Live | ✅ **Done** — `notificationRealtimeSyncProvider` wired and watched in `notifications_screen.dart`, `main_menu_screen.dart`, `standard_appbar.dart`. Mark-read/dismiss UI complete. |
+| Crypto economy | ✅ Live | ⏳ Pending — All 10 crypto endpoints (this doc, Part 2). Flutter service + providers not yet wired |
+| Avatar upload | ✅ Live (`POST /users/me/avatar/upload-url`) | ✅ **Done (2026-04-28)** — `lib/core/services/avatar_upload_service.dart`: presigned URL fetch + MinIO PUT with progress callback. |
+| ML signals | ✅ Live | ✅ **Done (2026-04-28)** — `lib/core/services/ml_signal_service.dart`: fire-and-forget `POST /ml/churn-risk` and `POST /ml/match-quality`. |
+| Admin security UI | ✅ Live | ⏳ Pending — Dead-letter list + replay UI; `/admin/audit/security` timeline page. See `docs/frontend_admin_security_rollout_plan.md` |
+| Sprint 2 networking layer | N/A | ✅ **Done** — All 4 files present in `lib/core/networking/`; `web_socket_channel` and `uuid` in pubspec; 3 Riverpod providers wired. |
 
 ---
 

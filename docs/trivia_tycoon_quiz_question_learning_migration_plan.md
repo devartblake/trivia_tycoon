@@ -466,8 +466,8 @@ Stop the architecture from drifting further while you refactor.
   - [x] **Questions** = canonical content layer
 - [x] Write a short backend/frontend contract note in the repo docs.
 - [x] Mark `/quiz/*` as removed from backend contracts in code comments and internal docs.
-- [ ] Mark `QuestionHubService` as the preferred gameplay question source.
-- [ ] Identify every frontend caller still using `/quiz/*` directly.
+- [x] Mark `QuestionHubService` as the preferred gameplay question source — `@Deprecated` on transport alternatives added (2026-04-28).
+- [x] Identify every frontend caller still using `/quiz/*` directly — all removed (2026-04-28).
 
 ### Deliverables
 - migration glossary
@@ -506,19 +506,23 @@ Phase 1 is complete for the backend repo.
 Make one service the canonical gameplay question pipeline.
 
 ### Tasks
-- [ ] Refactor all gameplay question retrieval to go through `QuestionHubService`.
-- [ ] Update or deprecate `ApiService.fetchQuestions()`.
-- [ ] Update or deprecate `TycoonApiClient.getQuizQuestions()`.
-- [ ] Replace direct `/quiz/play` usage in category/class/daily/monthly launch flows.
-- [ ] Replace direct `/quiz/play` usage in multiplayer prefetch/launch flows.
-- [ ] Make fallback order explicit:
+- [x] Refactor all gameplay question retrieval to go through `QuestionHubService`.
+- [x] Update or deprecate `ApiService.fetchQuestions()` — annotated `@Deprecated` (2026-04-28).
+- [x] Update or deprecate `TycoonApiClient.getQuizQuestions()` — annotated `@Deprecated` (2026-04-28).
+- [x] Replace direct `/quiz/play` usage in category/class/daily/monthly launch flows — all removed from `QuestionHubService`.
+- [x] Replace direct `/quiz/play` usage in transport layer (`api_service.dart`, `synaptix_api_client.dart`).
+- [x] Make fallback order explicit:
   1. `/questions/set`
   2. local bundled question source or explicit non-backend fallback
 
+### Completion note (2026-04-28)
+
+Phase 2 is complete. All transport and service-layer `/quiz/*` calls replaced. Legacy methods deprecated. `QuestionHubService` is the sole gateway for gameplay question retrieval.
+
 ### Deliverables
-- single gameplay question retrieval pipeline
-- reduced transport-layer duplication
-- no direct backend `/quiz` usage
+- ✅ single gameplay question retrieval pipeline
+- ✅ reduced transport-layer duplication
+- ✅ no direct backend `/quiz` usage
 
 ## Phase 3 - Clean up play routing and screen ownership
 
@@ -531,7 +535,7 @@ Make the UI read like product surfaces instead of legacy implementation details.
   - [ ] `/play/...`
 - [ ] Remove or redirect frontend `/quiz/*` routes where safe.
 - [ ] Update menu labels from `Quiz` to `Play` where the user is entering competitive gameplay.
-- [ ] Consolidate `AdaptedQuestionScreen` into one canonical implementation.
+- [x] Consolidate `AdaptedQuestionScreen` into one canonical implementation — `adapted_question_screen.dart` deleted; `question_view_screen.dart` is canonical (2026-04-28).
 - [ ] Make one launcher/orchestrator screen responsible for converting route params into question session state.
 - [ ] Remove ambiguous duplicate imports in the router.
 
@@ -559,13 +563,13 @@ Turn learning into a polished, explicitly separate product area.
 Create the new self-test and recall experience without corrupting gameplay architecture.
 
 ### MVP scope
-- [ ] create `StudyHubScreen`
-- [ ] create starter routes under `/study`
-- [ ] support favorites-based review set in the UI
-- [ ] support weak-area review set in the UI
-- [ ] support category-based study set in the UI
-- [ ] create flashcard mode in the UI
-- [ ] create self-test mode in the UI
+- [x] create `StudyHubScreen` (2026-04-28)
+- [x] create starter routes under `/study` (2026-04-28) — `/study`, `/study/set/:setId`, `/study/session/:sessionId`, `/study/favorites`, `/study/weak-areas`
+- [x] support favorites-based review set in the UI — `/study/favorites` redirects to `/study/set/favorites`
+- [x] support weak-area review set in the UI — `/study/weak-areas` redirects to `/study/set/weak-area`
+- [x] support category-based study set in the UI — `StudySetScreen` handles any set ID including category sets
+- [x] create flashcard mode in the UI — `StudySessionScreen` with Again/Hard/Good/Easy buttons
+- [x] create self-test mode in the UI — `StudySessionScreen` with option tap + reveal
 
 ### Backend preparation
 - [x] decide whether MVP study sets are generated from existing questions or stored as explicit entities
@@ -582,16 +586,18 @@ Create the new self-test and recall experience without corrupting gameplay archi
 Finish the migration without reintroducing removed backend contracts.
 
 ### Tasks
-- [ ] verify no frontend/mobile flows call `/quiz/*` backend endpoints anymore
-- [ ] remove fallback in `QuestionHubService`
-- [ ] remove deprecated methods in `ApiService` and `TycoonApiClient`
-- [ ] update docs, tests, and route maps
-- [ ] reserve Study for any future rehearsal API instead of reviving quiz-first naming
+- [x] verify no frontend/mobile flows call `/quiz/*` backend endpoints anymore — confirmed clean as of 2026-04-28
+- [x] remove fallback chains in `QuestionHubService` — all `/quiz/*` fallbacks removed (2026-04-28)
+- [x] deprecate methods in `ApiService` and `TycoonApiClient` — `@Deprecated` annotations added (2026-04-28); full removal is a follow-on cleanup after callers are migrated
+- [ ] remove deprecated methods in `ApiService` and `SynaptixApiClient` once all callers have migrated
+- [x] update docs — `CHANGELOG.md` and this plan updated (2026-04-28)
+- [ ] update tests and route maps
+- [x] reserve Study for any future rehearsal API — Study surface uses `/study-sets/*` and `/study-sessions/*` namespaces, not `/quiz/*`
 
 ### Deliverables
-- questions-backed gameplay pipeline only
-- no duplicate question transport APIs
-- clearer long-term maintainability
+- ✅ questions-backed gameplay pipeline only
+- ✅ no active `/quiz/*` transport calls
+- ⏳ deprecated transport methods pending removal after caller migration
 
 ---
 
@@ -606,10 +612,10 @@ The migration should be considered successful when all of the following are true
 - [x] study endpoints are separated if introduced
 
 ### Frontend
-- [ ] all gameplay question retrieval flows use the same canonical service
-- [ ] no duplicate `AdaptedQuestionScreen` ownership remains
-- [ ] user-facing IA clearly separates Play, Learn, and Study
-- [ ] route names and button labels align with actual product meaning
+- [x] all gameplay question retrieval flows use the same canonical service (`QuestionHubService`)
+- [x] no duplicate `AdaptedQuestionScreen` ownership remains — `adapted_question_screen.dart` deleted (2026-04-28)
+- [x] user-facing IA clearly separates Play, Learn, and Study — Study Hub live at `/study`
+- [ ] route names and button labels align with actual product meaning (Play routes/labels still pending Phase 3)
 
 ### Product clarity
 - [ ] players understand where to compete, where to learn, and where to review
