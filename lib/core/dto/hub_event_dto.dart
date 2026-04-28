@@ -154,3 +154,30 @@ class VoteTallyUpdatedDto {
         totalVotes: j['totalVotes'] as int? ?? 0,
       );
 }
+
+class DirectMessagesUpdatedDto {
+  final String playerId;
+  final String conversationId;
+  final int unreadCount;
+  final String reason;
+  final DateTime occurredAtUtc;
+
+  const DirectMessagesUpdatedDto({
+    required this.playerId,
+    required this.conversationId,
+    required this.unreadCount,
+    required this.reason,
+    required this.occurredAtUtc,
+  });
+
+  factory DirectMessagesUpdatedDto.fromJson(Map<String, dynamic> j) =>
+      DirectMessagesUpdatedDto(
+        playerId: j['playerId'] as String? ?? '',
+        conversationId: j['conversationId'] as String? ?? '',
+        unreadCount: j['unreadCount'] as int? ?? 0,
+        reason: j['reason'] as String? ?? '',
+        occurredAtUtc:
+            DateTime.tryParse(j['occurredAtUtc'] as String? ?? '') ??
+                DateTime.now(),
+      );
+}

@@ -870,6 +870,16 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         ),
         redirect: onboardingGuard,
       ),
+      GoRoute(
+        path: '/study/favorites',
+        name: 'study-favorites',
+        redirect: (context, state) => '/study/set/favorites',
+      ),
+      GoRoute(
+        path: '/study/weak-areas',
+        name: 'study-weak-areas',
+        redirect: (context, state) => '/study/set/weak-area',
+      ),
 
       GoRoute(
         path: '/learn-hub/module/:moduleId/complete',

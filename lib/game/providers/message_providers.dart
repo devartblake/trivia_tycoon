@@ -6,10 +6,12 @@ import '../../core/services/storage/message_storage_service.dart';
 import '../../core/services/social/challenge_message_bridge.dart';
 import '../../core/services/social/conversation_storage_service.dart';
 import '../../core/services/social/friend_message_bridge.dart';
+import '../../core/dto/hub_event_dto.dart';
 import '../models/conversation_models.dart';
 import '../models/message_models.dart';
 import '../models/typing_status_model.dart';
 import 'core_providers.dart';
+import 'hub_providers.dart';
 
 // ============ Auth Identity ============
 
@@ -121,6 +123,25 @@ final conversationUnreadCountProvider =
     },
     orElse: () => 0,
   );
+});
+
+// ============ Real-time sync (WebSocket push → REST invalidation) ============
+
+/// Watches the SignalR `DirectMessagesUpdated` push event and invalidates
+/// conversation/unread providers so the UI reflects new messages immediately.
+/// Must be watched by any screen that shows conversation lists or badges.
+final messageRealtimeSyncProvider = Provider<void>((ref) {
+  ref.listen<AsyncValue<DirectMessagesUpdatedDto>>(
+      directMessagesUpdatedStreamProvider, (_, next) {
+    next.whenData((event) {
+      final userId = ref.read(currentUserIdProvider);
+      ref.invalidate(userConversationsProvider(userId));
+      ref.invalidate(directMessageUnreadCountProvider(userId));
+      if (event.conversationId.isNotEmpty) {
+        ref.invalidate(conversationMessagesProvider(event.conversationId));
+      }
+    });
+  });
 });
 
 // ============ Streams (for real-time updates) ============

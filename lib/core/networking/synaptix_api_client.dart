@@ -44,7 +44,8 @@ class SynaptixApiClient {
   // Quiz/Questions
   // ========================================
 
-  /// Fetch quiz questions
+  @Deprecated('Use QuestionHubService instead. '
+      'Direct question fetching is handled by /questions endpoints.')
   Future<List<Map<String, dynamic>>> getQuizQuestions({
     required int amount,
     String? category,
