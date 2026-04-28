@@ -139,7 +139,7 @@ class DailyQuizScreen extends ConsumerWidget {
                   onPressed:
                       dailyQuizStatus.canPlay && quizData.questions.isNotEmpty
                           ? () {
-                              context.push('/quiz/play', extra: {
+                              context.go('/quiz/play', extra: {
                                 'questions': quizData.questions,
                                 'questionCount': quizData.questions.length,
                                 'classLevel': '9',

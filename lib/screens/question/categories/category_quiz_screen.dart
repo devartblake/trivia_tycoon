@@ -525,7 +525,7 @@ class _CategoryQuizScreenState extends ConsumerState<CategoryQuizScreen> {
     }
 
     final category = QuizCategoryManager.fromString(widget.category);
-    context.push('/quiz/play', extra: {
+    context.go('/quiz/play', extra: {
       'questions': selectedQuestions,
       'questionCount': selectedQuestions.length,
       'category': category?.name ?? widget.category,

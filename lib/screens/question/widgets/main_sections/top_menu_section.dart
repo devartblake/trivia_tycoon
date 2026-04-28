@@ -219,7 +219,7 @@ class TopMenuSection extends ConsumerWidget {
   }
 
   void _handlePlayQuizTap(BuildContext context) {
-    context.push('/quiz/play');
+    context.go('/quiz/play');
   }
 
   void _handleCreateQuizTap(BuildContext context) {
