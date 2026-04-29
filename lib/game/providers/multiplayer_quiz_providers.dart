@@ -256,6 +256,7 @@ class MultiplayerQuizNotifier extends StateNotifier<MultiplayerQuizState> {
       updatedQuestions[state.currentIndex] = updatedQuestion;
 
       state = state.copyWith(
+        playerAnswer: answer,
         currentQuestion: updatedQuestion,
         questions: updatedQuestions,
         isPlayerCorrect: validation.isCorrect,
@@ -276,8 +277,10 @@ class MultiplayerQuizNotifier extends StateNotifier<MultiplayerQuizState> {
 
     final correctAnswer =
         state.revealedCorrectAnswer ?? state.currentQuestion!.correctAnswer;
-    final isPlayerCorrect =
-        state.playerAnswer != null && state.playerAnswer == correctAnswer;
+    // Trust the server-validated result set by validateAnswer() in submitAnswer().
+    // Recalculating from the answer string is unreliable when correctAnswer is an
+    // opaque ID (e.g. UUID) rather than display text.
+    final isPlayerCorrect = state.isPlayerCorrect;
     final isOpponentCorrect =
         state.opponentAnswer != null && state.opponentAnswer == correctAnswer;
 
