@@ -7,6 +7,7 @@ import '../dto/guardian_dto.dart';
 import '../dto/territory_dto.dart';
 import '../dto/vote_dto.dart';
 import '../dto/economy_dto.dart';
+import '../dto/personalization_dto.dart';
 
 /// API client for Synaptix backend
 ///
@@ -741,6 +742,99 @@ class SynaptixApiClient {
       }
       rethrow;
     }
+  }
+
+  // ========================================
+  // PERSONALIZATION
+  // ========================================
+
+  /// GET /personalization/{playerId}/profile
+  Future<PlayerMindProfileDto> getPlayerMindProfile({required String playerId}) async {
+    final j = await _http.getJson('/personalization/$playerId/profile');
+    return PlayerMindProfileDto.fromJson(j);
+  }
+
+  /// GET /personalization/{playerId}/home
+  Future<PlayerHomePersonalizationDto> getHomePersonalization({required String playerId}) async {
+    final j = await _http.getJson('/personalization/$playerId/home');
+    return PlayerHomePersonalizationDto.fromJson(j);
+  }
+
+  /// POST /personalization/{playerId}/events — fire-and-forget behaviour event.
+  Future<void> recordBehaviourEvent({
+    required String playerId,
+    required BehaviourEventDto event,
+  }) async {
+    await _http.post('/personalization/$playerId/events', body: event.toJson());
+  }
+
+  /// GET /personalization/{playerId}/recommendations
+  Future<List<PlayerRecommendationDto>> getRecommendations({required String playerId}) async {
+    final data = await _http.getJsonList('/personalization/$playerId/recommendations');
+    return data.whereType<Map<String, dynamic>>().map(PlayerRecommendationDto.fromJson).toList();
+  }
+
+  /// POST /personalization/{playerId}/toggle
+  Future<bool> togglePersonalization({required String playerId, required bool enabled}) async {
+    final j = await _http.postJson(
+      '/personalization/$playerId/toggle',
+      body: {'enabled': enabled},
+    );
+    return j['personalizationEnabled'] as bool? ?? enabled;
+  }
+
+  /// GET /coach/{playerId}/daily-brief
+  Future<CoachBriefDto> getDailyBrief({required String playerId}) async {
+    final j = await _http.getJson('/coach/$playerId/daily-brief');
+    return CoachBriefDto.fromJson(j);
+  }
+
+  /// POST /coach/{playerId}/feedback
+  /// [feedback] is one of: "engage", "dismiss", "helpful", "not_helpful"
+  Future<void> postCoachFeedback({
+    required String playerId,
+    required String briefId,
+    required String feedback,
+  }) async {
+    await _http.post('/coach/$playerId/feedback', body: {
+      'briefId': briefId,
+      'feedback': feedback,
+    });
+  }
+
+  // ========================================
+  // A/B EXPERIMENTS
+  // ========================================
+
+  /// GET /experiments/player/{playerId} — bootstrap all assignments at session start.
+  Future<PlayerExperimentsDto> getPlayerExperiments({required String playerId}) async {
+    final j = await _http.getJson('/experiments/player/$playerId');
+    return PlayerExperimentsDto.fromJson(j);
+  }
+
+  /// GET /experiments/player/{playerId}/{experimentKey}
+  Future<SingleExperimentResultDto> getPlayerExperiment({
+    required String playerId,
+    required String experimentKey,
+  }) async {
+    final j = await _http.getJson('/experiments/player/$playerId/$experimentKey');
+    return SingleExperimentResultDto.fromJson(j);
+  }
+
+  /// POST /experiments/player/{playerId}/{experimentKey}/impression
+  Future<void> recordExperimentImpression({
+    required String playerId,
+    required String experimentKey,
+  }) async {
+    await _http.post('/experiments/player/$playerId/$experimentKey/impression');
+  }
+
+  /// POST /experiments/player/{playerId}/{experimentKey}/outcome
+  Future<void> recordExperimentOutcome({
+    required String playerId,
+    required String experimentKey,
+  }) async {
+    await _http.post('/experiments/player/$playerId/$experimentKey/outcome');
   }
 
   /// Close HTTP client

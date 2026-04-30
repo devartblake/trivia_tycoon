@@ -25,6 +25,8 @@ import '../../ui_components/tycoon_toast/tycoon_toast.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../game/providers/wallet_providers.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import '../../game/providers/personalization_providers.dart';
+import 'widgets/coach_brief_banner.dart';
 
 /// Modern, modular main menu screen
 ///
@@ -281,7 +283,9 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
         children: [
           const SizedBox(height: 10),
           _buildLiveTickerBar(),
-          const SizedBox(height: 14),
+          const SizedBox(height: 8),
+          _buildCoachBriefBanner(),
+          const SizedBox(height: 6),
           _animatedComponent(0, _buildFeaturedModeCard()),
           const SizedBox(height: 20),
           _animatedComponent(1, _buildCurrencyWidget()),
@@ -424,6 +428,18 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
       animation: _cardAnimationControllers[index],
       begin: const Offset(0, 0.5),
       child: child,
+    );
+  }
+
+  Widget _buildCoachBriefBanner() {
+    final asyncId = ref.watch(currentPlayerIdProvider);
+    return asyncId.when(
+      data: (id) {
+        if (id.isEmpty) return const SizedBox.shrink();
+        return CoachBriefBannerLoader(playerId: id);
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
     );
   }
 

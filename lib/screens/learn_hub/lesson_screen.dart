@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/dto/learning_dto.dart';
 import '../../game/providers/learning_providers.dart';
+import '../../game/providers/personalization_providers.dart';
 
 class LessonScreen extends ConsumerWidget {
   final String moduleId;
@@ -194,6 +195,14 @@ class _LessonFlowState extends ConsumerState<_LessonFlow> {
       final result = await ref
           .read(learningRepositoryProvider)
           .completeModule(widget.moduleId, playerId);
+
+      // Fire learning_module_completed behaviour event
+      if (playerId.isNotEmpty) {
+        ref.read(personalizationServiceProvider).fireLearningModuleCompleted(
+              playerId: playerId,
+              metadata: {'moduleId': widget.moduleId},
+            );
+      }
 
       if (mounted) {
         context.pushReplacement(

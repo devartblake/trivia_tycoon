@@ -28,6 +28,7 @@ import '../theme/app_scroll_behavior.dart';
 import '../theme/themes.dart';
 import '../services/theme/seasonal_theme_service.dart';
 import 'app_init.dart';
+import '../../game/providers/personalization_providers.dart';
 
 /// AppLauncher handles config + service initialization and launches the app
 class AppLauncher extends ConsumerStatefulWidget {
@@ -56,6 +57,7 @@ class _AppLauncherState extends ConsumerState<AppLauncher>
     _initRouter();
     _trackAppLaunch();
     _listenToLiveSpinSummary();
+    _listenToAuthForPersonalization();
     _retryQueuedProfileSyncUpdates();
     _initIncomingLinks();
   }
@@ -70,6 +72,15 @@ class _AppLauncherState extends ConsumerState<AppLauncher>
     AppInit.dispose();
 
     super.dispose();
+  }
+
+  /// Re-bootstrap personalization whenever the player logs in during the session.
+  void _listenToAuthForPersonalization() {
+    ref.listenManual<bool>(isLoggedInSyncProvider, (previous, current) {
+      if (current == true && previous != true) {
+        _bootstrapPersonalization(widget.initialData.$1);
+      }
+    });
   }
 
   void _listenToLiveSpinSummary() {
@@ -293,6 +304,38 @@ class _AppLauncherState extends ConsumerState<AppLauncher>
 
   // ============ END LIFECYCLE TRACKING ============
 
+  /// Fire-and-forget personalization + experiment bootstrap.
+  /// Runs after login; errors are swallowed so they never block the UI.
+  void _bootstrapPersonalization(serviceManager) {
+    unawaited(() async {
+      try {
+        final playerId =
+            await serviceManager.playerProfileService.getUserId();
+        if (playerId == null || playerId.isEmpty) return;
+        await ref
+            .read(personalizationServiceProvider)
+            .initSession(playerId);
+
+        // Seed personalization toggle from full profile (lazy fetch)
+        try {
+          final profile = await ref
+              .read(personalizationServiceProvider)
+              .getProfile(playerId);
+          ref
+              .read(personalizationEnabledProvider(playerId).notifier)
+              .state = profile.personalizationEnabled;
+        } catch (_) {}
+
+        LogManager.debug(
+            '[Personalization] Session bootstrap complete for $playerId',
+            source: 'AppLauncher');
+      } catch (e) {
+        LogManager.warning('[Personalization] Bootstrap failed: $e',
+            source: 'AppLauncher');
+      }
+    }());
+  }
+
   /// Initialize authentication state from your existing services
   Future<void> _initializeAuthState() async {
     try {
@@ -306,6 +349,7 @@ class _AppLauncherState extends ConsumerState<AppLauncher>
       // Update the provider state to match service state
       if (isLoggedIn) {
         ref.read(isLoggedInSyncProvider.notifier).state = true;
+        _bootstrapPersonalization(serviceManager);
       }
 
       if (isLoggedIn && hasOnboarded) {

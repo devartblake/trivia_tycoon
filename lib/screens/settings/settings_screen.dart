@@ -6,6 +6,8 @@ import '../../core/services/notification_service.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../game/providers/auth_providers.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import '../../game/providers/personalization_providers.dart';
+import '../../game/providers/learning_providers.dart' show currentPlayerIdProvider;
 
 final settingsControllerProvider = Provider<SettingsController>((ref) {
   final manager = ref.read(serviceManagerProvider);
@@ -455,6 +457,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
         _buildSection('Preferences', _preferences, 2, Icons.tune_rounded),
         _buildSection(
             'Privacy & Security', _privacy, 3, Icons.security_rounded),
+        const SliverToBoxAdapter(child: _PersonalizationSection()),
         const SliverToBoxAdapter(child: SizedBox(height: 100)),
       ],
     );
@@ -821,6 +824,141 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
           ],
         );
       },
+    );
+  }
+}
+
+// ── Personalization Section ───────────────────────────────────────────────────
+
+class _PersonalizationSection extends ConsumerWidget {
+  const _PersonalizationSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final asyncId = ref.watch(currentPlayerIdProvider);
+
+    return asyncId.when(
+      data: (playerId) {
+        if (playerId == null || playerId.isEmpty) return const SizedBox.shrink();
+        return _PersonalizationTile(playerId: playerId);
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
+    );
+  }
+}
+
+class _PersonalizationTile extends ConsumerStatefulWidget {
+  final String playerId;
+  const _PersonalizationTile({required this.playerId});
+
+  @override
+  ConsumerState<_PersonalizationTile> createState() =>
+      _PersonalizationTileState();
+}
+
+class _PersonalizationTileState extends ConsumerState<_PersonalizationTile> {
+  bool _loading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final enabled = ref.watch(personalizationEnabledProvider(widget.playerId));
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.06),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 4),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF6366F1).withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(Icons.psychology_rounded,
+                        color: Color(0xFF6366F1), size: 20),
+                  ),
+                  const SizedBox(width: 12),
+                  const Text(
+                    'Personalization',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF1E293B),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SwitchListTile(
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+              title: const Text(
+                'Adaptive Recommendations',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF1E293B),
+                ),
+              ),
+              subtitle: Text(
+                enabled
+                    ? 'Personalised content based on your play style'
+                    : 'Showing default experience',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: const Color(0xFF64748B).withOpacity(0.85),
+                ),
+              ),
+              value: enabled,
+              activeColor: const Color(0xFF6366F1),
+              onChanged: _loading
+                  ? null
+                  : (value) async {
+                      setState(() => _loading = true);
+                      try {
+                        final newState = await ref
+                            .read(personalizationServiceProvider)
+                            .togglePersonalization(
+                              playerId: widget.playerId,
+                              enabled: value,
+                            );
+                        ref
+                            .read(personalizationEnabledProvider(
+                                    widget.playerId)
+                                .notifier)
+                            .state = newState;
+                      } catch (_) {
+                        // Optimistically revert on error
+                        ref
+                            .read(personalizationEnabledProvider(
+                                    widget.playerId)
+                                .notifier)
+                            .state = enabled;
+                      } finally {
+                        if (mounted) setState(() => _loading = false);
+                      }
+                    },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
