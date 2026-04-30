@@ -6,6 +6,8 @@ import '../../core/helpers/quiz_helpers.dart';
 import '../../game/models/question_model.dart';
 import '../../game/providers/quiz_providers.dart';
 import '../../game/providers/quiz_results_provider.dart';
+import '../../game/providers/learning_providers.dart' show currentPlayerIdProvider;
+import '../../game/providers/personalization_providers.dart';
 import '../../game/services/quiz_category.dart';
 
 class AdaptedQuestionScreen extends ConsumerStatefulWidget {
@@ -420,6 +422,26 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
     final evaluation = await notifier.answerQuestion(answer);
     final isCorrect = evaluation.isCorrect;
 
+    // Fire behaviour event (fire-and-forget)
+    ref.read(currentPlayerIdProvider).whenData((playerId) {
+      if (playerId != null && playerId.isNotEmpty) {
+        ref.read(personalizationServiceProvider).fireQuestionAnswered(
+              playerId: playerId,
+              category: currentQuestion.category,
+              difficulty: currentQuestion.difficulty,
+              mode: state.classLevel ?? 'solo',
+              correct: isCorrect,
+              timeMs: state.timeRemaining > 0
+                  ? ((QuizHelpers.getTimeLimitForClass(state.classLevel) -
+                              state.timeRemaining) *
+                          1000)
+                      .toInt()
+                  : 0,
+              questionId: currentQuestion.id,
+            );
+      }
+    });
+
     // Get updated state to calculate XP gained
     final updatedState = ref.read(adaptedQuizProvider);
     final xpGained = updatedState.totalXP - previousXP;
@@ -446,6 +468,21 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
 
           // Get the final state with duration
           final finalState = ref.read(adaptedQuizProvider);
+
+          // Fire match_completed behaviour event (fire-and-forget)
+          ref.read(currentPlayerIdProvider).whenData((playerId) {
+            if (playerId != null && playerId.isNotEmpty) {
+              ref.read(personalizationServiceProvider).fireMatchCompleted(
+                    playerId: playerId,
+                    mode: finalState.classLevel ?? 'solo',
+                    category: _getCategoryDisplayName(),
+                    metadata: {
+                      'score': reconciledState.score,
+                      'totalQuestions': finalState.totalQuestions,
+                    },
+                  );
+            }
+          });
 
           // Create quiz results with all required fields and safe typing
           final quizResults = QuizResults(

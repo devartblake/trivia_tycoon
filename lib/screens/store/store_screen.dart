@@ -9,6 +9,8 @@ import '../../core/services/api_service.dart';
 import '../../core/services/store/store_return_url_builder.dart';
 import '../../core/services/settings/app_settings.dart';
 import '../../game/models/store_item_model.dart';
+import '../../game/providers/learning_providers.dart' show currentPlayerIdProvider;
+import '../../game/providers/personalization_providers.dart';
 import 'widgets/currency_display_bar.dart';
 import 'widgets/store_category_tab.dart';
 import 'widgets/store_item_card.dart';
@@ -711,6 +713,17 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
       try {
         ref.read(coinNotifierProvider).deduct(item.price);
         await AppSettings.addPurchasedItem(item.id);
+
+        // Fire store_item_purchased behaviour event
+        ref.read(currentPlayerIdProvider).whenData((playerId) {
+          if (playerId != null && playerId.isNotEmpty) {
+            ref.read(personalizationServiceProvider).fireStoreItemPurchased(
+                  playerId: playerId,
+                  itemId: item.id,
+                  metadata: {'itemName': item.name, 'price': item.price},
+                );
+          }
+        });
 
         if (!mounted) return;
         Navigator.of(context).pop();
