@@ -27,6 +27,7 @@ import '../../game/providers/wallet_providers.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import '../../game/providers/personalization_providers.dart';
 import 'widgets/coach_brief_banner.dart';
+import '../../personalization/widgets/recommended_for_you_section.dart';
 
 /// Modern, modular main menu screen
 ///
@@ -285,6 +286,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
           _buildLiveTickerBar(),
           const SizedBox(height: 8),
           _buildCoachBriefBanner(),
+          _buildRecommendedForYou(),
           const SizedBox(height: 6),
           _animatedComponent(0, _buildFeaturedModeCard()),
           const SizedBox(height: 20),
@@ -437,6 +439,21 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
       data: (id) {
         if (id == null || id.isEmpty) return const SizedBox.shrink();
         return CoachBriefBannerLoader(playerId: id);
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
+    );
+  }
+
+  Widget _buildRecommendedForYou() {
+    final asyncId = ref.watch(currentPlayerIdProvider);
+    return asyncId.when(
+      data: (id) {
+        if (id == null || id.isEmpty) return const SizedBox.shrink();
+        return Padding(
+          padding: const EdgeInsets.only(top: 6),
+          child: RecommendedForYouSection(playerId: id),
+        );
       },
       loading: () => const SizedBox.shrink(),
       error: (_, __) => const SizedBox.shrink(),

@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/dto/study_dto.dart';
+import '../../game/providers/learning_providers.dart' show currentPlayerIdProvider;
 import '../../game/providers/study_providers.dart';
+import '../../personalization/widgets/recommended_for_you_section.dart';
 
 class StudyHubScreen extends ConsumerWidget {
   const StudyHubScreen({super.key});
@@ -37,6 +39,7 @@ class StudyHubScreen extends ConsumerWidget {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
+            _PersonalizationRecommendations(),
             _SectionHeader(
               title: 'Recommended',
               icon: Icons.auto_awesome,
@@ -241,6 +244,30 @@ class _StudySetCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+// ── Personalization recommendations strip ─────────────────────────────────────
+
+class _PersonalizationRecommendations extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final asyncId = ref.watch(currentPlayerIdProvider);
+    return asyncId.when(
+      data: (id) {
+        if (id == null || id.isEmpty) return const SizedBox.shrink();
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: RecommendedForYouSection(
+            playerId: id,
+            filterType: 'learning_module',
+            sectionTitle: 'Personalised for You',
+          ),
+        );
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../personalization/widgets/recommended_for_you_section.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import 'package:trivia_tycoon/ui_components/power_ups/power_up_inventory_widget.dart';
 import '../../core/services/api_service.dart';
@@ -223,6 +224,11 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
               );
             },
           ),
+        ),
+
+        // Personalized store suggestions
+        SliverToBoxAdapter(
+          child: _StoreRecommendations(),
         ),
 
         // Power-ups Inventory
@@ -1020,6 +1026,29 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
           borderRadius: BorderRadius.circular(12),
         ),
       ),
+    );
+  }
+}
+
+// ── Store recommendations strip ───────────────────────────────────────────────
+
+class _StoreRecommendations extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final asyncId = ref.watch(currentPlayerIdProvider);
+    return asyncId.when(
+      data: (id) {
+        if (id == null || id.isEmpty) return const SizedBox.shrink();
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+          child: RecommendedForYouSection(
+            playerId: id,
+            filterType: 'store_offer',
+          ),
+        );
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
     );
   }
 }

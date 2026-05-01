@@ -83,6 +83,7 @@ import '../../screens/browse/all_classes_screen.dart';
 import '../../screens/menu/main_menu_screen.dart';
 import '../../screens/question/categories/daily_quiz_screen.dart';
 import '../../screens/question/question_view_screen.dart';
+import '../../screens/settings/personalization_settings_screen.dart';
 import '../../screens/settings/skill_theme_screen.dart';
 import '../../screens/skills_tree/skill_branch_detail_screen.dart';
 import '../../screens/skills_tree/skill_tree_nav_screen.dart';
@@ -497,6 +498,14 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           path: '/leaderboard',
           builder: (context, state) => LeaderboardScreen()),
       GoRoute(path: '/settings', builder: (context, state) => SettingsScreen()),
+      GoRoute(
+        path: '/settings/personalization',
+        name: 'personalization-settings',
+        builder: (context, state) {
+          final playerId = state.uri.queryParameters['playerId'] ?? '';
+          return PersonalizationSettingsScreen(playerId: playerId);
+        },
+      ),
 
       /// Store Routes
       GoRoute(
