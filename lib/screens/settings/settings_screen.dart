@@ -956,6 +956,27 @@ class _PersonalizationTileState extends ConsumerState<_PersonalizationTile> {
                       }
                     },
             ),
+            ListTile(
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+              dense: true,
+              title: const Text(
+                'More personalization options',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Color(0xFF6366F1),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              trailing: const Icon(
+                Icons.arrow_forward_ios,
+                size: 13,
+                color: Color(0xFF6366F1),
+              ),
+              onTap: () => context.push(
+                '/settings/personalization?playerId=${widget.playerId}',
+              ),
+            ),
           ],
         ),
       ),
