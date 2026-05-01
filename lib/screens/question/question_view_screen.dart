@@ -428,7 +428,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
         ref.read(personalizationServiceProvider).fireQuestionAnswered(
               playerId: playerId,
               category: currentQuestion.category,
-              difficulty: currentQuestion.difficulty,
+              difficulty: currentQuestion.difficulty.toString(),
               mode: state.classLevel ?? 'solo',
               correct: isCorrect,
               timeMs: state.timeRemaining > 0

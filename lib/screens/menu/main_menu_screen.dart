@@ -435,7 +435,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     final asyncId = ref.watch(currentPlayerIdProvider);
     return asyncId.when(
       data: (id) {
-        if (id.isEmpty) return const SizedBox.shrink();
+        if (id == null || id.isEmpty) return const SizedBox.shrink();
         return CoachBriefBannerLoader(playerId: id);
       },
       loading: () => const SizedBox.shrink(),
