@@ -1,19 +1,34 @@
 [
   {
+    "id": "gold_chest",
     "label": "Gold Chest",
     "color": "#FFD700",
     "imagePath": "assets/images/rewards/gold.png",
-    "rewardType": "large",
-    "reward": 250
+    "rewardType": "coins",
+    "reward": 250,
+    "isExclusive": false,
+    "requiredStreak": 0,
+    "requiredCurrency": 0,
+    "description": "Win 250 coins",
+    "probability": 1.0,
+    "metadata": {},
+    "isEnabled": true,
+    "enabledUntil": null
   },
   {
+    "id": "exclusive_diamond",
     "label": "Exclusive Diamond",
     "color": "#B9F2FF",
     "imagePath": "assets/images/rewards/diamond.png",
-    "rewardType": "jackpot",
+    "rewardType": "diamonds",
     "reward": 500,
     "isExclusive": true,
     "requiredStreak": 3,
-    "requiredCurrency": 100
+    "requiredCurrency": 100,
+    "description": "Win 500 diamonds",
+    "probability": 1.0,
+    "metadata": {},
+    "isEnabled": true,
+    "enabledUntil": null
   }
 ]
