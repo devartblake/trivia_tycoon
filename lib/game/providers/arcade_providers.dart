@@ -22,6 +22,7 @@ import '../../game/services/flow_connect_level_generator.dart';
 import '../../game/services/seasonal_competition_service.dart';
 import '../../game/state/tier_progression_state.dart';
 import '../../game/state/tier_update_result.dart';
+import '../../core/services/arcade/spin_wheel_api_service.dart';
 import '../../ui_components/spin_wheel/controllers/spining_controller.dart';
 import '../../ui_components/spin_wheel/services/segment_loader.dart';
 import 'core_providers.dart';
@@ -31,6 +32,10 @@ import 'game_providers.dart';
 // Spin Wheel
 // ---------------------------------------------------------------------------
 
+final spinWheelApiServiceProvider = Provider<SpinWheelApiService>((ref) {
+  return SpinWheelApiService(ref.read(apiServiceProvider));
+});
+
 final segmentLoaderProvider = Provider<SegmentLoader>((ref) {
   final manager = ref.read(serviceManagerProvider);
   return SegmentLoader(
@@ -39,7 +44,7 @@ final segmentLoaderProvider = Provider<SegmentLoader>((ref) {
     spinWheelService: manager.spinWheelSettingsService,
     generalKeyStorage: manager.generalKeyValueStorageService,
     source: SegmentSource.remote,
-    remoteUrl: 'https://example.com/api/segments',
+    apiService: ref.read(apiServiceProvider),
   );
 });
 
