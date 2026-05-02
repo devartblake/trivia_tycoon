@@ -16,7 +16,7 @@ import '../../utils/spin_transition_utils.dart';
 import '../dialogs/result_dialog.dart';
 import '../toasts/spin_ready_toast.dart';
 import '../widgets/stat_card_widget.dart';
-import '../widgets/wheel_segment_stack.dart';
+import '../widgets/wheel_widget.dart';
 import '../widgets/spin_button.dart';
 import '../widgets/spin_cooldown_widget.dart';
 import '../../../confetti/ui/confetti_debug_overlay.dart';
@@ -622,53 +622,28 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                                 child: Padding(
                                                   padding: const EdgeInsets.all(
                                                       16.0),
-                                                  child: WheelSegmentStack(
-                                                    segments: _segments,
-                                                    rotationAngle:
-                                                        _currentAngle,
-                                                    activeIndex: _activeIndex,
-                                                    onSegmentTap: (index) =>
-                                                        LogManager.debug(
-                                                            'Tapped segment $index'),
-                                                    onGestureSpin:
-                                                        _handleGestureSpin,
+                                                  child: GestureDetector(
+                                                    onVerticalDragEnd: (d) =>
+                                                        _handleGestureSpin(
+                                                            d.velocity
+                                                                .pixelsPerSecond
+                                                                .dy),
+                                                    onHorizontalDragEnd: (d) =>
+                                                        _handleGestureSpin(
+                                                            d.velocity
+                                                                .pixelsPerSecond
+                                                                .dx),
+                                                    child: WheelWidget(
+                                                      segments: _segments,
+                                                      rotationAngle:
+                                                          _currentAngle,
+                                                      activeIndex: _activeIndex,
+                                                      size: 300,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
                                             ),
-
-                                            // Loading overlay
-                                            if (_isSpinning)
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color: Colors.black
-                                                      .withValues(alpha: 0.2),
-                                                  borderRadius:
-                                                      BorderRadius.circular(24),
-                                                ),
-                                                child: const Center(
-                                                  child: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      CircularProgressIndicator(
-                                                        color: Colors.purple,
-                                                        strokeWidth: 3,
-                                                      ),
-                                                      SizedBox(height: 16),
-                                                      Text(
-                                                        'Spinning...',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
                                           ],
                                         ),
                                       ),
