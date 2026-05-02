@@ -1,5 +1,45 @@
 [
   {
+    "id": "coin_pouch_small",
+    "label": "Small Coin Pouch",
+    "color": "#F6C85F",
+    "imagePath": "assets/images/rewards/coins_small.png",
+    "rewardType": "coins",
+    "reward": 75,
+    "isExclusive": false,
+    "requiredStreak": 0,
+    "requiredCurrency": 0,
+    "description": "A quick coin reward for everyday spins.",
+    "probability": 18.0,
+    "metadata": {
+      "rarity": "common",
+      "economyLedgerType": "spin_reward",
+      "grantTarget": "wallet.coins"
+    },
+    "isEnabled": true,
+    "enabledUntil": null
+  },
+  {
+    "id": "coin_pouch_medium",
+    "label": "Medium Coin Pouch",
+    "color": "#F4B400",
+    "imagePath": "assets/images/rewards/coins_medium.png",
+    "rewardType": "coins",
+    "reward": 150,
+    "isExclusive": false,
+    "requiredStreak": 0,
+    "requiredCurrency": 0,
+    "description": "Earn 150 coins for store items, power-ups, or upgrades.",
+    "probability": 14.0,
+    "metadata": {
+      "rarity": "common",
+      "economyLedgerType": "spin_reward",
+      "grantTarget": "wallet.coins"
+    },
+    "isEnabled": true,
+    "enabledUntil": null
+  },
+  {
     "id": "gold_chest",
     "label": "Gold Chest",
     "color": "#FFD700",
@@ -9,9 +49,196 @@
     "isExclusive": false,
     "requiredStreak": 0,
     "requiredCurrency": 0,
-    "description": "Win 250 coins",
-    "probability": 1.0,
-    "metadata": {},
+    "description": "Win 250 coins.",
+    "probability": 9.0,
+    "metadata": {
+      "rarity": "uncommon",
+      "economyLedgerType": "spin_reward",
+      "grantTarget": "wallet.coins"
+    },
+    "isEnabled": true,
+    "enabledUntil": null
+  },
+  {
+    "id": "xp_spark",
+    "label": "XP Spark",
+    "color": "#4FC3F7",
+    "imagePath": "assets/images/rewards/xp_spark.png",
+    "rewardType": "xp",
+    "reward": 50,
+    "isExclusive": false,
+    "requiredStreak": 0,
+    "requiredCurrency": 0,
+    "description": "Gain 50 XP toward tier and profile progression.",
+    "probability": 12.0,
+    "metadata": {
+      "rarity": "common",
+      "grantTarget": "player.xp",
+      "missionProgressType": "earn_xp"
+    },
+    "isEnabled": true,
+    "enabledUntil": null
+  },
+  {
+    "id": "xp_boost_15m",
+    "label": "15m XP Boost",
+    "color": "#29B6F6",
+    "imagePath": "assets/images/rewards/xp_boost.png",
+    "rewardType": "boost",
+    "reward": 15,
+    "isExclusive": false,
+    "requiredStreak": 0,
+    "requiredCurrency": 0,
+    "description": "Activate a 15-minute XP boost for trivia modes.",
+    "probability": 5.0,
+    "metadata": {
+      "rarity": "uncommon",
+      "boostType": "xp_multiplier",
+      "multiplier": 1.5,
+      "durationMinutes": 15,
+      "grantTarget": "boosts.inventory"
+    },
+    "isEnabled": true,
+    "enabledUntil": null
+  },
+  {
+    "id": "extra_life",
+    "label": "Extra Life",
+    "color": "#EF5350",
+    "imagePath": "assets/images/rewards/heart.png",
+    "rewardType": "lives",
+    "reward": 1,
+    "isExclusive": false,
+    "requiredStreak": 0,
+    "requiredCurrency": 0,
+    "description": "Gain 1 extra life for quiz sessions.",
+    "probability": 7.0,
+    "metadata": {
+      "rarity": "common",
+      "grantTarget": "player.lives"
+    },
+    "isEnabled": true,
+    "enabledUntil": null
+  },
+  {
+    "id": "double_points_powerup",
+    "label": "Double Points",
+    "color": "#FF7043",
+    "imagePath": "assets/images/rewards/double_points.png",
+    "rewardType": "powerup",
+    "reward": 1,
+    "isExclusive": false,
+    "requiredStreak": 0,
+    "requiredCurrency": 0,
+    "description": "Add 1 Double Points power-up to inventory.",
+    "probability": 5.0,
+    "metadata": {
+      "rarity": "uncommon",
+      "powerupId": "double_points",
+      "grantTarget": "powerups.inventory"
+    },
+    "isEnabled": true,
+    "enabledUntil": null
+  },
+  {
+    "id": "fifty_fifty_powerup",
+    "label": "50/50 Lifeline",
+    "color": "#7E57C2",
+    "imagePath": "assets/images/rewards/fifty_fifty.png",
+    "rewardType": "powerup",
+    "reward": 1,
+    "isExclusive": false,
+    "requiredStreak": 0,
+    "requiredCurrency": 0,
+    "description": "Add 1 50/50 lifeline to inventory.",
+    "probability": 5.0,
+    "metadata": {
+      "rarity": "uncommon",
+      "powerupId": "fifty_fifty",
+      "grantTarget": "powerups.inventory"
+    },
+    "isEnabled": true,
+    "enabledUntil": null
+  },
+  {
+    "id": "skip_question_powerup",
+    "label": "Skip Question",
+    "color": "#5C6BC0",
+    "imagePath": "assets/images/rewards/skip.png",
+    "rewardType": "powerup",
+    "reward": 1,
+    "isExclusive": false,
+    "requiredStreak": 0,
+    "requiredCurrency": 0,
+    "description": "Add 1 Skip Question power-up to inventory.",
+    "probability": 4.5,
+    "metadata": {
+      "rarity": "uncommon",
+      "powerupId": "skip_question",
+      "grantTarget": "powerups.inventory"
+    },
+    "isEnabled": true,
+    "enabledUntil": null
+  },
+  {
+    "id": "time_freeze_powerup",
+    "label": "Time Freeze",
+    "color": "#26C6DA",
+    "imagePath": "assets/images/rewards/time_freeze.png",
+    "rewardType": "powerup",
+    "reward": 1,
+    "isExclusive": false,
+    "requiredStreak": 2,
+    "requiredCurrency": 0,
+    "description": "Add 1 Time Freeze power-up for timed quiz modes.",
+    "probability": 3.5,
+    "metadata": {
+      "rarity": "rare",
+      "powerupId": "time_freeze",
+      "grantTarget": "powerups.inventory"
+    },
+    "isEnabled": true,
+    "enabledUntil": null
+  },
+  {
+    "id": "diamond_shard",
+    "label": "Diamond Shard",
+    "color": "#B9F2FF",
+    "imagePath": "assets/images/rewards/diamond_shard.png",
+    "rewardType": "diamonds",
+    "reward": 10,
+    "isExclusive": false,
+    "requiredStreak": 0,
+    "requiredCurrency": 0,
+    "description": "Gain 10 premium diamonds.",
+    "probability": 4.0,
+    "metadata": {
+      "rarity": "rare",
+      "economyLedgerType": "premium_currency_reward",
+      "grantTarget": "wallet.diamonds"
+    },
+    "isEnabled": true,
+    "enabledUntil": null
+  },
+  {
+    "id": "diamond_cache",
+    "label": "Diamond Cache",
+    "color": "#80DEEA",
+    "imagePath": "assets/images/rewards/diamond.png",
+    "rewardType": "diamonds",
+    "reward": 25,
+    "isExclusive": true,
+    "requiredStreak": 3,
+    "requiredCurrency": 50,
+    "description": "A premium diamond reward unlocked by consistent play.",
+    "probability": 2.0,
+    "metadata": {
+      "rarity": "rare",
+      "economyLedgerType": "premium_currency_reward",
+      "grantTarget": "wallet.diamonds",
+      "requiredStreak": 3,
+      "requiredCurrency": 50
+    },
     "isEnabled": true,
     "enabledUntil": null
   },
@@ -21,13 +248,169 @@
     "color": "#B9F2FF",
     "imagePath": "assets/images/rewards/diamond.png",
     "rewardType": "diamonds",
-    "reward": 500,
+    "reward": 100,
     "isExclusive": true,
-    "requiredStreak": 3,
+    "requiredStreak": 5,
     "requiredCurrency": 100,
-    "description": "Win 500 diamonds",
-    "probability": 1.0,
-    "metadata": {},
+    "description": "A high-value diamond reward for advanced players.",
+    "probability": 0.75,
+    "metadata": {
+      "rarity": "legendary",
+      "economyLedgerType": "premium_currency_reward",
+      "grantTarget": "wallet.diamonds",
+      "requiredStreak": 5,
+      "requiredCurrency": 100
+    },
+    "isEnabled": true,
+    "enabledUntil": null
+  },
+  {
+    "id": "streak_guard",
+    "label": "Streak Guard",
+    "color": "#66BB6A",
+    "imagePath": "assets/images/rewards/streak_guard.png",
+    "rewardType": "boost",
+    "reward": 1,
+    "isExclusive": true,
+    "requiredStreak": 4,
+    "requiredCurrency": 0,
+    "description": "Protect your next streak from one missed question.",
+    "probability": 2.0,
+    "metadata": {
+      "rarity": "rare",
+      "boostType": "streak_protection",
+      "charges": 1,
+      "grantTarget": "boosts.inventory",
+      "requiredStreak": 4
+    },
+    "isEnabled": true,
+    "enabledUntil": null
+  },
+  {
+    "id": "mission_token",
+    "label": "Mission Token",
+    "color": "#AB47BC",
+    "imagePath": "assets/images/rewards/mission_token.png",
+    "rewardType": "mission_token",
+    "reward": 1,
+    "isExclusive": false,
+    "requiredStreak": 0,
+    "requiredCurrency": 0,
+    "description": "Use this token for mission rerolls or special arcade missions.",
+    "probability": 3.5,
+    "metadata": {
+      "rarity": "uncommon",
+      "grantTarget": "missions.tokens",
+      "missionProgressType": "earn_mission_token"
+    },
+    "isEnabled": true,
+    "enabledUntil": null
+  },
+  {
+    "id": "tier_points",
+    "label": "Tier Points",
+    "color": "#42A5F5",
+    "imagePath": "assets/images/rewards/tier_points.png",
+    "rewardType": "tier_points",
+    "reward": 20,
+    "isExclusive": false,
+    "requiredStreak": 0,
+    "requiredCurrency": 0,
+    "description": "Gain 20 tier points for rank progression.",
+    "probability": 4.0,
+    "metadata": {
+      "rarity": "uncommon",
+      "grantTarget": "tier.points",
+      "missionProgressType": "earn_tier_points"
+    },
+    "isEnabled": true,
+    "enabledUntil": null
+  },
+  {
+    "id": "season_points",
+    "label": "Season Points",
+    "color": "#26A69A",
+    "imagePath": "assets/images/rewards/season_points.png",
+    "rewardType": "season_points",
+    "reward": 30,
+    "isExclusive": false,
+    "requiredStreak": 0,
+    "requiredCurrency": 0,
+    "description": "Gain 30 points toward the current season leaderboard.",
+    "probability": 3.5,
+    "metadata": {
+      "rarity": "uncommon",
+      "grantTarget": "season.points",
+      "seasonal": true
+    },
+    "isEnabled": true,
+    "enabledUntil": null
+  },
+  {
+    "id": "avatar_shard",
+    "label": "Avatar Shard",
+    "color": "#EC407A",
+    "imagePath": "assets/images/rewards/avatar_shard.png",
+    "rewardType": "cosmetic_shard",
+    "reward": 1,
+    "isExclusive": false,
+    "requiredStreak": 0,
+    "requiredCurrency": 0,
+    "description": "Collect shards to unlock avatar cosmetics.",
+    "probability": 2.5,
+    "metadata": {
+      "rarity": "rare",
+      "grantTarget": "cosmetics.avatarShards",
+      "cosmeticType": "avatar"
+    },
+    "isEnabled": true,
+    "enabledUntil": null
+  },
+  {
+    "id": "mystery_box",
+    "label": "Mystery Box",
+    "color": "#78909C",
+    "imagePath": "assets/images/rewards/mystery_box.png",
+    "rewardType": "mystery",
+    "reward": 1,
+    "isExclusive": false,
+    "requiredStreak": 0,
+    "requiredCurrency": 0,
+    "description": "A randomized reward resolved by the backend.",
+    "probability": 3.0,
+    "metadata": {
+      "rarity": "rare",
+      "resolveServerSide": true,
+      "possibleRewardTypes": [
+        "coins",
+        "xp",
+        "powerup",
+        "diamonds"
+      ]
+    },
+    "isEnabled": true,
+    "enabledUntil": null
+  },
+  {
+    "id": "jackpot_vault",
+    "label": "Jackpot Vault",
+    "color": "#FF4081",
+    "imagePath": "assets/images/rewards/jackpot.png",
+    "rewardType": "jackpot",
+    "reward": 1000,
+    "isExclusive": true,
+    "requiredStreak": 7,
+    "requiredCurrency": 150,
+    "description": "Rare jackpot reward for highly engaged players.",
+    "probability": 0.25,
+    "metadata": {
+      "rarity": "legendary",
+      "grantTarget": "wallet.coins",
+      "economyLedgerType": "jackpot_spin_reward",
+      "requiredStreak": 7,
+      "requiredCurrency": 150,
+      "requiresServerValidation": true
+    },
     "isEnabled": true,
     "enabledUntil": null
   }
