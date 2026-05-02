@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
 import 'package:trivia_tycoon/core/services/settings/spin_wheel_settings_service.dart';
 import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
-import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
+import '../../../core/services/api_service.dart';
 import '../../../core/services/storage/config_storage_service.dart';
 import '../models/spin_system_models.dart';
 
@@ -13,7 +11,9 @@ enum SegmentSource { local, remote }
 
 class SegmentLoader {
   final SegmentSource source;
-  final String? remoteUrl;
+  /// [apiService] is used for remote loading when [source] == [SegmentSource.remote].
+  /// When null the loader falls back to the local asset bundle.
+  final ApiService? apiService;
   late AppCacheService appCache;
   late ConfigStorageService configStorage;
   late SpinWheelSettingsService spinWheelService;
@@ -21,7 +21,7 @@ class SegmentLoader {
 
   SegmentLoader({
     this.source = SegmentSource.local,
-    this.remoteUrl,
+    this.apiService,
     required this.appCache,
     required this.configStorage,
     required this.spinWheelService,
@@ -35,18 +35,18 @@ class SegmentLoader {
     List<WheelSegment> rawSegments = [];
 
     try {
-      if (source == SegmentSource.remote && remoteUrl != null) {
+      if (source == SegmentSource.remote && apiService != null) {
         rawSegments = await _loadFromRemote();
         await configStorage.saveConfig('segments',
             json.encode(rawSegments.map((s) => s.toJson()).toList()));
         await spinWheelService.setSegmentFetchTime(DateTime.now());
       } else {
-        rawSegments = await _loadFromLocal();
+        rawSegments = await _loadFromLocalOrCache();
       }
     } catch (e) {
       // Fallback to local if remote fails
       usedFallback = true;
-      rawSegments = await _loadFromLocal();
+      rawSegments = await _loadFromLocalOrCache();
     }
 
     return _filterUnlockedSegments(rawSegments);
@@ -59,16 +59,12 @@ class SegmentLoader {
     return data.map((e) => WheelSegment.fromJson(e)).toList();
   }
 
-  /// Load segments from remote API
+  /// Load segments from the API backend: GET /arcade/spin/segments
   Future<List<WheelSegment>> _loadFromRemote() async {
-    if (remoteUrl == null) throw Exception("Remote URL not provided.");
-
-    final response = await http.get(Uri.parse(remoteUrl!));
-    if (response.statusCode != 200)
-      throw Exception("Failed to load remote segments");
-
-    final List<dynamic> data = json.decode(response.body);
-    return data.map((e) => WheelSegment.fromJson(e)).toList();
+    final items = await apiService!.getList('/arcade/spin/segments');
+    return items
+        .map((e) => WheelSegment.fromJson(Map<String, dynamic>.from(e)))
+        .toList();
   }
 
   Future<List<WheelSegment>> _loadFromLocalOrCache() async {
@@ -98,15 +94,4 @@ class SegmentLoader {
     }).toList();
   }
 
-  final segmentLoaderProvider = Provider<SegmentLoader>((ref) {
-    final manager = ref.read(serviceManagerProvider);
-    return SegmentLoader(
-      source: SegmentSource.remote,
-      remoteUrl: 'https://example.com/api/segments',
-      appCache: manager.appCacheService,
-      configStorage: manager.configStorageService,
-      spinWheelService: manager.spinWheelSettingsService,
-      generalKeyStorage: manager.generalKeyValueStorageService,
-    );
-  });
 }

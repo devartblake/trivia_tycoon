@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:trivia_tycoon/ui_components/spin_wheel/ui/widgets/floating_spin_cta.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/services/api_service.dart' show ApiRequestException;
 import '../../../../game/analytics/providers/analytics_providers.dart';
 import '../../../../game/providers/riverpod_providers.dart'
     hide analyticsServiceProvider;
@@ -88,9 +88,14 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
   }
 
   @override
+  void deactivate() {
+    _trackScreenExit();
+    super.deactivate();
+  }
+
+  @override
   void dispose() {
     _cooldownCheckTimer?.cancel();
-    _trackScreenExit();
     _animationController.dispose();
     _scaleController.dispose();
     super.dispose();
@@ -209,6 +214,27 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
 
   // ============ END ANALYTICS METHODS ============
 
+  /// Submits the spin result to the server to grant the reward server-side
+  /// and syncs the local coin balance from the response.
+  Future<void> _claimSpinReward(WheelSegment segment) async {
+    try {
+      final playerId = await ref.read(currentUserIdProvider.future);
+      final spinId = DateTime.now().millisecondsSinceEpoch.toString();
+      final response = await ref.read(spinWheelApiServiceProvider).claimReward(
+            playerId: playerId,
+            segmentId: segment.id,
+            spinId: spinId,
+          );
+      if (response.newBalance > 0) {
+        await ref.read(coinBalanceProvider.notifier).set(response.newBalance);
+      }
+    } on ApiRequestException catch (e) {
+      LogManager.debug('[WheelScreen] Spin claim rejected: ${e.message}');
+    } catch (e) {
+      LogManager.debug('[WheelScreen] Spin claim error: $e');
+    }
+  }
+
   void _initializeAnimations() {
     _animationController = AnimationController(
       duration: const Duration(seconds: 5),
@@ -293,18 +319,18 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
       _spinCount++;
     });
 
-    // Track spin completion
     _trackSpinCompleted(result);
+    // Gesture spins bypass handleSpinWithPhysics so register + reward here.
+    SpinTracker.registerSpin();
+    _claimSpinReward(result);
+    _scheduleCooldownNotification();
+    _checkSpinAvailability();
 
-    // Trigger confetti and haptic feedback
     ref.read(confettiControllerProvider).play();
     HapticFeedback.heavyImpact();
 
-    // Delay result dialog for better UX
     Future.delayed(const Duration(milliseconds: 500), () {
-      if (mounted) {
-        _showResultDialog(result);
-      }
+      if (mounted) _showResultDialog(result);
     });
   }
 
@@ -343,11 +369,22 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
             }
           });
         },
-        onStart: () {
-          // Audio handled in physics handler
-        },
+        onStart: () {},
         onComplete: (segment) {
-          // Handled in animation status listener
+          // handleSpinWithPhysics already played confetti and called registerSpin.
+          // Complete the UI here.
+          if (!mounted) return;
+          setState(() {
+            _activeIndex = _segments.indexOf(segment);
+            _isSpinning = false;
+            _spinCount++;
+          });
+          HapticFeedback.heavyImpact();
+          _trackSpinCompleted(segment);
+          _claimSpinReward(segment);
+          Future.delayed(const Duration(milliseconds: 500), () {
+            if (mounted) _showResultDialog(segment);
+          });
         },
       );
       _scheduleCooldownNotification();
@@ -483,44 +520,37 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
               ),
             ),
             const Spacer(),
-            FutureBuilder<bool>(
-              future: SpinTracker.canSpin(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) return const SizedBox.shrink();
-
-                return Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: snapshot.data!
-                        ? Colors.green.withValues(alpha: 0.1)
-                        : Colors.orange.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(20),
+            Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: _canSpin
+                    ? Colors.green.withValues(alpha: 0.1)
+                    : Colors.orange.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: _canSpin ? Colors.green : Colors.orange,
+                      shape: BoxShape.circle,
+                    ),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: snapshot.data! ? Colors.green : Colors.orange,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        snapshot.data! ? 'Ready' : 'Cooldown',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: snapshot.data! ? Colors.green : Colors.orange,
-                        ),
-                      ),
-                    ],
+                  const SizedBox(width: 6),
+                  Text(
+                    _canSpin ? 'Ready' : 'Cooldown',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: _canSpin ? Colors.green : Colors.orange,
+                    ),
                   ),
-                );
-              },
+                ],
+              ),
             ),
           ],
         ),
@@ -688,7 +718,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                                   icon: Icons.casino,
                                                   label: 'Spins Today',
                                                   value:
-                                                      '${SpinTracker.maxSpinsPerDay}',
+                                                      '$_spinCount / ${SpinTracker.maxSpinsPerDay}',
                                                   color: Colors.blue,
                                                 ),
                                               ),
