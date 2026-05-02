@@ -304,7 +304,7 @@ class _SpinCooldownWidgetState extends ConsumerState<SpinCooldownWidget>
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        '$_remainingSpins / ${SpinTracker.getMaxSpins()}',
+                        '$_remainingSpins / $_maxSpins',
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: canSpin ? Colors.green : Colors.grey.shade700,

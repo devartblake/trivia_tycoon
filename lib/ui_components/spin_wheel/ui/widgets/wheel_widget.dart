@@ -157,6 +157,9 @@ class _WheelImagePainter extends CustomPainter {
     _drawCenterCircle(canvas, center);
 
     canvas.restore();
+
+    // Pointer drawn after restore — stays fixed at 12 o'clock regardless of rotation
+    _drawPointer(canvas, center, radius);
   }
 
   void _drawWheelShadow(Canvas canvas, Offset center, double radius) {
@@ -339,6 +342,33 @@ class _WheelImagePainter extends CustomPainter {
         lockCenter.dx - lockParagraph.width / 2,
         lockCenter.dy - lockParagraph.height / 2,
       ),
+    );
+  }
+
+  void _drawPointer(Canvas canvas, Offset center, double radius) {
+    final tip = Offset(center.dx, center.dy - radius + 10);
+    final left = Offset(center.dx - 12, center.dy - radius - 20);
+    final right = Offset(center.dx + 12, center.dy - radius - 20);
+
+    final path = Path()
+      ..moveTo(tip.dx, tip.dy)
+      ..lineTo(left.dx, left.dy)
+      ..lineTo(right.dx, right.dy)
+      ..close();
+
+    canvas.drawPath(
+      path.shift(const Offset(1, 2)),
+      Paint()
+        ..color = Colors.black.withValues(alpha: 0.3)
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3),
+    );
+    canvas.drawPath(path, Paint()..color = Colors.red..style = PaintingStyle.fill);
+    canvas.drawPath(
+      path,
+      Paint()
+        ..color = Colors.white
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2,
     );
   }
 
