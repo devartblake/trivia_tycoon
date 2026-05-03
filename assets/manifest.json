@@ -1,0 +1,14 @@
+{
+  "generatedFiles": [
+    "store-items.json",
+    "skill-nodes.json",
+    "season-rewards.json",
+    "questions.json"
+  ],
+  "notes": [
+    "store-items.json follows the existing asset/store item shape with added optional metadata.",
+    "skill-nodes.json follows the existing skill_tree.json nodes/edges model and adds optional hex positions.",
+    "season-rewards.json is a new seed file aligned to the 100-player tier model.",
+    "questions.json follows the existing question array schema with answers and correctAnswer."
+  ]
+}
