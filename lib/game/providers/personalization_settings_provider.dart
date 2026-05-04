@@ -7,19 +7,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class PersonalizationSettings {
   final bool reduceSuggestions;
   final bool showReasons;
+  final bool allowPersonalizedNotifications;
 
   const PersonalizationSettings({
     this.reduceSuggestions = false,
     this.showReasons = true,
+    this.allowPersonalizedNotifications = true,
   });
 
   PersonalizationSettings copyWith({
     bool? reduceSuggestions,
     bool? showReasons,
+    bool? allowPersonalizedNotifications,
   }) {
     return PersonalizationSettings(
       reduceSuggestions: reduceSuggestions ?? this.reduceSuggestions,
       showReasons: showReasons ?? this.showReasons,
+      allowPersonalizedNotifications:
+          allowPersonalizedNotifications ?? this.allowPersonalizedNotifications,
     );
   }
 }
@@ -33,6 +38,9 @@ class PersonalizationSettingsNotifier
 
   void setShowReasons(bool value) =>
       state = state.copyWith(showReasons: value);
+
+  void setAllowPersonalizedNotifications(bool value) =>
+      state = state.copyWith(allowPersonalizedNotifications: value);
 }
 
 final personalizationSettingsProvider = StateNotifierProvider<
