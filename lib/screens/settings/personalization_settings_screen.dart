@@ -63,6 +63,25 @@ class PersonalizationSettingsScreen extends ConsumerWidget {
               onChanged: notifier.setReduceSuggestions,
             ),
             _ToggleTile(
+              icon: Icons.notifications_active_outlined,
+              iconColor: const Color(0xFF8B5CF6),
+              title: 'Personalized notifications',
+              subtitle: 'Allow recommendation-driven push/message nudges',
+              value: settings.allowPersonalizedNotifications,
+              onChanged: (value) {
+                notifier.setAllowPersonalizedNotifications(value);
+                ref.read(personalizationServiceProvider).fireEvent(
+                      playerId,
+                      BehaviourEventDto(
+                        eventType: value
+                            ? 'personalized_notifications_enabled'
+                            : 'personalized_notifications_disabled',
+                        eventSource: 'settings',
+                      ),
+                    );
+              },
+            ),
+            _ToggleTile(
               icon: Icons.help_outline_rounded,
               iconColor: const Color(0xFF64B5F6),
               title: 'Show recommendation reasons',
