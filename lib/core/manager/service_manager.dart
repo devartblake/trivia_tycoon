@@ -42,6 +42,7 @@ import '../../game/services/referral_api_service.dart';
 import '../../game/services/referral_service.dart';
 import '../../game/services/referral_storage_service.dart';
 import '../env.dart';
+import '../networking/encrypted_api_client.dart';
 import '../networking/http_client.dart';
 import '../networking/signalr/match_hub.dart';
 import '../services/auth_http_client.dart';
@@ -52,6 +53,8 @@ import '../services/auth_service.dart' as core_auth;
 import '../services/auth_token_store.dart';
 import '../services/auth_api_client.dart';
 import '../services/device_id_service.dart';
+import '../security/secure_channel_service.dart';
+import '../security/secure_session_store.dart';
 
 class ServiceManager {
   static late final ServiceManager instance;
@@ -98,6 +101,9 @@ class ServiceManager {
   final ArcadeMissionService arcadeMissionService;
   final LocalArcadeLeaderboardService localArcadeLeaderboardService;
   final SynaptixApiClient synaptixApiClient;
+  final SecureSessionStore secureSessionStore;
+  final SecureChannelService secureChannelService;
+  final EncryptedApiClient encryptedApiClient;
   final NotificationHub notificationHub;
   final MatchHub matchHub;
 
@@ -144,6 +150,9 @@ class ServiceManager {
     required this.referralApiService,
     required this.referralService,
     required this.synaptixApiClient,
+    required this.secureSessionStore,
+    required this.secureChannelService,
+    required this.encryptedApiClient,
     required this.notificationHub,
     required this.matchHub,
   });
@@ -284,6 +293,19 @@ class ServiceManager {
       api: authApiClient,
     );
     final authHttpClient = AuthHttpClient(coreAuth, tokenStore);
+    final secureSessionStore = SecureSessionStore(secureStorage);
+    final secureChannel = DefaultSecureChannelService(
+      httpClient: authHttpClient,
+      sessionStore: secureSessionStore,
+      deviceIdService: deviceIdSvc,
+      baseUrl: baseUrl,
+    );
+    final encryptedApiClient = EncryptedApiClient(
+      authClient: authHttpClient,
+      secureChannel: secureChannel,
+      tokenStore: tokenStore,
+      baseUrl: '$baseUrl/api/v1',
+    );
     final history = QrHistoryService(cache: cache, settings: qrSettings);
     final httpClient = HttpClient(
       authClient: authHttpClient,
@@ -338,6 +360,9 @@ class ServiceManager {
       referralApiService: referralApi,
       referralService: referralServiceTemp,
       synaptixApiClient: synaptixApi,
+      secureSessionStore: secureSessionStore,
+      secureChannelService: secureChannel,
+      encryptedApiClient: encryptedApiClient,
       notificationHub: notifyHub,
       matchHub: mHub,
     );

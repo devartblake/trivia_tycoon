@@ -7,6 +7,8 @@
 ///   Coach brief             — 1 hr   (standalone endpoint, lazy)
 library;
 
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/dto/personalization_dto.dart';
@@ -43,6 +45,10 @@ final sessionInitProvider = FutureProvider.autoDispose
 /// Short-lived (autoDispose) home personalization — re-fetch every foreground.
 final homePersonalizationProvider = FutureProvider.autoDispose
     .family<PlayerHomePersonalizationDto, String>((ref, playerId) async {
+  final link = ref.keepAlive();
+  final timer = Timer(const Duration(minutes: 5), link.close);
+  ref.onDispose(timer.cancel);
+
   final service = ref.watch(personalizationServiceProvider);
   return service.getHome(playerId);
 });
@@ -53,6 +59,10 @@ final homePersonalizationProvider = FutureProvider.autoDispose
 /// autoDispose keeps it out of memory when not on screen.
 final playerMindProfileProvider = FutureProvider.autoDispose
     .family<PlayerMindProfileDto, String>((ref, playerId) async {
+  final link = ref.keepAlive();
+  final timer = Timer(const Duration(minutes: 10), link.close);
+  ref.onDispose(timer.cancel);
+
   final service = ref.watch(personalizationServiceProvider);
   return service.getProfile(playerId);
 });
@@ -61,6 +71,10 @@ final playerMindProfileProvider = FutureProvider.autoDispose
 
 final dailyBriefProvider = FutureProvider.autoDispose
     .family<CoachBriefDto, String>((ref, playerId) async {
+  final link = ref.keepAlive();
+  final timer = Timer(const Duration(hours: 1), link.close);
+  ref.onDispose(timer.cancel);
+
   final service = ref.watch(personalizationServiceProvider);
   return service.getDailyBrief(playerId);
 });
