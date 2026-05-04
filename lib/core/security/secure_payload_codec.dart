@@ -9,7 +9,6 @@ import 'secure_channel_exceptions.dart';
 class SecurePayloadCodec {
   static const _aadVersion = 'syn-sec-v1';
   final Cipher _cipher = AesGcm.with256bits();
-  final Random _random = Cryptography.instance.newRandom();
 
   Future<EncryptedPayload> encryptJson({
     required Map<String, dynamic> body,
@@ -17,7 +16,7 @@ class SecurePayloadCodec {
     required String method,
     required Uri uri,
   }) async {
-    final nonce = _random.nextBytes(12);
+    final nonce = SecureRandom.fast.nextBytes(12);
     final secretKey = SecretKey(keyBytes);
     final clear = utf8.encode(jsonEncode(body));
     final aad = utf8.encode('$_aadVersion|${method.toUpperCase()}|${uri.path}');

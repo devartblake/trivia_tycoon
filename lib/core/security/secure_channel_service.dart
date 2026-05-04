@@ -55,7 +55,7 @@ class DefaultSecureChannelService implements SecureChannelService {
   @override
   Future<SecureSession> startSession({required String accessToken}) async {
     final algorithm = X25519();
-    final clientNonce = Cryptography.instance.newRandom().nextBytes(16);
+    final clientNonce = _randomBytes(16);
     final keyPair = await algorithm.newKeyPair();
     final publicKey = await keyPair.extractPublicKey();
     _ephemeralKeyPair = await keyPair.extract();
