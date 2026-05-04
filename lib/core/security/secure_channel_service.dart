@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:cryptography/cryptography.dart';
 
@@ -36,6 +37,11 @@ class DefaultSecureChannelService implements SecureChannelService {
   static const _suite = 'X25519-HKDF-SHA256-AES256GCM';
 
   SimpleKeyPairData? _ephemeralKeyPair;
+
+  List<int> _randomBytes(int length) {
+    final random = Random.secure();
+    return List<int>.generate(length, (_) => random.nextInt(256));
+  }
 
   DefaultSecureChannelService({
     required AuthHttpClient httpClient,

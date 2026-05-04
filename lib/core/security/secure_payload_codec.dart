@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:cryptography/cryptography.dart';
@@ -16,7 +17,8 @@ class SecurePayloadCodec {
     required String method,
     required Uri uri,
   }) async {
-    final nonce = SecureRandom.fast.nextBytes(12);
+    final random = Random.secure();
+    final nonce = List<int>.generate(12, (_) => random.nextInt(256));
     final secretKey = SecretKey(keyBytes);
     final clear = utf8.encode(jsonEncode(body));
     final aad = utf8.encode('$_aadVersion|${method.toUpperCase()}|${uri.path}');
