@@ -433,7 +433,7 @@ class _SkillBranchDetailScreenState
 
     // Local derived values — no mutations during build.
     final pathIds = ref.watch(branchAutoPathProvider(widget.branchId));
-    final centers = _computeCenters(state.positions, filtered);
+    final centers = _computeCenters(positions, filtered);
 
     // Clamp step index to current path length via a guarded post-frame callback.
     if (pathIds.isNotEmpty && _pathIndex >= pathIds.length && !_stepClampPending) {
