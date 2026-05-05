@@ -1,0 +1,492 @@
+{
+  "repository": "devartblake/trivia_tycoon",
+  "generated_at": "2026-05-04",
+  "purpose": "Ready-to-import GitHub issue package for Skill Tree Navigation / Pathways stabilization.",
+  "source_review": {
+    "docs_directory_status": "Repository has multiple docs and handoff files under docs/, but no dedicated Skill Tree Navigation / Pathways status/spec document was found in docs search.",
+    "reviewed_files": [
+      "lib/core/navigation/app_router.dart",
+      "lib/screens/skills_tree/skill_tree_nav_screen.dart",
+      "lib/screens/skills_tree/skill_branch_detail_screen.dart",
+      "lib/game/planning/skill_branch_path_planner.dart",
+      "lib/game/providers/branch_path_providers.dart",
+      "lib/ui_components/hex_grid/widgets/mini_hex_preview.dart",
+      "lib/ui_components/hex_grid/paint/auto_path_overlay_painter.dart",
+      "docs/*"
+    ],
+    "key_current_findings": [
+      "SkillTreeNavScreen already uses Pathways branding, live XP, live progress, mini previews, Auto-Path modal, and /skill-branch deep links.",
+      "SkillBranchDetailScreen currently has duplicated overlay approaches and mutates path/center fields during build.",
+      "SkillBranchPathPlanner is centralized and mostly ready with weighted topological sorting.",
+      "branch_path_providers.dart exists, but branchCentersProvider returns raw positions while claiming screen-space centers.",
+      "MiniHexBranchPreview supports highlighted paths but fromGraph does not truly use the passed graph."
+    ]
+  },
+  "labels": [
+    "skill-tree",
+    "pathways",
+    "navigation",
+    "frontend",
+    "bug",
+    "feature",
+    "refactor",
+    "docs",
+    "testing",
+    "hex-grid",
+    "cooldowns",
+    "xp",
+    "profile"
+  ],
+  "milestones": [
+    {
+      "title": "Skill Tree Navigation Stabilization",
+      "description": "Normalize Pathways navigation, branch detail Auto-Path UX, overlay rendering, persistence, docs, and tests."
+    }
+  ],
+  "import_notes": {
+    "schema": "Generic issue package. Map each item to GitHub issue fields: title, body, labels, milestone, assignees.",
+    "suggested_import_order": [
+      "STN-001",
+      "STN-002",
+      "STN-003",
+      "STN-004",
+      "STN-005",
+      "STN-006",
+      "STN-007",
+      "STN-008",
+      "STN-009",
+      "STN-010",
+      "STN-011",
+      "STN-012",
+      "STN-013",
+      "STN-014"
+    ],
+    "body_template_hint": "When importing, concatenate body, files, acceptance_criteria, dependencies, priority, and estimate into GitHub issue body markdown."
+  },
+  "issues": [
+    {
+      "id": "STN-001",
+      "title": "[Skill Tree Navigation] Normalize route contract for global tree vs branch detail",
+      "type": "bug",
+      "priority": "P1",
+      "estimate": "S",
+      "labels": [
+        "skill-tree",
+        "navigation",
+        "routing",
+        "go-router",
+        "frontend"
+      ],
+      "milestone": "Skill Tree Navigation Stabilization",
+      "assignees": [],
+      "body": "Current navigation uses `/skill-tree/$groupId` for normal card taps and `/skill-branch/$branchId?step=0&showPath=1` for Auto-Path/search deep links. Standardize branch detail to `/skill-branch/:branchId` and reserve `/skill-tree` for the full/global skill tree.",
+      "files": [
+        "lib/screens/skills_tree/skill_tree_nav_screen.dart",
+        "lib/core/navigation/app_router.dart",
+        "lib/screens/skills_tree/skill_branch_detail_screen.dart"
+      ],
+      "acceptance_criteria": [
+        "All branch card taps route to `/skill-branch/:branchId`.",
+        "Auto-Path modal routes to `/skill-branch/:branchId?step=<n>&showPath=<0|1>`.",
+        "Search results route to branch detail with `?step=0&showPath=1`.",
+        "`/skill-tree` remains reserved for full/global tree."
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "STN-002",
+      "title": "[Skill Tree Navigation] Consolidate branch path overlays to one painter",
+      "type": "refactor",
+      "priority": "P1",
+      "estimate": "S",
+      "labels": [
+        "skill-tree",
+        "ui",
+        "hex-grid",
+        "refactor",
+        "frontend"
+      ],
+      "milestone": "Skill Tree Navigation Stabilization",
+      "assignees": [],
+      "body": "Branch Detail currently imports/renders both `BranchPathOverlayPainter` and `AutoPathOverlayPainter`. Keep `AutoPathOverlayPainter` as the canonical overlay and remove the older overlay layer unless intentionally retained as legacy.",
+      "files": [
+        "lib/screens/skills_tree/skill_branch_detail_screen.dart",
+        "lib/ui_components/hex_grid/paint/auto_path_overlay_painter.dart",
+        "lib/ui_components/hex_grid/paint/branch_path_overlay_painter.dart"
+      ],
+      "acceptance_criteria": [
+        "Only one overlay painter is rendered.",
+        "Full-path and current-step highlighting still work.",
+        "No duplicate line/halo effects are visible.",
+        "Unused legacy painter is removed or clearly marked legacy."
+      ],
+      "dependencies": [
+        "STN-001"
+      ]
+    },
+    {
+      "id": "STN-003",
+      "title": "[Skill Tree Navigation] Remove build-time mutation from SkillBranchDetailScreen",
+      "type": "bug",
+      "priority": "P1",
+      "estimate": "M",
+      "labels": [
+        "skill-tree",
+        "riverpod",
+        "state-management",
+        "frontend"
+      ],
+      "milestone": "Skill Tree Navigation Stabilization",
+      "assignees": [],
+      "body": "Branch Detail recalculates/mutates `_computedPath`, `_pathIds`, `_centers`, and ValueNotifier values during build. Convert these to local derived values or sync in a guarded post-frame method when graph/branch changes.",
+      "files": [
+        "lib/screens/skills_tree/skill_branch_detail_screen.dart",
+        "lib/game/providers/branch_path_providers.dart"
+      ],
+      "acceptance_criteria": [
+        "`build()` has no direct assignments to path/center fields.",
+        "Path and centers are provider/local derived values.",
+        "Step clamping does not mutate ValueNotifier during build.",
+        "No lifecycle errors appear entering Branch Detail."
+      ],
+      "dependencies": [
+        "STN-002"
+      ]
+    },
+    {
+      "id": "STN-004",
+      "title": "[Skill Tree Navigation] Clarify branch center coordinate contract",
+      "type": "bug",
+      "priority": "P1",
+      "estimate": "M",
+      "labels": [
+        "skill-tree",
+        "hex-grid",
+        "rendering",
+        "frontend"
+      ],
+      "milestone": "Skill Tree Navigation Stabilization",
+      "assignees": [],
+      "body": "`branchCentersProvider` says screen-space center but returns `state.positions`, which are world/layout positions. Choose one contract: rename to world centers or transform into screen-space in Branch Detail where `_transform.value` is available.",
+      "files": [
+        "lib/game/providers/branch_path_providers.dart",
+        "lib/screens/skills_tree/skill_branch_detail_screen.dart",
+        "lib/ui_components/hex_grid/paint/auto_path_overlay_painter.dart"
+      ],
+      "acceptance_criteria": [
+        "Provider name/comment accurately describes world vs screen coordinates.",
+        "Overlay lines align with visible nodes after zoom/pan.",
+        "No duplicate center maps are maintained in Branch Detail."
+      ],
+      "dependencies": [
+        "STN-002",
+        "STN-003"
+      ]
+    },
+    {
+      "id": "STN-005",
+      "title": "[Skill Tree Navigation] Add production Branch Detail action bar",
+      "type": "feature",
+      "priority": "P2",
+      "estimate": "M",
+      "labels": [
+        "skill-tree",
+        "ux",
+        "frontend",
+        "cooldowns",
+        "xp"
+      ],
+      "milestone": "Skill Tree Navigation Stabilization",
+      "assignees": [],
+      "body": "Add a bottom action bar for current Auto-Path step: previous/next controls, Unlock if locked/available, Use if unlocked, XP cost, insufficient XP state, and cooldown state.",
+      "files": [
+        "lib/screens/skills_tree/skill_branch_detail_screen.dart",
+        "lib/game/controllers/skill_tree_controller.dart",
+        "lib/game/services/skill_cooldown_service.dart",
+        "lib/game/services/profile_service.dart"
+      ],
+      "acceptance_criteria": [
+        "Action bar appears when path exists.",
+        "Unlock disables for missing prereqs/XP.",
+        "Use disables when locked/on cooldown.",
+        "Successful action advances focus appropriately.",
+        "XP/cooldown state updates visibly."
+      ],
+      "dependencies": [
+        "STN-003",
+        "STN-004"
+      ]
+    },
+    {
+      "id": "STN-006",
+      "title": "[Skill Tree Navigation] Persist Auto-Path progress per branch",
+      "type": "feature",
+      "priority": "P2",
+      "estimate": "M",
+      "labels": [
+        "skill-tree",
+        "persistence",
+        "profile",
+        "frontend"
+      ],
+      "milestone": "Skill Tree Navigation Stabilization",
+      "assignees": [],
+      "body": "Persist current Auto-Path step per branch in profile/local storage. URL query params should override saved progress when present.",
+      "files": [
+        "lib/screens/skills_tree/skill_branch_detail_screen.dart",
+        "lib/game/services/profile_service.dart",
+        "lib/game/providers/branch_path_providers.dart"
+      ],
+      "acceptance_criteria": [
+        "Branch restores last step when no query step is present.",
+        "Changing current step persists progress.",
+        "Deep link query param overrides saved progress.",
+        "Unknown/deleted node IDs are handled safely."
+      ],
+      "dependencies": [
+        "STN-005"
+      ]
+    },
+    {
+      "id": "STN-007",
+      "title": "[Skill Tree Navigation] Clean MiniHexBranchPreview data flow",
+      "type": "refactor",
+      "priority": "P2",
+      "estimate": "S",
+      "labels": [
+        "skill-tree",
+        "hex-grid",
+        "frontend",
+        "refactor"
+      ],
+      "milestone": "Skill Tree Navigation Stabilization",
+      "assignees": [],
+      "body": "`MiniHexBranchPreview.fromGraph` accepts a graph but build still reads `skillTreeProvider`. Either remove/rename the factory or add a graphOverride and use the provided graph.",
+      "files": [
+        "lib/ui_components/hex_grid/widgets/mini_hex_preview.dart",
+        "lib/screens/skills_tree/skill_tree_nav_screen.dart"
+      ],
+      "acceptance_criteria": [
+        "Factory uses provided graph or is removed.",
+        "No misleading unused constructor parameters remain.",
+        "`highlightPath` and `pathIds` still work.",
+        "Preview renders in nav cards and modal."
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "STN-008",
+      "title": "[Skill Tree Navigation] Data-drive branch cards instead of static metadata",
+      "type": "feature",
+      "priority": "P2",
+      "estimate": "L",
+      "labels": [
+        "skill-tree",
+        "navigation",
+        "data",
+        "frontend"
+      ],
+      "milestone": "Skill Tree Navigation Stabilization",
+      "assignees": [],
+      "body": "Branch card metadata is still hardcoded in `_getGroupsForType` while progress is live. Load titles, grouping, branch counts, and colors from `skillTreeGroupsProvider`/JSON with code fallback only.",
+      "files": [
+        "lib/screens/skills_tree/skill_tree_nav_screen.dart",
+        "lib/game/providers/skill_tree_nav_providers.dart",
+        "assets/data/skill_tree.json"
+      ],
+      "acceptance_criteria": [
+        "Nav groups are provider-backed.",
+        "Static `_GroupSpec` definitions removed or fallback-only.",
+        "Branch count reflects configured data.",
+        "Progress/available counts remain live."
+      ],
+      "dependencies": [
+        "STN-007"
+      ]
+    },
+    {
+      "id": "STN-009",
+      "title": "[Skill Tree Navigation] Optimize AutoPathOverlayPainter rendering",
+      "type": "performance",
+      "priority": "P3",
+      "estimate": "M",
+      "labels": [
+        "skill-tree",
+        "rendering",
+        "performance",
+        "hex-grid"
+      ],
+      "milestone": "Skill Tree Navigation Stabilization",
+      "assignees": [],
+      "body": "`AutoPathOverlayPainter` uses `saveLayer` inside each segment loop for dim mask clearing. Render the dim mask once and clear a single combined path, or disable dim-mask mode for mini previews/low-end devices.",
+      "files": [
+        "lib/ui_components/hex_grid/paint/auto_path_overlay_painter.dart",
+        "lib/screens/skills_tree/skill_branch_detail_screen.dart"
+      ],
+      "acceptance_criteria": [
+        "Painter avoids per-segment saveLayer calls.",
+        "Mini preview uses no dim mask.",
+        "Branch detail remains visually equivalent.",
+        "No frame drops with 20+ nodes."
+      ],
+      "dependencies": [
+        "STN-002"
+      ]
+    },
+    {
+      "id": "STN-010",
+      "title": "[Skill Tree Navigation] Add dedicated Pathways/Skill Tree Navigation docs",
+      "type": "docs",
+      "priority": "P2",
+      "estimate": "S",
+      "labels": [
+        "documentation",
+        "skill-tree",
+        "pathways",
+        "handoff"
+      ],
+      "milestone": "Skill Tree Navigation Stabilization",
+      "assignees": [],
+      "body": "Docs directory has broad plans/checklists/handoffs but no dedicated current-state Skill Tree Navigation document from this review. Add `docs/skill_tree_navigation_status.md` with route map, architecture, known issues, next sequence, and QA checklist.",
+      "files": [
+        "docs/skill_tree_navigation_status.md",
+        "docs/trivia_tycoon_migration_frontend_github_issues.json",
+        "lib/screens/skills_tree/skill_tree_nav_screen.dart",
+        "lib/screens/skills_tree/skill_branch_detail_screen.dart"
+      ],
+      "acceptance_criteria": [
+        "New docs file exists under docs/.",
+        "Includes route map and key file map.",
+        "References generated JSON issue package.",
+        "Includes QA checklist for nav, auto-path, overlays, cooldown/use flows."
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "STN-011",
+      "title": "[Skill Tree Navigation] Add planner, overlay, and route tests",
+      "type": "test",
+      "priority": "P2",
+      "estimate": "L",
+      "labels": [
+        "testing",
+        "skill-tree",
+        "planner",
+        "navigation",
+        "frontend"
+      ],
+      "milestone": "Skill Tree Navigation Stabilization",
+      "assignees": [],
+      "body": "Add tests for weighted topological planner, route deep-link parsing, mini preview route highlighting, and branch detail overlay data.",
+      "files": [
+        "test/game/planning/skill_branch_path_planner_test.dart",
+        "test/screens/skills_tree/skill_tree_nav_screen_test.dart",
+        "test/screens/skills_tree/skill_branch_detail_screen_test.dart"
+      ],
+      "acceptance_criteria": [
+        "Planner tests pass for DAG/cycle cases.",
+        "Route tests verify `/skill-branch/:branchId?step=0&showPath=1`.",
+        "Widget tests cover empty/valid branch states.",
+        "Tests are referenced from docs."
+      ],
+      "dependencies": [
+        "STN-001",
+        "STN-002",
+        "STN-003"
+      ]
+    },
+    {
+      "id": "STN-012",
+      "title": "[Skill Tree Navigation] Add cooldown chips and next-available messaging",
+      "type": "feature",
+      "priority": "P2",
+      "estimate": "M",
+      "labels": [
+        "skill-tree",
+        "cooldowns",
+        "ux",
+        "frontend"
+      ],
+      "milestone": "Skill Tree Navigation Stabilization",
+      "assignees": [],
+      "body": "Cooldown support exists in services/controller. Add consistent visual feedback in Branch Detail action bar, selected node detail, SkillNodeWidget overlay, and Auto-Path step list.",
+      "files": [
+        "lib/screens/skills_tree/skill_branch_detail_screen.dart",
+        "lib/screens/skills_tree/widgets/skill_node_widget.dart",
+        "lib/game/services/skill_cooldown_service.dart"
+      ],
+      "acceptance_criteria": [
+        "Cooldown state appears in Branch Detail current-step action bar.",
+        "Use action disables while on cooldown.",
+        "Remaining time updates periodically.",
+        "Cooldown UI does not cause excessive rebuilds."
+      ],
+      "dependencies": [
+        "STN-005"
+      ]
+    },
+    {
+      "id": "STN-013",
+      "title": "[Skill Tree Navigation] Persist unlocked nodes, cooldowns, and XP restore path",
+      "type": "feature",
+      "priority": "P1",
+      "estimate": "L",
+      "labels": [
+        "skill-tree",
+        "profile",
+        "persistence",
+        "xp",
+        "cooldowns"
+      ],
+      "milestone": "Skill Tree Navigation Stabilization",
+      "assignees": [],
+      "body": "Persist unlocked skill IDs, skill availability, cooldown end timestamps, player XP, and last Auto-Path step per branch so progression survives restart and can later sync to backend.",
+      "files": [
+        "lib/game/services/profile_service.dart",
+        "lib/game/services/skill_cooldown_service.dart",
+        "lib/game/controllers/skill_tree_controller.dart",
+        "lib/game/models/skill_tree_graph.dart"
+      ],
+      "acceptance_criteria": [
+        "Unlocked nodes persist after restart.",
+        "Cooldowns restore from end timestamps.",
+        "XP restores from profile/progression source.",
+        "Controller initializes graph state from persisted data.",
+        "Missing/deleted IDs are handled safely."
+      ],
+      "dependencies": [
+        "STN-005",
+        "STN-012"
+      ]
+    },
+    {
+      "id": "STN-014",
+      "title": "[Skill Tree Navigation] Clean imports and duplicate provider paths",
+      "type": "bug",
+      "priority": "P1",
+      "estimate": "M",
+      "labels": [
+        "skill-tree",
+        "imports",
+        "refactor",
+        "frontend"
+      ],
+      "milestone": "Skill Tree Navigation Stabilization",
+      "assignees": [],
+      "body": "Normalize skill-tree imports to avoid duplicate-type problems. Current files mix relative paths and package paths across graph models, providers, planners, and hex painters.",
+      "files": [
+        "lib/screens/skills_tree/skill_tree_nav_screen.dart",
+        "lib/screens/skills_tree/skill_branch_detail_screen.dart",
+        "lib/ui_components/hex_grid/hex_grid.dart",
+        "lib/game/providers/branch_path_providers.dart"
+      ],
+      "acceptance_criteria": [
+        "Consistent imports across skill-tree files.",
+        "No duplicate type conflicts remain.",
+        "`dart analyze` reports no unused/ambiguous skill-tree imports.",
+        "Hex grid barrel export is used where appropriate."
+      ],
+      "dependencies": []
+    }
+  ]
+}
