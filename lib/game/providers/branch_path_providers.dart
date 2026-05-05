@@ -13,8 +13,12 @@ final branchAutoPathProvider =
   return [for (final n in nodes) n.id];
 });
 
-/// Returns a map of nodeId -> screen-space center for a given branchId,
+/// Returns a map of nodeId -> layout/world center for a given branchId,
 /// using positions from the current SkillTreeState.
+///
+/// Important: these are not transformed screen-space positions. Screens using
+/// a TransformationController should transform these centers before using them
+/// in overlay painters.
 final branchCentersProvider =
     Provider.family<Map<String, Offset>, String>((ref, branchId) {
   final state = ref.watch(skillTreeProvider);

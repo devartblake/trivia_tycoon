@@ -11,6 +11,7 @@ import '../../core/theme/hex_spider_theme.dart';
 import '../../../game/models/skill_tree_graph.dart';
 import '../../../game/controllers/skill_tree_controller.dart';
 import '../../game/planning/skill_branch_path_planner.dart';
+import '../../game/providers/branch_path_providers.dart';
 import '../../game/providers/skill_tree_provider.dart';
 import '../../game/providers/xp_provider.dart';
 import '../../ui_components/hex_grid/math/hex_orientation.dart';
@@ -37,19 +38,17 @@ class _SkillBranchDetailScreenState
   final TransformationController _transform = TransformationController();
   late final ScrollController _listCtrl;
   static const double _nodeRadius = 40;
+  /// Radius used for the fallback circle layout when node positions are absent.
+  static const double _fallbackLayoutRadius = 260.0;
 
   String? _focusedId;
   bool _showPath = false;
   int _pathIndex = 0;
-  List<String> _computedPath = [];
+  bool _stepClampPending = false;
 
-  /// New overlay state management (ValueNotifiers for reactive updates)
+  /// Overlay state management (ValueNotifiers for reactive updates)
   final ValueNotifier<bool> _showFullPath = ValueNotifier<bool>(false);
   final ValueNotifier<int> _currentStep = ValueNotifier<int>(0);
-
-  /// Captured screen-space centers for overlay painter
-  final Map<String, Offset> _centers = <String, Offset>{};
-  List<String> _pathIds = const [];
 
   @override
   void initState() {
@@ -64,7 +63,8 @@ class _SkillBranchDetailScreenState
     // Defer parsing query params until we have context
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _hydrateFromQueryParamsIfNeeded();
-      _recomputePath();
+      // Clamp initial step index to the provider-derived path length.
+      _clampStepIndex(ref.read(branchAutoPathProvider(widget.branchId)));
       setState(() {});
     });
 
@@ -119,22 +119,19 @@ class _SkillBranchDetailScreenState
     }
   }
 
-  void _recomputePath() {
-    final state = ref.read(skillTreeProvider);
-    // Use the new centralized planner
-    final planner = SkillBranchPathPlanner.fromGraph(state.graph);
-    final orderedNodes = planner.forBranch(widget.branchId);
-    _computedPath = orderedNodes.map((n) => n.id).toList();
-    _pathIds = _computedPath; // Sync with overlay
-
-    if (_pathIndex >= _computedPath.length) {
-      _pathIndex = _computedPath.isEmpty ? 0 : _computedPath.length - 1;
-      _currentStep.value = _pathIndex;
-    }
+  /// Clamps `_pathIndex` and `_currentStep` to the valid range for [pathIds].
+  /// Safe to call outside of `build()` (e.g. from a post-frame callback or
+  /// `initState`). Sets state and ValueNotifier only when the value changes.
+  void _clampStepIndex(List<String> pathIds) {
+    if (!mounted || pathIds.isEmpty || _pathIndex < pathIds.length) return;
+    final clamped = pathIds.length - 1;
+    setState(() => _pathIndex = clamped);
+    _currentStep.value = clamped;
   }
 
   @override
   void dispose() {
+    _stepClampPending = false;
     _transform.dispose();
     _listCtrl.dispose();
     _showFullPath.dispose();
@@ -183,26 +180,49 @@ class _SkillBranchDetailScreenState
       final p = all[id];
       if (p != null) {
         out[id] = p;
-        // Capture screen-space centers for overlay (transform to screen space)
-        final screenPos = _transformPoint(_transform.value, p);
-        _centers[id] = screenPos;
       }
     }
     // If some nodes have no saved layout yet, place them in a quick circle.
     if (out.length < filtered.nodes.length) {
       final missing =
           filtered.nodes.where((n) => !out.containsKey(n.id)).toList();
-      final cx = 0.0, cy = 0.0, r = 260.0;
       for (int i = 0; i < missing.length; i++) {
         final a = (i / math.max(1, missing.length)) * 2 * math.pi;
-        final worldPos = Offset(cx + r * math.cos(a), cy + r * math.sin(a));
-        out[missing[i].id] = worldPos;
-        // Also capture screen space for overlay
-        final screenPos = _transformPoint(_transform.value, worldPos);
-        _centers[missing[i].id] = screenPos;
+        out[missing[i].id] = Offset(
+          _fallbackLayoutRadius * math.cos(a),
+          _fallbackLayoutRadius * math.sin(a),
+        );
       }
     }
     return out;
+  }
+
+  /// Computes screen-space centers for overlay painting from world positions.
+  /// Returns a fresh map; does not mutate any field.
+  Map<String, Offset> _computeCenters(
+      Map<String, Offset> all, SkillTreeGraph filtered) {
+    final ids = filtered.nodes.map((n) => n.id).toSet();
+    final centers = <String, Offset>{};
+    for (final id in ids) {
+      final p = all[id];
+      if (p != null) {
+        centers[id] = _transformPoint(_transform.value, p);
+      }
+    }
+    // Fallback circle for nodes missing a saved position.
+    if (centers.length < filtered.nodes.length) {
+      final missing =
+          filtered.nodes.where((n) => !centers.containsKey(n.id)).toList();
+      for (int i = 0; i < missing.length; i++) {
+        final a = (i / math.max(1, missing.length)) * 2 * math.pi;
+        final worldPos = Offset(
+          _fallbackLayoutRadius * math.cos(a),
+          _fallbackLayoutRadius * math.sin(a),
+        );
+        centers[missing[i].id] = _transformPoint(_transform.value, worldPos);
+      }
+    }
+    return centers;
   }
 
   // Delegates to the unified XP-based unlock path (handles prereqs + server sync).
@@ -244,8 +264,9 @@ class _SkillBranchDetailScreenState
   }
 
   void _goToStep(int i) {
-    if (_computedPath.isEmpty) return;
-    final newStep = i.clamp(0, _computedPath.length - 1);
+    final pathIds = ref.read(branchAutoPathProvider(widget.branchId));
+    if (pathIds.isEmpty) return;
+    final newStep = i.clamp(0, pathIds.length - 1);
     setState(() {
       _pathIndex = newStep;
       _currentStep.value = newStep; // Sync ValueNotifier
@@ -256,9 +277,6 @@ class _SkillBranchDetailScreenState
     setState(() {
       _showPath = !_showPath;
       _showFullPath.value = _showPath; // Sync ValueNotifier
-      if (_showPath) {
-        _recomputePath();
-      }
     });
   }
 
@@ -339,8 +357,8 @@ class _SkillBranchDetailScreenState
     );
   }
 
-  Widget _pathControls(BuildContext context) {
-    final total = _computedPath.length;
+  Widget _pathControls(BuildContext context, List<String> pathIds) {
+    final total = pathIds.length;
     final label = total == 0 ? 'No steps' : 'Step ${_pathIndex + 1} / $total';
 
     if (!_showPath || total == 0) return const SizedBox.shrink();
@@ -413,11 +431,21 @@ class _SkillBranchDetailScreenState
     final filtered = state.graph.subgraphForBranch(widget.branchId);
     final positions = _filterPositions(state.positions, filtered);
 
+    // Local derived values — no mutations during build.
+    final pathIds = ref.watch(branchAutoPathProvider(widget.branchId));
+    final centers = _computeCenters(state.positions, filtered);
+
+    // Clamp step index to current path length via a guarded post-frame callback.
+    if (pathIds.isNotEmpty && _pathIndex >= pathIds.length && !_stepClampPending) {
+      _stepClampPending = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _stepClampPending = false;
+        _clampStepIndex(pathIds);
+      });
+    }
+
     final currentScale = _transform.value.storage[0];
     final branchColor = _branchColor(widget.branchId);
-
-    // Ensure path is recomputed when state changes
-    _recomputePath();
 
     return Scaffold(
       backgroundColor: const Color(0xFF0D1021),
@@ -511,8 +539,8 @@ class _SkillBranchDetailScreenState
                         builder: (_, step, __) => IgnorePointer(
                           child: CustomPaint(
                             painter: AutoPathOverlayPainter(
-                              centers: _centers,
-                              pathIds: _pathIds,
+                              centers: centers,
+                              pathIds: pathIds,
                               currentIndex: step,
                               showFullPath: show,
                               fullPathColor: branchColor.withValues(alpha: 0.4),
@@ -541,7 +569,7 @@ class _SkillBranchDetailScreenState
                     left: 12,
                     right: 12,
                     bottom: 80, // Above zoom controls
-                    child: _pathControls(context),
+                    child: _pathControls(context, pathIds),
                   ),
                   // Add overlay controls for debugging (optional)
                   Positioned(
