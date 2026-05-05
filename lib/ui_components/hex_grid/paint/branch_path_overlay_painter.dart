@@ -2,6 +2,9 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' as vmath;
 
+/// **Legacy painter** — retained for use in [HexSpiderSkillTreeView] (prerequisite path glow).
+/// For the branch detail screen, prefer [AutoPathOverlayPainter] instead.
+///
 /// Draws a highlighted path over the branch graph:
 /// - Connects nodes in `path` order
 /// - Glowing stroke for the full path
