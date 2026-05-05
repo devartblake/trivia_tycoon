@@ -193,7 +193,7 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () => _navigateToSkillTree(group.id),
+          onTap: () => _navigateToSkillBranch(group.id),
           borderRadius: BorderRadius.circular(16),
           child: Padding(
             padding: const EdgeInsets.all(8), // Further reduced padding
@@ -648,9 +648,9 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
     );
   }
 
-  void _navigateToSkillTree(String groupId) {
-    // Navigate to specific skill tree view using go_router
-    context.push('/skill-tree/$groupId');
+  void _navigateToSkillBranch(String branchId) {
+    // Navigate to branch detail. The global tree remains at /skill-tree.
+    context.push('/skill-branch/$branchId');
   }
 
   /// Compute live progress for a branch category from the skill tree state.
