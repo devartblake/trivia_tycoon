@@ -1,0 +1,83 @@
+name: Import Skill Tree GitHub Issues
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Run mode: dry-run previews payloads, apply creates labels/milestones/issues"
+        required: true
+        default: "dry-run"
+        type: choice
+        options:
+          - dry-run
+          - apply
+      issue_json:
+        description: "Path to the issue JSON package"
+        required: true
+        default: "ops/issues/skill_tree_navigation_github_issues.json"
+        type: string
+      importer_script:
+        description: "Path to the importer script"
+        required: true
+        default: "ops/scripts/import_github_issues_trivia_tycoon.py"
+        type: string
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  import-issues:
+    name: Import GitHub Issues
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate requested files exist
+        shell: bash
+        run: |
+          test -f "${{ inputs.importer_script }}" || {
+            echo "Importer script not found: ${{ inputs.importer_script }}"
+            exit 1
+          }
+
+          test -f "${{ inputs.issue_json }}" || {
+            echo "Issue JSON file not found: ${{ inputs.issue_json }}"
+            exit 1
+          }
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install importer dependencies
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install requests
+
+      - name: Dry-run issue import
+        if: ${{ inputs.mode == 'dry-run' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        shell: bash
+        run: |
+          python "${{ inputs.importer_script }}" \
+            --repo "${{ github.repository }}" \
+            --json "${{ inputs.issue_json }}"
+
+      - name: Apply issue import
+        if: ${{ inputs.mode == 'apply' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        shell: bash
+        run: |
+          python "${{ inputs.importer_script }}" \
+            --repo "${{ github.repository }}" \
+            --json "${{ inputs.issue_json }}" \
+            --apply
