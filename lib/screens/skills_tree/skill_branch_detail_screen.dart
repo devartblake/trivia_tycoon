@@ -440,7 +440,8 @@ class _SkillBranchDetailScreenState
       _stepClampPending = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _stepClampPending = false;
-        _clampStepIndex(pathIds);
+        final latestPathIds = ref.read(branchAutoPathProvider(widget.branchId));
+        _clampStepIndex(latestPathIds);
       });
     }
 
