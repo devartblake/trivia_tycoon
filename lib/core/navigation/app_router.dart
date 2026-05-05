@@ -1187,12 +1187,9 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const SkillTreeNavTestScreen(),
       ),
       GoRoute(
-        path: '/skill-tree/:groupId',
+        path: '/skill-tree',
         name: 'skillTree',
-        builder: (context, state) {
-          final groupId = state.pathParameters['groupId'] ?? '';
-          return SkillTreeScreen(groupId: groupId);
-        },
+        builder: (context, state) => const SkillTreeScreen(),
       ),
       GoRoute(
         path: '/skill-branch/:branchId',
