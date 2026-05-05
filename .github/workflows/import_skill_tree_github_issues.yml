@@ -19,7 +19,7 @@ on:
       importer_script:
         description: "Path to the importer script"
         required: true
-        default: "ops/scripts/import_github_issues_trivia_tycoon.py"
+        default: "scripts/import_github_issues_trivia_tycoon.py"
         type: string
 
 permissions:
