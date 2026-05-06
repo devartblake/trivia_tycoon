@@ -404,7 +404,7 @@ class _SkillBranchDetailScreenState
           status = 'Requires: ${missingPrereqs.first.title}';
         } else if (!node.unlocked && playerXP < node.cost) {
           status = 'Need ${node.cost - playerXP} more XP';
-        } else if (onCooldown) {
+        } else if (node.unlocked && onCooldown) {
           status = 'Cooldown: ${cooldowns.remainingLabel(node.id)}';
         } else if (node.unlocked) {
           status = 'Ready to use';
