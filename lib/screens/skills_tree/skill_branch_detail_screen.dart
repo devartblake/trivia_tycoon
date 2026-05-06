@@ -63,8 +63,6 @@ class _SkillBranchDetailScreenState
       _pathIndex = widget.initialStep!.clamp(0, 9999);
 
     _listCtrl = ScrollController();
-    _cooldownTimer =
-        Timer.periodic(const Duration(seconds: 1), (_) => _cooldownTick.value++);
 
     // Defer parsing query params until we have context
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -137,14 +135,27 @@ class _SkillBranchDetailScreenState
 
   @override
   void dispose() {
+    _stopCooldownTicker();
     _stepClampPending = false;
     _transform.dispose();
     _listCtrl.dispose();
     _showFullPath.dispose();
     _currentStep.dispose();
-    _cooldownTimer?.cancel();
     _cooldownTick.dispose();
     super.dispose();
+  }
+
+  void _startCooldownTicker() {
+    if (_cooldownTimer?.isActive == true) return;
+    _cooldownTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (!mounted) return;
+      _cooldownTick.value = _cooldownTick.value + 1;
+    });
+  }
+
+  void _stopCooldownTicker() {
+    _cooldownTimer?.cancel();
+    _cooldownTimer = null;
   }
 
   // Build VM using the centralized planner.
@@ -386,6 +397,12 @@ class _SkillBranchDetailScreenState
       valueListenable: _cooldownTick,
       builder: (_, __, ___) {
         final onCooldown = cooldowns.isOnCooldown(node.id);
+        final shouldTick = node.unlocked && onCooldown;
+        if (shouldTick) {
+          _startCooldownTicker();
+        } else {
+          _stopCooldownTicker();
+        }
         final prereqIds = state.graph.getPrerequisites(node.id);
         final missingPrereqs = prereqIds
             .map(state.graph.getNodeById)
@@ -534,6 +551,7 @@ class _SkillBranchDetailScreenState
 
     // Local derived values — no mutations during build.
     final pathIds = ref.watch(branchAutoPathProvider(widget.branchId));
+    if (pathIds.isEmpty) _stopCooldownTicker();
     final centers = _computeCenters(positions, filtered);
 
     // Clamp step index to current path length via a guarded post-frame callback.
