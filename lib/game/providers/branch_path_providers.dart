@@ -17,8 +17,9 @@ final branchAutoPathProvider =
 /// using positions from the current SkillTreeState.
 ///
 /// Important: these are not transformed screen-space positions. Screens using
-/// a TransformationController should transform these centers before using them
-/// in overlay painters (e.g. via `_transform.value`).
+/// a [TransformationController] must apply the world-to-screen matrix
+/// (i.e. `controller.value`) to each [Offset] before passing them to overlay
+/// painters such as [AutoPathOverlayPainter].
 final branchWorldCentersProvider =
     Provider.family<Map<String, Offset>, String>((ref, branchId) {
   final state = ref.watch(skillTreeProvider);
