@@ -20,6 +20,15 @@ class SkillCooldownService {
     return rem.isNegative ? Duration.zero : rem;
   }
 
+  /// Returns remaining cooldown in `mm:ss` format, or `00:00` when inactive.
+  String remainingLabel(String skillId) {
+    final rem = remaining(skillId);
+    if (rem == null) return '00:00';
+    final mm = rem.inMinutes.remainder(60).toString().padLeft(2, '0');
+    final ss = rem.inSeconds.remainder(60).toString().padLeft(2, '0');
+    return '$mm:$ss';
+  }
+
   /// Shorten an active cooldown on a specific skill by [reduction].
   void reduceCooldown(String skillId, Duration reduction) {
     final end = _expiry[skillId];

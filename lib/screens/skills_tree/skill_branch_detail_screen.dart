@@ -12,6 +12,7 @@ import '../../../game/models/skill_tree_graph.dart';
 import '../../../game/controllers/skill_tree_controller.dart';
 import '../../game/planning/skill_branch_path_planner.dart';
 import '../../game/providers/branch_path_providers.dart';
+import '../../game/providers/skill_cooldown_service_provider.dart';
 import '../../game/providers/skill_tree_provider.dart';
 import '../../game/providers/xp_provider.dart';
 import '../../ui_components/hex_grid/math/hex_orientation.dart';
@@ -267,9 +268,12 @@ class _SkillBranchDetailScreenState
     final pathIds = ref.read(branchAutoPathProvider(widget.branchId));
     if (pathIds.isEmpty) return;
     final newStep = i.clamp(0, pathIds.length - 1);
+    final nodeId = pathIds[newStep];
+    ref.read(skillTreeProvider.notifier).select(nodeId);
     setState(() {
       _pathIndex = newStep;
       _currentStep.value = newStep; // Sync ValueNotifier
+      _focusedId = nodeId;
     });
   }
 
@@ -357,36 +361,124 @@ class _SkillBranchDetailScreenState
     );
   }
 
-  Widget _pathControls(BuildContext context, List<String> pathIds) {
+  Widget _actionBar({
+    required SkillTreeState state,
+    required List<String> pathIds,
+    required int playerXP,
+  }) {
     final total = pathIds.length;
-    final label = total == 0 ? 'No steps' : 'Step ${_pathIndex + 1} / $total';
+    if (total == 0) return const SizedBox.shrink();
 
-    if (!_showPath || total == 0) return const SizedBox.shrink();
+    final safeIndex = _pathIndex.clamp(0, total - 1);
+    final nodeId = pathIds[safeIndex];
+    final node = state.graph.byId[nodeId];
+    if (node == null) return const SizedBox.shrink();
 
-    return Card(
-      color: const Color(0xCC1E2139),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        child: Row(
-          children: [
-            IconButton(
-              onPressed: total == 0 ? null : () => _goToStep(_pathIndex - 1),
-              icon: const Icon(Icons.chevron_left, color: Colors.white),
+    final cooldowns = ref.watch(skillCooldownServiceProvider);
+    return StreamBuilder<int>(
+      stream: Stream<int>.periodic(const Duration(seconds: 1), (v) => v),
+      builder: (_, __) {
+        final onCooldown = cooldowns.isOnCooldown(node.id);
+        final prereqIds = state.graph.getPrerequisites(node.id);
+        final missingPrereqs = prereqIds
+            .map(state.graph.getNodeById)
+            .whereType<SkillNode>()
+            .where((n) => !n.unlocked)
+            .toList();
+
+        final canUnlock =
+            !node.unlocked && missingPrereqs.isEmpty && playerXP >= node.cost;
+        final canUse = node.unlocked && !onCooldown;
+        final canGoBack = safeIndex > 0;
+        final canGoNext = safeIndex < total - 1;
+
+        String status;
+        if (!node.unlocked && missingPrereqs.isNotEmpty) {
+          status = 'Requires: ${missingPrereqs.first.title}';
+        } else if (!node.unlocked && playerXP < node.cost) {
+          status = 'Need ${node.cost - playerXP} more XP';
+        } else if (onCooldown) {
+          status = 'Cooldown: ${cooldowns.remainingLabel(node.id)}';
+        } else if (node.unlocked) {
+          status = 'Ready to use';
+        } else {
+          status = 'Ready to unlock';
+        }
+
+        void handleAction() {
+          final notifier = ref.read(skillTreeProvider.notifier);
+          bool success = false;
+          if (node.unlocked) {
+            success = notifier.useSkill(node.id);
+          } else {
+            notifier.unlockSkill(node.id);
+            success =
+                ref.read(skillTreeProvider).graph.byId[node.id]?.unlocked ==
+                    true;
+          }
+
+          if (!success) return;
+          if (safeIndex < total - 1) {
+            _goToStep(safeIndex + 1);
+          } else {
+            notifier.select(node.id);
+            setState(() => _focusedId = node.id);
+          }
+        }
+
+        return Container(
+          padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
+          decoration: const BoxDecoration(
+            color: Color(0xFF15183A),
+            border: Border(top: BorderSide(color: Color(0x33FFFFFF))),
+          ),
+          child: SafeArea(
+            top: false,
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: canGoBack ? () => _goToStep(safeIndex - 1) : null,
+                  icon: const Icon(Icons.chevron_left, color: Colors.white),
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Step ${safeIndex + 1} / $total • ${node.title}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        'Cost: ${node.cost} XP • $status',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style:
+                            const TextStyle(color: Colors.white70, fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                FilledButton(
+                  onPressed: canUnlock || canUse ? handleAction : null,
+                  child: Text(node.unlocked ? 'Use' : 'Unlock'),
+                ),
+                IconButton(
+                  onPressed: canGoNext ? () => _goToStep(safeIndex + 1) : null,
+                  icon: const Icon(Icons.chevron_right, color: Colors.white),
+                ),
+              ],
             ),
-            Expanded(
-              child: Text(
-                label,
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.white),
-              ),
-            ),
-            IconButton(
-              onPressed: total == 0 ? null : () => _goToStep(_pathIndex + 1),
-              icon: const Icon(Icons.chevron_right, color: Colors.white),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -565,13 +657,6 @@ class _SkillBranchDetailScreenState
                           vmath.Matrix4.identity()..scale(0.9, 0.9)),
                     ),
                   ),
-                  // Add path controls at the bottom
-                  Positioned(
-                    left: 12,
-                    right: 12,
-                    bottom: 80, // Above zoom controls
-                    child: _pathControls(context, pathIds),
-                  ),
                   // Add overlay controls for debugging (optional)
                   Positioned(
                     left: 12,
@@ -584,6 +669,13 @@ class _SkillBranchDetailScreenState
           },
         ),
       ),
+      bottomNavigationBar: pathIds.isEmpty
+          ? null
+          : _actionBar(
+              state: state,
+              pathIds: pathIds,
+              playerXP: playerXP,
+            ),
     );
   }
 

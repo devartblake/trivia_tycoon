@@ -78,11 +78,17 @@ class ProfileService {
   bool hasEnoughXP(int xpCost) =>
       ref.read(xpServiceProvider).hasEnoughXP(xpCost);
 
-  void deductXP(int xpCost) => ref.read(xpServiceProvider).deductXP(xpCost);
+  void deductXP(int xpCost) {
+    final xp = ref.read(xpServiceProvider);
+    xp.deductXP(xpCost);
+    ref.read(playerXPProvider.notifier).state = xp.playerXP;
+  }
 
-  void addXP(int amount, {bool applyMultiplier = true}) => ref
-      .read(xpServiceProvider)
-      .addXP(amount, applyMultiplier: applyMultiplier);
+  void addXP(int amount, {bool applyMultiplier = true}) {
+    final xp = ref.read(xpServiceProvider);
+    xp.addXP(amount, applyMultiplier: applyMultiplier);
+    ref.read(playerXPProvider.notifier).state = xp.playerXP;
+  }
 
   void setXPBonusMultiplier(double multiplier) =>
       ref.read(xpServiceProvider).setBonusMultiplier(multiplier);
