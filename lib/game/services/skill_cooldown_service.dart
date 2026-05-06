@@ -20,7 +20,8 @@ class SkillCooldownService {
     return rem.isNegative ? Duration.zero : rem;
   }
 
-  /// Returns remaining cooldown in `mm:ss` format, or `00:00` when inactive.
+  /// Returns remaining cooldown in `m:ss` format, or `00:00` when inactive.
+  /// Minutes are not capped and may exceed 59 for long cooldowns.
   String remainingLabel(String skillId) {
     final rem = remaining(skillId);
     if (rem == null) return '00:00';

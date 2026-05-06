@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
@@ -50,6 +51,8 @@ class _SkillBranchDetailScreenState
   /// Overlay state management (ValueNotifiers for reactive updates)
   final ValueNotifier<bool> _showFullPath = ValueNotifier<bool>(false);
   final ValueNotifier<int> _currentStep = ValueNotifier<int>(0);
+  final ValueNotifier<int> _cooldownTick = ValueNotifier<int>(0);
+  Timer? _cooldownTimer;
 
   @override
   void initState() {
@@ -60,6 +63,8 @@ class _SkillBranchDetailScreenState
       _pathIndex = widget.initialStep!.clamp(0, 9999);
 
     _listCtrl = ScrollController();
+    _cooldownTimer =
+        Timer.periodic(const Duration(seconds: 1), (_) => _cooldownTick.value++);
 
     // Defer parsing query params until we have context
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -137,6 +142,8 @@ class _SkillBranchDetailScreenState
     _listCtrl.dispose();
     _showFullPath.dispose();
     _currentStep.dispose();
+    _cooldownTimer?.cancel();
+    _cooldownTick.dispose();
     super.dispose();
   }
 
@@ -375,9 +382,9 @@ class _SkillBranchDetailScreenState
     if (node == null) return const SizedBox.shrink();
 
     final cooldowns = ref.watch(skillCooldownServiceProvider);
-    return StreamBuilder<int>(
-      stream: Stream<int>.periodic(const Duration(seconds: 1), (v) => v),
-      builder: (_, __) {
+    return ValueListenableBuilder<int>(
+      valueListenable: _cooldownTick,
+      builder: (_, __, ___) {
         final onCooldown = cooldowns.isOnCooldown(node.id);
         final prereqIds = state.graph.getPrerequisites(node.id);
         final missingPrereqs = prereqIds
