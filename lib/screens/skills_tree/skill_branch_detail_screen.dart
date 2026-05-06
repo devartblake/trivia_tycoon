@@ -407,14 +407,16 @@ class _SkillBranchDetailScreenState
 
         void handleAction() {
           final notifier = ref.read(skillTreeProvider.notifier);
-          bool success = false;
-          if (node.unlocked) {
+          final wasUnlocked = node.unlocked;
+          bool success;
+          if (wasUnlocked) {
             success = notifier.useSkill(node.id);
           } else {
             notifier.unlockSkill(node.id);
-            success =
+            final unlockedAfterAction =
                 ref.read(skillTreeProvider).graph.byId[node.id]?.unlocked ==
                     true;
+            success = !wasUnlocked && unlockedAfterAction;
           }
 
           if (!success) return;
