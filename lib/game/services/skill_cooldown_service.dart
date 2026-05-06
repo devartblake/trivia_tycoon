@@ -24,9 +24,11 @@ class SkillCooldownService {
   /// Minutes are not capped and may exceed 59 for long cooldowns.
   String remainingLabel(String skillId) {
     final rem = remaining(skillId);
-    if (rem == null) return '00:00';
-    final mm = rem.inMinutes.toString().padLeft(2, '0');
-    final ss = rem.inSeconds.remainder(60).toString().padLeft(2, '0');
+    if (rem == null || rem == Duration.zero) return '00:00';
+
+    final totalSeconds = (rem.inMilliseconds + 999) ~/ 1000;
+    final mm = (totalSeconds ~/ 60).toString().padLeft(2, '0');
+    final ss = (totalSeconds % 60).toString().padLeft(2, '0');
     return '$mm:$ss';
   }
 
