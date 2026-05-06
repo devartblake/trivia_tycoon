@@ -423,7 +423,7 @@ class _SkillBranchDetailScreenState
             final unlockedAfterAction =
                 ref.read(skillTreeProvider).graph.byId[node.id]?.unlocked ==
                     true;
-            success = !wasUnlocked && unlockedAfterAction;
+            success = unlockedAfterAction;
           }
 
           if (!success) return;
