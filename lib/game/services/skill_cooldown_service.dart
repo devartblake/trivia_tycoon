@@ -24,7 +24,7 @@ class SkillCooldownService {
   String remainingLabel(String skillId) {
     final rem = remaining(skillId);
     if (rem == null) return '00:00';
-    final mm = rem.inMinutes.remainder(60).toString().padLeft(2, '0');
+    final mm = rem.inMinutes.toString().padLeft(2, '0');
     final ss = rem.inSeconds.remainder(60).toString().padLeft(2, '0');
     return '$mm:$ss';
   }

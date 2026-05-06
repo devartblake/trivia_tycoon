@@ -16,5 +16,14 @@ void main() {
       expect(RegExp(r'^\d{2}:\d{2}$').hasMatch(label), isTrue);
       expect(label.compareTo('00:00') > 0, isTrue);
     });
+
+    test('does not wrap minutes over 59', () {
+      final service = SkillCooldownService();
+      service.startCooldown('n2', const Duration(minutes: 75));
+
+      final label = service.remainingLabel('n2');
+      final minutes = int.parse(label.split(':').first);
+      expect(minutes, greaterThanOrEqualTo(74));
+    });
   });
 }
