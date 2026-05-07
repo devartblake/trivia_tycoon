@@ -36,7 +36,12 @@ final mergedSkillTreeGraphProvider =
   final assetGraph = await ref.watch(skillTreeGraphProvider.future);
 
   final profileService = ref.read(playerProfileServiceProvider);
-  final playerId = await profileService.getUserId();
+  String? playerId;
+  try {
+    playerId = await profileService.getUserId();
+  } catch (_) {
+    return assetGraph; // auth service unavailable — fall back to local
+  }
   if (playerId == null || playerId.isEmpty) return assetGraph;
 
   final dto = await ref.watch(serverSkillTreeProvider(playerId).future);

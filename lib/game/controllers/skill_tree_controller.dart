@@ -82,35 +82,100 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
     _computeLayout();
   }
 
-  // Hex-grid layout: pointy-top axial coordinates, same-category nodes adjacent.
+  // Radial BFS layout: master_hub at world origin, branches radiate outward.
   void _computeLayout() {
-    const double hexSize = 120.0;
+    const double nodeSize = 144.0; // world-pixel diameter of each node (2 * _nodeRadius)
+    const double radialStep = 280.0; // world-pixel gap between successive rings
     final positions = <String, Offset>{};
+    final graph = state.graph;
 
-    // Group by tier; within each tier sort by category then title so
-    // nodes of the same branch cluster together in the honeycomb.
-    final tiers = List.generate(state.graph.maxTier + 1, (_) => <SkillNode>[]);
-    for (final n in state.graph.nodes) {
-      tiers[n.tier].add(n);
+    if (graph.nodes.isEmpty) return;
+
+    // Find the hub node (the root with no incoming edges, preferring master_hub).
+    final hasIncoming = graph.edges.map((e) => e.toId).toSet();
+    final SkillNode hub = graph.nodes.firstWhere(
+      (n) => n.id == 'master_hub',
+      orElse: () => graph.nodes.firstWhere(
+        (n) => !hasIncoming.contains(n.id),
+        orElse: () => graph.nodes.first,
+      ),
+    );
+
+    positions[hub.id] = Offset.zero;
+
+    // Collect direct children of hub and compute first-ring radius such that
+    // adjacent nodes are at least nodeSize apart.
+    final hubChildren = graph.edges
+        .where((e) => e.fromId == hub.id)
+        .map((e) => e.toId)
+        .toList();
+
+    if (hubChildren.isEmpty) {
+      state = state.copyWith(positions: positions);
+      return;
     }
-    for (var t = 0; t < tiers.length; t++) {
-      final row = List<SkillNode>.from(tiers[t])
-        ..sort((a, b) {
-          final c = a.category.name.compareTo(b.category.name);
-          return c != 0 ? c : a.title.compareTo(b.title);
-        });
 
-      // Compensate for pointy-top axial stagger: x = √3·size·(q + r/2).
-      // To keep each row visually centred on x=0: q_start = -(n-1)/2 - t/2.
-      final qStart = (-((row.length - 1) / 2.0) - (t / 2.0)).round();
-      for (var i = 0; i < row.length; i++) {
-        final q = qStart + i;
-        final r = t;
-        final x = math.sqrt(3) * hexSize * (q + r / 2.0);
-        final y = 1.5 * hexSize * r;
-        positions[row[i].id] = Offset(x, y);
+    final n = hubChildren.length;
+    final r0 = n == 1
+        ? radialStep
+        : math.max(radialStep, nodeSize / (2 * math.sin(math.pi / n)));
+
+    // BFS queue: (nodeId, centerAngle, angularSpread, radius)
+    final queue = <_LayoutEntry>[];
+    final placed = <String>{hub.id};
+
+    if (n == 1) {
+      queue.add(_LayoutEntry(hubChildren[0], -math.pi / 2, 2 * math.pi, r0));
+    } else {
+      final angleStep = 2 * math.pi / n;
+      for (int i = 0; i < n; i++) {
+        final angle = -math.pi / 2 + i * angleStep;
+        queue.add(_LayoutEntry(hubChildren[i], angle, angleStep, r0));
       }
     }
+
+    while (queue.isNotEmpty) {
+      final entry = queue.removeAt(0);
+      if (placed.contains(entry.nodeId)) continue;
+      placed.add(entry.nodeId);
+
+      positions[entry.nodeId] = Offset(
+        math.cos(entry.angle) * entry.radius,
+        math.sin(entry.angle) * entry.radius,
+      );
+
+      final children = graph.edges
+          .where((e) => e.fromId == entry.nodeId && !placed.contains(e.toId))
+          .map((e) => e.toId)
+          .toList();
+
+      if (children.isEmpty) continue;
+
+      final spread = math.min(entry.spread, 2 * math.pi / 3);
+      final childSpread = spread / children.length;
+      final nextRadius = entry.radius + radialStep;
+
+      for (int i = 0; i < children.length; i++) {
+        final childAngle =
+            entry.angle - spread / 2 + childSpread / 2 + i * childSpread;
+        queue.add(_LayoutEntry(children[i], childAngle, childSpread, nextRadius));
+      }
+    }
+
+    // Fallback: place any graph nodes unreachable from hub in an outer ring.
+    final unplaced = graph.nodes.where((n) => !placed.contains(n.id)).toList();
+    if (unplaced.isNotEmpty) {
+      final maxR = positions.values.map((o) => o.distance).reduce(math.max);
+      final fallbackR = maxR + radialStep;
+      final step = 2 * math.pi / unplaced.length;
+      for (int i = 0; i < unplaced.length; i++) {
+        positions[unplaced[i].id] = Offset(
+          math.cos(i * step) * fallbackR,
+          math.sin(i * step) * fallbackR,
+        );
+      }
+    }
+
     state = state.copyWith(positions: positions);
   }
 
@@ -396,4 +461,12 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
       // ignore to avoid breaking
     }
   }
+}
+
+class _LayoutEntry {
+  final String nodeId;
+  final double angle;
+  final double spread;
+  final double radius;
+  const _LayoutEntry(this.nodeId, this.angle, this.spread, this.radius);
 }
