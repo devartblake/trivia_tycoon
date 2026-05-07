@@ -52,6 +52,7 @@ class _SkillBranchDetailScreenState
   bool _initialStepHydrationPending = false;
   bool _initialStepHydrated = false;
   int _initialStepHydrationToken = 0;
+  bool _transformCentered = false;
 
   /// Overlay state management (ValueNotifiers for reactive updates)
   final ValueNotifier<bool> _showFullPath = ValueNotifier<bool>(false);
@@ -105,6 +106,7 @@ class _SkillBranchDetailScreenState
       _initialStepHydrated = false;
       _showFullPath.value = _showPath;
       _currentStep.value = _pathIndex;
+      if (branchChanged) _transformCentered = false;
     });
     if (branchChanged) {
       ref.read(skillTreeProvider.notifier).select(null);
@@ -743,6 +745,19 @@ class _SkillBranchDetailScreenState
         color: const Color(0xFF0D1021),
         child: LayoutBuilder(
           builder: (context, c) {
+            // Center world-origin at the canvas midpoint on first layout.
+            if (!_transformCentered) {
+              _transformCentered = true;
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (!mounted) return;
+                setState(() {
+                  _transform.value = vmath.Matrix4.identity()
+                    ..translate(c.maxWidth / 2.0, c.maxHeight / 2.0)
+                    ..scale(0.9, 0.9);
+                });
+              });
+            }
+
             final painter = SkillTreePainter(
               graph: filtered,
               positions: positions,
@@ -827,7 +842,9 @@ class _SkillBranchDetailScreenState
                       onOut: () => setState(() =>
                           _transform.value = _transform.value.scaled(0.87)),
                       onReset: () => setState(() => _transform.value =
-                          vmath.Matrix4.identity()..scale(0.9, 0.9)),
+                          (vmath.Matrix4.identity()
+                            ..translate(c.maxWidth / 2.0, c.maxHeight / 2.0)
+                            ..scale(0.9, 0.9))),
                     ),
                   ),
                   // Add overlay controls for debugging (optional)
