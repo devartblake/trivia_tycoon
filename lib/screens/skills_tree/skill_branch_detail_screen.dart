@@ -151,7 +151,12 @@ class _SkillBranchDetailScreenState
     if (_cooldownTimer?.isActive == true) return;
     _cooldownTimer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (!mounted) return;
-      _cooldownTick.value = _cooldownTick.value + 1;
+      if (!_shouldTickCooldown(ref.read(skillTreeProvider),
+          ref.read(branchAutoPathProvider(widget.branchId)))) {
+        _stopCooldownTicker();
+        return;
+      }
+      _cooldownTick.value++;
     });
   }
 
@@ -161,22 +166,20 @@ class _SkillBranchDetailScreenState
   }
 
   void _syncCooldownTicker(SkillTreeState state, List<String> pathIds) {
-    if (pathIds.isEmpty) {
-      _stopCooldownTicker();
-      return;
-    }
-
-    final safeIndex = _pathIndex.clamp(0, pathIds.length - 1);
-    final node = state.graph.byId[pathIds[safeIndex]];
-    final shouldTick = node != null &&
-        node.unlocked &&
-        ref.read(skillCooldownServiceProvider).isOnCooldown(node.id);
-
-    if (shouldTick) {
+    if (_shouldTickCooldown(state, pathIds)) {
       _startCooldownTicker();
     } else {
       _stopCooldownTicker();
     }
+  }
+
+  bool _shouldTickCooldown(SkillTreeState state, List<String> pathIds) {
+    if (pathIds.isEmpty) return false;
+    final safeIndex = _pathIndex.clamp(0, pathIds.length - 1);
+    final node = state.graph.byId[pathIds[safeIndex]];
+    return node != null &&
+        node.unlocked &&
+        ref.read(skillCooldownServiceProvider).isOnCooldown(node.id);
   }
 
   // Build VM using the centralized planner.
