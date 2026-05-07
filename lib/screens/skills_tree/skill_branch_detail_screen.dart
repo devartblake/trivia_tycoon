@@ -47,6 +47,7 @@ class _SkillBranchDetailScreenState
   bool _showPath = false;
   int _pathIndex = 0;
   bool _stepClampPending = false;
+  bool _cooldownSyncPending = false;
 
   /// Overlay state management (ValueNotifiers for reactive updates)
   final ValueNotifier<bool> _showFullPath = ValueNotifier<bool>(false);
@@ -137,6 +138,7 @@ class _SkillBranchDetailScreenState
   void dispose() {
     _stopCooldownTicker();
     _stepClampPending = false;
+    _cooldownSyncPending = false;
     _transform.dispose();
     _listCtrl.dispose();
     _showFullPath.dispose();
@@ -564,7 +566,15 @@ class _SkillBranchDetailScreenState
 
     // Local derived values — no mutations during build.
     final pathIds = ref.watch(branchAutoPathProvider(widget.branchId));
-    _syncCooldownTicker(state, pathIds);
+    if (!_cooldownSyncPending) {
+      _cooldownSyncPending = true;
+      final pathSnapshot = List<String>.from(pathIds);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _cooldownSyncPending = false;
+        if (!mounted) return;
+        _syncCooldownTicker(state, pathSnapshot);
+      });
+    }
     final centers = _computeCenters(positions, filtered);
 
     // Clamp step index to current path length via a guarded post-frame callback.
