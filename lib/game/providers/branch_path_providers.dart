@@ -41,13 +41,13 @@ final branchCentersProvider = branchWorldCentersProvider;
 /// Saved auto-path progress for a branch, stored as nodeId.
 final branchSavedAutoPathNodeIdProvider =
     FutureProvider.family<String?, String>((ref, branchId) {
-  return ref.read(profileServiceProvider).getBranchAutoPathNodeId(branchId);
+  return ref.watch(profileServiceProvider).getBranchAutoPathNodeId(branchId);
 });
 
 /// Persists (or clears) auto-path progress for a branch using nodeId.
 final branchPersistAutoPathNodeIdProvider =
     Provider.family<Future<void> Function(String?), String>((ref, branchId) {
-  final profile = ref.read(profileServiceProvider);
+  final profile = ref.watch(profileServiceProvider);
   return (nodeId) {
     if (nodeId == null || nodeId.isEmpty) {
       return profile.clearBranchAutoPathNodeId(branchId);
