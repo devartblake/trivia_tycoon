@@ -55,14 +55,14 @@ class AnimationManager {
     int? delayIncrementMs,
     int? baseDelay,
     int? delayIncrement,
-    required bool mounted,
+    required bool Function() mounted,
   }) {
     final base = baseDelayMs ?? baseDelay ?? 200;
     final inc = delayIncrementMs ?? delayIncrement ?? 80;
 
     for (int i = 0; i < controllers.length; i++) {
       Future.delayed(Duration(milliseconds: base + (i * inc)), () {
-        if (mounted) controllers[i].forward();
+        if (mounted()) controllers[i].forward();
       });
     }
   }
