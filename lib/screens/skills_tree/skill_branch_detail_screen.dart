@@ -83,6 +83,33 @@ class _SkillBranchDetailScreenState
     });
   }
 
+  @override
+  void didUpdateWidget(covariant SkillBranchDetailScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.branchId == widget.branchId) return;
+
+    final initialStep = widget.initialStep?.clamp(0, 9999) ?? 0;
+    setState(() {
+      _focusedId = null;
+      _showPath = widget.showPathInitially;
+      _pathIndex = initialStep;
+      _stepClampPending = false;
+      _cooldownSyncPending = false;
+      _initialStepHydrationPending = false;
+      _initialStepHydrated = false;
+      _showFullPath.value = _showPath;
+      _currentStep.value = _pathIndex;
+    });
+    ref.read(skillTreeProvider.notifier).select(null);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _hydrateFromQueryParamsIfNeeded();
+      _clampStepIndex(ref.read(branchAutoPathProvider(widget.branchId)));
+      setState(() {});
+    });
+  }
+
   void _hydrateFromQueryParamsIfNeeded() {
     // If caller passed explicit values, prefer those
     int? step = widget.initialStep;
