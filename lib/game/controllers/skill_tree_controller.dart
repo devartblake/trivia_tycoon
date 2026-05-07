@@ -232,6 +232,10 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
       final success = handler.triggerSkill(node);
       if (!success) return false;
 
+      // Keep reactive XP state in sync for skills that consume XP on use.
+      ref.read(playerXPProvider.notifier).state =
+          ref.read(xpServiceProvider).playerXP;
+
       // Update node state with usage timestamp
       final updatedNodes = state.graph.nodes.map((n) {
         if (n.id != node.id) return n;
