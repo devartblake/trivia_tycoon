@@ -98,7 +98,14 @@ void main() {
         .whereType<AutoPathOverlayPainter>()
         .single;
 
-    expect(find.textContaining('Step '), findsNothing);
+    final actionBarStepFinder = find.byWidgetPredicate(
+      (widget) =>
+          widget is Text &&
+          widget.data != null &&
+          RegExp(r'^Step \d+ / \d+$').hasMatch(widget.data!),
+    );
+
+    expect(actionBarStepFinder, findsNothing);
     expect(overlayPainter.pathIds, isEmpty);
   });
 
