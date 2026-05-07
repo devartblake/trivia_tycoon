@@ -150,7 +150,15 @@ void main() {
     await tester.pumpWidget(_buildHarness());
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byIcon(Icons.alt_route).first);
+    final deepLinkIconFinder = find.descendant(
+      of: find.ancestor(
+        of: find.text('Scholar Root'),
+        matching: find.byType(Material),
+      ),
+      matching: find.byIcon(Icons.alt_route),
+    );
+
+    await tester.tap(deepLinkIconFinder);
     await tester.pumpAndSettle();
 
     expect(find.textContaining('/skill-branch/scholar?step=0&showPath=1'), findsOneWidget);
