@@ -65,8 +65,9 @@ class _SkillBranchDetailScreenState
     super.initState();
     _transform.value = vmath.Matrix4.identity()..scale(0.9, 0.9);
     _showPath = widget.showPathInitially;
-    if (widget.initialStep != null)
+    if (widget.initialStep != null) {
       _pathIndex = widget.initialStep!.clamp(0, _maxInitialStepIndex);
+    }
 
     _listCtrl = ScrollController();
 
