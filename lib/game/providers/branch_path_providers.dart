@@ -73,7 +73,7 @@ int resolveInitialAutoPathStep({
   if (savedNodeId != null && savedNodeId.isNotEmpty) {
     final savedIndex = pathIds.indexOf(savedNodeId);
     if (savedIndex >= 0) return savedIndex;
-    return 0;
+    return fallbackStep.clamp(0, pathIds.length - 1);
   }
   return fallbackStep.clamp(0, pathIds.length - 1);
 }

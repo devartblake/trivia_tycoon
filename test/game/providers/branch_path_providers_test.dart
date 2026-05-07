@@ -26,7 +26,7 @@ void main() {
       expect(step, 1);
     });
 
-    test('falls back safely when saved node is missing', () {
+    test('falls back safely to provided fallback step when saved node is missing', () {
       final step = resolveInitialAutoPathStep(
         pathIds: const ['a', 'b', 'c'],
         hasStepQueryParam: false,
@@ -34,7 +34,7 @@ void main() {
         fallbackStep: 2,
       );
 
-      expect(step, 0);
+      expect(step, 2);
     });
   });
 }

@@ -172,14 +172,8 @@ class _SkillBranchDetailScreenState
       });
       ref.read(skillTreeProvider.notifier).select(resolvedNodeId);
 
-      if (!hasQueryStep &&
-          savedNodeId != null &&
-          savedNodeId.isNotEmpty &&
-          !pathSnapshot.contains(savedNodeId)) {
-        unawaited(
-          ref.read(branchPersistAutoPathNodeIdProvider(widget.branchId))(null),
-        );
-      }
+      // When a previously saved node is missing (deleted/renamed), persisting
+      // the resolved step below rewrites storage with a valid node id.
       _persistCurrentStep(pathSnapshot, resolvedStep);
     });
   }
