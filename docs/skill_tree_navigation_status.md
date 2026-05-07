@@ -30,6 +30,16 @@
 - Cooldown integration
   - `lib/game/providers/skill_cooldown_service_provider.dart`
 
+## Test coverage map
+- `test/game/planning/skill_branch_path_planner_test.dart`
+  - Weighted topological planning for DAG and cycle fallback paths.
+- `test/screens/skills_tree/skill_tree_nav_screen_test.dart`
+  - Deep-link route construction for `/skill-branch/:branchId?step=0&showPath=1`.
+  - Auto-path preview highlight toggle to `showPath=0|1` route behavior.
+- `test/screens/skills_tree/skill_branch_detail_screen_test.dart`
+  - Empty vs valid branch states.
+  - Overlay painter hydration from deep-link query params (`step`, `showPath`).
+
 ## Architecture snapshot
 - `SkillTreeNavScreen` is the grouped Pathways entry surface with search, route icon CTA, and Auto-Path deep-link support.
 - `SkillBranchDetailScreen` hydrates branch context from route + query params, computes/reads branch auto-path IDs, renders graph + overlay, and supports unlock/use actions.
