@@ -51,7 +51,7 @@ void main() {
       expect(scholar.branchCount, 4);
     });
 
-    test('falls back to static metadata when groups are unavailable', () {
+    test('falls back to static metadata when groups provider errors', () async {
       final container = ProviderContainer(
         overrides: [
           skillTreeGroupsProvider.overrideWith(
@@ -61,6 +61,32 @@ void main() {
       );
       addTearDown(container.dispose);
 
+      await expectLater(
+        container.read(skillTreeGroupsProvider.future),
+        throwsException,
+      );
+
+      final sections = container.read(skillTreeNavSectionsProvider);
+      final combat =
+          sections.firstWhere((section) => section.id == 'combat_focused');
+      final scholar = combat.branches.firstWhere((b) => b.id == 'scholar');
+
+      expect(combat.title, 'Combat');
+      expect(scholar.title, 'Scholar');
+      expect(scholar.branchCount, 3);
+    });
+
+    test('falls back to static metadata when groups are empty', () async {
+      final container = ProviderContainer(
+        overrides: [
+          skillTreeGroupsProvider.overrideWith(
+            (ref) async => const <SkillTreeGroupVM>[],
+          ),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      await container.read(skillTreeGroupsProvider.future);
       final sections = container.read(skillTreeNavSectionsProvider);
       final combat =
           sections.firstWhere((section) => section.id == 'combat_focused');
