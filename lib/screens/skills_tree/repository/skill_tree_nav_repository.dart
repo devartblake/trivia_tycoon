@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui' show Color;
 import 'package:flutter/services.dart' show rootBundle;
 import '../../../game/models/skill_tree_nav_models.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
@@ -13,10 +14,15 @@ class SkillTreeNavRepository {
     final raw = await rootBundle.loadString(assetPath);
     final decoded = json.decode(raw);
 
-    // Expect either { "groups": [...] } or a flat list of branches
+    // Expect either:
+    // 1) { "skill_tree_groups": { ... } } (preferred)
+    // 2) { "groups": [...] } (legacy)
+    // 3) a flat list of branches (fallback)
     final groups = <SkillTreeGroupVM>[];
 
-    if (decoded is Map && decoded['groups'] is List) {
+    if (decoded is Map && decoded['skill_tree_groups'] is Map) {
+      groups.addAll(_parseSkillTreeGroupsMap(decoded['skill_tree_groups'] as Map));
+    } else if (decoded is Map && decoded['groups'] is List) {
       for (final g in decoded['groups']) {
         groups.add(_parseGroupMap(g));
       }
@@ -29,6 +35,7 @@ class SkillTreeNavRepository {
         title: 'All Branches',
         description: 'Un-bucketed branches',
         accent: groupAccent(SkillTreeGroupId.utility),
+        colorHex: _colorToHex(groupAccent(SkillTreeGroupId.utility)),
         branches: branches,
       ));
     } else {
@@ -58,18 +65,72 @@ class SkillTreeNavRepository {
       title: title,
       description: desc,
       accent: groupAccent(groupId),
+      colorHex: (g['color'] ?? _colorToHex(groupAccent(groupId))).toString(),
       branches: branches,
     );
+  }
+
+  List<SkillTreeGroupVM> _parseSkillTreeGroupsMap(Map groupsRaw) {
+    final groups = <SkillTreeGroupVM>[];
+    for (final entry in groupsRaw.entries) {
+      final groupKey = entry.key.toString();
+      final groupMap = entry.value;
+      if (groupMap is! Map) continue;
+
+      final groupId = parseGroupId(groupKey);
+      final title = (groupMap['title'] ?? groupKey).toString();
+      final desc = (groupMap['description'] ?? '').toString();
+      final colorHex =
+          (groupMap['color'] ?? _colorToHex(groupAccent(groupId))).toString();
+      final branches = <SkillBranchVM>[];
+      final branchesRaw = groupMap['branches'];
+
+      if (branchesRaw is Map) {
+        for (final branchEntry in branchesRaw.entries) {
+          final b = branchEntry.value;
+          if (b is Map) {
+            branches.add(_parseBranchMap(
+              b,
+              groupId,
+              fallbackBranchId: branchEntry.key.toString(),
+            ));
+          }
+        }
+      } else if (branchesRaw is List) {
+        for (final b in branchesRaw) {
+          if (b is Map) {
+            branches.add(_parseBranchMap(b, groupId));
+          }
+        }
+      }
+
+      groups.add(SkillTreeGroupVM(
+        id: groupId,
+        title: title,
+        description: desc,
+        accent: groupAccent(groupId),
+        colorHex: colorHex,
+        branches: branches,
+      ));
+    }
+    return groups;
   }
 
   SkillBranchVM _parseBranchMapLoose(dynamic b) {
     return _parseBranchMap(b as Map, SkillTreeGroupId.utility);
   }
 
-  SkillBranchVM _parseBranchMap(Map b, SkillTreeGroupId groupId) {
-    final branchId = (b['branch_id'] ?? b['id'] ?? 'unknown').toString();
+  SkillBranchVM _parseBranchMap(
+    Map b,
+    SkillTreeGroupId groupId, {
+    String fallbackBranchId = 'unknown',
+  }) {
+    final branchId =
+        (b['branch_id'] ?? b['id'] ?? fallbackBranchId).toString();
     final title = (b['title'] ?? branchId).toString();
     final desc = (b['description'] ?? '').toString();
+    final colorHex =
+        (b['color'] ?? _colorToHex(groupAccent(groupId))).toString();
     final nodes = b['nodes'] is List
         ? (b['nodes'] as List).whereType<Map>().toList()
         : const <Map>[];
@@ -83,7 +144,13 @@ class SkillTreeNavRepository {
       title: title,
       description: desc,
       accent: groupAccent(groupId),
+      colorHex: colorHex,
       nodeMaps: nodeMaps,
     );
+  }
+
+  String _colorToHex(Color color) {
+    final value = color.value;
+    return '#${(value & 0x00FFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase()}';
   }
 }

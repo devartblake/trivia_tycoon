@@ -64,22 +64,20 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
   @override
   Widget build(BuildContext context) {
     final skillTreeState = ref.watch(skillTreeProvider);
+    final navSections = ref.watch(skillTreeNavSectionsProvider);
 
     return Scaffold(
       backgroundColor: const Color(0xFF0D1021),
       appBar: _buildAppBar(context, skillTreeState),
       body: Column(
         children: [
-          _buildTabBar(),
+          _buildTabBar(navSections),
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: [
-                _buildGroupGrid('combat_focused'),
-                _buildGroupGrid('enhancement_branches'),
-                _buildGroupGrid('utility_branches'),
-                _buildGroupGrid('advanced_branches'),
-              ],
+              children: navSections
+                  .map((section) => _buildGroupGrid(section))
+                  .toList(),
             ),
           ),
         ],
@@ -136,7 +134,7 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
     );
   }
 
-  Widget _buildTabBar() {
+  Widget _buildTabBar(List<SkillTreeNavSectionMeta> sections) {
     return Container(
       color: const Color(0xFF15183A),
       child: TabBar(
@@ -145,18 +143,13 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
         unselectedLabelColor: Colors.white60,
         indicatorColor: const Color(0xFF6EE7F9),
         indicatorWeight: 3,
-        tabs: const [
-          Tab(text: 'Combat'),
-          Tab(text: 'Enhancement'),
-          Tab(text: 'Utility'),
-          Tab(text: 'Advanced'),
-        ],
+        tabs: sections.map((section) => Tab(text: section.title)).toList(),
       ),
     );
   }
 
-  Widget _buildGroupGrid(String groupType) {
-    final groups = _getGroupsForType(groupType);
+  Widget _buildGroupGrid(SkillTreeNavSectionMeta section) {
+    final groups = _getGroupsForSection(section);
     final skillTreeState = ref.watch(skillTreeProvider);
 
     return Padding(
@@ -666,51 +659,39 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
     return _GroupProgress(progressPercent: pct, availableSkills: available);
   }
 
-  List<SkillGroupData> _getGroupsForType(String groupType) {
-    switch (groupType) {
-      case 'combat_focused':
-        return _buildGroups([
-          _GroupSpec('scholar', 'Scholar', '#4A90E2', Icons.school, 3),
-          _GroupSpec('strategist', 'Strategist', '#9B59B6', Icons.psychology, 4),
-          _GroupSpec('combat', 'Combat', '#E74C3C', Icons.local_fire_department, 3),
-        ]);
-      case 'enhancement_branches':
-        return _buildGroups([
-          _GroupSpec('xp', 'XP Booster', '#27AE60', Icons.trending_up, 4),
-          _GroupSpec('timer', 'Timer', '#3498DB', Icons.timer, 3),
-          _GroupSpec('combo', 'Combo', '#E67E22', Icons.bolt, 3),
-          _GroupSpec('risk', 'Risk', '#C0392B', Icons.casino, 3),
-        ]);
-      case 'utility_branches':
-        return _buildGroups([
-          _GroupSpec('luck', 'Luck', '#F1C40F', Icons.stars, 3),
-          _GroupSpec('stealth', 'Stealth', '#34495E', Icons.visibility_off, 3),
-          _GroupSpec('knowledge', 'Knowledge', '#16A085', Icons.library_books, 3),
-        ]);
-      case 'advanced_branches':
-        return _buildGroups([
-          _GroupSpec('elite', 'Elite', '#FFD700', Icons.military_tech, 3),
-          _GroupSpec('wildcard', 'Wildcard', '#8E44AD', Icons.shuffle, 2),
-          _GroupSpec('general', 'General', '#7F8C8D', Icons.balance, 2),
-        ]);
-      default:
-        return [];
-    }
-  }
-
-  List<SkillGroupData> _buildGroups(List<_GroupSpec> specs) {
-    return specs.map((s) {
-      final live = _liveProgress(s.id);
+  List<SkillGroupData> _getGroupsForSection(SkillTreeNavSectionMeta section) {
+    return section.branches.map((branch) {
+      final live = _liveProgress(branch.id);
       return SkillGroupData(
-        id: s.id,
-        title: s.title,
-        color: s.color,
-        icon: s.icon,
-        branchCount: s.branchCount,
+        id: branch.id,
+        title: branch.title,
+        color: branch.colorHex,
+        icon: _iconForBranch(branch.id),
+        branchCount: branch.branchCount,
         progressPercent: live.progressPercent,
         availableSkills: live.availableSkills,
       );
     }).toList();
+  }
+
+  static const Map<String, IconData> _branchIcons = {
+    'scholar': Icons.school,
+    'strategist': Icons.psychology,
+    'combat': Icons.local_fire_department,
+    'xp': Icons.trending_up,
+    'timer': Icons.timer,
+    'combo': Icons.bolt,
+    'risk': Icons.casino,
+    'luck': Icons.stars,
+    'stealth': Icons.visibility_off,
+    'knowledge': Icons.library_books,
+    'elite': Icons.military_tech,
+    'wildcard': Icons.shuffle,
+    'general': Icons.balance,
+  };
+
+  IconData _iconForBranch(String branchId) {
+    return _branchIcons[branchId] ?? Icons.extension;
   }
 }
 
@@ -756,15 +737,6 @@ class SkillSearchResult {
     required this.cost,
     required this.relevanceScore,
   });
-}
-
-class _GroupSpec {
-  final String id;
-  final String title;
-  final String color;
-  final IconData icon;
-  final int branchCount;
-  const _GroupSpec(this.id, this.title, this.color, this.icon, this.branchCount);
 }
 
 class _GroupProgress {

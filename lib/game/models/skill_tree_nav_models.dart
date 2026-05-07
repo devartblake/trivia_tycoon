@@ -75,6 +75,7 @@ class SkillBranchVM {
   final String title;
   final String description;
   final Color accent;
+  final String colorHex;
 
   /// Raw node maps from JSON for convenience (id/title/description/cost/unlocked/requires/effects/etc)
   final List<Map<String, dynamic>> nodeMaps;
@@ -85,6 +86,7 @@ class SkillBranchVM {
     required this.title,
     required this.description,
     required this.accent,
+    required this.colorHex,
     required this.nodeMaps,
   });
 
@@ -179,6 +181,7 @@ class SkillTreeGroupVM {
   final String title;
   final String description;
   final Color accent;
+  final String colorHex;
   final List<SkillBranchVM> branches;
 
   SkillTreeGroupVM({
@@ -186,6 +189,7 @@ class SkillTreeGroupVM {
     required this.title,
     required this.description,
     required this.accent,
+    required this.colorHex,
     required this.branches,
   });
 
