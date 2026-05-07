@@ -39,13 +39,14 @@ class ProfileService {
     if (stored != null) unlockedCategories.addAll(stored);
     final savedProgress = await _storage.getJson(_branchAutoPathProgressKey);
     if (savedProgress != null) {
-      _branchAutoPathProgress
-        ..clear()
-        ..addAll({
-          for (final entry in savedProgress.entries)
-            if (entry.value is String && (entry.value as String).isNotEmpty)
-              entry.key: entry.value as String
-        });
+      for (final entry in savedProgress.entries) {
+        final value = entry.value;
+        if (value is String &&
+            value.isNotEmpty &&
+            !_branchAutoPathProgress.containsKey(entry.key)) {
+          _branchAutoPathProgress[entry.key] = value;
+        }
+      }
     }
   }
 
