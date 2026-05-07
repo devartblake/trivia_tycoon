@@ -808,6 +808,7 @@ class _SkillBranchDetailScreenState
                               pathIds: pathIds,
                               currentIndex: step,
                               showFullPath: show,
+                              showDimMask: true,
                               fullPathColor: branchColor.withValues(alpha: 0.4),
                               stepPathColor: branchColor,
                               stepPathWidth: 4.0,
