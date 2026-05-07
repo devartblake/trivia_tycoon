@@ -18,12 +18,15 @@ void main() {
         showFullPath: true,
       );
 
-      expect(
-        () => painter.paint(canvas, const Size(120, 80)),
-        returnsNormally,
-      );
-
-      recorder.endRecording();
+      try {
+        expect(
+          () => painter.paint(canvas, const Size(120, 80)),
+          returnsNormally,
+        );
+      } finally {
+        final picture = recorder.endRecording();
+        picture.dispose();
+      }
     });
   });
 
