@@ -71,8 +71,12 @@ class MiniHexBranchPreview extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(skillTreeProvider);
-    final graph = graphOverride ?? state.graph;
+    final SkillTreeGraph graph;
+    if (graphOverride != null) {
+      graph = graphOverride!;
+    } else {
+      graph = ref.watch(skillTreeProvider.select((s) => s.graph));
+    }
 
     // Use the centralized helper function to compute recommended order
     final ordered = computeRecommendedOrderForBranch(graph, branchId);
