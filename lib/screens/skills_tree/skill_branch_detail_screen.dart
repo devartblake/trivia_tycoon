@@ -40,6 +40,7 @@ class _SkillBranchDetailScreenState
   final TransformationController _transform = TransformationController();
   late final ScrollController _listCtrl;
   static const double _nodeRadius = 40;
+  static const int _maxInitialStepIndex = 9999;
   /// Radius used for the fallback circle layout when node positions are absent.
   static const double _fallbackLayoutRadius = 260.0;
 
@@ -63,7 +64,7 @@ class _SkillBranchDetailScreenState
     _transform.value = vmath.Matrix4.identity()..scale(0.9, 0.9);
     _showPath = widget.showPathInitially;
     if (widget.initialStep != null)
-      _pathIndex = widget.initialStep!.clamp(0, 9999);
+      _pathIndex = widget.initialStep!.clamp(0, _maxInitialStepIndex);
 
     _listCtrl = ScrollController();
 
@@ -88,7 +89,7 @@ class _SkillBranchDetailScreenState
     super.didUpdateWidget(oldWidget);
     if (oldWidget.branchId == widget.branchId) return;
 
-    final initialStep = widget.initialStep?.clamp(0, 9999) ?? 0;
+    final initialStep = widget.initialStep?.clamp(0, _maxInitialStepIndex) ?? 0;
     setState(() {
       _focusedId = null;
       _showPath = widget.showPathInitially;
@@ -106,7 +107,6 @@ class _SkillBranchDetailScreenState
       if (!mounted) return;
       _hydrateFromQueryParamsIfNeeded();
       _clampStepIndex(ref.read(branchAutoPathProvider(widget.branchId)));
-      setState(() {});
     });
   }
 
