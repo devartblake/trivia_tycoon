@@ -1,7 +1,6 @@
 # Skill Tree Navigation — Current Status
 
 ## Scope
-- Issue: `STN-010`
 - Source package: `docs/trivia_tycoon_migration_frontend_github_issues.json`
 - Review baseline: `docs/skill_tree_navigation_repo_recommendations.md`
 - Last verified against code: 2026-05-07
