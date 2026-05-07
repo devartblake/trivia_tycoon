@@ -319,9 +319,15 @@ class SkillTreeGraph {
 
       // Extract nodes from branches
       for (final branchEntry in branches.entries) {
+        final branchId = branchEntry.key;
         final branchNodes = branchEntry.value['nodes'] as List;
         for (final nodeData in branchNodes) {
-          nodes.add(SkillNode.fromJson(nodeData));
+          // Inject the branch key as branchId since the JSON node objects
+          // don't carry a branchId field — only a category field.
+          final nodeMap = Map<String, dynamic>.from(
+              nodeData as Map<String, dynamic>);
+          nodeMap['branchId'] ??= branchId;
+          nodes.add(SkillNode.fromJson(nodeMap));
         }
       }
     }
@@ -386,8 +392,12 @@ class SkillGroup {
 
 extension SkillTreeGraphBranch on SkillTreeGraph {
   SkillTreeGraph subgraphForBranch(String branchId) {
-    final ids =
-        nodes.where((n) => n.branchId == branchId).map((n) => n.id).toSet();
+    // Match by branchId if set; fall back to category.name for nodes loaded
+    // from flat JSON formats that don't carry an explicit branchId field.
+    final ids = nodes
+        .where((n) => (n.branchId ?? n.category.name) == branchId)
+        .map((n) => n.id)
+        .toSet();
     return SkillTreeGraph(
       nodes: nodes.where((n) => ids.contains(n.id)).toList(),
       edges: edges
