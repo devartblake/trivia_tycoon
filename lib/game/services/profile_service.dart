@@ -76,7 +76,11 @@ class ProfileService {
 
     final savedProgress = await _storage.getJson(_branchAutoPathProgressKey);
     final raw = savedProgress?[branchId];
-    return raw is String && raw.isNotEmpty ? raw : null;
+    if (raw is String && raw.isNotEmpty) {
+      _branchAutoPathProgress[branchId] = raw;
+      return raw;
+    }
+    return null;
   }
 
   Future<void> setBranchAutoPathNodeId(String branchId, String nodeId) async {

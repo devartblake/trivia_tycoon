@@ -127,9 +127,16 @@ class _SkillBranchDetailScreenState
   void _persistCurrentStep(List<String> pathIds, int step) {
     if (pathIds.isEmpty || step < 0 || step >= pathIds.length) return;
     final nodeId = pathIds[step];
-    unawaited(
-      ref.read(branchPersistAutoPathNodeIdProvider(widget.branchId))(nodeId),
-    );
+    unawaited(_persistCurrentStepNodeId(nodeId));
+  }
+
+  Future<void> _persistCurrentStepNodeId(String nodeId) async {
+    try {
+      await ref
+          .read(branchPersistAutoPathNodeIdProvider(widget.branchId))(nodeId);
+    } catch (e) {
+      debugPrint('Failed to persist auto-path step for ${widget.branchId}: $e');
+    }
   }
 
   void _hydrateInitialStepFromQueryOrSaved(List<String> pathIds) {
@@ -137,10 +144,9 @@ class _SkillBranchDetailScreenState
       return;
     }
     _initialStepHydrationPending = true;
-    final pathSnapshot = List<String>.from(pathIds);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       _initialStepHydrationPending = false;
-      if (!mounted || _initialStepHydrated || pathSnapshot.isEmpty) return;
+      if (!mounted || _initialStepHydrated || pathIds.isEmpty) return;
       _initialStepHydrated = true;
 
       final hasQueryStep = _hasStepQueryParam();
@@ -154,16 +160,16 @@ class _SkillBranchDetailScreenState
           savedNodeId = null;
         }
       }
-      if (!mounted || pathSnapshot.isEmpty) return;
+      if (!mounted || pathIds.isEmpty) return;
 
       final resolvedStep = resolveInitialAutoPathStep(
-        pathIds: pathSnapshot,
+        pathIds: pathIds,
         hasStepQueryParam: hasQueryStep,
         fallbackStep: _pathIndex,
         queryStep: queryStep,
         savedNodeId: savedNodeId,
       );
-      final resolvedNodeId = pathSnapshot[resolvedStep];
+      final resolvedNodeId = pathIds[resolvedStep];
 
       setState(() {
         _pathIndex = resolvedStep;
@@ -174,7 +180,7 @@ class _SkillBranchDetailScreenState
 
       // When a previously saved node is missing (deleted/renamed), persisting
       // the resolved step below rewrites storage with a valid node id.
-      _persistCurrentStep(pathSnapshot, resolvedStep);
+      _persistCurrentStep(pathIds, resolvedStep);
     });
   }
 
