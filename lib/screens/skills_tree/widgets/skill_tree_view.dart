@@ -66,6 +66,8 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
   @override
   void initState() {
     super.initState();
+    // Rebuild on pan/zoom so HexSpiderBackgroundPainter gets fresh matrix values.
+    _transform.addListener(_onTransformChange);
     // Centering happens in the first post-frame callback once we know the size.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
@@ -76,6 +78,17 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
         ..translate(size.width / 2.0, size.height / 2.0)
         ..scale(0.8, 0.8);
     });
+  }
+
+  void _onTransformChange() {
+    if (mounted) setState(() {});
+  }
+
+  @override
+  void dispose() {
+    _transform.removeListener(_onTransformChange);
+    _transform.dispose();
+    super.dispose();
   }
 
   void _zoom(double scale) {
