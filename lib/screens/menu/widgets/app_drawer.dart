@@ -72,7 +72,7 @@ class _AppDrawerState extends ConsumerState<AppDrawer>
     _fadeController!.forward();
     AnimationManager.startStaggered(
       controllers: _itemControllers,
-      mounted: mounted,
+      mounted: () => mounted,
     );
   }
 
