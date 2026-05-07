@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/core/services/api_service.dart';
+import 'package:trivia_tycoon/core/services/settings/player_profile_service.dart';
 import 'package:trivia_tycoon/core/services/event_queue_service.dart';
 import 'package:trivia_tycoon/game/analytics/providers/analytics_providers.dart';
 import 'package:trivia_tycoon/game/analytics/services/analytics_service.dart';
@@ -12,7 +13,7 @@ import 'package:trivia_tycoon/game/providers/skill_tree_nav_providers.dart';
 import 'package:trivia_tycoon/game/providers/skill_tree_provider.dart';
 import 'package:trivia_tycoon/game/providers/xp_provider.dart';
 import 'package:trivia_tycoon/screens/skills_tree/skill_tree_nav_screen.dart';
-import 'package:trivia_tycoon/synaptix/mode/synaptix_mode.dart';
+import 'package:trivia_tycoon/synaptix/mode/synaptix_mode_notifier.dart';
 import 'package:trivia_tycoon/synaptix/mode/synaptix_mode_provider.dart';
 
 class _StaticSkillTreeController extends SkillTreeController {
@@ -24,10 +25,6 @@ class _StaticSkillTreeController extends SkillTreeController {
         ) {
     state = initial;
   }
-}
-
-class _FixedSynaptixModeNotifier extends StateNotifier<SynaptixMode> {
-  _FixedSynaptixModeNotifier() : super(SynaptixMode.teen);
 }
 
 class _NoopAnalyticsService extends AnalyticsService {
@@ -136,7 +133,8 @@ Widget _buildHarness() {
   return ProviderScope(
     overrides: [
       analyticsServiceProvider.overrideWithValue(_NoopAnalyticsService()),
-      synaptixModeProvider.overrideWith((_) => _FixedSynaptixModeNotifier()),
+      synaptixModeProvider
+          .overrideWith((_) => SynaptixModeNotifier(PlayerProfileService())),
       skillTreeProvider.overrideWith(
           (ref) => _StaticSkillTreeController(ref, _testSkillTreeState())),
       skillTreeNavSectionsProvider.overrideWith((_) => sections),
