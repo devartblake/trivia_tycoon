@@ -201,12 +201,23 @@ void main() {
   });
 
   group('ProfileService — branch auto-path progress', () {
-    test('set/get stores progress per branch', () async {
+    test('set persists and is available from a new service instance', () async {
       final storage = _FakeStorage();
-      final result = await _withRef<String?>(
+      await _withRef<void>(
         (ref, _) async {
           final svc = ProfileService(ref, playerId: 'p1', displayName: 'A');
           await svc.setBranchAutoPathNodeId('combat', 'combat_node_2');
+          expect(await svc.getBranchAutoPathNodeId('combat'), 'combat_node_2');
+          return;
+        },
+        overrides: [
+          generalKeyValueStorageProvider.overrideWithValue(storage),
+        ],
+      );
+
+      final loadedFromFreshService = await _withRef<String?>(
+        (ref, _) async {
+          final svc = ProfileService(ref, playerId: 'p1', displayName: 'A');
           return svc.getBranchAutoPathNodeId('combat');
         },
         overrides: [
@@ -214,16 +225,27 @@ void main() {
         ],
       );
 
-      expect(result, 'combat_node_2');
+      expect(loadedFromFreshService, 'combat_node_2');
     });
 
-    test('clear removes saved branch progress', () async {
+    test('clear removes saved branch progress from storage', () async {
       final storage = _FakeStorage();
-      final result = await _withRef<String?>(
+      await _withRef<void>(
         (ref, _) async {
           final svc = ProfileService(ref, playerId: 'p1', displayName: 'A');
           await svc.setBranchAutoPathNodeId('combat', 'combat_node_2');
           await svc.clearBranchAutoPathNodeId('combat');
+          expect(await svc.getBranchAutoPathNodeId('combat'), isNull);
+          return;
+        },
+        overrides: [
+          generalKeyValueStorageProvider.overrideWithValue(storage),
+        ],
+      );
+
+      final loadedFromFreshService = await _withRef<String?>(
+        (ref, _) async {
+          final svc = ProfileService(ref, playerId: 'p1', displayName: 'A');
           return svc.getBranchAutoPathNodeId('combat');
         },
         overrides: [
@@ -231,7 +253,7 @@ void main() {
         ],
       );
 
-      expect(result, isNull);
+      expect(loadedFromFreshService, isNull);
     });
   });
 }
