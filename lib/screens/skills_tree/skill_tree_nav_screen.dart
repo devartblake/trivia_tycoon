@@ -674,37 +674,24 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
     }).toList();
   }
 
+  static const Map<String, IconData> _branchIcons = {
+    'scholar': Icons.school,
+    'strategist': Icons.psychology,
+    'combat': Icons.local_fire_department,
+    'xp': Icons.trending_up,
+    'timer': Icons.timer,
+    'combo': Icons.bolt,
+    'risk': Icons.casino,
+    'luck': Icons.stars,
+    'stealth': Icons.visibility_off,
+    'knowledge': Icons.library_books,
+    'elite': Icons.military_tech,
+    'wildcard': Icons.shuffle,
+    'general': Icons.balance,
+  };
+
   IconData _iconForBranch(String branchId) {
-    switch (branchId) {
-      case 'scholar':
-        return Icons.school;
-      case 'strategist':
-        return Icons.psychology;
-      case 'combat':
-        return Icons.local_fire_department;
-      case 'xp':
-        return Icons.trending_up;
-      case 'timer':
-        return Icons.timer;
-      case 'combo':
-        return Icons.bolt;
-      case 'risk':
-        return Icons.casino;
-      case 'luck':
-        return Icons.stars;
-      case 'stealth':
-        return Icons.visibility_off;
-      case 'knowledge':
-        return Icons.library_books;
-      case 'elite':
-        return Icons.military_tech;
-      case 'wildcard':
-        return Icons.shuffle;
-      case 'general':
-        return Icons.balance;
-      default:
-        return Icons.extension;
-    }
+    return _branchIcons[branchId] ?? Icons.extension;
   }
 }
 
