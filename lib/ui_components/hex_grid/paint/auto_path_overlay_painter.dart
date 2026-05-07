@@ -7,6 +7,7 @@ class AutoPathOverlayPainter extends CustomPainter {
   final List<String> pathIds; // recommended order
   final int currentIndex; // focus index in [pathIds]
   final bool showFullPath; // highlight entire path vs. only current→next
+  final bool showDimMask; // dim non-path area when showing the full path
 
   /// Optional styling
   final Color fullPathColor;
@@ -20,6 +21,7 @@ class AutoPathOverlayPainter extends CustomPainter {
     required this.pathIds,
     required this.currentIndex,
     required this.showFullPath,
+    this.showDimMask = true,
     this.fullPathColor = const Color(0x66FFFFFF),
     this.fullPathWidth = 2.0,
     this.stepPathColor = const Color(0xFF6EE7F9),
@@ -31,62 +33,40 @@ class AutoPathOverlayPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     if (pathIds.isEmpty) return;
 
-    // 1) Optionally draw a dim mask, then punch holes along the full path to guide the eye.
-    if (showFullPath) {
+    final visiblePoints = <Offset>[
+      for (final id in pathIds)
+        if (centers[id] != null) centers[id]!,
+    ];
+    if (visiblePoints.isEmpty) return;
+
+    final fullPath = _buildPath(visiblePoints);
+
+    // 1) Optionally draw a dim mask, then punch one combined hole along the path.
+    if (showFullPath && showDimMask && dimMaskColor.alpha > 0 && fullPath != null) {
+      final layerBounds = Offset.zero & size;
       final maskPaint = Paint()..color = dimMaskColor;
-      final pathStrokeWidth = fullPathWidth + 16; // fat hole around the path
+      final clearPaint = Paint()
+        ..blendMode = BlendMode.clear
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = fullPathWidth + 16 // fat hole around the path
+        ..strokeCap = StrokeCap.round
+        ..strokeJoin = StrokeJoin.round;
 
-      for (int i = 0; i < pathIds.length - 1; i++) {
-        final a = centers[pathIds[i]];
-        final b = centers[pathIds[i + 1]];
-        if (a == null || b == null) continue;
-        final segment = Path()
-          ..moveTo(a.dx, a.dy)
-          ..lineTo(b.dx, b.dy);
-        final metrics = segment.computeMetrics().toList();
-        if (metrics.isEmpty) continue;
-
-        // Stroke-as-path "hole"
-        final stroke = Path();
-        for (final m in metrics) {
-          stroke.addPath(m.extractPath(0, m.length), Offset.zero);
-        }
-        final stroked = stroke.shift(Offset.zero);
-        final paint = Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = pathStrokeWidth
-          ..strokeCap = StrokeCap.round
-          ..strokeJoin = StrokeJoin.round;
-        // Approximate a "hole" by drawing mask then clearing with destinationOut
-        canvas.saveLayer(Offset.zero & size, Paint());
-        canvas.drawRect(Offset.zero & size, maskPaint);
-        paint.blendMode = BlendMode.clear;
-        canvas.drawPath(stroked, paint);
-        canvas.restore();
-      }
+      canvas.saveLayer(layerBounds, Paint());
+      canvas.drawRect(layerBounds, maskPaint);
+      canvas.drawPath(fullPath!, clearPaint);
+      canvas.restore();
     }
 
     // 2) Draw full path polyline (subtle)
-    if (pathIds.length > 1) {
-      final p = Path();
-      bool started = false;
-      for (int i = 0; i < pathIds.length; i++) {
-        final c = centers[pathIds[i]];
-        if (c == null) continue;
-        if (!started) {
-          p.moveTo(c.dx, c.dy);
-          started = true;
-        } else {
-          p.lineTo(c.dx, c.dy);
-        }
-      }
+    if (fullPath != null) {
       final paint = Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = fullPathWidth
         ..color = fullPathColor
         ..strokeCap = StrokeCap.round
         ..strokeJoin = StrokeJoin.round;
-      canvas.drawPath(p, paint);
+      canvas.drawPath(fullPath, paint);
     }
 
     // 3) Draw current→next segment (accent)
@@ -105,12 +85,23 @@ class AutoPathOverlayPainter extends CustomPainter {
     }
   }
 
+  Path? _buildPath(List<Offset> points) {
+    if (points.length < 2) return null;
+
+    final path = Path()..moveTo(points.first.dx, points.first.dy);
+    for (int i = 1; i < points.length; i++) {
+      path.lineTo(points[i].dx, points[i].dy);
+    }
+    return path;
+  }
+
   @override
   bool shouldRepaint(covariant AutoPathOverlayPainter oldDelegate) =>
       oldDelegate.centers != centers ||
       oldDelegate.pathIds != pathIds ||
       oldDelegate.currentIndex != currentIndex ||
       oldDelegate.showFullPath != showFullPath ||
+      oldDelegate.showDimMask != showDimMask ||
       oldDelegate.fullPathColor != fullPathColor ||
       oldDelegate.fullPathWidth != fullPathWidth ||
       oldDelegate.stepPathColor != stepPathColor ||

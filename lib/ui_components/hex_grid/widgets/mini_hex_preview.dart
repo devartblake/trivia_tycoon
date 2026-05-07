@@ -192,12 +192,11 @@ class MiniHexBranchPreview extends ConsumerWidget {
                     pathIds: effectivePathIds!,
                     currentIndex: 0, // Start at beginning for mini preview
                     showFullPath: true,
+                    showDimMask: false,
                     fullPathWidth: 1.5,
                     stepPathWidth: 1.5,
                     fullPathColor: Colors.white54,
                     stepPathColor: Colors.white,
-                    dimMaskColor:
-                        const Color(0x00000000), // No dim mask for mini preview
                   ),
                 ),
             ],
