@@ -76,7 +76,7 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
       final size = box?.size ?? const Size(400, 700);
       _transform.value = vmath.Matrix4.identity()
         ..translate(size.width / 2.0, size.height / 2.0)
-        ..scale(0.8, 0.8);
+        ..scale(0.5, 0.5);
     });
   }
 
@@ -91,20 +91,26 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
     super.dispose();
   }
 
-  void _zoom(double scale) {
-    setState(() {
-      _transform.value = _transform.value.scaled(scale);
-    });
+  void _zoom(double factor) {
+    final box = context.findRenderObject() as RenderBox?;
+    final size = box?.size ?? const Size(400, 700);
+    final cx = size.width / 2.0;
+    final cy = size.height / 2.0;
+    // Scale around the current screen centre so the focal point never jumps.
+    final m = vmath.Matrix4.identity()
+      ..translate(cx, cy)
+      ..scale(factor, factor)
+      ..translate(-cx, -cy);
+    _transform.value = m * _transform.value;
+    // Rebuild triggered by _onTransformChange listener.
   }
 
   void _resetZoom() {
     final box = context.findRenderObject() as RenderBox?;
     final size = box?.size ?? const Size(400, 700);
-    setState(() {
-      _transform.value = vmath.Matrix4.identity()
-        ..translate(size.width / 2.0, size.height / 2.0)
-        ..scale(0.8, 0.8);
-    });
+    _transform.value = vmath.Matrix4.identity()
+      ..translate(size.width / 2.0, size.height / 2.0)
+      ..scale(0.5, 0.5);
   }
 
   // Hit test for nodes — localPos is already in world space because the
