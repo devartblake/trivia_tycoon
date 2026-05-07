@@ -40,6 +40,7 @@ class _SkillBranchDetailScreenState
   final TransformationController _transform = TransformationController();
   late final ScrollController _listCtrl;
   static const double _nodeRadius = 40;
+  static const int _maxInitialStepIndex = 9999;
   /// Radius used for the fallback circle layout when node positions are absent.
   static const double _fallbackLayoutRadius = 260.0;
 
@@ -48,6 +49,9 @@ class _SkillBranchDetailScreenState
   int _pathIndex = 0;
   bool _stepClampPending = false;
   bool _cooldownSyncPending = false;
+  bool _initialStepHydrationPending = false;
+  bool _initialStepHydrated = false;
+  int _initialStepHydrationToken = 0;
 
   /// Overlay state management (ValueNotifiers for reactive updates)
   final ValueNotifier<bool> _showFullPath = ValueNotifier<bool>(false);
@@ -61,7 +65,7 @@ class _SkillBranchDetailScreenState
     _transform.value = vmath.Matrix4.identity()..scale(0.9, 0.9);
     _showPath = widget.showPathInitially;
     if (widget.initialStep != null)
-      _pathIndex = widget.initialStep!.clamp(0, 9999);
+      _pathIndex = widget.initialStep!.clamp(0, _maxInitialStepIndex);
 
     _listCtrl = ScrollController();
 
@@ -82,21 +86,35 @@ class _SkillBranchDetailScreenState
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Hydrate from query params if present (additional safety)
-    try {
-      final qs = GoRouterState.of(context).uri.queryParameters;
-      final step = int.tryParse(qs['step'] ?? '') ?? 0;
-      final showPath = (qs['showPath'] ?? '0') == '1';
-      _currentStep.value = step < 0 ? 0 : step;
-      _showFullPath.value = showPath;
-      // Sync with existing state
-      _pathIndex = _currentStep.value;
-      _showPath = _showFullPath.value;
-    } catch (_) {
-      // Safe fallback (no-op)
+  void didUpdateWidget(covariant SkillBranchDetailScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final branchChanged = oldWidget.branchId != widget.branchId;
+    final routeInputsChanged = oldWidget.initialStep != widget.initialStep ||
+        oldWidget.showPathInitially != widget.showPathInitially;
+    if (!branchChanged && !routeInputsChanged) return;
+
+    final initialStep = widget.initialStep?.clamp(0, _maxInitialStepIndex) ?? 0;
+    _initialStepHydrationToken++;
+    setState(() {
+      _focusedId = branchChanged ? null : _focusedId;
+      _showPath = widget.showPathInitially;
+      _pathIndex = initialStep;
+      _stepClampPending = false;
+      _cooldownSyncPending = false;
+      _initialStepHydrationPending = false;
+      _initialStepHydrated = false;
+      _showFullPath.value = _showPath;
+      _currentStep.value = _pathIndex;
+    });
+    if (branchChanged) {
+      ref.read(skillTreeProvider.notifier).select(null);
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _hydrateFromQueryParamsIfNeeded();
+      _clampStepIndex(ref.read(branchAutoPathProvider(widget.branchId)));
+    });
   }
 
   void _hydrateFromQueryParamsIfNeeded() {
@@ -122,6 +140,105 @@ class _SkillBranchDetailScreenState
       _showPath = show;
       _showFullPath.value = show;
     }
+  }
+
+  bool _hasStepQueryParam() {
+    try {
+      return GoRouterState.of(context).uri.queryParameters.containsKey('step');
+    } catch (_) {
+      return false;
+    }
+  }
+
+  int? _readQueryStep() {
+    try {
+      return int.tryParse(GoRouterState.of(context).uri.queryParameters['step'] ?? '');
+    } catch (_) {
+      return null;
+    }
+  }
+
+  void _persistCurrentStep(String branchId, List<String> pathIds, int step) {
+    if (pathIds.isEmpty || step < 0 || step >= pathIds.length) return;
+    final nodeId = pathIds[step];
+    unawaited(_persistCurrentStepNodeId(branchId, nodeId));
+  }
+
+  Future<void> _persistCurrentStepNodeId(String branchId, String nodeId) async {
+    try {
+      await ref.read(branchPersistAutoPathNodeIdProvider(branchId))(nodeId);
+    } catch (e) {
+      debugPrint('Failed to persist auto-path step for $branchId: $e');
+    }
+  }
+
+  bool _pathIdsMatch(List<String> a, List<String> b) {
+    if (a.length != b.length) return false;
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) return false;
+    }
+    return true;
+  }
+
+  void _hydrateInitialStepFromQueryOrSaved(List<String> pathIds) {
+    if (_initialStepHydrated || _initialStepHydrationPending || pathIds.isEmpty) {
+      return;
+    }
+    final branchId = widget.branchId;
+    final hydrationToken = _initialStepHydrationToken;
+    final pathSnapshot = List<String>.from(pathIds);
+    _initialStepHydrationPending = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _initialStepHydrationPending = false;
+      if (!mounted ||
+          _initialStepHydrated ||
+          pathSnapshot.isEmpty ||
+          hydrationToken != _initialStepHydrationToken ||
+          widget.branchId != branchId ||
+          !_pathIdsMatch(ref.read(branchAutoPathProvider(branchId)), pathSnapshot)) {
+        return;
+      }
+      _initialStepHydrated = true;
+
+      final hasQueryStep = _hasStepQueryParam();
+      final queryStep = _readQueryStep();
+      String? savedNodeId;
+      if (!hasQueryStep) {
+        try {
+          savedNodeId = await ref
+              .read(branchSavedAutoPathNodeIdProvider(branchId).future);
+        } catch (_) {
+          savedNodeId = null;
+        }
+      }
+      if (!mounted ||
+          pathSnapshot.isEmpty ||
+          hydrationToken != _initialStepHydrationToken ||
+          widget.branchId != branchId ||
+          !_pathIdsMatch(ref.read(branchAutoPathProvider(branchId)), pathSnapshot)) {
+        return;
+      }
+
+      final resolvedStep = resolveInitialAutoPathStep(
+        pathIds: pathSnapshot,
+        hasStepQueryParam: hasQueryStep,
+        fallbackStep: _pathIndex,
+        queryStep: queryStep,
+        savedNodeId: savedNodeId,
+      );
+      final resolvedNodeId = pathSnapshot[resolvedStep];
+
+      setState(() {
+        _pathIndex = resolvedStep;
+        _currentStep.value = resolvedStep;
+        _focusedId = resolvedNodeId;
+      });
+      ref.read(skillTreeProvider.notifier).select(resolvedNodeId);
+
+      // When a previously saved node is missing (deleted/renamed), persisting
+      // the resolved step below rewrites storage with a valid node id.
+      _persistCurrentStep(branchId, pathSnapshot, resolvedStep);
+    });
   }
 
   /// Clamps `_pathIndex` and `_currentStep` to the valid range for [pathIds].
@@ -317,6 +434,7 @@ class _SkillBranchDetailScreenState
       _currentStep.value = newStep; // Sync ValueNotifier
       _focusedId = nodeId;
     });
+    _persistCurrentStep(widget.branchId, pathIds, newStep);
   }
 
   void _toggleOverlay() {
@@ -569,6 +687,7 @@ class _SkillBranchDetailScreenState
 
     // Local derived values — no mutations during build.
     final pathIds = ref.watch(branchAutoPathProvider(widget.branchId));
+    _hydrateInitialStepFromQueryOrSaved(pathIds);
     if (!_cooldownSyncPending) {
       _cooldownSyncPending = true;
       final pathSnapshot = List<String>.from(pathIds);

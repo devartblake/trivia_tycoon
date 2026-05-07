@@ -9,6 +9,7 @@ import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_s
 /// Implements XPService so existing controller code works with the same API.
 class ProfileService {
   static const _categoriesKey = 'unlockedCategories';
+  static const _branchAutoPathProgressKey = 'branchAutoPathProgress';
 
   final Ref ref;
 
@@ -17,6 +18,7 @@ class ProfileService {
   String displayName;
   final Set<String> unlockedCategories;
   final Map<String, dynamic> preferences;
+  final Map<String, String> _branchAutoPathProgress = <String, String>{};
 
   ProfileService(
     this.ref, {
@@ -35,6 +37,17 @@ class ProfileService {
   Future<void> _loadFromStorage() async {
     final stored = await _storage.getStringList(_categoriesKey);
     if (stored != null) unlockedCategories.addAll(stored);
+    final savedProgress = await _storage.getJson(_branchAutoPathProgressKey);
+    if (savedProgress != null) {
+      for (final entry in savedProgress.entries) {
+        final value = entry.value;
+        if (value is String &&
+            value.isNotEmpty &&
+            !_branchAutoPathProgress.containsKey(entry.key)) {
+          _branchAutoPathProgress[entry.key] = value;
+        }
+      }
+    }
   }
 
   // ---------- Profile operations ----------
@@ -56,6 +69,38 @@ class ProfileService {
   }
 
   T? getPreference<T>(String key) => preferences[key] as T?;
+
+  Future<String?> getBranchAutoPathNodeId(String branchId) async {
+    if (branchId.isEmpty) return null;
+    final cached = _branchAutoPathProgress[branchId];
+    if (cached != null && cached.isNotEmpty) return cached;
+
+    final savedProgress = await _storage.getJson(_branchAutoPathProgressKey);
+    final raw = savedProgress?[branchId];
+    if (raw is String && raw.isNotEmpty) {
+      _branchAutoPathProgress[branchId] = raw;
+      return raw;
+    }
+    return null;
+  }
+
+  Future<void> setBranchAutoPathNodeId(String branchId, String nodeId) async {
+    if (branchId.isEmpty || nodeId.isEmpty) return;
+    _branchAutoPathProgress[branchId] = nodeId;
+    await _storage.setJson(
+      _branchAutoPathProgressKey,
+      <String, dynamic>{..._branchAutoPathProgress},
+    );
+  }
+
+  Future<void> clearBranchAutoPathNodeId(String branchId) async {
+    if (branchId.isEmpty) return;
+    _branchAutoPathProgress.remove(branchId);
+    await _storage.setJson(
+      _branchAutoPathProgressKey,
+      <String, dynamic>{..._branchAutoPathProgress},
+    );
+  }
 
   // ---------- Game convenience ops ----------
   //// Posts a timer bonus to [pendingTimerBonusProvider] so the active
