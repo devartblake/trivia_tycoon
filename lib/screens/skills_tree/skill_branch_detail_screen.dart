@@ -158,6 +158,25 @@ class _SkillBranchDetailScreenState
     _cooldownTimer = null;
   }
 
+  void _syncCooldownTicker(SkillTreeState state, List<String> pathIds) {
+    if (pathIds.isEmpty) {
+      _stopCooldownTicker();
+      return;
+    }
+
+    final safeIndex = _pathIndex.clamp(0, pathIds.length - 1);
+    final node = state.graph.byId[pathIds[safeIndex]];
+    final shouldTick = node != null &&
+        node.unlocked &&
+        ref.read(skillCooldownServiceProvider).isOnCooldown(node.id);
+
+    if (shouldTick) {
+      _startCooldownTicker();
+    } else {
+      _stopCooldownTicker();
+    }
+  }
+
   // Build VM using the centralized planner.
   // [playerXP] comes from playerXPProvider so unlock eligibility reflects real
   // XP rather than the legacy playerPoints counter.
@@ -397,12 +416,6 @@ class _SkillBranchDetailScreenState
       valueListenable: _cooldownTick,
       builder: (_, __, ___) {
         final onCooldown = cooldowns.isOnCooldown(node.id);
-        final shouldTick = node.unlocked && onCooldown;
-        if (shouldTick) {
-          _startCooldownTicker();
-        } else {
-          _stopCooldownTicker();
-        }
         final prereqIds = state.graph.getPrerequisites(node.id);
         final missingPrereqs = prereqIds
             .map(state.graph.getNodeById)
@@ -551,7 +564,7 @@ class _SkillBranchDetailScreenState
 
     // Local derived values — no mutations during build.
     final pathIds = ref.watch(branchAutoPathProvider(widget.branchId));
-    if (pathIds.isEmpty) _stopCooldownTicker();
+    _syncCooldownTicker(state, pathIds);
     final centers = _computeCenters(positions, filtered);
 
     // Clamp step index to current path length via a guarded post-frame callback.
