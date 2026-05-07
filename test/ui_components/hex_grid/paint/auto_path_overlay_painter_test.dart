@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/game/models/skill_tree_graph.dart';
 import 'package:trivia_tycoon/ui_components/hex_grid/paint/auto_path_overlay_painter.dart';
 import 'package:trivia_tycoon/ui_components/hex_grid/widgets/mini_hex_preview.dart';
@@ -61,14 +62,16 @@ void main() {
       );
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: SizedBox(
-              width: 220,
-              child: MiniHexBranchPreview.fromGraph(
-                graph: graph,
-                branchId: 'scholar',
-                highlightPath: true,
+        ProviderScope(
+          child: MaterialApp(
+            home: Scaffold(
+              body: SizedBox(
+                width: 220,
+                child: MiniHexBranchPreview.fromGraph(
+                  graph: graph,
+                  branchId: 'scholar',
+                  highlightPath: true,
+                ),
               ),
             ),
           ),
