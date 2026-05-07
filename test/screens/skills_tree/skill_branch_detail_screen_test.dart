@@ -28,7 +28,7 @@ SkillTreeState _stateWithScholarBranch() {
     tier: 0,
     cost: 1,
     category: SkillCategory.scholar,
-    effects: {},
+    effects: const {},
     branchId: 'scholar',
     available: true,
   );
@@ -39,7 +39,7 @@ SkillTreeState _stateWithScholarBranch() {
     tier: 1,
     cost: 2,
     category: SkillCategory.scholar,
-    effects: {},
+    effects: const {},
     branchId: 'scholar',
   );
 
