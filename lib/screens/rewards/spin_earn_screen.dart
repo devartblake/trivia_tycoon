@@ -6,6 +6,9 @@ import 'package:trivia_tycoon/screens/rewards/widgets/reward_stepper_slider_widg
 import '../../game/analytics/services/analytics_service.dart';
 import '../../game/models/reward_step_models.dart';
 import '../../game/providers/riverpod_providers.dart';
+import '../../game/providers/spin_providers.dart';
+import '../../ui_components/spin_wheel/services/spin_tracker.dart'
+    show SpinStatistics;
 import '../../ui_components/spin_wheel/ui/toasts/spin_ready_premium_toast.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
@@ -100,31 +103,24 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
 
   Future<void> _loadSpinData() async {
     try {
-      // Check if we need to reset daily counts
-      await _checkAndResetDailyCounts();
-
-      // Load all spin data from AppSettings
       final results = await Future.wait([
-        AppSettings.getTodaySpinCount(),
-        AppSettings.getWeeklySpinCount(),
-        AppSettings.getTotalLifetimeSpins(),
-        AppSettings.getDailySpinLimit(),
-        AppSettings.getRemainingSpinsToday(),
+        ref.read(spinStatisticsProvider.future),
         AppSettings.getSpinRewardPoints(),
       ]);
 
+      final stats = results[0] as SpinStatistics;
+
       if (mounted) {
         setState(() {
-          _todaySpinCount = results[0] as int;
-          _weeklySpinCount = results[1] as int;
-          _totalSpins = results[2] as int;
-          _dailyLimit = results[3] as int;
-          _spinsRemaining = results[4] as int;
-          _currentSpinSliderValue = results[5] as double;
+          _todaySpinCount = stats.dailyCount;
+          _weeklySpinCount = stats.weeklyCount;
+          _totalSpins = stats.totalSpins;
+          _dailyLimit = stats.maxSpinsPerDay;
+          _spinsRemaining = stats.spinsRemainingToday;
+          _currentSpinSliderValue = results[1] as double;
           _isLoading = false;
         });
 
-        // Track analytics after loading
         await _trackDataLoaded();
       }
     } catch (e) {
@@ -885,13 +881,13 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
 
     final result = await context.push('/spin-earn/wheel');
 
-    // Track return from wheel
     await _trackUserAction('returned_from_wheel', additionalData: {
       'result': result?.toString(),
     });
 
-    // Refresh data after spinning
+    // Invalidate cached provider so all watching widgets get fresh counts.
     if (mounted) {
+      ref.invalidate(spinStatisticsProvider);
       await _loadSpinData();
     }
   }

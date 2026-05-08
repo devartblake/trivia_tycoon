@@ -3,6 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/helpers/mission_notification_helper.dart';
+import '../../game/state/hybrid_mission_state.dart'
+    hide currentUserIdProvider;
+import '../../game/providers/profile_providers.dart'
+    show currentUserIdProvider;
 
 class MissionsScreen extends ConsumerStatefulWidget {
   const MissionsScreen({super.key});
@@ -21,8 +25,11 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    // Record that user visited missions screen
-    _notificationHelper.onMissionsScreenVisited(userId: 'current_user_id');
+    ref.read(currentUserIdProvider.future).then((userId) {
+      _notificationHelper.onMissionsScreenVisited(userId: userId);
+    }).catchError((_) {
+      _notificationHelper.onMissionsScreenVisited(userId: 'anonymous');
+    });
   }
 
   @override
@@ -33,6 +40,14 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
 
   @override
   Widget build(BuildContext context) {
+    final missions = ref.watch(liveMissionsProvider);
+    final dailyMissions =
+        missions.where((m) => m['status'] != 'completed').toList();
+    final completedMissions =
+        missions.where((m) => m['status'] == 'completed').toList();
+    final totalXP = missions.fold<int>(
+        0, (sum, m) => sum + ((m['reward'] as num?)?.toInt() ?? 0));
+
     return Scaffold(
       backgroundColor: const Color(0xFF1A1A2E),
       appBar: AppBar(
@@ -70,14 +85,14 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
       body: SafeArea(
         child: Column(
           children: [
-            _buildHeader(),
+            _buildHeader(totalXP),
             _buildTabBar(),
             Expanded(
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  _buildDailyMissions(),
-                  _buildWeeklyMissions(),
+                  _buildDailyMissions(dailyMissions),
+                  _buildWeeklyMissions(completedMissions),
                 ],
               ),
             ),
@@ -87,7 +102,7 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(int totalXP) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -144,14 +159,14 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
               color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(20),
             ),
-            child: const Row(
+            child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.star, color: Colors.amber, size: 18),
-                SizedBox(width: 6),
+                const Icon(Icons.star, color: Colors.amber, size: 18),
+                const SizedBox(width: 6),
                 Text(
-                  "1,736 XP",
-                  style: TextStyle(
+                  "$totalXP XP",
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -224,7 +239,7 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
     );
   }
 
-  Widget _buildDailyMissions() {
+  Widget _buildDailyMissions(List<Map<String, dynamic>> missions) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -232,45 +247,38 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
         children: [
           _buildSectionHeader(
             "Today's Missions",
-            "Friday, June 16, 2023",
-            "REFRESH IN: 3h 35m",
+            "",
+            "",
           ),
           const SizedBox(height: 16),
-          _buildMissionCard(
-            icon: Icons.business,
-            title: "Complete 8 base sections",
-            progress: 2,
-            total: 8,
-            reward: 3,
-            isCompleted: false,
-            badge: "DAILY",
-          ),
-          const SizedBox(height: 12),
-          _buildMissionCard(
-            icon: Icons.collections,
-            title: "Collect 40 cards",
-            progress: 0,
-            total: 40,
-            reward: 3,
-            isCompleted: false,
-            badge: "DAILY",
-          ),
-          const SizedBox(height: 12),
-          _buildMissionCard(
-            icon: Icons.person_remove,
-            title: "Kill 3300 enemies",
-            progress: 1885,
-            total: 3300,
-            reward: 3,
-            isCompleted: false,
-            badge: "DAILY",
-          ),
+          if (missions.isEmpty)
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.all(24),
+                child: Text(
+                  "No active missions right now.\nCheck back later!",
+                  style: TextStyle(color: Colors.white70, fontSize: 14),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            )
+          else
+            ...missions.map((mission) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: _buildMissionCard(
+                  icon: _iconForMission(mission['icon'] as String?),
+                  title: mission['title'] as String? ?? 'Mission',
+                  progress: (mission['progress'] as num?)?.toInt() ?? 0,
+                  total: (mission['total'] as num?)?.toInt() ?? 1,
+                  reward: (mission['reward'] as num?)?.toInt() ?? 0,
+                  isCompleted: mission['status'] == 'completed',
+                  badge: mission['badge'] as String? ?? 'DAILY',
+                ),
+              );
+            }),
           const SizedBox(height: 24),
-          _buildSectionHeader(
-            "Quick Missions",
-            "",
-            "",
-          ),
+          _buildSectionHeader("Quick Missions", "", ""),
           const SizedBox(height: 16),
           _buildQuickMissionsGrid(),
         ],
@@ -278,72 +286,69 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
     );
   }
 
-  Widget _buildWeeklyMissions() {
+  Widget _buildWeeklyMissions(List<Map<String, dynamic>> completedMissions) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildSectionHeader(
-            "Weekly Mission",
-            "",
-            "REFRESH IN: 5d 3h",
-          ),
+          _buildSectionHeader("Completed Missions", "", ""),
           const SizedBox(height: 16),
-          _buildMissionCard(
-            icon: Icons.emoji_events,
-            title: "Win 60 battles",
-            progress: 4,
-            total: 60,
-            reward: 15,
-            isCompleted: false,
-            badge: "WEEKLY",
-          ),
-          const SizedBox(height: 24),
-          _buildSectionHeader(
-            "Character Missions",
-            "",
-            "",
-          ),
-          const SizedBox(height: 16),
-          _buildCharacterMissionCard(
-            characterName: "Mickey",
-            characterIcon: Icons.mouse,
-            title: "Win 1 level(s) using Mickey",
-            reward: 20,
-            isCompleted: true,
-          ),
-          const SizedBox(height: 12),
-          _buildCharacterMissionCard(
-            characterName: "Minnie",
-            characterIcon: Icons.mouse,
-            title: "Win 1 level(s) using Minnie",
-            reward: 20,
-            isCompleted: true,
-          ),
-          const SizedBox(height: 12),
-          _buildCharacterMissionCard(
-            characterName: "Anna",
-            characterIcon: Icons.person,
-            title: "Win 1 level(s) using Anna",
-            reward: 20,
-            isCompleted: false,
-            progress: 0,
-            total: 1,
-          ),
-          const SizedBox(height: 12),
-          _buildCharacterMissionCard(
-            characterName: "Pluto",
-            characterIcon: Icons.pets,
-            title: "Win 1 level(s) using Pluto",
-            reward: 20,
-            isCompleted: false,
-            progress: 0,
-            total: 1,
-          ),
+          if (completedMissions.isEmpty)
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.all(24),
+                child: Text(
+                  "No completed missions yet.\nFinish daily missions to see them here!",
+                  style: TextStyle(color: Colors.white70, fontSize: 14),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            )
+          else
+            ...completedMissions.map((mission) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: _buildMissionCard(
+                  icon: _iconForMission(mission['icon'] as String?),
+                  title: mission['title'] as String? ?? 'Mission',
+                  progress: (mission['total'] as num?)?.toInt() ?? 1,
+                  total: (mission['total'] as num?)?.toInt() ?? 1,
+                  reward: (mission['reward'] as num?)?.toInt() ?? 0,
+                  isCompleted: true,
+                  badge: mission['badge'] as String? ?? 'DAILY',
+                ),
+              );
+            }),
         ],
       ),
     );
+  }
+
+  IconData _iconForMission(String? iconName) {
+    switch (iconName?.toLowerCase()) {
+      case 'science':
+        return Icons.science;
+      case 'history':
+        return Icons.history_edu;
+      case 'geography':
+        return Icons.public;
+      case 'math':
+        return Icons.calculate;
+      case 'sports':
+        return Icons.sports;
+      case 'arts':
+        return Icons.palette;
+      case 'music':
+        return Icons.music_note;
+      case 'technology':
+        return Icons.computer;
+      case 'trophy':
+      case 'emoji_events':
+        return Icons.emoji_events;
+      default:
+        return Icons.assignment;
+    }
   }
 
   Widget _buildSectionHeader(
@@ -581,166 +586,6 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
                         ),
                       ),
                     ],
-                  ),
-                ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCharacterMissionCard({
-    required String characterName,
-    required IconData characterIcon,
-    required String title,
-    required int reward,
-    required bool isCompleted,
-    int progress = 0,
-    int total = 1,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: isCompleted
-              ? [
-                  const Color(0xFF52B788).withValues(alpha: 0.4),
-                  const Color(0xFF40916C).withValues(alpha: 0.3),
-                ]
-              : [
-                  const Color(0xFF74C0FC).withValues(alpha: 0.3),
-                  const Color(0xFF5A9FE8).withValues(alpha: 0.2),
-                ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isCompleted
-              ? const Color(0xFF52B788).withValues(alpha: 0.6)
-              : const Color(0xFF74C0FC).withValues(alpha: 0.4),
-          width: 1.5,
-        ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(
-              characterIcon,
-              color: Colors.white,
-              size: 24,
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                if (!isCompleted) ...[
-                  const SizedBox(height: 8),
-                  Container(
-                    height: 6,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(3),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(3),
-                      child: LinearProgressIndicator(
-                        value: (progress / total).clamp(0.0, 1.0),
-                        backgroundColor: Colors.transparent,
-                        valueColor: const AlwaysStoppedAnimation<Color>(
-                          Color(0xFF6C5CE7),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    "$progress/$total",
-                    style: const TextStyle(
-                      color: Colors.white70,
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
-                if (isCompleted)
-                  const Row(
-                    children: [
-                      Icon(Icons.check_circle, color: Colors.white, size: 16),
-                      SizedBox(width: 6),
-                      Text(
-                        "Completed",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 16),
-          Column(
-            children: [
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFFD60A).withValues(alpha: 0.25),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: const Color(0xFFFFD60A).withValues(alpha: 0.6),
-                  ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.star, color: Color(0xFFFFD60A), size: 16),
-                    const SizedBox(width: 4),
-                    Text(
-                      "$reward",
-                      style: const TextStyle(
-                        color: Color(0xFFFFD60A),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 8),
-              if (isCompleted)
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF52B788),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: const Text(
-                    "Claim",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                    ),
                   ),
                 ),
             ],
