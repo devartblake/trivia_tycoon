@@ -1,10 +1,51 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
 import 'package:trivia_tycoon/game/controllers/skill_tree_controller.dart';
 import 'package:trivia_tycoon/game/models/skill_tree_graph.dart';
+import 'package:trivia_tycoon/game/providers/core_providers.dart';
+import 'package:trivia_tycoon/game/providers/profile_service_provider.dart';
+import 'package:trivia_tycoon/game/providers/skill_cooldown_service_provider.dart';
 import 'package:trivia_tycoon/game/providers/skill_tree_provider.dart';
+import 'package:trivia_tycoon/game/services/profile_service.dart';
+import 'package:trivia_tycoon/game/services/skill_cooldown_service.dart';
 import 'package:trivia_tycoon/game/services/xp_service.dart';
 import 'package:trivia_tycoon/game/providers/xp_provider.dart';
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+
+/// Minimal in-memory storage for tests — no Hive required.
+class _FakeStorage extends GeneralKeyValueStorageService {
+  final Map<String, dynamic> _store = {};
+
+  _FakeStorage({Map<String, dynamic>? initial}) {
+    if (initial != null) _store.addAll(initial);
+  }
+
+  @override
+  Future<List<String>?> getStringList(String key) async {
+    final raw = _store[key];
+    if (raw is List<String>) return List<String>.from(raw);
+    return null;
+  }
+
+  @override
+  Future<void> setStringList(String key, List<String> values) async {
+    _store[key] = List<String>.from(values);
+  }
+
+  @override
+  Future<Map<String, dynamic>?> getJson(String key) async {
+    final raw = _store[key];
+    if (raw is Map<String, dynamic>) return Map<String, dynamic>.from(raw);
+    return null;
+  }
+
+  @override
+  Future<void> setJson(String key, Map<String, dynamic> value) async {
+    _store[key] = Map<String, dynamic>.from(value);
+  }
+}
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -306,6 +347,92 @@ void main() {
       // Allow the async _restoreProfile to complete.
       await Future.delayed(Duration.zero);
 
+      expect(
+        container.read(skillTreeProvider).graph.getNodeById('root')?.unlocked,
+        isTrue,
+      );
+    });
+  });
+
+  // ── storage-backed restore (no loadProfile callback) ──────────────────────
+
+  group('SkillTreeController — storage-backed restore', () {
+    test('restores unlocked nodes from storage when no loadProfile is given',
+        () async {
+      // Pre-populate storage with a persisted 'root' unlock.
+      final fakeStorage = _FakeStorage(initial: {
+        'unlockedSkillIds': <String>['root'],
+      });
+      final xpService = XPService(startingPlayerXP: 50);
+
+      final container = ProviderContainer(
+        overrides: [
+          xpServiceProvider.overrideWithValue(xpService),
+          generalKeyValueStorageProvider.overrideWithValue(fakeStorage),
+          // ProfileService uses generalKeyValueStorageProvider automatically
+          // through its _storage getter once we override it above.
+          profileServiceProvider.overrideWith(
+            (ref) => ProfileService(ref, playerId: 'p1', displayName: 'Test'),
+          ),
+          skillCooldownServiceProvider.overrideWith(
+            (_) => SkillCooldownService(),
+          ),
+          skillTreeProvider.overrideWith(
+            (ref) => SkillTreeController(
+              ref,
+              initialGraph: _testGraph(),
+            ),
+          ),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      // Allow _restoreProfile (and ProfileService._loadFromStorage) to finish.
+      await Future.delayed(Duration.zero);
+
+      expect(
+        container.read(skillTreeProvider).graph.getNodeById('root')?.unlocked,
+        isTrue,
+      );
+    });
+
+    test(
+        'persisted unlock IDs are reapplied when loadGraph is called after restore',
+        () async {
+      final fakeStorage = _FakeStorage(initial: {
+        'unlockedSkillIds': <String>['root'],
+      });
+      final xpService = XPService(startingPlayerXP: 50);
+
+      final container = ProviderContainer(
+        overrides: [
+          xpServiceProvider.overrideWithValue(xpService),
+          generalKeyValueStorageProvider.overrideWithValue(fakeStorage),
+          profileServiceProvider.overrideWith(
+            (ref) => ProfileService(ref, playerId: 'p1', displayName: 'Test'),
+          ),
+          skillCooldownServiceProvider.overrideWith(
+            (_) => SkillCooldownService(),
+          ),
+          skillTreeProvider.overrideWith(
+            (ref) => SkillTreeController(
+              ref,
+              initialGraph: _testGraph(), // starts empty
+            ),
+          ),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      // Wait for restore to finish and capture the controller.
+      await Future.delayed(Duration.zero);
+      final ctrl = container.read(skillTreeProvider.notifier);
+
+      // Simulate the hot-swap that skillTreeProvider does when
+      // mergedSkillTreeGraphProvider resolves (root starts locked in the new graph).
+      ctrl.loadGraph(_testGraph());
+
+      // Restored unlock IDs must be reapplied to the newly loaded graph.
       expect(
         container.read(skillTreeProvider).graph.getNodeById('root')?.unlocked,
         isTrue,

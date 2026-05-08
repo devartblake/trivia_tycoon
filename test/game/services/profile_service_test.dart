@@ -321,5 +321,26 @@ void main() {
       expect(loaded, isNot(contains('old_node')));
       expect(loaded, containsAll(['new_node_1', 'new_node_2']));
     });
+
+    test(
+        'loadUnlockedSkillIds returns empty set on repeated calls after empty save',
+        () async {
+      final storage = _FakeStorage();
+
+      // Simulate a respec that clears all nodes.
+      await _withRef<void>(
+        (ref, _) async {
+          final svc = ProfileService(ref, playerId: 'p1', displayName: 'A');
+          await svc.saveUnlockedSkillIds([]); // save empty list
+          // Both calls should return empty without re-reading storage.
+          final first = await svc.loadUnlockedSkillIds();
+          final second = await svc.loadUnlockedSkillIds();
+          expect(first, isEmpty);
+          expect(second, isEmpty);
+          return;
+        },
+        overrides: [generalKeyValueStorageProvider.overrideWithValue(storage)],
+      );
+    });
   });
 }

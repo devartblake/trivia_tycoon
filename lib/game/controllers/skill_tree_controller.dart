@@ -54,6 +54,12 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
   final Future<void> Function(SkillTreeGraph graph)? saveProfile;
   final Future<SkillTreeGraph?> Function()? loadProfile;
 
+  /// Unlocked IDs restored from storage during [_restoreProfile].
+  /// Reapplied by [loadGraph] / [replaceGraph] so unlock state survives the
+  /// graph hot-swap that the production [skillTreeProvider] performs when
+  /// server data arrives after the controller is already constructed.
+  Set<String> _restoredUnlockIds = {};
+
   SkillTreeController(
     this.ref, {
     required SkillTreeGraph initialGraph,
@@ -70,8 +76,15 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
   }
 
   /// Swap in a new graph (e.g., a branch). Optionally recompute layout.
+  ///
+  /// Any unlock IDs that were restored from storage during initialisation are
+  /// reapplied so they are not lost when the real graph is hot-swapped in
+  /// after an async load (e.g. from [skillTreeProvider]).
   void loadGraph(SkillTreeGraph newGraph, {bool recomputeLayout = true}) {
-    state = state.copyWith(graph: newGraph, selectedId: null);
+    final graphToLoad = _restoredUnlockIds.isNotEmpty
+        ? newGraph.withUnlockedIds(_restoredUnlockIds)
+        : newGraph;
+    state = state.copyWith(graph: graphToLoad, selectedId: null);
     if (recomputeLayout) {
       _computeLayout();
     }
@@ -79,7 +92,10 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
 
   // ---- Reload Graph ----
   void replaceGraph(SkillTreeGraph g) {
-    state = state.copyWith(graph: g);
+    final graphToLoad = _restoredUnlockIds.isNotEmpty
+        ? g.withUnlockedIds(_restoredUnlockIds)
+        : g;
+    state = state.copyWith(graph: graphToLoad);
     _computeLayout();
   }
 
@@ -474,6 +490,7 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
     try {
       final profileService = ref.read(profileServiceProvider);
       final unlockedIds = await profileService.loadUnlockedSkillIds();
+      _restoredUnlockIds = Set.from(unlockedIds);
       if (unlockedIds.isNotEmpty) {
         state = state.copyWith(
           graph: state.graph.withUnlockedIds(unlockedIds),

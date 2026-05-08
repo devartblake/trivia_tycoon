@@ -22,6 +22,16 @@ class ProfileService {
   final Map<String, String> _branchAutoPathProgress = <String, String>{};
   final Set<String> _persistedSkillIds = <String>{};
 
+  /// True once [_loadFromStorage] has finished (or failed).
+  /// Prevents [loadUnlockedSkillIds] from treating a legitimately empty
+  /// set as "not yet loaded" and re-reading storage on every call.
+  bool _skillIdsLoaded = false;
+
+  /// Completes when the initial async storage load is done.
+  /// Awaited by [saveUnlockedSkillIds] and [loadUnlockedSkillIds] so they
+  /// never race against the constructor's background load.
+  late final Future<void> _initFuture;
+
   ProfileService(
     this.ref, {
     required this.playerId,
@@ -30,31 +40,33 @@ class ProfileService {
     Map<String, dynamic>? preferences,
   })  : unlockedCategories = unlockedCategories ?? <String>{},
         preferences = preferences ?? <String, dynamic>{} {
-    _loadFromStorage();
+    _initFuture = _loadFromStorage();
   }
 
   GeneralKeyValueStorageService get _storage =>
       ref.read(generalKeyValueStorageProvider);
 
   Future<void> _loadFromStorage() async {
-    final stored = await _storage.getStringList(_categoriesKey);
-    if (stored != null) unlockedCategories.addAll(stored);
-    final savedProgress = await _storage.getJson(_branchAutoPathProgressKey);
-    if (savedProgress != null) {
-      for (final entry in savedProgress.entries) {
-        final value = entry.value;
-        if (value is String &&
-            value.isNotEmpty &&
-            !_branchAutoPathProgress.containsKey(entry.key)) {
-          _branchAutoPathProgress[entry.key] = value;
+    try {
+      final stored = await _storage.getStringList(_categoriesKey);
+      if (stored != null) unlockedCategories.addAll(stored);
+      final savedProgress = await _storage.getJson(_branchAutoPathProgressKey);
+      if (savedProgress != null) {
+        for (final entry in savedProgress.entries) {
+          final value = entry.value;
+          if (value is String &&
+              value.isNotEmpty &&
+              !_branchAutoPathProgress.containsKey(entry.key)) {
+            _branchAutoPathProgress[entry.key] = value;
+          }
         }
       }
-    }
-    final storedIds = await _storage.getStringList(_unlockedSkillIdsKey);
-    if (storedIds != null &&
-        storedIds.isNotEmpty &&
-        _persistedSkillIds.isEmpty) {
-      _persistedSkillIds.addAll(storedIds);
+      final storedIds = await _storage.getStringList(_unlockedSkillIdsKey);
+      if (storedIds != null) _persistedSkillIds.addAll(storedIds);
+    } catch (_) {
+      // Storage errors must not crash the service.
+    } finally {
+      _skillIdsLoaded = true;
     }
   }
 
@@ -102,25 +114,27 @@ class ProfileService {
   }
 
   /// Persists the current set of unlocked skill node IDs to local storage.
+  ///
+  /// Awaits [_initFuture] first so a concurrent constructor load cannot
+  /// overwrite a write that was issued before the background load finished.
   Future<void> saveUnlockedSkillIds(Iterable<String> ids) async {
+    if (!_skillIdsLoaded) await _initFuture;
     _persistedSkillIds
       ..clear()
       ..addAll(ids);
+    _skillIdsLoaded = true;
     await _storage.setStringList(
         _unlockedSkillIdsKey, _persistedSkillIds.toList());
   }
 
   /// Returns the set of previously persisted unlocked skill node IDs.
   ///
-  /// Uses the in-memory cache populated during construction when available;
-  /// falls back to reading from storage and populates the cache as a side
-  /// effect so subsequent calls within the same instance are O(1).
+  /// Awaits [_initFuture] on the first call to ensure the in-memory cache is
+  /// fully populated before returning.  Once [_skillIdsLoaded] is true,
+  /// subsequent calls return the cached set in O(1) without hitting storage —
+  /// even when the set is intentionally empty (e.g. after a respec).
   Future<Set<String>> loadUnlockedSkillIds() async {
-    if (_persistedSkillIds.isNotEmpty) {
-      return Set.unmodifiable(_persistedSkillIds);
-    }
-    final stored = await _storage.getStringList(_unlockedSkillIdsKey);
-    if (stored != null) _persistedSkillIds.addAll(stored);
+    if (!_skillIdsLoaded) await _initFuture;
     return Set.unmodifiable(_persistedSkillIds);
   }
 
