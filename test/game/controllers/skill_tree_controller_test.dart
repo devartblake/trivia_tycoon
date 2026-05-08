@@ -237,4 +237,79 @@ void main() {
       expect(container.read(skillTreeProvider).selectedId, isNull);
     });
   });
+
+  // ── SkillTreeGraph.withUnlockedIds ────────────────────────────────────────
+
+  group('SkillTreeGraph.withUnlockedIds', () {
+    test('marks matching nodes as unlocked and available', () {
+      final graph = _testGraph();
+      final restored = graph.withUnlockedIds({'root'});
+
+      expect(restored.getNodeById('root')?.unlocked, isTrue);
+      expect(restored.getNodeById('root')?.available, isTrue);
+    });
+
+    test('marks children of unlocked nodes as available', () {
+      final graph = _testGraph();
+      final restored = graph.withUnlockedIds({'root'});
+
+      expect(restored.getNodeById('child')?.available, isTrue);
+      expect(restored.getNodeById('child')?.unlocked, isFalse);
+    });
+
+    test('missing IDs are ignored safely', () {
+      final graph = _testGraph();
+      // 'ghost_node' does not exist in the graph — should not throw.
+      final restored = graph.withUnlockedIds({'ghost_node', 'root'});
+
+      expect(restored.getNodeById('root')?.unlocked, isTrue);
+    });
+
+    test('returns same graph when set is empty', () {
+      final graph = _testGraph();
+      final restored = graph.withUnlockedIds({});
+
+      // Nodes should remain in their original state.
+      expect(restored.getNodeById('root')?.unlocked, isFalse);
+    });
+
+    test('does not modify the original graph', () {
+      final graph = _testGraph();
+      graph.withUnlockedIds({'root'});
+
+      // Original graph must be unchanged.
+      expect(graph.getNodeById('root')?.unlocked, isFalse);
+    });
+  });
+
+  // ── controller restores graph from persisted unlocked IDs ─────────────────
+
+  group('SkillTreeController — loadProfile callback restore', () {
+    test('restores graph from loadProfile callback when provided', () async {
+      final persistedGraph = _testGraph(rootUnlocked: true);
+      final xpService = XPService(startingPlayerXP: 100);
+
+      final container = ProviderContainer(
+        overrides: [
+          xpServiceProvider.overrideWithValue(xpService),
+          skillTreeProvider.overrideWith(
+            (ref) => SkillTreeController(
+              ref,
+              initialGraph: _testGraph(), // start with empty graph
+              loadProfile: () async => persistedGraph,
+            ),
+          ),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      // Allow the async _restoreProfile to complete.
+      await Future.delayed(Duration.zero);
+
+      expect(
+        container.read(skillTreeProvider).graph.getNodeById('root')?.unlocked,
+        isTrue,
+      );
+    });
+  });
 }

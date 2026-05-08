@@ -295,6 +295,25 @@ class SkillTreeGraph {
     );
   }
 
+  /// Returns a copy of this graph with nodes marked as unlocked/available
+  /// based on [unlockedIds]. IDs that no longer exist in the graph are
+  /// silently ignored (safe for missing/deleted nodes after schema changes).
+  SkillTreeGraph withUnlockedIds(Set<String> unlockedIds) {
+    if (unlockedIds.isEmpty) return this;
+    final updatedNodes = nodes.map((n) {
+      if (unlockedIds.contains(n.id)) {
+        return n.copyWith(unlocked: true, available: true);
+      }
+      // Mark as available if any direct prerequisite is in the unlocked set.
+      final hasUnlockedPrereq = edges
+          .where((e) => e.toId == n.id)
+          .any((e) => unlockedIds.contains(e.fromId));
+      if (hasUnlockedPrereq) return n.copyWith(available: true);
+      return n;
+    }).toList();
+    return SkillTreeGraph(nodes: updatedNodes, edges: edges, groups: groups);
+  }
+
   /// Factory constructor for loading from grouped JSON structure
   factory SkillTreeGraph.fromGroupedJson(Map<String, dynamic> json) {
     final nodes = <SkillNode>[];

@@ -10,6 +10,7 @@ import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_s
 class ProfileService {
   static const _categoriesKey = 'unlockedCategories';
   static const _branchAutoPathProgressKey = 'branchAutoPathProgress';
+  static const _unlockedSkillIdsKey = 'unlockedSkillIds';
 
   final Ref ref;
 
@@ -19,6 +20,7 @@ class ProfileService {
   final Set<String> unlockedCategories;
   final Map<String, dynamic> preferences;
   final Map<String, String> _branchAutoPathProgress = <String, String>{};
+  final Set<String> _persistedSkillIds = <String>{};
 
   ProfileService(
     this.ref, {
@@ -48,6 +50,8 @@ class ProfileService {
         }
       }
     }
+    final storedIds = await _storage.getStringList(_unlockedSkillIdsKey);
+    if (storedIds != null) _persistedSkillIds.addAll(storedIds);
   }
 
   // ---------- Profile operations ----------
@@ -91,6 +95,26 @@ class ProfileService {
       _branchAutoPathProgressKey,
       <String, dynamic>{..._branchAutoPathProgress},
     );
+  }
+
+  /// Persists the current set of unlocked skill node IDs to local storage.
+  Future<void> saveUnlockedSkillIds(Iterable<String> ids) async {
+    _persistedSkillIds
+      ..clear()
+      ..addAll(ids);
+    await _storage.setStringList(
+        _unlockedSkillIdsKey, _persistedSkillIds.toList());
+  }
+
+  /// Returns the set of previously persisted unlocked skill node IDs.
+  /// Uses the in-memory cache when available; falls back to storage.
+  Future<Set<String>> loadUnlockedSkillIds() async {
+    if (_persistedSkillIds.isNotEmpty) {
+      return Set.unmodifiable(_persistedSkillIds);
+    }
+    final stored = await _storage.getStringList(_unlockedSkillIdsKey);
+    if (stored != null) _persistedSkillIds.addAll(stored);
+    return Set.unmodifiable(_persistedSkillIds);
   }
 
   Future<void> clearBranchAutoPathNodeId(String branchId) async {
