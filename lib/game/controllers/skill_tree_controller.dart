@@ -500,14 +500,24 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
   void _persistUnlockedSkillIds() {
     try {
       final ids = state.graph.unlockedNodes.map((n) => n.id).toList();
-      ref.read(profileServiceProvider).saveUnlockedSkillIds(ids);
+      unawaited(
+        ref
+            .read(profileServiceProvider)
+            .saveUnlockedSkillIds(ids)
+            .catchError((_) {}),
+      );
     } catch (_) {}
   }
 
   /// Fire-and-forget: persists active cooldown end timestamps to storage.
   void _persistSkillCooldowns() {
     try {
-      ref.read(skillCooldownServiceProvider).persistCooldowns();
+      unawaited(
+        ref
+            .read(skillCooldownServiceProvider)
+            .persistCooldowns()
+            .catchError((_) {}),
+      );
     } catch (_) {}
   }
 }
