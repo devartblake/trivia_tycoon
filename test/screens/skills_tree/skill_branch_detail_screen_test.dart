@@ -4,8 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/game/controllers/skill_tree_controller.dart';
 import 'package:trivia_tycoon/game/models/skill_tree_graph.dart';
+import 'package:trivia_tycoon/game/providers/skill_cooldown_service_provider.dart';
 import 'package:trivia_tycoon/game/providers/skill_tree_provider.dart';
 import 'package:trivia_tycoon/game/providers/xp_provider.dart';
+import 'package:trivia_tycoon/game/services/skill_cooldown_service.dart';
 import 'package:trivia_tycoon/screens/skills_tree/skill_branch_detail_screen.dart';
 import 'package:trivia_tycoon/ui_components/hex_grid/paint/auto_path_overlay_painter.dart';
 
@@ -56,7 +58,48 @@ SkillTreeState _stateWithScholarBranch() {
   );
 }
 
-Widget _buildHarness({required SkillTreeState state, required String location}) {
+SkillTreeState _stateWithUnlockedScholarRoot() {
+  final root = SkillNode(
+    id: 'scholar_root',
+    title: 'Scholar Root',
+    description: 'start',
+    tier: 0,
+    cost: 1,
+    category: SkillCategory.scholar,
+    effects: const {},
+    branchId: 'scholar',
+    effectTrigger: 'active',
+    unlocked: true,
+  );
+  final mid = SkillNode(
+    id: 'scholar_mid',
+    title: 'Scholar Mid',
+    description: 'next',
+    tier: 1,
+    cost: 2,
+    category: SkillCategory.scholar,
+    effects: const {},
+    branchId: 'scholar',
+  );
+
+  return SkillTreeState(
+    graph: SkillTreeGraph(
+      nodes: [root, mid],
+      edges: [SkillEdge(fromId: 'scholar_root', toId: 'scholar_mid')],
+    ),
+    positions: {
+      'scholar_root': const Offset(-40, 0),
+      'scholar_mid': const Offset(40, 0),
+    },
+    playerPoints: 0,
+  );
+}
+
+Widget _buildHarness({
+  required SkillTreeState state,
+  required String location,
+  SkillCooldownService? cooldownService,
+}) {
   final router = GoRouter(
     initialLocation: location,
     routes: [
@@ -76,6 +119,8 @@ Widget _buildHarness({required SkillTreeState state, required String location}) 
       skillTreeProvider.overrideWith(
           (ref) => _StaticSkillTreeController(ref, state)),
       playerXPProvider.overrideWith((_) => 100),
+      if (cooldownService != null)
+        skillCooldownServiceProvider.overrideWithValue(cooldownService),
     ],
     child: MaterialApp.router(routerConfig: router),
   );
@@ -129,5 +174,31 @@ void main() {
     expect(overlayPainter.pathIds, ['scholar_root', 'scholar_mid']);
     expect(overlayPainter.currentIndex, 1);
     expect(overlayPainter.showFullPath, isTrue);
+  });
+
+  testWidgets('shows cooldown messaging and disables use action while cooling down',
+      (tester) async {
+    final cooldowns = SkillCooldownService()
+      ..startCooldown('scholar_root', const Duration(seconds: 75));
+
+    await tester.pumpWidget(
+      _buildHarness(
+        state: _stateWithUnlockedScholarRoot(),
+        location: '/skill-branch/scholar?step=0&showPath=1',
+        cooldownService: cooldowns,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('Next available in'), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'Cooldown'), findsOneWidget);
+
+    final button =
+        tester.widget<FilledButton>(find.widgetWithText(FilledButton, 'Cooldown'));
+    expect(button.onPressed, isNull);
+
+    await tester.pump(const Duration(seconds: 2));
+
+    expect(find.textContaining('Next available in'), findsOneWidget);
   });
 }

@@ -1,6 +1,16 @@
 class SkillCooldownService {
   final Map<String, DateTime> _expiry = {};
 
+  /// Formats a duration as `mm:ss` with minutes not capped at 59.
+  static String formatRemaining(Duration duration) {
+    // Round up fractional seconds so active cooldowns don't display "00:00"
+    // until the cooldown has actually expired.
+    final totalSeconds = (duration.inMilliseconds + 999) ~/ 1000;
+    final mm = (totalSeconds ~/ 60).toString().padLeft(2, '0');
+    final ss = (totalSeconds % 60).toString().padLeft(2, '0');
+    return '$mm:$ss';
+  }
+
   /// Check if a skill is still cooling down.
   bool isOnCooldown(String skillId) {
     final end = _expiry[skillId];
@@ -25,11 +35,21 @@ class SkillCooldownService {
   String remainingLabel(String skillId) {
     final rem = remaining(skillId);
     if (rem == null || rem == Duration.zero) return '00:00';
+    return formatRemaining(rem);
+  }
 
-    final totalSeconds = (rem.inMilliseconds + 999) ~/ 1000;
-    final mm = (totalSeconds ~/ 60).toString().padLeft(2, '0');
-    final ss = (totalSeconds % 60).toString().padLeft(2, '0');
-    return '$mm:$ss';
+  /// Returns "Next available in mm:ss" while active; null when inactive.
+  String? nextAvailableLabel(String skillId) {
+    final rem = remaining(skillId);
+    if (rem == null || rem == Duration.zero) return null;
+    return 'Next available in ${formatRemaining(rem)}';
+  }
+
+  /// Returns "Next mm:ss" while active; null when inactive.
+  String? nextAvailableChipLabel(String skillId) {
+    final rem = remaining(skillId);
+    if (rem == null || rem == Duration.zero) return null;
+    return 'Next ${formatRemaining(rem)}';
   }
 
   /// Shorten an active cooldown on a specific skill by [reduction].

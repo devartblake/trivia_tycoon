@@ -26,4 +26,37 @@ void main() {
       expect(minutes, greaterThanOrEqualTo(74));
     });
   });
+
+  group('SkillCooldownService.nextAvailableLabel', () {
+    test('returns null when cooldown is inactive', () {
+      final service = SkillCooldownService();
+      expect(service.nextAvailableLabel('missing'), isNull);
+    });
+
+    test('returns next-available message while cooldown is active', () {
+      final service = SkillCooldownService();
+      service.startCooldown('n3', const Duration(seconds: 30));
+
+      final label = service.nextAvailableLabel('n3');
+      expect(label, isNotNull);
+      expect(label, startsWith('Next available in '));
+    });
+  });
+
+  group('SkillCooldownService.nextAvailableChipLabel', () {
+    test('returns null when cooldown is inactive', () {
+      final service = SkillCooldownService();
+      expect(service.nextAvailableChipLabel('missing'), isNull);
+    });
+
+    test('returns compact next label while cooldown is active', () {
+      final service = SkillCooldownService();
+      service.startCooldown('n4', const Duration(seconds: 30));
+
+      final label = service.nextAvailableChipLabel('n4');
+      expect(label, isNotNull);
+      expect(label, startsWith('Next '));
+      expect(label, isNot(contains('available in')));
+    });
+  });
 }
