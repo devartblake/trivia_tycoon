@@ -47,8 +47,6 @@ class _FakeStorage extends GeneralKeyValueStorageService {
   }
 }
 
-// ── Helpers ────────────────────────────────────────────────────────────────
-
 /// Creates a minimal skill tree graph for testing:
 ///   root (tier 0, cost 1, available) ──► child (tier 1, cost 2)
 SkillTreeGraph _testGraph({bool rootUnlocked = false}) {
