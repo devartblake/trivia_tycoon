@@ -491,6 +491,10 @@ class _SkillBranchDetailScreenState
                     final cooldownLabel = node.unlocked
                         ? cooldowns.nextAvailableLabel(node.id)
                         : null;
+                    final cooldownChipLabel = node.unlocked &&
+                            cooldowns.isOnCooldown(node.id)
+                        ? 'Next ${cooldowns.remainingLabel(node.id)}'
+                        : null;
 
                     return ListTile(
                       dense: true,
@@ -511,7 +515,7 @@ class _SkillBranchDetailScreenState
                       trailing: node.unlocked
                           ? cooldownLabel == null
                               ? const Icon(Icons.check, color: Colors.green)
-                              : _CooldownChip(label: cooldownLabel)
+                              : _CooldownChip(label: cooldownChipLabel!)
                           : ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
@@ -936,7 +940,7 @@ class _CooldownChip extends StatelessWidget {
         border: Border.all(color: const Color(0x88FFB300)),
       ),
       child: Text(
-        label.replaceFirst('available in ', ''),
+        label,
         style: const TextStyle(
           color: Colors.white,
           fontSize: 11,
