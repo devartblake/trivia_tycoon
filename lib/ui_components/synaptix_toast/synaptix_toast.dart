@@ -3,30 +3,30 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:just_audio/just_audio.dart';
-import 'tycoon_toast_route.dart' as route;
+import 'synaptix_toast_route.dart' as route;
 import 'toast_theme_manager.dart';
 
-const String tycoonToastRouteName = '/tycoonToastRoute';
+const String synaptixToastRouteName = '/synaptixToastRoute';
 
-typedef TycoonToastStatusCallback = void Function(TycoonToastStatus? status);
-typedef OnTycoonTap = void Function(TycoonToast toast);
+typedef SynaptixToastStatusCallback = void Function(SynaptixToastStatus? status);
+typedef OnSynaptixTap = void Function(SynaptixToast toast);
 
-enum TycoonToastType { success, error, info, reward, custom }
+enum SynaptixToastType { success, error, info, reward, custom }
 
-enum TycoonToastPosition { top, bottom }
+enum SynaptixToastPosition { top, bottom }
 
-enum TycoonToastStyle { floating, grounded }
+enum SynaptixToastStyle { floating, grounded }
 
-enum TycoonToastDismissDirection { horizontal, vertical }
+enum SynaptixToastDismissDirection { horizontal, vertical }
 
-enum TycoonToastStatus { showing, dismissed, isAppearing, isHiding }
+enum SynaptixToastStatus { showing, dismissed, isAppearing, isHiding }
 
-enum TycoonToastTransition { slide, fade, scale }
+enum SynaptixToastTransition { slide, fade, scale }
 
-typedef TycoonThemeEvent = String;
+typedef SynaptixThemeEvent = String;
 
-class TycoonToast<T> extends StatefulWidget {
-  TycoonToast({
+class SynaptixToast<T> extends StatefulWidget {
+  SynaptixToast({
     super.key,
     this.title,
     this.message,
@@ -56,14 +56,14 @@ class TycoonToast<T> extends StatefulWidget {
     this.progressIndicatorController,
     this.progressIndicatorBackgroundColor,
     this.progressIndicatorValueColor,
-    this.tycoonToastPosition = TycoonToastPosition.top,
-    this.tycoonToastStyle = TycoonToastStyle.floating,
+    this.tycoonToastPosition = SynaptixToastPosition.top,
+    this.tycoonToastStyle = SynaptixToastStyle.floating,
     this.positionOffset = 0.0,
-    this.dismissDirection = TycoonToastDismissDirection.vertical,
+    this.dismissDirection = SynaptixToastDismissDirection.vertical,
     this.forwardAnimationCurve = Curves.easeOutBack,
     this.reverseAnimationCurve = Curves.easeInBack,
     this.animationDuration = const Duration(milliseconds: 800),
-    TycoonToastStatusCallback? onStatusChanged,
+    SynaptixToastStatusCallback? onStatusChanged,
     this.barBlur = 0.0,
     this.routeBlur,
     this.routeColor,
@@ -71,18 +71,18 @@ class TycoonToast<T> extends StatefulWidget {
     this.safeArea = true,
     this.userInputForm,
     this.endOffset,
-    this.toastType = TycoonToastType.custom,
+    this.toastType = SynaptixToastType.custom,
     this.soundEffect,
     this.onShow,
     this.onDismiss,
     this.onAutoDismiss,
-    this.transitionType = TycoonToastTransition.slide,
+    this.transitionType = SynaptixToastTransition.slide,
     this.themeEvent = 'general',
     this.isDismissible = true,
   }) : onStatusChanged = onStatusChanged ?? ((_) {}) {
     // Apply modern gradient with glassmorphism effect
     this.backgroundGradient ??=
-        TycoonToastThemeManager.getGradientForEvent(themeEvent);
+        SynaptixToastThemeManager.getGradientForEvent(themeEvent);
   }
 
   final String? title;
@@ -95,7 +95,7 @@ class TycoonToast<T> extends StatefulWidget {
   final Color? messageColor;
   final double? messageSize;
   final Widget? mainButton;
-  final OnTycoonTap? onTap;
+  final OnSynaptixTap? onTap;
   final Duration? duration;
   final bool shouldIconPulse;
   final double? maxWidth;
@@ -113,10 +113,10 @@ class TycoonToast<T> extends StatefulWidget {
   final AnimationController? progressIndicatorController;
   final Color? progressIndicatorBackgroundColor;
   final Animation<Color>? progressIndicatorValueColor;
-  final TycoonToastPosition tycoonToastPosition;
-  final TycoonToastStyle tycoonToastStyle;
+  final SynaptixToastPosition tycoonToastPosition;
+  final SynaptixToastStyle tycoonToastStyle;
   final double positionOffset;
-  final TycoonToastDismissDirection dismissDirection;
+  final SynaptixToastDismissDirection dismissDirection;
   final Curve forwardAnimationCurve;
   final Curve reverseAnimationCurve;
   final Duration animationDuration;
@@ -128,17 +128,17 @@ class TycoonToast<T> extends StatefulWidget {
   final Form? userInputForm;
   final Offset? endOffset;
   final bool isDismissible;
-  final TycoonToastStatusCallback onStatusChanged;
+  final SynaptixToastStatusCallback onStatusChanged;
   final VoidCallback? onShow;
   final VoidCallback? onDismiss;
   final VoidCallback? onAutoDismiss;
-  final TycoonToastType toastType;
-  final TycoonToastTransition transitionType;
+  final SynaptixToastType toastType;
+  final SynaptixToastTransition transitionType;
   final String? soundEffect;
-  final TycoonThemeEvent themeEvent;
+  final SynaptixThemeEvent themeEvent;
 
-  final ValueNotifier<route.TycoonToastRoute<T?>?> _toastRouteNotifier =
-      ValueNotifier<route.TycoonToastRoute<T?>?>(null);
+  final ValueNotifier<route.SynaptixToastRoute<T?>?> _toastRouteNotifier =
+      ValueNotifier<route.SynaptixToastRoute<T?>?>(null);
 
   Future<T?> show(BuildContext context) async {
     onShow?.call();
@@ -148,7 +148,7 @@ class TycoonToast<T> extends StatefulWidget {
       unawaited(player.play());
     }
 
-    final toastRoute = route.showTycoonToast<T>(
+    final toastRoute = route.showSynaptixToast<T>(
       context: context,
       toast: this,
     );
@@ -175,19 +175,19 @@ class TycoonToast<T> extends StatefulWidget {
   }
 
   bool isShowing() =>
-      _toastRouteNotifier.value?.currentStatus == TycoonToastStatus.showing;
+      _toastRouteNotifier.value?.currentStatus == SynaptixToastStatus.showing;
   bool isDismissed() =>
-      _toastRouteNotifier.value?.currentStatus == TycoonToastStatus.dismissed;
+      _toastRouteNotifier.value?.currentStatus == SynaptixToastStatus.dismissed;
   bool isAppearing() =>
-      _toastRouteNotifier.value?.currentStatus == TycoonToastStatus.isAppearing;
+      _toastRouteNotifier.value?.currentStatus == SynaptixToastStatus.isAppearing;
   bool isHiding() =>
-      _toastRouteNotifier.value?.currentStatus == TycoonToastStatus.isHiding;
+      _toastRouteNotifier.value?.currentStatus == SynaptixToastStatus.isHiding;
 
   @override
-  State<TycoonToast> createState() => _TycoonToastState<T?>();
+  State<SynaptixToast> createState() => _SynaptixToastState<T?>();
 }
 
-class _TycoonToastState<K extends Object?> extends State<TycoonToast<K>>
+class _SynaptixToastState<K extends Object?> extends State<SynaptixToast<K>>
     with TickerProviderStateMixin {
   late AnimationController _pulseController;
   late AnimationController _shimmerController;
@@ -228,7 +228,7 @@ class _TycoonToastState<K extends Object?> extends State<TycoonToast<K>>
       _pulseController.repeat(reverse: true);
     }
 
-    if (widget.toastType == TycoonToastType.reward) {
+    if (widget.toastType == SynaptixToastType.reward) {
       _shimmerController.repeat();
     }
   }
@@ -293,7 +293,7 @@ class _TycoonToastState<K extends Object?> extends State<TycoonToast<K>>
               ),
 
               // Shimmer effect for reward toasts
-              if (widget.toastType == TycoonToastType.reward)
+              if (widget.toastType == SynaptixToastType.reward)
                 AnimatedBuilder(
                   animation: _shimmerAnimation,
                   builder: (context, child) {

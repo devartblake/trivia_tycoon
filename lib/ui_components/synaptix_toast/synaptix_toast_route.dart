@@ -4,14 +4,14 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'tycoon_toast.dart';
+import 'synaptix_toast.dart';;
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
-class TycoonToastRoute<T> extends OverlayRoute<T> {
-  final TycoonToast tycoonToast;
+class SynaptixToastRoute<T> extends OverlayRoute<T> {
+  final SynaptixToast tycoonToast;
   final Builder _builder;
   final Completer<T> _transitionCompleter = Completer<T>();
-  final TycoonToastStatusCallback? _onStatusChanged;
+  final SynaptixToastStatusCallback? _onStatusChanged;
 
   Animation<double>? _filterBlurAnimation;
   Animation<Color?>? _filterColorAnimation;
@@ -22,7 +22,7 @@ class TycoonToastRoute<T> extends OverlayRoute<T> {
   Alignment? _endAlignment;
   Timer? _timer;
   T? _result;
-  TycoonToastStatus? currentStatus;
+  SynaptixToastStatus? currentStatus;
 
   // Stack positioning
   int _stackIndex = 0;
@@ -36,7 +36,7 @@ class TycoonToastRoute<T> extends OverlayRoute<T> {
     }
   }
 
-  TycoonToastRoute({
+  SynaptixToastRoute({
     required this.tycoonToast,
     super.settings,
   })  : _builder = Builder(builder: (BuildContext innerContext) => tycoonToast),
@@ -44,19 +44,19 @@ class TycoonToastRoute<T> extends OverlayRoute<T> {
     _configureAlignment(tycoonToast.tycoonToastPosition);
   }
 
-  void _configureAlignment(TycoonToastPosition position) {
+  void _configureAlignment(SynaptixToastPosition position) {
     final stackOffset =
         _stackIndex * 0.15; // Offset each toast by 15% of screen height
 
     switch (position) {
-      case TycoonToastPosition.top:
+      case SynaptixToastPosition.top:
         _initialAlignment = const Alignment(0.0, -2.0);
         _endAlignment = tycoonToast.endOffset != null
             ? Alignment(0.0, -0.8 + stackOffset) +
                 Alignment(tycoonToast.endOffset!.dx, tycoonToast.endOffset!.dy)
             : Alignment(0.0, -0.8 + stackOffset);
         break;
-      case TycoonToastPosition.bottom:
+      case SynaptixToastPosition.bottom:
         _initialAlignment = const Alignment(0.0, 2.0);
         _endAlignment = tycoonToast.endOffset != null
             ? Alignment(0.0, 0.8 - stackOffset) +
@@ -106,7 +106,7 @@ class TycoonToastRoute<T> extends OverlayRoute<T> {
 
   Widget _applyTransitionAnimations(Widget child) {
     switch (tycoonToast.transitionType) {
-      case TycoonToastTransition.scale:
+      case SynaptixToastTransition.scale:
         return AnimatedBuilder(
           animation: _scaleAnimation!,
           builder: (context, child) => Transform.scale(
@@ -116,7 +116,7 @@ class TycoonToastRoute<T> extends OverlayRoute<T> {
           child: child,
         );
 
-      case TycoonToastTransition.fade:
+      case SynaptixToastTransition.fade:
         return AnimatedBuilder(
           animation: _slideAnimation!,
           builder: (context, child) => Opacity(
@@ -126,10 +126,10 @@ class TycoonToastRoute<T> extends OverlayRoute<T> {
           child: child,
         );
 
-      case TycoonToastTransition.slide:
+      case SynaptixToastTransition.slide:
       default:
         // Enhanced slide with slight rotation for reward toasts
-        if (tycoonToast.toastType == TycoonToastType.reward) {
+        if (tycoonToast.toastType == SynaptixToastType.reward) {
           return AnimatedBuilder(
             animation: _rotationAnimation!,
             builder: (context, child) => Transform.rotate(
@@ -180,9 +180,9 @@ class TycoonToastRoute<T> extends OverlayRoute<T> {
   Widget _getDismissibleToast(Widget child) {
     return Dismissible(
       direction:
-          tycoonToast.dismissDirection == TycoonToastDismissDirection.horizontal
+          tycoonToast.dismissDirection == SynaptixToastDismissDirection.horizontal
               ? DismissDirection.horizontal
-              : (tycoonToast.tycoonToastPosition == TycoonToastPosition.top
+              : (tycoonToast.tycoonToastPosition == SynaptixToastPosition.top
                   ? DismissDirection.up
                   : DismissDirection.down),
       key: UniqueKey(),
@@ -315,22 +315,22 @@ class TycoonToastRoute<T> extends OverlayRoute<T> {
   void _handleStatusChanged(AnimationStatus status) {
     switch (status) {
       case AnimationStatus.completed:
-        currentStatus = TycoonToastStatus.showing;
+        currentStatus = SynaptixToastStatus.showing;
         _onStatusChanged?.call(currentStatus);
         break;
       case AnimationStatus.dismissed:
-        currentStatus = TycoonToastStatus.dismissed;
+        currentStatus = SynaptixToastStatus.dismissed;
         _onStatusChanged?.call(currentStatus);
         if (!_transitionCompleter.isCompleted) {
           _transitionCompleter.complete(_result);
         }
         break;
       case AnimationStatus.forward:
-        currentStatus = TycoonToastStatus.isAppearing;
+        currentStatus = SynaptixToastStatus.isAppearing;
         _onStatusChanged?.call(currentStatus);
         break;
       case AnimationStatus.reverse:
-        currentStatus = TycoonToastStatus.isHiding;
+        currentStatus = SynaptixToastStatus.isHiding;
         _onStatusChanged?.call(currentStatus);
         break;
     }
@@ -369,12 +369,12 @@ class TycoonToastRoute<T> extends OverlayRoute<T> {
   Future<T> get completed => _transitionCompleter.future;
 }
 
-TycoonToastRoute<T> showTycoonToast<T>({
+SynaptixToastRoute<T> showSynaptixToast<T>({
   required BuildContext context,
-  required TycoonToast toast,
+  required SynaptixToast toast,
 }) {
-  return TycoonToastRoute<T>(
+  return SynaptixToastRoute<T>(
     tycoonToast: toast,
-    settings: const RouteSettings(name: '/tycoonToastRoute'),
+    settings: const RouteSettings(name: '/synaptixToastRoute'),
   );
 }

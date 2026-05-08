@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../ui_components/tycoon_toast/tycoon_toast_helper.dart';
+import '../../../ui_components/synaptix_toast/synaptix_toast_helper.dart';
 
 class WeeklyRewardsWidget extends StatelessWidget {
   const WeeklyRewardsWidget({super.key});
@@ -9,7 +9,7 @@ class WeeklyRewardsWidget extends StatelessWidget {
       String amount, bool canClaim) {
     if (!canClaim) {
       // Show info toast for locked rewards
-      TycoonToastHelper.createInformation(
+      SynaptixToastHelper.createInformation(
         title: 'Reward Locked',
         message: 'Complete Day ${day - 1} to unlock this reward',
         duration: Duration(seconds: 2),
@@ -21,7 +21,7 @@ class WeeklyRewardsWidget extends StatelessWidget {
     HapticFeedback.mediumImpact();
 
     // Show the reward toast
-    TycoonToastHelper.createWeeklyReward(
+    SynaptixToastHelper.createWeeklyReward(
       day: day,
       rewardType: rewardType,
       rewardAmount: amount,

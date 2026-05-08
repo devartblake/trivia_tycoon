@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/ui_components/tycoon_toast/tycoon_toast.dart';
+import 'package:trivia_tycoon/ui_components/synaptix_toast/synaptix_toast.dart';
 import 'dart:math' as math;
 
 class SpinReadyToast {
@@ -8,13 +8,13 @@ class SpinReadyToast {
     required VoidCallback onSpinNow,
     String? customMessage,
   }) async {
-    final toast = TycoonToast(
+    final toast = SynaptixToast(
       title: '🎰 Spin Ready!',
       message: customMessage ?? 'Your spin is available. Tap to spin now!',
       icon: _buildSpinIcon(),
-      toastType: TycoonToastType.reward,
-      tycoonToastPosition: TycoonToastPosition.bottom,
-      tycoonToastStyle: TycoonToastStyle.floating,
+      toastType: SynaptixToastType.reward,
+      tycoonToastPosition: SynaptixToastPosition.bottom,
+      tycoonToastStyle: SynaptixToastStyle.floating,
       themeEvent: 'spin_ready',
       isDismissible: true,
       shouldIconPulse: true,

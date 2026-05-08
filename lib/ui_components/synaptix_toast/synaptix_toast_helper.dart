@@ -1,15 +1,15 @@
-import 'tycoon_toast.dart';
+import 'synaptix_toast.dart';;
 import 'package:flutter/material.dart';
 import 'toast_theme_manager.dart';
 
-class TycoonToastHelper {
+class SynaptixToastHelper {
   /// Get a modern success notification toast
-  static TycoonToast createSuccess({
+  static SynaptixToast createSuccess({
     required String message,
     String? title,
     Duration duration = const Duration(seconds: 3),
   }) {
-    return TycoonToast(
+    return SynaptixToast(
       title: title ?? 'Success',
       message: message,
       icon: Container(
@@ -32,19 +32,19 @@ class TycoonToastHelper {
           Colors.green[400]!.withValues(alpha: 0.8),
         ],
       ),
-      toastType: TycoonToastType.success,
+      toastType: SynaptixToastType.success,
       duration: duration,
       borderRadius: BorderRadius.circular(16),
     );
   }
 
   /// Get a modern information notification toast
-  static TycoonToast createInformation({
+  static SynaptixToast createInformation({
     required String message,
     String? title,
     Duration duration = const Duration(seconds: 3),
   }) {
-    return TycoonToast(
+    return SynaptixToast(
       title: title ?? 'Info',
       message: message,
       icon: Container(
@@ -67,19 +67,19 @@ class TycoonToastHelper {
           Colors.blue[400]!.withValues(alpha: 0.8),
         ],
       ),
-      toastType: TycoonToastType.info,
+      toastType: SynaptixToastType.info,
       duration: duration,
       borderRadius: BorderRadius.circular(16),
     );
   }
 
   /// Get a modern error notification toast
-  static TycoonToast createError({
+  static SynaptixToast createError({
     required String message,
     String? title,
     Duration duration = const Duration(seconds: 4),
   }) {
-    return TycoonToast(
+    return SynaptixToast(
       title: title ?? 'Error',
       message: message,
       icon: Container(
@@ -102,21 +102,21 @@ class TycoonToastHelper {
           Colors.red[400]!.withValues(alpha: 0.8),
         ],
       ),
-      toastType: TycoonToastType.error,
+      toastType: SynaptixToastType.error,
       duration: duration,
       borderRadius: BorderRadius.circular(16),
     );
   }
 
   /// Get a modern reward notification toast with special effects
-  static TycoonToast createReward({
+  static SynaptixToast createReward({
     required String message,
     String? title,
     Duration duration = const Duration(seconds: 4),
     String? rewardType,
     String? rewardAmount,
   }) {
-    return TycoonToast(
+    return SynaptixToast(
       title: title ?? 'Reward Claimed!',
       message: message,
       icon: Container(
@@ -149,7 +149,7 @@ class TycoonToastHelper {
           Colors.pink[400]!.withValues(alpha: 0.85),
         ],
       ),
-      toastType: TycoonToastType.reward,
+      toastType: SynaptixToastType.reward,
       duration: duration,
       shouldIconPulse: true,
       borderRadius: BorderRadius.circular(20),
@@ -169,7 +169,7 @@ class TycoonToastHelper {
   }
 
   /// Get a weekly reward toast specifically for the RewardScreen
-  static TycoonToast createWeeklyReward({
+  static SynaptixToast createWeeklyReward({
     required int day,
     required String rewardType,
     required String rewardAmount,
@@ -200,7 +200,7 @@ class TycoonToastHelper {
         rewardColor = Colors.amber;
     }
 
-    return TycoonToast(
+    return SynaptixToast(
       title: 'Day $day Claimed!',
       message: '+$rewardAmount $rewardType earned',
       icon: Container(
@@ -264,12 +264,12 @@ class TycoonToastHelper {
         ),
       ),
       backgroundGradient:
-          TycoonToastThemeManager.getGradientForEvent(rewardType.toLowerCase()),
-      toastType: TycoonToastType.reward,
+          SynaptixToastThemeManager.getGradientForEvent(rewardType.toLowerCase()),
+      toastType: SynaptixToastType.reward,
       duration: duration,
       shouldIconPulse: true,
       borderRadius: BorderRadius.circular(16),
-      tycoonToastPosition: TycoonToastPosition.top,
+      tycoonToastPosition: SynaptixToastPosition.top,
       margin: EdgeInsets.fromLTRB(16, 40, 16, 16),
       padding: EdgeInsets.all(16),
       boxShadows: [
@@ -289,13 +289,13 @@ class TycoonToastHelper {
   }
 
   /// Get a toast with custom action button
-  static TycoonToast createAction({
+  static SynaptixToast createAction({
     required String message,
     required Widget button,
     String? title,
     Duration duration = const Duration(seconds: 4),
   }) {
-    return TycoonToast(
+    return SynaptixToast(
       title: title,
       message: message,
       mainButton: button,
@@ -307,7 +307,7 @@ class TycoonToastHelper {
           Colors.purple[500]!.withValues(alpha: 0.8),
         ],
       ),
-      toastType: TycoonToastType.custom,
+      toastType: SynaptixToastType.custom,
       duration: duration,
       borderRadius: BorderRadius.circular(16),
       padding: EdgeInsets.all(16),
@@ -315,14 +315,14 @@ class TycoonToastHelper {
   }
 
   /// Get a toast for loading states with progress
-  static TycoonToast createLoading({
+  static SynaptixToast createLoading({
     required String message,
     String? title,
     Duration? duration,
     AnimationController? progressIndicatorController,
     Color? progressIndicatorBackgroundColor,
   }) {
-    return TycoonToast(
+    return SynaptixToast(
       title: title ?? 'Loading...',
       message: message,
       icon: Container(
@@ -349,7 +349,7 @@ class TycoonToastHelper {
           Colors.teal[500]!.withValues(alpha: 0.8),
         ],
       ),
-      toastType: TycoonToastType.info,
+      toastType: SynaptixToastType.info,
       duration: duration,
       shouldIconPulse: false,
       borderRadius: BorderRadius.circular(16),
@@ -359,11 +359,11 @@ class TycoonToastHelper {
   }
 
   /// Get a toast for user input
-  static TycoonToast createInputToast({
+  static SynaptixToast createInputToast({
     required Form textForm,
     String? title,
   }) {
-    return TycoonToast(
+    return SynaptixToast(
       title: title,
       userInputForm: textForm,
       backgroundGradient: LinearGradient(
@@ -374,7 +374,7 @@ class TycoonToastHelper {
           Colors.green[500]!.withValues(alpha: 0.8),
         ],
       ),
-      toastType: TycoonToastType.custom,
+      toastType: SynaptixToastType.custom,
       duration: null,
       borderRadius: BorderRadius.circular(16),
       padding: EdgeInsets.all(16),
@@ -382,13 +382,13 @@ class TycoonToastHelper {
   }
 
   /// Get a compact notification for quick feedback
-  static TycoonToast createCompact({
+  static SynaptixToast createCompact({
     required String message,
     IconData? icon,
     Color? color,
     Duration duration = const Duration(seconds: 2),
   }) {
-    return TycoonToast(
+    return SynaptixToast(
       message: message,
       icon: icon != null ? Icon(icon, color: Colors.white, size: 18) : null,
       backgroundGradient: LinearGradient(
@@ -397,7 +397,7 @@ class TycoonToastHelper {
           (color ?? Colors.grey).withValues(alpha: 0.7),
         ],
       ),
-      toastType: TycoonToastType.custom,
+      toastType: SynaptixToastType.custom,
       duration: duration,
       borderRadius: BorderRadius.circular(12),
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),

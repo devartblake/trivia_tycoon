@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/ui_components/tycoon_toast/tycoon_toast.dart';
+import 'package:trivia_tycoon/ui_components/synaptix_toast/synaptix_toast.dart';
 
 Size? getWidgetSize(GlobalKey key) {
   final renderBox = key.currentContext?.findRenderObject() as RenderBox?;
   return renderBox?.size;
 }
 
-TycoonToast showSuccessToast(
+SynaptixToast showSuccessToast(
   BuildContext context,
   String title,
   String message, [
   Duration? duration,
 ]) {
-  return TycoonToast(
+  return SynaptixToast(
     title: title,
     message: message,
     icon: const Icon(
@@ -28,8 +28,8 @@ TycoonToast showSuccessToast(
   )..show(context);
 }
 
-TycoonToast showErrorToast(BuildContext context, String title, String message) {
-  return TycoonToast(
+SynaptixToast showErrorToast(BuildContext context, String title, String message) {
+  return SynaptixToast(
     title: title,
     message: message,
     icon: const Icon(

@@ -124,7 +124,7 @@ class TierManager {
       requiredXP: 100000,
       requiredLevel: 150,
       rewards: [
-        'Tycoon Badge',
+        'Synaptix Badge',
         '100000 Coins',
         '2000 Gems',
         'Exclusive Avatar'

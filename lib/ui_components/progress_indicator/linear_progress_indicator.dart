@@ -3,7 +3,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:trivia_tycoon/ui_components/progress_indicator/widget/progress_bar_painter.dart';
 
-class TycoonLinearProgressIndicator extends StatefulWidget {
+class SynaptixLinearProgressIndicator extends StatefulWidget {
   /// [value]: A double value representing the current progress percentage (0.0 to 1.0).
   final double value;
 
@@ -67,7 +67,7 @@ class TycoonLinearProgressIndicator extends StatefulWidget {
 
   final bool showGlowOnComplete;
 
-  const TycoonLinearProgressIndicator({
+  const SynaptixLinearProgressIndicator({
     super.key,
     required this.value,
     this.animationDuration = 500,
@@ -92,12 +92,12 @@ class TycoonLinearProgressIndicator extends StatefulWidget {
   });
 
   @override
-  State<TycoonLinearProgressIndicator> createState() =>
-      _TycoonLinearProgressIndicatorState();
+  State<SynaptixLinearProgressIndicator> createState() =>
+      _SynaptixLinearProgressIndicatorState();
 }
 
-class _TycoonLinearProgressIndicatorState
-    extends State<TycoonLinearProgressIndicator> with TickerProviderStateMixin {
+class _SynaptixLinearProgressIndicatorState
+    extends State<SynaptixLinearProgressIndicator> with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
   late AnimationController _xpPulseController;
@@ -168,7 +168,7 @@ class _TycoonLinearProgressIndicatorState
   }
 
   @override
-  void didUpdateWidget(TycoonLinearProgressIndicator oldWidget) {
+  void didUpdateWidget(SynaptixLinearProgressIndicator oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.value != widget.value ||
         oldWidget.maxValue != widget.maxValue) {

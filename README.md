@@ -1,4 +1,4 @@
-# Trivia Tycoon
+# Synaptix
 
 [![Flutter](https://img.shields.io/badge/Flutter-3.x-blue)]()
 [![Dart](https://img.shields.io/badge/Dart-Stable-blue.svg)]()
@@ -7,7 +7,7 @@
 [![State Management: Riverpod](https://img.shields.io/badge/State%20Management-Riverpod-purple.svg)]()
 [![Status](https://img.shields.io/badge/Status-Active_Development-orange.svg)]()
 
-Trivia Tycoon is a cross-platform trivia ecosystem built with Flutter. The app features a **tier-based ranking system**, **dynamic XP missions**, **a honeycomb skill tree**, **an offline-first architecture**, **QR code systems**, and **full administrative tools** for managing questions, analytics, encryption, and user behaviors.
+Synaptix is a cross-platform learning and competition platform built with Flutter. The app features a **tier-based ranking system**, **dynamic XP missions**, **a neural pathways skill tree**, **an offline-first architecture**, **QR code systems**, and **full administrative tools** for managing questions, analytics, encryption, and user behaviors.
 
 This repository includes the entire player-facing and admin-facing Flutter application.
 

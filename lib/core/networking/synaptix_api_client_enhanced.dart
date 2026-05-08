@@ -7,18 +7,18 @@ import 'ws_protocol.dart';
 
 /// Unified client that combines REST (ApiService/Dio) with WebSocket (WsClient).
 ///
-/// Use [tycoonApiClientEnhancedProvider] to obtain an instance.
+/// Use [synaptixApiClientEnhancedProvider] to obtain an instance.
 ///
 /// Lifecycle:
 /// - Call [connectWs()] when the app enters the foreground or after login.
 /// - Call [disconnectWs()] on logout or when the app goes to background.
 /// - REST calls go through [api] (existing ApiService — caching, auth, retries).
 /// - Real-time messages go through [ws] (WsClient — reliability layer, ACKs).
-class TycoonApiClientEnhanced {
+class SynaptixApiClientEnhanced {
   final ApiService api;
   final WsClient ws;
 
-  TycoonApiClientEnhanced({required this.api, required this.ws});
+  SynaptixApiClientEnhanced({required this.api, required this.ws});
 
   // -------------------------------------------------------------------------
   // WebSocket lifecycle helpers

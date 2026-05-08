@@ -21,7 +21,7 @@ import '../../game/providers/economy_providers.dart';
 import '../../game/providers/core_providers.dart';
 import '../../game/utils/gradient_themes.dart';
 import '../../game/utils/greeting_utils.dart';
-import '../../ui_components/tycoon_toast/tycoon_toast.dart';
+import '../../ui_components/synaptix_toast/synaptix_toast.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../game/providers/wallet_providers.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
@@ -51,7 +51,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
   late final AnimationController _animationController;
   late final AnimationController _pulseController;
   late List<AnimationController> _cardAnimationControllers;
-  TycoonToast? _greetingToast;
+  SynaptixToast? _greetingToast;
   AppLifecycleListener? _lifecycleListener;
 
   @override
@@ -113,15 +113,15 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     final greeting = GreetingUtils.getGreeting(currentHour);
     final greetingIcon = GreetingUtils.getGreetingIcon(currentHour);
 
-    _greetingToast = TycoonToast(
+    _greetingToast = SynaptixToast(
       title: greeting,
       message: 'Welcome back, $userName!',
       icon: Icon(greetingIcon, color: Colors.white, size: 32),
       titleSize: 18,
       messageSize: 15,
       duration: const Duration(seconds: 3),
-      tycoonToastPosition: TycoonToastPosition.top,
-      tycoonToastStyle: TycoonToastStyle.floating,
+      tycoonToastPosition: SynaptixToastPosition.top,
+      tycoonToastStyle: SynaptixToastStyle.floating,
       backgroundGradient: GradientThemes.getGreetingGradient(ageGroup),
       shouldIconPulse: true,
       margin: const EdgeInsets.only(top: 60, left: 16, right: 16),

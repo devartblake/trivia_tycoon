@@ -178,7 +178,7 @@ class MissionCardWithSwapButton extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    TycoonLinearProgressIndicator(
+                    SynaptixLinearProgressIndicator(
                       value: (currentProgress / currentTotal).clamp(0.0, 1.0),
                       maxValue: 1.0,
                       minHeight: 16,
@@ -608,7 +608,7 @@ class _ProgressBarWithText extends StatelessWidget {
 
     return SizedBox(
       height: compact ? 16 : 28,
-      child: TycoonLinearProgressIndicator(
+      child: SynaptixLinearProgressIndicator(
         value: value,
         maxValue: 1.0,
         minHeight: minHeight,

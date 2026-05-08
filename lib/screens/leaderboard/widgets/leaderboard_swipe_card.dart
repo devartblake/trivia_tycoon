@@ -159,7 +159,7 @@ class LeaderboardSwipeCard extends StatelessWidget {
       'Grandmaster',
       'Champion Circle',
       'Elite Division',
-      'Tycoon Hall',
+      'Synaptix Hall',
     ];
     return tier > 0 && tier < names.length ? names[tier] : 'Unknown';
   }
