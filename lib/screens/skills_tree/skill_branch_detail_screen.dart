@@ -295,11 +295,14 @@ class _SkillBranchDetailScreenState
 
   bool _shouldTickCooldown(SkillTreeState state, List<String> pathIds) {
     if (pathIds.isEmpty) return false;
-    final safeIndex = _pathIndex.clamp(0, pathIds.length - 1);
-    final node = state.graph.byId[pathIds[safeIndex]];
-    return node != null &&
-        node.unlocked &&
-        ref.read(skillCooldownServiceProvider).isOnCooldown(node.id);
+    final cooldowns = ref.read(skillCooldownServiceProvider);
+    for (final nodeId in pathIds) {
+      final node = state.graph.byId[nodeId];
+      if (node != null && node.unlocked && cooldowns.isOnCooldown(node.id)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   // Build VM using the centralized planner.
@@ -476,46 +479,56 @@ class _SkillBranchDetailScreenState
             ),
             const SizedBox(height: 12),
             Expanded(
-              child: ListView.builder(
-                itemCount: vm.order.length,
-                itemBuilder: (context, i) {
-                  final nodeId = vm.order[i];
-                  final node = vm.nodes.firstWhere((n) => n.id == nodeId);
-                  final canUnlock = vm.canUnlock[nodeId] ?? false;
+              child: ValueListenableBuilder<int>(
+                valueListenable: _cooldownTick,
+                builder: (_, __, ___) => ListView.builder(
+                  itemCount: vm.order.length,
+                  itemBuilder: (context, i) {
+                    final nodeId = vm.order[i];
+                    final node = vm.nodes.firstWhere((n) => n.id == nodeId);
+                    final canUnlock = vm.canUnlock[nodeId] ?? false;
+                    final cooldowns = ref.read(skillCooldownServiceProvider);
+                    final cooldownLabel = node.unlocked
+                        ? cooldowns.nextAvailableLabel(node.id)
+                        : null;
 
-                  return ListTile(
-                    dense: true,
-                    leading: CircleAvatar(
-                      backgroundColor:
-                          node.unlocked ? Colors.green : Colors.white12,
-                      child: Text('${i + 1}',
+                    return ListTile(
+                      dense: true,
+                      leading: CircleAvatar(
+                        backgroundColor:
+                            node.unlocked ? Colors.green : Colors.white12,
+                        child: Text('${i + 1}',
+                            style: const TextStyle(color: Colors.white)),
+                      ),
+                      title: Text(node.title,
                           style: const TextStyle(color: Colors.white)),
-                    ),
-                    title: Text(node.title,
-                        style: const TextStyle(color: Colors.white)),
-                    subtitle: Text(
-                      'Cost: ${node.cost} • Tier ${node.tier}',
-                      style:
-                          const TextStyle(color: Colors.white70, fontSize: 12),
-                    ),
-                    trailing: node.unlocked
-                        ? const Icon(Icons.check, color: Colors.green)
-                        : ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  canUnlock ? Colors.teal : Colors.grey,
+                      subtitle: Text(
+                        cooldownLabel == null
+                            ? 'Cost: ${node.cost} • Tier ${node.tier}'
+                            : 'Cost: ${node.cost} • Tier ${node.tier} • $cooldownLabel',
+                        style: const TextStyle(color: Colors.white70, fontSize: 12),
+                      ),
+                      trailing: node.unlocked
+                          ? cooldownLabel == null
+                              ? const Icon(Icons.check, color: Colors.green)
+                              : _CooldownChip(label: cooldownLabel)
+                          : ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    canUnlock ? Colors.teal : Colors.grey,
+                              ),
+                              onPressed: canUnlock
+                                  ? () {
+                                      _unlockSkill(node.id);
+                                      setState(() => _focusedId = node.id);
+                                    }
+                                  : null,
+                              child: const Text('Unlock'),
                             ),
-                            onPressed: canUnlock
-                                ? () {
-                                    _unlockSkill(node.id);
-                                    setState(() => _focusedId = node.id);
-                                  }
-                                : null,
-                            child: const Text('Unlock'),
-                          ),
-                    onTap: () => setState(() => _focusedId = node.id),
-                  );
-                },
+                      onTap: () => setState(() => _focusedId = node.id),
+                    );
+                  },
+                ),
               ),
             ),
           ],
@@ -555,13 +568,14 @@ class _SkillBranchDetailScreenState
         final canGoBack = safeIndex > 0;
         final canGoNext = safeIndex < total - 1;
 
+        final nextAvailableLabel = cooldowns.nextAvailableLabel(node.id);
         String status;
         if (!node.unlocked && missingPrereqs.isNotEmpty) {
           status = 'Requires: ${missingPrereqs.first.title}';
         } else if (!node.unlocked && playerXP < node.cost) {
           status = 'Need ${node.cost - playerXP} more XP';
-        } else if (node.unlocked && onCooldown) {
-          status = 'Cooldown: ${cooldowns.remainingLabel(node.id)}';
+        } else if (node.unlocked && nextAvailableLabel != null) {
+          status = nextAvailableLabel;
         } else if (node.unlocked) {
           status = 'Ready to use';
         } else {
@@ -633,7 +647,11 @@ class _SkillBranchDetailScreenState
                 const SizedBox(width: 8),
                 FilledButton(
                   onPressed: canUnlock || canUse ? handleAction : null,
-                  child: Text(node.unlocked ? 'Use' : 'Unlock'),
+                  child: Text(
+                    node.unlocked
+                        ? (onCooldown ? 'Cooldown' : 'Use')
+                        : 'Unlock',
+                  ),
                 ),
                 IconButton(
                   onPressed: canGoNext ? () => _goToStep(safeIndex + 1) : null,
@@ -901,6 +919,31 @@ class _SkillBranchDetailScreenState
       default:
         return const Color(0xFF6EE7F9);
     }
+  }
+}
+
+class _CooldownChip extends StatelessWidget {
+  final String label;
+  const _CooldownChip({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: const Color(0x33FFB300),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0x88FFB300)),
+      ),
+      child: Text(
+        label.replaceFirst('available in ', ''),
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
   }
 }
 
