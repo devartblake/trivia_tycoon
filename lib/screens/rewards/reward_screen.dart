@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
 import 'package:trivia_tycoon/screens/rewards/widgets/weekly_rewards_widget.dart';
+import '../../game/providers/game_providers.dart' show rewardSettingsServiceProvider;
+import '../../game/providers/profile_providers.dart' show coinBalanceProvider;
+import '../../game/providers/spin_providers.dart';
 import '../../ui_components/spin_wheel/services/spin_tracker.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
@@ -77,10 +79,9 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
 
   Future<void> _loadRewardData() async {
     try {
-      // Load data in parallel for better performance
       final results = await Future.wait([
         _checkDailyClaimStatus(),
-        EnhancedSpinTracker.getStatistics(),
+        ref.read(spinStatisticsProvider.future),
       ]);
 
       if (mounted) {
@@ -101,16 +102,9 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
   }
 
   Future<bool> _checkDailyClaimStatus() async {
-    final lastClaimDate = await AppSettings.getString('lastClaim');
-    if (lastClaimDate == null) return false;
-
-    final lastDate = DateTime.tryParse(lastClaimDate);
-    final now = DateTime.now();
-
-    return lastDate != null &&
-        lastDate.year == now.year &&
-        lastDate.month == now.month &&
-        lastDate.day == now.day;
+    final service = ref.read(rewardSettingsServiceProvider);
+    final isAvailable = await service.isDailyRewardAvailable();
+    return !isAvailable; // hasClaimedToday = daily reward NOT available
   }
 
   Future<void> _markRewardClaimed() async {
@@ -120,8 +114,14 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
       _claimController.reverse();
     });
 
-    final now = DateTime.now().toIso8601String();
-    await AppSettings.setString('lastClaim', now);
+    final service = ref.read(rewardSettingsServiceProvider);
+    final rewards = await service.claimDailyReward();
+    final coinsEarned = rewards['regularCurrency'] ?? 0;
+
+    if (coinsEarned > 0) {
+      final currentBalance = ref.read(coinBalanceProvider);
+      await ref.read(coinBalanceProvider.notifier).set(currentBalance + coinsEarned);
+    }
 
     if (mounted) {
       setState(() {
@@ -129,14 +129,15 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
         _claimedDuringThisSession = true;
       });
 
-      // Show success feedback
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Row(
             children: [
               Icon(Icons.check_circle, color: Colors.white),
               SizedBox(width: 8),
-              Text('Daily reward claimed!'),
+              Text(coinsEarned > 0
+                  ? 'Daily reward claimed! +$coinsEarned coins'
+                  : 'Daily reward claimed!'),
             ],
           ),
           backgroundColor: Colors.green,

@@ -1,43 +1,131 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../game/providers/game_providers.dart' show rewardSettingsServiceProvider;
+import '../../../game/providers/profile_providers.dart' show coinBalanceProvider;
+import '../../../core/services/settings/app_settings.dart';
 import '../../../ui_components/tycoon_toast/tycoon_toast_helper.dart';
 
-class WeeklyRewardsWidget extends StatelessWidget {
+class WeeklyRewardsWidget extends ConsumerStatefulWidget {
   const WeeklyRewardsWidget({super.key});
 
-  void _claimDayReward(BuildContext context, int day, String rewardType,
-      String amount, bool canClaim) {
-    if (!canClaim) {
-      // Show info toast for locked rewards
+  @override
+  ConsumerState<WeeklyRewardsWidget> createState() =>
+      _WeeklyRewardsWidgetState();
+}
+
+class _WeeklyRewardsWidgetState extends ConsumerState<WeeklyRewardsWidget> {
+  bool _isLoading = true;
+  // The highest day that has been claimed in the current 7-day cycle (0 = none).
+  int _claimedThroughDay = 0;
+  // Whether today's reward is still unclaimed.
+  bool _canClaimToday = false;
+
+  static const _dayKey = 'weeklyLoginDay';
+  static const _cycleStartKey = 'weeklyLoginCycleStart';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadState();
+  }
+
+  Future<void> _loadState() async {
+    final service = ref.read(rewardSettingsServiceProvider);
+    final canClaimToday = await service.isDailyRewardAvailable();
+
+    final dayStr = await AppSettings.getString(_dayKey);
+    final cycleStartStr = await AppSettings.getString(_cycleStartKey);
+
+    final now = DateTime.now();
+    final cycleStart =
+        cycleStartStr != null ? DateTime.tryParse(cycleStartStr) : null;
+    int claimedDay = dayStr != null ? (int.tryParse(dayStr) ?? 0) : 0;
+
+    // Reset if cycle is older than 7 days.
+    if (cycleStart != null && now.difference(cycleStart).inDays >= 7) {
+      claimedDay = 0;
+      await AppSettings.remove(_dayKey);
+      await AppSettings.remove(_cycleStartKey);
+    }
+
+    if (mounted) {
+      setState(() {
+        _claimedThroughDay = claimedDay;
+        _canClaimToday = canClaimToday;
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _claimDay(BuildContext context, int day) async {
+    final nextDay = _claimedThroughDay + 1;
+    if (!_canClaimToday || day != nextDay) {
+      // Show info for locked or already-claimed days
+      final msg = day <= _claimedThroughDay
+          ? 'Already claimed!'
+          : 'Complete Day ${day - 1} first.';
       TycoonToastHelper.createInformation(
-        title: 'Reward Locked',
-        message: 'Complete Day ${day - 1} to unlock this reward',
-        duration: Duration(seconds: 2),
+        title: day <= _claimedThroughDay ? 'Reward Claimed' : 'Reward Locked',
+        message: msg,
+        duration: const Duration(seconds: 2),
       ).show(context);
       return;
     }
 
-    // Add haptic feedback
     HapticFeedback.mediumImpact();
 
-    // Show the reward toast
+    final service = ref.read(rewardSettingsServiceProvider);
+    final rewards = await service.claimDailyReward();
+    final coinsEarned = rewards['regularCurrency'] ?? 0;
+
+    if (coinsEarned > 0) {
+      final currentBalance = ref.read(coinBalanceProvider);
+      await ref
+          .read(coinBalanceProvider.notifier)
+          .set(currentBalance + coinsEarned);
+    }
+
+    // Persist new cycle progress.
+    final now = DateTime.now();
+    if (_claimedThroughDay == 0) {
+      await AppSettings.setString(
+          _cycleStartKey, now.toIso8601String());
+    }
+    await AppSettings.setString(_dayKey, nextDay.toString());
+
+    if (mounted) {
+      setState(() {
+        _claimedThroughDay = nextDay;
+        _canClaimToday = false;
+      });
+    }
+
     TycoonToastHelper.createWeeklyReward(
       day: day,
-      rewardType: rewardType,
-      rewardAmount: amount,
-      duration: Duration(seconds: 4),
+      rewardType: 'Coins',
+      rewardAmount: coinsEarned.toString(),
+      duration: const Duration(seconds: 4),
     ).show(context);
-
-    // Here you would typically update the reward state
-    // For now, we'll just show the notification
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    if (_isLoading) {
+      return const SizedBox(
+        height: 100,
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    final nextClaimableDay = _claimedThroughDay + 1;
+    final dayText =
+        _claimedThroughDay > 0 ? 'Day $_claimedThroughDay/7' : 'Day 0/7';
+
     return Container(
-      padding: EdgeInsets.all(14),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -45,7 +133,7 @@ class WeeklyRewardsWidget extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -61,23 +149,24 @@ class WeeklyRewardsWidget extends StatelessWidget {
                   color: theme.colorScheme.secondary,
                   size: 20,
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Text(
                   'Weekly Rewards',
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: Colors.green.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    'Day 3/7',
-                    style: TextStyle(
+                    dayText,
+                    style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                       color: Colors.green,
@@ -86,327 +175,297 @@ class WeeklyRewardsWidget extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 8),
-
-            // First row - Days 1, 2, 3
+            const SizedBox(height: 8),
             Row(
               children: [
                 Expanded(
-                    child: _buildDayCard(1, 'Coins', '100',
-                        Icons.monetization_on, Colors.amber, true)),
-                SizedBox(width: 6),
-                Expanded(
                     child: _buildDayCard(
-                        2, 'Gems', '5', Icons.diamond, Colors.blue, true)),
-                SizedBox(width: 6),
+                        context, 1, 'Coins', '100', Icons.monetization_on,
+                        Colors.amber, nextClaimableDay)),
+                const SizedBox(width: 6),
                 Expanded(
-                    child: _buildDayCard(
-                        3, 'Boost', '1x', Icons.flash_on, Colors.orange, true)),
+                    child: _buildDayCard(context, 2, 'Gems', '5', Icons.diamond,
+                        Colors.blue, nextClaimableDay)),
+                const SizedBox(width: 6),
+                Expanded(
+                    child: _buildDayCard(context, 3, 'Boost', '1x',
+                        Icons.flash_on, Colors.orange, nextClaimableDay)),
               ],
             ),
-
-            SizedBox(height: 4),
-
-            // Second row - Days 4, 5, 6
+            const SizedBox(height: 4),
             Row(
               children: [
                 Expanded(
-                    child: _buildDayCard(4, 'Coins', '200',
-                        Icons.monetization_on, Colors.amber, false)),
-                SizedBox(width: 6),
-                Expanded(
                     child: _buildDayCard(
-                        5, 'Gems', '10', Icons.diamond, Colors.blue, false)),
-                SizedBox(width: 6),
+                        context, 4, 'Coins', '200', Icons.monetization_on,
+                        Colors.amber, nextClaimableDay)),
+                const SizedBox(width: 6),
                 Expanded(
-                    child: _buildDayCard(
-                        6, 'Spins', '3', Icons.casino, Colors.purple, false)),
+                    child: _buildDayCard(context, 5, 'Gems', '10', Icons.diamond,
+                        Colors.blue, nextClaimableDay)),
+                const SizedBox(width: 6),
+                Expanded(
+                    child: _buildDayCard(context, 6, 'Spins', '3', Icons.casino,
+                        Colors.purple, nextClaimableDay)),
               ],
             ),
-
-            SizedBox(height: 4),
-
-            // Third row - Day 7 (large card)
-            _buildDay7Card(),
+            const SizedBox(height: 4),
+            _buildDay7Card(context, nextClaimableDay),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildDayCard(int day, String rewardType, String amount, IconData icon,
-      Color color, bool claimed) {
-    // Determine if this card can be claimed (for demo purposes, days 1-3 are claimed, day 4 is claimable)
-    bool canClaim = day == 4 && !claimed; // Day 4 is ready to claim
+  Widget _buildDayCard(
+    BuildContext context,
+    int day,
+    String rewardType,
+    String amount,
+    IconData icon,
+    Color color,
+    int nextClaimableDay,
+  ) {
+    final claimed = day <= _claimedThroughDay;
+    final canClaim = _canClaimToday && day == nextClaimableDay;
 
-    return Builder(
-      builder: (BuildContext context) {
-        return GestureDetector(
-          onTap: () => _claimDayReward(
-            context,
-            day,
-            rewardType,
-            amount,
-            canClaim || claimed,
+    return GestureDetector(
+      onTap: () => _claimDay(context, day),
+      child: Container(
+        height: 90,
+        decoration: BoxDecoration(
+          color: claimed
+              ? color.withValues(alpha: 0.1)
+              : canClaim
+                  ? color.withValues(alpha: 0.15)
+                  : Colors.grey.shade100,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: claimed
+                ? color.withValues(alpha: 0.3)
+                : canClaim
+                    ? color.withValues(alpha: 0.4)
+                    : Colors.grey.shade300,
+            width: claimed || canClaim ? 2 : 1,
           ),
-          child: Container(
-            height: 90,
-            decoration: BoxDecoration(
-              color: claimed
-                  ? color.withValues(alpha: 0.1)
-                  : canClaim
-                      ? color.withValues(alpha: 0.15)
-                      : Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: claimed
-                    ? color.withValues(alpha: 0.3)
-                    : canClaim
-                        ? color.withValues(alpha: 0.4)
-                        : Colors.grey.shade300,
-                width: claimed || canClaim ? 2 : 1,
+        ),
+        child: Stack(
+          children: [
+            if (claimed)
+              Positioned(
+                top: 4,
+                right: 4,
+                child: Container(
+                  width: 16,
+                  height: 16,
+                  decoration: const BoxDecoration(
+                    color: Colors.green,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.check, size: 10, color: Colors.white),
+                ),
+              ),
+            if (canClaim)
+              Positioned(
+                top: 4,
+                right: 4,
+                child: Container(
+                  width: 16,
+                  height: 16,
+                  decoration: BoxDecoration(
+                    color: color,
+                    shape: BoxShape.circle,
+                  ),
+                  child:
+                      const Icon(Icons.star, size: 10, color: Colors.white),
+                ),
+              ),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: claimed || canClaim
+                          ? color.withValues(alpha: 0.2)
+                          : Colors.grey.shade300,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      icon,
+                      size: 16,
+                      color: claimed || canClaim ? color : Colors.grey.shade600,
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    'Day $day',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
+                      color:
+                          claimed || canClaim ? color : Colors.grey.shade600,
+                    ),
+                  ),
+                  Text(
+                    amount,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color:
+                          claimed || canClaim ? color : Colors.grey.shade600,
+                    ),
+                  ),
+                ],
               ),
             ),
-            child: Stack(
-              children: [
-                // Claimed checkmark
-                if (claimed)
-                  Positioned(
-                    top: 4,
-                    right: 4,
-                    child: Container(
-                      width: 16,
-                      height: 16,
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.check,
-                        size: 10,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-
-                // Available indicator for claimable rewards
-                if (canClaim)
-                  Positioned(
-                    top: 4,
-                    right: 4,
-                    child: Container(
-                      width: 16,
-                      height: 16,
-                      decoration: BoxDecoration(
-                        color: color,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.star,
-                        size: 10,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-
-                // Main content
-                Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: claimed || canClaim
-                              ? color.withValues(alpha: 0.2)
-                              : Colors.grey.shade300,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          icon,
-                          size: 16,
-                          color: claimed || canClaim
-                              ? color
-                              : Colors.grey.shade600,
-                        ),
-                      ),
-                      SizedBox(height: 3),
-                      Text(
-                        'Day $day',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
-                          color: claimed || canClaim
-                              ? color
-                              : Colors.grey.shade600,
-                        ),
-                      ),
-                      Text(
-                        amount,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: claimed || canClaim
-                              ? color
-                              : Colors.grey.shade600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
 
-  Widget _buildDay7Card() {
-    return Builder(
-      builder: (BuildContext context) {
-        return GestureDetector(
-          onTap: () => _claimDayReward(
-            context,
-            7,
-            'Mystery Box',
-            '1',
-            false, // Day 7 is locked
+  Widget _buildDay7Card(BuildContext context, int nextClaimableDay) {
+    final claimed = _claimedThroughDay >= 7;
+    final canClaim = _canClaimToday && nextClaimableDay == 7;
+    final daysLeft = 7 - _claimedThroughDay;
+
+    return GestureDetector(
+      onTap: () => _claimDay(context, 7),
+      child: Container(
+        width: double.infinity,
+        height: 90,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: claimed
+                ? [Colors.green.shade400, Colors.green.shade600]
+                : canClaim
+                    ? [
+                        Colors.purple.shade400,
+                        Colors.pink.shade400,
+                        Colors.orange.shade400,
+                      ]
+                    : [
+                        Colors.purple.shade200,
+                        Colors.pink.shade200,
+                        Colors.orange.shade200,
+                      ],
           ),
-          child: Container(
-            width: double.infinity,
-            height: 90,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Colors.purple.shade400,
-                  Colors.pink.shade400,
-                  Colors.orange.shade400,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.purple.withValues(alpha: 0.3),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: CustomPaint(
+                painter: _BackgroundPatternPainter(),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'DAY 7',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                        Text(
+                          'GRAND PRIZE',
+                          style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.9),
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.2),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            claimed ? Icons.check_circle : Icons.card_giftcard,
+                            size: 20,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          claimed ? 'Claimed!' : 'Mystery Box',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.2),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            claimed || canClaim ? Icons.lock_open : Icons.lock,
+                            size: 18,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        if (!claimed)
+                          Text(
+                            canClaim ? 'Claim!' : '$daysLeft days',
+                            style: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.9),
+                              fontSize: 9,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.purple.withValues(alpha: 0.3),
-                  blurRadius: 12,
-                  offset: Offset(0, 4),
-                ),
-              ],
             ),
-            child: Stack(
-              children: [
-                // Background pattern
-                Positioned.fill(
-                  child: CustomPaint(
-                    painter: _BackgroundPatternPainter(),
-                  ),
-                ),
-
-                // Content
-                Padding(
-                  padding: EdgeInsets.all(12),
-                  child: Row(
-                    children: [
-                      // Left side - Day info
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'DAY 7',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 1.2,
-                              ),
-                            ),
-                            Text(
-                              'GRAND PRIZE',
-                              style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.9),
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      // Center - Reward info
-                      Expanded(
-                        flex: 3,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.2),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.card_giftcard,
-                                size: 20,
-                                color: Colors.white,
-                              ),
-                            ),
-                            SizedBox(height: 2),
-                            Text(
-                              'Mystery Box',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      // Right side - Lock/Status
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(6),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.2),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.lock,
-                                size: 18,
-                                color: Colors.white,
-                              ),
-                            ),
-                            SizedBox(height: 2),
-                            Text(
-                              '4 days',
-                              style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.9),
-                                fontSize: 9,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
 }
@@ -418,7 +477,6 @@ class _BackgroundPatternPainter extends CustomPainter {
       ..color = Colors.white.withValues(alpha: 0.1)
       ..strokeWidth = 1;
 
-    // Draw diagonal lines pattern
     for (double i = -size.height; i < size.width + size.height; i += 20) {
       canvas.drawLine(
         Offset(i, 0),
