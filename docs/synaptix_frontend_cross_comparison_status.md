@@ -165,14 +165,16 @@ Still useful before beta:
 - stronger release-level QA on all core screens
 
 ### 5.4 Optional Packet E frontend cleanup
-Partially complete (commit `65b9f4d`):
+Workstream 1 complete (commit `79bc788`, 2026-05-08); Workstream 2 blocked:
 - ✅ `TriviaTycoonApp` -> `SynaptixApp` — renamed in `main.dart`
 - ✅ All user-visible "Trivia Tycoon" strings updated to Synaptix
 - ✅ Android label + iOS CFBundleDisplayName → "Synaptix"
 - ✅ Help screen URLs/emails → synaptix.app domain
 - ✅ Profile, invite, admin email updated
-- Deferred: `package:trivia_tycoon/...` internal import rename
-- Deferred: internal symbol cleanup
+- ✅ **Internal symbol cleanup complete (Workstream 1)** — `tycoon_toast/` → `synaptix_toast/`, all `TycoonToast*`/`TycoonApiClientEnhanced`/`TycoonLinearProgressIndicator` symbols renamed, `LoginMessages` constants renamed, `tTriviaGameImage` renamed, comment/string cleanup across 29 files total
+- ✅ `pubspec.yaml` description updated to `"Synaptix — Train. Compete. Grow."`
+- ✅ `README.md` title and opening paragraph updated
+- ⏸️ Blocked: `package:trivia_tycoon/...` internal import rename (Workstream 2) — awaiting store/legal plan for bundle ID change
 
 ---
 
@@ -233,8 +235,15 @@ The frontend plan shows the Synaptix rebrand is complete at UI level, but backen
 
 ## 8. Final frontend assessment
 
+**Last updated: 2026-05-08**
+
 ### Completed and mostly independent
-The frontend product-layer migration is largely complete.
+The frontend product-layer migration is largely complete, including Packet E Workstream 1.
+
+Completed since last update (2026-05-08):
+- ✅ Packet E Workstream 1 — internal symbol cleanup (commit `79bc788`)
+- ✅ Spin wheel redesign — `WheelWidget` pie-chart renderer, fixed pointer/needle, gesture spin, `SpinWheelApiService`, `SegmentLoader` backend wiring
+- ✅ Secure channel scaffolding — `lib/core/security/` (models, service, session store, payload codec, exceptions) + `EncryptedApiClient`
 
 ### Completed but cross-stack dependent
 Preferences and analytics alignment appear ready, pending final verification.
@@ -242,10 +251,13 @@ Preferences and analytics alignment appear ready, pending final verification.
 ### Still open
 The biggest unfinished frontend-adjacent work is:
 - ~~retention~~ ✅ basic retention hooks implemented
+- ~~internal symbol cleanup (Workstream 1)~~ ✅ complete (commit `79bc788`)
 - real backend economy integration
 - crypto UX
 - final QA hardening
-- sound cue layer
+- sound cue layer (Hub complete; broader surface coverage remaining)
+- secure channel endpoint rollout + tests
+- Workstream 2 (package root rename) — blocked on store plan
 
 ---
 
@@ -286,4 +298,10 @@ The biggest unfinished frontend-adjacent work is:
 - [ ] Economy UI integrated against authoritative backend economy state.
 - [ ] Reward reconciliation flow validated.
 - [ ] Store outcomes validated against backend settlement behavior.
+
+### E. Technical debt (Packet E)
+- [x] Packet E Workstream 1 — internal symbol cleanup complete (commit `79bc788`, 2026-05-08).
+- [ ] Packet E Workstream 2 — package root rename (`package:trivia_tycoon/` → `package:synaptix/`, bundle ID change). Blocked on store/legal plan.
+- [ ] Secure channel endpoint rollout (one non-critical endpoint first, then phase to refresh/match/economy/messages).
+- [ ] Secure channel tests (wrong nonce/sequence, expiry renewal, logout clear, web fallback, payload perf).
 - [ ] Crypto UX deferred or implemented based on backend readiness decision.

@@ -1,6 +1,6 @@
 # Remaining Tasks & Work Backlog
 
-_Last updated: 2026-04-29 (Unified Personalization Layer complete: core services + admin endpoints + gameplay/store/notification hooks)_
+_Last updated: 2026-05-08 — Packet E Workstream 1 complete (`79bc788`); spin wheel redesign complete; secure channel scaffolded_
 
 > This file is the canonical "what is left to do" reference.
 > For completed work, see [`docs/ALPHA_TASK_AUDIT.md`](ALPHA_TASK_AUDIT.md).
@@ -34,7 +34,11 @@ _Last updated: 2026-04-29 (Unified Personalization Layer complete: core services
 | Sprint 1 - Auth/profile integration verification | Medium | Partially improved; live backend verification still needed | Yes — needs live server |
 | Sprint 2 - Networking layer (Flutter) | High | Not started | No |
 | Synaptix runtime validation | Medium | Blocked | Yes — needs device + backend |
+| **Packet E Workstream 1 (symbol cleanup)** | **Low** | **Complete — `79bc788` (2026-05-08)** | **No** |
+| Packet E Workstream 2 (package root rename) | Deferred | Blocked — awaiting store plan | Yes — needs store/legal plan |
 | Backend Packet E (namespace rename) | Deferred | Not started | Intentional deferral |
+| **Spin wheel redesign** | **Medium** | **Complete** | **No** |
+| **Secure channel scaffolding** | **High** | **Complete (scaffolded); rollout pending** | **No** |
 
 ---
 
@@ -448,12 +452,12 @@ Status is improved but still requires explicit live verification:
 
 ## 6. Sprint 2 - Networking Layer
 
-Not started. Estimated ~70 min.
+Note: `web_socket_channel: ^3.0.3` and `uuid: ^4.5.2` are already present in `pubspec.yaml`. `lib/core/networking/` contains `encrypted_api_client.dart` (secure channel). Verify remaining networking file gaps before marking complete.
 
-- [ ] Copy 4 networking files into `lib/core/networking/`
-- [ ] Add `web_socket_channel` and `uuid` to `pubspec.yaml`
-- [ ] Add 3 new Riverpod providers (WebSocket connection, message stream, reconnect logic)
+- [ ] Confirm 4 core networking files are in `lib/core/networking/` (WebSocket connection, message stream, reconnect logic)
+- [ ] Add 3 new Riverpod providers (WebSocket connection, message stream, reconnect logic) if not already present
 - [ ] Integrate with existing HTTP layer (`AuthHttpClient` -> `HttpClient` -> WebSocket upgrade)
+- [x] `web_socket_channel` and `uuid` in `pubspec.yaml` — already present
 
 ---
 
@@ -473,7 +477,26 @@ Curl CONNECT tunnel failure blocks live smoke-checking in CI. Flutter SDK not on
 
 ---
 
-## 8. Synaptix Backend - Packet E (Deferred)
+## 8. Packet E — Deep Technical Rename
+
+### 8a. Frontend Workstream 1 (Symbol Cleanup) ✅ COMPLETE — `79bc788` (2026-05-08)
+
+All internal Dart class/enum/constant/file/folder names referencing old branding renamed. 29 files changed. See `docs/SYNAPTIX_PACKET_E_FRONTEND_STATUS.md` Section 9.5 for full item list.
+
+Key areas cleaned up: `tycoon_toast/` folder → `synaptix_toast/`, `TycoonToast*` → `SynaptixToast*`, `TycoonApiClientEnhanced` → `SynaptixApiClientEnhanced`, `TycoonLinearProgressIndicator` → `SynaptixLinearProgressIndicator`, `LoginMessages` toast constants, `tTriviaGameImage` constant, comment/string updates across 5 additional files, `pubspec.yaml` description, `README.md`.
+
+**Intentionally NOT changed:** `trivia_tycoon_group` notification channel key (Android OS-persisted), `package:trivia_tycoon/` imports (Workstream 2 scope).
+
+### 8b. Frontend Workstream 2 (Package Root Rename) ⏸️ BLOCKED — awaiting store plan
+
+- [ ] `pubspec.yaml` `name: trivia_tycoon` → `synaptix`
+- [ ] 564 `package:trivia_tycoon/` import occurrences updated
+- [ ] Android application ID: `com.theoreticalmindstech.trivia_tycoon` → `com.theoreticalmindstech.synaptix`
+- [ ] iOS bundle identifier: `com.theoreticalmindstech.triviaTycoon` → `com.theoreticalmindstech.synaptix`
+- [ ] Firebase / Google services config regenerated for new bundle IDs
+- [ ] Store transition plan agreed with product/legal (currently in discussion)
+
+### 8c. Backend Packet E (Namespace Rename) ⏸️ DEFERRED
 
 Intentionally deferred to after Alpha launch. No urgency.
 
@@ -552,6 +575,11 @@ or use conditional imports to provide web-safe stubs.
 | CI pipeline enforces coverage + lint + no raw prints | Not configured |
 | All source-code TODO/FIXME resolved | Done (0 remaining) |
 | Runtime validation of all Synaptix screens | Blocked (needs device) |
-| Sprint 2 networking layer | Not started |
+| Sprint 2 networking layer | Partially complete (`web_socket_channel` + `uuid` in pubspec; verify remaining file gaps) |
 | Remaining `dart:io` in screen-level files (web) | 19 files - app loads, affected screens throw |
 | Windows desktop prerequisite (`nuget.exe` for `flutter_inappwebview_windows`) | Pending on local machine |
+| Packet E Workstream 1 (symbol cleanup) | ✅ Complete — `79bc788` (2026-05-08) |
+| Packet E Workstream 2 (package root rename) | ⏸️ Blocked — awaiting store/legal plan |
+| Spin wheel redesign (pie-chart renderer, fixed needle, gesture spin) | ✅ Complete |
+| Secure channel (scaffolding) | ✅ Scaffolded; rollout to endpoints pending |
+| Secure channel (endpoint rollout + tests) | ❌ Not started |
