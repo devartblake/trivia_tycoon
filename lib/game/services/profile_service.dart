@@ -107,7 +107,10 @@ class ProfileService {
   }
 
   /// Returns the set of previously persisted unlocked skill node IDs.
-  /// Uses the in-memory cache when available; falls back to storage.
+  ///
+  /// Uses the in-memory cache populated during construction when available;
+  /// falls back to reading from storage and populates the cache as a side
+  /// effect so subsequent calls within the same instance are O(1).
   Future<Set<String>> loadUnlockedSkillIds() async {
     if (_persistedSkillIds.isNotEmpty) {
       return Set.unmodifiable(_persistedSkillIds);
