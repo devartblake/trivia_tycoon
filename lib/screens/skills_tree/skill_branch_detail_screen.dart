@@ -481,57 +481,60 @@ class _SkillBranchDetailScreenState
             Expanded(
               child: ValueListenableBuilder<int>(
                 valueListenable: _cooldownTick,
-                builder: (_, __, ___) => ListView.builder(
-                  itemCount: vm.order.length,
-                  itemBuilder: (context, i) {
-                    final nodeId = vm.order[i];
-                    final node = vm.nodes.firstWhere((n) => n.id == nodeId);
-                    final canUnlock = vm.canUnlock[nodeId] ?? false;
-                    final cooldowns = ref.read(skillCooldownServiceProvider);
-                    final cooldownLabel = node.unlocked
-                        ? cooldowns.nextAvailableLabel(node.id)
-                        : null;
-                    final cooldownChipLabel = node.unlocked
-                        ? cooldowns.nextAvailableChipLabel(node.id)
-                        : null;
+                builder: (_, __, ___) {
+                  final cooldowns = ref.read(skillCooldownServiceProvider);
+                  return ListView.builder(
+                    itemCount: vm.order.length,
+                    itemBuilder: (context, i) {
+                      final nodeId = vm.order[i];
+                      final node = vm.nodes.firstWhere((n) => n.id == nodeId);
+                      final canUnlock = vm.canUnlock[nodeId] ?? false;
+                      final cooldownLabel = node.unlocked
+                          ? cooldowns.nextAvailableLabel(node.id)
+                          : null;
+                      final cooldownChipLabel = node.unlocked
+                          ? cooldowns.nextAvailableChipLabel(node.id)
+                          : null;
 
-                    return ListTile(
-                      dense: true,
-                      leading: CircleAvatar(
-                        backgroundColor:
-                            node.unlocked ? Colors.green : Colors.white12,
-                        child: Text('${i + 1}',
+                      return ListTile(
+                        dense: true,
+                        leading: CircleAvatar(
+                          backgroundColor:
+                              node.unlocked ? Colors.green : Colors.white12,
+                          child: Text('${i + 1}',
+                              style: const TextStyle(color: Colors.white)),
+                        ),
+                        title: Text(node.title,
                             style: const TextStyle(color: Colors.white)),
-                      ),
-                      title: Text(node.title,
-                          style: const TextStyle(color: Colors.white)),
-                      subtitle: Text(
-                        cooldownLabel == null
-                            ? 'Cost: ${node.cost} • Tier ${node.tier}'
-                            : 'Cost: ${node.cost} • Tier ${node.tier} • $cooldownLabel',
-                        style: const TextStyle(color: Colors.white70, fontSize: 12),
-                      ),
-                      trailing: node.unlocked
-                          ? cooldownChipLabel == null
-                              ? const Icon(Icons.check, color: Colors.green)
-                              : _CooldownChip(label: cooldownChipLabel)
-                          : ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    canUnlock ? Colors.teal : Colors.grey,
+                        subtitle: Text(
+                          cooldownLabel == null
+                              ? 'Cost: ${node.cost} • Tier ${node.tier}'
+                              : 'Cost: ${node.cost} • Tier ${node.tier} • $cooldownLabel',
+                          style:
+                              const TextStyle(color: Colors.white70, fontSize: 12),
+                        ),
+                        trailing: node.unlocked
+                            ? cooldownChipLabel == null
+                                ? const Icon(Icons.check, color: Colors.green)
+                                : _CooldownChip(label: cooldownChipLabel)
+                            : ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      canUnlock ? Colors.teal : Colors.grey,
+                                ),
+                                onPressed: canUnlock
+                                    ? () {
+                                        _unlockSkill(node.id);
+                                        setState(() => _focusedId = node.id);
+                                      }
+                                    : null,
+                                child: const Text('Unlock'),
                               ),
-                              onPressed: canUnlock
-                                  ? () {
-                                      _unlockSkill(node.id);
-                                      setState(() => _focusedId = node.id);
-                                    }
-                                  : null,
-                              child: const Text('Unlock'),
-                            ),
-                      onTap: () => setState(() => _focusedId = node.id),
-                    );
-                  },
-                ),
+                        onTap: () => setState(() => _focusedId = node.id),
+                      );
+                    },
+                  );
+                },
               ),
             ),
           ],

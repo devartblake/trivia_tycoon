@@ -3,6 +3,8 @@ class SkillCooldownService {
 
   /// Formats a duration as `mm:ss` with minutes not capped at 59.
   static String formatRemaining(Duration duration) {
+    // Round up fractional seconds so active cooldowns don't display "00:00"
+    // until the cooldown has actually expired.
     final totalSeconds = (duration.inMilliseconds + 999) ~/ 1000;
     final mm = (totalSeconds ~/ 60).toString().padLeft(2, '0');
     final ss = (totalSeconds % 60).toString().padLeft(2, '0');
