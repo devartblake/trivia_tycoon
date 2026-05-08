@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../ui_components/hex_grid/index.dart';
 import '../logic/skill_effect_handler.dart';
 import '../models/skill_tree_graph.dart';
 import '../providers/core_providers.dart';
@@ -82,96 +83,99 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
     _computeLayout();
   }
 
-  // Radial BFS layout: master_hub at world origin, branches radiate outward.
+  // True axial hex grid layout: master_hub at world origin (0,0),
+  // 12 branch roots at ring-2, each branch extends outward in one of 6 directions.
   void _computeLayout() {
-    const double nodeSize = 144.0; // world-pixel diameter of each node (2 * _nodeRadius)
-    const double radialStep = 280.0; // world-pixel gap between successive rings
-    final positions = <String, Offset>{};
-    final graph = state.graph;
+    // Each node's (q, r) axial coordinate on a pointy-top hex grid.
+    // Ring-2 has exactly 12 cells — one per branch root.
+    const nodeAxial = <String, Coordinates>{
+      'master_hub':        Coordinates(0,  0),
+      // Scholar → NE (1,-1)
+      'sch_root':          Coordinates(2, -2),
+      'sch_faster_hint':   Coordinates(3, -3),
+      'sch_double_hint':   Coordinates(4, -4),
+      'sch_sage':          Coordinates(5, -5),
+      // Strategist → E (1,0)
+      'str_root':          Coordinates(2, -1),
+      'str_combo':         Coordinates(3, -1),
+      'lifeline_cooldown': Coordinates(4, -1),
+      'str_master':        Coordinates(5, -1),
+      // Combat → E (1,0)
+      'combat_root':       Coordinates(2,  0),
+      'combat_eraser':     Coordinates(3,  0),
+      'combat_glitch':     Coordinates(4,  0),
+      // XP → SE (0,1)
+      'xp_root':           Coordinates(1,  1),
+      'xp_boost_2':        Coordinates(1,  2),
+      'xp_burst':          Coordinates(1,  3),
+      'xp_grandmaster':    Coordinates(1,  4),
+      // Timer → SE (0,1)
+      'timer_root':        Coordinates(0,  2),
+      'timer_freeze':      Coordinates(0,  3),
+      'timer_power_play':  Coordinates(0,  4),
+      // Combo → SW (-1,1)
+      'combo_root':        Coordinates(-1,  2),
+      'combo_booster':     Coordinates(-2,  3),
+      'combo_gift':        Coordinates(-3,  4),
+      // Risk → SW (-1,1)
+      'risk_root':         Coordinates(-2,  2),
+      'risk_multiplier':   Coordinates(-3,  3),
+      'risk_supersonic':   Coordinates(-4,  4),
+      // Luck → W (-1,0)
+      'luck_root':         Coordinates(-2,  1),
+      'luck_immunity':     Coordinates(-3,  1),
+      'luck_streak_saver': Coordinates(-4,  1),
+      // Stealth → W (-1,0)
+      'stealth_root':      Coordinates(-2,  0),
+      'stealth_phantom':   Coordinates(-3,  0),
+      'stealth_decoy':     Coordinates(-4,  0),
+      // Knowledge → NW (0,-1)
+      'know_root':         Coordinates(-1, -1),
+      'know_specialist':   Coordinates(-1, -2),
+      'know_polymath':     Coordinates(-1, -3),
+      // Wildcard → NW (0,-1)
+      'wild_root':         Coordinates(0, -2),
+      'wild_chaos':        Coordinates(0, -3),
+      // General → NE (1,-1)
+      'gen_root':          Coordinates(1, -2),
+      'gen_versatile':     Coordinates(2, -3),
+      // Elite (cross-branch child of sch_sage + str_master) → continues NE
+      'elite_root':        Coordinates(6, -6),
+      'elite_scholar':     Coordinates(7, -7),
+      'elite_strategist':  Coordinates(7, -6),
+    };
 
+    const double hexSize = 100.0;
+    final graph = state.graph;
     if (graph.nodes.isEmpty) return;
 
-    // Find the hub node (the root with no incoming edges, preferring master_hub).
-    final hasIncoming = graph.edges.map((e) => e.toId).toSet();
-    final SkillNode hub = graph.nodes.firstWhere(
-      (n) => n.id == 'master_hub',
-      orElse: () => graph.nodes.firstWhere(
-        (n) => !hasIncoming.contains(n.id),
-        orElse: () => graph.nodes.first,
-      ),
-    );
+    final positions = <String, Offset>{};
+    final placed = <String>{};
 
-    positions[hub.id] = Offset.zero;
-
-    // Collect direct children of hub and compute first-ring radius such that
-    // adjacent nodes are at least nodeSize apart.
-    final hubChildren = graph.edges
-        .where((e) => e.fromId == hub.id)
-        .map((e) => e.toId)
-        .toList();
-
-    if (hubChildren.isEmpty) {
-      state = state.copyWith(positions: positions);
-      return;
-    }
-
-    final n = hubChildren.length;
-    final r0 = n == 1
-        ? radialStep
-        : math.max(radialStep, nodeSize / (2 * math.sin(math.pi / n)));
-
-    // BFS queue: (nodeId, centerAngle, angularSpread, radius)
-    final queue = <_LayoutEntry>[];
-    final placed = <String>{hub.id};
-
-    if (n == 1) {
-      queue.add(_LayoutEntry(hubChildren[0], -math.pi / 2, 2 * math.pi, r0));
-    } else {
-      final angleStep = 2 * math.pi / n;
-      for (int i = 0; i < n; i++) {
-        final angle = -math.pi / 2 + i * angleStep;
-        queue.add(_LayoutEntry(hubChildren[i], angle, angleStep, r0));
+    // Place all nodes with known axial coordinates.
+    for (final node in graph.nodes) {
+      final axial = nodeAxial[node.id];
+      if (axial != null) {
+        positions[node.id] = HexMetrics.axialToPixel(
+            axial.q, axial.r, hexSize, HexOrientation.pointy);
+        placed.add(node.id);
       }
     }
 
-    while (queue.isNotEmpty) {
-      final entry = queue.removeAt(0);
-      if (placed.contains(entry.nodeId)) continue;
-      placed.add(entry.nodeId);
-
-      positions[entry.nodeId] = Offset(
-        math.cos(entry.angle) * entry.radius,
-        math.sin(entry.angle) * entry.radius,
-      );
-
-      final children = graph.edges
-          .where((e) => e.fromId == entry.nodeId && !placed.contains(e.toId))
-          .map((e) => e.toId)
-          .toList();
-
-      if (children.isEmpty) continue;
-
-      final spread = math.min(entry.spread, 2 * math.pi / 3);
-      final childSpread = spread / children.length;
-      final nextRadius = entry.radius + radialStep;
-
-      for (int i = 0; i < children.length; i++) {
-        final childAngle =
-            entry.angle - spread / 2 + childSpread / 2 + i * childSpread;
-        queue.add(_LayoutEntry(children[i], childAngle, childSpread, nextRadius));
-      }
-    }
-
-    // Fallback: place any graph nodes unreachable from hub in an outer ring.
+    // Fallback radial BFS for any nodes not in the lookup table.
     final unplaced = graph.nodes.where((n) => !placed.contains(n.id)).toList();
     if (unplaced.isNotEmpty) {
-      final maxR = positions.values.map((o) => o.distance).reduce(math.max);
+      const double radialStep = 280.0;
+      final maxR = positions.isEmpty
+          ? 0.0
+          : positions.values.map((o) => o.distance).reduce(math.max);
       final fallbackR = maxR + radialStep;
       final step = 2 * math.pi / unplaced.length;
       for (int i = 0; i < unplaced.length; i++) {
+        final angle = -math.pi / 2 + i * step;
         positions[unplaced[i].id] = Offset(
-          math.cos(i * step) * fallbackR,
-          math.sin(i * step) * fallbackR,
+          math.cos(angle) * fallbackR,
+          math.sin(angle) * fallbackR,
         );
       }
     }
@@ -461,12 +465,4 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
       // ignore to avoid breaking
     }
   }
-}
-
-class _LayoutEntry {
-  final String nodeId;
-  final double angle;
-  final double spread;
-  final double radius;
-  const _LayoutEntry(this.nodeId, this.angle, this.spread, this.radius);
 }
