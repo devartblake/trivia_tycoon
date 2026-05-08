@@ -452,12 +452,13 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
   // ----- Profile Sync (optional, safe no-op if not provided) -----
   Future<void> _restoreProfile() async {
     // Restore via optional callback first (backward compat).
+    // Even when a graph is provided, continue with cooldown/XP restore and
+    // applying any persisted unlocked IDs on top.
     if (loadProfile != null) {
       try {
         final loaded = await loadProfile!.call();
         if (loaded != null) {
           state = state.copyWith(graph: loaded);
-          return;
         }
       } catch (_) {
         // ignore to avoid breaking
