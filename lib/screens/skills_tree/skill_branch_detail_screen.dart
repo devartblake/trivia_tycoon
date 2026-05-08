@@ -296,13 +296,10 @@ class _SkillBranchDetailScreenState
   bool _shouldTickCooldown(SkillTreeState state, List<String> pathIds) {
     if (pathIds.isEmpty) return false;
     final cooldowns = ref.read(skillCooldownServiceProvider);
-    for (final nodeId in pathIds) {
+    return pathIds.any((nodeId) {
       final node = state.graph.byId[nodeId];
-      if (node != null && node.unlocked && cooldowns.isOnCooldown(node.id)) {
-        return true;
-      }
-    }
-    return false;
+      return node != null && node.unlocked && cooldowns.isOnCooldown(node.id);
+    });
   }
 
   // Build VM using the centralized planner.

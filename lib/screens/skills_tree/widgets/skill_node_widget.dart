@@ -187,13 +187,14 @@ class SkillNodeWidget extends StatelessWidget {
       ],
     );
 
-    final badge = cooldownService.isOnCooldown(node.id)
+    final remaining = cooldownService.remaining(node.id);
+    final badge = remaining != null && remaining > Duration.zero
         ? Positioned(
             top: 6,
             right: 6,
             child: IgnorePointer(
               child: _CooldownBadge(
-                label: cooldownService.remainingLabel(node.id),
+                label: SkillCooldownService.formatRemaining(remaining),
                 color: base,
               ),
             ),
