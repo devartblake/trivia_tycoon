@@ -51,7 +51,11 @@ class ProfileService {
       }
     }
     final storedIds = await _storage.getStringList(_unlockedSkillIdsKey);
-    if (storedIds != null) _persistedSkillIds.addAll(storedIds);
+    if (storedIds != null &&
+        storedIds.isNotEmpty &&
+        _persistedSkillIds.isEmpty) {
+      _persistedSkillIds.addAll(storedIds);
+    }
   }
 
   // ---------- Profile operations ----------
