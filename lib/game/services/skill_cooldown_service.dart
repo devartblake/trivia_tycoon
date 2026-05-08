@@ -43,6 +43,13 @@ class SkillCooldownService {
     return 'Next available in ${formatRemaining(rem)}';
   }
 
+  /// Returns "Next mm:ss" while active; null when inactive.
+  String? nextAvailableChipLabel(String skillId) {
+    final rem = remaining(skillId);
+    if (rem == null || rem == Duration.zero) return null;
+    return 'Next ${formatRemaining(rem)}';
+  }
+
   /// Shorten an active cooldown on a specific skill by [reduction].
   void reduceCooldown(String skillId, Duration reduction) {
     final end = _expiry[skillId];

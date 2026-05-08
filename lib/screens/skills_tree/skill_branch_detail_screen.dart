@@ -491,9 +491,8 @@ class _SkillBranchDetailScreenState
                     final cooldownLabel = node.unlocked
                         ? cooldowns.nextAvailableLabel(node.id)
                         : null;
-                    final cooldownChipLabel = node.unlocked &&
-                            cooldowns.isOnCooldown(node.id)
-                        ? 'Next ${cooldowns.remainingLabel(node.id)}'
+                    final cooldownChipLabel = node.unlocked
+                        ? cooldowns.nextAvailableChipLabel(node.id)
                         : null;
 
                     return ListTile(
@@ -513,9 +512,9 @@ class _SkillBranchDetailScreenState
                         style: const TextStyle(color: Colors.white70, fontSize: 12),
                       ),
                       trailing: node.unlocked
-                          ? cooldownLabel == null
+                          ? cooldownChipLabel == null
                               ? const Icon(Icons.check, color: Colors.green)
-                              : _CooldownChip(label: cooldownChipLabel!)
+                              : _CooldownChip(label: cooldownChipLabel)
                           : ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
