@@ -7,8 +7,8 @@ import 'package:trivia_tycoon/core/services/social/backend_profile_social_servic
 // Test helpers
 // ---------------------------------------------------------------------------
 
-ApiService _fakeApi({
-  required Map<String, dynamic> response,
+ApiService _fakeApi<T>({
+  required T response,
   String? capturePath,
   void Function(String path, dynamic body, Map<String, dynamic> query)? onRequest,
 }) {
