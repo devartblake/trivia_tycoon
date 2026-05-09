@@ -1,5 +1,13 @@
+import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
+
 class SkillCooldownService {
+  static const _cooldownsStorageKey = 'skillCooldownExpiry';
+
   final Map<String, DateTime> _expiry = {};
+  final GeneralKeyValueStorageService? _storage;
+
+  SkillCooldownService({GeneralKeyValueStorageService? storage})
+      : _storage = storage;
 
   /// Formats a duration as `mm:ss` with minutes not capped at 59.
   static String formatRemaining(Duration duration) {
@@ -68,6 +76,35 @@ class SkillCooldownService {
     for (final key in _expiry.keys.toList()) {
       final reduced = _expiry[key]!.subtract(reduction);
       _expiry[key] = reduced.isBefore(now) ? now : reduced;
+    }
+  }
+
+  /// Persists all active (non-expired) cooldown end timestamps to local storage.
+  Future<void> persistCooldowns() async {
+    if (_storage == null) return;
+    final active = <String, dynamic>{};
+    final now = DateTime.now();
+    for (final entry in _expiry.entries) {
+      if (now.isBefore(entry.value)) {
+        active[entry.key] = entry.value.toIso8601String();
+      }
+    }
+    await _storage!.setJson(_cooldownsStorageKey, active);
+  }
+
+  /// Restores active cooldowns from local storage, ignoring already-expired entries.
+  Future<void> restoreCooldowns() async {
+    if (_storage == null) return;
+    final data = await _storage!.getJson(_cooldownsStorageKey);
+    if (data == null) return;
+    final now = DateTime.now();
+    for (final entry in data.entries) {
+      if (entry.value is String) {
+        final dt = DateTime.tryParse(entry.value as String);
+        if (dt != null && now.isBefore(dt)) {
+          _expiry[entry.key] = dt;
+        }
+      }
     }
   }
 

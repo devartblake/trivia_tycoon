@@ -54,6 +54,12 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
   final Future<void> Function(SkillTreeGraph graph)? saveProfile;
   final Future<SkillTreeGraph?> Function()? loadProfile;
 
+  /// Unlocked IDs restored from storage during [_restoreProfile].
+  /// Reapplied by [loadGraph] / [replaceGraph] so unlock state survives the
+  /// graph hot-swap that the production [skillTreeProvider] performs when
+  /// server data arrives after the controller is already constructed.
+  Set<String> _restoredUnlockIds = {};
+
   SkillTreeController(
     this.ref, {
     required SkillTreeGraph initialGraph,
@@ -70,8 +76,15 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
   }
 
   /// Swap in a new graph (e.g., a branch). Optionally recompute layout.
+  ///
+  /// Any unlock IDs that were restored from storage during initialisation are
+  /// reapplied so they are not lost when the real graph is hot-swapped in
+  /// after an async load (e.g. from [skillTreeProvider]).
   void loadGraph(SkillTreeGraph newGraph, {bool recomputeLayout = true}) {
-    state = state.copyWith(graph: newGraph, selectedId: null);
+    final graphToLoad = _restoredUnlockIds.isNotEmpty
+        ? newGraph.withUnlockedIds(_restoredUnlockIds)
+        : newGraph;
+    state = state.copyWith(graph: graphToLoad, selectedId: null);
     if (recomputeLayout) {
       _computeLayout();
     }
@@ -79,7 +92,10 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
 
   // ---- Reload Graph ----
   void replaceGraph(SkillTreeGraph g) {
-    state = state.copyWith(graph: g);
+    final graphToLoad = _restoredUnlockIds.isNotEmpty
+        ? g.withUnlockedIds(_restoredUnlockIds)
+        : g;
+    state = state.copyWith(graph: graphToLoad);
     _computeLayout();
   }
 
@@ -215,6 +231,7 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
       playerPoints: state.playerPoints - node.cost,
     );
     _persistProfile();
+    _persistUnlockedSkillIds();
     _persistUnlock(id);
   }
 
@@ -271,6 +288,7 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
     }
 
     _persistProfile();
+    _persistUnlockedSkillIds();
     _persistUnlock(nodeId);
   }
 
@@ -318,6 +336,7 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
 
       _persistProfile();
       _persistUseSkill(nodeId);
+      _persistSkillCooldowns();
       return true;
     } catch (_) {
       // Fallback for when services aren't available
@@ -360,6 +379,7 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
     }
 
     _persistProfile();
+    _persistUnlockedSkillIds();
     _persistRespec();
   }
 
@@ -447,14 +467,42 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
 
   // ----- Profile Sync (optional, safe no-op if not provided) -----
   Future<void> _restoreProfile() async {
-    if (loadProfile == null) return;
-    try {
-      final loaded = await loadProfile!.call();
-      if (loaded == null) return;
-      state = state.copyWith(graph: loaded);
-    } catch (_) {
-      // ignore to avoid breaking
+    // Restore via optional callback first (backward compat).
+    // Even when a graph is provided, continue with cooldown/XP restore and
+    // applying any persisted unlocked IDs on top.
+    if (loadProfile != null) {
+      try {
+        final loaded = await loadProfile!.call();
+        if (loaded != null) {
+          state = state.copyWith(graph: loaded);
+        }
+      } catch (_) {
+        // ignore to avoid breaking
+      }
     }
+
+    // Restore cooldown end timestamps from storage.
+    try {
+      await ref.read(skillCooldownServiceProvider).restoreCooldowns();
+    } catch (_) {}
+
+    // Restore unlocked skill IDs from ProfileService and apply to graph.
+    try {
+      final profileService = ref.read(profileServiceProvider);
+      final unlockedIds = await profileService.loadUnlockedSkillIds();
+      _restoredUnlockIds = Set.from(unlockedIds);
+      if (unlockedIds.isNotEmpty) {
+        state = state.copyWith(
+          graph: state.graph.withUnlockedIds(unlockedIds),
+        );
+      }
+    } catch (_) {}
+
+    // Sync reactive XP provider from XPService (which loads from storage).
+    try {
+      final xpService = ref.read(xpServiceProvider);
+      ref.read(playerXPProvider.notifier).state = xpService.playerXP;
+    } catch (_) {}
   }
 
   Future<void> _persistProfile() async {
@@ -464,5 +512,30 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
     } catch (_) {
       // ignore to avoid breaking
     }
+  }
+
+  /// Fire-and-forget: saves the current set of unlocked skill IDs to ProfileService.
+  void _persistUnlockedSkillIds() {
+    try {
+      final ids = state.graph.unlockedNodes.map((n) => n.id).toList();
+      unawaited(
+        ref
+            .read(profileServiceProvider)
+            .saveUnlockedSkillIds(ids)
+            .catchError((_) {}),
+      );
+    } catch (_) {}
+  }
+
+  /// Fire-and-forget: persists active cooldown end timestamps to storage.
+  void _persistSkillCooldowns() {
+    try {
+      unawaited(
+        ref
+            .read(skillCooldownServiceProvider)
+            .persistCooldowns()
+            .catchError((_) {}),
+      );
+    } catch (_) {}
   }
 }

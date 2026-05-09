@@ -256,4 +256,91 @@ void main() {
       expect(loadedFromFreshService, isNull);
     });
   });
+
+  group('ProfileService — unlocked skill IDs', () {
+    test('saveUnlockedSkillIds persists IDs; loadUnlockedSkillIds restores them',
+        () async {
+      final storage = _FakeStorage();
+
+      await _withRef<void>(
+        (ref, _) async {
+          final svc = ProfileService(ref, playerId: 'p1', displayName: 'A');
+          await svc.saveUnlockedSkillIds(['sch_root', 'xp_root']);
+          return;
+        },
+        overrides: [generalKeyValueStorageProvider.overrideWithValue(storage)],
+      );
+
+      final loaded = await _withRef<Set<String>>(
+        (ref, _) async {
+          final svc = ProfileService(ref, playerId: 'p1', displayName: 'A');
+          return svc.loadUnlockedSkillIds();
+        },
+        overrides: [generalKeyValueStorageProvider.overrideWithValue(storage)],
+      );
+
+      expect(loaded, containsAll(['sch_root', 'xp_root']));
+    });
+
+    test('loadUnlockedSkillIds returns empty set when nothing was saved',
+        () async {
+      final storage = _FakeStorage();
+
+      final loaded = await _withRef<Set<String>>(
+        (ref, _) async {
+          final svc = ProfileService(ref, playerId: 'p1', displayName: 'A');
+          return svc.loadUnlockedSkillIds();
+        },
+        overrides: [generalKeyValueStorageProvider.overrideWithValue(storage)],
+      );
+
+      expect(loaded, isEmpty);
+    });
+
+    test('saveUnlockedSkillIds replaces previous list', () async {
+      final storage = _FakeStorage();
+
+      await _withRef<void>(
+        (ref, _) async {
+          final svc = ProfileService(ref, playerId: 'p1', displayName: 'A');
+          await svc.saveUnlockedSkillIds(['old_node']);
+          await svc.saveUnlockedSkillIds(['new_node_1', 'new_node_2']);
+          return;
+        },
+        overrides: [generalKeyValueStorageProvider.overrideWithValue(storage)],
+      );
+
+      final loaded = await _withRef<Set<String>>(
+        (ref, _) async {
+          final svc = ProfileService(ref, playerId: 'p1', displayName: 'A');
+          return svc.loadUnlockedSkillIds();
+        },
+        overrides: [generalKeyValueStorageProvider.overrideWithValue(storage)],
+      );
+
+      expect(loaded, isNot(contains('old_node')));
+      expect(loaded, containsAll(['new_node_1', 'new_node_2']));
+    });
+
+    test(
+        'loadUnlockedSkillIds returns empty set on repeated calls after empty save',
+        () async {
+      final storage = _FakeStorage();
+
+      // Simulate a respec that clears all nodes.
+      await _withRef<void>(
+        (ref, _) async {
+          final svc = ProfileService(ref, playerId: 'p1', displayName: 'A');
+          await svc.saveUnlockedSkillIds([]); // save empty list
+          // Both calls should return empty without re-reading storage.
+          final first = await svc.loadUnlockedSkillIds();
+          final second = await svc.loadUnlockedSkillIds();
+          expect(first, isEmpty);
+          expect(second, isEmpty);
+          return;
+        },
+        overrides: [generalKeyValueStorageProvider.overrideWithValue(storage)],
+      );
+    });
+  });
 }
