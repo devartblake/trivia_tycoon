@@ -13,7 +13,7 @@ _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue 
 
 | Area | Priority | Status | Blocked? |
 |------|----------|--------|----------|
-| Frontend/backend alpha handoff | High | Store, profile/social, question gameplay complete; crypto + ML remain | No |
+| Frontend/backend alpha handoff | High | Store, profile/social, question gameplay, study hub complete; crypto + ML remain | No |
 | **3D Avatar purchase path (Browse → Buy → Download)** | **High** | **Complete** | **No** |
 | **Avatar handler unit tests (18 tests)** | **High** | **Complete — `Tycoon.Backend.Application.Tests/Avatars/AvatarHandlerTests.cs`** | **No** |
 | **MinIO catalog seeders (StoreItems, SkillNodes, SeasonRewards, Questions)** | **High** | **Complete** | **No** |
@@ -205,25 +205,14 @@ _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue 
   - decision on whether local fallback should remain in production once backend parity is proven
   - deeper observability metrics beyond the new source banner/logging (success ratios, latency, coverage drift)
 
-### 1f. Study Hub COMPLETE ✅ — all frontend surfaces implemented
-- Backend now supports:
-  - generated category study sets
-  - generated weak-area study sets
-  - favorites-backed generated study set
-  - due-review generated study set from persisted study card state
-  - custom saved study sets
-  - resumable study sessions
-  - flashcard/self-test mode persistence
-  - explicit flashcard interaction state persistence
-- Frontend still needed:
-  - `StudyHubScreen`
-  - `/study` route scaffolding
-  - favorites review UI
-  - category / weak-area / due-review Study entry points
-  - custom-set create/edit UI
-  - flashcard session UI consuming `StudySessionDto.interactions`
-  - self-test UI consuming `StudySessionDto.answeredQuestionIds`
-  - recent-session resume wiring
+### 1f. Study Hub COMPLETE ✅ — `7b18b03` (2026-05-09)
+- Frontend delivered:
+  - `StudyHubScreen` with "Continue Studying", "Quick Access" (Due for Review / Weak Areas / Favourites), "Browse by Category" chips, and "Create Set" FAB
+  - `/study/create` and `/study/set/:setId/edit` routes
+  - `StudyCustomSetScreen` — create/edit custom study sets with title, description, question search/selection
+  - `StudySetScreen` — session resume dialog, edit button for Custom sets, per-question favorites toggle
+  - `StudySessionScreen` (flashcard + self-test) — clears active session on completion
+  - `favoritedQuestionIdsProvider`, `activeStudySessionsProvider`, `studyCategoryListProvider` providers
 - Primary handoff:
   - `docs/study_frontend_backend_handoff_2026-04-18.md`
 
@@ -583,3 +572,4 @@ or use conditional imports to provide web-safe stubs.
 | Spin wheel redesign (pie-chart renderer, fixed needle, gesture spin) | ✅ Complete |
 | Secure channel (scaffolding) | ✅ Scaffolded; rollout to endpoints pending |
 | Secure channel (endpoint rollout + tests) | ❌ Not started |
+| Study Hub frontend (hub entry points, favorites, custom sets, session resume) | ✅ Complete — `7b18b03` (2026-05-09) |
