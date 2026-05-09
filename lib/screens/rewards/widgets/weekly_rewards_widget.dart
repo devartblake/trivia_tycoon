@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
+import '../../../core/manager/log_manager.dart';
 import '../../../game/providers/game_providers.dart' show rewardSettingsServiceProvider;
 import '../../../ui_components/synaptix_toast/synaptix_toast_helper.dart';
 
@@ -106,7 +107,9 @@ class _WeeklyRewardsWidgetState extends ConsumerState<WeeklyRewardsWidget> {
           _canClaimToday = false;
         });
       }
-    } catch (_) {}
+    } catch (e) {
+      LogManager.debug('Failed to claim weekly reward day $day: $e');
+    }
   }
 
   void _claimDayReward(BuildContext context, int day, String rewardType,
@@ -123,13 +126,11 @@ class _WeeklyRewardsWidgetState extends ConsumerState<WeeklyRewardsWidget> {
 
     HapticFeedback.mediumImpact();
 
-    final coinsEarned = int.tryParse(amount) ?? 0;
-
     // Show the reward toast
     SynaptixToastHelper.createWeeklyReward(
       day: day,
       rewardType: rewardType,
-      rewardAmount: coinsEarned > 0 ? coinsEarned.toString() : amount,
+      rewardAmount: amount,
       duration: const Duration(seconds: 4),
     ).show(context);
   }
