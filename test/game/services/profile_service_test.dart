@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
+import 'package:trivia_tycoon/game/providers/core_providers.dart';
 import 'package:trivia_tycoon/game/services/profile_service.dart';
 import 'package:trivia_tycoon/game/services/xp_service.dart';
 import 'package:trivia_tycoon/game/providers/xp_provider.dart';
@@ -15,6 +17,7 @@ import 'package:trivia_tycoon/game/providers/xp_provider.dart';
 Future<T> _withRef<T>(
   Future<T> Function(Ref ref, XPService xpService) body, {
   int startingXP = 0,
+  List<Override> overrides = const [],
 }) async {
   final xpService = XPService(startingPlayerXP: startingXP);
   late T result;
@@ -27,12 +30,43 @@ Future<T> _withRef<T>(
   });
 
   final container = ProviderContainer(
-    overrides: [xpServiceProvider.overrideWithValue(xpService)],
+    overrides: [
+      xpServiceProvider.overrideWithValue(xpService),
+      ...overrides,
+    ],
   );
   addTearDown(container.dispose);
   container.read(captureProvider); // triggers mounting
   await Future.delayed(Duration.zero); // let microtask run
   return result;
+}
+
+class _FakeStorage extends GeneralKeyValueStorageService {
+  final Map<String, dynamic> _store = {};
+
+  @override
+  Future<List<String>?> getStringList(String key) async {
+    final raw = _store[key];
+    if (raw is List<String>) return raw;
+    return null;
+  }
+
+  @override
+  Future<void> setStringList(String key, List<String> values) async {
+    _store[key] = List<String>.from(values);
+  }
+
+  @override
+  Future<Map<String, dynamic>?> getJson(String key) async {
+    final raw = _store[key];
+    if (raw is Map<String, dynamic>) return Map<String, dynamic>.from(raw);
+    return null;
+  }
+
+  @override
+  Future<void> setJson(String key, Map<String, dynamic> value) async {
+    _store[key] = Map<String, dynamic>.from(value);
+  }
 }
 
 /// Simpler sync helper: creates a ProfileService using a ProviderContainer-backed
@@ -163,6 +197,150 @@ void main() {
       final svc = _makeSyncService(container: container);
       xpService.addXP(300);
       expect(svc.getPlayerXP(), 300);
+    });
+  });
+
+  group('ProfileService — branch auto-path progress', () {
+    test('set persists and is available from a new service instance', () async {
+      final storage = _FakeStorage();
+      await _withRef<void>(
+        (ref, _) async {
+          final svc = ProfileService(ref, playerId: 'p1', displayName: 'A');
+          await svc.setBranchAutoPathNodeId('combat', 'combat_node_2');
+          expect(await svc.getBranchAutoPathNodeId('combat'), 'combat_node_2');
+          return;
+        },
+        overrides: [
+          generalKeyValueStorageProvider.overrideWithValue(storage),
+        ],
+      );
+
+      final loadedFromFreshService = await _withRef<String?>(
+        (ref, _) async {
+          final svc = ProfileService(ref, playerId: 'p1', displayName: 'A');
+          return svc.getBranchAutoPathNodeId('combat');
+        },
+        overrides: [
+          generalKeyValueStorageProvider.overrideWithValue(storage),
+        ],
+      );
+
+      expect(loadedFromFreshService, 'combat_node_2');
+    });
+
+    test('clear removes saved branch progress from storage', () async {
+      final storage = _FakeStorage();
+      await _withRef<void>(
+        (ref, _) async {
+          final svc = ProfileService(ref, playerId: 'p1', displayName: 'A');
+          await svc.setBranchAutoPathNodeId('combat', 'combat_node_2');
+          await svc.clearBranchAutoPathNodeId('combat');
+          expect(await svc.getBranchAutoPathNodeId('combat'), isNull);
+          return;
+        },
+        overrides: [
+          generalKeyValueStorageProvider.overrideWithValue(storage),
+        ],
+      );
+
+      final loadedFromFreshService = await _withRef<String?>(
+        (ref, _) async {
+          final svc = ProfileService(ref, playerId: 'p1', displayName: 'A');
+          return svc.getBranchAutoPathNodeId('combat');
+        },
+        overrides: [
+          generalKeyValueStorageProvider.overrideWithValue(storage),
+        ],
+      );
+
+      expect(loadedFromFreshService, isNull);
+    });
+  });
+
+  group('ProfileService — unlocked skill IDs', () {
+    test('saveUnlockedSkillIds persists IDs; loadUnlockedSkillIds restores them',
+        () async {
+      final storage = _FakeStorage();
+
+      await _withRef<void>(
+        (ref, _) async {
+          final svc = ProfileService(ref, playerId: 'p1', displayName: 'A');
+          await svc.saveUnlockedSkillIds(['sch_root', 'xp_root']);
+          return;
+        },
+        overrides: [generalKeyValueStorageProvider.overrideWithValue(storage)],
+      );
+
+      final loaded = await _withRef<Set<String>>(
+        (ref, _) async {
+          final svc = ProfileService(ref, playerId: 'p1', displayName: 'A');
+          return svc.loadUnlockedSkillIds();
+        },
+        overrides: [generalKeyValueStorageProvider.overrideWithValue(storage)],
+      );
+
+      expect(loaded, containsAll(['sch_root', 'xp_root']));
+    });
+
+    test('loadUnlockedSkillIds returns empty set when nothing was saved',
+        () async {
+      final storage = _FakeStorage();
+
+      final loaded = await _withRef<Set<String>>(
+        (ref, _) async {
+          final svc = ProfileService(ref, playerId: 'p1', displayName: 'A');
+          return svc.loadUnlockedSkillIds();
+        },
+        overrides: [generalKeyValueStorageProvider.overrideWithValue(storage)],
+      );
+
+      expect(loaded, isEmpty);
+    });
+
+    test('saveUnlockedSkillIds replaces previous list', () async {
+      final storage = _FakeStorage();
+
+      await _withRef<void>(
+        (ref, _) async {
+          final svc = ProfileService(ref, playerId: 'p1', displayName: 'A');
+          await svc.saveUnlockedSkillIds(['old_node']);
+          await svc.saveUnlockedSkillIds(['new_node_1', 'new_node_2']);
+          return;
+        },
+        overrides: [generalKeyValueStorageProvider.overrideWithValue(storage)],
+      );
+
+      final loaded = await _withRef<Set<String>>(
+        (ref, _) async {
+          final svc = ProfileService(ref, playerId: 'p1', displayName: 'A');
+          return svc.loadUnlockedSkillIds();
+        },
+        overrides: [generalKeyValueStorageProvider.overrideWithValue(storage)],
+      );
+
+      expect(loaded, isNot(contains('old_node')));
+      expect(loaded, containsAll(['new_node_1', 'new_node_2']));
+    });
+
+    test(
+        'loadUnlockedSkillIds returns empty set on repeated calls after empty save',
+        () async {
+      final storage = _FakeStorage();
+
+      // Simulate a respec that clears all nodes.
+      await _withRef<void>(
+        (ref, _) async {
+          final svc = ProfileService(ref, playerId: 'p1', displayName: 'A');
+          await svc.saveUnlockedSkillIds([]); // save empty list
+          // Both calls should return empty without re-reading storage.
+          final first = await svc.loadUnlockedSkillIds();
+          final second = await svc.loadUnlockedSkillIds();
+          expect(first, isEmpty);
+          expect(second, isEmpty);
+          return;
+        },
+        overrides: [generalKeyValueStorageProvider.overrideWithValue(storage)],
+      );
     });
   });
 }

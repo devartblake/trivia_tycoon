@@ -187,13 +187,14 @@ class SkillNodeWidget extends StatelessWidget {
       ],
     );
 
-    final badge = cooldownService.isOnCooldown(node.id)
+    final remaining = cooldownService.remaining(node.id);
+    final badge = remaining != null && remaining > Duration.zero
         ? Positioned(
             top: 6,
             right: 6,
             child: IgnorePointer(
               child: _CooldownBadge(
-                remaining: cooldownService.remaining(node.id)!,
+                label: SkillCooldownService.formatRemaining(remaining),
                 color: base,
               ),
             ),
@@ -299,18 +300,12 @@ class SkillNodeWidget extends StatelessWidget {
 }
 
 class _CooldownBadge extends StatelessWidget {
-  final Duration remaining;
+  final String label;
   final Color color;
-  const _CooldownBadge({required this.remaining, required this.color});
+  const _CooldownBadge({required this.label, required this.color});
 
   @override
   Widget build(BuildContext context) {
-    String mmss(Duration d) {
-      final m = d.inMinutes.remainder(60).toString().padLeft(2, '0');
-      final s = d.inSeconds.remainder(60).toString().padLeft(2, '0');
-      return '$m:$s';
-    }
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
@@ -319,7 +314,7 @@ class _CooldownBadge extends StatelessWidget {
         border: Border.all(color: color.withValues(alpha: 0.45), width: 1),
       ),
       child: Text(
-        mmss(remaining),
+        label,
         style: const TextStyle(fontSize: 10, color: Colors.white),
       ),
     );

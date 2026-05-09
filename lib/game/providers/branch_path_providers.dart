@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'profile_service_provider.dart';
 import 'package:trivia_tycoon/game/providers/skill_tree_provider.dart';
 import '../models/skill_tree_graph.dart';
 import '../planning/skill_branch_path_planner.dart';
@@ -36,6 +37,46 @@ final branchWorldCentersProvider =
 /// Backward-compatible alias for [branchWorldCentersProvider].
 /// Prefer using [branchWorldCentersProvider] directly.
 final branchCentersProvider = branchWorldCentersProvider;
+
+/// Saved auto-path progress for a branch, stored as nodeId.
+final branchSavedAutoPathNodeIdProvider =
+    FutureProvider.family<String?, String>((ref, branchId) {
+  return ref.watch(profileServiceProvider).getBranchAutoPathNodeId(branchId);
+});
+
+/// Persists (or clears) auto-path progress for a branch using nodeId.
+final branchPersistAutoPathNodeIdProvider =
+    Provider.family<Future<void> Function(String?), String>((ref, branchId) {
+  final profile = ref.watch(profileServiceProvider);
+  return (nodeId) {
+    if (nodeId == null || nodeId.isEmpty) {
+      return profile.clearBranchAutoPathNodeId(branchId);
+    }
+    return profile.setBranchAutoPathNodeId(branchId, nodeId);
+  };
+});
+
+/// Resolves initial auto-path step with the following precedence:
+/// query param step (when present) > saved node step > fallback step.
+int resolveInitialAutoPathStep({
+  required List<String> pathIds,
+  required bool hasStepQueryParam,
+  required int fallbackStep,
+  int? queryStep,
+  String? savedNodeId,
+}) {
+  if (pathIds.isEmpty) return 0;
+  if (hasStepQueryParam) {
+    final step = queryStep ?? 0;
+    return step.clamp(0, pathIds.length - 1);
+  }
+  if (savedNodeId != null && savedNodeId.isNotEmpty) {
+    final savedIndex = pathIds.indexOf(savedNodeId);
+    if (savedIndex >= 0) return savedIndex;
+    return fallbackStep.clamp(0, pathIds.length - 1);
+  }
+  return fallbackStep.clamp(0, pathIds.length - 1);
+}
 
 // Local helper to map groupId->category consistently with your app.
 SkillCategory _categoryFromGroupId(String groupId) {

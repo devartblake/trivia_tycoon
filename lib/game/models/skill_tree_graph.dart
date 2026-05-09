@@ -295,6 +295,25 @@ class SkillTreeGraph {
     );
   }
 
+  /// Returns a copy of this graph with nodes marked as unlocked/available
+  /// based on [unlockedIds]. IDs that no longer exist in the graph are
+  /// silently ignored (safe for missing/deleted nodes after schema changes).
+  SkillTreeGraph withUnlockedIds(Set<String> unlockedIds) {
+    if (unlockedIds.isEmpty) return this;
+    final updatedNodes = nodes.map((n) {
+      if (unlockedIds.contains(n.id)) {
+        return n.copyWith(unlocked: true, available: true);
+      }
+      // Mark as available if any direct prerequisite is in the unlocked set.
+      final hasUnlockedPrereq = edges
+          .where((e) => e.toId == n.id)
+          .any((e) => unlockedIds.contains(e.fromId));
+      if (hasUnlockedPrereq) return n.copyWith(available: true);
+      return n;
+    }).toList();
+    return SkillTreeGraph(nodes: updatedNodes, edges: edges, groups: groups);
+  }
+
   /// Factory constructor for loading from grouped JSON structure
   factory SkillTreeGraph.fromGroupedJson(Map<String, dynamic> json) {
     final nodes = <SkillNode>[];
@@ -319,9 +338,15 @@ class SkillTreeGraph {
 
       // Extract nodes from branches
       for (final branchEntry in branches.entries) {
+        final branchId = branchEntry.key;
         final branchNodes = branchEntry.value['nodes'] as List;
         for (final nodeData in branchNodes) {
-          nodes.add(SkillNode.fromJson(nodeData));
+          // Inject the branch key as branchId since the JSON node objects
+          // don't carry a branchId field — only a category field.
+          final nodeMap = Map<String, dynamic>.from(
+              nodeData as Map<String, dynamic>);
+          nodeMap['branchId'] ??= branchId;
+          nodes.add(SkillNode.fromJson(nodeMap));
         }
       }
     }
@@ -386,8 +411,12 @@ class SkillGroup {
 
 extension SkillTreeGraphBranch on SkillTreeGraph {
   SkillTreeGraph subgraphForBranch(String branchId) {
-    final ids =
-        nodes.where((n) => n.branchId == branchId).map((n) => n.id).toSet();
+    // Match by branchId if set; fall back to category.name for nodes loaded
+    // from flat JSON formats that don't carry an explicit branchId field.
+    final ids = nodes
+        .where((n) => (n.branchId ?? n.category.name) == branchId)
+        .map((n) => n.id)
+        .toSet();
     return SkillTreeGraph(
       nodes: nodes.where((n) => ids.contains(n.id)).toList(),
       edges: edges

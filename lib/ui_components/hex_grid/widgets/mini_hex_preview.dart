@@ -14,7 +14,8 @@ class MiniHexBranchPreview extends ConsumerWidget {
   final Color baseColor;
   final Color textColor;
   final bool highlightPath;
-  final List<String>? pathIds; // New parameter for explicit path IDs
+  final List<String>? pathIds;
+  final SkillTreeGraph? graphOverride;
 
   const MiniHexBranchPreview({
     super.key,
@@ -22,28 +23,28 @@ class MiniHexBranchPreview extends ConsumerWidget {
     required this.baseColor,
     required this.textColor,
     this.highlightPath = false,
-    this.pathIds, // New optional parameter
+    this.pathIds,
+    this.graphOverride,
   });
 
-  /// Factory constructor that uses real graph data instead of static demo
+  /// Factory constructor that uses the provided graph directly.
   factory MiniHexBranchPreview.fromGraph({
     Key? key,
     required SkillTreeGraph graph,
-    required String branchId, // Using branchId string instead of category enum
+    required String branchId,
     Color? baseColor,
     Color? textColor,
     bool highlightPath = false,
-    List<String>? pathIds, // New parameter
+    List<String>? pathIds,
   }) {
-    // For the factory, we can pre-compute some data if needed,
-    // but the main computation will still happen in build() to stay reactive
     return MiniHexBranchPreview(
       key: key,
       branchId: branchId,
       baseColor: baseColor ?? Colors.white24,
       textColor: textColor ?? Colors.white,
       highlightPath: highlightPath,
-      pathIds: pathIds, // Pass through pathIds
+      pathIds: pathIds,
+      graphOverride: graph,
     );
   }
 
@@ -55,7 +56,7 @@ class MiniHexBranchPreview extends ConsumerWidget {
     Color? baseColor,
     Color? textColor,
     bool highlightPath = false,
-    List<String>? pathIds, // New parameter
+    List<String>? pathIds,
   }) {
     return MiniHexBranchPreview.fromGraph(
       key: key,
@@ -64,14 +65,18 @@ class MiniHexBranchPreview extends ConsumerWidget {
       baseColor: baseColor,
       textColor: textColor,
       highlightPath: highlightPath,
-      pathIds: pathIds, // Pass through pathIds
+      pathIds: pathIds,
     );
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(skillTreeProvider);
-    final graph = state.graph;
+    final SkillTreeGraph graph;
+    if (graphOverride != null) {
+      graph = graphOverride!;
+    } else {
+      graph = ref.watch(skillTreeProvider.select((s) => s.graph));
+    }
 
     // Use the centralized helper function to compute recommended order
     final ordered = computeRecommendedOrderForBranch(graph, branchId);
@@ -187,12 +192,11 @@ class MiniHexBranchPreview extends ConsumerWidget {
                     pathIds: effectivePathIds!,
                     currentIndex: 0, // Start at beginning for mini preview
                     showFullPath: true,
+                    showDimMask: false,
                     fullPathWidth: 1.5,
                     stepPathWidth: 1.5,
                     fullPathColor: Colors.white54,
                     stepPathColor: Colors.white,
-                    dimMaskColor:
-                        const Color(0x00000000), // No dim mask for mini preview
                   ),
                 ),
             ],

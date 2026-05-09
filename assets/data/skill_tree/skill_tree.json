@@ -1,5 +1,38 @@
 {
   "skill_tree_groups": {
+    "root": {
+      "title": "Core Hub",
+      "description": "The central starting point for all skill branches",
+      "color": "#FFD700",
+      "branches": {
+        "hub": {
+          "branch_id": "hub",
+          "title": "Skill Hub",
+          "description": "Master all skills by starting here",
+          "color": "#FFD700",
+          "nodes": [
+            {
+              "id": "master_hub",
+              "title": "Skill Hub",
+              "description": "The starting point for all skill branches. Unlock any branch to begin your journey.",
+              "tier": 0,
+              "cost": 0,
+              "category": "general",
+              "effects": {},
+              "cooldown": null,
+              "lastUsed": null,
+              "unlocked": true,
+              "available": true,
+              "effectType": "custom",
+              "effectValue": 0.0,
+              "duration": null,
+              "effectTarget": null,
+              "effectTrigger": "passive"
+            }
+          ]
+        }
+      }
+    },
     "combat_focused": {
       "title": "Combat-Focused Branches",
       "description": "Direct gameplay mechanics and competitive advantages",
@@ -858,6 +891,19 @@
   },
 
   "edges": [
+    { "fromId": "master_hub", "toId": "sch_root" },
+    { "fromId": "master_hub", "toId": "str_root" },
+    { "fromId": "master_hub", "toId": "combat_root" },
+    { "fromId": "master_hub", "toId": "xp_root" },
+    { "fromId": "master_hub", "toId": "timer_root" },
+    { "fromId": "master_hub", "toId": "combo_root" },
+    { "fromId": "master_hub", "toId": "risk_root" },
+    { "fromId": "master_hub", "toId": "luck_root" },
+    { "fromId": "master_hub", "toId": "stealth_root" },
+    { "fromId": "master_hub", "toId": "know_root" },
+    { "fromId": "master_hub", "toId": "wild_root" },
+    { "fromId": "master_hub", "toId": "gen_root" },
+
     { "fromId": "sch_root", "toId": "sch_faster_hint" },
     { "fromId": "sch_faster_hint", "toId": "sch_double_hint" },
     { "fromId": "sch_double_hint", "toId": "sch_sage" },

@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../ui_components/hex_grid/index.dart';
 import '../logic/skill_effect_handler.dart';
 import '../models/skill_tree_graph.dart';
 import '../providers/core_providers.dart';
@@ -53,6 +54,12 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
   final Future<void> Function(SkillTreeGraph graph)? saveProfile;
   final Future<SkillTreeGraph?> Function()? loadProfile;
 
+  /// Unlocked IDs restored from storage during [_restoreProfile].
+  /// Reapplied by [loadGraph] / [replaceGraph] so unlock state survives the
+  /// graph hot-swap that the production [skillTreeProvider] performs when
+  /// server data arrives after the controller is already constructed.
+  Set<String> _restoredUnlockIds = {};
+
   SkillTreeController(
     this.ref, {
     required SkillTreeGraph initialGraph,
@@ -69,8 +76,15 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
   }
 
   /// Swap in a new graph (e.g., a branch). Optionally recompute layout.
+  ///
+  /// Any unlock IDs that were restored from storage during initialisation are
+  /// reapplied so they are not lost when the real graph is hot-swapped in
+  /// after an async load (e.g. from [skillTreeProvider]).
   void loadGraph(SkillTreeGraph newGraph, {bool recomputeLayout = true}) {
-    state = state.copyWith(graph: newGraph, selectedId: null);
+    final graphToLoad = _restoredUnlockIds.isNotEmpty
+        ? newGraph.withUnlockedIds(_restoredUnlockIds)
+        : newGraph;
+    state = state.copyWith(graph: graphToLoad, selectedId: null);
     if (recomputeLayout) {
       _computeLayout();
     }
@@ -78,39 +92,110 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
 
   // ---- Reload Graph ----
   void replaceGraph(SkillTreeGraph g) {
-    state = state.copyWith(graph: g);
+    final graphToLoad = _restoredUnlockIds.isNotEmpty
+        ? g.withUnlockedIds(_restoredUnlockIds)
+        : g;
+    state = state.copyWith(graph: graphToLoad);
     _computeLayout();
   }
 
-  // Hex-grid layout: pointy-top axial coordinates, same-category nodes adjacent.
+  // True axial hex grid layout: master_hub at world origin (0,0),
+  // 12 branch roots at ring-2, each branch extends outward in one of 6 directions.
   void _computeLayout() {
-    const double hexSize = 120.0;
+    // Each node's (q, r) axial coordinate on a pointy-top hex grid.
+    // Ring-2 has exactly 12 cells — one per branch root.
+    const nodeAxial = <String, Coordinates>{
+      'master_hub':        Coordinates(0,  0),
+      // Scholar → NE (1,-1)
+      'sch_root':          Coordinates(2, -2),
+      'sch_faster_hint':   Coordinates(3, -3),
+      'sch_double_hint':   Coordinates(4, -4),
+      'sch_sage':          Coordinates(5, -5),
+      // Strategist → E (1,0)
+      'str_root':          Coordinates(2, -1),
+      'str_combo':         Coordinates(3, -1),
+      'lifeline_cooldown': Coordinates(4, -1),
+      'str_master':        Coordinates(5, -1),
+      // Combat → E (1,0)
+      'combat_root':       Coordinates(2,  0),
+      'combat_eraser':     Coordinates(3,  0),
+      'combat_glitch':     Coordinates(4,  0),
+      // XP → SE (0,1)
+      'xp_root':           Coordinates(1,  1),
+      'xp_boost_2':        Coordinates(1,  2),
+      'xp_burst':          Coordinates(1,  3),
+      'xp_grandmaster':    Coordinates(1,  4),
+      // Timer → SE (0,1)
+      'timer_root':        Coordinates(0,  2),
+      'timer_freeze':      Coordinates(0,  3),
+      'timer_power_play':  Coordinates(0,  4),
+      // Combo → SW (-1,1)
+      'combo_root':        Coordinates(-1,  2),
+      'combo_booster':     Coordinates(-2,  3),
+      'combo_gift':        Coordinates(-3,  4),
+      // Risk → SW (-1,1)
+      'risk_root':         Coordinates(-2,  2),
+      'risk_multiplier':   Coordinates(-3,  3),
+      'risk_supersonic':   Coordinates(-4,  4),
+      // Luck → W (-1,0)
+      'luck_root':         Coordinates(-2,  1),
+      'luck_immunity':     Coordinates(-3,  1),
+      'luck_streak_saver': Coordinates(-4,  1),
+      // Stealth → W (-1,0)
+      'stealth_root':      Coordinates(-2,  0),
+      'stealth_phantom':   Coordinates(-3,  0),
+      'stealth_decoy':     Coordinates(-4,  0),
+      // Knowledge → NW (0,-1)
+      'know_root':         Coordinates(-1, -1),
+      'know_specialist':   Coordinates(-1, -2),
+      'know_polymath':     Coordinates(-1, -3),
+      // Wildcard → NW (0,-1)
+      'wild_root':         Coordinates(0, -2),
+      'wild_chaos':        Coordinates(0, -3),
+      // General → NE (1,-1)
+      'gen_root':          Coordinates(1, -2),
+      'gen_versatile':     Coordinates(2, -3),
+      // Elite (cross-branch child of sch_sage + str_master) → continues NE
+      'elite_root':        Coordinates(6, -6),
+      'elite_scholar':     Coordinates(7, -7),
+      'elite_strategist':  Coordinates(7, -6),
+    };
+
+    const double hexSize = 100.0;
+    final graph = state.graph;
+    if (graph.nodes.isEmpty) return;
+
     final positions = <String, Offset>{};
+    final placed = <String>{};
 
-    // Group by tier; within each tier sort by category then title so
-    // nodes of the same branch cluster together in the honeycomb.
-    final tiers = List.generate(state.graph.maxTier + 1, (_) => <SkillNode>[]);
-    for (final n in state.graph.nodes) {
-      tiers[n.tier].add(n);
-    }
-    for (var t = 0; t < tiers.length; t++) {
-      final row = List<SkillNode>.from(tiers[t])
-        ..sort((a, b) {
-          final c = a.category.name.compareTo(b.category.name);
-          return c != 0 ? c : a.title.compareTo(b.title);
-        });
-
-      // Compensate for pointy-top axial stagger: x = √3·size·(q + r/2).
-      // To keep each row visually centred on x=0: q_start = -(n-1)/2 - t/2.
-      final qStart = (-((row.length - 1) / 2.0) - (t / 2.0)).round();
-      for (var i = 0; i < row.length; i++) {
-        final q = qStart + i;
-        final r = t;
-        final x = math.sqrt(3) * hexSize * (q + r / 2.0);
-        final y = 1.5 * hexSize * r;
-        positions[row[i].id] = Offset(x, y);
+    // Place all nodes with known axial coordinates.
+    for (final node in graph.nodes) {
+      final axial = nodeAxial[node.id];
+      if (axial != null) {
+        positions[node.id] = HexMetrics.axialToPixel(
+            axial.q, axial.r, hexSize, HexOrientation.pointy);
+        placed.add(node.id);
       }
     }
+
+    // Fallback radial BFS for any nodes not in the lookup table.
+    final unplaced = graph.nodes.where((n) => !placed.contains(n.id)).toList();
+    if (unplaced.isNotEmpty) {
+      const double radialStep = 280.0;
+      final maxR = positions.isEmpty
+          ? 0.0
+          : positions.values.map((o) => o.distance).reduce(math.max);
+      final fallbackR = maxR + radialStep;
+      final step = 2 * math.pi / unplaced.length;
+      for (int i = 0; i < unplaced.length; i++) {
+        final angle = -math.pi / 2 + i * step;
+        positions[unplaced[i].id] = Offset(
+          math.cos(angle) * fallbackR,
+          math.sin(angle) * fallbackR,
+        );
+      }
+    }
+
     state = state.copyWith(positions: positions);
   }
 
@@ -146,6 +231,7 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
       playerPoints: state.playerPoints - node.cost,
     );
     _persistProfile();
+    _persistUnlockedSkillIds();
     _persistUnlock(id);
   }
 
@@ -202,6 +288,7 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
     }
 
     _persistProfile();
+    _persistUnlockedSkillIds();
     _persistUnlock(nodeId);
   }
 
@@ -232,6 +319,10 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
       final success = handler.triggerSkill(node);
       if (!success) return false;
 
+      // Keep reactive XP state in sync for skills that consume XP on use.
+      ref.read(playerXPProvider.notifier).state =
+          ref.read(xpServiceProvider).playerXP;
+
       // Update node state with usage timestamp
       final updatedNodes = state.graph.nodes.map((n) {
         if (n.id != node.id) return n;
@@ -245,6 +336,7 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
 
       _persistProfile();
       _persistUseSkill(nodeId);
+      _persistSkillCooldowns();
       return true;
     } catch (_) {
       // Fallback for when services aren't available
@@ -287,6 +379,7 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
     }
 
     _persistProfile();
+    _persistUnlockedSkillIds();
     _persistRespec();
   }
 
@@ -374,14 +467,42 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
 
   // ----- Profile Sync (optional, safe no-op if not provided) -----
   Future<void> _restoreProfile() async {
-    if (loadProfile == null) return;
-    try {
-      final loaded = await loadProfile!.call();
-      if (loaded == null) return;
-      state = state.copyWith(graph: loaded);
-    } catch (_) {
-      // ignore to avoid breaking
+    // Restore via optional callback first (backward compat).
+    // Even when a graph is provided, continue with cooldown/XP restore and
+    // applying any persisted unlocked IDs on top.
+    if (loadProfile != null) {
+      try {
+        final loaded = await loadProfile!.call();
+        if (loaded != null) {
+          state = state.copyWith(graph: loaded);
+        }
+      } catch (_) {
+        // ignore to avoid breaking
+      }
     }
+
+    // Restore cooldown end timestamps from storage.
+    try {
+      await ref.read(skillCooldownServiceProvider).restoreCooldowns();
+    } catch (_) {}
+
+    // Restore unlocked skill IDs from ProfileService and apply to graph.
+    try {
+      final profileService = ref.read(profileServiceProvider);
+      final unlockedIds = await profileService.loadUnlockedSkillIds();
+      _restoredUnlockIds = Set.from(unlockedIds);
+      if (unlockedIds.isNotEmpty) {
+        state = state.copyWith(
+          graph: state.graph.withUnlockedIds(unlockedIds),
+        );
+      }
+    } catch (_) {}
+
+    // Sync reactive XP provider from XPService (which loads from storage).
+    try {
+      final xpService = ref.read(xpServiceProvider);
+      ref.read(playerXPProvider.notifier).state = xpService.playerXP;
+    } catch (_) {}
   }
 
   Future<void> _persistProfile() async {
@@ -391,5 +512,30 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
     } catch (_) {
       // ignore to avoid breaking
     }
+  }
+
+  /// Fire-and-forget: saves the current set of unlocked skill IDs to ProfileService.
+  void _persistUnlockedSkillIds() {
+    try {
+      final ids = state.graph.unlockedNodes.map((n) => n.id).toList();
+      unawaited(
+        ref
+            .read(profileServiceProvider)
+            .saveUnlockedSkillIds(ids)
+            .catchError((_) {}),
+      );
+    } catch (_) {}
+  }
+
+  /// Fire-and-forget: persists active cooldown end timestamps to storage.
+  void _persistSkillCooldowns() {
+    try {
+      unawaited(
+        ref
+            .read(skillCooldownServiceProvider)
+            .persistCooldowns()
+            .catchError((_) {}),
+      );
+    } catch (_) {}
   }
 }

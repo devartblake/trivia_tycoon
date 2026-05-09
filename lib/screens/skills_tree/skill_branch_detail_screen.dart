@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import '../../../game/models/skill_tree_graph.dart';
 import '../../../game/controllers/skill_tree_controller.dart';
 import '../../game/planning/skill_branch_path_planner.dart';
 import '../../game/providers/branch_path_providers.dart';
+import '../../game/providers/skill_cooldown_service_provider.dart';
 import '../../game/providers/skill_tree_provider.dart';
 import '../../game/providers/xp_provider.dart';
 import '../../ui_components/hex_grid/math/hex_orientation.dart';
@@ -38,6 +40,7 @@ class _SkillBranchDetailScreenState
   final TransformationController _transform = TransformationController();
   late final ScrollController _listCtrl;
   static const double _nodeRadius = 40;
+  static const int _maxInitialStepIndex = 9999;
   /// Radius used for the fallback circle layout when node positions are absent.
   static const double _fallbackLayoutRadius = 260.0;
 
@@ -45,18 +48,26 @@ class _SkillBranchDetailScreenState
   bool _showPath = false;
   int _pathIndex = 0;
   bool _stepClampPending = false;
+  bool _cooldownSyncPending = false;
+  bool _initialStepHydrationPending = false;
+  bool _initialStepHydrated = false;
+  int _initialStepHydrationToken = 0;
+  bool _transformCentered = false;
 
   /// Overlay state management (ValueNotifiers for reactive updates)
   final ValueNotifier<bool> _showFullPath = ValueNotifier<bool>(false);
   final ValueNotifier<int> _currentStep = ValueNotifier<int>(0);
+  final ValueNotifier<int> _cooldownTick = ValueNotifier<int>(0);
+  Timer? _cooldownTimer;
 
   @override
   void initState() {
     super.initState();
     _transform.value = vmath.Matrix4.identity()..scale(0.9, 0.9);
     _showPath = widget.showPathInitially;
-    if (widget.initialStep != null)
-      _pathIndex = widget.initialStep!.clamp(0, 9999);
+    if (widget.initialStep != null) {
+      _pathIndex = widget.initialStep!.clamp(0, _maxInitialStepIndex);
+    }
 
     _listCtrl = ScrollController();
 
@@ -77,21 +88,36 @@ class _SkillBranchDetailScreenState
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Hydrate from query params if present (additional safety)
-    try {
-      final qs = GoRouterState.of(context).uri.queryParameters;
-      final step = int.tryParse(qs['step'] ?? '') ?? 0;
-      final showPath = (qs['showPath'] ?? '0') == '1';
-      _currentStep.value = step < 0 ? 0 : step;
-      _showFullPath.value = showPath;
-      // Sync with existing state
-      _pathIndex = _currentStep.value;
-      _showPath = _showFullPath.value;
-    } catch (_) {
-      // Safe fallback (no-op)
+  void didUpdateWidget(covariant SkillBranchDetailScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final branchChanged = oldWidget.branchId != widget.branchId;
+    final routeInputsChanged = oldWidget.initialStep != widget.initialStep ||
+        oldWidget.showPathInitially != widget.showPathInitially;
+    if (!branchChanged && !routeInputsChanged) return;
+
+    final initialStep = widget.initialStep?.clamp(0, _maxInitialStepIndex) ?? 0;
+    _initialStepHydrationToken++;
+    setState(() {
+      _focusedId = branchChanged ? null : _focusedId;
+      _showPath = widget.showPathInitially;
+      _pathIndex = initialStep;
+      _stepClampPending = false;
+      _cooldownSyncPending = false;
+      _initialStepHydrationPending = false;
+      _initialStepHydrated = false;
+      _showFullPath.value = _showPath;
+      _currentStep.value = _pathIndex;
+      if (branchChanged) _transformCentered = false;
+    });
+    if (branchChanged) {
+      ref.read(skillTreeProvider.notifier).select(null);
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _hydrateFromQueryParamsIfNeeded();
+      _clampStepIndex(ref.read(branchAutoPathProvider(widget.branchId)));
+    });
   }
 
   void _hydrateFromQueryParamsIfNeeded() {
@@ -119,6 +145,105 @@ class _SkillBranchDetailScreenState
     }
   }
 
+  bool _hasStepQueryParam() {
+    try {
+      return GoRouterState.of(context).uri.queryParameters.containsKey('step');
+    } catch (_) {
+      return false;
+    }
+  }
+
+  int? _readQueryStep() {
+    try {
+      return int.tryParse(GoRouterState.of(context).uri.queryParameters['step'] ?? '');
+    } catch (_) {
+      return null;
+    }
+  }
+
+  void _persistCurrentStep(String branchId, List<String> pathIds, int step) {
+    if (pathIds.isEmpty || step < 0 || step >= pathIds.length) return;
+    final nodeId = pathIds[step];
+    unawaited(_persistCurrentStepNodeId(branchId, nodeId));
+  }
+
+  Future<void> _persistCurrentStepNodeId(String branchId, String nodeId) async {
+    try {
+      await ref.read(branchPersistAutoPathNodeIdProvider(branchId))(nodeId);
+    } catch (e) {
+      debugPrint('Failed to persist auto-path step for $branchId: $e');
+    }
+  }
+
+  bool _pathIdsMatch(List<String> a, List<String> b) {
+    if (a.length != b.length) return false;
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) return false;
+    }
+    return true;
+  }
+
+  void _hydrateInitialStepFromQueryOrSaved(List<String> pathIds) {
+    if (_initialStepHydrated || _initialStepHydrationPending || pathIds.isEmpty) {
+      return;
+    }
+    final branchId = widget.branchId;
+    final hydrationToken = _initialStepHydrationToken;
+    final pathSnapshot = List<String>.from(pathIds);
+    _initialStepHydrationPending = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _initialStepHydrationPending = false;
+      if (!mounted ||
+          _initialStepHydrated ||
+          pathSnapshot.isEmpty ||
+          hydrationToken != _initialStepHydrationToken ||
+          widget.branchId != branchId ||
+          !_pathIdsMatch(ref.read(branchAutoPathProvider(branchId)), pathSnapshot)) {
+        return;
+      }
+      _initialStepHydrated = true;
+
+      final hasQueryStep = _hasStepQueryParam();
+      final queryStep = _readQueryStep();
+      String? savedNodeId;
+      if (!hasQueryStep) {
+        try {
+          savedNodeId = await ref
+              .read(branchSavedAutoPathNodeIdProvider(branchId).future);
+        } catch (_) {
+          savedNodeId = null;
+        }
+      }
+      if (!mounted ||
+          pathSnapshot.isEmpty ||
+          hydrationToken != _initialStepHydrationToken ||
+          widget.branchId != branchId ||
+          !_pathIdsMatch(ref.read(branchAutoPathProvider(branchId)), pathSnapshot)) {
+        return;
+      }
+
+      final resolvedStep = resolveInitialAutoPathStep(
+        pathIds: pathSnapshot,
+        hasStepQueryParam: hasQueryStep,
+        fallbackStep: _pathIndex,
+        queryStep: queryStep,
+        savedNodeId: savedNodeId,
+      );
+      final resolvedNodeId = pathSnapshot[resolvedStep];
+
+      setState(() {
+        _pathIndex = resolvedStep;
+        _currentStep.value = resolvedStep;
+        _focusedId = resolvedNodeId;
+      });
+      ref.read(skillTreeProvider.notifier).select(resolvedNodeId);
+
+      // When a previously saved node is missing (deleted/renamed), persisting
+      // the resolved step below rewrites storage with a valid node id.
+      _persistCurrentStep(branchId, pathSnapshot, resolvedStep);
+    });
+  }
+
   /// Clamps `_pathIndex` and `_currentStep` to the valid range for [pathIds].
   /// Safe to call outside of `build()` (e.g. from a post-frame callback or
   /// `initState`). Sets state and ValueNotifier only when the value changes.
@@ -131,12 +256,50 @@ class _SkillBranchDetailScreenState
 
   @override
   void dispose() {
+    _stopCooldownTicker();
     _stepClampPending = false;
+    _cooldownSyncPending = false;
     _transform.dispose();
     _listCtrl.dispose();
     _showFullPath.dispose();
     _currentStep.dispose();
+    _cooldownTick.dispose();
     super.dispose();
+  }
+
+  void _startCooldownTicker() {
+    if (_cooldownTimer?.isActive == true) return;
+    _cooldownTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (!mounted) return;
+      if (!_shouldTickCooldown(ref.read(skillTreeProvider),
+          ref.read(branchAutoPathProvider(widget.branchId)))) {
+        _stopCooldownTicker();
+        return;
+      }
+      _cooldownTick.value++;
+    });
+  }
+
+  void _stopCooldownTicker() {
+    _cooldownTimer?.cancel();
+    _cooldownTimer = null;
+  }
+
+  void _syncCooldownTicker(SkillTreeState state, List<String> pathIds) {
+    if (_shouldTickCooldown(state, pathIds)) {
+      _startCooldownTicker();
+    } else {
+      _stopCooldownTicker();
+    }
+  }
+
+  bool _shouldTickCooldown(SkillTreeState state, List<String> pathIds) {
+    if (pathIds.isEmpty) return false;
+    final cooldowns = ref.read(skillCooldownServiceProvider);
+    return pathIds.any((nodeId) {
+      final node = state.graph.byId[nodeId];
+      return node != null && node.unlocked && cooldowns.isOnCooldown(node.id);
+    });
   }
 
   // Build VM using the centralized planner.
@@ -267,10 +430,14 @@ class _SkillBranchDetailScreenState
     final pathIds = ref.read(branchAutoPathProvider(widget.branchId));
     if (pathIds.isEmpty) return;
     final newStep = i.clamp(0, pathIds.length - 1);
+    final nodeId = pathIds[newStep];
+    ref.read(skillTreeProvider.notifier).select(nodeId);
     setState(() {
       _pathIndex = newStep;
       _currentStep.value = newStep; // Sync ValueNotifier
+      _focusedId = nodeId;
     });
+    _persistCurrentStep(widget.branchId, pathIds, newStep);
   }
 
   void _toggleOverlay() {
@@ -309,44 +476,60 @@ class _SkillBranchDetailScreenState
             ),
             const SizedBox(height: 12),
             Expanded(
-              child: ListView.builder(
-                itemCount: vm.order.length,
-                itemBuilder: (context, i) {
-                  final nodeId = vm.order[i];
-                  final node = vm.nodes.firstWhere((n) => n.id == nodeId);
-                  final canUnlock = vm.canUnlock[nodeId] ?? false;
+              child: ValueListenableBuilder<int>(
+                valueListenable: _cooldownTick,
+                builder: (_, __, ___) {
+                  final cooldowns = ref.read(skillCooldownServiceProvider);
+                  return ListView.builder(
+                    itemCount: vm.order.length,
+                    itemBuilder: (context, i) {
+                      final nodeId = vm.order[i];
+                      final node = vm.nodes.firstWhere((n) => n.id == nodeId);
+                      final canUnlock = vm.canUnlock[nodeId] ?? false;
+                      final cooldownLabel = node.unlocked
+                          ? cooldowns.nextAvailableLabel(node.id)
+                          : null;
+                      final cooldownChipLabel = node.unlocked
+                          ? cooldowns.nextAvailableChipLabel(node.id)
+                          : null;
 
-                  return ListTile(
-                    dense: true,
-                    leading: CircleAvatar(
-                      backgroundColor:
-                          node.unlocked ? Colors.green : Colors.white12,
-                      child: Text('${i + 1}',
-                          style: const TextStyle(color: Colors.white)),
-                    ),
-                    title: Text(node.title,
-                        style: const TextStyle(color: Colors.white)),
-                    subtitle: Text(
-                      'Cost: ${node.cost} • Tier ${node.tier}',
-                      style:
-                          const TextStyle(color: Colors.white70, fontSize: 12),
-                    ),
-                    trailing: node.unlocked
-                        ? const Icon(Icons.check, color: Colors.green)
-                        : ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  canUnlock ? Colors.teal : Colors.grey,
-                            ),
-                            onPressed: canUnlock
-                                ? () {
-                                    _unlockSkill(node.id);
-                                    setState(() => _focusedId = node.id);
-                                  }
-                                : null,
-                            child: const Text('Unlock'),
-                          ),
-                    onTap: () => setState(() => _focusedId = node.id),
+                      return ListTile(
+                        dense: true,
+                        leading: CircleAvatar(
+                          backgroundColor:
+                              node.unlocked ? Colors.green : Colors.white12,
+                          child: Text('${i + 1}',
+                              style: const TextStyle(color: Colors.white)),
+                        ),
+                        title: Text(node.title,
+                            style: const TextStyle(color: Colors.white)),
+                        subtitle: Text(
+                          cooldownLabel == null
+                              ? 'Cost: ${node.cost} • Tier ${node.tier}'
+                              : 'Cost: ${node.cost} • Tier ${node.tier} • $cooldownLabel',
+                          style:
+                              const TextStyle(color: Colors.white70, fontSize: 12),
+                        ),
+                        trailing: node.unlocked
+                            ? cooldownChipLabel == null
+                                ? const Icon(Icons.check, color: Colors.green)
+                                : _CooldownChip(label: cooldownChipLabel)
+                            : ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      canUnlock ? Colors.teal : Colors.grey,
+                                ),
+                                onPressed: canUnlock
+                                    ? () {
+                                        _unlockSkill(node.id);
+                                        setState(() => _focusedId = node.id);
+                                      }
+                                    : null,
+                                child: const Text('Unlock'),
+                              ),
+                        onTap: () => setState(() => _focusedId = node.id),
+                      );
+                    },
                   );
                 },
               ),
@@ -357,36 +540,131 @@ class _SkillBranchDetailScreenState
     );
   }
 
-  Widget _pathControls(BuildContext context, List<String> pathIds) {
+  Widget _actionBar({
+    required SkillTreeState state,
+    required List<String> pathIds,
+    required int playerXP,
+  }) {
     final total = pathIds.length;
-    final label = total == 0 ? 'No steps' : 'Step ${_pathIndex + 1} / $total';
+    if (total == 0) return const SizedBox.shrink();
 
-    if (!_showPath || total == 0) return const SizedBox.shrink();
+    final safeIndex = _pathIndex.clamp(0, total - 1);
+    final nodeId = pathIds[safeIndex];
+    final node = state.graph.byId[nodeId];
+    if (node == null) return const SizedBox.shrink();
 
-    return Card(
-      color: const Color(0xCC1E2139),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        child: Row(
-          children: [
-            IconButton(
-              onPressed: total == 0 ? null : () => _goToStep(_pathIndex - 1),
-              icon: const Icon(Icons.chevron_left, color: Colors.white),
+    final cooldowns = ref.watch(skillCooldownServiceProvider);
+    return ValueListenableBuilder<int>(
+      valueListenable: _cooldownTick,
+      builder: (_, __, ___) {
+        final onCooldown = cooldowns.isOnCooldown(node.id);
+        final prereqIds = state.graph.getPrerequisites(node.id);
+        final missingPrereqs = prereqIds
+            .map(state.graph.getNodeById)
+            .whereType<SkillNode>()
+            .where((n) => !n.unlocked)
+            .toList();
+
+        final canUnlock =
+            !node.unlocked && missingPrereqs.isEmpty && playerXP >= node.cost;
+        final canUse = node.unlocked && !onCooldown;
+        final canGoBack = safeIndex > 0;
+        final canGoNext = safeIndex < total - 1;
+
+        final nextAvailableLabel = cooldowns.nextAvailableLabel(node.id);
+        String status;
+        if (!node.unlocked && missingPrereqs.isNotEmpty) {
+          status = 'Requires: ${missingPrereqs.first.title}';
+        } else if (!node.unlocked && playerXP < node.cost) {
+          status = 'Need ${node.cost - playerXP} more XP';
+        } else if (node.unlocked && nextAvailableLabel != null) {
+          status = nextAvailableLabel;
+        } else if (node.unlocked) {
+          status = 'Ready to use';
+        } else {
+          status = 'Ready to unlock';
+        }
+
+        void handleAction() {
+          final notifier = ref.read(skillTreeProvider.notifier);
+          final wasUnlocked = node.unlocked;
+          bool success;
+          if (wasUnlocked) {
+            success = notifier.useSkill(node.id);
+          } else {
+            notifier.unlockSkill(node.id);
+            final unlockedAfterAction =
+                ref.read(skillTreeProvider).graph.byId[node.id]?.unlocked ==
+                    true;
+            success = unlockedAfterAction;
+          }
+
+          if (!success) return;
+          if (safeIndex < total - 1) {
+            _goToStep(safeIndex + 1);
+          } else {
+            notifier.select(node.id);
+            setState(() => _focusedId = node.id);
+          }
+        }
+
+        return Container(
+          padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
+          decoration: const BoxDecoration(
+            color: Color(0xFF15183A),
+            border: Border(top: BorderSide(color: Color(0x33FFFFFF))),
+          ),
+          child: SafeArea(
+            top: false,
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: canGoBack ? () => _goToStep(safeIndex - 1) : null,
+                  icon: const Icon(Icons.chevron_left, color: Colors.white),
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Step ${safeIndex + 1} / $total • ${node.title}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        'Cost: ${node.cost} XP • $status',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style:
+                            const TextStyle(color: Colors.white70, fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                FilledButton(
+                  onPressed: canUnlock || canUse ? handleAction : null,
+                  child: Text(
+                    node.unlocked
+                        ? (onCooldown ? 'Cooldown' : 'Use')
+                        : 'Unlock',
+                  ),
+                ),
+                IconButton(
+                  onPressed: canGoNext ? () => _goToStep(safeIndex + 1) : null,
+                  icon: const Icon(Icons.chevron_right, color: Colors.white),
+                ),
+              ],
             ),
-            Expanded(
-              child: Text(
-                label,
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.white),
-              ),
-            ),
-            IconButton(
-              onPressed: total == 0 ? null : () => _goToStep(_pathIndex + 1),
-              icon: const Icon(Icons.chevron_right, color: Colors.white),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -433,6 +711,16 @@ class _SkillBranchDetailScreenState
 
     // Local derived values — no mutations during build.
     final pathIds = ref.watch(branchAutoPathProvider(widget.branchId));
+    _hydrateInitialStepFromQueryOrSaved(pathIds);
+    if (!_cooldownSyncPending) {
+      _cooldownSyncPending = true;
+      final pathSnapshot = List<String>.from(pathIds);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _cooldownSyncPending = false;
+        if (!mounted) return;
+        _syncCooldownTicker(state, pathSnapshot);
+      });
+    }
     final centers = _computeCenters(positions, filtered);
 
     // Clamp step index to current path length via a guarded post-frame callback.
@@ -479,6 +767,19 @@ class _SkillBranchDetailScreenState
         color: const Color(0xFF0D1021),
         child: LayoutBuilder(
           builder: (context, c) {
+            // Center world-origin at the canvas midpoint on first layout.
+            if (!_transformCentered) {
+              _transformCentered = true;
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (!mounted) return;
+                setState(() {
+                  _transform.value = vmath.Matrix4.identity()
+                    ..translate(c.maxWidth / 2.0, c.maxHeight / 2.0)
+                    ..scale(0.9, 0.9);
+                });
+              });
+            }
+
             final painter = SkillTreePainter(
               graph: filtered,
               positions: positions,
@@ -544,6 +845,7 @@ class _SkillBranchDetailScreenState
                               pathIds: pathIds,
                               currentIndex: step,
                               showFullPath: show,
+                              showDimMask: true,
                               fullPathColor: branchColor.withValues(alpha: 0.4),
                               stepPathColor: branchColor,
                               stepPathWidth: 4.0,
@@ -562,15 +864,10 @@ class _SkillBranchDetailScreenState
                       onOut: () => setState(() =>
                           _transform.value = _transform.value.scaled(0.87)),
                       onReset: () => setState(() => _transform.value =
-                          vmath.Matrix4.identity()..scale(0.9, 0.9)),
+                          (vmath.Matrix4.identity()
+                            ..translate(c.maxWidth / 2.0, c.maxHeight / 2.0)
+                            ..scale(0.9, 0.9))),
                     ),
-                  ),
-                  // Add path controls at the bottom
-                  Positioned(
-                    left: 12,
-                    right: 12,
-                    bottom: 80, // Above zoom controls
-                    child: _pathControls(context, pathIds),
                   ),
                   // Add overlay controls for debugging (optional)
                   Positioned(
@@ -584,6 +881,13 @@ class _SkillBranchDetailScreenState
           },
         ),
       ),
+      bottomNavigationBar: pathIds.isEmpty
+          ? null
+          : _actionBar(
+              state: state,
+              pathIds: pathIds,
+              playerXP: playerXP,
+            ),
     );
   }
 
@@ -618,6 +922,31 @@ class _SkillBranchDetailScreenState
       default:
         return const Color(0xFF6EE7F9);
     }
+  }
+}
+
+class _CooldownChip extends StatelessWidget {
+  final String label;
+  const _CooldownChip({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: const Color(0x33FFB300),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0x88FFB300)),
+      ),
+      child: Text(
+        label,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
   }
 }
 

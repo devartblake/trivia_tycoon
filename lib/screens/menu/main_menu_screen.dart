@@ -83,7 +83,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
       controllers: _cardAnimationControllers,
       baseDelayMs: 0,
       delayIncrementMs: 150,
-      mounted: mounted,
+      mounted: () => mounted,
     );
 
     // Show greeting toast after delay

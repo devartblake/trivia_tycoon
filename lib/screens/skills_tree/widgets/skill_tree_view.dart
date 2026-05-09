@@ -59,14 +59,16 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
   final TransformationController _transform = TransformationController();
   // Rendered node half-size in screen pixels.
   static const double _nodeRadius = 72;
-  // Must match hexSize in SkillTreeController._computeLayout (120).
-  static const double _layoutHexRadius = 120.0;
+  // Must match hexSize in SkillTreeController._computeLayout (100).
+  static const double _layoutHexRadius = 100.0;
 
   bool _showTree = true;
 
   @override
   void initState() {
     super.initState();
+    // Rebuild on pan/zoom so HexSpiderBackgroundPainter gets fresh matrix values.
+    _transform.addListener(_onTransformChange);
     // Centering happens in the first post-frame callback once we know the size.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
@@ -75,39 +77,48 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
       final size = box?.size ?? const Size(400, 700);
       _transform.value = vmath.Matrix4.identity()
         ..translate(size.width / 2.0, size.height / 2.0)
-        ..scale(0.8, 0.8);
+        ..scale(0.5, 0.5);
     });
   }
 
-  void _zoom(double scale) {
-    setState(() {
-      _transform.value = _transform.value.scaled(scale);
-    });
+  void _onTransformChange() {
+    if (mounted) setState(() {});
+  }
+
+  @override
+  void dispose() {
+    _transform.removeListener(_onTransformChange);
+    _transform.dispose();
+    super.dispose();
+  }
+
+  void _zoom(double factor) {
+    final box = context.findRenderObject() as RenderBox?;
+    final size = box?.size ?? const Size(400, 700);
+    final cx = size.width / 2.0;
+    final cy = size.height / 2.0;
+    // Scale around the current screen centre so the focal point never jumps.
+    final m = vmath.Matrix4.identity()
+      ..translate(cx, cy)
+      ..scale(factor, factor)
+      ..translate(-cx, -cy);
+    _transform.value = m * _transform.value;
+    // Rebuild triggered by _onTransformChange listener.
   }
 
   void _resetZoom() {
     final box = context.findRenderObject() as RenderBox?;
     final size = box?.size ?? const Size(400, 700);
-    setState(() {
-      _transform.value = vmath.Matrix4.identity()
-        ..translate(size.width / 2.0, size.height / 2.0)
-        ..scale(0.8, 0.8);
-    });
+    _transform.value = vmath.Matrix4.identity()
+      ..translate(size.width / 2.0, size.height / 2.0)
+      ..scale(0.5, 0.5);
   }
 
-  // Transform a point from world space to screen space
-  Offset _transformPoint(vmath.Matrix4 m, Offset p) {
-    final v = m.transform3(vmath.Vector3(p.dx, p.dy, 0)).xy;
-    return Offset(v.x, v.y);
-  }
-
-  // Hit test for nodes
-  String? _hitTestNode(Offset localPos, Map<String, Offset> positions,
-      vmath.Matrix4 worldToScreen) {
-    final inv = vmath.Matrix4.inverted(worldToScreen);
-    final world = _transformPoint(inv, localPos);
+  // Hit test for nodes — localPos is already in world space because the
+  // GestureDetector lives inside InteractiveViewer's transformed subtree.
+  String? _hitTestNode(Offset localPos, Map<String, Offset> positions) {
     for (final entry in positions.entries) {
-      if ((entry.value - world).distance <= _nodeRadius + 8) {
+      if ((entry.value - localPos).distance <= _nodeRadius + 8) {
         return entry.key;
       }
     }
@@ -123,8 +134,7 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
     allPositions.addAll(state.positions);
     _addChildPositions(state, allPositions);
 
-    final id =
-        _hitTestNode(details.localPosition, allPositions, _transform.value);
+    final id = _hitTestNode(details.localPosition, allPositions);
     if (id == null) return;
     ctrl.select(id);
 
@@ -288,7 +298,6 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
                                   graph: state.graph,
                                   positions:
                                       rawPositions, // use unfiltered so edges are always drawn
-                                  worldToScreen: _transform.value,
                                 ),
                               ),
                             ),
@@ -298,16 +307,14 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
                               ...allPositions.entries.map((entry) {
                                 final nodeId = entry.key;
                                 final worldPos = entry.value;
-                                final screenPos =
-                                    _transformPoint(_transform.value, worldPos);
                                 final node = state.graph.byId[nodeId];
 
                                 if (node == null)
                                   return const SizedBox.shrink();
 
                                 return Positioned(
-                                  left: screenPos.dx - _nodeRadius,
-                                  top: screenPos.dy - _nodeRadius,
+                                  left: worldPos.dx - _nodeRadius,
+                                  top: worldPos.dy - _nodeRadius,
                                   width: _nodeRadius * 2,
                                   height: _nodeRadius * 2,
                                   child: SkillNodeWidget(
@@ -531,18 +538,11 @@ class _TopBar extends ConsumerWidget {
 class _EdgesPainter extends CustomPainter {
   final SkillTreeGraph graph;
   final Map<String, Offset> positions; // world coords
-  final vmath.Matrix4 worldToScreen;
 
   _EdgesPainter({
     required this.graph,
     required this.positions,
-    required this.worldToScreen,
   });
-
-  Offset _toScreen(vmath.Matrix4 m, Offset world) {
-    final v = m.transform3(vmath.Vector3(world.dx, world.dy, 0)).xy;
-    return Offset(v.x, v.y);
-  }
 
   /// Draw a dashed line between [p1] and [p2].
   void _drawDashed(
@@ -569,15 +569,12 @@ class _EdgesPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     for (final e in graph.edges) {
-      final a = positions[e.fromId];
-      final b = positions[e.toId];
-      if (a == null || b == null) continue;
+      final p1 = positions[e.fromId];
+      final p2 = positions[e.toId];
+      if (p1 == null || p2 == null) continue;
 
       final fromNode = graph.byId[e.fromId];
       final toNode = graph.byId[e.toId];
-
-      final p1 = _toScreen(worldToScreen, a);
-      final p2 = _toScreen(worldToScreen, b);
 
       final paint = Paint()..style = PaintingStyle.stroke;
 
@@ -608,7 +605,5 @@ class _EdgesPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _EdgesPainter old) =>
-      old.graph != graph ||
-      old.positions != positions ||
-      old.worldToScreen != worldToScreen;
+      old.graph != graph || old.positions != positions;
 }
