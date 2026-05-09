@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../game/analytics/providers/analytics_providers.dart';
-import '../../../game/controllers/skill_tree_controller.dart';
-import '../../../synaptix/mode/synaptix_mode_provider.dart';
-import '../../../ui_components/hex_grid/widgets/hex_nav_button.dart';
-import '../../../ui_components/hex_grid/math/hex_orientation.dart';
+import '../../game/analytics/providers/analytics_providers.dart';
+import '../../game/controllers/skill_tree_controller.dart';
+import '../../synaptix/mode/synaptix_mode_provider.dart';
+import '../../ui_components/hex_grid/hex_grid.dart';
 import '../../game/models/skill_tree_nav_models.dart';
 import '../../game/providers/skill_tree_nav_providers.dart';
 import '../../game/providers/skill_tree_provider.dart';
 import '../../game/providers/xp_provider.dart';
-import '../../ui_components/hex_grid/widgets/mini_hex_preview.dart';
 
 class SkillTreeNavScreen extends ConsumerStatefulWidget {
   const SkillTreeNavScreen({super.key});
