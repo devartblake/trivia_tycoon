@@ -5,18 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vector_math/vector_math_64.dart' as vmath;
-import 'package:trivia_tycoon/screens/skills_tree/render/skill_tree_painter.dart';
-import '../../../ui_components/hex_grid/paint/hex_spider_background_painter.dart';
-import '../../../ui_components/hex_grid/paint/auto_path_overlay_painter.dart';
+import 'render/skill_tree_painter.dart';
+import '../../ui_components/hex_grid/hex_grid.dart';
 import '../../core/theme/hex_spider_theme.dart';
-import '../../../game/models/skill_tree_graph.dart';
-import '../../../game/controllers/skill_tree_controller.dart';
+import '../../game/models/skill_tree_graph.dart';
+import '../../game/controllers/skill_tree_controller.dart';
 import '../../game/planning/skill_branch_path_planner.dart';
 import '../../game/providers/branch_path_providers.dart';
 import '../../game/providers/skill_cooldown_service_provider.dart';
 import '../../game/providers/skill_tree_provider.dart';
 import '../../game/providers/xp_provider.dart';
-import '../../ui_components/hex_grid/math/hex_orientation.dart';
 
 class SkillBranchDetailScreen extends ConsumerStatefulWidget {
   final String branchId;
