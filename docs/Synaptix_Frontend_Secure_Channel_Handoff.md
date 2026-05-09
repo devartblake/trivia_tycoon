@@ -2,9 +2,23 @@
 
 Repository: `devartblake/trivia_tycoon`
 
-## Phase 1 Status — COMPLETE (`e144fd2`, 2026-05-09)
+## Phase 2 Status — COMPLETE (2026-05-09)
 
-`sendFriendRequest` (`POST /users/me/friends/request`) and `acceptFriendRequest` (`POST /users/me/friends/requests/{id}/accept`) are now routed through `EncryptedApiClient` when injected. `backendProfileSocialServiceProvider` injects `encryptedApiClientProvider`. Codec tests in `test/core/security/secure_payload_codec_test.dart` (7 cases). Next: roll out to additional mutation endpoints (Phase 2).
+**Phase 1** (`e144fd2`): `sendFriendRequest`, `acceptFriendRequest` — social write operations with PII.
+
+**Phase 2**: Four additional high-value mutation endpoints encrypted:
+| Endpoint | Service | Method |
+|----------|---------|--------|
+| `POST /users/me/friends/requests/{id}/decline` | `BackendProfileSocialService` | `declineFriendRequest` |
+| `POST /users/me/block` | `BackendProfileSocialService` | `blockUser` |
+| `PUT /users/me/preferences/loadout` | `BackendProfileSocialService` | `saveLoadout` |
+| `POST /arcade/spin/claim` | `SpinWheelApiService` | `claimReward` |
+
+`SpinWheelApiService` now accepts `EncryptedApiClient?`; `spinWheelApiServiceProvider` injects it.
+
+**Not yet encrypted (DELETE — no `deleteEncrypted` on client):** `removeFriend`, `cancelFriendRequest`, `unblockUser`. Phase 3 should add `deleteEncrypted` to `EncryptedApiClient` or convert to PATCH semantics.
+
+Codec tests in `test/core/security/secure_payload_codec_test.dart` (7 cases).
 
 ---
 

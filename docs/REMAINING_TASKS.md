@@ -40,6 +40,8 @@ _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue 
 | **Spin wheel redesign** | **Medium** | **Complete** | **No** |
 | **Secure channel scaffolding** | **High** | **Complete (scaffolded); rollout pending** | **No** |
 | **Secure channel Phase 1 endpoint rollout** | **High** | **Complete — `sendFriendRequest` + `acceptFriendRequest` wired to `EncryptedApiClient`** | **No** |
+| **Secure channel Phase 2 endpoint rollout** | **High** | **Complete — `declineFriendRequest`, `blockUser`, `saveLoadout`, `claimReward` encrypted** | **No** |
+| **dart:io web guards (all 19 files)** | **Medium** | **Complete — all files verified safe; 3 changed, 16 confirmed already guarded** | **No** |
 
 ---
 
@@ -506,40 +508,33 @@ Intentionally deferred to after Alpha launch. No urgency.
 
 ---
 
-## 9. Web Platform - Remaining `dart:io` Screen Files
+## 9. Web Platform - `dart:io` Guards ✅ COMPLETE
 
 **Startup fixed:** `api_service.dart` and `auth_error_messages.dart` no longer import
 `dart:io`, eliminating the startup cascade failure on web.
 
-**This session — 3 files guarded (out of 19 listed; 16 were already guarded at runtime):**
-- ✅ `lib/game/services/avatar_package_service.dart` — added `kIsWeb` guards to 4 private methods
-- ✅ `lib/ui_components/profile_avatar/profile_image_picker.dart` — callback changed to `ValueChanged<XFile>`; `dart:io` import removed
-- ✅ `lib/game/controllers/profile_avatar_controller.dart` — `File?` fields changed to `XFile?`; callers updated
+**All 19 originally listed files have been verified safe:**
+- 3 files were changed in a prior session: `avatar_package_service.dart`, `profile_image_picker.dart`, `profile_avatar_controller.dart`
+- The remaining 16 files were audited and confirmed to **already have correct `kIsWeb` runtime guards** — Flutter web stubs `dart:io` so imports compile fine; only instantiation throws, and every instantiation site in these files is guarded
 
-The following files still import `dart:io` unconditionally. They are **not** in the startup
-path so the app loads on web, but these screens/features will throw when visited on web:
-
-| File | Used in | Impact on web |
-|------|---------|---------------|
-| `lib/ui_components/spin_wheel/services/prize_log_export_service.dart` | Spin-wheel export | File export will fail |
-| `lib/ui_components/shimmer_avatar/widgets/avatar_content.dart` | Avatar display | Avatar widget will throw |
-| `lib/ui_components/shimmer_avatar/utils/avatar_helpers.dart` | Avatar helpers | Avatar feature will throw |
-| `lib/ui_components/depth_card_3d/core/depth_card_3d.dart` | 3D cards | May throw if `dart:io` class is instantiated |
-| `lib/ui_components/confetti/utils/confetti_log_manager.dart` | Confetti debug overlay | Debug-only; low impact |
-| `lib/ui_components/color_picker/utils/color_log_manager.dart` | Color picker | Debug-only; low impact |
-| `lib/screens/profile/widgets/profile_avatar_preview.dart` | Profile screen | Avatar preview will throw |
-| `lib/screens/profile/widgets/shimmer_avatar.dart` | Profile screen | Shimmer avatar will throw |
-| `lib/screens/profile/widgets/avatar_image_card.dart` | Profile screen | Avatar card will throw |
-| `lib/screens/profile/widgets/avatar_package_image.dart` | Profile screen | Avatar image will throw |
-| `lib/screens/profile/tabs/collection_tab.dart` | Profile -> Collections tab | Collections tab will throw |
-| `lib/game/services/collection_items_loader.dart` | Collection items | Loader will throw on web |
-| `lib/admin/widgets/encrypted_file_preview.dart` | Admin | Admin only; low web priority |
-| `lib/admin/widgets/question_editor_form.dart` | Admin | Admin only; low web priority |
-| `lib/admin/questions/question_list_screen.dart` | Admin | Admin only; low web priority |
-| `lib/admin/questions/file_import_export_screen.dart` | Admin | Admin only; low web priority |
-
-**Recommended action:** For each file, either add `kIsWeb` guards around file-system calls
-or use conditional imports to provide web-safe stubs.
+| File | Guard type |
+|------|-----------|
+| `prize_log_export_service.dart` | `if (kIsWeb) throw UnsupportedError(...)` before any File use |
+| `avatar_content.dart` | `if (kIsWeb)` branch skips `FileImage(File(...))` |
+| `avatar_helpers.dart` | `kIsWeb ? false : File(path).existsSync()` ternary |
+| `depth_card_3d.dart` | `kIsWeb ? ... : Image.file(File(path))` ternary |
+| `confetti_log_manager.dart` | `if (kIsWeb) return;` early exit |
+| `color_log_manager.dart` | `if (kIsWeb) return '...'` early exit |
+| `profile_avatar_preview.dart` | `kIsWeb ? AssetImage(...) : FileImage(File(...))` |
+| `shimmer_avatar.dart` | `kIsWeb ? AssetImage(...) : FileImage(File(...))` |
+| `avatar_image_card.dart` | `kIsWeb ? AssetImage(...) : FileImage(File(...))` |
+| `avatar_package_image.dart` | `_isFilePath()` returns `false` on web → `File()` branch unreachable |
+| `collection_tab.dart` | `kIsWeb ? Image.asset(...) : Image.file(File(...))` |
+| `collection_items_loader.dart` | `if (kIsWeb) return` guards all Directory/File operations |
+| `encrypted_file_preview.dart` | `if (kIsWeb) return;` early exit |
+| `question_editor_form.dart` | `if (!kIsWeb) setState(...)` guards File instantiation |
+| `question_list_screen.dart` | `if (kIsWeb)` guards both import and export blocks |
+| `file_import_export_screen.dart` | `if (kIsWeb)` guards both _importFromFile and _exportToFile |
 
 ---
 
@@ -578,12 +573,13 @@ or use conditional imports to provide web-safe stubs.
 | All source-code TODO/FIXME resolved | Done (0 remaining) |
 | Runtime validation of all Synaptix screens | Blocked (needs device) |
 | Sprint 2 networking layer | ✅ Complete — WS stream providers + encrypted client provider added |
-| Remaining `dart:io` in screen-level files (web) | 16 files remain (3 fixed this session: avatar_package_service, profile_image_picker, profile_avatar_controller) |
+| Remaining `dart:io` in screen-level files (web) | ✅ Complete — all 19 files verified safe (3 changed; 16 confirmed already guarded) |
 | Windows desktop prerequisite (`nuget.exe` for `flutter_inappwebview_windows`) | Pending on local machine |
 | Packet E Workstream 1 (symbol cleanup) | ✅ Complete — `79bc788` (2026-05-08) |
 | Packet E Workstream 2 (package root rename) | ⏸️ Blocked — awaiting store/legal plan |
 | Spin wheel redesign (pie-chart renderer, fixed needle, gesture spin) | ✅ Complete |
 | Secure channel (scaffolding) | ✅ Scaffolded; rollout to endpoints pending |
 | Secure channel (Phase 1 endpoint rollout + codec tests) | ✅ Complete — `sendFriendRequest` + `acceptFriendRequest` encrypted; `secure_payload_codec_test.dart` added |
+| Secure channel (Phase 2 endpoint rollout) | ✅ Complete — `declineFriendRequest`, `blockUser`, `saveLoadout` (social); `claimReward` (economy) encrypted |
 | Study Hub frontend (hub entry points, favorites, custom sets, session resume) | ✅ Complete — `7b18b03` (2026-05-09) |
 | MinIO avatar upload (frontend) | ⏳ Planned — `AvatarUploadService` exists; controller/provider wiring + progress UI next |

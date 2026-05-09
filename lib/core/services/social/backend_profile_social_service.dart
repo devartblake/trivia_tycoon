@@ -55,12 +55,11 @@ class BackendProfileSocialService {
     );
   }
 
-  Future<Map<String, dynamic>> saveLoadout(Map<String, dynamic> loadout) {
-    return _apiService.put(
-      '/users/me/preferences/loadout',
-      body: loadout,
-      timeout: _socialTimeout,
-    );
+  Future<Map<String, dynamic>> saveLoadout(Map<String, dynamic> loadout) async {
+    final response = _encryptedClient != null
+        ? await _encryptedClient!.putEncrypted('/users/me/preferences/loadout', body: loadout)
+        : await _apiService.put('/users/me/preferences/loadout', body: loadout, timeout: _socialTimeout);
+    return response;
   }
 
   Future<PaginatedSocialResponse<FriendListItemDto>> getFriends({
@@ -161,11 +160,10 @@ class BackendProfileSocialService {
   }
 
   Future<FriendRequestDto> declineFriendRequest(String requestId) async {
-    final response = await _apiService.post(
-      '/users/me/friends/requests/$requestId/decline',
-      body: const <String, dynamic>{},
-      timeout: _socialTimeout,
-    );
+    const body = <String, dynamic>{};
+    final response = _encryptedClient != null
+        ? await _encryptedClient!.postEncrypted('/users/me/friends/requests/$requestId/decline', body: body)
+        : await _apiService.post('/users/me/friends/requests/$requestId/decline', body: body, timeout: _socialTimeout);
     return FriendRequestDto.fromJson(response);
   }
 
@@ -214,12 +212,13 @@ class BackendProfileSocialService {
   // TODO(backend): These endpoints are not yet deployed.
   // They will throw once called; stub provides the correct contract shape.
 
-  Future<void> blockUser(String targetUserId) {
-    return _apiService.post(
-      '/users/me/block',
-      body: {'targetUserId': targetUserId},
-      timeout: _socialTimeout,
-    );
+  Future<void> blockUser(String targetUserId) async {
+    final body = {'targetUserId': targetUserId};
+    if (_encryptedClient != null) {
+      await _encryptedClient!.postEncrypted('/users/me/block', body: body);
+    } else {
+      await _apiService.post('/users/me/block', body: body, timeout: _socialTimeout);
+    }
   }
 
   Future<void> unblockUser(String targetUserId) {

@@ -1,5 +1,6 @@
 import 'package:logging/logging.dart';
 import '../api_service.dart';
+import '../../networking/encrypted_api_client.dart';
 import '../../../ui_components/spin_wheel/models/spin_system_models.dart';
 
 class SpinClaimResponse {
@@ -34,8 +35,10 @@ class SpinWheelApiService {
   static final _log = Logger('SpinWheelApiService');
 
   final ApiService _apiService;
+  final EncryptedApiClient? _encryptedClient;
 
-  SpinWheelApiService(this._apiService);
+  SpinWheelApiService(this._apiService, {EncryptedApiClient? encryptedClient})
+      : _encryptedClient = encryptedClient;
 
   /// Fetches wheel segments from the server.
   /// Falls back to an empty list on failure (caller should use local fallback).
@@ -61,14 +64,14 @@ class SpinWheelApiService {
     required String spinId,
   }) async {
     _log.info('Claiming spin reward: segmentId=$segmentId spinId=$spinId');
-    final json = await _apiService.post(
-      '/arcade/spin/claim',
-      body: {
-        'playerId': playerId,
-        'segmentId': segmentId,
-        'spinId': spinId,
-      },
-    );
+    final body = {
+      'playerId': playerId,
+      'segmentId': segmentId,
+      'spinId': spinId,
+    };
+    final json = _encryptedClient != null
+        ? await _encryptedClient!.postEncrypted('/arcade/spin/claim', body: body)
+        : await _apiService.post('/arcade/spin/claim', body: body);
     return SpinClaimResponse.fromJson(json);
   }
 }
