@@ -33,7 +33,10 @@ import 'game_providers.dart';
 // ---------------------------------------------------------------------------
 
 final spinWheelApiServiceProvider = Provider<SpinWheelApiService>((ref) {
-  return SpinWheelApiService(ref.read(apiServiceProvider));
+  return SpinWheelApiService(
+    ref.read(apiServiceProvider),
+    encryptedClient: ref.read(encryptedApiClientProvider),
+  );
 });
 
 final segmentLoaderProvider = Provider<SegmentLoader>((ref) {

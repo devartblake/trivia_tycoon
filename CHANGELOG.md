@@ -8,6 +8,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added – dart:io web guards verified + secure channel Phase 2 (2026-05-09)
+
+#### dart:io web guards — COMPLETE
+All 19 originally listed files audited. 16 remaining files confirmed already safe: every `dart:io` instantiation site is guarded by `kIsWeb` checks (ternary, early return, or conditional branch). No code changes required. `REMAINING_TASKS.md` section 9 updated to reflect verified-complete status.
+
+#### Secure channel Phase 2 — 4 additional encrypted endpoints
+- `BackendProfileSocialService.declineFriendRequest()` — `POST /users/me/friends/requests/{id}/decline` now uses `postEncrypted` when `EncryptedApiClient` is injected (symmetric with `acceptFriendRequest`)
+- `BackendProfileSocialService.blockUser()` — `POST /users/me/block` now uses `postEncrypted`
+- `BackendProfileSocialService.saveLoadout()` — `PUT /users/me/preferences/loadout` now uses `putEncrypted`
+- `SpinWheelApiService.claimReward()` — `POST /arcade/spin/claim` (economy endpoint) now uses `postEncrypted`; service accepts `EncryptedApiClient?` constructor param; `spinWheelApiServiceProvider` injects it
+
+DELETE endpoints (`removeFriend`, `cancelFriendRequest`, `unblockUser`) remain plain — `EncryptedApiClient` has no `deleteEncrypted` yet; noted in handoff doc as Phase 3 scope.
+
+---
+
 ### Added – Sprint 2 networking, secure channel Phase 1, friends/social absorption, dart:io guards (2026-05-09) — commit `e144fd2`
 
 #### Sprint 2 Networking Layer (complete)
