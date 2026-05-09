@@ -387,6 +387,24 @@ extension SoundManagerExtension on SoundManager {
       case 'notification':
         await playNotification();
         break;
+      // Skill-tree / pathways unlock — emphatic success with haptic
+      case 'unlock':
+        await playSound(SoundEffect.success, volume: 1.0);
+        HapticFeedback.heavyImpact();
+        break;
+      // Reward reveal or XP milestone — prize sound at moderate volume
+      case 'reward':
+        await playSound(SoundEffect.prizeWin, volume: 0.8);
+        break;
+      // Tab/section switch — soft click
+      case 'tab':
+        await playSound(SoundEffect.buttonClick, volume: 0.5);
+        break;
+      // Friend request sent or social invite
+      case 'invite':
+      case 'request':
+        await playSound(SoundEffect.notification, volume: 0.9);
+        break;
       default:
         await playSound(SoundEffect.buttonClick);
     }

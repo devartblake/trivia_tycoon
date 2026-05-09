@@ -4,7 +4,7 @@ class LeaderboardEntry {
   final String playerName;
   final int score;
   final int rank;
-  final int tier; // 1-10 (Bronze = 1, Tycoon Hall = 10)
+  final int tier; // 1-10 (Bronze = 1, Synaptix Hall = 10)
   final int tierRank; // 1-100 within tier
   final bool isPromotionEligible;
   final bool isRewardEligible;

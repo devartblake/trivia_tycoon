@@ -404,7 +404,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                   Hero(
                     tag: Constants.logoTag,
                     child: Image.asset(
-                      tTriviaGameImage,
+                      tSynaptixAppLogo,
                       height: 80,
                     ),
                   ),
@@ -739,7 +739,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image.asset(
-                      tTriviaGameImage,
+                      tSynaptixAppLogo,
                       fit: BoxFit.cover,
                     ),
                   ),

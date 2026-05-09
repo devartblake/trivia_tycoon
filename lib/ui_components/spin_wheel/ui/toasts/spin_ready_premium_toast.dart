@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import '../../../tycoon_toast/tycoon_toast.dart';
+import '../../../synaptix_toast/synaptix_toast.dart';
 
 /// Premium version with more features
 class PremiumSpinReadyToast {
@@ -11,13 +11,13 @@ class PremiumSpinReadyToast {
     int? rewardPoints,
     String? bonusMessage,
   }) async {
-    final toast = TycoonToast(
+    final toast = SynaptixToast(
       title: '🎰 Free Spin Available!',
       message: _buildMessage(spinsRemaining, rewardPoints, bonusMessage),
       icon: _buildAnimatedIcon(),
-      toastType: TycoonToastType.reward,
-      tycoonToastPosition: TycoonToastPosition.bottom,
-      tycoonToastStyle: TycoonToastStyle.floating,
+      toastType: SynaptixToastType.reward,
+      tycoonToastPosition: SynaptixToastPosition.bottom,
+      tycoonToastStyle: SynaptixToastStyle.floating,
       themeEvent: 'premium_spin_ready',
       isDismissible: true,
       shouldIconPulse: true,

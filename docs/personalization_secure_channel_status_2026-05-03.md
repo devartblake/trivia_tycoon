@@ -78,6 +78,9 @@ The secure-channel foundation from `Synaptix_Frontend_Secure_Channel_Handoff.md`
 - Added `cryptography: ^2.9.0` dependency for AEAD + key exchange/HKDF.
 - `ServiceManager` now wires `SecureSessionStore`, `SecureChannelService`, and `EncryptedApiClient` during initialization.
 
+### Verified present in codebase (2026-05-06 — confirmed via main branch merge)
+All 6 secure channel files above were confirmed present after merging `origin/main` into the feature branch on 2026-05-06. The scaffolding is live in the codebase.
+
 ### Remaining secure-channel tasks
 - Integrate `EncryptedApiClient` usage into selected endpoints (milestone target: one non-critical endpoint first).
 - Add tests from the secure-channel checklist (wrong nonce/sequence, expiry renewal, logout clear, web fallback, payload perf).
@@ -90,4 +93,4 @@ The secure-channel foundation from `Synaptix_Frontend_Secure_Channel_Handoff.md`
 2. Add secure-channel tests and compatibility validation against staging/backend schema.
 
 ### Medium priority
-3. Reconcile endpoint-path documentation mismatch across plan docs.
+3. Reconcile endpoint-path documentation mismatch across plan docs (`/personalization/{playerId}/...` is current; older `/personalization/home/{playerId}` shape is superseded unless backend indicates otherwise).

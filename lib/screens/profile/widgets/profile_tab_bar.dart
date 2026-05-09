@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trivia_tycoon/ui_components/spin_wheel/core/sound_manager.dart';
 
 /// Styled tab bar for the profile screen collection/stats/awards/created tabs.
 class ProfileTabBar extends StatelessWidget {
@@ -25,6 +26,7 @@ class ProfileTabBar extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         child: TabBar(
           controller: controller,
+          onTap: (_) => soundManager.playUISound('tab'),
           indicatorColor: const Color(0xFF6A5ACD),
           indicatorWeight: 3,
           indicatorSize: TabBarIndicatorSize.tab,

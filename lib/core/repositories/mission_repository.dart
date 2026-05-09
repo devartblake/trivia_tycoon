@@ -16,7 +16,7 @@ abstract class AccessTokenProvider {
 
 /// Mission repository abstraction.
 ///
-/// IMPORTANT: Implementations should talk to the Tycoon
+/// IMPORTANT: Implementations should talk to the Synaptix
 /// backend API (JWT-first) and optionally add local/offline fallbacks.
 abstract class MissionRepository {
   Future<List<UserMission>> getUserMissions(String userId);
@@ -32,7 +32,7 @@ abstract class MissionRepository {
   Future<void> cleanupExpiredMissions();
 }
 
-/// JWT-first implementation backed by Tycoon backend.
+/// JWT-first implementation backed by Synaptix backend.
 /// Assumes ApiService is already configured with baseUrl.
 /// You will add/confirm the actual endpoints on the backend during migration.
 ///

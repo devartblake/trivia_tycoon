@@ -132,7 +132,7 @@ class _AdditionalSignUpCardState extends ConsumerState<_AdditionalSignUpCard>
 
     if (!isNullOrEmpty(error)) {
       if (context.mounted) {
-        showErrorToast(context, messages.tycoonToastTitleError, error!);
+        showErrorToast(context, messages.toastTitleError, error!);
       }
       setState(() => _isSubmitting = false);
       return false;
@@ -140,7 +140,7 @@ class _AdditionalSignUpCardState extends ConsumerState<_AdditionalSignUpCard>
       if (context.mounted) {
         showSuccessToast(
           context,
-          messages.tycoonToastTitleSuccess,
+          messages.toastTitleSuccess,
           messages.signUpSuccess,
           const Duration(seconds: 4),
         );

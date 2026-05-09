@@ -458,23 +458,43 @@ trackEvent("synaptix_surface_opened", {
 
 ## FE Packet E — Optional Deep Technical Rename (Phase 8)
 
-**Default recommendation: DEFER unless Packets A–D are stable.**
+### Workstream 1: Frontend Symbol Cleanup ✅ COMPLETE — `79bc788`
 
-### Workstream 1: Frontend Symbol Cleanup (Low Risk)
-- `TriviaTycoonApp` -> `SynaptixApp`
-- Internal helper names tied to old branding
-- Comments and README content
+All internal Dart class/enum/constant/file/folder names referencing old branding renamed to Synaptix equivalents. 29 files changed. No store impact, no backend contract changes, no persistence key renames.
 
-### Workstream 2: Package Root Rename (Higher Risk)
-- `package:trivia_tycoon/...` -> `package:synaptix/...`
-- Treat as a separate subproject — not a casual global replace
-- Risks: wide import churn, broken generated references, broken tests
+| Area | Details |
+|---|---|
+| `tycoon_toast/` folder | Renamed to `synaptix_toast/`; all 4 files renamed; all `TycoonToast*` symbols → `SynaptixToast*`; 5 external consumer files updated |
+| `TycoonApiClientEnhanced` | → `SynaptixApiClientEnhanced`; `tycoonApiClientEnhancedProvider` → `synaptixApiClientEnhancedProvider` in `core_providers.dart` |
+| `TycoonLinearProgressIndicator` | → `SynaptixLinearProgressIndicator` (2 files) |
+| `LoginMessages` toast constants | `tycoonToastTitleSuccess/Error` → `toastTitleSuccess/Error`; 5 login card callsite files updated |
+| `tTriviaGameImage` constant | → `tSynaptixAppLogo`; asset path updated to `synaptix_appLogo.png` |
+| Comment/string updates | `mission_repository.dart`, `leaderboard_entry.dart`, `tier_manager.dart`, `leaderboard_swipe_card.dart`, `rank_tab_widget.dart` |
+| `pubspec.yaml` description | Updated to `"Synaptix — Train. Compete. Grow."` |
+| `README.md` | Title → `# Synaptix`; opening paragraph updated to Synaptix brand copy |
 
-**Preconditions for Packet E:**
-- Stable release candidate from Packet D
-- No major outstanding rebrand bugs
-- Build/test coverage acceptable
+**Explicitly NOT changed (Workstream 2 scope):**
+- `package:trivia_tycoon/` import prefix (564 occurrences)
+- `pubspec.yaml` `name: trivia_tycoon`
+- `'trivia_tycoon_group'` notification channel group key (persisted Android OS value)
+- Android application ID and iOS bundle identifier
+
+### Workstream 2: Package Root Rename (Higher Risk) ⏸️ BLOCKED — awaiting store plan
+
+| Item | Current | Target |
+|---|---|---|
+| `pubspec.yaml` package name | `trivia_tycoon` | `synaptix` |
+| All `package:trivia_tycoon/...` imports | 564 occurrences across `lib/` | `package:synaptix/...` |
+| Android application ID | `com.theoreticalmindstech.trivia_tycoon` | `com.theoreticalmindstech.synaptix` |
+| iOS bundle identifier | `com.theoreticalmindstech.triviaTycoon` | `com.theoreticalmindstech.synaptix` |
+| Firebase / Google services config | Tied to current bundle ID | Requires new Firebase app registrations |
+| `build_runner` generated files | Package-scoped | Full regeneration required |
+
+**Preconditions for Workstream 2:**
+- Store/legal bundle ID transition plan agreed (currently in discussion)
 - Rollback strategy documented
+- `build_runner` regeneration verified in isolated branch
+- Coordinated release window identified
 
 ---
 

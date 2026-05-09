@@ -1,107 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../game/providers/game_providers.dart' show rewardSettingsServiceProvider;
-import '../../../game/providers/profile_providers.dart' show coinBalanceProvider;
-import '../../../core/services/settings/app_settings.dart';
-import '../../../ui_components/tycoon_toast/tycoon_toast_helper.dart';
+import '../../../ui_components/synaptix_toast/synaptix_toast_helper.dart';
 
 class WeeklyRewardsWidget extends ConsumerStatefulWidget {
   const WeeklyRewardsWidget({super.key});
 
-  @override
-  ConsumerState<WeeklyRewardsWidget> createState() =>
-      _WeeklyRewardsWidgetState();
-}
-
-class _WeeklyRewardsWidgetState extends ConsumerState<WeeklyRewardsWidget> {
-  bool _isLoading = true;
-  // The highest day that has been claimed in the current 7-day cycle (0 = none).
-  int _claimedThroughDay = 0;
-  // Whether today's reward is still unclaimed.
-  bool _canClaimToday = false;
-
-  static const _dayKey = 'weeklyLoginDay';
-  static const _cycleStartKey = 'weeklyLoginCycleStart';
-
-  @override
-  void initState() {
-    super.initState();
-    _loadState();
-  }
-
-  Future<void> _loadState() async {
-    final service = ref.read(rewardSettingsServiceProvider);
-    final canClaimToday = await service.isDailyRewardAvailable();
-
-    final dayStr = await AppSettings.getString(_dayKey);
-    final cycleStartStr = await AppSettings.getString(_cycleStartKey);
-
-    final now = DateTime.now();
-    final cycleStart =
-        cycleStartStr != null ? DateTime.tryParse(cycleStartStr) : null;
-    int claimedDay = dayStr != null ? (int.tryParse(dayStr) ?? 0) : 0;
-
-    // Reset if cycle is older than 7 days.
-    if (cycleStart != null && now.difference(cycleStart).inDays >= 7) {
-      claimedDay = 0;
-      await AppSettings.remove(_dayKey);
-      await AppSettings.remove(_cycleStartKey);
-    }
-
-    if (mounted) {
-      setState(() {
-        _claimedThroughDay = claimedDay;
-        _canClaimToday = canClaimToday;
-        _isLoading = false;
-      });
-    }
-  }
-
-  Future<void> _claimDay(BuildContext context, int day) async {
-    final nextDay = _claimedThroughDay + 1;
-    if (!_canClaimToday || day != nextDay) {
-      // Show info for locked or already-claimed days
-      final msg = day <= _claimedThroughDay
-          ? 'Already claimed!'
-          : 'Complete Day ${day - 1} first.';
-      TycoonToastHelper.createInformation(
-        title: day <= _claimedThroughDay ? 'Reward Claimed' : 'Reward Locked',
-        message: msg,
-        duration: const Duration(seconds: 2),
+  void _claimDayReward(BuildContext context, int day, String rewardType,
+      String amount, bool canClaim) {
+    if (!canClaim) {
+      // Show info toast for locked rewards
+      SynaptixToastHelper.createInformation(
+        title: 'Reward Locked',
+        message: 'Complete Day ${day - 1} to unlock this reward',
+        duration: Duration(seconds: 2),
       ).show(context);
       return;
     }
 
     HapticFeedback.mediumImpact();
 
-    final service = ref.read(rewardSettingsServiceProvider);
-    final rewards = await service.claimDailyReward();
-    final coinsEarned = rewards['regularCurrency'] ?? 0;
-
-    if (coinsEarned > 0) {
-      final currentBalance = ref.read(coinBalanceProvider);
-      await ref
-          .read(coinBalanceProvider.notifier)
-          .set(currentBalance + coinsEarned);
-    }
-
-    // Persist new cycle progress.
-    final now = DateTime.now();
-    if (_claimedThroughDay == 0) {
-      await AppSettings.setString(
-          _cycleStartKey, now.toIso8601String());
-    }
-    await AppSettings.setString(_dayKey, nextDay.toString());
-
-    if (mounted) {
-      setState(() {
-        _claimedThroughDay = nextDay;
-        _canClaimToday = false;
-      });
-    }
-
-    TycoonToastHelper.createWeeklyReward(
+    // Show the reward toast
+    SynaptixToastHelper.createWeeklyReward(
       day: day,
       rewardType: 'Coins',
       rewardAmount: coinsEarned.toString(),

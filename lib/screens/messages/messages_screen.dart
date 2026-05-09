@@ -11,6 +11,7 @@ import '../search/dialogs/search_dialog.dart';
 import 'dialogs/create_dm_dialog.dart';
 import 'dialogs/message_request_dialog.dart';
 import 'message_detail_screen.dart';
+import 'package:trivia_tycoon/ui_components/spin_wheel/core/sound_manager.dart';
 
 class MessagesScreen extends ConsumerStatefulWidget {
   const MessagesScreen({super.key});
@@ -298,7 +299,10 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
     final String lastMessagePreview = conversation.lastMessagePreview;
 
     return InkWell(
-      onTap: () => _openConversationDetail(conversation),
+      onTap: () {
+        soundManager.playButtonClick();
+        _openConversationDetail(conversation);
+      },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(

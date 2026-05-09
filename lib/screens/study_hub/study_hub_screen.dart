@@ -14,6 +14,8 @@ class StudyHubScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final recommendedAsync = ref.watch(recommendedStudySetsProvider);
     final allAsync = ref.watch(studySetsProvider);
+    final activeSessions = ref.watch(activeStudySessionsProvider);
+    final categories = ref.watch(studyCategoryListProvider);
 
     return Scaffold(
       backgroundColor: const Color(0xFF0F172A),
@@ -31,6 +33,13 @@ class StudyHubScreen extends ConsumerWidget {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => context.push('/study/create'),
+        backgroundColor: const Color(0xFF6366F1),
+        foregroundColor: Colors.white,
+        icon: const Icon(Icons.add),
+        label: const Text('Create Set'),
+      ),
       body: RefreshIndicator(
         onRefresh: () async {
           ref.invalidate(studySetsProvider);
@@ -40,6 +49,43 @@ class StudyHubScreen extends ConsumerWidget {
           padding: const EdgeInsets.all(16),
           children: [
             _PersonalizationRecommendations(),
+
+            // ── Continue Studying ─────────────────────────────────────────────
+            if (activeSessions.isNotEmpty) ...[
+              _SectionHeader(
+                title: 'Continue Studying',
+                icon: Icons.play_circle_outline,
+                color: const Color(0xFFF59E0B),
+              ),
+              const SizedBox(height: 8),
+              ...activeSessions.entries.map((entry) => _ResumeCard(
+                    setId: entry.key,
+                    sessionId: entry.value,
+                  )),
+              const SizedBox(height: 24),
+            ],
+
+            // ── Quick Access ──────────────────────────────────────────────────
+            _SectionHeader(
+              title: 'Quick Access',
+              icon: Icons.bolt,
+              color: const Color(0xFFEF4444),
+            ),
+            const SizedBox(height: 10),
+            _QuickAccessRow(),
+            const SizedBox(height: 24),
+
+            // ── Browse by Category ────────────────────────────────────────────
+            _SectionHeader(
+              title: 'Browse by Category',
+              icon: Icons.grid_view_rounded,
+              color: const Color(0xFF8B5CF6),
+            ),
+            const SizedBox(height: 10),
+            _CategoryChips(categories: categories),
+            const SizedBox(height: 24),
+
+            // ── Recommended ───────────────────────────────────────────────────
             _SectionHeader(
               title: 'Recommended',
               icon: Icons.auto_awesome,
@@ -52,6 +98,8 @@ class StudyHubScreen extends ConsumerWidget {
               data: (sets) => _StudySetRow(sets: sets),
             ),
             const SizedBox(height: 24),
+
+            // ── All Study Sets ────────────────────────────────────────────────
             _SectionHeader(
               title: 'All Study Sets',
               icon: Icons.library_books,
@@ -63,12 +111,181 @@ class StudyHubScreen extends ConsumerWidget {
               error: (e, _) => _ErrorRow(message: e.toString()),
               data: (sets) => _StudySetList(sets: sets),
             ),
+            const SizedBox(height: 80), // FAB clearance
           ],
         ),
       ),
     );
   }
 }
+
+// ── Quick Access Row ──────────────────────────────────────────────────────────
+
+class _QuickAccessRow extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: _QuickAccessChip(
+            label: 'Due for Review',
+            icon: Icons.schedule,
+            color: const Color(0xFFEF4444),
+            onTap: () => context.push('/study/set/due-review'),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: _QuickAccessChip(
+            label: 'Weak Areas',
+            icon: Icons.trending_up,
+            color: const Color(0xFFEC4899),
+            onTap: () => context.push('/study/set/weak-area'),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: _QuickAccessChip(
+            label: 'Favourites',
+            icon: Icons.favorite,
+            color: const Color(0xFFF59E0B),
+            onTap: () => context.push('/study/favorites'),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _QuickAccessChip extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final Color color;
+  final VoidCallback onTap;
+
+  const _QuickAccessChip({
+    required this.label,
+    required this.icon,
+    required this.color,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.12),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: color.withValues(alpha: 0.3)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: color, size: 22),
+            const SizedBox(height: 6),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: color,
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ── Category Chips ────────────────────────────────────────────────────────────
+
+class _CategoryChips extends StatelessWidget {
+  final List<String> categories;
+
+  const _CategoryChips({required this.categories});
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: categories
+          .map((cat) => ActionChip(
+                label: Text(cat),
+                labelStyle:
+                    const TextStyle(color: Colors.white, fontSize: 13),
+                backgroundColor: const Color(0xFF1E293B),
+                side: const BorderSide(color: Color(0xFF8B5CF6), width: 0.8),
+                onPressed: () =>
+                    context.push('/study/set/category:$cat'),
+              ))
+          .toList(),
+    );
+  }
+}
+
+// ── Resume Card ───────────────────────────────────────────────────────────────
+
+class _ResumeCard extends ConsumerWidget {
+  final String setId;
+  final String sessionId;
+
+  const _ResumeCard({required this.setId, required this.sessionId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return GestureDetector(
+      onTap: () => context.push('/study/session/$sessionId'),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: const Color(0xFF1E293B),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+              color: const Color(0xFFF59E0B).withValues(alpha: 0.4)),
+        ),
+        child: Row(
+          children: [
+            const Icon(Icons.play_circle_fill,
+                color: Color(0xFFF59E0B), size: 28),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Resume session',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Text(
+                    'Set: $setId',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                        color: Colors.white54, fontSize: 12),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right, color: Colors.white38),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ── Section Header ────────────────────────────────────────────────────────────
 
 class _SectionHeader extends StatelessWidget {
   final String title;

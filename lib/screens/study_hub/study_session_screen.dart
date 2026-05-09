@@ -60,7 +60,14 @@ class _StudySessionScreenState extends ConsumerState<StudySessionScreen> {
             selectedOptionId: optionId,
             currentQuestionIndex: _session.currentQuestionIndex,
           );
-      if (mounted) setState(() => _session = updated);
+      if (mounted) {
+        setState(() => _session = updated);
+        if (updated.isCompleted) {
+          ref.read(activeStudySessionsProvider.notifier).update(
+                (s) => Map.from(s)..remove(updated.studySetId),
+              );
+        }
+      }
     } catch (_) {
     } finally {
       if (mounted) setState(() => _loading = false);
@@ -87,6 +94,12 @@ class _StudySessionScreenState extends ConsumerState<StudySessionScreen> {
           _answerRevealed = false;
           _selectedOptionId = null;
         });
+        if (updated.isCompleted) {
+          // Clear resume entry — session is done
+          ref.read(activeStudySessionsProvider.notifier).update(
+                (s) => Map.from(s)..remove(updated.studySetId),
+              );
+        }
       }
     } catch (_) {
     } finally {

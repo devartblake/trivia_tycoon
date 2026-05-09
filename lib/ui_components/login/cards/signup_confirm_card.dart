@@ -70,7 +70,7 @@ class _ConfirmSignupCardState extends ConsumerState<_ConfirmSignupCard>
 
     if (error != null) {
       if (context.mounted) {
-        showErrorToast(context, messages.tycoonToastTitleError, error);
+        showErrorToast(context, messages.toastTitleError, error);
       }
       setState(() => _isSubmitting = false);
       await _fieldSubmitController.reverse();
@@ -80,7 +80,7 @@ class _ConfirmSignupCardState extends ConsumerState<_ConfirmSignupCard>
     if (context.mounted) {
       showSuccessToast(
         context,
-        messages.tycoonToastTitleSuccess,
+        messages.toastTitleSuccess,
         messages.confirmSignupSuccess,
       );
     }
@@ -116,7 +116,7 @@ class _ConfirmSignupCardState extends ConsumerState<_ConfirmSignupCard>
 
     if (error != null) {
       if (context.mounted) {
-        showErrorToast(context, messages.tycoonToastTitleError, error);
+        showErrorToast(context, messages.toastTitleError, error);
       }
 
       setState(() => _isSubmitting = false);
@@ -127,7 +127,7 @@ class _ConfirmSignupCardState extends ConsumerState<_ConfirmSignupCard>
     if (context.mounted) {
       showSuccessToast(
         context,
-        messages.tycoonToastTitleSuccess,
+        messages.toastTitleSuccess,
         messages.resendCodeSuccess,
       );
     }

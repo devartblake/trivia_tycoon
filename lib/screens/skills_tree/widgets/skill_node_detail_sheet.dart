@@ -10,6 +10,7 @@ import '../../../game/providers/xp_provider.dart';
 import '../../../game/services/skill_cooldown_service.dart';
 import 'skill_effect_labels.dart';
 import 'skill_node_widget.dart';
+import 'package:trivia_tycoon/ui_components/spin_wheel/core/sound_manager.dart';
 
 /// A rich modal bottom sheet showing full detail for a [SkillNode].
 ///
@@ -384,13 +385,19 @@ class SkillNodeDetailSheet extends ConsumerWidget {
             onPressed: enabled
                 ? () {
                     if (btnState == _ButtonState.canUnlock) {
+                      soundManager.playUISound('unlock');
                       controller.unlockSkill(node.id);
                     } else {
+                      soundManager.playSuccess();
                       controller.useSkill(node.id);
                     }
                     Navigator.of(context).pop();
                   }
-                : null,
+                : () {
+                    if (btnState == _ButtonState.insufficientXP) {
+                      soundManager.playError();
+                    }
+                  },
             style: FilledButton.styleFrom(
               backgroundColor: enabled ? categoryColor : Colors.white12,
               foregroundColor: enabled ? Colors.white : Colors.white38,

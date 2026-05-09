@@ -46,7 +46,7 @@ class AppLogo extends StatelessWidget {
               ],
             ),
             child: Image.asset(
-              tTriviaGameImage,
+              tSynaptixAppLogo,
               height: size,
               width: size,
               errorBuilder: (context, error, stackTrace) {
@@ -188,7 +188,7 @@ class AppLogoCompact extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Image.asset(
-          tTriviaGameImage,
+          tSynaptixAppLogo,
           height: height,
           errorBuilder: (context, error, stackTrace) {
             return Container(

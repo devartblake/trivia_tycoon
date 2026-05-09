@@ -14,8 +14,8 @@ class LoginMessages {
     this.goBackButton = defaultGoBackButton,
     this.confirmPasswordError = defaultConfirmPasswordError,
     this.recoverPasswordSuccess = defaultRecoverPasswordSuccess,
-    this.tycoonToastTitleError = defaultTycoonToastTitleError,
-    this.tycoonToastTitleSuccess = defaultTycoonToastTitleSuccess,
+    this.toastTitleError = defaultToastTitleError,
+    this.toastTitleSuccess = defaultToastTitleSuccess,
     this.signUpSuccess = defaultSignUpSuccess,
     this.providersTitleFirst = defaultProvidersTitleFirst,
     this.providersTitleSecond = defaultProvidersTitleSecond,
@@ -52,8 +52,8 @@ class LoginMessages {
   static const defaultGoBackButton = 'BACK';
   static const defaultConfirmPasswordError = 'Password do not match!';
   static const defaultRecoverPasswordSuccess = 'An email has been sent';
-  static const defaultTycoonToastTitleSuccess = 'Success';
-  static const defaultTycoonToastTitleError = 'Error';
+  static const defaultToastTitleSuccess = 'Success';
+  static const defaultToastTitleError = 'Error';
   static const defaultSignUpSuccess = 'An activation link has been sent';
   static const defaultProvidersTitleFirst = 'or login with';
   static const defaultProvidersTitleSecond = 'or';
@@ -90,8 +90,8 @@ class LoginMessages {
   final String goBackButton;
   final String confirmPasswordError;
   final String recoverPasswordSuccess;
-  final String tycoonToastTitleError;
-  final String tycoonToastTitleSuccess;
+  final String toastTitleError;
+  final String toastTitleSuccess;
   final String signUpSuccess;
   final String providersTitleFirst;
   final String providersTitleSecond;

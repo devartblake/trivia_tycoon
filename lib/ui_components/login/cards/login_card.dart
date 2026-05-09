@@ -228,7 +228,7 @@ class _LoginCardState extends ConsumerState<_LoginCard>
 
     if (!isNullOrEmpty(error)) {
       if (context.mounted) {
-        showErrorToast(context, messages.tycoonToastTitleError, error!);
+        showErrorToast(context, messages.toastTitleError, error!);
       }
 
       Future.delayed(const Duration(milliseconds: 271), () {
@@ -256,7 +256,7 @@ class _LoginCardState extends ConsumerState<_LoginCard>
         if (context.mounted) {
           showSuccessToast(
             context,
-            messages.tycoonToastTitleSuccess,
+            messages.toastTitleSuccess,
             messages.signUpSuccess,
           );
         }
@@ -285,7 +285,7 @@ class _LoginCardState extends ConsumerState<_LoginCard>
         if (loginProvider.errorsToExcludeFromErrorMessage == null ||
             !loginProvider.errorsToExcludeFromErrorMessage!.contains(error)) {
           if (context.mounted) {
-            showErrorToast(context, messages.tycoonToastTitleError, error!);
+            showErrorToast(context, messages.toastTitleError, error!);
           }
         }
         return false;
@@ -318,7 +318,7 @@ class _LoginCardState extends ConsumerState<_LoginCard>
       if (loginProvider.errorsToExcludeFromErrorMessage == null ||
           !loginProvider.errorsToExcludeFromErrorMessage!.contains(error)) {
         if (context.mounted) {
-          showErrorToast(context, messages.tycoonToastTitleError, error!);
+          showErrorToast(context, messages.toastTitleError, error!);
         }
       }
 
@@ -349,7 +349,7 @@ class _LoginCardState extends ConsumerState<_LoginCard>
           if (loginProvider.errorsToExcludeFromErrorMessage == null ||
               !loginProvider.errorsToExcludeFromErrorMessage!.contains(error)) {
             if (context.mounted) {
-              showErrorToast(context, messages.tycoonToastTitleError, error!);
+              showErrorToast(context, messages.toastTitleError, error!);
             }
           }
 

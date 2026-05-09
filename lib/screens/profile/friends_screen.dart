@@ -13,6 +13,7 @@ import '../../game/providers/message_providers.dart';
 import '../../game/providers/profile_providers.dart' hide currentUserIdProvider;
 import '../../ui_components/presence/presence_status_widget.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:trivia_tycoon/ui_components/spin_wheel/core/sound_manager.dart';
 import '../messages/message_detail_screen.dart';
 
 class FriendsScreen extends ConsumerStatefulWidget {
@@ -580,7 +581,10 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
           final isSelected = tab == _selectedTab;
           return Expanded(
             child: GestureDetector(
-              onTap: () => setState(() => _selectedTab = tab),
+              onTap: () {
+                soundManager.playUISound('tab');
+                setState(() => _selectedTab = tab);
+              },
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
@@ -746,7 +750,10 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
                 borderRadius: BorderRadius.circular(8),
               ),
               child: IconButton(
-                onPressed: () => _acceptFriendRequest(friend),
+                onPressed: () {
+                  soundManager.playSuccess();
+                  _acceptFriendRequest(friend);
+                },
                 icon: const Icon(Icons.check, color: Colors.white, size: 18),
                 padding: EdgeInsets.zero,
               ),
@@ -769,7 +776,10 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
         );
       case 'Suggested':
         return ElevatedButton(
-          onPressed: () => _sendFriendRequest(friend),
+          onPressed: () {
+            soundManager.playUISound('request');
+            _sendFriendRequest(friend);
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF6366F1),
             foregroundColor: Colors.white,

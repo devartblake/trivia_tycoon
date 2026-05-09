@@ -70,7 +70,7 @@ class _ConfirmRecoverCardState extends ConsumerState<_ConfirmRecoverCard>
 
     if (error != null) {
       if (context.mounted) {
-        showErrorToast(context, messages.tycoonToastTitleError, error);
+        showErrorToast(context, messages.toastTitleError, error);
       }
       setState(() => _isSubmitting = false);
       if (context.mounted) {
@@ -81,7 +81,7 @@ class _ConfirmRecoverCardState extends ConsumerState<_ConfirmRecoverCard>
       if (context.mounted) {
         showSuccessToast(
           context,
-          messages.tycoonToastTitleSuccess,
+          messages.toastTitleSuccess,
           messages.confirmRecoverSuccess,
         );
       }

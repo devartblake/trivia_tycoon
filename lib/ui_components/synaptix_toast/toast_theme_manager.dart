@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TycoonToastThemeManager {
+class SynaptixToastThemeManager {
   /// Gets the gradient for a given theme event string
   static LinearGradient getGradientForEvent(String themeEvent) {
     switch (themeEvent.toLowerCase()) {

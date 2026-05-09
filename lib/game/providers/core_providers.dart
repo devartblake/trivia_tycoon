@@ -181,10 +181,10 @@ final audioAssetServiceProvider = Provider<AudioAssetService>((ref) {
 });
 
 /// Unified REST + WebSocket client.
-/// Connect the WebSocket after login: `ref.read(tycoonApiClientEnhancedProvider).connectWs()`.
-final tycoonApiClientEnhancedProvider =
-    Provider<TycoonApiClientEnhanced>((ref) {
-  return TycoonApiClientEnhanced(
+/// Connect the WebSocket after login: `ref.read(synaptixApiClientEnhancedProvider).connectWs()`.
+final synaptixApiClientEnhancedProvider =
+    Provider<SynaptixApiClientEnhanced>((ref) {
+  return SynaptixApiClientEnhanced(
     api: ref.watch(apiServiceProvider),
     ws: ref.watch(wsClientProvider),
   );

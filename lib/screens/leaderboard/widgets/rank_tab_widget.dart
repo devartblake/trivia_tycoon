@@ -43,7 +43,7 @@ final List<TierData> tierList = [
       color: Colors.pinkAccent),
   TierData(
       id: 10,
-      name: "Tycoon",
+      name: "Synaptix",
       icon: Icons.monetization_on_outlined,
       color: Colors.teal),
 ];

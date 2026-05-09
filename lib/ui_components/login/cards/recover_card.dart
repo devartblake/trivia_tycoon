@@ -69,7 +69,7 @@ class _RecoverCardState extends ConsumerState<_RecoverCard>
 
     if (error != null) {
       if (context.mounted) {
-        showErrorToast(context, messages.tycoonToastTitleError, error);
+        showErrorToast(context, messages.toastTitleError, error);
       }
       setState(() => _isSubmitting = false);
       if (context.mounted) {
@@ -80,7 +80,7 @@ class _RecoverCardState extends ConsumerState<_RecoverCard>
       if (context.mounted) {
         showSuccessToast(
           context,
-          messages.tycoonToastTitleSuccess,
+          messages.toastTitleSuccess,
           messages.recoverPasswordSuccess,
         );
       }

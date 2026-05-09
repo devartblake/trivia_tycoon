@@ -10,6 +10,7 @@ import 'events_management/admin_event_queue_screen.dart';
 import 'notifications/admin_notifications_screen.dart';
 import 'questions/file_import_export_screen.dart';
 import 'questions/question_editor_screen.dart';
+import 'package:trivia_tycoon/ui_components/spin_wheel/core/sound_manager.dart';
 
 class AdminDashboardScreen extends ConsumerWidget {
   const AdminDashboardScreen({super.key});
@@ -209,7 +210,10 @@ class AdminDashboardScreen extends ConsumerWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: action.onTap,
+          onTap: () {
+            soundManager.playButtonClick();
+            action.onTap();
+          },
           borderRadius: BorderRadius.circular(20),
           child: Container(
             decoration: BoxDecoration(
