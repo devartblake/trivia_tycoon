@@ -93,22 +93,23 @@ _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue 
   - `presence.update` on quiz/match activity
   - offline transitions on disconnect
 
-### 1b.i Portable avatar/object-storage persistence IN PROGRESS
-- Still needed:
-- Frontend hookup to the backend-supported upload flow for picked avatar images
-- Frontend adoption of the stable backend profile field for object URL/key after upload
-- Frontend upload client for MinIO-backed avatar storage
-- Replace local-device avatar file-path persistence with backend-served object references
-- Recommended file targets:
-- `lib/game/controllers/profile_avatar_controller.dart`
-- `lib/core/services/settings/profile_sync_service.dart`
-- `lib/core/services/storage/` or `lib/core/services/profile/` upload client
-- `lib/screens/profile/` edit/avatar surfaces
-- `test/core/services/` upload/profile sync tests
+### 1b.i Portable avatar/object-storage persistence — PLANNED (next batch)
+
+#### ✅ Already in place
+- `lib/core/services/avatar_upload_service.dart` — 2-step presigned-URL upload service exists (POST for ticket → PUT bytes to MinIO) but is not yet wired
+- Backend contract confirmed: `POST /users/me/avatar/upload-url` → `{uploadUrl, objectKey, publicUrl}`
+- `ProfileSyncService.syncProfileFields(avatar: url)` can persist the returned URL
+
+#### 🔲 Still needed (implementation batch)
+- Update `AvatarUploadService` to accept `XFile` (cross-platform); add `fileName`/`contentLength` to request body; normalise `publicUrl`/`avatarUrl` response field
+- Inject `AvatarUploadService` + `ProfileSyncService` into `ProfileAvatarController`; add upload state (`isUploading`, `uploadProgress`, `remoteAvatarUrl`, `uploadError`, `retryUpload`)
+- Add `avatarUploadServiceProvider` and `profileSyncServiceProvider` to `game_providers.dart`; update `profileAvatarControllerProvider`
+- Progress overlay and error/retry UI in `profile_character_section.dart`
+- Tests: `test/core/services/avatar_upload_service_test.dart` (5 cases), `test/game/controllers/profile_avatar_controller_upload_test.dart` (5 cases)
 - Notes:
-- Asset-path avatars and backend-served URLs are already safe to sync.
-- Local emulator/device file paths are not portable across reinstalls and should
-  not be treated as authoritative backend profile values.
+  - Asset-path avatars and backend-served URLs are already safe to sync.
+  - Local emulator/device file paths are not portable across reinstalls and should
+    not be treated as authoritative backend profile values.
 
 #### MinIO avatar upload integration checklist
 
@@ -585,3 +586,4 @@ or use conditional imports to provide web-safe stubs.
 | Secure channel (scaffolding) | ✅ Scaffolded; rollout to endpoints pending |
 | Secure channel (Phase 1 endpoint rollout + codec tests) | ✅ Complete — `sendFriendRequest` + `acceptFriendRequest` encrypted; `secure_payload_codec_test.dart` added |
 | Study Hub frontend (hub entry points, favorites, custom sets, session resume) | ✅ Complete — `7b18b03` (2026-05-09) |
+| MinIO avatar upload (frontend) | ⏳ Planned — `AvatarUploadService` exists; controller/provider wiring + progress UI next |

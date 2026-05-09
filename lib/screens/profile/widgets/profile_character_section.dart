@@ -54,6 +54,48 @@ class ProfileCharacterSection extends ConsumerWidget {
                 child: _buildAvatarDisplay(controller),
               ),
             ),
+            if (controller.isUploading)
+              Positioned.fill(
+                child: ClipOval(
+                  child: ColoredBox(
+                    color: Colors.black38,
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        value: controller.uploadProgress > 0
+                            ? controller.uploadProgress
+                            : null,
+                        color: Colors.white,
+                        strokeWidth: 3,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            if (controller.uploadError != null && !controller.isUploading)
+              Positioned(
+                bottom: 64,
+                child: GestureDetector(
+                  onTap: controller.retryUpload,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.red.shade700,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.refresh, color: Colors.white, size: 14),
+                        SizedBox(width: 4),
+                        Text('Retry upload',
+                            style: TextStyle(
+                                color: Colors.white, fontSize: 12)),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             Positioned(
               bottom: 16,
               right: 16,
