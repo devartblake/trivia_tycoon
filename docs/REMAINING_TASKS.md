@@ -1,6 +1,6 @@
 # Remaining Tasks & Work Backlog
 
-_Last updated: 2026-05-08 — Packet E Workstream 1 complete (`79bc788`); spin wheel redesign complete; secure channel scaffolded_
+_Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue expansion to all 6 surfaces ✅; Study Hub gaps (hub entry points, favorites, custom set creation, session resume) ✅_
 
 > This file is the canonical "what is left to do" reference.
 > For completed work, see [`docs/ALPHA_TASK_AUDIT.md`](ALPHA_TASK_AUDIT.md).
@@ -205,7 +205,7 @@ _Last updated: 2026-05-08 — Packet E Workstream 1 complete (`79bc788`); spin w
   - decision on whether local fallback should remain in production once backend parity is proven
   - deeper observability metrics beyond the new source banner/logging (success ratios, latency, coverage drift)
 
-### 1f. Study backend contract COMPLETE, frontend adoption REMAINING
+### 1f. Study Hub COMPLETE ✅ — all frontend surfaces implemented
 - Backend now supports:
   - generated category study sets
   - generated weak-area study sets

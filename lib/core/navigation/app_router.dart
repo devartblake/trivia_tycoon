@@ -103,6 +103,7 @@ import '../../screens/learn_hub/module_detail_screen.dart';
 import '../../screens/study_hub/study_hub_screen.dart';
 import '../../screens/study_hub/study_set_screen.dart';
 import '../../screens/study_hub/study_session_screen.dart';
+import '../../screens/study_hub/study_custom_set_screen.dart';
 import '../dto/study_dto.dart';
 import '../../screens/login_screen.dart';
 import '../../screens/onboarding/onboarding_screen.dart';
@@ -894,6 +895,20 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/study/weak-areas',
         name: 'study-weak-areas',
         redirect: (context, state) => '/study/set/weak-area',
+      ),
+      GoRoute(
+        path: '/study/create',
+        name: 'study-create',
+        builder: (context, state) => const StudyCustomSetScreen(),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/study/set/:setId/edit',
+        name: 'study-set-edit',
+        builder: (context, state) => StudyCustomSetScreen(
+          editSetId: state.pathParameters['setId'],
+        ),
+        redirect: onboardingGuard,
       ),
 
       GoRoute(
