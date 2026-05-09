@@ -12,6 +12,7 @@ import '../../game/providers/riverpod_providers.dart'
     hide analyticsServiceProvider;
 import '../../synaptix/mode/synaptix_mode_provider.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:trivia_tycoon/ui_components/spin_wheel/core/sound_manager.dart';
 
 class LeaderboardScreen extends ConsumerStatefulWidget {
   const LeaderboardScreen({super.key});
@@ -510,6 +511,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                     ),
                     GestureDetector(
                       onTap: () {
+                        soundManager.playButtonClick();
                         context.push('/ranking');
                       },
                       child: Container(
@@ -759,6 +761,7 @@ class _TierProgressionWidgetState extends State<TierProgressionWidget>
 
     return GestureDetector(
       onTap: () {
+        soundManager.playUISound('tab');
         if (isUnlocked && widget.onTierTap != null) {
           widget.onTierTap!(index);
         }

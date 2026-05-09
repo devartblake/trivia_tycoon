@@ -8,10 +8,18 @@ Frontend = Renderer
 Backend = Decision Maker
 
 ## API Integration
-- GET /personalization/home/{playerId}
-- GET /personalization/recommendations/{playerId}
+
+> ⚠️ **Path shapes below are superseded.** The live implementation (see `lib/core/networking/synaptix_api_client.dart`) uses the April 30 2026 contract paths: `/personalization/{playerId}/home`, `/personalization/{playerId}/recommendations`, etc. Treat any `/personalization/home/{playerId}` or `/personalization/recommendations/{playerId}` references in this doc as historical only.
+
+Current correct paths (as implemented):
+- GET /personalization/{playerId}/profile
+- GET /personalization/{playerId}/home
+- GET /personalization/{playerId}/recommendations
+- POST /personalization/{playerId}/events
+- POST /personalization/{playerId}/toggle
 - GET /coach/{playerId}/daily-brief
-- POST accept/dismiss
+- POST /coach/{playerId}/feedback
+- GET /experiments/player/{playerId}
 
 ## UI Areas
 - Home (recommended mode, category, mission)

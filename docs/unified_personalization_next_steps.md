@@ -44,11 +44,20 @@
 - `PlayerInboxService.MarkReadAsync` → `notification_opened`; `DeleteAsync` → `notification_dismissed`
 
 ## Frontend Impact ✅
+
+> ⚠️ **Path shapes below were superseded by the April 30 2026 backend handoff.** The live Flutter implementation uses the correct paths listed immediately after.
+
+~~`GET /personalization/home/{playerId}`~~  
+~~`POST /personalization/recommendations/{id}/accept`~~  
+~~`POST /personalization/recommendations/{id}/dismiss`~~
+
+**Current correct paths (as implemented in `synaptix_api_client.dart`):**
 ```
-GET /personalization/home/{playerId}    — home screen personalization
-GET /coach/{playerId}/daily-brief       — coach brief with tone/archetype
-POST /personalization/recommendations/{id}/accept
-POST /personalization/recommendations/{id}/dismiss
+GET  /personalization/{playerId}/home
+GET  /personalization/{playerId}/recommendations
+POST /personalization/{playerId}/events   — replaces accept/dismiss; send BehaviourEventDto with eventType: 'recommendation_accepted' or 'recommendation_dismissed'
+GET  /coach/{playerId}/daily-brief
+POST /coach/{playerId}/feedback
 ```
 Frontend displays results only (no logic). All scoring, guardrails, and recommendations are backend-authoritative.
 

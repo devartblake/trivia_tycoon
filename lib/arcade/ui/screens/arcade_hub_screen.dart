@@ -8,6 +8,7 @@ import '../../domain/arcade_difficulty.dart';
 import '../../domain/arcade_game_definition.dart';
 import '../../providers/arcade_providers.dart';
 import 'arcade_game_shell.dart';
+import 'package:trivia_tycoon/ui_components/spin_wheel/core/sound_manager.dart';
 
 class ArcadeHubScreen extends ConsumerWidget {
   const ArcadeHubScreen({super.key});
@@ -520,7 +521,10 @@ class ArcadeHubScreen extends ConsumerWidget {
   Widget _buildFeaturedSection(
       BuildContext context, ArcadeGameDefinition game) {
     return GestureDetector(
-      onTap: () => _openDifficultyPicker(context, game),
+      onTap: () {
+        soundManager.playButtonClick();
+        _openDifficultyPicker(context, game);
+      },
       child: Container(
         margin: const EdgeInsets.fromLTRB(20, 24, 20, 0),
         height: 180,
@@ -547,7 +551,10 @@ class ArcadeHubScreen extends ConsumerWidget {
           color: Colors.transparent,
           child: InkWell(
             borderRadius: BorderRadius.circular(24),
-            onTap: () => _openDifficultyPicker(context, game),
+            onTap: () {
+              soundManager.playButtonClick();
+              _openDifficultyPicker(context, game);
+            },
             child: Padding(
               padding: const EdgeInsets.all(24),
               child: Row(
@@ -943,7 +950,10 @@ class ArcadeHubScreen extends ConsumerWidget {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: () => Navigator.of(context).pop(difficulty),
+            onTap: () {
+              soundManager.playUISound('reward');
+              Navigator.of(context).pop(difficulty);
+            },
             borderRadius: BorderRadius.circular(16),
             child: Padding(
               padding: const EdgeInsets.all(16),

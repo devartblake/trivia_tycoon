@@ -12,6 +12,7 @@ import '../../../game/providers/skill_cooldown_service_provider.dart';
 import '../../../game/providers/skill_tree_provider.dart';
 import '../../../game/providers/xp_provider.dart';
 import 'skill_node_detail_sheet.dart';
+import 'package:trivia_tycoon/ui_components/spin_wheel/core/sound_manager.dart';
 
 enum SkillNodeFilterMode { all, unlocked, available, locked }
 
@@ -130,6 +131,7 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
     final node = state.graph.byId[id];
     if (node == null) return;
 
+    soundManager.playButtonClick();
     // Show the rich detail modal
     SkillNodeDetailSheet.show(context, ref, node);
   }

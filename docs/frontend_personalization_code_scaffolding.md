@@ -1,5 +1,7 @@
 # Synaptix Unified Personalization — Flutter Integration Scaffolding
 
+> ⚠️ **Historical scaffolding doc.** The API endpoint paths in the example code below reflect the pre-April 30 2026 shape (e.g. `/personalization/home/{playerId}`, `/personalization/recommendations/{playerId}`). These are **superseded**. The live implementation in `lib/core/networking/synaptix_api_client.dart` uses the correct paths: `/personalization/{playerId}/home`, `/personalization/{playerId}/recommendations`, `/personalization/{playerId}/events`. Do not use this doc as a reference for endpoint paths.
+
 ## 1. Purpose
 
 This document provides code-ready Flutter scaffolding for integrating the Unified Personalization Layer into the Synaptix / Trivia Tycoon frontend.
@@ -1068,13 +1070,12 @@ await api.dismissRecommendation(
 
 Personalization must never block gameplay.
 
-If these fail:
+If these fail (current correct paths):
 
 ```text
-GET /personalization/home/{playerId}
-GET /coach/{playerId}/daily-brief
-POST accept/dismiss
-POST behavior event
+GET  /personalization/{playerId}/home
+GET  /coach/{playerId}/daily-brief
+POST /personalization/{playerId}/events   (behavior events — replaces old accept/dismiss)
 ```
 
 Then the frontend should:
