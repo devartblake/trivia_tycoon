@@ -39,6 +39,7 @@ class AvatarPackageService {
   /// Where packages are installed:
   /// <documents>/avatarPackages/<packageId_version>/
   Future<Directory> get _packagesRootDir async {
+    if (kIsWeb) throw UnsupportedError('Avatar packages not supported on web.');
     final docs = await getApplicationDocumentsDirectory();
     final root = Directory(p.join(docs.path, 'avatarPackages'));
     if (!await root.exists()) {
@@ -48,10 +49,12 @@ class AvatarPackageService {
   }
 
   File _manifestFileSync(Directory installDir) {
+    if (kIsWeb) throw UnsupportedError('Avatar packages not supported on web.');
     return File(p.join(installDir.path, 'manifest.json'));
   }
 
   Future<File> _manifestFile(Directory installDir) async {
+    if (kIsWeb) throw UnsupportedError('Avatar packages not supported on web.');
     return File(p.join(installDir.path, 'manifest.json'));
   }
 
@@ -404,6 +407,7 @@ class AvatarPackageService {
   // ---------------------------------------------------------------------------
 
   Future<List<AvatarPackageInstall>> _scanInstalledPackagesFromDisk() async {
+    if (kIsWeb) throw UnsupportedError('Avatar packages not supported on web.');
     final root = await _packagesRootDir;
     if (!await root.exists()) return const [];
 

@@ -12,7 +12,7 @@ import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
 enum AvatarType { image, asset2D, asset3D }
 
 class ProfileAvatarController extends ChangeNotifier {
-  File? _imageFile;
+  XFile? _imageFile;
   String? _avatarPath;
   File? _avatarFile;
   final ImagePicker _picker = ImagePicker();
@@ -37,7 +37,7 @@ class ProfileAvatarController extends ChangeNotifier {
 
   // 🧠 Public Getters
   DepthCardTheme get depthCardTheme => _depthCardTheme;
-  File? get imageFile => _imageFile;
+  XFile? get imageFile => _imageFile;
   File? get avatarFile => _avatarFile;
   String? get avatarPath => _avatarPath;
 
@@ -50,13 +50,13 @@ class ProfileAvatarController extends ChangeNotifier {
     try {
       final cropped = await _cropToSquare(picked.path);
       final savePath = cropped ?? picked.path;
-      _imageFile = File(savePath);
+      _imageFile = XFile(savePath);
       await keyValueStorage.setString(_profileImageKey, savePath);
       notifyListeners();
     } catch (e) {
       LogManager.error('Avatar crop failed, using original: $e',
           source: 'ProfileAvatarController');
-      _imageFile = File(picked.path);
+      _imageFile = picked;
       await keyValueStorage.setString(_profileImageKey, picked.path);
       notifyListeners();
     }
@@ -97,7 +97,7 @@ class ProfileAvatarController extends ChangeNotifier {
     if (kIsWeb) return;
     final path = await keyValueStorage.getString(_profileImageKey);
     if (path != null && File(path).existsSync()) {
-      _imageFile = File(path);
+      _imageFile = XFile(path);
       notifyListeners();
     }
   }
@@ -113,7 +113,7 @@ class ProfileAvatarController extends ChangeNotifier {
 
   // 💾 Save selected avatar from assets
   Future<void> selectAvatarFromAsset(String assetPath) async {
-    _avatarFile = File(assetPath);
+    if (!kIsWeb) _avatarFile = File(assetPath);
     _avatarPath = assetPath;
     await keyValueStorage.setString(_avatarPathKey, assetPath);
     notifyListeners();

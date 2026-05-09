@@ -17,7 +17,9 @@ import '../../core/manager/service_manager.dart';
 import '../../core/navigation/app_router.dart';
 import '../../core/networking/http_client.dart';
 import '../../core/networking/synaptix_api_client.dart';
+import '../../core/networking/encrypted_api_client.dart';
 import '../../core/networking/ws_client.dart';
+import '../../core/networking/ws_protocol.dart';
 import '../../core/services/analytics/config_service.dart';
 import '../../core/services/api_service.dart';
 import '../../core/services/auth_api_client.dart';
@@ -65,6 +67,20 @@ final globalWsClientProvider = Provider<WsClient?>((ref) {
 
 final wsConnectionStatusProvider = StateProvider<bool>((ref) {
   return AppInit.isWebSocketConnected;
+});
+
+final wsMessageStreamProvider = StreamProvider<WsEnvelope>((ref) {
+  final client = ref.watch(globalWsClientProvider);
+  return client?.messageStream ?? const Stream.empty();
+});
+
+final wsStateStreamProvider = StreamProvider<WsState>((ref) {
+  final client = ref.watch(globalWsClientProvider);
+  return client?.stateStream ?? const Stream.empty();
+});
+
+final encryptedApiClientProvider = Provider<EncryptedApiClient>((ref) {
+  return ref.watch(serviceManagerProvider).encryptedApiClient;
 });
 
 // ---------------------------------------------------------------------------

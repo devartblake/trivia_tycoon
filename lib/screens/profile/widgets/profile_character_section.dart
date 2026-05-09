@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -115,7 +117,7 @@ class ProfileCharacterSection extends ConsumerWidget {
       );
     } else if (imageFile != null) {
       return Image.file(
-        imageFile,
+        File(imageFile.path),
         width: double.infinity,
         height: double.infinity,
         fit: BoxFit.cover,
