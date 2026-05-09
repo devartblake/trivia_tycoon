@@ -2,6 +2,12 @@
 
 Repository: `devartblake/trivia_tycoon`
 
+## Phase 1 Status — COMPLETE (`e144fd2`, 2026-05-09)
+
+`sendFriendRequest` (`POST /users/me/friends/request`) and `acceptFriendRequest` (`POST /users/me/friends/requests/{id}/accept`) are now routed through `EncryptedApiClient` when injected. `backendProfileSocialServiceProvider` injects `encryptedApiClientProvider`. Codec tests in `test/core/security/secure_payload_codec_test.dart` (7 cases). Next: roll out to additional mutation endpoints (Phase 2).
+
+---
+
 ## Objective
 
 Add a dedicated secure client-server payload encryption layer to the Flutter app without replacing the existing `ApiService`, `AuthHttpClient`, `SecureStorage`, or auth flow.

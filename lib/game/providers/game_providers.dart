@@ -34,8 +34,10 @@ import '../../core/services/settings/theme_settings_service.dart';
 // BackendAuthService — not the AuthService type that ServiceManager.authService
 // actually holds. Import the legacy AuthService from its real location instead.
 import 'package:trivia_tycoon/ui_components/login/providers/auth.dart';
+import '../../core/services/avatar_upload_service.dart';
 import '../../core/services/encryption/encryption_service.dart';
 import '../../core/services/encryption/fernet_service.dart';
+import '../../core/services/settings/profile_sync_service.dart';
 import '../../core/services/theme/swatch_service.dart';
 import '../../core/services/theme/theme_notifier.dart';
 import '../../game/controllers/fernet_controller.dart';
@@ -177,12 +179,26 @@ final leaderboardAssetProvider =
 // Profile / Avatar
 // ---------------------------------------------------------------------------
 
+final avatarUploadServiceProvider = Provider<AvatarUploadService>((ref) {
+  return AvatarUploadService(ref.read(apiServiceProvider));
+});
+
+final profileSyncServiceProvider = Provider<ProfileSyncService>((ref) {
+  final serviceManager = ref.read(serviceManagerProvider);
+  return ProfileSyncService(
+    apiService: serviceManager.apiService,
+    trackEvent: serviceManager.analyticsService.trackEvent,
+  );
+});
+
 final profileAvatarControllerProvider =
     ChangeNotifierProvider<ProfileAvatarController>((ref) {
   final serviceManager = ref.read(serviceManagerProvider);
   return ProfileAvatarController(
     keyValueStorage: serviceManager.generalKeyValueStorageService,
     appCache: serviceManager.appCacheService,
+    uploadService: ref.read(avatarUploadServiceProvider),
+    syncService: ref.read(profileSyncServiceProvider),
   );
 });
 

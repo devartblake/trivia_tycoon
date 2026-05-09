@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,7 +8,7 @@ import 'package:trivia_tycoon/core/animations/animation_manager.dart';
 /// Provides a beautiful bottom sheet interface for selecting profile images
 /// from camera or gallery with smooth animations and visual feedback.
 class ProfileImagePicker extends StatefulWidget {
-  final ValueChanged<File> onImageSelected;
+  final ValueChanged<XFile> onImageSelected;
   final VoidCallback? onCancel;
   final bool showCamera;
   final bool showGallery;
@@ -85,7 +84,7 @@ class _ProfileImagePickerState extends State<ProfileImagePicker>
       if (!mounted) return;
 
       if (picked != null) {
-        if (!kIsWeb) widget.onImageSelected(File(picked.path));
+        widget.onImageSelected(picked);
         await _animationController.reverse();
         if (mounted) {
           Navigator.of(context).pop();
@@ -361,7 +360,7 @@ class _ImageSourceOptionState extends State<_ImageSourceOption> {
 /// Shows the profile image picker as a modal bottom sheet
 Future<void> showProfileImagePicker({
   required BuildContext context,
-  required ValueChanged<File> onImageSelected,
+  required ValueChanged<XFile> onImageSelected,
   VoidCallback? onCancel,
   bool showCamera = true,
   bool showGallery = true,

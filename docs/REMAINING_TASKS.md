@@ -13,7 +13,7 @@ _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue 
 
 | Area | Priority | Status | Blocked? |
 |------|----------|--------|----------|
-| Frontend/backend alpha handoff | High | Store, profile/social, question gameplay complete; crypto + ML remain | No |
+| Frontend/backend alpha handoff | High | Store, profile/social, question gameplay, study hub complete; crypto + ML remain | No |
 | **3D Avatar purchase path (Browse → Buy → Download)** | **High** | **Complete** | **No** |
 | **Avatar handler unit tests (18 tests)** | **High** | **Complete — `Tycoon.Backend.Application.Tests/Avatars/AvatarHandlerTests.cs`** | **No** |
 | **MinIO catalog seeders (StoreItems, SkillNodes, SeasonRewards, Questions)** | **High** | **Complete** | **No** |
@@ -32,13 +32,14 @@ _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue 
 | Phase 3 - Test coverage (remaining gaps) | Medium | ~4.1% → 40% target | No |
 | Phase 4 - Dependency audit | Medium | Partial | No |
 | Sprint 1 - Auth/profile integration verification | Medium | Partially improved; live backend verification still needed | Yes — needs live server |
-| Sprint 2 - Networking layer (Flutter) | High | Not started | No |
+| **Sprint 2 - Networking layer (Flutter)** | **High** | **Complete — `wsMessageStreamProvider`, `wsStateStreamProvider`, `encryptedApiClientProvider` added** | **No** |
 | Synaptix runtime validation | Medium | Blocked | Yes — needs device + backend |
 | **Packet E Workstream 1 (symbol cleanup)** | **Low** | **Complete — `79bc788` (2026-05-08)** | **No** |
 | Packet E Workstream 2 (package root rename) | Deferred | Blocked — awaiting store plan | Yes — needs store/legal plan |
 | Backend Packet E (namespace rename) | Deferred | Not started | Intentional deferral |
 | **Spin wheel redesign** | **Medium** | **Complete** | **No** |
 | **Secure channel scaffolding** | **High** | **Complete (scaffolded); rollout pending** | **No** |
+| **Secure channel Phase 1 endpoint rollout** | **High** | **Complete — `sendFriendRequest` + `acceptFriendRequest` wired to `EncryptedApiClient`** | **No** |
 
 ---
 
@@ -63,8 +64,18 @@ _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue 
   - login/signup now attempt backend profile hydration
   - bootstrap now attempts backend profile hydration before falling back to Hive
 
-### 1b.ii Friends/social runtime verification REMAINING
-- Still needed:
+### 1b.ii Friends/social — Code-complete; runtime verification REMAINING
+
+#### ✅ Code-complete (this session)
+- `FriendDiscoveryService` absorbed into `BackendProfileSocialService` and deleted
+- New methods: `blockUser`, `unblockUser`, `getBlockedUserIds`, `cancelFriendRequest`
+- New local-preference helpers: `setFriendNickname`, `getFriendNickname`, `toggleFavourite`, `isFavourite`, `getFavouriteFriendIds`
+- New derived helpers: `getFriendshipStatus`, `getOnlineFriends`, `getSocialAnalytics`
+- Riverpod stream providers added: `friendsListStreamProvider`, `pendingRequestsStreamProvider`, `blockedUsersProvider`, `favouriteFriendIdsProvider`
+- Unit tests extended to 20 cases in `backend_profile_social_service_test.dart`
+- `RichPresenceService` test coverage added (`rich_presence_service_test.dart`, 12 cases)
+
+#### Blocked — needs live backend + two devices
 - Live verification of:
   - `GET /users/me/friends`
   - `GET /users/me/friends/requests`
@@ -81,25 +92,24 @@ _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue 
   - initial `presence.bulk`
   - `presence.update` on quiz/match activity
   - offline transitions on disconnect
-- Final cleanup/deprecation decision for `FriendDiscoveryService`
-- Flutter-enabled formatter/analyzer/test pass
 
-### 1b.i Portable avatar/object-storage persistence IN PROGRESS
-- Still needed:
-- Frontend hookup to the backend-supported upload flow for picked avatar images
-- Frontend adoption of the stable backend profile field for object URL/key after upload
-- Frontend upload client for MinIO-backed avatar storage
-- Replace local-device avatar file-path persistence with backend-served object references
-- Recommended file targets:
-- `lib/game/controllers/profile_avatar_controller.dart`
-- `lib/core/services/settings/profile_sync_service.dart`
-- `lib/core/services/storage/` or `lib/core/services/profile/` upload client
-- `lib/screens/profile/` edit/avatar surfaces
-- `test/core/services/` upload/profile sync tests
+### 1b.i Portable avatar/object-storage persistence — PLANNED (next batch)
+
+#### ✅ Already in place
+- `lib/core/services/avatar_upload_service.dart` — 2-step presigned-URL upload service exists (POST for ticket → PUT bytes to MinIO) but is not yet wired
+- Backend contract confirmed: `POST /users/me/avatar/upload-url` → `{uploadUrl, objectKey, publicUrl}`
+- `ProfileSyncService.syncProfileFields(avatar: url)` can persist the returned URL
+
+#### 🔲 Still needed (implementation batch)
+- Update `AvatarUploadService` to accept `XFile` (cross-platform); add `fileName`/`contentLength` to request body; normalise `publicUrl`/`avatarUrl` response field
+- Inject `AvatarUploadService` + `ProfileSyncService` into `ProfileAvatarController`; add upload state (`isUploading`, `uploadProgress`, `remoteAvatarUrl`, `uploadError`, `retryUpload`)
+- Add `avatarUploadServiceProvider` and `profileSyncServiceProvider` to `game_providers.dart`; update `profileAvatarControllerProvider`
+- Progress overlay and error/retry UI in `profile_character_section.dart`
+- Tests: `test/core/services/avatar_upload_service_test.dart` (5 cases), `test/game/controllers/profile_avatar_controller_upload_test.dart` (5 cases)
 - Notes:
-- Asset-path avatars and backend-served URLs are already safe to sync.
-- Local emulator/device file paths are not portable across reinstalls and should
-  not be treated as authoritative backend profile values.
+  - Asset-path avatars and backend-served URLs are already safe to sync.
+  - Local emulator/device file paths are not portable across reinstalls and should
+    not be treated as authoritative backend profile values.
 
 #### MinIO avatar upload integration checklist
 
@@ -205,25 +215,14 @@ _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue 
   - decision on whether local fallback should remain in production once backend parity is proven
   - deeper observability metrics beyond the new source banner/logging (success ratios, latency, coverage drift)
 
-### 1f. Study Hub COMPLETE ✅ — all frontend surfaces implemented
-- Backend now supports:
-  - generated category study sets
-  - generated weak-area study sets
-  - favorites-backed generated study set
-  - due-review generated study set from persisted study card state
-  - custom saved study sets
-  - resumable study sessions
-  - flashcard/self-test mode persistence
-  - explicit flashcard interaction state persistence
-- Frontend still needed:
-  - `StudyHubScreen`
-  - `/study` route scaffolding
-  - favorites review UI
-  - category / weak-area / due-review Study entry points
-  - custom-set create/edit UI
-  - flashcard session UI consuming `StudySessionDto.interactions`
-  - self-test UI consuming `StudySessionDto.answeredQuestionIds`
-  - recent-session resume wiring
+### 1f. Study Hub COMPLETE ✅ — `7b18b03` (2026-05-09)
+- Frontend delivered:
+  - `StudyHubScreen` with "Continue Studying", "Quick Access" (Due for Review / Weak Areas / Favourites), "Browse by Category" chips, and "Create Set" FAB
+  - `/study/create` and `/study/set/:setId/edit` routes
+  - `StudyCustomSetScreen` — create/edit custom study sets with title, description, question search/selection
+  - `StudySetScreen` — session resume dialog, edit button for Custom sets, per-question favorites toggle
+  - `StudySessionScreen` (flashcard + self-test) — clears active session on completion
+  - `favoritedQuestionIdsProvider`, `activeStudySessionsProvider`, `studyCategoryListProvider` providers
 - Primary handoff:
   - `docs/study_frontend_backend_handoff_2026-04-18.md`
 
@@ -450,14 +449,15 @@ Status is improved but still requires explicit live verification:
 
 ---
 
-## 6. Sprint 2 - Networking Layer
+## 6. Sprint 2 - Networking Layer ✅ COMPLETE
 
-Note: `web_socket_channel: ^3.0.3` and `uuid: ^4.5.2` are already present in `pubspec.yaml`. `lib/core/networking/` contains `encrypted_api_client.dart` (secure channel). Verify remaining networking file gaps before marking complete.
-
-- [ ] Confirm 4 core networking files are in `lib/core/networking/` (WebSocket connection, message stream, reconnect logic)
-- [ ] Add 3 new Riverpod providers (WebSocket connection, message stream, reconnect logic) if not already present
-- [ ] Integrate with existing HTTP layer (`AuthHttpClient` -> `HttpClient` -> WebSocket upgrade)
 - [x] `web_socket_channel` and `uuid` in `pubspec.yaml` — already present
+- [x] Core networking files confirmed: `ws_client.dart`, `ws_protocol.dart`, `ws_reliability.dart`, `signalr/` adapter
+- [x] 3 Riverpod providers added to `lib/game/providers/core_providers.dart`:
+  - `wsMessageStreamProvider` — `Stream<WsEnvelope>` from `WsClient.messageStream`
+  - `wsStateStreamProvider` — `Stream<WsState>` from `WsClient.stateStream`
+  - `encryptedApiClientProvider` — exposes `EncryptedApiClient` from `ServiceManager`
+- [x] HTTP layer integration: `SynaptixApiClientEnhanced` has `connectWs()` method
 
 ---
 
@@ -511,6 +511,11 @@ Intentionally deferred to after Alpha launch. No urgency.
 **Startup fixed:** `api_service.dart` and `auth_error_messages.dart` no longer import
 `dart:io`, eliminating the startup cascade failure on web.
 
+**This session — 3 files guarded (out of 19 listed; 16 were already guarded at runtime):**
+- ✅ `lib/game/services/avatar_package_service.dart` — added `kIsWeb` guards to 4 private methods
+- ✅ `lib/ui_components/profile_avatar/profile_image_picker.dart` — callback changed to `ValueChanged<XFile>`; `dart:io` import removed
+- ✅ `lib/game/controllers/profile_avatar_controller.dart` — `File?` fields changed to `XFile?`; callers updated
+
 The following files still import `dart:io` unconditionally. They are **not** in the startup
 path so the app loads on web, but these screens/features will throw when visited on web:
 
@@ -519,7 +524,6 @@ path so the app loads on web, but these screens/features will throw when visited
 | `lib/ui_components/spin_wheel/services/prize_log_export_service.dart` | Spin-wheel export | File export will fail |
 | `lib/ui_components/shimmer_avatar/widgets/avatar_content.dart` | Avatar display | Avatar widget will throw |
 | `lib/ui_components/shimmer_avatar/utils/avatar_helpers.dart` | Avatar helpers | Avatar feature will throw |
-| `lib/ui_components/profile_avatar/profile_image_picker.dart` | Avatar upload | File picker unavailable on web |
 | `lib/ui_components/depth_card_3d/core/depth_card_3d.dart` | 3D cards | May throw if `dart:io` class is instantiated |
 | `lib/ui_components/confetti/utils/confetti_log_manager.dart` | Confetti debug overlay | Debug-only; low impact |
 | `lib/ui_components/color_picker/utils/color_log_manager.dart` | Color picker | Debug-only; low impact |
@@ -528,9 +532,7 @@ path so the app loads on web, but these screens/features will throw when visited
 | `lib/screens/profile/widgets/avatar_image_card.dart` | Profile screen | Avatar card will throw |
 | `lib/screens/profile/widgets/avatar_package_image.dart` | Profile screen | Avatar image will throw |
 | `lib/screens/profile/tabs/collection_tab.dart` | Profile -> Collections tab | Collections tab will throw |
-| `lib/game/services/avatar_package_service.dart` | Avatar packages | Service will throw on web |
 | `lib/game/services/collection_items_loader.dart` | Collection items | Loader will throw on web |
-| `lib/game/controllers/profile_avatar_controller.dart` | Profile avatar | Controller will throw on web |
 | `lib/admin/widgets/encrypted_file_preview.dart` | Admin | Admin only; low web priority |
 | `lib/admin/widgets/question_editor_form.dart` | Admin | Admin only; low web priority |
 | `lib/admin/questions/question_list_screen.dart` | Admin | Admin only; low web priority |
@@ -575,11 +577,13 @@ or use conditional imports to provide web-safe stubs.
 | CI pipeline enforces coverage + lint + no raw prints | Not configured |
 | All source-code TODO/FIXME resolved | Done (0 remaining) |
 | Runtime validation of all Synaptix screens | Blocked (needs device) |
-| Sprint 2 networking layer | Partially complete (`web_socket_channel` + `uuid` in pubspec; verify remaining file gaps) |
-| Remaining `dart:io` in screen-level files (web) | 19 files - app loads, affected screens throw |
+| Sprint 2 networking layer | ✅ Complete — WS stream providers + encrypted client provider added |
+| Remaining `dart:io` in screen-level files (web) | 16 files remain (3 fixed this session: avatar_package_service, profile_image_picker, profile_avatar_controller) |
 | Windows desktop prerequisite (`nuget.exe` for `flutter_inappwebview_windows`) | Pending on local machine |
 | Packet E Workstream 1 (symbol cleanup) | ✅ Complete — `79bc788` (2026-05-08) |
 | Packet E Workstream 2 (package root rename) | ⏸️ Blocked — awaiting store/legal plan |
 | Spin wheel redesign (pie-chart renderer, fixed needle, gesture spin) | ✅ Complete |
 | Secure channel (scaffolding) | ✅ Scaffolded; rollout to endpoints pending |
-| Secure channel (endpoint rollout + tests) | ❌ Not started |
+| Secure channel (Phase 1 endpoint rollout + codec tests) | ✅ Complete — `sendFriendRequest` + `acceptFriendRequest` encrypted; `secure_payload_codec_test.dart` added |
+| Study Hub frontend (hub entry points, favorites, custom sets, session resume) | ✅ Complete — `7b18b03` (2026-05-09) |
+| MinIO avatar upload (frontend) | ⏳ Planned — `AvatarUploadService` exists; controller/provider wiring + progress UI next |

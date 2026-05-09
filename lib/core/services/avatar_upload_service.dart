@@ -1,60 +1,77 @@
-import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+
 import 'api_service.dart';
 
 /// Handles avatar image upload via the MinIO presigned-URL flow.
 ///
 /// Flow:
-///   1. `POST /users/me/avatar/upload-url` → get presigned PUT URL + avatarUrl
-///   2. HTTP PUT to the presigned URL with the image bytes
+///   1. `POST /users/me/avatar/upload-url` → get presigned PUT URL + permanent avatarUrl
+///   2. HTTP PUT to the presigned URL with the image bytes (no auth — MinIO signs it)
 ///   3. Return the permanent [avatarUrl] for persistence in the player profile
 class AvatarUploadService {
   final ApiService _api;
+  final http.Client _httpClient;
 
-  const AvatarUploadService(this._api);
+  AvatarUploadService(this._api, {http.Client? httpClient})
+      : _httpClient = httpClient ?? http.Client();
 
-  /// Request a presigned upload URL from the backend.
-  ///
-  /// [contentType] should be the image MIME type, e.g. `image/jpeg` or `image/png`.
-  /// Returns `{'uploadUrl': '...', 'avatarUrl': '...'}`.
-  Future<Map<String, dynamic>> _requestUploadUrl(String contentType) {
+  Future<Map<String, dynamic>> _requestUploadUrl({
+    required String contentType,
+    required String fileName,
+    required int contentLength,
+  }) {
     return _api.post('/users/me/avatar/upload-url', body: {
       'contentType': contentType,
+      'fileName': fileName,
+      'contentLength': contentLength,
     });
   }
 
-  /// Upload [file] to the player's avatar slot.
+  /// Upload [file] to the player's avatar slot and return the permanent URL.
   ///
-  /// Returns the permanent [avatarUrl] to store in the player profile.
   /// Progress is reported via [onProgress] as a value from 0.0 to 1.0.
+  /// The returned URL should be stored in the player profile as `avatarUrl`.
   Future<String> uploadAvatar({
-    required File file,
+    required XFile file,
     String contentType = 'image/jpeg',
     void Function(double progress)? onProgress,
   }) async {
-    final response = await _requestUploadUrl(contentType);
-    final uploadUrl = response['uploadUrl'] as String?;
-    final avatarUrl = response['avatarUrl'] as String?;
+    final bytes = await file.readAsBytes();
+    final fileName = file.name.isNotEmpty
+        ? file.name
+        : 'avatar_${DateTime.now().millisecondsSinceEpoch}.jpg';
 
-    if (uploadUrl == null || uploadUrl.isEmpty) {
+    final ticket = await _requestUploadUrl(
+      contentType: contentType,
+      fileName: fileName,
+      contentLength: bytes.length,
+    );
+
+    final uploadUrl = ticket['uploadUrl'] as String? ?? '';
+    // Accept 'publicUrl' (preferred) or 'avatarUrl' (legacy fallback).
+    final permanentUrl = (ticket['publicUrl'] as String? ?? '').isNotEmpty
+        ? ticket['publicUrl'] as String
+        : ticket['avatarUrl'] as String? ?? '';
+
+    if (uploadUrl.isEmpty) {
       throw Exception('Avatar upload: no upload URL returned by backend');
     }
 
-    final bytes = await file.readAsBytes();
     onProgress?.call(0.1);
 
-    final putResponse = await http.put(
+    final putResponse = await _httpClient.put(
       Uri.parse(uploadUrl),
       headers: {'Content-Type': contentType},
       body: bytes,
     );
+
     onProgress?.call(1.0);
 
     if (putResponse.statusCode != 200 && putResponse.statusCode != 204) {
-      throw Exception(
-          'Avatar upload failed: HTTP ${putResponse.statusCode}');
+      throw Exception('Avatar upload failed: HTTP ${putResponse.statusCode}');
     }
 
-    return avatarUrl ?? '';
+    return permanentUrl;
   }
 }

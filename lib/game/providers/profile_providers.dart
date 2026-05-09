@@ -20,7 +20,7 @@ import '../../game/services/referral_invite_storage_service.dart';
 import '../../game/services/referral_service.dart';
 import '../../game/services/referral_storage_service.dart';
 import '../../core/services/social/backend_profile_social_service.dart';
-import 'core_providers.dart';
+import 'core_providers.dart' show apiServiceProvider, encryptedApiClientProvider, serviceManagerProvider;
 import 'game_providers.dart';
 
 // ---------------------------------------------------------------------------
@@ -115,7 +115,8 @@ final userProfileProvider = Provider<Map<String, dynamic>>((ref) {
 final backendProfileSocialServiceProvider =
     Provider<BackendProfileSocialService>((ref) {
   final apiService = ref.watch(apiServiceProvider);
-  return BackendProfileSocialService(apiService);
+  final encryptedClient = ref.watch(encryptedApiClientProvider);
+  return BackendProfileSocialService(apiService, encryptedClient: encryptedClient);
 });
 
 final profileLoadoutProvider =

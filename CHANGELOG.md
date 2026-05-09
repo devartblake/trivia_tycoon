@@ -8,6 +8,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added – Sprint 2 networking, secure channel Phase 1, friends/social absorption, dart:io guards (2026-05-09) — commit `e144fd2`
+
+#### Sprint 2 Networking Layer (complete)
+- `lib/game/providers/core_providers.dart` — added `wsMessageStreamProvider` (`Stream<WsEnvelope>`) and `wsStateStreamProvider` (`Stream<WsState>`) exposing `WsClient` reactive streams; added `encryptedApiClientProvider` reading from `ServiceManager`.
+
+#### Secure Channel Phase 1 — endpoint rollout
+- `lib/core/services/social/backend_profile_social_service.dart` — `sendFriendRequest` and `acceptFriendRequest` now route through `EncryptedApiClient` (X25519/AES-256-GCM) when the provider injects one; plain `ApiService` fallback preserved.
+- `lib/game/providers/profile_providers.dart` — `backendProfileSocialServiceProvider` injects `encryptedApiClientProvider`.
+- `test/core/security/secure_payload_codec_test.dart` (new) — 7 codec cases: round-trip, nonce uniqueness, ciphertext uniqueness, wrong key, MAC tamper, wrong AAD method, wrong AAD path.
+
+#### FriendDiscoveryService absorbed into BackendProfileSocialService
+- New methods: `blockUser`, `unblockUser`, `getBlockedUserIds`, `cancelFriendRequest`.
+- New local-preference helpers (in-process, Hive in next iteration): `setFriendNickname`, `getFriendNickname`, `toggleFavourite`, `isFavourite`, `getFavouriteFriendIds`.
+- New derived helpers: `getFriendshipStatus` (`FriendshipStatus` enum), `getOnlineFriends`, `getSocialAnalytics`.
+- `lib/game/providers/friends_providers.dart` — added `friendsListStreamProvider`, `pendingRequestsStreamProvider`, `blockedUsersProvider`, `favouriteFriendIdsProvider`.
+- `lib/core/services/social/friend_discovery_service.dart` deleted (all capabilities absorbed, zero remaining references).
+- `test/core/services/backend_profile_social_service_test.dart` — extended from 4 to 20 test cases.
+- `test/core/services/presence/rich_presence_service_test.dart` (new) — 12 cases: initialize, updateCurrentUserPresence, setGameActivity/clearGameActivity, listener notification, canUserJoinGame (lobby/waiting/playing/no-presence), watchUserPresence stream, dispose.
+
+#### dart:io web guards (3 files)
+- `lib/game/services/avatar_package_service.dart` — `kIsWeb` guard added to 4 private disk-access methods (`_packagesRootDir`, `_manifestFileSync`, `_manifestFile`, `_scanInstalledPackagesFromDisk`).
+- `lib/ui_components/profile_avatar/profile_image_picker.dart` — callback changed from `ValueChanged<File>` to `ValueChanged<XFile>`; `dart:io` import removed.
+- `lib/game/controllers/profile_avatar_controller.dart` — `File? _imageFile` field changed to `XFile?`; callers (`drawer_header.dart`, `profile_character_section.dart`) updated to `File(imageFile.path)`.
+
+---
+
 ### Added – Study Hub full implementation (2026-04-28)
 
 Introduces the complete Quizlet-like study surface (Phase 5 of the migration plan) — wiring three new screens, backend service, DTOs, Riverpod providers, and router routes.
