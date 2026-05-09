@@ -1,4 +1,4 @@
-import 'synaptix_toast.dart';;
+import 'synaptix_toast.dart';
 import 'package:flutter/material.dart';
 import 'toast_theme_manager.dart';
 

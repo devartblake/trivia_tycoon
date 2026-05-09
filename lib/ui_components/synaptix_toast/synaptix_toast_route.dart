@@ -4,7 +4,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'synaptix_toast.dart';;
+import 'synaptix_toast.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class SynaptixToastRoute<T> extends OverlayRoute<T> {
