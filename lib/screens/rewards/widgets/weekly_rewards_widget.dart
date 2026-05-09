@@ -1,10 +1,116 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
+import '../../../core/manager/log_manager.dart';
+import '../../../game/providers/game_providers.dart' show rewardSettingsServiceProvider;
 import '../../../ui_components/synaptix_toast/synaptix_toast_helper.dart';
 
 class WeeklyRewardsWidget extends ConsumerStatefulWidget {
   const WeeklyRewardsWidget({super.key});
+
+  @override
+  ConsumerState<WeeklyRewardsWidget> createState() =>
+      _WeeklyRewardsWidgetState();
+}
+
+class _WeeklyRewardsWidgetState extends ConsumerState<WeeklyRewardsWidget> {
+  static const _settingsBox = 'settings';
+  static const _weeklyClaimedDayKey = 'weeklyClaimedDay';
+  static const _weeklyLastClaimKey = 'weeklyLastClaim';
+
+  bool _isLoading = true;
+  int _claimedThroughDay = 0;
+  bool _canClaimToday = false;
+
+  // Coin rewards per day (non-coin rewards show 0 coins)
+  static const Map<int, int> _dayCoins = {
+    1: 100,
+    2: 0,
+    3: 0,
+    4: 200,
+    5: 0,
+    6: 0,
+    7: 0,
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    _loadWeeklyState();
+  }
+
+  String _todayKey() {
+    final now = DateTime.now();
+    return '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+  }
+
+  Future<void> _loadWeeklyState() async {
+    try {
+      final box = await Hive.openBox(_settingsBox);
+      final claimedDay = box.get(_weeklyClaimedDayKey, defaultValue: 0) as int;
+      final lastClaim = box.get(_weeklyLastClaimKey) as String?;
+
+      final today = _todayKey();
+      final canClaim = lastClaim != today;
+
+      if (mounted) {
+        setState(() {
+          _claimedThroughDay = claimedDay;
+          _canClaimToday = canClaim;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  Future<void> _claimDay(BuildContext context, int day) async {
+    final nextClaimableDay = _claimedThroughDay + 1;
+    final canClaim = _canClaimToday && day == nextClaimableDay;
+
+    // Map day number to reward info shown in the cards
+    const dayRewardTypes = {
+      1: 'Coins', 2: 'Gems', 3: 'Boost',
+      4: 'Coins', 5: 'Gems', 6: 'Spins', 7: 'Mystery Box',
+    };
+    const dayAmounts = {
+      1: '100', 2: '5', 3: '1x',
+      4: '200', 5: '10', 6: '3', 7: '1',
+    };
+
+    final rewardType = dayRewardTypes[day] ?? 'Coins';
+    final amount = dayAmounts[day] ?? '0';
+    _claimDayReward(context, day, rewardType, amount, canClaim);
+
+    if (!canClaim) return;
+
+    try {
+      final box = await Hive.openBox(_settingsBox);
+      final newDay = _claimedThroughDay >= 7 ? 1 : _claimedThroughDay + 1;
+      await box.put(_weeklyClaimedDayKey, newDay);
+      await box.put(_weeklyLastClaimKey, _todayKey());
+
+      // Award coins if applicable
+      final coins = _dayCoins[day] ?? 0;
+      if (coins > 0) {
+        final service = ref.read(rewardSettingsServiceProvider);
+        await service.addRegularCurrency(coins);
+      }
+
+      if (mounted) {
+        setState(() {
+          _claimedThroughDay = newDay;
+          _canClaimToday = false;
+        });
+      }
+    } catch (e) {
+      LogManager.debug('Failed to claim weekly reward day $day: $e');
+    }
+  }
 
   void _claimDayReward(BuildContext context, int day, String rewardType,
       String amount, bool canClaim) {
@@ -23,8 +129,8 @@ class WeeklyRewardsWidget extends ConsumerStatefulWidget {
     // Show the reward toast
     SynaptixToastHelper.createWeeklyReward(
       day: day,
-      rewardType: 'Coins',
-      rewardAmount: coinsEarned.toString(),
+      rewardType: rewardType,
+      rewardAmount: amount,
       duration: const Duration(seconds: 4),
     ).show(context);
   }
