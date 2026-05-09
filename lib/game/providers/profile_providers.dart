@@ -20,7 +20,7 @@ import '../../game/services/referral_invite_storage_service.dart';
 import '../../game/services/referral_service.dart';
 import '../../game/services/referral_storage_service.dart';
 import '../../core/services/social/backend_profile_social_service.dart';
-import 'core_providers.dart' show apiServiceProvider, encryptedApiClientProvider, serviceManagerProvider;
+import 'core_providers.dart' show apiServiceProvider, encryptedApiClientProvider, serviceManagerProvider, generalKeyValueStorageProvider;
 import 'game_providers.dart';
 
 // ---------------------------------------------------------------------------
