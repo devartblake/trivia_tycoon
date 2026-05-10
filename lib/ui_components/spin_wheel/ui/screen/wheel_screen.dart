@@ -225,9 +225,10 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
             segmentId: segment.id,
             spinId: spinId,
           );
-      if (response.newBalance > 0) {
-        await ref.read(coinBalanceProvider.notifier).set(response.newBalance);
-      }
+      await refreshAuthoritativeWallet(
+        ref,
+        backendCoinBalance: response.newBalance > 0 ? response.newBalance : null,
+      );
     } on ApiRequestException catch (e) {
       LogManager.debug('[WheelScreen] Spin claim rejected: ${e.message}');
     } catch (e) {

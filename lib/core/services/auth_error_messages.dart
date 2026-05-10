@@ -75,7 +75,11 @@ class AuthErrorMessages {
     }
 
     // Validation errors (400)
-    if (errorStr.contains('400') || errorStr.contains('Bad Request')) {
+    if (errorStr.contains('400') ||
+        errorStr.contains('422') ||
+        errorStr.contains('Bad Request') ||
+        errorStr.contains('VALIDATION_ERROR') ||
+        errorStr.contains('Validation failed')) {
       // Try to extract specific validation message
       if (errorStr.contains('Email')) {
         return 'Please enter a valid email address.';
@@ -167,6 +171,12 @@ class AuthErrorMessages {
       return 'Please verify your email address before logging in.';
     }
 
+    if (errorStr.contains('422') ||
+        errorStr.contains('VALIDATION_ERROR') ||
+        errorStr.contains('Validation failed')) {
+      return 'Please check your input and try again.';
+    }
+
     return getUserFriendlyMessage(error);
   }
 
@@ -201,6 +211,12 @@ class AuthErrorMessages {
         return 'Password must be at least 8 characters long.';
       }
       return 'Password does not meet requirements. Please use at least 8 characters.';
+    }
+
+    if (errorStr.contains('422') ||
+        errorStr.contains('VALIDATION_ERROR') ||
+        errorStr.contains('Validation failed')) {
+      return 'Please check your signup details and try again.';
     }
 
     return getUserFriendlyMessage(error);

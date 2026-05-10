@@ -103,9 +103,10 @@ class _TryNowWidgetState extends ConsumerState<TryNowWidget>
             avatarId: meta.id,
           );
       final newBalance = (response['newBalance'] as num?)?.toInt();
-      if (newBalance != null) {
-        await ref.read(coinBalanceProvider.notifier).set(newBalance);
-      }
+      await refreshAuthoritativeWallet(
+        ref,
+        backendCoinBalance: newBalance,
+      );
       ref.invalidate(serverAvatarPackagesProvider);
       if (!mounted) return;
       _showSnack('${meta.name} purchased! Tap Install to download.', const Color(0xFF10B981));

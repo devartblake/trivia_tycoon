@@ -1,5 +1,7 @@
 # Skill Tree Navigation — Current Status
 
+_Last updated: 2026-05-10._
+
 ## Scope
 - Source package: `docs/trivia_tycoon_migration_frontend_github_issues.json`
 - Review baseline: `docs/skill_tree_navigation_repo_recommendations.md`
@@ -47,16 +49,23 @@
 - Overlay rendering in branch detail currently uses `AutoPathOverlayPainter` as the active path visualization layer.
 - Persisted auto-path progress is node-id based (`branchSavedAutoPathNodeIdProvider` / `branchPersistAutoPathNodeIdProvider`).
 
+## 2026-05-10 reconciliation
+- Route normalization is complete: branch cards, route icons, Auto-Path, and search use `/skill-branch/:branchId`.
+- Branch detail overlay consolidation is complete: branch detail uses `AutoPathOverlayPainter`; the older `BranchPathOverlayPainter` remains available for other legacy views only.
+- Coordinate naming/docs are clarified: `branchWorldCentersProvider` returns world/layout coordinates and `branchCentersProvider` is a compatibility alias.
+- Build-time path recomputation mutation has been removed from `SkillBranchDetailScreen`.
+- `MiniHexBranchPreview.fromGraph` now uses the provided graph through `graphOverride`.
+
 ## Known issues / risks (current-state)
 1. **State complexity in detail screen**: `SkillBranchDetailScreen` still maintains multiple path-related mutable fields/notifiers (`_showPath`, `_pathIndex`, `_showFullPath`, `_currentStep`) that increase regression risk during refactors.
 2. **Query hydration duplication risk**: route/query hydration occurs in more than one lifecycle path (`initState`, post-frame, and helper methods), so precedence/ordering should remain covered by regression tests.
 3. **Debug controls exposed in UI**: `_overlayControls()` is still rendered in the detail stack; keep/guard this intentionally to avoid shipping accidental debug affordances.
 
 ## Recommended next sequence
-1. Add/expand widget tests for route query hydration (`step`, `showPath`) and branch switching behavior.
-2. Consolidate path state in `SkillBranchDetailScreen` toward a single source of truth for step + visibility.
-3. Decide whether `_overlayControls()` should be debug-only behind a flag.
-4. Add explicit QA regression runs for cooldown timer transitions during step navigation.
+1. Decide whether `_overlayControls()` should be debug-only behind a flag.
+2. Add/expand widget tests for route query hydration (`step`, `showPath`) and branch switching behavior.
+3. Add explicit QA regression runs for cooldown timer transitions during step navigation.
+4. Continue future enhancements: cooldown chips, persisted auto-path progress, backend/profile sync, and stronger unlock guard messaging.
 
 ## QA checklist
 - [ ] **Navigation routes**

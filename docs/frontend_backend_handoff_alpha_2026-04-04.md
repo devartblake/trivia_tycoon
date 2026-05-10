@@ -5,6 +5,10 @@ This handoff summarizes what backend contracts are now available for frontend in
 
 ## Frontend status update (2026-04-14)
 
+> 2026-05-10 reconciliation: for the concise current backlog, use
+> [`CURRENT_TASKS.md`](CURRENT_TASKS.md). Portable avatar upload is now wired in
+> frontend code; only live wipe/login runtime verification remains.
+
 The previously partial frontend work for this handoff is now closed in two
 alpha-scoped areas:
 
@@ -21,11 +25,11 @@ alpha-scoped areas:
 Still not completed from this handoff:
 - crypto economy player surfaces
 - ML endpoint consumption in frontend UX/telemetry
-- portable avatar upload/object-storage persistence (requires backend upload contract;
-  MinIO-backed flow is the expected next step)
+- portable avatar upload runtime verification after emulator wipe/login
 
 Canonical remaining-work tracker:
-- [`docs/REMAINING_TASKS.md`](REMAINING_TASKS.md)
+- [`docs/CURRENT_TASKS.md`](CURRENT_TASKS.md)
+- [`docs/REMAINING_TASKS.md`](REMAINING_TASKS.md) for detailed backlog/history
 
 ---
 

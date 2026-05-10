@@ -130,6 +130,57 @@ void main() {
     expect(response['validated'], isTrue);
   });
 
+  test('purchaseWithCoinsOrDiamonds posts expected payload', () async {
+    final dio = Dio(BaseOptions(baseUrl: 'https://example.test'));
+    late String capturedPath;
+    Map<String, dynamic>? capturedBody;
+
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          capturedPath = options.path;
+          capturedBody = Map<String, dynamic>.from(options.data as Map);
+          handler.resolve(
+            Response(
+              requestOptions: options,
+              statusCode: 200,
+              data: {
+                'success': true,
+                'sku': 'powerup:skip',
+                'quantity': 2,
+                'newBalance': 940,
+              },
+            ),
+          );
+        },
+      ),
+    );
+
+    final apiService = ApiService(
+      baseUrl: 'https://example.test',
+      dio: dio,
+      initializeCache: false,
+    );
+    final storeService = await StoreService.initialize(apiService);
+
+    final response = await storeService.purchaseWithCoinsOrDiamonds(
+      playerId: 'player-123',
+      sku: 'powerup:skip',
+      quantity: 2,
+    );
+
+    expect(capturedPath, '/store/purchase');
+    expect(
+      capturedBody,
+      {
+        'playerId': 'player-123',
+        'sku': 'powerup:skip',
+        'quantity': 2,
+      },
+    );
+    expect(response['newBalance'], 940);
+  });
+
   test('getPlayerRewards loads reward center payload', () async {
     final dio = Dio(BaseOptions(baseUrl: 'https://example.test'));
     late String capturedPath;

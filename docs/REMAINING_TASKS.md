@@ -1,8 +1,10 @@
 # Remaining Tasks & Work Backlog
 
+_Reconciled update: 2026-05-10 - use [`docs/CURRENT_TASKS.md`](CURRENT_TASKS.md) as the concise current task list. This file is the detailed backlog/history reference._
+
 _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue expansion to all 6 surfaces ✅; Study Hub gaps (hub entry points, favorites, custom set creation, session resume) ✅_
 
-> This file is the canonical "what is left to do" reference.
+> [`docs/CURRENT_TASKS.md`](CURRENT_TASKS.md) is the concise current task list. This file is the detailed backlog/history reference.
 > For completed work, see [`docs/ALPHA_TASK_AUDIT.md`](ALPHA_TASK_AUDIT.md).
 > For the frontend/backend handoff status, see
 > [`docs/frontend_backend_handoff_alpha_2026-04-04.md`](frontend_backend_handoff_alpha_2026-04-04.md).
@@ -38,7 +40,7 @@ _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue 
 | Packet E Workstream 2 (package root rename) | Deferred | Blocked — awaiting store plan | Yes — needs store/legal plan |
 | Backend Packet E (namespace rename) | Deferred | Not started | Intentional deferral |
 | **Spin wheel redesign** | **Medium** | **Complete** | **No** |
-| **Secure channel scaffolding** | **High** | **Complete (scaffolded); rollout pending** | **No** |
+| **Secure channel scaffolding** | **High** | **Complete (scaffolded); Phase 1/2 endpoint rollout also complete** | **No** |
 | **Secure channel Phase 1 endpoint rollout** | **High** | **Complete — `sendFriendRequest` + `acceptFriendRequest` wired to `EncryptedApiClient`** | **No** |
 | **Secure channel Phase 2 endpoint rollout** | **High** | **Complete — `declineFriendRequest`, `blockUser`, `saveLoadout`, `claimReward` encrypted** | **No** |
 | **dart:io web guards (all 19 files)** | **Medium** | **Complete — all files verified safe; 3 changed, 16 confirmed already guarded** | **No** |
@@ -46,6 +48,12 @@ _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue 
 ---
 
 ## 1. Frontend/Backend Alpha Handoff
+
+### 2026-05-10 reconciliation notes
+- Portable avatar upload frontend wiring is now complete in code: `AvatarUploadService` accepts `XFile`, controller/provider wiring exists, profile UI shows progress/error/retry, and upload/controller tests exist. Remaining work is live-device/backend verification after emulator wipe.
+- `RichPresenceService` test coverage now exists in `test/core/services/presence/rich_presence_service_test.dart`.
+- Skill-tree navigation cleanup items STN-001..004/007 are complete in code: branch routes normalize to `/skill-branch/:branchId`, branch detail uses `AutoPathOverlayPainter`, `branchWorldCentersProvider` documents world coordinates, build-time path mutation was removed, and `MiniHexBranchPreview.fromGraph` uses `graphOverride`.
+- For the short authoritative task list, use [`CURRENT_TASKS.md`](CURRENT_TASKS.md).
 
 ### 1a. Store / payments / subscriptions COMPLETE
 - Frontend wiring now covers backend catalog, purchase flows, inventory refresh, subscription
@@ -69,7 +77,7 @@ _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue 
 ### 1b.ii Friends/social — Code-complete; runtime verification REMAINING
 
 #### ✅ Code-complete (this session)
-- `FriendDiscoveryService` absorbed into `BackendProfileSocialService` and deleted
+- `FriendDiscoveryService` cleanup/deprecation completed; no `friend_discovery` source file remains under `lib/`
 - New methods: `blockUser`, `unblockUser`, `getBlockedUserIds`, `cancelFriendRequest`
 - New local-preference helpers: `setFriendNickname`, `getFriendNickname`, `toggleFavourite`, `isFavourite`, `getFavouriteFriendIds`
 - New derived helpers: `getFriendshipStatus`, `getOnlineFriends`, `getSocialAnalytics`
@@ -112,6 +120,14 @@ _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue 
   - Asset-path avatars and backend-served URLs are already safe to sync.
   - Local emulator/device file paths are not portable across reinstalls and should
     not be treated as authoritative backend profile values.
+
+#### 2026-05-10 status correction
+
+The implementation checklist below is retained for history, but its frontend
+implementation items are now complete. The remaining task is runtime QA against
+a live backend/device: pick, crop, upload, persist the returned backend URL,
+wipe local emulator data, log in again, and confirm avatar hydration from the
+backend URL.
 
 #### MinIO avatar upload integration checklist
 
@@ -367,11 +383,10 @@ dotnet ef database update \
 | `test/arcade/games/memory_flip_controller_test.dart` | `MemoryFlipController` - initial state, deck structure, `flip()` (first/match/miss/ignored), `allMatched -> isOver`, `toResult()`, `dispose()` |
 | `test/arcade/games/pattern_sprint_controller_test.dart` | `PatternSprintController` - initial state, `answer()` (correct/wrong/lock), streak multiplier, question generation across all difficulties, `toResult()`, `dispose()` |
 
-### 3b. Presence services (not yet tested)
+### 3b. Presence services COMPLETE
 
 #### `RichPresenceService` (`lib/core/services/presence/rich_presence_service.dart`, 357 lines)
-- **Dependency:** Singleton - test using `initialize(useWebSocket: false)` (legacy polling mode)
-  to avoid real WebSocket connections.
+- `test/core/services/presence/rich_presence_service_test.dart` now covers the key singleton scenarios using `initialize(useWebSocket: false)` to avoid real WebSocket connections.
 
 | Method / scenario | What to test |
 |---|---|
@@ -559,6 +574,11 @@ Intentionally deferred to after Alpha launch. No urgency.
 
 ## Release Readiness Checklist
 
+> 2026-05-10 note: The final row for "MinIO avatar upload (frontend)" may appear
+> stale in older rendered copies of this document. Current code status is:
+> service/controller/provider wiring, progress/error UI, and tests are complete;
+> only live runtime wipe/login verification remains.
+
 | Item | Status |
 |------|--------|
 | Alpha handoff core frontend wiring | Complete for store/profile/questions; crypto + ML remain |
@@ -578,8 +598,8 @@ Intentionally deferred to after Alpha launch. No urgency.
 | Packet E Workstream 1 (symbol cleanup) | ✅ Complete — `79bc788` (2026-05-08) |
 | Packet E Workstream 2 (package root rename) | ⏸️ Blocked — awaiting store/legal plan |
 | Spin wheel redesign (pie-chart renderer, fixed needle, gesture spin) | ✅ Complete |
-| Secure channel (scaffolding) | ✅ Scaffolded; rollout to endpoints pending |
+| Secure channel (scaffolding) | ✅ Scaffolded; Phase 1/2 endpoint rollout complete; remaining gap is encrypted DELETE/equivalent semantics + lifecycle/perf tests |
 | Secure channel (Phase 1 endpoint rollout + codec tests) | ✅ Complete — `sendFriendRequest` + `acceptFriendRequest` encrypted; `secure_payload_codec_test.dart` added |
 | Secure channel (Phase 2 endpoint rollout) | ✅ Complete — `declineFriendRequest`, `blockUser`, `saveLoadout` (social); `claimReward` (economy) encrypted |
 | Study Hub frontend (hub entry points, favorites, custom sets, session resume) | ✅ Complete — `7b18b03` (2026-05-09) |
-| MinIO avatar upload (frontend) | ⏳ Planned — `AvatarUploadService` exists; controller/provider wiring + progress UI next |
+| MinIO avatar upload (frontend) | Complete in code - service, controller/provider wiring, progress/error UI, and tests exist; runtime wipe/login verification remains |

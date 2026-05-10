@@ -76,7 +76,7 @@ As of the latest frontend pass, the following are now implemented against the ba
 Still pending on the frontend side:
 
 - live runtime verification against the deployed backend
-- final cleanup/deprecation decision for `FriendDiscoveryService`
+- `FriendDiscoveryService` cleanup is complete; no `friend_discovery` source file remains under `lib/`
 - analyzer/format/test pass in a Flutter-enabled environment
 
 ---
@@ -621,9 +621,11 @@ Frontend guidance:
 
 ---
 
-## Backend-Recommended Frontend Migration
+## Backend-Recommended Frontend Migration — completed in frontend
 
-Replace `friendDiscoveryServiceProvider` with:
+2026-05-10 update: the replacement of `friendDiscoveryServiceProvider` is
+complete in the frontend. The list below is retained as the implemented contract
+map and should be used for runtime verification:
 
 1. friend list -> `GET /users/me/friends?page=1&pageSize=50`
 2. pending inbox -> `GET /users/me/friends/requests?page=1&pageSize=50`

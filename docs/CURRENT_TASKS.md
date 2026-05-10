@@ -1,0 +1,158 @@
+# Current Tasks
+
+_Generated from the markdown files in `docs/` on 2026-05-10._
+_PR/branch cross-check pass: 2026-05-10 against `origin/main`, recent remote branches, and known merged PR metadata. No specific active PR number was supplied, so branch heads were also used as the working source of truth._
+
+> This file reconciles the current remaining work from the docs folder. Older completed or superseded checklist items are omitted where newer status docs mark them done.
+
+## P0 - Alpha / Release Blockers
+
+### Runtime validation on device + live backend
+- [ ] Validate app launch, auth/bootstrap, login, signup, logout, token refresh, and session resume on a real device/emulator with a live backend.
+- [ ] Validate onboarding restore, first challenge completion, reward reveal, and completion handoff to `/home`.
+- [ ] Run kids, teen, and adult mode QA for layout, copy, navigation, and mode-specific rendering.
+- [ ] Verify all core Synaptix surfaces are reachable: Hub, Arena, Labs, Pathways, Journey, Circles, Command, Store, Rewards.
+- [ ] Confirm no high-visibility stale "Trivia Tycoon" labels remain in runtime UI.
+
+### Auth / local web verification
+- [x] Add gated live Dart smoke coverage for local Docker/staging auth, CORS preflight, login, `/users/me`, `/users/me/wallet`, refresh, and Spin & Earn confirmed endpoints.
+- [x] Confirm `AuthHttpClient` is registered correctly in the Riverpod/provider graph: `authHttpClientProvider` feeds `httpClientProvider`, and `ServiceManager` builds the same backend auth chain.
+- [x] Verify login errors for 401, 403, 422, and network timeout with focused `AuthErrorMessages` coverage.
+- [x] Verify signup validation and backend error-code display with focused `AuthErrorMessages` coverage.
+- [x] Test 401 auto-refresh end-to-end against stub backend coverage in `api_service_test.dart` and gated live refresh coverage in `live_backend_smoke_test.dart`.
+- [x] Verify backend profile hydration path after login/signup through `AuthOperations._hydrateProfileFromBackend`; emulator/data-wipe runtime verification remains covered by the live smoke/manual checklist.
+- [ ] Resolve local web CORS verification: local Docker port `5000` is reachable and `OPTIONS /auth/login` returned `204`, but the response observed on 2026-05-10 did not expose `Access-Control-Allow-Origin` for `http://localhost:63033`.
+
+### Friends, social, and presence verification
+- [ ] Live-verify `GET /users/me/friends`, request lists, sent requests, suggestions, authenticated `/users/search`, and authenticated `DELETE /friends`.
+- [ ] Two-account/device QA: send request, accept, decline, cancel, block/unblock, unfriend, nickname/favorite state, and DM recipient picking.
+- [ ] Presence QA: initial `presence.bulk`, `presence.update` during quiz/match activity, reconnect behavior, and offline transitions on disconnect.
+- [x] Remove/deprecate `FriendDiscoveryService`; no `friend_discovery` source file remains in `lib/`.
+
+### Economy, wallet, store settlement
+- [x] Map authoritative backend wallet fields from `GET /users/me/wallet`: `credits -> coins`, `neuralXp -> xp`, `synapseShards -> diamonds`.
+- [x] Bridge backend wallet refresh into legacy coin, diamond, and XP providers while keeping Hive/local wallet state as cache/fallback.
+- [x] Refresh authoritative wallet state after Spin & Earn claim, reward claim, avatar purchase, and payment-return purchase reconciliation.
+- [x] Integrate remaining shared wallet counters with authoritative backend state from `GET /users/me/wallet` by syncing legacy `playerCoinsProvider`, `playerGemsProvider`, and Hive wallet cache.
+- [x] Add test coverage for displayed wallet field mapping: credits, neural XP, and Synapse Shards after backend wallet fetch.
+- [x] Route coin/diamond store purchases through backend `purchaseWithCoinsOrDiamonds` when a SKU exists, then refresh wallet, catalog, and inventory providers; local fallback remains for offline/dev-only catalog items.
+- [x] Validate store service settlement contracts for IAP validation, reward claims, PayPal/Stripe return routing, and payment return reconciliation with focused service/screen tests.
+- [ ] Run staging settlement smoke: store purchase settlement, inventory refresh, subscription entitlement refresh, IAP validation, Stripe/PayPal return reconciliation, and reward reconciliation after daily/weekly/spin/mission claims. This requires staging credentials/payment test setup and cannot be completed from local code alone.
+
+### Pending database / DevOps actions
+- [ ] Apply pending backend EF migrations to staging/prod or confirm already applied: season reward rules, store stock system, flash sales, reward claim rule, effective max quantity.
+- [ ] Verify store stock/admin store endpoints behave correctly after migrations.
+- [ ] Deploy hosted app-link verification files: `assetlinks.json` and `apple-app-site-association`.
+- [ ] Clean native rebuild/reinstall after adding `app_links` to avoid stale `MissingPluginException`.
+
+## P1 - High-Value Implementation
+
+### Crypto economy surfaces
+- [x] Add typed crypto service, models, and providers for wallet link, balance, history, withdraw, stake, unstake, staking status, and prize pool actions.
+- [x] Base crypto wallet screen exists for balance/history, wallet linking, withdrawals, staking, unstaking, and prize pool interaction.
+- [x] Add service/provider tests for crypto endpoint contracts, mutation invalidation, and backend error envelope mapping.
+- [ ] Add feature flags for staged crypto rollout and safe disabling.
+- [ ] Live-validate crypto contracts against local Docker first, then staging.
+- [ ] Add/extend crypto UI smoke tests for linked/unlinked, pending withdrawal, disabled-feature, stake/unstake, and prize pool states.
+
+### Rewards backend integration
+- [x] Wire confirmed Spin & Earn endpoints: `GET /arcade/spin/segments` and `POST /arcade/spin/claim`.
+- [x] Keep local segment/stat/history fallback when backend Spin & Earn calls fail.
+- [x] Add gated smoke coverage for authenticated segment fetch and authorized spin claim route behavior.
+- [ ] Replace local-only daily reward config and claim state with server endpoints once backend confirms them.
+- [ ] Replace weekly login streak Hive state with server streak/schedule/claim APIs once backend confirms them.
+- [ ] Persist spin stats/history server-side when the server stats/history endpoints are available.
+- [ ] Replace local spin stats/history with server stats/history where available; keep local cache only as offline fallback.
+- [ ] Fix `hybrid_mission_state.dart` `currentUserIdProvider` stub by using the real profile/auth user provider.
+- [ ] Wire mission list, progress, claim, swap/generate, and delete flows to backend mission endpoints.
+- [ ] Move hardcoded reward step presets behind a provider once a configurable backend endpoint exists.
+
+### Portable avatar persistence
+- [x] Avatar upload service accepts `XFile`, sends filename/content length, performs presigned MinIO PUT, and returns the persisted avatar URL.
+- [x] `ProfileAvatarController` is wired with upload/profile-sync services and exposes upload progress, error, retry, and remote URL state.
+- [x] Profile UI shows avatar upload progress/error/retry state.
+- [x] Upload service and controller tests cover success, failure, retry, and persisted URL state.
+- [ ] Runtime-verify emulator wipe/login rehydrates avatar from backend URL instead of a local device path.
+
+### Secure channel rollout
+- [ ] Add `deleteEncrypted` to `EncryptedApiClient` or convert DELETE-sensitive operations to supported encrypted semantics.
+- [ ] Encrypt remaining selected endpoints in phases: non-critical first, then refresh/match/economy/messages/private social writes.
+- [ ] Add secure-channel tests for wrong nonce, wrong sequence, expiry renewal, logout clear, reinstall invalidation, web fallback, and 1 KB/10 KB/100 KB payload performance.
+- [ ] Validate exact backend response schema, replay protection, and sequence semantics against staging.
+
+### Admin security and operations UI
+- [ ] Build dead-letter/security event list and replay UI.
+- [ ] Build `/admin/audit/security` timeline page.
+- [ ] Decide whether central admin notifications should be server-managed or remain local-only.
+- [ ] If server-managed, wire `/admin/notifications*` endpoints.
+- [ ] Confirm admin auth choices: MFA, token lifetime, refresh rotation, permission scopes, enum values, bulk question mode, event dedupe key, config locality.
+
+### Skill tree / Pathways cleanup
+- [x] Normalize branch navigation so cards, route icons, Auto-Path, and search use `/skill-branch/:branchId`.
+- [x] Remove duplicate branch overlay rendering from `SkillBranchDetailScreen`; branch detail now uses `AutoPathOverlayPainter`.
+- [x] Clarify/rename branch coordinate provider via `branchWorldCentersProvider`; `branchCentersProvider` remains as a compatibility alias.
+- [x] Move path recomputation out of build-time mutation in `SkillBranchDetailScreen`.
+- [x] Make `MiniHexBranchPreview.fromGraph` use the provided graph through `graphOverride`.
+- [ ] Decide whether debug overlay controls ship, hide behind a flag, or move to debug builds only.
+
+## P2 - Quality, Tests, and Release Hardening
+
+### Test coverage
+- [x] Add `RichPresenceService` tests for initialization, update, game activity, joinability, watched streams, and dispose.
+- [ ] Add auth edge-case tests: social login, account linking, concurrent 401 refresh, offline login, and logout token cleanup.
+- [ ] Expand widget tests for `ArcadeGameShell`, `DailyBonusScreen`, `ArcadeMissionsScreen`, and leaderboard interactions.
+- [ ] Expand skill tree widget tests for query hydration, branch switching, cooldown transitions, invalid steps, and empty/short paths.
+- [ ] Move toward the documented 40% coverage target for `lib/game/` and `lib/core/`.
+
+### Dependency and build health
+- [ ] Run `flutter pub outdated` and apply safe security/minor updates.
+- [ ] Run `flutter pub deps --style=compact` and remove unused dependencies from retired features.
+- [ ] Install `nuget.exe` on Windows PATH; verify `nuget help`, `flutter clean`, `flutter pub get`, and `flutter build windows`.
+- [ ] Configure CI to enforce analyze/tests/coverage and prevent raw production `debugPrint` regressions.
+
+### Product polish
+- [ ] Expand sound cues beyond Hub to Arena, Labs, Pathways, Journey, Circles, and Command.
+- [ ] Standardize SFX taxonomy, shared cue helper, volume profiles, settings gating, fallback behavior, and cue tests.
+- [ ] Run low-end Android and iOS audio latency/fatigue QA.
+- [ ] Complete final empty-state copy sweep and mode-specific accessibility pass.
+- [ ] Verify frontend labels, preferences payloads, and analytics payloads against backend dashboards/docs.
+
+### Questions, Play, Learn, Study cleanup
+- [ ] Live-verify gameplay stays on backend question data in local/staging/prod.
+- [ ] Decide whether local question fallback remains enabled in production after backend parity is proven.
+- [ ] Add source observability beyond banners/logging: backend success ratio, latency, and coverage drift.
+- [ ] Introduce `/play` route aliases, remove or redirect frontend `/quiz/*` routes where safe, and align labels from Quiz to Play.
+- [ ] Create one launcher/orchestrator for route params to question session state and remove ambiguous router imports.
+- [ ] Add learning progress summary, recommended module logic, continue-learning CTA, reward transparency, and idempotent lesson/module completion retries.
+- [ ] Remove deprecated `ApiService` and `SynaptixApiClient` quiz methods after all callers are migrated.
+- [ ] Update route maps and tests.
+
+## P3 - Deferred / Decision-Gated
+
+### Cross-check notes
+- [ ] If there is a specific active PR number, re-run this cross-check against that PR number's changed files and patches.
+- [ ] Known merged PR metadata was spot-checked, including PR #158 for Phase 3 test coverage pass 2.
+- [ ] Recent remote branches indicate several task slices may also be PR-style branch work, especially `copilot/stn-*` skill-tree branches and `claude/fix-hexagon-alignment-CrQVu`.
+
+### Packet E package root rename
+- [ ] Wait for product/legal store transition plan before changing package root or bundle IDs.
+- [ ] Rename `pubspec.yaml` package from `trivia_tycoon` to `synaptix`.
+- [ ] Update all `package:trivia_tycoon/...` imports.
+- [ ] Change Android application ID and iOS bundle identifier to `com.theoreticalmindstech.synaptix`.
+- [ ] Regenerate Firebase/Google service configs and `build_runner` outputs.
+- [ ] Document rollback strategy and run the rename in an isolated branch.
+
+### Backend Packet E
+- [ ] Defer backend namespace rename from `Tycoon.Backend.*` to `Synaptix.Backend.*` until after Alpha/stable release.
+- [ ] Later rename service/telemetry identifiers, Docker/CI labels, Elasticsearch aliases, and related ops naming.
+
+### Optional ML / personalization UX
+- [ ] Keep personalization frontend paths on the current `/personalization/{playerId}/...` contract and clean up older docs that show superseded paths.
+- [ ] Decide whether churn-risk and match-quality ML signals need visible UX in this sprint.
+- [ ] If yes, add or expand typed providers/UX for ML-driven nudges behind feature flags.
+- [ ] Track `source` values such as `deployed-model` vs `heuristic` only as optional telemetry/UX context.
+
+### Backend-dependent future APIs
+- [ ] Do not wire `GET /v1/assets/audio/{category}/{filename}` until backend marks it live.
+- [ ] Treat premium DB-backed catalog phase 2 and richer gift/cosmetic/avatar purchase contracts as post-launch unless reprioritized.
+- [ ] Add stronger store feature flags via `/store/system/status` if backend exposes the endpoint.

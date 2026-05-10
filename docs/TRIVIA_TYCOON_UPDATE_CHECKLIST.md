@@ -1,6 +1,6 @@
 # Trivia Tycoon Update Checklist
 
-**Last updated:** 2026-04-17  
+**Last updated:** 2026-05-10
 **Purpose:** High-level project status snapshot for the latest frontend migration and verification work. This file replaces the older auth-only checklist, which is no longer an accurate picture of what remains.
 
 ---
@@ -16,6 +16,14 @@
 - Main menu currency display is improved:
   - backend wallet balances now sync into the menu coin/gem display
   - duplicate green energy strip below `CurrencyDisplay` was removed
+- Wallet/economy bridge is stronger:
+  - `GET /users/me/wallet` remains authoritative for coins, XP, and diamonds
+  - backend wallet refresh now updates coin, diamond, and XP provider state
+  - Spin & Earn claim, reward claim, avatar purchase, and payment-return reconciliation refresh backend wallet state
+- Crypto economy typed layer is in place:
+  - service/models/providers cover balance, history, staking, link wallet, withdrawal, and prize pool actions
+  - focused service/provider tests cover contracts, invalidation, and backend error envelope mapping
+- Gated live backend smoke coverage was added for auth/CORS, `/users/me`, `/users/me/wallet`, and confirmed Spin & Earn endpoints.
 - Question gameplay is backend-first:
   - retrieval prefers `GET /questions/set`
   - per-answer validation uses `POST /questions/check`
@@ -47,8 +55,8 @@
 
 ### Broader backlog still remaining
 
-- Portable avatar/object-storage upload flow
-- Crypto economy player surfaces
+- Portable avatar/object-storage upload runtime verification after emulator wipe/login
+- Crypto economy live contract validation and optional UI smoke/polish
 - ML enhancement signal consumption
 - Runtime validation on device/simulator for the broader Synaptix surface
 
@@ -78,16 +86,33 @@
 - [x] WebSocket `playerId` query-string alignment completed
 - [ ] Two-account/device runtime verification completed
 - [ ] Backend team confirms final friends/search/unfriend contracts
-- [ ] Decision made on `FriendDiscoveryService` cleanup/deprecation
+- [x] `FriendDiscoveryService` cleanup/deprecation completed; no `friend_discovery` source file remains under `lib/`
+
+2026-05-10 note: production-path social consolidation is complete and
+`RichPresenceService` tests exist. The remaining friends/social items are live
+backend/two-device verification and the final `FriendDiscoveryService`
+deprecation/removal decision.
 
 ## 3. Economy / menu validation
 
 - [x] Main menu coin/gem display syncs from backend player wallet data
 - [x] Duplicate green energy HUD removed
+- [x] Backend wallet mapping covered for `credits -> coins`, `neuralXp -> xp`, and `synapseShards -> diamonds`
+- [x] Backend wallet refresh bridge updates legacy coin, diamond, and XP providers
+- [x] Spin/reward/avatar/payment-return success paths refresh authoritative wallet state
 - [ ] Runtime QA confirms displayed balances match backend balances after login/resume/refresh
 - [ ] Broader player wallet/history flows implemented
 
-## 4. Verification / release hygiene
+## 4. Auth, Spin & Earn, and crypto verification
+
+- [x] Gated live smoke tests added for local Docker/staging auth, CORS preflight, wallet, and confirmed Spin & Earn endpoints
+- [x] Spin & Earn frontend uses confirmed segment/claim endpoints with local fallback retained
+- [x] Crypto service/provider tests added for contract coverage and mutation invalidation
+- [ ] Run local Docker smoke tests with `SYNAPTIX_TEST_EMAIL`, `SYNAPTIX_TEST_PASSWORD`, and confirmed `SYNAPTIX_API_BASE_URL`
+- [ ] Run optional staging smoke tests with `SYNAPTIX_STAGING_API_BASE_URL`
+- [ ] Add remaining crypto UI smoke tests
+
+## 5. Verification / release hygiene
 
 - [ ] Run `flutter analyze`
 - [ ] Run targeted Flutter tests for question flow
@@ -108,6 +133,7 @@
 ## Canonical Status References
 
 - [`CHANGELOG.md`](../CHANGELOG.md)
+- [`CURRENT_TASKS.md`](CURRENT_TASKS.md)
 - [`REMAINING_TASKS.md`](REMAINING_TASKS.md)
 - [`question_flow_frontend_backend_handoff_2026-04-15.md`](question_flow_frontend_backend_handoff_2026-04-15.md)
 - [`friends_social_presence_frontend_backend_verification_2026-04-15.md`](friends_social_presence_frontend_backend_verification_2026-04-15.md)

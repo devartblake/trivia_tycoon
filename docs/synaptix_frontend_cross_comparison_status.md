@@ -256,7 +256,7 @@ The biggest unfinished frontend-adjacent work is:
 - crypto UX
 - final QA hardening
 - sound cue layer (Hub complete; broader surface coverage remaining)
-- secure channel endpoint rollout + tests
+- secure channel remaining endpoint rollout + lifecycle/performance tests
 - Workstream 2 (package root rename) — blocked on store plan
 
 ---
@@ -302,6 +302,7 @@ The biggest unfinished frontend-adjacent work is:
 ### E. Technical debt (Packet E)
 - [x] Packet E Workstream 1 — internal symbol cleanup complete (commit `79bc788`, 2026-05-08).
 - [ ] Packet E Workstream 2 — package root rename (`package:trivia_tycoon/` → `package:synaptix/`, bundle ID change). Blocked on store/legal plan.
-- [ ] Secure channel endpoint rollout (one non-critical endpoint first, then phase to refresh/match/economy/messages).
-- [ ] Secure channel tests (wrong nonce/sequence, expiry renewal, logout clear, web fallback, payload perf).
+- [x] Secure channel Phase 1/2 endpoint rollout completed for selected social/economy mutations.
+- [ ] Add encrypted DELETE support or equivalent semantics for `removeFriend`, `cancelFriendRequest`, and `unblockUser`.
+- [ ] Secure channel lifecycle/performance tests: sequence/replay, expiry renewal, logout clear, reinstall invalidation, web fallback, payload perf.
 - [ ] Crypto UX deferred or implemented based on backend readiness decision.

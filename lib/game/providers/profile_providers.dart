@@ -3,6 +3,8 @@
 /// Depends on [core_providers.dart] and [game_providers.dart].
 library;
 
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/manager/currency_manager.dart';
@@ -20,8 +22,15 @@ import '../../game/services/referral_invite_storage_service.dart';
 import '../../game/services/referral_service.dart';
 import '../../game/services/referral_storage_service.dart';
 import '../../core/services/social/backend_profile_social_service.dart';
-import 'core_providers.dart' show apiServiceProvider, encryptedApiClientProvider, serviceManagerProvider, generalKeyValueStorageProvider;
+import 'core_providers.dart'
+    show
+        apiServiceProvider,
+        encryptedApiClientProvider,
+        serviceManagerProvider,
+        generalKeyValueStorageProvider;
 import 'game_providers.dart';
+import 'wallet_providers.dart';
+import 'xp_provider.dart';
 
 // ---------------------------------------------------------------------------
 // Wallet (server-authoritative)
@@ -34,21 +43,64 @@ final walletProvider = FutureProvider<UserWallet>((ref) async {
     final api = ref.read(apiServiceProvider);
     final json = await api.get('/users/me/wallet');
     return UserWallet.fromJson(json);
-  } catch (_) {
-    return UserWallet.empty;
+  } catch (error, stackTrace) {
+    Error.throwWithStackTrace(error, stackTrace);
   }
 });
 
 /// Listens to [walletProvider] and keeps [coinBalanceProvider] in sync with
-/// the server-authoritative credit balance. Activate by reading this provider
+/// the server-authoritative wallet balance. Activate by reading this provider
 /// once at app startup (ProviderScope override or ref.read in main).
 final walletSyncProvider = Provider<void>((ref) {
   ref.listen<AsyncValue<UserWallet>>(walletProvider, (_, next) {
     next.whenData((wallet) {
-      ref.read(coinBalanceProvider.notifier).set(wallet.coins);
+      unawaited(ref.read(coinBalanceProvider.notifier).set(wallet.coins));
+      unawaited(ref.read(diamondNotifierProvider).set(wallet.diamonds));
+      unawaited(ref.read(walletServiceProvider).setBalances(
+            coins: wallet.coins,
+            gems: wallet.diamonds,
+          ));
+      ref.read(playerCoinsProvider.notifier).state = wallet.coins;
+      ref.read(playerGemsProvider.notifier).state = wallet.diamonds;
+      ref.read(playerXPProvider.notifier).state = wallet.xp;
     });
   });
 });
+
+/// Refreshes the authoritative backend wallet and mirrors it into the legacy
+/// local currency providers. If the fetch fails, existing local fallback state
+/// is preserved except for a backend-returned coin balance passed by the caller.
+Future<void> refreshAuthoritativeWallet(
+  WidgetRef ref, {
+  int? backendCoinBalance,
+  int? backendDiamondBalance,
+}) async {
+  if (backendCoinBalance != null) {
+    await ref.read(coinBalanceProvider.notifier).set(backendCoinBalance);
+    ref.read(playerCoinsProvider.notifier).state = backendCoinBalance;
+  }
+  if (backendDiamondBalance != null) {
+    await ref.read(diamondNotifierProvider).set(backendDiamondBalance);
+    ref.read(playerGemsProvider.notifier).state = backendDiamondBalance;
+  }
+
+  ref.invalidate(walletProvider);
+
+  try {
+    final wallet = await ref.read(walletProvider.future);
+    await ref.read(coinBalanceProvider.notifier).set(wallet.coins);
+    await ref.read(diamondNotifierProvider).set(wallet.diamonds);
+    await ref.read(walletServiceProvider).setBalances(
+          coins: wallet.coins,
+          gems: wallet.diamonds,
+        );
+    ref.read(playerCoinsProvider.notifier).state = wallet.coins;
+    ref.read(playerGemsProvider.notifier).state = wallet.diamonds;
+    ref.read(playerXPProvider.notifier).state = wallet.xp;
+  } catch (_) {
+    // Keep local cache/fallback state when the backend wallet is unavailable.
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Currency

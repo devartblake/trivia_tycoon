@@ -406,9 +406,10 @@ class _RewardCenterState extends ConsumerState<RewardCenter>
           );
 
       final newBalance = (response['newBalance'] as num?)?.toInt();
-      if (newBalance != null) {
-        await ref.read(coinBalanceProvider.notifier).set(newBalance);
-      }
+      await refreshAuthoritativeWallet(
+        ref,
+        backendCoinBalance: newBalance,
+      );
 
       ref.invalidate(playerRewardsProvider);
 

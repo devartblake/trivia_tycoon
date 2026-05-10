@@ -10,6 +10,8 @@
 
 This document covers every file in the rewards and spin-wheel subsystems, identifies what has already been wired to real providers, what still reads from local storage only, and what new API endpoints or providers are needed to complete server-side integration.
 
+**2026-05-10 frontend update:** Backend-confirmed Spin & Earn endpoints are limited to `GET /arcade/spin/segments` and `POST /arcade/spin/claim`. The Flutter app uses those endpoints where available, refreshes wallet state through `GET /users/me/wallet` after successful claims, and keeps local fallbacks for unconfirmed daily/weekly/server-stat/history/reward-step endpoints.
+
 ---
 
 ## Status Key
@@ -162,26 +164,22 @@ Purely presentational. Accepts `rewardSteps` as a constructor parameter from the
 
 ### `ui/screen/wheel_screen.dart`  🟡
 
-**What works:** Wheel physics, animation, result dialog.
+**What works:** Wheel physics, animation, result dialog, backend segment fetch through `SpinWheelApiService.fetchSegments()`, backend claim through `SpinWheelApiService.claimReward()`, and backend wallet refresh after claim.
 
-**Still local-only:**
+**Backend-confirmed and wired:**
+| Data | Current source | Status |
+|------|---------------|--------|
+| Segment list | `GET /arcade/spin/segments` | Wired with local segment fallback |
+| Claim/award | `POST /arcade/spin/claim` | Wired; frontend refreshes `/users/me/wallet` after claim |
+
+**Still local-only / planned:**
 | Data | Current source | Needed API |
 |------|---------------|-----------|
 | Spin result persistence | `AppSettings.addSpinToHistory()`, `AppSettings.updateSpinStatistics()` | `POST /spins/result` — persist outcome server-side |
 | Spin count increment | `AppSettings.incrementTodaySpinCount()` (3 separate calls) | Consolidate into `POST /spins/result` response |
-| Reward award | `coinBalanceProvider` updated locally | Server should award and return new balance in `POST /spins/result` response |
+| Spin stats/history | `EnhancedSpinTracker` / `AppSettings` local cache | Server stats/history endpoints once backend confirms them |
 
-**Recommended refactor:**
-```dart
-// After wheel lands, instead of 3 separate AppSettings calls:
-final response = await ref.read(storeServiceProvider).recordSpinResult(
-  userId: userId,
-  rewardType: result.reward.type,
-  rewardAmount: result.reward.amount,
-);
-ref.read(coinBalanceProvider.notifier).set(response.newCoinBalance);
-ref.invalidate(spinStatisticsProvider);
-```
+**Current frontend rule:** Do not replace local stats/history yet; only use the confirmed segment and claim endpoints.
 
 ---
 

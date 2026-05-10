@@ -1,7 +1,7 @@
 # Friends & Presence Frontend Action Plan
 ## Comprehensive Migration Plan
 
-**Date:** 2026-04-15  
+**Date:** 2026-05-10
 **Based on:** [friends_presence_backend_integration_handoff_2026-04-15.md](/c:/Users/lmxbl/StudioProjects/trivia_tycoon/docs/friends_presence_backend_integration_handoff_2026-04-15.md:1)
 
 ---
@@ -40,7 +40,7 @@
 ### Remaining
 
 - runtime verification of friends + presence against a live backend
-- final cleanup/deprecation decision for `FriendDiscoveryService`
+- `FriendDiscoveryService` cleanup is complete; no `friend_discovery` source file remains under `lib/`
 - audit any non-screen social/message utilities for assumptions about local friend state
 - formatter/analyzer/test pass in a Flutter-enabled environment
 - docs/backlog closeout after runtime validation
@@ -403,17 +403,13 @@ Acceptance:
 
 ## Phase 7: Cleanup and Mock Isolation
 
-### Task 15. Reduce friendDiscoveryServiceProvider usage
+### Task 15. Reduce friendDiscoveryServiceProvider usage — COMPLETE
 
-Search and assess:
+2026-05-10 update:
 
-- `lib/core/services/social/friend_discovery_service.dart`
-- all imports/usages of `friendDiscoveryServiceProvider`
-
-Goal:
-
-- remove it from production Friends screen path
-- keep only for any local-only feature not yet backendized
+- `lib/core/services/social/friend_discovery_service.dart` no longer exists.
+- No `friend_discovery` source file remains under `lib/`.
+- Production Friends, add-friend, and DM picker paths are backend-backed.
 
 Acceptance:
 
@@ -430,7 +426,8 @@ Document one of:
 Suggested doc update targets:
 
 - `docs/FRIENDS_SCREEN_IMPLEMENTATION_GUIDE.md`
-- `docs/REMAINING_TASKS.md`
+- `docs/CURRENT_TASKS.md` for current tasks
+- `docs/REMAINING_TASKS.md` for detailed backlog/history
 - `CHANGELOG.md`
 
 ---

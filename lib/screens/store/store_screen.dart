@@ -706,8 +706,12 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
       return;
     }
 
-    final coins = ref.read(coinBalanceProvider);
-    if (coins >= item.price) {
+    final currency = item.currency.toLowerCase();
+    final availableBalance = currency == 'diamonds'
+        ? ref.read(diamondBalanceProvider)
+        : ref.read(coinBalanceProvider);
+
+    if (availableBalance >= item.price) {
       showDialog(
         context: context,
         barrierDismissible: false,
@@ -717,7 +721,41 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
       );
 
       try {
-        ref.read(coinNotifierProvider).deduct(item.price);
+        final sku = item.sku ?? item.id;
+        Map<String, dynamic>? purchaseResponse;
+
+        if (sku.isNotEmpty) {
+          try {
+            final playerId = await ref.read(currentUserIdProvider.future);
+            purchaseResponse =
+                await ref.read(storeServiceProvider).purchaseWithCoinsOrDiamonds(
+                      playerId: playerId,
+                      sku: sku,
+                      quantity: item.quantity,
+                    );
+          } on ApiRequestException {
+            rethrow;
+          } catch (_) {
+            // Preserve local fallback behavior if the backend purchase endpoint
+            // is not reachable in a dev/offline environment.
+          }
+        }
+
+        final newBalance = (purchaseResponse?['newBalance'] as num?)?.toInt();
+        if (purchaseResponse != null) {
+          await refreshAuthoritativeWallet(
+            ref,
+            backendCoinBalance: currency == 'coins' ? newBalance : null,
+            backendDiamondBalance: currency == 'diamonds' ? newBalance : null,
+          );
+          ref.invalidate(storeItemsProvider);
+          ref.invalidate(powerUpInventoryProvider);
+        } else if (currency == 'diamonds') {
+          await ref.read(diamondNotifierProvider).deduct(item.price);
+        } else {
+          await ref.read(coinBalanceProvider.notifier).deduct(item.price);
+        }
+
         await AppSettings.addPurchasedItem(item.id);
 
         // Fire store_item_purchased behaviour event
