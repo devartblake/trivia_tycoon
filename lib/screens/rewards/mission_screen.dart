@@ -267,7 +267,7 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12),
                 child: _buildMissionCard(
-                  icon: _iconForMission(mission['icon'] as String?),
+                  icon: _iconForMission(mission['icon']),
                   title: mission['title'] as String? ?? 'Mission',
                   progress: (mission['progress'] as num?)?.toInt() ?? 0,
                   total: (mission['total'] as num?)?.toInt() ?? 1,
@@ -310,7 +310,7 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12),
                 child: _buildMissionCard(
-                  icon: _iconForMission(mission['icon'] as String?),
+                  icon: _iconForMission(mission['icon']),
                   title: mission['title'] as String? ?? 'Mission',
                   progress: (mission['total'] as num?)?.toInt() ?? 1,
                   total: (mission['total'] as num?)?.toInt() ?? 1,
@@ -325,8 +325,14 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
     );
   }
 
-  IconData _iconForMission(String? iconName) {
-    switch (iconName?.toLowerCase()) {
+  IconData _iconForMission(Object? iconValue) {
+    if (iconValue is IconData) {
+      return iconValue;
+    }
+    if (iconValue is! String) {
+      return Icons.assignment;
+    }
+    switch (iconValue.toLowerCase()) {
       case 'science':
         return Icons.science;
       case 'history':
