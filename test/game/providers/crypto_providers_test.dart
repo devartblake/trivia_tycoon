@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:trivia_tycoon/core/models/crypto/crypto_api_error.dart';
 import 'package:trivia_tycoon/core/models/crypto/crypto_balance_model.dart';
 import 'package:trivia_tycoon/core/models/crypto/crypto_fund_prize_pool_request.dart';
 import 'package:trivia_tycoon/core/models/crypto/crypto_fund_prize_pool_result.dart';
@@ -42,11 +43,11 @@ void main() {
       expect(service.historyCalls, 1);
 
       await container.read(linkWalletProvider)(
-            const CryptoLinkWalletRequest(
-              playerId: 'player-1',
-              walletAddress: '7EcDhSYGxXyscszYEp35KHN8vvw3svAuLKTzXwCFLtV',
-            ),
-          );
+        const CryptoLinkWalletRequest(
+          playerId: 'player-1',
+          walletAddress: '7EcDhSYGxXyscszYEp35KHN8vvw3svAuLKTzXwCFLtV',
+        ),
+      );
 
       final refreshedBalance =
           await container.read(cryptoBalanceProvider('player-1').future);
@@ -80,12 +81,12 @@ void main() {
       expect(service.balanceCalls, 1);
 
       await container.read(fundPrizePoolProvider)(
-            const CryptoFundPrizePoolRequest(
-              playerId: 'player-1',
-              units: 50,
-              poolId: 'global',
-            ),
-          );
+        const CryptoFundPrizePoolRequest(
+          playerId: 'player-1',
+          units: 50,
+          poolId: 'global',
+        ),
+      );
 
       final refreshedPool =
           await container.read(cryptoPrizePoolProvider('global').future);
@@ -96,6 +97,78 @@ void main() {
       expect(refreshedBalance.units, 200);
       expect(service.prizePoolCalls, 2);
       expect(service.balanceCalls, 2);
+    });
+
+    test('write providers fail fast when crypto writes are disabled', () async {
+      final service = _FakeCryptoService();
+      final container = ProviderContainer(
+        overrides: [
+          cryptoServiceProvider.overrideWithValue(service),
+          cryptoFeatureFlagsProvider.overrideWithValue(
+            const CryptoFeatureFlags(
+              surfacesEnabled: true,
+              writesEnabled: false,
+              enabledNetworkKeys: {'solana', 'xrp'},
+            ),
+          ),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      await expectLater(
+        container.read(linkWalletProvider)(
+          const CryptoLinkWalletRequest(
+            playerId: 'player-1',
+            walletAddress: '7EcDhSYGxXyscszYEp35KHN8vvw3svAuLKTzXwCFLtV',
+          ),
+        ),
+        throwsA(
+          isA<CryptoApiException>().having(
+            (error) => error.code,
+            'code',
+            'CRYPTO_DISABLED',
+          ),
+        ),
+      );
+
+      expect(service.linkWalletCalls, 0);
+    });
+
+    test('wallet link fails fast when the selected network is disabled',
+        () async {
+      final service = _FakeCryptoService();
+      final container = ProviderContainer(
+        overrides: [
+          cryptoServiceProvider.overrideWithValue(service),
+          cryptoFeatureFlagsProvider.overrideWithValue(
+            const CryptoFeatureFlags(
+              surfacesEnabled: true,
+              writesEnabled: true,
+              enabledNetworkKeys: {'xrp'},
+            ),
+          ),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      await expectLater(
+        container.read(linkWalletProvider)(
+          const CryptoLinkWalletRequest(
+            playerId: 'player-1',
+            walletAddress: '7EcDhSYGxXyscszYEp35KHN8vvw3svAuLKTzXwCFLtV',
+            network: CryptoNetwork.solana,
+          ),
+        ),
+        throwsA(
+          isA<CryptoApiException>().having(
+            (error) => error.code,
+            'code',
+            'CRYPTO_NETWORK_DISABLED',
+          ),
+        ),
+      );
+
+      expect(service.linkWalletCalls, 0);
     });
   });
 }
@@ -113,6 +186,7 @@ class _FakeCryptoService extends CryptoService {
   int stakingCalls = 0;
   int historyCalls = 0;
   int prizePoolCalls = 0;
+  int linkWalletCalls = 0;
 
   @override
   Future<CryptoBalanceModel> getBalance(String playerId) async {
@@ -164,6 +238,7 @@ class _FakeCryptoService extends CryptoService {
   Future<CryptoLinkWalletResult> linkWallet(
     CryptoLinkWalletRequest request,
   ) async {
+    linkWalletCalls += 1;
     return CryptoLinkWalletResult(
       playerId: request.playerId,
       walletAddress: request.walletAddress,

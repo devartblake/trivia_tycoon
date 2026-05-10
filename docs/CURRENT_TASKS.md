@@ -51,7 +51,7 @@ _PR/branch cross-check pass: 2026-05-10 against `origin/main`, recent remote bra
 - [x] Add typed crypto service, models, and providers for wallet link, balance, history, withdraw, stake, unstake, staking status, and prize pool actions.
 - [x] Base crypto wallet screen exists for balance/history, wallet linking, withdrawals, staking, unstaking, and prize pool interaction.
 - [x] Add service/provider tests for crypto endpoint contracts, mutation invalidation, and backend error envelope mapping.
-- [ ] Add feature flags for staged crypto rollout and safe disabling.
+- [x] Add feature flags for staged crypto rollout and safe disabling: `CRYPTO_SURFACES_ENABLED`, `CRYPTO_WRITES_ENABLED`, and `CRYPTO_ENABLED_NETWORKS`.
 - [ ] Live-validate crypto contracts against local Docker first, then staging.
 - [ ] Add/extend crypto UI smoke tests for linked/unlinked, pending withdrawal, disabled-feature, stake/unstake, and prize pool states.
 
@@ -75,9 +75,11 @@ _PR/branch cross-check pass: 2026-05-10 against `origin/main`, recent remote bra
 - [ ] Runtime-verify emulator wipe/login rehydrates avatar from backend URL instead of a local device path.
 
 ### Secure channel rollout
-- [ ] Add `deleteEncrypted` to `EncryptedApiClient` or convert DELETE-sensitive operations to supported encrypted semantics.
-- [ ] Encrypt remaining selected endpoints in phases: non-critical first, then refresh/match/economy/messages/private social writes.
-- [ ] Add secure-channel tests for wrong nonce, wrong sequence, expiry renewal, logout clear, reinstall invalidation, web fallback, and 1 KB/10 KB/100 KB payload performance.
+- [x] Add `deleteEncrypted` to `EncryptedApiClient` and route DELETE-sensitive social operations through encrypted semantics: `removeFriend`, `cancelFriendRequest`, and `unblockUser`.
+- [x] Encrypt selected private social/economy endpoints through the current rollout: friend request send/accept/decline/cancel/remove, block/unblock, loadout save, and Spin & Earn claim.
+- [x] Add secure-channel tests for wrong nonce, logout/session clear, and 1 KB/10 KB/100 KB payload coverage.
+- [ ] Add remaining secure-channel tests for wrong sequence/replay, expiry renewal, reinstall invalidation, and web fallback.
+- [ ] Decide and schedule any later refresh/match/economy/messages/private social write expansion beyond the currently selected endpoints.
 - [ ] Validate exact backend response schema, replay protection, and sequence semantics against staging.
 
 ### Admin security and operations UI

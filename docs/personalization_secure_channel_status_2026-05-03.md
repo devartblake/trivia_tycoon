@@ -85,18 +85,19 @@ All 6 secure channel files above were confirmed present after merging `origin/ma
 - Scaffolding is complete and live.
 - Phase 1 endpoint rollout is complete: `sendFriendRequest` and `acceptFriendRequest`.
 - Phase 2 endpoint rollout is complete: `declineFriendRequest`, `blockUser`, `saveLoadout`, and `claimReward`.
-- Codec tests exist in `test/core/security/secure_payload_codec_test.dart`.
+- Phase 3 DELETE support is complete: `deleteEncrypted` now covers `removeFriend`, `cancelFriendRequest`, and `unblockUser`.
+- Codec/session tests exist in `test/core/security/secure_payload_codec_test.dart`, including wrong nonce, session clear, and 1 KB/10 KB/100 KB payload coverage.
 
 ### Remaining secure-channel tasks
-- Add `deleteEncrypted` to `EncryptedApiClient` or convert DELETE-sensitive operations to supported encrypted semantics for `removeFriend`, `cancelFriendRequest`, and `unblockUser`.
-- Add the remaining tests from the secure-channel checklist: sequence/replay semantics, expiry renewal, logout clear, reinstall invalidation, web fallback, and payload performance.
+- Add the remaining tests from the secure-channel checklist: sequence/replay semantics, expiry renewal, reinstall invalidation, and web fallback.
+- Decide the next endpoint expansion beyond the selected private social/economy mutations.
 - Harden backend compatibility details (exact response schema and replay/sequence semantics) against staging.
 
 ## Remaining work summary
 
 ### High priority
-1. Add encrypted DELETE support or equivalent endpoint semantics for the remaining private social deletes.
-2. Add remaining secure-channel tests and compatibility validation against staging/backend schema.
+1. Add remaining secure-channel lifecycle/replay tests and compatibility validation against staging/backend schema.
+2. Decide whether the next rollout includes refresh, match, economy, messages, or additional private social writes.
 
 ### Medium priority
 3. Reconcile endpoint-path documentation mismatch across plan docs (`/personalization/{playerId}/...` is current; older `/personalization/home/{playerId}` shape is superseded unless backend indicates otherwise).

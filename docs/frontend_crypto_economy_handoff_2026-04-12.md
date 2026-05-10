@@ -40,7 +40,7 @@ Still remaining for the crypto track:
 
 ## Status update (2026-05-10)
 
-The typed crypto service/model/provider layer is implemented and now has focused service/provider coverage for endpoint contracts, mutation invalidation, and backend error envelope mapping.
+The typed crypto service/model/provider layer is implemented and now has focused service/provider coverage for endpoint contracts, mutation invalidation, backend error envelope mapping, staged write disabling, and per-network availability.
 
 Current remaining crypto work:
 - run live contract validation against local Docker first, then staging
@@ -639,11 +639,12 @@ Global rules:
     Suggested file targets:
     - `lib/screens/store/widgets/crypto_prize_pool_card.dart`
     - `lib/screens/store/widgets/crypto_fund_pool_sheet.dart`
-15. Add feature gating for Phase 2 networks (`snx`, `shib`) so they can be enabled without redesigning the UI.
+15. [x] Add feature gating for Phase 2 networks (`snx`, `shib`) so they can be enabled without redesigning the UI.
     Suggested file targets:
-    - `lib/core/config/env.dart`
+    - `lib/core/env.dart`
     - `lib/core/models/crypto/crypto_network.dart`
-    - `lib/screens/store/widgets/crypto_network_picker.dart`
+    - `lib/game/providers/crypto_providers.dart`
+    - `lib/screens/store/crypto_wallet_screen.dart`
 
 ### Tier 6 - Highest effort / cross-cutting work
 

@@ -44,6 +44,13 @@ class EncryptedApiClient {
     return _sendEncrypted(method: 'PATCH', path: path, body: body);
   }
 
+  Future<Map<String, dynamic>> deleteEncrypted(
+    String path, {
+    required Map<String, dynamic> body,
+  }) async {
+    return _sendEncrypted(method: 'DELETE', path: path, body: body);
+  }
+
   Future<Map<String, dynamic>> _sendEncrypted({
     required String method,
     required String path,
@@ -65,7 +72,8 @@ class EncryptedApiClient {
       );
       final activeSession = await _secureChannel.loadSession();
       if (activeSession == null) {
-        throw const SecureChannelException('No secure session after encryptJson');
+        throw const SecureChannelException(
+            'No secure session after encryptJson');
       }
       final response = await _request(
         method: method,
@@ -75,7 +83,8 @@ class EncryptedApiClient {
       );
 
       final decoded = jsonDecode(response.body);
-      if (decoded is Map<String, dynamic> && decoded.containsKey('ciphertext')) {
+      if (decoded is Map<String, dynamic> &&
+          decoded.containsKey('ciphertext')) {
         return _secureChannel.decryptJsonResponse(
           uri: uri,
           method: method,
@@ -111,11 +120,29 @@ class EncryptedApiClient {
 
     switch (method.toUpperCase()) {
       case 'POST':
-        return _authClient.post(uri, headers: headers, body: jsonEncode(encrypted.toJson()));
+        return _authClient.post(
+          uri,
+          headers: headers,
+          body: jsonEncode(encrypted.toJson()),
+        );
       case 'PUT':
-        return _authClient.put(uri, headers: headers, body: jsonEncode(encrypted.toJson()));
+        return _authClient.put(
+          uri,
+          headers: headers,
+          body: jsonEncode(encrypted.toJson()),
+        );
       case 'PATCH':
-        return _authClient.patch(uri, headers: headers, body: jsonEncode(encrypted.toJson()));
+        return _authClient.patch(
+          uri,
+          headers: headers,
+          body: jsonEncode(encrypted.toJson()),
+        );
+      case 'DELETE':
+        return _authClient.delete(
+          uri,
+          headers: headers,
+          body: jsonEncode(encrypted.toJson()),
+        );
       default:
         throw SecureChannelException('Unsupported secure method: $method');
     }

@@ -276,8 +276,8 @@ These items are complete in the Flutter codebase and are recorded in `docs/synap
 
 | Item | Priority | Notes |
 |---|---|---|
-| Secure channel: remaining endpoint rollout | High | Phase 1/2 complete. Remaining gap is encrypted DELETE/equivalent semantics for `removeFriend`, `cancelFriendRequest`, and `unblockUser`, then later refresh/match/economy/messages expansion as needed |
-| Secure channel: remaining tests | High | Codec tests exist. Still need sequence/replay, expiry renewal, logout clear, reinstall invalidation, web fallback, and payload perf |
+| Secure channel: selected endpoint rollout | High | Phase 1/2/3 complete. `deleteEncrypted` now covers `removeFriend`, `cancelFriendRequest`, and `unblockUser`; later refresh/match/economy/messages expansion remains decision-gated |
+| Secure channel: remaining tests | High | Codec/session tests cover wrong nonce, session clear, and 1 KB/10 KB/100 KB payloads. Still need sequence/replay, expiry renewal, reinstall invalidation, and web fallback |
 | Secure channel: backend compatibility validation | High | Exact response schema + replay/sequence semantics against staging |
 | Personalization endpoint path reconciliation | Medium | `/personalization/{playerId}/...` (current) vs older plan shape — confirm with backend |
 | FE-D2: Frontend labels vs backend dashboard cross-check | Low | Deferred pending backend alignment |

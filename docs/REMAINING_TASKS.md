@@ -40,12 +40,14 @@ _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue 
 | Packet E Workstream 2 (package root rename) | Deferred | Blocked — awaiting store plan | Yes — needs store/legal plan |
 | Backend Packet E (namespace rename) | Deferred | Not started | Intentional deferral |
 | **Spin wheel redesign** | **Medium** | **Complete** | **No** |
-| **Secure channel scaffolding** | **High** | **Complete (scaffolded); Phase 1/2 endpoint rollout also complete** | **No** |
+| **Secure channel scaffolding** | **High** | **Complete (scaffolded); Phase 1/2/3 selected endpoint rollout also complete** | **No** |
 | **Secure channel Phase 1 endpoint rollout** | **High** | **Complete — `sendFriendRequest` + `acceptFriendRequest` wired to `EncryptedApiClient`** | **No** |
 | **Secure channel Phase 2 endpoint rollout** | **High** | **Complete — `declineFriendRequest`, `blockUser`, `saveLoadout`, `claimReward` encrypted** | **No** |
 | **dart:io web guards (all 19 files)** | **Medium** | **Complete — all files verified safe; 3 changed, 16 confirmed already guarded** | **No** |
 
 ---
+
+| **Secure channel Phase 3 encrypted DELETE rollout** | **High** | **Complete - `removeFriend`, `cancelFriendRequest`, `unblockUser` encrypted via `deleteEncrypted`** | **No** |
 
 ## 1. Frontend/Backend Alpha Handoff
 
@@ -246,14 +248,14 @@ backend URL.
 
 ### 1d. Crypto economy player surfaces REMAINING
 - Still needed:
-- Broader player-facing wallet balance integration beyond the main menu sync
-- Transaction/history integration
-- Wallet link / withdraw UX
-- Staking and unstaking UI
-- Feature-flag strategy for staged rollout
+- Live contract validation against local Docker, then staging
+- Broader widget/UI smoke tests for linked/unlinked, pending withdrawal, disabled-feature, stake/unstake, and prize pool states
+- Optional profile/store polish after contract validation
 - Newly completed:
   - `main_menu_screen.dart` now syncs coin/gem display from backend player wallet data during economy refresh
   - duplicate green energy strip under the menu currency display was removed
+  - `CryptoService`, crypto models, Riverpod providers, and `crypto_wallet_screen.dart` now cover balance, history, link wallet, withdrawal, staking/unstaking, and prize pool flows
+  - `CRYPTO_SURFACES_ENABLED`, `CRYPTO_WRITES_ENABLED`, and `CRYPTO_ENABLED_NETWORKS` gate staged rollout and network availability
 - Backend endpoints available for consumption:
 - `POST /crypto/link-wallet`
 - `GET /crypto/balance/{playerId}`
@@ -453,15 +455,14 @@ Status is improved but still requires explicit live verification:
 - [ ] Auto-refresh (token renewal on 401) tested end-to-end with a live or stub backend
 - [ ] Backend profile hydration after login verified against a live backend endpoint
 - [ ] Backend profile hydration after emulator/data wipe verified end-to-end
-- [ ] Local web auth CORS/origin validation confirmed for Docker-hosted backend
+- [ ] Local web auth CORS/origin validation confirmed for Docker-hosted backend; frontend smoke coverage exists, but the 2026-05-10 local check returned `204` without `Access-Control-Allow-Origin` for `http://localhost:63033`
 
 ### 5a. Local web auth / Docker verification REMAINING
 - Frontend-side diagnosis is complete:
   - browser auth should target `http://localhost:5000` for local host access
   - stale `https://localhost:5000` local defaults were corrected in frontend config
 - Still needed:
-  - verify Docker publishes the backend port to the host machine
-  - verify backend CORS allows the Flutter web dev origin
+  - backend CORS must return `Access-Control-Allow-Origin` for `http://localhost:63033`
   - verify any social/OAuth local callback URLs use the same reachable origin/protocol
 
 ---

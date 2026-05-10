@@ -3,7 +3,10 @@ import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trivia_tycoon/core/security/secure_channel_exceptions.dart';
+import 'package:trivia_tycoon/core/security/secure_channel_models.dart';
 import 'package:trivia_tycoon/core/security/secure_payload_codec.dart';
+import 'package:trivia_tycoon/core/security/secure_session_store.dart';
+import 'package:trivia_tycoon/core/services/storage/secure_storage.dart';
 
 List<int> _randomKey() =>
     List<int>.generate(32, (_) => Random.secure().nextInt(256));
@@ -111,8 +114,33 @@ void main() {
       final json = encrypted.toJson();
       // Flip the last character of the MAC
       final mac = json['mac'] as String;
-      json['mac'] = mac.substring(0, mac.length - 1) +
-          (mac.endsWith('A') ? 'B' : 'A');
+      json['mac'] =
+          mac.substring(0, mac.length - 1) + (mac.endsWith('A') ? 'B' : 'A');
+
+      expect(
+        () => codec.decryptJson(
+          encryptedBody: json,
+          keyBytes: keyBytes,
+          method: 'POST',
+          uri: uri,
+        ),
+        throwsA(isA<SecureDecryptException>()),
+      );
+    });
+
+    test('wrong nonce throws SecureDecryptException', () async {
+      final body = {'amount': 100};
+      final encrypted = await codec.encryptJson(
+        body: body,
+        keyBytes: keyBytes,
+        method: 'POST',
+        uri: uri,
+      );
+
+      final json = encrypted.toJson();
+      final nonce = json['nonce'] as String;
+      json['nonce'] = nonce.substring(0, nonce.length - 1) +
+          (nonce.endsWith('A') ? 'B' : 'A');
 
       expect(
         () => codec.decryptJson(
@@ -181,5 +209,70 @@ void main() {
       expect(encrypted.mac, isNotEmpty);
       expect(encrypted.encryptedAtUtc, isNotEmpty);
     });
+
+    test('round-trips larger JSON payloads used by secure endpoints', () async {
+      for (final size in [1024, 10 * 1024, 100 * 1024]) {
+        final body = {
+          'message': List<String>.filled(size, 'x').join(),
+          'metadata': {'size': size},
+        };
+
+        final encrypted = await codec.encryptJson(
+          body: body,
+          keyBytes: keyBytes,
+          method: 'PATCH',
+          uri: uri,
+        );
+
+        final decrypted = await codec.decryptJson(
+          encryptedBody: encrypted.toJson(),
+          keyBytes: keyBytes,
+          method: 'PATCH',
+          uri: uri,
+        );
+
+        expect(decrypted, equals(body));
+      }
+    });
   });
+
+  group('SecureSessionStore', () {
+    test('clear removes the persisted secure session', () async {
+      final storage = _MemorySecureStorage();
+      final store = SecureSessionStore(storage);
+      final session = SecureSession(
+        sessionId: 'session-1',
+        protocolVersion: 'syn-sec-v1',
+        selectedSuite: 'X25519-HKDF-SHA256-AES256GCM',
+        clientToServerKey: keyBytes,
+        serverToClientKey: _randomKey(),
+        expiresAtUtc: DateTime.now().toUtc().add(const Duration(minutes: 5)),
+      );
+
+      await store.save(session);
+      expect(await store.load(), isNotNull);
+
+      await store.clear();
+      expect(await store.load(), isNull);
+    });
+  });
+}
+
+class _MemorySecureStorage extends SecureStorage {
+  final Map<String, String> _secrets = {};
+
+  @override
+  Future<void> setSecret(String key, String value) async {
+    _secrets[key] = value;
+  }
+
+  @override
+  Future<String?> getSecret(String key) async {
+    return _secrets[key];
+  }
+
+  @override
+  Future<void> removeSecret(String key) async {
+    _secrets.remove(key);
+  }
 }

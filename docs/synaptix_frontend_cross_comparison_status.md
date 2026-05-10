@@ -302,7 +302,8 @@ The biggest unfinished frontend-adjacent work is:
 ### E. Technical debt (Packet E)
 - [x] Packet E Workstream 1 — internal symbol cleanup complete (commit `79bc788`, 2026-05-08).
 - [ ] Packet E Workstream 2 — package root rename (`package:trivia_tycoon/` → `package:synaptix/`, bundle ID change). Blocked on store/legal plan.
-- [x] Secure channel Phase 1/2 endpoint rollout completed for selected social/economy mutations.
+- [x] Secure channel Phase 1/2/3 endpoint rollout completed for selected social/economy mutations, including encrypted DELETE social operations.
 - [ ] Add encrypted DELETE support or equivalent semantics for `removeFriend`, `cancelFriendRequest`, and `unblockUser`.
-- [ ] Secure channel lifecycle/performance tests: sequence/replay, expiry renewal, logout clear, reinstall invalidation, web fallback, payload perf.
+- [x] Secure channel wrong-nonce, session-clear, and 1 KB/10 KB/100 KB payload coverage added.
+- [ ] Secure channel lifecycle/replay tests: sequence/replay, expiry renewal, reinstall invalidation, and web fallback.
 - [ ] Crypto UX deferred or implemented based on backend readiness decision.

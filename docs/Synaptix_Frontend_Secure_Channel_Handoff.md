@@ -1,5 +1,11 @@
 # Synaptix Frontend Secure Channel Implementation Handoff
 
+## Phase 3 Status - COMPLETE (2026-05-10)
+
+`EncryptedApiClient.deleteEncrypted` now encrypts DELETE-sensitive social mutations: `removeFriend`, `cancelFriendRequest`, and `unblockUser`.
+
+Codec/session tests in `test/core/security/secure_payload_codec_test.dart` now cover wrong nonce, session clear, and 1 KB/10 KB/100 KB payload coverage in addition to the original codec cases.
+
 Repository: `devartblake/trivia_tycoon`
 
 ## Phase 2 Status — COMPLETE (2026-05-09)

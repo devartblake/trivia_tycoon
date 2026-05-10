@@ -1,5 +1,9 @@
 # 🧩 Frontend CORS Issue – Implementation Brief
 
+## 2026-05-10 Local Check
+
+Frontend smoke coverage is in place for `OPTIONS /auth/login`, login, `/users/me`, `/users/me/wallet`, refresh, and confirmed Spin & Earn endpoints. Local Docker port `5000` was reachable, and `OPTIONS /auth/login` returned `204`, but the response did not include `Access-Control-Allow-Origin` for `http://localhost:63033`. The remaining fix is backend CORS configuration for the fixed Flutter web origin.
+
 **Project:** Synaptix / Trivia Tycoon  
 **Scope:** Flutter Web local development  
 **Status:** ✅ Fix implemented (VS Code launch config + Android Studio run configs + `run_web.sh`)

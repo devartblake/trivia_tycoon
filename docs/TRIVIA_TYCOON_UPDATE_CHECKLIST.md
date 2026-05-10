@@ -23,6 +23,10 @@
 - Crypto economy typed layer is in place:
   - service/models/providers cover balance, history, staking, link wallet, withdrawal, and prize pool actions
   - focused service/provider tests cover contracts, invalidation, and backend error envelope mapping
+  - staged rollout flags now cover full surface disable, write disable, and enabled network selection
+- Secure channel selected endpoint rollout is complete through Phase 3:
+  - encrypted DELETE support now covers remove friend, cancel friend request, and unblock
+  - codec/session tests now cover wrong nonce, session clear, and 1 KB/10 KB/100 KB payload coverage
 - Gated live backend smoke coverage was added for auth/CORS, `/users/me`, `/users/me/wallet`, and confirmed Spin & Earn endpoints.
 - Question gameplay is backend-first:
   - retrieval prefers `GET /questions/set`
@@ -57,6 +61,7 @@
 
 - Portable avatar/object-storage upload runtime verification after emulator wipe/login
 - Crypto economy live contract validation and optional UI smoke/polish
+- Secure channel staging validation for replay/sequence semantics, expiry renewal, reinstall invalidation, and web fallback
 - ML enhancement signal consumption
 - Runtime validation on device/simulator for the broader Synaptix surface
 
@@ -108,9 +113,18 @@ deprecation/removal decision.
 - [x] Gated live smoke tests added for local Docker/staging auth, CORS preflight, wallet, and confirmed Spin & Earn endpoints
 - [x] Spin & Earn frontend uses confirmed segment/claim endpoints with local fallback retained
 - [x] Crypto service/provider tests added for contract coverage and mutation invalidation
+- [x] Crypto rollout flags added for surface disable, write disable, and enabled networks
 - [ ] Run local Docker smoke tests with `SYNAPTIX_TEST_EMAIL`, `SYNAPTIX_TEST_PASSWORD`, and confirmed `SYNAPTIX_API_BASE_URL`
 - [ ] Run optional staging smoke tests with `SYNAPTIX_STAGING_API_BASE_URL`
 - [ ] Add remaining crypto UI smoke tests
+
+## 4a. Secure channel rollout
+
+- [x] Add encrypted DELETE support to `EncryptedApiClient`
+- [x] Encrypt selected DELETE-sensitive social operations: remove friend, cancel friend request, unblock
+- [x] Add wrong-nonce, session-clear, and 1 KB/10 KB/100 KB payload coverage
+- [ ] Validate exact response schema, replay protection, and sequence semantics against staging
+- [ ] Add expiry renewal, reinstall invalidation, and web fallback tests
 
 ## 5. Verification / release hygiene
 

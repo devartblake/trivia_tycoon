@@ -17,6 +17,9 @@ class EnvConfig {
   static String? _presenceHubUrl;
   static String? _notifyHubUrl;
   static String? _appRedirectBaseUrl;
+  static bool _cryptoSurfacesEnabled = true;
+  static bool _cryptoWritesEnabled = true;
+  static Set<String> _enabledCryptoNetworks = const {'solana', 'xrp'};
 
   /// Getter for the backend API Base URL.
   static String get apiBaseUrl {
@@ -51,6 +54,18 @@ class EnvConfig {
 
   /// Optional frontend/app base URL for payment return routing.
   static String? get appRedirectBaseUrl => _appRedirectBaseUrl;
+
+  /// Enables player-facing crypto wallet surfaces.
+  static bool get cryptoSurfacesEnabled => _cryptoSurfacesEnabled;
+
+  /// Enables mutating crypto actions such as link wallet, withdraw, stake,
+  /// unstake, and prize-pool funding. Read-only crypto surfaces may remain
+  /// visible while writes are disabled.
+  static bool get cryptoWritesEnabled => _cryptoWritesEnabled;
+
+  /// Network keys enabled for frontend selection.
+  static Set<String> get enabledCryptoNetworks =>
+      Set.unmodifiable(_enabledCryptoNetworks);
 
   static String _joinWsPath(String baseUrl, String suffixPath) {
     final baseUri = Uri.parse(baseUrl);
@@ -159,6 +174,18 @@ class EnvConfig {
               ? null
               : _joinWsPath(_apiWsBaseUrl!, '/ws/notify'));
       _appRedirectBaseUrl = _resolveAppRedirectBaseUrl();
+      _cryptoSurfacesEnabled = _parseBool(
+        dotenv.env['CRYPTO_SURFACES_ENABLED'],
+        fallback: true,
+      );
+      _cryptoWritesEnabled = _parseBool(
+        dotenv.env['CRYPTO_WRITES_ENABLED'],
+        fallback: true,
+      );
+      _enabledCryptoNetworks = _parseCsvSet(
+        dotenv.env['CRYPTO_ENABLED_NETWORKS'],
+        fallback: const {'solana', 'xrp'},
+      );
 
       // Perform checks to ensure essential variables are present
       if (_apiBaseUrl == null ||
@@ -208,5 +235,36 @@ class EnvConfig {
     }
 
     return null;
+  }
+
+  static bool _parseBool(String? value, {required bool fallback}) {
+    if (value == null || value.trim().isEmpty) return fallback;
+    switch (value.trim().toLowerCase()) {
+      case '1':
+      case 'true':
+      case 'yes':
+      case 'on':
+        return true;
+      case '0':
+      case 'false':
+      case 'no':
+      case 'off':
+        return false;
+      default:
+        return fallback;
+    }
+  }
+
+  static Set<String> _parseCsvSet(
+    String? value, {
+    required Set<String> fallback,
+  }) {
+    if (value == null || value.trim().isEmpty) return fallback;
+    final parsed = value
+        .split(',')
+        .map((item) => item.trim().toLowerCase())
+        .where((item) => item.isNotEmpty)
+        .toSet();
+    return parsed.isEmpty ? fallback : parsed;
   }
 }

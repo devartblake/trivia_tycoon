@@ -2,6 +2,8 @@ library;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/env.dart';
+import '../../core/models/crypto/crypto_api_error.dart';
 import '../../core/models/crypto/crypto_balance_model.dart';
 import '../../core/models/crypto/crypto_fund_prize_pool_request.dart';
 import '../../core/models/crypto/crypto_fund_prize_pool_result.dart';
@@ -17,6 +19,22 @@ import '../../core/models/crypto/crypto_withdraw_result.dart';
 import '../../core/services/crypto/crypto_service.dart';
 import 'core_providers.dart';
 import 'profile_providers.dart';
+
+class CryptoFeatureFlags {
+  const CryptoFeatureFlags({
+    required this.surfacesEnabled,
+    required this.writesEnabled,
+    required this.enabledNetworkKeys,
+  });
+
+  final bool surfacesEnabled;
+  final bool writesEnabled;
+  final Set<String> enabledNetworkKeys;
+
+  bool isNetworkEnabled(String networkKey) {
+    return enabledNetworkKeys.contains(networkKey.toLowerCase());
+  }
+}
 
 class CryptoHistoryQuery {
   const CryptoHistoryQuery({
@@ -51,6 +69,14 @@ class CryptoHistoryQuery {
 final cryptoServiceProvider = Provider<CryptoService>((ref) {
   final apiService = ref.watch(apiServiceProvider);
   return CryptoService(apiService: apiService);
+});
+
+final cryptoFeatureFlagsProvider = Provider<CryptoFeatureFlags>((ref) {
+  return CryptoFeatureFlags(
+    surfacesEnabled: EnvConfig.cryptoSurfacesEnabled,
+    writesEnabled: EnvConfig.cryptoWritesEnabled,
+    enabledNetworkKeys: EnvConfig.enabledCryptoNetworks,
+  );
 });
 
 final currentUserCryptoHistoryQueryProvider =
@@ -125,6 +151,7 @@ final linkWalletProvider =
     Provider<Future<CryptoLinkWalletResult> Function(CryptoLinkWalletRequest)>(
   (ref) {
     return (request) async {
+      _ensureCryptoWriteEnabled(ref, request.network.key);
       final result = await ref.read(cryptoServiceProvider).linkWallet(request);
       _invalidatePlayerCryptoProviders(ref, request.playerId);
       return result;
@@ -136,6 +163,7 @@ final withdrawCryptoProvider =
     Provider<Future<CryptoWithdrawResult> Function(CryptoWithdrawRequest)>(
   (ref) {
     return (request) async {
+      _ensureCryptoWriteEnabled(ref, request.network.key);
       final result = await ref.read(cryptoServiceProvider).withdraw(request);
       _invalidatePlayerCryptoProviders(ref, request.playerId);
       return result;
@@ -146,6 +174,7 @@ final withdrawCryptoProvider =
 final stakeCryptoProvider =
     Provider<Future<CryptoStakeResult> Function(CryptoStakeRequest)>((ref) {
   return (request) async {
+    _ensureCryptoWriteEnabled(ref);
     final result = await ref.read(cryptoServiceProvider).stake(request);
     _invalidatePlayerCryptoProviders(ref, request.playerId);
     return result;
@@ -155,6 +184,7 @@ final stakeCryptoProvider =
 final unstakeCryptoProvider =
     Provider<Future<CryptoStakeResult> Function(CryptoStakeRequest)>((ref) {
   return (request) async {
+    _ensureCryptoWriteEnabled(ref);
     final result = await ref.read(cryptoServiceProvider).unstake(request);
     _invalidatePlayerCryptoProviders(ref, request.playerId);
     return result;
@@ -165,6 +195,7 @@ final fundPrizePoolProvider = Provider<
     Future<CryptoFundPrizePoolResult> Function(CryptoFundPrizePoolRequest)>(
   (ref) {
     return (request) async {
+      _ensureCryptoWriteEnabled(ref);
       final result =
           await ref.read(cryptoServiceProvider).fundPrizePool(request);
       _invalidatePlayerCryptoProviders(ref, request.playerId);
@@ -184,4 +215,24 @@ void _invalidatePlayerCryptoProviders(Ref ref, String playerId) {
   ref.invalidate(currentUserCryptoBalanceProvider);
   ref.invalidate(currentUserCryptoStakingProvider);
   ref.invalidate(currentUserCryptoHistoryProvider);
+}
+
+void _ensureCryptoWriteEnabled(Ref ref, [String? networkKey]) {
+  final flags = ref.read(cryptoFeatureFlagsProvider);
+  if (!flags.surfacesEnabled || !flags.writesEnabled) {
+    throw const CryptoApiException(
+      code: 'CRYPTO_DISABLED',
+      message: 'Crypto writes are disabled for this environment.',
+      statusCode: 503,
+    );
+  }
+
+  if (networkKey != null && !flags.isNetworkEnabled(networkKey)) {
+    throw CryptoApiException(
+      code: 'CRYPTO_NETWORK_DISABLED',
+      message: 'The selected crypto network is not enabled.',
+      statusCode: 503,
+      details: {'network': networkKey},
+    );
+  }
 }
