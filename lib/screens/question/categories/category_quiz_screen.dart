@@ -498,41 +498,59 @@ class _CategoryQuizScreenState extends ConsumerState<CategoryQuizScreen> {
     });
   }
 
-  void _startQuiz(CategoryQuizData categoryData) {
+  Future<void> _startQuiz(CategoryQuizData categoryData) async {
     setState(() => isStartingQuiz = true);
     final allowedDifficulties =
         selectedDifficulties.map(_difficultyToInt).whereType<int>().toSet();
-    final filteredQuestions = categoryData.allQuestions.where((question) {
-      final difficultyMatch = allowedDifficulties.isEmpty ||
-          allowedDifficulties.contains(question.difficulty);
-      final audioMatch = includeAudio || !question.hasAudio;
-      final videoMatch = includeVideo || !question.hasVideo;
-      final imageMatch = includeImages || !question.hasImage;
-      return difficultyMatch && audioMatch && videoMatch && imageMatch;
-    }).toList()
-      ..shuffle();
 
-    final selectedQuestions =
-        filteredQuestions.take(selectedQuestionCount).toList(growable: false);
-    if (selectedQuestions.isEmpty) {
-      setState(() => isStartingQuiz = false);
+    try {
+      final repository = ref.read(question_data.questionRepositoryProvider);
+      final category = QuizCategoryManager.fromString(widget.category);
+      final backendDifficulty =
+          allowedDifficulties.length == 1 ? allowedDifficulties.first : null;
+      var questions = categoryData.allQuestions;
+      try {
+        questions = await repository.getQuestionsForCategory(
+          category: category?.name ?? widget.category,
+          amount: selectedQuestionCount,
+          difficulty: backendDifficulty,
+          mode: 'practice',
+        );
+      } catch (_) {
+        if (questions.isEmpty) rethrow;
+      }
+      final filteredQuestions = questions.where((question) {
+        final difficultyMatch = allowedDifficulties.isEmpty ||
+            allowedDifficulties.contains(question.difficulty);
+        final audioMatch = includeAudio || !question.hasAudio;
+        final videoMatch = includeVideo || !question.hasVideo;
+        final imageMatch = includeImages || !question.hasImage;
+        return difficultyMatch && audioMatch && videoMatch && imageMatch;
+      }).toList()
+        ..shuffle();
+
+      final selectedQuestions =
+          filteredQuestions.take(selectedQuestionCount).toList(growable: false);
+      if (selectedQuestions.isEmpty) {
+        throw Exception('No questions match the selected filters.');
+      }
+
+      if (!mounted) return;
+      context.go('/quiz/play', extra: {
+        'questions': selectedQuestions,
+        'questionCount': selectedQuestions.length,
+        'category': category?.name ?? widget.category,
+        'classLevel': '6',
+        'displayTitle': '${_getCategoryLabel()} Quiz',
+      });
+    } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No questions match the selected filters.'),
-        ),
+        SnackBar(content: Text('Unable to prepare quiz: $e')),
       );
-      return;
+    } finally {
+      if (mounted) setState(() => isStartingQuiz = false);
     }
-
-    final category = QuizCategoryManager.fromString(widget.category);
-    context.go('/quiz/play', extra: {
-      'questions': selectedQuestions,
-      'questionCount': selectedQuestions.length,
-      'category': category?.name ?? widget.category,
-      'classLevel': '6',
-      'displayTitle': '${_getCategoryLabel()} Quiz',
-    });
-    setState(() => isStartingQuiz = false);
   }
 
   int? _difficultyToInt(String difficulty) {

@@ -53,6 +53,8 @@ class _FakeQuestionRepository implements QuestionRepository {
     List<String>? categories,
     List<String>? difficulties,
     bool balanceDifficulties = false,
+    String mode = 'practice',
+    String? playerId,
   }) async =>
       const [];
 
@@ -60,6 +62,7 @@ class _FakeQuestionRepository implements QuestionRepository {
   Future<List<QuestionModel>> getMultiplayerQuestions({
     int amount = 10,
     String? category,
+    int? difficulty,
   }) async =>
       const [];
 
@@ -76,6 +79,8 @@ class _FakeQuestionRepository implements QuestionRepository {
     required String category,
     int amount = 10,
     int? difficulty,
+    String mode = 'practice',
+    String? playerId,
   }) async =>
       const [];
 
@@ -85,6 +90,7 @@ class _FakeQuestionRepository implements QuestionRepository {
     int amount = 10,
     String? category,
     int? difficulty,
+    String? playerId,
   }) async =>
       const [];
 

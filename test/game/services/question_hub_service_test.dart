@@ -17,6 +17,10 @@ class _FakeApiService extends ApiService {
   Object? fetchQuestionsError;
   final Map<String, Map<String, dynamic>> getResponses = {};
   final Map<String, Map<String, dynamic>> postResponses = {};
+  String? lastGetPath;
+  Map<String, dynamic>? lastGetQueryParameters;
+  String? lastPostPath;
+  Map<String, dynamic>? lastPostBody;
   Object? postError;
 
   @override
@@ -38,6 +42,8 @@ class _FakeApiService extends ApiService {
     Map<String, dynamic>? queryParameters,
     Duration? timeout,
   }) async {
+    lastGetPath = path;
+    lastGetQueryParameters = queryParameters;
     return getResponses[path] ?? <String, dynamic>{};
   }
 
@@ -48,6 +54,8 @@ class _FakeApiService extends ApiService {
     Map<String, String>? headers,
     Duration? timeout,
   }) async {
+    lastPostPath = path;
+    lastPostBody = body;
     if (postError != null) {
       throw postError!;
     }
@@ -121,6 +129,100 @@ Map<String, dynamic> _questionJson(
 }
 
 void main() {
+  test('parses backend GameplayQuestionDto without embedded correctness',
+      () async {
+    final api = _FakeApiService()
+      ..getResponses['/questions/set'] = {
+        'questions': [
+          {
+            'id': 'backend-1',
+            'text': 'Which option is safe?',
+            'category': 'Science',
+            'difficulty': 'Expert',
+            'mediaKey': 'media/questions/backend-1.png',
+            'options': const [
+              {'optionId': 'a', 'text': 'Alpha'},
+              {'optionId': 'b', 'text': 'Beta'},
+            ],
+          }
+        ],
+      };
+
+    final service = QuestionHubService(
+      apiService: api,
+      localLoader: _FakeLoaderService(),
+    );
+    final result = await service.getMixedQuiz(questionCount: 1);
+
+    expect(result, hasLength(1));
+    expect(result.first.id, 'backend-1');
+    expect(result.first.question, 'Which option is safe?');
+    expect(result.first.options, ['Alpha', 'Beta']);
+    expect(
+      result.first.answers.map((answer) => answer.isCorrect),
+      [false, false],
+    );
+    expect(result.first.correctAnswer, isEmpty);
+    expect(result.first.difficulty, 4);
+    expect(result.first.imageUrl, 'media/questions/backend-1.png');
+    expect(result.first.optionIdForAnswer('Beta'), 'b');
+  });
+
+  test('category questions send /questions/set gameplay query parameters',
+      () async {
+    final api = _FakeApiService()
+      ..getResponses['/questions/set'] = {
+        'items': [_questionJson(id: '1', difficulty: 1)],
+      };
+
+    final service = QuestionHubService(
+      apiService: api,
+      localLoader: _FakeLoaderService(),
+    );
+
+    await service.getQuestionsForCategory(
+      category: 'Science',
+      amount: 5,
+      difficulty: 1,
+      mode: 'practice',
+      playerId: 'adaptive-player',
+    );
+
+    expect(api.lastGetPath, '/questions/set');
+    expect(api.lastGetQueryParameters, {
+      'category': 'Science',
+      'count': 5,
+      'mode': 'practice',
+      'difficulty': 'Easy',
+      'playerId': 'adaptive-player',
+    });
+  });
+
+  test('mixed quiz sends ranked mode without personalization when requested',
+      () async {
+    final api = _FakeApiService()
+      ..getResponses['/questions/set'] = {
+        'items': [_questionJson(id: 'ranked', difficulty: 2)],
+      };
+
+    final service = QuestionHubService(
+      apiService: api,
+      localLoader: _FakeLoaderService(),
+    );
+
+    await service.getMixedQuiz(
+      questionCount: 8,
+      mode: 'ranked',
+      playerId: null,
+    );
+
+    expect(api.lastGetPath, '/questions/set');
+    expect(api.lastGetQueryParameters, {
+      'count': 8,
+      'mode': 'ranked',
+    });
+  });
+
   test('getQuestionsForCategory returns backend questions when available',
       () async {
     final api = _FakeApiService()
@@ -243,7 +345,7 @@ void main() {
       ..postResponses['/questions/check'] = {
         'questionId': '1',
         'isCorrect': true,
-        'correctAnswer': 'A',
+        'correctOptionId': 'A',
         'source': 'deployed-model',
       };
     final loader = _FakeLoaderService();
@@ -259,6 +361,47 @@ void main() {
     expect(result.isCorrect, isTrue);
     expect(result.correctAnswer, 'A');
     expect(result.source, 'deployed-model');
+    expect(api.lastPostPath, '/questions/check');
+    expect(api.lastPostBody, {
+      'questionId': '1',
+      'selectedOptionId': 'A',
+    });
+  });
+
+  test('checkAnswer posts backend option ids and maps correctOptionId to text',
+      () async {
+    final api = _FakeApiService()
+      ..postResponses['/questions/check'] = {
+        'questionId': 'backend-1',
+        'isCorrect': false,
+        'correctOptionId': 'b',
+      };
+    final service = QuestionHubService(
+      apiService: api,
+      localLoader: _FakeLoaderService(),
+    );
+    final question = QuestionModel.fromGameplayDto({
+      'id': 'backend-1',
+      'text': 'Backend question',
+      'category': 'Science',
+      'difficulty': 'Easy',
+      'options': const [
+        {'optionId': 'a', 'text': 'Alpha'},
+        {'optionId': 'b', 'text': 'Beta'},
+      ],
+    });
+
+    final result = await service.checkAnswer(
+      question: question,
+      selectedAnswer: 'Alpha',
+    );
+
+    expect(api.lastPostBody, {
+      'questionId': 'backend-1',
+      'selectedOptionId': 'a',
+    });
+    expect(result.correctAnswer, 'Beta');
+    expect(result.selectedAnswer, 'Alpha');
   });
 
   test('checkAnswer falls back to local validation when backend fails',

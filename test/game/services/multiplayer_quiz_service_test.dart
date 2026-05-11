@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -19,6 +17,11 @@ class _FakeQuestionRepository implements QuestionRepository {
   final List<QuestionModel> questionsForMode;
   final bool throwOnMode;
   int modeCallCount = 0;
+  GameMode? lastMode;
+  int? lastAmount;
+  String? lastCategory;
+  int? lastDifficulty;
+  String? lastPlayerId;
 
   @override
   Future<List<QuestionModel>> getQuestionsForMode({
@@ -26,8 +29,14 @@ class _FakeQuestionRepository implements QuestionRepository {
     int amount = 10,
     String? category,
     int? difficulty,
+    String? playerId,
   }) async {
     modeCallCount++;
+    lastMode = mode;
+    lastAmount = amount;
+    lastCategory = category;
+    lastDifficulty = difficulty;
+    lastPlayerId = playerId;
     if (throwOnMode) {
       throw Exception('repository unavailable');
     }
@@ -36,7 +45,11 @@ class _FakeQuestionRepository implements QuestionRepository {
 
   @override
   Future<List<QuestionModel>> getQuestionsForCategory(
-          {required String category, int amount = 10, int? difficulty}) async =>
+          {required String category,
+          int amount = 10,
+          int? difficulty,
+          String mode = 'practice',
+          String? playerId}) async =>
       const [];
 
   @override
@@ -64,12 +77,14 @@ class _FakeQuestionRepository implements QuestionRepository {
           {int questionCount = 10,
           List<String>? categories,
           List<String>? difficulties,
-          bool balanceDifficulties = false}) async =>
+          bool balanceDifficulties = false,
+          String mode = 'practice',
+          String? playerId}) async =>
       const [];
 
   @override
   Future<List<QuestionModel>> getMultiplayerQuestions(
-          {int amount = 10, String? category}) async =>
+          {int amount = 10, String? category, int? difficulty}) async =>
       const [];
 
   @override
@@ -139,6 +154,11 @@ void main() {
     expect(questions.length, 1);
     expect(questions.first.id, 'repo-1');
     expect(repository.modeCallCount, 1);
+    expect(repository.lastMode, GameMode.arena);
+    expect(repository.lastAmount, 15);
+    expect(repository.lastCategory, isNull);
+    expect(repository.lastDifficulty, isNull);
+    expect(repository.lastPlayerId, isNull);
   });
 
   test('prefetched questions are reused by getQuestionsForGameMode', () async {
@@ -161,28 +181,18 @@ void main() {
     expect(repository.modeCallCount, 1);
   });
 
-  test('falls back to HTTP when repository is unavailable', () async {
+  test('falls back to mock questions when repository is unavailable', () async {
     final repository = _FakeQuestionRepository(throwOnMode: true);
 
     final service = MultiplayerQuizService(
-      client: MockClient((request) async {
-        if (request.url.path.endsWith('/api/questions')) {
-          return http.Response(
-            jsonEncode({
-              'questions': [_questionJson(id: 'http-1', category: 'mixed')],
-            }),
-            200,
-          );
-        }
-        return http.Response('{}', 404);
-      }),
+      client: MockClient((_) async => http.Response('{}', 404)),
       questionRepository: repository,
     );
 
     final questions = await service.getQuestionsForGameMode('arena');
 
-    expect(questions.length, 1);
-    expect(questions.first.id, 'http-1');
+    expect(questions.length, 15);
+    expect(questions.first.id, startsWith('mock_arena_'));
     expect(repository.modeCallCount, 1);
   });
 }

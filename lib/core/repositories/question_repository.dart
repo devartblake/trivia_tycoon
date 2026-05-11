@@ -8,6 +8,8 @@ abstract class QuestionRepository {
     required String category,
     int amount = 10,
     int? difficulty,
+    String mode = 'practice',
+    String? playerId,
   });
 
   Future<List<QuestionModel>> getDailyQuestions({int count = 5});
@@ -27,6 +29,8 @@ abstract class QuestionRepository {
     List<String>? categories,
     List<String>? difficulties,
     bool balanceDifficulties = false,
+    String mode = 'practice',
+    String? playerId,
   });
 
   Future<List<QuestionModel>> getQuestionsForMode({
@@ -34,11 +38,13 @@ abstract class QuestionRepository {
     int amount = 10,
     String? category,
     int? difficulty,
+    String? playerId,
   });
 
   Future<List<QuestionModel>> getMultiplayerQuestions({
     int amount = 10,
     String? category,
+    int? difficulty,
   });
 
   Future<QuestionAnswerCheckResult> checkAnswer({

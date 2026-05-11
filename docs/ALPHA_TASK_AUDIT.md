@@ -226,9 +226,13 @@ Progress update (2026-04-04 execution — complete):
   - backend loadout `GET`/`PUT` wiring added for enhanced profile data + profile edit save
   - backend `DELETE /friends` wiring added for unfriend
 - Question gameplay handoff wiring is now implemented:
-  - quiz retrieval prefers `GET /questions/set`
+  - quiz retrieval uses `GET /questions/set`
+  - backend-safe `GameplayQuestionDto` parsing is implemented for `text`, `options`, `mediaKey`, and enum difficulty values
+  - single-player/category/class flows use `mode=practice`
+  - multiplayer uses `mode=ranked`, count-only, with no `playerId` personalization
   - per-question validation uses `POST /questions/check`
   - end-of-quiz reconciliation uses `POST /questions/check-batch`
+  - stale direct multiplayer `/api/questions` fallback was removed
 - This closes the previously partial store/profile slices from
   `docs/frontend_backend_handoff_alpha_2026-04-04.md`.
 - The larger handoff items for crypto surfaces and ML UX usage

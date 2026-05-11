@@ -22,6 +22,10 @@ class _FakeQuestionHubService extends QuestionHubService {
   int? lastDailyCount;
   int? lastMixedCount;
   List<String>? lastMixedCategories;
+  List<String>? lastMixedDifficulties;
+  String? lastCategoryMode;
+  String? lastMixedMode;
+  String? lastMixedPlayerId;
   bool? lastBalanceDifficulties;
   QuestionModel? lastCheckedQuestion;
   String? lastSelectedAnswer;
@@ -32,10 +36,13 @@ class _FakeQuestionHubService extends QuestionHubService {
     required String category,
     int amount = 10,
     int? difficulty,
+    String mode = 'practice',
+    String? playerId,
   }) async {
     lastCategory = category;
     lastAmount = amount;
     lastDifficulty = difficulty;
+    lastCategoryMode = mode;
     return const [];
   }
 
@@ -51,10 +58,15 @@ class _FakeQuestionHubService extends QuestionHubService {
     List<String>? categories,
     List<String>? difficulties,
     bool balanceDifficulties = false,
+    String mode = 'practice',
+    String? playerId,
   }) async {
     lastMixedCount = questionCount;
     lastMixedCategories = categories;
+    lastMixedDifficulties = difficulties;
     lastBalanceDifficulties = balanceDifficulties;
+    lastMixedMode = mode;
+    lastMixedPlayerId = playerId;
     return const [];
   }
 
@@ -132,7 +144,7 @@ void main() {
     expect(hub.lastDailyCount, 6);
   });
 
-  test('arena mode routes to mixed hub loader with multiplayer balance',
+  test('arena mode routes to ranked count-only hub loader for fairness',
       () async {
     final hub = _FakeQuestionHubService();
     final repo = QuestionRepositoryImpl(questionHubService: hub);
@@ -144,8 +156,11 @@ void main() {
     );
 
     expect(hub.lastMixedCount, 8);
-    expect(hub.lastMixedCategories, ['history']);
+    expect(hub.lastMixedCategories, isNull);
+    expect(hub.lastMixedDifficulties, isNull);
     expect(hub.lastBalanceDifficulties, isTrue);
+    expect(hub.lastMixedMode, 'ranked');
+    expect(hub.lastMixedPlayerId, isNull);
   });
 
   test('checkAnswer delegates validation to hub service', () async {

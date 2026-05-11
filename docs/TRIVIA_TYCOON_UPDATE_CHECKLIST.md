@@ -29,9 +29,13 @@
   - codec/session tests now cover wrong nonce, session clear, and 1 KB/10 KB/100 KB payload coverage
 - Gated live backend smoke coverage was added for auth/CORS, `/users/me`, `/users/me/wallet`, and confirmed Spin & Earn endpoints.
 - Question gameplay is backend-first:
-  - retrieval prefers `GET /questions/set`
+  - retrieval uses `GET /questions/set` through `QuestionHubService`
+  - backend `GameplayQuestionDto` payloads now parse safely without embedded answers
+  - single-player/category/class flows use `mode=practice`
+  - multiplayer arena/teams use `mode=ranked`, count-only, without player personalization
   - per-answer validation uses `POST /questions/check`
   - end-of-quiz reconciliation uses `POST /questions/check-batch`
+  - live smoke coverage now includes question set retrieval and check/check-batch routes
 - Question source observability is in place:
   - visible backend-vs-local-fallback banner on `QuestionScreen`
   - stronger `QuestionHubService` logging for backend vs fallback source usage
@@ -50,10 +54,8 @@
 - Live verification that `/users/search` and `DELETE /friends` succeed with auth headers in target backend environments
 - Live verification that question gameplay remains on backend data in normal environments and only falls back locally when expected
 - Flutter-enabled formatter/analyzer/test pass
-- Backend confirmation of the intended question contracts, especially:
+- Live validation of the confirmed question contracts in local Docker/staging:
   - `/questions/set`
-  - `/quiz/categories`
-  - `/quiz/classes/{classId}/stats`
   - `/questions/check`
   - `/questions/check-batch`
 
@@ -77,10 +79,15 @@
 - [x] Category quiz launch fixed
 - [x] Class quiz launch fixed
 - [x] Daily quiz launch fixed
+- [x] Backend gameplay DTO parsing fixed for `text`, `options`, `mediaKey`, and enum difficulty values
+- [x] Category/class gameplay routes now pass selected category/difficulty via `/questions/set`
+- [x] Multiplayer question routing now uses ranked, count-only backend requests with no `playerId`
+- [x] Stale direct multiplayer `/api/questions` fetch fallback removed
+- [x] `/questions/check` and `/questions/check-batch` now use option ids as the backend correctness contract
 - [x] Backend/frontend question handoff markdown created
-- [ ] Backend team confirms canonical question endpoint set
-- [ ] Backend team confirms class stats response always includes `availableCategories`
-- [ ] Backend team confirms answer validation response fields and envelope stability
+- [x] Canonical gameplay endpoint set reflected in frontend code: `/questions/set`, `/questions/check`, `/questions/check-batch`
+- [x] Class gameplay no longer depends on backend class-stats endpoints; frontend maps class/grade to categories and difficulty
+- [x] Answer validation response fields are handled through `isCorrect` + `correctOptionId`
 - [ ] Runtime QA verifies fallback banner only appears during actual endpoint failures
 
 ## 2. Friends / presence alignment
@@ -115,7 +122,7 @@ deprecation/removal decision.
 - [x] Crypto service/provider tests added for contract coverage and mutation invalidation
 - [x] Crypto rollout flags added for surface disable, write disable, and enabled networks
 - [x] Local Docker crypto contract smoke passed for balance, history, staking, prize pool, and secure-channel write guard
-- [ ] Run local Docker smoke tests with `SYNAPTIX_TEST_EMAIL`, `SYNAPTIX_TEST_PASSWORD`, and confirmed `SYNAPTIX_API_BASE_URL`
+- [ ] Run local Docker smoke tests with `SYNAPTIX_TEST_EMAIL`, `SYNAPTIX_TEST_PASSWORD`, and confirmed `SYNAPTIX_API_BASE_URL`, including question set/check/check-batch coverage
 - [ ] Run optional staging smoke tests with `SYNAPTIX_STAGING_API_BASE_URL`
 - [ ] Run staging crypto contract smoke once staging credentials are supplied
 - [ ] Add remaining crypto UI smoke tests

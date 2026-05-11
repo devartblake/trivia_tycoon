@@ -123,13 +123,21 @@ _PR/branch cross-check pass: 2026-05-10 against `origin/main`, recent remote bra
 - [ ] Verify frontend labels, preferences payloads, and analytics payloads against backend dashboards/docs.
 
 ### Questions, Play, Learn, Study cleanup
+- [x] Align gameplay question parsing to backend `GameplayQuestionDto`: `text`, `options`, `mediaKey`, no embedded correctness, and `Easy/Medium/Hard/Expert` difficulty mapping.
+- [x] Route single-player, category, class, and multiplayer question loading through `QuestionHubService` and `GET /questions/set` with the correct `mode` contract.
+- [x] Keep class/grade gameplay as frontend category+difficulty mapping; no nonexistent `/questions/classes/*` gameplay endpoint is required.
+- [x] Make multiplayer use `mode=ranked`, count-only, and no `playerId` personalization for fair question sets.
+- [x] Remove stale direct multiplayer `/api/questions` fetch fallback; repository/hub is primary and local mock fallback remains only after repository failure.
+- [x] Use `/questions/check` and `/questions/check-batch` as the correctness source for backend questions, posting `selectedOptionId` and mapping `correctOptionId` back to answer text.
+- [x] Extend gated live smoke coverage for `/questions/set`, `/questions/check`, and `/questions/check-batch`.
 - [ ] Live-verify gameplay stays on backend question data in local/staging/prod.
+- [ ] Run targeted Flutter/Dart tests for question model parsing, service query contracts, category/class launch, and multiplayer routing once SDK tooling is available.
 - [ ] Decide whether local question fallback remains enabled in production after backend parity is proven.
 - [ ] Add source observability beyond banners/logging: backend success ratio, latency, and coverage drift.
 - [ ] Introduce `/play` route aliases, remove or redirect frontend `/quiz/*` routes where safe, and align labels from Quiz to Play.
 - [ ] Create one launcher/orchestrator for route params to question session state and remove ambiguous router imports.
 - [ ] Add learning progress summary, recommended module logic, continue-learning CTA, reward transparency, and idempotent lesson/module completion retries.
-- [ ] Remove deprecated `ApiService` and `SynaptixApiClient` quiz methods after all callers are migrated.
+- [ ] Remove deprecated `ApiService` and `SynaptixApiClient` quiz methods after all callers are migrated; active gameplay callers are no longer using `ApiService.fetchQuestions()`.
 - [ ] Update route maps and tests.
 
 ## P3 - Deferred / Decision-Gated

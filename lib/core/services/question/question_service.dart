@@ -64,9 +64,22 @@ class QuestionService {
   /// ✅ Fetches questions from the API (remote)
   Future<List<QuestionModel>> fetchQuestionsFromServer(String category,
       {int amount = 10}) async {
-    final data =
-        await apiService.fetchQuestions(amount: amount, category: category);
-    return data.map((json) => QuestionModel.fromJson(json)).toList();
+    final response = await apiService.get(
+      '/questions/set',
+      queryParameters: {
+        'count': amount,
+        'category': category,
+        'mode': 'practice',
+      },
+    );
+    final data = response['items'] ?? response['questions'] ?? response['data'];
+    if (data is! List) return const [];
+    return data
+        .whereType<Map>()
+        .map((json) => QuestionModel.fromGameplayDto(
+              Map<String, dynamic>.from(json),
+            ))
+        .toList();
   }
 
   /// ✅ Loads fallback local questions (from assets with filtering, caching, and logging)

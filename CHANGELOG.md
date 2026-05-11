@@ -8,6 +8,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Fixed - Question gameplay backend contract alignment (2026-05-10)
+
+- `QuestionModel` now parses backend-safe `GameplayQuestionDto` payloads from `GET /questions/set`, including `text`, `options`, `mediaKey`, and backend difficulty enum values. Backend options are converted into selectable frontend answers without assuming embedded correctness.
+- `QuestionHubService` now sends canonical `/questions/set` query parameters (`count`, optional `category`, optional `difficulty`, `mode`, optional `playerId`) and uses `/questions/check` plus `/questions/check-batch` as the correctness source.
+- Answer validation now posts backend option ids through `selectedOptionId` and maps `correctOptionId` back to display text for the frontend result state.
+- Single-player/category/class flows now route through the backend gameplay contract with `mode=practice`; class gameplay uses frontend class-to-category mapping instead of nonexistent class gameplay endpoints.
+- Multiplayer question loading now uses the repository/hub path with `mode=ranked`, count-only, and no `playerId` personalization for fair matches. The stale direct `/api/questions` multiplayer fallback was removed.
+- Category and class quiz launch screens now request backend questions for selected subject/difficulty and retain local fallback behavior when backend filtering cannot produce a playable set.
+- `QuestionService.fetchQuestionsFromServer()` now reads `/questions/set` directly instead of using deprecated `ApiService.fetchQuestions()`.
+- Live smoke coverage now includes `/questions/set`, `/questions/check`, and `/questions/check-batch` alongside auth/wallet/Spin & Earn checks.
+
+**Verification note:** `git diff --check` passed with line-ending warnings only. Flutter/Dart tests were not run because neither `flutter` nor `dart` was available on PATH in this environment.
+
+---
+
 ### Added – dart:io web guards verified + secure channel Phase 2 (2026-05-09)
 
 #### dart:io web guards — COMPLETE

@@ -181,34 +181,29 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
       );
 
       List<QuestionModel> questions;
+      final difficulty = difficulties != null && difficulties.isNotEmpty
+          ? difficulties.first
+          : null;
 
       if (category != null) {
         // Load questions for specific category
         questions = await _repository.getQuestionsForCategory(
           category: category.name,
           amount: questionCount,
-          difficulty: difficulties != null && difficulties.isNotEmpty
-              ? difficulties.first
-              : null,
+          difficulty: difficulty,
+          mode: 'practice',
         );
       } else {
-        // Fallback to class-based quiz
-        final classStats = await _repository.getClassStats(classLevel);
-        final availableCategories = (classStats['availableCategories'] as List?)
-                ?.whereType<QuizCategory>()
-                .toList() ??
-            <QuizCategory>[];
+        final categories = QuizCategoryManager.getCategoriesForClass(classLevel)
+            .map((category) => category.name)
+            .toList(growable: false);
 
-        final targetCategory = availableCategories.isNotEmpty
-            ? availableCategories.first.name
-            : 'general';
-
-        questions = await _repository.getQuestionsForCategory(
-          category: targetCategory,
-          amount: questionCount,
-          difficulty: difficulties != null && difficulties.isNotEmpty
-              ? difficulties.first
-              : null,
+        questions = await _repository.getMixedQuiz(
+          questionCount: questionCount,
+          categories: categories.isEmpty ? null : categories,
+          difficulties:
+              difficulty == null ? null : <String>[_difficultyName(difficulty)],
+          mode: 'practice',
         );
       }
 
@@ -248,6 +243,21 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
         isLoading: false,
         error: e.toString(),
       );
+    }
+  }
+
+  String _difficultyName(int difficulty) {
+    switch (difficulty) {
+      case 1:
+        return 'Easy';
+      case 2:
+        return 'Medium';
+      case 3:
+        return 'Hard';
+      case 4:
+        return 'Expert';
+      default:
+        return difficulty.toString();
     }
   }
 

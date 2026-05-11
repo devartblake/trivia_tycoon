@@ -515,9 +515,11 @@ Make one service the canonical gameplay question pipeline.
   1. `/questions/set`
   2. local bundled question source or explicit non-backend fallback
 
-### Completion note (2026-04-28)
+### Completion note (2026-04-28; updated 2026-05-10)
 
 Phase 2 is complete. All transport and service-layer `/quiz/*` calls replaced. Legacy methods deprecated. `QuestionHubService` is the sole gateway for gameplay question retrieval.
+
+2026-05-10 update: active gameplay routes now also align with the backend-safe `GameplayQuestionDto` shape (`text`, `options`, `mediaKey`, enum difficulty, no embedded correctness). Single-player, category, and class flows use `/questions/set` with `mode=practice`; multiplayer uses `/questions/set` with `mode=ranked`, count-only, and no `playerId`. The stale direct multiplayer `/api/questions` fetch fallback was removed, and `QuestionService.fetchQuestionsFromServer()` now calls `/questions/set` directly instead of deprecated `ApiService.fetchQuestions()`.
 
 ### Deliverables
 - ✅ single gameplay question retrieval pipeline
@@ -589,9 +591,10 @@ Finish the migration without reintroducing removed backend contracts.
 - [x] verify no frontend/mobile flows call `/quiz/*` backend endpoints anymore — confirmed clean as of 2026-04-28
 - [x] remove fallback chains in `QuestionHubService` — all `/quiz/*` fallbacks removed (2026-04-28)
 - [x] deprecate methods in `ApiService` and `TycoonApiClient` — `@Deprecated` annotations added (2026-04-28); full removal is a follow-on cleanup after callers are migrated
-- [ ] remove deprecated methods in `ApiService` and `SynaptixApiClient` once all callers have migrated
+- [ ] remove deprecated methods in `ApiService` and `SynaptixApiClient` once all callers have migrated; active gameplay fetches no longer use `ApiService.fetchQuestions()` as of 2026-05-10
 - [x] update docs — `CHANGELOG.md` and this plan updated (2026-04-28)
-- [ ] update tests and route maps
+- [x] update question contract tests for backend DTO parsing, `/questions/set` query params, option-id validation, and ranked multiplayer routing (2026-05-10)
+- [ ] update route maps for Play aliases and remaining `/quiz/*` route cleanup
 - [x] reserve Study for any future rehearsal API — Study surface uses `/study-sets/*` and `/study-sessions/*` namespaces, not `/quiz/*`
 
 ### Deliverables
@@ -613,6 +616,8 @@ The migration should be considered successful when all of the following are true
 
 ### Frontend
 - [x] all gameplay question retrieval flows use the same canonical service (`QuestionHubService`)
+- [x] gameplay question DTO parsing matches the backend answer-safe contract
+- [x] multiplayer uses `mode=ranked`, count-only, with no `playerId`
 - [x] no duplicate `AdaptedQuestionScreen` ownership remains — `adapted_question_screen.dart` deleted (2026-04-28)
 - [x] user-facing IA clearly separates Play, Learn, and Study — Study Hub live at `/study`
 - [ ] route names and button labels align with actual product meaning (Play routes/labels still pending Phase 3)

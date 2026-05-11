@@ -182,6 +182,58 @@ void _registerSmokeTests({
         reason:
             'Spin claim should either succeed for test-safe payloads or reject an invalid spin id through the confirmed route.',
       );
+
+      final questionSet = await target.get(
+        client,
+        '/questions/set',
+        queryParameters: const {'count': '5'},
+        headers: authHeaders,
+      );
+      expect(questionSet.statusCode, inInclusiveRange(200, 299));
+      final firstQuestion = _firstQuestion(_decodeAny(questionSet));
+      expect(firstQuestion, isNotNull);
+      final selectedOptionId = _firstOptionId(firstQuestion!);
+      expect(selectedOptionId, isNotNull);
+
+      final categorySet = await target.get(
+        client,
+        '/questions/set',
+        queryParameters: const {
+          'category': 'Science',
+          'difficulty': 'Easy',
+          'count': '5',
+        },
+        headers: authHeaders,
+      );
+      expect(categorySet.statusCode, inInclusiveRange(200, 299));
+
+      final check = await target.postJson(
+        client,
+        '/questions/check',
+        {
+          'questionId': firstQuestion['id'] ?? firstQuestion['questionId'],
+          'selectedOptionId': selectedOptionId,
+        },
+        headers: authHeaders,
+      );
+      expect(check.statusCode, inInclusiveRange(200, 299));
+      expect(_decodeObject(check)['isCorrect'], isA<bool>());
+
+      final batch = await target.postJson(
+        client,
+        '/questions/check-batch',
+        {
+          'answers': [
+            {
+              'questionId': firstQuestion['id'] ?? firstQuestion['questionId'],
+              'selectedOptionId': selectedOptionId,
+            }
+          ],
+        },
+        headers: authHeaders,
+      );
+      expect(batch.statusCode, inInclusiveRange(200, 299));
+      expect(_decodeAny(batch), isNotNull);
     } finally {
       client.close();
     }
@@ -200,11 +252,15 @@ class _LiveTarget {
   Future<http.Response> get(
     http.Client client,
     String path, {
+    Map<String, String>? queryParameters,
     Map<String, String>? headers,
   }) {
+    final uri = queryParameters == null
+        ? this.uri(path)
+        : this.uri(path).replace(queryParameters: queryParameters);
     return send(
       client,
-      http.Request('GET', uri(path))..headers.addAll(headers ?? {}),
+      http.Request('GET', uri)..headers.addAll(headers ?? {}),
     );
   }
 
@@ -269,4 +325,24 @@ String? _findString(Object? node, List<String> keys) {
     }
   }
   return null;
+}
+
+Map<String, dynamic>? _firstQuestion(Object? payload) {
+  final items = payload is List
+      ? payload
+      : payload is Map
+          ? payload['items'] ?? payload['questions'] ?? payload['data']
+          : null;
+  if (items is! List || items.isEmpty || items.first is! Map) return null;
+  return Map<String, dynamic>.from(items.first as Map);
+}
+
+String? _firstOptionId(Map<String, dynamic> question) {
+  final options = question['options'];
+  if (options is! List || options.isEmpty) return null;
+  final first = options.first;
+  if (first is Map) {
+    return (first['optionId'] ?? first['id'] ?? first['text'])?.toString();
+  }
+  return first?.toString();
 }

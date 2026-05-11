@@ -139,6 +139,7 @@ class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
         category: category.name,
         amount: (selectedQuestionCount * 4).clamp(20, 200),
         difficulty: difficulty,
+        mode: 'practice',
       );
       final curatedQuestions =
           questions.take(selectedQuestionCount).toList(growable: false);
