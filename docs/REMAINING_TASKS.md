@@ -248,7 +248,7 @@ backend URL.
 
 ### 1d. Crypto economy player surfaces REMAINING
 - Still needed:
-- Live contract validation against local Docker, then staging
+- Staging crypto contract validation after staging base URL and credentials are supplied
 - Broader widget/UI smoke tests for linked/unlinked, pending withdrawal, disabled-feature, stake/unstake, and prize pool states
 - Optional profile/store polish after contract validation
 - Newly completed:
@@ -256,6 +256,7 @@ backend URL.
   - duplicate green energy strip under the menu currency display was removed
   - `CryptoService`, crypto models, Riverpod providers, and `crypto_wallet_screen.dart` now cover balance, history, link wallet, withdrawal, staking/unstaking, and prize pool flows
   - `CRYPTO_SURFACES_ENABLED`, `CRYPTO_WRITES_ENABLED`, and `CRYPTO_ENABLED_NETWORKS` gate staged rollout and network availability
+  - local Docker crypto contract validation passed on 2026-05-10 for balance, history, staking, prize-pool, and secure-channel write guard
 - Backend endpoints available for consumption:
 - `POST /crypto/link-wallet`
 - `GET /crypto/balance/{playerId}`
@@ -455,14 +456,16 @@ Status is improved but still requires explicit live verification:
 - [ ] Auto-refresh (token renewal on 401) tested end-to-end with a live or stub backend
 - [ ] Backend profile hydration after login verified against a live backend endpoint
 - [ ] Backend profile hydration after emulator/data wipe verified end-to-end
-- [ ] Local web auth CORS/origin validation confirmed for Docker-hosted backend; frontend smoke coverage exists, but the 2026-05-10 local check returned `204` without `Access-Control-Allow-Origin` for `http://localhost:63033`
+- [x] Local web auth CORS/origin validation confirmed for Docker-hosted backend; `OPTIONS /auth/login` now returns `Access-Control-Allow-Origin` for `http://localhost:63033` and `http://127.0.0.1:63033`
 
 ### 5a. Local web auth / Docker verification REMAINING
 - Frontend-side diagnosis is complete:
   - browser auth should target `http://localhost:5000` for local host access
   - stale `https://localhost:5000` local defaults were corrected in frontend config
+- Completed:
+  - backend CORS now returns `Access-Control-Allow-Origin` for `http://localhost:63033`
+  - backend CORS now returns `Access-Control-Allow-Origin` for `http://127.0.0.1:63033`
 - Still needed:
-  - backend CORS must return `Access-Control-Allow-Origin` for `http://localhost:63033`
   - verify any social/OAuth local callback URLs use the same reachable origin/protocol
 
 ---

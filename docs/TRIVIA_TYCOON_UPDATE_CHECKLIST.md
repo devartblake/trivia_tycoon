@@ -114,8 +114,10 @@ deprecation/removal decision.
 - [x] Spin & Earn frontend uses confirmed segment/claim endpoints with local fallback retained
 - [x] Crypto service/provider tests added for contract coverage and mutation invalidation
 - [x] Crypto rollout flags added for surface disable, write disable, and enabled networks
+- [x] Local Docker crypto contract smoke passed for balance, history, staking, prize pool, and secure-channel write guard
 - [ ] Run local Docker smoke tests with `SYNAPTIX_TEST_EMAIL`, `SYNAPTIX_TEST_PASSWORD`, and confirmed `SYNAPTIX_API_BASE_URL`
 - [ ] Run optional staging smoke tests with `SYNAPTIX_STAGING_API_BASE_URL`
+- [ ] Run staging crypto contract smoke once staging credentials are supplied
 - [ ] Add remaining crypto UI smoke tests
 
 ## 4a. Secure channel rollout

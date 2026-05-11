@@ -43,9 +43,11 @@ Still remaining for the crypto track:
 The typed crypto service/model/provider layer is implemented and now has focused service/provider coverage for endpoint contracts, mutation invalidation, backend error envelope mapping, staged write disabling, and per-network availability.
 
 Current remaining crypto work:
-- run live contract validation against local Docker first, then staging
+- run live contract validation against staging after staging base URL and credentials are supplied
 - add optional UI smoke/polish tests for linked/unlinked, pending withdrawal, disabled-feature, stake/unstake, and prize pool states
 - keep Phase 2 network enablement gated until backend/operators confirm `snx` and `shib`
+
+Local Docker validation completed on 2026-05-10 against `http://localhost:5000` with a disposable signup user. Verified contracts: `GET /crypto/balance/{playerId}`, `GET /crypto/history/{playerId}`, `GET /crypto/staking/{playerId}`, `GET /crypto/prize-pool/global`, and the secure-channel guard for `POST /crypto/link-wallet`.
 
 ---
 

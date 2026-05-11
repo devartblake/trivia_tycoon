@@ -21,7 +21,7 @@ _PR/branch cross-check pass: 2026-05-10 against `origin/main`, recent remote bra
 - [x] Verify signup validation and backend error-code display with focused `AuthErrorMessages` coverage.
 - [x] Test 401 auto-refresh end-to-end against stub backend coverage in `api_service_test.dart` and gated live refresh coverage in `live_backend_smoke_test.dart`.
 - [x] Verify backend profile hydration path after login/signup through `AuthOperations._hydrateProfileFromBackend`; emulator/data-wipe runtime verification remains covered by the live smoke/manual checklist.
-- [ ] Resolve local web CORS verification: local Docker port `5000` is reachable and `OPTIONS /auth/login` returned `204`, but the response observed on 2026-05-10 did not expose `Access-Control-Allow-Origin` for `http://localhost:63033`.
+- [x] Resolve local web CORS verification: backend Docker CORS config now includes `http://localhost:63033` and `http://127.0.0.1:63033`; `OPTIONS /auth/login` returned `204` with `Access-Control-Allow-Origin` on 2026-05-10.
 
 ### Friends, social, and presence verification
 - [ ] Live-verify `GET /users/me/friends`, request lists, sent requests, suggestions, authenticated `/users/search`, and authenticated `DELETE /friends`.
@@ -52,7 +52,8 @@ _PR/branch cross-check pass: 2026-05-10 against `origin/main`, recent remote bra
 - [x] Base crypto wallet screen exists for balance/history, wallet linking, withdrawals, staking, unstaking, and prize pool interaction.
 - [x] Add service/provider tests for crypto endpoint contracts, mutation invalidation, and backend error envelope mapping.
 - [x] Add feature flags for staged crypto rollout and safe disabling: `CRYPTO_SURFACES_ENABLED`, `CRYPTO_WRITES_ENABLED`, and `CRYPTO_ENABLED_NETWORKS`.
-- [ ] Live-validate crypto contracts against local Docker first, then staging.
+- [x] Live-validate crypto contracts against local Docker: disposable signup plus balance, history, staking, prize-pool reads, and secure-channel write guard verified against `http://localhost:5000` on 2026-05-10.
+- [ ] Run the same crypto contract smoke against staging once staging base URL and credentials are supplied.
 - [ ] Add/extend crypto UI smoke tests for linked/unlinked, pending withdrawal, disabled-feature, stake/unstake, and prize pool states.
 
 ### Rewards backend integration
