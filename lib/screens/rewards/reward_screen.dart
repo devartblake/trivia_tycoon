@@ -8,6 +8,7 @@ import '../../game/providers/profile_providers.dart'
     show coinBalanceProvider, refreshAuthoritativeWallet, walletProvider;
 import '../../game/providers/reward_backend_providers.dart';
 import '../../game/providers/spin_providers.dart';
+import '../../game/services/rewards_api_service.dart';
 import '../../ui_components/spin_wheel/services/spin_tracker.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
