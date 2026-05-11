@@ -4,6 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import '../../../core/manager/log_manager.dart';
 import '../../../game/providers/game_providers.dart' show rewardSettingsServiceProvider;
+import '../../../game/providers/profile_providers.dart' show refreshAuthoritativeWallet;
+import '../../../game/providers/reward_backend_providers.dart';
+import '../../../game/services/rewards_api_service.dart';
 import '../../../ui_components/synaptix_toast/synaptix_toast_helper.dart';
 
 class WeeklyRewardsWidget extends ConsumerStatefulWidget {
@@ -22,6 +25,7 @@ class _WeeklyRewardsWidgetState extends ConsumerState<WeeklyRewardsWidget> {
   bool _isLoading = true;
   int _claimedThroughDay = 0;
   bool _canClaimToday = false;
+  List<WeeklyRewardDayModel> _schedule = const [];
 
   // Coin rewards per day (non-coin rewards show 0 coins)
   static const Map<int, int> _dayCoins = {
@@ -46,6 +50,27 @@ class _WeeklyRewardsWidgetState extends ConsumerState<WeeklyRewardsWidget> {
   }
 
   Future<void> _loadWeeklyState() async {
+    try {
+      final streak = await ref.read(weeklyStreakProvider.future);
+      final schedule = streak.schedule.isNotEmpty
+          ? streak.schedule
+          : await ref.read(weeklyRewardScheduleProvider.future);
+
+      if (mounted) {
+        setState(() {
+          _claimedThroughDay = streak.claimedDays.isEmpty
+              ? 0
+              : streak.claimedDays.reduce((a, b) => a > b ? a : b);
+          _canClaimToday = !streak.claimedDays.contains(streak.currentDay);
+          _schedule = schedule;
+          _isLoading = false;
+        });
+      }
+      return;
+    } catch (e) {
+      LogManager.debug('Backend weekly rewards unavailable, using local: $e');
+    }
+
     try {
       final box = await Hive.openBox(_settingsBox);
       final claimedDay = box.get(_weeklyClaimedDayKey, defaultValue: 0) as int;
@@ -73,20 +98,39 @@ class _WeeklyRewardsWidgetState extends ConsumerState<WeeklyRewardsWidget> {
     final canClaim = _canClaimToday && day == nextClaimableDay;
 
     // Map day number to reward info shown in the cards
-    const dayRewardTypes = {
-      1: 'Coins', 2: 'Gems', 3: 'Boost',
-      4: 'Coins', 5: 'Gems', 6: 'Spins', 7: 'Mystery Box',
-    };
-    const dayAmounts = {
-      1: '100', 2: '5', 3: '1x',
-      4: '200', 5: '10', 6: '3', 7: '1',
-    };
-
-    final rewardType = dayRewardTypes[day] ?? 'Coins';
-    final amount = dayAmounts[day] ?? '0';
+    final reward = _rewardForDay(day);
+    final rewardType = _rewardTypeLabel(reward);
+    final amount = reward?.amountLabel ?? '0';
     _claimDayReward(context, day, rewardType, amount, canClaim);
 
     if (!canClaim) return;
+
+    try {
+      final claim =
+          await ref.read(rewardsApiServiceProvider).claimWeeklyReward(day);
+      await refreshAuthoritativeWallet(
+        ref,
+        backendCoinBalance: claim.newBalance,
+      );
+      ref.invalidate(weeklyStreakProvider);
+      ref.invalidate(weeklyRewardScheduleProvider);
+
+      if (mounted) {
+        setState(() {
+          _claimedThroughDay = claim.updatedStreak.claimedDays.isEmpty
+              ? day
+              : claim.updatedStreak.claimedDays
+                  .reduce((a, b) => a > b ? a : b);
+          _canClaimToday = false;
+          _schedule = claim.updatedStreak.schedule.isNotEmpty
+              ? claim.updatedStreak.schedule
+              : _schedule;
+        });
+      }
+      return;
+    } catch (e) {
+      LogManager.debug('Backend weekly claim failed, using local: $e');
+    }
 
     try {
       final box = await Hive.openBox(_settingsBox);
@@ -110,6 +154,20 @@ class _WeeklyRewardsWidgetState extends ConsumerState<WeeklyRewardsWidget> {
     } catch (e) {
       LogManager.debug('Failed to claim weekly reward day $day: $e');
     }
+  }
+
+  WeeklyRewardDayModel? _rewardForDay(int day) {
+    for (final reward in _schedule) {
+      if (reward.day == day) return reward;
+    }
+    return null;
+  }
+
+  String _rewardTypeLabel(WeeklyRewardDayModel? reward) {
+    final type = reward?.rewardType.toLowerCase();
+    if (type == 'gems' || (reward?.gemsAmount ?? 0) > 0) return 'Gems';
+    if (type == 'coins' || (reward?.coinsAmount ?? 0) > 0) return 'Coins';
+    return 'Reward';
   }
 
   void _claimDayReward(BuildContext context, int day, String rewardType,
@@ -206,15 +264,15 @@ class _WeeklyRewardsWidgetState extends ConsumerState<WeeklyRewardsWidget> {
               children: [
                 Expanded(
                     child: _buildDayCard(
-                        context, 1, 'Coins', '100', Icons.monetization_on,
+                        context, 1, _rewardTypeLabel(_rewardForDay(1)), _rewardForDay(1)?.amountLabel ?? '100', Icons.monetization_on,
                         Colors.amber, nextClaimableDay)),
                 const SizedBox(width: 6),
                 Expanded(
-                    child: _buildDayCard(context, 2, 'Gems', '5', Icons.diamond,
+                    child: _buildDayCard(context, 2, _rewardTypeLabel(_rewardForDay(2)), _rewardForDay(2)?.amountLabel ?? '5', Icons.diamond,
                         Colors.blue, nextClaimableDay)),
                 const SizedBox(width: 6),
                 Expanded(
-                    child: _buildDayCard(context, 3, 'Boost', '1x',
+                    child: _buildDayCard(context, 3, _rewardTypeLabel(_rewardForDay(3)), _rewardForDay(3)?.amountLabel ?? '1x',
                         Icons.flash_on, Colors.orange, nextClaimableDay)),
               ],
             ),
@@ -223,15 +281,15 @@ class _WeeklyRewardsWidgetState extends ConsumerState<WeeklyRewardsWidget> {
               children: [
                 Expanded(
                     child: _buildDayCard(
-                        context, 4, 'Coins', '200', Icons.monetization_on,
+                        context, 4, _rewardTypeLabel(_rewardForDay(4)), _rewardForDay(4)?.amountLabel ?? '200', Icons.monetization_on,
                         Colors.amber, nextClaimableDay)),
                 const SizedBox(width: 6),
                 Expanded(
-                    child: _buildDayCard(context, 5, 'Gems', '10', Icons.diamond,
+                    child: _buildDayCard(context, 5, _rewardTypeLabel(_rewardForDay(5)), _rewardForDay(5)?.amountLabel ?? '10', Icons.diamond,
                         Colors.blue, nextClaimableDay)),
                 const SizedBox(width: 6),
                 Expanded(
-                    child: _buildDayCard(context, 6, 'Spins', '3', Icons.casino,
+                    child: _buildDayCard(context, 6, _rewardTypeLabel(_rewardForDay(6)), _rewardForDay(6)?.amountLabel ?? '3', Icons.casino,
                         Colors.purple, nextClaimableDay)),
               ],
             ),

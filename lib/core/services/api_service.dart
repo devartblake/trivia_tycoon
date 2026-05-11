@@ -538,6 +538,9 @@ class ApiService {
 
     if (path == '/store' || path.startsWith('/store/')) return true;
     if (path == '/crypto' || path.startsWith('/crypto/')) return true;
+    if (path == '/rewards' || path.startsWith('/rewards/')) return true;
+    if (path == '/spins' || path.startsWith('/spins/')) return true;
+    if (path == '/missions' || path.startsWith('/missions/')) return true;
 
     // User-scoped/profile endpoints also require auth headers and token refresh handling.
     if (path == '/users/me' || path.startsWith('/users/me/')) return true;

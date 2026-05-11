@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/screens/rewards/widgets/weekly_rewards_widget.dart';
 import '../../game/providers/game_providers.dart' show rewardSettingsServiceProvider;
-import '../../game/providers/profile_providers.dart' show coinBalanceProvider;
+import '../../game/providers/profile_providers.dart'
+    show coinBalanceProvider, refreshAuthoritativeWallet, walletProvider;
+import '../../game/providers/reward_backend_providers.dart';
 import '../../game/providers/spin_providers.dart';
 import '../../ui_components/spin_wheel/services/spin_tracker.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
@@ -30,6 +32,12 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
   bool _isLoading = true;
   bool _claimedDuringThisSession = false;
   SpinStatistics? _spinStats;
+  DailyRewardConfigModel _dailyConfig = const DailyRewardConfigModel(
+    rewardType: 'coins',
+    coinsAmount: 100,
+    displayName: 'Daily Mystery Box',
+    iconName: 'daily_box',
+  );
 
   @override
   void initState() {
@@ -80,14 +88,16 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
   Future<void> _loadRewardData() async {
     try {
       final results = await Future.wait([
+        _loadDailyConfig(),
         _checkDailyClaimStatus(),
         ref.read(spinStatisticsProvider.future),
       ]);
 
       if (mounted) {
         setState(() {
-          _hasClaimedToday = results[0] as bool;
-          _spinStats = results[1] as SpinStatistics;
+          _dailyConfig = results[0] as DailyRewardConfigModel;
+          _hasClaimedToday = results[1] as bool;
+          _spinStats = results[2] as SpinStatistics;
           _isLoading = false;
         });
       }
@@ -101,7 +111,22 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
     }
   }
 
+  Future<DailyRewardConfigModel> _loadDailyConfig() async {
+    try {
+      return await ref.read(dailyRewardConfigProvider.future);
+    } catch (_) {
+      return _dailyConfig;
+    }
+  }
+
   Future<bool> _checkDailyClaimStatus() async {
+    try {
+      final status = await ref.read(dailyRewardStatusProvider.future);
+      return !status.isClaimAvailable;
+    } catch (_) {
+      // Fall back to the legacy local status when backend availability cannot
+      // be read, preserving offline behavior.
+    }
     final service = ref.read(rewardSettingsServiceProvider);
     final isAvailable = await service.isDailyRewardAvailable();
     return !isAvailable; // hasClaimedToday = daily reward NOT available
@@ -114,13 +139,28 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
       _claimController.reverse();
     });
 
-    final service = ref.read(rewardSettingsServiceProvider);
-    final rewards = await service.claimDailyReward();
-    final coinsEarned = rewards['regularCurrency'] ?? 0;
+    var coinsEarned = 0;
+    var newBalance = 0;
 
-    if (coinsEarned > 0) {
-      final currentBalance = ref.read(coinBalanceProvider);
-      await ref.read(coinBalanceProvider.notifier).set(currentBalance + coinsEarned);
+    try {
+      final claim = await ref.read(rewardsApiServiceProvider).claimDailyReward();
+      coinsEarned = claim.coinsGranted;
+      newBalance = claim.newBalance;
+      await refreshAuthoritativeWallet(ref, backendCoinBalance: newBalance);
+      ref.invalidate(dailyRewardStatusProvider);
+      ref.invalidate(walletProvider);
+    } catch (e) {
+      LogManager.debug('Backend daily reward claim failed, using local: $e');
+      final service = ref.read(rewardSettingsServiceProvider);
+      final rewards = await service.claimDailyReward();
+      coinsEarned = rewards['regularCurrency'] ?? 0;
+
+      if (coinsEarned > 0) {
+        final currentBalance = ref.read(coinBalanceProvider);
+        await ref
+            .read(coinBalanceProvider.notifier)
+            .set(currentBalance + coinsEarned);
+      }
     }
 
     if (mounted) {
@@ -353,7 +393,7 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
                     ),
                     SizedBox(width: 12),
                     Text(
-                      'Daily Mystery Box',
+                      _dailyConfig.displayName,
                       style: theme.textTheme.titleLarge?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

@@ -60,13 +60,15 @@ _PR/branch cross-check pass: 2026-05-10 against `origin/main`, recent remote bra
 - [x] Wire confirmed Spin & Earn endpoints: `GET /arcade/spin/segments` and `POST /arcade/spin/claim`.
 - [x] Keep local segment/stat/history fallback when backend Spin & Earn calls fail.
 - [x] Add gated smoke coverage for authenticated segment fetch and authorized spin claim route behavior.
-- [ ] Replace local-only daily reward config and claim state with server endpoints once backend confirms them.
-- [ ] Replace weekly login streak Hive state with server streak/schedule/claim APIs once backend confirms them.
-- [ ] Persist spin stats/history server-side when the server stats/history endpoints are available.
-- [ ] Replace local spin stats/history with server stats/history where available; keep local cache only as offline fallback.
-- [ ] Fix `hybrid_mission_state.dart` `currentUserIdProvider` stub by using the real profile/auth user provider.
-- [ ] Wire mission list, progress, claim, swap/generate, and delete flows to backend mission endpoints.
-- [ ] Move hardcoded reward step presets behind a provider once a configurable backend endpoint exists.
+- [x] Replace local-only daily reward config and claim state with server endpoints once backend confirms them.
+- [x] Replace weekly login streak Hive state with server streak/schedule/claim APIs once backend confirms them.
+- [x] Persist spin stats/history server-side when the server stats/history endpoints are available.
+- [x] Replace local spin stats/history with server stats/history where available; keep local cache only as offline fallback.
+- [x] Fix `hybrid_mission_state.dart` `currentUserIdProvider` stub by using the real profile/auth user provider.
+- [x] Wire confirmed mission list and claim flows to backend endpoints: `GET /missions` and `POST /missions/{missionId}/claim`.
+- [x] Wire mission progress event submission to `POST /missions/progress/match-completed` and `POST /missions/progress/round-completed` from real gameplay completion events.
+- [x] Keep mission swap/generate/delete local-only until backend confirms replacement endpoints.
+- [x] Move hardcoded reward step presets behind a provider once a configurable backend endpoint exists.
 
 ### Portable avatar persistence
 - [x] Avatar upload service accepts `XFile`, sends filename/content length, performs presigned MinIO PUT, and returns the persisted avatar URL.

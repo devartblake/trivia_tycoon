@@ -76,6 +76,22 @@ class MissionService {
     }
   }
 
+  Future<MissionClaimResult> claimMission({
+    required String playerId,
+    required String missionId,
+    MissionType? type,
+  }) async {
+    try {
+      return await _repository.claimMission(
+        playerId: playerId,
+        missionId: missionId,
+        type: type,
+      );
+    } catch (e) {
+      throw Exception('Failed to claim mission: $e');
+    }
+  }
+
   // ----------------------------
   // Update mission progress
   // ----------------------------
@@ -130,6 +146,38 @@ class MissionService {
     } catch (e) {
       throw Exception('Failed to update progress: $e');
     }
+  }
+
+  Future<void> recordMatchCompleted({
+    required String eventId,
+    required String playerId,
+    required bool isWin,
+    required int correctAnswers,
+    required int totalQuestions,
+    required int durationSeconds,
+  }) async {
+    await _repository.recordMatchCompleted(
+      eventId: eventId,
+      playerId: playerId,
+      isWin: isWin,
+      correctAnswers: correctAnswers,
+      totalQuestions: totalQuestions,
+      durationSeconds: durationSeconds,
+    );
+  }
+
+  Future<void> recordRoundCompleted({
+    required String eventId,
+    required String playerId,
+    required bool perfectRound,
+    required int averageAnswerTimeMs,
+  }) async {
+    await _repository.recordRoundCompleted(
+      eventId: eventId,
+      playerId: playerId,
+      perfectRound: perfectRound,
+      averageAnswerTimeMs: averageAnswerTimeMs,
+    );
   }
 
   // ----------------------------

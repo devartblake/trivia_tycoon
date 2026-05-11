@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:uuid/uuid.dart';
 import '../providers/quiz_results_provider.dart';
 import '../providers/riverpod_providers.dart';
 import '../providers/xp_provider.dart';
@@ -31,6 +32,7 @@ class QuizCompletionHandler {
 
       // Trigger achievement checks
       await _checkForNewAchievements(result);
+      await _recordMissionProgress(result);
 
       // Refresh providers to show updated data
       ref.invalidate(educationalStatsProvider);
@@ -40,6 +42,41 @@ class QuizCompletionHandler {
     } catch (e) {
       LogManager.debug('Error processing quiz completion: $e');
       // Don't throw - we don't want to break the quiz flow if stats fail
+    }
+  }
+
+  Future<void> _recordMissionProgress(QuizResults result) async {
+    try {
+      final playerId = await ref.read(currentPlayerIdProvider.future);
+      if (playerId == null || playerId.isEmpty) return;
+
+      final service = ref.read(backendMissionServiceProvider);
+      final isWin = result.totalQuestions > 0 &&
+          (result.score / result.totalQuestions) > 0.5;
+      final perfectRound =
+          result.totalQuestions > 0 && result.score >= result.totalQuestions;
+      final averageAnswerTimeMs = result.totalQuestions <= 0
+          ? 0
+          : (result.quizDuration.inMilliseconds / result.totalQuestions)
+              .round();
+
+      await service.recordMatchCompleted(
+        eventId: const Uuid().v4(),
+        playerId: playerId,
+        isWin: isWin,
+        correctAnswers: result.score,
+        totalQuestions: result.totalQuestions,
+        durationSeconds: result.quizDuration.inSeconds,
+      );
+
+      await service.recordRoundCompleted(
+        eventId: const Uuid().v4(),
+        playerId: playerId,
+        perfectRound: perfectRound,
+        averageAnswerTimeMs: averageAnswerTimeMs,
+      );
+    } catch (e) {
+      LogManager.debug('Mission progress submission skipped: $e');
     }
   }
 

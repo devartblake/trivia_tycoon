@@ -95,6 +95,10 @@ final rewardSettingsServiceProvider = Provider<RewardSettingsService>((ref) {
   return ref.watch(serviceManagerProvider).rewardSettingsService;
 });
 
+final backendMissionServiceProvider = Provider((ref) {
+  return ref.watch(serviceManagerProvider).missionService;
+});
+
 final customThemeServiceProvider = Provider<CustomThemeService>((ref) {
   return ref.read(serviceManagerProvider).customThemeService;
 });

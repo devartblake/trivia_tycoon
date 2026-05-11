@@ -24,10 +24,29 @@ abstract class MissionRepository {
 
   Future<List<Mission>> getAvailableMissions(MissionType? type);
   Future<UserMission> assignMissionToUser(String userId, String missionId);
+  Future<MissionClaimResult> claimMission({
+    required String playerId,
+    required String missionId,
+    MissionType? type,
+  });
 
   Future<UserMission> swapMission(String userMissionId);
   Future<UserMission> updateMissionProgress(
       String userMissionId, int newProgress);
+  Future<void> recordMatchCompleted({
+    required String eventId,
+    required String playerId,
+    required bool isWin,
+    required int correctAnswers,
+    required int totalQuestions,
+    required int durationSeconds,
+  });
+  Future<void> recordRoundCompleted({
+    required String eventId,
+    required String playerId,
+    required bool perfectRound,
+    required int averageAnswerTimeMs,
+  });
 
   Future<void> cleanupExpiredMissions();
 }
@@ -36,14 +55,56 @@ abstract class MissionRepository {
 /// Assumes ApiService is already configured with baseUrl.
 /// You will add/confirm the actual endpoints on the backend during migration.
 ///
-/// Recommended endpoint shape (suggested):
-/// - GET    /v1/missions?userId=...
-/// - GET    /v1/missions/active?userId=...
-/// - PATCH  /v1/missions/{missionId}/progress  { userId, progress }
-/// - POST   /v1/missions/{missionId}/complete  { userId }
-/// - POST   /v1/missions/{missionId}/claim     { userId }
-/// - POST   /v1/missions                        (admin/dev) { ...mission }
-/// - DELETE /v1/missions/{missionId}
+class MissionClaimResult {
+  final String status;
+  final String playerId;
+  final String missionId;
+  final int rewardXp;
+  final int rewardCoins;
+  final int rewardDiamonds;
+  final bool completed;
+  final bool claimed;
+  final List<UserMission> updatedMissions;
+
+  const MissionClaimResult({
+    required this.status,
+    required this.playerId,
+    required this.missionId,
+    required this.rewardXp,
+    required this.rewardCoins,
+    required this.rewardDiamonds,
+    required this.completed,
+    required this.claimed,
+    required this.updatedMissions,
+  });
+
+  factory MissionClaimResult.fromJson(Map<String, dynamic> json) {
+    final updated = json['updatedMissions'];
+    return MissionClaimResult(
+      status: (json['status'] ?? '').toString(),
+      playerId: (json['playerId'] ?? '').toString(),
+      missionId: (json['missionId'] ?? '').toString(),
+      rewardXp: _asInt(json['rewardXp']),
+      rewardCoins: _asInt(json['rewardCoins']),
+      rewardDiamonds: _asInt(json['rewardDiamonds']),
+      completed: json['completed'] == true,
+      claimed: json['claimed'] == true,
+      updatedMissions: updated is List
+          ? updated
+              .whereType<Map>()
+              .map((e) => UserMission.fromJson(Map<String, dynamic>.from(e)))
+              .toList()
+          : const <UserMission>[],
+    );
+  }
+}
+
+int _asInt(Object? value) {
+  if (value is num) return value.toInt();
+  if (value == null) return 0;
+  return int.tryParse(value.toString()) ?? 0;
+}
+
 class ApiMissionRepository implements MissionRepository {
   final String baseUrl;
 
@@ -63,9 +124,12 @@ class ApiMissionRepository implements MissionRepository {
   // -------------------------
   // Route configuration
   // -------------------------
-  // Adjust these if your backend differs.
-  String _userMissions(String userId) => '/players/$userId/missions';
+  // Confirmed backend routes in Tycoon.Backend.Api.Features.Missions.
   String _missions() => '/missions';
+  String _claimMission(String missionId) => '/missions/$missionId/claim';
+  String _matchCompleted() => '/missions/progress/match-completed';
+  String _roundCompleted() => '/missions/progress/round-completed';
+  // Not backend-confirmed yet. Kept for compatibility and local fallback paths.
   String _assignMission(String userId) => '/players/$userId/missions/assign';
   String _swapMission(String userMissionId) =>
       '/missions/user/$userMissionId/swap';
@@ -112,7 +176,7 @@ class ApiMissionRepository implements MissionRepository {
 
   @override
   Future<List<UserMission>> getUserMissions(String userId) async {
-    final uri = _uri(_userMissions(userId), {'status': 'active'});
+    final uri = _uri(_missions());
     final res = await http.get(uri, headers: await _headers());
 
     if (res.statusCode < 200 || res.statusCode >= 300) {
@@ -122,7 +186,11 @@ class ApiMissionRepository implements MissionRepository {
     final data = _decodeBody(res.body);
     if (data is List) {
       return data
-          .map((e) => UserMission.fromJson(e as Map<String, dynamic>))
+          .whereType<Map>()
+          .map((e) => UserMission.fromJson({
+                ...Map<String, dynamic>.from(e),
+                'playerId': userId,
+              }))
           .toList();
     }
 
@@ -130,7 +198,11 @@ class ApiMissionRepository implements MissionRepository {
     if (data is Map && data['items'] is List) {
       final items = data['items'] as List;
       return items
-          .map((e) => UserMission.fromJson(e as Map<String, dynamic>))
+          .whereType<Map>()
+          .map((e) => UserMission.fromJson({
+                ...Map<String, dynamic>.from(e),
+                'playerId': userId,
+              }))
           .toList();
     }
 
@@ -151,8 +223,7 @@ class ApiMissionRepository implements MissionRepository {
   Future<List<Mission>> getAvailableMissions(MissionType? type) async {
     final query = <String, String>{};
     if (type != null) {
-      // Ensure backend expects the enum string. If backend uses lowercase, map here.
-      query['type'] = type.name;
+      query['type'] = _backendMissionType(type);
     }
 
     final uri = _uri(_missions(), query.isEmpty ? null : query);
@@ -165,18 +236,46 @@ class ApiMissionRepository implements MissionRepository {
     final data = _decodeBody(res.body);
     if (data is List) {
       return data
-          .map((e) => Mission.fromJson(e as Map<String, dynamic>))
+          .whereType<Map>()
+          .map((e) => Mission.fromJson(Map<String, dynamic>.from(e)))
           .toList();
     }
 
     if (data is Map && data['items'] is List) {
       final items = data['items'] as List;
       return items
-          .map((e) => Mission.fromJson(e as Map<String, dynamic>))
+          .whereType<Map>()
+          .map((e) => Mission.fromJson(Map<String, dynamic>.from(e)))
           .toList();
     }
 
     return <Mission>[];
+  }
+
+  @override
+  Future<MissionClaimResult> claimMission({
+    required String playerId,
+    required String missionId,
+    MissionType? type,
+  }) async {
+    final query = <String, String>{'playerId': playerId};
+    if (type != null) {
+      query['type'] = _backendMissionType(type);
+    }
+
+    final uri = _uri(_claimMission(missionId), query);
+    final res = await http.post(uri, headers: await _headers());
+
+    if (res.statusCode < 200 || res.statusCode >= 300) {
+      _httpError(uri, res.statusCode, res.body);
+    }
+
+    final data = _decodeBody(res.body);
+    if (data is Map) {
+      return MissionClaimResult.fromJson(Map<String, dynamic>.from(data));
+    }
+
+    throw Exception('Unexpected response for claimMission: ${res.body}');
   }
 
   @override
@@ -253,6 +352,73 @@ class ApiMissionRepository implements MissionRepository {
 
     if (res.statusCode < 200 || res.statusCode >= 300) {
       _httpError(uri, res.statusCode, res.body);
+    }
+  }
+
+  @override
+  Future<void> recordMatchCompleted({
+    required String eventId,
+    required String playerId,
+    required bool isWin,
+    required int correctAnswers,
+    required int totalQuestions,
+    required int durationSeconds,
+  }) async {
+    final uri = _uri(_matchCompleted());
+    final res = await http.post(
+      uri,
+      headers: await _headers(),
+      body: jsonEncode({
+        'eventId': eventId,
+        'playerId': playerId,
+        'isWin': isWin,
+        'correctAnswers': correctAnswers,
+        'totalQuestions': totalQuestions,
+        'durationSeconds': durationSeconds,
+      }),
+    );
+
+    if (res.statusCode < 200 || res.statusCode >= 300) {
+      _httpError(uri, res.statusCode, res.body);
+    }
+  }
+
+  @override
+  Future<void> recordRoundCompleted({
+    required String eventId,
+    required String playerId,
+    required bool perfectRound,
+    required int averageAnswerTimeMs,
+  }) async {
+    final uri = _uri(_roundCompleted());
+    final res = await http.post(
+      uri,
+      headers: await _headers(),
+      body: jsonEncode({
+        'eventId': eventId,
+        'playerId': playerId,
+        'perfectRound': perfectRound,
+        'avgAnswerTimeMs': averageAnswerTimeMs,
+      }),
+    );
+
+    if (res.statusCode < 200 || res.statusCode >= 300) {
+      _httpError(uri, res.statusCode, res.body);
+    }
+  }
+
+  String _backendMissionType(MissionType type) {
+    switch (type) {
+      case MissionType.daily:
+        return 'Daily';
+      case MissionType.weekly:
+        return 'Weekly';
+      case MissionType.seasonal:
+        return 'Seasonal';
+      case MissionType.oneTime:
+        return 'OneTime';
+      default:
+        return type.name;
     }
   }
 }
