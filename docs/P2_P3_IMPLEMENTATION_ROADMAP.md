@@ -13,11 +13,14 @@ _Updated: 2026-05-12 — Branch `claude/fix-hexagon-alignment-CrQVu`_
 - Metadata persistence implemented
 - Connection issues resolved
 
-✅ **P2 Test coverage (Phase 3) — partially complete:**
+✅ **P2 Test coverage (Phase 3) — substantially complete:**
 - Auth edge cases: offline login, 401 best-effort logout, concurrent refresh, token expiry, OAuth URL, session metadata (`test/core/services/auth_service_test.dart`)
 - Widget tests for `DailyBonusScreen` and `ArcadeMissionsScreen` (`test/arcade/screens/arcade_screens_widget_test.dart`)
 - Skill tree branch detail expanded: `showPath=0`, step clamping, correct step labels (`test/screens/skills_tree/skill_branch_detail_screen_test.dart`)
-- Remaining: `ArcadeGameShell`, leaderboard interaction tests; 40% coverage milestone
+- `ArcadeGameShell` widget tests: patternSprint/memoryFlip/quickMathRush mount, `ArcadeRunApi.of()`, difficulty propagation (`test/arcade/screens/arcade_game_shell_test.dart`)
+- Crypto wallet UI smoke tests: disabled feature, unlinked/linked, balance, staked units, staking summary, pending withdrawal, empty history (`test/screens/store/crypto_wallet_screen_test.dart`)
+- Secure channel replay/sequence/expiry/reinstall/web-fallback tests: 15 tests in 3 groups (`test/core/security/secure_payload_codec_test.dart`)
+- Remaining: leaderboard interaction tests (`AnimatedRankBadge`, `EnhancedScoreDisplay`); 40% coverage milestone
 
 ✅ **Rewards backend wiring — complete:**
 - `lib/game/services/rewards_api_service.dart` — `GET /rewards/daily-config`, `POST /rewards/daily/claim`, `GET /rewards/weekly-streak/{id}`, `POST /rewards/weekly/claim`, `GET /spins/stats/{id}`, `GET /spins/history/{id}`, `GET /rewards/spin-reward-steps`
@@ -182,12 +185,14 @@ catch (e) {
 - `test/game/services/skill_cooldown_service_test.dart`
 - `test/game/providers/crypto_providers_test.dart`
 - `test/arcade/screens/arcade_screens_widget_test.dart` — `DailyBonusScreen`, `ArcadeMissionsScreen` widget smoke tests
+- `test/arcade/screens/arcade_game_shell_test.dart` — `ArcadeGameShell` mounts correct widget per `ArcadeGameId`, `ArcadeRunApi.of()`, difficulty propagation ✅ NEW
 - `test/screens/skills_tree/skill_branch_detail_screen_test.dart` — query hydration, cooldown, showPath, step clamping
+- `test/screens/store/crypto_wallet_screen_test.dart` — disabled feature, unlinked/linked wallet, balance/staked units, staking summary, pending withdrawal, empty history ✅ NEW
+- `test/core/security/secure_payload_codec_test.dart` — replay/sequence protection, SecureSession expiry/sequence, SecureSessionStore reinstall/web-fallback ✅ NEW (15 tests in 3 new groups)
 - Many more — see `test/` directory tree
 
 #### Still needed for 40% milestone:
-- `ArcadeGameShell` widget test
-- Leaderboard interaction tests
+- Leaderboard interaction tests (`AnimatedRankBadge`, `EnhancedScoreDisplay`)
 - Auth provider integration tests (Riverpod container wiring)
 - `test/core/manager/login_manager_test.dart`
 

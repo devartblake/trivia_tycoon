@@ -54,7 +54,7 @@ _PR/branch cross-check pass: 2026-05-10 against `origin/main`, recent remote bra
 - [x] Add feature flags for staged crypto rollout and safe disabling: `CRYPTO_SURFACES_ENABLED`, `CRYPTO_WRITES_ENABLED`, and `CRYPTO_ENABLED_NETWORKS`.
 - [x] Live-validate crypto contracts against local Docker: disposable signup plus balance, history, staking, prize-pool reads, and secure-channel write guard verified against `http://localhost:5000` on 2026-05-10.
 - [ ] Run the same crypto contract smoke against staging once staging base URL and credentials are supplied.
-- [ ] Add/extend crypto UI smoke tests for linked/unlinked, pending withdrawal, disabled-feature, stake/unstake, and prize pool states.
+- [x] Add/extend crypto UI smoke tests for linked/unlinked, pending withdrawal, disabled-feature, stake/unstake, and prize pool states. (`test/screens/store/crypto_wallet_screen_test.dart` — 8 widget tests covering disabled feature, unlinked, linked, balance, staked units, staking summary, pending withdrawal, empty history)
 
 ### Rewards backend integration
 - [x] Wire confirmed Spin & Earn endpoints: `GET /arcade/spin/segments` and `POST /arcade/spin/claim`.
@@ -81,7 +81,7 @@ _PR/branch cross-check pass: 2026-05-10 against `origin/main`, recent remote bra
 - [x] Add `deleteEncrypted` to `EncryptedApiClient` and route DELETE-sensitive social operations through encrypted semantics: `removeFriend`, `cancelFriendRequest`, and `unblockUser`.
 - [x] Encrypt selected private social/economy endpoints through the current rollout: friend request send/accept/decline/cancel/remove, block/unblock, loadout save, and Spin & Earn claim.
 - [x] Add secure-channel tests for wrong nonce, logout/session clear, and 1 KB/10 KB/100 KB payload coverage.
-- [ ] Add remaining secure-channel tests for wrong sequence/replay, expiry renewal, reinstall invalidation, and web fallback.
+- [x] Add remaining secure-channel tests for wrong sequence/replay, expiry renewal, reinstall invalidation, and web fallback. (`test/core/security/secure_payload_codec_test.dart` — 15 new tests in 3 groups: replay/sequence, SecureSession model, SecureSessionStore reinstall/web-fallback)
 - [ ] Decide and schedule any later refresh/match/economy/messages/private social write expansion beyond the currently selected endpoints.
 - [ ] Validate exact backend response schema, replay protection, and sequence semantics against staging.
 
@@ -108,7 +108,7 @@ _PR/branch cross-check pass: 2026-05-10 against `origin/main`, recent remote bra
 - [x] Add auth edge-case tests: social login (`getOAuthUrl`), concurrent 401 refresh, offline login (SocketException), logout token cleanup (401 best-effort), expiry detection, metadata extraction. (`test/core/services/auth_service_test.dart`)
 - [x] Expand widget tests for `DailyBonusScreen` and `ArcadeMissionsScreen`: renders correctly, coin/gem values, streak states, wallet counters, mission catalog. (`test/arcade/screens/arcade_screens_widget_test.dart`)
 - [x] Expand skill tree widget tests: `showPath=0` disables highlight, step 0 label, out-of-bounds step clamps without crash. (`test/screens/skills_tree/skill_branch_detail_screen_test.dart`)
-- [ ] Expand widget tests for `ArcadeGameShell` — mounts correct game widget per `ArcadeGameId`.
+- [x] Expand widget tests for `ArcadeGameShell` — mounts correct game widget per `ArcadeGameId`. (`test/arcade/screens/arcade_game_shell_test.dart` — 5 tests: patternSprint, memoryFlip, quickMathRush mount, ArcadeRunApi accessible via `.of()`, difficulty passed to builder)
 - [ ] Expand leaderboard interaction tests (`AnimatedRankBadge`, `EnhancedScoreDisplay`).
 - [ ] Move toward the documented 40% coverage target for `lib/game/` and `lib/core/`.
 

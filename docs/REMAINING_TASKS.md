@@ -31,7 +31,7 @@ _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue 
 | **Django DefaultPermissions fix** | Medium | **Complete — all 12 scopes now granted on login** | No |
 | Operator Dashboard Wave D (Cutover + Blazor decommission) | Low | Staging parallel-run pending (May 8–14); cutover May 15 | Depends on sign-off |
 | Phase 2 - Crash recovery stubs | High | Code complete; device validation pending | Yes — needs device |
-| Phase 3 - Test coverage (remaining gaps) | Medium | ~4.1% → 40% target | No |
+| Phase 3 - Test coverage (remaining gaps) | Medium | ~4.1% → 40% target; ArcadeGameShell, CryptoWalletScreen, secure channel tests added 2026-05-12 | No |
 | Phase 4 - Dependency audit | Medium | Partial | No |
 | Sprint 1 - Auth/profile integration verification | Medium | Partially improved; live backend verification still needed | Yes — needs live server |
 | **Sprint 2 - Networking layer (Flutter)** | **High** | **Complete — `wsMessageStreamProvider`, `wsStateStreamProvider`, `encryptedApiClientProvider` added** | **No** |
@@ -421,10 +421,17 @@ Added to `test/core/services/auth_service_test.dart` (branch `claude/fix-hexagon
 - `DailyBonusScreen` ✅ — `test/arcade/screens/arcade_screens_widget_test.dart`: renders unclaimed/claimed, coin amount visible, streak increments, wallet counters
 - `ArcadeMissionsScreen` ✅ — same file: catalog non-empty, first mission title visible, progress ratio 0–1, wallet counters
 - Skill tree branch detail ✅ — extended `test/screens/skills_tree/skill_branch_detail_screen_test.dart`: `showPath=0` disables full-path highlight; step 0 shows correct label; out-of-bounds step clamps without crashing
-- `ArcadeGameShell` — mounts the correct game widget for each `ArcadeGameId` (not yet done)
+- `ArcadeGameShell` ✅ — `test/arcade/screens/arcade_game_shell_test.dart`: mounts correct widget per `ArcadeGameId` (`patternSprint`, `memoryFlip`, `quickMathRush`), `ArcadeRunApi.of()` accessible, difficulty passed to builder (5 tests)
+- `CryptoWalletScreen` ✅ — `test/screens/store/crypto_wallet_screen_test.dart`: disabled feature, unlinked/linked wallet, available balance, staked units, staking summary, pending withdrawal polling notice, empty history card (8 tests)
 - Leaderboard screen renders `AnimatedRankBadge` and `EnhancedScoreDisplay` correctly
   (basic rendering exists in `test/widgets/leaderboard_widgets_test.dart` — extend with
   interaction tests)
+
+### 3f. Secure channel tests ✅ COMPLETE (2026-05-12)
+Added to `test/core/security/secure_payload_codec_test.dart` (3 new groups, 15 new tests):
+- **SecurePayloadCodec — replay and sequence protection**: 50-nonce uniqueness, cross-nonce replay fails, cross-session key replay fails, AAD endpoint binding, AAD method binding
+- **SecureSession — expiry and sequence**: `isExpired` past/future, `copyWith(nextSequence)`, `toJson/fromJson` roundtrip
+- **SecureSessionStore — reinstall and web fallback**: null on empty storage, save/load roundtrip, clear simulates reinstall, second save overwrites (renewal), expired session preserved, cross-instance sharing via shared storage
 
 ### 3e. Other service gaps COMPLETE
 
