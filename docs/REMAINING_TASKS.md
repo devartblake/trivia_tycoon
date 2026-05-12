@@ -423,9 +423,15 @@ Added to `test/core/services/auth_service_test.dart` (branch `claude/fix-hexagon
 - Skill tree branch detail ✅ — extended `test/screens/skills_tree/skill_branch_detail_screen_test.dart`: `showPath=0` disables full-path highlight; step 0 shows correct label; out-of-bounds step clamps without crashing
 - `ArcadeGameShell` ✅ — `test/arcade/screens/arcade_game_shell_test.dart`: mounts correct widget per `ArcadeGameId` (`patternSprint`, `memoryFlip`, `quickMathRush`), `ArcadeRunApi.of()` accessible, difficulty passed to builder (5 tests)
 - `CryptoWalletScreen` ✅ — `test/screens/store/crypto_wallet_screen_test.dart`: disabled feature, unlinked/linked wallet, available balance, staked units, staking summary, pending withdrawal polling notice, empty history card (8 tests)
-- Leaderboard screen renders `AnimatedRankBadge` and `EnhancedScoreDisplay` correctly
-  (basic rendering exists in `test/widgets/leaderboard_widgets_test.dart` — extend with
-  interaction tests)
+- Leaderboard widgets ✅ — `test/widgets/leaderboard_widgets_test.dart` extended with 6 `AnimatedRankBadge` interaction tests (up/down arrow icons, no-arrow unchanged/null, animation pumpAndSettle) and 14 `EnhancedScoreDisplay` interaction tests (all 5 performance message tiers, percentage label, XP section visible/hidden, XP animation final value, category breakdown visible/hidden, power-up section visible/hidden, class level badge)
+
+### 3g. LoginManager unit tests ✅ COMPLETE (2026-05-12)
+Added to `test/core/manager/login_manager_test.dart` (16 tests, 5 groups):
+- **Role extraction**: from `role`/`roles` list/`tier` top-level metadata, default 'player', admin/moderator tier mapping, `isAdminUser()`
+- **Premium extraction**: from `isPremium`/`subscriptionStatus: active`/`tier: premium`, false by default, explicit false
+- **getNextRoute() routing**: no tokens → '/login'; after login (not onboarded) → '/onboarding'; after setHasCompletedOnboarding(true) → '/home'
+- **isLoggedIn()**: false before login, true after login
+- **userId persistence**: userId from response body saved to `profileService`
 
 ### 3f. Secure channel tests ✅ COMPLETE (2026-05-12)
 Added to `test/core/security/secure_payload_codec_test.dart` (3 new groups, 15 new tests):

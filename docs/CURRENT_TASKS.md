@@ -109,7 +109,8 @@ _PR/branch cross-check pass: 2026-05-10 against `origin/main`, recent remote bra
 - [x] Expand widget tests for `DailyBonusScreen` and `ArcadeMissionsScreen`: renders correctly, coin/gem values, streak states, wallet counters, mission catalog. (`test/arcade/screens/arcade_screens_widget_test.dart`)
 - [x] Expand skill tree widget tests: `showPath=0` disables highlight, step 0 label, out-of-bounds step clamps without crash. (`test/screens/skills_tree/skill_branch_detail_screen_test.dart`)
 - [x] Expand widget tests for `ArcadeGameShell` — mounts correct game widget per `ArcadeGameId`. (`test/arcade/screens/arcade_game_shell_test.dart` — 5 tests: patternSprint, memoryFlip, quickMathRush mount, ArcadeRunApi accessible via `.of()`, difficulty passed to builder)
-- [ ] Expand leaderboard interaction tests (`AnimatedRankBadge`, `EnhancedScoreDisplay`).
+- [x] Expand leaderboard interaction tests (`AnimatedRankBadge`, `EnhancedScoreDisplay`). (`test/widgets/leaderboard_widgets_test.dart` — added 6 `AnimatedRankBadge` interaction tests: up/down arrow icons, no-arrow states, animation completion; added 14 `EnhancedScoreDisplay` interaction tests: performance messages for all 5 tiers, percentage label, XP section visibility, XP animation final value, category breakdown, power-up section, class level badge)
+- [x] `LoginManager` unit tests: role extraction (`role`/`roles`/`tier` fields), premium status (`isPremium`/`subscriptionStatus`/`tier`), `getNextRoute()` routing, `isLoggedIn()` state, userId persistence. (`test/core/manager/login_manager_test.dart` — 16 tests across 5 groups)
 - [ ] Move toward the documented 40% coverage target for `lib/game/` and `lib/core/`.
 
 ### Dependency and build health

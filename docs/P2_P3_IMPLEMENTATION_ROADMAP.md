@@ -189,12 +189,12 @@ catch (e) {
 - `test/screens/skills_tree/skill_branch_detail_screen_test.dart` — query hydration, cooldown, showPath, step clamping
 - `test/screens/store/crypto_wallet_screen_test.dart` — disabled feature, unlinked/linked wallet, balance/staked units, staking summary, pending withdrawal, empty history ✅ NEW
 - `test/core/security/secure_payload_codec_test.dart` — replay/sequence protection, SecureSession expiry/sequence, SecureSessionStore reinstall/web-fallback ✅ NEW (15 tests in 3 new groups)
+- `test/widgets/leaderboard_widgets_test.dart` — extended with `AnimatedRankBadge` interaction tests (up/down arrows, no-arrow states, animation) and `EnhancedScoreDisplay` interaction tests (5 performance message tiers, percentage label, XP section, XP animation, category breakdown, power-up section, class level badge) ✅ NEW
+- `test/core/manager/login_manager_test.dart` — 16 unit tests: role extraction from `role`/`roles`/`tier` fields, admin role mapping, premium status from `isPremium`/`subscriptionStatus`/`tier`, `getNextRoute()` routing, `isLoggedIn()` state, userId persistence ✅ NEW
 - Many more — see `test/` directory tree
 
 #### Still needed for 40% milestone:
-- Leaderboard interaction tests (`AnimatedRankBadge`, `EnhancedScoreDisplay`)
 - Auth provider integration tests (Riverpod container wiring)
-- `test/core/manager/login_manager_test.dart`
 
 ---
 
