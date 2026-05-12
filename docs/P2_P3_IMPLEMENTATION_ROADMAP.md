@@ -5,11 +5,28 @@
 
 ## 📊 Current Status
 
+_Updated: 2026-05-12 — Branch `claude/fix-hexagon-alignment-CrQVu`_
+
 ✅ **P1 Completed:**
 - Backend auth integration working
 - Role & premium extraction functional
 - Metadata persistence implemented
 - Connection issues resolved
+
+✅ **P2 Test coverage (Phase 3) — partially complete:**
+- Auth edge cases: offline login, 401 best-effort logout, concurrent refresh, token expiry, OAuth URL, session metadata (`test/core/services/auth_service_test.dart`)
+- Widget tests for `DailyBonusScreen` and `ArcadeMissionsScreen` (`test/arcade/screens/arcade_screens_widget_test.dart`)
+- Skill tree branch detail expanded: `showPath=0`, step clamping, correct step labels (`test/screens/skills_tree/skill_branch_detail_screen_test.dart`)
+- Remaining: `ArcadeGameShell`, leaderboard interaction tests; 40% coverage milestone
+
+✅ **Rewards backend wiring — complete:**
+- `lib/game/services/rewards_api_service.dart` — `GET /rewards/daily-config`, `POST /rewards/daily/claim`, `GET /rewards/weekly-streak/{id}`, `POST /rewards/weekly/claim`, `GET /spins/stats/{id}`, `GET /spins/history/{id}`, `GET /rewards/spin-reward-steps`
+- `lib/game/providers/reward_backend_providers.dart` — `dailyRewardConfigProvider`, `weeklyStreakProvider`, `weeklyRewardScheduleProvider`, `serverSpinStatisticsProvider`, `spinRewardStepsProvider`, `serverSpinHistoryProvider`
+- Frontend screens wired: `reward_screen.dart`, `weekly_rewards_widget.dart`, `spin_earn_screen.dart`, `mission_screen.dart`
+
+✅ **Skill tree hex grid layout — complete:**
+- `SkillTreeController._computeLayout()` replaced radial BFS with true axial hex-grid: `master_hub` at `(0,0)`, 12 branch roots at ring-2, tiers extend along branch direction vectors
+- `HexMetrics.axialToPixel` converts `(q,r)` to world pixel offsets
 
 ---
 
@@ -152,45 +169,26 @@ catch (e) {
 
 ## 🎨 P3 - Nice to Have Improvements
 
-### 4. 🧪 Unit Tests (2-3 hours)
+### 4. 🧪 Unit Tests ✅ IN PROGRESS
 
 **Priority:** P3 - Medium  
 **Effort:** 2-3 hours  
-**Status:** Recommended before production
+**Status:** Substantial coverage added; 40% milestone in progress
 
-#### Setup:
+#### Already complete (test files exist):
+- `test/core/services/auth_service_test.dart` — login/signup/refresh/logout + edge cases (offline, 401, concurrent, metadata, OAuth URL)
+- `test/core/services/presence/rich_presence_service_test.dart` — 12 cases
+- `test/game/controllers/skill_tree_controller_test.dart` — unlock/respec/select/BFS/storage restore
+- `test/game/services/skill_cooldown_service_test.dart`
+- `test/game/providers/crypto_providers_test.dart`
+- `test/arcade/screens/arcade_screens_widget_test.dart` — `DailyBonusScreen`, `ArcadeMissionsScreen` widget smoke tests
+- `test/screens/skills_tree/skill_branch_detail_screen_test.dart` — query hydration, cooldown, showPath, step clamping
+- Many more — see `test/` directory tree
 
-**Step 1: Add Dependencies** (5 minutes)
-
-In `pubspec.yaml`:
-```yaml
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  mockito: ^5.4.0
-  build_runner: ^2.4.0
-  test: ^1.24.0
-```
-
-Then run:
-```bash
-flutter pub get
-```
-
-**Step 2: Create Test Directory**
-```bash
-mkdir -p test/core/services
-mkdir -p test/game/providers
-```
-
-**Step 3: Write Tests** (2 hours)
-
-See `P2_P3_TESTING_GUIDE.md` for complete test examples.
-
-Key test files to create:
-- `test/core/services/auth_service_test.dart`
-- `test/core/services/auth_token_store_test.dart`
-- `test/game/providers/auth_providers_test.dart`
+#### Still needed for 40% milestone:
+- `ArcadeGameShell` widget test
+- Leaderboard interaction tests
+- Auth provider integration tests (Riverpod container wiring)
 - `test/core/manager/login_manager_test.dart`
 
 ---
@@ -371,11 +369,13 @@ void main() async {
 | Feature | Priority | Time | Impact | Status |
 |---------|----------|------|--------|--------|
 | Metadata Persistence | P2 | - | High | ✅ Done |
-| Auto Token Refresh | P2 | 30m | High | 🟡 Ready |
-| Error Messages | P2 | 20m | High | 🟡 Ready |
-| Unit Tests | P3 | 2h | Medium | 📝 Guide |
-| Analytics | P3 | 1h | Medium | 📝 Guide |
-| Biometric Auth | P3 | 1h | Low | 📝 Guide |
+| Auto Token Refresh | P2 | 30m | High | ✅ Done |
+| Error Messages | P2 | 20m | High | ✅ Done |
+| Rewards Backend Wiring | P2 | - | High | ✅ Done |
+| Skill Tree Hex Grid Layout | P2 | - | High | ✅ Done |
+| Unit Tests (auth, arcade, skill tree) | P3 | 2h | Medium | ✅ In progress |
+| Analytics | P3 | 1h | Medium | 📝 Guide (deferred) |
+| Biometric Auth | P3 | 1h | Low | 📝 Guide (deferred) |
 
 ---
 

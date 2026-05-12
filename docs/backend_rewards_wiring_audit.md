@@ -1,6 +1,6 @@
 # Rewards Module — Backend Integration Audit
 
-**Date:** 2026-05-08  
+**Date:** 2026-05-08 — Updated: 2026-05-12  
 **Branch:** `claude/fix-hexagon-alignment-CrQVu`  
 **Prepared for:** Backend / API Team  
 
@@ -13,6 +13,8 @@ This document covers every file in the rewards and spin-wheel subsystems, identi
 **2026-05-10 frontend update:** Backend-confirmed Spin & Earn endpoints are limited to `GET /arcade/spin/segments` and `POST /arcade/spin/claim`. The Flutter app uses those endpoints where available, refreshes wallet state through `GET /users/me/wallet` after successful claims, and keeps local fallbacks for unconfirmed daily/weekly/server-stat/history/reward-step endpoints. Confirmed mission endpoints now used by the Flutter mission layer are `GET /missions`, `POST /missions/{missionId}/claim`, `POST /missions/progress/match-completed`, and `POST /missions/progress/round-completed`; swap/generate/delete mission replacement endpoints are still unconfirmed.
 
 **2026-05-10 completion update:** Rewards backend integration is now backend-first for daily config/claim status, weekly schedule/streak/claim, spin stats/history, configurable spin reward steps, and mission progress event submission. Local Hive/AppSettings behavior remains as offline fallback where backend calls fail or no authenticated player id is available.
+
+**2026-05-12 implementation update:** `lib/game/services/rewards_api_service.dart` and `lib/game/providers/reward_backend_providers.dart` were merged from `main` as of the 2026-05-12 merge. All 9 priority endpoints now have a service implementation. The `currentUserIdProvider` stub in `hybrid_mission_state.dart` was fixed to delegate to the real `profile_providers.currentUserIdProvider`.
 
 ---
 

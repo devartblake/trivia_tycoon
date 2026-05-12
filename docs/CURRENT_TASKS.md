@@ -98,15 +98,18 @@ _PR/branch cross-check pass: 2026-05-10 against `origin/main`, recent remote bra
 - [x] Clarify/rename branch coordinate provider via `branchWorldCentersProvider`; `branchCentersProvider` remains as a compatibility alias.
 - [x] Move path recomputation out of build-time mutation in `SkillBranchDetailScreen`.
 - [x] Make `MiniHexBranchPreview.fromGraph` use the provided graph through `graphOverride`.
+- [x] Replace free-form radial BFS layout with true axial hex-grid positioning: `master_hub` at `(0,0)`, 12 branch roots at ring-2, tier nodes extending along branch direction vectors. `HexMetrics.axialToPixel` converts to world pixels. (`lib/game/controllers/skill_tree_controller.dart`, branch `claude/fix-hexagon-alignment-CrQVu`)
 - [ ] Decide whether debug overlay controls ship, hide behind a flag, or move to debug builds only.
 
 ## P2 - Quality, Tests, and Release Hardening
 
 ### Test coverage
 - [x] Add `RichPresenceService` tests for initialization, update, game activity, joinability, watched streams, and dispose.
-- [ ] Add auth edge-case tests: social login, account linking, concurrent 401 refresh, offline login, and logout token cleanup.
-- [ ] Expand widget tests for `ArcadeGameShell`, `DailyBonusScreen`, `ArcadeMissionsScreen`, and leaderboard interactions.
-- [ ] Expand skill tree widget tests for query hydration, branch switching, cooldown transitions, invalid steps, and empty/short paths.
+- [x] Add auth edge-case tests: social login (`getOAuthUrl`), concurrent 401 refresh, offline login (SocketException), logout token cleanup (401 best-effort), expiry detection, metadata extraction. (`test/core/services/auth_service_test.dart`)
+- [x] Expand widget tests for `DailyBonusScreen` and `ArcadeMissionsScreen`: renders correctly, coin/gem values, streak states, wallet counters, mission catalog. (`test/arcade/screens/arcade_screens_widget_test.dart`)
+- [x] Expand skill tree widget tests: `showPath=0` disables highlight, step 0 label, out-of-bounds step clamps without crash. (`test/screens/skills_tree/skill_branch_detail_screen_test.dart`)
+- [ ] Expand widget tests for `ArcadeGameShell` — mounts correct game widget per `ArcadeGameId`.
+- [ ] Expand leaderboard interaction tests (`AnimatedRankBadge`, `EnhancedScoreDisplay`).
 - [ ] Move toward the documented 40% coverage target for `lib/game/` and `lib/core/`.
 
 ### Dependency and build health

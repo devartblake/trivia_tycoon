@@ -407,19 +407,24 @@ dotnet ef database update \
   `updateUserTypingStatus`, `handleTextInput`, `handleMessageSent`, `clearConversationTyping`,
   `getTypingText`, `getTypingStats`
 
-### 3c. Auth flow edge cases (not yet tested)
-- Social login flows (OAuth token injection, account linking)
-- Token refresh when `AuthHttpClient` encounters a 401 on a concurrent request
-- Offline login attempt (cached credentials vs. no cache)
-- Logout clears all stored tokens and in-memory state
+### 3c. Auth flow edge cases ✅ COMPLETE
+Added to `test/core/services/auth_service_test.dart` (branch `claude/fix-hexagon-alignment-CrQVu`):
+- `AuthService.login — offline`: SocketException on network down; no partial tokens saved
+- `AuthService.signup — edge cases`: 409 duplicate email, 400 validation, userId saved from response
+- `AuthService.logout — 401 best-effort`: 401 from backend still clears local tokens; metadata cleared on logout
+- `AuthService.refresh — concurrent calls`: two simultaneous calls complete; 401 rotated-token throws
+- `AuthSession — expiry detection`: isExpired true/false for past/future/absent expiry
+- `AuthSession — metadata extraction`: role, isPremium, subscriptionStatus=active
+- `AuthApiClient.getOAuthUrl — social login`: URL returned on success; null on empty body; throws on 404
 
-### 3d. Widget tree tests (not yet tested)
+### 3d. Widget tree tests (partial)
+- `DailyBonusScreen` ✅ — `test/arcade/screens/arcade_screens_widget_test.dart`: renders unclaimed/claimed, coin amount visible, streak increments, wallet counters
+- `ArcadeMissionsScreen` ✅ — same file: catalog non-empty, first mission title visible, progress ratio 0–1, wallet counters
+- Skill tree branch detail ✅ — extended `test/screens/skills_tree/skill_branch_detail_screen_test.dart`: `showPath=0` disables full-path highlight; step 0 shows correct label; out-of-bounds step clamps without crashing
+- `ArcadeGameShell` — mounts the correct game widget for each `ArcadeGameId` (not yet done)
 - Leaderboard screen renders `AnimatedRankBadge` and `EnhancedScoreDisplay` correctly
-  (basic rendering exists in `test/widgets/leaderboard_widgets_test.dart` - extend with
+  (basic rendering exists in `test/widgets/leaderboard_widgets_test.dart` — extend with
   interaction tests)
-- `ArcadeGameShell` mounts the correct game widget for each `ArcadeGameId`
-- `DailyBonusScreen` renders correct coins/gems/streak values from `ArcadeDailyBonusService`
-- `ArcadeMissionsScreen` renders claimed vs. unclaimed missions correctly
 
 ### 3e. Other service gaps COMPLETE
 
