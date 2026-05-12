@@ -54,7 +54,7 @@ _PR/branch cross-check pass: 2026-05-10 against `origin/main`, recent remote bra
 - [x] Add feature flags for staged crypto rollout and safe disabling: `CRYPTO_SURFACES_ENABLED`, `CRYPTO_WRITES_ENABLED`, and `CRYPTO_ENABLED_NETWORKS`.
 - [x] Live-validate crypto contracts against local Docker: disposable signup plus balance, history, staking, prize-pool reads, and secure-channel write guard verified against `http://localhost:5000` on 2026-05-10.
 - [ ] Run the same crypto contract smoke against staging once staging base URL and credentials are supplied.
-- [ ] Add/extend crypto UI smoke tests for linked/unlinked, pending withdrawal, disabled-feature, stake/unstake, and prize pool states.
+- [x] Add/extend crypto UI smoke tests for linked/unlinked, pending withdrawal, disabled-feature, stake/unstake, and prize pool states. (`test/screens/store/crypto_wallet_screen_test.dart` — 8 widget tests covering disabled feature, unlinked, linked, balance, staked units, staking summary, pending withdrawal, empty history)
 
 ### Rewards backend integration
 - [x] Wire confirmed Spin & Earn endpoints: `GET /arcade/spin/segments` and `POST /arcade/spin/claim`.
@@ -81,7 +81,7 @@ _PR/branch cross-check pass: 2026-05-10 against `origin/main`, recent remote bra
 - [x] Add `deleteEncrypted` to `EncryptedApiClient` and route DELETE-sensitive social operations through encrypted semantics: `removeFriend`, `cancelFriendRequest`, and `unblockUser`.
 - [x] Encrypt selected private social/economy endpoints through the current rollout: friend request send/accept/decline/cancel/remove, block/unblock, loadout save, and Spin & Earn claim.
 - [x] Add secure-channel tests for wrong nonce, logout/session clear, and 1 KB/10 KB/100 KB payload coverage.
-- [ ] Add remaining secure-channel tests for wrong sequence/replay, expiry renewal, reinstall invalidation, and web fallback.
+- [x] Add remaining secure-channel tests for wrong sequence/replay, expiry renewal, reinstall invalidation, and web fallback. (`test/core/security/secure_payload_codec_test.dart` — 15 new tests in 3 groups: replay/sequence, SecureSession model, SecureSessionStore reinstall/web-fallback)
 - [ ] Decide and schedule any later refresh/match/economy/messages/private social write expansion beyond the currently selected endpoints.
 - [ ] Validate exact backend response schema, replay protection, and sequence semantics against staging.
 
@@ -98,15 +98,19 @@ _PR/branch cross-check pass: 2026-05-10 against `origin/main`, recent remote bra
 - [x] Clarify/rename branch coordinate provider via `branchWorldCentersProvider`; `branchCentersProvider` remains as a compatibility alias.
 - [x] Move path recomputation out of build-time mutation in `SkillBranchDetailScreen`.
 - [x] Make `MiniHexBranchPreview.fromGraph` use the provided graph through `graphOverride`.
+- [x] Replace free-form radial BFS layout with true axial hex-grid positioning: `master_hub` at `(0,0)`, 12 branch roots at ring-2, tier nodes extending along branch direction vectors. `HexMetrics.axialToPixel` converts to world pixels. (`lib/game/controllers/skill_tree_controller.dart`, branch `claude/fix-hexagon-alignment-CrQVu`)
 - [ ] Decide whether debug overlay controls ship, hide behind a flag, or move to debug builds only.
 
 ## P2 - Quality, Tests, and Release Hardening
 
 ### Test coverage
 - [x] Add `RichPresenceService` tests for initialization, update, game activity, joinability, watched streams, and dispose.
-- [ ] Add auth edge-case tests: social login, account linking, concurrent 401 refresh, offline login, and logout token cleanup.
-- [ ] Expand widget tests for `ArcadeGameShell`, `DailyBonusScreen`, `ArcadeMissionsScreen`, and leaderboard interactions.
-- [ ] Expand skill tree widget tests for query hydration, branch switching, cooldown transitions, invalid steps, and empty/short paths.
+- [x] Add auth edge-case tests: social login (`getOAuthUrl`), concurrent 401 refresh, offline login (SocketException), logout token cleanup (401 best-effort), expiry detection, metadata extraction. (`test/core/services/auth_service_test.dart`)
+- [x] Expand widget tests for `DailyBonusScreen` and `ArcadeMissionsScreen`: renders correctly, coin/gem values, streak states, wallet counters, mission catalog. (`test/arcade/screens/arcade_screens_widget_test.dart`)
+- [x] Expand skill tree widget tests: `showPath=0` disables highlight, step 0 label, out-of-bounds step clamps without crash. (`test/screens/skills_tree/skill_branch_detail_screen_test.dart`)
+- [x] Expand widget tests for `ArcadeGameShell` — mounts correct game widget per `ArcadeGameId`. (`test/arcade/screens/arcade_game_shell_test.dart` — 5 tests: patternSprint, memoryFlip, quickMathRush mount, ArcadeRunApi accessible via `.of()`, difficulty passed to builder)
+- [x] Expand leaderboard interaction tests (`AnimatedRankBadge`, `EnhancedScoreDisplay`). (`test/widgets/leaderboard_widgets_test.dart` — added 6 `AnimatedRankBadge` interaction tests: up/down arrow icons, no-arrow states, animation completion; added 14 `EnhancedScoreDisplay` interaction tests: performance messages for all 5 tiers, percentage label, XP section visibility, XP animation final value, category breakdown, power-up section, class level badge)
+- [x] `LoginManager` unit tests: role extraction (`role`/`roles`/`tier` fields), premium status (`isPremium`/`subscriptionStatus`/`tier`), `getNextRoute()` routing, `isLoggedIn()` state, userId persistence. (`test/core/manager/login_manager_test.dart` — 16 tests across 5 groups)
 - [ ] Move toward the documented 40% coverage target for `lib/game/` and `lib/core/`.
 
 ### Dependency and build health

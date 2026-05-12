@@ -66,6 +66,54 @@ void main() {
       await tester.pump(const Duration(milliseconds: 100));
       expect(find.text('#1'), findsOneWidget);
     });
+
+    testWidgets('shows up arrow when rank improved', (tester) async {
+      await tester.pumpWidget(
+          _wrap(const AnimatedRankBadge(rank: 3, previousRank: 10)));
+      await tester.pump();
+      expect(
+        find.byWidgetPredicate((w) =>
+            w is Icon &&
+            w.icon == Icons.arrow_upward &&
+            w.color == Colors.green),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('shows down arrow when rank declined', (tester) async {
+      await tester.pumpWidget(
+          _wrap(const AnimatedRankBadge(rank: 15, previousRank: 3)));
+      await tester.pump();
+      expect(
+        find.byWidgetPredicate((w) =>
+            w is Icon &&
+            w.icon == Icons.arrow_downward &&
+            w.color == Colors.red),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('no arrow icon when previousRank is null', (tester) async {
+      await tester.pumpWidget(_wrap(const AnimatedRankBadge(rank: 5)));
+      await tester.pump();
+      expect(find.byType(Icon), findsNothing);
+    });
+
+    testWidgets('no arrow icon when rank is unchanged', (tester) async {
+      await tester
+          .pumpWidget(_wrap(const AnimatedRankBadge(rank: 5, previousRank: 5)));
+      await tester.pump();
+      expect(find.byType(Icon), findsNothing);
+    });
+
+    testWidgets('animation completes without error after pumpAndSettle',
+        (tester) async {
+      await tester.pumpWidget(
+          _wrap(const AnimatedRankBadge(rank: 2, previousRank: 8)));
+      await tester.pumpAndSettle();
+      expect(find.text('#2'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
   });
 
   // -------------------------------------------------------------------------
@@ -198,6 +246,160 @@ void main() {
       )));
       await tester.pump();
       expect(find.byType(EnhancedScoreDisplay), findsOneWidget);
+    });
+
+    testWidgets('shows Your Score label and totalQuestions denominator',
+        (tester) async {
+      await tester.pumpWidget(_riverpodWrap(const EnhancedScoreDisplay(
+        score: 7,
+        totalQuestions: 10,
+      )));
+      await tester.pump();
+      expect(find.text('Your Score'), findsOneWidget);
+      expect(find.textContaining('/ 10'), findsOneWidget);
+    });
+
+    testWidgets('shows correct percentage text for 7/10', (tester) async {
+      await tester.pumpWidget(_riverpodWrap(const EnhancedScoreDisplay(
+        score: 7,
+        totalQuestions: 10,
+      )));
+      await tester.pump();
+      expect(find.text('70%'), findsOneWidget);
+    });
+
+    testWidgets('performance message Outstanding work for >=90%',
+        (tester) async {
+      await tester.pumpWidget(_riverpodWrap(const EnhancedScoreDisplay(
+        score: 9,
+        totalQuestions: 10,
+      )));
+      await tester.pump();
+      expect(find.text('Outstanding work!'), findsOneWidget);
+    });
+
+    testWidgets('performance message Great job for >=80%', (tester) async {
+      await tester.pumpWidget(_riverpodWrap(const EnhancedScoreDisplay(
+        score: 8,
+        totalQuestions: 10,
+      )));
+      await tester.pump();
+      expect(find.text('Great job!'), findsOneWidget);
+    });
+
+    testWidgets('performance message Good effort for >=70%', (tester) async {
+      await tester.pumpWidget(_riverpodWrap(const EnhancedScoreDisplay(
+        score: 7,
+        totalQuestions: 10,
+      )));
+      await tester.pump();
+      expect(find.text('Good effort!'), findsOneWidget);
+    });
+
+    testWidgets('performance message Keep trying for >=60%', (tester) async {
+      await tester.pumpWidget(_riverpodWrap(const EnhancedScoreDisplay(
+        score: 6,
+        totalQuestions: 10,
+      )));
+      await tester.pump();
+      expect(find.text('Keep trying!'), findsOneWidget);
+    });
+
+    testWidgets('performance message Practice makes perfect for <60%',
+        (tester) async {
+      await tester.pumpWidget(_riverpodWrap(const EnhancedScoreDisplay(
+        score: 5,
+        totalQuestions: 10,
+      )));
+      await tester.pump();
+      expect(find.text('Practice makes perfect!'), findsOneWidget);
+    });
+
+    testWidgets('XP section visible when totalXP > 0', (tester) async {
+      await tester.pumpWidget(_riverpodWrap(const EnhancedScoreDisplay(
+        score: 8,
+        totalQuestions: 10,
+        totalXP: 300,
+      )));
+      await tester.pump();
+      expect(find.text('Experience Points'), findsOneWidget);
+    });
+
+    testWidgets('XP section absent when totalXP is 0', (tester) async {
+      await tester.pumpWidget(_riverpodWrap(const EnhancedScoreDisplay(
+        score: 5,
+        totalQuestions: 10,
+        totalXP: 0,
+      )));
+      await tester.pump();
+      expect(find.text('Experience Points'), findsNothing);
+    });
+
+    testWidgets('XP animates to final value after pumpAndSettle',
+        (tester) async {
+      await tester.pumpWidget(_riverpodWrap(const EnhancedScoreDisplay(
+        score: 10,
+        totalQuestions: 10,
+        totalXP: 500,
+      )));
+      await tester.pumpAndSettle();
+      expect(find.text('500 XP'), findsOneWidget);
+    });
+
+    testWidgets('category breakdown visible with categoryScores',
+        (tester) async {
+      await tester.pumpWidget(_riverpodWrap(const EnhancedScoreDisplay(
+        score: 8,
+        totalQuestions: 10,
+        categoryScores: {'science': 5, 'history': 3},
+      )));
+      await tester.pump();
+      expect(find.text('Subject Performance'), findsOneWidget);
+      expect(find.text('SCIENCE'), findsOneWidget);
+      expect(find.text('HISTORY'), findsOneWidget);
+    });
+
+    testWidgets('category breakdown absent with empty categoryScores',
+        (tester) async {
+      await tester.pumpWidget(_riverpodWrap(const EnhancedScoreDisplay(
+        score: 5,
+        totalQuestions: 10,
+        categoryScores: {},
+      )));
+      await tester.pump();
+      expect(find.text('Subject Performance'), findsNothing);
+    });
+
+    testWidgets('power-up section visible with powerUpTimeRemaining',
+        (tester) async {
+      await tester.pumpWidget(_riverpodWrap(const EnhancedScoreDisplay(
+        score: 7,
+        totalQuestions: 10,
+        powerUpTimeRemaining: Duration(seconds: 45),
+      )));
+      await tester.pump();
+      expect(find.text('Power-Up Active'), findsOneWidget);
+      expect(find.text('45s'), findsOneWidget);
+    });
+
+    testWidgets('power-up section absent when powerUpTimeRemaining is null',
+        (tester) async {
+      await tester.pumpWidget(_riverpodWrap(const EnhancedScoreDisplay(
+        score: 7,
+        totalQuestions: 10,
+      )));
+      await tester.pump();
+      expect(find.text('Power-Up Active'), findsNothing);
+    });
+
+    testWidgets('class level badge shows correct label', (tester) async {
+      await tester.pumpWidget(_riverpodWrap(const EnhancedScoreDisplay(
+        score: 5,
+        totalQuestions: 10,
+        classLevel: '6',
+      )));
+      await tester.pump();
+      expect(find.text('Class 6'), findsOneWidget);
     });
   });
 }
