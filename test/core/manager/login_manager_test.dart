@@ -107,7 +107,8 @@ void main() {
   setUp(() async {
     tempDir = await Directory.systemTemp.createTemp('login_manager_test');
     Hive.init(tempDir.path);
-    tokenStore = AuthTokenStore();
+    final box = await Hive.openBox('auth_tokens');
+    tokenStore = AuthTokenStore(box);
     secureStorage = SecureStorage();
     profileService = PlayerProfileService();
     onboardingService = OnboardingSettingsService();

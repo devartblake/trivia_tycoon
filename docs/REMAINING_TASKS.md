@@ -31,7 +31,7 @@ _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue 
 | **Django DefaultPermissions fix** | Medium | **Complete — all 12 scopes now granted on login** | No |
 | Operator Dashboard Wave D (Cutover + Blazor decommission) | Low | Staging parallel-run pending (May 8–14); cutover May 15 | Depends on sign-off |
 | Phase 2 - Crash recovery stubs | High | Code complete; device validation pending | Yes — needs device |
-| Phase 3 - Test coverage (remaining gaps) | Medium | ~4.1% → 40% target; ArcadeGameShell, CryptoWalletScreen, secure channel tests added 2026-05-12 | No |
+| Phase 3 - Test coverage (remaining gaps) | Medium | ~4.1% → 40% target; ArcadeGameShell, CryptoWalletScreen, secure channel, leaderboard widgets, LoginManager, AuthTokenStore, AuthStateNotifier, LeaderboardController, QuestionController tests added 2026-05-12 | No |
 | Phase 4 - Dependency audit | Medium | Partial | No |
 | Sprint 1 - Auth/profile integration verification | Medium | Partially improved; live backend verification still needed | Yes — needs live server |
 | **Sprint 2 - Networking layer (Flutter)** | **High** | **Complete — `wsMessageStreamProvider`, `wsStateStreamProvider`, `encryptedApiClientProvider` added** | **No** |
