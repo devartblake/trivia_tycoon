@@ -114,8 +114,13 @@ _PR/branch cross-check pass: 2026-05-10 against `origin/main`, recent remote bra
 - [x] `AuthTokenStore` + `AuthSession` unit tests: hasTokens, isExpired, role/roles/isPremium/tier getters, copyWith, toJson/fromJson, load/save/clear/updateAccessToken/getRole/isPremium on store — 30+ tests. (`test/core/services/auth_token_store_test.dart`) ✅ NEW
 - [x] `AuthStateNotifier` + `AuthState` provider tests: initial state, login, signup, logout, setRole, setPremiumStatus, clearError, `isLoggedInSyncProvider`, `profileSelectedProvider` — 20+ tests. (`test/game/providers/auth_providers_test.dart`) ✅ NEW
 - [x] `LeaderboardController` tests: initial state, setCategory, applySorting, category filter (daily/weekly/global), sorting by score/rank, promoteUser, banUser, pause/resume, exportLeaderboardData, isFilterActive, getLeaderboardStats — 25+ tests. (`test/game/controllers/leaderboard_controller_test.dart`) ✅ NEW
-- [x] `QuestionController` + `QuestionState` tests: initial(), copyWith, computed properties (accuracy, isQuizOver, currentQuestion), initial provider state, isSelected, selectAnswer (normal/guard/post-reset), reset, usePowerUp extra_time — 20+ tests. (`test/game/controllers/question_controller_test.dart`) ✅ NEW
-- [ ] Move toward the documented 40% coverage target for `lib/game/` and `lib/core/` (remaining: profile/wallet providers, AuthOperations integration).
+- [x] `QuestionController` + `QuestionState` tests: initial(), copyWith, computed properties (accuracy, isQuizOver, currentQuestion), initial provider state, isSelected, selectAnswer (normal/guard/post-reset), reset, usePowerUp — 20+ tests. (`test/game/controllers/question_controller_test.dart`) ✅ NEW
+- [x] `UserWallet.fromJson` field mapping tests: credits→coins, neuralXp→xp, synapseShards→diamonds, defaults, doubles, `UserWallet.empty` — 15+ tests. (`test/core/models/user_wallet_model_test.dart` expanded) ✅ NEW
+- [x] `CoinBalanceNotifier` tests: initial state, add (accumulate/zero), deduct (sufficient/insufficient/exact), canAfford, set, reset, persistence round-trip — 20+ tests. (`test/game/controllers/coin_balance_notifier_test.dart`) ✅ NEW
+- [x] `EnergyState.copyWith` + `EnergyNotifier` tests: initial state, canPlay*/useEnergy/addEnergy/syncWithServer methods, constant validation — 25+ tests. (`test/game/controllers/energy_notifier_test.dart`) ✅ NEW
+- [x] `WalletService` tests: addCoins/addGems (positive/zero/negative), spendCoins/spendGems (sufficient/insufficient/exact/zero), setBalances (clamps negatives), coins/gems independence — 20+ tests. (`test/game/services/wallet_service_test.dart`) ✅ NEW
+- [x] `currentUserIdProvider` fallback chain tests: stored userId → email prefix → player name → guest; `PlayerProfileService` and `LocalAuthService` integration — 12+ tests. (`test/game/providers/profile_providers_test.dart`) ✅ NEW
+- [ ] Move toward the documented 40% coverage target for `lib/game/` and `lib/core/` (remaining: AuthOperations integration, notification service).
 
 ### Dependency and build health
 - [ ] Run `flutter pub outdated` and apply safe security/minor updates.
