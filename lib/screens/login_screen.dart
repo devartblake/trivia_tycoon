@@ -16,6 +16,10 @@ import '../game/providers/onboarding_providers.dart';
 import '../game/providers/multi_profile_providers.dart';
 import 'onboarding/steps/constants.dart';
 
+// Platform check helper — avoids importing dart:io on web
+bool get _isIOS => !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
+bool get _isAndroid => !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+
 /// User data model for mock authentication
 class MockUser {
   final String email;
@@ -91,6 +95,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   bool _obscurePassword = true;
   bool _isLoading = false;
   bool _isSignUpMode = false;
+  bool _isGameLoginLoading = false;
 
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
@@ -119,6 +124,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     ));
 
     _animationController.forward();
+
+    // Attempt silent game platform login (non-blocking).
+    // If successful the user is navigated to home without needing to fill the form.
+    if (ConfigService.useBackendAuth && (_isIOS || _isAndroid)) {
+      _trySilentGameLogin();
+    }
+  }
+
+  Future<void> _trySilentGameLogin() async {
+    final authOps = ref.read(authOperationsProvider);
+    final loggedIn = await authOps.trySilentGameLogin();
+    if (loggedIn && mounted) {
+      context.go('/home');
+    }
   }
 
   @override
@@ -303,6 +322,39 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } catch (e) {
       _showErrorSnackBar('Failed to start $provider login: $e');
+    }
+  }
+
+  Future<void> _handleGamePlatformLogin() async {
+    if (_isGameLoginLoading || _isLoading) return;
+
+    setState(() => _isGameLoginLoading = true);
+
+    try {
+      final authOps = ref.read(authOperationsProvider);
+      final gamePlatformService = ref.read(gamePlatformAuthServiceProvider);
+      final identity = await gamePlatformService.signInSilently();
+
+      if (identity == null) {
+        _showErrorSnackBar(
+          _isIOS
+              ? 'Unable to connect to Game Center. Make sure you are signed in to Game Center in device Settings.'
+              : 'Unable to connect to Google Play Games. Make sure the Play Games app is installed and signed in.',
+        );
+        setState(() => _isGameLoginLoading = false);
+        return;
+      }
+
+      await authOps.loginWithGamePlatform(identity);
+
+      if (mounted) {
+        context.go('/home');
+      }
+    } catch (e) {
+      final msg = AuthErrorMessages.getLoginErrorMessage(e);
+      _showErrorSnackBar(msg);
+    } finally {
+      if (mounted) setState(() => _isGameLoginLoading = false);
     }
   }
 
@@ -648,7 +700,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                             ),
                           ],
                         ),
-                        const SizedBox(height: 32),
+                        const SizedBox(height: 16),
+
+                        // Native game platform login (iOS: Game Center, Android: Play Games)
+                        if ((_isIOS || _isAndroid) && ConfigService.useBackendAuth)
+                          _buildNativeGameLoginButton(),
+                        const SizedBox(height: 16),
 
                         // Sign Up Link
                         Row(
@@ -942,6 +999,43 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           icon,
           color: Colors.white.withValues(alpha: 0.8),
           size: 20,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNativeGameLoginButton() {
+    final isIOS = _isIOS;
+    final label = isIOS ? 'Continue with Game Center' : 'Continue with Play Games';
+    final icon = isIOS ? FontAwesomeIcons.gamepad : FontAwesomeIcons.google;
+
+    return SizedBox(
+      height: 50,
+      child: OutlinedButton.icon(
+        onPressed:
+            (_isGameLoginLoading || _isLoading) ? null : _handleGamePlatformLogin,
+        icon: _isGameLoginLoading
+            ? const SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF6366F1)),
+                ),
+              )
+            : FaIcon(icon, size: 18, color: const Color(0xFF6366F1)),
+        label: Text(
+          label,
+          style: const TextStyle(
+            color: Color(0xFF6366F1),
+            fontWeight: FontWeight.w600,
+            fontSize: 14,
+          ),
+        ),
+        style: OutlinedButton.styleFrom(
+          side: const BorderSide(color: Color(0xFF6366F1), width: 1.5),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          backgroundColor: const Color(0xFF6366F1).withValues(alpha: 0.08),
         ),
       ),
     );

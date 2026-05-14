@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/services/auth_error_messages.dart';
+import '../../core/services/game_platform_auth_service.dart';
 import '../../core/services/settings/profile_sync_service.dart';
 import '../../core/services/storage/secure_storage.dart';
 import '../../ui_components/login/models/signup_data.dart';
@@ -20,6 +21,11 @@ final profileSelectedProvider = StateProvider<bool>((ref) => false);
 /// Auth operations provider for login/logout
 final authOperationsProvider = Provider<AuthOperations>((ref) {
   return AuthOperations(ref);
+});
+
+/// Provides the singleton GamePlatformAuthService (Game Center / Play Games).
+final gamePlatformAuthServiceProvider = Provider<GamePlatformAuthService>((ref) {
+  return GamePlatformAuthService();
 });
 
 class AuthOperations {
@@ -143,6 +149,48 @@ class AuthOperations {
       }
     } catch (e) {
       LogManager.debug('[AuthOperations] Remote profile hydrate skipped: $e');
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Mobile game platform auth
+  // -------------------------------------------------------------------------
+
+  /// Silently attempt to sign in using the native game platform.
+  ///
+  /// Call this early in the app lifecycle (e.g. from the root widget or a
+  /// splash screen) so the user skips the login form when Game Center /
+  /// Play Games is already active on the device.
+  ///
+  /// Returns `true` if silent login succeeded and the user is now logged in.
+  Future<bool> trySilentGameLogin() async {
+    final gamePlatformService = ref.read(gamePlatformAuthServiceProvider);
+    final identity = await gamePlatformService.signInSilently();
+    if (identity == null) return false;
+
+    try {
+      await loginWithGamePlatform(identity);
+      return true;
+    } catch (e) {
+      LogManager.debug('[AuthOperations] silent game login failed: $e');
+      return false;
+    }
+  }
+
+  /// Authenticate via a native game platform identity.
+  Future<void> loginWithGamePlatform(GamePlatformIdentity identity) async {
+    try {
+      final backendAuthService = ref.read(coreAuthServiceProvider);
+      final secureStorage = ref.read(secureStorageProvider);
+
+      await backendAuthService.loginWithGamePlatform(identity);
+      await _hydrateProfileFromBackend();
+      await _updateRoleAndPremiumStatus(secureStorage);
+
+      ref.read(isLoggedInSyncProvider.notifier).state = true;
+    } catch (e) {
+      final message = AuthErrorMessages.getLoginErrorMessage(e);
+      throw Exception(message);
     }
   }
 
