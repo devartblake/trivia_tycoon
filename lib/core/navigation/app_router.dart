@@ -106,6 +106,7 @@ import '../../screens/study_hub/study_session_screen.dart';
 import '../../screens/study_hub/study_custom_set_screen.dart';
 import '../dto/study_dto.dart';
 import '../../screens/login_screen.dart';
+import '../../screens/login_screen_mobile.dart';
 import '../../screens/onboarding/onboarding_screen.dart';
 import '../../screens/profile/avatar_selection_screen.dart';
 import '../../screens/profile/friends_screen.dart';
@@ -183,7 +184,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/login',
         name: 'login',
-        builder: (context, state) => const LoginScreen(),
+        builder: (context, state) =>
+            kIsWeb ? const LoginScreen() : const LoginScreenMobile(),
       ),
 
       /// 📚 Onboarding Routes
