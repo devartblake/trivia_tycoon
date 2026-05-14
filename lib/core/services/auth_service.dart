@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'auth_api_client.dart';
 import 'auth_token_store.dart';
 import 'device_id_service.dart';
+import 'game_platform_auth_service.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Named BackendAuthService to avoid collision with the local-storage AuthService
@@ -102,6 +103,36 @@ class BackendAuthService {
       // Always clear local tokens, even if backend call fails
       await _store.clear();
     }
+  }
+
+  // -------------------------------------------------------------------------
+  // Mobile game platform auth
+  // -------------------------------------------------------------------------
+
+  /// Authenticate via a native game platform (Game Center / Play Games).
+  ///
+  /// On success the returned session is saved to the token store.
+  Future<AuthSession> loginWithGamePlatform(GamePlatformIdentity identity) async {
+    final session = await _api.loginWithGamePlatform(
+      platform: identity.platform,
+      playerId: identity.playerId,
+      displayName: identity.displayName,
+    );
+    await _store.save(session);
+    return session;
+  }
+
+  /// Link the current account to a game platform identity.
+  Future<void> linkGameAccount(GamePlatformIdentity identity) async {
+    final token = accessToken;
+    if (token.isEmpty) {
+      throw Exception('Cannot link game account: user is not logged in.');
+    }
+    await _api.linkGameAccount(
+      platform: identity.platform,
+      playerId: identity.playerId,
+      accessToken: token,
+    );
   }
 
   /// Get access token for API calls (returns empty if not logged in)

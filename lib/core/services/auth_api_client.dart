@@ -365,6 +365,121 @@ class AuthApiClient {
     }
   }
 
+  // -------------------------------------------------------------------------
+  // Mobile game platform auth
+  // -------------------------------------------------------------------------
+
+  static const String mobileGameLoginPath = '/auth/mobile-game-login';
+  static const String linkGameAccountPath = '/auth/link-game-account';
+
+  /// Authenticate using a native game platform identity (Game Center / Play Games).
+  ///
+  /// The backend must implement `POST /auth/mobile-game-login` which accepts:
+  /// `{ platform, playerId, displayName }` and returns the same session JSON
+  /// as the regular login endpoint.
+  Future<AuthSession> loginWithGamePlatform({
+    required String platform,
+    required String playerId,
+    required String displayName,
+  }) async {
+    final deviceIdentity = await _deviceId.getDeviceIdentityPayload();
+    final payload = {
+      'platform': platform,
+      'playerId': playerId,
+      'displayName': displayName,
+      ...deviceIdentity,
+    };
+
+    _logRequest('POST', mobileGameLoginPath, body: payload);
+
+    final http.Response response;
+    try {
+      response = await _http.post(
+        _u(mobileGameLoginPath),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(payload),
+      );
+    } catch (e) {
+      throw AuthApiException(
+        message: 'Mobile game login request failed before receiving a response.',
+        path: mobileGameLoginPath,
+        method: 'POST',
+        innerError: e,
+      );
+    }
+
+    _logResponse('POST', mobileGameLoginPath, response);
+
+    if (response.statusCode == 200) {
+      final data = _decodeBodyMap(response.body, context: 'mobile-game-login');
+      final session = _parseSession(data);
+      final metadata = _extractMetadata(data);
+      return session.copyWith(metadata: metadata);
+    }
+
+    throw AuthApiException(
+      message: _extractErrorMessage(
+        response,
+        fallback: 'Mobile game login failed (HTTP ${response.statusCode})',
+      ),
+      statusCode: response.statusCode,
+      path: mobileGameLoginPath,
+      method: 'POST',
+      responseBody: response.body,
+    );
+  }
+
+  /// Link a game platform identity to the currently authenticated account.
+  ///
+  /// Requires the caller to supply a valid Bearer access token in the request.
+  /// The backend must implement `POST /auth/link-game-account`.
+  Future<void> linkGameAccount({
+    required String platform,
+    required String playerId,
+    required String accessToken,
+  }) async {
+    final payload = {
+      'platform': platform,
+      'playerId': playerId,
+    };
+
+    _logRequest('POST', linkGameAccountPath, body: payload);
+
+    final http.Response response;
+    try {
+      response = await _http.post(
+        _u(linkGameAccountPath),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+        },
+        body: jsonEncode(payload),
+      );
+    } catch (e) {
+      throw AuthApiException(
+        message: 'Link game account request failed before receiving a response.',
+        path: linkGameAccountPath,
+        method: 'POST',
+        innerError: e,
+      );
+    }
+
+    _logResponse('POST', linkGameAccountPath, response);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) return;
+
+    throw AuthApiException(
+      message: _extractErrorMessage(
+        response,
+        fallback: 'Link game account failed (HTTP ${response.statusCode})',
+      ),
+      statusCode: response.statusCode,
+      path: linkGameAccountPath,
+      method: 'POST',
+      responseBody: response.body,
+    );
+  }
+
   Future<String?> getOAuthUrl(String provider) async {
     final path = '/auth/oauth/$provider';
     _logRequest('GET', path);

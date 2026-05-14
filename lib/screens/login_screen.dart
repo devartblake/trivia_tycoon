@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,10 +12,18 @@ import 'package:trivia_tycoon/core/services/auth_error_messages.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../core/bootstrap/app_init.dart';
 import '../core/constants/image_strings.dart';
+import '../core/services/auth_token_store.dart';
 import '../game/providers/auth_providers.dart';
+import '../game/providers/core_providers.dart';
 import '../game/providers/onboarding_providers.dart';
 import '../game/providers/multi_profile_providers.dart';
+import '../game/providers/web_link_providers.dart';
 import 'onboarding/steps/constants.dart';
+import 'web_link/qr_link_widget.dart';
+
+// Platform check helper — avoids importing dart:io on web
+bool get _isIOS => !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
+bool get _isAndroid => !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
 /// User data model for mock authentication
 class MockUser {
@@ -91,6 +100,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   bool _obscurePassword = true;
   bool _isLoading = false;
   bool _isSignUpMode = false;
+  bool _isGameLoginLoading = false;
+  bool _isGoogleWebLoading = false;
+  bool _showWebLinking = false;
+  bool _showQrCode = false;
+  final TextEditingController _linkCodeController = TextEditingController();
 
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
@@ -119,12 +133,27 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     ));
 
     _animationController.forward();
+
+    // Attempt silent game platform login (non-blocking).
+    // If successful the user is navigated to home without needing to fill the form.
+    if (ConfigService.useBackendAuth && (_isIOS || _isAndroid)) {
+      _trySilentGameLogin();
+    }
+  }
+
+  Future<void> _trySilentGameLogin() async {
+    final authOps = ref.read(authOperationsProvider);
+    final loggedIn = await authOps.trySilentGameLogin();
+    if (loggedIn && mounted) {
+      context.go('/home');
+    }
   }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _linkCodeController.dispose();
     _animationController.dispose();
     super.dispose();
   }
@@ -303,6 +332,120 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } catch (e) {
       _showErrorSnackBar('Failed to start $provider login: $e');
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Web account linking handlers
+  // -------------------------------------------------------------------------
+
+  /// [Web only] Sign in with Google and obtain a backend session.
+  Future<void> _handleGoogleWebSignIn() async {
+    if (_isGoogleWebLoading || _isLoading) return;
+    setState(() => _isGoogleWebLoading = true);
+
+    try {
+      final googleUser = await GoogleSignIn(scopes: ['email']).signIn();
+      if (googleUser == null) {
+        setState(() => _isGoogleWebLoading = false);
+        return;
+      }
+
+      final auth = await googleUser.authentication;
+      final idToken = auth.idToken;
+      if (idToken == null) {
+        _showErrorSnackBar('Google Sign-In failed: no ID token received.');
+        setState(() => _isGoogleWebLoading = false);
+        return;
+      }
+
+      final service = ref.read(webLinkServiceProvider);
+      final result = await service.authenticateWithGoogleToken(idToken);
+
+      // Save the returned session.
+      final authTokenStore = ref.read(authTokenStoreProvider);
+      await authTokenStore.save(AuthSession(
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+        userId: result.userId,
+      ));
+
+      ref.read(isLoggedInSyncProvider.notifier).state = true;
+      if (mounted) context.go('/home');
+    } catch (e) {
+      _showErrorSnackBar('Google Sign-In failed: ${e.toString()}');
+    } finally {
+      if (mounted) setState(() => _isGoogleWebLoading = false);
+    }
+  }
+
+  /// [Web only] Enter a link code received from the mobile app.
+  Future<void> _handleLinkCodeSubmit() async {
+    final code = _linkCodeController.text.trim().toUpperCase();
+    if (code.length < 6) {
+      _showErrorSnackBar('Enter the 6-character code from the mobile app.');
+      return;
+    }
+
+    setState(() => _isLoading = true);
+    try {
+      final service = ref.read(webLinkServiceProvider);
+      final result = await service.consumeLinkCode(code);
+
+      final authTokenStore = ref.read(authTokenStoreProvider);
+      await authTokenStore.save(AuthSession(
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+        userId: result.userId,
+      ));
+
+      ref.read(isLoggedInSyncProvider.notifier).state = true;
+      if (mounted) context.go('/home');
+    } catch (e) {
+      _showErrorSnackBar('Invalid or expired code. Please try again.');
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  /// Called when the web QR scan succeeds and the backend returns a session token.
+  void _handleQrSuccess(String sessionToken) async {
+    // sessionToken is typically the full access token; the backend may also
+    // establish a refresh token via a cookie. Adapt as needed.
+    ref.read(isLoggedInSyncProvider.notifier).state = true;
+    if (mounted) context.go('/home');
+  }
+
+  Future<void> _handleGamePlatformLogin() async {
+    if (_isGameLoginLoading || _isLoading) return;
+
+    setState(() => _isGameLoginLoading = true);
+
+    try {
+      final authOps = ref.read(authOperationsProvider);
+      final gamePlatformService = ref.read(gamePlatformAuthServiceProvider);
+      final identity = await gamePlatformService.signInSilently();
+
+      if (identity == null) {
+        _showErrorSnackBar(
+          _isIOS
+              ? 'Unable to connect to Game Center. Make sure you are signed in to Game Center in device Settings.'
+              : 'Unable to connect to Google Play Games. Make sure the Play Games app is installed and signed in.',
+        );
+        setState(() => _isGameLoginLoading = false);
+        return;
+      }
+
+      await authOps.loginWithGamePlatform(identity);
+
+      if (mounted) {
+        context.go('/home');
+      }
+    } catch (e) {
+      final msg = AuthErrorMessages.getLoginErrorMessage(e);
+      _showErrorSnackBar(msg);
+    } finally {
+      if (mounted) setState(() => _isGameLoginLoading = false);
     }
   }
 
@@ -648,7 +791,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                             ),
                           ],
                         ),
-                        const SizedBox(height: 32),
+                        const SizedBox(height: 16),
+
+                        // Native game platform login (iOS: Game Center, Android: Play Games)
+                        if ((_isIOS || _isAndroid) && ConfigService.useBackendAuth)
+                          _buildNativeGameLoginButton(),
+                        const SizedBox(height: 16),
+
+                        // Web account linking (web platform only)
+                        if (kIsWeb && ConfigService.useBackendAuth)
+                          _buildWebLinkingSection(),
+                        if (kIsWeb && ConfigService.useBackendAuth)
+                          const SizedBox(height: 16),
 
                         // Sign Up Link
                         Row(
@@ -942,6 +1096,209 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           icon,
           color: Colors.white.withValues(alpha: 0.8),
           size: 20,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWebLinkingSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // Section header
+        Row(
+          children: [
+            Expanded(
+              child: Divider(
+                color: Colors.white.withValues(alpha: 0.2),
+                thickness: 1,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Text(
+                'or link mobile account',
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.4),
+                  fontSize: 12,
+                ),
+              ),
+            ),
+            Expanded(
+              child: Divider(
+                color: Colors.white.withValues(alpha: 0.2),
+                thickness: 1,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+
+        // Expand/collapse toggle
+        TextButton(
+          onPressed: () => setState(() => _showWebLinking = !_showWebLinking),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                _showWebLinking ? Icons.expand_less : Icons.expand_more,
+                color: const Color(0xFF6366F1),
+                size: 18,
+              ),
+              const SizedBox(width: 4),
+              const Text(
+                'Link from Mobile App',
+                style: TextStyle(color: Color(0xFF6366F1), fontSize: 13),
+              ),
+            ],
+          ),
+        ),
+
+        if (_showWebLinking) ...[
+          const SizedBox(height: 16),
+
+          // Method 1: Google Sign-In on web
+          SizedBox(
+            height: 48,
+            child: ElevatedButton.icon(
+              onPressed:
+                  _isGoogleWebLoading ? null : _handleGoogleWebSignIn,
+              icon: _isGoogleWebLoading
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    )
+                  : const Icon(Icons.g_mobiledata_rounded, size: 20),
+              label: const Text('Continue with Google'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.black87,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+
+          // Method 2: One-time link code input
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _linkCodeController,
+                  decoration: InputDecoration(
+                    hintText: 'Enter 6-char code from app',
+                    hintStyle: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.4),
+                      fontSize: 13,
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 14),
+                    filled: true,
+                    fillColor: Colors.white.withValues(alpha: 0.05),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(
+                        color: Colors.white.withValues(alpha: 0.1),
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(color: Color(0xFF6366F1)),
+                    ),
+                  ),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    letterSpacing: 4,
+                    fontFamily: 'monospace',
+                  ),
+                  maxLength: 6,
+                  textCapitalization: TextCapitalization.characters,
+                  buildCounter: (_, {required currentLength, required isFocused, maxLength}) =>
+                      null,
+                ),
+              ),
+              const SizedBox(width: 10),
+              ElevatedButton(
+                onPressed: _isLoading ? null : _handleLinkCodeSubmit,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF6366F1),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 16, horizontal: 16),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                ),
+                child: const Text('Link'),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          // Method 3: QR code
+          TextButton(
+            onPressed: () => setState(() => _showQrCode = !_showQrCode),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.qr_code_rounded,
+                    size: 16, color: Color(0xFF6366F1)),
+                const SizedBox(width: 6),
+                Text(
+                  _showQrCode ? 'Hide QR Code' : 'Show QR Code to Scan',
+                  style: const TextStyle(
+                    color: Color(0xFF6366F1),
+                    fontSize: 13,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (_showQrCode) ...[
+            const SizedBox(height: 12),
+            QrLinkWidget(onSuccess: _handleQrSuccess),
+          ],
+        ],
+      ],
+    );
+  }
+
+  Widget _buildNativeGameLoginButton() {
+    final isIOS = _isIOS;
+    final label = isIOS ? 'Continue with Game Center' : 'Continue with Play Games';
+    final icon = isIOS ? FontAwesomeIcons.gamepad : FontAwesomeIcons.google;
+
+    return SizedBox(
+      height: 50,
+      child: OutlinedButton.icon(
+        onPressed:
+            (_isGameLoginLoading || _isLoading) ? null : _handleGamePlatformLogin,
+        icon: _isGameLoginLoading
+            ? const SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF6366F1)),
+                ),
+              )
+            : FaIcon(icon, size: 18, color: const Color(0xFF6366F1)),
+        label: Text(
+          label,
+          style: const TextStyle(
+            color: Color(0xFF6366F1),
+            fontWeight: FontWeight.w600,
+            fontSize: 14,
+          ),
+        ),
+        style: OutlinedButton.styleFrom(
+          side: const BorderSide(color: Color(0xFF6366F1), width: 1.5),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          backgroundColor: const Color(0xFF6366F1).withValues(alpha: 0.08),
         ),
       ),
     );
