@@ -58,19 +58,19 @@ void main() {
 
   group('purchaseTheme', () {
     test('returns true when user has enough coins', () async {
-      await gts.addCoins('pt_u1', 500);
+      await gts.addCoins(userId: 'pt_u1', amount: 500, type: TransactionType.coinPurchase);
       final result = await svc.purchaseTheme('pt_u1', 'ocean_theme', 100);
       expect(result, isTrue);
     });
 
     test('ownsTheme true after successful purchase', () async {
-      await gts.addCoins('pt_u2', 500);
+      await gts.addCoins(userId: 'pt_u2', amount: 500, type: TransactionType.coinPurchase);
       await svc.purchaseTheme('pt_u2', 'fire_theme', 100);
       expect(svc.ownsTheme('pt_u2', 'fire_theme'), isTrue);
     });
 
     test('theme appears in getOwnedThemes after purchase', () async {
-      await gts.addCoins('pt_u3', 500);
+      await gts.addCoins(userId: 'pt_u3', amount: 500, type: TransactionType.coinPurchase);
       await svc.purchaseTheme('pt_u3', 'space_theme', 100);
       expect(svc.getOwnedThemes('pt_u3'), contains('space_theme'));
     });
@@ -91,7 +91,7 @@ void main() {
     });
 
     test('can purchase multiple themes for same user', () async {
-      await gts.addCoins('pt_multi', 1000);
+      await gts.addCoins(userId: 'pt_multi', amount: 1000, type: TransactionType.coinPurchase);
       await svc.purchaseTheme('pt_multi', 'theme_a', 100);
       await svc.purchaseTheme('pt_multi', 'theme_b', 100);
       final owned = svc.getOwnedThemes('pt_multi');
@@ -116,7 +116,7 @@ void main() {
     });
 
     test('getActiveTheme returns applied theme', () async {
-      await gts.addCoins('at_u2', 500);
+      await gts.addCoins(userId: 'at_u2', amount: 500, type: TransactionType.coinPurchase);
       await svc.purchaseTheme('at_u2', 'neon_theme', 100);
       await svc.applyTheme('at_u2', 'neon_theme');
       expect(svc.getActiveTheme('at_u2'), 'neon_theme');
@@ -128,7 +128,7 @@ void main() {
     });
 
     test('can switch active themes', () async {
-      await gts.addCoins('at_u4', 1000);
+      await gts.addCoins(userId: 'at_u4', amount: 1000, type: TransactionType.coinPurchase);
       await svc.purchaseTheme('at_u4', 'theme_x', 100);
       await svc.purchaseTheme('at_u4', 'theme_y', 100);
       await svc.applyTheme('at_u4', 'theme_x');
@@ -144,19 +144,19 @@ void main() {
 
   group('purchaseStickerPack', () {
     test('returns true with sufficient coins', () async {
-      await gts.addCoins('sp_u1', 500);
+      await gts.addCoins(userId: 'sp_u1', amount: 500, type: TransactionType.coinPurchase);
       final result = await svc.purchaseStickerPack('sp_u1', 'gaming', 50);
       expect(result, isTrue);
     });
 
     test('ownsStickerPack true after purchase', () async {
-      await gts.addCoins('sp_u2', 500);
+      await gts.addCoins(userId: 'sp_u2', amount: 500, type: TransactionType.coinPurchase);
       await svc.purchaseStickerPack('sp_u2', 'reactions', 50);
       expect(svc.ownsStickerPack('sp_u2', 'reactions'), isTrue);
     });
 
     test('pack appears in getOwnedStickerPacks', () async {
-      await gts.addCoins('sp_u3', 500);
+      await gts.addCoins(userId: 'sp_u3', amount: 500, type: TransactionType.coinPurchase);
       await svc.purchaseStickerPack('sp_u3', 'animals', 50);
       expect(svc.getOwnedStickerPacks('sp_u3'), contains('animals'));
     });
@@ -194,7 +194,7 @@ void main() {
     });
 
     test('grows after purchasing additional pack', () async {
-      await gts.addCoins('sticker_u1', 500);
+      await gts.addCoins(userId: 'sticker_u1', amount: 500, type: TransactionType.coinPurchase);
       final before = svc.getAvailableStickers('sticker_u1').length;
       await svc.purchaseStickerPack('sticker_u1', 'gaming', 50);
       final after = svc.getAvailableStickers('sticker_u1').length;
@@ -306,7 +306,7 @@ void main() {
     });
 
     test('emits new theme after applyTheme', () async {
-      await gts.addCoins('watch_u1', 500);
+      await gts.addCoins(userId: 'watch_u1', amount: 500, type: TransactionType.coinPurchase);
       await svc.purchaseTheme('watch_u1', 'lava_theme', 100);
 
       final stream = svc.watchActiveTheme('watch_u1');
@@ -333,7 +333,7 @@ void main() {
     });
 
     test('emits updated set after purchaseStickerPack', () async {
-      await gts.addCoins('watch_sticker_u1', 500);
+      await gts.addCoins(userId: 'watch_sticker_u1', amount: 500, type: TransactionType.coinPurchase);
 
       final stream = svc.watchOwnedStickers('watch_sticker_u1');
       final received = <Set<String>>[];
@@ -442,7 +442,7 @@ void main() {
     });
 
     test('round-trip: export then import preserves data', () async {
-      await gts.addCoins('rt_export_u', 500);
+      await gts.addCoins(userId: 'rt_export_u', amount: 500, type: TransactionType.coinPurchase);
       await svc.purchaseTheme('rt_export_u', 'rt_theme', 100);
       await svc.setFontSize('rt_export_u', 22.0);
 

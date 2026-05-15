@@ -145,14 +145,6 @@ void main() {
     final start = DateTime(2026, 1, 1, 10);
 
     test('holds all required fields', () {
-      const state = GameSpectateState(
-        gameId: 'game1',
-        gameTitle: 'Science Quiz',
-        category: 'Science',
-        players: [],
-        totalQuestions: 10,
-        startTime: null, // ignore for now
-      );
       // Using a valid construction
       final s = GameSpectateState(
         gameId: 'game1',
