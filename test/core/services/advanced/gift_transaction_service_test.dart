@@ -4,9 +4,9 @@ import 'package:trivia_tycoon/core/services/advanced/gift_transaction_service.da
 void main() {
   late GiftTransactionService svc;
 
-  setUp(() async {
+  setUp(() {
     svc = GiftTransactionService();
-    await svc.initialize();
+    svc.initialize();
   });
 
   // -------------------------------------------------------------------------

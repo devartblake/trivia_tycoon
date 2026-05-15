@@ -178,7 +178,9 @@ class EventQueueService {
   }
 
   /// Enqueue a failed event for later retry
-  Future<void> enqueueEvent(
+  /// Returns true if the event was successfully enqueued.
+  /// Returns false if the service is in cooldown or if an exception occurs.
+  Future<bool> enqueueEvent(
       String endpoint, Map<String, dynamic> payload) async {
     if (isInCooldown) {
       LogManager.logWithCustomColor(
@@ -187,7 +189,7 @@ class EventQueueService {
         color: LogColors.brightRed,
         bold: true,
       );
-      return;
+      return false;
     }
 
     try {
@@ -241,12 +243,15 @@ class EventQueueService {
         'endpoint': endpoint,
         'queue_size': box.length,
       });
+
+      return true;
     } catch (e) {
       LogManager.error(
         'Failed to enqueue event',
         source: 'EventQueueService',
         error: e,
       );
+      return false;
     }
   }
 
