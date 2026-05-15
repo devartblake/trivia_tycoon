@@ -178,8 +178,8 @@ class EventQueueService {
   }
 
   /// Enqueue a failed event for later retry
-  /// Returns false if the service is in cooldown or if an exception occurs.
   /// Returns true if the event was successfully enqueued.
+  /// Returns false if the service is in cooldown or if an exception occurs.
   Future<bool> enqueueEvent(
       String endpoint, Map<String, dynamic> payload) async {
     if (isInCooldown) {
