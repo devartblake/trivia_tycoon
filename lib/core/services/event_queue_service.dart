@@ -242,7 +242,7 @@ class EventQueueService {
         'endpoint': endpoint,
         'queue_size': box.length,
       });
-      
+
       return true;
     } catch (e) {
       LogManager.error(
